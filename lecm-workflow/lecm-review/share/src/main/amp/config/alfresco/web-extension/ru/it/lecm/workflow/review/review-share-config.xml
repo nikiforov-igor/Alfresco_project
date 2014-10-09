@@ -14,13 +14,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-workflow:assigneesListAssoc">
-						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
-							<control-param name="workflowType">REVIEW</control-param>
-							<control-param name="concurrency">PARALLEL</control-param>
-							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
-							<control-param name="showListSelectMenu">true</control-param>
-							<control-param name="formAddAssigneeTitle">Добавить сотрудника для ознакомления</control-param>
-						</control>
+						<control template="/ru/it/lecm/workflow/review/controls/review-assignee-control.ftl"/>
 					</field>
 					<field id="bpm:workflowDescription">
 						<control template="/ru/it/lecm/documents/controls/workflow/document-present-string-hidden.ftl">
@@ -44,7 +38,7 @@
 					<show id="lecmReview:documentPreview" force="true" />
 					<show id="lecmReview:reviewTaskResult" />
 					<show id="transitions" force="true" />
-				<show id="bpm:reassignable" />
+					<show id="bpm:reassignable" />
 				</field-visibility>
 				<appearance>
 					<field id="lecmReview:presentString">
@@ -66,7 +60,7 @@
 					<field id="lecmReview:documentPreview">
 						<control template="/ru/it/lecm/documents/controls/document-preview-control.ftl" />
 					</field>
-				<field id="bpm:reassignable">
+					<field id="bpm:reassignable">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>
 				</appearance>
@@ -130,8 +124,44 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-workflow-result:workflow-result-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
-                    <field id="lecm-workflow-result:workflow-result-item-employee-position" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}" />
-                    <field id="lecm-workflow-result:workflow-result-item-employee-unit" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}" />
+					<field id="lecm-workflow-result:workflow-result-item-employee-position" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}" />
+					<field id="lecm-workflow-result:workflow-result-item-employee-unit" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-workflow:assignee">
+		<forms>
+			<form id="reviewAssigneeList">
+				<field-visibility>
+					<show id="lecm-workflow:assignee-employee-assoc"/>
+					<show id="lecm-workflow:assignee-employee-position-fake"/>
+					<show id="lecm-workflow:assignee-employee-unit-fake"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-workflow:assignee-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+					<field id="lecm-workflow:assignee-employee-position-fake" label="Должность" substituteString="{lecm-workflow:assignee-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}" />
+					<field id="lecm-workflow:assignee-employee-unit-fake" label="Подразделение" substituteString="{lecm-workflow:assignee-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}" />
+				</appearance>
+			</form>
+			<form id="addEmployeesToReview">
+				<field-visibility>
+					<show id="lecm-workflow:assignee-employee-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-workflow:assignee-employee-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="itemType">lecm-orgstr:employee</control-param>
+							<control-param name="endpointMany">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
