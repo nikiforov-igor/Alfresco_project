@@ -292,8 +292,8 @@ public class DocumentPolicy extends BaseBean
                         } catch (WriteTransactionNeededException ex) {
                             throw new RuntimeException(ex);
                         }
-                        
-                        
+
+
 	            }
 	        }
 
@@ -364,7 +364,7 @@ public class DocumentPolicy extends BaseBean
             }
         }
 
-        final String finalPresentString = presentString;
+		final String finalPresentString = presentString;
         final AuthenticationUtil.RunAsWork<String> stringValue = new AuthenticationUtil.RunAsWork<String>() {
             @Override
             public String doWork() throws Exception {
@@ -373,6 +373,7 @@ public class DocumentPolicy extends BaseBean
         };
 
         String presentStringValue = AuthenticationUtil.runAsSystem(stringValue);
+		presentStringValue  = presentStringValue.replaceAll("\r", " ").replaceAll("\n", " ");
         if (presentStringValue != null) {
             setPropertyAsSystem(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
 	        if (presentStringValue.endsWith(".")) {
@@ -385,14 +386,14 @@ public class DocumentPolicy extends BaseBean
                 setPropertyAsSystem(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
             }
         }
-		
+
 		final AuthenticationUtil.RunAsWork<String> listStringValue = new AuthenticationUtil.RunAsWork<String>() {
             @Override
             public String doWork() throws Exception {
                 return substituteService.getTemplateStringForObject(nodeRef, true);
             }
         };
-		
+
         String listPresentString = AuthenticationUtil.runAsSystem(listStringValue);
 
         String listPresentStringValue = substituteService.formatNodeTitle(nodeRef, listPresentString);
