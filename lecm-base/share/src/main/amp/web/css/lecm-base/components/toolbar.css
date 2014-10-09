@@ -57,3 +57,11 @@
 .datalist-toolbar .yui-button.search {
     margin: 0;
 }
+
+.yui-skin-lecmTheme .datalist-toolbar .print span.first-child {
+    padding-left: 0;
+    background-position: 12px 6px;
+}
+.yui-skin-lecmTheme .datalist-toolbar .print span.first-child button {
+    padding-left: 34px;
+}
