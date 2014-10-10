@@ -22,6 +22,13 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 		this.name = 'LogicECM.module.Review.AssigneeControl';
 
+		YAHOO.Bubbling.fire('registerValidationHandler', {
+			message: 'Необходимо добавить участников ознакомления',
+			fieldId: addEmployeeButtonElement,
+			handler: this.assigneesValidator,
+			when: 'keyup'
+		});
+
 		this.initControl();
 
 		return this;
@@ -130,6 +137,24 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 				failureMessage: this.msg('message.new-row.failure')
 			});
 			addEmployeesDialog.show();
+		},
+		assigneesValidator: function (field, args, event, form) {
+			debugger;
+			var controls = Alfresco.util.ComponentManager.find({name: 'LogicECM.module.Review.AssigneeControl'}),
+				me = controls ? controls[0] : null, result = true,
+				validatorFunction = function () {
+					debugger;
+					var records = this.widgets.dataTable.getRecordSet().getRecords();
+					result = records && records.length > 0;
+				};
+
+			if (me) {
+				validatorFunction.call(me);
+			} else {
+				result = false;
+			}
+
+			return result;
 		}
 	}, true);
 })();
