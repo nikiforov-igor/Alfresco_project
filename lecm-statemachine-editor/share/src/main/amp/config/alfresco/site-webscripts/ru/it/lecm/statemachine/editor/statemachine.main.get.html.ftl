@@ -5,15 +5,25 @@
 </@>
 
 <#if !page.url.args.statemachineId??>
-<br/>
-<#list machines as machine>
-    <div>
-        <h3><a href="${page.url.context}/page/statemachine?statemachineId=${machine.id}" class="theme-color-1">${machine.title}</a></h3>
-        ${machine.description}
-    </div>
-    <br/>
-</#list>
-
+    <script type="text/javascript">
+        (function() {
+            function init() {
+                LogicECM.module.Base.Util.loadScripts([
+                    'scripts/lecm-statemachine-editor/lecm-statemachine-deploy.js'
+                ], createControl, []);
+            }
+            function createControl(){
+                new LogicECM.module.StatemachineEditor.Deploy("deploy-control");
+            }
+            YAHOO.util.Event.onDOMReady(init);
+        })();
+    </script>
+    <div id="deploy-control"></div>
+    <span id="deploy-control-button" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button">Развернуть</button>
+        </span>
+    </span>
 <#else>
 <div id="statemachine-properties-menu"></div>
 <span class="statemachine-menu">

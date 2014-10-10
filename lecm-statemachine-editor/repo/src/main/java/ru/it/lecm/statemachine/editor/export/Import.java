@@ -5,6 +5,7 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
@@ -103,6 +104,12 @@ public class Import extends AbstractWebScript {
                     XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, serviceDictionary, stateMachineId);
                     xmlImporter.importStateMachine();
                     xmlImporter.close();
+                    if (defaultStatemachine) {
+                        JSONObject result = new JSONObject();
+                        result.put("packageNodeRef", xmlImporter.getStatusesNodeRef().toString());
+                        res.setContentType("application/json;charset=UTF-8");
+                        res.getWriter().write(result.toString());
+                    }
                 }
             }
         } catch (LecmBaseException e) {

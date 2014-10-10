@@ -6,14 +6,22 @@ types.remove(qname);
 
 types = types.toArray();
 
+var defaultStatemachines = ctx.getBean("defaultStatemachines");
+
+
 var machines = [];
 for each (var type in types) {
     var typeDef = dictionaryService.getType(type)
-    machines.push({
-        id: type.toPrefixString().replace(":", "_"),
-        title: typeDef.getTitle(),
-        description: typeDef.getDescription()
-    });
+    var typeString = type.toPrefixString();
+    if (defaultStatemachines.getPath(typeString) != null) {
+        var machineFolder = lecmRepository.getHomeRef().childByNamePath("statemachines/" + typeString.replace(":", "_") + "/statuses");
+        machines.push({
+            id: typeString.replace(":", "_"),
+            title: typeDef.getTitle(),
+            description: typeDef.getDescription(),
+            packageNodeRef: machineFolder == null ? null : machineFolder.nodeRef.toString()
+        });
+    }
 }
 
-model.machines = machines;
+model.result = jsonUtils.toJSONString(machines);

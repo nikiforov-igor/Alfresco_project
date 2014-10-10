@@ -23,9 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -85,6 +82,10 @@ public class XMLImporter {
 
     public void close() throws XMLStreamException {
         xmlr.close();
+    }
+
+    public NodeRef getStatusesNodeRef() {
+        return statusesNodeRef;
     }
 
     private XMLNode readStateMachine() throws XMLStreamException {
