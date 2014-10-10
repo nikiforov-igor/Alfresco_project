@@ -27,6 +27,52 @@
                                         var cType = root.itemType;
                                         root.itemType = namespace + ":" + cType;
                                         root.bubblingLabel = cType;
+
+                                        LogicECM.module.Base.DataGrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
+                                                var html = "";
+                                                // Populate potentially missing parameters
+                                                if (!oRecord) {
+                                                    oRecord = this.getRecord(elCell);
+                                                }
+                                                if (!oColumn) {
+                                                    oColumn = this.getColumn(elCell.parentNode.cellIndex);
+                                                }
+
+                                                if (oRecord && oColumn) {
+                                                    if (!oData) {
+                                                        oData = oRecord.getData("itemData")[oColumn.field];
+                                                    }
+
+                                                    if (oData) {
+                                                        var datalistColumn = grid.datagridColumns[oColumn.key];
+                                                        if (datalistColumn) {
+                                                            oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+                                                            for (var i = 0, ii = oData.length, data; i < ii; i++) {
+                                                                data = oData[i];
+
+                                                                var columnContent = "";
+                                                                switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
+                                                                    case "lecm-subscr:subscription-object-assoc":
+                                                                        columnContent += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + data.value + "\')\">" + data.displayValue + "</a>";
+                                                                        break;
+                                                                    default:
+                                                                        break;
+                                                                }
+
+                                                                if (columnContent) {
+                                                                    html += columnContent;
+
+                                                                    if (i < ii - 1) {
+                                                                        html += "<br />";
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                return html.length > 0 ? html : null;  // возвращаем NULL чтобы вызывался основной метод отрисовки
+                                            };
+
                                         var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
                                                 {
                                                     usePagination:true,
