@@ -34,10 +34,6 @@
                 <property name="cm:name">Личный прием</property>
                 <property name="lecm-doc-dic-dm:deliveryMethod-code">08</property>
             </item>
-            <item name="cm:МЭДО" type="lecm-doc-dic-dm:deliveryMethod">
-                <property name="cm:name">МЭДО</property>
-                <property name="lecm-doc-dic-dm:deliveryMethod-code">09</property>
-            </item>
         </items>
 	</item>
 </items>
