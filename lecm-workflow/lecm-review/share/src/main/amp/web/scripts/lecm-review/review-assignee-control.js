@@ -139,11 +139,9 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 			addEmployeesDialog.show();
 		},
 		assigneesValidator: function (field, args, event, form) {
-			debugger;
 			var controls = Alfresco.util.ComponentManager.find({name: 'LogicECM.module.Review.AssigneeControl'}),
 				me = controls ? controls[0] : null, result = true,
 				validatorFunction = function () {
-					debugger;
 					var records = this.widgets.dataTable.getRecordSet().getRecords();
 					result = records && records.length > 0;
 				};
