@@ -2095,7 +2095,16 @@ LogicECM.module = LogicECM.module || {};
 
 			getEmployeesAbsenceInformation: function (items) {
 				var requestObj = [];
-				for (var i = 0; i < items.length; i++) {
+                var selectedItems = this.selectedItems;
+                var selectedItemsArray = [];
+
+                if (selectedItems) {
+                    for (var key in selectedItems) {
+                        selectedItemsArray.push(selectedItems[key]);
+                    }
+                    items = items.concat(selectedItemsArray);
+                }
+                for (var i = 0; i < items.length; i++) {
 					var item = items[i];
 					if (item.type === "lecm-orgstr:employee") {
 						requestObj.push({"nodeRef": item.nodeRef});
