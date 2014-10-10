@@ -2,8 +2,8 @@
 [
 	<#list  employees as employee>
 	{
-		"firstName": "${employee.properties["lecm-orgstr:employee-first-name"]}",
-		"middleName": "${employee.properties["lecm-orgstr:employee-middle-name"]}",
+		"firstName": "${employee.properties["lecm-orgstr:employee-first-name"]!''}",
+		"middleName": "${employee.properties["lecm-orgstr:employee-middle-name"]!''}",
 		"lastName": "${employee.properties["lecm-orgstr:employee-last-name"]!''}",
 		"phone": "${employee.properties["lecm-orgstr:employee-phone"]!''}",
 		"email": "${employee.properties["lecm-orgstr:employee-email"]!''}",
