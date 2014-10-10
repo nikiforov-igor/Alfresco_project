@@ -11,6 +11,7 @@
 	<#assign fieldValue = field.value>
 </#if>
 
+<#assign defaultValue=""/>
 <#if form.arguments[field.name]?has_content>
 	<#assign defaultValue = form.arguments[field.name]>
 </#if>
@@ -21,8 +22,8 @@
 		YAHOO.util.Event.onContentReady("${fieldHtmlId}", function (){
 			<#if field.control.params.addedXpath??>
 				addValue("${field.control.params.addedXpath}");
-			<#elseif defaultValue??>
-				addNodeRef("${defaultValue}");
+			<#elseif defaultValue != "">
+				addNodeRef("${defaultValue?string}");
 			</#if>
 
 			YAHOO.Bubbling.fire("hiddenAssociationFormReady",
