@@ -129,37 +129,18 @@ public class ExportData extends AbstractWebScript {
                 for (HashMap<String, Object> item : items) {
                     HashMap<String, Object> data = (HashMap<String, Object>) item.get("nodeData");
                     for (String key : fieldKeys) {
-                        HashMap<String, Object> value = (HashMap<String, Object>) data.get(key);
+                        Object valueObject = data.get(key);
                         String result = "";
-                        if (value != null) {
-                            String type = (String) value.get("type");
-                            if ("date".equals(type) || "datetime".equals(type)) {
-                                Date date = null;
-                                try {
-                                    date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse(value.get("displayValue").toString());
-                                } catch (ParseException e) {
-                                    log.error("Error while parsing date format", e);
-                                }
-
-                                if (timeZoneDiff != 0) {
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(date);
-
-                                    cal.add(Calendar.MILLISECOND, timeZoneDiff);
-                                    date = cal.getTime();
-                                }
-
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("date".equals(type) ? DATE_FORMAT : DATETIME_FORMAT, LOCALE_RU);
-                                result = dateFormat.format(date);
-                            } else if ("boolean".equals(type)){
-                                Boolean booleanValue = Boolean.parseBoolean(value.get("displayValue").toString());
-                                result = booleanValue ? "Да" :"Нет";
-                            } else {
-                                result = value.get("displayValue").toString();
+                        if (valueObject instanceof HashMap) {
+                            HashMap<String, Object> value = (HashMap<String, Object>) valueObject;
+                            result = getValue(timeZoneDiff, value);
+                        } else if (valueObject instanceof List) {
+                            List<HashMap<String, Object>> value = (List<HashMap<String, Object>>) valueObject;
+                            for (HashMap<String, Object> dataItem : value) {
+                                result += getValue(timeZoneDiff, dataItem) + "; ";
                             }
+                            result = result.substring(0, result.length() - 2);
                         }
-                        result = result.replaceAll("<a[^>]*>", "");
-                        result = result.replaceAll("</a>", "");
                         wr.write(result);
                     }
                     wr.endRecord();
@@ -177,6 +158,42 @@ public class ExportData extends AbstractWebScript {
             }
         }
         log.info("Export CSV complete");
+    }
+    /**
+     * extract string value
+     */
+    private String getValue(int timeZoneDiff, HashMap<String, Object> value) {
+        String result = "";
+        if (value != null) {
+            String type = (String) value.get("type");
+            if ("date".equals(type) || "datetime".equals(type)) {
+                Date date = null;
+                try {
+                    date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse(value.get("displayValue").toString());
+                } catch (ParseException e) {
+                    log.error("Error while parsing date format", e);
+                }
+
+                if (timeZoneDiff != 0) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+
+                    cal.add(Calendar.MILLISECOND, timeZoneDiff);
+                    date = cal.getTime();
+                }
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("date".equals(type) ? DATE_FORMAT : DATETIME_FORMAT, LOCALE_RU);
+                result = dateFormat.format(date);
+            } else if ("boolean".equals(type)){
+                Boolean booleanValue = Boolean.parseBoolean(value.get("displayValue").toString());
+                result = booleanValue ? "Да" :"Нет";
+            } else {
+                result = value.get("displayValue").toString();
+            }
+        }
+        result = result.replaceAll("<a[^>]*>", "");
+        result = result.replaceAll("</a>", "");
+        return result;
     }
 
     /**
