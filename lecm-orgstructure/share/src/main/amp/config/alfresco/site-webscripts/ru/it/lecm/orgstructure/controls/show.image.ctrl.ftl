@@ -152,7 +152,8 @@
 					<div id="${controlId}-itemGroupActions" class="show-picker"></div>
 				</div>
 
-				<@renderPickerHTML controlId />
+                <#assign hideOnStart = true/>
+				<@renderPickerHTML controlId hideOnStart/>
 			</#if>
 
 			<div class="value-div">
