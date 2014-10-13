@@ -35,9 +35,9 @@
 	padding: 0 !important;
 }
 
-.item-description .link-span {
+/*.item-description .link-span {
 	float: left;
-}
+}*/
 
 .item-description .connection-direction,
 .item-description .document-type {
@@ -74,4 +74,8 @@
 .yui-skin-sam .graph-tree-liner {
 	margin: 0;
     padding: 4px 0 4px 10px;
+}
+
+.graph-tree-toolbar {
+    padding-top: 0.5em;
 }
