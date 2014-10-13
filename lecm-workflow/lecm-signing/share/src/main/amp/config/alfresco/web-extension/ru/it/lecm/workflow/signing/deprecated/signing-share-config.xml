@@ -140,12 +140,10 @@
 			<form id="internal">
 				<field-visibility>
 					<show id="lecm-workflow-result:workflow-result-item-employee-assoc"/>
-					<show id="lecm-workflow-result:workflow-result-item-employee-position" force="true"/>
 					<show id="lecm-workflow-result:workflow-result-item-finish-date"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-workflow-result:workflow-result-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
-					<field id="lecm-workflow-result:workflow-result-item-employee-position" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
+					<field id="lecm-workflow-result:workflow-result-item-employee-assoc"/>
 					<field id="lecm-workflow-result:workflow-result-item-finish-date" label-id="ru.it.lecm.workflow.signing.signing-date">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="showTime">false</control-param>
@@ -153,6 +151,26 @@
                      </field>
 				</appearance>
 			</form>
+            <form id="external">
+                <field-visibility>
+                    <show id="lecm-workflow-result:workflow-result-item-employee-assoc"/>
+                    <show id="lecm-workflow-result:workflow-result-item-finish-date"/>
+                    <show id="lecmSignResult:signResultItemDecision"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-workflow-result:workflow-result-item-employee-assoc"/>
+                    <field id="lecm-workflow-result:workflow-result-item-finish-date" label-id="ru.it.lecm.workflow.signing.signing-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="showTime">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmSignResult:signResultItemDecision" >
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+                            <control-param name="fieldValue">SIGNED</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 
