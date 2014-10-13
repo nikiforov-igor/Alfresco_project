@@ -150,7 +150,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		}
         String user = AuthenticationUtil.getFullyAuthenticatedUser();
         if (!draftDocument || !stateMachineService.isDraft(documentRef)) {    //если мы удаляем черновик, то админом быть необязательно
-            if (!lecmPermissionService.isAdmin(user)) {     //проверяем что мы есть админ, причем совсем админ ???
+            if (!lecmPermissionService.isAdmin(user) && !AuthenticationUtil.isRunAsUserTheSystemUser()) {     //проверяем что мы есть админ, причем совсем админ ???
                 String template = "User with login %s must be alfresco administrator to purge document {%s}%s";
                 String msg = String.format(template, user, documentType, documentRef);
                 throw new AlfrescoRuntimeException(msg);
