@@ -50,9 +50,9 @@
    );
 </#macro>
 
-<#macro renderPickerHTML controlId hideOnStart=false>
+<#macro renderPickerHTML controlId>
    <#assign pickerId = controlId + "-picker">
-<div id="${pickerId}" class="picker yui-panel" <#if hideOnStart??>style="visibility:hidden;"</#if>>
+<div id="${pickerId}" class="picker yui-panel">
    <div id="${pickerId}-head" class="hd">${msg("form.control.object-picker.header")}</div>
 
    <div id="${pickerId}-body" class="bd">
