@@ -160,6 +160,7 @@
     font-size: 9px;
     font-weight: bold;
     text-align: right;
+    margin-right: 10px;
 }
 
 .workflow-task-main-text {
