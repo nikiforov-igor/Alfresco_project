@@ -90,7 +90,7 @@
 	YAHOO.util.Event.onContentReady ("${formId}", createDialog);
 	//]]>
 	</script>
-	<div id="${formId}" class="yui-panel">
+	<div id="${formId}" class="yui-panel hidden1"><#--отрисовываем форму скрытой всегда - при показе ей явным образом выставляется display:block-->
 		<div id="${formId}-head" class="hd">${msg("logicecm.view")}</div>
 		<div id="${formId}-body" class="bd">
 			<div id="${formId}-content"></div>
