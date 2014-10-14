@@ -204,7 +204,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							fn:function(response){
 								var container = Dom.get(this.id);
 								if (container != null) {
-									container.innerHTML = response.serverResponse.responseText;
+                                    var customRegion = container.parentElement;
+                                    customRegion.innerHTML = "";
+                                    customRegion.innerHTML = response.serverResponse.responseText;
 								}
 							},
 							scope: this

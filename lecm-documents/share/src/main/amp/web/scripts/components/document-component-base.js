@@ -96,6 +96,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // копируем контент в кастомный регион
                 var formEl = this.getCustomRegion();
                 if (formEl != null) {
+                    formEl.innerHTML = "";
                     currentExtendedComponent = this;
                     formEl.innerHTML = html;
                     // подменяем заголовок

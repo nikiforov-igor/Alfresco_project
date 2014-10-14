@@ -83,11 +83,12 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 						YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 					}
 
+                    var removed = Dom.get(this.removedItemId);
 					YAHOO.Bubbling.fire("formValueChanged",
 						{
 							eventGroup:this,
 							addedItems:this.selectItem.value,
-							removedItems:Dom.get(this.removedItemId).value,
+							removedItems: removed != null ? removed.value : "",
 							selectedItems:this.selectItem.value,
 							selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
 						});
