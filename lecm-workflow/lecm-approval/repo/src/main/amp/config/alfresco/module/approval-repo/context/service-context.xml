@@ -72,7 +72,5 @@
 		  class="ru.it.lecm.workflow.approval.ApprovalServiceImpl"
 		  depends-on="lecm.approve3.model.bootstrap"
 		  p:defaultApprovalTerm="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.approval.defaultTerm}') ? T(java.lang.Integer).parseInt('${lecm.approval.defaultTerm}') : null}"
-		  p:folders-ref="approval.folders"
-		  p:delegationService-ref="delegationService"
-		  p:stateMachineService-ref="stateMachineHelper"/>
+		  p:folders-ref="approval.folders"/>
 </beans>

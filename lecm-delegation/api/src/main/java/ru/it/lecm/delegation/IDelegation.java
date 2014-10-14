@@ -101,9 +101,9 @@ public interface IDelegation {
 	 */
 	String BUSINESS_ROLE_OTHER_DESIGNATIONS = "BR_OTHER_DESIGNATIONS";
 
-	public static final QName TYPE_DELEGATION_GLOBAL_SETTINGS = QName.createQName (DELEGATION_NAMESPACE, "global-settings");
-	public static final QName PROP_CREATE_DOCUMENT_DELEGATION_SETTING = QName.createQName(DELEGATION_NAMESPACE, "create-document-delegation-setting");
-	public static final String DELEGATION_SETTINGS_NODE_NAME = "Settings";
+	QName TYPE_DELEGATION_GLOBAL_SETTINGS = QName.createQName (DELEGATION_NAMESPACE, "global-settings");
+	QName PROP_CREATE_DOCUMENT_DELEGATION_SETTING = QName.createQName(DELEGATION_NAMESPACE, "create-document-delegation-setting");
+	String DELEGATION_SETTINGS_NODE_NAME = "Settings";
 
 	/**
 	 * получение ссылки на папку сервиса делегирования
@@ -134,7 +134,7 @@ public interface IDelegation {
 	 * @return NodeRef идентификатор параметров делегирования или null если ничего не нашел.
 	 */
 	NodeRef getDelegationOpts (NodeRef nodeRef);
-	
+
         NodeRef createDelegationOpts (NodeRef nodeRef);
 
 	/**
@@ -355,7 +355,7 @@ public interface IDelegation {
 	 * Получение настройки "давать делегирующим права на документы, созданные делегатом на основе делегирования"
 	 * @return если true, то нужно давать делегирующим права на документы, созданные делегатом на основе делегирования
 	 */
-	public boolean getCreateDocumentDelegationSetting();
+	boolean getCreateDocumentDelegationSetting();
 
 	/**
 	 * Получение доверителей для сотрудника по бизнес роли (Сотрудников, которые делегировали указанную бизнес роль)
@@ -363,5 +363,13 @@ public interface IDelegation {
 	 * @param roles список ролей
 	 * @return список сотрудников
 	 */
-	public Set<NodeRef> getDeletionOwnerEmployees(NodeRef employee, Set<String> roles);
+	Set<NodeRef> getDeletionOwnerEmployees(NodeRef employee, Set<String> roles);
+
+	/**
+	 * получение актуального исполнителя по задаче, с учетом делегирования полномочий
+	 * @param employeeRef предполагаемый сотрудник-исполнитель задачи
+	 * @param workflowDynRole идентификатор динамической бизнес роли через которую осуществляется делегирование
+	 * @return актуальный сотрудник или тотже самый сотрудник
+	 */
+	NodeRef getEffectiveEmployee(final NodeRef employeeRef, final String workflowDynRole);
 }

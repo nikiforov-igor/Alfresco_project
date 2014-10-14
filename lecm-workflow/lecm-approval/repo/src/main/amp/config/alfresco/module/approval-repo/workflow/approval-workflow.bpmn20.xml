@@ -49,7 +49,7 @@
           state = '' + items[j].properties['lecmApproveAspects:approvalState'];
           if ('NEW' == state || 'ACTIVE' == state) {
             items[j].properties['lecmApproveAspects:approvalState'] = 'CANCELLED';
-            items[j].properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
+            items[j].properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
             items[j].save();
           }
         }
@@ -65,14 +65,14 @@
     }
     currentIteration.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
     currentIteration.properties['lecmApproveAspects:approvalDecision'] = approvalDecision;
-    currentIteration.properties['lecmWorkflowRoutes:routeCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
+    currentIteration.properties['lecmWorkflowRoutes:routeCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
     currentIteration.save();
     /* уведомление о завершении согласования */
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
     /* запись в БЖ о завершении согласования */
     businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Принято решение по согласованию документа #mainobject', []);
     /* отцепляемся от машины состояний, потому что мы все сделали */
-    approval.disconnectFromStatemachine(document, 'activiti$' + execution.getProcessInstanceId());
+    statemachine.disconnectFromStatemachine(document, 'activiti$' + execution.getProcessInstanceId());
   }
 })();]]></activiti:string>
         </activiti:field>
@@ -95,17 +95,17 @@
   var currentIteration = routesService.getDocumentCurrentIteration(document);
   /* пометка итерации как активной */
   currentIteration.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
-  currentIteration.properties['lecmWorkflowRoutes:routeStartDate'] = approval.getValueConverter().convertValueForJava(new Date());
+  currentIteration.properties['lecmWorkflowRoutes:routeStartDate'] = base.getValueConverter().convertValueForJava(new Date());
   currentIteration.save();
   currentIteration.createAssociation(currentEmployee, 'lecmWorkflowRoutes:initiatorEmployeeAssoc');
   var routeInterruptAfterReject = currentIteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject'];
   var routeNotifyAboutEveryDecision = currentIteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision'];
-  execution.setVariableLocal('currentIteration', approval.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
+  execution.setVariableLocal('currentIteration', base.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
   execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
   execution.setVariable('routeNotifyAboutEveryDecision', routeNotifyAboutEveryDecision);
-  execution.setVariable('initiatorEmployee', approval.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
+  execution.setVariable('initiatorEmployee', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
   /* привязывание процесса к машине состояний документа */
-  approval.connectToStatemachine(document, 'activiti$' + execution.getProcessInstanceId(), 'activiti$' + execution.getProcessDefinition().getKey());
+  statemachine.connectToStatemachine(document, 'activiti$' + execution.getProcessInstanceId(), 'activiti$' + execution.getProcessDefinition().getKey());
 })();]]></activiti:string>
         </activiti:field>
       </extensionElements>
@@ -134,7 +134,7 @@
   stage.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
   stage.save();
   /* передача этапа в подпроцесс */
-  execution.setVariable('currentStage', approval.getWorkflowNodeConverter().convertNode(stage.nodeRef));
+  execution.setVariable('currentStage', base.getWorkflowNodeConverter().convertNode(stage.nodeRef));
 })();]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">
@@ -185,7 +185,7 @@
   /* пометка как активного */
   stageItem.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
   stageItem.save();
-  execution.setVariableLocal('currentStageItem', approval.getWorkflowNodeConverter().convertNode(stageItem.nodeRef));
+  execution.setVariableLocal('currentStageItem', base.getWorkflowNodeConverter().convertNode(stageItem.nodeRef));
 })();]]></activiti:string>
           </activiti:field>
           <activiti:field name="runAs">
@@ -210,7 +210,7 @@
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     msg = documentLink + ' направлен Вам на согласование.';
     employee = orgstructure.getEmployeeByLogin(assignee);
-    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(employee.nodeRef));
+    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */
@@ -231,9 +231,9 @@
   var effectiveEmployee, userName, term, dueDate;
   /* вычисление userName */
   if (employees && employees.length) {
-    effectiveEmployee = approval.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
-    task.setVariableLocal('originalEmployee', approval.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
-    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    effectiveEmployee = delegation.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
+    task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
+    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
     userName = orgstructure.getEmployeeLogin(effectiveEmployee);
 
     /* вычисление dueDate */
@@ -242,14 +242,14 @@
     dueDate = workCalendar.getNextWorkingDateByDays(new Date(), term);
 
     stageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
-    stageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = approval.getValueConverter().convertValueForJava(new Date());
+    stageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = base.getValueConverter().convertValueForJava(new Date());
     stageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     stageItem.save();
     stageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     stageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
 
     /* подготовка переменных для таймера */
-    realExecution.setVariableLocal('localAssignee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
     realExecution.setVariableLocal('localDueDate', dueDate);
 
     task.setDueDate(dueDate);
@@ -275,7 +275,7 @@
   if (attachment) {
     attachment.move(stageItem);
   }
-  stageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
+  stageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   stageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
@@ -351,7 +351,7 @@
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     msg = documentLink + ' направлен Вам на согласование.';
     employee = orgstructure.getEmployeeByLogin(assignee);
-    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(employee.nodeRef));
+    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */
@@ -373,9 +373,9 @@
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
   currentStageItem.save();
   if (employees && employees.length) {
-    effectiveEmployee = approval.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
-    task.setVariableLocal('originalEmployee', approval.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
-    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    effectiveEmployee = delegation.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
+    task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
+    task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
     userName = orgstructure.getEmployeeLogin(effectiveEmployee);
 
     /* вычисление dueDate */
@@ -384,14 +384,14 @@
     dueDate = workCalendar.getNextWorkingDateByDays(new Date(), term);
 
     currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
-    currentStageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = approval.getValueConverter().convertValueForJava(new Date());
+    currentStageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = base.getValueConverter().convertValueForJava(new Date());
     currentStageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     currentStageItem.save();
     currentStageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     currentStageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
 
     /* подготовка переменных для таймера */
-    realExecution.setVariableLocal('localAssignee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    realExecution.setVariableLocal('localAssignee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
     realExecution.setVariableLocal('localDueDate', dueDate);
 
     task.setDueDate(dueDate);
@@ -419,7 +419,7 @@
   if (attachment) {
     attachment.move(currentStageItem);
   }
-  currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
+  currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
   currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   currentStageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
@@ -460,7 +460,7 @@
             <activiti:string><![CDATA[(function(){ /* start */
   var currentStage = execution.getVariable('currentStage');
   var activitiStageItems, stageItems = currentStage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
-  activitiStageItems = approval.getWorkflowNodeConverter().convertNodes(approval.getValueConverter().convertValueForJava(stageItems), true);
+  activitiStageItems = base.getWorkflowNodeConverter().convertNodes(base.getValueConverter().convertValueForJava(stageItems), true);
   execution.setVariableLocal('stageItems', activitiStageItems);
 })();]]></activiti:string>
           </activiti:field>
@@ -479,7 +479,7 @@
   var localDueDate = realExecution.getVariableLocal('localDueDate');
   var isSameDay;
   if (localAssignee && localDueDate) {
-    isSameDay = Packages.org.apache.commons.lang.time.DateUtils.isSameDay(localDueDate, approval.getValueConverter().convertValueForJava(new Date()));
+    isSameDay = Packages.org.apache.commons.lang.time.DateUtils.isSameDay(localDueDate, base.getValueConverter().convertValueForJava(new Date()));
     if (isSameDay) {
       document = bpm_package.children[0];
       documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');

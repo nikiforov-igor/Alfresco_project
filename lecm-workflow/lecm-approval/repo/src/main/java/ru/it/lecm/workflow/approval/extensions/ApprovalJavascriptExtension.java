@@ -43,16 +43,4 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 	public ScriptNode createDocumentApprovalHistoryFolder(final ScriptNode document) {
 		return new ScriptNode(approvalService.createDocumentApprovalHistoryFolder(document.getNodeRef()), serviceRegistry, getScope());
 	}
-
-	public ScriptNode getEffectiveEmployee(final ScriptNode employee, final String workflowDynRole) {
-		return new ScriptNode(approvalService.getEffectiveEmployee(employee.getNodeRef(), workflowDynRole), serviceRegistry, getScope());
-	}
-
-	public void connectToStatemachine(final ScriptNode document, final String processInstanceID, final String processDefinitionID) {
-		approvalService.connectToStatemachine(document.getNodeRef(), processInstanceID, processDefinitionID);
-	}
-
-	public void disconnectFromStatemachine(final ScriptNode document, final String processInstanceID) {
-		approvalService.disconnectFromStatemachine(document.getNodeRef(), processInstanceID);
-	}
 }

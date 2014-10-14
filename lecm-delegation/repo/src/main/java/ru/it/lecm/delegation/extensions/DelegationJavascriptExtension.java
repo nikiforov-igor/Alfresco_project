@@ -122,7 +122,7 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 //			TODO: Потенциально может так получится, что настройки делегирования ещё не созданы,
 //			(из-за разделения метода getOrCreate, поэтому попробуем создать.
 //			Вызывается как минимум из одного не транзакционнного скрипта, поэтому обернём
-//                      delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.                        
+//                      delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.
 //			if(delegationOptsNodeRef == null) {
 //				delegationOptsNodeRef = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
 //					@Override
@@ -254,7 +254,7 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 //		TODO: Метод getEffectiveExecutor через несколько уровней вызывает getDelegationOpts,
 //		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
 //		и при необходимости создать
-//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.            
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.
 //		NodeRef employeeRef = new NodeRef(assumedExecutorRef);
 //		if(delegationService.getDelegationOpts(employeeRef) == null) {
 //			delegationService.createDelegationOpts(employeeRef);
@@ -280,7 +280,7 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 //		TODO: Метод assignTaskToEffectiveExecutor через несколько уровней вызывает getDelegationOpts,
 //		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
 //		и при необходимости создать
-//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.            
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.
 //		NodeRef employeeRef = new NodeRef(assumedExecutor);
 //		if(delegationService.getDelegationOpts(employeeRef) == null) {
 //			delegationService.createDelegationOpts(employeeRef);
@@ -295,5 +295,9 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 
 	public ScriptNode getGlobalSettingsNode() {
 		return new ScriptNode(delegationService.getGlobalSettingsNode(), serviceRegistry, getScope());
+	}
+
+	public ScriptNode getEffectiveEmployee(final ScriptNode employee, final String workflowDynRole) {
+		return new ScriptNode(delegationService.getEffectiveEmployee(employee.getNodeRef(), workflowDynRole), serviceRegistry, getScope());
 	}
 }

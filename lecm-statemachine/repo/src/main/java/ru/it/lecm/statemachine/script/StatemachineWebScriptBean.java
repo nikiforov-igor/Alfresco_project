@@ -22,312 +22,326 @@ import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
 import java.util.*;
 
 /**
- * User: pmelnikov
- * Date: 15.03.13
- * Time: 13:56
+ * User: pmelnikov Date: 15.03.13 Time: 13:56
  */
 public class StatemachineWebScriptBean extends BaseWebScript {
 
-    private OrgstructureBean orgstructureService;
-    private StateMachineHelper stateMachineHelper;
+	private OrgstructureBean orgstructureService;
+	private StateMachineHelper stateMachineHelper;
 
-    private final static Logger logger = LoggerFactory.getLogger(StatemachineWebScriptBean.class);
+	private final static Logger logger = LoggerFactory.getLogger(StatemachineWebScriptBean.class);
 
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
-    }
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
-        this.stateMachineHelper = stateMachineHelper;
-    }
+	public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+		this.stateMachineHelper = stateMachineHelper;
+	}
 
-    enum BPMState {
-        NA, ACTIVE, COMPLETED, ALL;
+	enum BPMState {
 
-        public static BPMState getValue(String name) {
-            try {
-                return valueOf(name.toUpperCase());
-            } catch (Exception e) {
-                return NA;
-            }
-        }
-    }
+		NA, ACTIVE, COMPLETED, ALL;
 
-    /**
-     * Возвращает задачи для документа
-     * @param node - документ, для которого будет возвращены задачи
-     * @param stateParam  статус задачи
-     * @param addSubordinatesTask поск задач подчененных сотрудников
-     * @param myTasksLimit - максимальное количество задач
-     * @return
-     */
-    public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, int myTasksLimit) {
-        if (node == null) {
-            return new WorkflowTaskListBean();
-        }
+		public static BPMState getValue(String name) {
+			try {
+				return valueOf(name.toUpperCase());
+			} catch (Exception e) {
+				return NA;
+			}
+		}
+	}
 
-        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        if (currentEmployee == null) {
-            return new WorkflowTaskListBean();
-        }
+	/**
+	 * Возвращает задачи для документа
+	 *
+	 * @param node - документ, для которого будет возвращены задачи
+	 * @param stateParam статус задачи
+	 * @param addSubordinatesTask поск задач подчененных сотрудников
+	 * @param myTasksLimit - максимальное количество задач
+	 * @return
+	 */
+	public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, int myTasksLimit) {
+		if (node == null) {
+			return new WorkflowTaskListBean();
+		}
 
-        final NodeRef nodeRef = node.getNodeRef();
-        BPMState state = BPMState.getValue(stateParam);
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+		if (currentEmployee == null) {
+			return new WorkflowTaskListBean();
+		}
 
-        List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
-        if (state == BPMState.ACTIVE || state == BPMState.ALL) {
-            List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
-                @Override
-                public List<WorkflowTask> doWork() throws Exception {
-                    return stateMachineHelper.getDocumentTasks(nodeRef, true);
-                }
-            });
+		final NodeRef nodeRef = node.getNodeRef();
+		BPMState state = BPMState.getValue(stateParam);
 
-            List<WorkflowTask> userTasks = stateMachineHelper.getAssignedAndPooledTasks(AuthenticationUtil.getFullyAuthenticatedUser());
-            for (WorkflowTask activeTask : activeTasks) {
-                for (WorkflowTask userTask : userTasks) {
-                    if (activeTask.getId().equals(userTask.getId())) {
-                        tasks.add(activeTask);
-                    }
-                }
-            }
-        }
+		List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
+		if (state == BPMState.ACTIVE || state == BPMState.ALL) {
+			List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+				@Override
+				public List<WorkflowTask> doWork() throws Exception {
+					return stateMachineHelper.getDocumentTasks(nodeRef, true);
+				}
+			});
 
-        if (state == BPMState.COMPLETED || state == BPMState.ALL) {
-            tasks.addAll(stateMachineHelper.getDocumentTasks(nodeRef, false));
-        }
+			List<WorkflowTask> userTasks = stateMachineHelper.getAssignedAndPooledTasks(AuthenticationUtil.getFullyAuthenticatedUser());
+			for (WorkflowTask activeTask : activeTasks) {
+				for (WorkflowTask userTask : userTasks) {
+					if (activeTask.getId().equals(userTask.getId())) {
+						tasks.add(activeTask);
+					}
+				}
+			}
+		}
 
-        WorkflowTaskListBean result = new WorkflowTaskListBean();
+		if (state == BPMState.COMPLETED || state == BPMState.ALL) {
+			tasks.addAll(stateMachineHelper.getDocumentTasks(nodeRef, false));
+		}
 
-        boolean isBoss = orgstructureService.isBoss(currentEmployee);
-        result.setShowSubordinateTasks(isBoss);
+		WorkflowTaskListBean result = new WorkflowTaskListBean();
 
-        List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
-        result.setMyTasks(myTasks, myTasksLimit);
+		boolean isBoss = orgstructureService.isBoss(currentEmployee);
+		result.setShowSubordinateTasks(isBoss);
 
-        for (WorkflowTaskBean task : result.getMyTasks()) {
-            String presentString = getDocumentPresentString(nodeRef);
-            task.setDocumentPresentString(presentString);
-        }
+		List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
+		result.setMyTasks(myTasks, myTasksLimit);
 
-        if (addSubordinatesTask) {
-            List<NodeRef> subordinateEmployees = orgstructureService.getBossSubordinate(currentEmployee);
-            List<WorkflowTask> subordinatesTasks = stateMachineHelper.filterTasksByAssignees(tasks, subordinateEmployees);
-            result.setSubordinatesTasks(subordinatesTasks);
+		for (WorkflowTaskBean task : result.getMyTasks()) {
+			String presentString = getDocumentPresentString(nodeRef);
+			task.setDocumentPresentString(presentString);
+		}
 
-            for (WorkflowTaskBean task : result.getSubordinateTasks()) {
-                String presentString = getDocumentPresentString(nodeRef);
-                task.setDocumentPresentString(presentString);
-            }
-        }
+		if (addSubordinatesTask) {
+			List<NodeRef> subordinateEmployees = orgstructureService.getBossSubordinate(currentEmployee);
+			List<WorkflowTask> subordinatesTasks = stateMachineHelper.filterTasksByAssignees(tasks, subordinateEmployees);
+			result.setSubordinatesTasks(subordinatesTasks);
 
-        return result;
-    }
+			for (WorkflowTaskBean task : result.getSubordinateTasks()) {
+				String presentString = getDocumentPresentString(nodeRef);
+				task.setDocumentPresentString(presentString);
+			}
+		}
 
-    /**
-     * Возвращает процессы для документа
-     *
-     * @param node - nodeRef документа
-     * @param stateParam состояние заправиваемых процессов
-     * @param activeWorkflowsLimit максимальное количество возвращаемых процессов
-     * @return
-     */
-    public WorkflowListBean getWorkflows(ScriptNode node, String stateParam, int activeWorkflowsLimit) {
-        if (node == null) {
-            return new WorkflowListBean();
-        }
+		return result;
+	}
 
-        NodeRef nodeRef = node.getNodeRef();
-        BPMState state = BPMState.getValue(stateParam);
-        WorkflowListBean result = new WorkflowListBean();
+	/**
+	 * Возвращает процессы для документа
+	 *
+	 * @param node - nodeRef документа
+	 * @param stateParam состояние заправиваемых процессов
+	 * @param activeWorkflowsLimit максимальное количество возвращаемых процессов
+	 * @return
+	 */
+	public WorkflowListBean getWorkflows(ScriptNode node, String stateParam, int activeWorkflowsLimit) {
+		if (node == null) {
+			return new WorkflowListBean();
+		}
 
-        List<WorkflowInstance> activeWorkflows = stateMachineHelper.getDocumentWorkflows(nodeRef, true);
-        result.setActiveWorkflows(activeWorkflows, activeWorkflowsLimit);
+		NodeRef nodeRef = node.getNodeRef();
+		BPMState state = BPMState.getValue(stateParam);
+		WorkflowListBean result = new WorkflowListBean();
 
-        if (state == BPMState.ALL) {
-            List<WorkflowInstance> completedWorkflows = stateMachineHelper.getDocumentWorkflows(nodeRef, false);
-            result.setCompletedWorkflows(completedWorkflows);
-        }
+		List<WorkflowInstance> activeWorkflows = stateMachineHelper.getDocumentWorkflows(nodeRef, true);
+		result.setActiveWorkflows(activeWorkflows, activeWorkflowsLimit);
 
-        return result;
-    }
+		if (state == BPMState.ALL) {
+			List<WorkflowInstance> completedWorkflows = stateMachineHelper.getDocumentWorkflows(nodeRef, false);
+			result.setCompletedWorkflows(completedWorkflows);
+		}
 
-    /**
-     * Проверка на "Только для чтения" для категории вложения
-     * @param node - документ
-     * @param category - категория
-     * @return
-     */
-    public boolean isReadOnlyCategory(ScriptNode node, String category) {
-        return stateMachineHelper.isReadOnlyCategory(node.getNodeRef(), category);
-    }
+		return result;
+	}
 
-    /**
-     * Возвращает список активных задач пользователя для документа данного типа
-     *
-     * @param documentTypesString
-     * @return
-     */
-    public WorkflowTaskListBean getDocumentsTasks(String documentTypesString) {
-        if (StringUtils.isEmpty(documentTypesString)) {
-            return new WorkflowTaskListBean();
-        }
+	/**
+	 * Проверка на "Только для чтения" для категории вложения
+	 *
+	 * @param node - документ
+	 * @param category - категория
+	 * @return
+	 */
+	public boolean isReadOnlyCategory(ScriptNode node, String category) {
+		return stateMachineHelper.isReadOnlyCategory(node.getNodeRef(), category);
+	}
 
-        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        if (currentEmployee == null) {
-            return new WorkflowTaskListBean();
-        }
+	/**
+	 * Возвращает список активных задач пользователя для документа данного типа
+	 *
+	 * @param documentTypesString
+	 * @return
+	 */
+	public WorkflowTaskListBean getDocumentsTasks(String documentTypesString) {
+		if (StringUtils.isEmpty(documentTypesString)) {
+			return new WorkflowTaskListBean();
+		}
 
-        List<String> documentTypes = Arrays.asList(documentTypesString.split(","));
-        String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+		if (currentEmployee == null) {
+			return new WorkflowTaskListBean();
+		}
 
-        List<WorkflowTask> documentsTasks = stateMachineHelper.getDocumentsTasks(documentTypes, fullyAuthenticatedUser);
-        List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(documentsTasks, Collections.singletonList(currentEmployee));
+		List<String> documentTypes = Arrays.asList(documentTypesString.split(","));
+		String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
 
-        WorkflowTaskListBean result = new WorkflowTaskListBean();
-        result.setMyTasks(myTasks);
+		List<WorkflowTask> documentsTasks = stateMachineHelper.getDocumentsTasks(documentTypes, fullyAuthenticatedUser);
+		List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(documentsTasks, Collections.singletonList(currentEmployee));
 
-        for (WorkflowTaskBean task : result.getMyTasks()) {
-            NodeRef taskDocument = stateMachineHelper.getTaskDocument(task.getWorkflowTask(), documentTypes);
-            String documentPresentString = taskDocument != null ? getDocumentPresentString(taskDocument) : "";
-            task.setDocumentPresentString(documentPresentString);
-        }
+		WorkflowTaskListBean result = new WorkflowTaskListBean();
+		result.setMyTasks(myTasks);
 
-        return result;
-    }
+		for (WorkflowTaskBean task : result.getMyTasks()) {
+			NodeRef taskDocument = stateMachineHelper.getTaskDocument(task.getWorkflowTask(), documentTypes);
+			String documentPresentString = taskDocument != null ? getDocumentPresentString(taskDocument) : "";
+			task.setDocumentPresentString(documentPresentString);
+		}
 
-    /**
-     * Возвращает список активных задач для документа
-     * @param node
-     * @return
-     */
-    public List<WorkflowTask> getDocumentTasks(ScriptNode node) {
-        return stateMachineHelper.getDocumentTasks(node.getNodeRef(), true);
-    }
+		return result;
+	}
 
-    /**
-     * Возвращает список активных рабочих процессов
-     * @param node
-     * @return
-     */
-    public List<WorkflowInstance> getDocumentWorkflows(ScriptNode node) {
-        return stateMachineHelper.getDocumentWorkflows(node.getNodeRef(), true);
-    }
+	/**
+	 * Возвращает список активных задач для документа
+	 *
+	 * @param node
+	 * @return
+	 */
+	public List<WorkflowTask> getDocumentTasks(ScriptNode node) {
+		return stateMachineHelper.getDocumentTasks(node.getNodeRef(), true);
+	}
 
-    /**
-     * Проверка наличия машины состояний у документа
-     * @param node
-     * @return
-     */
-    public boolean hasStatemachine(ScriptNode node) {
-        return stateMachineHelper.hasStatemachine(node.getNodeRef());
-    }
+	/**
+	 * Возвращает список активных рабочих процессов
+	 *
+	 * @param node
+	 * @return
+	 */
+	public List<WorkflowInstance> getDocumentWorkflows(ScriptNode node) {
+		return stateMachineHelper.getDocumentWorkflows(node.getNodeRef(), true);
+	}
 
-    /**
-     * Возвращает может ли текущий сотрудник создавать документ определенного типа
-     * @param type
-     * @return
-     */
-    public boolean isStarter(String type) {
-        return stateMachineHelper.isStarter(type);
-    }
+	/**
+	 * Проверка наличия машины состояний у документа
+	 *
+	 * @param node
+	 * @return
+	 */
+	public boolean hasStatemachine(ScriptNode node) {
+		return stateMachineHelper.hasStatemachine(node.getNodeRef());
+	}
 
-    /**
-     * Проверка документа на черновой статус
-     * @param node
-     * @return
-     */
-    public boolean isDraft(ScriptNode node) {
-        return stateMachineHelper.isDraft(node.getNodeRef());
-    }
+	/**
+	 * Возвращает может ли текущий сотрудник создавать документ определенного типа
+	 *
+	 * @param type
+	 * @return
+	 */
+	public boolean isStarter(String type) {
+		return stateMachineHelper.isStarter(type);
+	}
 
-    /**
-     * Возвращает статус для документа
-     * @param document
-     * @return
-     */
-    public String getDocumentStatus(ScriptNode document) {
-        return stateMachineHelper.getDocumentStatus(document.getNodeRef());
-    }
+	/**
+	 * Проверка документа на черновой статус
+	 *
+	 * @param node
+	 * @return
+	 */
+	public boolean isDraft(ScriptNode node) {
+		return stateMachineHelper.isDraft(node.getNodeRef());
+	}
 
-    /**
-     * Выполнение действия по его идентификатору
-     * @param document
-     * @param actionId
-     * @return
-     */
-    public TransitionResponse executeAction(ScriptNode document, String actionId) {
-        return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
-    }
+	/**
+	 * Возвращает статус для документа
+	 *
+	 * @param document
+	 * @return
+	 */
+	public String getDocumentStatus(ScriptNode document) {
+		return stateMachineHelper.getDocumentStatus(document.getNodeRef());
+	}
 
-    /**
-     * Выполнение действия по его имени
-     * @param document
-     * @param actionName
-     * @return
-     */
-    public TransitionResponse executeActionByName(ScriptNode document, String actionName) {
-        return stateMachineHelper.executeActionByName(document.getNodeRef(), actionName);
-    }
+	/**
+	 * Выполнение действия по его идентификатору
+	 *
+	 * @param document
+	 * @param actionId
+	 * @return
+	 */
+	public TransitionResponse executeAction(ScriptNode document, String actionId) {
+		return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
+	}
 
-    /**
-     * Получение списка статусов для документа
-     * @param documentType
-     * @param includeActive
-     * @param includeFinal
-     * @return
-     */
-    public String[] getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
-    	logger.debug("!!!!!!! StatemachineWebScriptBean getStatuses");
-        Set<String> statuses = new HashSet<String>();
-        if (documentType != null && !documentType.isEmpty()) {
-            String[] types = documentType.split(",");
-            for (String type : types) {
-                if (!type.isEmpty()) {
-                    statuses.addAll(stateMachineHelper.getStatuses(type, includeActive, includeFinal));
-                }
-            }
-        }
-        return statuses.toArray(new String[statuses.size()]);
-    }
+	/**
+	 * Выполнение действия по его имени
+	 *
+	 * @param document
+	 * @param actionName
+	 * @return
+	 */
+	public TransitionResponse executeActionByName(ScriptNode document, String actionName) {
+		return stateMachineHelper.executeActionByName(document.getNodeRef(), actionName);
+	}
 
-    /**
-     * Получение папкок с архивными документами
-     * @param documentType
-     * @return
-     */
-    public String[] getArchiveFolders(String documentType) {
-        Set<String> folders = stateMachineHelper.getArchiveFolders(documentType);
-        return folders.toArray(new String[folders.size()]);
-    }
+	/**
+	 * Получение списка статусов для документа
+	 *
+	 * @param documentType
+	 * @param includeActive
+	 * @param includeFinal
+	 * @return
+	 */
+	public String[] getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
+		logger.debug("!!!!!!! StatemachineWebScriptBean getStatuses");
+		Set<String> statuses = new HashSet<String>();
+		if (documentType != null && !documentType.isEmpty()) {
+			String[] types = documentType.split(",");
+			for (String type : types) {
+				if (!type.isEmpty()) {
+					statuses.addAll(stateMachineHelper.getStatuses(type, includeActive, includeFinal));
+				}
+			}
+		}
+		return statuses.toArray(new String[statuses.size()]);
+	}
 
-    /**
-     * Получение строки представления для документа
-     * @param document
-     * @return
-     */
-    public String getDocumentPresentString(NodeRef document) {
-        return (String) serviceRegistry.getNodeService().getProperty(document, QName.createQName("http://www.it.ru/logicECM/document/1.0", "present-string"));
-    }
+	/**
+	 * Получение папкок с архивными документами
+	 *
+	 * @param documentType
+	 * @return
+	 */
+	public String[] getArchiveFolders(String documentType) {
+		Set<String> folders = stateMachineHelper.getArchiveFolders(documentType);
+		return folders.toArray(new String[folders.size()]);
+	}
 
-    private Collection<String> convertToJavaCollection(Object privileges) {
-        HashSet<String> result = new HashSet<String>();
-        if (privileges instanceof String) {
-            result.add((String) privileges);
-        } if (privileges instanceof ScriptableObject) {
-            ScriptableObject object = (ScriptableObject) privileges;
+	/**
+	 * Получение строки представления для документа
+	 *
+	 * @param document
+	 * @return
+	 */
+	public String getDocumentPresentString(NodeRef document) {
+		return (String) serviceRegistry.getNodeService().getProperty(document, QName.createQName("http://www.it.ru/logicECM/document/1.0", "present-string"));
+	}
 
-            Object[] ids = object.getIds();
-            for (Object id : ids) {
-                String value = (String) object.get((Integer) id, object);
-                result.add(value);
-            }
-        }
-        return result;
-    }
+	private Collection<String> convertToJavaCollection(Object privileges) {
+		HashSet<String> result = new HashSet<String>();
+		if (privileges instanceof String) {
+			result.add((String) privileges);
+		}
+		if (privileges instanceof ScriptableObject) {
+			ScriptableObject object = (ScriptableObject) privileges;
+
+			Object[] ids = object.getIds();
+			for (Object id : ids) {
+				String value = (String) object.get((Integer) id, object);
+				result.add(value);
+			}
+		}
+		return result;
+	}
 
 	/**
 	 * Возвращает находится ли документ в финальном статусе
+	 *
 	 * @param nodeRef
 	 * @return
 	 */
@@ -335,95 +349,110 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 		return stateMachineHelper.isFinal(new NodeRef(nodeRef));
 	}
 
-    /**
-     * Возвращает номер процесса машины состояний, по которому запущен документ
-     * @param node
-     * @return
-     */
-    public String getStatemachineId(ScriptNode node) {
-        return stateMachineHelper.getStatemachineId(node.getNodeRef());
-    }
+	/**
+	 * Возвращает номер процесса машины состояний, по которому запущен документ
+	 *
+	 * @param node
+	 * @return
+	 */
+	public String getStatemachineId(ScriptNode node) {
+		return stateMachineHelper.getStatemachineId(node.getNodeRef());
+	}
 
-    /**
-     * Возвращает номер версии машины состояний
-     * @param node
-     * @return
-     */
-    public String getStatemachineVersion(ScriptNode node) {
-        return stateMachineHelper.getStatemachineVersion(node.getNodeRef());
-    }
+	/**
+	 * Возвращает номер версии машины состояний
+	 *
+	 * @param node
+	 * @return
+	 */
+	public String getStatemachineVersion(ScriptNode node) {
+		return stateMachineHelper.getStatemachineVersion(node.getNodeRef());
+	}
 
-    /**
-     * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
-     * @param document документ
-     * @param employee сотрудник
-     * @param roleName имя роли
-     * @return
-     */
-    public boolean grandDynamicRoleForEmployee(ScriptNode document, ScriptNode employee, String roleName) {
-        return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName);
-    }
-    
-    /**
-     * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
-     * @param document документ
-     * @param employee сотрудник
-     * @param roleName имя роли
-     * @param task
-     * @return
-     */
-    public boolean grandDynamicRoleForEmployee(ScriptNode document, ScriptNode employee, String roleName, Task task) {
-        return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName, task);
-    }
+	/**
+	 * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
+	 *
+	 * @param document документ
+	 * @param employee сотрудник
+	 * @param roleName имя роли
+	 * @return
+	 */
+	public boolean grandDynamicRoleForEmployee(ScriptNode document, ScriptNode employee, String roleName) {
+		return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName);
+	}
 
-    /**
-     * Возвращает true, если поле возможно редактировать
-     * @param document
-     * @param field
-     * @return
-     */
-    public boolean isEditableField(ScriptNode document, String field) {
-        return stateMachineHelper.isEditableField(document.getNodeRef(), field);
-    }
+	/**
+	 * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
+	 *
+	 * @param document документ
+	 * @param employee сотрудник
+	 * @param roleName имя роли
+	 * @param task
+	 * @return
+	 */
+	public boolean grandDynamicRoleForEmployee(ScriptNode document, ScriptNode employee, String roleName, Task task) {
+		return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName, task);
+	}
 
+	/**
+	 * Возвращает true, если поле возможно редактировать
+	 *
+	 * @param document
+	 * @param field
+	 * @return
+	 */
+	public boolean isEditableField(ScriptNode document, String field) {
+		return stateMachineHelper.isEditableField(document.getNodeRef(), field);
+	}
 
-    /**
-     * @param document - документ
-     * @return Имя предыдущего статуса
-     */
-    public String getPreviousStatusName(ScriptNode document) {
-        return stateMachineHelper.getPreviousStatusName(document.getNodeRef());
-    }
+	/**
+	 * @param document - документ
+	 * @return Имя предыдущего статуса
+	 */
+	public String getPreviousStatusName(ScriptNode document) {
+		return stateMachineHelper.getPreviousStatusName(document.getNodeRef());
+	}
 
-    /**
-     * Выполнение дейсвтвия по перходу в следующий статус
-     * @param document
-     * @param actionName
-     */
-    public void executeTransitionAction(ScriptNode document, String actionName) {
-        stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName);
-    }
+	/**
+	 * Выполнение дейсвтвия по перходу в следующий статус
+	 *
+	 * @param document
+	 * @param actionName
+	 */
+	public void executeTransitionAction(ScriptNode document, String actionName) {
+		stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName);
+	}
 
-    /**
-     * Выполнение дейсвтвия по перходу в следующий статус
-     * @param document
-     * @param actionName
-     * @param task
-     */
-    public void executeTransitionAction(ScriptNode document, String actionName, Task task) {
-        stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName, task);
-    }
+	/**
+	 * Выполнение дейсвтвия по перходу в следующий статус
+	 *
+	 * @param document
+	 * @param actionName
+	 * @param task
+	 */
+	public void executeTransitionAction(ScriptNode document, String actionName, Task task) {
+		stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName, task);
+	}
 
-    /**
-     * Принудительное завершение процесса
-     * @param document
-     * @param definition
-     * @param variable
-     * @param value
-     */
+	/**
+	 * Принудительное завершение процесса
+	 *
+	 * @param document
+	 * @param definition
+	 * @param variable
+	 * @param value
+	 */
 	public void terminateWorkflowsByDefinition(final ScriptNode document, final String definition, final String variable, final Object value) {
 		ArrayList<String> definitions = new ArrayList<String>();
 		definitions.add(definition);
 		stateMachineHelper.terminateWorkflowsByDefinitionId(document.getNodeRef(), definitions, variable, value);
+	}
+
+	public void connectToStatemachine(final ScriptNode document, final String processInstanceID, final String processDefinitionID) {
+		stateMachineHelper.connectToStatemachine(document.getNodeRef(), processInstanceID, processDefinitionID);
+	}
+
+	public void disconnectFromStatemachine(final ScriptNode document, final String processInstanceID) {
+		stateMachineHelper.disconnectFromStatemachine(document.getNodeRef(), processInstanceID);
 	}
 }
