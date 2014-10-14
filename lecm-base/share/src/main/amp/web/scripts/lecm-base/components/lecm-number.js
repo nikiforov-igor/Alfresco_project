@@ -57,8 +57,8 @@ LogicECM.module = LogicECM.module || {};
 				controlId:null,
 				options: {
 					formId: null,
-					fieldId: null
-					
+					fieldId: null,
+                    disabled: false
 				},
 				onDisableControl: function (layer, args) {
 					if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {

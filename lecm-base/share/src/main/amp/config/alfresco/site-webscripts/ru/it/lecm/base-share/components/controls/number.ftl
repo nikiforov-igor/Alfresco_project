@@ -5,6 +5,8 @@
     </#if>
 </#if>
 
+<#assign disabled=(field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))/>
+
 <#if form.mode == "view">
    <div class="control number viewmode">
 	   <div class="label-div">
@@ -42,7 +44,8 @@
 				var control = new LogicECM.module.Number("${fieldHtmlId}").setMessages(${messages});
 				control.setOptions({
 					fieldId: "${field.configName}",
-					formId: "${args.htmlid}"
+					formId: "${args.htmlid}",
+                    disabled: ${disabled?string}
 				});
 			}
 
@@ -71,7 +74,7 @@
 				       <#if field.description??>title="${field.description}"</#if>
 				       <#if field.control.params.maxLength??>maxlength="${field.control.params.maxLength}"</#if>
 				       <#if field.control.params.size??>size="${field.control.params.size}"</#if>
-				       <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if> />
+				       <#if disabled>disabled="true"</#if> />
 			</div>
 		</div>
 	</div>
