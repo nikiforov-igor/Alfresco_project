@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="lecmTransactionHelper" class="ru.it.lecm.base.beans.LecmTransactionHelperImpl">
-            <property name="transactionService" ref="transactionService"/>
-        </bean>
-            
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
+
 	<bean id="repositoryStructureHelper" class="ru.it.lecm.base.beans.RepositoryStructureHelperImpl" init-method="init">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="permissionService" ref="permissionService"/>
@@ -32,48 +32,48 @@
 	</bean>
 
 	<!--TODO: проверить, что поломается, если использовать секьюрные сервисы (NodeService, TransactionService и т.п).
-			  по возможности нужно использовать именно секьюрные сервисы-->
+	по возможности нужно использовать именно секьюрные сервисы-->
 	<bean id="baseBean" class="ru.it.lecm.base.beans.BaseBean" abstract="true"
-		depends-on="repositoryStructureHelper, ServiceRegistry, nodeService, transactionService, lecmTransactionHelper, authenticationService"
-			p:repositoryStructureHelper-ref="repositoryStructureHelper"
-			p:serviceRegistry-ref="ServiceRegistry"
-			p:nodeService-ref="nodeService"
-			p:transactionService-ref="transactionService"
-			p:lecmTransactionHelper-ref="lecmTransactionHelper"
-			p:authService-ref="authenticationService"/>
+		  depends-on="repositoryStructureHelper, ServiceRegistry, nodeService, transactionService, lecmTransactionHelper, authenticationService"
+		  p:repositoryStructureHelper-ref="repositoryStructureHelper"
+		  p:serviceRegistry-ref="ServiceRegistry"
+		  p:nodeService-ref="nodeService"
+		  p:transactionService-ref="transactionService"
+		  p:lecmTransactionHelper-ref="lecmTransactionHelper"
+		  p:authService-ref="authenticationService"/>
 
-    <bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
+	<bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
 	</bean>
 
 	<bean id="ServiceFolderPermissionHelper" init-method="bootstrap" abstract="true"
-          class="ru.it.lecm.base.beans.ServiceFolderPermissionHelper" depends-on="dictionaryBootstrap">
-        <property name="nodeService" ref="nodeService"/>
+		  class="ru.it.lecm.base.beans.ServiceFolderPermissionHelper" depends-on="dictionaryBootstrap">
+		<property name="nodeService" ref="nodeService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="permissionService" ref="permissionService"/>
 		<property name="authorityService" ref="authorityService"/>
-    </bean>
+	</bean>
 
-    <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" parent="baseBean"
-		depends-on="ServiceRegistry, nodeService" 
-			p:dictionaryService-ref="serviceDictionary"
-            p:lecmPermissionService-ref="lecmPermissionServiceBean"
-			p:documentService-ref="documentService"
-			p:objTypeCache-ref="objTypeCache"
-			p:typeTemplateCache-ref="typeTemplateCache"
-			p:dictionary-ref="dictionaryService"
-			p:typeListTemplateCache-ref="typeListTemplateCache"
-			p:dateFormat="${lecm.base.date.format}"/>
+	<bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" parent="baseBean"
+		  depends-on="ServiceRegistry, nodeService"
+		  p:dictionaryService-ref="serviceDictionary"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+		  p:documentService-ref="documentService"
+		  p:objTypeCache-ref="objTypeCache"
+		  p:typeTemplateCache-ref="typeTemplateCache"
+		  p:dictionary-ref="dictionaryService"
+		  p:typeListTemplateCache-ref="typeListTemplateCache"
+		  p:dateFormat="${lecm.base.date.format}"/>
 
-    <bean id="substitudeWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SubstitudeWebScriptBean"
-          depends-on="substitudeService">
-        <property name="extensionName">
-            <value>substitude</value>
-        </property>
-        <property name="service">
-            <ref bean="substitudeService"/>
-        </property>
-    </bean>
+	<bean id="substitudeWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SubstitudeWebScriptBean"
+		  depends-on="substitudeService">
+		<property name="extensionName">
+			<value>substitude</value>
+		</property>
+		<property name="service">
+			<ref bean="substitudeService"/>
+		</property>
+	</bean>
 
 	<bean id="LogicECMContentPolicy"
 		  class="ru.it.lecm.base.policy.LogicECMContentPolicy" init-method="init">
@@ -82,96 +82,97 @@
 	</bean>
 
 	<bean id="deleteAction"
-	      class="ru.it.lecm.base.schedule.DeleteActionExecuter"
-	      parent="action-executer">
+		  class="ru.it.lecm.base.schedule.DeleteActionExecuter"
+		  parent="action-executer">
 		<property name="nodeService">
 			<ref bean="NodeService" />
 		</property>
 		<property name="ignoreLock">
 			<value>false</value>
 		</property>
-        <property name="publicAction" value="false" />
-    </bean>
+		<property name="publicAction" value="false" />
+	</bean>
 
-    <bean id="lecmObjectsService" class="ru.it.lecm.base.beans.LecmObjectsServiceImpl" parent="baseBean"
-		p:namespaceService-ref="namespaceService"
-		p:dictionaryService-ref="dictionaryService"
-		p:cannedQueryRegistry-ref="fileFolderCannedQueryRegistry"/>
+	<bean id="lecmObjectsService" class="ru.it.lecm.base.beans.LecmObjectsServiceImpl" parent="baseBean"
+		  p:namespaceService-ref="namespaceService"
+		  p:dictionaryService-ref="dictionaryService"
+		  p:cannedQueryRegistry-ref="fileFolderCannedQueryRegistry"/>
 
-    <bean id="baseWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.BaseWebScriptBean">
-        <property name="extensionName">
-            <value>base</value>
-        </property>
-        <property name="namespaceService">
-            <ref bean="namespaceService"/>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
-        </property>
-        <property name="lecmObjectsService">
-            <ref bean="lecmObjectsService"/>
-        </property>
-	    <property name="dictionaryService">
-		    <ref bean="dictionaryService"/>
-	    </property>
-	    <property name="nodeService">
-		    <ref bean="nodeService" />
-	    </property>
-	    <property name="authorityService" ref="authorityService" />
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-    </bean>
+	<bean id="baseWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.BaseWebScriptBean">
+		<property name="extensionName">
+			<value>base</value>
+		</property>
+		<property name="namespaceService">
+			<ref bean="namespaceService"/>
+		</property>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
+		</property>
+		<property name="lecmObjectsService">
+			<ref bean="lecmObjectsService"/>
+		</property>
+		<property name="dictionaryService">
+			<ref bean="dictionaryService"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService" />
+		</property>
+		<property name="authorityService" ref="authorityService" />
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="workflowNodeConverter" ref="activitiNodeConverter"/>
+	</bean>
 
-    <bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">
-        <property name="extensionName">
-            <value>lecmRepository</value>
-        </property>
-        <property name="repositoryStructureHelper">
-            <ref bean="repositoryStructureHelper"/>
-        </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
-        </property>
-    </bean>
+	<bean id="lecmRepositoryWebScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.LecmRepositoryWebScriptBean">
+		<property name="extensionName">
+			<value>lecmRepository</value>
+		</property>
+		<property name="repositoryStructureHelper">
+			<ref bean="repositoryStructureHelper"/>
+		</property>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry"/>
+		</property>
+	</bean>
 
-    <bean name="lecmGetChildrenCannedQueryFactory" class="ru.it.lecm.base.beans.getchildren.GetLECMChildrenCannedQueryFactory">
-        <property name="registry" ref="fileFolderCannedQueryRegistry"/>
-        <property name="dictionaryService" ref="dictionaryService"/>
-        <property name="permissionService" ref="permissionService"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="tenantService" ref="tenantService"/>
-        <property name="nodeDAO" ref="nodeDAO"/>
-        <property name="qnameDAO" ref="qnameDAO"/>
-        <property name="localeDAO" ref="localeDAO"/>
-        <property name="contentDataDAO" ref="contentDataDAO"/>
-        <property name="cannedQueryDAO" ref="cannedQueryDAO"/>
-        <property name="methodSecurity" ref="FileFolderService_security_list"/>
-    </bean>
+	<bean name="lecmGetChildrenCannedQueryFactory" class="ru.it.lecm.base.beans.getchildren.GetLECMChildrenCannedQueryFactory">
+		<property name="registry" ref="fileFolderCannedQueryRegistry"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="permissionService" ref="permissionService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="tenantService" ref="tenantService"/>
+		<property name="nodeDAO" ref="nodeDAO"/>
+		<property name="qnameDAO" ref="qnameDAO"/>
+		<property name="localeDAO" ref="localeDAO"/>
+		<property name="contentDataDAO" ref="contentDataDAO"/>
+		<property name="cannedQueryDAO" ref="cannedQueryDAO"/>
+		<property name="methodSecurity" ref="FileFolderService_security_list"/>
+	</bean>
 
 	<bean id="webscript.ru.it.lecm.workflow.task-subordinates-instances.get"
-	      class="ru.it.lecm.base.scripts.LecmTaskSubordinatesInstancesGet"
-	      parent="abstractWorkflowWebScript" depends-on="serviceOrgstructure">
+		  class="ru.it.lecm.base.scripts.LecmTaskSubordinatesInstancesGet"
+		  parent="abstractWorkflowWebScript" depends-on="serviceOrgstructure">
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
-    <bean id="logicEcmAssociationPolicy" init-method="init" abstract="true"
-          class="ru.it.lecm.base.policies.LogicECMAssociationPolicy">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-        <property name="namespaceService">
-            <ref bean="namespaceService"/>
-        </property>
-        <property name="dictionaryService">
-            <ref bean="dictionaryService"/>
-        </property>
-    </bean>
+	<bean id="logicEcmAssociationPolicy" init-method="init" abstract="true"
+		  class="ru.it.lecm.base.policies.LogicECMAssociationPolicy">
+		<property name="policyComponent">
+			<ref bean="policyComponent"/>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="namespaceService">
+			<ref bean="namespaceService"/>
+		</property>
+		<property name="dictionaryService">
+			<ref bean="dictionaryService"/>
+		</property>
+	</bean>
 
 	<bean id="webscript.ru.it.lecm.actions.export-csv.post"
-	      class="ru.it.lecm.base.scripts.ExportCSV"
-	      parent="webscript"
+		  class="ru.it.lecm.base.scripts.ExportCSV"
+		  parent="webscript"
 		  depends-on="substitudeService">
 		<property name="nodeService">
 			<ref bean="nodeService" />
@@ -181,26 +182,26 @@
 		</property>
 	</bean>
 
-    <bean id="webscript.ru.it.lecm.search.export.post"
-          class="ru.it.lecm.base.scripts.ExportData"
-          parent="webscript">
-        <property name="nodeService">
-            <ref bean="nodeService" />
-        </property>
-        <property name="rhinoScriptProcessor">
-            <ref bean="javaScriptProcessor" />
-        </property>
-    </bean>
+	<bean id="webscript.ru.it.lecm.search.export.post"
+		  class="ru.it.lecm.base.scripts.ExportData"
+		  parent="webscript">
+		<property name="nodeService">
+			<ref bean="nodeService" />
+		</property>
+		<property name="rhinoScriptProcessor">
+			<ref bean="javaScriptProcessor" />
+		</property>
+	</bean>
 
-    <bean id="webscript.ru.it.lecm.models.restore.get"
-	      class="ru.it.lecm.base.scripts.RestoreModel"
-	      parent="webscript"
+	<bean id="webscript.ru.it.lecm.models.restore.get"
+		  class="ru.it.lecm.base.scripts.RestoreModel"
+		  parent="webscript"
 		  depends-on="substitudeService">
 		<property name="lecmModelsService" ref="lecmModelsService"/>
 	</bean>
 
 	<bean id="logicEcmBaseAspectsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap">
+		  depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/base-repo/models/lecm-base-aspects-model.xml</value>
@@ -213,8 +214,8 @@
 		</property>
 	</bean>
 
-    <bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap">
+	<bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/base-repo/models/lecm-links-model.xml</value>
@@ -227,45 +228,45 @@
 		</property>
 	</bean>
 
-    <bean id="lecmModelsService" class="ru.it.lecm.base.beans.LecmModelsService"
-          depends-on="dictionaryBootstrap">
-        <property name="dictionaryDAO" ref="dictionaryDAO"/>
-        <property name="contentService" ref="ContentService"/>
-        <property name="transactionService" ref="transactionService"/>
-        <property name="namespaceService" ref="namespaceService"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="tenantAdminService" ref="tenantAdminService"/>
-        <property name="dictionaryRepositoryBootstrap" ref="dictionaryRepositoryBootstrap"/>
-
-        <property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
-    </bean>
-
-    <bean id="modelsToRepositoryLoader" class="ru.it.lecm.base.beans.ModelToRepositoryLoader" abstract="true"
-            init-method="init">
-        <property name="dictionaryDAO" ref="dictionaryDAO"/>
-
-        <property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
-
-        <property name="lecmModelsService" ref="lecmModelsService"/>
-
-        <property name="useDefaultModels" value="${lecm.models.useDefaultModels}"/>
+	<bean id="lecmModelsService" class="ru.it.lecm.base.beans.LecmModelsService"
+		  depends-on="dictionaryBootstrap">
+		<property name="dictionaryDAO" ref="dictionaryDAO"/>
+		<property name="contentService" ref="ContentService"/>
 		<property name="transactionService" ref="transactionService"/>
-    </bean>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="tenantAdminService" ref="tenantAdminService"/>
+		<property name="dictionaryRepositoryBootstrap" ref="dictionaryRepositoryBootstrap"/>
 
-    <bean id="listOfUsedTypes" class="ru.it.lecm.base.ListOfUsedTypesBean">
-        <property name="types">
-            <map>
-                <entry key="d:text" value="String"/>
-                <entry key="d:int" value="Int"/>
-                <entry key="d:long" value="Long"/>
-                <entry key="d:float" value="Float"/>
-                <entry key="d:double" value="Double"/>
-                <entry key="d:date" value="Date"/>
-                <entry key="d:datetime" value="Datetime"/>
-                <entry key="d:boolean" value="Boolean"/>
-            </map>
-        </property>
-    </bean>
+		<property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
+	</bean>
+
+	<bean id="modelsToRepositoryLoader" class="ru.it.lecm.base.beans.ModelToRepositoryLoader" abstract="true"
+		  init-method="init">
+		<property name="dictionaryDAO" ref="dictionaryDAO"/>
+
+		<property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
+
+		<property name="lecmModelsService" ref="lecmModelsService"/>
+
+		<property name="useDefaultModels" value="${lecm.models.useDefaultModels}"/>
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
+
+	<bean id="listOfUsedTypes" class="ru.it.lecm.base.ListOfUsedTypesBean">
+		<property name="types">
+			<map>
+				<entry key="d:text" value="String"/>
+				<entry key="d:int" value="Int"/>
+				<entry key="d:long" value="Long"/>
+				<entry key="d:float" value="Float"/>
+				<entry key="d:double" value="Double"/>
+				<entry key="d:date" value="Date"/>
+				<entry key="d:datetime" value="Datetime"/>
+				<entry key="d:boolean" value="Boolean"/>
+			</map>
+		</property>
+	</bean>
 
 	<bean id="userTempDirectoryCleanSchedule" class="ru.it.lecm.base.schedule.UserTempDirectoryCleanSchedule">
 		<property name="repositoryStructureHelper">
@@ -312,22 +313,22 @@
 		</property>
 	</bean>
 
-    <bean id="lecmSearchCounterScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.SearchCounter">
-        <property name="extensionName">
-            <value>searchCounter</value>
-        </property>
-        <property name="searchService">
-            <ref bean="searchService"/>
-        </property>
-        <property name="storeUrl">
-            <value>${spaces.store}</value>
-        </property>
-        <property name="processorService" ref="searchQueryProcessorService"/>
-    </bean>
+	<bean id="lecmSearchCounterScript" parent="baseJavaScriptExtension" class="ru.it.lecm.base.scripts.SearchCounter">
+		<property name="extensionName">
+			<value>searchCounter</value>
+		</property>
+		<property name="searchService">
+			<ref bean="searchService"/>
+		</property>
+		<property name="storeUrl">
+			<value>${spaces.store}</value>
+		</property>
+		<property name="processorService" ref="searchQueryProcessorService"/>
+	</bean>
 
 	<bean id="webscript.ru.it.lecm.config.repoShareConfig.get"
-	      class="ru.it.lecm.base.scripts.RepoShareConfigGet"
-	      parent="webscript">
+		  class="ru.it.lecm.base.scripts.RepoShareConfigGet"
+		  parent="webscript">
 		<property name="nodeService" ref="NodeService"/>
 		<property name="tenantService" ref="tenantService"/>
 		<property name="searchService" ref="SearchService"/>
@@ -342,108 +343,108 @@
 		</property>
 	</bean>
 
-        <bean id="webscript.ru.it.lecm.formsConfig.getTypeParents.get" class="ru.it.lecm.base.scripts.FormsConfigWebScriptBean" parent="webscript">
+	<bean id="webscript.ru.it.lecm.formsConfig.getTypeParents.get" class="ru.it.lecm.base.scripts.FormsConfigWebScriptBean" parent="webscript">
 		<property name="dictionaryService" ref="DictionaryService" />
-                <property name="nameSpaceService" ref="NamespaceService" />
+		<property name="nameSpaceService" ref="NamespaceService" />
 	</bean>
 
-    <bean id="lecm.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
-            abstract="true" init-method="bootstrapViews">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="dictionaryService" ref="DictionaryService" />
-        <property name="namespaceService" ref="NamespaceService" />
-    </bean>
+	<bean id="lecm.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
+		  abstract="true" init-method="bootstrapViews">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="dictionaryService" ref="DictionaryService" />
+		<property name="namespaceService" ref="NamespaceService" />
+	</bean>
 
 	<bean id="propertiesImpl" class="ru.it.lecm.base.beans.LecmBasePropertiesServiceImpl"></bean>
 
 	<bean id="propertiesService"  class="org.springframework.aop.framework.ProxyFactoryBean">
-        <property name="proxyInterfaces" value="ru.it.lecm.base.beans.LecmBasePropertiesService"/>
-        <property name="target" ref="propertiesImpl"/>
-        <property name="interceptorNames">
-            <list>
-                <value>propertiesInterceptor</value>
-            </list>
-        </property>
-    </bean>
+		<property name="proxyInterfaces" value="ru.it.lecm.base.beans.LecmBasePropertiesService"/>
+		<property name="target" ref="propertiesImpl"/>
+		<property name="interceptorNames">
+			<list>
+				<value>propertiesInterceptor</value>
+			</list>
+		</property>
+	</bean>
 
 	<bean id="propertiesInterceptor" class="ru.it.lecm.base.utils.LecmBasePropertiesInterceptor"/>
 
-    <bean name="objTypeSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
-        <!-- <property name="cache">
-            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
-                <property name="cacheManager">
-                    <ref bean="internalEHCacheManager" />
-                                </property>
-                <property name="cacheName">
-                    <value>ru.it.lecm.cache.objTypeCache</value>
-                                </property>
-                        </bean>
-        </property> -->
-    </bean>
+	<bean name="objTypeSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
+		<!-- <property name="cache">
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
+				<property name="cacheManager">
+					<ref bean="internalEHCacheManager" />
+								</property>
+				<property name="cacheName">
+					<value>ru.it.lecm.cache.objTypeCache</value>
+								</property>
+						</bean>
+		</property> -->
+	</bean>
 
-    <bean name="objTypeCache" class="org.alfresco.repo.cache.TransactionalCache">
-        <property name="sharedCache">
-            <ref bean="objTypeSharedCache" />
-        </property>
-        <property name="name">
-            <value>ru.it.lecm.cache.objTypeTransactionalCache</value>
-        </property>
-        <property name="maxCacheSize" value="300" />
-        <property name="mutable" value="true" />
-    </bean>
+	<bean name="objTypeCache" class="org.alfresco.repo.cache.TransactionalCache">
+		<property name="sharedCache">
+			<ref bean="objTypeSharedCache" />
+		</property>
+		<property name="name">
+			<value>ru.it.lecm.cache.objTypeTransactionalCache</value>
+		</property>
+		<property name="maxCacheSize" value="300" />
+		<property name="mutable" value="true" />
+	</bean>
 
-    <bean name="typeTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
-        <!-- <property name="cache">
-            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
-                <property name="cacheManager">
-                    <ref bean="internalEHCacheManager" />
-                                </property>
-                <property name="cacheName">
-                    <value>ru.it.lecm.cache.typeTemplateCache</value>
-                                </property>
-                        </bean>
-        </property> -->
-    </bean>
+	<bean name="typeTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
+		<!-- <property name="cache">
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
+				<property name="cacheManager">
+					<ref bean="internalEHCacheManager" />
+								</property>
+				<property name="cacheName">
+					<value>ru.it.lecm.cache.typeTemplateCache</value>
+								</property>
+						</bean>
+		</property> -->
+	</bean>
 
-    <bean name="typeTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
-        <property name="sharedCache">
-            <ref bean="typeTemplateSharedCache" />
-        </property>
-        <property name="name">
-            <value>ru.it.lecm.cache.typeTemplateTransactionalCache</value>
-        </property>
-        <property name="maxCacheSize" value="300" />
-        <property name="mutable" value="true" />
-    </bean>
+	<bean name="typeTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
+		<property name="sharedCache">
+			<ref bean="typeTemplateSharedCache" />
+		</property>
+		<property name="name">
+			<value>ru.it.lecm.cache.typeTemplateTransactionalCache</value>
+		</property>
+		<property name="maxCacheSize" value="300" />
+		<property name="mutable" value="true" />
+	</bean>
 
-    <bean name="typeListTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
-        <!-- <property name="cache">
-            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
-                <property name="cacheManager">
-                    <ref bean="internalEHCacheManager" />
-                                </property>
-                <property name="cacheName">
-                    <value>ru.it.lecm.cache.typeListTemplateCache</value>
-                                </property>
-                        </bean>
-        </property> -->
-    </bean>
+	<bean name="typeListTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
+		<!-- <property name="cache">
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
+				<property name="cacheManager">
+					<ref bean="internalEHCacheManager" />
+								</property>
+				<property name="cacheName">
+					<value>ru.it.lecm.cache.typeListTemplateCache</value>
+								</property>
+						</bean>
+		</property> -->
+	</bean>
 
-    <bean name="typeListTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
-        <property name="sharedCache">
-            <ref bean="typeListTemplateSharedCache" />
-        </property>
-        <property name="name">
-            <value>ru.it.lecm.cache.typeListTemplateTransactionalCache</value>
-        </property>
-        <property name="maxCacheSize" value="300" />
-        <property name="mutable" value="true" />
-    </bean>
+	<bean name="typeListTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
+		<property name="sharedCache">
+			<ref bean="typeListTemplateSharedCache" />
+		</property>
+		<property name="name">
+			<value>ru.it.lecm.cache.typeListTemplateTransactionalCache</value>
+		</property>
+		<property name="maxCacheSize" value="300" />
+		<property name="mutable" value="true" />
+	</bean>
 
 	<bean id="webscript.ru.it.lecm.actions.reassign-tasks.post"
-	      class="ru.it.lecm.base.scripts.ReassignTasks"
-	      parent="webscript"
-	      depends-on="substitudeService">
+		  class="ru.it.lecm.base.scripts.ReassignTasks"
+		  parent="webscript"
+		  depends-on="substitudeService">
 		<property name="workflowService" ref="workflowServiceImpl"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="notificationsService" ref="notificationsService"/>
@@ -452,43 +453,43 @@
 		<property name="documentService" ref="documentService"/>
 	</bean>
 
-    <bean id="webscript.ru.it.lecm.js-helper.getCompletion.get" class="ru.it.lecm.base.scripts.JSCompletionHelper" parent="webscript">
-    </bean>
+	<bean id="webscript.ru.it.lecm.js-helper.getCompletion.get" class="ru.it.lecm.base.scripts.JSCompletionHelper" parent="webscript">
+	</bean>
 
-    <bean id="searchQueryProcessorService" class="ru.it.lecm.base.beans.SearchQueryProcessorServiceImpl">
-        <property name="processorManager" ref="searchQueryProcessorManager"/>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="notificationsService" ref="notificationsService"/>
-        <property name="workCalendarService" ref="WorkCalendarService"/>
-    </bean>
+	<bean id="searchQueryProcessorService" class="ru.it.lecm.base.beans.SearchQueryProcessorServiceImpl">
+		<property name="processorManager" ref="searchQueryProcessorManager"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="workCalendarService" ref="WorkCalendarService"/>
+	</bean>
 
-    <bean id="searchQueryProcessorManager" class="ru.it.lecm.base.beans.SearchQueryProcManager"/>
+	<bean id="searchQueryProcessorManager" class="ru.it.lecm.base.beans.SearchQueryProcManager"/>
 
-    <bean id="searchQueryBaseProccesor" init-method="register" abstract="true"
-          class="ru.it.lecm.base.beans.SearchQueryProcessor">
-        <property name="nodeService" ref="nodeService"/>
-        <property name="namespaceService" ref="namespaceService"/>
-        <property name="authService" ref="authenticationService"/>
-        <property name="processorManager" ref="searchQueryProcessorManager"/>
-        <property name="searchService" ref="searchService"/>
-    </bean>
+	<bean id="searchQueryBaseProccesor" init-method="register" abstract="true"
+		  class="ru.it.lecm.base.beans.SearchQueryProcessor">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="authService" ref="authenticationService"/>
+		<property name="processorManager" ref="searchQueryProcessorManager"/>
+		<property name="searchService" ref="searchService"/>
+	</bean>
 
-    <bean id="favouritesProcessor" class="ru.it.lecm.base.processors.FavouritesProcessor" parent="searchQueryBaseProccesor">
-        <property name="id" value="FAVOURITES"/>
-        <property name="preferenceService" ref="preferenceService"/>
-    </bean>
+	<bean id="favouritesProcessor" class="ru.it.lecm.base.processors.FavouritesProcessor" parent="searchQueryBaseProccesor">
+		<property name="id" value="FAVOURITES"/>
+		<property name="preferenceService" ref="preferenceService"/>
+	</bean>
 
-    <bean id="searchQueryProcessorWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SearchQueryProcessorScript">
-        <property name="extensionName">
-            <value>searchQueryProcessor</value>
-        </property>
-        <property name="processorService" ref="searchQueryProcessorService"/>
-    </bean>
+	<bean id="searchQueryProcessorWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SearchQueryProcessorScript">
+		<property name="extensionName">
+			<value>searchQueryProcessor</value>
+		</property>
+		<property name="processorService" ref="searchQueryProcessorService"/>
+	</bean>
 
-    <bean id="nodeExpression" class="ru.it.lecm.base.expression.ExpressionNode"/>
+	<bean id="nodeExpression" class="ru.it.lecm.base.expression.ExpressionNode"/>
 
 	<bean id="base.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="userProfile.arm.LogicEcmBootstrap">
+		  depends-on="userProfile.arm.LogicEcmBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Мое делегирование"/>
 		<property name="dictionaries">
 			<list>
