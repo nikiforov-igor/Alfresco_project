@@ -152,6 +152,14 @@ public interface DocumentConnectionService {
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef);
 
 	/**
+	 * Получение связей с документом
+	 * @param documentRef Ссылка на документ
+	 * @param connectionTypeCode тип связи
+	 * @return Список ссылок на связи
+	 */
+	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, String connectionTypeCode);
+
+	/**
 	 * Получение документов, связанных с документом
 	 * @param documentRef Ссылка на документ
 	 * @param checkPermissions проверка прав

@@ -256,6 +256,22 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 
 	/**
 	 * Получение связей на документ документа
+	 * @param document документ
+	 * @param connectionTypeCode Тип связи
+	 * @return массив связей
+	 */
+	public Scriptable getConnectionsWithDocument(ScriptNode document, String connectionTypeCode) {
+		ParameterCheck.mandatory("document", document);
+		ParameterCheck.mandatory("connectionTypeCode", connectionTypeCode);
+		if (document != null) {
+			List<NodeRef> connections = this.documentConnectionService.getConnectionsWithDocument(document.getNodeRef(), connectionTypeCode);
+			return createScriptable(connections);
+		}
+ 		return null;
+	}
+
+	/**
+	 * Получение связей на документ документа
 	 * @param documentNodeRef nodeRef документа
 	 * @param checkPermission проверятьли доступность связанного документа
 	 * @return массив связей

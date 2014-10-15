@@ -309,6 +309,39 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	@Override
+	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, String connectionTypeCode) {
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
+
+		List<NodeRef> results = new ArrayList<NodeRef>();
+
+		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
+		if (connections != null) {
+			NodeRef connectionType = null;
+
+			if (connectionTypeCode != null) {
+				connectionType = dictionaryService.getDictionaryValueByParam(
+						DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+						DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+						connectionTypeCode);
+			}
+
+			for (AssociationRef assocRef : connections) {
+				NodeRef connectionRef = assocRef.getSourceRef();
+
+				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
+					List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
+					if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
+							&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
+						results.add(connectionRef);
+					}
+				}
+			}
+		}
+
+		return results;
+	}
+
+	@Override
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem) {
 		return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, typeNodeRef, isSystem, false);
 	}
