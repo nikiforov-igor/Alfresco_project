@@ -54,8 +54,7 @@
 		<property name="authorityService" ref="authorityService"/>
 	</bean>
 
-	<bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" parent="baseBean"
-		  depends-on="ServiceRegistry, nodeService"
+	<bean id="substitudeService" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" parent="baseBean"
 		  p:dictionaryService-ref="serviceDictionary"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
 		  p:documentService-ref="documentService"
@@ -63,7 +62,8 @@
 		  p:typeTemplateCache-ref="typeTemplateCache"
 		  p:dictionary-ref="dictionaryService"
 		  p:typeListTemplateCache-ref="typeListTemplateCache"
-		  p:dateFormat="${lecm.base.date.format}"/>
+		  p:dateFormat="${lecm.base.date.format}"
+		  p:namespaceService-ref="namespaceService"/>
 
 	<bean id="substitudeWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SubstitudeWebScriptBean"
 		  depends-on="substitudeService">

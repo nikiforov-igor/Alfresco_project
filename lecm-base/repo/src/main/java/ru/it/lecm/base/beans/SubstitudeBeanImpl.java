@@ -265,6 +265,10 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         this.lecmPermissionService = lecmPermissionService;
     }
 
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
     /**
      * Получение заголовка элемента в соответствии с форматной строкой.
      * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)
@@ -752,11 +756,6 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         return expressions;
     }
 
-    public void init() {
-        namespaceService = getServiceRegistry().getNamespaceService();
-        nodeService = getServiceRegistry().getNodeService();
-    }
-
     public ServiceRegistry getServiceRegistry() {
         return serviceRegistry;
     }
@@ -778,7 +777,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
     private NodeRef getObjectTypeRef(NodeRef nodeRef) {
         // получаем тип объекта
         QName type = nodeService.getType(nodeRef);
-        String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
+        String shortTypeName = type.toPrefixString(namespaceService);
         // получаем Тип Объекта
         return getObjectTypeByClass(type,shortTypeName);
     }
