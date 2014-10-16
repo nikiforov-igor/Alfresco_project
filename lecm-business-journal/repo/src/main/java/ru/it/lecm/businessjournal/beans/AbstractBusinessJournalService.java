@@ -24,6 +24,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.jms.core.MessageCreator;
 
@@ -253,7 +254,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
      */
     protected String fillTemplateString(String template, Map<String, String> holders) {
         for (String key : holders.keySet()) {
-            template = template.replaceAll(key, holders.get(key));
+            template = StringUtils.replace(template, key, holders.get(key));
         }
         return template;
     }
@@ -323,7 +324,12 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
             if (record == null) return;
             sendRecord(record);
         } catch (Exception e) {
-            logger.error("Error while save business journal record");
+			String msg = String.format("Error while save business journal record for '%s'", defaultDescription);
+			if (logger.isDebugEnabled() || logger.isTraceEnabled()) {
+				logger.debug(msg, e);
+			} else {
+	            logger.error(msg);
+			}
         }
     }
 
