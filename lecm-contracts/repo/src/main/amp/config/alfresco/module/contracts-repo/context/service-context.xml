@@ -32,7 +32,7 @@
     </bean>
 
     <bean id="contracts.LogicEcmContractsBootstrap" parent="modelsToRepositoryLoader"
-          depends-on="contracts.contractsBootstrap">
+          depends-on="contracts.contractsBootstrap, lecm.sign2.helper.model.bootstrap">
         <property name="models">
             <list>
 

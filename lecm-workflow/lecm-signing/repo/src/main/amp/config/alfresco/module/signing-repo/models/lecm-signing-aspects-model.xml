@@ -23,6 +23,21 @@
 				<property name="lecmSignAspects:signingDate">
 					<type>d:datetime</type>
 				</property>
+				<property name="lecmSignAspects:signingState">
+					<type>d:text</type>
+					<default>NEW</default>
+					<constraints>
+						<constraint name="lecmSignAspects:signingStateConstraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>NEW</value>
+									<value>ACTIVE</value>
+									<value>COMPLETE</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecmSignAspects:signerEmployeeAssoc">
@@ -33,7 +48,7 @@
 					<target>
 						<class>lecm-orgstr:employee</class>
 						<mandatory>false</mandatory>
-						<many>true</many>
+						<many>false</many>
 					</target>
 				</association>
 			</associations>

@@ -10,6 +10,10 @@
   var document;
   if (isEnded || deleteReason) {
     document = bpm_package.children[0];
+    if (deleteReason) {
+      document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
+      document.save();
+    }
     statemachine.disconnectFromStatemachine(document, 'activiti$' + execution.getProcessInstanceId());
   }
 })();]]></activiti:string>
@@ -32,6 +36,9 @@
   var signerEmployee = document.assocs['lecmSignAspects:signerEmployeeAssoc'][0];
   execution.setVariableLocal('initiatorEmployee', base.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
   execution.setVariableLocal('signerEmployee', base.getWorkflowNodeConverter().convertNode(signerEmployee.nodeRef));
+  /* сбрасываем ранее принятое решение на случай повторного запуска */
+  document.properties['lecmSignAspects:signingState'] = 'ACTIVE';
+  document.save();
   /* привязывание процесса к машине состояний документа */
   statemachine.connectToStatemachine(document, 'activiti$' + execution.getProcessInstanceId(), 'activiti$' + execution.getProcessDefinition().getKey());
 })();]]></activiti:string>
@@ -87,16 +94,16 @@
   execution.setVariableLocal('employeeComment', comment);
   execution.setVariableLocal('effectiveEmployee', effectiveEmployee);
   /* отбираем ранее нарезанные права */
-  /* lecmPermission.revokeDynamicRole(document, employee, 'LECM_SIGNER_DYN'); */
+  /* lecmPermission.revokeDynamicRole(document, effectiveEmployee, 'LECM_SIGNER_DYN'); */
   /* добавляем в участники как читателя */
-  documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
+  documentMembers.addMemberWithoutCheckPermission(document, effectiveEmployee, 'LECM_BASIC_PG_Reader', true);
 })();]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow2" sourceRef="alfrescoScripttask1" targetRef="usertask1"></sequenceFlow>
-    <serviceTask id="alfrescoScripttask2" name="Alfresco Script Task" activiti:async="true" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+    <serviceTask id="alfrescoScripttask2" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
       <extensionElements>
         <activiti:field name="script">
           <activiti:string><![CDATA[(function() { /* запись в БЖ, рассылка уведомлений, запись результата в документ */
@@ -107,22 +114,26 @@
   var effectiveEmployee = execution.getVariableLocal('effectiveEmployee');
   var employeeName = effectiveEmployee.properties['lecm-orgstr:employee-short-name'];
   var decision = '' + execution.getVariableLocal('employeeDecision');
-  var comment = (execution.getVariableLocal('employeeDecision') != null) ? '' + execution.getVariableLocal('employeeDecision') : null;
+  var comment = (execution.getVariableLocal('employeeComment') != null) ? '' + execution.getVariableLocal('employeeComment') : null;
   var isSigned = 'SIGNED' == decision;
-  var msg, bjMsg;
+  var msg, bjMsg, wrapped;
   if (isSigned) {
     msg = 'Сотрудник ' + employeeName + ' подписал документ ' + documentLink;
     bjMsg = 'Сотрудник #object1 подписал документ #mainobject';
 
     document.properties['lecmSignAspects:isSigned'] = true;
+    document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
     document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
     document.save();
     document.removeAssociation(signerEmployee, 'lecmSignAspects:signerEmployeeAssoc');
     document.createAssociation(effectiveEmployee, 'lecmSignAspects:signerEmployeeAssoc');
   } else {
-    /* logText += documentScript.wrapperTitle("изменение срока", lecmErrandWf_requestDueDateChangeReason); */
-    msg = 'Сотрудник ' + employeeName + ' отклонил подписание документа ' +  + documentLink;
-    bjMsg = 'Сотрудник #object1 отклонил подписание документа #mainobject';
+    wrapped = documentScript.wrapperTitle('отклонил подписание', comment);
+    msg = 'Сотрудник ' + employeeName + ' ' + wrapped + ' документа ' + documentLink;
+    bjMsg = 'Сотрудник #object1 ' + wrapped + ' документа #mainobject';
+
+    document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
+    document.save();
   }
   notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
   businessJournal.log(document.nodeRef.toString(), 'SIGNING', bjMsg, [effectiveEmployee.nodeRef.toString()]);
@@ -133,9 +144,22 @@
         </activiti:field>
       </extensionElements>
     </serviceTask>
-    <sequenceFlow id="flow3" sourceRef="usertask1" targetRef="alfrescoScripttask2"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="usertask1" targetRef="alfrescoScripttask3"></sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow4" sourceRef="alfrescoScripttask2" targetRef="endevent1"></sequenceFlow>
+    <serviceTask id="alfrescoScripttask3" name="Alfresco Script Task" activiti:async="true" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+      <extensionElements>
+        <activiti:field name="script">
+          <activiti:string><![CDATA[(function() { /* empty script for breaking transaction */
+})();
+]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="runAs">
+          <activiti:string><![CDATA[workflow]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow5" sourceRef="alfrescoScripttask3" targetRef="alfrescoScripttask2"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_lecmSigningWorkflow">
     <bpmndi:BPMNPlane bpmnElement="lecmSigningWorkflow" id="BPMNPlane_lecmSigningWorkflow">
@@ -149,10 +173,13 @@
         <omgdc:Bounds height="55.0" width="105.0" x="300.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask2" id="BPMNShape_alfrescoScripttask2">
-        <omgdc:Bounds height="55.0" width="105.0" x="480.0" y="250.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="650.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="660.0" y="260.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="810.0" y="260.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="alfrescoScripttask3" id="BPMNShape_alfrescoScripttask3">
+        <omgdc:Bounds height="55.0" width="105.0" x="475.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="75.0" y="277.0"></omgdi:waypoint>
@@ -164,11 +191,15 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
         <omgdi:waypoint x="405.0" y="277.0"></omgdi:waypoint>
-        <omgdi:waypoint x="480.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="475.0" y="277.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
-        <omgdi:waypoint x="585.0" y="277.0"></omgdi:waypoint>
-        <omgdi:waypoint x="660.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="755.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="277.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="580.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="650.0" y="277.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

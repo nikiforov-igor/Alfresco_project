@@ -63,6 +63,9 @@
                     <show id="lecm-contract-aspect:reasonDelete-assoc"/>
                     <show id="lecm-contract-table-structure:stages-assoc"/>
 					<show id="lecm-contract:approval" force="true"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
+					<show id="lecmSignAspects:isSigned" for-mode="view"/>
+					<show id="lecmSignAspects:signingDate" for-mode="view"/>
 				</field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
@@ -174,7 +177,9 @@
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
-
+					<field id="lecmSignAspects:signerEmployeeAssoc" set="contract-info"/>
+					<field id="lecmSignAspects:isSigned" set="contract-info"/>
+					<field id="lecmSignAspects:signingDate" set="contract-info"/>
                 </appearance>
 			</form>
             <form id="document">
@@ -283,6 +288,7 @@
                     <show id="lecm-contract:regNumContractor"/>
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
@@ -367,6 +373,7 @@
 			                <control-param name="defaultSelectedShowPreviewButton">true</control-param>
 		                </control>
 	                </field>
+					<field id="lecmSignAspects:signerEmployeeAssoc"/>
                 </appearance>
 			</form>
             <form id="datagrid">
@@ -784,6 +791,7 @@
             </form>
             <form id="search">
                 <field-visibility>
+                    <show id="sys:node-dbid"/>
                     <show id="lecm-contract:regNumSystem"/>
                     <show id="lecm-contract:regNumProject"/>
                     <show id="lecm-contract:regNumContractor"/>
@@ -889,6 +897,7 @@
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-contract-table-structure:stages-assoc"/>
                     <show id="lecm-contract:approval"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
 <!-- Example: How to use dynamic access role
                 <appearance>

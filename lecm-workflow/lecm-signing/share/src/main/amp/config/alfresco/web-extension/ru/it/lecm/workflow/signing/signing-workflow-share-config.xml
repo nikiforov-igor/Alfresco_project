@@ -34,7 +34,7 @@
 					<show id="lecmSign2:documentPreview" force="true"/>
 					<show id="lecmSign2:decision"/>
 					<show id="bpm:comment"/>
-					<!--<show id="lecmApprove3:approveTaskValidatorFake" force="true"/>-->
+					<show id="lecmSign2:bpmCommentValidator" force="true"/>
 					<!--<show id="bpm:reassignable"/>-->
 				</field-visibility>
 				<appearance>
@@ -57,9 +57,9 @@
 							<control-param name="rows">4</control-param>
 						</control>
 					</field>
-<!--					<field id="lecmApprove3:approveTaskValidatorFake">
-						<control template="/ru/it/lecm/workflow/approval/controls/approval-task-result-validator.ftl"/>
-					</field>-->
+					<field id="lecmSign2:bpmCommentValidator">
+						<control template="/ru/it/lecm/workflow/signing/controls/signing-task-result-validator.ftl"/>
+					</field>
 					<!--<field id="bpm:reassignable" set="right-set">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>-->
