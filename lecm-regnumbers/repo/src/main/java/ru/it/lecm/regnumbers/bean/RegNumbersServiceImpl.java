@@ -280,9 +280,9 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             }
             NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
             Serializable number = nodeService.getProperty(documentNode, propNumber);
-            String regNumber = null;
-            Date regDate = null;
-            if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
+            String regNumber;
+            Date regDate;
+            if (number != null && !number.toString().isEmpty() && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
                 regNumber = number.toString();
                 //номер уже есть
                 if (propIsRegistered != null && !onlyReserve) {
