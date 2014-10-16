@@ -380,7 +380,7 @@ LogicECM.module = LogicECM.module || {};
                                                         message += "<div class=\"" + (item.withErrors ? "error-item" : "noerror-item") + "\">" + item.message + "</div>";
                                                     }
                                                     if (message != "") {
-                                                        this._openMessageWindow(actionId, message, true);
+                                                        this._openMessageWindow(action.actionId, message, true);
                                                     }
                                                 }
                                             },
@@ -481,9 +481,26 @@ LogicECM.module = LogicECM.module || {};
 				onSuccess: {
 					scope: this,
 					fn: function DataGrid_onActionCreate_success(response) {
-						// document.location.href = document.location.href;
-						// ALF-2803
-						window.location.reload(true);
+                        var json = eval("(" + response.serverResponse.responseText + ")");
+                        var item =  null;
+                        if (json.forCollection) {
+                            item = json;
+                        } else {
+                            item = json.items[0];
+                        }
+                        var message = "";
+                        if (item.redirect != "") {
+                            document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+                        } else if (item.openWindow) {
+                            window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                        } else if (!item.withErrors){
+                            window.location.reload(true);
+                        } else {
+                            message += "<div class=\"" + (item.withErrors ? "error-item" : "noerror-item") + "\">" + item.message + "</div>";
+                        }
+                        if (message != "") {
+                            this._openMessageWindow(action.actionId, message, true);
+                        }
 					}
 				},
 				onFailure: {
@@ -628,9 +645,30 @@ LogicECM.module = LogicECM.module || {};
 		},
 		_hideSplash: function() {
 			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
-		}
+		},
 
-	});
+        _openMessageWindow: function openMessageWindowFunction(title, message, reload) {
+            Alfresco.util.PopupManager.displayPrompt(
+                {
+                    title: "Результат выполнения операции \"" + title + "\"",
+                    text: message,
+                    noEscape: true,
+                    buttons: [
+                        {
+                            text: "Ок",
+                            handler: function dlA_onAction_action()
+                            {
+                                this.destroy();
+                                if (reload) {
+                                    document.location.href = document.location.href;
+                                }
+                            }
+                        }]
+                });
+        },
+
+
+    });
 })();
 
 (function() {

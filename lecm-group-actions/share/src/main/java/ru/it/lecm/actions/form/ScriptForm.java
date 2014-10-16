@@ -30,6 +30,7 @@ public class ScriptForm extends FormUIGet {
 
     private enum AlfrescoTypes {
         d_text,
+        d_mltext,
         d_int,
         d_float,
         d_long,
@@ -57,7 +58,8 @@ public class ScriptForm extends FormUIGet {
         HashMap<String, Object> form = new HashMap<String, Object>();
         model.put(MODEL_FORM, form);
 
-        form.put(MODEL_CONSTRAINTS, new ArrayList<Object>());
+        ArrayList<Object> constraints = new ArrayList<Object>();
+        form.put(MODEL_CONSTRAINTS, constraints);
 
         ArrayList<Set> sets = new ArrayList<Set>();
         form.put(MODEL_STRUCTURE, sets);
@@ -80,10 +82,11 @@ public class ScriptForm extends FormUIGet {
                     String id = jsonField.getString("id");
                     String type = jsonField.getString("type");
                     String value = jsonField.getString("value");
+                    boolean mandatory = jsonField.getBoolean("mandatory");
                     if (value != null) {
                         value = URLDecoder.decode(value);
                     }
-                    FieldDescriptor descriptor = new FieldDescriptor(name, id, type, value);
+                    FieldDescriptor descriptor = new FieldDescriptor(name, id, type, value, mandatory);
                     descriptors.add(descriptor);
                 }
 
@@ -102,6 +105,18 @@ public class ScriptForm extends FormUIGet {
                 fields.put(descriptor.getId(), field);
                 FieldPointer fieldPointer = new FieldPointer(field.getId());
                 set.addChild(fieldPointer);
+                if (field.isMandatory()) {
+                    Constraint constraint;
+                    try {
+                        constraint = generateConstraintModel(field, CONSTRAINT_MANDATORY);
+                        if (constraint != null) {
+                            constraints.add(constraint);
+                        }
+                    } catch (JSONException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+
             }
         }
 
@@ -161,6 +176,7 @@ public class ScriptForm extends FormUIGet {
                 field.setName(colMnem);
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
+                field.setMandatory(column.isMandatory());
 
                 String fieldValue = column.getValue();
 
@@ -248,6 +264,65 @@ public class ScriptForm extends FormUIGet {
         }
     }
 
+    protected Constraint generateConstraintModel(Field field, String constraintId) throws JSONException {
+        Constraint constraint = null;
+
+        // retrieve the default constraints configuration
+        ConstraintHandlersConfigElement defaultConstraintHandlers = null;
+        FormsConfigElement formsGlobalConfig =
+                (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
+        if (formsGlobalConfig != null) {
+            defaultConstraintHandlers = formsGlobalConfig.getConstraintHandlers();
+        }
+
+        if (defaultConstraintHandlers == null) {
+            throw new WebScriptException("Failed to locate default constraint handlers configurarion");
+        }
+
+        // get the default handler for the constraint
+        ConstraintHandlerDefinition defaultConstraintConfig =
+                defaultConstraintHandlers.getItems().get(constraintId);
+
+        if (defaultConstraintConfig != null) {
+            // generate and process the constraint model
+            constraint = generateConstraintModel(field, constraintId, new JSONObject(), defaultConstraintConfig);
+        }
+
+        return constraint;
+    }
+
+    private Constraint generateConstraintModel(Field field, String constraintId, JSONObject constraintParams, ConstraintHandlerDefinition defaultConstraintConfig) {
+        // get the validation handler from the config
+        String validationHandler = defaultConstraintConfig.getValidationHandler();
+
+        Constraint constraint = new Constraint(field.getId(), constraintId, validationHandler, constraintParams);
+
+        if (defaultConstraintConfig.getEvent() != null) {
+            constraint.setEvent(defaultConstraintConfig.getEvent());
+        } else {
+            constraint.setEvent(DEFAULT_CONSTRAINT_EVENT);
+        }
+
+        // look for an overridden message in the field's constraint config,
+        // if none found look in the default constraint config
+        String constraintMsg = null;
+        if (defaultConstraintConfig.getMessageId() != null) {
+            constraintMsg = retrieveMessage(defaultConstraintConfig.getMessageId());
+        } else if (defaultConstraintConfig.getMessage() != null) {
+            constraintMsg = defaultConstraintConfig.getMessage();
+        }
+        if (constraintMsg == null) {
+            constraintMsg = retrieveMessage(validationHandler + ".message");
+        }
+
+        // add the message if there is one
+        if (constraintMsg != null) {
+            constraint.setMessage(constraintMsg);
+        }
+
+        return constraint;
+    }
+
     private boolean isNotAssoc(String typeKey) {
         return typeKey != null && enumHasValue(AlfrescoTypes.class, typeKey.replaceAll(":", "_"));
     }
@@ -280,12 +355,14 @@ public class ScriptForm extends FormUIGet {
         private String id;
         private String type;
         private String value;
+        private boolean mandatory;
 
-        public FieldDescriptor(String name, String id, String type, String value) {
+        public FieldDescriptor(String name, String id, String type, String value, boolean mandatory) {
             this.name = name;
             this.id = id;
             this.type = type;
             this.value = value;
+            this.mandatory = mandatory;
         }
 
         public String getName() {
@@ -302,6 +379,10 @@ public class ScriptForm extends FormUIGet {
 
         public String getValue() {
             return value;
+        }
+
+        public boolean isMandatory() {
+            return mandatory;
         }
     }
 

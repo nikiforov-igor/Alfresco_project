@@ -220,6 +220,7 @@
                     <show id="lecm-group-actions:field-type"/>
                     <show id="lecm-group-actions:field-priority"/>
                     <show id="lecm-group-actions:field-default-value"/>
+                    <show id="lecm-group-actions:field-is-mandatory"/>
                 </field-visibility>
             </form>
         </forms>
@@ -235,6 +236,7 @@
                     <show id="lecm-group-actions:field-type"/>
                     <show id="lecm-group-actions:field-priority"/>
                     <show id="lecm-group-actions:field-default-value"/>
+                    <show id="lecm-group-actions:field-is-mandatory"/>
                 </field-visibility>
             </form>
             <!-- Форма для табличного представления (набор столбцов)-->
