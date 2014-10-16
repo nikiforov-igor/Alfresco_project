@@ -22,6 +22,11 @@
 		<#assign defaultValue = form.arguments[field.name]/>
 	</#if>
 
+	<#assign defaultSelectedShowPreviewButton = true>
+	<#if params.defaultSelectedShowPreviewButton?? && params.defaultSelectedShowPreviewButton == "false">
+		<#assign defaultSelectedShowPreviewButton = false/>
+	</#if>
+
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		function init() {
@@ -48,9 +53,7 @@
 					defaultValue: "${defaultValue?string}",
 				</#if>
             	suppressRefreshEvent: ${suppressRefreshEvent?string},
-				<#if params.defaultSelectedShowPreviewButton??>
-					defaultSelectedShowPreviewButton: ${params.defaultSelectedShowPreviewButton?string},
-				</#if>
+				defaultSelectedShowPreviewButton: ${defaultSelectedShowPreviewButton?string},
             	showPreview: ${showPreview?string}
 			});
 		}

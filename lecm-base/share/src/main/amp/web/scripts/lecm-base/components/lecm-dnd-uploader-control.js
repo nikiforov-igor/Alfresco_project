@@ -314,6 +314,9 @@ LogicECM.control = LogicECM.control || {};
 						item = items[i];
 						this.selectedItems[item.nodeRef] = item;
 					}
+					if (items.length > 0) {
+						this.selectPreviewFile(null, items[0].nodeRef);
+					}
 
 					this.updateSelectedItems();
 					this.updateFormFields();
