@@ -1071,6 +1071,9 @@
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
 					<show id="lecm-contract:approval" force="true"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
+					<show id="lecmSignAspects:isSigned" for-mode="view"/>
+					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
@@ -1085,6 +1088,9 @@
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
+					<field id="lecmSignAspects:signerEmployeeAssoc" set="contract-info"/>
+					<field id="lecmSignAspects:isSigned" set="contract-info"/>
+					<field id="lecmSignAspects:signingDate" set="contract-info"/>
                 </appearance>
             </form>
             <form id="datagrid">
@@ -1174,6 +1180,7 @@
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-document-aspects:attachments-temp-assoc" label="Вложения">
@@ -1184,6 +1191,7 @@
 				            <control-param name="defaultSelectedShowPreviewButton">true</control-param>
 			            </control>
 		            </field>
+					<field id="lecmSignAspects:signerEmployeeAssoc"/>
 	            </appearance>
             </form>
             <form id="datagrid">
@@ -1211,6 +1219,7 @@
 					<show id="lecm-additional-document:signedCounterparty"/>
 					<show id="lecm-additional-document:summaryContent"/>
 					<show id="lecm-contract:approval"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label="Согласование"/>
