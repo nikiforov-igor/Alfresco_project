@@ -2401,7 +2401,7 @@
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["ACTIVE" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+																<value><![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "ACTIVE" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -3622,7 +3622,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["REJECTED_FORCED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
+																<value><![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "REJECTED_FORCED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -3652,7 +3652,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["REJECTED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
+																<value><![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "REJECTED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -3682,7 +3682,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["APPROVED_FORCED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
+																<value><![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "APPROVED_FORCED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -3712,7 +3712,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["APPROVED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
+																<value><![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "APPROVED" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -3742,7 +3742,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["APPROVED_WITH_REMARK" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
+																<value><![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "APPROVED_WITH_REMARK" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_DECISION)]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -5898,7 +5898,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["ACTIVE" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+																<value><![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "ACTIVE" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
