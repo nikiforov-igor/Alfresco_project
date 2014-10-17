@@ -20,8 +20,9 @@
 	    <#if categories??>
 	        <@view.viewForm formId="${el}-view-modifier-form"/>
 	        <#list categories as category>
-	            <div id="${el}-${category.nodeRef}"  class="attachment-list no-check-bg">
-		            <div id="${el}-${category.nodeRef}-main-template" class="hidden">
+	            <#assign categoryId = el + "-" + category.nodeRef?replace("/", "")?replace(":", "")/>
+	            <div id="${categoryId}"  class="attachment-list no-check-bg">
+		            <div id="${categoryId}-main-template" class="hidden">
 			            <div>
 			            </div>
 		            </div>
@@ -34,14 +35,14 @@
 	                        <td class="category-upload">
 		                        <#if hasAddAttachmentPerm && !category.isReadOnly && hasStatemachine>
 		                            <div class="file-upload">
-		                               <span id="${el}-${category.nodeRef}-fileUpload-button" class="yui-button yui-push-button">
+		                               <span id="${categoryId}-fileUpload-button" class="yui-button yui-push-button">
 		                                  <span class="first-child">
 		                                     <button name="fileUpload">${msg("button.upload.file")}</button>
 		                                  </span>
 		                               </span>
 		                            </div>
 			                        <#--<div class="add-link">-->
-		                               <#--<span id="${el}-${category.nodeRef}-addLink-button" class="yui-button yui-push-button">-->
+		                               <#--<span id="${categoryId}-addLink-button" class="yui-button yui-push-button">-->
 		                                  <#--<span class="first-child">-->
 		                                     <#--<button name="addLink">${msg("button.upload.file")}</button>-->
 		                                  <#--</span>-->
@@ -52,12 +53,12 @@
 	                    </tr>
 	                </table>
 
-		            <div id="${el}-${category.nodeRef}-documents" class="documents"></div>
+		            <div id="${categoryId}-documents" class="documents"></div>
 
 		            <div class="hidden1">
 
 		                <#-- Action Set "More" template -->
-			            <div id="${el}-${category.nodeRef}-moreActions">
+			            <div id="${categoryId}-moreActions">
 				            <div class="internal-show-more" title="onActionShowMore"><a href="#" class="doc-list-show-more doc-list-show-more-${category.nodeRef}-${aDateTime?iso_utc}" title="${msg("actions.more")}"><span>${msg("actions.more")}</span></a></div>
 				            <div class="more-actions hidden"></div>
 			            </div>
@@ -72,6 +73,7 @@
 	        function init() {
 				<#if categories??>
 					<#list categories as category>
+						<#assign categoryId = el + "-" + category.nodeRef?replace("/", "")?replace(":", "")/>
 						<#if !hasReadAttachmentPerm>
 							<#assign showActions = []/>
 						<#elseif category.isReadOnly || !hasStatemachine>
@@ -83,7 +85,7 @@
 						var path = "${category.path}";
 						path = path.substring(path.indexOf("/", 1), path.length);
 
-			            new LogicECM.DocumentAttachmentsList("${el}-${category.nodeRef}").setOptions(
+			            new LogicECM.DocumentAttachmentsList("${categoryId}").setOptions(
 			                    {
 			                        nodeRef: "${category.nodeRef}",
 				                    categoryName: "${category.name}",
