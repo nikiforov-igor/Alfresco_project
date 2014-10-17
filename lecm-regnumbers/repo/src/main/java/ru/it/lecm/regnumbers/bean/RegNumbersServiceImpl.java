@@ -45,7 +45,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	/**
 	 * Ищем регистрационные номера в этих полях документа
 	 */
-	private final static String REGNUMBER_SEARCH_TEMPLATE = "%(lecm\\-document:regnum lecm\\-contract:regNumSystem)";
+	private final static String REGNUMBER_SEARCH_TEMPLATE = "%lecm\\-document:regnum";
 	private ApplicationContext applicationContext;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
@@ -111,7 +111,11 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 		sp.setQuery(String.format(SEARCH_QUERY_TEMPLATE, documentType.toString(), number));
-		sp.addQueryTemplate("regnumberTemplate", REGNUMBER_SEARCH_TEMPLATE);
+        if (documentType.toString().equals("lecm-contract:document")) {
+            sp.addQueryTemplate("regnumberTemplate", "%lecm\\-contract:regNumSystem");
+        } else {
+            sp.addQueryTemplate("regnumberTemplate", REGNUMBER_SEARCH_TEMPLATE);
+        }
 
 		ResultSet results = null;
 		try {
