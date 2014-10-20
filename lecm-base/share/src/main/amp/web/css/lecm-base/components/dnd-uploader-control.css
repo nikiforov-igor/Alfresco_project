@@ -1,7 +1,8 @@
 .dnd-uploader ul.attachments-list {
-    min-height: 102px;
+    height: 102px;
     border: 1px solid #666;
 	margin-top: 10px;
+    overflow-y: auto;
 }
 .dnd-uploader ul.attachments-list li img.remove-icon,
 .dnd-uploader ul.attachments-list li img.newVersion-icon {
