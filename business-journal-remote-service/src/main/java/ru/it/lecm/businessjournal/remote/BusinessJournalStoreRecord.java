@@ -54,7 +54,7 @@ public class BusinessJournalStoreRecord implements Serializable {
 	@Index
 	private String eventCategory;
 	private String eventCategoryText;
-	@Column(length = 1200, jdbcType = "TEXT")
+	@Column(length=10485760)
 	private String recordDescription;
 	@PrimaryKey
 	private Date date;
