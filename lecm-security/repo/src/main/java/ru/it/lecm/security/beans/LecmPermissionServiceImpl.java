@@ -815,31 +815,25 @@ public class LecmPermissionServiceImpl
 	 * @throws AuthenticationException
 	 */
 
-	void setACE(
-			final NodeRef nodeRef
-			, final String authority
-			, final LecmPermissionGroup permGrp
-			, final StringBuilder destBuf
-			) throws AuthenticationException
-			{
-		// удаление прежней auth-записи ...
-		permissionService.clearPermission(nodeRef, authority);
+    void setACE(final NodeRef nodeRef, final String authority, final LecmPermissionGroup permGrp, final StringBuilder destBuf) throws AuthenticationException {
+        // удаление прежней auth-записи ...
+        permissionService.clearPermission(nodeRef, authority);
 
-		final String rawPerm = findACEPermission(permGrp);
-		final boolean allowed = !ACCPERM_EMPTY.equals(rawPerm);
+        final String rawPerm = findACEPermission(permGrp);
+        final boolean allowed = !ACCPERM_EMPTY.equals(rawPerm);
 
-		logger.debug( String.format("calling setACE( nodeRef='%s', auth='%s', rawPerm='%s', allow=%s) ...", nodeRef, authority, rawPerm, allowed));
+        logger.debug(String.format("calling setACE( nodeRef='%s', auth='%s', rawPerm='%s', allow=%s) ...", nodeRef, authority, rawPerm, allowed));
 
-		if (!this.authorityService.authorityExists(authority))
-			throw new AuthenticationException( String.format( "Security group not exists '%s': node '%s'", authority, nodeRef));
+        if (!this.authorityService.authorityExists(authority))
+            throw new AuthenticationException(String.format("Security group not exists '%s': node '%s'", authority, nodeRef));
 
 		/*
-		 *  @NOTE: (!) здесь может быть rawPerm = "deny", allowed = false, но прав с названием deny не существует
+         *  @NOTE: (!) здесь может быть rawPerm = "deny", allowed = false, но прав с названием deny не существует
 		 *  permissionService.setPermission(nodeRef, authority, rawPerm, allowed); - не проходит для deny
 		 */
-		if (allowed) // ALLOW
-			permissionService.setPermission(nodeRef, authority, rawPerm, true);
-		else { // DENY
+        if (allowed) // ALLOW
+            permissionService.setPermission(nodeRef, authority, rawPerm, true);
+        else { // DENY
 			/*
 			 * (2013.03.01, RuSA, EERofeev) если явно прописать запрет чтения то
 			 * у пользователя входящего и в группу с DENY и в другие группы
@@ -849,19 +843,19 @@ public class LecmPermissionServiceImpl
 			 *
 			permissionService.setPermission(nodeRef, authority, "Read", false); // явный запрет
 			 */
-		}
+        }
 
-		logger.debug( String.format("... called OK setACE( nodeRef='%s', auth='%s', rawPerm='%s', allow=%s)", nodeRef, authority, rawPerm, allowed));
+        logger.debug(String.format("... called OK setACE( nodeRef='%s', auth='%s', rawPerm='%s', allow=%s)", nodeRef, authority, rawPerm, allowed));
 
-		if (destBuf != null)
-			destBuf.append(String.format("\t'%s' \t as '%s'\n", authority, rawPerm));
-			}
+        if (destBuf != null) {
+            destBuf.append(String.format("\t'%s' \t as '%s'\n", authority, rawPerm));
+        }
+    }
 
-	void setACE( final NodeRef nodeRef, final String authority, final LecmPermissionGroup permGrp)
-			throws AuthenticationException
-			{
-		setACE(nodeRef, authority, permGrp, null);
-			}
+    @Override
+    public void setACE(final NodeRef nodeRef, final String authority, final LecmPermissionGroup permGrp) throws AuthenticationException {
+        setACE(nodeRef, authority, permGrp, null);
+    }
 
 	/**
 	 * Вернуть название полномочия Альфреско, которое будет соот-ть группе полномочий

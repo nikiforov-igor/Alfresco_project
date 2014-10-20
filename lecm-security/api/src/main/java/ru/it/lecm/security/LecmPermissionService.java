@@ -3,6 +3,7 @@ package ru.it.lecm.security;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.security.Types.SGPosition;
 
+import javax.naming.AuthenticationException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -251,7 +252,16 @@ public interface LecmPermissionService {
 	StringBuilder trackAllLecmPermissions( String info, NodeRef nodeRef,
 			String ... userLogins);
 
-	/**
+    /**
+     * Выполнить формирование ACE для списка доступа ACL указанного узла
+     * @param nodeRef
+     * @param authority
+     * @param permGrp
+     * @throws AuthenticationException
+     */
+    void setACE(final NodeRef nodeRef, final String authority, final LecmPermissionGroup permGrp) throws AuthenticationException;
+
+    /**
 	 * Именованный security-объект Альфреско, в имено которого содержится префикс
 	 */
 	public interface AlfrescoSecurityNamedItemWithPrefix {

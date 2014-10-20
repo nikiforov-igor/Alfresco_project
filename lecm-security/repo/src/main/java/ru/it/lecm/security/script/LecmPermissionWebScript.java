@@ -3,12 +3,18 @@ package ru.it.lecm.security.script;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.Types;
+import ru.it.lecm.security.beans.SgNameResolver;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 /**
@@ -17,10 +23,11 @@ import java.util.List;
  * Time: 16:37
  */
 public class LecmPermissionWebScript extends BaseWebScript {
-
+    final static protected Logger logger = LoggerFactory.getLogger(LecmPermissionWebScript.class);
     private LecmPermissionService lecmPermissionService;
     private OrgstructureBean orgstructureService;
     private AuthenticationService authService;
+    private AuthorityService authorityService;
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
@@ -32,6 +39,10 @@ public class LecmPermissionWebScript extends BaseWebScript {
 
     public void setAuthService(AuthenticationService authService) {
         this.authService = authService;
+    }
+
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
     }
 
     /**
@@ -139,4 +150,16 @@ public class LecmPermissionWebScript extends BaseWebScript {
 		List<NodeRef> results = lecmPermissionService.getEmployeesByDynamicRole(document.getNodeRef(), roleCode);
 		return createScriptable(results);
 	}
+
+    public void grantStaticRole(ScriptNode document, String roleCode, String permission) {
+        SgNameResolver resolver = new SgNameResolver(logger);
+        resolver.setAuthorityService(authorityService);
+
+        String authority = resolver.makeSGName(Types.SGKind.SG_BR.getSGPos(roleCode, "Business role <" + roleCode + ">"));
+        try {
+            lecmPermissionService.setACE(document.getNodeRef(), authority, lecmPermissionService.findPermissionGroup(permission));
+        } catch (AuthenticationException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 }
