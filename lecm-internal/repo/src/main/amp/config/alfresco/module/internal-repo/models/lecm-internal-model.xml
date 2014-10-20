@@ -11,6 +11,7 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
+		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
@@ -72,11 +73,11 @@
 					<title>Срок ответа</title>
 					<type>d:date</type>
 				</property>
-                <property name="lecm-internal:all-answers-complete">
-                    <title>Получены все ответы</title>
-                    <type>d:boolean</type>
-                    <default>false</default>
-                </property>
+				<property name="lecm-internal:all-answers-complete">
+					<title>Получены все ответы</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 			<associations>
 				<!-- Получатель (сотрудник или подразделение) -->
@@ -109,6 +110,7 @@
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>
+				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

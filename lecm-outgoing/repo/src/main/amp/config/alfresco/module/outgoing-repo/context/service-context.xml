@@ -13,7 +13,8 @@
 					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					  documents.dictionaries.LogicEcmModelsBootstrap,
 					  dictionary.fileRegister.LogicEcmModelsBootstrap,
-					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap"
+					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap,
+					  lecm.sign2.helper.model.bootstrap"
 		  p:models="alfresco/module/${artifactId}/models/lecm-outgoing-model.xml"
 		  p:labels="alfresco/module/${artifactId}/messages/lecm-outgoing-model"/>
 

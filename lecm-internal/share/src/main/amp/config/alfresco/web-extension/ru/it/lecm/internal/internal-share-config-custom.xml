@@ -74,12 +74,13 @@
 	                <show id="lecm-document-aspects:reg-project-data-date"/>
 	                <show id="lecm-document-aspects:is-shared-folder"/>
 					<show id="lecm-contract:approval" force="true"/>
-                    <show id="lecm-internal:signing-list" for-mode="view"/>	<!-- Листы подписания-->
                     <show id="lecm-internal-table-structure:answers-assoc"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
+					<show id="lecmSignAspects:isSigned" for-mode="view"/>
+					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
-					<set id="signingTab" appearance="" label="Подписание" /> <!-- tab2 -->
                     <set id="approvalTab" appearance="" label="Согласование"/>
                     <set id="answers" appearance="" label="Ответы" />
 
@@ -147,12 +148,6 @@
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 	                </field>
 
-                    <field id="lecm-internal:signing-list" set="signingTab" label="Подписание">
-                        <control template="/ru/it/lecm/workflow/signing/controls/deprecated/signing-list-datagrid-control.ftl">
-                            <control-param name="datagridFormId">internal</control-param>
-                        </control>
-                    </field>
-
                     <field id="lecm-internal-table-structure:answers-assoc" set="answers">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="datagridFormId">answers-datagrid</control-param>
@@ -166,6 +161,9 @@
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
+					<field id="lecmSignAspects:signerEmployeeAssoc" set="common"/>
+					<field id="lecmSignAspects:isSigned" set="common"/>
+					<field id="lecmSignAspects:signingDate" set="common"/>
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
@@ -355,6 +353,7 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title"/>
@@ -419,6 +418,7 @@
 	                        <control-param name="suppressRefreshEvent">true</control-param>
                         </control>
                     </field>
+					<field id="lecmSignAspects:signerEmployeeAssoc"/>
                 </appearance>
             </form>
             <!-- Форма для табличного представления (набор столбцов)-->
@@ -488,7 +488,8 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document-aspects:reg-data-number"/>
 					<show id="lecm-contract:approval"/>
-                </field-visibility>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
+				</field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label="Согласование"/>
 				</appearance>

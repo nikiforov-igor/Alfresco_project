@@ -17,6 +17,7 @@
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
 		<import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
 		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
 	</imports>
 
 	<namespaces>
@@ -132,6 +133,7 @@
 			<mandatory-aspects>
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
 				<aspect>lecm-document-aspects:on-control-aspect</aspect>
+				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
 			</mandatory-aspects>
 		</type>
 

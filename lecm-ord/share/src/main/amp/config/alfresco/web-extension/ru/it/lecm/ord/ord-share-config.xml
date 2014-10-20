@@ -14,6 +14,7 @@
                     <show id="lecm-ord:canceled-assoc"/>
                     <show id="lecm-ord:accepted-assoc"/>
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title" label="Заголовок"/>
@@ -70,6 +71,7 @@
 			                <control-param name="suppressRefreshEvent">true</control-param>
 		                </control>
 	                </field>
+					<field id="lecmSignAspects:signerEmployeeAssoc"/>
                 </appearance>
             </form>
 
@@ -108,6 +110,7 @@
                     <show id="lecm-ord-table-structure:items-assoc"/>
                     <show id="lecm-document:regnum"/>
 					<show id="lecm-contract:approval"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label="Согласование"/>
@@ -175,12 +178,13 @@
 	                <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-ord-table-structure:items-assoc"/>
 					<show id="lecm-contract:approval" force="true"/>
-                    <show id="lecm-ord:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
+					<show id="lecmSignAspects:isSigned" for-mode="view"/>
+					<show id="lecmSignAspects:signingDate" for-mode="view"/>
                 </field-visibility>
                 <appearance>
                     <set id="ord-document-form-common-set" label-id="label.ord.common"/>
                     <set id="ord-document-items" label-id="label.ord.items"/>
-                    <set id="signingTab" label="Подписание"/>
                     <set id="approvalTab" appearance="" label="Согласование"/>
 
 					<field id="lecm-document:regnum" set="ord-document-form-common-set" mandatory="true">
@@ -263,9 +267,9 @@
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
-                    <field id="lecm-ord:signing-list" set="signingTab" label="Подписание">
-                        <control template="/ru/it/lecm/workflow/signing/controls/deprecated/signing-list-datagrid-control.ftl"/>
-                    </field>
+					<field id="lecmSignAspects:signerEmployeeAssoc" set="ord-document-form-common-set"/>
+					<field id="lecmSignAspects:isSigned" set="ord-document-form-common-set"/>
+					<field id="lecmSignAspects:signingDate" set="ord-document-form-common-set"/>
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->

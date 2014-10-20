@@ -22,11 +22,12 @@
 					<show id="lecm-document-aspects:reg-project-data-date"/>
 					<show id="lecm-document-aspects:is-shared-folder"/>
 					<show id="lecm-contract:approval" force="true"/>
-					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
+					<show id="lecmSignAspects:isSigned" for-mode="view"/>
+					<show id="lecmSignAspects:signingDate" for-mode="view"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
-					<set id="signingTab" appearance="" label="Подписание" /> <!-- tab2 -->
                     <set id="approvalTab" appearance="" label="Согласование"/>
 
 					<field id="lecm-document:regnum" set="common" mandatory="true">
@@ -98,9 +99,9 @@
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
-					<field id="lecm-outgoing:signing-list" set="signingTab" label="Подписание">
-						<control template="/ru/it/lecm/workflow/signing/controls/deprecated/signing-list-datagrid-control.ftl"/>
-					</field>
+					<field id="lecmSignAspects:signerEmployeeAssoc" set="common"/>
+					<field id="lecmSignAspects:isSigned" set="common"/>
+					<field id="lecmSignAspects:signingDate" set="common"/>
 				</appearance>
 			</form>
 
@@ -164,6 +165,7 @@
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 					<show id="lecm-document-aspects:attachments-temp-assoc"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -234,6 +236,7 @@
 							<control-param name="suppressRefreshEvent">true</control-param>
 						</control>
 					</field>
+					<field id="lecmSignAspects:signerEmployeeAssoc"/>
 				</appearance>
 			</form>
 
@@ -287,6 +290,7 @@
 					<show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
 					<show id="lecm-document:regnum"/>																	<!-- Регистрационный номер -->
 					<show id="lecm-contract:approval"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label="Согласование"/>

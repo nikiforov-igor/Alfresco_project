@@ -27,7 +27,8 @@
 					 documents.LogicEcmModelsConnectionsBootstrap,
 					 documents.dictionaries.LogicEcmModelsBootstrap,
 					 lecm.signed-docflow.model-bootstrap,
-					 eds.models.bootstrap">
+					 eds.models.bootstrap,
+					 lecm.sign2.helper.model.bootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-internal-typical-answers-dic-model.xml</value>

@@ -32,7 +32,8 @@
           depends-on="
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
             eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
-            documents.LogicEcmModelsBootstrap"
+            documents.LogicEcmModelsBootstrap,
+             lecm.sign2.helper.model.bootstrap"
           p:models-ref="nd.models"
           p:labels-ref="nd.models.labels"/>
 

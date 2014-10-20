@@ -1,150 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="lecm-ord:model">
-    <description>ОРД</description>
-    <author>VKuprin</author>
-    <version>1.0</version>
+	<description>ОРД</description>
+	<author>VKuprin</author>
+	<version>1.0</version>
 
-    <imports>
-        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
-        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
-        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
-        <import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
-        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-        <import uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
-    </imports>
-    <namespaces>
-        <namespace uri="http://www.it.ru/lecm/ORD/1.0" prefix="lecm-ord"/>
-    </namespaces>
-    <constraints>
-        <constraint name="lecm-ord:attachment-categories" type="LIST">
-            <parameter name="allowedValues">
-                <list>
-                    <value>Документ</value>
-                    <value>Приложения</value>
-                    <value>Согласование</value>
-                    <value>Подлинник</value>
-                    <value>Прочее</value>
-                </list>
-            </parameter>
-        </constraint>
-        <constraint name="lecm-ord:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
-            <parameter name="presentString">
-                <value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено} от {cm:created?dd-MM-yyyy}]]></value>
-            </parameter>
-        </constraint>
-        <constraint name="lecm-ord:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
-            <parameter name="armUrl">
-                <value>arm?code=SED</value>
-            </parameter>
-        </constraint>
-        <constraint name="lecm-ord:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
-            <parameter name="authorProperty">
-                <value>lecm-document:creator-ref</value>
-            </parameter>
-        </constraint>
-        <constraint name="lecm-ord:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
-            <parameter name="regNumbersProperties">
-                <value></value>
-            </parameter>
-        </constraint>
-    </constraints>
-    <types>
-        <type name="lecm-ord:document">
-            <title>Logic Ecm ORD</title>
-            <parent>lecm-eds-document:base</parent>
-            <properties>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
+		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<import uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
+		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/ORD/1.0" prefix="lecm-ord"/>
+	</namespaces>
+	<constraints>
+		<constraint name="lecm-ord:attachment-categories" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Документ</value>
+					<value>Приложения</value>
+					<value>Согласование</value>
+					<value>Подлинник</value>
+					<value>Прочее</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-ord:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+			<parameter name="presentString">
+				<value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено} от {cm:created?dd-MM-yyyy}]]></value>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-ord:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+			<parameter name="armUrl">
+				<value>arm?code=SED</value>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-ord:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+			<parameter name="authorProperty">
+				<value>lecm-document:creator-ref</value>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-ord:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
+			<parameter name="regNumbersProperties">
+				<value></value>
+			</parameter>
+		</constraint>
+	</constraints>
+	<types>
+		<type name="lecm-ord:document">
+			<title>Logic Ecm ORD</title>
+			<parent>lecm-eds-document:base</parent>
+			<properties>
 
-                <!--Служебные свойства-->
-                <property name="lecm-ord:controller-assoc-ref">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-ord:controller-assoc-text-content">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
+				<!--Служебные свойства-->
+				<property name="lecm-ord:controller-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-ord:controller-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 
 				<property name="lecm-ord:signers-assoc-ref">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-ord:signers-assoc-text-content">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-            </properties>
-            <associations>
-                <association name="lecm-ord:controller-assoc">
-                    <title>Controller</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:employee</class>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-                <association name="lecm-ord:canceled-assoc">
-                    <title>Canceled documents</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-eds-document:base</class>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>
-                <association name="lecm-ord:accepted-assoc">
-                    <title>Accepted documents</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-eds-document:base</class>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>
-                <association name="lecm-ord:signers-assoc">
-                    <title>Document signers</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:employee</class>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>
-            </associations>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-ord:signers-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-ord:controller-assoc">
+					<title>Controller</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecm-ord:canceled-assoc">
+					<title>Canceled documents</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-eds-document:base</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-ord:accepted-assoc">
+					<title>Accepted documents</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-eds-document:base</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-ord:signers-assoc">
+					<title>Document signers</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
 
-            <mandatory-aspects>
-                <aspect>lecm-ord-table-structure:table-items-aspect</aspect>
-            </mandatory-aspects>
-        </type>
-    </types>
+			<mandatory-aspects>
+				<aspect>lecm-ord-table-structure:table-items-aspect</aspect>
+				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
 </model>
