@@ -12,8 +12,18 @@
     <#assign fieldValue = field.value>
 </#if>
 
-<#if form.arguments[field.name]?has_content>
-    <#assign fieldValue = form.arguments[field.name]>
+<#if field.control.params.selectedItemsFormArgs??>
+    <#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
+    <#list selectedItemsFormArgs as selectedItemsFormArg>
+        <#if form.arguments[selectedItemsFormArg]??>
+            <#if (fieldValue?length > 0)>
+                <#assign fieldValue = fieldValue + ","/>
+            </#if>
+            <#assign fieldValue = fieldValue + form.arguments[selectedItemsFormArg]/>
+        </#if>
+    </#list>
+<#elseif form.arguments[field.name]?has_content>
+    <#assign fieldValue = form.arguments[field.name]/>
 </#if>
 
 <#if form.mode == "edit" || form.mode == "create">
