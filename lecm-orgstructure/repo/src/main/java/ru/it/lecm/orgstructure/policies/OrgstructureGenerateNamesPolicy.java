@@ -59,10 +59,7 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
         QName type = nodeService.getType(object);
         String newNodeName = null;
         switch (TYPES.get(type)) {
-            case 1: {
-                newNodeName = generateOrgElementName(parent, object);
-            }
-            break;
+            case 1:
             case 2: {
                 newNodeName = generateOrgElementName(parent, object);
             }
@@ -71,7 +68,8 @@ public class OrgstructureGenerateNamesPolicy extends BaseBean
                 newNodeName = generateEmployeeName(parent, object);
                 nodeService.setProperty(object, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME, newNodeName);
 
-                newNodeName = StringUtils.stripEnd(newNodeName, ".");
+                newNodeName = StringUtils.stripEnd(newNodeName, ". ");
+                newNodeName = FileNameValidator.getValidFileName(newNodeName);
                 newNodeName = getUniqueNodeName(parent, newNodeName);
             }
         }
