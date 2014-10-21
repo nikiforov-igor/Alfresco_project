@@ -518,18 +518,17 @@ IT.component = IT.component || {};
 			if(!YAHOO.lang.isObject(args.modelObject.model)) {
 				args.modelObject.model = {};
 			}
-					
 			if(!YAHOO.lang.isValue(args.modelObject.model._name)||(args.modelObject.model._name!=""+namespace+":"+modelName)) {
-				args.modelObject.model = {
-					"_xmlns": "http://www.alfresco.org/model/dictionary/1.0",
-					"_name":""+namespace+":"+modelName,
-					"description":""+modelDescription,
-					"author":""+userName,
-					"published":""+modelPublished.getFullYear()+ 
+				args.modelObject.model["_xmlns"]="http://www.alfresco.org/model/dictionary/1.0";
+				args.modelObject.model["_name"]=""+namespace+":"+modelName;
+				args.modelObject.model["description"]=""+modelDescription;
+				args.modelObject.model["author"]=""+userName;
+				args.modelObject.model["published"]=""+modelPublished.getFullYear()+ 
 								"-"+month[modelPublished.getMonth()]+
-								"-"+(modelPublished.getDate()<10 ? "0" : "")+modelPublished.getDate(),
-					"version":"1.0"
-				};
+								"-"+(modelPublished.getDate()<10 ? "0" : "")+modelPublished.getDate();
+				args.modelObject.model["version"]="1.0";
+			}
+			if(!YAHOO.lang.isObject(args.modelObject.model.imports)) {
 				args.modelObject.model.imports = {"import" : []};
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/dictionary/1.0","_prefix":"d"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/content/1.0","_prefix":"cm"});
@@ -538,28 +537,31 @@ IT.component = IT.component || {};
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/eds-document/1.0","_prefix":"lecm-eds-document"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"});
-				var records = args.widgets.associationsDataTable.getRecordSet().getRecords();
-				for(var i in records) {
-					var rec = records[i];
-					var clazz = rec.getData("class");
-					var NS = clazz.substr(0,clazz.indexOf(":"));
-					//TODO: Как по NS определять его URL?
-					for(var n in args.namespaces) {
-						if(args.namespaces[n].prefix==NS)
-							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
+			}
+			var records = args.widgets.associationsDataTable.getRecordSet().getRecords();
+			for(var i in records) {
+				var rec = records[i];
+				var clazz = rec.getData("class");
+				var NS = clazz.substr(0,clazz.indexOf(":"));
+				//TODO: Как по NS определять его URL?
+				for(var n in args.namespaces) {
+					if(args.namespaces[n].prefix==NS&&!containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
+						args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
 					}
 				}
-				var records = args.widgets.tablesDataTable.getRecordSet().getRecords();
-				for(var i in records) {
-					var rec = records[i];
-					var clazz = rec.getData("table");
-					var NS = clazz.substr(0,clazz.indexOf(":"));
-					//TODO: Как по NS определять его URL?
-					for(var n in args.namespaces) {
-						if(args.namespaces[n].prefix==NS)
-							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
-					}
+			}
+			var records = args.widgets.tablesDataTable.getRecordSet().getRecords();
+			for(var i in records) {
+				var rec = records[i];
+				var clazz = rec.getData("table");
+				var NS = clazz.substr(0,clazz.indexOf(":"));
+				//TODO: Как по NS определять его URL?
+				for(var n in args.namespaces) {
+					if(args.namespaces[n].prefix==NS)
+						args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
 				}
+			}
+			if(!YAHOO.lang.isObject(args.modelObject.model.namespaces)||args.modelObject.model.namespaces.namespace._prefix!=""+namespace) {
 				var _uri = "http://www.it.ru/lecm/"+typeName+"/1.0";
 				for(var n in args.namespaces) {
 					if(args.namespaces[n].prefix==namespace) {
@@ -568,7 +570,7 @@ IT.component = IT.component || {};
 				}
 				args.modelObject.model.namespaces = {"namespace":{"_uri":_uri,"_prefix":namespace}};
 			}
-			args.modelObject.model.description = modelDescription;
+			if(YAHOO.lang.isString(modelDescription)) args.modelObject.model.description = modelDescription;
 			//constraints
 			if(!YAHOO.lang.isObject(args.modelObject.model.constraints)) {
 				args.modelObject.model.constraints = {}
@@ -642,13 +644,14 @@ IT.component = IT.component || {};
 			if(!YAHOO.lang.isObject(args.modelObject.model.types)) {
 				args.modelObject.model.types = {}
 			}
-			if(!YAHOO.lang.isObject(args.modelObject.model.types.type)) {
+			if(!YAHOO.lang.isObject(args.modelObject.model.types.type)||args.modelObject.model.types.type._name!=""+namespace+":"+typeName) {
 				args.modelObject.model.types.type = {
 						"_name":namespace+":"+typeName,
 						"title":(typeTitle||""),
 						"parent":(parentRef||"lecm-document:base"),
 				};
 			}
+			if(YAHOO.lang.isString(typeTitle)) args.modelObject.model.types.type.title = typeTitle;
 			//properties
 			if(!YAHOO.lang.isObject(args.modelObject.model.types.type.properties)) {
 				args.modelObject.model.types.type.properties = {};
@@ -718,18 +721,24 @@ IT.component = IT.component || {};
 			}
 			if(args.rating==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
-					args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-document-aspects:rateable");
+					if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-document-aspects:rateable")) {
+						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-document-aspects:rateable");
+					}
 				}
 			}
 			if(args.signed==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
-					args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-signed-docflow:docflowable");
+					if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
+						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-signed-docflow:docflowable");
+					}
 				}
 			}
 			var records = args.widgets.tablesDataTable.getRecordSet().getRecords();
 			for(var i in records) {
 				var rec = records[i];
-				args.modelObject.model.types.type["mandatory-aspects"].aspect.push((rec.getData("table")||""));
+				if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,rec.getData("table"))) {
+					args.modelObject.model.types.type["mandatory-aspects"].aspect.push((rec.getData("table")||""));	
+				}
 			}
 			
 			//json2xml
@@ -1102,6 +1111,10 @@ IT.component = IT.component || {};
 				if(t.type === "checkbox") { r.setData(c.key, ""+t.checked); } 
 				else { r.setData(c.key, ""+t.value); }
 			});
+			this.widgets.associationsDataTable.on("dropdownChangeEvent", function(args) {
+				var e = args.event, t = args.target, r = this.getRecord(t), c = this.getColumn(this.getCellIndex(t.parentNode));
+				r.setData(c.key, t.value);
+			});
             var associationsAddSpan = document.createElement("span");
 			if (Button) {
                 oYUIButton = new Button({ label: "Добавить", type: "button" });
@@ -1143,6 +1156,22 @@ IT.component = IT.component || {};
 	//Служебные функции
 	//TODO: Вынести в отдельный файл
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function contains(a, obj) {
+	    for (var i = 0; i < a.length; i++) {
+	        if (a[i] === obj) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	function containsUri(a, obj) {
+	    for (var i = 0; i < a.length; i++) {
+	        if (a[i]._uri === obj._uri) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 	function parseXML( data , xml , tmp ) {
 		if ( window.DOMParser ) { // Standard
 			tmp = new DOMParser();
