@@ -94,7 +94,7 @@
   execution.setVariableLocal('employeeComment', comment);
   execution.setVariableLocal('effectiveEmployee', effectiveEmployee);
   /* отбираем ранее нарезанные права */
-  /* lecmPermission.revokeDynamicRole(document, effectiveEmployee, 'LECM_SIGNER_DYN'); */
+  lecmPermission.revokeDynamicRole(document, effectiveEmployee, 'LECM_SIGNER_DYN');
   /* добавляем в участники как читателя */
   documentMembers.addMemberWithoutCheckPermission(document, effectiveEmployee, 'LECM_BASIC_PG_Reader', true);
 })();]]></activiti:string>

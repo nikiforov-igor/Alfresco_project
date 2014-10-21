@@ -277,6 +277,7 @@
                     <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:representative-assoc"/>
                     <show id="lecm-contract:signedCounterparty"/>
@@ -288,7 +289,6 @@
                     <show id="lecm-contract:regNumContractor"/>
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
-					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
@@ -373,7 +373,7 @@
 			                <control-param name="defaultSelectedShowPreviewButton">true</control-param>
 		                </control>
 	                </field>
-					<field id="lecmSignAspects:signerEmployeeAssoc"/>
+					<field id="lecmSignAspects:signerEmployeeAssoc" set="afterPrice"/>
                 </appearance>
 			</form>
             <form id="datagrid">
