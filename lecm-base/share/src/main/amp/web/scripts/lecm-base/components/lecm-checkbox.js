@@ -26,6 +26,7 @@ LogicECM.module = LogicECM.module || {};
         this.checkboxId = fieldHtmlId + "-entry";
 	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+	    YAHOO.Bubbling.on("disableRelatedFields", this.onDisableRelatedFields, this);
         return this;
     };
 
@@ -91,39 +92,8 @@ LogicECM.module = LogicECM.module || {};
                 },
                 onChange: function() {
                     var el = Dom.get(this.id);
-	                var me = this;
-                    var selected = this.checkbox.checked;
-	                el.value = selected;
-                    if (this.options.disabledFieldsIfNotSelect != null) {
-                        for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
-                            var field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];
-                            if (field != null) {
-                                field.disabled = !selected;
-
-	                            var fieldId = this.options.disabledFieldsIfNotSelect[i];
-	                            if (!selected) {
-		                            LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
-	                            } else {
-		                            LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
-	                            }
-                            }
-                        }
-                    }
-                    if (this.options.disabledFieldsIfSelect != null) {
-                        for (i = 0; i < this.options.disabledFieldsIfSelect.length; i++) {
-                            field = el.form["prop_" + this.options.disabledFieldsIfSelect[i].replace(":", "_")];
-                            if (field != null) {
-                                field.disabled = selected;
-
-	                            fieldId = this.options.disabledFieldsIfSelect[i];
-	                            if (selected) {
-		                            LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
-	                            } else {
-		                            LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
-	                            }
-                            }
-                        }
-                    }
+	                el.value = this.checkbox.checked;
+                    this.checkDisableRelatedFields();
                     YAHOO.Bubbling.fire("formValueChanged", {
                        eventGroup: this,
                        addedItems: [],
@@ -135,6 +105,41 @@ LogicECM.module = LogicECM.module || {};
 		                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 	                }
                 },
+	            checkDisableRelatedFields: function() {
+		            var el = Dom.get(this.id);
+		            var me = this;
+		            var selected = this.checkbox.checked;
+		            if (this.options.disabledFieldsIfNotSelect != null) {
+			            for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
+				            var field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];
+				            if (field != null) {
+					            field.disabled = !selected;
+
+					            var fieldId = this.options.disabledFieldsIfNotSelect[i];
+					            if (!selected) {
+						            LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
+					            } else {
+						            LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
+					            }
+				            }
+			            }
+		            }
+		            if (this.options.disabledFieldsIfSelect != null) {
+			            for (i = 0; i < this.options.disabledFieldsIfSelect.length; i++) {
+				            field = el.form["prop_" + this.options.disabledFieldsIfSelect[i].replace(":", "_")];
+				            if (field != null) {
+					            field.disabled = selected;
+
+					            fieldId = this.options.disabledFieldsIfSelect[i];
+					            if (selected) {
+						            LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
+					            } else {
+						            LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
+					            }
+				            }
+			            }
+		            }
+	            },
 
 	            onDisableControl: function (layer, args) {
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
@@ -151,6 +156,12 @@ LogicECM.module = LogicECM.module || {};
 				            this.checkbox.disabled = false;
 				            Dom.get(this.id).disabled = false;
 			            }
+		            }
+	            },
+
+	            onDisableRelatedFields: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            this.checkDisableRelatedFields();
 		            }
 	            }
             });
