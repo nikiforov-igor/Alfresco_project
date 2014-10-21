@@ -76,7 +76,7 @@
     employee = orgstructure.getEmployeeByLogin(assignee);
     task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
-    lecmPermission.grantDynamicRole(document, employee, 'LECM_SIGNER_DYN', 'LECM_BASIC_PG_Reviewer');
+    lecmPermission.grantDynamicRole(document, employee, 'LECM_SIGNER_DYN', 'LECM_BASIC_PG_ResponsibleEmployee');
     /* уведомление актуальному исполнителю */
     notifications.sendNotification([employee.nodeRef.toString()], msg, document);
   }

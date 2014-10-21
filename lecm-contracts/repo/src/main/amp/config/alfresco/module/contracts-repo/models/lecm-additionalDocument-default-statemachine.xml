@@ -7033,7 +7033,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -8188,7 +8188,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+												<value><![CDATA[LECM_BASIC_PG_ResponsibleEmployee]]></value>
 											</property>
 										</properties>
 										<aspects>
