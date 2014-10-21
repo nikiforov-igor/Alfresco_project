@@ -349,11 +349,11 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
-					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title"/>

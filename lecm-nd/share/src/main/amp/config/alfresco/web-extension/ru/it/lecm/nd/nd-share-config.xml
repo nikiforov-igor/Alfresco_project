@@ -14,6 +14,7 @@
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
@@ -21,7 +22,6 @@
                     <show id="lecm-nd:end-date" mandatory="true"/>
                     <show id="lecm-nd:unlimited" mandatory="true"/>
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
-					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
                 <appearance>
 	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />

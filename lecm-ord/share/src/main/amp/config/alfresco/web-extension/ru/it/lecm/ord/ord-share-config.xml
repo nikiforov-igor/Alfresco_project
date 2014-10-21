@@ -7,6 +7,7 @@
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
+					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-ord:controller-assoc"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -14,7 +15,6 @@
                     <show id="lecm-ord:canceled-assoc"/>
                     <show id="lecm-ord:accepted-assoc"/>
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
-					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:title" label="Заголовок"/>
