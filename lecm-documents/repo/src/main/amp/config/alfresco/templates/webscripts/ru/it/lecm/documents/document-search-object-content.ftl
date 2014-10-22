@@ -7,18 +7,26 @@
 	<ul>
 		<#if properties??>
 			<#list properties?keys as propTitle>
-				<li>
-					<#if propTitle??>
-						<#if properties[propTitle]??>
-							<#if properties[propTitle]?is_date>
-								<#assign propValue = properties[propTitle]?datetime>
-							<#else>
-								<#assign propValue = properties[propTitle]?string>
-							</#if>
+				<#if propTitle??>
+					<#if properties[propTitle]??>
+						<li>
+						<#if properties[propTitle]?is_date>
+							<#assign propValue = properties[propTitle]?datetime>
+						<#elseif properties[propTitle]?is_enumerable>
+							<#assign propValue = "">
+							<#list properties[propTitle] as value>
+								<#assign propValue = propValue + value.properties["cm:name"]>
+								<#if value_has_next>
+									<#assign propValue = propValue + ", ">
+								</#if>
+							</#list>
+						<#else>
+							<#assign propValue = properties[propTitle]?string>
 						</#if>
 						${propTitle}: <#if propValue??>${propValue}</#if>
+						</li>
 					</#if>
-				</li>
+				</#if>
 			</#list>
 		</#if>
 	</ul>
