@@ -146,7 +146,6 @@
 				<js src="/scripts/lecm-base/components/lecm-form-tabs.js" />
 				<js src="/yui/tabview/tabview.js" />
 				<js src="/jquery/jquery-1.6.2.js"/>
-                <js src="/scripts/lecm-base/constraints/current-date-limit-validator.js" />
 				<!-- <js src="/scripts/lecm-base/components/lecm-toolbar.js" />
 				<js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-selectone.js" />
@@ -182,7 +181,6 @@
 				<js src="/scripts/lecm-base/components/binder.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-create-control.js" />
 				<js src="/scripts/lecm-base/components/lecm-text-checkboxes-control.js" />
-				<js src="/scripts/lecm-base/constraints/current-date-limit-validator.js" />
 				<js src="/scripts/knockout.min.js" />
 				<js src="/components/preview/web-preview.js" />
 				<js src="/components/preview/WebPreviewer.js" />

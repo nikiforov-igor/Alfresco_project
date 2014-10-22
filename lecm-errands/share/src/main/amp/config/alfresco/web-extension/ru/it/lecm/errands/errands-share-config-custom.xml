@@ -79,9 +79,9 @@
                         </control>
                     </field>
                     <field id="lecm-errands:limitation-date" mandatory="true">
-	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
-	                    </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands:title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
@@ -107,7 +107,11 @@
 	                </field>
                     <field id="lecm-errands:end-date"/>
                     <field id="lecm-errands:controller-assoc"/>
-                    <field id="lecm-errands:start-date"/>
+					<field id="lecm-errands:start-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
                     <field id="lecm-errands:content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
@@ -136,7 +140,11 @@
                     <field id="lecm-errands:line">
                         <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
                     </field>
-                    <field id="lecm-errands:execution-date"/>
+					<field id="lecm-errands:execution-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
                     <field id="lecm-errands:execution-report">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
@@ -299,9 +307,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-errands:limitation-date" mandatory="true">
-	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
-	                    </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-document-aspects:attachments-temp-assoc">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
@@ -348,7 +356,11 @@
 			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-errands:start-date" set="collapsable-inner"/>
+					<field id="lecm-errands:start-date" set="collapsable-inner">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
                     <field id="lecm-errands:just-in-time" set="collapsable-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
@@ -511,10 +523,8 @@
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-errands:limitation-date" mandatory="true">
-	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
-	                    </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
                             <control-param name="maxLimitArg">parentLimitationDate</control-param>
                         </control>
                     </field>
@@ -563,7 +573,11 @@
 			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-errands:start-date" set="collapsable-inner"/>
+					<field id="lecm-errands:start-date" set="collapsable-inner">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
                     <field id="lecm-errands:just-in-time" set="collapsable-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
