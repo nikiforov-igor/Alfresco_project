@@ -73,6 +73,8 @@ public class Notification {
 	 */
 	private boolean dontCheckAccessToObject = false;
 
+	private List<NodeRef> delegateBusinessRoleRefs;
+
     public Notification() {
 	}
 
@@ -174,5 +176,13 @@ public class Notification {
 
 	public void setDontCheckAccessToObject(boolean dontCheckAccessToObject) {
 		this.dontCheckAccessToObject = dontCheckAccessToObject;
+	}
+
+	public List<NodeRef> getDelegateBusinessRoleRefs() {
+		return delegateBusinessRoleRefs;
+	}
+
+	public void setDelegateBusinessRoleRefs(List<NodeRef> delegateBusinessRoleRefs) {
+		this.delegateBusinessRoleRefs = delegateBusinessRoleRefs;
 	}
 }

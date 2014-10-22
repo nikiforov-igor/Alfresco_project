@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_EMPLOYEE;
+import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_BUSINESS_ROLE;
 
 /**
  * User: AIvkin Date: 10.01.13 Time: 16:53
@@ -333,10 +334,14 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                 logger.trace("Roles added. Current size: {}", employeeRefs.size());
             }
 
-                        //пробегаемся по сотрудникам, смотрим их параметры делегирования и наличие доверенных лиц (в том числе и по доверенностям
+            //пробегаемся по сотрудникам, смотрим их параметры делегирования и наличие доверенных лиц (в том числе и по доверенностям
             //если таковые имеются, то добавляем их в в общий перечень
             // временный сет нужен для того, чтобы избежать ConcurrentModificationException при модификации коллекции во время итерации по ней
-            Set<NodeRef> tmpEmployeeRefs = new HashSet<NodeRef>(employeeRefs);
+			//"заместителя" по всем БР мы всегда добавляем в получатели уведомлений
+			//делегатов по БР мы добавляем по факту их наличия
+			final List<NodeRef> delegateBroles = generalizedNotification.getDelegateBusinessRoleRefs();
+			final boolean hasDelegateBroles = delegateBroles != null && delegateBroles.size() > 0;
+            Set<NodeRef> tmpEmployeeRefs = new HashSet<>(employeeRefs);
             for (NodeRef employee : tmpEmployeeRefs) {
                 NodeRef delegationOpts = findNodeByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
                 if (delegationOpts != null) {
@@ -347,23 +352,26 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                             employeeRefs.add(trustee);
                         }
 
-                        Set<QName> types = new HashSet<QName>();
-                        types.add(IDelegation.TYPE_PROCURACY);
+						if (hasDelegateBroles) {
+							Set<QName> types = new HashSet<>();
+							types.add(IDelegation.TYPE_PROCURACY);
 
-                        List<ChildAssociationRef> procuraciesList = nodeService.getChildAssocs(delegationOpts, types);
+							List<ChildAssociationRef> procuraciesList = nodeService.getChildAssocs(delegationOpts, types);
 
-                        for (ChildAssociationRef procuaryAssoc : procuraciesList) {
-                            NodeRef procuary = procuaryAssoc.getChildRef();
-                            Boolean procuaryActive = (Boolean) nodeService.getProperty(procuary, IS_ACTIVE);
+							for (ChildAssociationRef procuaryAssoc : procuraciesList) {
+								NodeRef procuary = procuaryAssoc.getChildRef();
+								Boolean procuaryActive = (Boolean) nodeService.getProperty(procuary, IS_ACTIVE);
 
-                            if (procuaryActive) {
-                                NodeRef procuaryTrustee = findNodeByAssociationRef(procuary, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+								if (procuaryActive) {
+									NodeRef procuaryTrustee = findNodeByAssociationRef(procuary, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+									NodeRef procuracyBrole = findNodeByAssociationRef(procuary, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
 
-                                if (procuaryTrustee != null) {
-                                    employeeRefs.add(procuaryTrustee);
-                                }
-                            }
-                        }
+									if (procuaryTrustee != null && procuracyBrole != null && delegateBroles.contains(procuracyBrole)) {
+										employeeRefs.add(procuaryTrustee);
+									}
+								}
+							}
+						}
                     }
                 }
             }
@@ -586,6 +594,18 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         notification.setInitiatorRef(initiatorRef);
         sendNotification(notification, dontCheckAccessToObject);
     }
+
+	@Override
+	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef, boolean dontCheckAccessToObject, List<NodeRef> delegateBusinessRoleRefs) {
+        Notification notification = new Notification();
+        notification.setAuthor(author);
+        notification.setRecipientEmployeeRefs(recipientEmployees);
+        notification.setObjectRef(object);
+        notification.setDescription(substituteService.formatNodeTitle(object, textFormatString));
+        notification.setInitiatorRef(initiatorRef);
+		notification.setDelegateBusinessRoleRefs(delegateBusinessRoleRefs);
+        sendNotification(channels, notification, dontCheckAccessToObject);
+	}
 
     private class NotificationTransactionListener implements TransactionListener {
 
