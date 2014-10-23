@@ -227,6 +227,22 @@
                     </field>
                 </appearance>
             </form>
+            <form id="doclib-simple-metadata">
+                <appearance>
+                    <field id="cm:name">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                    </field>
+                    <field id="cm:description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl" />
+                    </field>
+                    <field id="cm:author">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                    </field>
+                    <field id="cm:owner">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
