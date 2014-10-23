@@ -44,9 +44,7 @@
         </label>
     </div>
     <div class="container">
-        <div class="buttons-div">
-            <@formLib.renderFieldHelp field=field />
-        </div>
+        <div class="buttons-div"><@formLib.renderFieldHelp field=field /></div>
         <div class="value-div">
             <textarea id="${fieldHtmlId}" name="${field.name}" rows="${rows}" cols="${columns}" tabindex="0"
                         <#if field.description??>title="${field.description}"</#if>
