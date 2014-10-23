@@ -313,8 +313,8 @@
                     <show id="lecm-orgstr:employee-first-name"/>
                     <show id="lecm-orgstr:employee-middle-name"/>
                     <show id="lecm-orgstr:employee-phone"/>
-                    <show id="lecm-orgstr:employee-main-position" force="true"/>
                     <show id="lecm-orgstr:employee-main-unit" force="true"/>
+                    <show id="lecm-orgstr:employee-main-position" force="true"/>
                     <show id="lecm-orgstr:employee-email"/>
                     <show id="lecm-orgstr:employee-person-login"/>
                 </field-visibility>
