@@ -1,10 +1,5 @@
 package ru.it.lecm.base.beans;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
@@ -18,6 +13,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * User: mshafeev
@@ -150,25 +151,28 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
      * @return
      */
     public List<NodeRef> getNodeRefsFromScriptableCollection(Scriptable scriptableCollection) {
-        List<NodeRef> additionalUnitsRefs = null;
+        List<NodeRef> objectsRefs = null;
         if (scriptableCollection != null) {
             Object[] elements = Context.getCurrentContext().getElements(scriptableCollection);
-            additionalUnitsRefs = new ArrayList<NodeRef>(elements.length);
+            objectsRefs = new ArrayList<NodeRef>(elements.length);
             for (Object element : elements) {
                 if (element != null) {
-                    if (element instanceof NativeJavaObject) {
+                    if (element instanceof ScriptNode) {
+                        ScriptNode obj = (ScriptNode) element;
+                        objectsRefs.add(obj.getNodeRef());
+                    } else if (element instanceof NativeJavaObject) {
                         Object unwrappedObj = ((NativeJavaObject) element).unwrap();
                         if (unwrappedObj != null && unwrappedObj instanceof ScriptNode) {
-                            additionalUnitsRefs.add(((ScriptNode) unwrappedObj).getNodeRef());
+                            objectsRefs.add(((ScriptNode) unwrappedObj).getNodeRef());
                         }
                     } else if (element instanceof String) {
                         if (NodeRef.isNodeRef((String) element)) {
-                            additionalUnitsRefs.add(new NodeRef((String) element));
+                            objectsRefs.add(new NodeRef((String) element));
                         }
                     }
                 }
             }
         }
-        return additionalUnitsRefs;
+        return objectsRefs;
     }
 }
