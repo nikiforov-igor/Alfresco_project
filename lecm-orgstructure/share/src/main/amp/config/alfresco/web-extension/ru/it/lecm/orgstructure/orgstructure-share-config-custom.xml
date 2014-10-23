@@ -783,7 +783,7 @@
 	                <show id="lecm-orgstr:staff-list-is-boss"/>
                 </field-visibility>
 	            <appearance>
-		            <field id="lecm-orgstr-aspects:linked-organization-assoc" label-id="staff_organization"/>
+		            <field id="lecm-orgstr-aspects:linked-organization-assoc" label-id="staff_organization" substituteString="{..lecm-orgstr-aspects:linked-organization-assoc/lecm-orgstr:element-full-name}"/>
 		            <field id="lecm-orgstr:staff-unit" substituteString="{../lecm-orgstr:element-short-name}"/>
 		            <field id="lecm-orgstr:element-member-position-assoc" label-id="lecm-orgstr_employee-main-position"/>
 		            <field id="lecm-orgstr:primary-position" label-id="staff_is_primary" substituteString="{lecm-orgstr:element-member-employee-assoc/lecm-orgstr:employee-link-is-primary}"/>
