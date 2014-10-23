@@ -206,8 +206,10 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 		List<BusinessJournalRecord> filtered = new ArrayList<>();
 		for (BusinessJournalRecord record : res) {
 			if (employees.isEmpty() || employees.contains(record.getInitiator().toString())) {
-				if (eventCats.isEmpty() || eventCats.contains(record.getEventCategory().toString())) {
-					if (objectTypes.isEmpty() || objectTypes.contains(record.getObjectType().toString())) {
+				String recordEventCategory = record.getEventCategory() != null ? record.getEventCategory().toString() : null;
+				if (eventCats.isEmpty() || eventCats.contains(recordEventCategory)) {
+					String recordObjectType = record.getObjectType() != null ? record.getObjectType().toString() : null;
+					if (objectTypes.isEmpty() || objectTypes.contains(recordObjectType)) {
 						if ((begin != null && record.getDate().after(begin)) && (end != null && record.getDate().before(end))) {
 							filtered.add(record);
 						}
