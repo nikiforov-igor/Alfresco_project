@@ -4,6 +4,7 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -29,7 +30,6 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 
 /**
  *
@@ -198,11 +198,10 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 			//получаем все вложения отключаем их policy и удаляем
 			List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
 			for (NodeRef categoryRef : categories) {
-				String category = documentAttachmentsService.getCategoryName(categoryRef);
-				List<NodeRef> attachments = documentAttachmentsService.getAttachmentsByCategory(documentRef, category);
-				for (NodeRef attachRef : attachments) {
-					cruellyDeleteNode(attachRef);
-				}
+                List<ChildAssociationRef> attachments = nodeService.getChildAssocs(categoryRef);
+                for (ChildAssociationRef attachRef : attachments) {
+                    cruellyDeleteNode(attachRef.getChildRef());
+                }
 			}
 		} catch (Exception ex) {
 			// что-то сломалось при попытке получить категории вложений. это не повод прекращать удаление документа
