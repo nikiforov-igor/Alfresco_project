@@ -310,7 +310,7 @@ div.error-item
     border-left: 1px solid #D6D6D6;
 }
 .filters-block #columnsForm .columns-list .filters-table .column .column-label {
-    width: 140px;
+    width: 130px;
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
