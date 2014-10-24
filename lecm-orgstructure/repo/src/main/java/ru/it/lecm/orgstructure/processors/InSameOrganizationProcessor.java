@@ -49,7 +49,7 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         sbQuery.append("@").append(organizationProperty).append(":");
 
 //        if (!orgstructureBean.isEmployeeHasBusinessRole(employee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
-        if (!auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
+        if ( !AuthenticationUtil.isRunAsUserTheSystemUser() && !auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
             organization = orgstructureBean.getUserOrganization(userName);
             if (organization != null) {
                 sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
