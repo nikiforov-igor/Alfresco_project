@@ -18,7 +18,7 @@ LogicECM.module.OrgStructure.Absence.employeeHasNoAbsenceValidation =
         else{
             var formDom = YAHOO.util.Dom.get(field.id);
             var newDiv = document.createElement("div");
-            newDiv.innerHTML = '<div id="error-message-container" style="margin-left: 12em; color: #800000; font-weight: bold;"></div>';
+            newDiv.innerHTML = '<div id="error-message-container" class="employee-absence-error"></div>';
             formDom.parentNode.parentNode.appendChild(newDiv);
             htmlNode = YAHOO.util.Dom.get("error-message-container");
         }

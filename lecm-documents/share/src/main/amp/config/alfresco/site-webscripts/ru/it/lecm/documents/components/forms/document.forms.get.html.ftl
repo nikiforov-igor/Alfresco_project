@@ -19,7 +19,7 @@
                             <#assign i=0/>
                             <#escape x as x?js_string>
                                 <#list reportsDescriptors as report>
-                                    <li style="padding-bottom: 0.4em;" class="text-broken">
+                                    <li class="text-broken">
                                             <a href="#" class="theme-color-1"
                                                onClick='LogicECM.module.Documents.Reports.reportLinkClicked(this, {"reportCode": "${report.code}", "nodeRef":"${nodeRef}"});'><#if report.name != "">${report.name}<#else>(no name)</#if></a>
                                     </li>

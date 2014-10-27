@@ -683,7 +683,7 @@ LogicECM.module = LogicECM.module || {};
 			var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
 					'<div id="confirm-edit-fields-head" class="hd" title="Ошибка действия &quot;' + label + '&quot;">Ошибка действия "' + label + '"</div>' +
 					'<div id="confirm-edit-fields-body" class="bd">' +
-					'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields" style="padding: 1em">Выполнение действия невозможно.<br/>';
+					'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields">Выполнение действия невозможно.<br/>';
 			for (var i = 0; i < errors.length; i++) {
 				form += errors[i];
 				form += "<br/>";

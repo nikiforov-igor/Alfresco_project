@@ -428,7 +428,8 @@
                         'scripts/lecm-base/components/lecm-datagrid.js'
                     ], [
                         'components/search/search.css',
-                        'modules/document-details/historic-properties-viewer.css'
+                        'modules/document-details/historic-properties-viewer.css',
+                        'css/lecm-orgstructure/orgstructure-employee-absence.css'
                     ], createDatagrid);
                 }
 

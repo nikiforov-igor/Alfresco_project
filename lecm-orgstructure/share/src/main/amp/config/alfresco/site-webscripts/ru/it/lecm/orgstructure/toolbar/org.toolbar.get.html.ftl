@@ -63,7 +63,8 @@
             'scripts/lecm-orgstructure/orgstructure-toolbar.js',
             'scripts/lecm-orgstructure/noderefs-has-no-absences-validation.js'
         ], [
-            'components/data-lists/toolbar.css'
+            'components/data-lists/toolbar.css',
+            'css/lecm-orgstructure/orgstructure-employee-absence.css'
         ], createToolbar);
     }
 
