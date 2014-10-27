@@ -133,6 +133,9 @@
                         <#if field.control.params.repoDatasource??>
                             repoDatasource: ${field.control.params.repoDatasource},
                         </#if>
+		                <#if field.control.params.createFormTitleMsg??>
+			                createFormTitleMsg: "${field.control.params.createFormTitleMsg?string}",
+		                </#if>
                         allowCreate: ${allowCreate?string},
                         showActionColumn: ${showActions?string},
                         showCheckboxColumn: false
