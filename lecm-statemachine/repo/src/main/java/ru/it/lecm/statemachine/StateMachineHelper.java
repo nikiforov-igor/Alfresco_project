@@ -2546,18 +2546,20 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 	 */
 	private boolean isStarter(String type, NodeRef employee) {
 		String statmachene = type.replace(":", "_");
-		//Set<String> accessRoles = getStarterRoles(type);
-		List<String> accessRoles = getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getStarterRoles();
-		if (accessRoles.isEmpty()) {
-			return false;
-		}
-		List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(employee, true, true);
-		for (NodeRef role : roleRefs) {
-			String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-			if (accessRoles.contains(name)) {
-				return true;
-			}
-		}
+        List<String> accessRoles = getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().getStarterRoles();
+        final String employeeLogin = orgstructureBean.getEmployeeLogin(employee);
+        @SuppressWarnings("unchecked") Set<String> auth = (Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
+            }
+        });
+
+        for (String accessRole : accessRoles) {
+            if (auth.contains("GROUP__LECM$BR%" + accessRole)) {
+                return true;
+            }
+        }
 		return false;
 	}
 
