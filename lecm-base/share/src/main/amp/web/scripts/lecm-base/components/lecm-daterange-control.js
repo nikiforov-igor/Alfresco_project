@@ -331,7 +331,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // update the date field
                 var selected = args[0];
                 var selDate = this.widgets.calendarTo.toDate(selected[0]);
-                var dateEntry = selDate.toString(this.msg("form.control.date-picker.entry.date.format"));
+                var dateEntry = selDate.toString(this.msg("lecm.form.control.date-picker.entry.date.format"));
                 var obj = Dom.get(this.id + "-date-to");
                 this._setValueAndSavePosition(obj, dateEntry);
 
@@ -376,7 +376,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     if (event == undefined || (event.keyCode != KeyListener.KEY.TAB && event.keyCode != KeyListener.KEY.SHIFT)) {
 
                         // convert to format expected by YUI
-                        var parsedDate = Date.parseExact(changedDate, this.msg("form.control.date-picker.entry.date.format"));
+                        var parsedDate = Date.parseExact(changedDate, this.msg("lecm.form.control.date-picker.entry.date.format"));
                         if (parsedDate != null) {
                             this.widgets.calendarFrom.select((parsedDate.getMonth() + 1) + "/" + parsedDate.getDate() + "/" + parsedDate.getFullYear());
                             var selectedDates = this.widgets.calendarFrom.getSelectedDates();
@@ -411,7 +411,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var changedDate = Dom.get(this.id + "-date-to").value;
                 if (changedDate.length > 0) {
                     // convert to format expected by YUI
-                    var parsedDate = Date.parseExact(changedDate, this.msg("form.control.date-picker.entry.date.format"));
+                    var parsedDate = Date.parseExact(changedDate, this.msg("lecm.form.control.date-picker.entry.date.format"));
                     if (parsedDate != null) {
                         this.widgets.calendarTo.select((parsedDate.getMonth() + 1) + "/" + parsedDate.getDate() + "/" + parsedDate.getFullYear());
                         var selectedDates = this.widgets.calendarTo.getSelectedDates();
