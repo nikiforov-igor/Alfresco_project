@@ -227,33 +227,36 @@ public class ReportsManager {
     public List<ReportDescriptor> getRegisteredReports(String docType, boolean dontFilterByRole) {
         final Map<String, ReportDescriptor> list = this.getDescriptors();
         if (list == null || list.isEmpty()) {
-            return new ArrayList<ReportDescriptor>();
+            return new ArrayList<>();
         }
 
         if (docType != null && docType.trim().isEmpty()) {
             docType = null;
         }
 
-        final HashSet<String> employeeRoles = new HashSet<String>();
+        final Set<String> employeeAuth = new HashSet<>();
         if (!dontFilterByRole) {
-        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+            NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 
-        if (currentEmployee != null) {
-            List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(currentEmployee, true, true);
-            for (NodeRef role : roleRefs) {
-                String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-                employeeRoles.add(name);
+            if (currentEmployee != null) {
+                final String employeeLogin = orgstructureBean.getEmployeeLogin(currentEmployee);
+                //noinspection unchecked
+                employeeAuth.addAll((Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
+                    }
+                }));
             }
         }
-        }
 
-        final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
+        final List<ReportDescriptor> found = new ArrayList<>();
         try {
             if (docType == null) {
                 // не задано фильтрование -> вернуть сразу всё целиком ... без подотчетов
                 for (ReportDescriptor desc : list.values()) {
                     if (!desc.isSubReport()) {
-                        if (dontFilterByRole || hasPermissionToReport(desc, employeeRoles)) {
+                        if (dontFilterByRole || hasPermissionToReport(desc, employeeAuth)) {
                             found.add(desc);
                         }
                     }
@@ -262,7 +265,7 @@ public class ReportsManager {
                 for (ReportDescriptor desc : list.values()) {
                     if (!desc.isSubReport()) {
                         final boolean okDocType = (desc.getFlags() == null) || desc.getFlags().isTypeSupported(docType);
-                        if (okDocType && (dontFilterByRole || hasPermissionToReport(desc, employeeRoles))) {
+                        if (okDocType && (dontFilterByRole || hasPermissionToReport(desc, employeeAuth))) {
                             found.add(desc);
                         }
                     }
@@ -275,16 +278,16 @@ public class ReportsManager {
         return found;
     }
 
-    private boolean hasPermissionToReport(ReportDescriptor descriptor, HashSet<String> employeeRoles) {
+    private boolean hasPermissionToReport(ReportDescriptor descriptor, Set<String> auth) {
         Set<String> reportRoles = descriptor.getBusinessRoles();
         if (reportRoles.isEmpty()) {
             return true;
         }
-            for (String reportRole : reportRoles) {
-                if (employeeRoles.contains(reportRole)) {
-                    return true;
-                }
+        for (String reportRole : reportRoles) {
+            if (auth.contains("GROUP__LECM$BR%" + reportRole)) {
+                return true;
             }
+        }
         return false;
     }
 
