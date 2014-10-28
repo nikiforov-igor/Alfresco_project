@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.service.cmr.dictionary.DictionaryException;
 import org.alfresco.util.PropertyCheck;
 import org.springframework.core.io.ClassPathResource;
 
@@ -90,87 +91,123 @@ public class LecmModelsService {
         return model;
     }
 
-    public M2Model loadModelFromLocation(final String location, boolean updateExisting) {
-        final NodeRef modelsRoot = getModelsRoot();
-        M2Model model = null;
-        try {
-            PropertyCheck.mandatory(this, "location", location);
-            PropertyCheck.mandatory(this, "repositoryModelsLocation", repositoryModelsLocation);
-            PropertyCheck.mandatory(this, "modelsRoot", modelsRoot);
+	public M2Model loadModelFromLocation(final String location, boolean updateExisting) {
+		final NodeRef modelsRoot = getModelsRoot();
+		M2Model model = null;
+		try {
+			PropertyCheck.mandatory(this, "location", location);
+			PropertyCheck.mandatory(this, "repositoryModelsLocation", repositoryModelsLocation);
+			PropertyCheck.mandatory(this, "modelsRoot", modelsRoot);
 
-            final ClassPathResource modelResource = new ClassPathResource(location);
-            InputStream modelStream = modelResource.getInputStream();
-            try {
-                model = M2Model.createModel(modelStream);
+			logger.debug("################################################################################");
+			logger.trace("Repository models location: '{}'", repositoryModelsLocation.getPath());
+			logger.trace("Models root folder in repository: '{}'", nodeService.getPath(modelsRoot).toPrefixString(namespaceService));
+			logger.trace("Existing models will {}!", updateExisting ? "BE UPDATED" : "NOT BE UPDATED");
+			logger.debug("Load model from location '{}'", location);
 
-                final String name = model.getName().replace(":", "_");
-                modelsMap.put(name, location);
-                final NodeRef node = nodeService.getChildByName(modelsRoot, ContentModel.ASSOC_CONTAINS, name);
-                dictionaryRepositoryBootstrap.onDictionaryInit();   //внесено внутрь цикла для правильного распознавания зависимых моделей
+			final ClassPathResource modelResource = new ClassPathResource(location);
+			InputStream modelStream = modelResource.getInputStream();
+			try {
+				logger.trace("Creating model definition from model xml file");
+				model = M2Model.createModel(modelStream);
+				logger.trace("Model definition successfully created");
 
-                if (node == null || (updateExisting)) {
-                    dictionaryDAO.putModel(model);
-//                  TODO: DONE Вызывается из вебскрипта, уже обёрнутого в транзакцию. Транзакция перенесена во вторую точку вызова - init метод бина ModelToRepositoryLoader
-                    InputStream contentInputStream = null;
-                    try {
-	                    contentInputStream = modelResource.getInputStream();
+				final String name = model.getName().replace(":", "_");
+				modelsMap.put(name, location);
+				logger.trace("Find model '{}' in repository", name);
+				final NodeRef node = nodeService.getChildByName(modelsRoot, ContentModel.ASSOC_CONTAINS, name);
+				logger.trace("Reinitialize models in dictionary");
+				dictionaryRepositoryBootstrap.onDictionaryInit();   //внесено внутрь цикла для правильного распознавания зависимых моделей
+				logger.trace("Models reinitialized successfully");
 
-	                    NodeRef newNode;
-	                    boolean update = false;
-	                    if (node == null) {
-		                    Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-		                    props.put(ContentModel.PROP_NAME, name);
+				if (node == null || (updateExisting)) {
+					logger.trace("Add model '{}' to dictionary", name);
+					QName qName = dictionaryDAO.putModel(model);
+					logger.trace("Model '{}' successfully added. Model QName is '{}'", name, qName.toString());
+					InputStream contentInputStream = null;
+					try {
+						contentInputStream = modelResource.getInputStream();
 
-		                    newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
-		                    update = true;
-	                    } else {
-		                    newNode = node;
-		                    InputStream oldContentInputStream = null;
-		                    try {
-			                    ContentReader oldContentReader = contentService.getReader(newNode, ContentModel.PROP_CONTENT);
-			                    oldContentInputStream = oldContentReader.getContentInputStream();
-			                    update = !IOUtils.contentEquals(oldContentInputStream, contentInputStream);
-		                    } catch (Exception e) {
-			                    logger.error("Error load model", e);
-		                    } finally {
-			                    IOUtils.closeQuietly(oldContentInputStream);
-			                    IOUtils.closeQuietly(contentInputStream);
-		                    }
-	                    }
+						NodeRef newNode;
+						boolean update = false;
+						if (node == null) {
+							logger.trace("Model '{}' WAS NOT FOUND in repository location", name);
+							Map<QName, Serializable> props = new HashMap<>();
+							props.put(ContentModel.PROP_NAME, name);
 
-	                    //не обновляем, если нет изменений
-	                    if (update) {
-		                    contentInputStream = modelResource.getInputStream();
-		                    if (!nodeService.hasAspect(newNode, ContentModel.ASPECT_VERSIONABLE)) {
-			                    nodeService.addAspect(newNode, ContentModel.ASPECT_VERSIONABLE, null);
-		                    }
-		                    ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
-		                    contentWriter.putContent(contentInputStream);
-		                    nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
-	                    }
-                    } catch (Exception e) {
-	                    logger.error("Error load model", e);
-                    } finally {
-                        IOUtils.closeQuietly(contentInputStream);
-                    }
-                    return null;
-                }
-            } catch (Exception e) {
-	            logger.error("Error load model", e);
-            } finally {
-                IOUtils.closeQuietly(modelStream);
-            }
+							logger.trace("Add model '{}' to repository location", name);
+							newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
+							logger.trace("Model '{}' successfully added to repository", name);
+							update = true;
+						} else {
+							logger.trace("Model '{}' WAS FOUND in repository location", name);
+							newNode = node;
+							InputStream oldContentInputStream = null;
+							try {
+								logger.trace("Compare model '{}' content with its repository content", name);
+								ContentReader oldContentReader = contentService.getReader(newNode, ContentModel.PROP_CONTENT);
+								oldContentInputStream = oldContentReader.getContentInputStream();
+								update = !IOUtils.contentEquals(oldContentInputStream, contentInputStream);
+							} catch (Exception e) {
+								String msg =String.format("Failed to compare model '%s' content with its repository content", name);
+								logger.error(msg);
+								throw new DictionaryException(msg, e);
+							} finally {
+								IOUtils.closeQuietly(oldContentInputStream);
+								IOUtils.closeQuietly(contentInputStream);
+							}
+						}
 
-        } catch (AlfrescoRuntimeException e) {
-            logger.warn(String.format("Failed load model from location '%s': %s", location, e));
-        } catch (FileNotFoundException e) {
-            logger.error(String.format("Could not find bootstrap model %s: %s", location, e));
-        } catch (IOException e) {
-            logger.error(String.format("Could not import bootstrap model %s: %s", location, e));
-        }
+						//не обновляем, если нет изменений
+						if (update) {
+							logger.trace("Models are DIFFERENT. Model content in repository will BE UPDATED.");
+							contentInputStream = modelResource.getInputStream();
+							if (!nodeService.hasAspect(newNode, ContentModel.ASPECT_VERSIONABLE)) {
+								nodeService.addAspect(newNode, ContentModel.ASPECT_VERSIONABLE, null);
+							}
+							logger.trace("Update model '{}' content", name);
+							ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
+							contentWriter.putContent(contentInputStream);
+							logger.trace("Model '{}' content successfully updated", name);
+							logger.trace("Activating model '{}'", name);
+							nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
+							logger.trace("Model '{}' activated successfully", name);
+						} else {
+							logger.trace("Models are EQUALS. Model content in repository will NOT BE UPDATED.");
+						}
+					} catch (Exception e) {
+						String msg = String.format("Error load model '%s' to repository", name);
+						logger.error(msg);
+						throw new DictionaryException(msg, e);
+					} finally {
+						IOUtils.closeQuietly(contentInputStream);
+					}
+					return null;
+				}
+			} catch (Exception e) {
+				String msg = String.format("Error bootstrap model '%s'", location);
+				logger.error(msg);
+				throw new DictionaryException(msg, e);
+			} finally {
+				IOUtils.closeQuietly(modelStream);
+			}
+			logger.debug("Model from location '{}' successfully loaded", location);
+			logger.debug("################################################################################");
+		} catch (AlfrescoRuntimeException e) {
+			logger.warn(String.format("Failed load model from location '%s': %s", location, e));
+			throw e;
+		} catch (FileNotFoundException e) {
+			String msg = String.format("Could not find bootstrap model '%s': %s", location, e);
+			logger.error(msg);
+			throw new DictionaryException(msg, e);
+		} catch (IOException e) {
+			String msg = String.format("Could not import bootstrap model '%s': %s", location, e);
+			logger.error(msg);
+			throw new DictionaryException(msg, e);
+		}
 
-        return model;
-    }
+		return model;
+	}
 
     public NodeRef getModelsRoot() {
         NodeRef root = nodeService.getRootNode(repositoryModelsLocation.getStoreRef());
