@@ -1878,6 +1878,19 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
     private boolean isEmployeeHasBusinessRole(NodeRef employeeRef, String businessRoleIdentifier, boolean withDelegation, boolean inheritSubordinatesRoles, boolean checkAccess) {
+        if (withDelegation && inheritSubordinatesRoles) {
+            final String employeeLogin = getEmployeeLogin(employeeRef);
+            @SuppressWarnings("unchecked") Set<String> auth = (Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                @Override
+                public Object doWork() throws Exception {
+                    return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
+                }
+            });
+
+            if (auth.contains("GROUP__LECM$BR%" + businessRoleIdentifier)) {
+                return true;
+            }
+        }
         List<NodeRef> allEmployeeBusinessRoles = getEmployeeRoles(employeeRef, withDelegation, inheritSubordinatesRoles, checkAccess);
         NodeRef businessRole = getBusinessRoleByIdentifier(businessRoleIdentifier);
 
