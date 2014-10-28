@@ -113,7 +113,9 @@ LogicECM.module = LogicECM.module || {};
 			            for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
 				            var field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];
 				            if (field != null) {
-					            field.disabled = !selected;
+					            if (field.className.indexOf("initially-disabled") == -1) {
+						            field.disabled = !selected;
+					            }
 
 					            var fieldId = this.options.disabledFieldsIfNotSelect[i];
 					            if (!selected) {
@@ -128,7 +130,9 @@ LogicECM.module = LogicECM.module || {};
 			            for (i = 0; i < this.options.disabledFieldsIfSelect.length; i++) {
 				            field = el.form["prop_" + this.options.disabledFieldsIfSelect[i].replace(":", "_")];
 				            if (field != null) {
-					            field.disabled = selected;
+					            if (field.className.indexOf("initially-disabled") == -1) {
+						            field.disabled = !selected;
+					            }
 
 					            fieldId = this.options.disabledFieldsIfSelect[i];
 					            if (selected) {

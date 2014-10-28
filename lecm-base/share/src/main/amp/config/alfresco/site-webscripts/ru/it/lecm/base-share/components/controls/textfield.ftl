@@ -24,6 +24,18 @@
     </#if>
 </#if>
 
+<#assign disabled = field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>
+<#assign styleClass = ""/>
+<#if field.control.params.styleClass??>
+	<#assign styleClass = field.control.params.styleClass/>
+</#if>
+<#if disabled>
+    <#if (styleClass?length > 0)>
+	    <#assign styleClass = styleClass + " "/>
+    </#if>
+	<#assign styleClass = styleClass + "initially-disabled"/>
+</#if>
+
 <#if form.mode == "view">
     <div class="control textfield viewmode">
         <div class="label-div">
@@ -62,7 +74,7 @@
             <div class="value-div">
                 <input id="${fieldHtmlId}" name="${field.name}${nameSuffix}" tabindex="0"
                        <#if field.control.params.password??>type="password"<#else>type="text"</#if>
-                       <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
+                       <#if (styleClass?length > 0)>class="${styleClass}"</#if>
                        <#if field.control.params.style??>style="${field.control.params.style}"</#if>
                        <#if !hideValue>
                           <#if defaultValue?is_number>value="${defaultValue?c}"<#else>value="${defaultValue?html}"</#if>
@@ -70,7 +82,7 @@
                        <#if field.description??>title="${field.description}"</#if>
                        <#if field.control.params.maxLength??>maxlength="${field.control.params.maxLength}"</#if>
                        <#if field.control.params.size??>size="${field.control.params.size}"</#if>
-                       <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if> />
+                       <#if disabled>disabled="true"</#if> />
             </div>
         </div>
     </div>
