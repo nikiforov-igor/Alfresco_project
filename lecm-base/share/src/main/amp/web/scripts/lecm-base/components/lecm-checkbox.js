@@ -131,7 +131,7 @@ LogicECM.module = LogicECM.module || {};
 				            field = el.form["prop_" + this.options.disabledFieldsIfSelect[i].replace(":", "_")];
 				            if (field != null) {
 					            if (field.className.indexOf("initially-disabled") == -1) {
-						            field.disabled = !selected;
+						            field.disabled = selected;
 					            }
 
 					            fieldId = this.options.disabledFieldsIfSelect[i];
