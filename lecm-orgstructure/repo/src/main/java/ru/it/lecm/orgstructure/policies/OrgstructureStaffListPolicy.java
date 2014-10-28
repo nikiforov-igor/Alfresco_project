@@ -96,7 +96,8 @@ public class OrgstructureStaffListPolicy
 
 				final NodeRef employee = orgstructureService.getEmployeeByPosition(nodeRef);
 
-				if (changed && employee != null) {
+				// (prevPrimary != null || curPrimary) - мы НЕ делаем запись в бизнес-журнал, если раньше было null, а стало false
+				if (changed && (prevPrimary != null || curPrimary) && employee != null) {
 					final NodeRef unit = nodeService.getPrimaryParent(nodeRef).getParentRef();
 
 					final String category;
