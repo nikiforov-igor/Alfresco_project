@@ -9,7 +9,7 @@
     <#assign forTask = true>
 </#if>
 
-<div class="control document-preview">
+<div class="control document-preview ${params.cssClass!''}">
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		function init() {
@@ -46,11 +46,13 @@
 	})();
 	//]]></script>
 
-	<div class="preview-select">
-		<select id="${fieldHtmlId}-attachment-select"></select>
-	</div>
-	<div id="${fieldHtmlId}-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
+    <div class="doc-preview-container">
+        <div class="preview-select">
+            <select id="${fieldHtmlId}-attachment-select"></select>
+        </div>
+        <div id="${fieldHtmlId}-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
 
-	<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
+        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
+    </div>
 </div>
 <div class="clear"></div>
