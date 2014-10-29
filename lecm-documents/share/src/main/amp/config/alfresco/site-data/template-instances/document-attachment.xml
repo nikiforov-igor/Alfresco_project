@@ -153,8 +153,12 @@
 			<url>/components/upload/file-upload</url>
 		</component>
 		<component>
-			<region-id>dnd-upload</region-id>
+			<region-id>lecm-dnd-upload</region-id>
 			<url>/lecm/components/dnd-upload</url>
+		</component>
+		<component>
+			<region-id>dnd-upload</region-id>
+			<url>/components/upload/dnd-upload</url>
 		</component>
 	</components>
 </template-instance>
