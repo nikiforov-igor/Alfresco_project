@@ -5,7 +5,10 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
     var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
-    if (!nodeDetails || !hasPermission(model.nodeRef, PERM_ATTR_EDIT)) {
+	var hasPerm = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
+	model.hasPerm = hasPerm;
+
+    if (!nodeDetails || !hasPerm) {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
 		if (accessInfo) {
 			if (accessInfo.exists) {
