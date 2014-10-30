@@ -336,7 +336,7 @@ public class ActionsScript extends DeclarativeWebScript {
                         variables.addInput(formInputFromType, formInputFromValue, WorkflowVariables.Type.VARIABLE.toString(), formInputToValue);
                     }
 
-                    actionStruct.put("variables", stateMachineService.getInputVariablesMap(statemachineId, variables.getInput()));
+                    actionStruct.put("variables", stateMachineService.getInputVariablesMap(statemachineId, nodeRef, variables.getInput()));
                     actionStruct.put("isForm", false);
                 } else if (type.equals(GroupActionsService.TYPE_GROUP_WORKFLOW_ACTION)) {
                     actionStruct.put("subtype", "workflow");

@@ -1758,9 +1758,23 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 	 * @param variables
 	 * @return
 	 */
-	public Map<String, String> getInputVariablesMap(String stateMachineExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
+    public Map<String, String> getInputVariablesMap(String stateMachineExecutionId, List<WorkflowVariables.WorkflowVariable> variables) {
+        NodeService nodeService = serviceRegistry.getNodeService();
+        RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
+        List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
+        if (documents.size() > 0) {
+            NodeRef document = documents.get(0).getChildRef();
+            return getInputVariablesMap(stateMachineExecutionId, document, variables);
+        } else {
+            return null;
+        }
+    }
+
+	public Map<String, String> getInputVariablesMap(String stateMachineExecutionId, NodeRef document, List<WorkflowVariables.WorkflowVariable> variables) {
 		HashMap<String, String> result = new HashMap<String, String>();
 		RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
+        NodeService nodeService = serviceRegistry.getNodeService();
 		for (WorkflowVariables.WorkflowVariable variable : variables) {
 			String value = "";
 			if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
@@ -1771,25 +1785,18 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 					value = /*varObject*/ (String) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue());
 				}
 			} else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
-				NodeService nodeService = serviceRegistry.getNodeService();
-
-				NodeRef wPackage = ((ActivitiScriptNode) runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), "bpm_package")).getNodeRef();
-				List<ChildAssociationRef> documents = nodeService.getChildAssocs(wPackage);
-				if (documents.size() > 0) {
-					NodeRef document = documents.get(0).getChildRef();
-					QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
-					PropertyDefinition propDef = serviceRegistry.getDictionaryService().getProperty(propertyName);
-					Object pv = nodeService.getProperty(document, propertyName);
-					if (propDef != null) {
-						if (propDef.getDataType().getName().equals(DataTypeDefinition.DATE) || propDef.getDataType().getName().equals(DataTypeDefinition.DATETIME)) {
-							SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-							value = pv != null ? DateFormatISO8601.format(pv) : "";
-						} else {
-							value = pv != null ? pv.toString() : "";
-						}
-					}
-				}
-			} else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
+                QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
+                PropertyDefinition propDef = serviceRegistry.getDictionaryService().getProperty(propertyName);
+                Object pv = nodeService.getProperty(document, propertyName);
+                if (propDef != null) {
+                    if (propDef.getDataType().getName().equals(DataTypeDefinition.DATE) || propDef.getDataType().getName().equals(DataTypeDefinition.DATETIME)) {
+                        SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                        value = pv != null ? DateFormatISO8601.format(pv) : "";
+                    } else {
+                        value = pv != null ? pv.toString() : "";
+                    }
+                }
+            } else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
 				value = variable.getFromValue();
 			}
 
