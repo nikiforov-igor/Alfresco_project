@@ -307,6 +307,7 @@ public class ActionsScript extends DeclarativeWebScript {
 
         if (hasExecutionPermission) {
             List<NodeRef> groupActions = groupActionsService.getActiveActions(nodeRef);
+            boolean hasStatemachine = stateMachineService.hasActiveStatemachine(nodeRef);
             for (NodeRef action : groupActions) {
                 HashMap<String, Object> actionStruct = new HashMap<String, Object>();
                 actionStruct.put("type", "group");
@@ -323,11 +324,18 @@ public class ActionsScript extends DeclarativeWebScript {
                     WorkflowVariables variables = new WorkflowVariables();
                     List<ChildAssociationRef> vars = nodeService.getChildAssocs(action);
                     for (ChildAssociationRef var : vars) {
-                        String formInputFromType = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_TYPE).toString();
                         String formInputFromValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_VALUE).toString();
+                        String formInputFromType;
+                        if (!hasStatemachine && "stm_document".equals(formInputFromValue)) {
+                            formInputFromType = WorkflowVariables.Type.VALUE.toString();
+                            formInputFromValue = nodeRef.toString();
+                        } else {
+                            formInputFromType = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_TYPE).toString();
+                        }
                         String formInputToValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_TO_VALUE).toString();
-                        variables.addInput(formInputFromType,formInputFromValue,"VARIABLE",formInputToValue);
+                        variables.addInput(formInputFromType, formInputFromValue, WorkflowVariables.Type.VARIABLE.toString(), formInputToValue);
                     }
+
                     actionStruct.put("variables", stateMachineService.getInputVariablesMap(statemachineId, variables.getInput()));
                     actionStruct.put("isForm", false);
                 } else if (type.equals(GroupActionsService.TYPE_GROUP_WORKFLOW_ACTION)) {
