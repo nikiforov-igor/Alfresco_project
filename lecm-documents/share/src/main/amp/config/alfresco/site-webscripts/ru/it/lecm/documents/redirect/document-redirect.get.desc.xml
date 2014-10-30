@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webscript>
+	<shortname>document-redirect</shortname>
+	<description>document-redirect</description>
+	<url>/lecm/documents/redirect</url>
+	<format default="html">extension</format>
+	<authentication>user</authentication>
+</webscript>
