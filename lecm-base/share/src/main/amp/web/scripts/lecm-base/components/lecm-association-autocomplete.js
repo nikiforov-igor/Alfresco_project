@@ -18,6 +18,8 @@ LogicECM.module = LogicECM.module || {};
 
 (function () {
     var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        KeyListener = YAHOO.util.KeyListener,
         Util = LogicECM.module.Base.Util;
 
     var $combine = Alfresco.util.combinePaths;
@@ -265,6 +267,7 @@ LogicECM.module = LogicECM.module || {};
             makeAutocomplete: function () {
                 var me = this;
                 var oDS;
+                me.byEnter = false;
                 if (!this.options.lazyLoading) {
                     if (me.options.useDynamicLoading) {
                         var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/" + this.options.itemFamily + this._generateChildrenUrlPath(this.options.parentNodeRef);
@@ -295,7 +298,31 @@ LogicECM.module = LogicECM.module || {};
 
                             return me._generateChildrenUrlParams(searchData);
                         };
-                        oAC.queryDelay = 1;
+                        oAC.doBeforeLoadData = function(sQuery , oResponse , oPayload) {
+                            var results = oResponse.results;
+
+                            // Если после нажатия enter возращается только один результат, то он сразу подставляется в поле
+                            if (me.byEnter && results && results.length == 1) {
+                                me.byEnter = false;
+                                var result = results[0];
+                                var node = {
+                                    name: result.name,
+                                    selectedName: result.selectedName,
+                                    nodeRef: result.nodeRef
+                                };
+
+                                me.selectedItems[node.nodeRef] = node;
+
+                                me.updateSelectedItems();
+                                me.updateFormFields();
+                                me.updateInputUI();
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        };
+
+                        oAC.queryDelay = 0.5;
                     }
                     oAC.minQueryLength = 3;
                     oAC.prehighlightClassName = "yui-ac-prehighlight";
@@ -315,6 +342,27 @@ LogicECM.module = LogicECM.module || {};
                         this.updateInputUI();
                     }.bind(this);
                     oAC.itemSelectEvent.subscribe(selectItemHandler);
+
+                    // Register the "enter" event on the autocomplete text field
+                    var input = Dom.get(this.controlId + "-autocomplete-input");
+                    new KeyListener(input,
+                        {
+                            keys: 13
+                        },
+                        {
+                            fn: function(eventName, args) {
+                                var e = args[1];
+                                var text = input.value;
+
+                                if (text && text != "") {
+                                    me.byEnter = true;
+                                    oAC.sendQuery(text);
+                                }
+                                Event.stopEvent(e);
+                            },
+                            scope: this,
+                            correctScope: true
+                        }, "keydown").enable();
                 }
             },
 

@@ -47,7 +47,7 @@
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
-<div id="${controlId}" class="control association-tree-picker viewmode">
+<div id="${controlId}" class="control association-control viewmode">
 	<div class="label-div">
 		<#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
 		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
@@ -62,7 +62,7 @@
 	</div>
 </div>
 <#else>
-<div class="control association-tree-picker editmode">
+<div class="control association-control editmode">
 	<div class="label-div">
 		<label for="${controlId}">
 		${field.label?html}:
