@@ -134,7 +134,10 @@
 		</property>
 	</bean>
 
-    <bean id="dictionary.exportSettings" class="ru.it.lecm.dictionary.beans.ExportSettingsHolder"/>
+    <bean id="dictionary.exportSettings" class="ru.it.lecm.dictionary.beans.ExportSettingsHolder">
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+    </bean>
 
     <bean id="dictionary.exportSettingsInitializer" abstract="true" class="ru.it.lecm.dictionary.ExportSettingsInitializer" init-method="init">
         <property name="exportSettings" ref="dictionary.exportSettings"/>
