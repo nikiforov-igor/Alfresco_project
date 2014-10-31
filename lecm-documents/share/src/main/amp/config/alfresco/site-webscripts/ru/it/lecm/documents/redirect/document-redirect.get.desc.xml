@@ -2,7 +2,7 @@
 <webscript>
 	<shortname>document-redirect</shortname>
 	<description>document-redirect</description>
-	<url>/lecm/documents/redirect</url>
+	<url>/lecm/documents/redirect?nodeRef={nodeRef}&amp;noRedirect={noRedirect}</url>
 	<format default="html">extension</format>
 	<authentication>user</authentication>
 </webscript>

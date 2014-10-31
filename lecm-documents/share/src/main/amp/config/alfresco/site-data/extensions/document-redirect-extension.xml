@@ -19,6 +19,20 @@
 						</sub-component>
 					</sub-components>
 				</component>
+				<component>
+					<scope>template</scope>
+					 <region-id>doclib-custom</region-id>
+					<source-id>document-details</source-id>
+					<sub-components>
+						<sub-component id="document-redirector">
+							<evaluations>
+								<evaluation id="document-redirector-evaluation">
+									<url>/lecm/documents/redirect?nodeRef={nodeRef}&amp;noRedirect={noRedirect}</url>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
 			</components>
 		</module>
 	</modules>
