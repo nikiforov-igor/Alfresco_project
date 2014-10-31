@@ -71,9 +71,7 @@ model.documentRef = documentNodeRef;
 function checkConnectionType(connection, connType) {
     if (connType != null && connType.length > 0) {
         var currentConnectionCode = connection.assocs["lecm-connect:connection-type-assoc"][0].properties["lecm-connect-types:code"];
-        if (connType.indexOf(currentConnectionCode) >= 0) {
-            return true;
-        }
+        return connType.indexOf(currentConnectionCode) >= 0;
     }
     return true;
 }
@@ -81,9 +79,7 @@ function checkConnectionType(connection, connType) {
 function checkConnectedDocType(connectedDoc, docType) {
     if (docType != null && docType.length > 0) {
         var currentDocType = connectedDoc.shortName;
-        if (docType.indexOf(currentDocType) >= 0) {
-            return true;
-        }
+        return docType.indexOf(currentDocType) >= 0;
     }
     return true;
 }
