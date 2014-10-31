@@ -299,7 +299,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // update the date field
                 var selected = args[0];
                 var selDate = this.widgets.calendarFrom.toDate(selected[0]);
-                var dateEntry = selDate.toString(this.msg("form.control.date-picker.entry.date.format"));
+                var dateEntry = selDate.toString(this.msg("lecm.form.control.date-picker.entry.date.format"));
                 var obj = Dom.get(this.id + "-date-from");
                 this._setValueAndSavePosition(obj, dateEntry);
 
