@@ -179,13 +179,6 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
                     }
 
                 }
-                //Изменяем логин пользователя в настройках сотрудника
-                List<AssociationRef> personAssocs = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
-                if (personAssocs.size() == 1) {
-                    NodeRef person = personAssocs.get(0).getTargetRef();
-                    nodeService.setProperty(nodeRef, OrgstructureBean.PROP_EMPLOYEE_PERSON_LOGIN, nodeService.getProperty(person, ContentModel.PROP_USERNAME));
-                }
-
 
 /*
                 Код для импорта сотрудников
@@ -254,6 +247,9 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
         final NodeRef person = nodeAssocRef.getTargetRef();
         // оповещение SG о том, что создана ассоциация
         notifyEmploeeTie(employee);
+
+        //Изменяем логин пользователя в настройках сотрудника
+        nodeService.setProperty(employee, OrgstructureBean.PROP_EMPLOYEE_PERSON_LOGIN, nodeService.getProperty(person, ContentModel.PROP_USERNAME));
 
         // получить ссылку на фотографию сотрудника
         final NodeRef employeePhoto = orgstructureService.getEmployeePhoto(employee);
