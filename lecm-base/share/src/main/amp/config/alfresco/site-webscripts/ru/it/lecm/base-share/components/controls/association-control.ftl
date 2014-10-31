@@ -81,8 +81,8 @@
 				<input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
 				<#if showCreateNewButton>
 					<span class="create-new-button">
-                    <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
-                </span>
+                        <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
+                    </span>
 				</#if>
 			</div>
 

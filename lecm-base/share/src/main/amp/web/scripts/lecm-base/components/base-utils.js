@@ -536,22 +536,25 @@ LogicECM.module.Base.Util = {
 
                     } else {
                         // универсально для большинства контролов
-                        var valueDiv = Selector.query('div.value-div', el, true);
-                        if (valueDiv) {
-                            var input = Selector.query('input[type=text], input[type=checkbox], select, textarea', valueDiv, true);
-                            if (input) {
-                                Dom.setAttribute(input, 'tabindex', ++tabindex);
-                                tabbedArray.push(input);
+                        var container = Selector.query(' > div.container', el, true);
+                        if (container) {
+                            var valueDiv = Selector.query(' > div.value-div', container, true);
+                            if (valueDiv) {
+                                var input = Selector.query('input[type=text], input[type=checkbox], select, textarea', valueDiv, true);
+                                if (input) {
+                                    Dom.setAttribute(input, 'tabindex', ++tabindex);
+                                    tabbedArray.push(input);
+                                }
                             }
-                        }
-                        var buttonDiv = Selector.query('div.buttons-div', el, true);
-                        if (buttonDiv) {
-                            var buttons = Selector.query('a, input[type=button], span.yui-button button', buttonDiv);
-                            for (var j = 0; j < buttons.length; j++) {
-                                var btn = buttons[j];
-                                if (btn.offsetHeight > 0) {
-                                    Dom.setAttribute(btn, 'tabindex', ++tabindex);
-                                    tabbedArray.push(btn);
+                            var buttonDiv = Selector.query(' > div.buttons-div', container, true);
+                            if (buttonDiv) {
+                                var buttons = Selector.query('a, input[type=button], span.yui-button button', buttonDiv);
+                                for (var j = 0; j < buttons.length; j++) {
+                                    var btn = buttons[j];
+                                    if (btn.offsetHeight > 0) {
+                                        Dom.setAttribute(btn, 'tabindex', ++tabindex);
+                                        tabbedArray.push(btn);
+                                    }
                                 }
                             }
                         }
