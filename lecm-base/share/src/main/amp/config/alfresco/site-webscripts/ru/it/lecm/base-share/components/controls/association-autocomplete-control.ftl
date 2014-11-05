@@ -63,6 +63,11 @@
 	<#assign useDynamicLoading = false>
 </#if>
 
+<#assign showMandatoryIndicator = true>
+<#if field.control.params.showMandatoryIndicator?? && field.control.params.showMandatoryIndicator == "false">
+	<#assign showMandatoryIndicator = false>
+</#if>
+
 <#assign isFieldMandatory = false>
 <#if field.control.params.mandatory??>
     <#if field.control.params.mandatory == "true">
@@ -273,7 +278,7 @@
     <div class="label-div">
         <label for="${controlId}-autocomplete-input">
             ${field.label?html}:
-            <#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
+            <#if isFieldMandatory && showMandatoryIndicator><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
         </label>
         <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
         <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
