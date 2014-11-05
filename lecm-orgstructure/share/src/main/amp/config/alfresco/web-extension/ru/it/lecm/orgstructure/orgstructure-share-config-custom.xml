@@ -18,7 +18,7 @@
                     <show id="lecm-orgstr:employee-fio-d" for-mode="edit"/>
                     <show id="lecm-orgstr:employee-person-assoc" for-mode="edit"/>
                     <show id="lecm-orgstr:employee-person-data-assoc"/>
-                    <show id="lecm-orgstr:employee-positions"/>
+                    <show id="lecm-orgstr:employee-positions-fake" force="true"/>
                     <show id="lecm-orgstr:employee-roles"/>
 	                <show id="lecm-busjournal-aspects:history-list"/>
 	                <show id="lecm-orgstr:employee-only-business-roles"/>
@@ -84,7 +84,7 @@
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personalInner">
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
                     </field>
-                    <field id="lecm-orgstr:employee-positions" set="positionsAndGroups">
+                    <field id="lecm-orgstr:employee-positions-fake" set="positionsAndGroups" label="Должности">
                         <control template="/ru/it/lecm/orgstructure/controls/employee.positions.ctrl.ftl">
                             <control-param name="itemType">lecm-orgstr:staff-list</control-param>
                             <control-param name="allowCreate">false</control-param>

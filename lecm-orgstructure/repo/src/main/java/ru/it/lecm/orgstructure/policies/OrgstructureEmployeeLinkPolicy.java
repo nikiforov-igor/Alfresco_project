@@ -1,5 +1,6 @@
 package ru.it.lecm.orgstructure.policies;
 
+import java.io.Serializable;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -10,7 +11,10 @@ import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import org.alfresco.model.ContentModel;
 
 /**
  * @author dbashmakov
@@ -66,9 +70,18 @@ public class OrgstructureEmployeeLinkPolicy
                 }
             }
             try {
-                String defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject на должность #object1 в подразделение #object2";
                 NodeRef position = orgstructureService.getPositionByStaff(staff);
-                List<String> objects = new ArrayList<String>(2);
+				if (position != null) {
+					String positionName = (String)nodeService.getProperty(position, ContentModel.PROP_NAME);
+
+					Serializable ePositions = nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_POSITIONS);
+					HashSet<String> employeePositions = (ePositions != null) ? new HashSet<>((Collection<String>)ePositions) : new HashSet<String>();
+					employeePositions.add(positionName);
+					nodeService.setProperty(employee, OrgstructureBean.PROP_EMPLOYEE_POSITIONS, employeePositions);
+				}
+
+                String defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject на должность #object1 в подразделение #object2";
+                List<String> objects = new ArrayList<>(2);
                 objects.add(position != null ? position.toString() : "");
                 objects.add(unit != null ? unit.toString() : "");
                 businessJournalService.log(employee, EventCategory.TAKE_JOB_POSITION, defaultDescription, objects);
@@ -128,11 +141,23 @@ public class OrgstructureEmployeeLinkPolicy
                     }
                 }
 
-                // -> запись в БЖ
-                String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с должности #object1 в подразделении #object2";
 				NodeRef position = orgstructureService.getPositionByStaff(parent);
 				NodeRef unit = orgstructureService.getUnitByStaff(parent);
-				List<String> objects = new ArrayList<String>(2);
+
+				if (position != null) {
+					String positionName = (String)nodeService.getProperty(position, ContentModel.PROP_NAME);
+
+					Serializable ePositions = nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_POSITIONS);
+					if (ePositions != null) {
+						HashSet<String> employeePositions = new HashSet<String>((Collection<String>)ePositions);
+						employeePositions.remove(positionName);
+						nodeService.setProperty(employee, OrgstructureBean.PROP_EMPLOYEE_POSITIONS, employeePositions);
+					}
+				}
+
+                // -> запись в БЖ
+                String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с должности #object1 в подразделении #object2";
+				List<String> objects = new ArrayList<>(2);
 				objects.add(position != null ? position.toString() : "");
 				objects.add(unit != null ? unit.toString() : "");
 

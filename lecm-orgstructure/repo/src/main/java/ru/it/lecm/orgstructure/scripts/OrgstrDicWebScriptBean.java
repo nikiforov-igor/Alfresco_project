@@ -49,7 +49,8 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
 
     private final static String EMPLOYEES_BY_TERM_QUERY = "TYPE:\"lecm-orgstr:employee\" " +
             "AND (@lecm\\-orgstr\\:employee\\-last\\-name:{searchTerm} @lecm\\-orgstr\\:employee\\-middle\\-name:{searchTerm} @lecm\\-orgstr\\:employee\\-email:{searchTerm} " +
-            "@lecm\\-orgstr\\:employee\\-first\\-name:{searchTerm} @lecm\\-orgstr\\:employee\\-person\\-login:{searchTerm} @lecm\\-orgstr\\:employee\\-phone:{searchTerm}) AND @lecm\\-dic\\:active:true";
+            "@lecm\\-orgstr\\:employee\\-first\\-name:{searchTerm} @lecm\\-orgstr\\:employee\\-person\\-login:{searchTerm} @lecm\\-orgstr\\:employee\\-phone:{searchTerm} @lecm\\-orgstr\\:employee\\-positions:{searchTerm})" +
+			"AND @lecm\\-dic\\:active:true";
 
     private static final String TITLE = "title";
     private static final String LABEL = "label";

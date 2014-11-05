@@ -463,6 +463,12 @@
                 <property name="lecm-orgstr:employee-positions">
                     <title>Hidden property for List positions</title>
                     <type>d:text</type>
+                    <multiple>true</multiple>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-orgstr:employee-roles">
                     <title>Hidden property for List roles</title>
