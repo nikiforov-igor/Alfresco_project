@@ -356,6 +356,7 @@ LogicECM.module = LogicECM.module || {};
 
                                 if (text && text != "") {
                                     me.byEnter = true;
+	                                clearTimeout(oAC._nDelayID);
                                     oAC.sendQuery(text);
                                 }
                                 Event.stopEvent(e);
