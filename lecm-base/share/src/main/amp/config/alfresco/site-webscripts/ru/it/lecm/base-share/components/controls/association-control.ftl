@@ -9,6 +9,11 @@
 	<#assign plane = true>
 </#if>
 
+<#assign showPath = true>
+<#if params.showPath?? && params.showPath == "false">
+	<#assign showPath = false>
+</#if>
+
 <#assign showAutocomplete = true>
 <#if params.showAutocomplete?? && params.showAutocomplete == "false">
 	<#assign showAutocomplete = false>
@@ -183,6 +188,7 @@
 			</#if>
 				showSearch: ${showSearch?string},
 				plane: ${plane?string},
+				showPath: ${showPath?string},
 				showAutocomplete: ${showAutocomplete?string},
 				currentValue: "${field.value!''}",
 			<#if params.defaultValueDataSource??>

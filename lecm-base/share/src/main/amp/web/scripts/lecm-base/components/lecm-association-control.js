@@ -103,6 +103,8 @@ LogicECM.module = LogicECM.module || {};
 
 				plane: false,
 
+				showPath: true,
+
 				showAutocomplete: true,
 
 				currentValue: "",
@@ -1806,7 +1808,7 @@ LogicECM.module = LogicECM.module || {};
 
 				for (var i in items) {
 					if (typeof(items[i]) != "function") {
-						if (this.options.plane) {
+						if (this.options.plane || !this.options.showPath) {
 							var displayName = items[i].selectedName;
 						} else {
 							displayName = items[i].simplePath + items[i].selectedName;
@@ -1826,7 +1828,7 @@ LogicECM.module = LogicECM.module || {};
 
 			updateAddedSelectedItem: function(item) {
 				var fieldId = this.options.pickerId + "-selected-elements";
-				if (this.options.plane) {
+				if (this.options.plane || !this.options.showPath) {
 					var displayName = item.selectedName;
 				} else {
 					displayName =item.simplePath + item.selectedName;
@@ -1848,7 +1850,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			getDefaultView: function (displayValue, item) {
-				var titleName = this.options.plane ? item.selectedName : item.path + item.selectedName;
+				var titleName = (this.options.plane || this.options.showPath) ? item.selectedName : item.path + item.selectedName;
 				var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : titleName;
 				var result = "<span class='not-person' title='" + title + "'>";
 				if (this.options.showAssocViewForm && item.nodeRef != null) {
@@ -1909,7 +1911,7 @@ LogicECM.module = LogicECM.module || {};
 						el.innerHTML = '';
 					}
 					for (var i in this.selectedItems) {
-						if (this.options.plane) {
+						if (this.options.plane || !this.options.showPath) {
 							var displayName = this.selectedItems[i].selectedName;
 						} else {
 							displayName = this.selectedItems[i].simplePath + this.selectedItems[i].selectedName;
