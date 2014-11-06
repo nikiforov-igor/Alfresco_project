@@ -145,6 +145,7 @@ LogicECM.module = LogicECM.module || {};
                     );
                 }
 
+                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
 
 	        onSelectChange: function AssociationTreeViewer_onSelectChange() {
@@ -177,7 +178,9 @@ LogicECM.module = LogicECM.module || {};
 
                 if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
                     YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
-                        selectedItems: ((selectValue && selectValue.length > 0) ?[selectValue] : [])
+                        selectedItems: ((selectValue && selectValue.length > 0) ?[selectValue] : []),
+                        fieldId: this.options.fieldId,
+                        formId: this.options.formId
                     });
                 }
 	        },

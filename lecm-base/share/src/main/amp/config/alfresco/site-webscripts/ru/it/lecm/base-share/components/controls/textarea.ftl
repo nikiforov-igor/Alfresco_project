@@ -8,6 +8,8 @@
     </#if>
 </#if>
 
+<#assign disabled=(field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))/>
+
 <#if form.mode == "view">
 <div class="control textarea viewmode">
    <div class="label-div">
@@ -34,6 +36,30 @@
    </div>
 </div>
 <#else>
+<script type="text/javascript">//<![CDATA[
+(function() {
+    LogicECM.CurrentModules = LogicECM.CurrentModules || {};
+    function init() {
+        LogicECM.module.Base.Util.loadScripts([
+                    'scripts/lecm-base/components/lecm-textarea.js'
+                ],
+                createLecmTextArea,
+                []);
+    }
+
+    function createLecmTextArea(){
+        var control = new LogicECM.module.TextArea("${fieldHtmlId}").setMessages(${messages});
+        control.setOptions({
+            fieldId: "${field.configName}",
+            formId: "${args.htmlid}",
+            disabled: ${disabled?string}
+        });
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
+//]]></script>
+
 <div class="control textarea editmode">
     <div class="label-div">
         <label for="${fieldHtmlId}">

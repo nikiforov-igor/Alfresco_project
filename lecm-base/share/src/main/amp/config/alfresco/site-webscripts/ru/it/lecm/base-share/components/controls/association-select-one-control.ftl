@@ -98,7 +98,8 @@
                     <#if defaultValue?has_content>
                         defaultValue: "${defaultValue?string}",
                     </#if>
-                    fieldId: "${fieldId}"
+                    fieldId: "${fieldId}",
+                    formId: "${args.htmlid}"
                 });
     }
     YAHOO.util.Event.onDOMReady(init);

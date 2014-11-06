@@ -19,7 +19,9 @@
             mandatory: ${field.mandatory?string},
             currentNodeRef: "${form.arguments.itemId}",
             destination: "${args.destination!""}",
-            updateOnAction: "${field.control.params.updateOnAction!""}"
+            updateOnAction: "${field.control.params.updateOnAction!""}",
+            fieldId: "${field.configName}",
+            formId: "${args.htmlid}"
         }).setMessages(${messages});
     }
     YAHOO.util.Event.onDOMReady(init);
