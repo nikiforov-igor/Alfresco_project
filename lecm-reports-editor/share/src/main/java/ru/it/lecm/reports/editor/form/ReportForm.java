@@ -99,7 +99,16 @@ public class ReportForm extends FormUIGet {
         });
 
         if (descriptor.getReportTemplates() != null && descriptor.getReportTemplates().size() > 1) {
-            addTemplateParameterColumn(params);
+            ColumnDescriptor templateParam = new ColumnDescriptor(TEMPLATE_CODE);
+            templateParam.setAlfrescoType(TEMPLATES);
+
+            L18Value name = new L18Value();
+            name.regItem("ru", TEMPLATES_COLUMN_NAME);
+            templateParam.setL18Name(name);
+
+            templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
+
+            params.add(templateParam);
         }
 
         int colNumber = 0;
@@ -260,6 +269,12 @@ public class ReportForm extends FormUIGet {
                     control.getParams().put("docType", resultedValue);
                     control.getParams().put("multiply", String.valueOf(column.getParameterValue().getType().equals(ParameterType.Type.LIST)));
                 }
+
+                // прописываем кастомные параметры
+                Map<String, String> customParams = column.getControlParams();
+                for (String paramKey : customParams.keySet()) {
+                    control.getParams().put(paramKey, customParams.get(paramKey));
+                }
                 // поддерживается ли множественный выбор? Да, если тип Параметра - Список
                 field.setRepeating(column.getParameterValue().getType().equals(ParameterType.Type.LIST));
             }
@@ -290,8 +305,7 @@ public class ReportForm extends FormUIGet {
 
         // retrieve the default constraints configuration
         ConstraintHandlersConfigElement defaultConstraintHandlers = null;
-        FormsConfigElement formsGlobalConfig =
-                (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
+        FormsConfigElement formsGlobalConfig = (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
         if (formsGlobalConfig != null) {
             defaultConstraintHandlers = formsGlobalConfig.getConstraintHandlers();
         }
@@ -301,44 +315,36 @@ public class ReportForm extends FormUIGet {
         }
 
         // get the default handler for the constraint
-        ConstraintHandlerDefinition defaultConstraintConfig =
-                defaultConstraintHandlers.getItems().get(constraintId);
-
+        ConstraintHandlerDefinition defaultConstraintConfig = defaultConstraintHandlers.getItems().get(constraintId);
         if (defaultConstraintConfig != null) {
             // generate and process the constraint model
-            constraint = generateConstraintModel(field, constraintId, new JSONObject(), defaultConstraintConfig);
-        }
+            // get the validation handler from the config
+            String validationHandler = defaultConstraintConfig.getValidationHandler();
 
-        return constraint;
-    }
+            constraint = new Constraint(field.getId(), constraintId, validationHandler, new JSONObject());
 
-    private Constraint generateConstraintModel(Field field, String constraintId, JSONObject constraintParams, ConstraintHandlerDefinition defaultConstraintConfig) {
-        // get the validation handler from the config
-        String validationHandler = defaultConstraintConfig.getValidationHandler();
+            if (defaultConstraintConfig.getEvent() != null) {
+                constraint.setEvent(defaultConstraintConfig.getEvent());
+            } else {
+                constraint.setEvent(DEFAULT_CONSTRAINT_EVENT);
+            }
 
-        Constraint constraint = new Constraint(field.getId(), constraintId, validationHandler, constraintParams);
+            // look for an overridden message in the field's constraint config,
+            // if none found look in the default constraint config
+            String constraintMsg = null;
+            if (defaultConstraintConfig.getMessageId() != null) {
+                constraintMsg = retrieveMessage(defaultConstraintConfig.getMessageId());
+            } else if (defaultConstraintConfig.getMessage() != null) {
+                constraintMsg = defaultConstraintConfig.getMessage();
+            }
+            if (constraintMsg == null) {
+                constraintMsg = retrieveMessage(validationHandler + ".message");
+            }
 
-        if (defaultConstraintConfig.getEvent() != null) {
-            constraint.setEvent(defaultConstraintConfig.getEvent());
-        } else {
-            constraint.setEvent(DEFAULT_CONSTRAINT_EVENT);
-        }
-
-        // look for an overridden message in the field's constraint config,
-        // if none found look in the default constraint config
-        String constraintMsg = null;
-        if (defaultConstraintConfig.getMessageId() != null) {
-            constraintMsg = retrieveMessage(defaultConstraintConfig.getMessageId());
-        } else if (defaultConstraintConfig.getMessage() != null) {
-            constraintMsg = defaultConstraintConfig.getMessage();
-        }
-        if (constraintMsg == null) {
-            constraintMsg = retrieveMessage(validationHandler + ".message");
-        }
-
-        // add the message if there is one
-        if (constraintMsg != null) {
-            constraint.setMessage(constraintMsg);
+            // add the message if there is one
+            if (constraintMsg != null) {
+                constraint.setMessage(constraintMsg);
+            }
         }
 
         return constraint;
@@ -368,18 +374,6 @@ public class ReportForm extends FormUIGet {
             inEnum = false;
         }
         return inEnum;
-    }
-
-    private void addTemplateParameterColumn(List<ColumnDescriptor> params) {
-        ColumnDescriptor templateParam = new ColumnDescriptor(TEMPLATE_CODE);
-        templateParam.setAlfrescoType(TEMPLATES);
-
-        L18Value name = new L18Value();
-        name.regItem("ru", TEMPLATES_COLUMN_NAME);
-        templateParam.setL18Name(name);
-
-        templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
-        params.add(templateParam);
     }
 
     private String nonBlank(String s, String sDefault) {

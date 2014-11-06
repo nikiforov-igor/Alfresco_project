@@ -8,6 +8,9 @@ import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,6 +31,8 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
     private String alfrescoType;
 
     private int order = 0;
+
+    private Map<String, String> controlParams = new HashMap<>();
 
     public ColumnDescriptor() {
         super();
@@ -207,6 +212,34 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         }
     }
 
+    public Map<String, String> getControlParams() {
+        if (this.controlParams == null) {
+            this.controlParams = new HashMap<>();
+        }
+        return controlParams;
+    }
+
+    public void setControlParams(Map<String, String> controlParams) {
+        this.controlParams = controlParams;
+    }
+
+    public void setControlParams(String paramsStr) {
+        getControlParams().clear();
+        if (!Utils.isStringEmpty(paramsStr)) {
+            final String[] items = Utils.replaceCR(paramsStr).split("\\s*[;]\\s*");
+            for (String item : items) {
+                if (!Utils.isStringEmpty(item)) {
+                    final String[] param = Utils.trimmed(item).split("\\s*[=]\\s*");
+                    if (param.length == 2) {
+                        this.controlParams.put(param[0], param[1]);
+                    } else if (param.length == 1) {//у нас пустое значение параметра
+                        this.controlParams.put(param[0], "");
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Является ли колонка спецальной, например, константой для запроса или
      * чем-то подобным. По-умолчанию false. Специальные колонки не включаются
@@ -253,6 +286,7 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         this.setExpression(srcCol.getExpression());
         this.setSpecial(srcCol.isSpecial());
         this.setAlfrescoType(srcCol.getAlfrescoType());
+        this.setControlParams(srcCol.getControlParams());
 
         this.setOrder(srcCol.getOrder());
         this.setParameterValue(Utils.clone(srcCol.getParameterValue()));

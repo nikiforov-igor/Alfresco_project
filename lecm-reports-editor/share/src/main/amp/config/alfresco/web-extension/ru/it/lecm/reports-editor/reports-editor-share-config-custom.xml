@@ -531,10 +531,18 @@
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                     <show id="lecm-rpeditor:dataColumnMandatory"/>
+                    <show id="lecm-rpeditor:dataColumnControlParams"/>
+                    <show id="change-param-type-listener"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
                     <set id="parameter" appearance="" label-id="report-column.parameter" />
+
+                    <field id="change-param-type-listener" set="parameter">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-reports-editor/change-param-type-listener.js</control-param>
+                        </control>
+                    </field>
 
                     <field id="cm:name" label-id="label.report.displayName" set="settings"/>
                     <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
@@ -550,6 +558,9 @@
                     <field id="lecm-rpeditor:dataColumnExpression" mandatory="true" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
+                    <field id="lecm-rpeditor:dataColumnControlParams" set="parameter">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+                    </field>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
@@ -557,7 +568,7 @@
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="changeItemsFireAction">lecm-rpeditor:dataColumnClass</control-param>
+                            <control-param name="changeItemsFireAction">changeParamType</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnClass" set="parameter">
@@ -565,7 +576,6 @@
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">lecm/base/types</control-param>
                             <control-param name="withEmpty">true</control-param>
-                            <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter" help-id="column.order.help"/>
@@ -584,10 +594,18 @@
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                     <show id="lecm-rpeditor:dataColumnMandatory"/>
+                    <show id="lecm-rpeditor:dataColumnControlParams"/>
+                    <show id="change-param-type-listener"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
                     <set id="parameter" appearance="" label-id="report-column.parameter" />
+
+                    <field id="change-param-type-listener" set="parameter">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-reports-editor/change-param-type-listener.js</control-param>
+                        </control>
+                    </field>
 
                     <field id="cm:name" label-id="label.report.displayName" set="settings"/>
                     <field id="lecm-rpeditor:dataColumnCode" set="settings"/>
@@ -610,7 +628,7 @@
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="changeItemsFireAction">lecm-rpeditor:dataColumnClass</control-param>
+                            <control-param name="changeItemsFireAction">changeParamType</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnClass" set="parameter">
@@ -618,11 +636,13 @@
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">lecm/base/types</control-param>
                             <control-param name="withEmpty">true</control-param>
-                            <control-param name="updateOnAction">lecm-rpeditor:dataColumnClass</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter"  help-id="column.order.help"/>
                     <field id="lecm-rpeditor:dataColumnMandatory" set="parameter"/>
+                    <field id="lecm-rpeditor:dataColumnControlParams" set="parameter">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -641,6 +661,7 @@
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                     <show id="lecm-rpeditor:dataColumnMandatory"/>
+                    <show id="lecm-rpeditor:dataColumnControlParams"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
@@ -680,6 +701,9 @@
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter" help-id="column.order.help"/>
                     <field id="lecm-rpeditor:dataColumnMandatory" set="parameter"/>
+                    <field id="lecm-rpeditor:dataColumnControlParams" set="parameter">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+                    </field>
                 </appearance>
             </form>
             <form id="short-datagrid">
@@ -702,6 +726,7 @@
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
                     <show id="lecm-rpeditor:dataColumnMandatory"/>
+                    <show id="lecm-rpeditor:dataColumnControlParams"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
@@ -738,6 +763,9 @@
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter" help-id="column.order.help"/>
                     <field id="lecm-rpeditor:dataColumnMandatory" set="settings"/>
+                    <field id="lecm-rpeditor:dataColumnControlParams" set="parameter">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+                    </field>
                 </appearance>
             </form>
             <form id="datagrid">

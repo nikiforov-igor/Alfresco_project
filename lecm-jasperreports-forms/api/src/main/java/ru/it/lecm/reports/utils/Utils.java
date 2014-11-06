@@ -465,4 +465,15 @@ public class Utils {
             return null;
         }
     }
+
+    public static String replaceCR(String s) {
+        final int length = s.length();
+        final char[] chars = s.toCharArray();
+        for (int i = 0; i < length; i++) {
+            if (chars[i] == '\r' || chars[i] == '\n') {
+                chars[i] = ' ';
+            }
+        }
+        return new String(chars);
+    }
 }

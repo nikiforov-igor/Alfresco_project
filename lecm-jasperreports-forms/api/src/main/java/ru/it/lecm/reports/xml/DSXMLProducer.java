@@ -40,6 +40,10 @@ public class DSXMLProducer {
     public static final String XMLNODE_FIELD = "field";
 
     public static final String XMLNODE_PARAMETER = "parameter";
+    public static final String XMLNODE_CONTROL_PARAMS = "controlParams";
+    public static final String XMLNODE_CONTROL_PARAM = "control-param";
+    public static final String XMLATTR_CONTROL_PARAM_NAME = "paramName";
+    public static final String XMLATTR_CONTROL_PARAM_VALUE = "paramValue";
     public static final String XMLATTR_PARAM_LABEL1 = "label1";
     public static final String XMLATTR_PARAM_LABEL2 = "label2";
 
@@ -774,6 +778,11 @@ public class DSXMLProducer {
         final Element nodeParameter = xmlCreateParameterNode(doc, XMLNODE_PARAMETER, column.getParameterValue());
         if (nodeParameter != null) {
             result.appendChild(nodeParameter);
+
+            final Element controlParameters = xmlCreateControlParametersNode(doc, XMLNODE_CONTROL_PARAMS, column.getControlParams());
+            if (controlParameters != null) {
+                result.appendChild(controlParameters);
+            }
         }
 
         return result;
@@ -885,9 +894,41 @@ public class DSXMLProducer {
             // тип параметра для колонки ...
             column.setParameterValue(parseParameterNode(fldNode, XMLNODE_PARAMETER));
 
+            column.setControlParams(parseControlParametersNode(fldNode, XMLNODE_CONTROL_PARAMS));
         } // for
 
-        return new ArrayList<ColumnDescriptor>(result.values());
+        return new ArrayList<>(result.values());
+    }
+
+    private static Map<String, String> parseControlParametersNode(Element srcColumnNode, String xmlNodeName) {
+        Map<String, String> result = new HashMap<>();
+
+        if (srcColumnNode == null) {
+            return result;
+        }
+
+        final Element nodeControlParameters = XmlHelper.findNodeByName(srcColumnNode, xmlNodeName);
+        if (nodeControlParameters == null) {
+            return result;
+        }
+
+        final List<Node> paramsList = XmlHelper.findNodesList(nodeControlParameters, XMLNODE_CONTROL_PARAM, null, null);
+        if (paramsList != null) {
+            for (Node node : paramsList) {
+                final Element paramNode = (Element) node;
+                if (paramNode.hasAttribute(XMLATTR_CONTROL_PARAM_NAME)) {
+                    String key = paramNode.getAttribute(XMLATTR_CONTROL_PARAM_NAME);
+                    String value = "";
+                    if (paramNode.hasAttribute(XMLATTR_CONTROL_PARAM_VALUE)) {
+                        value = paramNode.getAttribute(XMLATTR_CONTROL_PARAM_VALUE);
+                    }
+                    if (key != null && !key.isEmpty()) {
+                        result.put(key, value);
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     private static Element xmlCreateParameterNode(Document doc, String xmlNodeName, ParameterTypedValue parameter) {
@@ -918,6 +959,26 @@ public class DSXMLProducer {
         parameter.setBound1(XmlHelper.getTagContent(doc, XMLATTR_PARAM_BOUND1, null, null));
         parameter.setBound2(XmlHelper.getTagContent(doc, XMLATTR_PARAM_BOUND2, null, null));
 
+        return result;
+    }
+
+    private static Element xmlCreateControlParametersNode(Document doc, String xmlNodeName, Map<String, String> parameters) {
+        if (parameters == null) {
+            return null;
+        }
+
+        final Element result = doc.createElement(xmlNodeName);
+
+        for (String paramKey : parameters.keySet()) {
+            final Element param = doc.createElement(XMLNODE_CONTROL_PARAM);
+
+            if (param != null) {
+                param.setAttribute(XMLATTR_CONTROL_PARAM_NAME, paramKey);
+                param.setAttribute(XMLATTR_CONTROL_PARAM_VALUE, parameters.get(paramKey));
+
+                result.appendChild(param);
+            }
+        }
         return result;
     }
 

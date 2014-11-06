@@ -261,6 +261,7 @@
 						<value>lecm-rpeditor:columnTypeAssoc</value>
 						<value>lecm-rpeditor:columnParameterTypeAssoc</value>
 						<value>lecm-rpeditor:dataColumnMandatory</value>
+						<value>lecm-rpeditor:dataColumnControlParams</value>
 					</list>
 				</entry>
 			</map>

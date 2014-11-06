@@ -319,6 +319,10 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-rpeditor:dataColumnControlParams">
+                    <title>Control Params</title>
+                    <type>d:text</type>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-rpeditor:columnTypeAssoc">

@@ -373,6 +373,11 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
             result.setAlfrescoType(alfTypeValue.toString());
         }
 
+        Object columnParams = getNodeService().getProperty(node, PROP_RDS_COLUMN_CONTROL_PARAMS);
+        if (columnParams != null) {
+            result.setControlParams(columnParams.toString());
+        }
+
         // тип колонки ...
         List<AssociationRef> colTypesRefs = getNodeService().getTargetAssocs(node, ASSOC_RDS_COLUMN_TYPE);
         if (!colTypesRefs.isEmpty()) {
