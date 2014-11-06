@@ -4,14 +4,17 @@
     <@formLib.renderFormsRuntime formId=formId />
 </#if>
 
+<#assign aDateTime = .now>
+<#assign panelId = "view-attributes-panel-" + aDateTime?iso_utc>
+
 <@formLib.renderFormContainer formId=formId>
 
-<div id="view-attributes-panel" class="yui-panel hidden1">
-    <div id="view-attributes-panel-head" class="hd">Просмотр</div>
-    <div id="view-attributes-panel-body" class="bd">
-        <div id="view-attributes-panel-content"></div>
+<div id="${panelId}" class="yui-panel hidden1">
+    <div id="${panelId}-head" class="hd">Просмотр</div>
+    <div id="${panelId}-body" class="bd">
+        <div id="${panelId}-content"></div>
         <div class="bdft">
-                <span id="view-attributes-panel-cancel" class="yui-button yui-push-button">
+                <span id="${panelId}-cancel" class="yui-button yui-push-button">
                     <span class="first-child">
                         <button type="button" tabindex="0" onclick="_hideLinkAttributes()">Закрыть</button>
                     </span>
@@ -222,21 +225,21 @@
                     }
                     if (response.type) {
                         if (response.typeRef) {
-                            document.getElementById("${formId}-type").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('view-attributes-panel','" + response.typeRef + "')\">" + response.type + "</a>";
+                            document.getElementById("${formId}-type").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.typeRef + "')\">" + response.type + "</a>";
                         } else {
                             document.getElementById("${formId}-type").innerHTML = response.type;
                         }
                     }
                     if (response.initiator) {
                         if (response.initiatorRef) {
-                            document.getElementById("${formId}-initiator").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('view-attributes-panel','" + response.initiatorRef + "')\">" + response.initiator + "</a>";
+                            document.getElementById("${formId}-initiator").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.initiatorRef + "')\">" + response.initiator + "</a>";
                         } else {
                             document.getElementById("${formId}-initiator").innerHTML = response.initiator;
                         }
                     }
                     if (response.mainObject) {
                         if (response.mainObjectRef) {
-                            document.getElementById("${formId}-mainObject").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('view-attributes-panel','" + response.mainObjectRef + "')\">" + response.mainObject + "</a>";
+                            document.getElementById("${formId}-mainObject").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.mainObjectRef + "')\">" + response.mainObject + "</a>";
                         } else {
                             document.getElementById("${formId}-mainObject").innerHTML = response.mainObject;
                         }
