@@ -237,8 +237,12 @@
 	    additionalFilter: "${field.control.params.additionalFilter!''}",
 	    showAssocViewForm: ${showAssocViewForm?string},
 	    checkType: ${checkType?string},
-		fieldId: "${field.configName}",
-		formId: "${args.htmlid}"
+		<#if field.configName??>
+			fieldId: "${field.configName}",
+		</#if>
+		<#if args.htmlid??>
+			formId: "${args.htmlid}"
+		</#if>
     }).setMessages( ${messages} );
  	}
  	YAHOO.util.Event.onDOMReady(init);
