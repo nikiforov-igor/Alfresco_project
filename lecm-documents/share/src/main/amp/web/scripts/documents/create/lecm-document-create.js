@@ -278,7 +278,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 		},
 
 		onFormSubmitSuccessRedirect: function(nodeRef) {
-			debugger;
 			var reloadCheckbox = Dom.get('document-form-close-and-create-new');
 			if (reloadCheckbox && reloadCheckbox.checked) {
 				window.location.reload();
