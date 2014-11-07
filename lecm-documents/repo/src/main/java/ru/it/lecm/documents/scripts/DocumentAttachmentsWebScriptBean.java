@@ -263,4 +263,8 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 				attachment.getParent() != null &&
 				documentAttachmentsService.isDocumentCategory(attachment.getParent().getNodeRef());
 	}
+
+    public void addAttachment(ScriptNode document, ScriptNode category) {
+        documentAttachmentsService.addAttachment(document.getNodeRef(), category.getNodeRef());
+    }
 }
