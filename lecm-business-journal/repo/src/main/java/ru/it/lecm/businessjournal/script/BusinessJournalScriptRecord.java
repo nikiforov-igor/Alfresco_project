@@ -1,6 +1,7 @@
 package ru.it.lecm.businessjournal.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.springframework.extensions.surf.util.ISO8601DateFormat;
 import ru.it.lecm.businessjournal.beans.RecordObject;
 
 import java.text.SimpleDateFormat;
@@ -57,6 +58,10 @@ public class BusinessJournalScriptRecord {
 
     public String getFormatDate() {
         return format.format(date);
+    }
+
+	public String getISO8601Date() {
+        return ISO8601DateFormat.format(date);
     }
 
     public ScriptNode getInitiator() {

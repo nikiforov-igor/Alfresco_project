@@ -3,7 +3,7 @@ var nodeId = args["recordId"];
 var record = businessJournal.getNodeById(parseInt(nodeId));
 
 var result = {
-    date: record.getFormatDate(),
+    date: record.getISO8601Date(),
     description: record.getRecordDescription(),
     category: record.getEventCategoryText(),
     type: record.getObjectTypeText(),

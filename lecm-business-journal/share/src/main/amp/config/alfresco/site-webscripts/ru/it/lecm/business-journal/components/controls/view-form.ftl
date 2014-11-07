@@ -215,7 +215,7 @@
                 success: function (oResponse) {
                     var response = eval("(" + oResponse.responseText + ")");
                     if (response.date) {
-                        document.getElementById("${formId}-date").innerHTML = response.date;
+                        document.getElementById("${formId}-date").innerHTML =  Alfresco.util.formatDate(Alfresco.util.fromISO8601(response.date), "dd mmm yyyy HH:MM:ss");
                     }
                     if (response.description) {
                         document.getElementById("${formId}-description").innerHTML = response.description;
