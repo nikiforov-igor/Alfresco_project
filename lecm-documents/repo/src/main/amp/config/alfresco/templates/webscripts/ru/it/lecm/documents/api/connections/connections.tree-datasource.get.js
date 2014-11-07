@@ -78,7 +78,7 @@ function checkConnectionType(connection, connType) {
 
 function checkConnectedDocType(connectedDoc, docType) {
     if (docType != null && docType.length > 0) {
-        var currentDocType = connectedDoc.shortName;
+        var currentDocType = connectedDoc.typeShort;
         return docType.indexOf(currentDocType) >= 0;
     }
     return true;
