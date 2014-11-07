@@ -11,6 +11,10 @@ function main() {
 	var parentDocumentNodeRef = null;
 	var workflowTask = null;
 
+	var actionType = null;
+	var taskId = null;
+	var actionId = null;
+
 	var params = page.url.args["p1"];
 	var decodeParams = new java.lang.String(Packages.org.apache.commons.codec.binary.Base64.decodeBase64(params));
 
@@ -21,7 +25,7 @@ function main() {
 			var param = paramsArray[i];
 			var name = param.split("=")[0];
 			var value = param.split("=")[1];
-			if (name != null && value != null) {
+			if (name && value) {
 				if (name == "documentType") {
 					docType = value;
 				} else if (name == "formId") {
@@ -35,7 +39,13 @@ function main() {
 				} else if (name == "parentDocumentNodeRef") {
 					parentDocumentNodeRef = value;
 				} else if (name == "workflowTask") {
-                    workflowTask = value;
+					workflowTask = value;
+				} else if (name == "actionType") {
+					actionType = value;
+				} else if (name == "taskId") {
+					taskId = value;
+				} else if (name == "actionId") {
+					actionId = value;
 				} else {
 					urlArgs[name] = value;
 				}
@@ -50,10 +60,13 @@ function main() {
 					documentType: docType,
 					formId: formId,
 					connectionType: connectionType,
-					connectionIsSystem: connectionIsSystem,
-					connectionIsReverse: connectionIsReverse,
+					connectionIsSystem: connectionIsSystem == 'true',
+					connectionIsReverse: connectionIsReverse == 'true',
 					parentDocumentNodeRef: parentDocumentNodeRef,
-                    workflowTask: workflowTask,
+					workflowTask: workflowTask,
+					actionType: actionType,
+					actionId: actionId,
+					taskId: taskId,
 					args: urlArgs
 				}
 			};

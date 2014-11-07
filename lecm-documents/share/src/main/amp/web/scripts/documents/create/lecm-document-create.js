@@ -4,8 +4,8 @@
  * @namespace LogicECM
  */
 // Ensure LogicECM root object exists
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
+if (typeof LogicECM == 'undefined' || !LogicECM) {
+	LogicECM = {};
 }
 
 /**
@@ -18,225 +18,299 @@ LogicECM.module = LogicECM.module || {};
 
 LogicECM.module.Documents = LogicECM.module.Documents || {};
 
-(function()
-{
+(function() {
 	var Dom = YAHOO.util.Dom;
 
-	LogicECM.module.Documents.Create = function(htmlId)
-	{
-		LogicECM.module.Documents.Create.superclass.constructor.call(this, "LogicECM.module.Documents.Create", htmlId, ["container", "json"]);
+	LogicECM.module.Documents.Create = function(htmlId) {
+		LogicECM.module.Documents.Create.superclass.constructor.call(this, 'LogicECM.module.Documents.Create', htmlId, ['container', 'json']);
 
-		YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
-		YAHOO.Bubbling.on("formContentReady", this.onFormContentReady, this);
+		YAHOO.Bubbling.on('beforeFormRuntimeInit', this.onBeforeFormRuntimeInit, this);
+		YAHOO.Bubbling.on('formContentReady', this.onFormContentReady, this);
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.Documents.Create, Alfresco.component.Base,
-		{
-			options: {
-				documentType: null,
-				formId: null,
+	YAHOO.extend(LogicECM.module.Documents.Create, Alfresco.component.Base, {
+		options: {
+			documentType: null,
+			formId: null,
 
-				//Параметры для создания связи
-				connectionType: null,
-				connectionIsSystem: null,
-				connectionIsReverse: false,
-				parentDocumentNodeRef: null,
-                //для завершения процесса
-                workflowTask: null,
+			//Параметры для создания связи
+			connectionType: null,
+			connectionIsSystem: null,
+			connectionIsReverse: false,
+			parentDocumentNodeRef: null,
+			//для завершения процесса
+			workflowTask: null,
+			//для перевода родительского документа в другой статус
+			actionId: null,
+			actionType: null,
+			taskId: null,
+			args: {}
+		},
 
-				args: {}
-			},
+		rootFolder: null,
+		splashScreen: null,
+		runtimeForm: null,
 
-			rootFolder: null,
-			splashScreen: null,
-            runtimeForm: null,
+		onReady: function () {
+			this.loadDraftRoot();
+		},
 
-			onReady: function () {
-				this.loadDraftRoot();
-			},
+		loadDraftRoot: function() {
+			var url;
+			var template = '{proxyUri}lecm/document-type/settings?docType={docType}';
+			var successCallback;
+			if (this.options.documentType) {
+				url = YAHOO.lang.substitute(template, {
+					proxyUri: Alfresco.constants.PROXY_URI,
+					docType: encodeURIComponent(this.options.documentType)
+				});
 
-			loadDraftRoot: function() {
-				if (this.options.documentType != null) {
-					var me = this;
-					var url = Alfresco.constants.PROXY_URI + "lecm/document-type/settings?docType=" + this.options.documentType;
-					var callback = {
-						success: function (oResponse) {
-							var oResults = eval("(" + oResponse.responseText + ")");
-							me.rootFolder = oResults.nodeRef;
-							me.loadForm();
-						},
-						timeout: 60000
-					};
-					YAHOO.util.Connect.asyncRequest('GET', url, callback);
-				}
-			},
-
-			loadForm: function() {
-				var me = this;
-				Alfresco.util.Ajax.request(
-					{
-						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-						dataObj: {
-							htmlid: this.id,
-							itemKind:"type",
-							itemId: this.options.documentType,
-							destination: this.rootFolder,
-							mode: "create",
-							submitType:"json",
-							formId: this.options.formId,
-							showSubmitButton:true,
-							showCancelButton: true,
-							args: JSON.stringify(this.options.args)
-						},
-						successCallback: {
-							fn: function (response) {
-								var container = Dom.get(me.id + "-body");
-								container.innerHTML = response.serverResponse.responseText;
-							}
-						},
-						failureMessage: "message.failure",
-						execScripts: true
-					});
-			},
-
-			onFormContentReady: function(layer, args) {
-				if (args[1].parentId == this.id) {
-					var submitButton = args[1].buttons.submit;
-					submitButton.set("label", this.msg("label.save"));
-
-					var cancelButton = args[1].buttons.cancel;
-					if (cancelButton) {
-						cancelButton.addListener("click", this.onCancelButtonClick, null, this);
+				successCallback = {
+					scope: this,
+					fn: function(serverResponse) {
+						this.rootFolder = serverResponse.json.nodeRef;
+						this.loadForm();
 					}
+				};
 
-					var previewHeight = Dom.getRegion(this.id + "-form-fields").height - 26;
-					Dom.setStyle(this.id + "-preview", "height", previewHeight.toString() + "px");
-				}
-			},
-
-			onBeforeFormRuntimeInit: function(layer, args) {
-                this.runtimeForm = args[1].runtime;
-                var submitFunction = this.runtimeForm.submitElements[0].submitForm;
-                var me = this;
-                this.runtimeForm.submitElements[0].submitForm = function() {
-                    if (me.runtimeForm.validate()) {
-                        me._showSplash();
-                    }
-                    submitFunction.bind(me.runtimeForm.submitElements[0])();
-                };
-
-				args[1].runtime.setAJAXSubmit(true,
-					{
-						successCallback:
-						{
-							fn: this.onFormSubmitSuccess,
-							scope: this
-						},
-						failureCallback:
-						{
-							fn: this.onFormSubmitFailure,
-							scope: this
-						}
-					});
-			},
-
-			onFormSubmitSuccess: function (response) {
-                for (var index in this.runtimeForm.submitElements) {
-                    var button = this.runtimeForm.submitElements[index];
-                    button.set("disabled", true);
-                }
-
-				var me = this;
-				var createdDocument = response.json.persistedObject;
-				if (this.options.connectionType != null && this.options.connectionIsSystem != null && this.options.parentDocumentNodeRef != null) {
-                    var template = "{proxyUri}lecm/documents/connection?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
-
-					var fromNodeRef, toNodeRef;
-					if (this.options.connectionIsReverse == "true") {
-						fromNodeRef = createdDocument;
-						toNodeRef = this.options.parentDocumentNodeRef;
-					} else {
-						fromNodeRef = this.options.parentDocumentNodeRef;
-						toNodeRef = createdDocument;
-					}
-
-					var url = YAHOO.lang.substitute(template, {
-                        proxyUri: Alfresco.constants.PROXY_URI,
-                        connectionType: encodeURIComponent(this.options.connectionType),
-                        connectionIsSystem: encodeURIComponent(this.options.connectionIsSystem),
-                        fromNodeRef: fromNodeRef,
-                        toNodeRef: toNodeRef
-                    });
-                    var callback = {
-                        success: function(oResponse) {
-	                        me.onFormSubmitSuccessRedirect(createdDocument);
-                        },
-                        timeout: 60000
-                    };
-                    YAHOO.util.Connect.asyncRequest('GET', url, callback);
-				} else if (this.options.workflowTask != null) {
-                    var template = "{proxyUri}api/task/{workflowTask}/formprocessor";
-                    var url = YAHOO.lang.substitute(template, {
-                        proxyUri: Alfresco.constants.PROXY_URI,
-                        workflowTask: encodeURIComponent(this.options.workflowTask)
-                    });
-                    var params = {
-                        "prop_lecmWorkflowDocument_createdNodeRef": createdDocument,
-                        "direct-type": "on",
-                        "prop_transitions": "Next"
-                    }
-                    Alfresco.util.Ajax.jsonPost(
-                        {
-                            url: url,
-                            dataObj: params,
-                            successCallback: {
-                                fn: function (response) {
-	                                me.onFormSubmitSuccessRedirect(createdDocument);
-                                },
-                                scope: this
-                            }
-                        });
-                }else {
-					me.onFormSubmitSuccessRedirect(createdDocument);
-				}
-			},
-
-			onFormSubmitSuccessRedirect: function(nodeRef) {
-				var reloadCheckbox = Dom.get("document-form-close-and-create-new");
-				if (reloadCheckbox != null && reloadCheckbox.checked) {
-					window.location.reload();
-				} else {
-					window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + nodeRef;
-				}
-			},
-
-			onFormSubmitFailure: function(response) {
-                for (var index in this.runtimeForm.submitElements) {
-                    var button = this.runtimeForm.submitElements[index];
-                    button.set("disabled", false);
-                }
-                this._hideSplash();
-                Alfresco.util.PopupManager.displayPrompt(
-					{
-						text: Alfresco.util.message("message.failure")
-					});
-			},
-
-			onCancelButtonClick: function() {
-				document.location.href = document.referrer;
-			},
-
-			_showSplash: function() {
-				this.splashScreen = Alfresco.util.PopupManager.displayMessage(
-					{
-						text: Alfresco.util.message("label.loading"),
-						spanClass: "wait",
-						displayTime: 0
-					});
-			},
-			_hideSplash: function() {
-				YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+				Alfresco.util.Ajax.jsonGet({
+					url: url,
+					successCallback: successCallback,
+					failureMessage: this.msg('message.failure')
+				});
 			}
-		});
+		},
+
+		loadForm: function() {
+			var template = '{serviceContext}lecm/components/form';
+			var url = YAHOO.lang.substitute(template, {
+				serviceContext: Alfresco.constants.URL_SERVICECONTEXT
+			});
+			var dataObj = {
+				htmlid: this.id,
+				itemKind: 'type',
+				itemId: this.options.documentType,
+				destination: this.rootFolder,
+				mode: 'create',
+				submitType: 'json',
+				formId: this.options.formId,
+				showSubmitButton: true,
+				showCancelButton: true,
+				args: JSON.stringify(this.options.args)
+			};
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					var container = Dom.get(this.id + '-body');
+					container.innerHTML = serverResponse.serverResponse.responseText;
+				}
+			};
+			Alfresco.util.Ajax.request({
+				url: url,
+				dataObj: dataObj,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure'),
+				execScripts: true
+			});
+		},
+
+		onFormContentReady: function(layer, args) {
+			if (args[1].parentId == this.id) {
+				var submitButton = args[1].buttons.submit;
+				submitButton.set('label', this.msg('label.save'));
+
+				var cancelButton = args[1].buttons.cancel;
+				if (cancelButton) {
+					cancelButton.addListener('click', this.onCancelButtonClick, null, this);
+				}
+
+				var previewHeight = Dom.getRegion(this.id + '-form-fields').height - 26;
+				Dom.setStyle(this.id + '-preview', 'height', previewHeight.toString() + 'px');
+			}
+		},
+
+		onBeforeFormRuntimeInit: function(layer, args) {
+			this.runtimeForm = args[1].runtime;
+			var submitElement = this.runtimeForm.submitElements[0];
+			var originalSubmitFunction = submitElement.submitForm;
+
+			var newSubmitFunction = function(fn, scope) {
+				if (this.runtimeForm.validate()) {
+					this._showSplash();
+				}
+				if (YAHOO.lang.isFunction(fn) && scope) {
+					fn.call(scope);
+				}
+			};
+
+			submitElement.submitForm = newSubmitFunction.bind(this, originalSubmitFunction, submitElement);
+
+			this.runtimeForm.setAJAXSubmit(true, {
+				successCallback: {
+					scope: this,
+					fn: this.onFormSubmitSuccess
+				},
+				failureCallback: {
+					scope: this,
+					fn: this.onFormSubmitFailure
+				}
+			});
+		},
+
+		onFormSubmitSuccess: function (response) {
+			var createdDocument = response.json.persistedObject;
+			var index;
+
+			for (index in this.runtimeForm.submitElements) {
+				this.runtimeForm.submitElements[index].set('disabled', true);
+			}
+
+			var defferedConfig = {
+				scope: this,
+				fn: this.onFormSubmitSuccessRedirect,
+				obj: createdDocument
+			};
+			var deferredLabels = ['chooseState', 'connectDocuments', 'workflowTask'];
+			this.deferredFormSubmitSuccessRedirect = new Alfresco.util.Deferred(deferredLabels, defferedConfig);
+
+			if (this.options.actionId && this.options.actionType && this.options.taskId) {
+				deferredLabels.splice(deferredLabels.indexOf('chooseState'), 1);
+				this._chooseState('chooseState', this.options.actionType, this.options.taskId, null, this.options.actionId);
+			}
+
+			if (this.options.connectionType && this.options.parentDocumentNodeRef) {
+				deferredLabels.splice(deferredLabels.indexOf('connectDocuments'), 1);
+				this._connectDocuments('connectDocuments', createdDocument);
+			} else if (this.options.workflowTask) {
+				deferredLabels.splice(deferredLabels.indexOf('workflowTask'), 1);
+				this._workflowTask('workflowTask', createdDocument);
+			}
+			for (index in deferredLabels) {
+				this.deferredFormSubmitSuccessRedirect.fulfil(deferredLabels[index]);
+			}
+		},
+
+		_chooseState: function(deferredLabel, type, taskId, formResponse, actionId) {
+			var template = '{proxyUri}lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}';
+			var url = YAHOO.lang.substitute(template, {
+				proxyUri: Alfresco.constants.PROXY_URI,
+				actionType: encodeURIComponent(type),
+				taskId: encodeURIComponent(taskId),
+				formResponse: encodeURIComponent(formResponse),
+				actionId: actionId ? encodeURIComponent(actionId) : ''
+			});
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					if (serverResponse.json && serverResponse.json.error) {
+						Alfresco.util.PopupManager.displayPrompt({
+							title: 'Ошибка выполнения действия',
+							text: 'При выполнении действия произошла ошибка. Попробуйте обновить страницу и выполнить действие еще раз',
+							buttons: [{
+								text: 'Ок',
+								handler: function dlA_onAction_action(){
+									this.destroy();
+								}
+							}]
+						});
+					}
+					this.deferredFormSubmitSuccessRedirect.fulfil(deferredLabel);
+				}
+			};
+			Alfresco.util.Ajax.jsonGet({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
+			});
+		},
+
+		_connectDocuments: function(deferredLabel, createdDocument) {
+			var template = '{proxyUri}lecm/documents/connection?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}';
+			var fromNodeRef = this.options.connectionIsReverse ? createdDocument : this.options.parentDocumentNodeRef;
+			var toNodeRef = this.options.connectionIsReverse ? this.options.parentDocumentNodeRef : createdDocument;
+
+			var url = YAHOO.lang.substitute(template, {
+				proxyUri: Alfresco.constants.PROXY_URI,
+				connectionType: encodeURIComponent(this.options.connectionType),
+				connectionIsSystem: encodeURIComponent(this.options.connectionIsSystem),
+				fromNodeRef: fromNodeRef,
+				toNodeRef: toNodeRef
+			});
+
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					this.deferredFormSubmitSuccessRedirect.fulfil(deferredLabel);
+				}
+			};
+
+			Alfresco.util.Ajax.request({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
+			});
+		},
+
+		_workflowTask: function(deferredLabel, createdDocument) {
+			var template = '{proxyUri}api/task/{workflowTask}/formprocessor';
+			var url = YAHOO.lang.substitute(template, {
+				proxyUri: Alfresco.constants.PROXY_URI,
+				workflowTask: encodeURIComponent(this.options.workflowTask)
+			});
+			var dataObj = {
+				'prop_lecmWorkflowDocument_createdNodeRef': createdDocument,
+				'direct-type': 'on',
+				'prop_transitions': 'Next'
+			};
+
+			Alfresco.util.Ajax.jsonPost({
+				url: url,
+				dataObj: dataObj,
+				successCallback: {
+					scope: this,
+					fn: function (response) {
+						this.deferredFormSubmitSuccessRedirect.fulfil(deferredLabel);
+					}
+				},
+				failureMessage: this.msg('message.failure')
+			});
+		},
+
+		onFormSubmitSuccessRedirect: function(nodeRef) {
+			debugger;
+			var reloadCheckbox = Dom.get('document-form-close-and-create-new');
+			if (reloadCheckbox && reloadCheckbox.checked) {
+				window.location.reload();
+			} else {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + nodeRef;
+			}
+		},
+
+		onFormSubmitFailure: function(response) {
+			for (var index in this.runtimeForm.submitElements) {
+				this.runtimeForm.submitElements[index].set('disabled', false);
+			}
+			this._hideSplash();
+			Alfresco.util.PopupManager.displayPrompt({
+				text: this.msg('message.failure')
+			});
+		},
+
+		onCancelButtonClick: function() {
+			document.location.href = document.referrer;
+		},
+
+		_showSplash: function() {
+			this.splashScreen = Alfresco.util.PopupManager.displayMessage({
+				text: this.msg('label.loading'),
+				spanClass: 'wait',
+				displayTime: 0
+			});
+		},
+
+		_hideSplash: function() {
+			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+		}
+	});
 })();
