@@ -382,6 +382,7 @@ i.icon-building {
     position: inherit;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+	resize: none;
 }
 .control .container .value-div input.invalid + .mandatory-highlightable {
     background-color: #faecee;
