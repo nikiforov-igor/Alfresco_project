@@ -210,7 +210,7 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 				if (eventCats.isEmpty() || eventCats.contains(recordEventCategory)) {
 					String recordObjectType = record.getObjectType() != null ? record.getObjectType().toString() : null;
 					if (objectTypes.isEmpty() || objectTypes.contains(recordObjectType)) {
-						if ((begin != null && record.getDate().after(begin)) && (end != null && record.getDate().before(end))) {
+						if ((begin == null || record.getDate().after(begin)) && (end != null && record.getDate().before(end))) {
 							filtered.add(record);
 						}
 					}
