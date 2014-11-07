@@ -16,9 +16,18 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
     private boolean custom = false;
     private boolean runAsSystem = true;
     private boolean includeAllOrganizations = false;
+    private boolean loadColumnsFromSQLQuery = false;
 
     public ReportFlags() {
         super();
+    }
+
+    public boolean isLoadColumnsFromSQLQuery() {
+        return loadColumnsFromSQLQuery;
+    }
+
+    public void setLoadColumnsFromSQLQuery(boolean loadColumnsFromSQLQuery) {
+        this.loadColumnsFromSQLQuery = loadColumnsFromSQLQuery;
     }
 
     @Override
@@ -168,6 +177,7 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
         result = prime * result + (isMultiRow ? 1231 : 1237);
         result = prime * result + (runAsSystem ? 1231 : 1237);
         result = prime * result + (includeAllOrganizations ? 1231 : 1237);
+        result = prime * result + (loadColumnsFromSQLQuery ? 1231 : 1237);
         result = prime * result
                 + ((queryDesc == null) ? 0 : queryDesc.hashCode());
         return result;
@@ -188,6 +198,8 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
             return false;
         if (includeAllOrganizations != other.includeAllOrganizations)
             return false;
+        if (loadColumnsFromSQLQuery != other.loadColumnsFromSQLQuery)
+            return false;
         if (queryDesc == null) {
             if (other.queryDesc != null)
                 return false;
@@ -203,6 +215,7 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
         builder.append("isMultiRow ").append(isMultiRow);
         builder.append("runAsSystem ").append(runAsSystem);
         builder.append("includeAllOrganizations ").append(includeAllOrganizations);
+        builder.append("loadColumnsFromSQLQuery ").append(loadColumnsFromSQLQuery);
         builder.append(", ").append(super.toString());
         builder.append(", queryDesc ").append(queryDesc);
         builder.append("]");

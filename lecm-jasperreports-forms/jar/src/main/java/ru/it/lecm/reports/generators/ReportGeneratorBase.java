@@ -11,13 +11,13 @@ import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
+import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.NamedValue;
 import ru.it.lecm.reports.model.impl.ReportFlags;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
-import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
      */
     final static String PFX_PROPERTY_ITEM = "property.".toLowerCase();
 
-    private DataSource targetDataSource;
+    private DataBaseHelper databaseHelper;
     private WKServiceKeeper services;
     private LinksResolver resolver;
 
@@ -67,19 +67,19 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
         this.resolver = resolver;
     }
 
-    public DataSource getTargetDataSource() {
-        return targetDataSource;
+    public DataBaseHelper getDatabaseHelper() {
+        return databaseHelper;
     }
 
-    public void setTargetDataSource(DataSource targetDataSource) {
-        this.targetDataSource = targetDataSource;
+    public void setDatabaseHelper(DataBaseHelper databaseHelper) {
+        this.databaseHelper = databaseHelper;
     }
     /**
      * Предполагается, что входной поток это xml-макет для генератора ru.it.lecm.reports.generators.XMLMacroGenerator
      */
     @Override
     public byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc, ReportTemplate template) {
-        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc, template, getTargetDataSource());
+        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc, template, getDatabaseHelper());
         final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate(
                 new ByteArrayInputStream(maketData), "Template For Report - " + desc.getMnem());
         return (result != null) ? result.toByteArray() : null;

@@ -156,7 +156,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
                 final JRDataSource dataSource = dataSourceProvider.create(report);
                 jPrint = fillManager.fill(report, reportParameters, dataSource);
             } else {// SQL
-                conn = getTargetDataSource().getConnection();
+                conn = getDatabaseHelper().getConnection();
                 jPrint = fillManager.fill(report, reportParameters, conn);
             }
 

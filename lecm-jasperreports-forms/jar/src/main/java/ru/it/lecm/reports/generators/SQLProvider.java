@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.ReportProviderExt;
+import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.JavaDataType;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,7 +30,11 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
 
     @SuppressWarnings("unused")
     private ReportsManager reportsManager;
-    private DataSource basicDataSource;
+    private DataBaseHelper databaseHelper;
+
+    public DataBaseHelper getDatabaseHelper() {
+        return databaseHelper;
+    }
 
     @Override
     public boolean supportsGetFieldsOperation() {
@@ -43,7 +47,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
-            connection = basicDataSource.getConnection();
+            connection = getDatabaseHelper().getConnection();
             String query = reportDescriptor.getFlags().getText() + " LIMIT 1";
             statement = connection.prepareStatement(query);
 
@@ -114,6 +118,6 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
 
     @Override
     public void initializeFromGenerator(ReportGeneratorBase baseGenerator) {
-        this.basicDataSource = baseGenerator.getTargetDataSource();
+        this.databaseHelper = baseGenerator.getDatabaseHelper();
     }
 }

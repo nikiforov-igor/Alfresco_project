@@ -77,7 +77,7 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
         final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
 
         PropertyCheck.mandatory(this, "connection", getConnection());
-        PropertyCheck.mandatory(this, "basicDataSource", getDataSource());
+        PropertyCheck.mandatory(this, "databaseHelper", getDatabaseHelper());
         PropertyCheck.mandatory(this, "templateUrl", srcOODocUrl);
         PropertyCheck.mandatory(this, "reportDesc", desc);
 

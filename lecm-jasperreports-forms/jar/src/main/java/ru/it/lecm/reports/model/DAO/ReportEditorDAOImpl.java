@@ -234,6 +234,7 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
         result.setMultiRow(getBoolean(node, PROP_REPORT_MULTIPLICITY, true));
         result.setRunAsSystem(getBoolean(node, PROP_REPORT_RUN_AS_SYSTEM, true));
         result.setIncludeAllOrganizations(getBoolean(node, PROP_REPORT_INCLUDE_ALL_ORGS, false));
+        result.setLoadColumnsFromSQLQuery(getBoolean(node, PROP_REPORT_LOAD_COLUMNS_FROM_SQL, false));
 
         result.setLimit(getInteger(node, PROP_REPORT_QUERY_LIMIT));
         result.setOffset(getInteger(node, PROP_REPORT_QUERY_OFFSET, 0));

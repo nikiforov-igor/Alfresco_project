@@ -38,7 +38,7 @@
     <bean id="baseReportGenerator" abstract="true" class="ru.it.lecm.reports.generators.ReportGeneratorBase">
         <property name="services" ref="wksKeeper"/>
         <property name="resolver" ref="linksResolverBean"/>
-        <property name="targetDataSource" ref="dataSource"/>
+        <property name="databaseHelper" ref="lecmReportingDatabaseHelper"/>
         <property name="queryHelper" ref="lucenePreparedQueryHelper"/>
     </bean>
 
@@ -73,21 +73,13 @@
     </bean>
 
     <bean id="ooCalcTemplateGenerator" class="ru.it.lecm.reports.generators.OpenOfficeCalcTemplateGenerator">
-        <property name="connection">
-            <ref bean="reportOpenOfficeConnection"/>
-        </property>
-        <property name="dataSource">
-            <ref bean="dataSource"/>
-        </property>
+        <property name="connection" ref="reportOpenOfficeConnection"/>
+        <property name="databaseHelper" ref="lecmReportingDatabaseHelper"/>
     </bean>
 
     <bean id="ooOdtTemplateGenerator" class="ru.it.lecm.reports.generators.OpenOfficeTemplateGenerator">
-        <property name="connection">
-            <ref bean="reportOpenOfficeConnection"/>
-        </property>
-        <property name="dataSource">
-            <ref bean="dataSource"/>
-        </property>
+        <property name="connection" ref="reportOpenOfficeConnection"/>
+        <property name="databaseHelper" ref="lecmReportingDatabaseHelper"/>
     </bean>
 
     <util:constant id="RE_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_ROOT_ID"/>
@@ -323,5 +315,15 @@
           class="ru.it.lecm.reports.xml.GetXmlConfig"
           parent="webscript">
         <property name="reportsManager" ref="reportsManager"/>
+    </bean>
+
+    <bean id="lecmReportingDatabaseHelper"
+          class="ru.it.lecm.reports.database.DataBaseHelper"
+          init-method="init">
+        <property name="jdbcdriver" value="${lecm.reports.db.driver}"/>
+        <property name="username" value="${lecm.reports.db.username}"/>
+        <property name="password" value="${lecm.reports.db.password}"/>
+        <property name="url" value="${lecm.reports.db.url}"/>
+        <property name="basicDataSource" ref="dataSource"/>
     </bean>
 </beans>

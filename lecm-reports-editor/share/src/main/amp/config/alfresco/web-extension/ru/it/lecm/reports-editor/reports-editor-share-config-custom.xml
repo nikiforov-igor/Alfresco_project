@@ -30,11 +30,18 @@
                     <show id="lecm-rpeditor:runAsSystem"/>
                     <show id="lecm-rpeditor:includeAllOrganizations"/>
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
+                    <show id="lecm-rpeditor:loadColumnsFromSQL"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
                     <show id="lecm-rpeditor:reportQuerySort"/>
+                    <show id="change-provider-type-listener"/>
                 </field-visibility>
                 <appearance>
+                    <field id="change-provider-type-listener">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-reports-editor/change-provider-type-listener.js</control-param>
+                        </control>
+                    </field>
                     <field id="cm:name" label-id="label.report.displayName"/>
                     <field id="lecm-rpeditor:reportQuery" help-id="report.query.help">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
@@ -53,8 +60,10 @@
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="changeItemsFireAction">changeProviderType</control-param>
                         </control>
                     </field>
+                    <field id="lecm-rpeditor:loadColumnsFromSQL" help-id="report.loadColumnsFromSQL.help"/>
                     <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>
                     <field id="lecm-rpeditor:businessRolesAssoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
@@ -110,11 +119,18 @@
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
+                    <show id="lecm-rpeditor:loadColumnsFromSQL"/>
                     <show id="lecm-rpeditor:parentReportTemplateAssoc"/>
                     <show id="lecm-rpeditor:reportQuery"/>
                     <show id="lecm-rpeditor:reportQuerySort"/>
+                    <show id="change-provider-type-listener"/>
                 </field-visibility>
                 <appearance>
+                    <field id="change-provider-type-listener">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-reports-editor/change-provider-type-listener.js</control-param>
+                        </control>
+                    </field>
                     <field id="cm:name" label-id="label.report.displayName"/>
                     <field id="lecm-rpeditor:reportCode" help-id="report.code.help">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
@@ -134,8 +150,10 @@
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="changeItemsFireAction">changeProviderType</control-param>
                         </control>
                     </field>
+                    <field id="lecm-rpeditor:loadColumnsFromSQL" help-id="report.loadColumnsFromSQL.help"/>
                     <field id="lecm-rpeditor:parentReportTemplateAssoc">
                         <control template="/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl">
                             <control-param name="ctrlValue">nodeRef</control-param>

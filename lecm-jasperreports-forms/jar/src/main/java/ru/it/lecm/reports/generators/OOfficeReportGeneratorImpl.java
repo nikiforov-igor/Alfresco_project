@@ -425,7 +425,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
             PreparedStatement statement = null;
 
             try {
-                sqlConnection = getTargetDataSource().getConnection();
+                sqlConnection = getDatabaseHelper().getConnection();
                 String query = report.getFlags().getText();
 
                 statement = sqlConnection.prepareStatement(query);

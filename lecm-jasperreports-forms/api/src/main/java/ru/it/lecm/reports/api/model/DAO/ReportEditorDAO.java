@@ -22,6 +22,7 @@ public interface ReportEditorDAO {
     final static public QName PROP_REPORT_MULTIPLICITY = QName.createQName(REPORTS_EDITOR_URI, "reportObjectsMultiplicity");
     final static public QName PROP_REPORT_RUN_AS_SYSTEM = QName.createQName(REPORTS_EDITOR_URI, "runAsSystem");
     final static public QName PROP_REPORT_INCLUDE_ALL_ORGS = QName.createQName(REPORTS_EDITOR_URI, "includeAllOrganizations");
+    final static public QName PROP_REPORT_LOAD_COLUMNS_FROM_SQL = QName.createQName(REPORTS_EDITOR_URI, "loadColumnsFromSQL");
 
     final static public QName PROP_REPORT_QUERY = QName.createQName(REPORTS_EDITOR_URI, "reportQuery");
     final static public QName PROP_REPORT_QUERY_SORT = QName.createQName(REPORTS_EDITOR_URI, "reportQuerySort");

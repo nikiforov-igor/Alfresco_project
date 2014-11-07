@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
@@ -18,7 +19,6 @@ import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.XmlHelper;
 
-import javax.sql.DataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -182,7 +182,7 @@ public class XMLMacroGenerator {
     private ReportDescriptor reportDesc;
     private ReportTemplate templateDesc;
 
-    private DataSource dataSourceContext;
+    private DataBaseHelper dataSourceContext;
 
     /**
      * Глобальные переменные для генерации.
@@ -191,7 +191,7 @@ public class XMLMacroGenerator {
      */
     private MacroValues globals;
 
-    public XMLMacroGenerator(ReportDescriptor rdesc, ReportTemplate template, DataSource ds) {
+    public XMLMacroGenerator(ReportDescriptor rdesc, ReportTemplate template, DataBaseHelper ds) {
         setReportDesc(rdesc);
         this.templateDesc = template;
         this.dataSourceContext = ds;
@@ -573,7 +573,7 @@ public class XMLMacroGenerator {
 
         private void expansionColumns(ReportDescriptor descriptor, boolean includeSubColumns, String macroKey) {
             int index = -1;
-            if (!descriptor.isSQLDataSource()) {//берем поля из набора данных
+            if (!descriptor.isSQLDataSource() || !descriptor.getFlags().isLoadColumnsFromSQLQuery()) {//берем поля из набора данных
                 List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
                 if (columns != null) {
                     // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
@@ -595,20 +595,26 @@ public class XMLMacroGenerator {
                 PreparedStatement statement = null;
                 try {
                     connection = dataSourceContext.getConnection();
-                    String query = descriptor.getFlags().getText();
-                    statement = connection.prepareStatement(query);
-                    statement.setMaxRows(1);
-                    resultSet = statement.executeQuery();
+                    String query = Utils.trimmed(descriptor.getFlags().getText());
+                    if (!Utils.isStringEmpty(query)) {
+                        int indexWhere = query.toLowerCase().indexOf("where");
+                        if (indexWhere > -1) {
+                            query = query.substring(0, indexWhere); // обрезаем все после первого WHERE
+                        }
+                        statement = connection.prepareStatement(query);
+                        statement.setMaxRows(1);
+                        resultSet = statement.executeQuery();
 
-                    int columnCount = resultSet.getMetaData().getColumnCount();
-                    for (int i = 1; i <= columnCount; i++) {
-                        String columnName = resultSet.getMetaData().getColumnName(i);
-                        int columnType = resultSet.getMetaData().getColumnType(i);
+                        int columnCount = resultSet.getMetaData().getColumnCount();
+                        for (int i = 1; i <= columnCount; i++) {
+                            String columnName = resultSet.getMetaData().getColumnName(i);
+                            int columnType = resultSet.getMetaData().getColumnType(i);
 
-                        index++;
-                        ColumnDescriptor colDesc = new ColumnDescriptor(columnName, JavaDataType.SupportedTypes.findTypeBySQL(columnType));
-                        colDesc.regItem(Locale.getDefault().getCountry(), columnName);
-                        this.doColumnMacroExpansion(macroKey, colDesc, index);
+                            index++;
+                            ColumnDescriptor colDesc = new ColumnDescriptor(columnName, JavaDataType.SupportedTypes.findTypeBySQL(columnType));
+                            colDesc.regItem(Locale.getDefault().getCountry(), columnName);
+                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+                        }
                     }
                 } catch (SQLException e) {
                     logger.error(e.getMessage(), e);

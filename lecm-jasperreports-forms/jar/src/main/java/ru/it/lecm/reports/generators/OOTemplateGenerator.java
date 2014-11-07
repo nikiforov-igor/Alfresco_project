@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
@@ -54,12 +55,14 @@ public abstract class OOTemplateGenerator {
     protected DataSource dataSource;
     protected OpenOfficeConnection connection;
 
-    public DataSource getDataSource() {
-        return dataSource;
+    private DataBaseHelper databaseHelper;
+
+    public DataBaseHelper getDatabaseHelper() {
+        return databaseHelper;
     }
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public void setDatabaseHelper(DataBaseHelper databaseHelper) {
+        this.databaseHelper = databaseHelper;
     }
 
     public OpenOfficeConnection getConnection() {
@@ -154,7 +157,12 @@ public abstract class OOTemplateGenerator {
                 xDocProps.setAuthor(author);
             }
             //основные колонки - не подотчеты!
-            if (!desc.isSQLDataSource()) {
+            if (desc.isSQLDataSource()) {
+                //дополнительно добавляем поле с SQL запросом
+                userPropsContainer.addProperty(desc.getMnem() + "-query", DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, desc.getFlags().getText());
+            }
+
+            if (!desc.isSQLDataSource() || !desc.getFlags().isLoadColumnsFromSQLQuery()) {
                 for (ColumnDescriptor col : desc.getDsDescriptor().getColumns()) {
                     stage = String.format("Add property '%s' with expression '%s'", col.getColumnName(), col.getExpression());
                     if (col.getExpression() != null) {
@@ -166,9 +174,6 @@ public abstract class OOTemplateGenerator {
                 }
             } else {
                 addPropsFromSQLToContainer(desc, userPropsContainer);
-                //дополнительно добавляем поле с SQL запросом
-                userPropsContainer.addProperty(desc.getMnem() + "-query",
-                        DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, desc.getFlags().getText());
             }
 
             //обработаем подотчеты отдельно
@@ -234,18 +239,24 @@ public abstract class OOTemplateGenerator {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
-            sqlConnection = getDataSource().getConnection();
-            String query = desc.getFlags().getText();
-            statement = sqlConnection.prepareStatement(query);
-            statement.setMaxRows(1);
-            resultSet = statement.executeQuery();
+            sqlConnection = getDatabaseHelper().getConnection();
+            String query = Utils.trimmed(desc.getFlags().getText());
+            if (!Utils.isStringEmpty(query)) {
+                int indexWhere = query.toLowerCase().indexOf("where");
+                if (indexWhere > -1) {
+                    query = query.substring(0, indexWhere); // обрезаем все после первого WHERE
+                }
+                statement = sqlConnection.prepareStatement(query);
+                statement.setMaxRows(1);
+                resultSet = statement.executeQuery();
 
-            int columnCount = resultSet.getMetaData().getColumnCount();
-            for (int i = 1; i <= columnCount; i++) {
-                String columnName = resultSet.getMetaData().getColumnName(i);
+                int columnCount = resultSet.getMetaData().getColumnCount();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = resultSet.getMetaData().getColumnName(i);
 
-                String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
-                userPropsContainer.addProperty(desc.isSubReport() ? (desc.getMnem() + "." + columnName) : columnName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                    String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
+                    userPropsContainer.addProperty(desc.isSubReport() ? (desc.getMnem() + "." + columnName) : columnName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                }
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -280,7 +291,7 @@ public abstract class OOTemplateGenerator {
         PreparedStatement statement = null;
 
         try {
-            sqlConnection = getDataSource().getConnection();
+            sqlConnection = getDatabaseHelper().getConnection();
 
             //1 Получаем Query - берем либо базовую, либо заполненную из параметров (если там есть такое свойство)
             String baseQuery = getQueryString(desc, paramsToQuery, docProperties);
@@ -343,7 +354,7 @@ public abstract class OOTemplateGenerator {
 
         List<Map> result = new ArrayList<Map>();
         try {
-            sqlConnection = getDataSource().getConnection();
+            sqlConnection = getDatabaseHelper().getConnection();
 
             //1 Получаем Query - берем либо базовую, либо заполненную из параметров (если там есть такое свойство)
             String baseQuery = getQueryString(subReport, propsToAssign, docProperties);

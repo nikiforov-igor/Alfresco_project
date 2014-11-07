@@ -222,6 +222,7 @@
 						<value>lecm-rpeditor:reportTemplateAssoc</value>
 						<value>lecm-rpeditor:businessRolesAssoc</value>
 						<value>lecm-rpeditor:reportExtFlags</value>
+						<value>lecm-rpeditor:loadColumnsFromSQL</value>
 					</list>
 				</entry>
 				<entry key="lecm-rpeditor:subReportDescriptor">
@@ -243,6 +244,7 @@
 						<value>lecm-rpeditor:businessRolesAssoc</value>
 						<value>lecm-rpeditor:reportExtFlags</value>
 						<value>lecm-rpeditor:parentReportTemplateAssoc</value>
+                        <value>lecm-rpeditor:loadColumnsFromSQL</value>
 					</list>
 				</entry>
 				<entry key="lecm-rpeditor:reportDataSource">
