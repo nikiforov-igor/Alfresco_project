@@ -4,8 +4,8 @@
  * @namespace LogicECM
  */
 // Ensure LogicECM root object exists
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
+if (typeof LogicECM == 'undefined' || !LogicECM) {
+	LogicECM = {};
 }
 
 /**
@@ -21,7 +21,6 @@ LogicECM.module = LogicECM.module || {};
 	 * YUI Library aliases
 	 */
 	var Dom = YAHOO.util.Dom;
-	var Event = YAHOO.util.Event;
 
 	/**
 	 * StartWorkflow constructor.
@@ -31,11 +30,11 @@ LogicECM.module = LogicECM.module || {};
 	 * @constructor
 	 */
 	LogicECM.module.StartWorkflow = function StartWorkflow_constructor(htmlId) {
-		var module = LogicECM.module.StartWorkflow.superclass.constructor.call(this, "LogicECM.module.StartWorkflow", htmlId, ["button"]);
-		YAHOO.Bubbling.on("objectFinderReady", module.onObjectFinderReady, module);
-		YAHOO.Bubbling.on("hiddenAssociationFormReady", module.onHiddenAssociationFormReady, module);
-		YAHOO.Bubbling.on("formContentReady", module.onStartWorkflowFormContentReady, module);
-		YAHOO.Bubbling.on("redrawDocumentActions", module.draw, module);
+		var module = LogicECM.module.StartWorkflow.superclass.constructor.call(this, 'LogicECM.module.StartWorkflow', htmlId, ['button']);
+		YAHOO.Bubbling.on('objectFinderReady', module.onObjectFinderReady, module);
+		YAHOO.Bubbling.on('hiddenAssociationFormReady', module.onHiddenAssociationFormReady, module);
+		YAHOO.Bubbling.on('formContentReady', module.onStartWorkflowFormContentReady, module);
+		YAHOO.Bubbling.on('redrawDocumentActions', module.draw, module);
 		return module;
 	};
 
@@ -46,169 +45,167 @@ LogicECM.module = LogicECM.module || {};
 			nodeRef: null
 		},
 		draw: function draw_function() {
-			var url = Alfresco.constants.PROXY_URI + "/lecm/statemachine/actions?documentNodeRef=" + this.options.nodeRef;
-			var callback = {
-				success: function(oResponse) {
-					var oResults = eval("(" + oResponse.responseText + ")");
-					var parent = oResponse.argument.parent;
+			var template = '{proxyUri}lecm/statemachine/actions?documentNodeRef={documentNodeRef}';
+			var url = YAHOO.lang.substitute(template, {
+				proxyUri: Alfresco.constants.PROXY_URI,
+				documentNodeRef: this.options.nodeRef
+			});
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					var oResults = serverResponse.json;
+					var container, actionsContainer, index, action, actionDiv;
+					if (oResults.actions && oResults.actions.length) {
+						Dom.setStyle(this.id, 'display', 'block');
 
-					if (oResults.actions != null && oResults.actions.length > 0) {
-						Dom.setStyle(parent.id, "display", "block");
+						this.taskId = oResults.taskId;
 
-						parent.taskId = oResults.taskId;
-
-						var container = document.getElementById(parent.id + "-formContainer");
-						var actionsContainer = document.getElementById(parent.id + "-formContainer-actions");
-						if (actionsContainer != null) {
-							actionsContainer.innerHTML = "";
+						container = document.getElementById(this.id + '-formContainer');
+						actionsContainer = document.getElementById(this.id + '-formContainer-actions');
+						if (actionsContainer) {
+							actionsContainer.innerHTML = '';
 						} else {
-							actionsContainer = document.createElement("div");
-							actionsContainer.id = parent.id + "-formContainer-actions";
+							actionsContainer = document.createElement('div');
+							actionsContainer.id = this.id + '-formContainer-actions';
 						}
 
-						oResults.actions.forEach(function(action) {
-							var div = document.createElement("div");
-                            if (action.dueDate != null) {
-                                div.title = "Срок исполнения: " + action.dueDate;
-                            }
-							div.className = "widget-button-grey text-cropped";
-                            if (action.type == "task") {
-                                div.className += " task-marker";
-                            }
-							div.innerHTML = action.label;
-							div.onclick = function() {
-								parent.show(action);
-							};
-                            actionsContainer.appendChild(div);
-						});
-                        container.insertBefore(actionsContainer, container.firstChild);
-					} else {
-                        if (document.getElementById("final-actions-actionSet").innerHTML == "") {
-	                        Dom.setStyle(parent.id, "display", "none");
-                        }
+						for (index in oResults.actions) {
+							action = oResults.actions[index];
+							actionDiv = document.createElement('div');
+							actionDiv.className = 'widget-button-grey text-cropped';
+							actionDiv.innerHTML = action.label;
+							actionDiv.onclick = this.show.bind(this, action);
+							if (action.dueDate) {
+								actionDiv.title = 'Срок исполнения: ' + action.dueDate;
+							}
+							if (action.type == 'task') {
+								actionDiv.className += ' task-marker';
+							}
+							actionsContainer.appendChild(actionDiv);
+						}
+						container.insertBefore(actionsContainer, container.firstChild);
+					} else if (!document.getElementById('final-actions-actionSet').innerHTML) {
+						Dom.setStyle(this.id, 'display', 'none');
 					}
-				},
-				argument: {
-					parent: this
-				},
-				timeout: 60000
+				}
 			};
-			YAHOO.util.Connect.asyncRequest('GET', url, callback);
+			Alfresco.util.Ajax.jsonGet({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
+			});
 		},
 		onObjectFinderReady: function StartWorkflow_onObjectFinderReady(layer, args) {
 			var objectFinder = args[1].eventGroup;
-			if (objectFinder.options.field == "assoc_packageItems") {
+			if (objectFinder.options.field == 'assoc_packageItems') {
 				objectFinder.selectItems(this.options.nodeRef);
 			}
 		},
 		onHiddenAssociationFormReady: function StartWorkflow_onObjectFinderReady(layer, args) {
-			if (args[1].fieldName == "assoc_packageItems") {
-				Dom.get(args[1].fieldId + "-added").value = this.options.nodeRef;
-				YAHOO.Bubbling.fire("afterSetItems",
-						{
-							items: this.options.nodeRef
-						});
+			if (args[1].fieldName == 'assoc_packageItems') {
+				Dom.get(args[1].fieldId + '-added').value = this.options.nodeRef;
+				YAHOO.Bubbling.fire('afterSetItems', {
+					items: this.options.nodeRef
+				});
 			}
 		},
 		show: function showWorkflowForm(action) {
-			if (this.doubleClickLock)
+			if (this.doubleClickLock) {
 				return;
+			}
 			this.doubleClickLock = true;
 			this._showSplash();
 
-			var template = "{proxyUri}lecm/statemachine/actions?documentNodeRef={documentNodeRef}&actionId={actionId}&taskId={taskId}";
+			var template = '{proxyUri}lecm/statemachine/actions?documentNodeRef={documentNodeRef}&actionId={actionId}&taskId={taskId}';
 			var url = YAHOO.lang.substitute(template, {
 				proxyUri: Alfresco.constants.PROXY_URI,
 				documentNodeRef: encodeURIComponent(this.options.nodeRef),
 				actionId: encodeURIComponent(action.actionId),
 				taskId: encodeURIComponent(this.taskId)
 			});
-			var callback = {
-				success: function(oResponse) {
-					oResponse.argument.parent._hideSplash();
-					var oResults = eval("(" + oResponse.responseText + ")");
-					var parent = oResponse.argument.parent
-					if (oResults.errors != null && oResults.errors.length > 0 && !oResults.doesNotBlock) {
-						parent.doubleClickLock = false;
-						var viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
-						viewDialog.show(parent.options.nodeRef, action.label, oResults.errors, oResults.fields);
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					this._hideSplash();
+					var oResults = serverResponse.json;
+					if (oResults.errors && oResults.errors.length && !oResults.doesNotBlock) {
+						this.doubleClickLock = false;
+						var viewDialog = new LogicECM.module.EditFieldsConfirm('confirm-edit-fields');
+						viewDialog.show(this.options.nodeRef, action.label, oResults.errors, oResults.fields);
 						return;
 					}
-					if (action.type == "task") {
-						parent.showTask(action.actionId, action.label);
-					} else if (action.type == "group") {
-						parent.onGroupActions(action);
-					} else if ((action.workflowId != null && action.workflowId != 'null') || action.isForm) {
-						parent.showForm(action, oResults.errors);
+					if (action.type == 'task') {
+						this.showTask(action.actionId, action.label);
+					} else if (action.type == 'group') {
+						this.onGroupActions(action);
+					} else if ((action.workflowId && action.workflowId != 'null') || action.isForm) {
+						this.showForm(action, oResults.errors);
 					} else {
-						parent.showPromt(action, oResults.errors);
+						this.showPromt(action, oResults.errors);
 					}
-				},
-				argument: {
-					parent: this
-				},
-				timeout: 60000
+				}
 			};
-			YAHOO.util.Connect.asyncRequest('GET', url, callback);
+			Alfresco.util.Ajax.jsonGet({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
+			});
 		},
-        showForm: function showForm_function(action, errors) {
-            if (errors.length > 0) {
-                var message = "";
-                for (var i in errors) {
-                    message += errors[i] + "<br>";
-                }
-                var me = this;
-                Alfresco.util.PopupManager.displayPrompt(
-                    {
-                        title: "Выполнение действия",
-                        text: message + "Подтвердите выполнение для этого документа действия \"" + action.label + "\". ",
-                        noEscape: true,
-                        buttons: [
-                            {
-                                text: "Ок",
-                                handler: function dlA_onAction_action()
-                                {
-                                    this.destroy();
-                                    me._showForm(action);
-                                }
-                            },
-                            {
-                                text: "Отмена",
-                                handler: function dlA_onActionDelete_cancel()
-                                {
-                                    this.destroy();
-                                },
-                                isDefault: true
-                            }]
-                    });
-                this.doubleClickLock = false;
-            } else {
-                this._showForm(action);
-            }
-
-        },
-		_showForm: function showForm_action(action) {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT;
-			var templateRequestParams;
-			var formWidth = "65em";
-			if (action.isForm) {
-                this._createDocument(action)
+		showForm: function showForm_function(action, errors) {
+			var i, message = '';
+			if (errors.length) {
+				for (i in errors) {
+					message += errors[i] + '<br>';
+				}
+				Alfresco.util.PopupManager.displayPrompt({
+					title: 'Выполнение действия',
+					text: message + 'Подтвердите выполнение для этого документа действия "' + action.label + '".',
+					noEscape: true,
+					buttons: [{
+						text: 'Ок',
+						handler: {
+							fn: function (event, obj) {
+								this.destroy();
+								obj.parent._showForm(obj.action);
+							},
+							obj: {
+								parent: this,
+								action: action
+							}
+						}
+					},{
+						text: 'Отмена',
+						handler: function(event, obj) {
+							this.destroy();
+						},
+						isDefault: true
+					}]
+				});
+				this.doubleClickLock = false;
 			} else {
-				templateUrl += "lecm/components/form";
+				this._showForm(action);
+			}
+		},
+		_showForm: function showForm_action(action) {
+			var templateUrl;
+			var templateRequestParams;
+			if (action.isForm) {
+				this._createDocument(action);
+			} else {
+				templateUrl = Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form';
 				templateRequestParams = {
-					itemKind: "workflow",
+					itemKind: 'workflow',
 					itemId: action.workflowId,
-					mode: "create",
-					submitType: "json",
-					formId: "workflow-form",
+					mode: 'create',
+					submitType: 'json',
+					formId: 'workflow-form',
 					args: JSON.stringify(action.variables),
 					nodeRef: this.options.nodeRef,
 					showCancelButton: true
 
 				};
-				LogicECM.CurrentModules = {};
-				var dialog = LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-					width: formWidth,
+				var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
+					width: '65em',
 					templateUrl: templateUrl,
 					templateRequestParams: templateRequestParams,
 					actionUrl: null,
@@ -216,13 +213,13 @@ LogicECM.module = LogicECM.module || {};
 					doBeforeDialogShow: {
 						scope: this,
 						fn: function(p_form, p_dialog) {
-							p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", action.label));
-							var contId = p_dialog.id + "-form-container";
-							Dom.addClass(contId, "metadata-form-edit");
-							if (action.documentType && action.documentType != "") {
-								Dom.addClass(contId, action.documentType.replace(":", "_"));
+							p_dialog.dialog.setHeader(this.msg('logicecm.workflow.runAction.label', action.label));
+							var contId = p_dialog.id + '-form-container';
+							Dom.addClass(contId, 'metadata-form-edit');
+							if (action.documentType) {
+								Dom.addClass(contId, action.documentType.replace(':', '_'));
 							} else {
-								Dom.addClass(contId, "no-form-type");
+								Dom.addClass(contId, 'no-form-type');
 							}
 
 							this.doubleClickLock = false;
@@ -243,185 +240,165 @@ LogicECM.module = LogicECM.module || {};
 						}
 					}
 				});
-                LogicECM.module.Base.Util.registerDialog(dialog);
-                dialog.show();
+				LogicECM.module.Base.Util.registerDialog(dialog);
+				dialog.show();
 			}
 		},
 		showPromt: function showPromt_action(action, errors) {
-            var message = "";
-            for (var i in errors) {
-                message += errors[i] + "<br>";
-            }
-            var me = this;
-			Alfresco.util.PopupManager.displayPrompt(
-					{
-						title: "Выполнение действия",
-						text: message + "Подтвердите выполнение для этого документа действия \"" + action.label + "\". ",
-                        noEscape: true,
-						buttons: [
-							{
-								text: "Ок",
-								handler: function dlA_onAction_action()
-								{
-									this.destroy();
-									me._chooseState("trans", me.taskId, null, action.actionId);
-								}
-							},
-							{
-								text: "Отмена",
-								handler: function dlA_onActionDelete_cancel()
-								{
-									this.destroy();
-								},
-								isDefault: true
-							}]
-					});
+			var i, message = '';
+			for (i in errors) {
+				message += errors[i] + '<br>';
+			}
+			Alfresco.util.PopupManager.displayPrompt({
+				title: 'Выполнение действия',
+				text: message + 'Подтвердите выполнение для этого документа действия "' + action.label + '". ',
+				noEscape: true,
+				buttons: [{
+					text: 'Ок',
+					handler: {
+						fn: function(event, obj) {
+							this.destroy();
+							obj.parent._chooseState('trans', obj.parent.taskId, null, obj.action.actionId);
+						},
+						obj: {
+							parent: this,
+							action: action
+						}
+					}
+				},{
+					text: 'Отмена',
+					handler: function(event, obj) {
+						this.destroy();
+					},
+					isDefault: true
+				}]
+			});
 			this.doubleClickLock = false;
 		},
 		onGroupActions: function onGroupActionsFunction(action) {
 			if (action.isForm) {
 				this._createScriptForm(action);
 			} else {
-                if (action.subtype == "document" || action.subtype == "workflow") {
-                    if (action.subtype == "document") {
-                        this._createDocument(action);
-                    } else {
-                        var templateRequestParams = {
-                            itemKind: "workflow",
-                            itemId: action.workflowType,
-                            mode: "create",
-                            submitType: "json",
-                            formId: "workflow-form",
-                            destination: action.formFolder,
-                            showCancelButton: true
-                        };
-                        var responseHandler = function(response) {
-                            // document.location.href = document.location.href;
-                            // ALF-2803
-                            window.location.reload(true);
-                        }
+				if (action.subtype == 'document') {
+					this._createDocument(action);
+				} else if (action.subtype == 'workflow') {
+					var templateRequestParams = {
+						itemKind: 'workflow',
+						itemId: action.workflowType,
+						mode: 'create',
+						submitType: 'json',
+						formId: 'workflow-form',
+						destination: action.formFolder,
+						showCancelButton: true
+					};
 
-	                    var me = this;
-	                    LogicECM.CurrentModules = {};
-	                    var dialog = LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-		                    width: "84em",
-		                    templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-		                    templateRequestParams: templateRequestParams,
-		                    actionUrl: null,
-		                    destroyOnHide: true,
-		                    doBeforeDialogShow: {
-			                    scope: this,
-			                    fn: function(p_form, p_dialog) {
-				                    p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", action.label));
-				                    var contId = p_dialog.id + "-form-container";
-				                    Dom.addClass(contId, "metadata-form-edit");
-				                    if (action.documentType && action.documentType != "") {
-					                    Dom.addClass(contId, action.documentType.replace(":", "_"));
-				                    } else {
-					                    Dom.addClass(contId, "no-form-type");
-				                    }
+					var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
+						width: '84em',
+						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+						templateRequestParams: templateRequestParams,
+						actionUrl: null,
+						destroyOnHide: true,
+						doBeforeDialogShow: {
+							scope: this,
+							fn: function(p_form, p_dialog) {
+								p_dialog.dialog.setHeader(this.msg('logicecm.workflow.runAction.label', action.label));
+								var contId = p_dialog.id + '-form-container';
+								Dom.addClass(contId, 'metadata-form-edit');
+								if (action.documentType) {
+									Dom.addClass(contId, action.documentType.replace(':', '_'));
+								} else {
+									Dom.addClass(contId, 'no-form-type');
+								}
 
-				                    this.doubleClickLock = false;
+								this.doubleClickLock = false;
 
-				                    p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-			                    }
-		                    },
-		                    doBeforeFormSubmit: {
-			                    scope: this,
-			                    fn: function() {
-				                    this._showSplash();
-			                    }
-		                    },
-		                    onSuccess: {
-			                    scope: this,
-			                    fn: responseHandler
-		                    }
-	                    });
-                        LogicECM.module.Base.Util.registerDialog(dialog);
-                        dialog.show();
-                    }
-                } else {
-                    var me = this;
-                    Alfresco.util.PopupManager.displayPrompt(
-                        {
-                            title: "Выполнение действия",
-                            text: "Подтвердите выполнение действия \"" + action.actionId + "\"",
-                            buttons: [
-                                {
-                                    text: "Ок",
-                                    handler: function dlA_onAction_action() {
-                                        this.destroy();
-                                        var items = [];
-                                        items.push(me.options.nodeRef);
-                                        Alfresco.util.Ajax.jsonRequest({
-                                            method: "POST",
-                                            url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-                                            dataObj: {
-                                                items: items,
-                                                actionId: action.actionId
-                                            },
-                                            successCallback: {
-                                                fn: function (oResponse) {
-                                                    var json = eval("(" + oResponse.serverResponse.responseText + ")");
-                                                    var item =  null;
-                                                    if (json.forCollection) {
-                                                        item = json;
-                                                    } else {
-                                                        item = json.items[0];
-                                                    }
-                                                    var message = "";
-                                                    if (item.redirect != "") {
-                                                        document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
-                                                    } else if (item.openWindow) {
-                                                        window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
-                                                    } else if (!item.withErrors){
-                                                        window.location.reload(true);
-                                                    } else {
-                                                        message += "<div class=\"" + (item.withErrors ? "error-item" : "noerror-item") + "\">" + item.message + "</div>";
-                                                    }
-                                                    if (message != "") {
-                                                        this._openMessageWindow(action.actionId, message, true);
-                                                    }
-                                                }
-                                            },
-                                            failureCallback: {
-                                                fn: function () {
-                                                }
-                                            },
-                                            scope: me,
-                                            execScripts: true
-                                        });
-
-                                    }
-                                },
-                                {
-                                    text: "Отмена",
-                                    handler: function () {
-                                        this.destroy();
-                                    },
-                                    isDefault: true
-                                }
-                            ]
-                        });
-                    this.doubleClickLock = false;
-                }
+								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+							}
+						},
+						doBeforeFormSubmit: {
+							scope: this,
+							fn: function() {
+								this._showSplash();
+							}
+						},
+						onSuccess: {
+							scope: this,
+							fn: function() {
+								// document.location.href = document.location.href;
+								// ALF-2803
+								window.location.reload(true);
+							}
+						}
+					});
+					LogicECM.module.Base.Util.registerDialog(dialog);
+					dialog.show();
+				} else {
+					Alfresco.util.PopupManager.displayPrompt({
+						title: 'Выполнение действия',
+						text: 'Подтвердите выполнение действия "' + action.actionId + '"',
+						buttons: [{
+							text: 'Ок',
+							handler: {
+								fn: function(event, obj) {
+									this.destroy();
+									var items = [obj.options.nodeRef];
+									Alfresco.util.Ajax.jsonPost({
+										url: Alfresco.constants.PROXY_URI + 'lecm/groupActions/exec',
+										dataObj: {
+											items: items,
+											actionId: action.actionId
+										},
+										successCallback: {
+											scope: obj,
+											fn: function (oResponse) {
+												var json = oResponse.json;
+												var item = json.forCollection ? json : json.items[0];
+												var message;
+												if (item.redirect) {
+													document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+												} else if (item.openWindow) {
+													window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
+												} else if (!item.withErrors){
+													window.location.reload(true);
+												} else {
+													message = '<div class=\'' + (item.withErrors ? 'error-item' : 'noerror-item') + '\'>' + item.message + '</div>';
+													this._openMessageWindow(action.actionId, message, true);
+												}
+											}
+										},
+										failureMessage: obj.msg('message.failure'),
+										execScripts: true
+									});
+								},
+								obj: this
+							}
+						},{
+							text: 'Отмена',
+							handler: function(event, obj) {
+								this.destroy();
+							},
+							isDefault: true
+						}]
+					});
+					this.doubleClickLock = false;
+				}
 			}
 		},
 		showTask: function(taskId, taskName) {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form";
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + 'components/form';
 			var templateRequestParams = {
-				itemKind: "task",
+				itemKind: 'task',
 				itemId: taskId,
-				mode: "edit",
+				mode: 'edit',
 				formUI: true,
-				submitType: "json",
+				submitType: 'json',
 				showCancelButton: true,
 				reassignReload: true
 			};
 			// Using Forms Service, so always create new instance
-			var taskDetails = new Alfresco.module.SimpleDialog(this.id + "-taskDetails");
+			var taskDetails = new Alfresco.module.SimpleDialog(this.id + '-taskDetails');
 			taskDetails.setOptions({
-				width: "55em",
+				width: '55em',
 				templateUrl: templateUrl,
 				templateRequestParams: templateRequestParams,
 				actionUrl: null,
@@ -444,24 +421,24 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}
 			});
-            LogicECM.module.Base.Util.registerDialog(taskDetails);
-            taskDetails.show();
+			LogicECM.module.Base.Util.registerDialog(taskDetails);
+			taskDetails.show();
 		},
 		_createScriptForm: function _createScriptFormFunction(action) {
-			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form/script";
+			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form/script';
 			var items = [this.options.nodeRef];
 			var templateRequestParams = {
-				itemKind: "type",
+				itemKind: 'type',
 				itemId: action.actionId,
-				formId: "scriptForm",
-				mode: "create",
-				submitType: "json",
+				formId: 'scriptForm',
+				mode: 'create',
+				submitType: 'json',
 				items: JSON.stringify(items)
 			};
 			// Using Forms Service, so always create new instance
-			var scriptForm = new Alfresco.module.SimpleDialog(this.id + "-scriptForm");
+			var scriptForm = new Alfresco.module.SimpleDialog(this.id + '-scriptForm');
 			scriptForm.setOptions({
-				width: "55em",
+				width: '55em',
 				templateUrl: templateUrl,
 				templateRequestParams: templateRequestParams,
 				actionUrl: null,
@@ -471,8 +448,8 @@ LogicECM.module = LogicECM.module || {};
 					fn: function(p_form, p_dialog) {
 						p_dialog.dialog.setHeader(action.actionId);
 
-						var contId = p_dialog.id + "-form-container";
-						Dom.addClass(contId, "metadata-form-edit");
+						var contId = p_dialog.id + '-form-container';
+						Dom.addClass(contId, 'metadata-form-edit');
 						this.doubleClickLock = false;
 
 						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
@@ -481,140 +458,131 @@ LogicECM.module = LogicECM.module || {};
 				onSuccess: {
 					scope: this,
 					fn: function DataGrid_onActionCreate_success(response) {
-                        var json = eval("(" + response.serverResponse.responseText + ")");
-                        var item =  null;
-                        if (json.forCollection) {
-                            item = json;
-                        } else {
-                            item = json.items[0];
-                        }
-                        var message = "";
-                        if (item.redirect != "") {
-                            document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
-                        } else if (item.openWindow) {
-                            window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
-                        } else if (!item.withErrors){
-                            window.location.reload(true);
-                        } else {
-                            message += "<div class=\"" + (item.withErrors ? "error-item" : "noerror-item") + "\">" + item.message + "</div>";
-                        }
-                        if (message != "") {
-                            this._openMessageWindow(action.actionId, message, true);
-                        }
+						var json = eval('(' + response.serverResponse.responseText + ')');
+						var item = (json.forCollection) ? json : json.items[0];
+						var message;
+						if (item.redirect) {
+							document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+						} else if (item.openWindow) {
+							window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
+						} else if (!item.withErrors){
+							window.location.reload(true);
+						} else {
+							message = '<div class="' + (item.withErrors ? 'error-item' : 'noerror-item') + '">' + item.message + '</div>';
+							this._openMessageWindow(action.actionId, message, true);
+						}
 					}
 				},
 				onFailure: {
 					scope: this,
 					fn: function DataGrid_onActionCreate_failure(response) {
 						Alfresco.util.PopupManager.displayMessage({
-							text: this.msg("message.save.failure")
+							text: this.msg('message.save.failure')
 						});
 						this.doubleClickLock = false;
 					}
 				}
 			});
-            LogicECM.module.Base.Util.registerDialog(scriptForm);
-            scriptForm.show();
+			LogicECM.module.Base.Util.registerDialog(scriptForm);
+			scriptForm.show();
 		},
-        _createDocument: function _createDocumentFunction(action) {
-            if (action.autoFill) {
-                var me = this;
-                Alfresco.util.Ajax.jsonRequest({
-                    method: "GET",
-                    url: Alfresco.constants.PROXY_URI + "lecm/documents/additionalParameters",
-                    dataObj: {
-                        nodeRef: this.options.nodeRef,
-                        qName: action.documentType
-                    },
-                    successCallback: {
-                        fn: function (oResponse) {
-                            var json = eval("(" + oResponse.serverResponse.responseText + ")");
-                            me._redirectToCreateDocument(action, json);
-                        }
-                    },
-                    failureCallback: {
-                        fn: function () {
-                        }
-                    },
-                    scope: this,
-                    execScripts: true
-                });
-            } else {
-                this._redirectToCreateDocument(action, null);
-            }
-        },
-        _redirectToCreateDocument: function _redirectToCreateDocument_function(action, additionalParams) {
-            var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.documentType;
+		_createDocument: function _createDocumentFunction(action) {
+			if (action.autoFill) {
+				Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + 'lecm/documents/additionalParameters',
+					dataObj: {
+						nodeRef: this.options.nodeRef,
+						qName: action.documentType
+					},
+					successCallback: {
+						scope: this,
+						fn: function (oResponse) {
+							this._redirectToCreateDocument(action, oResponse.json);
+						}
+					},
+					failureMessage: this.msg('message.failure'),
+					execScripts: true
+				});
+			} else {
+				this._redirectToCreateDocument(action, null);
+			}
+		},
+		_redirectToCreateDocument: function _redirectToCreateDocument_function(action, additionalParams) {
+			var url =  Alfresco.constants.URL_PAGECONTEXT + 'document-create?documentType=' + action.documentType;
 
-            var params = "documentType=" + action.documentType;
-            params += "&formId=" + "workflow-form";
-            params += "&connectionType=" + action.connectionType;
-            params += "&connectionIsSystem=" + action.connectionIsSystem;
-            params += "&connectionIsReverse=" + action.connectionIsReverse;
-            params += "&parentDocumentNodeRef=" + this.options.nodeRef;
+			var params = 'documentType=' + action.documentType;
+			params += '&formId=' + 'workflow-form';
+			params += '&connectionType=' + action.connectionType;
+			params += '&connectionIsSystem=' + action.connectionIsSystem;
+			params += '&connectionIsReverse=' + action.connectionIsReverse;
+			params += '&parentDocumentNodeRef=' + this.options.nodeRef;
+			params += '&actionType=' + action.type;
+			params += '&taskId=' + this.taskId;
+			params += '&actionId=' + action.actionId;
+			//this._chooseState(action.type, this.taskId, response.json.persistedObject, action.actionId);
+			//me._chooseState('trans', me.taskId, null, action.actionId);
+			var prop;
 
-            if (action.variables != null) {
-                for (var prop in action.variables) {
-                    if (action.variables.hasOwnProperty(prop)) {
-                        params += "&" + prop + "=" + action.variables[prop];
-                    }
-                }
-            }
+			if (action.variables) {
+				for (prop in action.variables) {
+					if (action.variables.hasOwnProperty(prop)) {
+						params += '&' + prop + '=' + action.variables[prop];
+					}
+				}
+			}
 
-            if (additionalParams != null) {
-                for (var prop in additionalParams) {
-                    if (additionalParams.hasOwnProperty(prop)) {
-                        params += "&" + prop + "=" + additionalParams[prop];
-                    }
-                }
-            }
+			if (additionalParams) {
+				for (prop in additionalParams) {
+					if (additionalParams.hasOwnProperty(prop)) {
+						params += '&' + prop + '=' + additionalParams[prop];
+					}
+				}
+			}
 
-            window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
-        },
+			window.location.href = url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params);
+		},
 		_chooseState: function(type, taskId, formResponse, actionId) {
-			var template = "{proxyUri}lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
+			var template = '{proxyUri}lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}';
 			var url = YAHOO.lang.substitute(template, {
 				proxyUri: Alfresco.constants.PROXY_URI,
 				actionType: encodeURIComponent(type),
 				taskId: encodeURIComponent(taskId),
 				formResponse: encodeURIComponent(formResponse),
-				actionId: actionId ? encodeURIComponent(actionId) : ""
+				actionId: actionId ? encodeURIComponent(actionId) : ''
 			});
-			this._showSplash();
-			var callback = {
-				success: function(oResponse) {
-					oResponse.argument.contractsObject._hideSplash();
-					var oResults = eval("(" + oResponse.responseText + ")");
-					if (oResults.error == "") {
-						if (oResults.redirect != null && oResults.redirect != "null") {
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					var oResults = serverResponse.json;
+					this._hideSplash();
+					if (oResults.error) {
+						Alfresco.util.PopupManager.displayPrompt({
+							title: 'Ошибка выполнения действия',
+							text: 'При выполнении действия произошла ошибка. Попробуйте обновить страницу и выполнить действие еще раз',
+							buttons: [{
+								text: 'Ок',
+								handler: function dlA_onAction_action() {
+									this.destroy();
+								}
+							}]
+						});
+					} else {
+						if (oResults.redirect && oResults.redirect != 'null') {
 							document.location.href = Alfresco.constants.URL_PAGECONTEXT + oResults.redirect;
 						} else {
 							// document.location.href = document.location.href;
 							// ALF-2803
 							window.location.reload(true);
 						}
-					} else {
-						Alfresco.util.PopupManager.displayPrompt(
-								{
-									title: "Ошибка выполнения действия",
-									text: "При выполнении действия произошла ошибка. Попробуйте обновить страницу и выполнить действие еще раз",
-									buttons: [
-										{
-											text: "Ок",
-											handler: function dlA_onAction_action()
-											{
-												this.destroy();
-											}
-										}]
-								});
 					}
-				},
-				argument: {
-					contractsObject: this
-				},
-				timeout: 60000
+				}
 			};
-			YAHOO.util.Connect.asyncRequest('GET', url, callback);
+			this._showSplash();
+			Alfresco.util.Ajax.jsonGet({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
+			});
 		},
 		/**
 		 * Called when a workflow form has been loaded.
@@ -624,73 +592,72 @@ LogicECM.module = LogicECM.module || {};
 		 * @param response {Object}
 		 */
 		onWorkflowFormLoaded: function StartWorkflow_onWorkflowFormLoaded(response) {
-			var formEl = Dom.get(this.id + "-workflowFormContainer");
-			Dom.addClass(formEl, "hidden");
+			var formEl = Dom.get(this.id + '-workflowFormContainer');
+			Dom.addClass(formEl, 'hidden');
 			formEl.innerHTML = response.serverResponse.responseText;
 		},
 		/**
-		 * Event handler called when the "formContentReady" event is received
+		 * Event handler called when the 'formContentReady' event is received
+		 * @method onStartWorkflowFormContentReady
+		 * @param layer
+		 * @param args
 		 */
 		onStartWorkflowFormContentReady: function FormManager_onStartWorkflowFormContentReady(layer, args) {
-			var formEl = Dom.get(this.id + "-workflowFormContainer");
-			Dom.removeClass(formEl, "hidden");
+			var formEl = Dom.get(this.id + '-workflowFormContainer');
+			Dom.removeClass(formEl, 'hidden');
 		},
 		_showSplash: function() {
-			this.splashScreen = Alfresco.util.PopupManager.displayMessage(
-					{
-						text: Alfresco.util.message("label.loading"),
-						spanClass: "wait",
-						displayTime: 0
-					});
+			this.splashScreen = Alfresco.util.PopupManager.displayMessage({
+				text: Alfresco.util.message('label.loading'),
+				spanClass: 'wait',
+				displayTime: 0
+			});
 		},
 		_hideSplash: function() {
 			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
 		},
 
-        _openMessageWindow: function openMessageWindowFunction(title, message, reload) {
-            Alfresco.util.PopupManager.displayPrompt(
-                {
-                    title: "Результат выполнения операции \"" + title + "\"",
-                    text: message,
-                    noEscape: true,
-                    buttons: [
-                        {
-                            text: "Ок",
-                            handler: function dlA_onAction_action()
-                            {
-                                this.destroy();
-                                if (reload) {
-                                    document.location.href = document.location.href;
-                                }
-                            }
-                        }]
-                });
-        },
-
-
-    });
+		_openMessageWindow: function openMessageWindowFunction(title, message, reload) {
+			Alfresco.util.PopupManager.displayPrompt({
+				title: 'Результат выполнения операции "' + title + '"',
+				text: message,
+				noEscape: true,
+				buttons: [{
+					text: 'Ок',
+					handler: function dlA_onAction_action() {
+						this.destroy();
+						if (reload) {
+							// document.location.href = document.location.href;
+							// ALF-2803
+							window.location.reload(true);
+						}
+					}
+				}]
+			});
+		}
+	});
 })();
 
 (function() {
 	LogicECM.module.EditFieldsConfirm = function EditFieldsConfirm_constructor(htmlId) {
-		var module = LogicECM.module.EditFieldsConfirm.superclass.constructor.call(this, "LogicECM.module.EditFieldsConfirm", htmlId, ["button"]);
+		var module = LogicECM.module.EditFieldsConfirm.superclass.constructor.call(this, 'LogicECM.module.EditFieldsConfirm', htmlId, ['button']);
 		return module;
 	};
 
 	YAHOO.extend(LogicECM.module.EditFieldsConfirm, Alfresco.component.Base, {
 		show: function showEditFieldsConfirm(nodeRef, label, errors, fields) {
-			var containerDiv = document.createElement("div");
+			var containerDiv = document.createElement('div');
 			var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
 					'<div id="confirm-edit-fields-head" class="hd" title="Ошибка действия &quot;' + label + '&quot;">Ошибка действия "' + label + '"</div>' +
 					'<div id="confirm-edit-fields-body" class="bd">' +
 					'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields">Выполнение действия невозможно.<br/>';
 			for (var i = 0; i < errors.length; i++) {
 				form += errors[i];
-				form += "<br/>";
+				form += '<br/>';
 			}
 
 			form += '</div></div>' +
-					'<div class="bdft">'
+					'<div class="bdft">';
 			if (fields.length > 0) {
 				form += '<span id="confirm-edit-fields-edit" class="yui-button yui-push-button">' +
 						'<span class="first-child">' +
@@ -708,27 +675,24 @@ LogicECM.module = LogicECM.module || {};
 					'</div>' +
 					'</div>';
 			containerDiv.innerHTML = form;
-			this.dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv),
-					{
-						width: "35em"
-					});
-			Dom.setStyle("confirm-edit-fields-form-container", "display", "block");
-			this.dialog.show();
-			var button = document.getElementById("confirm-edit-fields-cancel-button");
-			button.onclick = function() {
-				this.dialog.hide();
-			}.bind(this);
-			button = document.getElementById("confirm-edit-fields-edit-button");
-			button.onclick = function() {
-        		this.dialog.hide();
-                var url =  Alfresco.constants.URL_PAGECONTEXT + "document-edit?nodeRef=" + nodeRef;
-
-                var params = "highlightedFields=" + JSON.stringify(fields);
-
-                window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
-            }.bind(this);
+			var dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv), {
+				width: '35em'
+			});
+			Dom.setStyle('confirm-edit-fields-form-container', 'display', 'block');
+			dialog.show();
+			var button = document.getElementById('confirm-edit-fields-cancel-button');
+			if (button) {
+				button.onclick = dialog.hide.bind(dialog);
+			}
+			button = document.getElementById('confirm-edit-fields-edit-button');
+			if (button) {
+				button.onclick = function(dlg, ref, flds) {
+					dlg.hide();
+					var url =  Alfresco.constants.URL_PAGECONTEXT + 'document-edit?nodeRef=' + ref;
+					var params = 'highlightedFields=' + JSON.stringify(flds);
+					window.location.href = url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params);
+				}.bind(button, dialog, nodeRef, fields);
+			}
 		}
-
 	});
-
 })();

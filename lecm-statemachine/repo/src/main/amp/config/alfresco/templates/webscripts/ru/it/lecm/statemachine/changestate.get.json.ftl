@@ -1,4 +1,14 @@
+<#escape x as jsonUtils.encodeJSONString(x)>
 {
-    redirect: "${redirect!"null"}",
-    error: "${error!""}"
+	<#if redirect??>
+		"redirect": "${redirect}",
+	<#else>
+		"redirect": null,
+	</#if>
+	<#if error??>
+		"error": "${error}"
+	<#else>
+		"error": ""
+	</#if>
 }
+</#escape>

@@ -2,7 +2,7 @@
 	<shortname>Actions for Document</shortname>
 	<description>Actions for Document</description>
 	<url>/lecm/statemachine/actions</url>
-	<format default="html">extension</format>
+	<format default="json">extension</format>
 	<authentication>user</authentication>
 	<lifecycle>internal</lifecycle>
     <transaction>none</transaction>
