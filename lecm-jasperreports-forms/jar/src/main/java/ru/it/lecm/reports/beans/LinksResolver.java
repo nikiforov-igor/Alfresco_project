@@ -3,6 +3,8 @@ package ru.it.lecm.reports.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.util.PropertyCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.generators.SubreportBuilder;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
@@ -12,6 +14,8 @@ import java.util.*;
 
 
 public class LinksResolver {
+
+    private static final Logger logger = LoggerFactory.getLogger(LinksResolver.class);
 
     private WKServiceKeeper services;
 
@@ -57,13 +61,17 @@ public class LinksResolver {
 		 */
         // (!) пробуем получить значения, указанные "путями" вида {acco1/acco2/.../field} ...
         // (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
-        Object value;
-        if (curProps != null && curProps.containsKey(linkExpression)) {
-            value = curProps.get(linkExpression);
-        } else if (isSubstCalcExpr(linkExpression)) { // ссылка или выражение ...
-            value = services.getSubstitudeService().getNodeFieldByFormat(docId, linkExpression);
-        } else { // считаем явно заданной константой ...
-            value = linkExpression;
+        Object value = null;
+        try {
+            if (curProps != null && curProps.containsKey(linkExpression)) {
+                value = curProps.get(linkExpression);
+            } else if (isSubstCalcExpr(linkExpression)) { // ссылка или выражение ...
+                value = services.getSubstitudeService().getNodeFieldByFormat(docId, linkExpression);
+            } else { // считаем явно заданной константой ...
+                value = linkExpression;
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
 
         if (value == null) {
