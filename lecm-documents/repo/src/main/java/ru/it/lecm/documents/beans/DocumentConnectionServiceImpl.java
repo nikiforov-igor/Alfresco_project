@@ -66,7 +66,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		NodeRef connectionRef = createFolder(documentRef, DOCUMENT_CONNECTIONS_ROOT_NAME);
-		hideNode(connectionRef, true);
+		hideNode(connectionRef, false);
 		return connectionRef;
 	}
 
@@ -383,7 +383,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		nodeService.createAssociation(connectionNodeRef, connectedDocumentNodeRef, ASSOC_CONNECTED_DOCUMENT);
 		nodeService.createAssociation(connectionNodeRef, typeNodeRef, ASSOC_CONNECTION_TYPE);
 
-		hideNode(connectionNodeRef, true);
+		hideNode(connectionNodeRef, false);
 
 		return connectionNodeRef;
 	}
