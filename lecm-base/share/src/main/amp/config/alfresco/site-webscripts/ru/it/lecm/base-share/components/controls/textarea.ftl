@@ -50,8 +50,12 @@
     function createLecmTextArea(){
         var control = new LogicECM.module.TextArea("${fieldHtmlId}").setMessages(${messages});
         control.setOptions({
-            fieldId: "${field.configName}",
-            formId: "${args.htmlid}",
+            <#if field.configName??>
+                fieldId: "${field.configName}",
+            </#if>
+            <#if args.htmlid??>
+                formId: "${args.htmlid}",
+            </#if>
             disabled: ${disabled?string}
         });
     }
