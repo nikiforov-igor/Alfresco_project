@@ -628,6 +628,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var currentNode = args[1].currentNode;
                 this.currentNode = currentNode;
                 if (currentNode !== null) {
+                    var isReportNode = this.currentNode.data.nodeType == "lecm-arm:reports-node";
+                    var isHtmlNode = this.currentNode.data.nodeType == "lecm-arm:html-node";
+                    if (isReportNode || isHtmlNode) {
+                        Dom.setStyle(this.id, "display", "none");
+                    } else {
+                        Dom.setStyle(this.id, "display", "block");
+                    }
                     var filters = currentNode.data.filters;
                     var hasFilters = filters != null && filters.length > 0;
                     var hasColumns = currentNode.data.columns != null && currentNode.data.columns.length > 0;
