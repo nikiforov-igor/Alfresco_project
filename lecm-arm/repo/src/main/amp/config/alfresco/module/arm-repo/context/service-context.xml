@@ -59,6 +59,7 @@
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="authorityService" ref="authorityService" />
+        <property name="processorService" ref="searchQueryProcessorService"/>
         <property name="columnsCache" ref="arm.columns.cache"/>
         <property name="childNodesCache" ref="arm.nodes.cache"/>
         <property name="nodesTypesCache" ref="arm.nodes.types.cache"/>
