@@ -63,6 +63,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             currentToDate: null,
 
+            options: {
+                fillInCurrentDate: false
+            },
+
             /**
              * Fired by YUI when parent element is available for scripting.
              * Component initialisation, including instantiation of YUI widgets and event listener binding.
@@ -94,6 +98,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                     // Write output back (as ISO8601)
                     Dom.get(this.valueHtmlId).value = fullDate.join("|");
+                } else {
+                    if (this.options.fillInCurrentDate) {
+                        var currentDate = new Date();
+                        var currentDateValue = currentDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+                        Dom.get(this.id + "-date-from").value = currentDateValue;
+                        Dom.get(this.id + "-date-to").value = currentDateValue;
+
+                        this.currentFromDate = Alfresco.util.toISO8601(currentDate);
+                        this.currentToDate = Alfresco.util.toISO8601(currentDate);
+
+                        this._updateCurrentValue();
+                    }
                 }
 
                 // construct the pickers
@@ -432,6 +448,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.currentToDate = "";
                     this._updateCurrentValue();
                 }
+            },
+
+            _msg: function (messageId) {
+                var me = this;
+                return Alfresco.util.message.call(me, messageId, "LogicECM.DatePicker", Array.prototype.slice.call(arguments).slice(1));
             }
         });
 })();

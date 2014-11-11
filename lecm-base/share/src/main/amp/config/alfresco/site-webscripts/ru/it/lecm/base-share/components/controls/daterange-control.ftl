@@ -36,7 +36,11 @@
     }
 
     function createDateRangeControl() {
-        var dsf = new LogicECM.DateRangeControl("${controlId}", "${fieldHtmlId}").setMessages(${messages});
+        var dsf = new LogicECM.DateRangeControl("${controlId}", "${fieldHtmlId}").setOptions(
+                {
+                fillInCurrentDate:<#if field.control.params.fillInCurrentDate??>${field.control.params.fillInCurrentDate?string}<#else>false</#if>
+                }
+        ).setMessages(${messages});
     }
     YAHOO.util.Event.onDOMReady(init);
 
