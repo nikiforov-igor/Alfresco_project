@@ -18,6 +18,7 @@ import ru.it.lecm.arm.beans.childRules.ArmDictionaryChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmQueryChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -41,6 +42,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	private NamespaceService namespaceService;
     private OrgstructureBean orgstructureBean;
     private AuthorityService authorityService;
+    private SearchQueryProcessorService processorService;
 
     private SimpleCache<String, List<ArmColumn>> columnsCache;
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
@@ -121,6 +123,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     public void setChildRulesCache(SimpleCache<NodeRef, ArmBaseChildRule> childRulesCache) {
         this.childRulesCache = childRulesCache;
+    }
+
+    public void setProcessorService(SearchQueryProcessorService processorService) {
+        this.processorService = processorService;
     }
 
     @Override
@@ -472,7 +478,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                     Map<QName, Serializable> props = getCachedProperties(query);
                     if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
                         result = new ArmQueryChildRule();
-                        ((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
+                        String processedQuery = (String) props.get(PROP_LIST_QUERY_CHILD_RULE);
+                        processedQuery = processorService.processQuery(processedQuery);
+                        ((ArmQueryChildRule) result).setListQuery(processedQuery);
                         ((ArmQueryChildRule) result).setSearchService(searchService);
                     } else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
                         result = new ArmDictionaryChildRule();
