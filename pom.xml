@@ -487,6 +487,11 @@
                 <artifactId>xbean-spring</artifactId>
                 <version>3.6</version>
             </dependency>
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>2.5</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -714,7 +719,7 @@
                 <redeploy.process.definitions>true</redeploy.process.definitions>
             </properties>
         </profile>
-        <profile>
+		<profile>
             <id>SED</id>
             <modules>
                 <module>lecm-incoming</module>

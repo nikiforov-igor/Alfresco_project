@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import org.quartz.CronExpression;
 
 /**
  * User: PMelnikov
@@ -557,9 +558,15 @@ public class BPMNGenerator {
 			boundaryEvent.setAttribute("cancelActivity", String.valueOf(statuses.size()>0));
 			
 			Element boundaryEventDefinition = doc.createElement("timerEventDefinition");
-			Element timeDuration = doc.createElement("timeDuration");
-			timeDuration.setTextContent(timerDuration);
-			boundaryEventDefinition.appendChild(timeDuration);
+			Element timeDescription;
+			if (timerDuration.startsWith("R") || CronExpression.isValidExpression(timerDuration)) {
+				timeDescription = doc.createElement("timeCycle");
+			} else {
+				timeDescription = doc.createElement("timeDuration");
+			}
+			
+			timeDescription.setTextContent(timerDuration);
+			boundaryEventDefinition.appendChild(timeDescription);
 			boundaryEvent.appendChild(boundaryEventDefinition);
 			
 			parentElement.appendChild(boundaryEvent);
