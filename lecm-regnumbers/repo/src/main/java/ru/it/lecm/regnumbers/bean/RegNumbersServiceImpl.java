@@ -284,7 +284,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             }
             NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
             Serializable number = nodeService.getProperty(documentNode, propNumber);
-            String regNumber;
+            String regNumber = null;
             Date regDate;
             if (number != null && !number.toString().isEmpty() && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
                 regNumber = number.toString();
@@ -298,12 +298,16 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                 QName documentType = nodeService.getType(documentNode);
                 // нам нужно получить уникальный регистрационный номер документа.
                 // есть вероятность, что сгененрированный номер уже используется, потому что задан руками
-                do {
+				do {
+					String prevRegNum = regNumber;
                     if (repeatedDocument != null) {
                         regNumber = getRepeatedNumber(documentNode);
                     } else {
                         regNumber = templateDictionary != null ? getNumber(documentNode, templateDictionary) : getNumber(documentNode, dictionaryTemplateCode);
                     }
+					if (regNumber.equals(prevRegNum)){
+						throw new TemplateRunException("Can't generate unique regNumber for document "+documentNode.toString()+": reg. number didn't modyfied after retry.");
+					}
                 } while (!isNumberUnique(regNumber, documentType));
 
                 nodeService.setProperty(documentNode, propNumber, regNumber);
