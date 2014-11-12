@@ -6,12 +6,6 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="ord.association-handler.policy"
-		  class="ru.it.lecm.ord.policies.AssociationHandlerPolicy"
-		  init-method="init"
-		  parent="logicEcmAssociationPolicy"
-		  depends-on="ord.document.models.bootstrap"/>
-
 	<bean id="ord.ORDFinalSharedFolderPolicy"
 		  class="ru.it.lecm.ord.policies.ORDFinalSharedFolderPolicy"
 		  init-method="init" depends-on="ord.document.models.bootstrap"
