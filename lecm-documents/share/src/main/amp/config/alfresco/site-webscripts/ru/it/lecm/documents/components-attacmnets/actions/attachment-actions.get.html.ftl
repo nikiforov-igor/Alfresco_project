@@ -12,7 +12,7 @@
          siteId: <#if site??>"${site?js_string}"<#else>null</#if>,
          containerId: "${container?js_string}",
          rootNode: "${rootNode}",
-         replicationUrlMapping: ${replicationUrlMappingJSON!"{}"},
+         replicationUrlMapping: {},
          documentDetails: ${attachmentDetailsJSON},
          repositoryBrowsing: ${(rootNode??)?string},
 	     documentNodeRef: "${document.nodeRef!''}"
