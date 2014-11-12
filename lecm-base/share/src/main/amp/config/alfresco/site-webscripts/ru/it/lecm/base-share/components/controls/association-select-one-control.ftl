@@ -51,27 +51,26 @@
 </#if>
 
 <script type="text/javascript">//<![CDATA[
-(function()
-{
+(function () {
     function init() {
         LogicECM.module.Base.Util.loadScripts(['scripts/lecm-base/components/lecm-association-selectone.js'],
                 createAssociationSelectOne,
                 ["container", "resize", "datasource"]);
     }
 
-    function createAssociationSelectOne(){
+    function createAssociationSelectOne() {
         var control = new LogicECM.module.AssociationSelectOne("${fieldHtmlId}").setMessages(${messages});
         control.setOptions(
                 {
-    	            <#if disabled>
-    		            disabled: true,
-    	            </#if>
-                    <#if field.control.params.parentNodeRef??>
-                        parentNodeRef: "${field.control.params.parentNodeRef}",
-                    </#if>
-                    <#if field.control.params.startLocation??>
-                        startLocation: "${field.control.params.startLocation}",
-                    </#if>
+                <#if disabled>
+                    disabled: true,
+                </#if>
+                <#if field.control.params.parentNodeRef??>
+                    parentNodeRef: "${field.control.params.parentNodeRef}",
+                </#if>
+                <#if field.control.params.startLocation??>
+                    startLocation: "${field.control.params.startLocation}",
+                </#if>
                     mandatory: ${isFieldMandatory?string},
                     itemType: "${ field.control.params.endpointType ! field.endpointType! }",
                     itemFamily: "node",
@@ -81,23 +80,27 @@
                     nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
                     sortProp: "${field.control.params.sortProp!'cm:name'}",
                     showCreateNewButton: ${showCreateNewButton?string},
-    	            notSelectedOptionShow: ${notSelectedOptionShow?string},
-    	            notSelectedText: "${notSelectedText?string}",
-				<#if field.control.params.customDatasource??>
-					customDatasource: "${field.control.params.customDatasource}",
-				</#if>
-    	            <#if field.control.params.primaryCascading??>
-                        primaryCascading: ${field.control.params.primaryCascading},
-    		        </#if>
-                    <#if field.control.params.changeItemsFireAction??>
-                        changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
-                    </#if>
-    	            <#if field.control.params.defaultValueDataSource??>
-    		            defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
-    	            </#if>
-                    <#if defaultValue?has_content>
-                        defaultValue: "${defaultValue?string}",
-                    </#if>
+                    notSelectedOptionShow: ${notSelectedOptionShow?string},
+                    additionalFilter: "${field.control.params.additionalFilter!''}",
+                    notSelectedText: "${notSelectedText?string}",
+                <#if field.control.params.customDatasource??>
+                    customDatasource: "${field.control.params.customDatasource}",
+                </#if>
+                <#if field.control.params.primaryCascading??>
+                    primaryCascading: ${field.control.params.primaryCascading},
+                </#if>
+                <#if field.control.params.changeItemsFireAction??>
+                    changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
+                </#if>
+                <#if field.control.params.defaultValueDataSource??>
+                    defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+                </#if>
+                <#if field.control.params.forceMultiple??>
+                    multipleSelect: ${field.control.params.forceMultiple?string},
+                </#if>
+                <#if defaultValue?has_content>
+                    defaultValue: "${defaultValue?string}",
+                </#if>
                     fieldId: "${fieldId}",
                     formId: "${args.htmlid}"
                 });
@@ -145,6 +148,7 @@
 			<select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
 			        <#if field.description??>title="${field.description}"</#if>
 			        <#if field.control.params.size??>size="${field.control.params.size}"</#if>
+                    <#if field.control.params.forceMultiple??>multiple="multiple"</#if>
 			        <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
 				<#if notSelectedOptionShow>
 					<option value="">

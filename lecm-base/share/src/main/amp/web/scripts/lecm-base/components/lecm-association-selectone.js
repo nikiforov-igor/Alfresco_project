@@ -74,6 +74,10 @@ LogicECM.module = LogicECM.module || {};
 
                 notSelectedText: "",
 
+                additionalFilter: "",
+
+                multipleSelect: false,
+
 	            disabled: false,
 
                 defaultValue: null,
@@ -149,7 +153,22 @@ LogicECM.module = LogicECM.module || {};
             },
 
 	        onSelectChange: function AssociationTreeViewer_onSelectChange() {
-		        var selectValue = this.selectItem.value;
+                var selectValue = null;
+
+                if (!this.options.multipleSelect) {
+                    selectValue = this.selectItem.value;
+                } else {
+                    if (this.selectItem !== null) {
+                        var values = new Array();
+                        for (var j = 0, jj = this.selectItem.options.length; j < jj; j++) {
+                            if (this.selectItem.options[j].selected) {
+                                values.push(this.selectItem.options[j].value);
+                            }
+                        }
+
+                        selectValue = values.join(",");
+                    }
+                }
 		        var addedItem = "";
 		        var removedItem = "";
 
@@ -492,9 +511,11 @@ LogicECM.module = LogicECM.module || {};
 
             _generateChildrenUrlParams: function AssociationSelectOne__generateChildrenUrlParams(searchTerm)
             {
+                var additionalFilter = this.options.additionalFilter;
                 var params =  "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                     "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
-                    "&sortProp=" + encodeURIComponent(this.options.sortProp);
+                    "&sortProp=" + encodeURIComponent(this.options.sortProp) +
+                    "&additionalFilter=" + encodeURIComponent(additionalFilter);
 
                 if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
                 {
