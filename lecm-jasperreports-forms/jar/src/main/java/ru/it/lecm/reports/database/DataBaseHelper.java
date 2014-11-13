@@ -68,13 +68,13 @@ public class DataBaseHelper {
                         }
                     }
                 }
-            }
 
-            if (useDefault) {
-                try {
-                    this.connection = getBasicDataSource().getConnection();
-                } catch (SQLException e) {
-                    log.error(e.getMessage(), e);
+                if (useDefault) {
+                    try {
+                        this.connection = getBasicDataSource().getConnection();
+                    } catch (SQLException e) {
+                        log.error(e.getMessage(), e);
+                    }
                 }
             }
         } catch (SQLException | ClassNotFoundException se) {
