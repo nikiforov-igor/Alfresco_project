@@ -76,7 +76,8 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 									this.createRow(YAHOO.lang.substitute(template, {
 										bold: index === 0 ? 'bold' : '',
 										message: this.message[list[index].key],
-										href: Alfresco.URL_PAGECONTEXT + 'contracts-list?query=' + list[index].filter,
+										//TODO: на страницу contract-list переходить уже не надо. Надо уточнить куда переходить из этого дашлета
+										href: Alfresco.constants.URL_PAGECONTEXT + 'contracts-list?query=' + list[index].filter,
 										amount: list[index].amount
 									}));
 								}
