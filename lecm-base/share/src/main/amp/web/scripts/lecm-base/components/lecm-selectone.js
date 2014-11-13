@@ -38,6 +38,7 @@ LogicECM.module = LogicECM.module || {};
             currentNodeRef: null,
             destination: null,
             updateOnAction: null,
+	        changeItemFireAction: null,
             fieldId: null,
             formId: null
         },
@@ -76,6 +77,13 @@ LogicECM.module = LogicECM.module || {};
                             if (this.options.mandatory) {
                                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
                             }
+	                        if (this.options.changeItemFireAction != null && this.options.changeItemFireAction != "") {
+		                        YAHOO.Bubbling.fire(this.options.changeItemFireAction, {
+			                        selectedItem: select.value,
+			                        formId: this.options.formId,
+			                        fieldId: this.options.fieldId
+		                        });
+	                        }
                         }
                     },
                     scope: this
@@ -115,6 +123,13 @@ LogicECM.module = LogicECM.module || {};
             if (this.options.mandatory) {
                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
             }
+	        if (this.options.changeItemFireAction != null && this.options.changeItemFireAction != "") {
+		        YAHOO.Bubbling.fire(this.options.changeItemFireAction, {
+			        selectedItem: select.value,
+			        formId: this.options.formId,
+			        fieldId: this.options.fieldId
+		        });
+	        }
         },
 
         onDisableControl: function (layer, args) {

@@ -20,6 +20,9 @@
             currentNodeRef: "${form.arguments.itemId}",
             destination: "${args.destination!""}",
             updateOnAction: "${field.control.params.updateOnAction!""}",
+	        <#if field.control.params.changeItemFireAction??>
+		        changeItemFireAction: "${field.control.params.changeItemFireAction}",
+	        </#if>
             fieldId: "${field.configName}",
             formId: "${args.htmlid}"
         }).setMessages(${messages});
