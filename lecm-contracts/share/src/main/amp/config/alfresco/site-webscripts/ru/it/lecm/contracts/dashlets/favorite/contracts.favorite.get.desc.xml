@@ -1,0 +1,6 @@
+<webscript>
+	<shortname>Избранные документы</shortname>
+	<description>Избранные документы</description>
+	<family>contracts-dashlet</family>
+	<url>/lecm/contracts/components/favorite</url>
+</webscript>
