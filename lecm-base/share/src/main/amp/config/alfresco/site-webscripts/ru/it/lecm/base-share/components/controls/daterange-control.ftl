@@ -24,7 +24,17 @@
 </#if>
 
 <#assign viewFormat>${msg("form.control.date-picker.view.date.format")}</#assign>
-<#assign defaultDate><#if (field.control.params.defaultFrom?? || field.control.params.defaultTo??)>${field.control.params.defaultFrom!""}|${field.control.params.defaultTo!""}</#if></#assign>
+<#assign defaultDate>
+	<#if (field.control.params.defaultFrom?? || field.control.params.defaultTo??)>
+		${field.control.params.defaultFrom!""}|${field.control.params.defaultTo!""}
+	</#if>
+</#assign>
+<#if form.mode == "create" && defaultDate?string == "">
+	<#if form.arguments[field.name + "-date-range"]?has_content>
+		<#assign defaultDate=form.arguments[field.name + "-date-range"]>
+	</#if>
+</#if>
+
 <#assign controlId = fieldHtmlId + "-cntrl">
 
 <script type="text/javascript">//<![CDATA[
