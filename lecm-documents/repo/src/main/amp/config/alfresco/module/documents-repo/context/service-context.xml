@@ -213,6 +213,7 @@
         <property name="nodeService" ref="nodeService"/>
 	    <property name="businessJournalService" ref="businessJournalService"/>
 	    <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
 		<!--<property name="behaviourFilter" ref="policyBehaviourFilter"/>-->
     </bean>
 

@@ -4,10 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
@@ -16,14 +13,12 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
-import org.alfresco.service.cmr.repository.InvalidNodeRefException;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
-import static ru.it.lecm.documents.beans.DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT;
 
 /**
  * User: AIvkin Date: 18.02.13 Time: 13:55
@@ -298,8 +293,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		if (connections != null) {
 			for (AssociationRef assocRef : connections) {
 				NodeRef connectionRef = assocRef.getSourceRef();
-
-				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
+                List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+				if (!primary.isEmpty() && !isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
 					results.add(connectionRef);
 				}
 			}
@@ -327,8 +322,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 			for (AssociationRef assocRef : connections) {
 				NodeRef connectionRef = assocRef.getSourceRef();
-
-				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
+                List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+                if (!primary.isEmpty() && !isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
 					List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
 					if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
 							&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
@@ -547,7 +542,10 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 						if (connectionsAssocRefs != null) {
 							for (AssociationRef assocRef : connectionsAssocRefs) {
 								NodeRef connectionRef = assocRef.getSourceRef();
-								connections.add(connectionRef);
+                                List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+                                if (!primary.isEmpty()) {
+                                    connections.add(connectionRef);
+                                }
 							}
 						}
 					} catch (InvalidNodeRefException ex) {

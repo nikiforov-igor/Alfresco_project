@@ -1,7 +1,10 @@
 package ru.it.lecm.documents.policy;
 
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.node.NodeServicePolicies.BeforeCreateNodePolicy;
+import org.alfresco.repo.node.NodeServicePolicies.BeforeDeleteNodePolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateNodePolicy;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -11,6 +14,8 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentConnectionServiceImpl;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
@@ -18,10 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.alfresco.repo.node.NodeServicePolicies.BeforeCreateNodePolicy;
-import org.alfresco.repo.node.NodeServicePolicies.BeforeDeleteNodePolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnCreateNodePolicy;
 
 /**
  * User: AIvkin
@@ -34,6 +35,7 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 	private NodeService nodeService;
 	private BusinessJournalService businessJournalService;
 	private LecmPermissionService lecmPermissionService;
+    private DocumentConnectionServiceImpl documentConnectionService;
 //	private BehaviourFilter behaviourFilter;
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
@@ -52,6 +54,10 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
+    public void setDocumentConnectionService(DocumentConnectionServiceImpl documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
+    }
+
 //	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 //		this.behaviourFilter = behaviourFilter;
 //	}
@@ -61,7 +67,11 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 				DocumentConnectionService.TYPE_CONNECTION, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT,
 				new JavaBehaviour(this, "onCreateAssociation"));
 
-		policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME,
+        policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME,
+                DocumentService.TYPE_BASE_DOCUMENT, DocumentConnectionService.ASSOC_TEMP_CONNECTION,
+                new JavaBehaviour(this, "onCreateTempAssociation"));
+
+        policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(BeforeDeleteNodePolicy.QNAME,
@@ -188,8 +198,22 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 		}
 		if (document != null) {
 			lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_CREATE, document);
-		} else {
-			throw new AlfrescoRuntimeException("Can't get document for connection");
 		}
 	}
+
+    public void onCreateTempAssociation(AssociationRef nodeAssocRef) {
+        //Текущий документ
+        NodeRef primary = nodeAssocRef.getSourceRef();
+        //Временная связь
+        NodeRef tempConnection = nodeAssocRef.getTargetRef();
+        //Присоединяемый документ
+        NodeRef connected = nodeService.getTargetAssocs(tempConnection, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT).get(0).getTargetRef();
+        //Тип связи
+        NodeRef type = nodeService.getTargetAssocs(tempConnection, DocumentConnectionService.ASSOC_CONNECTION_TYPE).get(0).getTargetRef();
+        //Создаем связь
+        documentConnectionService.createConnection(primary, connected, type, false, true);
+        //Удаляем временную связь
+        nodeService.deleteNode(tempConnection);
+    }
+
 }

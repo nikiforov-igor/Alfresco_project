@@ -1,9 +1,10 @@
 package ru.it.lecm.documents.beans;
 
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+
+import java.util.List;
 
 /**
  * User: AIvkin
@@ -24,6 +25,7 @@ public interface DocumentConnectionService {
 
 	public static final QName ASSOC_PRIMARY_DOCUMENT = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "primary-document-assoc");
 	public static final QName ASSOC_CONNECTED_DOCUMENT = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connected-document-assoc");
+	public static final QName ASSOC_TEMP_CONNECTION = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "temp-connection-assoc");
 	public static final QName ASSOC_CONNECTION_TYPE = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connection-type-assoc");
 
 	public static final QName PROP_IS_SYSTEM = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "is-system");

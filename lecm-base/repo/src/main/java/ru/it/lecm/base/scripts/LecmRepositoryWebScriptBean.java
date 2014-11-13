@@ -1,7 +1,5 @@
 package ru.it.lecm.base.scripts;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.ServiceRegistry;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -69,6 +67,38 @@ public class LecmRepositoryWebScriptBean extends BaseWebScript {
         ScriptNode node = null;
         try {
             node = new ScriptNode(repositoryStructureHelper.getDraftsRef(personRef.getNodeRef()), serviceRegistry, getScope());
+        } catch (WriteTransactionNeededException ex) {
+            throw new RuntimeException(ex);
+        }
+        return node;
+    }
+
+    /**
+     * получение ссылки на папку c временными файлами
+     *
+     * @param personRef ссылки на cm:person
+     * @return
+     */
+    public ScriptNode getTempRef(final ScriptNode personRef) {
+        ScriptNode node = null;
+        try {
+            node = new ScriptNode(repositoryStructureHelper.getUserTemp(personRef.getNodeRef(), true), serviceRegistry, getScope());
+        } catch (WriteTransactionNeededException ex) {
+            throw new RuntimeException(ex);
+        }
+        return node;
+    }
+
+    /**
+     * получение ссылки на папку c временными файлами
+     *
+     * @param personRef ссылки на cm:person
+     * @return
+     */
+    public ScriptNode createTemp(final ScriptNode personRef) {
+        ScriptNode node = null;
+        try {
+            node = new ScriptNode(repositoryStructureHelper.createUserTemp(personRef.getNodeRef()), serviceRegistry, getScope());
         } catch (WriteTransactionNeededException ex) {
             throw new RuntimeException(ex);
         }
