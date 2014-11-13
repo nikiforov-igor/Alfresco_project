@@ -101,8 +101,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         Dom.get(this.id + "-date-from").value = currentDateValue;
                         Dom.get(this.id + "-date-to").value = currentDateValue;
 
-                        this.currentFromDate = Alfresco.util.toISO8601(currentDate);
-                        this.currentToDate = Alfresco.util.toISO8601(currentDate);
+                        var dateWithoutTime = new Date(currentDate.getFullYear(), currentDate.getMonth(),currentDate.getDate());
+                        this.currentFromDate = Alfresco.util.toISO8601(dateWithoutTime, {"milliseconds": false});
+                        this.currentToDate = Alfresco.util.toISO8601(dateWithoutTime, {"milliseconds": false});
 
                         this._updateCurrentValue();
                     }
