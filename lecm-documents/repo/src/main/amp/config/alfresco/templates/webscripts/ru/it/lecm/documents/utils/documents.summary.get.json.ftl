@@ -5,8 +5,8 @@
         <#list list as item>
         {
         "key" : "${item.key}",
-        "skip": "${item.skip?string}",
-        "amount" : "${item.amount}",
+        "skip": ${item.skip?string},
+        "amount" : ${item.amount},
         "filter" : "${item.filter}"
         }
             <#if item_has_next>,</#if>
@@ -15,7 +15,7 @@
 "members": {
     <#list members as member>
     "key": "${member.key}",
-    "amountMembers": "${member.amountMembers}"
+    "amountMembers": ${member.amountMembers}
     </#list>
 }
 }
