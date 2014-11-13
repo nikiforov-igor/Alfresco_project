@@ -9,7 +9,7 @@ LogicECM.module = LogicECM.module || {};
 	var Dom = YAHOO.util.Dom;
 
 	LogicECM.module.TextfieldWithDefaultValue = function(fieldHtmlId) {
-		LogicECM.module.Checkbox.superclass.constructor.call(this, "LogicECM.module.TextfieldWithDefaultValue", fieldHtmlId, ["container", "datasource"]);
+        LogicECM.module.TextfieldWithDefaultValue.superclass.constructor.call(this, "LogicECM.module.TextfieldWithDefaultValue", fieldHtmlId, ["container", "datasource"]);
 		return this;
 	};
 
