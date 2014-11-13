@@ -135,11 +135,13 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 		}
 
 		List<String> eventCats = new ArrayList<>();
-		StringTokenizer stEventCategories = new StringTokenizer(eventCategories, ",");
-		while (stEventCategories.hasMoreTokens()) {
-			String nodeRefStr = stEventCategories.nextToken().trim();
-			if (NodeRef.isNodeRef(nodeRefStr) && nodeService.exists(new NodeRef(nodeRefStr))) {
-				eventCats.add(nodeRefStr);
+		if (eventCategories != null) {
+			StringTokenizer stEventCategories = new StringTokenizer(eventCategories, ",");
+			while (stEventCategories.hasMoreTokens()) {
+				String nodeRefStr = stEventCategories.nextToken().trim();
+				if (NodeRef.isNodeRef(nodeRefStr) && nodeService.exists(new NodeRef(nodeRefStr))) {
+					eventCats.add(nodeRefStr);
+				}
 			}
 		}
 

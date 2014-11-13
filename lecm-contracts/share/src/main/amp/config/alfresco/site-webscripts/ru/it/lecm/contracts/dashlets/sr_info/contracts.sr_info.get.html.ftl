@@ -1,11 +1,5 @@
 <#assign id = args.htmlid>
 
-<script type="text/javascript">
-(function() {
-	LogicECM.module.Base.Util.loadCSS(['css/lecm-contracts/contracts-sr.css']);
-})();
-</script>
-
 <div class="dashlet contracts-sr-info bordered">
 	<div class="title dashlet-title">
 		<span>${msg("label.title")}</span>
@@ -22,3 +16,9 @@
 		</#if>
 	</div>
 </div>
+
+<script type="text/javascript">
+(function() {
+	LogicECM.module.Base.Util.loadCSS(['css/lecm-contracts/contracts-sr.css']);
+})();
+</script>
