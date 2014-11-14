@@ -798,6 +798,15 @@
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
+            <form id="datagrid_Избранное">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:image"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document:ext-present-string"/>
+                    <show id="lecm-document:list-present-string"/>
+                </field-visibility>
+            </form>
             <form id="document-journal">
                 <field-visibility>
                     <show id="cm:name"/>

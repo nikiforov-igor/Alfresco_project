@@ -43,8 +43,8 @@
         </component>
 
         <component>
-            <region-id>tasks</region-id>
-            <url>/lecm/contracts/components/tasks</url>
+            <region-id>favorites</region-id>
+            <url>/lecm/contracts/components/favorite</url>
         </component>
 
         <component>
