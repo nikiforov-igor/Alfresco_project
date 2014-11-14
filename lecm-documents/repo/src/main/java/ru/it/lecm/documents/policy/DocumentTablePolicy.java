@@ -138,7 +138,7 @@ public class DocumentTablePolicy extends BaseBean {
                                                         logger.debug("Can't create table data object", ex);
                                                         throw new RuntimeException(ex);
                                                     }
-                            hideNode(tableData, true);
+                            hideNode(tableData, false);
 							nodeService.createAssociation(nodeRef, tableData, assocName);
 
 							documentTableService.createTotalRow(tableData);
