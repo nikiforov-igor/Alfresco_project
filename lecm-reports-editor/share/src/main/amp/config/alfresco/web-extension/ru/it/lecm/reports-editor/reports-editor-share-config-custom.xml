@@ -780,7 +780,7 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter" help-id="column.order.help"/>
-                    <field id="lecm-rpeditor:dataColumnMandatory" set="settings"/>
+                    <field id="lecm-rpeditor:dataColumnMandatory" set="parameter"/>
                     <field id="lecm-rpeditor:dataColumnControlParams" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
