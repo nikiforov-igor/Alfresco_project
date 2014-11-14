@@ -64,10 +64,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             currentToDate: null,
 
             options: {
-                maxDateDefault: null,
                 toDateDefault: "NOW", //NEXT_MONTH, START_YEAR, LAST_MONTH, NOW
                 fromDateDefault: "LAST_MONTH",
-                minDateDefault: null
+                fillDates: false
             },
 
             /**
@@ -77,32 +76,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DateRange_onReady() {
-                var toDate = new Date();
-                var fromDate = new Date();
-
-                var fromDayKey = this.options.fromDateDefault;
-                if (fromDayKey != null && fromDayKey != "NOW") {
-                    if (fromDayKey == "START_YEAR") {
-                        fromDate.setMonth(0);
-                        fromDate.setDate(1);
-                    } else if (fromDayKey == "NEXT_MONTH") {
-                        fromDate.setMonth(toDate.getMonth() + 1);
-                    } else {
-                        fromDate.setMonth(toDate.getMonth() - 1);
-                    }
-                }
-
-                var toDayKey = this.options.toDateDefault;
-                if (toDayKey != null && toDayKey != "NOW") {
-                    if (toDayKey == "START_YEAR") {
-                        toDayKey.setMonth(0);
-                        toDayKey.setDate(1);
-                    } else if (fromDayKey == "LAST_MONTH") {
-                        toDayKey.setMonth(toDate.getMonth() - 1);
-                    } else {
-                        toDayKey.setMonth(toDate.getMonth() + 1);
-                    }
-                }
+                var toDate = this._getDateByKey(this.options.toDateDefault);
+                var fromDate = this._getDateByKey(this.options.fromDateDefault);
 
                 if (Dom.get(this.valueHtmlId).value) {
                     var fullDate = Dom.get(this.valueHtmlId).value.split("|");
@@ -121,27 +96,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // Write output back (as ISO8601)
                     Dom.get(this.valueHtmlId).value = fullDate.join("|");
                 } else {
-                    if (this.options.minDateDefault != null) {
-                        var minDate = null;
+                    if (this.options.fillDates) {
+                        Dom.get(this.id + "-date-from").value = fromDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+                        this.currentFromDate = Alfresco.util.toISO8601(new Date(fromDate.getFullYear(), fromDate.getMonth(),fromDate.getDate()), {"milliseconds": false});
 
-                        if (this.options.minDateDefault !== "NOW") {
-                            minDate = Alfresco.util.fromISO8601(this.options.minDateDefault);
-                        } else {
-                            minDate = new Date();
-                        }
-
-                        Dom.get(this.id + "-date-from").value = minDate.toString(this._msg("form.control.date-picker.entry.date.format"));
-                        this.currentFromDate = Alfresco.util.toISO8601(new Date(minDate.getFullYear(), minDate.getMonth(),minDate.getDate()), {"milliseconds": false});
-                    }
-                    if (this.options.maxDateDefault != null) {
-                        var maxDate = null;
-                        if (this.options.maxDateDefault !== "NOW") {
-                            maxDate = Alfresco.util.fromISO8601(this.options.maxDateDefault);
-                        } else {
-                            maxDate = new Date();
-                        }
-                        Dom.get(this.id + "-date-to").value = maxDate.toString(this._msg("form.control.date-picker.entry.date.format"));
-                        this.currentToDate = Alfresco.util.toISO8601(new Date(maxDate.getFullYear(), maxDate.getMonth(),maxDate.getDate()), {"milliseconds": false});
+                        Dom.get(this.id + "-date-to").value = toDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+                        this.currentToDate = Alfresco.util.toISO8601(new Date(toDate.getFullYear(), toDate.getMonth(),toDate.getDate()), {"milliseconds": false});
                     }
                     this._updateCurrentValue();
                 }
@@ -208,6 +168,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // render the calendar controls
                 this.widgets.calendarFrom.render();
                 this.widgets.calendarTo.render();
+            },
+
+            _getDateByKey: function (key) {
+                var date = new Date();
+                if (key != null && key != "NOW") {
+                    if (key == "START_YEAR") {
+                        date.setMonth(0);
+                        date.setDate(1);
+                    } else if (key == "NEXT_MONTH") {
+                        date.setMonth(date.getMonth() + 1);
+                    } else if (key == "LAST_MONTH"){
+                        date.setMonth(date.getMonth() - 1);
+                    }
+                }
+                return date;
             },
 
             /**
