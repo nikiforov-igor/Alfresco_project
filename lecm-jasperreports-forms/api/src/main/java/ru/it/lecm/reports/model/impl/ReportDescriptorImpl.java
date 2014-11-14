@@ -103,7 +103,7 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
                 if (item.isSubReport()) {
                     SubReportDescriptorImpl subItem = (SubReportDescriptorImpl)item;
                     String destColumn = subItem.getDestColumnName();
-                    ColumnDescriptor cd = dsDescriptor.findColumnByName(destColumn);
+                    ColumnDescriptor cd = getDsDescriptor().findColumnByName(destColumn);
                     if (cd != null) {
                         // тип колонки в основном отчёте, которая соот-вет подотчёту:
                         //    String, если используется форматирование
