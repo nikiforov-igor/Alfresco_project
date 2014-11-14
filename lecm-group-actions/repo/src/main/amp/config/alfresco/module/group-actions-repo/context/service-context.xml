@@ -23,7 +23,7 @@
 
     <bean id="groupActionsService" init-method="init" parent="baseBean"
 		  class="ru.it.lecm.actions.bean.GroupActionsServiceImpl"
-		  depends-on="groupActions.modelBootstrap">
+		  depends-on="groupActions.modelBootstrap, statemachineEditor.editorModelBootstrap">
         <property name="dictionaryService" ref="dictionaryService"/>
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <!--<property name="stateMachineService"  ref="stateMachineHelper"/>-->
