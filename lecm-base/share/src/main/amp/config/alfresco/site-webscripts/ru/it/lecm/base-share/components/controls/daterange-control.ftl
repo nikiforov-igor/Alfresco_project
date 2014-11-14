@@ -48,7 +48,15 @@
     function createDateRangeControl() {
         var dsf = new LogicECM.DateRangeControl("${controlId}", "${fieldHtmlId}").setOptions(
                 {
-                fillInCurrentDate:<#if field.control.params.fillInCurrentDate??>${field.control.params.fillInCurrentDate?string}<#else>false</#if>
+                <#if field.control.params.toDateDefault??>
+                    toDateDefault: "${field.control.params.toDateDefault?string}",
+                </#if>
+
+                <#if field.control.params.fromDateDefault??>
+                    fromDateDefault: "${field.control.params.fromDateDefault?string}",
+                </#if>
+                minDateDefault:<#if field.control.params.minDateDefault??>"${field.control.params.minDateDefault?string}"<#else>null</#if>,
+                maxDateDefault:<#if field.control.params.maxDateDefault??>"${field.control.params.maxDateDefault?string}"<#else>null</#if>
                 }
         ).setMessages(${messages});
     }
