@@ -160,7 +160,7 @@ public class ParameterMapper {
                     String[] bound = null;
                     if (args.containsKey(argParamName)) {
                         final String paramValue = args.get(argParamName);
-                        if (paramValue != null) {
+                        if (paramValue != null && !paramValue.isEmpty()) {
                             bound = paramValue.split("[,;]");
                             argsMap.put(argParamName, SupportedTypes.LIST.getValueByRealType(bound));
 
@@ -174,6 +174,8 @@ public class ParameterMapper {
                             } else {
                                 argsMap.put(argParamName + IDS_POSTFIX, null);
                             }
+                        } else {
+                            argsMap.put(argParamName, null);
                         }
                     }
                     colDesc.getParameterValue().setBound1(bound); //String[]
