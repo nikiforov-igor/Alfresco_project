@@ -3,15 +3,15 @@
     <template-type>ru/it/lecm/contracts/contracts-main</template-type>
     <components>
         <!-- Title -->
-        <component>
+<!--        <component>
             <region-id>title</region-id>
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
                     <title>page.contracts-main</title>
             </properties>
-        </component>
+        </component>-->
         <!-- Toolbar -->
-        <component>
+<!--        <component>
             <region-id>toolbar</region-id>
             <url>/lecm/documents/documents-list-toolbar</url>
             <properties>
@@ -22,15 +22,15 @@
                 <newRowLabel>label.create-lecm-contract_document</newRowLabel>
                 <newRowDialogTitle>label.create-lecm-contract_document</newRowDialogTitle>
             </properties>
-        </component>
+        </component>-->
         <!-- Menu -->
-        <component>
+<!--        <component>
             <region-id>menu</region-id>
             <url>/lecm/contracts/menu</url>
             <properties>
                 <selected>main</selected>
             </properties>
-        </component>
+        </component>-->
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>
