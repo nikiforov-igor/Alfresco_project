@@ -637,7 +637,7 @@ public class ReportsManager {
 
         // (1) передача параметров из запроса в ReportDescriptor на основании их типов
         // (2) расширение списка пришедших параметров: для диапазонов - добавление крайних значений, для ID - добавить доп поле node_id (для SQL запросов)
-        final Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry, substitudeService);
+        final Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry, substitudeService, orgstructureBean);
         if (logger.isInfoEnabled()) {
             logParameters(paramsMap, String.format("Processing report '%s' with args: \n", reportName));
         }

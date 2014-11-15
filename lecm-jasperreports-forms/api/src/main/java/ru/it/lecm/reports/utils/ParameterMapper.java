@@ -16,6 +16,7 @@ import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 
 import java.util.*;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * Распределитель request-аргументов по параметрам описателя отчёта.
@@ -38,7 +39,7 @@ public class ParameterMapper {
      * @param reportDesc ReportDescriptor
      * @param args       Map<String, String>
      */
-    public static Map<String, Object> assignParameters(ReportDescriptor reportDesc, Map<String, String> args, ServiceRegistry services, SubstitudeBean substituteService) {
+    public static Map<String, Object> assignParameters(ReportDescriptor reportDesc, Map<String, String> args, ServiceRegistry services, SubstitudeBean substituteService, OrgstructureBean orgstructureService) {
         Map<String, Object> argsMap = new HashMap<String, Object>();
         if (args == null || reportDesc == null || reportDesc.getDsDescriptor() == null) {
             return null;
@@ -207,6 +208,13 @@ public class ParameterMapper {
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_TYPE), DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
             argsMap.put(DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_TYPE)));
         }
+
+		// параметр с инициатором построения отчета
+		NodeRef buildPerformer = orgstructureService.getCurrentEmployee();
+		if (null != buildPerformer){
+			String buildPerformerName = (String) nodeService.getProperty(buildPerformer, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+			argsMap.put("buildPerformer", buildPerformerName);
+		}
 
         return argsMap;
     }
