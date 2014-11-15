@@ -449,7 +449,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (!successFilters) {
                     successFilters = this.dataGrid.currentFilters;
                 }
-                var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                var bookmarkedFilter = null;
+                if (YAHOO.util.History) {
+                    bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                }
                 if (bookmarkedFilter) {
                     try {
                         while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {

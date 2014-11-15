@@ -1344,7 +1344,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // дополнительный фильтр из адресной строки (или параметров)
                 if (!this.currentFilters || this.currentFilters.length == 0) {
-                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                    var bookmarkedFilter = null;
+                    if (YAHOO.util.History) {
+                        bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                    }
                     if (bookmarkedFilter) {
                         try {
                             while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
