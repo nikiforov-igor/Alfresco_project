@@ -93,8 +93,7 @@
                             createFormId: "connection-types-not-filtered",
                             actionsConfig: {
                                 fullDelete: "true"
-                            },
-                            sort: "${field.control.params.sort!"cm:name|true"}"
+                            }
                         },
                         editForm: "connection-types-not-filtered",
                         bubblingLabel: "${bubblingId}",
@@ -102,7 +101,8 @@
                         allowCreate: true,
                         showActionColumn: true,
                         showCheckboxColumn: false,
-                        fixedHeader: true
+                        fixedHeader: true,
+                        overrideSortingWith: false
                     }).setMessages(${messages});
                     datagrid.draw();
 
