@@ -12,6 +12,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.DateTime;
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.Utils;
@@ -75,7 +77,7 @@ public abstract class OOTemplateGenerator {
 
     public abstract com.sun.star.frame.XStorable saveDocAs(final XComponent xCompDoc, final String destUrl) throws IOException;
 
-    public abstract void odtSetColumnsAsDocCustomProps(Map<String, Object> props, Map<String, Object> requestParameters, ReportDescriptor desc,
+    public abstract void odtSetColumnsAsDocCustomProps(JRDataSource jrDataSource, Map<String, Object> requestParameters, ReportDescriptor desc,
                                                        String srcOODocUrl, String destSaveAsUrl, String author);
 
     public abstract void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects);
@@ -303,17 +305,23 @@ public abstract class OOTemplateGenerator {
             statement.setMaxRows(1); // для office у нас может быть одно значение!
             resultSet = statement.executeQuery();
 
-            //3 Получить актуальные значения. пропускаем подотчеты
+            // по умолчанию - названия столбцов из запроса
+            int columnCount = resultSet.getMetaData().getColumnCount();
             while (resultSet.next()) {
-                for (String propName : propsToAssign.keySet()) { // в props список всех нужных полей со значениями по умолчанию
-                    if (!(propsToAssign.get(propName) instanceof List)) {
-                        Object value = resultSet.getObject(propName);
-                        propsToAssign.put(propName, value); //подменяем на реальные значения!
-                    }
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = resultSet.getMetaData().getColumnName(i);
+                    Object value = resultSet.getObject(columnName);
+                    propsToAssign.put(columnName, value);
                 }
             }
 
-            //обработаем подотчеты отдельно
+            /* + из колонок берем подотчеты... */
+            for (ColumnDescriptor colDesc : desc.getDsDescriptor().getColumns()) {
+                if (colDesc.getExpression() != null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                    propsToAssign.put(colDesc.getColumnName(), new ArrayList<Map>());
+                }
+            }
+            //обработаем подотчеты
             List<ReportDescriptor> subReportsList = desc.getSubreports();
             if (subReportsList != null && !subReportsList.isEmpty()) {
                 for (ReportDescriptor subReport : subReportsList) {
@@ -407,41 +415,37 @@ public abstract class OOTemplateGenerator {
 
     private String getQueryString(ReportDescriptor reportDesc, Map<String, Object> propsToAssign, XPropertySet docProperties) throws UnknownPropertyException, WrappedTargetException {
         String baseQuery = reportDesc.getFlags().getText();
-
-        final boolean isQueryPresent = docProperties.getPropertySetInfo().hasPropertyByName(reportDesc.getMnem() + "-query");
-        if (isQueryPresent) {
-            final Object queryProp = docProperties.getPropertyValue(reportDesc.getMnem() + "-query");
-            //параметризуем query
-            baseQuery = insertParamsToQuery(queryProp.toString(), propsToAssign);
+        if (docProperties != null) {
+            final boolean isQueryPresent = docProperties.getPropertySetInfo().hasPropertyByName(reportDesc.getMnem() + "-query");
+            if (isQueryPresent) {
+                final Object queryProp = docProperties.getPropertyValue(reportDesc.getMnem() + "-query");
+                //параметризуем query
+                baseQuery = queryProp.toString();
+            }
         }
-        return baseQuery;
+        return insertParamsToQuery(baseQuery, propsToAssign);
     }
 
     private String insertParamsToQuery(String baseQuery, Map<String, Object> requestParameters) {
         if (baseQuery != null && requestParameters != null) {
             for (String param : requestParameters.keySet()) {
-                //TODO возможно придется добавить обработку по типам
                 if (baseQuery.contains("$P{" + param + "}")) {
-                    if (requestParameters.get(param) instanceof List) {
-                        String resultedValue = "";
-                        for (Object value : (List) requestParameters.get(param)) {
-                            resultedValue += resultedValue +
-                                    (resultedValue.length() > 0 ? "," : "") +
-                                    (value instanceof String ?
-                                            ("\'" + value + "\'") :
-                                            String.valueOf(value));
-                        }
-                        if (resultedValue.length() > 0) {
-                            baseQuery = baseQuery.replaceAll("\\$P\\{" + param + "\\}", resultedValue);
-                        }
+                    JavaDataType.SupportedTypes type;
+                    Object paramValue = requestParameters.get(param);
+                    if (!(paramValue instanceof List)) {
+                        type = paramValue != null ?
+                                JavaDataType.SupportedTypes.findType(paramValue.getClass().getName()) :
+                                JavaDataType.SupportedTypes.NULL;
                     } else {
-                        baseQuery = baseQuery.replaceAll("\\$P\\{" + param + "\\}",
-                                (requestParameters.get(param) instanceof String ?
-                                        ("\'" + requestParameters.get(param) + "\'") :
-                                        String.valueOf(requestParameters.get(param))));
+                        type = JavaDataType.SupportedTypes.LIST;
+                    }
+
+                    if (type != null) {
+                        baseQuery = baseQuery.replaceAll("\\$P\\{" + param + "\\}", type.getSQLPreparedValue(requestParameters.get(param)));
                     }
                 }
             }
+            baseQuery = baseQuery.replaceAll("\\$P\\{.*\\}","NULL"); // заменяем все пустые параметры
         }
         return baseQuery;
     }

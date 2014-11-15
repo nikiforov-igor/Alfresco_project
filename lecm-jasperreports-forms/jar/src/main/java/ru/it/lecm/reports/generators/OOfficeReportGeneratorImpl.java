@@ -9,11 +9,8 @@ import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.FilenameUtils;
-import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
@@ -22,8 +19,6 @@ import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
-import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
@@ -31,13 +26,7 @@ import ru.it.lecm.reports.utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
@@ -389,93 +378,8 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
      * @throws JRException
      */
     public void fill(ReportDescriptor report, Map<String, Object> parameters, JRDataSource jrDataSource, String urlSrc, String urlSaveAs) throws JRException {
-        PropertyCheck.mandatory(this, "connection", connection);
-
-        // атрибуты одной строки НД, которые надо будет присвоить параметрам документа
-        final Map<String, Object> props = new HashMap<String, Object>();
-
-        // формируем значения
-        if (!report.isSQLDataSource()) {
-            // по умолчанию - expressions
-            for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
-                props.put(colDesc.getColumnName(), colDesc.getExpression());
-            }
-            // реальные значения из источника
-            if (jrDataSource.next()) {
-                /* получение данных из текущей строки ... */
-                for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
-                    Object value = jrDataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
-                    if (value == null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
-                        // пустой подотчет - вместо null подсовываем пустой список
-                        value = new ArrayList();
-                    }
-
-                    JavaDataType.SupportedTypes type = JavaDataType.SupportedTypes.findType(colDesc.getClassName());
-                    if (type != null && value != null) {
-                        if (type.equals(JavaDataType.SupportedTypes.HTML)) {
-                            value = Jsoup.parse(value.toString()).text();
-                        }
-                    }
-                    props.put(colDesc.getColumnName(), value);
-                }
-            }
-        } else {
-            Connection sqlConnection = null;
-            ResultSet resultSet = null;
-            PreparedStatement statement = null;
-
-            try {
-                sqlConnection = getDatabaseHelper().getConnection();
-                String query = report.getFlags().getText();
-
-                statement = sqlConnection.prepareStatement(query);
-                statement.setMaxRows(1);
-
-                resultSet = statement.executeQuery();
-
-                // по умолчанию - названия столбцов из запроса
-                int columnCount = resultSet.getMetaData().getColumnCount();
-                for (int i = 1; i <= columnCount; i++) {
-                    String columnName = resultSet.getMetaData().getColumnName(i);
-
-                    String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
-                    props.put(columnName, value);
-                }
-                /* + из колонок берем подотчеты... */
-                for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
-                    if (colDesc.getExpression() != null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
-                        props.put(colDesc.getColumnName(), new ArrayList<Map>());
-                    }
-                }
-            } catch (SQLException e) {
-                logger.error(e.getMessage(), e);
-            } finally {
-                if (resultSet != null) {
-                    try {
-                        resultSet.close();
-                    } catch (SQLException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-                if (statement != null) {
-                    try {
-                        statement.close();
-                    } catch (SQLException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-                if (sqlConnection != null) {
-                    try {
-                        sqlConnection.close();
-                    } catch (SQLException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-            }
-        }
-
         //в props для обычного провайдера - список заполненных значений, для SQL - дефолтныхce);
-        templateGenerator.odtSetColumnsAsDocCustomProps(props, parameters, report, urlSrc, urlSaveAs, null);
+        templateGenerator.odtSetColumnsAsDocCustomProps(jrDataSource, parameters, report, urlSrc, urlSaveAs, null);
     }
 
     private abstract class Job<TResult> {

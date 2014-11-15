@@ -6,6 +6,7 @@ import ru.it.lecm.reports.api.model.Mnemonicable;
 import ru.it.lecm.reports.utils.ArgsHelper;
 
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,6 +26,9 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
         super(className);
     }
 
+    final static String DATE_FMT_YMD_HMS = "yyyy-MM-dd HH:mm:ss";
+    final static SimpleDateFormat DateFormat_YMD_HMS = new SimpleDateFormat(DATE_FMT_YMD_HMS);
+
     public final static String HTML = "HTML";
     /**
      * Набор типов поддерживаемых для шаблонов.
@@ -32,9 +36,27 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
      * @author rabdullin
      */
     public enum SupportedTypes {
-        NULL(null),
-        STRING(String.class.getName()),
-        HTML(JavaDataType.HTML),
+        NULL(null) {
+            @Override
+            public String getSQLPreparedValue(Object value) {
+                return "NULL";
+            }
+        },
+
+        STRING(String.class.getName()) {
+            @Override
+            public String getSQLPreparedValue(Object value) {
+                return value != null ? ("'" + value + "'") : "NULL";
+            }
+        },
+
+        HTML(JavaDataType.HTML) {
+            @Override
+            public String getSQLPreparedValue(Object value) {
+                return value != null ? ("'" + value + "'") : "NULL";
+            }
+        },
+
         DATE(Date.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
@@ -43,7 +65,13 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
                 }
                 return (value instanceof Date ? value : ArgsHelper.tryMakeDate(value.toString(), null));
             }
+
+            @Override
+            public String getSQLPreparedValue(Object value) {
+                return value != null ? ("'" + DateFormat_YMD_HMS.format(((Date) value)) + "'") : "NULL";
+            }
         },
+
         BOOL(Boolean.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
@@ -51,6 +79,11 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
                     return null;
                 }
                 return (value instanceof Boolean ? value : Boolean.valueOf(value.toString()));
+            }
+
+            @Override
+            public String getSQLPreparedValue(Object value) {
+                return value != null ? ((Boolean)value ? "1" : "0") : "0";
             }
         },
 
@@ -113,6 +146,26 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
                                 new ArrayList<Object>(Arrays.asList((String[])value)) :
                                 new ArrayList<Object>(Arrays.asList(value.toString().split("[,;]")))));
             }
+
+            @Override
+            public String getSQLPreparedValue(Object value) {
+                String resultedValue = "";
+                for (Object val : (List) value) {
+                    JavaDataType.SupportedTypes type;
+                    String destClassName;
+                    if (val != null) {
+                        destClassName = val.getClass().getName();
+                    } else {
+                        destClassName = null;
+                    }
+                    type = JavaDataType.SupportedTypes.findType(destClassName);
+
+                    resultedValue = resultedValue +
+                            (resultedValue.length() > 0 ? "," : "") + (type != null ? type.getSQLPreparedValue(val) : "NULL");
+                }
+
+                return resultedValue;
+            }
         };
 
         final private JavaDataType javaDataType;
@@ -127,6 +180,10 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
 
         public Object getValueByRealType(Object value) {
             return value != null ? value.toString() : null;
+        }
+
+        public String getSQLPreparedValue(Object value) {
+            return value != null ? value.toString() : "NULL";
         }
 
         public static SupportedTypes findType(String clazzName) {

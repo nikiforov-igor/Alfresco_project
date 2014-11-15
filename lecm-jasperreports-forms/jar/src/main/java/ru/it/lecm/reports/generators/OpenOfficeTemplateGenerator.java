@@ -17,16 +17,19 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextTable;
 import com.sun.star.text.XTextTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
+import net.sf.jasperreports.engine.JRDataSource;
 import org.alfresco.util.PropertyCheck;
+import org.jsoup.Jsoup;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.utils.Utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,11 +77,10 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
     /**
      * Задать свойства для атрибутов документа
      *
-     * @param props             задаваемые значения (ключи - имена атрибутов). Акутальные значения для обычных провайдеров, дефолтные - для SQL
      * @param requestParameters список параметров из запроса
      * @param author            автор изменений
      */
-    public void odtSetColumnsAsDocCustomProps(Map<String, Object> props, Map<String, Object> requestParameters, ReportDescriptor desc,
+    public void odtSetColumnsAsDocCustomProps(JRDataSource jrDataSource, Map<String, Object> requestParameters, ReportDescriptor desc,
                                               String srcOODocUrl, String destSaveAsUrl, String author) {
 
         final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
@@ -117,44 +119,60 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
             final StringBuilder sb = new StringBuilder("Update openOffice attributes list: ");
             boolean mustLog = false; // true, чтобы обязательно зажурналировать список присвоений из sb
             try {
-                if (props != null) {
-                    if (desc.isSQLDataSource()) { // для SQL провайдеров - получаем реальные значения вместо плейсхолдеров
-                        getSQLPropsValue(desc, requestParameters, docProperties, props);
-                    }
+                // атрибуты одной строки НД, которые надо будет присвоить параметрам документа
+                final Map<String, Object> props = new HashMap<>();
 
-                    //тут props точно заполнены для любого провайдера - передаем их в документ!
-                    int i = 0;
-                    for (Map.Entry<String, Object> item : props.entrySet()) {
-                        final String propName = item.getKey();
-                        final Object propValue = item.getValue();
-                        try {
-                            final boolean isPresent = docProperties.getPropertySetInfo().hasPropertyByName(propName);
-                            i++;
-                            sb.append(String.format("\n %s [%s]\t'%s' = '%s'", (isPresent ? "set" : "add"), i, propName, Utils.coalesce(propValue, "NULL")));
-                            if (isPresent) {
-                                if (!(propValue instanceof List)) {
-                                    assignTypedProperty(docProperties, propName, propValue);
-                                } else { // значение список - отрабатываем его как таблицу
-                                    assignTableProperty(xCompDoc, docProperties, propName, (List<Map>) propValue);
-                                }
-                            } else {
-                                docPropertyContainer.addProperty(propName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, propValue);
-                            }
-                        } catch (Throwable t) {
-                            /*
-                             * это не страшно: например, сюда падаем с com.sun.star.lang.IllegalArgumentException
-							 * при присвоении типизированному свойству значения NULL (например, для Дат)
-							 */
-                            mustLog = true;
-                            logger.warn(String.format("\n [%s]\t'%s' = '%s'", i, propName, propValue), t);
-                            sb.append(String.format("\n\t (!) error %s", t.getMessage()));
+                // формируем значения
+                if (!desc.isSQLDataSource()) {
+                    // по умолчанию - expressions
+                    for (ColumnDescriptor colDesc : desc.getDsDescriptor().getColumns()) {
+                        Object value = jrDataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
+                        if (value == null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                            // пустой подотчет - вместо null подсовываем пустой список
+                            value = new ArrayList();
                         }
 
+                        JavaDataType.SupportedTypes type = JavaDataType.SupportedTypes.findType(colDesc.getClassName());
+                        if (type != null && value != null) {
+                            if (type.equals(JavaDataType.SupportedTypes.HTML)) {
+                                value = Jsoup.parse(value.toString()).text();
+                            }
+                        }
+                        props.put(colDesc.getColumnName(), value);
                     }
                 } else {
-                    sb.append("no row properties");
+                    getSQLPropsValue(desc, requestParameters, docProperties, props);
                 }
 
+                //тут props точно заполнены для любого провайдера - передаем их в документ!
+                int i = 0;
+                for (Map.Entry<String, Object> item : props.entrySet()) {
+                    final String propName = item.getKey();
+                    final Object propValue = item.getValue();
+                    try {
+                        final boolean isPresent = docProperties.getPropertySetInfo().hasPropertyByName(propName);
+                        i++;
+                        sb.append(String.format("\n %s [%s]\t'%s' = '%s'", (isPresent ? "set" : "add"), i, propName, Utils.coalesce(propValue, "NULL")));
+                        if (isPresent) {
+                            if (!(propValue instanceof List)) {
+                                assignTypedProperty(docProperties, propName, propValue);
+                            } else { // значение список - отрабатываем его как таблицу
+                                assignTableProperty(xCompDoc, docProperties, propName, (List<Map>) propValue);
+                            }
+                        } else {
+                            docPropertyContainer.addProperty(propName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, propValue);
+                        }
+                    } catch (Throwable t) {
+                        /*
+                         * это не страшно: например, сюда падаем с com.sun.star.lang.IllegalArgumentException
+                         * при присвоении типизированному свойству значения NULL (например, для Дат)
+                         */
+                        mustLog = true;
+                        logger.warn(String.format("\n [%s]\t'%s' = '%s'", i, propName, propValue), t);
+                        sb.append(String.format("\n\t (!) error %s", t.getMessage()));
+                    }
+
+                }
             } finally {
                 if (logger.isDebugEnabled() || mustLog) {
                     if (mustLog)
