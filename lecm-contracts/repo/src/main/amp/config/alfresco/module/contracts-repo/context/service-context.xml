@@ -126,7 +126,6 @@
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-status-types.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-roles-items.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-connection-types-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-regnumbers.xml</value>
             </list>
         </property>

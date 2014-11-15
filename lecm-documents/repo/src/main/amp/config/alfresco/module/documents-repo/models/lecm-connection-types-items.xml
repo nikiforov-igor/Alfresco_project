@@ -17,6 +17,16 @@
                 <property name="lecm-connect-types:reverse-name">К сведению</property>
                 <property name="lecm-connect-types:code">forInformation</property>
             </item>
+            <item name="cm:Является основанием для" type="lecm-connect-types:connection-type">
+                <property name="cm:name">Является основанием для</property>
+                <property name="lecm-connect-types:reverse-name">Создан на основании</property>
+                <property name="lecm-connect-types:code">onBasis</property>
+            </item>
+            <item name="cm:Отменяет" type="lecm-connect-types:connection-type">
+                <property name="cm:name">Отменяет</property>
+                <property name="lecm-connect-types:reverse-name">Отменён</property>
+                <property name="lecm-connect-types:code">cancel</property>
+            </item>
         </items>
     </item>
 </items>
