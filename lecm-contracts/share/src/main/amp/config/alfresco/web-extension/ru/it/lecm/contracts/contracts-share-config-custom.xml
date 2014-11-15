@@ -1460,12 +1460,12 @@
         </forms>
     </config>
 
-    <config evaluator="node-type" condition="lecm-contract:dashlet-settings">
+    <config evaluator="node-type" condition="lecm-contract-ext:dashlet-settings">
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-contract:dashlet-settings-code" force="true"/>
-                    <show id="lecm-contract:dashlet-settings-path" force="true"/>
+                    <show id="lecm-contract-ext:dashlet-settings-code" force="true"/>
+                    <show id="lecm-contract-ext:dashlet-settings-path" force="true"/>
                 </field-visibility>
             </form>
         </forms>

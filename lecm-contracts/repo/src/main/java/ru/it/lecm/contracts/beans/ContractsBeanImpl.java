@@ -28,6 +28,7 @@ import java.util.*;
  */
 public class ContractsBeanImpl extends BaseBean {
     public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
+    public static final String CONTRACTS_EXT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/ext/1.0";
     public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
     public static final String CONTRACT_TABLES_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/table-structure/1.0";
     public static final String CONTRACT_DIC_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/dictionaries/1.0";
@@ -35,7 +36,7 @@ public class ContractsBeanImpl extends BaseBean {
     public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
     public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
     public static final QName TYPE_CONTRACT_STAGE = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "stage");
-    public static final QName TYPE_DASHLET_SETTINGS = QName.createQName(CONTRACTS_NAMESPACE_URI, "dashlet-settings");
+    public static final QName TYPE_DASHLET_SETTINGS = QName.createQName(CONTRACTS_EXT_NAMESPACE_URI, "dashlet-settings");
 
     public static final QName PROP_START_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "startDate");
     public static final QName PROP_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");

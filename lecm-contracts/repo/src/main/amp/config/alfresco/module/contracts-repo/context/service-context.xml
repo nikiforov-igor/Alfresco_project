@@ -37,6 +37,7 @@
             <list>
 
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-ext-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-additional-document-model.xml</value>
             </list>
         </property>

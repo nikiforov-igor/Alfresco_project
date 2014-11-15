@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-contract-ext:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Договора (Расширение)</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/contract/ext/1.0" prefix="lecm-contract-ext"/>
+	</namespaces>
+
+    <types>
+        <!-- Настройки дашлета "Договора"-->
+        <type name="lecm-contract-ext:dashlet-settings">
+            <title>Logic Ecm Contract DashletSettings</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <!-- код СЭД-->
+                <property name="lecm-contract-ext:dashlet-settings-code">
+                    <type>d:text</type>
+                    <default>SED</default>
+                </property>
+                <!-- Путь в дереве СЭД-->
+                <property name="lecm-contract-ext:dashlet-settings-path">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+            </properties>
+        </type>
+	</types>
+
+</model>
