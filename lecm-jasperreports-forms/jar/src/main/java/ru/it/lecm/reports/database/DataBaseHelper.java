@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -16,14 +17,17 @@ import java.sql.SQLException;
 public class DataBaseHelper {
     private static Logger log = LoggerFactory.getLogger(DataBaseHelper.class);
 
-    private DataSource basicDataSource;
+    private static final String ORG_POSTGRESQL_DRIVER = "org.postgresql.Driver";
 
-    private Connection connection;
+    private DataSource basicDataSource;
 
     private String jdbcdriver;
     private String username;
     private String password;
     private String url;
+
+    private boolean isPostgresDB = false;
+    private String alfrescoDriver;
 
     public DataSource getBasicDataSource() {
         return basicDataSource;
@@ -49,38 +53,68 @@ public class DataBaseHelper {
         this.url = url;
     }
 
+    public void setAlfrescoDriver(String alfrescoDriver) {
+        this.alfrescoDriver = alfrescoDriver;
+    }
+
     public void init() {
-        this.connection = getConnection();
+        Connection conn = getConnection();
+        if (conn != null) {
+            try {
+                if (isPostgresDB) {
+                    initializeFunctions(conn);
+                }
+            } catch (SQLException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
     }
 
     public Connection getConnection() {
+        Connection conn = null;
         try {
             boolean useDefault = true;
+            if (url != null && !url.contains("${")) {
+                if (jdbcdriver != null && !jdbcdriver.contains("${")) {
+                    Class.forName(jdbcdriver);
 
-            if ((this.connection == null) || connection.isClosed()) {
-                if (url != null && !url.contains("${")) {
-                    if (jdbcdriver != null && !jdbcdriver.contains("${")) {
-                        Class.forName(jdbcdriver);
-
-                        if (username != null && !username.contains("${") && password != null && !password.contains("${")) {
-                            this.connection = DriverManager.getConnection(url, username, password);
-                            useDefault = false;
-                        }
+                    if (username != null && !username.contains("${") && password != null && !password.contains("${")) {
+                        conn = DriverManager.getConnection(url, username, password);
+                        useDefault = false;
+                        isPostgresDB = jdbcdriver.equals(ORG_POSTGRESQL_DRIVER);
                     }
                 }
-
-                if (useDefault) {
-                    try {
-                        this.connection = getBasicDataSource().getConnection();
-                    } catch (SQLException e) {
-                        log.error(e.getMessage(), e);
-                    }
-                }
+            }
+            if (useDefault) {
+                conn = getBasicDataSource().getConnection();
+                isPostgresDB = alfrescoDriver != null && alfrescoDriver.equals(ORG_POSTGRESQL_DRIVER);
             }
         } catch (SQLException | ClassNotFoundException se) {
             log.error(se.getMessage(), se);
         }
 
-        return connection;
+        return conn;
+    }
+
+    private void initializeFunctions(Connection conn) throws SQLException{
+        String sqlQuery = "CREATE EXTENSION IF NOT EXISTS tablefunc";
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(sqlQuery);
+            statement.execute();
+            if (!conn.getAutoCommit()){
+                conn.commit();
+            }
+            log.debug("Extensions created:\n{}", sqlQuery);
+        } catch (SQLException e) {
+            log.warn("Can not create extensions:\n{}", sqlQuery);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        }
     }
 }

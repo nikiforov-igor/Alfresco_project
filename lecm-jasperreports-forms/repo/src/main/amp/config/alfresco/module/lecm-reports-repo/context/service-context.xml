@@ -321,6 +321,7 @@
           class="ru.it.lecm.reports.database.DataBaseHelper"
           init-method="init">
         <property name="jdbcdriver" value="${lecm.reports.db.driver}"/>
+        <property name="alfrescoDriver" value="${db.driver}"/>
         <property name="username" value="${lecm.reports.db.username}"/>
         <property name="password" value="${lecm.reports.db.password}"/>
         <property name="url" value="${lecm.reports.db.url}"/>
