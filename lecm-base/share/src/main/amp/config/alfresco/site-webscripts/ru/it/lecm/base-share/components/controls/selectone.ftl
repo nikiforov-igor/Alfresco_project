@@ -67,9 +67,7 @@
 			</label>
 		</div>
 		<div class="container">
-            <div class="buttons-div">
-                <@formLib.renderFieldHelp field=field />
-            </div>
+            <div class="buttons-div"><@formLib.renderFieldHelp field=field /></div>
             <div class="value-div">
 				<#if field.control.params.options?? && field.control.params.options != "">
 					<select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
