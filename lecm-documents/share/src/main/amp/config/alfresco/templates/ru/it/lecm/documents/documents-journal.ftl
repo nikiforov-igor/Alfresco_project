@@ -4,7 +4,7 @@
     <script type="text/javascript">//<![CDATA[
         var response = ${response};
         if (typeof LogicECM == "undefined" || !LogicECM) {
-            var LogicECM = {};
+            LogicECM = {};
         }
 
         LogicECM.module = LogicECM.module || {};

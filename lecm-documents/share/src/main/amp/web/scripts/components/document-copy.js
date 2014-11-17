@@ -4,7 +4,7 @@
  * @namespace LogicECM
  */
 if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
+    LogicECM = {};
 }
 
 /**

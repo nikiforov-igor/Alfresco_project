@@ -1,6 +1,6 @@
 /* global Alfresco */
 if (typeof LogicECM === 'undefined' || !LogicECM) {
-	var LogicECM = {};
+	LogicECM = {};
 }
 
 LogicECM.module = LogicECM.module || {};

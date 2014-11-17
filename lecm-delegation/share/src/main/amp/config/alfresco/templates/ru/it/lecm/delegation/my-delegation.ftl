@@ -1,7 +1,7 @@
 <script type="text/javascript">//<![CDATA[
 
 if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
+	LogicECM = {};
 	}
 
 	LogicECM.module = LogicECM.module || {};

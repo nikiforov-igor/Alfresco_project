@@ -1,9 +1,10 @@
 <#macro viewForm formId="view-node-form" useDefaultForms=false>
 <script type="text/javascript">//<![CDATA[
 
-    if (!window.LogicECM) {
-        window.LogicECM = {};
+    if (typeof LogicECM == "undefined" || !LogicECM) {
+        LogicECM = {};
     }
+
     LogicECM.CurrentModules = LogicECM.CurrentModules || {};
     LogicECM.CurrentModules.ViewFormModule = LogicECM.CurrentModules.ViewFormModule || {};
 

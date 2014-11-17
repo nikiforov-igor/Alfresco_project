@@ -4,12 +4,12 @@ define(["dojo/_base/declare",
         "alfresco/menus/_AlfMenuItemMixin"], function(declare, MenuItem, AlfCore, _AlfMenuItemMixin) {
 
     if (typeof LogicECM == "undefined" || !LogicECM) {
-        window.LogicECM = {};
+        LogicECM = {};
     }
 
-    window.LogicECM.module = LogicECM.module || {};
-    window.LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
-    window.LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
+    LogicECM.module = LogicECM.module || {};
+    LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
+    LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
     // Валидаторы для форм
 

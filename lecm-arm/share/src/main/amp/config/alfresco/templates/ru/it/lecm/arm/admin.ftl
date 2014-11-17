@@ -22,7 +22,7 @@
     <script type="text/javascript">//<![CDATA[
         // настройки из repo
         if (typeof LogicECM == "undefined" || !LogicECM) {
-            var LogicECM = {};
+            LogicECM = {};
         }
 
         LogicECM.module = LogicECM.module || {};

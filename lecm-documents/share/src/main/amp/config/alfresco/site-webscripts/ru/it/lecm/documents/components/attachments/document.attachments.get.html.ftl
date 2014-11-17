@@ -71,7 +71,7 @@
 	    <script type="text/javascript">//<![CDATA[
 
 		if (typeof LogicECM == "undefined" || !LogicECM) {
-		    var LogicECM = {};
+		    LogicECM = {};
 		}
     	if (typeof LogicECM.DocumentAttachmentsComponent == "undefined" || !LogicECM.DocumentAttachmentsComponent) {
 		    LogicECM.DocumentAttachmentsComponent = {};

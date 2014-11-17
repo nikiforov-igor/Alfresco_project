@@ -76,7 +76,7 @@ function _hideLinkAttributes(layer, args) {
  */
 // Ensure LogicECM root object exists
 if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
+    LogicECM = {};
 }
 
 /**
