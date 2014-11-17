@@ -1,10 +1,6 @@
 <#if allowEdit >
 <#assign el=args.htmlid?html>
 
-<@markup id="js">
-    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"/>
-</@>
-
 <script type="text/javascript">//<![CDATA[
 (function(){
     function createPage() {

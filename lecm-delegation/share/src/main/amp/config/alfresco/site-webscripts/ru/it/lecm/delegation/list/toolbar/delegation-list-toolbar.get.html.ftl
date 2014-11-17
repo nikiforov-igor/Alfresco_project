@@ -18,7 +18,6 @@
                 'scripts/lecm-base/components/lecm-toolbar.js',
                 'scripts/lecm-delegation/list/delegation-list-toolbar.js',
                 'modules/simple-dialog.js',
-                'jquery/jquery-1.6.2.js',
                 'scripts/lecm-delegation/list/delegation-list.js'
             ], [
                 'css/lecm-base/components/base-menu/base-menu.css',

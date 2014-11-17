@@ -12,7 +12,7 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 	function notDefaultSchedule(oData) {
 		var rowNodeRef,
 			orgNodeRef;
-	
+
 		orgNodeRef = LogicECM.module.WCalendar.Schedule.ORGANIZATION_NODE_REF;
 		rowNodeRef = oData.itemData["assoc_lecm-sched_sched-employee-link-assoc"].value;
 	    if(rowNodeRef == orgNodeRef) {
@@ -53,7 +53,6 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 
     function init() {
         LogicECM.module.Base.Util.loadResources([
-            'jquery/jquery-1.6.2.js',
             'modules/simple-dialog.js',
             'scripts/lecm-base/components/advsearch.js',
             'scripts/lecm-base/components/lecm-datagrid.js',

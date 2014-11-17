@@ -3,8 +3,7 @@
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
             'scripts/lecm-base/components/lecm-reassign-task-control.js',
-            'modules/simple-dialog.js',
-	        'jquery/jquery-1.6.2.js'
+            'modules/simple-dialog.js'
 		], createControls);
 	}
 	function createControls(){

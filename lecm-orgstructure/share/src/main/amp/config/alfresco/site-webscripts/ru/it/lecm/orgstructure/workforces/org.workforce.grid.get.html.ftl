@@ -71,7 +71,6 @@
 
             function init() {
                 LogicECM.module.Base.Util.loadResources([
-                    'jquery/jquery-1.6.2.js',
                     'components/form/date-range.js',
                     'components/form/number-range.js',
                     'modules/simple-dialog.js',

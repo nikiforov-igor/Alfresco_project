@@ -10,13 +10,13 @@
 			<script type="text/javascript">//<![CDATA[
 			(function() {
 				function createDatagrid() {
-	
+
 	                // Переопределяем метод onActionDelete. Добавляем проверки
 	                LogicECM.module.Base.DataGrid.prototype.onActionDelete =
 	                    function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
 	                        var me = this;
 	                        var orgRoleToDelete = YAHOO.lang.isArray(p_items) ? p_items[0] : p_items;
-	
+
 	                        // Проверим назначены ли на роль сотрудники
 	                        var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getOrgRoleEmployees?nodeRef=" + orgRoleToDelete.nodeRef;
 	                        var callback = {
@@ -28,7 +28,7 @@
 	                                    for (i in oResults) {
 	                                        employees.push(oResults[i].shortName);
 	                                    }
-	
+
 	                                    var employeesStr = employees.join(", ");
 	                                    Alfresco.util.PopupManager.displayMessage(
 	                                        {
@@ -49,7 +49,7 @@
 	                        };
 	                        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 	                    };
-	
+
 					new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
@@ -85,7 +85,7 @@
 								showCheckboxColumn: false,
 								attributeForShow:"cm:name"
 							}).setMessages(${messages});
-	
+
 	                YAHOO.util.Event.onContentReady ('${id}', function () {
 	                    YAHOO.Bubbling.fire ("activeGridChanged", {
 	                        datagridMeta: {
@@ -99,10 +99,9 @@
 	                    });
 	                });
 				}
-	
+
 				function init() {
                     LogicECM.module.Base.Util.loadResources([
-                        'jquery/jquery-1.6.2.js',
                         'modules/simple-dialog.js',
                         'scripts/lecm-base/components/advsearch.js',
                         'scripts/lecm-base/components/lecm-datagrid.js',
@@ -117,7 +116,7 @@
                         'yui/treeview/assets/skins/sam/treeview.css',
                         'css/lecm-orgstructure/orgstructure-tree.css'
                     ], createDatagrid);				}
-	
+
 				YAHOO.util.Event.onDOMReady(init);
 			})();
 			//]]></script>

@@ -48,7 +48,6 @@
                 'scripts/lecm-base/components/lecm-toolbar.js',
                 'scripts/lecm-delegation/list/delegation-list-toolbar.js',
                 'modules/simple-dialog.js',
-                'jquery/jquery-1.6.2.js',
                 'scripts/lecm-base/components/advsearch.js',
                 'scripts/lecm-base/components/lecm-datagrid.js',
                 'scripts/lecm-delegation/list/delegation-list.js'

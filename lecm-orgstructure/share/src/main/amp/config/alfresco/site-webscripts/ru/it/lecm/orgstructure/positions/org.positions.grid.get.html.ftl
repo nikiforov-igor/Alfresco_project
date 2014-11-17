@@ -15,7 +15,7 @@
 	                    function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
 	                        var me = this;
 	                        var positionToDelete = YAHOO.lang.isArray(p_items) ? p_items[0] : p_items;
-	
+
 	                        // Проверим назначены ли на должность сотрудники
 	                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getPositionEmployees?nodeRef=" + positionToDelete.nodeRef;
 	                        var callback = {
@@ -27,7 +27,7 @@
 	                                    for (i in oResults) {
 	                                        employees.push(oResults[i].shortName);
 	                                    }
-	
+
 	                                    var employeesStr = employees.join(", ");
 	                                    Alfresco.util.PopupManager.displayMessage(
 	                                            {
@@ -48,7 +48,7 @@
 	                        };
 	                        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 	                    };
-	
+
 					var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
@@ -84,7 +84,7 @@
 								showCheckboxColumn: false,
 								attributeForShow:"cm:name"
 							}).setMessages(${messages});
-	
+
 	                YAHOO.util.Event.onContentReady ('${id}', function () {
 	                    YAHOO.Bubbling.fire ("activeGridChanged", {
 	                        datagridMeta: {
@@ -98,10 +98,9 @@
 	                    });
 	                });
 				}
-	
+
 				function init() {
                     LogicECM.module.Base.Util.loadResources([
-                        'jquery/jquery-1.6.2.js',
                         'modules/simple-dialog.js',
                         'scripts/lecm-base/components/advsearch.js',
                         'scripts/lecm-base/components/lecm-datagrid.js',

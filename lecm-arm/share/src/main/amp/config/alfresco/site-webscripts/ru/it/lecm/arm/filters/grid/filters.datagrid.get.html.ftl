@@ -1,10 +1,7 @@
 <@markup id="js">
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js" group="armFiltersGrid"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js" group="armFiltersGrid"/>
-    <#--загрузка base-utils.js вынесена в base-share-config-custom.xml-->
-	<#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="armFiltersGrid"/>-->
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js" group="armFiltersGrid"/>
-	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js" group="armFiltersGrid"/>
 </@>
 
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>

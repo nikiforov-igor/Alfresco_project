@@ -8,7 +8,6 @@
 <@markup id="js">
 	<@script type="text/javascript" src="${url.context}/res/components/console/consoletool.js" group="lecm-approval-settings"/>
 	<@script type="text/javascript" src="${url.context}/res/components/form/form.js" group="lecm-approval-settings"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="lecm-approval-settings"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-approval/approval-settings.js" group="lecm-approval-settings"/>
 </@>
 

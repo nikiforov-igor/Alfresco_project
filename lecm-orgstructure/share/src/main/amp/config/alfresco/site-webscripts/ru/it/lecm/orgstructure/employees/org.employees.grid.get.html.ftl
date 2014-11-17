@@ -10,14 +10,14 @@
 			<script type="text/javascript">//<![CDATA[
 			(function () {
 				function createDatagrid() {
-	
+
 	                YAHOO.lang.augmentObject(LogicECM.module.Base.DataGrid.prototype, {
-	
+
 			                	makeJquerySyncRequestForAbsence : function _makeJquerySyncRequestForAbsence(url, payload, showMessage, comment ){
 			                        var result = {};
-	
+
 			                        result.hasNoActiveAbsences = false;
-	
+
 			                        // Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
 			                        jQuery.ajax({
 			                            url: Alfresco.constants.PROXY_URI_RELATIVE + url,
@@ -41,7 +41,7 @@
 			                                result.errorText = textStatus;
 			                            }
 			                        });
-	
+
 			                        if (showMessage){
 			                            if (result.errorText){
 			                                Alfresco.util.PopupManager.displayMessage(
@@ -57,7 +57,7 @@
 			                                }
 			                            }
 			                        }
-	
+
 			                        return result;
 			                    },
 	                            //Действия по умолчанию. В конкретных реализациях ДатаГрида эти методы при необходимости следует переопределять
@@ -73,15 +73,15 @@
 	                            onActionDelete:function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
 	                                this.checkBeforeDeleteAction(p_items, owner, actionsConfig, fnDeleteComplete);
 	                            },
-	
+
 	                            checkBeforeDeleteAction: function DataGridActions_checkBeforeDelete(p_items, owner, actionsConfig, fnDeleteComplete){
 	                                if (this.checkBeforeDeleteSync(p_items)){
 	                                    this.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
 	                                }
 	                            },
-	
-	                            checkBeforeDeleteSync: function DataGridActions_checkBeforeDeleteSync(p_items){                            	
-	                                   
+
+	                            checkBeforeDeleteSync: function DataGridActions_checkBeforeDeleteSync(p_items){
+
 	                                var hasNoActiveAbsences = this.makeJquerySyncRequestForAbsence("lecm/orgstructure/api/employeeHasNoAbsences",
 	                                                                                               { nodeRef : p_items.nodeRef },
 	                                                                                               true,
@@ -90,14 +90,14 @@
 	                                if (hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences){
 	                                    return true;
 	                                }
-	                                   
+
 	                                return false;
 	                            }
-	
+
 	                        },
 	                    true
 	                );
-	
+
 					var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
@@ -142,7 +142,7 @@
 								showCheckboxColumn: false,
 								attributeForShow:"lecm-orgstr:employee-last-name"
 							}).setMessages(${messages});
-	
+
 	                YAHOO.util.Event.onContentReady ('${id}', function () {
 	                    YAHOO.Bubbling.fire ("activeGridChanged", {
 	                        datagridMeta: {
@@ -156,10 +156,9 @@
 	                    });
 	                });
 				}
-	
+
 				function init() {
                     LogicECM.module.Base.Util.loadResources([
-                        'jquery/jquery-1.6.2.js',
                         'scripts/lecm-base/components/lecm-validation.js',
                         'modules/simple-dialog.js',
                         'scripts/lecm-base/components/advsearch.js',

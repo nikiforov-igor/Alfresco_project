@@ -1,7 +1,4 @@
 <#if allowEdit >
-<@markup id="js">
-    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" />
-</@>
 
 <#assign el=args.htmlid?html>
 

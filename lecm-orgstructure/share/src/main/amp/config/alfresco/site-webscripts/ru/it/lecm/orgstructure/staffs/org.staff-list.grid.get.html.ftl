@@ -423,7 +423,6 @@
                         'scripts/lecm-base/components/versions.js',
                         'scripts/lecm-orgstructure/employee-validations.js',
                         'modules/simple-dialog.js',
-                        'jquery/jquery-1.6.2.js',
                         'scripts/lecm-base/components/advsearch.js',
                         'scripts/lecm-base/components/lecm-datagrid.js'
                     ], [
@@ -438,6 +437,6 @@
 					();
 			//]]></script>
 		</@grid.datagrid>
-		
-	
+
+
 

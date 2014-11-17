@@ -1,10 +1,7 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader "transitional">
-	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js"/>
     <@script type="text/javascript" src="/scripts/lecm-arm/controls/arm-settings-fields-control.js"/>
     <@script type="text/javascript" src="/scripts/lecm-arm/constraints/arm-statuses-child-rule-validator.js"/>
-<#--загрузка base-utils.js вынесена в base-share-config-custom.xml-->
-    <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"></@script>-->
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-validation.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>
 

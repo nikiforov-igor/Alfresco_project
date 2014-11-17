@@ -27,7 +27,7 @@
 	                    bubblingLabel: "${bubblingLabel!"business-role"}"
 	                });
 	                datagrid.setMessages (${messages});
-	
+
 	                YAHOO.util.Event.onContentReady ('${id}', function () {
 	                    YAHOO.Bubbling.fire ("activeGridChanged", {
 	                        datagridMeta: {
@@ -44,10 +44,9 @@
 	                    });
 	                });
 	            }
-	
+
 	            function init() {
                     LogicECM.module.Base.Util.loadResources([
-                        'jquery/jquery-1.6.2.js',
                         'modules/simple-dialog.js',
                         'scripts/lecm-base/components/advsearch.js',
                         'scripts/lecm-base/components/lecm-datagrid.js',
@@ -56,7 +55,7 @@
                     ], [], createDatagrid);
 
                 }
-	
+
 	            YAHOO.util.Event.onDOMReady(init);
 			})();
             //]]></script>

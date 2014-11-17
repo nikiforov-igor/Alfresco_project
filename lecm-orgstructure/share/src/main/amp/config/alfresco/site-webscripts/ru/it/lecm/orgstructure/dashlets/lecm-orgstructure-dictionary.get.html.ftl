@@ -12,7 +12,6 @@
 </@>
 <@markup id="js">
     <@script type="text/javascript" src="${url.context}/res/components/form/form.js"/>
-    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"/>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-form-tabs.js"/>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/orgstructure-toolbar.js"></@script>

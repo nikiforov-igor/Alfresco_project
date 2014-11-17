@@ -6,9 +6,6 @@
 <@markup id="js">
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js" group="toolbar"/>
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js" group="toolbar"/>
-<#--загрузка base-utils.js вынесена в base-share-config-custom.xml-->
-	<#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="toolbar"/>-->
-	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js" group="toolbar"/>
 </@>
 
 <@markup id="widgets">

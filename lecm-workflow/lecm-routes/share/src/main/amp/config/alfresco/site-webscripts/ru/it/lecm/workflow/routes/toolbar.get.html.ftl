@@ -22,7 +22,6 @@
             LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-workflow/routes/routes-toolbar.js',
                 'components/form/form.js',
-                'jquery/jquery-1.6.2.js',
                 'modules/simple-dialog.js'
             ], [
                 'css/lecm-base/components/base-menu/base-menu.css',

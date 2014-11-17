@@ -39,7 +39,7 @@
 								showCheckboxColumn: false,
 								attributeForShow:"lecm-orgstr:element-short-name"
 							}).setMessages(${messages});
-	
+
 	                YAHOO.util.Event.onContentReady ('${id}', function () {
 	                    YAHOO.Bubbling.fire ("activeGridChanged", {
 	                        datagridMeta: {
@@ -53,10 +53,9 @@
 	                    });
 	                });
 				}
-	
+
 				function init() {
                     LogicECM.module.Base.Util.loadResources([
-                        'jquery/jquery-1.6.2.js',
                         'components/form/date-range.js',
                         'components/form/number-range.js',
                         'modules/simple-dialog.js',

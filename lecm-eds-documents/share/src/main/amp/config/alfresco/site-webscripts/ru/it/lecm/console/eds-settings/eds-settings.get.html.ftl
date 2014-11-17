@@ -1,10 +1,6 @@
 <#if allowEdit >
 <#include "/org/alfresco/components/component.head.inc">
 
-<@markup id="js">
-    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" />
-</@>
-
 <#assign el=args.htmlid?html>
 <script type="text/javascript">//<![CDATA[
 (function(){

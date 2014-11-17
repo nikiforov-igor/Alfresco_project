@@ -1,15 +1,12 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader "transitional">
     <#include "/org/alfresco/components/form/form.dependencies.inc">
-	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js"/>
     <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-reports-editor/reports-editor-const.js"></@script>-->
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-validation.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
-<#--загрузка base-utils.js вынесена в base-share-config-custom.xml-->
-    <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"></@script>-->
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-reports-editor/editor-tree-menu.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-reports-editor/toolbar.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-reports-editor/template-edit/template-editor-toolbar.js"></@script>
