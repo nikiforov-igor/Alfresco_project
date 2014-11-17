@@ -38,10 +38,12 @@
             (function () {
 
                 function init() {
-                    LogicECM.module.Base.Util.loadScripts([
+                    LogicECM.module.Base.Util.loadResources([
                         'scripts/lecm-base/components/advsearch.js',
                         'scripts/lecm-base/components/lecm-datagrid.js',
                         'scripts/documents/connections/document-temp-connection.js'
+                    ], [
+                        'css/lecm-documents/document-temp-connection.css'
                     ], initData);
                 }
 
@@ -97,7 +99,6 @@
                         },
                         editForm: "connection-types-not-filtered",
                         bubblingLabel: "${bubblingId}",
-                        height: 150,
                         allowCreate: true,
                         showActionColumn: true,
                         showCheckboxColumn: false,
