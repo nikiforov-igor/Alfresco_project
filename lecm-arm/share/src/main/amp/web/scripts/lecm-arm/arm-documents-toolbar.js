@@ -665,11 +665,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         types = currentNode.data.types.split(",");
                     }
                     this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isNotGridNode ||
-                        (types.length != 1 && (currentNode.data.searchType == null || currentNode.data.searchType.length == 0)));
-                    if (types.length == 1) {
+                        ((types.length != 1 || types[0].length == 0) && (currentNode.data.searchType == null || currentNode.data.searchType.length == 0)));
+                    if (types.length == 1 && types[0].length > 0) {
 	                    this.currentType = types[0];
                     } else if (currentNode.data.searchType != null && currentNode.data.searchType.length > 0) {
 	                    this.currentType = currentNode.data.searchType;
+                    } else {
+                        this.currentType = null;
                     }
                 }
                 if (!this.deferredListPopulation.fulfil("updateArmFilters")){
