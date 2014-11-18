@@ -478,10 +478,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                     Map<QName, Serializable> props = getCachedProperties(query);
                     if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
                         result = new ArmQueryChildRule();
-                        String processedQuery = (String) props.get(PROP_LIST_QUERY_CHILD_RULE);
-                        processedQuery = processorService.processQuery(processedQuery);
-                        ((ArmQueryChildRule) result).setListQuery(processedQuery);
+                        ((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
                         ((ArmQueryChildRule) result).setSearchService(searchService);
+                        ((ArmQueryChildRule) result).setProcessorService(processorService);
                     } else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
                         result = new ArmDictionaryChildRule();
                         NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, null, ASSOCIATION_TYPE.TARGET);

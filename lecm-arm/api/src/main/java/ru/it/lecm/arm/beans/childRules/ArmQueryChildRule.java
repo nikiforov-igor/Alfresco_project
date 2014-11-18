@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,14 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
 	}
 
     private SearchService searchService;
+    private SearchQueryProcessorService processorService;
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
+    }
+
+    public void setProcessorService(SearchQueryProcessorService processorService) {
+        this.processorService = processorService;
     }
 
     @Override
@@ -39,7 +45,8 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
             sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
             sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-            sp.setQuery(listQuery);
+            String processedQuery = processorService.processQuery(listQuery);
+            sp.setQuery(processedQuery);
             sp.addSort("@" + ContentModel.PROP_NAME, true);
 
             ResultSet results = null;
