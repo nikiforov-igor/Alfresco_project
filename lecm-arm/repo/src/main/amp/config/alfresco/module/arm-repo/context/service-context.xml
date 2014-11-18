@@ -248,6 +248,7 @@
                         <value>cm:name</value>
                         <value>lecm-arm:html-url</value>
                         <value>lecm-arm:order</value>
+                        <value>lecm-arm:node-child-rule-assoc</value>
                     </list>
                 </entry>
             </map>

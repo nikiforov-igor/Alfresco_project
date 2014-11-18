@@ -358,7 +358,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
 
                 var isReportNode = node.data.nodeType == "lecm-arm:reports-node";
-	            var isHtmlNode = node.data.nodeType == "lecm-arm:html-node";
+	            var isHtmlNode = node.data.htmlUrl != null && node.data.htmlUrl.length > 0;
 	            var isNotGridNode = isReportNode || isHtmlNode;
 
 	            Dom.setStyle("arm-documents-grid", "display", isNotGridNode ? "none" : "block");

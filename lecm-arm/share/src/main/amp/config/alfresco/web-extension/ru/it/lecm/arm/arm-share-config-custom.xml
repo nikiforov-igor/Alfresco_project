@@ -343,7 +343,17 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:html-url" force="true"/>
+					<show id="lecm-arm:node-child-rule-assoc" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:node-child-rule-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
+							<control-param name="nameSubstituteString">{lecm-arm:list-query-child-rule}{lecm-arm:child-rule-dictionary-assoc/cm:name}{lecm-arm:statuses-rule}</control-param>
+							<control-param name="itemTypes">lecm-arm:query-child-rule,lecm-arm:dictionary-child-rule</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>

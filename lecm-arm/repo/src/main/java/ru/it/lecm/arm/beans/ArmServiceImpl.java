@@ -467,7 +467,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
 	public ArmBaseChildRule getNodeChildRule(NodeRef node) {
-		if (isArmNode(node)) {
+		if (isArmElement(node)) {
             if (!childRulesCache.contains(node)) {
                 List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(node, ASSOC_NODE_CHILD_RULE);
                 ArmBaseChildRule result = null;

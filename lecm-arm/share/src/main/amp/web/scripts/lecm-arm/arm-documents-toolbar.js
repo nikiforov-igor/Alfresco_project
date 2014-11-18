@@ -629,7 +629,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 this.currentNode = currentNode;
                 if (currentNode !== null) {
                     var isReportNode = this.currentNode.data.nodeType == "lecm-arm:reports-node";
-                    var isHtmlNode = this.currentNode.data.nodeType == "lecm-arm:html-node";
+                    var isHtmlNode = this.currentNode.data.htmlUrl != null && this.currentNode.data.htmlUrl.length > 0;
                     if (isReportNode || isHtmlNode) {
                         Dom.setStyle(this.id, "display", "none");
                     } else {

@@ -86,20 +86,6 @@
                     <type>d:text</type>
                 </property>
             </properties>
-			<associations>
-				<!-- Правило построения узлов -->
-				<association name="lecm-arm:node-child-rule-assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-arm:base-child-rule</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
 			<overrides>
 				<property name="lecm-dic:valueContainsType">
 					<default>lecm-arm:node</default>
@@ -240,6 +226,18 @@
                         <many>true</many>
                     </target>
                 </association>
+				<!-- Правило построения узлов -->
+				<association name="lecm-arm:node-child-rule-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-arm:base-child-rule</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
 			</associations>
             <mandatory-aspects>
                 <aspect>lecm-arm:ordered</aspect>
