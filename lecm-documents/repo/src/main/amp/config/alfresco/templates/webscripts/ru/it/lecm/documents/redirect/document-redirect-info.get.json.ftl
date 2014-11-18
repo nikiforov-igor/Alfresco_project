@@ -6,6 +6,6 @@
 	<#if node??>
 	"nodeRef":"${node.nodeRef?string}",
 	</#if>
-	"redirect":"${redirect?string}"
+	"redirect":${redirect?string}
 }
 </#escape>
