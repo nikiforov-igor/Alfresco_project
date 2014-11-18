@@ -41,6 +41,11 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
             public String getSQLPreparedValue(Object value) {
                 return "NULL";
             }
+
+            @Override
+            public String getFTSPreparedValue(Object value) {
+                return "*";
+            }
         },
 
         STRING(String.class.getName()) {
@@ -48,12 +53,22 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
             public String getSQLPreparedValue(Object value) {
                 return value != null ? ("'" + value + "'") : "NULL";
             }
+
+            @Override
+            public String getFTSPreparedValue(Object value) {
+                return value != null ? ("'" + value + "'") : "*";
+            }
         },
 
         HTML(JavaDataType.HTML) {
             @Override
             public String getSQLPreparedValue(Object value) {
                 return value != null ? ("'" + value + "'") : "NULL";
+            }
+
+            @Override
+            public String getFTSPreparedValue(Object value) {
+                return value != null ? ("'" + value + "'") : "*";
             }
         },
 
@@ -68,7 +83,12 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
 
             @Override
             public String getSQLPreparedValue(Object value) {
-                return value != null ? ("'" + DateFormat_YMD_HMS.format(((Date) value)) + "'") : "NULL";
+                return value != null ? ("'" + ArgsHelper.DateFormat_YMD_HMS.format(((Date) value)) + "'") : "NULL";
+            }
+
+            @Override
+            public String getFTSPreparedValue(Object value) {
+                return value != null ? ("'" + ArgsHelper.DateFormatISO8601.format(((Date) value)) + "'") : "*";
             }
         },
 
@@ -166,6 +186,26 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
 
                 return resultedValue;
             }
+
+            @Override
+            public String getFTSPreparedValue(Object value) {
+                String resultedValue = "";
+                for (Object val : (List) value) {
+                    JavaDataType.SupportedTypes type;
+                    String destClassName;
+                    if (val != null) {
+                        destClassName = val.getClass().getName();
+                    } else {
+                        destClassName = null;
+                    }
+                    type = JavaDataType.SupportedTypes.findType(destClassName);
+
+                    resultedValue = resultedValue +
+                            (resultedValue.length() > 0 ? " OR " : "") + (type != null ? type.getSQLPreparedValue(val) : "*");
+                }
+
+                return resultedValue;
+            }
         };
 
         final private JavaDataType javaDataType;
@@ -184,6 +224,10 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
 
         public String getSQLPreparedValue(Object value) {
             return value != null ? value.toString() : "NULL";
+        }
+
+        public String getFTSPreparedValue(Object value) {
+            return value != null ? value.toString() : "*";
         }
 
         public static SupportedTypes findType(String clazzName) {
