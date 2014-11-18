@@ -4,6 +4,17 @@
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
+<#assign isFieldMandatory = false>
+<#if field.control.params.mandatory??>
+	<#if field.control.params.mandatory == "true">
+		<#assign isFieldMandatory = true>
+	</#if>
+<#elseif field.mandatory??>
+	<#assign isFieldMandatory = field.mandatory>
+<#elseif field.endpointMandatory??>
+	<#assign isFieldMandatory = field.endpointMandatory>
+</#if>
+
 <#if disabled>
 	<div class="control association-create viewmode">
 		<div class="label-div">
