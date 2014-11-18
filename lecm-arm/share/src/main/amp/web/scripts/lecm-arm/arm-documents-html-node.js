@@ -20,7 +20,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	YAHOO.extend(LogicECM.module.ARM.HtmlNode, Alfresco.component.Base,
 		{
 			onUpdateArmHtmlNode: function(layer, args) {
-				var url = args[1].url;
+				var node = args[1].armNode;
+				var url = node.data.htmlUrl;
 				if (url !== null) {
 					var container = Dom.get(this.id);
 
@@ -30,7 +31,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 						if (this.isIframePage(url)) {
 							this.loadIframePage(url);
 						} else {
-							this.loadSharePage(url);
+							this.loadSharePage(url, node);
 						}
 					}
 				}
@@ -40,14 +41,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				return url.indexOf("http://") == 0 || url.indexOf("https://") == 0;
 			},
 
-			loadSharePage: function(url) {
+			loadSharePage: function(url, node) {
 				var me = this;
+				var dataObj = {
+					htmlid: this.id
+				};
+				if (node.data.nodeRef != null) {
+					dataObj.armSelectedNodeRef = node.data.nodeRef
+				}
+
 				Alfresco.util.Ajax.request(
 					{
 						url: Alfresco.constants.URL_CONTEXT + url,
-						dataObj: {
-							htmlid: this.id
-						},
+						dataObj: dataObj,
 						successCallback: {
 							fn:function(response){
 								Dom.get(me.id).innerHTML = response.serverResponse.responseText;
