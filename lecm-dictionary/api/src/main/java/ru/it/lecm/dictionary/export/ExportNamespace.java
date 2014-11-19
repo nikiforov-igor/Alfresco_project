@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.QName;
  */
 public interface ExportNamespace {
 	public static final String ATTR_NAME = "name";
+    String ATTR_FMS_ORGSTR_EXT_ID = "fmsOrgstrExtID";
     String ATTR_TYPE = "type";
     String ATTR_PATH = "path";
     String ATTR_UPDATE_MODE = "updateMode";

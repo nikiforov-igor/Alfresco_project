@@ -29,11 +29,11 @@ import java.util.*;
  * Time: 10:24
  */
 public class XMLImportBeanImpl implements XMLImportBean {
-    private static final transient Logger logger = LoggerFactory.getLogger(XMLImporterImpl.class);
+    protected static final transient Logger logger = LoggerFactory.getLogger(XMLImporterImpl.class);
 
-    private NodeService nodeService;
-    private NamespaceService namespaceService;
-    private DictionaryService dictionaryService;
+    protected NodeService nodeService;
+    protected NamespaceService namespaceService;
+    protected DictionaryService dictionaryService;
     private Repository repositoryHelper;
 	private ContentService contentService;
 	private MimetypeService mimetypeService;
@@ -69,15 +69,15 @@ public class XMLImportBeanImpl implements XMLImportBean {
 
     public class XMLImporterImpl implements XMLImporter {
         private InputStream inputStream;
-	    private XMLImporterInfo importInfo;
+	    protected XMLImporterInfo importInfo;
 
-	    private HashMap<NodeRef, Map<String, List<String>>> assocs;
+	    protected HashMap<NodeRef, Map<String, List<String>>> assocs;
 
         /**
          * Конструктор загрузчика XML
          * @param inputStream входной XML поток
          */
-        private XMLImporterImpl(InputStream inputStream) {
+        protected XMLImporterImpl(InputStream inputStream) {
             this.inputStream = inputStream;
 	        this.assocs = new HashMap<NodeRef, Map<String, List<String>>>();
         }
@@ -97,7 +97,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
          *
          * @param parentNodeRef родительский элемен, в котором будут созданы импортируемые
          * @param updateMode режим обновления записей
-         * @throws XMLStreamException
+         * @throws javax.xml.stream.XMLStreamException
          */
         public XMLImporterInfo readItems(NodeRef parentNodeRef, UpdateMode updateMode) throws XMLStreamException {
 	        this.importInfo = new XMLImporterInfo();
@@ -130,7 +130,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
          * @param parent ссылка на родительский элемент
          * @param updateMode режим обновления записей
          * @return true если элементы были создан
-         * @throws XMLStreamException
+         * @throws javax.xml.stream.XMLStreamException
          */
 
         private boolean readItems(XMLStreamReader xmlr, NodeRef parent, UpdateMode updateMode) throws XMLStreamException {
@@ -164,7 +164,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
          * @param parent ссылка на родительский элемент
          * @param updateMode режим обновления записей
          * @return true если элемент был создан
-         * @throws XMLStreamException
+         * @throws javax.xml.stream.XMLStreamException
          */
         private boolean readItem(XMLStreamReader xmlr, NodeRef parent, UpdateMode updateMode) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
@@ -220,7 +220,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
             return true;
         }
 
-        private boolean readAssoc(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
+        protected boolean readAssoc(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_ASSOC))) {
                 return false;
@@ -243,7 +243,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
             return true;
         }
 
-	    private void createAssocs(UpdateMode updateMode) {
+	    protected void createAssocs(UpdateMode updateMode) {
 		    for (NodeRef nodeRef: this.assocs.keySet()) {
 			    for (String assocType: this.assocs.get(nodeRef).keySet()) {
 				    for (String assocPath: this.assocs.get(nodeRef).get(assocType)) {
@@ -288,7 +288,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
 		    }
 	    }
 
-        private NodeRef getNodeByPath(String path) {
+        protected NodeRef getNodeByPath(String path) {
             NodeRef result = null;
             StringTokenizer t = new StringTokenizer(path, "/");
             if (t.hasMoreTokens())
@@ -376,7 +376,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
          *
          * @param xmlr XML Reader
          * @return карта свойств
-         * @throws XMLStreamException
+         * @throws javax.xml.stream.XMLStreamException
          */
         private Map<QName, Serializable> getProperties(XMLStreamReader xmlr) throws XMLStreamException {
             Map<QName, Serializable> properties = new HashMap<QName, Serializable>();

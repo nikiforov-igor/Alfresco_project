@@ -41,8 +41,8 @@ public class XMLExportBeanImpl implements XMLExportBean {
     }
 
     private ExportSettings exportSettings;
-    private NodeService nodeService;
-    private NamespaceService namespaceService;
+    protected NodeService nodeService;
+    protected NamespaceService namespaceService;
 	private ContentService contentService;
 
     public void setExportSettings(ExportSettings exportSettings) {
@@ -68,9 +68,9 @@ public class XMLExportBeanImpl implements XMLExportBean {
 
     public class XMLExporterImpl implements XMLExporter {
 
-        private XMLStreamWriter xmlw;
+        protected XMLStreamWriter xmlw;
 
-        private XMLExporterImpl(OutputStream resOutputStream) throws XMLStreamException {
+        protected XMLExporterImpl(OutputStream resOutputStream) throws XMLStreamException {
             // Create an output factory
             XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
             xmlw = xmlof.createXMLStreamWriter(resOutputStream);
@@ -143,7 +143,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
             }
         }
 
-        private void writeAssoc(AssociationRef assoc, List<String> fieldsForType) throws XMLStreamException {
+        protected void writeAssoc(AssociationRef assoc, List<String> fieldsForType) throws XMLStreamException {
             QName assocTypeQName = assoc.getTypeQName();
             if (!isExportField(fieldsForType, assocTypeQName)) {
                 return; //фильтр по имени ассоциации
@@ -192,7 +192,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
             }
         }
 
-        private boolean isExportField(List exportFieldsList, QName qName) {
+        protected boolean isExportField(List exportFieldsList, QName qName) {
             return exportFieldsList != null && exportFieldsList.contains(qName.toPrefixString(namespaceService));
         }
 
@@ -239,7 +239,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
          * @param ref Ссылка на элемент
          * @return true - если элемент архивный, иначе false
          */
-        private boolean isArchive(NodeRef ref){
+        protected boolean isArchive(NodeRef ref){
 	        boolean isArchive = StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals (ref.getStoreRef ());
 	        if (isArchive) {
 		        return true;
