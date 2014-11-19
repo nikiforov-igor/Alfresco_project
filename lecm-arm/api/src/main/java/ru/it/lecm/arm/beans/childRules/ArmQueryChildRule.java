@@ -1,6 +1,7 @@
 package ru.it.lecm.arm.beans.childRules;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -64,5 +65,10 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
         }
 
         return nodes;
+    }
+
+    @Override
+    public List<NodeRef> getChildren(NodeRef node) {
+        return null;
     }
 }

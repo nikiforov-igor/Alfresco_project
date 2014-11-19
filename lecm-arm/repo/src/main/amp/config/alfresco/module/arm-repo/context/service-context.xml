@@ -233,6 +233,13 @@
                         <value>lecm-arm:selected-statuses</value>
                     </list>
                 </entry>
+                <entry key="lecm-arm:xpath-child-rule">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:xpath-child-rule-root-xpath</value>
+                        <value>lecm-arm:xpath-child-rule-types</value>
+                    </list>
+                </entry>
                 <entry key="lecm-arm:filter">
                     <list>
                         <value>cm:name</value>

@@ -40,6 +40,11 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
         return nodes;
     }
 
+    @Override
+    public List<NodeRef> getChildren(NodeRef node) {
+        return dictionaryService.getChildren(node);
+    }
+
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
     }

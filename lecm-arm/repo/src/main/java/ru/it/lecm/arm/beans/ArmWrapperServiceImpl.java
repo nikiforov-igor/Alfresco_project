@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
@@ -15,8 +16,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-//import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  * User: dbashmakov
@@ -106,10 +105,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         //2. Добавить реальных дочерних узлов для иерархического справочника!
         // в остальных случаях у нас не может быть дочерних элементов
-        if (node != null && !isArmElement(node) && dictionaryService.isDictionaryValue(node)){
-            List<NodeRef> dicChilds = dictionaryService.getChildren(node);
-            for (NodeRef dicChild : dicChilds) {
-                result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
+        if (node != null && !isArmElement(node)){
+            List<NodeRef> childs = parent.getNodeQuery().getChildren(node);
+            if (childs != null) {
+                for (NodeRef dicChild : childs) {
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
+                }
             }
         }
         return result;
@@ -125,11 +126,13 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             parentFromArm = parentRef;
         }
 
+        ArmBaseChildRule nodeQuery = service.getNodeChildRule(parentRef);
+
         //2. Добавить реальных дочерних узлов для иерархического справочника!
         // в остальных случаях у нас не может быть дочерних элементов
-        if (node != null && !isArmElement(node) && dictionaryService.isDictionaryValue(node)){
-            List<NodeRef> dicChilds = dictionaryService.getChildren(node);
-            if (!dicChilds.isEmpty()) {
+        if (node != null && !isArmElement(node)){
+            List<NodeRef> childs = nodeQuery.getChildren(node);
+            if (childs != null && !childs.isEmpty()) {
                 return true;
             }
         }

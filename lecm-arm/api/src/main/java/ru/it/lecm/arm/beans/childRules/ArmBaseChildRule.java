@@ -1,5 +1,6 @@
 package ru.it.lecm.arm.beans.childRules;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 
@@ -18,7 +19,14 @@ public abstract class ArmBaseChildRule {
         public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
             return null;
         }
+
+        @Override
+        public List<NodeRef> getChildren(NodeRef node) {
+            return null;
+        }
     };
 
     abstract public List<ArmNode> build(ArmWrapperService service, ArmNode node);
+
+    abstract public List<NodeRef> getChildren(NodeRef node);
 }

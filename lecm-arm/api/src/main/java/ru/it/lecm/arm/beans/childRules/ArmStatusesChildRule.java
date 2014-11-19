@@ -1,5 +1,6 @@
 package ru.it.lecm.arm.beans.childRules;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -125,7 +126,12 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
         return nodes;
     }
 
-	public String getQuery() {
+    @Override
+    public List<NodeRef> getChildren(NodeRef node) {
+        return null;
+    }
+
+    public String getQuery() {
 		StringBuilder queryBuilder = new StringBuilder();
 		switch (Rule.valueOf(rule)) {
 			case SELECTED: {

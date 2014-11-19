@@ -13,10 +13,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
-import ru.it.lecm.arm.beans.childRules.ArmDictionaryChildRule;
-import ru.it.lecm.arm.beans.childRules.ArmQueryChildRule;
-import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
+import ru.it.lecm.arm.beans.childRules.*;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -503,6 +500,15 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
                             ((ArmStatusesChildRule) result).setSelectedStatuses(selectedStatusesList);
                         }
+                    } else if (TYPE_XPATH_CHILD_RULE.equals(queryType)) {
+                        result = new ArmXPathChildRule();
+                        ((ArmXPathChildRule) result).setRootXPath((String) props.get(PROP_ROOT_XPATH));
+                        String types = (String) props.get(PROP_XPATH_TYPES);
+                        if (types != null) {
+                            ((ArmXPathChildRule) result).setTypes(Arrays.asList(types.split(",")));
+                        }
+                        ((ArmXPathChildRule) result).setSearchService(searchService);
+                        ((ArmXPathChildRule) result).setNodeService(nodeService);
                     }
                 }
                 childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
