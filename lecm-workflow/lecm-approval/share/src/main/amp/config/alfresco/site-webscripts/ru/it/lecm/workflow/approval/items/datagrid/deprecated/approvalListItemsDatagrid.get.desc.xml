@@ -2,5 +2,5 @@
 <webscript>
 	<shortname>Лист согласование</shortname>
 	<description>Датагрид с содержимым листа согласования</description>
-	<url>/lecm/workflow/approval/approvalListItemsDatagrid?nodeRef={nodeRef}&amp;approvalItemType={approvalItemType}</url>
+	<url>/lecm/workflow/approval/deprecated/approvalListItemsDatagrid?nodeRef={nodeRef}&amp;approvalItemType={approvalItemType}</url>
 </webscript>

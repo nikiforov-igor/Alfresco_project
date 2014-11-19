@@ -136,7 +136,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			var me = this, nodeRef = record.getData("nodeRef");
 			Alfresco.util.Ajax.request({
 				method: "GET",
-				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/workflow/approval/approvalListItemsDatagrid",
+				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/workflow/approval/deprecated/approvalListItemsDatagrid",
 				dataObj: {
 					nodeRef: nodeRef,
 					datagridFormId: me.options.approvalItemsDatagridId,
