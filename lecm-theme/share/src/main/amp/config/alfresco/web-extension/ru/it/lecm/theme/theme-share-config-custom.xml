@@ -72,7 +72,6 @@
 <!--
 				<js src="/modules/create-site.js" />
                 <js src="/modules/header/sites.js" />
-                <js src="/scripts/notifications.js" />
                 <js src="/yui/event-simulate/event-simulate.js" />
                 <js src="/scripts/lecm_im/lecm_im_config.js" />
                 <js src="/scripts/lecm-im-header.js" />

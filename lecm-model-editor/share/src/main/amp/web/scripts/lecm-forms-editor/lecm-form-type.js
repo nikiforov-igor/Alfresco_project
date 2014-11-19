@@ -23,7 +23,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
     var Dom = YAHOO.util.Dom;
     LogicECM.module.FormsEditor.FormType = function (fieldHtmlId)
     {
-		LogicECM.module.FormsEditor.FormType.superclass.constructor.call(this, "LogicECM.module.FormsEditor.FormType", fieldHtmlId, [ "container"]);
+		LogicECM.module.FormsEditor.FormType.superclass.constructor.call(this, "LogicECM.module.FormsEditor.FormType", fieldHtmlId, ["container", "history"]);
 	    this.formIds = [];
 	    return this;
     };

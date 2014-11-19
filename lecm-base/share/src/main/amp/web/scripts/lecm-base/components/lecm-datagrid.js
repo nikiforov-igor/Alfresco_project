@@ -75,7 +75,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
      */
     LogicECM.module.Base.DataGrid = function(htmlId)
     {
-        LogicECM.module.Base.DataGrid.superclass.constructor.call(this, "LogicECM.module.Base.DataGrid_" + htmlId, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
+        LogicECM.module.Base.DataGrid.superclass.constructor.call(this, "LogicECM.module.Base.DataGrid_" + htmlId, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation", "history"]);
 
         // Initialise prototype properties
         this.datagridMeta = {};

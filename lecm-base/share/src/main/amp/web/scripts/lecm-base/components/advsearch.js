@@ -40,7 +40,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
      * @constructor
      */
     LogicECM.AdvancedSearch = function (htmlId, grid) {
-        LogicECM.AdvancedSearch.superclass.constructor.call(this, "LogicECM.AdvancedSearch", htmlId, ["button", "container", "datasource", "datatable", "paginator"]);
+        LogicECM.AdvancedSearch.superclass.constructor.call(this, "LogicECM.AdvancedSearch", htmlId, ["button", "container", "datasource", "datatable", "paginator", "history"]);
         // Initialise prototype properties
         this.dataTable = grid.widgets.dataTable;
         this.dataSource = grid.widgets.dataSource;
