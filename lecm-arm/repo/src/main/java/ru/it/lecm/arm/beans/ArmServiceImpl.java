@@ -504,7 +504,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                         result = new ArmXPathChildRule();
                         ((ArmXPathChildRule) result).setRootXPath((String) props.get(PROP_ROOT_XPATH));
                         String types = (String) props.get(PROP_XPATH_TYPES);
-                        if (types != null) {
+                        if (types != null && types.length() > 0) {
                             ((ArmXPathChildRule) result).setTypes(Arrays.asList(types.split(",")));
                         }
                         ((ArmXPathChildRule) result).setSearchService(searchService);
