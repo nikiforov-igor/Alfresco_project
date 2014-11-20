@@ -37,35 +37,37 @@ import java.util.regex.Pattern;
  */
 public class ArchiveDocumentAction extends StateMachineAction implements ExecutionListener {
 
-	private String archiveFolderPath = "/Archive";
-	private String archiveFolderPathAdditional = "";
-	private String status = "UNKNOWN";
-	private String qnameArchivePath = null;
-	protected Expression archiveFolder;
-	protected Expression archiveFolderAdditional;
-    
+    private String archiveFolderPath = "/Archive";
+    private String archiveFolderPathAdditional = "";
+    private String status = "UNKNOWN";
+    private String qnameArchivePath = null;
+    protected Expression archiveFolder;
+    protected Expression archiveFolderAdditional;
+
     public void setArchiveFolder(Expression archiveFolder) {
-		this.archiveFolder = archiveFolder;
-	}
-    
+        this.archiveFolder = archiveFolder;
+    }
+
     public void setArchiveFolderAdditional(Expression archiveFolderAdditional) {
-		this.archiveFolderAdditional = archiveFolderAdditional;
-	}
+        this.archiveFolderAdditional = archiveFolderAdditional;
+    }
 
-	private static final transient Logger logger = LoggerFactory.getLogger(ArchiveDocumentAction.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(ArchiveDocumentAction.class);
 
-	@Override
+    @Override
     public void notify(DelegateExecution execution) {
-		status = execution.getCurrentActivityName();
-		if(archiveFolder!=null&&archiveFolder.getValue(execution)!=null) archiveFolderPath = archiveFolder.getExpressionText();
-		if(archiveFolderAdditional!=null&&archiveFolderAdditional.getValue(execution)!=null) archiveFolderPathAdditional = archiveFolderAdditional.getExpressionText();
-		
-		final NodeService nodeService = getServiceRegistry().getNodeService();
-		NodeRef wPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
-		final NodeRef document = nodeService.getChildAssocs(wPackage).get(0).getChildRef();
-		final String name = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-		
-		nodeService.setProperty(document, StatemachineModel.PROP_STATUS, status);
+        status = execution.getCurrentActivityName();
+        if (archiveFolder != null && archiveFolder.getValue(execution) != null)
+            archiveFolderPath = archiveFolder.getExpressionText();
+        if (archiveFolderAdditional != null && archiveFolderAdditional.getValue(execution) != null)
+            archiveFolderPathAdditional = archiveFolderAdditional.getExpressionText();
+
+        final NodeService nodeService = getServiceRegistry().getNodeService();
+
+        final NodeRef document = ((ActivitiScriptNode) execution.getVariable("stm_document")).getNodeRef();
+        final String name = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
+
+        nodeService.setProperty(document, StatemachineModel.PROP_STATUS, status);
 
         //Проверяем наличие аспекта указывающего на финальный статус
         if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_IS_FINAL)) {
@@ -73,7 +75,7 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
         }
         //Устанавливаем флаг финального статуса
         nodeService.setProperty(document, StatemachineModel.PROP_IS_FINAL, true);
-        
+
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
             @Override
             public Void doWork() throws Exception {
@@ -119,7 +121,7 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
                                             additionalFolder = nodeService.getChildByName(additionalFolders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
                                         }
                                     }
-                                    if(additionalFolder!=null) {
+                                    if (additionalFolder != null) {
                                         additionalFolder = createAdditionalPath(document, additionalFolder);
                                         try {
                                             nodeService.addChild(additionalFolder, document, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(additionalFolder.getId())));
@@ -139,139 +141,145 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
                             /////////////////////////////
                         }
                     }
+
                     //удаляем динамические пермиссии
                     //исключение: пермиссии, назначенные непосредственно сотруднику (с префиксом GROUP__LECM$SPEC%)
                     //            пермиссии участников также сохраняются (т.к. они выданы непосредственно сотруднику)
-					Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document);
-					for (AccessPermission permission : permissions) {
-						if (permission.getPosition() == 0 && !permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM + Types.SGKind.SG_SPEC.getSuffix())) {
-							getServiceRegistry().getPermissionService().deletePermission(document, permission.getAuthority(), permission.getPermission());
-						}
-					}
+                    Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document);
+                    for (AccessPermission permission : permissions) {
+                        if (permission.getPosition() == 0 && !permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM + Types.SGKind.SG_SPEC.getSuffix())) {
+                            getServiceRegistry().getPermissionService().deletePermission(document, permission.getAuthority(), permission.getPermission());
+                        }
+                    }
                 } catch (Exception e) {
                     logger.error("Error while action execution", e);
                 }
-		        return null;
+                return null;
             }
-		});
+        });
+
+        //Сбрасываем документ для скриптов
+        ((ActivitiScriptNode) execution.getVariable("stm_document")).reset();
+
         try {
-			String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
-			List<String> objects = new ArrayList<String>(1);
-			objects.add(status);
-			getBusinessJournalService().log(initiator, document,
-					EventCategory.CHANGE_DOCUMENT_STATUS,
-					"#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\". Регламентная работа по документу завершена.", objects);
-		} catch (Exception e) {
-			logger.error("Не удалось создать запись бизнес-журнала", e);
-		}
-	}
-	@Override
-	public void execute(DelegateExecution execution) throws InvalidNodeRefException{
-		
-	}
+            String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
+            List<String> objects = new ArrayList<String>(1);
+            objects.add(status);
+            getBusinessJournalService().log(initiator, document,
+                    EventCategory.CHANGE_DOCUMENT_STATUS,
+                    "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\". Регламентная работа по документу завершена.", objects);
+        } catch (Exception e) {
+            logger.error("Не удалось создать запись бизнес-журнала", e);
+        }
+    }
 
-	@Override
-	public void init(BaseElement actionElement, String processId) {
+    @Override
+    public void execute(DelegateExecution execution) throws InvalidNodeRefException {
 
-	}
+    }
 
-	public String getArchiveFolderPath() {
-		if (qnameArchivePath == null) {
-			qnameArchivePath = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
-				@Override
-				public String doWork() throws Exception {
-					String result = null;
-					try {
-						NodeService nodeService = getServiceRegistry().getNodeService();
-						NodeRef folderRef = getRepositoryStructureHelper().getCompanyHomeRef();
-						StringTokenizer tokenizer = new StringTokenizer(archiveFolderPath, "/");
-						while (tokenizer.hasMoreTokens()) {
-							String folderName = tokenizer.nextToken();
-							if (!"".equals(folderName)) {
-								folderRef = nodeService.getChildByName(folderRef, ContentModel.ASSOC_CONTAINS, folderName);
-							}
-						}
-						result = nodeService.getPath(folderRef).toPrefixString(getServiceRegistry().getNamespaceService());
-					} catch (Exception e) {
-						logger.warn("Archive folder \"" + archiveFolderPath + "\" removed or access denied");
-					}
-					return result;
-				}
-			});
-		}
-		return qnameArchivePath;
-	}
+    @Override
+    public void init(BaseElement actionElement, String processId) {
 
-	public String getStatusName() {
-		return status;
-	}
+    }
 
-	private NodeRef createArchivePath(NodeRef node) {
-		//Проверяем структуру
-		String rootFolder = archiveFolderPath;
+    public String getArchiveFolderPath() {
+        if (qnameArchivePath == null) {
+            qnameArchivePath = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
+                @Override
+                public String doWork() throws Exception {
+                    String result = null;
+                    try {
+                        NodeService nodeService = getServiceRegistry().getNodeService();
+                        NodeRef folderRef = getRepositoryStructureHelper().getCompanyHomeRef();
+                        StringTokenizer tokenizer = new StringTokenizer(archiveFolderPath, "/");
+                        while (tokenizer.hasMoreTokens()) {
+                            String folderName = tokenizer.nextToken();
+                            if (!"".equals(folderName)) {
+                                folderRef = nodeService.getChildByName(folderRef, ContentModel.ASSOC_CONTAINS, folderName);
+                            }
+                        }
+                        result = nodeService.getPath(folderRef).toPrefixString(getServiceRegistry().getNamespaceService());
+                    } catch (Exception e) {
+                        logger.warn("Archive folder \"" + archiveFolderPath + "\" removed or access denied");
+                    }
+                    return result;
+                }
+            });
+        }
+        return qnameArchivePath;
+    }
 
-		NodeService nodeService = getServiceRegistry().getNodeService();
-		NodeRef archiveFolder = getRepositoryStructureHelper().getCompanyHomeRef();
-		//Создаем основной путь до папки
-		boolean isCreated = false;
-		try {
-			StringTokenizer tokenizer = new StringTokenizer(rootFolder, "/");
-			while (tokenizer.hasMoreTokens()) {
-				String folderName = tokenizer.nextToken();
-				if (!"".equals(folderName)) {
-					NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
-					if (folder == null) {
-						folder = createFolder(archiveFolder, folderName);
-						isCreated = true;
-					}
-					archiveFolder = folder;
-				}
-			}
-		} catch (Exception e) {
-			logger.error("Error while create archive folder", e);  //To change body of catch statement use File | Settings | File Templates.
-		}
+    public String getStatusName() {
+        return status;
+    }
 
-		//Если была создана новая архивная папка сбрасываем ей права доступа и добавляем системные
-		if (isCreated && !archiveFolderPath.equals("/")) {
-			getServiceRegistry().getPermissionService().setInheritParentPermissions(archiveFolder, false);
-			Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(archiveFolder);
-			for (AccessPermission permission : permissions) {
-				getServiceRegistry().getPermissionService().deletePermission(archiveFolder, permission.getAuthority(), permission.getPermission());
-			}
-			getServiceRegistry().getPermissionService().setPermission(archiveFolder, AuthenticationUtil.SYSTEM_USER_NAME, "LECM_BASIC_PG_Reader", true);
-		}
-		archiveFolder = createAdditionalPath(node, archiveFolder);
-		return archiveFolder;
-	}
+    private NodeRef createArchivePath(NodeRef node) {
+        //Проверяем структуру
+        String rootFolder = archiveFolderPath;
 
-	private NodeRef createAdditionalPath(NodeRef node, NodeRef rootPath) {
-		Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
-		String path = archiveFolderPathAdditional;
-		Matcher matcher = pattern.matcher(path);
-		while (matcher.find()) {
-			String prefix = matcher.group(1);
-			String attributeName = matcher.group(2);
-			QName attribute = QName.createQName(prefix, attributeName, getServiceRegistry().getNamespaceService());
-			String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
-			path = path.replace("{" + prefix + ":" + attributeName + "}", value);
-		}
-		try {
-			StringTokenizer tokenizer = new StringTokenizer(path, "/");
-			NodeService nodeService = getServiceRegistry().getNodeService();
-			while (tokenizer.hasMoreTokens()) {
-				String folderName = tokenizer.nextToken();
-				if (!"".equals(folderName)) {
-					NodeRef folder = nodeService.getChildByName(rootPath, ContentModel.ASSOC_CONTAINS, folderName);
-					if (folder == null) {
-						folder = createFolder(rootPath, folderName);
-					}
-					rootPath = folder;
-				}
-			}
-		} catch (Exception e) {
-			logger.error("Error while create archive folder", e);
-		}
-		return rootPath;
-	}
+        NodeService nodeService = getServiceRegistry().getNodeService();
+        NodeRef archiveFolder = getRepositoryStructureHelper().getCompanyHomeRef();
+        //Создаем основной путь до папки
+        boolean isCreated = false;
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(rootFolder, "/");
+            while (tokenizer.hasMoreTokens()) {
+                String folderName = tokenizer.nextToken();
+                if (!"".equals(folderName)) {
+                    NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
+                    if (folder == null) {
+                        folder = createFolder(archiveFolder, folderName);
+                        isCreated = true;
+                    }
+                    archiveFolder = folder;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error while create archive folder", e);  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        //Если была создана новая архивная папка сбрасываем ей права доступа и добавляем системные
+        if (isCreated && !archiveFolderPath.equals("/")) {
+            getServiceRegistry().getPermissionService().setInheritParentPermissions(archiveFolder, false);
+            Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(archiveFolder);
+            for (AccessPermission permission : permissions) {
+                getServiceRegistry().getPermissionService().deletePermission(archiveFolder, permission.getAuthority(), permission.getPermission());
+            }
+            getServiceRegistry().getPermissionService().setPermission(archiveFolder, AuthenticationUtil.SYSTEM_USER_NAME, "LECM_BASIC_PG_Reader", true);
+        }
+        archiveFolder = createAdditionalPath(node, archiveFolder);
+        return archiveFolder;
+    }
+
+    private NodeRef createAdditionalPath(NodeRef node, NodeRef rootPath) {
+        Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
+        String path = archiveFolderPathAdditional;
+        Matcher matcher = pattern.matcher(path);
+        while (matcher.find()) {
+            String prefix = matcher.group(1);
+            String attributeName = matcher.group(2);
+            QName attribute = QName.createQName(prefix, attributeName, getServiceRegistry().getNamespaceService());
+            String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
+            path = path.replace("{" + prefix + ":" + attributeName + "}", value);
+        }
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(path, "/");
+            NodeService nodeService = getServiceRegistry().getNodeService();
+            while (tokenizer.hasMoreTokens()) {
+                String folderName = tokenizer.nextToken();
+                if (!"".equals(folderName)) {
+                    NodeRef folder = nodeService.getChildByName(rootPath, ContentModel.ASSOC_CONTAINS, folderName);
+                    if (folder == null) {
+                        folder = createFolder(rootPath, folderName);
+                    }
+                    rootPath = folder;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error while create archive folder", e);
+        }
+        return rootPath;
+    }
 
 }
