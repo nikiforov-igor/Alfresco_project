@@ -1,17 +1,15 @@
-<#assign fieldValue = "">
+<#assign fieldValue = field.value>
+<#assign defaultValue=""/>
 <#if field.control.params.contextProperty??>
 	<#if context.properties[field.control.params.contextProperty]??>
-		<#assign fieldValue = context.properties[field.control.params.contextProperty]>
+		<#assign defaultValue = context.properties[field.control.params.contextProperty]>
 	<#elseif args[field.control.params.contextProperty]??>
-		<#assign fieldValue = args[field.control.params.contextProperty]>
+		<#assign defaultValue = args[field.control.params.contextProperty]>
 	</#if>
 <#elseif context.properties[field.name]??>
-	<#assign fieldValue = context.properties[field.name]>
-<#else>
-	<#assign fieldValue = field.value>
+	<#assign defaultValue = context.properties[field.name]>
 </#if>
 
-<#assign defaultValue=""/>
 <#if form.arguments[field.name]?has_content>
 	<#assign defaultValue = form.arguments[field.name]>
 </#if>
