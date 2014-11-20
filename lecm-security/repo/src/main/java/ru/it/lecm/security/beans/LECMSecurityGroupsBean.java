@@ -41,8 +41,12 @@ public class LECMSecurityGroupsBean
 
 	public void setSVAspect(String SVAspect) {
 		this.SVAspectString = SVAspect;
-		logger.info("Creating OU_SV is allowed only for units with aspect: " + SVAspect);
-		this.SVAspectQName = QName.createQName(SVAspect);
+		if(SVAspect == null) {
+			logger.info("Aspect for creating OU_SV not found in alfresco-global.properties, using default " + this.SVAspectQName);
+		} else {
+			logger.info("Creating OU_SV is allowed only for units with aspect: " + SVAspect);
+			this.SVAspectQName = QName.createQName(SVAspect);
+		}
 	}
 
 	public void setAllowOUSV(boolean allowOUSV) {
