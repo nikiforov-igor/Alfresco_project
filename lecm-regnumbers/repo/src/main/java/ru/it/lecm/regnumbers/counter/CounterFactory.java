@@ -20,7 +20,6 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import static ru.it.lecm.regnumbers.RegNumbersService.REGNUMBERS_NAMESPACE;
 
@@ -40,21 +39,22 @@ public class CounterFactory extends BaseBean {
 	// необходимые сервисы
 	private NamespaceService namespaceService;
 	private DictionaryService dictionaryService;
-	
+
 	/**
 	 * ID каталога, в котором хранятся счетчики.
 	 */
 	public final static String REGNUMBERS_FOLDER_ID = "REGNUMBERS_FOLDER_ID";
 	/**
-	 * Ссылки на сквозные счетчики по типу документа. Структура: Тип в виде префикса (напр. "lecm-document:base") - Метка счетчика - Cсылка на счетчик. Для счетчиков без тега "Метка счетчика" равна
+	 * Ссылки на сквозные счетчики по типу документа. Структура: Тип в виде префикса (напр. "lecm-document:base") - Метка счетчика - Cсылка на
+	 * счетчик. Для счетчиков без тега "Метка счетчика" равна
 	 * null.
 	 */
-	private final Map<String, Map<String, NodeRef>> docTypeCounters = new ConcurrentHashMap<String, Map<String, NodeRef>>();
+	private final Map<String, Map<String, NodeRef>> docTypeCounters = new ConcurrentHashMap<>();
 
 	/**
 	 * мапа на совсем глобальные счетчики - глобальный сквозной - глобальный годовой - глобальный для документооборота
 	 */
-	private final Map<String, NodeRef> globalCounters = new ConcurrentHashMap<String, NodeRef>();
+	private final Map<String, NodeRef> globalCounters = new ConcurrentHashMap<>();
 	// логгер
 	private final static Logger logger = LoggerFactory.getLogger(CounterFactory.class);
 	/**
@@ -121,18 +121,14 @@ public class CounterFactory extends BaseBean {
 				documentType = getItemTypeAsPrefix(documentRef);
 				tagCounter = docTypeCounters.get(documentType);
 				if (tagCounter == null) {
-					tagCounter = new ConcurrentHashMap<String, NodeRef>();
+					tagCounter = new ConcurrentHashMap<>();
 					docTypeCounters.put(documentType, tagCounter);
 				}
 				if (tagCounter.containsKey(PLAIN_PREFIX + tag)) {
 					counterNodeRef = tagCounter.get(PLAIN_PREFIX + tag);
 				} else {
-					counterNodeRef = tagCounter.get(PLAIN_PREFIX + null);
-					if (counterNodeRef == null) {
-						counterNodeRef = getDocTypePlainCounter(documentType, null);
-						tagCounter.put(PLAIN_PREFIX + null, counterNodeRef);
-					}
-					logger.warn("We have no counter with tag {} for item type {}. Using default counter!", tag, documentType);
+					counterNodeRef = getDocTypePlainCounter(documentType, tag);
+					tagCounter.put(PLAIN_PREFIX + tag, counterNodeRef);
 				}
 				if (counterNodeRef == null) {
 					String errMessage = String.format("No counter for node %s! In must be inherited from lecm-document:base", documentRef.toString());
@@ -146,18 +142,14 @@ public class CounterFactory extends BaseBean {
 				documentType = getItemTypeAsPrefix(documentRef);
 				tagCounter = docTypeCounters.get(documentType);
 				if (tagCounter == null) {
-					tagCounter = new ConcurrentHashMap<String, NodeRef>();
+					tagCounter = new ConcurrentHashMap<>();
 					docTypeCounters.put(documentType, tagCounter);
 				}
 				if (tagCounter.containsKey(YEAR_PREFIX + tag)) {
 					counterNodeRef = tagCounter.get(YEAR_PREFIX + tag);
 				} else {
-					counterNodeRef = tagCounter.get(YEAR_PREFIX + null);
-					if (counterNodeRef == null) {
-						counterNodeRef = getDocTypeYearCounter(documentType, null);
-						tagCounter.put(YEAR_PREFIX + null, counterNodeRef);
-					}
-					logger.warn("We have no year counter with tag {} for item type {}. Using default counter!", tag, documentType);
+					counterNodeRef = getDocTypeYearCounter(documentType, tag);
+					tagCounter.put(YEAR_PREFIX + tag, counterNodeRef);
 				}
 				if (counterNodeRef == null) {
 					String errMessage = String.format("No counter for node %s! In must be inherited from lecm-document:base", documentRef.toString());
@@ -299,7 +291,7 @@ public class CounterFactory extends BaseBean {
 	void initTaggedCounters(String documentType, List<String> tags) {
 		Map<String, NodeRef> tagCounter = docTypeCounters.get(documentType);
 		if (tagCounter == null) {
-			tagCounter = new ConcurrentHashMap<String, NodeRef>();
+			tagCounter = new ConcurrentHashMap<>();
 			docTypeCounters.put(documentType, tagCounter);
 		}
 
@@ -338,7 +330,7 @@ public class CounterFactory extends BaseBean {
 	 */
 	private NodeRef createNewCounter(final CounterType counterType, final String docType, final String tag) {
 		final QName itemType;
-		final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		final Map<QName, Serializable> properties = new HashMap<>();
 		String nodeName, assocName;
 
 		switch (counterType) {
@@ -394,6 +386,6 @@ public class CounterFactory extends BaseBean {
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-            return getFolder(REGNUMBERS_FOLDER_ID);
+		return getFolder(REGNUMBERS_FOLDER_ID);
 	}
 }
