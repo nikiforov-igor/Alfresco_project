@@ -23,6 +23,9 @@
 
 	<bean id="lecmSecurityGroupsBean" class="ru.it.lecm.security.beans.LECMSecurityGroupsBean" depends-on="lecmModuleSecurePermissionModelBootstrap">
 		<property name="authorityService" ref="authorityService" />
+		<property name="nodeService" ref="nodeService" />
+		<property name="sVAspect" value="${lecm.security.ou_sv.aspect}"/>
+		<property name="allowOUSV" value="${lecm.security.allow.ou_sv}"/>
 		<property name="safeMode" value="true" />
 		<!--
 		<property name="serviceRegistry" ref="ServiceRegistry" />

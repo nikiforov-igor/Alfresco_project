@@ -14,6 +14,11 @@ import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
 
 import java.util.Set;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.namespace.QName;
+import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 
 public class LECMSecurityGroupsBean
 		implements InitializingBean, IOrgStructureNotifiers
@@ -21,9 +26,33 @@ public class LECMSecurityGroupsBean
 
 	final static protected Logger logger = LoggerFactory.getLogger (LECMSecurityGroupsBean.class);
 
+	private boolean allowSVOnlyWithAspect = false;
+
 	private AuthorityService authorityService;
+	private NodeService nodeService;
+	private String SVAspectString;
+	private QName SVAspectQName = OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION;
 	private boolean safeMode = false;
 	private final SgNameResolver sgnm = new SgNameResolver(logger);
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
+
+	public void setSVAspect(String SVAspect) {
+		this.SVAspectString = SVAspect;
+		logger.info("Creating OU_SV is allowed only for units with aspect: " + SVAspect);
+		this.SVAspectQName = QName.createQName(SVAspect);
+	}
+
+	public void setAllowOUSV(boolean allowOUSV) {
+		this.allowSVOnlyWithAspect = allowOUSV;
+		if(allowOUSV) {
+			logger.info("Creating OU_SV is allowed only for nodes with aspect");
+		} else {
+			logger.info("Creating OU_SV is allowed for all nodes");
+		}
+	}
 
 	public AuthorityService getAuthorityService() {
 		return authorityService;
@@ -102,7 +131,7 @@ public class LECMSecurityGroupsBean
 	 * Удаление security-группы Альфреско
 	 * @param fullName
 	 */
-	void removeAlfrescoAuthority(String fullName) { 
+	void removeAlfrescoAuthority(String fullName) {
 		removeAlfrescoAuthority( fullName, false);
 	}
 
@@ -162,13 +191,31 @@ public class LECMSecurityGroupsBean
 
 	@Override
 	public String orgNodeCreated(Types.SGPosition obj) {
+		String sgName = null;
 		// создание личной группы объекта
-		final String sgName = ensureAlfrescoGroupName( obj.getAlfrescoSuffix(), obj.getDisplayInfo());
+		//Если пришла группа SG_SV, то произвести проверку
+		if(obj.getSgKind().equals(SGKind.SG_SV)){
+			if(allowSVOnlyWithAspect) {
+				if(nodeService.hasAspect(new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, obj.getId()), SVAspectQName)) {
+					return ensureAlfrescoGroupName( obj.getAlfrescoSuffix(), obj.getDisplayInfo());
+				}
+			} else {
+				return ensureAlfrescoGroupName( obj.getAlfrescoSuffix(), obj.getDisplayInfo());
+			}
+		} else {
+			sgName = ensureAlfrescoGroupName( obj.getAlfrescoSuffix(), obj.getDisplayInfo());
+		}
 
 		// дополнительные действия зависят от типа
-		if (obj.getSgKind() ==  SGKind.SG_OU)
-			// создание SG_SV для Департамента (OU) ...
-			ensureAlfrescoGroupName( SGKind.SG_SV.getAlfrescoSuffix(obj.getId()), obj.getDisplayInfo());
+		if (obj.getSgKind() ==  SGKind.SG_OU) {
+			if(allowSVOnlyWithAspect) {
+				if(nodeService.hasAspect(new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, obj.getId()), SVAspectQName)) {
+					ensureAlfrescoGroupName( SGKind.SG_SV.getAlfrescoSuffix(obj.getId()), obj.getDisplayInfo());
+				}
+			} else {
+				ensureAlfrescoGroupName( SGKind.SG_SV.getAlfrescoSuffix(obj.getId()), obj.getDisplayInfo());
+			}
+		}
 
 		return sgName;
 	}
@@ -185,7 +232,7 @@ public class LECMSecurityGroupsBean
 		}
 
 		if (alfrescoUserLogin == null) {
-			logger.warn( String.format( "employee {%s}: user login is null -> %s operation with {USER <-> SG_ME} skipped", 
+			logger.warn( String.format( "employee {%s}: user login is null -> %s operation with {USER <-> SG_ME} skipped",
 					employeeId, (tie ? "tie" : "untie")));
 		} else {
 			final String sg_user_name = this.authorityService.getName(AuthorityType.USER, alfrescoUserLogin);
@@ -218,7 +265,7 @@ public class LECMSecurityGroupsBean
 
 			// дополнительные действия для OU - убрать SV-группу
 			if (obj.getSgKind() ==  SGKind.SG_OU) {
-				final SGPosition sgPos = SGKind.SG_SV.getSGPos( obj.getId()); 
+				final SGPosition sgPos = SGKind.SG_SV.getSGPos( obj.getId());
 				removeAlfrescoAuthority( sgnm.makeSGName(sgPos.getAlfrescoSuffix() ));
 			}
 		}
@@ -241,8 +288,12 @@ public class LECMSecurityGroupsBean
 		final String sgItem =  this.sgnm.makeSGName(child);
 		final String sgParent = this.sgnm.makeSGName(parent);
 
+		if(!sgnm.hasFullAuth(sgItem) || !sgnm.hasFullAuth(sgParent)) {
+			return;
+		}
+
 		if (isOperWithBossAndSV(child, parent)) { // SG_ME >>> SG_SV
-			// (!) вхождение личной группы в SV выполняется на уровне user->group 
+			// (!) вхождение личной группы в SV выполняется на уровне user->group
 			// , а не group->group как для всего остального.
 			final Types.SGPrivateMeOfUser user = (Types.SGPrivateMeOfUser) child;
 
@@ -269,12 +320,12 @@ public class LECMSecurityGroupsBean
 	}
 
 	/**
-	 * Проверка операции над SG_ME и SG_SV  
+	 * Проверка операции над SG_ME и SG_SV
 	 * @param child
 	 * @param parent
 	 * @return true если childPos является SG_ME, а parentPos SG_SV, т.е.
 	 * если операнды для операции вклчения/искл личной группы босса в/из
-	 * SG_SV подразделения. 
+	 * SG_SV подразделения.
 	 */
 	private boolean isOperWithBossAndSV(SGPosition child, SGPosition parent) {
 		return (	child != null && parent != null
@@ -291,9 +342,9 @@ public class LECMSecurityGroupsBean
 		final String sgParentFullName = this.sgnm.makeSGName(parent);
 
 		if (isOperWithBossAndSV(child, parent)) { // SG_ME >>> SG_SV
-			// вхождение личной группы в SV выполняется на уровне user->group 
+			// вхождение личной группы в SV выполняется на уровне user->group
 			// (а не group->group как для всего остального)
-			return sgnm.hasFullAuthEx( 
+			return sgnm.hasFullAuthEx(
 					this.authorityService.getName(AuthorityType.USER, child.getAlfrescoSuffix())
 					, sgParentFullName, AuthorityType.USER
 					);
@@ -313,7 +364,7 @@ public class LECMSecurityGroupsBean
 	public void orgBRAssigned(String broleId, Types.SGPosition obj) {
 		final String broleSuffix = SGKind.SG_BR.getAlfrescoSuffix(broleId);
 
-		
+
 		// safe-действия по созданию security-groups под БР и сам объект
 		if (safeMode) {
 			final String details = "BRole-"+ broleId;
@@ -362,7 +413,7 @@ public class LECMSecurityGroupsBean
 				final SGPrivateBusinessRole sgMyRole = SGKind.getSGMyRolePos( dp.getUserId(), broleId);
 				sgInclude( sgMyRole, dp);
 
-				// SG_Me -> SG_MyRole 
+				// SG_Me -> SG_MyRole
 				final SGPrivateMeOfUser sgMe = SGKind.getSGMeOfUser( dp.getUserId(), dp.getUserLogin());
 				sgInclude( sgMe, sgMyRole);
 			} else {
@@ -405,9 +456,9 @@ public class LECMSecurityGroupsBean
 
 	/**
 	 * Получить имена sec-объектов Альфреско типа USER, которые непосредственно
-	 * включены в указанную группу. 
+	 * включены в указанную группу.
 	 * Например, для личной ME-группы это позволит получить её владельца, т.к.
-	 * только он входит в неё как USER, а все остальные (Делегаты, Руководство 
+	 * только он входит в неё как USER, а все остальные (Делегаты, Руководство
 	 * и пр) входят как ГРУППЫ.
 	 * @param fullAlfrescoSecGroupName полное имя sec-объекта Альфреско, соот-щее
 	 * проверяемой sec-группе.
