@@ -114,6 +114,16 @@ public class DocumentImpl implements Document {
 	}
 
 	@Override
+	public NodeRef getAssoc(String assocName) {
+		QName assocQName = QName.createQName(assocName, namespaceService);
+		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(documentNode, assocQName);
+		if (!targetAssocs.isEmpty()){
+			return targetAssocs.get(0).getTargetRef();
+		}
+		return null;
+	}
+
+	@Override
 	public int getTypeCode() {
 		logger.warn("getTypeCode() not supported yet.");
 		return 9999;
