@@ -21,6 +21,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    this.accordionItems = [];
 
         YAHOO.Bubbling.on("updateCurrentColumns", this.onUpdateSelectedColumns, this);
+        YAHOO.Bubbling.on("armRefreshSelectedTreeNode", this.onRefreshSelectedTreeNode, this);
 
         return this;
     };
@@ -530,6 +531,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     execScripts: true
                 });
             }
+        },
+
+        onRefreshSelectedTreeNode: function() {
+//            console.log("refreshTreeNode");
+            this._loadTree(this.selectedNode);
         }
+
     });
 })();
