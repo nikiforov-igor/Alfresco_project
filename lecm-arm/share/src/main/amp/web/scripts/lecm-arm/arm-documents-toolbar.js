@@ -26,6 +26,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         YAHOO.Bubbling.on("updateArmFilters", this.onUpdateArmFilters, this);
 	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
+        YAHOO.Bubbling.on('hiddenAssociationFormReady', this._onHiddenAssociationFormReady, this);
         YAHOO.Bubbling.on("objectFinderReady", this._onObjectFinderReady, this);
 
         YAHOO.Bubbling.on("restoreDefaultColumns", this.onRestoreDefaultColumns, this);
@@ -515,6 +516,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var objectFinder = args[1].eventGroup;
                 if (objectFinder.options.field == "assoc_packageItems") {
                     objectFinder.selectItems(this.options.currentSelectedItems.join(","));
+                }
+            },
+
+            _onHiddenAssociationFormReady: function StartWorkflow_onHiddenAssociationFormReady(layer, args) {
+                if (args[1].fieldName == 'assoc_packageItems') {
+                    Dom.get(args[1].fieldId + '-added').value = this.options.currentSelectedItems.join(",");
                 }
             },
 
