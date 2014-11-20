@@ -9,6 +9,7 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,8 +58,17 @@ public class DictionaryWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getRecordByParamValue(String object, String field, Serializable value) {
+        return getRecordByParamValue(object, field, value, false);
+    }
+
+    public Scriptable getRecordByParamValue(String object, String field, Serializable value, boolean lookInSubFolders) {
         QName fieldName = QName.createQName(field, namespaceService);
-        List<NodeRef> records = dictionaryService.getRecordsByParamValue(object, fieldName, value);
+        List<NodeRef> records = new ArrayList<>();
+        if (lookInSubFolders) {
+            records.add(dictionaryService.getDictionaryValueByParam(object, fieldName, (String) value));
+        } else {
+            records.addAll(dictionaryService.getRecordsByParamValue(object, fieldName, value));
+        }
 
         return createScriptable(records);
     }
