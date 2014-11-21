@@ -586,7 +586,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                             }
                             result = property;
                         } else {
-                            result = getSubstituteDefaultValue(fieldName, returnRealTypes);
+                            result = getSubstituteDefaultValue(defaultValue, returnRealTypes);
                         }
                     } else {
                         result = !returnRealTypes ? getObjectDescription(showNode) : showNode;
