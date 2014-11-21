@@ -77,7 +77,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onReady: function DateRange_onReady() {
                 var toDate = this._getDateByKey(this.options.toDateDefault);
+                toDate.setHours(12);
+                toDate.setMinutes(0);
+                toDate.setSeconds(0);
+
                 var fromDate = this._getDateByKey(this.options.fromDateDefault);
+                fromDate.setHours(12);
+                fromDate.setMinutes(0);
+                fromDate.setSeconds(0);
 
                 if (Dom.get(this.valueHtmlId).value) {
                     var fullDate = Dom.get(this.valueHtmlId).value.split("|");
@@ -98,10 +105,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 } else {
                     if (this.options.fillDates) {
                         Dom.get(this.id + "-date-from").value = fromDate.toString(this._msg("form.control.date-picker.entry.date.format"));
-                        this.currentFromDate = Alfresco.util.toISO8601(new Date(fromDate.getFullYear(), fromDate.getMonth(),fromDate.getDate()), {"milliseconds": false});
+                        this.currentFromDate = Alfresco.util.toISO8601(fromDate, {"milliseconds": false});
 
                         Dom.get(this.id + "-date-to").value = toDate.toString(this._msg("form.control.date-picker.entry.date.format"));
-                        this.currentToDate = Alfresco.util.toISO8601(new Date(toDate.getFullYear(), toDate.getMonth(),toDate.getDate()), {"milliseconds": false});
+                        this.currentToDate = Alfresco.util.toISO8601(toDate, {"milliseconds": false});
                     }
                     this._updateCurrentValue();
                 }
@@ -324,14 +331,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // update the date field
                 var selected = args[0];
                 var selDate = this.widgets.calendarFrom.toDate(selected[0]);
-                var dateEntry = selDate.toString(this.msg("lecm.form.control.date-picker.entry.date.format"));
-                var obj = Dom.get(this.id + "-date-from");
-                this._setValueAndSavePosition(obj, dateEntry);
-
                 // if we have a valid date, convert to ISO format and set value on hidden field
                 if (selDate != null) {
-                    var isoValue = Alfresco.util.toISO8601(selDate, {"milliseconds": false});
-                    this.currentFromDate = isoValue;
+                    selDate.setHours(12);
+                    selDate.setMinutes(0);
+                    selDate.setSeconds(0);
+                    var dateEntry = selDate.toString(this.msg("lecm.form.control.date-picker.entry.date.format"));
+                    var obj = Dom.get(this.id + "-date-from");
+                    this._setValueAndSavePosition(obj, dateEntry);
+
+                    this.currentFromDate = Alfresco.util.toISO8601(selDate, {"milliseconds": false});
                     this._updateCurrentValue();
 
                     Dom.removeClass(this.id + "-date-from", "invalid");
@@ -356,14 +365,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // update the date field
                 var selected = args[0];
                 var selDate = this.widgets.calendarTo.toDate(selected[0]);
-                var dateEntry = selDate.toString(this.msg("lecm.form.control.date-picker.entry.date.format"));
-                var obj = Dom.get(this.id + "-date-to");
-                this._setValueAndSavePosition(obj, dateEntry);
 
                 // if we have a valid date, convert to ISO format and set value on hidden field
                 if (selDate != null) {
-                    var isoValue = Alfresco.util.toISO8601(selDate, {"milliseconds": false});
-                    this.currentToDate = isoValue;
+                    selDate.setHours(12);
+                    selDate.setMinutes(0);
+                    selDate.setSeconds(0);
+
+                    var dateEntry = selDate.toString(this.msg("lecm.form.control.date-picker.entry.date.format"));
+                    var obj = Dom.get(this.id + "-date-to");
+                    this._setValueAndSavePosition(obj, dateEntry);
+
+                    this.currentToDate = Alfresco.util.toISO8601(selDate, {"milliseconds": false});
                     this._updateCurrentValue();
 
                     Dom.removeClass(this.id + "-date-to", "invalid");
