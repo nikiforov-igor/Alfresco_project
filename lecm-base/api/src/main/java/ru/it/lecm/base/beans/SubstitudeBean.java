@@ -82,6 +82,11 @@ public interface SubstitudeBean {
 	final QName PROP_OBJ_TYPE_CLASS = QName.createQName(BJ_NAMESPACE_URI, "objectType-class");
 	final QName ASSOC_EMPLOYEE_PERSON = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-assoc");
 
+    /**
+     * Символ ссылки на родителя
+     */
+    final String ASSOC_DELIMITER = "; ";
+
 	/**
 	 * Получение заголовка элемента в соответствии с форматной строкой.
 	 * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)

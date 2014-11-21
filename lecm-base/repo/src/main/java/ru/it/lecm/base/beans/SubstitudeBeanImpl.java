@@ -361,20 +361,44 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     dFormat = getDateFormat();
                 }
                 String result = formatString;
+
                 List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
 				//проверка на сложную строку (не одно поле) - определяем, что будет на выходе
 				Boolean objectExpected = nameParams.size() == 1 && result.replace(OPEN_SUBSTITUDE_SYMBOL + nameParams.get(0) + CLOSE_SUBSTITUDE_SYMBOL, "").isEmpty();
+
                 if (objectExpected) { //возвращаем объект
-                    return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset, true);
+                    boolean isAssocField = nameParams.get(0).endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
+                    if (isAssocField) { // у нас ассоциация - соберем все значения вместе
+                        result = formatAssocString(node, nameParams.get(0));
+                    } else {
+                        return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset, true);
+                    }
                 } else { //возвращаем строку
                     for (String param : nameParams) {
-                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
+                        Object transValue;
+                        boolean isAssocField = param.endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
+                        if (isAssocField) { // у нас ассоциация - соберем все значения вместе
+                            transValue = formatAssocString(node, param);
+                        } else {
+                            transValue = getSubstitudeField(node, param, dFormat, timeZoneOffset).toString();
+                        }
+                        result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, transValue.toString());
                     }
-				}
-				return result;
+                }
+                return result;
             }
         };
         return AuthenticationUtil.runAsSystem(substitudeString);
+    }
+
+    private String formatAssocString(NodeRef node, String formatStr) {
+        StringBuilder sb = new StringBuilder();
+        List<NodeRef> assocsList = getAssocsByFormatString(node, formatStr);
+        for (NodeRef nodeRef : assocsList) {
+            sb.append(getObjectDescription(nodeRef));
+            sb.append(SubstitudeBean.ASSOC_DELIMITER);
+        }
+        return sb.toString().substring(0, sb.length() - 1);
     }
 
     private boolean isExpressionSyntax(String fmt) {
@@ -438,7 +462,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             field = field.substring(1);
         }
         final boolean isPseudoProp = field.startsWith(PSEUDO_PROPERTY_SYMBOL);
-        if (!isPseudoProp) {
+        if (!isPseudoProp) { //если не псевдосвойств - идем по обычному пути
             if (field.contains(SPLIT_TRANSITIONS_SYMBOL)) {
                 int firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL);
                 transitions.add(field.substring(0, firstIndex));
@@ -453,18 +477,19 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                 fieldName = field;
             }
 
-            if (fieldName.contains("|")) {
+            if (fieldName.contains("|")) {  //проверяем есть ли значение по дефолту (условие проверки - не null в итоговом поле
                 String[] values = fieldName.split("\\|");
                 fieldName = values[0];
                 defaultValue = values.length > 1 ? values[1] : null;
             }
 
-            if (fieldName.contains(STRING_FORMAT_SYMBOL)) {
+            if (fieldName.contains(STRING_FORMAT_SYMBOL)) { //формат (для дат)
                 String fieldValue = fieldName;
                 fieldName = fieldValue.substring(0, fieldValue.indexOf(STRING_FORMAT_SYMBOL));
                 fieldFormat = fieldValue.substring(fieldValue.indexOf(STRING_FORMAT_SYMBOL) + 1, fieldValue.length());
             }
 
+            //проходим по всем переходам - на выходе имеем 1(!!!) результирующую ноду
             for (String el : transitions) {
                 showNodes.clear();
                 Map<String, String> expressions = getExpression(el);
@@ -546,7 +571,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     break;
                 }
             }
-        } else {
+        } else { //для псевдосвойство - высчитывем его
             fieldName = field.substring(1);
 
             if (fieldName.contains("|")) {
@@ -562,14 +587,17 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             }
         }
 
-        if (showNode != null) {
+        if (showNode != null) { //если нода найдена или не были заданы переходы, или у нас псевдосвойство - вычисляем итоговое значение
             if (fieldName.equals("nodeRef")) {
                 result = !returnRealTypes ? showNode.toString() : showNode;
             } else {
                 if (result == null || result.toString().isEmpty()) {
+                    //если у нас не псевдо или для псевдо не нашли значение
                     if (!fieldName.isEmpty()) {
+                        //либо реальное свойство, либо дефолтное значение
                         Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
                         if (property != null) {
+                            //если у нас свойство и мы получили значение - применяем возможный констрейнт
                             List<ConstraintDefinition> constraintDefinitionList = dictionary.getProperty(QName.createQName(fieldName, namespaceService)).getConstraints();
                             //ищем привязанный LIST_CONSTRAINT
                             if (constraintDefinitionList != null) {
@@ -586,21 +614,22 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                             }
                             result = property;
                         } else {
-                            result = getSubstituteDefaultValue(defaultValue, returnRealTypes);
+                            if (defaultValue != null) {
+                                fieldName = defaultValue;
+                                result = showNode != null ?
+                                        getSubstitudeField(showNode, fieldName, dateFormat, timeZoneOffset, returnRealTypes) :
+                                        getSubstituteDefaultValue(defaultValue, returnRealTypes);
+                            } else {
+                                result = getSubstituteDefaultValue(defaultValue, returnRealTypes);
+                            }
+                            //поле не заполнено - возвращаем либо дефолтное (если есть), либо пустую строку/null
                         }
                     } else {
+                        //не задано конечное свойство (и не задано значение по дефолоту) - берем либо описание, либо саму ноду
                         result = !returnRealTypes ? getObjectDescription(showNode) : showNode;
                     }
-                    if (result == null || result.equals("")) {
-                        if (defaultValue != null) {
-                            fieldName = defaultValue;
-                            result = showNode != null ?
-                                    getSubstitudeField(showNode, fieldName, dateFormat, timeZoneOffset, returnRealTypes) :
-                                    getSubstituteDefaultValue(defaultValue, returnRealTypes);
-                        }
-                    }
                 }
-                if (result != null) {
+                if (result != null) {//форматируем даты, если нашли значение
                     if (result instanceof Date) {
                         if (timeZoneOffset != null) {
                             Calendar cal = Calendar.getInstance();
@@ -616,7 +645,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     }
                 }
             }
-            if (!returnRealTypes) {
+            if (!returnRealTypes) {//если возвращаем строку и надо обернуть как ссылку
                 if (wrapAsLink && !result.toString().isEmpty()) {
                     SysAdminParams params = serviceRegistry.getSysAdminParams();
                     String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
