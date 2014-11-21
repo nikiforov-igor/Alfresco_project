@@ -454,9 +454,9 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             }
 
             if (fieldName.contains("|")) {
-                String[] values = field.split("\\|");
+                String[] values = fieldName.split("\\|");
                 fieldName = values[0];
-                defaultValue = values.length > 1 ? values[1] : (returnRealTypes ? null : "");
+                defaultValue = values.length > 1 ? values[1] : null;
             }
 
             if (fieldName.contains(STRING_FORMAT_SYMBOL)) {
@@ -546,71 +546,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     break;
                 }
             }
-
-            if (showNode != null) {
-                if (!fieldName.contains("~")) {
-                    if (fieldName.equals("nodeRef")) {
-                        result = !returnRealTypes ? showNode.toString() : showNode;
-                    } else {
-                        if (result == null || result.toString().isEmpty()) {
-                            if (!fieldName.isEmpty()) {
-                                Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
-                                if (property != null) {
-                                    List<ConstraintDefinition> constraintDefinitionList = dictionary.getProperty(QName.createQName(fieldName, namespaceService)).getConstraints();
-                                    //ищем привязанный LIST_CONSTRAINT
-                                    if (constraintDefinitionList != null) {
-                                        for (ConstraintDefinition constraintDefinition : constraintDefinitionList) {
-                                            Constraint constraint = constraintDefinition.getConstraint();
-                                            if (constraint instanceof ListOfValuesConstraint) {
-                                                //получаем локализованное значение для LIST_CONSTRAINT
-                                                String constraintProperty = ((ListOfValuesConstraint) constraint).getDisplayLabel(property.toString(), dictionary);
-                                                if (constraintProperty != null) {
-                                                    property = constraintProperty;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    result = property;
-                                } else {
-                                    result = !returnRealTypes ? "" : null;
-                                }
-                            } else {
-                                result = !returnRealTypes ? getObjectDescription(showNode) : showNode;
-                            }
-                        }
-                        if (result != null) {
-                            if (result instanceof Date) {
-                                if (timeZoneOffset != null) {
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime((Date) result);
-                                    cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
-                                    result = cal.getTime();
-                                }
-
-                                if (!returnRealTypes || fieldFormat != null) {
-                                    DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
-                                    result = dFormat.format(result);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!returnRealTypes) {
-                    if (wrapAsLink && !result.toString().isEmpty()) {
-                        SysAdminParams params = serviceRegistry.getSysAdminParams();
-                        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-                        result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
-                                + result + "</a>";
-                    }
-                }
-            }
         } else {
             fieldName = field.substring(1);
 
             if (fieldName.contains("|")) {
                 String[] values = fieldName.split("\\|");
                 fieldName = values[0];
-                defaultValue = values.length > 1 ? values[1] : (returnRealTypes ? null : "");
+                defaultValue = values.length > 1 ? values[1] : null;
             }
 
             if (returnRealTypes) {
@@ -618,16 +560,79 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             } else {
                 result = getFormatStringByPseudoProp(showNode, fieldName);
             }
-
         }
 
-        if (result == null || result.equals("")) {
-            if (defaultValue != null) {
-                result = defaultValue;
+        if (showNode != null) {
+            if (fieldName.equals("nodeRef")) {
+                result = !returnRealTypes ? showNode.toString() : showNode;
+            } else {
+                if (result == null || result.toString().isEmpty()) {
+                    if (!fieldName.isEmpty()) {
+                        Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
+                        if (property != null) {
+                            List<ConstraintDefinition> constraintDefinitionList = dictionary.getProperty(QName.createQName(fieldName, namespaceService)).getConstraints();
+                            //ищем привязанный LIST_CONSTRAINT
+                            if (constraintDefinitionList != null) {
+                                for (ConstraintDefinition constraintDefinition : constraintDefinitionList) {
+                                    Constraint constraint = constraintDefinition.getConstraint();
+                                    if (constraint instanceof ListOfValuesConstraint) {
+                                        //получаем локализованное значение для LIST_CONSTRAINT
+                                        String constraintProperty = ((ListOfValuesConstraint) constraint).getDisplayLabel(property.toString(), dictionary);
+                                        if (constraintProperty != null) {
+                                            property = constraintProperty;
+                                        }
+                                    }
+                                }
+                            }
+                            result = property;
+                        } else {
+                            result = getSubstituteDefaultValue(fieldName, returnRealTypes);
+                        }
+                    } else {
+                        result = !returnRealTypes ? getObjectDescription(showNode) : showNode;
+                    }
+                    if (result == null || result.equals("")) {
+                        if (defaultValue != null) {
+                            fieldName = defaultValue;
+                            result = showNode != null ?
+                                    getSubstitudeField(showNode, fieldName, dateFormat, timeZoneOffset, returnRealTypes) :
+                                    getSubstituteDefaultValue(defaultValue, returnRealTypes);
+                        }
+                    }
+                }
+                if (result != null) {
+                    if (result instanceof Date) {
+                        if (timeZoneOffset != null) {
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime((Date) result);
+                            cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
+                            result = cal.getTime();
+                        }
+
+                        if (!returnRealTypes || fieldFormat != null) {
+                            DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
+                            result = dFormat.format(result);
+                        }
+                    }
+                }
             }
+            if (!returnRealTypes) {
+                if (wrapAsLink && !result.toString().isEmpty()) {
+                    SysAdminParams params = serviceRegistry.getSysAdminParams();
+                    String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+                    result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
+                            + result + "</a>";
+                }
+            }
+        } else {
+            result = getSubstituteDefaultValue(defaultValue, returnRealTypes);
         }
 
         return result;
+    }
+
+    private Object getSubstituteDefaultValue(Object defaultValue, boolean returnRealTypes) {
+        return defaultValue != null ? defaultValue : (returnRealTypes ? null : "");
     }
 
     private Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset) {
