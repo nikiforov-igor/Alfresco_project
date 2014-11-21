@@ -271,7 +271,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                     } else {
                         oResponse.argument.tree.render();
                     }
-                    makeDraggable();
+//                    makeDraggable();
                 },
                 failure:function (oResponse) {
                     YAHOO.log("Failed to process XHR transaction.", "info", "example");
@@ -336,7 +336,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         this._loadTree(event.node.parent, function () {
                             tree.render();
                             event.node.focus();
-                            makeDraggable();
+//                            makeDraggable();
                         }.bind(this));
                         this.doubleClickLock = false;
                     },
