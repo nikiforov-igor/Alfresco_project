@@ -113,7 +113,7 @@
 		 if (this.options.formatDateStr){
 			var dateEntry = Alfresco.util.formatDate(theDate,this._msg(this.options.formatDateStr));
 		 }else{
-			var dateEntry = theDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+			var dateEntry = theDate.toString(this._msg("lecm.form.control.date-picker.entry.date.format"));
 		 }
          var timeEntry = theDate.toString(this._msg("form.control.date-picker.entry.time.format"));
 

@@ -203,7 +203,7 @@
 
                     var page = (theDate.getMonth() + 1) + "/" + theDate.getFullYear();
                     var selected = (theDate.getMonth() + 1) + "/" + theDate.getDate() + "/" + theDate.getFullYear();
-                    var dateEntry = theDate.toString(me._msg("form.control.date-picker.entry.date.format"));
+                    var dateEntry = theDate.toString(me._msg("lecm.form.control.date-picker.entry.date.format"));
                     var timeEntry = theDate.toString(me._msg("form.control.date-picker.entry.time.format"));
 
                     // populate the input fields
@@ -345,7 +345,7 @@
                     var me = this;
                     var selected = args[0];
                     var selDate = me.widgets.calendar.toDate(selected[0]);
-                    var dateEntry = selDate.toString(me._msg("form.control.date-picker.entry.date.format"));
+                    var dateEntry = selDate.toString(me._msg("lecm.form.control.date-picker.entry.date.format"));
                     Dom.get(me.id + "-date").value = dateEntry;
 
                     // update the time field if necessary
@@ -353,7 +353,7 @@
                         var time = Dom.get(me.id + "-time").value;
                         if (time.length > 0) {
                             var dateTime = Dom.get(me.id + "-date").value + " " + time;
-                            var dateTimePattern = me._msg("form.control.date-picker.entry.date.format") + " " + me._msg("form.control.date-picker.entry.time.format");
+                            var dateTimePattern = me._msg("lecm.form.control.date-picker.entry.date.format") + " " + me._msg("form.control.date-picker.entry.time.format");
                             selDate = Date.parseExact(dateTime, dateTimePattern);
                         }
                     } else {
@@ -405,7 +405,7 @@
                         // Only set for actual value changes so tab or shift events doesn't remove the "text selection" of the input field
                         if (event == undefined || (event.keyCode != KeyListener.KEY.TAB && event.keyCode != KeyListener.KEY.SHIFT)) {
                             // convert to format expected by YUI
-                            var parsedDate = Date.parseExact(changedDate, me._msg("form.control.date-picker.entry.date.format"));
+                            var parsedDate = Date.parseExact(changedDate, me._msg("lecm.form.control.date-picker.entry.date.format"));
                             if (parsedDate != null) {
                                 if (me.options.disabled) {
                                     Dom.removeClass(me.id + "-date", "invalid");
