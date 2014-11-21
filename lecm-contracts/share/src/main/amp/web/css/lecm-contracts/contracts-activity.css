@@ -1,6 +1,9 @@
 .yui-u .dashlet.contracts-activity .body.dashlet-body {
     padding: 0;
 }
+.yui-u .dashlet.contracts-activity .body.dashlet-body div.no-records {
+    padding: 1em;
+}
 .dashlet.contracts-activity .body .row {
     line-height: 16px;
     margin: 0;

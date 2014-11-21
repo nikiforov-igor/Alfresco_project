@@ -14,14 +14,15 @@
     width: 100%;
 }
 
-.yui-gc .yui-u .columnSize2 {
-    margin-left: 1.99%;
-    margin-right: 1.99%;
+.yui-gc .yui-u .columnSize2.grid {
+    margin: 0 5px;
 }
 
-.first .yui-gd div.column1 {
-    margin-left: 2%;
-    width: 47%;
+.yui-gc .yui-u .columnSize2.yui-gd div.column1,
+.yui-gc .yui-u .columnSize2.yui-gd div.column2 {
+    width: 49.5%;
+    margin-right: 0;
+    margin-left: 0;
 }
 
 .bordered {
@@ -45,10 +46,6 @@
     padding: 0 1em;
 }
 
-.first .yui-gd div.column2 {
-    margin-right: 2%;
-    width: 47%;
-}
 .yui-gc .yui-u {
     margin-left: 0;
     width: 20%;

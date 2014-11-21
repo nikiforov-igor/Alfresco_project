@@ -32,8 +32,7 @@
 	(function () {
 		LogicECM.module.Documents.SETTINGS = <#if settings?? >${settings}<#else>{}</#if>;
 		LogicECM.module.Base.Util.loadCSS(
-			// ['css/lecm-base/light-blue-bgr.css', 'css/lecm-contracts/contracts-main.css'],
-			[],
+			['css/lecm-contracts/contracts-main.css'],
 			function() {
 				// setTimeout(function () {
 				// 	LogicECM.module.Base.Util.setHeight();

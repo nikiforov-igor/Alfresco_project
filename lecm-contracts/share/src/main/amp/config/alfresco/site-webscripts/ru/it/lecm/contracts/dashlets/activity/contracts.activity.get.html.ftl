@@ -5,7 +5,7 @@
 		<span>${msg("label.title")}</span>
 	</div>
 	<div class="body scrollableList dashlet-body" id="${id}_results">
-		<span>${msg("label.no-more.records")}</span>
+		<div class="no-records"><span>${msg("label.no-more.records")}</span></div>
 	</div>
 </div>
 
