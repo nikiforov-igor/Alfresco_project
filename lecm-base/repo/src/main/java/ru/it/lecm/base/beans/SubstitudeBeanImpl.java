@@ -398,7 +398,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             sb.append(getObjectDescription(nodeRef));
             sb.append(SubstitudeBean.ASSOC_DELIMITER);
         }
-        return sb.toString().substring(0, sb.length() - 1);
+        return sb.toString().substring(0, sb.length() - 2);
     }
 
     private boolean isExpressionSyntax(String fmt) {
