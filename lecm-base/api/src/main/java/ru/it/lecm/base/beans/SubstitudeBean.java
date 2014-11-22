@@ -86,6 +86,7 @@ public interface SubstitudeBean {
      * Символ ссылки на родителя
      */
     final String ASSOC_DELIMITER = "; ";
+    final String LAST_ASSOC_EXPR = "lastAssoc";
 
 	/**
 	 * Получение заголовка элемента в соответствии с форматной строкой.
@@ -122,6 +123,9 @@ public interface SubstitudeBean {
     String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull);
 
     public Object getNodeFieldByFormat(NodeRef node, String formatString);
+    public Object getNodeFieldByFormat(NodeRef node, String formatString , boolean returnLastAssoc);
 
     public Object getNodeFieldByFormat(NodeRef node, String formatString, String dateFormat, Integer timeZoneOffset);
+
+    public Object getNodeFieldByFormat(NodeRef node, String formatString, String dateFormat, Integer timeZoneOffset, boolean returnLastAssoc);
 }

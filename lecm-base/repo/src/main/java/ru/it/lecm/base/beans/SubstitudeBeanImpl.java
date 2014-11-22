@@ -344,7 +344,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
     }
 
     @Override
-    public Object getNodeFieldByFormat(final NodeRef node, final String formatString, final String dateFormat, final Integer timeZoneOffset) {
+    public Object getNodeFieldByFormat(NodeRef node, String formatString, boolean returnLastAssoc) {
+        return getNodeFieldByFormat(node, formatString, null, null, returnLastAssoc);
+    }
+
+    @Override
+    public Object getNodeFieldByFormat(final NodeRef node, final String formatString, final String dateFormat, final Integer timeZoneOffset, final boolean returnLastAssoc) {
         final AuthenticationUtil.RunAsWork<Object> substitudeString = new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
@@ -363,13 +368,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                 String result = formatString;
 
                 List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
-				//проверка на сложную строку (не одно поле) - определяем, что будет на выходе
-				Boolean objectExpected = nameParams.size() == 1 && result.replace(OPEN_SUBSTITUDE_SYMBOL + nameParams.get(0) + CLOSE_SUBSTITUDE_SYMBOL, "").isEmpty();
+                //проверка на сложную строку (не одно поле) - определяем, что будет на выходе
+                Boolean objectExpected = nameParams.size() == 1 && result.replace(OPEN_SUBSTITUDE_SYMBOL + nameParams.get(0) + CLOSE_SUBSTITUDE_SYMBOL, "").isEmpty();
 
                 if (objectExpected) { //возвращаем объект
                     boolean isAssocField = nameParams.get(0).endsWith(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL);
-                    if (isAssocField) { // у нас ассоциация - соберем все значения вместе
-                        result = formatAssocString(node, nameParams.get(0));
+                    if (isAssocField) {// список нод по ассоциации
+                        return getAssocsByFormatString(node, nameParams.get(0));
                     } else {
                         return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset, true);
                     }
@@ -391,6 +396,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         return AuthenticationUtil.runAsSystem(substitudeString);
     }
 
+    @Override
+    public Object getNodeFieldByFormat(final NodeRef node, final String formatString, final String dateFormat, final Integer timeZoneOffset) {
+        return getNodeFieldByFormat(node, formatString, dateFormat, timeZoneOffset, true);
+    }
+
     private String formatAssocString(NodeRef node, String formatStr) {
         StringBuilder sb = new StringBuilder();
         List<NodeRef> assocsList = getAssocsByFormatString(node, formatStr);
@@ -398,7 +408,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             sb.append(getObjectDescription(nodeRef));
             sb.append(SubstitudeBean.ASSOC_DELIMITER);
         }
-        return sb.toString().substring(0, sb.length() - 2);
+        return sb.length() > 2 ? sb.toString().substring(0, sb.length() - 2) : sb.toString();
     }
 
     private boolean isExpressionSyntax(String fmt) {
@@ -445,7 +455,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
      * @param field выражение для элемента (ассоциации, условия и атрибуты)
      * @return {Object}
      */
-    private Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset, boolean returnRealTypes) {
+    private Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset, boolean returnRealTypes, boolean returnLastAssoc) {
         NodeRef showNode = node;
         List<NodeRef> showNodes = new ArrayList<>();
         String fieldName;
@@ -528,22 +538,29 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                 }
                 if (!expressions.isEmpty()) {
                     boolean exist = false;
+                    boolean lastAssoc = false;
                     for (NodeRef nodeRef : showNodes) {
                         if (!isArchive(nodeRef)) {
                             boolean expressionsFalse = false;
                             for (Map.Entry<String, String> entry : expressions.entrySet()) {
-                                Object currentPropertyValue =
-                                        nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-                                if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
-                                        || !currentPropertyValue.toString().equals(entry.getValue())) {
-                                    expressionsFalse = true;
-                                    break;
+                                if (!LAST_ASSOC_EXPR.equals(entry.getKey())) {
+                                    Object currentPropertyValue =
+                                            nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
+                                    if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
+                                            || !currentPropertyValue.toString().equals(entry.getValue())) {
+                                        expressionsFalse = true;
+                                        break;
+                                    }
+                                } else {
+                                    lastAssoc = Boolean.valueOf(entry.getValue());
                                 }
                             }
                             if (!expressionsFalse) {
                                 showNode = nodeRef;
                                 exist = true;
-                                break;
+                                if (!lastAssoc) {
+                                    break; // возвращаем первую подходящую, если флаг не говорит об обратном
+                                }
                             }
                         }
                     }
@@ -558,6 +575,10 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                         if (!isArchive(nodeRef)) {
                             showNode = nodeRef;
                             exist = true;
+                            if (!returnLastAssoc) {
+                                logger.debug(String.format("Возвращаем первый найденный результат для [%s] по условиям [%s]", showNode, expressions));
+                                break;
+                            }
                         }
                     }
                     if (!exist) {
@@ -573,12 +594,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             }
         } else { //для псевдосвойство - высчитывем его
             fieldName = field.substring(1);
-
             if (fieldName.contains("|")) {
                 String[] values = fieldName.split("\\|");
                 fieldName = values[0];
                 defaultValue = values.length > 1 ? values[1] : null;
             }
+
+            logger.debug(String.format("Вычисляем значение псевдосвойства [%s] для [%s]", fieldName, showNode));
 
             if (returnRealTypes) {
                 result = getRealValueByPseudoProp(showNode, fieldName);
@@ -587,6 +609,46 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
             }
         }
 
+        result = getResultedValue(showNode, fieldName, defaultValue, returnRealTypes, result, timeZoneOffset);
+
+        result = postProcessValue(result, showNode, returnRealTypes, fieldFormat, timeZoneOffset, dateFormat, wrapAsLink);
+        return result;
+    }
+
+    private Object postProcessValue(Object result, NodeRef showNode, boolean returnRealTypes, String fieldFormat, Integer timeZoneOffset, String dateFormat, boolean wrapAsLink) {
+        if (result != null) {//форматируем даты, если нашли значение
+            if (result instanceof Date) {
+                if (timeZoneOffset != null) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime((Date) result);
+                    cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
+                    result = cal.getTime();
+                }
+
+                if (!returnRealTypes || fieldFormat != null) {
+                    DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
+                    result = dFormat.format(result);
+                }
+            }
+        }
+
+        if (showNode != null && result != null && !returnRealTypes) {//если возвращаем строку и надо обернуть как ссылку
+            if (wrapAsLink && !result.toString().isEmpty()) {
+                SysAdminParams params = serviceRegistry.getSysAdminParams();
+                String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+                result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
+                        + result + "</a>";
+            }
+        }
+
+        return result;
+    }
+
+    private Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset, boolean returnRealTypes) {
+        return getSubstitudeField(node, field, dateFormat, timeZoneOffset, returnRealTypes, true);
+    }
+
+    private Object getResultedValue(NodeRef showNode, String fieldName, String defaultValue, boolean returnRealTypes, Object result, Integer timeZoneOffset) {
         if (showNode != null) { //если нода найдена или не были заданы переходы, или у нас псевдосвойство - вычисляем итоговое значение
             if (fieldName.equals("nodeRef")) {
                 result = !returnRealTypes ? showNode.toString() : showNode;
@@ -615,48 +677,23 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                             result = property;
                         } else {
                             if (defaultValue != null) {
+                                //идём вглубь форматной строки
                                 fieldName = defaultValue;
-                                result = showNode != null ?
-                                        getSubstitudeField(showNode, fieldName, dateFormat, timeZoneOffset, returnRealTypes) :
-                                        getSubstituteDefaultValue(defaultValue, returnRealTypes);
+                                result = getSubstitudeField(showNode, fieldName, dateFormat, timeZoneOffset, returnRealTypes);
                             } else {
-                                result = getSubstituteDefaultValue(defaultValue, returnRealTypes);
+                                result = getSubstituteDefaultValue(null, returnRealTypes);
                             }
-                            //поле не заполнено - возвращаем либо дефолтное (если есть), либо пустую строку/null
                         }
                     } else {
-                        //не задано конечное свойство (и не задано значение по дефолоту) - берем либо описание, либо саму ноду
+                        //не задано конечное свойство - берем либо описание, либо саму ноду
                         result = !returnRealTypes ? getObjectDescription(showNode) : showNode;
                     }
                 }
-                if (result != null) {//форматируем даты, если нашли значение
-                    if (result instanceof Date) {
-                        if (timeZoneOffset != null) {
-                            Calendar cal = Calendar.getInstance();
-                            cal.setTime((Date) result);
-                            cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
-                            result = cal.getTime();
-                        }
-
-                        if (!returnRealTypes || fieldFormat != null) {
-                            DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
-                            result = dFormat.format(result);
-                        }
-                    }
-                }
-            }
-            if (!returnRealTypes) {//если возвращаем строку и надо обернуть как ссылку
-                if (wrapAsLink && !result.toString().isEmpty()) {
-                    SysAdminParams params = serviceRegistry.getSysAdminParams();
-                    String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-                    result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
-                            + result + "</a>";
-                }
             }
         } else {
+            //поле не заполнено - возвращаем либо дефолтное (если есть), либо пустую строку/null
             result = getSubstituteDefaultValue(defaultValue, returnRealTypes);
         }
-
         return result;
     }
 
