@@ -2089,13 +2089,17 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 		List<WorkflowTask> result = new ArrayList<WorkflowTask>();
 		WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
-		List<WorkflowTask> assignedTasks = workflowService.getAssignedTasks(fullyAuthenticatedUser, WorkflowTaskState.IN_PROGRESS);
-		result.addAll(assignedTasks);
+        try {
+            List<WorkflowTask> assignedTasks = workflowService.getAssignedTasks(fullyAuthenticatedUser, WorkflowTaskState.IN_PROGRESS);
+            result.addAll(assignedTasks);
 
-		List<WorkflowTask> pooledTasks = workflowService.getPooledTasks(fullyAuthenticatedUser);
-		result.addAll(pooledTasks);
+            List<WorkflowTask> pooledTasks = workflowService.getPooledTasks(fullyAuthenticatedUser);
+            result.addAll(pooledTasks);
+        } catch (Exception e) {
+            logger.error("Error while reade user tasks", e);
+        }
 
-		return result;
+        return result;
 	}
 
 	/**
