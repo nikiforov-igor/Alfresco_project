@@ -80,7 +80,8 @@ public abstract class OOTemplateGenerator {
     public abstract void odtSetColumnsAsDocCustomProps(JRDataSource jrDataSource, Map<String, Object> requestParameters, ReportDescriptor desc,
                                                        String srcOODocUrl, String destSaveAsUrl, String author);
 
-    public abstract void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects);
+    public abstract void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects,
+		                                     final Map<String, Object> settingProps);
 
     /**
      * Открыть указанный openOffice-файл
