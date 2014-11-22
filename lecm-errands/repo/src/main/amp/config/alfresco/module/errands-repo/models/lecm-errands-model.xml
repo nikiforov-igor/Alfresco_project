@@ -260,7 +260,7 @@
 						<many>false</many>
 					</target>
 				</association>
-				<!-- Контроллер -->
+				<!-- Контролер -->
 				<association name="lecm-errands:controller-assoc">
 					<source>
 						<mandatory>false</mandatory>

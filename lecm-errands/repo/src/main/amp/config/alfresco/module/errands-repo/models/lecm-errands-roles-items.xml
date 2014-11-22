@@ -18,7 +18,7 @@
                 <property name="cm:name">Поручения. Контролер</property>
                 <property name="lecm-orgstr:business-role-identifier">ERRANDS_CONTROLLER</property>
                 <property name="lecm-orgstr:business-role-is-dynamic">true</property>
-                <property name="lecm-orgstr:business-role-description">Контроллер поручения</property>
+                <property name="lecm-orgstr:business-role-description">Контролер поручения</property>
             </item>
             <item name="cm:Поручения. Соисполнитель" type="lecm-orgstr:business-role">
                 <property name="cm:name">Поручения. Соисполнитель</property>

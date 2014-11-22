@@ -41,7 +41,7 @@
                     <show id="lecm-errands:executor-assoc"/>
                     <!-- Срок завершения поручения -->
                     <show id="lecm-errands:end-date"/>
-                    <!-- Контроллер -->
+                    <!-- Контролер -->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Дата начала -->
                     <show id="lecm-errands:start-date"/>
@@ -250,7 +250,7 @@
                     <show id="lecm-errands:initiator-assoc"/>
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- Контроллер -->
+                    <!-- ККонтролер-->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Соисполнители -->
                     <show id="lecm-errands:coexecutors-assoc"/>
@@ -472,7 +472,7 @@
                     <show id="lecm-errands:initiator-assoc"/>
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- Контроллер -->
+                    <!-- КоКонтролер->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Соисполнители -->
                     <show id="lecm-errands:coexecutors-assoc"/>
