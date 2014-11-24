@@ -472,7 +472,7 @@
                     <show id="lecm-errands:initiator-assoc"/>
                     <!-- Без утверждения инициатором -->
                     <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- КоКонтролер->
+                    <!-- Контролер -->
                     <show id="lecm-errands:controller-assoc"/>
                     <!-- Соисполнители -->
                     <show id="lecm-errands:coexecutors-assoc"/>
