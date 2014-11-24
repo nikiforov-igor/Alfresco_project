@@ -2,5 +2,4 @@
   <shortname>Admin Console Global EDS Settings</shortname>
   <description>Administration Console - Global EDS Settings Tool</description>
   <url>/components/console/eds-global-settings</url>
-  <family>admin-console</family>
 </webscript>

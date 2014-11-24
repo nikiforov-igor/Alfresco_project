@@ -2,5 +2,4 @@
   <shortname>Admin Console Errands Dashlet Settings</shortname>
   <description>Admin Console Errands Dashlet Settings</description>
   <url>/components/console/errands-dashlet-settings</url>
-  <family>admin-console</family>
 </webscript>

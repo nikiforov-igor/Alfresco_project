@@ -2,5 +2,4 @@
   <shortname>Admin Console Errands Settings</shortname>
   <description>Administration Console - Errands Settings Tool</description>
   <url>/components/console/errands-settings</url>
-  <family>admin-console</family>
 </webscript>

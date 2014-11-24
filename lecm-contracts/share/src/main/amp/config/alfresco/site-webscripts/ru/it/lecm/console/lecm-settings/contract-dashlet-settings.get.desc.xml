@@ -2,5 +2,4 @@
   <shortname>Admin Console Contracts Dashlet Settings</shortname>
   <description>Admin Console Contracts Dashlet Settings</description>
   <url>/components/console/contract-dashlet-settings</url>
-  <family>admin-console</family>
 </webscript>
