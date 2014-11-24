@@ -274,6 +274,20 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
 							}
 						}
 
+						//если первая ячейка строки заполнена, то перепрыгиваем весь ряд
+						boolean jump = false;
+						do {
+							jump = false;
+							XCell cell = xSpreadsheet.getCellByPosition(startCol, startRow + rowIndex);
+							if (!overflow && rowIndex > 0 && !shiftedDown){
+								if (!cell.getFormula().isEmpty()){
+									jump = true;
+								}
+							}
+							if (jump){
+								rowIndex++;
+							}
+						} while (jump);
                         //заполняем её данными из объекта
                         for (int j = 0; j < tableColCount; j++) {
                             XCell cell = xSpreadsheet.getCellByPosition(startCol + j, startRow + rowIndex);
@@ -304,24 +318,12 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                                     DateFormat dFormat = new SimpleDateFormat(DD_MM_YYYY);
                                     valueToWrite = dFormat.format(valueToWrite);
                                 }
-								if (!overflow && rowIndex > 0){
-									if (cell.getFormula().isEmpty()){
-										cell.setFormula(valueToWrite != null ? String.valueOf(valueToWrite) : "");
-									}
-								} else{
-									cell.setFormula(valueToWrite != null ? String.valueOf(valueToWrite) : "");
-								}
+								cell.setFormula(valueToWrite != null ? String.valueOf(valueToWrite) : "");
+
                             } else {
                                 int rowNum = startRow + 1 + rowIndex;
                                 String resultExp = cellExpression.replaceAll("\\{[^{}]*\\}", String.valueOf(rowNum));
-
-								if (!overflow && rowIndex > 0){
-									if (cell.getFormula().isEmpty()){
-										cell.setFormula(resultExp);
-									}
-								} else{
-									cell.setFormula(resultExp);
-								}
+								cell.setFormula(resultExp);
 
                             }
                         }
