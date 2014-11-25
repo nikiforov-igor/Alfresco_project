@@ -1962,6 +1962,29 @@ if (soExecutors != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>a333cc0c-2322-44d6-aaa2-657db20a4b9f</name>
+																		<nodeRef>workspace://SpacesStore/89849fab-872e-47b2-8d38-20cb5c07d775</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Вы уже запросили изменение срока поручения]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -3216,6 +3239,29 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>fc3a27f5-1494-4ecb-ae1b-fea4bb6be468</name>
+																		<nodeRef>workspace://SpacesStore/3e13958b-7de1-47d5-85ee-3ea85b5923c3</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Вы уже направили запрос отмены поручения]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -3333,6 +3379,29 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>d23b3296-62ee-440d-bf6f-e9c675df14f8</name>
+																		<nodeRef>workspace://SpacesStore/949686f4-9dc3-4fc8-ae5f-62e609d26677</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Вы уже запросили изменение срока поручения]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -4883,6 +4952,29 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>f19f32f4-958b-4255-8545-8540d2441325</name>
+																		<nodeRef>workspace://SpacesStore/20875ba9-65ce-44f7-88ab-da4646b3d92c</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Вы уже запросили изменение срока поручения]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.attr("lecm-errands-aspect:isDueDateChangeRequested") == null OR !doc.attr("lecm-errands-aspect:isDueDateChangeRequested")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -4970,6 +5062,29 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>680f6729-7a62-445c-ba5b-ea7aa95c530e</name>
+																		<nodeRef>workspace://SpacesStore/b8e86bb8-90aa-433e-89e3-7c21911238f8</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Вы уже направили запрос отмены поручения]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
@@ -6559,6 +6674,29 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>4209ee35-6a08-4d8c-9fbd-580d9c27680f</name>
+																		<nodeRef>workspace://SpacesStore/0734c5ce-2f5c-4881-a97e-2f64ec8e834d</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Вы уже направили запрос отмены поручения]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.attr("lecm-errands-aspect:isCancelRequested") == null OR !doc.attr("lecm-errands-aspect:isCancelRequested")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
