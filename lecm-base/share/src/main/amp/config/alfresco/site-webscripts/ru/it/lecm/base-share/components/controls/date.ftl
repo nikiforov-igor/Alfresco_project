@@ -150,7 +150,7 @@
                            <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
                            <#else>tabindex="0"</#if> />
                     <div>
-                        <span class="date-format <#if hideDateFormat>hidden1</#if>">${msg("form.control.date-picker.display.date.format")}</span>
+                        <span class="date-format <#if hideDateFormat>hidden1</#if>">${msg("lecm.form.control.date-picker.display.date.format")}</span>
                     </div>
 
                     <#if showTime>
