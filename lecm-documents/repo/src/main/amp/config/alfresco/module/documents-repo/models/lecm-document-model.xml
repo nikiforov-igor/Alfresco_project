@@ -89,6 +89,7 @@
                     </index>
                 </property>
                 <property name="lecm-document:employee-ref">
+                    <title>Сотрудник (для передачи документа)</title>
                     <type>d:text</type>
                 </property>
                 <property name="lecm-document:creator-ref">
@@ -112,11 +113,13 @@
                 </property>
                 <!-- Выполнение передачи прав при передаче документа-->
                 <property name="lecm-document:istransmit">
+                    <title>Выполнение передачи прав при передаче документа</title>
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
                 <!-- Лишить текущего владельца прав на передоваемые документы-->
                 <property name="lecm-document:deprive-right">
+                    <title>Лишить текущего владельца прав на передоваемые документы</title>
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
