@@ -100,7 +100,6 @@
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="transactionService" ref="transactionService" />
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
-		<property name="documentService" ref="documentService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="workCalendarService" ref="WorkCalendarService" />
 	</bean>
@@ -307,5 +306,18 @@
      <bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>-->
-
+	
+	<!--<bean id="lecmGlobalOrganisationAccess" parent="spacesStoreImporter" singleton="true">
+        <property name="useExistingStore">
+            <value>true</value>
+        </property>
+		<property name="bootstrapViews">
+			<list>
+				<props>
+					<prop key="path">/${system.system_container.childname}</prop>
+					<prop key="location">alfresco/module/statemachine-repo/context/lecmGlobalOrganisationAccess.xml</prop>
+				</props>
+			</list>
+		</property>
+	</bean>-->
 </beans>

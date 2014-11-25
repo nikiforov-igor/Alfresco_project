@@ -525,7 +525,8 @@ public class BPMNGenerator {
             createScriptAction(extensions, /*eventElement, */action);
 			return Collections.EMPTY_LIST;
 		} else if (StatemachineEditorModel.ACTION_WAIT_FOR_DOCUMENT_CHANGE.equals(actionId)) {
-			return createWaitForDocumentChangeEvent(/*eventElement, */statusVar, action, actionVar);
+			createWaitForDocumentChangeEvent(parentElement, statusVar, action, actionVar);
+			return Collections.EMPTY_LIST;
 		} else if (StatemachineEditorModel.ACTION_TIMER_ACTION.equals(actionId)) {
 			createTimerEvent(parentElement, statusVar, action, actionVar);
 			return Collections.EMPTY_LIST;
@@ -727,10 +728,36 @@ public class BPMNGenerator {
 			</lecm:expressions>
 			</lecm:action>
 	*/
-	private List<Flow> createWaitForDocumentChangeEvent(/*Element eventElement, */String statusVar, ChildAssociationRef action, String actionVar) {
-		List<Flow> flows = new ArrayList<Flow>();
+	private void createWaitForDocumentChangeEvent(Element parentElement, String statusVar, ChildAssociationRef action, String actionVar) {
+//		List<Flow> flows = new ArrayList<Flow>();
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
-		if (expressions.size() > 0) {
+		for (ChildAssociationRef expression : expressions) {
+			String variableName = "id" + expression.getChildRef().getId().replace("-","");
+			
+			Element boundaryEvent = doc.createElement("boundaryEvent");
+			boundaryEvent.setAttribute("id", variableName);
+			boundaryEvent.setAttribute("attachedToRef", statusVar);
+			boundaryEvent.setAttribute("cancelActivity", "true");
+			
+			Element boundaryEventDefinition = doc.createElement("messageEventDefinition");
+			boundaryEventDefinition.setAttribute("messageRef",variableName+"_msg");
+			boundaryEvent.appendChild(boundaryEventDefinition);
+			
+			parentElement.appendChild(boundaryEvent);
+			
+			Element boundaryEventMessage = doc.createElement("message");
+			boundaryEventMessage.setAttribute("id", variableName+"_msg");
+			boundaryEventMessage.setAttribute("name", variableName+"_msg");
+			parentElement.getParentNode().insertBefore(boundaryEventMessage,parentElement);
+			
+			List<AssociationRef> l = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+			if(l.size()>0){
+				AssociationRef statusRef = l.get(0);
+				String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
+				parentElement.appendChild(createSequenceFlow(variableName, target));
+			}
+		}
+//		if (expressions.size() > 0) {
 //			Element actionElement = doc.createElement("lecm:action");
 //			actionElement.setAttribute("type", StatemachineEditorModel.ACTION_WAIT_FOR_DOCUMENT_CHANGE);
 //			eventElement.appendChild(actionElement);
@@ -738,10 +765,10 @@ public class BPMNGenerator {
 //			Element expressionsElement = doc.createElement("lecm:expressions");
 //			expressionsElement.setAttribute("outputVariable", "var" + actionVar);
 //			actionElement.appendChild(expressionsElement);
-
-            flows = createTransitionExpressionsFlows(statusVar, actionVar, expressions);//, expressionsElement);
-        }
-		return flows;
+//
+//            flows = createTransitionExpressionsFlows(statusVar, actionVar, expressions);//, expressionsElement);
+//        }
+//		return flows;
 	}
 
 

@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine.action.document;
 
-import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -25,9 +24,10 @@ import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -66,16 +66,20 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
         AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
         // Add the pending action to the transaction resource
-        List<NodeRef> pendingActions = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
+//        List<NodeRef> pendingActions = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
+        NodeRef pendingActions = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
         if (pendingActions == null) {
-            pendingActions = new ArrayList<NodeRef>();
+            pendingActions = nodeRef;
             AlfrescoTransactionSupport.bindResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER, pendingActions);
+            if (logger.isDebugEnabled()) {
+    			logger.debug("МАШИНА СОСТОЯНИЙ. Добавление документа "+nodeRef+" в список на обработку изменений");
+    		}
         }
 
         // Check that action has only been added to the list once
-        if (!pendingActions.contains(nodeRef)) {
-            pendingActions.add(nodeRef);
-        }
+//        if (!pendingActions.contains(nodeRef)) {
+//            pendingActions.add(nodeRef);
+//        }
     }
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
@@ -110,31 +114,52 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 
         @Override
         public void flush() {
-
+			logger.debug("МАШИНА СОСТОЯНИЙ. Вызывается метод flush");
+            NodeRef nodeRef = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
+			if (nodeRef != null && nodeService.exists(nodeRef)) {
+				Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
+				logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе flush равен {}", state);
+			}
         }
 
         @Override
         public void beforeCommit(boolean readOnly) {
-
+			logger.debug("МАШИНА СОСТОЯНИЙ. Вызывается метод beforeCommit");
+            NodeRef nodeRef = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
+			if (nodeRef != null && nodeService.exists(nodeRef)) {
+				Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
+				logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе beforeCommit равен {}", state);
+			}
         }
 
         @Override
         public void beforeCompletion() {
-
+			logger.debug("МАШИНА СОСТОЯНИЙ. Вызывается метод beforeCompletion");
+            NodeRef nodeRef = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
+			if (nodeRef != null && nodeService.exists(nodeRef)) {
+				Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
+				logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе beforeCompletion равен {}", state);
+			}
         }
 
         @Override
         public void afterCommit() {
-            List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
+			logger.debug("МАШИНА СОСТОЯНИЙ. Вызывается метод afterCommit");
+            NodeRef pendingDocs = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
             if (pendingDocs != null) {
-                while (!pendingDocs.isEmpty()) {
-                    final NodeRef nodeRef = pendingDocs.remove(0);
+//                while (!pendingDocs.isEmpty()) {
+//                    final NodeRef nodeRef = pendingDocs.remove(0);
+                    final NodeRef nodeRef = pendingDocs;
                     if (nodeService.exists(nodeRef)) {
+						Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
+						logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе afterCommit равен {}", state);
                         Runnable runnable = new Runnable() {
                             public void run() {
                                 try {
                                 	String modifier = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-                                	
+                                	if (logger.isDebugEnabled()) {
+                            			logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа "+nodeRef+" пользователем "+modifier);
+                            		}
                                 	AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
                                         @Override
                                         public Void doWork() throws Exception {
@@ -144,6 +169,9 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                                                 public Void execute() throws Throwable {
                                                     if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
                                                         final String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
+                                                        if (logger.isDebugEnabled()) {
+                                                			logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа "+nodeRef+" таска: "+taskId);
+                                                		}
                                                         List<StateMachineAction> actions = stateMachineHelper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class));
 
                                                         WaitForDocumentChangeAction.Expression result = null;
@@ -162,27 +190,44 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                                                         }
 
                                                         if (result != null) {
+                                                        	if (logger.isDebugEnabled()) {
+                                                    			logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа "+nodeRef+" выражение: "+result.getExpression());
+                                                    		}
+                                                        	final String executionId = stateMachineHelper.getCurrentExecutionId(taskId);
                                                             if (result.getScript() != null && !"".equals(result.getScript())) {
                                                                 final String script = result.getScript();
 //                                                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
 //                                                                    @Override
 //                                                                    public Object doWork() throws Exception {
-                                                                        stateMachineHelper.executeScript(script, stateMachineHelper.getCurrentExecutionId(taskId));
+                                                                        stateMachineHelper.executeScript(script, executionId);
+                                                                        if (logger.isDebugEnabled()) {
+                                                                			logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа "+nodeRef+" скрипт: "+result.getScript());
+                                                                		}
 //                                                                        return null;
 //                                                                    }
 //                                                                });
                                                             }
                                                             if (result.getOutputValue() != null && !"".equals(result.getOutputValue())) {
-                                                                HashMap<String, Object> parameters = new HashMap<String, Object>();
-                                                                parameters.put(result.getOutputVariable(), result.getOutputValue());
+                                                                //HashMap<String, Object> parameters = new HashMap<String, Object>();
+                                                                //parameters.put(result.getOutputVariable(), result.getOutputValue());
+                                                            	final String messageName = result.getOutputVariable()+"_msg";
                                                                 //TODO может сразу execution? Или переписать на message?
-                                                                stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
+                                                                //stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
                                                                 if (result.isStopSubWorkflows()) {
-                                                                    String statemachineId = stateMachineHelper.getCurrentExecutionId(taskId);
-                                                                    //TODO nodeRef это и есть документ
+                                                                    //TODO DONE nodeRef это и есть документ
                                                                     stateMachineHelper.stopDocumentSubWorkflows(nodeRef, null);
                                                                 }
-                                                                stateMachineHelper.nextTransition(taskId);
+                                                                //stateMachineHelper.nextTransition(taskId);
+                                                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                                                                	@Override
+                                                                	public Void doWork() throws Exception {
+                                                                		if (logger.isDebugEnabled()) {
+                                                                			logger.debug("МАШИНА СОСТОЯНИЙ. Обработка изменений документа "+nodeRef+" executionId: "+executionId+" ,messageName: "+messageName);
+                                                                		}
+                                                                		stateMachineHelper.sendMessage(messageName, executionId);
+                                                                		return null;
+                                                                	}
+                                                                });
                                                             }
                                                         }
                                                     }
@@ -198,13 +243,18 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                         };
                         threadPoolExecutor.execute(runnable);
                     }
-                }
+//                }
             }
         }
 
         @Override
         public void afterRollback() {
-
+			logger.debug("МАШИНА СОСТОЯНИЙ. Вызывается метод afterRollback");
+            NodeRef nodeRef = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
+			if (nodeRef != null && nodeService.exists(nodeRef)) {
+				Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
+				logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе afterRollback равен {}", state);
+			}
         }
     }
 

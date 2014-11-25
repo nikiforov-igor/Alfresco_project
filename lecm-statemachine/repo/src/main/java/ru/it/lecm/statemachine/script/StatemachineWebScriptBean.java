@@ -253,9 +253,9 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 	 * @param document
 	 * @return
 	 */
-	public String getDocumentStatus(ScriptNode document) {
-		return stateMachineHelper.getDocumentStatus(document.getNodeRef());
-	}
+//	public String getDocumentStatus(ScriptNode document) {
+//		return stateMachineHelper.getDocumentStatus(document.getNodeRef());
+//	}
 
 	/**
 	 * Выполнение действия по его идентификатору
@@ -264,9 +264,9 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 	 * @param actionId
 	 * @return
 	 */
-	public TransitionResponse executeAction(ScriptNode document, String actionId) {
-		return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
-	}
+//	public TransitionResponse executeAction(ScriptNode document, String actionId) {
+//		return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
+//	}
 
 	/**
 	 * Выполнение действия по его имени
@@ -275,9 +275,9 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 	 * @param actionName
 	 * @return
 	 */
-	public TransitionResponse executeActionByName(ScriptNode document, String actionName) {
-		return stateMachineHelper.executeActionByName(document.getNodeRef(), actionName);
-	}
+//	public TransitionResponse executeActionByName(ScriptNode document, String actionName) {
+//		return stateMachineHelper.executeActionByName(document.getNodeRef(), actionName);
+//	}
 
 	/**
 	 * Получение списка статусов для документа
@@ -430,9 +430,9 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 	 * @param actionName
 	 * @param task
 	 */
-	public void executeTransitionAction(ScriptNode document, String actionName, Task task) {
-		stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName, task);
-	}
+//	public void executeTransitionAction(ScriptNode document, String actionName, Task task) {
+//		stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName, task);
+//	}
 
 	/**
 	 * Принудительное завершение процесса

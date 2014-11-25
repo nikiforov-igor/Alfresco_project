@@ -58,7 +58,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                     //TODO Сразу передавать нужные параметры
                     List<StateMachineAction> actions = stateMachineHelper.getTaskActionsByName(descriptor.getStartTaskId(), descriptor.getActionName());
                     if (actions.size() == 0) {
-                        actions = stateMachineHelper.getHistoricalTaskActionsByName(descriptor.getStartTaskId(), descriptor.getActionName(), descriptor.getEventName());
+                        actions = stateMachineHelper.getHistoricalTaskActionsByName(descriptor.getStartTaskId(), descriptor.getActionName());
                     }
 
                     List<WorkflowVariables.WorkflowVariable> variables = null;
@@ -106,7 +106,7 @@ public class EndWorkflowEvent implements ExecutionListener {
 //	                        HashMap<String, Object> parameters = new HashMap<String, Object>();
 //	                        parameters.put(transition.getVariableName(), currentTransitionValid);
 //	                        stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
-	
+
 	                        if (currentTransitionValid) {
 	                            stopSubWorkflows = stopSubWorkflows || transition.isStopSubWorkflows();
 	                            messageName = transition.getVariableName()+"_msg";
@@ -137,7 +137,7 @@ public class EndWorkflowEvent implements ExecutionListener {
     public void setDocumentService(DocumentService documentService) {
     	this.documentService = documentService;
     }
-    
+
     public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
