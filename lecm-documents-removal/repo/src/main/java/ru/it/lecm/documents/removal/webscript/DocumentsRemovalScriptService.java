@@ -23,8 +23,4 @@ public class DocumentsRemovalScriptService extends BaseWebScript {
         documentsRemovalService.purgeDraft(document.getNodeRef());
     }
 
-    public void purge(ScriptNode document) {
-        documentsRemovalService.purge(document.getNodeRef());
-    }
-
 }
