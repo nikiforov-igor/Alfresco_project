@@ -12,11 +12,11 @@ function main() {
         }
     }
 
+	var highlightedFields = [];
     var params = page.url.args["p1"];
     if (params != null) {
         var decodeParams = new java.lang.String(Packages.org.apache.commons.codec.binary.Base64.decodeBase64(params));
 
-        var highlightedFields = [];
         var hash = page.url.args["p2"];
         if (hash == (new Packages.java.lang.String(decodeParams)).hashCode()) {
             var paramsArray = decodeParams.split("&");
