@@ -52,8 +52,6 @@
             <@formLib.renderFieldHelp field=field />
         </div>
 		<div class="value-div">
-			<input type="hidden" id="${controlId}-added" name="${field.name}_added" />
-			<input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
 			<select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
 			        <#if field.description??>title="${field.description}"</#if>
 			        <#if field.control.params.size??>size="${field.control.params.size}"</#if>
