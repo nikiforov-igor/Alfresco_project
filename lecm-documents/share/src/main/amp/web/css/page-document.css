@@ -26,6 +26,7 @@
 }
 .doc-page .yui-gc .doc-right-part .control .label-div ~ .container {
     min-width: 130px;
+    max-height: 165px;
 }
 .doc-page .yui-gc .main-content {
     width: auto;
