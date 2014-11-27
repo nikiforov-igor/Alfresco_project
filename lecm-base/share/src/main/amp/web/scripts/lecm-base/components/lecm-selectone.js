@@ -118,6 +118,8 @@ LogicECM.module = LogicECM.module || {};
 
         onSelectChange: function () {
             var select = document.getElementById(this.id);
+            document.getElementById(this.options.controlId + "-removed").value = this.options.selectedValue;
+            document.getElementById(this.options.controlId + "-added").value = select.value;
             if (this.options.mandatory) {
                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
             }
@@ -139,6 +141,15 @@ LogicECM.module = LogicECM.module || {};
                 }
 
                 this.tempDisabled = true;
+
+                var added = Dom.get(this.options.controlId + "-added");
+                if (added != null) {
+                    added.setAttribute("disabled", "true");
+            }
+                var removed = Dom.get(this.options.controlId + "-removed");
+                if (removed != null) {
+                    removed.setAttribute("disabled", "true");
+                }
             }
         },
 
@@ -151,6 +162,15 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     this.tempDisabled = true;
+
+                    var added = Dom.get(this.options.controlId + "-added");
+                    if (added != null) {
+                        added.removeAttribute("disabled");
+                    }
+                    var removed = Dom.get(this.options.controlId + "-removed");
+                    if (removed != null) {
+                        removed.removeAttribute("disabled");
+                    }
                 }
                 this.tempDisabled = false;
             }
