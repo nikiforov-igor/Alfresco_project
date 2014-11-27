@@ -2243,6 +2243,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
         String smName = processDefinitionId.substring(0, processDefinitionId.indexOf(":"));
         String version = processDefinitionId.substring(processDefinitionId.indexOf(":")+1, processDefinitionId.lastIndexOf(":"));
         result.add(getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(name).getActionByName("FinishStateWithTransition"));
+        result.add(getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(name).getActionByName("UserWorkflow"));
         return result;
     }
 
