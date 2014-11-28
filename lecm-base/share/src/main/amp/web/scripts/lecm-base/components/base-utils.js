@@ -692,6 +692,7 @@ LogicECM.module.Base.Util = {
                 Selector = YAHOO.util.Selector;
 
             var firstTr = Selector.query("tbody.yui-dt-data > tr", table, true);
+            Dom.removeClass(table, "fixedHeader");
 
             if (firstTr) {
                 var tds = Selector.query(" > td", firstTr);
@@ -700,10 +701,12 @@ LogicECM.module.Base.Util = {
                 for (var i = 0; i < tds.length; i++) {
                     var td = tds[i];
                     var th = ths[i];
-                    Dom.setStyle(th, "width", parseInt(Dom.getStyle(td, "width")) + "px");
+                    var width = parseInt(Dom.getStyle(td, "width")) + "px";
+
+                    Dom.setStyle(th, "width", width);
+                    Dom.setStyle(td, "width", width);
                 }
-            } else {
-                Dom.removeClass(table, "fixedHeader");
+                Dom.addClass(table, "fixedHeader");
             }
         }
     }

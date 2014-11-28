@@ -2278,6 +2278,9 @@ span.person a div.description:empty {
     overflow: auto;
     display: block;
 }
+.yui-skin-lecmTheme div.grid table.fixedHeader tbody td div {
+    word-break: break-all;
+}
 /* Datagrid : table : fixed header - end */
 
 .show-picker{
