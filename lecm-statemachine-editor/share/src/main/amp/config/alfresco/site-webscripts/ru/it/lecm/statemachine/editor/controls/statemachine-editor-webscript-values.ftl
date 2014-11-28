@@ -7,7 +7,7 @@
 (function() {
     function init() {
         LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-base/components/lecm-selectone.js'
+            'scripts/lecm-statemachine-editor/lecm-statemachine-editor-selectone.js'
         ], createSelectOne);
     }
     function createSelectOne(){
@@ -52,7 +52,9 @@
             <@formLib.renderFieldHelp field=field />
         </div>
 		<div class="value-div">
-			<select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
+			<input type="hidden" id="${controlId}-added" name="${field.name}_added" />
+			<input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
+			<select id="${fieldHtmlId}" tabindex="0"
 			        <#if field.description??>title="${field.description}"</#if>
 			        <#if field.control.params.size??>size="${field.control.params.size}"</#if>
 			        <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>

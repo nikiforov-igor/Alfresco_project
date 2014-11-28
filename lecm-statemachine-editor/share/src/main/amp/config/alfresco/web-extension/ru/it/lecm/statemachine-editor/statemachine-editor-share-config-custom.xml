@@ -682,7 +682,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -724,7 +724,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -754,7 +754,7 @@
 						</control>
 					</field>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -794,7 +794,7 @@
 						</control>
 					</field>
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -839,7 +839,7 @@
 				<appearance>
 					<field id="lecm-stmeditor:transitionExpression" />
 					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -875,7 +875,7 @@
                 <appearance>
                     <field id="lecm-stmeditor:transitionExpression" />
                     <field id="lecm-stmeditor:transitionStatus">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">/lecm/statemachine/editor/status</control-param>
                             <control-param name="withEmpty">true</control-param>
@@ -1300,7 +1300,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:role-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">/lecm/statemachine/editor/roles/static</control-param>
 							<control-param name="withEmpty">true</control-param>
@@ -1471,7 +1471,7 @@
                 <appearance>
                     <field id="lecm-stmeditor:alternativeExpression" />
                     <field id="lecm-stmeditor:alternativeStatus">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">/lecm/statemachine/editor/status/alternative</control-param>
                             <control-param name="withEmpty">true</control-param>
@@ -1492,7 +1492,7 @@
                 <appearance>
                     <field id="lecm-stmeditor:alternativeExpression" />
                     <field id="lecm-stmeditor:alternativeStatus">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">/lecm/statemachine/editor/status/alternative</control-param>
                             <control-param name="withEmpty">true</control-param>
@@ -1595,7 +1595,7 @@
                     <field id="lecm-stmeditor:transitionIsSystemFormConnection" />
                     <field id="lecm-stmeditor:transitionIsReverseFormConnection" />
                     <field id="lecm-stmeditor:transitionStatus">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">/lecm/statemachine/editor/status</control-param>
                             <control-param name="withEmpty">true</control-param>
@@ -1639,7 +1639,7 @@
                     <field id="lecm-stmeditor:transitionIsSystemFormConnection" />
                     <field id="lecm-stmeditor:transitionIsReverseFormConnection" />
                     <field id="lecm-stmeditor:transitionStatus">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                        <control template="/ru/it/lecm/statemachine/editor/controls/statemachine-editor-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
                             <control-param name="webscript">/lecm/statemachine/editor/status</control-param>
                             <control-param name="withEmpty">true</control-param>
