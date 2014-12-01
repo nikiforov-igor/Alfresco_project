@@ -20,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
+import ru.it.lecm.statemachine.OrgUnitDynamicAuthority;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.util.ArrayList;
@@ -147,7 +149,10 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
                     //            пермиссии участников также сохраняются (т.к. они выданы непосредственно сотруднику)
                     Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document);
                     for (AccessPermission permission : permissions) {
-                        if (permission.getPosition() == 0 && !permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM + Types.SGKind.SG_SPEC.getSuffix())) {
+                        if (permission.isSetDirectly()
+                                && !permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM + Types.SGKind.SG_SPEC.getSuffix())
+                                && !permission.getAuthority().equals(OrgUnitDynamicAuthority.ORGUNIT_AUTHORITY)
+                                && !permission.getAuthority().startsWith(LecmPermissionService.DYNAMIC_AUTH_PREFIX)) {
                             getServiceRegistry().getPermissionService().deletePermission(document, permission.getAuthority(), permission.getPermission());
                         }
                     }

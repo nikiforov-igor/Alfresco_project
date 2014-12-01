@@ -23,13 +23,14 @@ import java.util.Set;
 
 public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBean
 {
-	final static protected Logger logger = LoggerFactory.getLogger(OrgUnitDynamicAuthority.class);
-	
-	private NodeService nodeService;
+    final static protected Logger logger = LoggerFactory.getLogger(OrgUnitDynamicAuthority.class);
+    public static final String ORGUNIT_AUTHORITY = "ORGUNIT";
+
+    private NodeService nodeService;
 	private DictionaryService dictionaryService;
 	private AuthorityService authorityService;
 	private SimpleCache<String, NodeRef> userOrganizationsCache;
-	
+
     public OrgUnitDynamicAuthority()
     {
         super();
@@ -106,7 +107,7 @@ public class OrgUnitDynamicAuthority implements DynamicAuthority, InitializingBe
 
     public String getAuthority()
     {
-       return "ORGUNIT";
+       return ORGUNIT_AUTHORITY;
     }
 
     public Set<PermissionReference> requiredFor()
