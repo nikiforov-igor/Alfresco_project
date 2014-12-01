@@ -34,7 +34,7 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
             this.lecmTransactionHelper = lecmTransactionHelper;
         }
 
-        
+
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
 	}
@@ -67,23 +67,6 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 
             NodeRef connectionsRoot = this.documentConnectionService.getRootFolder(documentRef);
 
-            if (null == connectionsRoot) {
-                AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                    @Override
-                    public NodeRef doWork() throws Exception {
-                        return lecmTransactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                            @Override
-                            public NodeRef execute() throws Throwable {
-                                return documentConnectionService.createRootFolder(documentRef);
-                            }
-                        }, false);
-                    }
-
-                };
-                connectionsRoot = AuthenticationUtil.runAsSystem(raw);
-            }
-        //TODO : Вынести создание rootFolder в машину состояний
-            
             if (connectionsRoot != null) {
                 return new ScriptNode(connectionsRoot, this.serviceRegistry, getScope());
             }

@@ -69,7 +69,7 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 
         policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME,
                 DocumentService.TYPE_BASE_DOCUMENT, DocumentConnectionService.ASSOC_TEMP_CONNECTION,
-                new JavaBehaviour(this, "onCreateTempAssociation"));
+                new JavaBehaviour(this, "onCreateTempAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));

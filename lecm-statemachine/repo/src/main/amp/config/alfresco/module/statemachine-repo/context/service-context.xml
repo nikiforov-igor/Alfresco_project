@@ -7,7 +7,7 @@
 	The ASF licenses this file to You under the Apache License, Version 2.0
 	(the "License"); you may not use this file except in compliance with
 	the License.  You may obtain a copy of the License at
-	
+
 	http://www.apache.org/licenses/LICENSE-2.0
 
 	Unless required by applicable law or agreed to in writing, software
@@ -15,7 +15,7 @@
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 	See the License for the specific language governing permissions and
 	limitations under the License.
-	
+
 -->
 <beans>
 
@@ -163,6 +163,7 @@
 		<property name="policyComponent" ref="policyComponent"/>
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="stateMachineHelper" ref="stateMachineHelper"/>
+		<property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
     <bean id="stateMachineDeleteDocumentPolicy" class="ru.it.lecm.statemachine.policy.StateMachineDeleteDocumentPolicy" init-method="init">
@@ -197,7 +198,7 @@
         <!-- <property name="documentService" ref="documentService"/> -->
         <property name="stateMachineHelper" ref="stateMachineHelper"/>
     </bean>
-    
+
 	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl" />
 
 	<bean id="statusChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
@@ -306,7 +307,7 @@
      <bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>-->
-	
+
 	<!--<bean id="lecmGlobalOrganisationAccess" parent="spacesStoreImporter" singleton="true">
         <property name="useExistingStore">
             <value>true</value>

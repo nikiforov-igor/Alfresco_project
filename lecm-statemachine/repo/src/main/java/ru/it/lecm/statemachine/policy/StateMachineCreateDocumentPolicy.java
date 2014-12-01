@@ -35,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.logging.Level;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 /**
  * User: PMelnikov
@@ -49,6 +52,11 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     private ThreadPoolExecutor threadPoolExecutor;
     private TransactionListener transactionListener;
     private BusinessJournalService businessJournalService;
+	private DocumentConnectionService documentConnectionService;
+
+	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+		this.documentConnectionService = documentConnectionService;
+	}
 
     final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
     private StateMachineHelper stateMachineHelper;
@@ -102,6 +110,13 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         if (!pendingActions.contains(docRef)) {
             pendingActions.add(docRef);
         }
+
+		//Вынесено создание папки "Связи"
+		try {
+			documentConnectionService.createRootFolder(docRef);
+		} catch (WriteTransactionNeededException ex) {
+			logger.error("Cannot create connections root folder", ex);
+		}
     }
 
     public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
