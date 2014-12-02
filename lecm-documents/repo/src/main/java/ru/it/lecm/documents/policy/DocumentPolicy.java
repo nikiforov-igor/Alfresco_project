@@ -503,9 +503,9 @@ public class DocumentPolicy extends BaseBean
 						ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 
                         //Добавляем аспект с организацией для объекта поиска
-                        nodeService.addAspect(associationRef.getChildRef(), OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
                         List<AssociationRef> unitRefs = nodeService.getTargetAssocs(documentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                         if (!unitRefs.isEmpty()) {
+                            nodeService.addAspect(associationRef.getChildRef(), OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
                             nodeService.createAssociation(associationRef.getChildRef(), unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                         }
 
