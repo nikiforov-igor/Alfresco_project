@@ -501,7 +501,15 @@ public class DocumentPolicy extends BaseBean
 						Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
 						properties.put(ContentModel.PROP_NAME, fileName);
 						ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-						return associationRef.getChildRef();
+
+                        //Добавляем аспект с организацией для объекта поиска
+                        nodeService.addAspect(associationRef.getChildRef(), OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+                        List<AssociationRef> unitRefs = nodeService.getTargetAssocs(documentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                        if (!unitRefs.isEmpty()) {
+                            nodeService.createAssociation(associationRef.getChildRef(), unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                        }
+
+                        return associationRef.getChildRef();
 
 //						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 //							@Override
