@@ -10,7 +10,6 @@ import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.version.VersionServicePolicies;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -26,6 +25,7 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -138,6 +138,20 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				if (!assocExist) {
 					nodeService.createAssociation(category, attachmentRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 				}
+                //Добавляем аспект с организацией для вложения
+                if (!nodeService.hasAspect(attachmentRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                    nodeService.addAspect(attachmentRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+                }
+                List<AssociationRef> unitRefs = nodeService.getTargetAssocs(document, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                if (!unitRefs.isEmpty()) {
+                    List<AssociationRef> units =  nodeService.getTargetAssocs(attachmentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                    for (AssociationRef unit : units) {
+                        nodeService.removeAssociation(attachmentRef, unit.getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                    }
+                    nodeService.createAssociation(attachmentRef, unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                }
+
+                //Меняем владельца документа на системного пользователя
                 AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                     @Override
                     public Object doWork() throws Exception {
