@@ -45,6 +45,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			actionId: null,
 			actionType: null,
 			taskId: null,
+			backUrl: null,
 			args: {}
 		},
 
@@ -281,6 +282,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			var reloadCheckbox = Dom.get('document-form-close-and-create-new');
 			if (reloadCheckbox && reloadCheckbox.checked) {
 				window.location.reload();
+			} else if (this.options.backUrl != null) {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + decodeURIComponent(this.options.backUrl);
 			} else {
 				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + nodeRef;
 			}

@@ -15,6 +15,8 @@ function main() {
 	var taskId = null;
 	var actionId = null;
 
+	var backUrl = null;
+
 	var params = page.url.args["p1"];
 	var decodeParams = new java.lang.String(Packages.org.apache.commons.codec.binary.Base64.decodeBase64(params));
 
@@ -46,6 +48,8 @@ function main() {
 					taskId = value;
 				} else if (name == "actionId") {
 					actionId = value;
+				} else if (name == "backUrl") {
+					backUrl = value;
 				} else {
 					urlArgs[name] = value;
 				}
@@ -67,6 +71,7 @@ function main() {
 					actionType: actionType,
 					actionId: actionId,
 					taskId: taskId,
+					backUrl: backUrl,
 					args: urlArgs
 				}
 			};
