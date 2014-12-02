@@ -1,4 +1,9 @@
-ul.sr-list {
-	padding-left: 20px;
-	padding-top: 10px;
+.yui-u .dashlet.contracts-sr-info .dashlet-body {
+    padding: 0;
+}
+.dashlet.contracts-sr-info ul.sr-list li {
+    line-height: 16px;
+    padding: 10px 1em;
+    border-bottom: 1px solid #d7d7d7;
+    overflow: hidden;
 }

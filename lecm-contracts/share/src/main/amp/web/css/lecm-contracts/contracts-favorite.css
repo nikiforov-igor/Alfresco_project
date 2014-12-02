@@ -1,3 +1,9 @@
+.yui-u .dashlet.contracts-favorite .dashlet-body {
+    padding: 0;
+}
+.yui-u .dashlet.contracts-favorite .datagrid .grid {
+    border: none;
+}
 .dashlet.contracts-favorite .datagrid thead {
 	display: none;
 }

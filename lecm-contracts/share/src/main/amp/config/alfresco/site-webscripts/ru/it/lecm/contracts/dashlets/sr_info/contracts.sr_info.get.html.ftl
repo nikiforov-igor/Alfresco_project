@@ -9,7 +9,7 @@
 			<ul class="sr-list">
 				<#list data as value>
 					<li>
-						<a href=" ${value.item.node.properties["lecm-contract-dic:reference-data-link"]!''}"> ${value.item.node.properties["cm:name"]!''}</a>
+						<a href="${value.item.node.properties["lecm-contract-dic:reference-data-link"]!''}"> ${value.item.node.properties["cm:name"]!''}</a>
 					</li>
 				</#list>
 			</ul>
