@@ -139,11 +139,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 					nodeService.createAssociation(category, attachmentRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 				}
                 //Добавляем аспект с организацией для вложения
-                if (!nodeService.hasAspect(attachmentRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
-                    nodeService.addAspect(attachmentRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
-                }
                 List<AssociationRef> unitRefs = nodeService.getTargetAssocs(document, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                 if (!unitRefs.isEmpty()) {
+                    if (!nodeService.hasAspect(attachmentRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                        nodeService.addAspect(attachmentRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+                    }
                     List<AssociationRef> units =  nodeService.getTargetAssocs(attachmentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                     for (AssociationRef unit : units) {
                         nodeService.removeAssociation(attachmentRef, unit.getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);

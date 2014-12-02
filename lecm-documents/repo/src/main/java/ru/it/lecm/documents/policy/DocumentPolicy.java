@@ -502,13 +502,6 @@ public class DocumentPolicy extends BaseBean
 						properties.put(ContentModel.PROP_NAME, fileName);
 						ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 
-                        //Добавляем аспект с организацией для объекта поиска
-                        List<AssociationRef> unitRefs = nodeService.getTargetAssocs(documentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-                        if (!unitRefs.isEmpty()) {
-                            nodeService.addAspect(associationRef.getChildRef(), OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
-                            nodeService.createAssociation(associationRef.getChildRef(), unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-                        }
-
                         return associationRef.getChildRef();
 
 //						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
@@ -532,7 +525,19 @@ public class DocumentPolicy extends BaseBean
 				};
 				result = AuthenticationUtil.runAsSystem(raw);
 			}
-		}
+            //Добавляем аспект с организацией для вложения
+            List<AssociationRef> unitRefs = nodeService.getTargetAssocs(documentRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+            if (!unitRefs.isEmpty()) {
+                if (!nodeService.hasAspect(result, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                    nodeService.addAspect(result, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+                }
+                List<AssociationRef> units =  nodeService.getTargetAssocs(result, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                for (AssociationRef unit : units) {
+                    nodeService.removeAssociation(result, unit.getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                }
+                nodeService.createAssociation(result, unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+            }
+        }
 
 		return result;
 	}
