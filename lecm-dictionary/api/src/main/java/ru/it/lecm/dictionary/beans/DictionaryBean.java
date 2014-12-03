@@ -32,4 +32,27 @@ public interface DictionaryBean {
 	public List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);
 	public NodeRef getRecordByParamValue (String dictionaryName, QName parameter, Serializable value);
 	public NodeRef getDictionariesRoot();
+
+	/**
+	 * Получить коллекцию типов данных всех справочников зарегистрированных в системе
+	 * @return коллекция типов данных (ArrayList<String>) справочников вида prefixedString
+	 * Элемент строки представляет собой пару name|value
+	 */
+	Serializable getAllDictionaryTypes();
+
+	/**
+	 * Получить коллецию типов данных существующих справочников
+	 * @return коллекция типов данных (ArrayList<String>) существующих справочников вида prefixedString
+	 * Элемент строки представляет собой пару name|value
+	 */
+	Serializable getExistDictionaryTypes();
+
+	/**
+	 * получить коллекцию пропертей которые есть у заданного типа справочника
+	 * включает в себя cm:name и cm:title
+	 * @param dicType имя типа для которого получаем список пропертей
+	 * @return коллекция пропертей (ArrayList<String>) для указанного типа справочника вида prefixedString
+	 * Элемент строки представляет собой пару name|value
+	 */
+	Serializable getDictionaryTypeProperties(final String dicType);
 }

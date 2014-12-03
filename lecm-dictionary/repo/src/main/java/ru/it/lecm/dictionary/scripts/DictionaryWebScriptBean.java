@@ -85,4 +85,16 @@ public class DictionaryWebScriptBean extends BaseWebScript {
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
+
+	public Scriptable getAllDictionaryTypes() {
+		return (Scriptable)getValueConverter().convertValueForScript(serviceRegistry, getScope(), null, dictionaryService.getAllDictionaryTypes());
+	}
+
+	public Scriptable getExistDictionaryTypes() {
+		return (Scriptable)getValueConverter().convertValueForScript(serviceRegistry, getScope(), null, dictionaryService.getExistDictionaryTypes());
+	}
+
+	public Scriptable getDictionaryTypeProperties(final String dicType) {
+		return (Scriptable)getValueConverter().convertValueForScript(serviceRegistry, getScope(), null, dictionaryService.getDictionaryTypeProperties(dicType));
+	}
 }

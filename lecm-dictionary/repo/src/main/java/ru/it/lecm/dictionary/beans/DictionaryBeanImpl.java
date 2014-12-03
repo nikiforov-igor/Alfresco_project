@@ -18,11 +18,14 @@ import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * User: ORakovskaya
@@ -97,7 +100,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
     @Override
     public List<NodeRef> getChildren(NodeRef nodeRef) {
         List<NodeRef> activeChildren = new ArrayList<NodeRef>();
-		
+
         if (nodeRef != null) {
             List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
 
@@ -194,5 +197,78 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getDictionariesRoot();
+	}
+
+	@Override
+	public Serializable getAllDictionaryTypes() {
+		List<QName> types = new ArrayList<>();
+		types.addAll(dictionaryService.getSubTypes(TYPE_PLANE_DICTIONARY_VALUE, true));
+		types.addAll(dictionaryService.getSubTypes(TYPE_HIERARCHICAL_DICTIONARY_VALUE, true));
+		types.remove(TYPE_PLANE_DICTIONARY_VALUE);
+		types.remove(TYPE_HIERARCHICAL_DICTIONARY_VALUE);
+
+		ArrayList<String> result = new ArrayList<>();
+		for (QName type : types) {
+			TypeDefinition typedef = dictionaryService.getType(type);
+			String title = StringUtils.defaultString(typedef.getTitle(dictionaryService));
+			result.add(String.format("%s|%s", type.toPrefixString(namespaceService), title));
+		}
+
+		return result;
+	}
+
+	@Override
+	public Serializable getExistDictionaryTypes() {
+		ArrayList<String> result = new ArrayList<>();
+
+		List<NodeRef> dictionaries = new ArrayList<>();
+		NodeRef root = getDictionariesRoot();
+
+		if (root != null) {
+			List<ChildAssociationRef> children = nodeService.getChildAssocs(root);
+
+			if (children != null && !children.isEmpty()) {
+
+				for (ChildAssociationRef child : children) {
+					NodeRef childRef = child.getChildRef();
+					if (!isArchive(childRef) && isDictionary(childRef)) {
+						dictionaries.add(childRef);
+					}
+				}
+			}
+		}
+
+		for (NodeRef dictionary : dictionaries) {
+			String dicType = (String)nodeService.getProperty(dictionary, PROPERTY_DICTIONARY_TYPE);
+			QName type = QName.createQName(dicType, namespaceService);
+			TypeDefinition typedef = dictionaryService.getType(type);
+			String title = StringUtils.defaultString(typedef.getTitle(dictionaryService));
+			result.add(String.format("%s|%s", type.toPrefixString(namespaceService), title));
+		}
+
+		return result;
+	}
+
+	@Override
+	public Serializable getDictionaryTypeProperties(final String dicType) {
+		QName type = QName.createQName(dicType, namespaceService);
+		TypeDefinition typedef = dictionaryService.getType(type);
+		Map<QName, PropertyDefinition> propDefs = typedef.getProperties();
+		Collection<PropertyDefinition> properties = propDefs.values();
+
+		ArrayList<String> result = new ArrayList<>();
+		PropertyDefinition cmNameDef = dictionaryService.getProperty(ContentModel.PROP_NAME);
+		PropertyDefinition cmTitleDef = dictionaryService.getProperty(ContentModel.PROP_TITLE);
+		result.add(String.format("%s|%s", ContentModel.PROP_NAME.toPrefixString(namespaceService), StringUtils.defaultString(cmNameDef.getTitle(dictionaryService))));
+		result.add(String.format("%s|%s", ContentModel.PROP_TITLE.toPrefixString(namespaceService), StringUtils.defaultString(cmTitleDef.getTitle(dictionaryService))));
+
+		for (PropertyDefinition property : properties) {
+			if (type.isMatch(property.getContainerClass().getName())) {
+				String name = property.getName().toPrefixString(namespaceService);
+				String title = StringUtils.defaultString(property.getTitle(dictionaryService));
+				result.add(String.format("%s|%s", name, title));
+			}
+		}
+		return result;
 	}
 }

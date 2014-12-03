@@ -193,6 +193,9 @@
                     usePagination: true,
                     showExtendSearchBlock:false,
                     showCheckboxColumn:false,
+                    allowCreate: true,
+                    createItemBtnMsg: 'Добавить справочник',
+                    createFormTitleMsg: 'Справочник',
                     actions: [
                         {
                             type:"datagrid-action-link-${bubblingLabel}",
@@ -208,6 +211,7 @@
                         }
                     ],
                     datagridMeta:{
+                        //createFormId: '',
                         itemType: "lecm-dic:dictionary",
                         nodeRef: rootNodeRef
                     }
