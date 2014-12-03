@@ -1610,6 +1610,62 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		        }
 		        e.stopPropagation();
 		        e.preventDefault();
-	        }
+	        },
+
+            onActionUploadNewVersion: function (record)
+            {
+                var jsNode = record.jsNode,
+                    displayName = record.displayName,
+                    nodeRef = jsNode.nodeRef,
+                    version = record.version;
+
+                if (!this.fileUpload) {
+                    this.fileUpload = Alfresco.getFileUploadInstance();
+                }
+
+                // Show uploader for multiple files
+                var description = this.msg("label.filter-description", displayName),
+                    extensions = "*";
+
+                if (displayName && new RegExp(/[^\.]+\.[^\.]+/).exec(displayName))
+                {
+                    // Only add a filtering extension if filename contains a name and a suffix
+                    extensions = "*" + displayName.substring(displayName.lastIndexOf("."));
+                }
+
+                if (record.workingCopy && record.workingCopy.workingCopyVersion)
+                {
+                    version = record.workingCopy.workingCopyVersion;
+                }
+
+                var singleUpdateConfig =
+                {
+                    updateNodeRef: nodeRef.toString(),
+                    updateFilename: displayName,
+                    updateVersion: version,
+                    overwrite: true,
+                    filter: [
+                        {
+                            description: description,
+                            extensions: extensions
+                        }],
+                    mode: this.fileUpload.MODE_SINGLE_UPDATE,
+                    onFileUploadComplete:
+                    {
+                        fn:  function(complete) {
+                            this._uploadComplete(complete, "updated");
+                            YAHOO.Bubbling.fire("listRefresh",{});
+                        },
+                        scope: this
+                    },
+                    suppressRefreshEvent: true
+                };
+                if ($isValueSet(this.options.siteId))
+                {
+                    singleUpdateConfig.siteId = this.options.siteId;
+                    singleUpdateConfig.containerId = this.options.containerId;
+                }
+                this.fileUpload.show(singleUpdateConfig);
+            }
         }, true);
 })();
