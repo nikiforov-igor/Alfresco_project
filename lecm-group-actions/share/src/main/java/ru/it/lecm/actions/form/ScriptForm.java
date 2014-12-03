@@ -174,6 +174,7 @@ public class ScriptForm extends FormUIGet {
 
                 field.setId(colMnem);
                 field.setName(colMnem);
+                field.setConfigName(colMnem);
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
                 field.setMandatory(column.isMandatory());
