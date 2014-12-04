@@ -93,6 +93,8 @@ LogicECM.module = LogicECM.module || {};
 
 				nameSubstituteString: "{cm:name}",
 
+				titleNameSubstituteString: null,
+
                 sortProp: "cm:name",
 
 				selectedItemsNameSubstituteString: null,
@@ -507,9 +509,17 @@ LogicECM.module = LogicECM.module || {};
 					var template = '';
 
 					if (scope.options.viewUrl != null) {
-						template += '<h3 class="item-name"><a href="' + scope.options.viewUrl + '" target="blank">{name}</a></h3>';
+						if (scope.options.titleNameSubstituteString != null) {
+							template += '<h3 class="item-name" title="{title}"><a href="' + scope.options.viewUrl + '" target="blank">{name}</a></h3>';
+						} else {
+							template += '<h3 class="item-name"><a href="' + scope.options.viewUrl + '" target="blank">{name}</a></h3>';
+						}
 					} else {
-						template += '<h3 class="item-name">{name}</h3>';
+						if (scope.options.titleNameSubstituteString != null) {
+							template += '<h3 class="item-name" title="{title}">{name}</h3>';
+						} else {
+							template += '<h3 class="item-name">{name}</h3>';
+						}
 					}
 
 					if (!scope.options.compactMode)
@@ -676,9 +686,12 @@ LogicECM.module = LogicECM.module || {};
 					"&additionalFilter=" + encodeURIComponent(additionalFilter) +
                     "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
 
-					if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/")
-				{
+				if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/") {
 					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
+				}
+
+				if (this.options.titleNameSubstituteString != null) {
+					params += "&titleNameSubstituteString=" + encodeURIComponent(this.options.titleNameSubstituteString);
 				}
 
 				return params;
