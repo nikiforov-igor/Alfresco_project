@@ -38,7 +38,7 @@
 					<title>Type</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
-/                    <index enabled="true">
+                    <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
                         <tokenised>both</tokenised>
