@@ -71,7 +71,7 @@
                 ${field.label?html}:
                 <#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
             </label>
-            <input type="hidden" id="${controlId}-removed" name="${field.name}_removed" value="${fieldValue}"/>
+            <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed" value="${fieldValue}"/>
         </div>
         <div class="container">
             <div class="value-div">
