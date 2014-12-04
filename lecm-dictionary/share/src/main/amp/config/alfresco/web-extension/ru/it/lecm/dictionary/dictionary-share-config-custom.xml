@@ -36,7 +36,7 @@
 					<show id="lecm-dic:description"/>
 					<show id="lecm-dic:type"/>
 					<show id="lecm-dic:attributeForShow"/>
-					<show id="lecm-dic:plane"/>
+					<show id="lecm-dic:attributeForShow-type-binder" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-dic:type">
@@ -47,11 +47,15 @@
 						</control>
 					</field>
 					<field id="lecm-dic:attributeForShow">
-<!--						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
-							<control-param name="webscript">lecm/dictionary/attributes</control-param>
+							<control-param name="webscript">lecm/dictionary/attributes?dataType=cm:content</control-param>
 							<control-param name="withEmpty">true</control-param>
-						</control>-->
+						</control>
+					</field>
+					<field id="lecm-dic:attributeForShow-type-binder">
+						<control template="/ru/it/lecm/dictionary/all/components/controls/attributeForShow-type-binder.ftl">
+						</control>
 					</field>
 				</appearance>
 			</form>

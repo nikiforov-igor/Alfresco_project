@@ -734,7 +734,8 @@ LogicECM.module.Base.Util = {
 	 * Base resizer
 	 */
 	LogicECM.module.Base.Resizer = function(htmlId) {
-		LogicECM.module.Base.Resizer.superclass.constructor.call(this, "LogicECM.module.Base.Resizer", htmlId);
+		LogicECM.module.Base.Resizer.superclass.constructor.call(this, "LogicECM.module.Base.Resizer");
+		this.id = htmlId;
 		return this;
 	};
 
