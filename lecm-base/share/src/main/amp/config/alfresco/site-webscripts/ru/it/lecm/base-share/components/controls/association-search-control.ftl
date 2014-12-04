@@ -128,6 +128,9 @@
 				<#if field.control.params.titleNameSubstituteString??>
 					titleNameSubstituteString: "${field.control.params.titleNameSubstituteString}",
 				</#if>
+				<#if field.control.params.checkSearchColumnDataType??>
+					checkSearchColumnDataType: ${field.control.params.checkSearchColumnDataType?string},
+				</#if>
 				<#if field.control.params.fireAction?? && field.control.params.fireAction != "">
 					fireAction: {
 						<#list field.control.params.fireAction?split(optionSeparator) as typeValue>

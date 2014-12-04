@@ -128,7 +128,9 @@ LogicECM.module = LogicECM.module || {};
 
 				childrenDataSource: "lecm/forms/picker",
 
-				viewUrl: null
+				viewUrl: null,
+
+				checkSearchColumnDataType: true
 			},
 
 			onReady: function AssociationSearchViewer_onReady()
@@ -204,6 +206,7 @@ LogicECM.module = LogicECM.module || {};
 
 
 			_loadSearchProperties: function AssociationSearchViewer__loadSearchProperties() {
+				var me = this;
 				Alfresco.util.Ajax.jsonGet(
 					{
 						url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "/lecm/components/datagrid/config/columns?formId=searchColumns&itemType=" + encodeURIComponent(this.options.itemType)),
@@ -213,7 +216,7 @@ LogicECM.module = LogicECM.module || {};
 								var columns = response.json.columns;
 								for (var i = 0; i < columns.length; i++) {
 									var column = columns[i];
-									if (column.dataType == "text" || column.dataType == "mltext") {
+									if (!me.options.checkSearchColumnDataType || column.dataType == "text" || column.dataType == "mltext") {
 										this.searchProperties[column.name] = column.name;
 									} else if (column.type == "association"){
                                         this.searchProperties[column.name + "-text-content"] = column.name + "-text-content";
