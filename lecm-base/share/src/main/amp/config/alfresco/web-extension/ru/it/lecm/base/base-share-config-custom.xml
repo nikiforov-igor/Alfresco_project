@@ -272,4 +272,15 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="model-type" condition="cm:content">
+        <forms>
+            <form id="file-navigator">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:modified"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>
