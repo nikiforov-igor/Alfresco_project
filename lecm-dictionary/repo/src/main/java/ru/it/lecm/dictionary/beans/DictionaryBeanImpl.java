@@ -74,6 +74,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 			SearchParameters parameters = new SearchParameters();
 			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+            parameterValue = parameterValue != null ? parameterValue.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-") : "";
 			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + propParameterName + ":\"" + parameterValue + "\"");
 			ResultSet resultSet = null;
 			try {
