@@ -36,7 +36,7 @@
 				"selectedName": "${row.selectedVisibleName!row.item.properties.name!""}",
 				"path": "${row.path!""}",
 				"simplePath": "${row.simplePath!""}",
-				"title": "${row.item.properties.title!""}",
+				"title": "${row.titleVisibleName!row.item.properties.title!""}",
 				"description": "${row.item.properties.description!""}",
 				<#if row.item.properties.modified??>"modified": "${xmldate(row.item.properties.modified)}",</#if>
 				<#if row.item.properties.modifier??>"modifier": "${row.item.properties.modifier}",</#if>

@@ -9,6 +9,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		argsXPath = args['xpath'],
 		argsRootNode = args['rootNode'],
 		argsNameSubstituteString = args['nameSubstituteString'],
+		argsTitleNameSubstituteString = args['titleNameSubstituteString'],
 		argsSelectedItemsNameSubstituteString = args['selectedItemsNameSubstituteString'] != null ? args['selectedItemsNameSubstituteString'] : argsNameSubstituteString,
 		pathElements = url.service.split("/"),
 		parent = null,
@@ -247,6 +248,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                 }
 
                 resultObj.visibleName = substitude.formatNodeTitle(result, argsNameSubstituteString);
+				resultObj.titleVisibleName = substitude.formatNodeTitle(result, argsTitleNameSubstituteString);
                 resultObj.selectedVisibleName = substitude.formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
 
 				var path = "/";
