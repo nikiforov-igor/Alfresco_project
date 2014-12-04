@@ -122,6 +122,9 @@
 				<#if renderPickerJSSelectedValue??>
 					selectedValue: "${renderPickerJSSelectedValue}",
 				</#if>
+				<#if field.control.params.viewUrl??>
+					viewUrl: "${field.control.params.viewUrl}",
+				</#if>
 				<#if field.control.params.fireAction?? && field.control.params.fireAction != "">
 					fireAction: {
 						<#list field.control.params.fireAction?split(optionSeparator) as typeValue>

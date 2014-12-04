@@ -506,7 +506,11 @@ LogicECM.module = LogicECM.module || {};
 				{
 					var template = '';
 
-					template += '<h3 class="item-name">{name}</h3>';
+					if (scope.options.viewUrl != null) {
+						template += '<h3 class="item-name"><a href="' + scope.options.viewUrl + '" target="blank">{name}</a></h3>';
+					} else {
+						template += '<h3 class="item-name">{name}</h3>';
+					}
 
 					if (!scope.options.compactMode)
 					{
@@ -721,7 +725,7 @@ LogicECM.module = LogicECM.module || {};
 			            nodeRef: item.nodeRef
 		            });
 
-		            result += "<a href='" + href + "'>" + displayValue + "</a>";
+		            result += "<a href='" + href + "' target='blank'>" + displayValue + "</a>";
 	            } else {
 		            result += displayValue;
 	            }
