@@ -38,8 +38,7 @@
 					<title>Type</title>
 					<type>d:text</type>
 					<mandatory>true</mandatory>
-                    <default>lecm-dic:hierarchical_dictionary_values</default>
-                    <index enabled="true">
+/                    <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
                         <tokenised>both</tokenised>
@@ -48,7 +47,7 @@
                 <property name="lecm-dic:attributeForShow">
                     <title>Attribute for show</title>
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <default>cm:name</default>
                     <index enabled="true">
                         <atomic>true</atomic>

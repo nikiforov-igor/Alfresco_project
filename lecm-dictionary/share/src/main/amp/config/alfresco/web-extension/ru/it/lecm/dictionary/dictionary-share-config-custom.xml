@@ -49,7 +49,6 @@
 					<field id="lecm-dic:attributeForShow">
 						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
-							<control-param name="webscript">lecm/dictionary/attributes?dataType=cm:content</control-param>
 							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
