@@ -1850,7 +1850,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			getDefaultView: function (displayValue, item) {
-				var titleName = (this.options.plane || this.options.showPath) ? item.selectedName : item.path + item.selectedName;
+				var titleName = (this.options.plane || !this.options.showPath) ? item.selectedName : item.path + item.selectedName;
 				var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : titleName;
 				var result = "<span class='not-person' title='" + title + "'>";
 				if (this.options.showAssocViewForm && item.nodeRef != null) {
