@@ -47,7 +47,8 @@ LogicECM.module = LogicECM.module || {};
             updateOnAction: null,
             changeItemFireAction: null,
             fieldId: null,
-            formId: null
+            formId: null,
+            needSort: null
         },
 
         onReady: function() {
@@ -76,7 +77,7 @@ LogicECM.module = LogicECM.module || {};
                     successCallback: {
                         scope: this,
                         fn: function (response) {
-                            var i, select, option,
+                            var i, select, option, prop,
                                 oResults = response.json;
                             if (oResults) {
                                 select = document.getElementById(this.id);
@@ -90,12 +91,29 @@ LogicECM.module = LogicECM.module || {};
                                     select.appendChild(option);
                                 }
 
+                                if (this.options.needSort) {
+                                    oResults.data.sort(function(left, right) {
+                                        if (left.name < right.name) {
+                                            return -1;
+                                        }
+                                        if (left.name > right.name) {
+                                            return 1;
+                                        }
+                                        return 0;
+                                    });
+                                }
+
                                 for (i in oResults.data) {
                                     option = document.createElement("option");
                                     option.value = oResults.data[i].value;
                                     option.innerHTML = oResults.data[i].name;
                                     if (oResults.data[i].value == this.options.selectedValue) {
                                         option.selected = true;
+                                    }
+                                    delete oResults.data[i].value;
+                                    delete oResults.data[i].name;
+                                    for(prop in oResults.data[i]) {
+                                        option['data-' + prop] = oResults.data[i][prop];
                                     }
                                     select.appendChild(option);
                                 }

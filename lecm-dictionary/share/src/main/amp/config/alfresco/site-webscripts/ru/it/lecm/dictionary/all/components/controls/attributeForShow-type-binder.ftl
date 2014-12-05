@@ -6,11 +6,16 @@
 	function onResultChanged(type, args) {
 		var dicTypeSelectControl = args[1];
 		var dicTypeSelect = document.getElementById(dicTypeSelectControl.id);
+		var dicPlaneHidden = document.getElementById('${dialogId}_prop_lecm-dic_plane-added');
 		var dicType = dicTypeSelect.value;
+		var isPlane = dicTypeSelect[dicTypeSelect.selectedIndex]['data-isPlane'];
+
+		if (dicPlaneHidden) {
+			dicPlaneHidden.value = isPlane;
+		}
+
 		LogicECM.module.Base.Util.reInitializeControl('${dialogId}', 'lecm-dic:attributeForShow', {
-			webscript: 'lecm/dictionary/attributes?dataType=' + dicType,
-			webscriptType: 'server',
-			withEmpty: true
+			webscript: 'lecm/dictionary/attributes?dataType=' + dicType
 		});
 	}
 

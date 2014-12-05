@@ -20,6 +20,9 @@
             <#if field.control.params.withEmpty??>
             withEmpty: ${field.control.params.withEmpty},
             </#if>
+            <#if field.control.params.needSort??>
+            needSort: ${field.control.params.needSort},
+            </#if>
             selectedValue: "${fieldValue}",
             mandatory: ${field.mandatory?string},
             currentNodeRef: "${form.arguments.itemId}",

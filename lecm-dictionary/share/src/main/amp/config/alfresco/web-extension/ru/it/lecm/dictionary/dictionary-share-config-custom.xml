@@ -22,7 +22,16 @@
 					<show id="lecm-dic:attributeForShow"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-dic:type" read-only="true"/>
+					<field id="lecm-dic:type" read-only="true">
+						<control template="/ru/it/lecm/dictionary/all/components/controls/dicType-hidden.ftl"/>
+					</field>
+					<field id="lecm-dic:attributeForShow">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="withEmpty">true</control-param>
+							<control-param name="needSort">true</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -36,6 +45,7 @@
 					<show id="lecm-dic:description"/>
 					<show id="lecm-dic:type"/>
 					<show id="lecm-dic:attributeForShow"/>
+					<show id="lecm-dic:plane"/>
 					<show id="lecm-dic:attributeForShow-type-binder" force="true"/>
 				</field-visibility>
 				<appearance>
@@ -43,18 +53,22 @@
 						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="webscript">lecm/dictionary/dataTypes</control-param>
-							<control-param name="withEmpty">false</control-param>
+							<control-param name="withEmpty">true</control-param>
+							<control-param name="needSort">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-dic:attributeForShow">
 						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
 							<control-param name="webscriptType">server</control-param>
 							<control-param name="withEmpty">true</control-param>
+							<control-param name="needSort">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-dic:plane">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
 					<field id="lecm-dic:attributeForShow-type-binder">
-						<control template="/ru/it/lecm/dictionary/all/components/controls/attributeForShow-type-binder.ftl">
-						</control>
+						<control template="/ru/it/lecm/dictionary/all/components/controls/attributeForShow-type-binder.ftl"/>
 					</field>
 				</appearance>
 			</form>

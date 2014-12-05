@@ -211,8 +211,9 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 		ArrayList<String> result = new ArrayList<>();
 		for (QName type : types) {
 			TypeDefinition typedef = dictionaryService.getType(type);
+			boolean isPlane = dictionaryService.isSubClass(type, TYPE_PLANE_DICTIONARY_VALUE);
 			String title = StringUtils.defaultString(typedef.getTitle(dictionaryService));
-			result.add(String.format("%s|%s", type.toPrefixString(namespaceService), title));
+			result.add(String.format("%s|%s|%s", type.toPrefixString(namespaceService), isPlane, title));
 		}
 
 		return result;
@@ -243,8 +244,9 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 			String dicType = (String)nodeService.getProperty(dictionary, PROPERTY_DICTIONARY_TYPE);
 			QName type = QName.createQName(dicType, namespaceService);
 			TypeDefinition typedef = dictionaryService.getType(type);
+			boolean isPlane = dictionaryService.isSubClass(type, TYPE_PLANE_DICTIONARY_VALUE);
 			String title = StringUtils.defaultString(typedef.getTitle(dictionaryService));
-			result.add(String.format("%s|%s", type.toPrefixString(namespaceService), title));
+			result.add(String.format("%s|%s|%s", type.toPrefixString(namespaceService), isPlane, title));
 		}
 
 		return result;

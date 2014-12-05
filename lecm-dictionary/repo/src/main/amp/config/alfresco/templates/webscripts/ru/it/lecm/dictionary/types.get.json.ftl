@@ -2,10 +2,11 @@
 {
 	"data": [
 		<#if results??>
-			<#list results?keys as type>
+			<#list results as result>
 			{
-				"name": "${results[type]}",
-				"value": "${type}"
+				"name": "${result.name}",
+				"value": "${result.value}",
+				"isPlane": ${result.isPlane?js_string}
 			}<#if type_has_next>,</#if>
 			</#list>
 		</#if>

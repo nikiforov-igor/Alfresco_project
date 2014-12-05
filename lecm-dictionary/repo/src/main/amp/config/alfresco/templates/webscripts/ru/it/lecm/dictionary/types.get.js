@@ -18,12 +18,17 @@
 	var existTypes = dictionary.getExistDictionaryTypes();
 //	var types = symmetricDifference(allTypes, existTypes);
 	var types = relativeComplement(allTypes, existTypes);
-	var i, value, name, tmp;
-	model.results = {};
+	var i, value, name, isPlane, tmp;
+	model.results = [];
 	for (i in types) {
 		tmp = types[i].split('|');
 		value = tmp[0];
-		name = (tmp.length > 1 && tmp[1]) ? tmp[1] : value;
-		model.results[value] = name;
+		isPlane = tmp[1];
+		name = (tmp.length > 2 && tmp[2]) ? tmp[2] : value;
+		model.results.push({
+			name: name,
+			value: value,
+			isPlane: isPlane
+		});
 	}
 })();

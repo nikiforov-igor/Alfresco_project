@@ -195,7 +195,7 @@
                     showCheckboxColumn:false,
                     allowCreate: true,
                     createItemBtnMsg: 'Добавить справочник',
-                    createFormTitleMsg: 'Справочник',
+                    createFormTitleMsg: 'Новый справочник',
                     actions: [
                         {
                             type:"datagrid-action-link-${bubblingLabel}",

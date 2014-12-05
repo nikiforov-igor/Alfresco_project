@@ -35,7 +35,7 @@ function Binder(options) {
 		}
 
 		if(currentHandler) {
-			console.log('Binder: изменилось состояние компонента пучка (' + currentId + ')');
+			//console.log('Binder: изменилось состояние компонента пучка (' + currentId + ')');
 			currentHandler.call(obj, type, args);
 		}
 
