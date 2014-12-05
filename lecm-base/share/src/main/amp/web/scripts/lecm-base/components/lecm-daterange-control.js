@@ -165,12 +165,28 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
                 // setup events
                 this.widgets.calendarFrom.selectEvent.subscribe(this._handlePickerChangeFrom, this, true);
+                this.widgets.calendarFrom.selectEvent.subscribe(this.onChangeDates, this, true);
                 Event.addListener(this.id + "-date-from", "keyup", this._handleFieldChangeFrom, this, true);
                 Event.addListener(this.id + "-icon-from", "click", this._showPickerFrom, this, true);
+                Event.on(this.id + "-date-from", "change", this.onChangeDates, this, true);
+                YAHOO.Bubbling.fire("registerValidationHandler",
+                    {
+                        fieldId: this.id + "-date-from",
+                        handler: Alfresco.forms.validation.validDateTime,
+                        when: "keyup"
+                    });
 
                 this.widgets.calendarTo.selectEvent.subscribe(this._handlePickerChangeTo, this, true);
+                this.widgets.calendarTo.selectEvent.subscribe(this.onChangeDates, this, true);
                 Event.addListener(this.id + "-date-to", "keyup", this._handleFieldChangeTo, this, true);
                 Event.addListener(this.id + "-icon-to", "click", this._showPickerTo, this, true);
+                Event.on(this.id + "-date-to", "change", this.onChangeDates, this, true);
+                YAHOO.Bubbling.fire("registerValidationHandler",
+                    {
+                        fieldId: this.id + "-date-to",
+                        handler: Alfresco.forms.validation.validDateTime,
+                        when: "keyup"
+                    });
 
                 // render the calendar controls
                 this.widgets.calendarFrom.render();
@@ -475,6 +491,30 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             _msg: function (messageId) {
                 var me = this;
                 return Alfresco.util.message.call(me, messageId, "LogicECM.DatePicker", Array.prototype.slice.call(arguments).slice(1));
+            },
+
+            onChangeDates: function() {
+                if (this.widgets.calendarFrom != null && this.widgets.calendarTo != null) {
+                    var startPickerId = this.id + "-date-from";
+                    var endPickerId = this.id + "-date-to";
+                    var startDate = Date.parseExact(Dom.get(startPickerId).value, this.msg("lecm.form.control.date-picker.entry.date.format"));
+                    var endDate = Date.parseExact(Dom.get(endPickerId).value, this.msg("lecm.form.control.date-picker.entry.date.format"));
+
+                    if (startDate != null && endDate != null) {
+                        if (startDate > endDate) {
+                            Dom.addClass(startPickerId, "invalid");
+                            Dom.addClass(endPickerId, "invalid");
+                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarFrom);
+                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarTo);
+                        } else {
+                            Dom.removeClass(startPickerId, "invalid");
+                            Dom.removeClass(endPickerId, "invalid");
+                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarFrom);
+                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this.widgets.calendarTo);
+                        }
+                    }
+                }
             }
+
         });
 })();
