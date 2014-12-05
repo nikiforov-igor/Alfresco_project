@@ -290,11 +290,36 @@ var Evaluator = {
                     }
                 }
             } else { // работает сразу через substitute сервис
-                fieldData = {
-                    type: "text"
-                };
-                if (Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDef)) {
-                    nodeData["prop_" + fName] = fieldData; // prop_cm_name
+                if (fName == "mimetype") {
+                    nodeData["prop_" + fName] = {
+                        type: "text",
+                        value: node.getMimetype(),
+                        displayValue: node.getMimetype()
+                    }; // prop_mimetype
+                } else if (fName == "size") {
+                    nodeData["prop_" + fName] = {
+                        type: "size",
+                        value: node.getSize(),
+                        displayValue: node.getSize()
+                    }; // prop_size
+                } else if (fName == "creator") {
+                    var login = node.properties["cm:creator"];
+                    var person = people.getPerson(login);
+                    if (person != null) {
+                        var personData = Evaluator.getPersonObject(person.nodeRef.toString());
+                        nodeData["prop_" + fName] = {
+                            type: "size",
+                            value: personData.displayName,
+                            displayValue: personData.displayName
+                        }; // prop_creator
+                    }
+                } else {
+                    fieldData = {
+                        type: "text"
+                    };
+                    if (Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDef)) {
+                        nodeData["prop_" + fName] = fieldData; // prop_cm_name
+                    }
                 }
             }
         }

@@ -278,8 +278,14 @@
             <form id="file-navigator">
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="creator"/>
+                    <show id="mimetype"/>
+                    <show id="size"/>
                     <show id="cm:modified"/>
                 </field-visibility>
+                <appearance>
+                    <field id="creator" label="Создатель" />
+                </appearance>
             </form>
         </forms>
     </config>

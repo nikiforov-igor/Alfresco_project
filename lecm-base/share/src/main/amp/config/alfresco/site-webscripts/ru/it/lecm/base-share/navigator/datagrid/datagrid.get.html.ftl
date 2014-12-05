@@ -13,7 +13,7 @@
 (function(){
 
 	function createDatagrid() {
-        var datagrid = new LogicECM.module.Base.DataGrid("${id}").setOptions({
+        var datagrid = new LogicECM.module.Navigator.DataGrid("${id}").setOptions({
             usePagination: false,
             showExtendSearchBlock: false,
             actions: [
@@ -47,16 +47,14 @@
             showCheckboxColumn: false,
             attributeForShow:"cm:name"
         }).setMessages(${messages});
-        datagrid.onActionViewDocument = function(item) {
-            document.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-details?nodeRef=" + item.nodeRef;
-        }
         datagrid.draw();
 	}
 
 	function init() {
 		LogicECM.module.Base.Util.loadResources([
             'scripts/lecm-base/components/advsearch.js',
-            'scripts/lecm-base/components/lecm-datagrid.js'
+            'scripts/lecm-base/components/lecm-datagrid.js',
+            'scripts/lecm-base/navigator/lecm-navigator-datagrid.js'
 		], [], createDatagrid);
 	}
 
