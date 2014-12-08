@@ -1,5 +1,5 @@
 <alfresco-config>
-<!-- 
+<!--
 	<config>
 		<forms>
 			<dependencies>
@@ -45,11 +45,12 @@
 
 	<config evaluator="model-type" condition="lecm-forms-editor:form">
 		<forms>
-			<form>
+			<form submission-url="/lecm/model-editor/type/lecm-forms-editor%3Aform/formprocessor">
 				<field-visibility>
 					<show id="lecm-forms-editor:form-evaluator"/>
 					<show id="lecm-forms-editor:form-id"/>
 					<show id="lecm-forms-editor:form-template"/>
+					<show id="lecm-forms-editor:fill-by-default"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-forms-editor:form-evaluator" label-id="label.form.type">
@@ -62,6 +63,11 @@
 					</field>
 					<field id="lecm-forms-editor:form-template">
 						<control template="/ru/it/lecm/documentforms/controls/form-layout-control.ftl"/>
+					</field>
+					<field id="lecm-forms-editor:fill-by-default">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+							<control-param name="options">true|Да,false|Нет</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
