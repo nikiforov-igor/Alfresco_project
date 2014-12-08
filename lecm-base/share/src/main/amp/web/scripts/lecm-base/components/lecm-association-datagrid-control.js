@@ -153,6 +153,88 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
 		    }
         },
 
+        onActionEdit:function DataGrid_onActionEdit(item) {
+            // Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
+            if (this.editDialogOpening) {
+                return;
+            }
+            this.editDialogOpening = true;
+            var me = this;
+
+            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+            var templateRequestParams = {
+                itemKind: "node",
+                itemId: item.nodeRef,
+                mode: "edit",
+                submitType: "json",
+                showCancelButton: true
+            };
+            if (this.options.editForm) {
+                templateRequestParams.formId = this.options.editForm;
+            }
+
+            // Using Forms Service, so always create new instance
+            var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
+            editDetails.setOptions(
+                {
+                    width: this.options.editFormWidth,
+                    templateUrl:templateUrl,
+                    templateRequestParams:templateRequestParams,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    doBeforeDialogShow:{
+                        fn: function(p_form, p_dialog) {
+                            var contId = p_dialog.id + "-form-container";
+                            if (item.type && item.type != "") {
+                                Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
+                            }
+                            p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
+                            this.editDialogOpening = false;
+
+                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                        },
+                        scope:this
+                    },
+                    onSuccess:{
+                        fn:function DataGrid_onActionEdit_success(response) {
+                            // Reload the node's metadata
+                            // Fire "itemUpdated" event
+                            Alfresco.util.PopupManager.displayMessage({
+                                text:this.msg("message.details.success")
+                            });
+                            Alfresco.util.Ajax.jsonPost(
+                                {
+                                    url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(response.json.persistedObject).uri,
+                                    dataObj: this._buildDataGridParams(),
+                                    successCallback: {
+                                        fn: function DataGrid_onActionEdit_refreshSuccess(response) {
+                                            // Fire "itemUpdated" event
+                                            YAHOO.Bubbling.fire("dataItemUpdated",
+                                                {
+                                                    item: response.json.item,
+                                                    bubblingLabel: me.options.bubblingLabel
+                                                });
+                                        },
+                                        scope: this
+                                    }
+                                });
+                            this.editDialogOpening = false;
+                        },
+                        scope:this
+                    },
+                    onFailure:{
+                        fn:function DataGrid_onActionEdit_failure(response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text:this.msg("message.details.failure")
+                                });
+                            this.editDialogOpening = false;
+                        },
+                        scope:this
+                    }
+                }).show();
+        },
+
         onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {
             var obj = args[1];
             if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
