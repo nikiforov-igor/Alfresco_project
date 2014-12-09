@@ -84,6 +84,7 @@
 							}
 						],
 						datagridMeta:{
+							sort: "lecm-forms-editor:attr-index|true",
 							itemType: "lecm-forms-editor:attr",
 							useChildQuery: true,
 							nodeRef: "${form.arguments.itemId}",

@@ -131,4 +131,8 @@ public class FormsEditorWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+	public void generateDefaultFormAttributes(final ScriptNode form, final String typename) {
+		formsEditorService.generateDefaultFormAttributes(form.getNodeRef(), typename);
+	}
 }

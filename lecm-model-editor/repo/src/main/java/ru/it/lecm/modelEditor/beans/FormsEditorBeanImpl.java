@@ -27,6 +27,10 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import org.alfresco.service.cmr.dictionary.ChildAssociationDefinition;
+import org.alfresco.service.cmr.dictionary.ClassAttributeDefinition;
+import org.alfresco.util.PropertyMap;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -619,5 +623,41 @@ public class FormsEditorBeanImpl extends BaseBean {
 			}
 		}
 		return result;
+	}
+
+	private void createAttribute(final NodeRef formRef, final ClassAttributeDefinition attrDef, final int order) {
+		PropertyMap props = new PropertyMap();
+		String name = attrDef.getName().toPrefixString(namespaceService);
+		String title = StringUtils.defaultString(attrDef.getTitle(dictionaryService));
+		props.put(PROP_ATTR_NAME, name);
+		props.put(PROP_ATTR_TITLE, title);
+		props.put(PROP_ATTR_INDEX, order);
+		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+		nodeService.createNode(formRef, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_FORM_ATTRIBUTE, props);
+	}
+
+	public void generateDefaultFormAttributes(final NodeRef formRef, final String typename) {
+		QName type = QName.createQName(typename, namespaceService);
+		TypeDefinition typeDef = dictionaryService.getType(type);
+		Collection<PropertyDefinition> propDefs = typeDef.getProperties().values();
+		Collection<AssociationDefinition> assocDefs = typeDef.getAssociations().values();
+		Collection<ChildAssociationDefinition> childAssocDefs = typeDef.getChildAssociations().values();
+
+		int order = 0;
+		for (PropertyDefinition propDef : propDefs) {
+			if (type.isMatch(propDef.getContainerClass().getName())) {
+				createAttribute(formRef, propDef, order++);
+			}
+		}
+		for (AssociationDefinition assocDef : assocDefs) {
+			if (type.isMatch(assocDef.getSourceClass().getName())) {
+				createAttribute(formRef, assocDef, order++);
+			}
+		}
+		for (ChildAssociationDefinition childAssocDef : childAssocDefs) {
+			if (type.isMatch(childAssocDef.getSourceClass().getName())) {
+				createAttribute(formRef, childAssocDef, order++);
+			}
+		}
 	}
 }
