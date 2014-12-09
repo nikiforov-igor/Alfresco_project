@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS "BUSINESSJOURNALSTORERECORD"
   "INITIATORTEXT" character varying(255),
   "MAINOBJECT" character varying(255),
   "MAINOBJECTDESCRIPTION" character varying(255),
-  "OBJECT1" character varying(255),
+  "OBJECT1" character varying(10485760),
   "OBJECT1ID" character varying(255),
   "OBJECT2" character varying(255),
   "OBJECT2ID" character varying(255),
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS "BUSINESSJOURNALSTORERECORD"
   "OBJECT5ID" character varying(255),
   "OBJECTTYPE" character varying(255),
   "OBJECTTYPETEXT" character varying(255),
-  "RECORDDESCRIPTION" character varying(1200),
+  "RECORDDESCRIPTION" character varying(10485760),
   CONSTRAINT "BUSINESSJOURNALSTORERECORD_PK" PRIMARY KEY ("DUMMY", "DATE", "NODEID")
 )
 WITH (

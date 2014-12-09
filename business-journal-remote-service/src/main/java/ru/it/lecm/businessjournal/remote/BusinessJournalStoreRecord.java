@@ -62,6 +62,7 @@ public class BusinessJournalStoreRecord implements Serializable {
 	@PrimaryKey
 	@Index
 	private Long nodeId;
+	@Column(length=10485760)
 	private String object1;
 	private String object2;
 	private String object3;
