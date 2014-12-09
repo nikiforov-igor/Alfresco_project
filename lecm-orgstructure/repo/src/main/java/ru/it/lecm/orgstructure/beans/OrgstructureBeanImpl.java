@@ -1053,18 +1053,43 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
-	public List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef) {
+	public List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef, boolean subUnits) {
 		List<NodeRef> results = new ArrayList<NodeRef>();
 		if (isBusinessRole(businessRoleRef)) { // если бизнес роль
 			// получаем организационные элементы (подразделения и рабочие группы)
 			List<AssociationRef> orgElements = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT);
 			for (AssociationRef orgElementChildRef : orgElements) {
-				if (!isArchive(orgElementChildRef.getTargetRef())) {
-					results.add(orgElementChildRef.getTargetRef());
-					results.addAll(getSubUnits(orgElementChildRef.getTargetRef(), true, true));
+				NodeRef orgElementNode = orgElementChildRef.getTargetRef();
+				if (!isArchive(orgElementNode)) {
+					results.add(orgElementNode);
+					if (subUnits) {
+						results.addAll(getSubUnits(orgElementNode, true, true));
+					}
 				}
 			}
 		}
+		return results;
+	}
+
+	@Override
+	public List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef) {
+		return getOrganizationElementsByBusinessRole(businessRoleRef, true);
+	}
+
+	@Override
+	public List<NodeRef> getOrganizationElementMembersByBusinessRole(NodeRef businessRoleRef) {
+		List<NodeRef> results = new ArrayList<>();
+
+		if (isBusinessRole(businessRoleRef)) {
+			List<AssociationRef> orgElementsMembers = nodeService.getTargetAssocs(businessRoleRef, ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER);
+			for (AssociationRef orgElementMemberChildRef : orgElementsMembers) {
+				NodeRef orgElementMemberNode = orgElementMemberChildRef.getTargetRef();
+				if (!isArchive(orgElementMemberNode)) {
+					results.add(orgElementMemberNode);
+				}
+			}
+		}
+
 		return results;
 	}
 

@@ -57,19 +57,24 @@ public interface OrgstructureBean {
 	QName ASSOC_ORGANIZATION_UNIT_FOLDER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "unit-folder-assoc");
 	QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-member-assoc");
 	QName PROP_STAFF_LIST_IS_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-is-boss");
+	QName PROP_STAFF_LIST_DESCRIPTION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-description");
 	QName PROP_EMP_LINK_IS_PRIMARY = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-is-primary");
 	QName PROP_BUSINESS_ROLE_IDENTIFIER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-identifier");
+	QName PROP_BUSINESS_ROLE_DESCRIPTION = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-description");
 	QName PROP_BUSINESS_ROLE_IS_DYNAMIC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-is-dynamic");
 	QName PROP_EMPLOYEE_EMAIL = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-email");
 	QName PROP_STAFF_POSITION_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-code");
 	QName PROP_STAFF_POSITION_NAME_D = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-name-d");
 	QName PROP_STAFF_POSITION_NAME_G = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-name-g");
 	QName PROP_UNIT_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "unit-code");
+	QName PROP_UNIT_TYPE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "unit-type");
 	QName PROP_EMPLOYEE_NUMBER = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-number");
 	QName PROP_EMPLOYEE_PHONE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-phone");
 	QName PROP_EMPLOYEE_SEX = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-sex");
 	QName PROP_EMPLOYEE_PERSON_LOGIN = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-person-login");
 	QName PROP_EMPLOYEE_POSITIONS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-positions");
+	QName PROP_EMPLOYEE_FIO_G = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-fio-g");
+	QName PROP_EMPLOYEE_FIO_D = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-fio-d");
 
 	QName PROP_EMPLOYEE_FIRST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
 	QName PROP_EMPLOYEE_MIDDLE_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
@@ -383,6 +388,20 @@ public interface OrgstructureBean {
 	 * исполняющих определенную Бизнес-роль (включая вложенные)
 	 */
 	List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef);
+
+	/**
+	 * Получение перечня организационных элементов (подразделений и рабочих групп),
+	 * исполняющих определенную Бизнес-роль
+	 * @param subUnits указывает, включать ли вложенные подразделения
+	 */
+	List<NodeRef> getOrganizationElementsByBusinessRole(NodeRef businessRoleRef, boolean subUnits);
+
+	/**
+	 * Получение перечня позиций (штатное расписание), исполняющих определенную бизнес-роль
+	 * @param businessRoleRef ссылка на бизнес-роль
+	 * @return список ссылок на штатное расписание
+	 */
+	List<NodeRef> getOrganizationElementMembersByBusinessRole(NodeRef businessRoleRef);
 
 	/**
 	 * Получение ссылок на сотрудника
