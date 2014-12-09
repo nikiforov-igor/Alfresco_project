@@ -29,7 +29,7 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
 
     private final static Logger logger = LoggerFactory.getLogger(BusinessJournalAuthLoggerSchedule.class);
 //TODO вынести в настройки
-    private final static String cronExpression = "0/1 * * * * ?";
+    private String cronExpression = "0/1 * * * * ?";
     private final static String appName = "AuthAudit";
 //
 
@@ -132,6 +132,10 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
         this.businessJournalService = businessJournalService;
     }
+
+	public void setCronExpression(String cronExpression) {
+		this.cronExpression = cronExpression;
+	}
 
     @Override
     public Trigger getTrigger() {

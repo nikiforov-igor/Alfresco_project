@@ -197,6 +197,9 @@
 		<property name="personService">
 			<ref bean="personService"/>
 		</property>
+		<property name="cronExpression">
+			<value>0/1 * * * * ?</value>
+		</property>
 	</bean>
 
 	<bean id="businessJournalAuthLoggerScheduleExecutor" class="ru.it.lecm.businessjournal.schedule.BusinessJournalAuthLoggerScheduleExecutor" parent="action-executer">
