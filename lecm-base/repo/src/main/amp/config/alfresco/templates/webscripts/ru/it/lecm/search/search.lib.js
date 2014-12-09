@@ -109,12 +109,12 @@ function escapeString(value) {
     for (var i = 0, c; i < value.length; i++) {
         c = value.charAt(i);
         if (i == 0) {
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')) {
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || c == '_')) {
                 result += '\\';
             }
         }
         else {
-            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || c == '$' || c == '#')) {
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || c == '_' || c == '$' || c == '#')) {
                 result += '\\';
             }
         }
@@ -197,15 +197,31 @@ function getSearchQuery(params) {
 										first = false;
 									}
 								}
-								else {
-									if (propName.match("-strong-constant$") == "-strong-constant") {
-										propName = propName.substr(0, propName.length - "-strong-constant".length);
-									} else {
-										propValue = '*' + propValue + '*';
-									}
-									formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"' + propValue + '"';
-									first = false;
-								}
+                                else {
+                                    if (propName.match("-strong-constant$") == "-strong-constant") {
+                                        propName = propName.substr(0, propName.length - "-strong-constant".length);
+                                        propValue = '"' + propValue + '"';
+                                    } else {
+                                        if (propValue != null && propValue != "") {
+                                            var searchTermsArray = propValue.split(" ");
+                                            searchTerm = "";
+                                            for (var k = 0; k < searchTermsArray.length; k++) {
+                                                var newSearchTerm = searchTermsArray[k];
+                                                if (newSearchTerm != null && newSearchTerm != "") {
+                                                    if (k > 0) {
+                                                        searchTerm += ' AND ';
+                                                    }
+                                                    searchTerm += '*' + escapeString(searchTermsArray[k]) + '*';
+                                                }
+                                            }
+                                            if (searchTerm != "") {
+                                                propValue = '(' + searchTerm + ')';
+                                            }
+                                        }
+                                    }
+                                    formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':' + propValue;
+                                    first = false;
+                                }
 							}
 							else {
 								// pseudo cm:content property - e.g. mimetype, size or encoding
@@ -257,12 +273,25 @@ function getSearchQuery(params) {
 				var searchTerm = fullTextSearchJson["searchTerm"];
 				logger.log("searchTerm = " + searchTerm);
 				if (ftsFields != null && ftsFields.length > 0 && searchTerm != null && searchTerm.length > 0) {
+                    var searchTermsArray = searchTerm.split(" ");
+                    searchTerm = "";
+                    for (var k = 0; k < searchTermsArray.length; k++) {
+                        var newSearchTerm = searchTermsArray[k];
+                        if (newSearchTerm != null && newSearchTerm != "") {
+                            if (k > 0) {
+                                searchTerm += ' AND ';
+                            }
+                            searchTerm += '*' + searchTermsArray[k] + '*';
+                        }
+                    }
 					var columns = ftsFields.split(",");
 					var fieldsQuery = "";
 
-					for (var i = 0; i < columns.length; i++) {
-						fieldsQuery += this.escapeQName(columns[i]) + ':"*' + searchTerm + '*" OR ';
-					}
+                    if (searchTerm != "") {
+                        for (var i = 0; i < columns.length; i++) {
+                            fieldsQuery += this.escapeQName(columns[i]) + ':(' + searchTerm + ') OR ';
+                        }
+                    }
 					if (fieldsQuery.length > 5) {
 						fieldsQuery = fieldsQuery.substring(0, fieldsQuery.length - 4);
 						fullTextSearchQuery += (fullTextSearchQuery.length > 0 ? " AND " : "") + " (" + fieldsQuery + ")";
