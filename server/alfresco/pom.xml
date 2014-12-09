@@ -128,6 +128,13 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
+			<groupId>ru.it.lecm.orgstructure.export-import</groupId>
+			<artifactId>orgstructure-export-import-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
 			<!-- <groupId>ru.it.lecm.forms.jasperforms</groupId> -->
 			<groupId>ru.it.lecm.reports</groupId>
 			<!-- <artifactId>jasperforms-repo</artifactId> -->
@@ -574,6 +581,11 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
+							<groupId>ru.it.lecm.orgstructure.export-import</groupId>
+							<artifactId>orgstructure-export-import-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
 							<groupId>ru.it.lecm.reports</groupId>
 							<artifactId>lecm-reports-repo</artifactId>
 							<type>amp</type>
@@ -936,6 +948,11 @@
                                     <artifactId>orgstructure-repo</artifactId>
                                     <type>amp</type>
                                 </overlay>
+								<overlay>
+									<groupId>ru.it.lecm.orgstructure.export-import</groupId>
+									<artifactId>orgstructure-export-import-repo</artifactId>
+									<type>amp</type>
+								</overlay>
                                 <overlay>
                                     <groupId>ru.it.lecm.reports</groupId>
                                     <artifactId>lecm-reports-repo</artifactId>
