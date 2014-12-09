@@ -34,7 +34,7 @@ public abstract class BaseBean implements InitializingBean {
     public static final QName ASPECT_ACTIVE = QName.createQName(DICTIONARY_NAMESPACE, "aspect_active");
 
     private static final Logger logger = LoggerFactory.getLogger(BaseBean.class);
-    
+
     final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
     final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
     final DateFormat FolderNameFormatDay = new SimpleDateFormat("dd");
@@ -113,7 +113,7 @@ public abstract class BaseBean implements InitializingBean {
 						for (Entry<String, String> entry : folders.entrySet()) {
 							String relativePath = entry.getValue();
 							final ServiceFolder serviceFolder = new ServiceFolder(relativePath, null);
-							//TODO: DONE Требуется транзакция. 
+							//TODO: DONE Требуется транзакция.
 							//Метод вызывается до метода init, после инициализации свойств. Транзакции нет, поэтому создаём. В других ситуациях вызываться не должен.
 							NodeRef folderRef = serviceFolderStructureHelper.getFolderRef(serviceFolder);
 							serviceFolder.setFolderRef(folderRef);
@@ -297,7 +297,7 @@ public abstract class BaseBean implements InitializingBean {
      * @return ссылка на директорию
      */
     //TODO DONE refactoring in progress...
-    // Выделен метод создания путей. методы типа get теперь только возвращают найденный путь, иначе null 
+    // Выделен метод создания путей. методы типа get теперь только возвращают найденный путь, иначе null
     public NodeRef getFolder(String nameSpace, NodeRef root, List<String> directoryPaths) {
         NodeRef directoryRef = root;
         for (String pathString : directoryPaths) {
@@ -314,12 +314,12 @@ public abstract class BaseBean implements InitializingBean {
     //TODO DONE refactoring in progress...
     /**
      * Создаёт папку по указанному пути.
-     * 
+     *
      * @param nameSpace
      * @param root - корневой узел пути
      * @param directoryPaths - путь
      * @return
-     * @throws WriteTransactionNeededException 
+     * @throws WriteTransactionNeededException
      */
     public NodeRef createPath(String nameSpace, NodeRef root, List<String> directoryPaths) throws WriteTransactionNeededException {
         try {
@@ -344,11 +344,11 @@ public abstract class BaseBean implements InitializingBean {
 
     /**
      * Создаёт папку по указанному пути.
-     * 
+     *
      * @param root - корневой узел пути
      * @param directoryPaths - путь
      * @return
-     * @throws WriteTransactionNeededException 
+     * @throws WriteTransactionNeededException
      */
     public NodeRef createPath(NodeRef root, List<String> directoryPaths) throws WriteTransactionNeededException {
         return createPath(NamespaceService.CONTENT_MODEL_1_0_URI, root, directoryPaths);
@@ -423,7 +423,7 @@ public abstract class BaseBean implements InitializingBean {
         return repositoryStructureHelper.getFolder(parentRef, folder);
     }
 
-    
+
     //TODO DONE refactoring in progress...
     public NodeRef createNode(final NodeRef rootFolder, final QName type, final String name, final Map<QName, Serializable> properties) throws WriteTransactionNeededException {
         try {
@@ -436,7 +436,7 @@ public abstract class BaseBean implements InitializingBean {
         if (name != null) {
             assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
         } else {
-            assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
+            assocQName = generateRandomQName();
         }
 
         Map<QName, Serializable> props = properties;
@@ -480,4 +480,9 @@ public abstract class BaseBean implements InitializingBean {
         props.put(ContentModel.PROP_IS_CONTENT_INDEXED, Boolean.FALSE);
         nodeService.addAspect(nodeRef, ContentModel.ASPECT_INDEX_CONTROL, props);
     }
+
+	protected QName generateRandomQName() {
+		return QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
+	}
+
 }
