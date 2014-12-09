@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.security.Types;
-import ru.it.lecm.security.beans.SgNameResolver;
 
-import javax.naming.AuthenticationException;
 import java.util.List;
 
 /**
@@ -150,16 +147,4 @@ public class LecmPermissionWebScript extends BaseWebScript {
 		List<NodeRef> results = lecmPermissionService.getEmployeesByDynamicRole(document.getNodeRef(), roleCode);
 		return createScriptable(results);
 	}
-
-    public void grantStaticRole(ScriptNode document, String roleCode, String permission) {
-        SgNameResolver resolver = new SgNameResolver(logger);
-        resolver.setAuthorityService(authorityService);
-
-        String authority = resolver.makeSGName(Types.SGKind.SG_BR.getSGPos(roleCode, "Business role <" + roleCode + ">"));
-        try {
-            lecmPermissionService.setACE(document.getNodeRef(), authority, lecmPermissionService.findPermissionGroup(permission));
-        } catch (AuthenticationException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
 }
