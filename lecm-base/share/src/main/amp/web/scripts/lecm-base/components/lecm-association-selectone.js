@@ -356,7 +356,9 @@ LogicECM.module = LogicECM.module || {};
 			        if (this.options.notSelectedOptionShow) {
 				        var emptyOption = this.selectItem.options[0];
 				        var emptOpt = document.createElement('option');
-				        emptOpt.innerHTML = emptyOption.innerHTML;
+				        var emptyOptHtml = emptyOption.innerHTML.trim();
+                        emptyOptHtml = (emptyOptHtml == "") ? "&nbsp;" : emptyOptHtml;
+				        emptOpt.innerHTML = emptyOptHtml;
 				        emptOpt.value = emptyOption.value;
 
 				        this.selectItem.innerHTML = "";
