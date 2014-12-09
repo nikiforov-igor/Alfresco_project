@@ -49,6 +49,11 @@
 	<#assign checkType = false>
 </#if>
 
+<#assign endpointMany = field.endpointMany>
+<#if field.control.params.endpointMany??>
+    <#assign endpointMany = (field.control.params.endpointMany == "true")>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -149,7 +154,7 @@
 			<#elseif field.endpointMandatory??>
 				mandatory: ${field.endpointMandatory?string},
 			</#if>
-				multipleSelectMode: ${field.endpointMany?string},
+				multipleSelectMode: ${endpointMany?string},
 
 			<#if params.nameSubstituteString??>
 				nameSubstituteString: "${params.nameSubstituteString}",

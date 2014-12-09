@@ -27,6 +27,11 @@
 	<#assign secondShowSearch = true>
 </#if>
 
+<#assign endpointMany = field.endpointMany>
+<#if field.control.params.endpointMany??>
+    <#assign endpointMany = (field.control.params.endpointMany == "true")>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -130,7 +135,7 @@
 	        <#elseif field.endpointMandatory??>
 	            mandatory: ${field.endpointMandatory?string},
 	        </#if>
-	        multipleSelectMode: ${field.endpointMany?string},
+	        multipleSelectMode: ${endpointMany?string},
 
 	        <#if params.firstNameSubstituteString??>
 	            nameSubstituteString: "${params.firstNameSubstituteString}",
@@ -262,7 +267,7 @@
 		    showCreateNewLink: false,
             additionalFilter: "${params.secondAdditionalFilter!''}",
 		    showSelectedItemsPath: false,
-		    multipleSelectMode: ${field.endpointMany?string},
+		    multipleSelectMode: ${endpointMany?string},
 		    showSearch: ${secondShowSearch?string},
 		    plane: ${secondPlane?string},
 		    currentValue: "${field.value!''}",
