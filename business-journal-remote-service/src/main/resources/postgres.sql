@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS "BUSINESSJOURNALSTORERECORD"
   "MAINOBJECTDESCRIPTION" character varying(255),
   "OBJECT1" character varying(10485760),
   "OBJECT1ID" character varying(255),
-  "OBJECT2" character varying(255),
+  "OBJECT2" character varying(10485760),
   "OBJECT2ID" character varying(255),
   "OBJECT3" character varying(255),
   "OBJECT3ID" character varying(255),
