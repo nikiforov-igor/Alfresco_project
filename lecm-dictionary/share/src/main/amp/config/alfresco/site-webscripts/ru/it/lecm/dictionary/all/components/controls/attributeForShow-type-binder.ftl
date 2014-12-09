@@ -10,13 +10,15 @@
 		var dicType = dicTypeSelect.value;
 		var isPlane = dicTypeSelect[dicTypeSelect.selectedIndex]['data-isPlane'];
 
-		if (dicPlaneHidden) {
-			dicPlaneHidden.value = isPlane;
-		}
+		if (dicType) {
+			if (dicPlaneHidden) {
+				dicPlaneHidden.value = isPlane;
+			}
 
-		LogicECM.module.Base.Util.reInitializeControl('${dialogId}', 'lecm-dic:attributeForShow', {
-			webscript: 'lecm/dictionary/attributes?dataType=' + dicType
-		});
+			LogicECM.module.Base.Util.reInitializeControl('${dialogId}', 'lecm-dic:attributeForShow', {
+				webscript: 'lecm/dictionary/attributes?dataType=' + dicType
+			});
+		}
 	}
 
 	function createBinder() {

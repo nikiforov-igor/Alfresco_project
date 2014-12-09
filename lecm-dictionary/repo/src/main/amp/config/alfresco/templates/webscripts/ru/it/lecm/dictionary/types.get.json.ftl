@@ -7,7 +7,7 @@
 				"name": "${result.name}",
 				"value": "${result.value}",
 				"isPlane": ${result.isPlane?js_string}
-			}<#if type_has_next>,</#if>
+			}<#if result_has_next>,</#if>
 			</#list>
 		</#if>
 	]
