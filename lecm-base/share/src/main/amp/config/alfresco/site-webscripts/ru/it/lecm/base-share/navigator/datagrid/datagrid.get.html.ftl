@@ -37,7 +37,7 @@
                 <#if isRoot>
                     ,
                     searchConfig: {
-                        filter: "PATH: \"/app:company_home/*\""
+                        filter: "PATH: \"${args.rootPath!"/app:company_home/*"}\""
                     }
                 </#if>
             },

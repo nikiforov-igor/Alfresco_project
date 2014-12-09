@@ -22,7 +22,7 @@
                         <property name="cm:name"><![CDATA[Файлы и папки]]></property>
                         <property name="lecm-arm:order"><![CDATA[0]]></property>
                         <property name="lecm-dic:active"><![CDATA[true]]></property>
-                        <property name="lecm-arm:html-url"><![CDATA[page/lecm/navigator/datagrid?root=true]]></property>
+                        <property name="lecm-arm:html-url"><![CDATA[page/lecm/navigator/datagrid?root=true&rootPath=/app:company_home/*]]></property>
                         <property name="lecm-dic:valueContainsType"><![CDATA[lecm-arm:node]]></property>
                         <items>
                             <item name="cm:Узлы" type="lecm-arm:html-node">
