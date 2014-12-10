@@ -46,7 +46,10 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     private PersonService personService;
     private JmsTemplate jmsTemplate;
 	private JmsTemplate jmsTemplateInternal;
+	private JmsTemplate jmsTemplateExternal;
     final private Map<NodeRef, Boolean> logSettingsCache = Collections.synchronizedMap(new HashMap<NodeRef, Boolean>());
+	private boolean enableResend;
+	private List<String> allowedCategories;
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBusinessJournalService.class);
     private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
@@ -77,6 +80,18 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
 	public void setJmsTemplateInternal(JmsTemplate jmsTemplateInternal) {
 		this.jmsTemplateInternal = jmsTemplateInternal;
+	}
+
+	public void setJmsTemplateExternal(JmsTemplate jmsTemplateExternal) {
+		this.jmsTemplateExternal = jmsTemplateExternal;
+	}
+
+	public void setAllowedCategories(List<String> allowedCategories) {
+		this.allowedCategories = allowedCategories;
+	}
+
+	public void setEnableResend(boolean enableResend) {
+		this.enableResend = enableResend;
 	}
 
     public void setSubstituteService(SubstitudeBean substituteService) {
@@ -333,22 +348,47 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         }
     }
 
-    public void sendRecord(final BusinessJournalRecord record) {
-		final ObjectMapper mapper = new ObjectMapper();
+	private String getCategoryCode(BusinessJournalRecord record) {
+		NodeRef eventCategoryNodeRef = record.getEventCategory();
+		if(eventCategoryNodeRef == null) {
+			return null;
+		}
+		return (String) nodeService.getProperty(eventCategoryNodeRef, BusinessJournalService.PROP_EVENT_CAT_CODE);
+	}
 
-		jmsTemplate.send(new MessageCreator() {
+	private MessageCreator getMessageCreator(final BusinessJournalRecord record) {
+		final ObjectMapper mapper = new ObjectMapper();
+		return new MessageCreator() {
+
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 				TextMessage message = null;
 				try {
 					message = session.createTextMessage(mapper.writeValueAsString(record));
 				} catch (IOException ex) {
-					logger.error("Failed to convert BJ records to JSON string");
+					logger.error("Failed to convert BJ records to JSON string", ex);
 				}
 				return message;
 			}
-		});
+		};
+	}
 
+    public void sendRecord(final BusinessJournalRecord record) {
+		MessageCreator messageCreator = getMessageCreator(record);
+
+		//Отправка сообщения удаленному сервису БЖ (bjQueue)
+		jmsTemplate.send(messageCreator);
+
+		//Отправка сообщения в очередь для внешних сервисов (bjQueueExternal)
+		if(allowedCategories == null) {
+			allowedCategories = new ArrayList<>(); //Избавляемся от дополнительной проверки на null
+		}
+
+		if(enableResend && (allowedCategories.contains(getCategoryCode(record)) || allowedCategories.isEmpty())) {
+			jmsTemplateExternal.send(messageCreator);
+		}
+
+		//Отправка сообщения по внутренней очереди для подписок (bjQueueInternal)
 		jmsTemplateInternal.convertAndSend(record);
 
     }

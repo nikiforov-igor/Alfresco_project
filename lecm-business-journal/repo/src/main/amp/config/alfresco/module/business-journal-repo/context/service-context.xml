@@ -105,6 +105,9 @@
 		<property name="jmsTemplate" ref="jmsProducerTemplate"/>
 		<property name="jmsTemplateInternal" ref="jmsProducerTemplateInternal"/>
 		<property name="stateMachineService"  ref="stateMachineHelper"/>
+		<property name="jmsTemplateExternal" ref="jmsExternalTemplateProducer"/>
+		<property name="enableResend" value="#{'${businessjournal.resend.enable}' == '$'+'{businessjournal.resend.enable}' ? false : '${businessjournal.resend.enable}'}"/>
+		<property name="allowedCategories" value="#{'${businessjournal.resend.allowed.categories}' == '$'+'{businessjournal.resend.allowed.categories}' ? null : '${businessjournal.resend.allowed.categories}'.split(';')}"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -128,6 +131,7 @@
 	<!--  ActiveMQ Destination  -->
 	<amq:queue id="bjQueue" physicalName="bjQueue" />
 	<amq:queue id="bjQueueInternal" physicalName="bjQueueInternal" />
+	<amq:queue id="bjQueueExternal" physicalName="bjQueueExternal" />
 
 	<!-- JMS ConnectionFactory to use, configuring the embedded broker using XML -->
 	<bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory" depends-on="broker"
@@ -138,6 +142,15 @@
 		  class="org.apache.activemq.pool.PooledConnectionFactory"
 		  p:maxConnections="50"
 		  p:connectionFactory-ref="jmsFactory" />
+
+	<bean id="jmsExternalProducerConnectionFactory"
+		  class="org.apache.activemq.pool.PooledConnectionFactory"
+		  p:maxConnections="50"
+		  p:connectionFactory-ref="jmsFactory" />
+
+	<bean id="jmsExternalTemplateProducer" class="org.springframework.jms.core.JmsTemplate"
+		  p:connectionFactory-ref="jmsExternalProducerConnectionFactory"
+		  p:defaultDestination-ref="bjQueueExternal" />
 
 	<bean id="jmsProducerTemplate" class="org.springframework.jms.core.JmsTemplate"
 		   p:connectionFactory-ref="jmsProducerConnectionFactory"
