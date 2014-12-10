@@ -347,6 +347,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.selectedNode = node;
             this.tree.onEventToggleHighlight(node);
 
+            // При смене узла дерева - выбрать первую страницу, а не сохраненную
+            if (this.menuState.selected != this._getTextNodeId(node)) {
+                this.menuState.pageNum = 1;
+            }
+
             this.menuState.selected = this._getTextNodeId(node);
 
             if (node) {
