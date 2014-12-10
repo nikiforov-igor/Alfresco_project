@@ -139,7 +139,10 @@ LogicECM.module = LogicECM.module || {};
                 if (select) {
                     select.setAttribute("disabled", "true");
                 }
-                Bubbling.unsubscribe(this.options.updateOnAction, this.onUpdateSelect, this);
+                var bubble = Bubbling.bubble[this.options.updateOnAction];
+                if (bubble) {
+                    bubble.unsubscribe(this.onUpdateSelect, this);
+                }
                 Bubbling.on(this.options.updateOnAction, this.onUpdateSelect, this);
             }
         },
