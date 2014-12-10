@@ -59,6 +59,10 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
                 new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                ArmService.TYPE_XPATH_CHILD_RULE,
+                new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ArmService.TYPE_DICTIONARY_CHILD_RULE,
                 new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
@@ -101,6 +105,10 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
                 ArmService.TYPE_STATUSES_CHILD_RULE,
+                new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ArmService.TYPE_XPATH_CHILD_RULE,
                 new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 
