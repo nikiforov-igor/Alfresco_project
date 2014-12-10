@@ -488,7 +488,9 @@ i.icon-building {
     width: 100%;
     min-height: 100px;
 }
-.control.richtext .container .value-div > span.mceEditor table iframe {
+.control.richtext .container .value-div > span.mceEditor > table,
+.control.richtext .container .value-div > span.mceEditor > table iframe {
+    width: 100% !important;
     max-width: 100%;
 }
 .control.richtext.editmode .container .value-div {  /* чтоб не прыгало во время загрузки страницы */
