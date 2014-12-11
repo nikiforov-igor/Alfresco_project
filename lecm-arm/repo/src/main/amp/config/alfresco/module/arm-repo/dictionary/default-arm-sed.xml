@@ -4047,7 +4047,7 @@
 				<property name="lecm-arm:order"><![CDATA[15]]></property>
 				<property name="lecm-arm:search-type"><![CDATA[]]></property>
 				<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-				<property name="lecm-arm:types"><![CDATA[lecm-contract:document,lecm-additional-document:additionalDocument]]></property>
+				<property name="lecm-arm:types"><![CDATA[lecm-contract:document]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
 				<items>
