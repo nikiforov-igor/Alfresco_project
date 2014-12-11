@@ -100,11 +100,20 @@ public class Form extends FormUIGet {
 
     private void updateFilelds(ModelContext context) {
         //Отключаем поля в форме, которые не доступны на данном шаге
-        String url = "/lecm/statemachine/statefields?documentNodeRef=" + context.getRequest().getParameter(PARAM_ITEM_ID);
-        Response response = scriptRemote.connect("alfresco").get(url);
         HashSet<String> editableFields = new HashSet<String>();
         boolean hasStatemachine = false;
         try {
+            String url = "/lecm/statemachine/statefields?documentNodeRef=" + context.getRequest().getParameter(PARAM_ITEM_ID);
+            ConnectorService connService = FrameworkUtil.getConnectorService();
+            RequestContext requestContext = ThreadLocalRequestContext.getRequestContext();
+            String currentUserId = requestContext.getUserId();
+            HttpSession currentSession = ServletUtil.getSession(true);
+            Connector connector = connService.getConnector(ENDPOINT_ID, currentUserId, currentSession);
+            ConnectorContext connectorContext = new ConnectorContext(HttpMethod.GET, null, null);
+            connectorContext.setContentType("application/json");
+
+            // call the form service
+            Response response = connector.call(url, connectorContext);
             if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
                 JSONObject stateFields = new JSONObject(response.getResponse());
                 hasStatemachine = stateFields.getBoolean("hasStatemachine");
@@ -120,13 +129,13 @@ public class Form extends FormUIGet {
             } else {
                 logger.warn("Cannot get editable fields list from server");
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             logger.warn("Cannot get editable fields list from server", e);
         }
 
         HashSet<String> dynamicRoles = new HashSet<String>();
         try {
-            url = "/lecm/documents/dynamicRoles?nodeRef=" + context.getRequest().getParameter(PARAM_ITEM_ID);
+            String url = "/lecm/documents/dynamicRoles?nodeRef=" + context.getRequest().getParameter(PARAM_ITEM_ID);
             ConnectorService connService = FrameworkUtil.getConnectorService();
             RequestContext requestContext = ThreadLocalRequestContext.getRequestContext();
             String currentUserId = requestContext.getUserId();
@@ -136,7 +145,7 @@ public class Form extends FormUIGet {
             connectorContext.setContentType("application/json");
 
             // call the form service
-            response = connector.call(url, connectorContext);
+            Response response = connector.call(url, connectorContext);
             if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
                 JSONArray roles = new JSONArray(response.getResponse());
                 for (int i = 0; i < roles.length(); i++) {

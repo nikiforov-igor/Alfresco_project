@@ -64,6 +64,7 @@ public interface LecmPermissionService {
     final public String  PERM_MEMBERS_ADD = "_lecmPerm_MemberAdd";
     final public String  PERM_SET_RATE = "_lecmPerm_SetRate";
 	final public String  PERM_READ_ATTACHMENT = "_lecmPerm_ReadAttachment";
+	final public String  PERM_WRITE_ALL_FIELDS = "_lecmPerm_WriteAllFields";
     final public String DYNAMIC_AUTH_PREFIX = "DYN_AUTH_";
 
     /**

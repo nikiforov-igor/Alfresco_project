@@ -3,5 +3,5 @@
 	<description>Fields for Document State</description>
 	<url>/lecm/statemachine/statefields</url>
 	<format default="json">extension</format>
-	<authentication runas="admin">none</authentication>
+	<authentication>user</authentication>
 </webscript>

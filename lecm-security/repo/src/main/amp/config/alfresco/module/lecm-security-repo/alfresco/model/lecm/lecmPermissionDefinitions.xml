@@ -256,7 +256,9 @@
 			<includePermissionGroup type="sys:base" permissionGroup="ReadAssociations" />
 		</permissionGroup>
 
-		<!-- =========== -->
+        <permissionGroup name="lecmPerm_WriteAllFields" expose="true" allowFullControl="false" />
+
+        <!-- =========== -->
 		<!-- Permissions -->
 		<!-- =========== -->
 
@@ -590,6 +592,11 @@
 			<grantedToGroup permissionGroup="lecmPerm_ReadAttachment" />
 		</permission>
 
+        <!-- Редактирование всех полей -->
+        <permission name="_lecmPerm_WriteAllFields" expose="false" >
+            <grantedToGroup permissionGroup="lecmPerm_WriteAllFields" />
+        </permission>
+
 	</permissionSet>
 
 	<!-- ================================================ -->
@@ -910,6 +917,55 @@
 
 		 <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
 		</permissionGroup>
+
+        <!-- Ответственный работчник (Расширенный)-->
+        <permissionGroup name="LECM_BASIC_PG_ResponsibleEmployeeExtended" allowFullControl="false" expose="false" >
+            <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
+            <!--
+            <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
+            <includePermissionGroup permissionGroup="Consumer" type="cm:cmobject" />
+             -->
+            <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
+            <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
+            <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_ContentAdd" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_ContentView" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_ContentAddVer" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_ContentDelete" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_ContentCopy" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_WFEnumBP" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_WFTaskList" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_WFArtefactsBP" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_HistoryView" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_TagView" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_TagCreate" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_TagDelete" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_LinksView" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_LinksCreate" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_LinksDelete" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_CommentCreate" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_CommentView" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_CommentDelete" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_ActionExec" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+
+            <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
+            <includePermissionGroup permissionGroup="lecmPerm_WriteAllFields" type="sys:base" />
+
+        </permissionGroup>
 
 		<!-- Работник -->
 		<permissionGroup name="LECM_BASIC_PG_Employee" allowFullControl="false" expose="false" >
