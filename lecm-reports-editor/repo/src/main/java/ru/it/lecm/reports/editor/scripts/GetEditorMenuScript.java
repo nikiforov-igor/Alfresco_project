@@ -99,6 +99,7 @@ public class GetEditorMenuScript extends AbstractWebScript {
                                     !isSub ? "reportActions" : null, false)
                     );
                 }
+                Collections.sort(nodes, comparator);
             } else if (childType.equals(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService))) {// список НД
                 Set<QName> type = new HashSet<QName>();
                 type.add(QName.createQName(childType, namespaceService));
@@ -151,8 +152,6 @@ public class GetEditorMenuScript extends AbstractWebScript {
         }
 
         try {
-            Collections.sort(nodes, comparator);
-
             res.setContentType("application/json");
             res.setContentEncoding(Charset.defaultCharset().displayName());
             res.getWriter().write(nodes.toString());
