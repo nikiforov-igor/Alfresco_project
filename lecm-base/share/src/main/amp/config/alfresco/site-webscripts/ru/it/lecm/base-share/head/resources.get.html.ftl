@@ -12,7 +12,7 @@
 		var Bubbling = YAHOO.Bubbling;
 		if (Bubbling) {
 			Bubbling.unsubscribe = function(layer, handler, scope) {
-				var bubble = bubble[layer];
+				var bubble = this.bubble[layer];
 				if (bubble) {
 					bubble.unsubscribe(handler, scope);
 				}
