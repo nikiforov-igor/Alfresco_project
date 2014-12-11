@@ -18,10 +18,7 @@ import ru.it.lecm.reports.editor.ReportsEditorService;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -64,6 +61,23 @@ public class GetEditorMenuScript extends AbstractWebScript {
 
         String nodeRef = req.getParameter(NODE_REF);
         String childType = req.getParameter(CHILD_TYPE);
+
+        Comparator<JSONObject> comparator = new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject a, JSONObject b) {
+                String valA = "";
+                String valB = "";
+
+                try {
+                    valA = (String) a.get("label");
+                    valB = (String) b.get("label");
+                } catch (JSONException e) {
+                    logger.error("JSONException in combineJSONArrays sort section", e);
+                }
+
+                return valA.compareTo(valB);
+            }
+        };
 
         if (nodeRef != null && NodeRef.isNodeRef(nodeRef)) {
             NodeRef currentRef = new NodeRef(nodeRef);
@@ -137,6 +151,8 @@ public class GetEditorMenuScript extends AbstractWebScript {
         }
 
         try {
+            Collections.sort(nodes, comparator);
+
             res.setContentType("application/json");
             res.setContentEncoding(Charset.defaultCharset().displayName());
             res.getWriter().write(nodes.toString());
