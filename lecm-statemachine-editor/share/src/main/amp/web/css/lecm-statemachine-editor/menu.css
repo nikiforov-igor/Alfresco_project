@@ -81,4 +81,8 @@
     background: url('/share/res/images/lecm-statemachine-editor/end_event_small.png') no-repeat 4px 4px;
 }
 
-
+.statemachine-menu #menu-buttons-alternative-start-menu-button span.first-child {
+    width: 24px;
+    height: 24px;
+    background: url('/share/res/images/lecm-statemachine-editor/altern_start.png') no-repeat 1px -2px;
+}
