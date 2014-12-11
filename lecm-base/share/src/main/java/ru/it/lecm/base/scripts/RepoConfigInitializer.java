@@ -10,6 +10,7 @@ import ru.it.lecm.base.config.StringConfigSource;
 
 import java.util.HashMap;
 import java.util.Map;
+import ru.it.lecm.base.formsConfig.FormsConfig;
 
 /**
  * User: AIvkin
@@ -21,6 +22,7 @@ public class RepoConfigInitializer extends DeclarativeWebScript {
 
 	private ConfigService configService;
 	private ScriptRemote scriptRemote;
+	private FormsConfig formsConfig;
 
 	private boolean hasBeenInitialized = false;
 
@@ -30,6 +32,10 @@ public class RepoConfigInitializer extends DeclarativeWebScript {
 
 	public void setScriptRemote(ScriptRemote scriptRemote) {
 		this.scriptRemote = scriptRemote;
+	}
+
+	public void setFormsConfig(FormsConfig formsConfig) {
+		this.formsConfig = formsConfig;
 	}
 
 	@Override
@@ -46,6 +52,7 @@ public class RepoConfigInitializer extends DeclarativeWebScript {
 
 				if (reset != null && reset.equals("true")) {
 					this.configService.reset();
+					formsConfig.init();
 				}
 
 				this.configService.appendConfig(cs);
