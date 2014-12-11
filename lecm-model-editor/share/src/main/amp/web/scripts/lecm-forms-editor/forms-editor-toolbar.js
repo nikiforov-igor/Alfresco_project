@@ -29,7 +29,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
                         value: "create"
                     });
 
-	            this.toolbarButtons["defaultActive"].deployButton = Alfresco.util.createYUIButton(this, "generateFormsButton", this.generateModelForms);
+	            this.toolbarButtons["defaultActive"].generateButton = Alfresco.util.createYUIButton(this, "generateFormsButton", this.generateModelForms);
 
 	            this.toolbarButtons["defaultActive"].deployButton = Alfresco.util.createYUIButton(this, "deployFormsButton", this.deployForms);
 
