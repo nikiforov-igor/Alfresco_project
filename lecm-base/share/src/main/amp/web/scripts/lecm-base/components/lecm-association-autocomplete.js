@@ -476,22 +476,26 @@ LogicECM.module = LogicECM.module || {};
             _generateChildrenUrlParams: function AssociationSelectOne__generateChildrenUrlParams(searchTerm)
             {
 	            var additionalFilter = this.options.additionalFilter;
+				var allowedNodesFilter = "";
 
-	            if (this.options.allowedNodes != null && this.options.allowedNodes.length > 0) {
-		            var allowedNodesFilter = "";
-		            for (var i = 0; i < this.options.allowedNodes.length; i++) {
-			            if (allowedNodesFilter.length > 0) {
-				            allowedNodesFilter += " OR ";
-			            }
-			            allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
-		            }
+				if (this.options.allowedNodes) {
+					if (this.options.allowedNodes.length) {
+						for (var i in this.options.allowedNodes) {
+							if (allowedNodesFilter.length > 0) {
+								allowedNodesFilter += " OR ";
+							}
+							allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
+						}
+					} else {
+						allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
+					}
 
-		            if (additionalFilter != null && additionalFilter.length > 0) {
-			            additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
-		            } else {
-			            additionalFilter = allowedNodesFilter;
-		            }
-	            }
+					if (additionalFilter) {
+						additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
+					} else {
+						additionalFilter = allowedNodesFilter;
+					}
+				}
 
 	            if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
 		            var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";

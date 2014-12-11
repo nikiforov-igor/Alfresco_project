@@ -1725,17 +1725,21 @@ LogicECM.module = LogicECM.module || {};
 			_generateChildrenUrlParams: function (searchTerm, forAutocomplete)
 			{
 				var additionalFilter = this.options.additionalFilter;
+				var allowedNodesFilter = "";
 
-				if (this.options.allowedNodes != null && this.options.allowedNodes.length > 0) {
-					var allowedNodesFilter = "";
-					for (var i = 0; i < this.options.allowedNodes.length; i++) {
-						if (allowedNodesFilter.length > 0) {
-							allowedNodesFilter += " OR ";
+				if (this.options.allowedNodes) {
+					if (this.options.allowedNodes.length) {
+						for (var i in this.options.allowedNodes) {
+							if (allowedNodesFilter.length > 0) {
+								allowedNodesFilter += " OR ";
+							}
+							allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
 						}
-						allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
+					} else {
+						allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
 					}
 
-					if (additionalFilter != null && additionalFilter.length > 0) {
+					if (additionalFilter) {
 						additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
 					} else {
 						additionalFilter = allowedNodesFilter;
