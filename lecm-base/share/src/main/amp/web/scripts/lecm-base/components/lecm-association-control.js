@@ -135,7 +135,7 @@ LogicECM.module = LogicECM.module || {};
 
 				treeRoteNodeTitleProperty: "cm:name",
 
-				treeNodeSubstituteString: "{cm:name}",
+				treeNodeSubstituteString: "",
 
 				treeNodeTitleSubstituteString: "",
 

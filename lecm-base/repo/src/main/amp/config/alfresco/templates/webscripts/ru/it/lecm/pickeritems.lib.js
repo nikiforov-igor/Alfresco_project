@@ -78,7 +78,11 @@ function getPickerItems() {
 						while (temp != null && !temp.equals(pathRoot)) {
 							var pathNodeName;
 							if (argsPathNameSubstituteString != null) {
-								pathNodeName = substitude.formatNodeTitle(temp, argsPathNameSubstituteString);
+								if (argsPathNameSubstituteString.length > 0) {
+									pathNodeName = substitude.formatNodeTitle(temp, argsPathNameSubstituteString);
+								} else {
+									pathNodeName = substitude.getObjectDescription(temp);
+								}
 							} else {
 								pathNodeName = temp.name
 							}

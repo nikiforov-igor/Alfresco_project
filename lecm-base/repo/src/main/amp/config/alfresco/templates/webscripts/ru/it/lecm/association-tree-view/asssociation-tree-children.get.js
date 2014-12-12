@@ -17,7 +17,7 @@ if (parentNode != null) {
 		if (item.isSubType(selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
             && orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
 	        branch.push({
-	            label: substitude.formatNodeTitle(item, nodeSubstituteString),
+	            label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
 	            title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
 	            type: item.getTypeShort(),
 	            nodeRef: item.getNodeRef().toString(),
