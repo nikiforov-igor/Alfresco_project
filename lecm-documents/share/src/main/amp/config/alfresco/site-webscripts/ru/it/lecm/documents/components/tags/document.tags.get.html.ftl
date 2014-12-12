@@ -58,7 +58,7 @@
         var nodeRef = jsNode.nodeRef;
 
         Alfresco.util.Ajax.request({
-            url: Alfresco.util.combinePaths(Alfresco.constants.URL_SERVICECONTEXT, "lecm/document/data/node/", nodeRef.uri),
+            url: Alfresco.util.combinePaths(Alfresco.constants.URL_SERVICECONTEXT, "components/documentlibrary/data/node/", nodeRef.uri),
             successCallback: {
                 fn: function refreshSuccess(response) {
                     var record = response.json.item;
