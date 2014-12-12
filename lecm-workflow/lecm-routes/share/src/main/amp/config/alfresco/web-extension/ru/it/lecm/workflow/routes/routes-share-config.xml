@@ -232,6 +232,7 @@
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
 						</control>
 					</field>
 				</appearance>
