@@ -590,6 +590,31 @@
 		            </field>
 	            </appearance>
             </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-connect-types:reverse-name"/>
+                    <show id="lecm-connect-types:code"/>
+                </field-visibility>
+	            <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-connect-types:reverse-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+		            <field id="lecm-connect-types:code" mandatory="false">
+			            <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+			            <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+			            </constraint-handlers>
+		            </field>
+	            </appearance>
+            </form>
 
             <form id="datagrid">
                 <field-visibility>
@@ -625,6 +650,32 @@
                     <show id="lecm-connect-types:recommended-connection-types-assoc"/>
                     <show id="lecm-connect-types:default-connection-type-assoc"/>
                 </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-connect-types:primary-document-type"/>
+                    <show id="lecm-connect-types:connected-document-type"/>
+                    <show id="lecm-connect-types:not-available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:recommended-connection-types-assoc"/>
+                    <show id="lecm-connect-types:default-connection-type-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-connect-types:primary-document-type" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-connect-types:connected-document-type" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-connect-types:default-connection-type-assoc" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
 
             <form id="datagrid">
@@ -900,6 +951,26 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-doc-dic:subject-code" force="true"/>
+					<show id="lecm-doc-dic:subject-description" force="true"/>
+				</field-visibility>
+				<appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+					<field id="lecm-doc-dic:subject-code" mandatory="false">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name" force="true"/>
@@ -943,6 +1014,19 @@
 					<show id="lecm-doc-dic-fr:year" force="true"/>
 					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
 				</field-visibility>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:year" force="true"/>
+					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
+				</field-visibility>
+                <appearance>
+                    <field id="lecm-doc-dic-fr:year" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
@@ -1031,6 +1115,24 @@
                     <show id="lecm-doc-dic-dm:deliveryMethod-code" force="true"/>
                 </field-visibility>
             </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dm:deliveryMethod-code" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-doc-dic-dm:deliveryMethod-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
@@ -1052,6 +1154,24 @@
                     <show id="cm:name" force="true"/>
                     <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
                 </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-doc-dic-dt:documentType-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>

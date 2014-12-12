@@ -34,6 +34,42 @@
 					<show id="lecm-busjournal:objectType-list-template"/>
 				</field-visibility>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-busjournal:objectType-code"/>
+					<show id="lecm-busjournal:objectType-class"/>
+					<show id="lecm-busjournal:objectType-template"/>
+					<show id="lecm-busjournal:objectType-list-template"/>
+				</field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:objectType-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:objectType-class" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:objectType-template" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:objectType-list-template" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name"/>
@@ -63,6 +99,25 @@
 					<show id="lecm-busjournal:eventCategory-code"/>
 					<show id="lecm-busjournal:eventCategory-on"/>
 				</field-visibility>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-busjournal:eventCategory-code"/>
+					<show id="lecm-busjournal:eventCategory-on"/>
+				</field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:eventCategory-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
@@ -99,6 +154,36 @@
 					<show id="lecm-busjournal:messageTemplate-template"/>
 					<show id="lecm-busjournal:messageTemplate-code"/>
 				</field-visibility>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="lecm-busjournal:messageTemplate-objType-assoc"/>
+					<show id="lecm-busjournal:messageTemplate-evCategory-assoc"/>
+					<show id="lecm-busjournal:messageTemplate-template"/>
+					<show id="lecm-busjournal:messageTemplate-code"/>
+				</field-visibility>
+                <appearance>
+                    <field id="lecm-busjournal:messageTemplate-objType-assoc" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:messageTemplate-evCategory-assoc" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:messageTemplate-template" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-busjournal:messageTemplate-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>

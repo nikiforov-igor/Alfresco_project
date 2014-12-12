@@ -968,6 +968,26 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-contract-dic:contract-type-code" force="true"/>
+					<show id="lecm-contract-dic:contract-type-description" force="true"/>
+				</field-visibility>
+				<appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+					<field id="lecm-contract-dic:contract-type-code" mandatory="false">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name" force="true"/>
@@ -1004,6 +1024,25 @@
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<constraint-handlers>
 							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-contract-dic:contract-documents-type-code" force="true"/>
+				</field-visibility>
+				<appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+					<field id="lecm-contract-dic:contract-documents-type-code" mandatory="false">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 						</constraint-handlers>
 					</field>
 				</appearance>
@@ -1047,6 +1086,25 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-contract-dic:delete-reason-code" force="true"/>
+				</field-visibility>
+				<appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+					<field id="lecm-contract-dic:delete-reason-code" mandatory="false">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name" force="true"/>
@@ -1074,6 +1132,24 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-contract-dic:reference-data-link" force="true"/>
 				</field-visibility>
+			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-contract-dic:reference-data-link" force="true"/>
+				</field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contract-dic:reference-data-link" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
@@ -1312,6 +1388,19 @@
                     <show id="cm:name" force="true"/>
                     <show id="cm:description" force="true"/>
                 </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="cm:description" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
             <form id="datagrid">
                 <field-visibility>

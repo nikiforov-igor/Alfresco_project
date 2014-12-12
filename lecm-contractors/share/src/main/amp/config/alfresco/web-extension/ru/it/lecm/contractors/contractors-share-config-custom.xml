@@ -228,6 +228,16 @@
                     <show id="lecm-contractor:INN"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-contractor:fullname" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-contractor:shortname" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-contractor:contractor-to-specialization-association">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
                             <control-param name="rootLocation">
@@ -632,9 +642,46 @@
 					<show id="lecm-representative:house-number"/>                                                       <!-- Дом -->
 					<show id="lecm-representative:apartment-number"/>                                                   <!-- Квартира -->
                     <show id="lecm-representative:email"/>                                                              <!-- E-mail -->
-                    					<show id="lecm-representative:representative-to-certifying-document-association"/>                                                           <!-- FK Удостоверяющий документ (тип) -->
+                    <show id="lecm-representative:representative-to-certifying-document-association"/>                                                           <!-- FK Удостоверяющий документ (тип) -->
                     <show id="lecm-contractor:representative-to-contractor-association"/>                               <!-- FK Контрагент -->
                 </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-representative:primary-contact"/>                                                    <!-- Основной контакт -->
+                    <show id="lecm-representative:surname"/>                                                            <!-- Фамилия -->
+                    <show id="lecm-representative:firstname"/>                                                          <!-- Имя -->
+                    <show id="lecm-representative:middlename"/>                                                         <!-- Отчество -->
+                    <show id="lecm-representative:sex"/>                                                                <!-- Пол -->
+                    <show id="lecm-representative:birthdate"/>                                                               <!-- Дата рождения -->
+                    <show id="lecm-representative:document-number"/>                                                          <!-- Номер документа -->
+                    <show id="lecm-representative:document-series"/>                                                    <!-- Серия документа -->
+                    <show id="lecm-representative:document-issuance-date"/>                                             <!-- Дата выдачи документа -->
+                    <show id="lecm-representative:work-phone"/>                                                         <!-- Телефон -->
+                    <show id="lecm-representative:zip-code"/>                                                       <!-- Индекс -->
+                    <show id="lecm-representative:auto-district"/>                                                           <!-- Автономный округ -->
+                    <show id="lecm-representative:region"/>                                                                <!-- Область -->
+                    <show id="lecm-representative:area"/>                                                               <!-- Район -->
+                    <show id="lecm-representative:settlement"/>                                                         <!-- Населенный пункт -->
+                    <show id="lecm-representative:street"/>                                                             <!-- Улица -->
+                    <show id="lecm-representative:house-number"/>                                                       <!-- Дом -->
+                    <show id="lecm-representative:apartment-number"/>                                                   <!-- Квартира -->
+                    <show id="lecm-representative:email"/>                                                              <!-- E-mail -->
+                    <show id="lecm-representative:representative-to-certifying-document-association"/>                                                           <!-- FK Удостоверяющий документ (тип) -->
+                    <show id="lecm-contractor:representative-to-contractor-association"/>                               <!-- FK Контрагент -->
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-representative:surname" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-representative:firstname" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
 
             <form id="datagrid">
@@ -676,7 +723,7 @@
 					<show id="lecm-representative:house-number"/>                                                       <!-- Дом -->
 					<show id="lecm-representative:apartment-number"/>                                                   <!-- Квартира -->
                     <show id="lecm-representative:email"/>                                                              <!-- E-mail -->
-                    					<show id="lecm-representative:representative-to-certifying-document-association"/>                                                           <!-- FK Удостоверяющий документ (тип) -->
+                    <show id="lecm-representative:representative-to-certifying-document-association"/>                                                           <!-- FK Удостоверяющий документ (тип) -->
                     <show id="lecm-contractor:representative-to-contractor-association"/>                               <!-- FK Контрагент -->
                 </field-visibility>
 
@@ -727,6 +774,19 @@
                     <show id="lecm-specialization:description"/>                                                        <!-- Описание -->
                 </field-visibility>
             </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-specialization:title"/>                                                              <!-- Наименование -->
+                    <show id="lecm-specialization:description"/>                                                        <!-- Описание -->
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-specialization:title" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-specialization:title"/>                                                              <!-- Наименование -->
@@ -755,6 +815,25 @@
                     <show id="lecm-legalform:full-title"/>                                                              <!-- Полное наименование -->
                     <show id="lecm-legalform:comment"/>                                                                 <!-- Комментарий -->
                 </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-legalform:short-title"/>                                                             <!-- Краткое наименование -->
+                    <show id="lecm-legalform:full-title"/>                                                              <!-- Полное наименование -->
+                    <show id="lecm-legalform:comment"/>                                                                 <!-- Комментарий -->
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-legalform:short-title" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-legalform:full-title" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
             <form id="datagrid">
                 <field-visibility>

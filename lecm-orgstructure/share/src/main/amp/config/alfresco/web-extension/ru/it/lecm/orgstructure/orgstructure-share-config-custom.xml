@@ -334,10 +334,33 @@
                     <show id="lecm-orgstr:employee-number"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-orgstr:employee-sex">
+                    <field id="lecm-orgstr:employee-last-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-orgstr:employee-first-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-orgstr:employee-middle-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-orgstr:employee-sex" mandatory="false">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
                             <control-param name="nameSuffix">-strong-constant</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-orgstr:employee-email" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
                     </field>
                 </appearance>
             </form>
@@ -499,6 +522,21 @@
                     <show id="lecm-orgstr:unit-type"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-orgstr:element-full-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-orgstr:element-short-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-orgstr:unit-code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-orgstr:unit-type">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl"/>
                     </field>
@@ -936,7 +974,11 @@
                     <show id="lecm-orgstr:staffPosition-name-d"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name"/>
+                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                 </appearance>
             </form>
             <form id="datagrid">
@@ -981,7 +1023,11 @@
                     <show id="lecm-orgstr:workRole-description"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="lecm-orgstr_workRole-name"/>
+                    <field id="cm:name" label-id="lecm-orgstr_workRole-name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -1003,6 +1049,18 @@
                 <field-visibility>
                     <show id="cm:name"/>
                 </field-visibility>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -1113,6 +1171,26 @@
 					<show id="lecm-orgstr:business-role-is-dynamic"/>
 				</field-visibility>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="lecm-orgstr:business-role-identifier"/>
+					<show id="cm:name"/>
+					<show id="lecm-orgstr:business-role-description"/>
+					<show id="lecm-orgstr:business-role-is-dynamic"/>
+				</field-visibility>
+                <appearance>
+                    <field id="lecm-orgstr:business-role-identifier" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name"/>

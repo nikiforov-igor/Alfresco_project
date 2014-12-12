@@ -52,10 +52,23 @@
                     <show id="lecm-notf-type:default-select"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-notf-type:code">
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-notf-type:code" mandatory="false">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
                             <control-param name="nameSuffix">-strong-constant</control-param>
                         </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-notf-type:spring-bean-id" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
                     </field>
                 </appearance>
             </form>
