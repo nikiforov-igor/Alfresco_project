@@ -31,12 +31,12 @@
 
 <script type="text/javascript">//<![CDATA[
 (function() {
-    function createControl() {
-	    new LogicECM.BaseFormTabs("${formId}-tabs").setOptions({
-		    formId: "${formId}"
-	    }).setMessages(${messages});
-    }
+	LogicECM.module.Base.Util.loadScripts(['scripts/lecm-base/components/lecm-form-tabs.js'], createControl, ['tabview']);
 
-	YAHOO.util.Event.onDOMReady(createControl);
+	function createControl() {
+		new LogicECM.BaseFormTabs('${formId}-tabs').setOptions({
+			formId: '${formId}'
+		}).setMessages(${messages});
+	}
 })();
 //]]></script>

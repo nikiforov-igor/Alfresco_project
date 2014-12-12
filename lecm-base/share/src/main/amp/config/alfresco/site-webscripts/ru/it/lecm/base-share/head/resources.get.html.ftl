@@ -1,4 +1,7 @@
 <@markup id="resources">
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/font-awesome.css" group="lecm-head-resources"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/base-styles.css" group="lecm-head-resources"/>
+
 	<#--
 	 сделаем метод Bubbling.unsubscribe более безопасным
 	 добавим проверку на существование bubble[layer]
@@ -20,7 +23,9 @@
 		}
 	})();
 	</@>
+
 	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base64.js" group="lecm-head-resources"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="lecm-head-resources"/>
 	<#-- Исправление баги alfresco: при некоторых условиях во время добавления тега страница перезагружается -->
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/alfresco/tag-editor-fix.js" group="lecm-head-resources"/>
