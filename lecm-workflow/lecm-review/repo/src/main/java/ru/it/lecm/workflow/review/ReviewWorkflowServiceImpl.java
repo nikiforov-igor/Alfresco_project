@@ -182,6 +182,11 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		String owner = (String) props.get(ContentModel.PROP_OWNER);
 		if (docInfo.getDocumentRef() != null) {
 			NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
+			if (employee == null) {
+				logger.error("Review task {} has no owner", userTask.getId());
+				return;
+			}
+
 			List<NodeRef> recipients = new ArrayList<NodeRef>();
 			recipients.add(employee);
 			Date comingSoonDate = workCalendarService.getEmployeePreviousWorkingDay(employee, dueDate, -1);
@@ -247,7 +252,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		}
 	}
 
-        
+
         //TODO Refactoring in progress...
 	@Override
 	public NodeRef createResultList(NodeRef bpmPackage, String documentAttachmentCategoryName, List<NodeRef> assigneesList) {
