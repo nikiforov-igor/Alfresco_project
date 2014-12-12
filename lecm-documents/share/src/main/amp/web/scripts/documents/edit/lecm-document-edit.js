@@ -36,6 +36,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			options: {
 				nodeRef: null,
 				formId: null,
+				mayAdd: null,
+				mayView: null,
+				hasStatemachine: null,
 				args: {},
                 higlightedFields: []
 			},
@@ -60,6 +63,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 								mode: "edit",
 								submitType: "json",
 								formId: this.options.formId,
+								mayView: this.options.mayView,
+								mayAdd: this.options.mayAdd,
+								hasStatemachine: this.options.hasStatemachine,
 								showSubmitButton: true,
 								showCancelButton: true,
 								args: JSON.stringify(this.options.args),

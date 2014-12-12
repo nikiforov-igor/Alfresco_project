@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+
 function main() {
     var urlArgs = {};
     var nodeRef = "";
@@ -33,11 +35,18 @@ function main() {
         }
     }
 
+	var mayView = hasPermission(nodeRef, PERM_ATTR_LIST);
+	var mayAdd = hasPermission(nodeRef, PERM_ATTR_EDIT);
+	var docHasStatemachine = hasStatemachine(nodeRef);
+
     var documentEdit = {
         name: "LogicECM.module.Documents.Edit",
         options: {
             nodeRef: nodeRef,
             formId: formId,
+			mayView: mayView,
+			mayAdd: mayAdd,
+			hasStatemachine: docHasStatemachine,
             args: urlArgs,
             higlightedFields: highlightedFields
         }
