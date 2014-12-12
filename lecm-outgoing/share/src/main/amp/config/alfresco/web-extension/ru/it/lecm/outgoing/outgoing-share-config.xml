@@ -306,6 +306,32 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
+					<field id="lecm-outgoing:recipient-assoc">
+						<control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+							<control-param name="updateOnContractorSelect">contractor.selected</control-param>
+							<control-param name="updateOnOrganizationSelect">organization.selected</control-param>
+							<!-- autocomplete options-->
+							<control-param name="autoCompleteJsName">select-representative-autoComplete</control-param>
+							<control-param name="treeViewJsName">select-representative-treeView</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
+							<control-param name="lazyLoading">true</control-param>
+							<control-param name="checkType">false</control-param>
+							<!--customization options-->
+							<control-param name="employeesByOrgDS">lecm/employees/byOrg/{organization}/picker</control-param>
+							<control-param name="representativesByContrDS">lecm/representatives/{contractor}/picker</control-param>
+							<control-param name="employeesNameSubstitute">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="representativesSubstitute">{cm:name}</control-param>
+
+							<control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="representativesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+
+							<control-param name="employeesDefaultValueDS"></control-param>
+							<control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 
