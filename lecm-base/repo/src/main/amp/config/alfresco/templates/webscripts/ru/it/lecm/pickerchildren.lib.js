@@ -639,7 +639,17 @@ function getFilterParams(filterData, parentXPath)
 			ampersand = " @";
 		}
 
-		params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '"*' + escapeString(trimString(namespace[2])) + '*"' + or;
+		var searchTerm = escapeString(trimString(namespace[2]));
+		var searchArray = searchTerm.split(" ");
+		var filter = "";
+		for (var j = 0; j < searchArray.length; j++) {
+			filter += "*" + searchArray[j] + "*";
+			if (j < searchArray.length - 1) {
+				filter += " OR ";
+			}
+		}
+
+		params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '(' + filter + ')' + or;
 	}
 	if (params !== "") {
 		query += " AND " + "(" + params + " )";
