@@ -1,7 +1,6 @@
 package ru.it.lecm.actions.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -16,6 +15,7 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.*;
+import org.alfresco.service.cmr.dictionary.ClassDefinition;
 import ru.it.lecm.actions.bean.GroupActionsService;
 
 /**
@@ -66,8 +66,8 @@ public class GroupActionsScript extends BaseWebScript {
         for (String aspect : aspects) {
             QName aspectQName = QName.createQName(aspect, namespaceService);
             if (aspectQName != null) {
-                AspectDefinition typeDef = dictionaryService.getAspect(aspectQName);
-                String title = typeDef.getTitle();
+                ClassDefinition typeDef = dictionaryService.getClass(aspectQName);
+                String title = typeDef.getTitle(dictionaryService);
                 results.put(aspectQName.toPrefixString(namespaceService), title == null || title.equals("") ? aspect : title);
             }
         }
