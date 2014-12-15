@@ -69,6 +69,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				window.location = url;
 			}, {label: "Создать"});
 
+			// Finally show the component body here to prevent UI artifacts on YUI button decoration
+			Dom.setStyle(this.id + "-body", "visibility", "visible");
 		},
 
 		_formatExpandModel: function () {
