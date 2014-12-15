@@ -1,0 +1,67 @@
+<alfresco-config>
+	<!--
+	 lecm-controls-editor:control
+	-->
+	<config evaluator="model-type" condition="lecm-controls-editor:control">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-controls-editor:control-default"/>
+				</field-visibility>
+				<appearance>
+
+				</appearance>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-controls-editor:control-default"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-controls-editor:control">
+		<forms>
+			<form>
+				<field-visibility>
+
+				</field-visibility>
+				<appearance>
+
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	<!--
+	 lecm-controls-editor:control-param
+	-->
+	<config evaluator="model-type" condition="lecm-controls-editor:control-param">
+		<forms>
+			<form>
+				<field-visibility>
+
+				</field-visibility>
+				<appearance>
+
+				</appearance>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-controls-editor:control-param">
+		<forms>
+			<form>
+				<field-visibility>
+
+				</field-visibility>
+				<appearance>
+
+				</appearance>
+			</form>
+		</forms>
+	</config>
+</alfresco-config>

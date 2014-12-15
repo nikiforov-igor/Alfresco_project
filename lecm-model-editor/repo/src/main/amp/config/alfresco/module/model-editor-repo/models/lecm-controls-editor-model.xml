@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-controls-editor:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Controls editor model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/controls/editor/1.0" prefix="lecm-controls-editor"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-controls-editor:control">
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-controls-editor:control-template">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-controls-editor:control-default">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+		</type>
+		<type name="lecm-controls-editor:control-param">
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-controls-editor:param-id">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-controls-editor:param-value">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>

@@ -15,5 +15,7 @@
 //]]></script>
 
 <@comp.baseMenu>
-    <@comp.baseMenuButton "modelEditorHome" msg('lecm.modelEditorHome.btn') "modelEditorHome" true/>
+    <@comp.baseMenuButton "modelEditorHome" msg('lecm.modelEditorHome.btn') "modelEditorHome" true true/>
+    <@comp.baseMenuButton "formsEditorHome" msg('lecm.formsEditorHome.btn') "formsEditorHome" true true/>
+    <@comp.baseMenuButton "controlsEditorHome" msg('lecm.controlsEditorHome.btn') "controlsEditorHome" true true/>
 </@comp.baseMenu>

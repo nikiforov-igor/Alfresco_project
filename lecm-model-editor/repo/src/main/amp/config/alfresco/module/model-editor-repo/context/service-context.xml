@@ -13,11 +13,13 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-forms-editor-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-controls-editor-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/forms-editor</value>
+				<value>alfresco/module/${artifactId}/messages/controls-editor</value>
 			</list>
 		</property>
 	</bean>
