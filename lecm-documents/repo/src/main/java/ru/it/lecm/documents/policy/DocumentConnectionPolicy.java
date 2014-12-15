@@ -147,10 +147,15 @@ public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, On
 			if (primaryDocument != null && connectedDocument != null) {
 				this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_DELETE, primaryDocument);
 
-				final List<String> objects = new ArrayList<String>(1);
+				List<String> objects = new ArrayList<String>(1);
 				objects.add(connectedDocument.toString());
 
 				businessJournalService.log(primaryDocument, EventCategory.DELETE_DOCUMENT_CONNECTION, "#initiator удалил(а) связь документов #mainobject и #object1", objects);
+
+                objects = new ArrayList<>(2);
+                objects.add(primaryDocument.toString());
+                objects.add(connectedDocument.toString());
+				businessJournalService.log(nodeRef, EventCategory.REMOVE_FROM_REPORTING, "#initiator удалил(а) связь документов #object1 и #object2", objects);
 			}
 		}
 	}

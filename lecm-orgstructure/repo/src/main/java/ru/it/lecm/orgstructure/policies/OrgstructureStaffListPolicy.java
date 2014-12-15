@@ -16,6 +16,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +54,12 @@ public class OrgstructureStaffListPolicy
     public void onDeleteStaffListLog(NodeRef staff) {
         final NodeRef unit = orgstructureService.getUnitByStaff(staff);
 		final NodeRef positionRef = orgstructureService.getPositionByStaff(staff);
-        final List<String> objects = Arrays.asList(positionRef.toString());
+        List<String> objects = Arrays.asList(positionRef.toString());
         businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "#initiator внес(ла) сведения об исключении должности #object1 из подразделения #mainobject", objects);
+        objects = new ArrayList<>();
+        objects.add(positionRef.toString());
+        objects.add(unit.toString());
+        businessJournalService.log(staff, EventCategory.REMOVE_FROM_REPORTING, "#initiator внес(ла) сведения об исключении должности #object1 из подразделения #object2", objects);
 
         // исключение штаной SG_DP ...
         final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staff, nodeService, orgstructureService, logger);

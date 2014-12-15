@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+	        <item name="cm:Связь" type="lecm-busjournal:objectType">
+                <property name="cm:name">Связь</property>
+                <property name="lecm-busjournal:objectType-code">LECM_CONNECTION</property>
+                <property name="lecm-busjournal:objectType-class">lecm-connect:connection</property>
+                <property name="lecm-busjournal:objectType-template">{cm:name}</property>
+            </item>
+        </items>
+    </item>
+</items>
