@@ -190,7 +190,11 @@
 						</control>
 					</field>
 					<field id="lecmSignAspects:isSigned" set="contract-info"/>
-					<field id="lecmSignAspects:signingDate" set="contract-info"/>
+					<field id="lecmSignAspects:signingDate" set="contract-info">
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+						</control>
+					</field>
                 </appearance>
 			</form>
             <form id="document">
@@ -1202,7 +1206,11 @@
 						</control>
 					</field>
 					<field id="lecmSignAspects:isSigned" set="common"/>
-					<field id="lecmSignAspects:signingDate" set="common"/>
+					<field id="lecmSignAspects:signingDate" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+						</control>
+					</field>
                 </appearance>
             </form>
             <form id="datagrid">
