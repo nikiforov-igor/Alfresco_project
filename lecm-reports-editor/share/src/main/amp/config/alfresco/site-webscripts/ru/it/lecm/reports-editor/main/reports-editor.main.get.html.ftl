@@ -136,7 +136,8 @@
                                         var callback = {
                                             success: function (oResponse) {
                                                 oResponse.argument.parent._hideSplash();
-                                                item.itemData["prop_lecm-rpeditor_reportIsDeployed"] = {value: true, displayValue: true};
+                                                var response = eval("(" + oResponse.responseText + ")");;
+                                                item.itemData["prop_lecm-rpeditor_reportIsDeployed"] = {value: response.success, displayValue: response.success};
                                                 YAHOO.Bubbling.fire("dataItemUpdated",
                                                         {
                                                             item: item,
@@ -144,7 +145,7 @@
                                                         });
                                                 Alfresco.util.PopupManager.displayMessage(
                                                         {
-                                                            text: "Отчет зарегистрирован в системе",
+                                                            text: (response != null && response.success) ? "Отчет зарегистрирован в системе" : "При развертывании отчета произошла ошибка",
                                                             displayTime: 3
                                                         });
                                             },

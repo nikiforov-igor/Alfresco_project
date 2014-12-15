@@ -31,10 +31,11 @@
                                     reportDescNode: "${args["reportId"]}"
                                 });
                                 var callback = {
-                                    success: function () {
+                                    success: function (oResponse) {
+                                        var response = eval("(" + oResponse.responseText + ")");;
                                         Alfresco.util.PopupManager.displayMessage(
                                                 {
-                                                    text: "Отчет зарегистрирован в системе",
+                                                    text: (response != null && response.success) ? "Отчет зарегистрирован в системе" : "При развертывании отчета произошла ошибка",
                                                     displayTime: 3
                                                 });
                                     },
@@ -92,7 +93,7 @@
                                 }
 
                                 if (Dom.get(htmlId + "-form-submit") !== null) {
-                                    Dom.get(htmlId + "-form-submit").setAttribute('label', "${msg("actions.save")}");
+                                    Dom.get(htmlId + "-form-submit").innerHTML = "${msg("actions.save")}";
                                     Dom.get(htmlId + "-form-submit").setAttribute('title', "${msg("actions.save")}");
                                 }
 

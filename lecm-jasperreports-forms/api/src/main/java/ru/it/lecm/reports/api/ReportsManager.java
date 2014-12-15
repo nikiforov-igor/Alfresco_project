@@ -395,14 +395,17 @@ public class ReportsManager {
      * Зарегистрировать отчёт, созданный редактором отчётов ("lecm-reports-editor"), указав его id.
      * Доступ к данным будет выполняться через reportDAO.
      */
-    public void registerReportDescriptor(NodeRef rdescId) {
+    public boolean registerReportDescriptor(NodeRef rdescId) {
+        boolean result = false;
         PropertyCheck.mandatory(this, "reportDAO", getReportEditorDAO());
         try {
             registerReportDescriptor(getReportEditorDAO().getReportDescriptor(rdescId), rdescId);
             getReportEditorDAO().markAsDeployed(rdescId);
+            result = true;
         } catch (RuntimeException ex) {
             logger.error(ex.getMessage(), ex);
         }
+        return result;
     }
 
     /**
@@ -923,7 +926,7 @@ public class ReportsManager {
     /**
      * Сохранение шаблона отчёта из desc.getReportTemplates()
      */
-    private boolean saveReportTemplate(ReportDescriptor desc) {
+    private boolean saveReportTemplate(ReportDescriptor desc) throws RuntimeException {
         if (desc.getReportTemplates() == null || desc.getReportTemplates().isEmpty()) {
             logger.warn(String.format("Report '%s' has no template", desc.getMnem()));
             return false;

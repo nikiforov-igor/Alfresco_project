@@ -40,8 +40,7 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
         boolean result = false;
         if (NodeRef.isNodeRef(reportDescNode)) {
             final NodeRef rdId = new NodeRef(reportDescNode);
-            getReportsManager().registerReportDescriptor(rdId);
-            result = true;
+            result = getReportsManager().registerReportDescriptor(rdId);
         }
         logger.warn(String.format("report '%s' %sdeployed", reportDescNode, (result ? "" : "NOT ")));
         return result;

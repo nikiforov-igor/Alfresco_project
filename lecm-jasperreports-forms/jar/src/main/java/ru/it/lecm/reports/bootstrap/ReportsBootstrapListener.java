@@ -51,13 +51,13 @@ public class ReportsBootstrapListener implements XMLImportListener {
                         for (String code : reportsForDeploy) {
                             NodeRef reportDescriptorRef = manager.getReportEditorDAO().getReportDescriptorNodeByCode(code);
                             if (reportDescriptorRef != null) { // нашли отчет - деплоем его
-                                manager.registerReportDescriptor(reportDescriptorRef);
+                                return manager.registerReportDescriptor(reportDescriptorRef);
                             }
                         }
-                        return null;
+                        return false;
                     }
                 });
-                return null;
+                return false;
             }
         };
         AuthenticationUtil.runAsSystem(raw);

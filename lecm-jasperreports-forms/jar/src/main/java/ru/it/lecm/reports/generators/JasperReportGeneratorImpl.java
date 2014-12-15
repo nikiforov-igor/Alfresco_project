@@ -207,11 +207,11 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
     }
 
     @Override
-    public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) {
+    public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) throws Exception {
         compileJrxml(desc, template, templateData, storage);
     }
 
-    private void compileJrxml(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) {
+    private void compileJrxml(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) throws Exception {
         if (templateData == null || template == null) {
             return;
         }
@@ -221,14 +221,10 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
         final ByteArrayInputStream inData = new ByteArrayInputStream(templateData);
         final ByteArrayOutputStream outData = new ByteArrayOutputStream();
 
-        try {
-            JasperCompileManager.compileReportToStream(inData, outData);
-            final IdRContent id = IdRContent.createId(desc, getTemplateFileName(desc, template, ".jasper"));
-            storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
-        } catch (Exception ex) {
-            final String msg = String.format("Error compiling report '%s':\n\t%s", desc.getMnem(), ex.getMessage());
-            log.error(msg, ex);
-        }
+        JasperCompileManager.compileReportToStream(inData, outData);
+        final IdRContent id = IdRContent.createId(desc, getTemplateFileName(desc, template, ".jasper"));
+        storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
+
         log.info(String.format("Jasper report '%s' compiled SUCCESSFULLY into %s bytes", desc.getMnem(), outData.size()));
     }
 }

@@ -368,9 +368,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                 var callback = {
                                     success: function (oResponse) {
                                         obj.params.reportTree._treeNodeSelected(obj.params.curElem);
+                                        var response = eval("(" + oResponse.responseText + ")");
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
-                                                text: "Отчет зарегистрирован в системе",
+                                                text: (response != null && response.success) ? "Отчет зарегистрирован в системе" : "При развертывании отчета произошла ошибка",
                                                 displayTime: 3
                                             });
                                     },
@@ -379,7 +380,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                         alert(oResponse.responseText);
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
-                                                text: "При регистрации отчета произошла ошибка",
+                                                text: "При развертывании отчета произошла ошибка",
                                                 displayTime: 3
                                             });
                                     },
