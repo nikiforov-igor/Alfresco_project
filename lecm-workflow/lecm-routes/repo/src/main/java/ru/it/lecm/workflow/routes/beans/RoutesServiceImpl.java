@@ -532,4 +532,24 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		}
 		return hasEmployeesInIteration;
 	}
+
+	@Override
+	public String getApprovalState(NodeRef documentNode) {
+		String result;
+		NodeRef currentIteration = getDocumentCurrentIteration(documentNode);
+		if (currentIteration != null) {
+			String approvalState;
+			approvalState = (String) nodeService.getProperty(currentIteration, ApprovalAspectsModel.PROP_APPROVAL_STATE);
+			if ("COMPLETE".equals(approvalState)) {
+				result = (String) nodeService.getProperty(currentIteration, ApprovalAspectsModel.PROP_APPROVAL_DECISION);
+			} else {
+				result = approvalState;
+			}
+		} else {
+			result = "UNDEF";
+		}
+
+		return result;
+	}
+
 }

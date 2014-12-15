@@ -69,4 +69,6 @@ public interface RoutesService {
 	 * если маршрута нет
 	 */
 	boolean hasEmployeesInRoute(final NodeRef documentRef);
+
+	String getApprovalState(NodeRef documentNode);
 }
