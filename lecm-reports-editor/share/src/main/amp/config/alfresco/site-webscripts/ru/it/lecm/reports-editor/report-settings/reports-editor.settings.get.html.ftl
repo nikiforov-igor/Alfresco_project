@@ -91,9 +91,8 @@
                                             deployFunction, { label: "${msg("actions.deploy")}", title: "${msg("actions.deploy")}" }, htmlId + "-form-cancel");
 
                                 }
-
                                 if (Dom.get(htmlId + "-form-submit") !== null) {
-                                    Dom.get(htmlId + "-form-submit").innerHTML = "${msg("actions.save")}";
+                                    Dom.get(htmlId + "-form-submit").value = "${msg("actions.save")}";
                                     Dom.get(htmlId + "-form-submit").setAttribute('title', "${msg("actions.save")}");
                                 }
 
