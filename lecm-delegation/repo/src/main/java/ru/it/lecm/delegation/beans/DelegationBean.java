@@ -1009,6 +1009,9 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 				}
 			}
 		}
+		if (effectiveEmployeeRef == null) {
+			effectiveEmployeeRef = employeeRef;
+		}
 		return effectiveEmployeeRef;
 	}
 }
