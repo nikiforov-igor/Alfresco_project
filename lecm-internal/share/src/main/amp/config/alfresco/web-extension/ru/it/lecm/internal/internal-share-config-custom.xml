@@ -174,7 +174,11 @@
 						</control>
 					</field>
 					<field id="lecmSignAspects:isSigned" set="common"/>
-					<field id="lecmSignAspects:signingDate" set="common"/>
+					<field id="lecmSignAspects:signingDate" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+						</control>
+					</field>
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
