@@ -57,7 +57,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private ORDDocumentService ordDocumentService;
 
 	private ORDReportsService ordReportsService;
-	
+
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
@@ -93,11 +93,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
-	
+
 	public void setOrdReportsService(ORDReportsService ordReportsService) {
 		this.ordReportsService = ordReportsService;
 	}
-	
+
 	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
 		this.ordDocumentService = ordDocumentService;
 	}
@@ -348,75 +348,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 	}
 
-
-	/**
-	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
-	 *
-	 * @param documentNode документ
-	 * @param signersList список подписантов
-	 */
-	public void updateDocumentToSignersAssocs(final ScriptNode documentNode, final ActivitiScriptNodeList signersList) {
-		NodeRef documentRef = documentNode.getNodeRef();
-		List<NodeRef> signersRefs = signersList.getNodeReferences();
-
-		updateDocumentToSignersAssocs(documentRef, signersRefs);
-	}
-
-	/**
-	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
-	 *
-	 * @param documentNode документ
-	 * @param listNode нода списка подписантов
-	 */
-	public void updateDocumentToSignersAssocs(final ScriptNode documentNode, final ScriptNode listNode) {
-		NodeRef documentRef = documentNode.getNodeRef();
-		NodeRef listRef = listNode.getNodeRef();
-		List<NodeRef> itemsList = new ArrayList<NodeRef>();
- 		List<ChildAssociationRef> itemsAssocs = nodeService.getChildAssocs(listRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
-		for (ChildAssociationRef itemAssoc : itemsAssocs) {
-			NodeRef itemRef = itemAssoc.getChildRef();
-			if (itemRef != null) {
-				List<AssociationRef> employeesAssocs = nodeService.getTargetAssocs(itemRef, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
-				for (AssociationRef employeeAssoc : employeesAssocs) {
-					NodeRef employeeRef = employeeAssoc.getTargetRef();
-					itemsList.add(employeeRef);
-				}
-			}
-		}
-		updateDocumentToSignersAssocs(documentRef, itemsList);
-	}
-
-	/**
-	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
-	 *
-	 * @param documentRef документ
-	 * @param signersRefs список NodeRef-ов подписантов
-	 */
-	public void updateDocumentToSignersAssocs(final NodeRef documentRef, final List<NodeRef> signersRefs) {
-		List<NodeRef> documentSignersRefs = getDocumentToSignersAssocs(documentRef);
-		Set<NodeRef> signersForDeleteRefs = new HashSet<NodeRef>(documentSignersRefs);
-
-		for (NodeRef signerRef : signersRefs) {
-			if (!signersForDeleteRefs.remove(signerRef)) {
-				nodeService.createAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNERS);
-			}
-		}
-		for (NodeRef signerRef : signersForDeleteRefs) {
-			nodeService.removeAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNERS);
-		}
-	}
-
-	private List<NodeRef> getDocumentToSignersAssocs(NodeRef documentRef) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
-		List<AssociationRef> signersAssocs = nodeService.getTargetAssocs(documentRef, ORDModel.ASSOC_ORD_SIGNERS);
-		for (AssociationRef signerAssoc : signersAssocs) {
-			NodeRef signerRef = signerAssoc.getTargetRef();
-			if (signerRef != null) result.add(signerRef);
-		}
-
-		return result;
-	}
-
 	public void changePointStatusByErrand(ScriptNode ordSNode){
 		NodeRef ord = ordSNode.getNodeRef();
         Set<NodeRef> senders = documentEventService.getEventSenders(ord);
@@ -483,10 +414,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 		return false;
 	}
-	
+
 	public ScriptNode generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
 		NodeRef reportNodeRef = ordReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
-		
+
 		return new ScriptNode(reportNodeRef, serviceRegistry, getScope());
 	}
 }
