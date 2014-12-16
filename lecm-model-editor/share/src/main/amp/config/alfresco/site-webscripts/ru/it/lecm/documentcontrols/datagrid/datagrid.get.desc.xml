@@ -1,5 +1,5 @@
 <webscript>
 	<shortname>Lecm Document Forms: Data Grid</shortname>
 	<description>Lecm Document Forms: Data Grid component</description>
-	<url>/lecm/documentcontrols/datagrid</url>
+	<url>/lecm/documentcontrols/datagrid?doctype={doctype}</url>
 </webscript>
