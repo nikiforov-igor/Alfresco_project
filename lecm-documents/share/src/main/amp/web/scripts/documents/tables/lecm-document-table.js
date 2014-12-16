@@ -41,6 +41,7 @@ LogicECM.module = LogicECM.module || {};
 				messages: null,
 				mode: null,
 				isTableSortable: null,
+				sort: null,
                 externalCreateId: null,
                 refreshAfterCreate: false,
                 showActions: true,
@@ -177,7 +178,7 @@ LogicECM.module = LogicECM.module || {};
 							actionsConfig: {
 								fullDelete: true
 					        },
-							sort: "lecm-document:indexTableRow",
+							sort: this.options.sort ? this.options.sort : "lecm-document:indexTableRow",
 							useChildQuery: true
 						},
 						bubblingLabel: this.options.bubblingLabel,

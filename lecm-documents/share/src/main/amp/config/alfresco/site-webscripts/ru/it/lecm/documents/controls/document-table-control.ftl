@@ -66,6 +66,11 @@
     <#assign isTableSortable = field.control.params.isTableSortable/>
 </#if>
 
+<#assign sort = ""/>
+<#if field.control.params.sort??>
+    <#assign sort = field.control.params.sort/>
+</#if>
+
 <#assign jsObjectName = "LogicECM.module.DocumentTable"/>
 <#if field.control.params.jsObjectName??>
     <#assign jsObjectName = field.control.params.jsObjectName/>
@@ -103,6 +108,7 @@
 				mode: "${form.mode?string}",
 				disabled: ${field.disabled?string},
 				isTableSortable: ${isTableSortable?string},
+                sort: "${sort?string}",
                 externalCreateId: "${form.arguments.externalCreateId!""}",
                 refreshAfterCreate: ${refreshAfterCreate?string},
 				<#if params.deleteMessageFunction??>
