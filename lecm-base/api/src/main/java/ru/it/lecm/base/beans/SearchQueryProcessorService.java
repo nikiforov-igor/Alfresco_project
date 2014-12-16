@@ -11,6 +11,7 @@ public interface SearchQueryProcessorService {
     public final Pattern PROC_PATTERN = Pattern.compile("[{]{2}.+?[}]{2}");
 
     public String processQuery(String query);
+    public String processQuery(String query, String replacedStr);
 
     public String getProcessorQuery(String id, String params);
 }

@@ -1,5 +1,6 @@
 package ru.it.lecm.base.beans;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -47,6 +48,11 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
 
     @Override
     public String processQuery(String query) {
+        return processQuery(query, null);
+    }
+
+    @Override
+    public String processQuery(String query, String replacedStr) {
         Matcher m = PROC_PATTERN.matcher(query);
         while (m.find()) {
             String groupText = m.group();
@@ -56,15 +62,22 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
                 lastIndex = groupText.indexOf(params) - OPEN_PARAM_SYMBOL.length(); // - ( size
             }
             String processorId = groupText.substring(2, lastIndex);
-            String procQuery = getProcessorQuery(processorId, params);
-            if (!procQuery.isEmpty()) {
-                query = query.replace(groupText, "(" + procQuery + ")");
+            if (replacedStr == null) {
+                String procQuery = getProcessorQuery(processorId, params);
+                if (!procQuery.isEmpty()) {
+                    query = query.replace(groupText, "(" + procQuery + ")");
+                }
+            } else {
+                query = query.replace(groupText, replacedStr);
             }
         }
 
         // обработка спец-выражений
-        if (query.contains(CURRENT_USER)) {
-            query = query.replaceAll(CURRENT_USER, orgstructureService.getCurrentEmployee().toString());
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        if (currentEmployee != null) {
+            if (query.contains(CURRENT_USER)) {
+                query = query.replaceAll(CURRENT_USER, orgstructureService.getCurrentEmployee().toString());
+            }
         }
         if (query.contains(CURRENT_DATE)) {
             int limitDays = notificationsService.getSettingsNDays();
