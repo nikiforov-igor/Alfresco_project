@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,16 +21,13 @@ import ru.it.lecm.arm.beans.ArmFilter;
 import ru.it.lecm.arm.beans.ArmFilterValue;
 import ru.it.lecm.arm.beans.ArmWrapperServiceImpl;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
-
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.transaction.TransactionService;
-import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: dbashmakov
@@ -236,14 +234,25 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 			for (String type : allTypes) {
 				final QName typeQName = QName.createQName(type, namespaceService);
 				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
-				if (typeDefinition != null && !stateMachineService.isNotArmCreate(type)) {
+                boolean notArmCreate = false;
+                try {
+                    notArmCreate = stateMachineService.isNotArmCreate(type);
+                } catch (Exception ignored) {
+                    //игнорируем любые ошибки внутри машины состояний
+                }
+                if (typeDefinition != null && !notArmCreate) {
 					try {
 						boolean isStarter;
 						if (isStarterHash.containsKey(type)) {
 							isStarter = isStarterHash.get(type);
 						} else {
-							isStarter = stateMachineService.isStarter(type);
-							isStarterHash.put(type, isStarter);
+                            isStarter = false;
+                            try {
+                                isStarter = stateMachineService.isStarter(type);
+                            } catch (Exception e) {
+                                //игнорируем любые ошибки внутри машины состояний, строчка станет неактивной
+                            }
+                            isStarterHash.put(type, isStarter);
 						}
 						JSONObject json = new JSONObject();
 						json.put("type", type);
