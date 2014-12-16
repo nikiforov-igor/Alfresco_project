@@ -2,10 +2,10 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 	LogicECM = {};
 }
 LogicECM.module = LogicECM.module || {};
-LogicECM.module.Contracts = LogicECM.module.Contracts|| {};
+LogicECM.module.Contracts = LogicECM.module.Contracts || {};
 LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 
-(function() {
+(function () {
 	var Dom = YAHOO.util.Dom;
 
 	LogicECM.module.Contracts.dashlet.Summary = function Contracts_constructor(htmlId) {
@@ -24,7 +24,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 		message: {},
 
 		onReady: function Contracts_onReady() {
-			this.container = Dom.get(this.id+'_results');
+			this.container = Dom.get(this.id + '_results');
 			this.setMessage();
 			this.createDialog();
 			this.drawForm();
@@ -32,9 +32,9 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 
 		setMessage: function Set_Message() {
 			this.message = {
-				'Все': this.msg('label.info.allContracts'),
+				'Все действующие': this.msg('label.info.allContracts'),
 				'Проекты': this.msg('label.info.contractsToDevelop'),
-				'Подписанные': this.msg('label.info.activeContracts'),
+				'На исполнении': this.msg('label.info.activeContracts'),
 				'Завершенные': this.msg('label.info.inactiveContracts'),
 				'Участники': this.msg('label.info.participants')
 			};
@@ -52,18 +52,17 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 		},
 
 		drawForm: function Draw_form() {
-			var template = '{proxyUri}lecm/documents/summary?docType={docType}&archive={archive}&skippedStatuses={skippedStatuses}&considerFilter={considerFilter}';
+			var template = '{proxyUri}lecm/documents/summary?docType={docType}&archive={archive}&skippedStatuses={skippedStatuses}';
 			var url = YAHOO.lang.substitute(template, {
 				proxyUri: Alfresco.constants.PROXY_URI,
 				docType: 'lecm-contract:document',
 				archive: 'false',
-				skippedStatuses: 'Корзина',
-				considerFilter: location.hash.replace(/#(\w+)=/, '')
+				skippedStatuses: 'Корзина'
 			});
 			var successCallback = {
 				scope: this,
-				fn: function(serverResponse) {
-					var index, list, members;
+				fn: function (serverResponse) {
+					var index, list, members, listItem;
 					var template = '<div class="column first {bold}">{message}:</div><div class="column second"><a class="status-button text-cropped" href="{href}">{amount}</a></div>';
 					var membersTemplate = '<div class="column first bold">{message}:</div><div class="column second"><a class="status-button text-cropped" onclick="{onclick}">{amount}</a></div>';
 					if (this.container) {
@@ -72,13 +71,13 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 							list = serverResponse.json.list;
 							members = serverResponse.json.members;
 							for (index in list) {
-								if (!list[index].skip){
+								listItem = list[index];
+								if (!listItem.skip) {
 									this.createRow(YAHOO.lang.substitute(template, {
 										bold: index === 0 ? 'bold' : '',
-										message: this.message[list[index].key],
-										//TODO: на страницу contract-list переходить уже не надо. Надо уточнить куда переходить из этого дашлета
-										href: Alfresco.constants.URL_PAGECONTEXT + 'contracts-list?query=' + list[index].filter,
-										amount: list[index].amount
+										message: this.message[listItem.key],
+										href: Alfresco.constants.URL_PAGECONTEXT + 'arm?code=SED&path=Договоры/' + encodeURIComponent(listItem.key),
+										amount: listItem.amount
 									}));
 								}
 							}
@@ -125,7 +124,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 					scope: this,
 					fn: function (response) {
 						var text = response.serverResponse.responseText;
-						var formEl = Dom.get(this.options.formId+'-content');
+						var formEl = Dom.get(this.options.formId + '-content');
 						formEl.innerHTML = text;
 					}
 				},
