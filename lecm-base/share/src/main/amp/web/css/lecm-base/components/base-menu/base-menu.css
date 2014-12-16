@@ -58,8 +58,3 @@
 #lecm-menu #menu-buttons #menu-buttons-bj-logger-settingsBtn span.first-child {
     background: url('/share/res/images/lecm-dictionary/dictionary_32.png') no-repeat 4px 4px;
 }
-
-/* ModelEditor menu */
-#lecm-menu #menu-buttons #menu-buttons-modelEditorHomeBtn span.first-child {
-	background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
-}
