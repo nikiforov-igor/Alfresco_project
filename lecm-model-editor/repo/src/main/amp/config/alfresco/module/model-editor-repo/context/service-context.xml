@@ -77,4 +77,13 @@
         <property name="policyComponent" ref="policyComponent"/>
     </bean>
 
+	<util:constant id="CONTROLS_EDITOR_ROOT_ID" static-field="ru.it.lecm.modelEditor.beans.ControlsEditorBeanImpl.CONTROLS_EDITOR_ROOT_ID"/>
+
+	<bean id="controlsEditorService" class="ru.it.lecm.modelEditor.beans.ControlsEditorBeanImpl" parent="baseBean">
+		<property name="folders">
+			<map>
+				<entry key="#{CONTROLS_EDITOR_ROOT_ID}" value="Сервис Редактор контролов"/>
+			</map>
+		</property>
+	</bean>
 </beans>
