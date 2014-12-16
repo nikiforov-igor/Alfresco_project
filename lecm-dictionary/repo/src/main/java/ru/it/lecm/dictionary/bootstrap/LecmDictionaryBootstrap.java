@@ -97,7 +97,7 @@ public class LecmDictionaryBootstrap extends BaseBean {
 								try {
 									XMLImportBean.XMLImporter importer = xmlImportBean.getXMLImporter(inputStream);
 									XMLImporterInfo info = importer.readItems(rootDir);
-									logger.debug("{} import finished. {}", dictionary, info);
+									logger.trace("{} import finished. {}", dictionary, info);
 								} catch (Exception e) {
 									logger.error("Can not import dictionary: " + dictionary, e);
 								} finally {
