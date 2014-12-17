@@ -257,42 +257,58 @@ i.icon-building {
 }
 
 /* Табы */
+.yui-skin-lecmTheme .yui-navset ul.yui-nav,
 .yui-skin-lecmTheme .yui-panel .yui-navset ul.yui-nav {
     margin-left: 5px;
 }
+.yui-skin-lecmTheme .yui-navset .yui-nav li,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li {
     margin: 0 5px 0 0;
 }
+.yui-skin-lecmTheme .yui-navset .yui-nav li a,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a {
     background: #eaeaea;
     border: 1px solid #d2d2d2;
     border-bottom-width: 0;
     border-radius: 5px 5px 0 0;
 }
+.yui-skin-lecmTheme .yui-navset .yui-nav li a:focus,
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a:focus {
+    outline: 1px dashed #ccc;
+    outline-offset: -6px;
+}
+.yui-skin-lecmTheme .yui-navset .yui-nav li a em,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a em {
     padding: 5px 15px 2px;
     border: none;
     font-size: 13px;
     font-weight: bold;
     color: #303030;
+    top: 0;
 }
+.yui-skin-lecmTheme .yui-navset .yui-nav li.selected,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected {
-    margin-bottom: -1px;
+    margin: 0 5px -1px 0;
     position: relative;
 }
+.yui-skin-lecmTheme .yui-navset .yui-nav li.selected a,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a {
     background: #fff;
 }
+.yui-skin-lecmTheme .yui-navset .yui-nav li.selected a em,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a em {
     padding-bottom: 4px;
     color: #076a8d;
+    border-radius: 4px 4px 0 0;
 }
+.yui-skin-lecmTheme .yui-navset .yui-content,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-content {
     margin: 0;
     border: none;
     padding: 0;
     background: #eaeaea;
 }
+.yui-skin-lecmTheme .yui-navset .yui-content > div,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-content > div {
     overflow: hidden;
     border: 1px solid #d2d2d2;
