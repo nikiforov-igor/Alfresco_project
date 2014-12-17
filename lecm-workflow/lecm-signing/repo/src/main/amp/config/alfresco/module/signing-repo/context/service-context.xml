@@ -8,6 +8,7 @@
 
 	<util:list id="sign2.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-signing-br-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-signing-event-category-items.xml</value>
 	</util:list>
 
 	<bean id="lecm.sign2.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
