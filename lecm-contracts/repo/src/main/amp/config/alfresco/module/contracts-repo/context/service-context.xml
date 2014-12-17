@@ -145,7 +145,7 @@
     <bean id="contractsStatusesFilter" parent="documentStatusesFilter">
         <property name="defaultFilters">
             <map>
-                <entry key="lecm-contract:document" value="Все"/>
+                <entry key="lecm-contract:document" value="Все действующие"/>
                 <entry key="lecm-contract:document-archive" value="Завершенные"/>
                 <entry key="lecm-additional-document:additionalDocument" value="Все"/>
                 <entry key="lecm-additional-document:additionalDocument-archive" value="Все"/>
