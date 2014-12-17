@@ -48,6 +48,14 @@
 		  p:models-ref="approve3.models"
 		  p:labels-ref="approve3.labels"/>
 
+	<util:list id="approve3.arm.dictionaries">
+		<value>alfresco/module/${artifactId}/arm/approval-settings-arm.xml</value>
+	</util:list>
+	<bean id="approve3.arm.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
+		  p:dictionaries-ref="approve3.arm.dictionaries"/>
+
 	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
 	<util:constant id="MIMETYPE" static-field="org.alfresco.repo.workflow.WorkflowDeployer.MIMETYPE"/>
