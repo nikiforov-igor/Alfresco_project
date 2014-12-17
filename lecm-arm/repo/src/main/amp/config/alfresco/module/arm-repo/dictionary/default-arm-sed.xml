@@ -4282,6 +4282,86 @@
 						<property name="lecm-arm:order"><![CDATA[0]]></property>
 						<property name="lecm-arm:html-url"><![CDATA[page/contracts-main]]></property>
 					</item>
+					<item name="cm:Все действующие" type="lecm-arm:node">
+						<property name="cm:name"><![CDATA[Все действующие]]></property>
+						<property name="lecm-arm:order"><![CDATA[25]]></property>
+						<property name="lecm-arm:search-type"><![CDATA[]]></property>
+						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+						<property name="lecm-arm:types"><![CDATA[]]></property>
+						<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:('Черновик' OR 'Проект зарегистрирован' OR 'На согласовании' OR 'Согласован' OR 'На подписании' OR 'Подписан' OR 'На доработке' OR 'На подписании у контрагента' OR 'Зарегистрирован' OR 'Действует' OR 'Приостановлен')]]></property>
+						<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+						<items>
+							<item name="cm:Действующие_статусы" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[Действующие_статусы]]></property>
+								<property name="lecm-arm:order"><![CDATA[0]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+								<items>
+									<item name="cm:6e78ef09-0175-46da-9c99-d0bb3a5a4f29" type="lecm-arm:statuses-child-rule">
+										<property name="cm:name"><![CDATA[6e78ef09-0175-46da-9c99-d0bb3a5a4f29]]></property>
+										<property name="lecm-arm:selected-statuses"><![CDATA[Черновик,Проект зарегистрирован,На согласовании,Согласован,На подписании,Подписан,На доработке,На подписании у контрагента,Зарегистрирован,Действует,Приостановлен]]></property>
+										<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
+									</item>
+								</items>
+								<assocs>
+									<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/Действующие_статусы/6e78ef09-0175-46da-9c99-d0bb3a5a4f29"/>
+								</assocs>
+							</item>
+							<item name="cm:c0306c49-c866-4be2-907d-4e9c0670d30f" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Регистрационный №]]></property>
+								<property name="cm:name"><![CDATA[124c743d-c017-4d3a-9bcd-7dcc213cecb7]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-contract:regNumSystem]]></property>
+							</item>
+							<item name="cm:69435a27-6ec9-4040-b386-06e870cfe9b0" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Регистрационный № проекта]]></property>
+								<property name="cm:name"><![CDATA[1814fb35-b427-401f-b5bf-9e003a470761]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-contract:regNumProject]]></property>
+							</item>
+							<item name="cm:5ff623c9-f2df-4d34-8734-d2aa8c361fbc" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Контрагент]]></property>
+								<property name="cm:name"><![CDATA[3c2d1b8e-f49b-452a-9d99-20de95dcc62e]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-contract:partner-assoc]]></property>
+							</item>
+							<item name="cm:d66d82f4-cbb8-4d1b-a892-d3a79f2b14bb" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Сумма по договору]]></property>
+								<property name="cm:name"><![CDATA[d96d0135-30f3-4b0f-a10a-7a290c6d3263]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-contract:totalAmount]]></property>
+							</item>
+							<item name="cm:5a04d904-b776-4498-96d8-f6138349f776" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Валюта договора]]></property>
+								<property name="cm:name"><![CDATA[aba2370c-b80c-459c-b4d0-3bf2cb9afc4a]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-contract:currency-assoc]]></property>
+							</item>
+							<item name="cm:eb9aa44c-377f-416f-920c-c791887dad2f" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
+								<property name="cm:name"><![CDATA[72d03ab2-1ce6-4a0f-b0e5-d92e18e17fa1]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-document:author-assoc]]></property>
+							</item>
+							<item name="cm:46b3e77f-23b5-4795-90da-ab92f2fe39c0" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Идентификатор БД объекта]]></property>
+								<property name="cm:name"><![CDATA[f246397a-56bc-4142-8964-c037fb2f6ba4]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[sys:node-dbid]]></property>
+							</item>
+						</items>
+						<assocs>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/124c743d-c017-4d3a-9bcd-7dcc213cecb7"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/1814fb35-b427-401f-b5bf-9e003a470761"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/3c2d1b8e-f49b-452a-9d99-20de95dcc62e"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/d96d0135-30f3-4b0f-a10a-7a290c6d3263"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/aba2370c-b80c-459c-b4d0-3bf2cb9afc4a"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/72d03ab2-1ce6-4a0f-b0e5-d92e18e17fa1"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/f246397a-56bc-4142-8964-c037fb2f6ba4"/>
+						</assocs>
+					</item>
 				</items>
 				<assocs>
 					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Договор. Исполнитель"/>
