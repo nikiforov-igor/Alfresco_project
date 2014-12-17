@@ -7395,7 +7395,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and doc.attr("lecmSignAspects:isSigned") and doc.attr("lecm-contract:signedCounterparty")]]></value>
+																<value><![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and doc.attr("lecmSignAspects:isSigned") and doc.attr("lecm-additional-document:signedCounterparty")]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -7425,7 +7425,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and doc.attr("lecmSignAspects:isSigned") and !doc.attr("lecm-contract:signedCounterparty")]]></value>
+																<value><![CDATA["COMPLETE" == doc.attr("lecmSignAspects:signingState") and doc.attr("lecmSignAspects:isSigned") and !doc.attr("lecm-additional-document:signedCounterparty")]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
