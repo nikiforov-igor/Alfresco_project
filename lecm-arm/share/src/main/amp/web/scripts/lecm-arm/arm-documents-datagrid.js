@@ -177,12 +177,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 itemType: this.datagridMeta.itemType,
                 sort: this.datagridMeta.sort,
                 offset: offset,
-                filter: this.currentFilters
+                filter: this.currentFilters,
+                useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg,
+                useFilterByOrg: this.datagridMeta.useFilterByOrg
             });
         },
 
 	    populateDataGrid: function DataGrid_populateDataGrid() {
-		    if (!YAHOO.lang.isObject(this.datagridMeta)) {
+		    if (!YAHOO.lang.isObject(this.datagridMeta) || this.datagridMeta.itemType == null) {
 			    return;
 		    }
 

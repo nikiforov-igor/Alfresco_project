@@ -23,6 +23,8 @@ function main() {
             itemType:(pars.get("itemType").length() > 0)  ? pars.get("itemType") : null,
             startIndex: pars.has("startIndex") ? parseInt(pars.get("startIndex"), 10) : DEFAULT_INDEX,
             useChildQuery: pars.has("useChildQuery") ? ("" + pars.get("useChildQuery") == "true") : false,
+            useFilterByOrg: pars.has("useFilterByOrg") ? ("" + pars.get("useFilterByOrg") == "true") : true,
+            useOnlyInSameOrg: pars.has("useOnlyInSameOrg") ? ("" + pars.get("useOnlyInSameOrg") == "true") : false,
             filter: pars.has("filter")  ? pars.get("filter") : null
         };
     }

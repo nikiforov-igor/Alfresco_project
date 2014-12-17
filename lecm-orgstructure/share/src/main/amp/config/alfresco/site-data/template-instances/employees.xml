@@ -6,13 +6,5 @@
             <region-id>employees-grid</region-id>
             <url>/lecm/orgstructure/employees</url>
         </component>
-        <!-- Toolbar -->
-        <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/orgstructure/arm-toolbar</url>
-            <properties>
-                <bubblingLabel>employees</bubblingLabel>
-            </properties>
-        </component>
     </components>
 </template-instance>

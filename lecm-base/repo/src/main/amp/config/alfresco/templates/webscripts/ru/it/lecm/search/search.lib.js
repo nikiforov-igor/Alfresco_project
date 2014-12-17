@@ -135,13 +135,16 @@ function getFiltersQuery(filters) {
 }
 
 function getSearchQuery(params) {
-	var ftsQuery = "",
-		searchConfigString = params.searchConfig,
-		showInactive = params.showInactive,
-		parent = params.parent,
-		searchNodes = params.searchNodes,
-		itemType = params.itemType,
-		filterStr = params.filter;
+    var
+        ftsQuery = "",
+        searchConfigString = params.searchConfig,
+        showInactive = params.showInactive,
+        useFilterByOrg = params.useFilterByOrg != null ? (("" + params.useFilterByOrg) == "true") : true,
+        useOnlyInSameOrg = params.useOnlyInSameOrg  != null ? (("" + params.useOnlyInSameOrg) == "true") : false,
+        parent = params.parent,
+        searchNodes = params.searchNodes,
+        itemType = params.itemType,
+        filterStr = params.filter;
 
 		var typesQuery = "", formQuery = "", fullTextSearchQuery = "", filter = "", filtersQuery = "";
 		// вытаскивае6м инфу из searchConfig
@@ -350,9 +353,10 @@ function getSearchQuery(params) {
 			ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + 'NOT @' + this.escapeQName("lecm-dic:active") + ':false';
 		}
 
-		// по организации
-		ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + '{{IN_SAME_ORGANIZATION}}';
-
+        // по организации
+        if (useFilterByOrg) {
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + '{{IN_SAME_ORGANIZATION({strict:' + useOnlyInSameOrg + '})}}';
+        }
 		//фильтр по доступным нодам
 		if (searchNodes != null) {
 			ftsQuery = "";
@@ -378,6 +382,8 @@ function getSearchResults(params) {
 	var nodes,
 		fields = params.fields,
 		nameSubstituteStrings = params.nameSubstituteStrings,
+        useFilterByOrg = params.useFilterByOrg != null ? (("" + params.useFilterByOrg) == "true") : true,
+        useOnlyInSameOrg = params.useOnlyInSameOrg  != null ? (("" + params.useOnlyInSameOrg) == "true") : false,
 		showInactive = params.showInactive,
 		parent = params.parent,
 		itemType = params.itemType,
@@ -420,7 +426,7 @@ function getSearchResults(params) {
             language: "fts-alfresco",
             onerror: "no-results"
         };
-        total = searchCounter.query(queryDef);
+        total = searchCounter.query(queryDef, useFilterByOrg, useOnlyInSameOrg);
 
         var sortColumns = [];
         if (sortField.column.charAt(0) == '.') {
@@ -449,7 +455,7 @@ function getSearchResults(params) {
             if (node) {
                 if (logger.isLoggingEnabled())
                     logger.log("Get childs for node:\r\n" + parent + "\r\nItemType: " + (itemType != null ? itemType : ""));
-                var childsPaged = base.getChilds(node, itemType, pageSize, startIndex, utils.shortQName(sortField.column), sortField.ascending, !showInactive);
+                var childsPaged = base.getChilds(node.nodeRef, itemType, null, pageSize, startIndex, utils.shortQName(sortField.column), sortField.ascending, !showInactive, !useFilterByOrg, useOnlyInSameOrg);
                 nodes = childsPaged.page;
                 total = childsPaged.totalResultCountUpper;
                 if (logger.isLoggingEnabled())

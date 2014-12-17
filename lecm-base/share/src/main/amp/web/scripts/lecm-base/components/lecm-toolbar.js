@@ -256,7 +256,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             searchConfig: datagridMeta.searchConfig,
                             searchNodes: datagridMeta.searchNodes,
                             searchShowInactive: dataGrid.options.searchShowInactive,
-                            sort: datagridMeta.sort
+                            sort: datagridMeta.sort,
+                            useOnlyInSameOrg: datagridMeta.useOnlyInSameOrg,
+                            useFilterByOrg: datagridMeta.useFilterByOrg
                         });
                         YAHOO.Bubbling.fire("showFilteredLabel");
                         YAHOO.Bubbling.fire("showFullTextSearchLabel");
@@ -461,7 +463,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         itemType: datagridMeta.itemType,
                         searchConfig: datagridMeta.searchConfig,
                         searchShowInactive: dataGrid.options.searchShowInactive,
-	                    sort: datagridMeta.sort
+	                    sort: datagridMeta.sort,
+                        useOnlyInSameOrg: datagridMeta.useOnlyInSameOrg,
+                        useFilterByOrg: datagridMeta.useFilterByOrg
                     });
                     if (!datagridMeta.searchConfig || !datagridMeta.searchConfig.fullTextSearch) {
                         YAHOO.Bubbling.fire("hideFilteredLabel");

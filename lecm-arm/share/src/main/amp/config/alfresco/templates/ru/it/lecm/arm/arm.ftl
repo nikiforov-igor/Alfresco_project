@@ -30,13 +30,7 @@
 
         LogicECM.module.ARM = LogicECM.module.ARM || {};
 
-        LogicECM.module.ARM.SETTINGS =
-            <#if settings?? >
-            ${settings}
-            <#else>
-            {}
-            </#if>;
-
+        LogicECM.module.ARM.SETTINGS = {};
         LogicECM.module.ARM.SETTINGS.ARM_CODE = "${page.url.args.code!''}";
         LogicECM.module.ARM.SETTINGS.ARM_PATH = ${path!'{}'};
         LogicECM.module.ARM.SETTINGS.ARM_TYPE = "USER";

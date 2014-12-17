@@ -422,97 +422,101 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 form.submit();
             },
 
-            prepareSearchParams: function prepareSearchParams_function(args) {
-                var searchConfig = args.searchConfig,
-                    searchShowInactive = args.searchShowInactive,
-                    parent = args.parent,
-                    searchNodes = args.searchNodes,
-                    itemType = args.itemType,
-                    sort = args.sort,
-                    useChildQuery = args.useChildQuery ? args.useChildQuery : false,
-                    offset = args.offset ? args.offset : -1;
+            prepareSearchParams: function prepareSearchParams_function(searchParams) {
+                if (searchParams.searchFields == null || searchParams.dataRequestNameSubstituteStrings == null) {
+                    // вернуть следующие поля для элемента(строки)
+                    var reqFields = [];
+                    var reqNameSubstituteStrings = [];
+                    for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
+                        var column = this.dataColumns[i],
+                            columnName = column.name.replace(":", "_");
+                        reqFields.push(columnName);
+                        reqNameSubstituteStrings.push(column.nameSubstituteString);
+                    }
 
-                // вернуть следующие поля для элемента(строки)
-                var reqFields = [];
-                var reqNameSubstituteStrings = [];
-                for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
-                    var column = this.dataColumns[i],
-                        columnName = column.name.replace(":", "_");
-                    reqFields.push(columnName);
-                    reqNameSubstituteStrings.push(column.nameSubstituteString);
+                    searchParams.searchFields = reqFields.join(",");
+                    searchParams.dataRequestNameSubstituteStrings = reqNameSubstituteStrings.join(",");
                 }
-                var fields = reqFields.join(",");
-                var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
 
                 // дополнительный фильтр из адресной строки (или параметров)
-                var successFilters = args.filter;
-                if (!successFilters) {
-                    successFilters = this.dataGrid.currentFilters;
-                }
-                var bookmarkedFilter = null;
-                if (YAHOO.util.History) {
-                    bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-                }
-                if (bookmarkedFilter) {
-                    try {
-                        while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                if (searchParams.additionalFilters == null || searchParams.additionalFilters.length == 0) {
+                    var successFilters = searchParams.filter;
+                    if (!successFilters) {
+                        successFilters = this.dataGrid.currentFilters;
+                    }
+                    var bookmarkedFilter = null;
+                    if (YAHOO.util.History) {
+                        bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                    }
+                    if (bookmarkedFilter) {
+                        try {
+                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                            }
                         }
-                    }
-                    catch (e) {
-                        // Catch "malformed URI sequence" exception
-                    }
-                    var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-                        var filters = strFilter.split("|");
-                        return {
-                            code: window.unescape(filters[0] || ""),
-                            curValue: window.unescape(filters[1] || ""),
-                            fromUrl:true
+                        catch (e) {
+                            // Catch "malformed URI sequence" exception
+                        }
+                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                            var filters = strFilter.split("|");
+                            return {
+                                code: window.unescape(filters[0] || ""),
+                                curValue: window.unescape(filters[1] || ""),
+                                fromUrl: true
+                            };
                         };
-                    };
 
-                    var filterFromUrl = fnDecodeBookmarkedFilter(bookmarkedFilter);
-                    var index = this.dataGrid._filterInArray(filterFromUrl.code, successFilters);
-                    if (index >= 0) {
-                        successFilters.splice(index, 1);
+                        var filterFromUrl = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                        var index = this.dataGrid._filterInArray(filterFromUrl.code, successFilters);
+                        if (index >= 0) {
+                            successFilters.splice(index, 1);
+                        }
+                        successFilters.push(filterFromUrl);
                     }
-                    successFilters.push(filterFromUrl);
+
+                    searchParams.additionalFilters = successFilters;
                 }
 
-                return this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilters, useChildQuery);
-            },
+                //на случай вызовов из расширенных датагридов
+                if (searchParams.useFilterByOrg == null) {
+                    searchParams.useFilterByOrg = this.dataGrid.datagridMeta.useFilterByOrg;
+                }
+                if (searchParams.useOnlyInSameOrg == null) {
+                    searchParams.useOnlyInSameOrg = this.dataGrid.datagridMeta.useOnlyInSameOrg;
+                }
 
-            buildSearchParams:function ADVSearch__buildSearchParams(parent, searchNodes, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilters, useChildQuery) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
-                if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
-                    searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
+                if (searchParams.searchConfig && searchParams.searchConfig.formData && typeof searchParams.searchConfig.formData == "object") {
+                    searchParams.searchConfig.formData = YAHOO.lang.JSON.stringify(searchParams.searchConfig.formData);
                 }
-                if (searchConfig && searchConfig.fullTextSearch && typeof searchConfig.fullTextSearch == "object") {
-                    searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(searchConfig.fullTextSearch);
+                if (searchParams.searchConfig && searchParams.searchConfig.fullTextSearch && typeof searchParams.searchConfig.fullTextSearch == "object") {
+                    searchParams.searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(searchParams.searchConfig.fullTextSearch);
                 }
                 var startIndex = 0;
-                if (offset >= 0 && ((this.dataGrid.options.usePagination && !this.dataGrid.options.disableDynamicPagination) || this.dataGrid.options.unlimited)) {
-                    startIndex = offset;
+                if (searchParams.offset >= 0 && ((this.dataGrid.options.usePagination && !this.dataGrid.options.disableDynamicPagination) || this.dataGrid.options.unlimited)) {
+                    startIndex = searchParams.offset;
                 }
 
                 var filters = [];
-                if (additionalFilters && additionalFilters.length > 0) {
-                    filters = YAHOO.lang.JSON.stringify(additionalFilters);
+                if (searchParams.additionalFilters && searchParams.additionalFilters.length > 0) {
+                    filters = YAHOO.lang.JSON.stringify(searchParams.additionalFilters);
                 }
                 return {
                     params: {
-                        parent: parent != null ? parent : "",
-	                    searchNodes: searchNodes != null ? searchNodes.toString() : "",
-                        itemType: itemType != null ? itemType : "",
-                        searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
+                        parent: searchParams.parent != null ? searchParams.parent : "",
+                        searchNodes: searchParams.searchNodes != null ? searchParams.searchNodes.toString() : "",
+                        itemType: searchParams.itemType != null ? searchParams.itemType : "",
+                        searchConfig: searchParams.searchConfig != null ? YAHOO.lang.JSON.stringify(searchParams.searchConfig) : "",
                         maxResults: (this.dataGrid.options.usePagination && !this.dataGrid.options.disableDynamicPagination) ?
                             this.dataGrid.options.pageSize : (this.options.unlimited && this.dataTable.getRecordSet().getRecords().length > 0 ? this.options.loopSize : this.dataGrid.options.maxResults),
-                        fields: searchFields != null ? searchFields : "",
-                        nameSubstituteStrings: dataRequestNameSubstituteStrings,
-                        showInactive: searchShowInactive != null ? searchShowInactive : "false",
+                        fields: searchParams.searchFields != null ? searchParams.searchFields : "",
+                        nameSubstituteStrings: searchParams.dataRequestNameSubstituteStrings,
+                        showInactive: searchParams.searchShowInactive != null ? searchParams.searchShowInactive : false,
                         startIndex: startIndex,
-                        sort: sort != null ? sort : "",
+                        sort: searchParams.sort != null ? searchParams.sort : "",
                         filter: filters ? filters : "",
-                        useChildQuery: useChildQuery != null ?  useChildQuery : false
+                        useChildQuery: searchParams.useChildQuery != null ? searchParams.useChildQuery : false,
+                        useFilterByOrg: searchParams.useFilterByOrg != null ? searchParams.useFilterByOrg : true,
+                        useOnlyInSameOrg: searchParams.useOnlyInSameOrg != null ? searchParams.useOnlyInSameOrg : false
                     }
                 };
             },

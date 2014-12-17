@@ -1306,8 +1306,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 parent: datagridMeta.nodeRef,
 	                            searchNodes: this.datagridMeta.searchNodes,
                                 itemType: datagridMeta.itemType,
-                                sort:datagridMeta.sort,
-                                useChildQuery:this.datagridMeta.useChildQuery
+                                sort: datagridMeta.sort,
+                                useChildQuery:datagridMeta.useChildQuery,
+                                useOnlyInSameOrg: datagridMeta.useOnlyInSameOrg,
+                                useFilterByOrg: datagridMeta.useFilterByOrg
                             });
                         }
                     }
@@ -1379,10 +1381,23 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     selectAllChbx.checked = false;
                 }
 
-                var params = this.search.buildSearchParams(this.datagridMeta.nodeRef, null,
-                    this.datagridMeta.itemType, sort, this.datagridMeta.searchConfig, this.dataRequestFields.join(","),
-                    this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, oState.pagination.recordOffset, this.currentFilters, this.datagridMeta.useChildQuery);
-                return YAHOO.lang.JSON.stringify(params);
+                var searchParams = {
+                    parent: this.datagridMeta.nodeRef,
+                    searchNodes: null,
+                    itemType: this.datagridMeta.itemType,
+                    sort: sort,
+                    searchConfig: this.datagridMeta.searchConfig,
+                    searchFields: this.dataRequestFields.join(","),
+                    dataRequestNameSubstituteStrings: this.dataRequestNameSubstituteStrings.join(","),
+                    searchShowInactive: this.options.searchShowInactive,
+                    offset: oState.pagination.recordOffset,
+                    additionalFilters: this.currentFilters,
+                    useChildQuery: this.datagridMeta.useChildQuery,
+                    useFilterByOrg: this.datagridMeta.useFilterByOrg,
+                    useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg
+                };
+
+                return YAHOO.lang.JSON.stringify(this.search.prepareSearchParams(searchParams));
             },
 
 	        /**
@@ -1530,7 +1545,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             offset: offset,
                             notReplaceRS: true,
                             useChildQuery:scope.datagridMeta.useChildQuery,
-                            filter: null
+                            filter: null,
+                            useOnlyInSameOrg: scope.datagridMeta.useOnlyInSameOrg,
+                            useFilterByOrg: scope.datagridMeta.useFilterByOrg
                         });
                     }
                 }
@@ -1619,6 +1636,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     itemType: this.datagridMeta.itemType,
                     searchShowInactive: searchShowInactive,
                     useChildQuery:this.datagridMeta.useChildQuery,
+                    useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg,
+                    useFilterByOrg: this.datagridMeta.useFilterByOrg,
                     sort:sort
                 });
             },
@@ -2319,6 +2338,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     sort: this.datagridMeta.sort,
                     offset: offset,
                     useChildQuery:this.datagridMeta.useChildQuery,
+                    useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg,
+                    useFilterByOrg: this.datagridMeta.useFilterByOrg,
                     filter: successFilters
                 });
             },

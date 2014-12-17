@@ -46,7 +46,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         this.storeRef = new StoreRef(storeRef);
     }
 
-    public Long query(Object search) {
+    public Long query(Object search, boolean useFilterByOrg, boolean onlyInSameOrg) {
         Long result = 0L;
 
         if (search instanceof Serializable) {
@@ -94,7 +94,9 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 sp.addStore(store != null ? new StoreRef(store) : this.storeRef);
                 sp.setLanguage(language != null ? language : SearchService.LANGUAGE_LUCENE);
 
-                query = query + " AND {{IN_SAME_ORGANIZATION}} ";
+                if (useFilterByOrg) {
+                    query = query + " AND {{IN_SAME_ORGANIZATION({strict:" + onlyInSameOrg + "})}} ";
+                }
 
                 query = processorService.processQuery(query);
 
@@ -127,6 +129,14 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         }
 
         return result;
+    }
+
+    public Long query(Object search) {
+        return query(search, true);
+    }
+
+    public Long query(Object search, boolean useFilterByOrg) {
+        return query(search, useFilterByOrg, false);
     }
 
     protected Long query(SearchParameters sp, boolean exceptionOnError, int maxResults, int skipCount) {

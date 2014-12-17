@@ -55,11 +55,8 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                         allowCreate: false,
                         showActionColumn: true,
                         showCheckboxColumn: true,
-                    bubblingLabel: "documents-arm",
-                        expandable: true
-                    }).setMessages(${messages});
-
-                    YAHOO.Bubbling.fire ("activeGridChanged", {
+                        bubblingLabel: "documents-arm",
+                        expandable: true,
                         datagridMeta: {
                             itemType: "lecm-document:base",
                             datagridFormId: "datagrid-arm",
@@ -68,14 +65,9 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                                 fullDelete:true,
                                 trash: false
                             },
-                            sort:"cm:modified|false",
-                            searchConfig: {
-                                filter: 'PATH:"' + LogicECM.module.ARM.SETTINGS.draftPath + '//*"'
-                                    + ' OR PATH:"' + LogicECM.module.ARM.SETTINGS.documentPath + '//*"'
-                            }
-                        },
-                        bubblingLabel: "documents-arm"
-                    });
+                            sort:"cm:modified|false"
+                        }
+                    }).setMessages(${messages});
                 });
 			//]]></script>
 		</@grid.datagrid>
