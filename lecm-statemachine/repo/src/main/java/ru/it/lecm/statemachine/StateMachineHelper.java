@@ -2405,7 +2405,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
                         return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                             @Override
                             public NodeRef execute() throws Throwable {
-                                return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>());
+                                return documentMembersService.addMember(document, assignee, new HashMap<QName, Serializable>(), true);
                             }
                         });
                     }
