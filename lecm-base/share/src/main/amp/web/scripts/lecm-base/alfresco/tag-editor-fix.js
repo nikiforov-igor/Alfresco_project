@@ -1,4 +1,8 @@
 (function () {
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		Element = YAHOO.util.Element,
+		KeyListener = YAHOO.util.KeyListener;
 
 	if (Alfresco.widget.InsituEditor && Alfresco.widget.InsituEditor.tagEditor) {
 		Alfresco.widget.InsituEditor.tagEditor.prototype._generateMarkup = function InsituEditor_tagEditor__generateMarkup()
