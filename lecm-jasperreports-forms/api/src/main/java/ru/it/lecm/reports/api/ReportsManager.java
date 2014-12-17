@@ -621,17 +621,20 @@ public class ReportsManager {
         Set<String> bRoles = report.getBusinessRoles();
 
         if (!bRoles.isEmpty()) {
-            final HashSet<String> employeeRoles = new HashSet<String>();
+            final HashSet<String> employeeAuth = new HashSet<String>();
             NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 
             if (currentEmployee != null) {
-                List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(currentEmployee, true, true);
-                for (NodeRef role : roleRefs) {
-                    String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-                    employeeRoles.add(name);
-                }
+                final String employeeLogin = orgstructureBean.getEmployeeLogin(currentEmployee);
+                //noinspection unchecked
+                employeeAuth.addAll((Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
+                    }
+                }));
             }
-            if (!hasPermissionToReport(report, employeeRoles)) {
+            if (!hasPermissionToReport(report, employeeAuth)) {
                 throw new RuntimeException(String.format("Current Employee has not permission to view report '%s' !!!", reportName));
             }
         }
