@@ -5151,7 +5151,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																			</property>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Необходимо добавить вложение в категорию "Договор"]]></value>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -5159,7 +5159,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[doc.hasCategoryAttachment("Договор")]]></value>
+																				<value><![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6427,7 +6427,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																			</property>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Необходимо добавить вложение в категорию "Договор"]]></value>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -6435,7 +6435,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[doc.hasCategoryAttachment("Договор")]]></value>
+																				<value><![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
