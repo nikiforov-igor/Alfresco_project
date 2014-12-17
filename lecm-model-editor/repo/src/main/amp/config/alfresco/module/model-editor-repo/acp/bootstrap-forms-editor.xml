@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+		   xmlns:cm="http://www.alfresco.org/model/content/1.0"
+		   xmlns:sys="http://www.alfresco.org/model/system/1.0">
+	<cm:folder view:childName="${lecm.lecm_forms_container.childname}">
+		<view:aspects>
+			<cm:auditable/>
+			<sys:referenceable/>
+			<sys:localized/>
+			<cm:titled/>
+		</view:aspects>
+		<view:properties>
+			<sys:node-uuid>lecm_forms_container</sys:node-uuid>
+			<cm:name>${lecm.lecm_forms_container.root.name}</cm:name>
+			<cm:title>${lecm.lecm_forms_container.root.title}</cm:title>
+			<cm:description>${lecm.lecm_forms_container.root.description}</cm:description>
+		</view:properties>
+	</cm:folder>
+</view:view>

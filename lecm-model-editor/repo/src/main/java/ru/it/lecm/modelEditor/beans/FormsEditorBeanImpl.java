@@ -27,8 +27,10 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.dictionary.ChildAssociationDefinition;
 import org.alfresco.service.cmr.dictionary.ClassAttributeDefinition;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -57,7 +59,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 	public static final QName PROP_ATTR_CONTROL = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-control");
 
 	public static final String FORMS_EDITOR_ROOT_ID = "FORMS_EDITOR_ROOT_ID";
-	public static final String FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME = "Формы";
+	public static final String FORMS_EDITOR_MODELS_DEPLOY_UUID = "lecm_forms_container";
 
 	public static final String FAKE_ATTRIBUTE_TYPE = "fake";
 
@@ -88,26 +90,14 @@ public class FormsEditorBeanImpl extends BaseBean {
 	 */
         //TODO Refactoring in progress
 	public NodeRef getModelsDeployRootFolder() {
-		NodeRef folder = null;
-
-		List<ChildAssociationRef> dictionaryAssocs = nodeService.getChildAssocs(
-				repository.getCompanyHome(),
-				ContentModel.ASSOC_CONTAINS,
-				QName.createQName(NamespaceService.APP_MODEL_1_0_URI, "dictionary"));
-
-		if (dictionaryAssocs.size() == 1) {
-			NodeRef parent = dictionaryAssocs.get(0).getChildRef();
-			folder = getFolder(parent, FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
-			if (folder == null) {
-                            try {
-                                folder = createFolder(parent, FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
-                            } catch (WriteTransactionNeededException ex) {
-                                logger.debug("Can't create folder.", ex );
-                                throw new RuntimeException(ex);
-                            }
-			}
+		NodeRef folder;
+		NodeRef nodeRef = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, FORMS_EDITOR_MODELS_DEPLOY_UUID);
+		if (nodeService.exists(nodeRef)) {
+			folder = nodeRef;
+		} else {
+			String msg = String.format("Node %s does not exist! Check bootstrap-forms-editor.xml", nodeRef);
+			throw new AlfrescoRuntimeException(msg);
 		}
-
 		return folder;
 	}
 

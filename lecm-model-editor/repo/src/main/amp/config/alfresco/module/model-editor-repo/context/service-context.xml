@@ -5,6 +5,20 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<bean parent="spacesStoreImporter">
+		<property name="useExistingStore" value="true"/>
+		<property name="bootstrapViews">
+			<list>
+				<props>
+					<prop key="uuidBinding">UPDATE_EXISTING</prop>
+					<prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}</prop>
+					<prop key="location">alfresco/module/${artifactId}/acp/bootstrap-forms-editor.xml</prop>
+					<prop key="messages">alfresco/module/${artifactId}/messages/bootstrap-forms-editor</prop>
+				</props>
+			</list>
+		</property>
+	</bean>
+<!-- *************************************************************************************************************** -->
 	<bean id="webscript.ru.it.lecm.namespaces.get" class="ru.it.lecm.NamespacesGet" parent="webscript">
       <property name="namespaceService" ref="NamespaceService"/>
 	</bean>
