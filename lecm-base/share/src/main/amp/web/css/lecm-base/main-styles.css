@@ -602,6 +602,9 @@ i.icon-building {
 .yui-skin-lecmTheme .form-container .form-fields .set {
     padding-bottom: 0;
 }
+.yui-skin-lecmTheme .form-container .form-fields {
+    border-bottom: none;
+}
 .yui-skin-lecmTheme .form-container .form-buttons {
     margin-left: 1em;
     padding: 0 1em 1em 190px;
