@@ -110,3 +110,6 @@
 #yui-main #arm-with-tree #yui-main-2 .orgstructure-dictionary-page .toolbar .header-bar {
     padding: 2px 0;
 }
+#yui-main #arm-with-tree #yui-main-2 .orgstructure-dictionary-page .toolbar .header-bar .right {
+    margin-right: 20px;
+}
