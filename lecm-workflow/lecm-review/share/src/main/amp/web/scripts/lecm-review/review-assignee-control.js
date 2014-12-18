@@ -29,6 +29,12 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 			when: 'keyup'
 		});
 
+		YAHOO.Bubbling.on('datagridVisible', function() {
+			YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
+			this.widgets.dataTable.subscribe("rowAddEvent", this.onRowChangeEvent, this, true);
+			this.widgets.dataTable.subscribe("rowDeleteEvent", this.onRowChangeEvent, this, true);
+		}, this);
+
 		this.initControl();
 
 		return this;
@@ -81,6 +87,9 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 				}
 			});
 
+		},
+		onRowChangeEvent: function() {
+			YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
 		},
 		onAddEmployeeButton: function () {
 			var addEmployeesDialog = new Alfresco.module.SimpleDialog(this.id + '-createAssigneeItemDialog'),
@@ -140,16 +149,13 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 		},
 		assigneesValidator: function (field, args, event, form) {
 			var controls = Alfresco.util.ComponentManager.find({name: 'LogicECM.module.Review.AssigneeControl'}),
-				me = controls ? controls[0] : null, result = true,
-				validatorFunction = function () {
-					var records = this.widgets.dataTable.getRecordSet().getRecords();
-					result = records && records.length > 0;
-				};
+				assigneeControl = controls && controls.length ? controls[0] : null,
+				result = false,
+				records;
 
-			if (me) {
-				validatorFunction.call(me);
-			} else {
-				result = false;
+			if (assigneeControl) {
+				records = assigneeControl.widgets.dataTable.getRecordSet().getRecords();
+				result = records && records.length > 0;
 			}
 
 			return result;
