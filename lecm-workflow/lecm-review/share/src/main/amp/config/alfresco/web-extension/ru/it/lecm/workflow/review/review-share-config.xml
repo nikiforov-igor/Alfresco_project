@@ -11,7 +11,9 @@
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDueDate" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="minLimitCurrentDate">true</control-param>
+						</control>
 					</field>
 					<field id="lecm-workflow:assigneesListAssoc">
 						<control template="/ru/it/lecm/workflow/review/controls/review-assignee-control.ftl"/>
