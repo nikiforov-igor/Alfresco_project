@@ -14,7 +14,7 @@ if (parentNode != null) {
     var values = parentNode.getChildren();
 
     for each(var item in values) {
-		if (item.isSubType(selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
+		if (isSubType(item, selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
             && orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
 	        branch.push({
 	            label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
@@ -27,6 +27,18 @@ if (parentNode != null) {
 	        });
 		}
     }
+}
+
+function isSubType(item, typesStr){
+    if (typesStr != null && typesStr !== "") {
+        var types = typesStr.split(",");
+        for (var i = 0; i < types.length; i++) {
+            if (types[i].length > 0 && item.isSubType(types[i])) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 model.branch = branch;

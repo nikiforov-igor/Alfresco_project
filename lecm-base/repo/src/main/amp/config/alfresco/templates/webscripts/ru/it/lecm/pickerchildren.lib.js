@@ -332,11 +332,11 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		}
 		else if (url.templateArgs.type == "authority")
 		{
-			if (argsSelectableType == "cm:person")
+			if (argsSelectableType == "cm:person" || argsSelectableType.indexOf("cm:person") > 0)
 			{
 				findUsers(argsSearchTerm, maxResults, results);
 			}
-			else if (argsSelectableType == "cm:authorityContainer")
+			else if (argsSelectableType == "cm:authorityContainer" || argsSelectableType.indexOf("cm:authorityContainer") > 0)
 			{
 				findGroups(argsSearchTerm, maxResults, results);
 			}
@@ -377,11 +377,18 @@ function getItemSelectableQuery(selectableType, showFolders, ctx) {
     var dictionaryService = ctx.getBean("dictionaryService");
     var namespaceService = ctx.getBean("namespaceService");
 
-    var typeQName = Packages.org.alfresco.service.namespace.QName.createQName(selectableType, namespaceService);
-
-    var isAspect = (dictionaryService.getAspect(typeQName) != null);
     if (selectableType !== null && selectableType !== "") {
-        selectable = (isAspect ? "ASPECT:" : "TYPE:") + "\"" + selectableType + "\"";
+        var types = selectableType.split(",");
+        for (var i = 0; i < types.length; i++) {
+            if (types[i].length > 0) {
+                var typeQName = Packages.org.alfresco.service.namespace.QName.createQName(types[i], namespaceService);
+                var isAspect = (dictionaryService.getAspect(typeQName) != null);
+                selectable = (selectable !== "" ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + "\"" + selectableType + "\"";
+            }
+        }
+        if (selectable !== "") {
+            selectable = "(" + selectable + ")";
+        }
     }
 
     selectable = selectable + (selectable !== "" ? " OR (" : "(")
@@ -393,12 +400,20 @@ function isItemSelectable(node, selectableType) {
     var selectable = true;
 
     if (selectableType !== null && selectableType !== "") {
-        selectable = node.isSubType(selectableType);
+        var types = selectableType.split(",");
+        for (var i = 0; i < types.length; i++) {
+            if (types[i].length > 0) {
+                selectable = node.isSubType(types[i]);
+                if (!selectable) {
+                    // the selectableType could also be an aspect,
+                    // if the node has that aspect it is selectable
+                    selectable = node.hasAspect(types[i]);
+                }
 
-        if (!selectable) {
-            // the selectableType could also be an aspect,
-            // if the node has that aspect it is selectable
-            selectable = node.hasAspect(selectableType);
+                if (selectable) {
+                    break;
+                }
+            }
         }
     }
 

@@ -217,7 +217,17 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         queryBuffer.append("PARENT:\"").append(parentRef).append("\"");
 
         if (childType != null && !childType.isEmpty()) {
-            queryBuffer.append(" AND TYPE:\"").append(childType).append("\"");
+            StringBuilder typesQuery = new StringBuilder();
+            String[] types = childType.split(",");
+            for (String type : types) {
+                if (typesQuery.length() > 0) {
+                    typesQuery.append(" OR ");
+                }
+                typesQuery.append("TYPE:\"").append(type).append("\"");
+            }
+            if (typesQuery.length() > 0) {
+                queryBuffer.append(" AND (").append(typesQuery.toString()).append(")");
+            }
         }
         queryBuffer.append(" AND NOT @lecm\\-dic\\:active:false");
         queryBuffer.append(")");
