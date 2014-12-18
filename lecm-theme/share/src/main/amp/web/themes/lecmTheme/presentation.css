@@ -2066,6 +2066,9 @@ span.person a div.description:empty {
 #alfresco-console .tools-link h2 {
     background-position: 3px 50%;
 }
+#alfresco-console .search-button button {
+    background: none;
+}
 #alfresco-repository .alfresco-twister-closed {
     background-position: 5px 50%;
 }
