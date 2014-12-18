@@ -338,7 +338,8 @@
 
 		<property name="repoFoldersUrls">
 			<list>
-				<value>workspace://SpacesStore/${spaces.company_home.childname}/app:dictionary/cm:Формы//*</value>
+				<value>workspace://SpacesStore/${spaces.company_home.childname}/app:dictionary/cm:Логика_ECM_Формы//*</value>
+				<value>workspace://SpacesStore/${spaces.company_home.childname}/app:dictionary/cm:LECM_Forms//*</value>
 			</list>
 		</property>
 	</bean>
