@@ -643,7 +643,7 @@ function getFilterParams(filterData, parentXPath)
 		var searchArray = searchTerm.split(" ");
 		var filter = "";
 		for (var j = 0; j < searchArray.length; j++) {
-			filter += "*" + searchArray[j] + "*";
+			filter += '"*' + searchArray[j] + '*"';
 			if (j < searchArray.length - 1) {
 				filter += " OR ";
 			}
