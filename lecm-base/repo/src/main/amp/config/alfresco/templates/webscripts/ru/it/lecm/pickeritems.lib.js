@@ -75,7 +75,7 @@ function getPickerItems() {
 					if (rootNodes.length > 0) {
 						var pathRoot = rootNodes[0];
 						var temp = result.parent;
-						while (temp != null && !temp.equals(pathRoot)) {
+						while (temp != null && temp.hasPermission("Read") && !temp.equals(pathRoot)) {
 							var pathNodeName;
 							if (argsPathNameSubstituteString != null) {
 								if (argsPathNameSubstituteString.length > 0) {
