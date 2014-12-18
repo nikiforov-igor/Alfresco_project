@@ -60,16 +60,18 @@
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							var dueDate = bpm_workflowDueDate;
-							task.setDueDate(dueDate);
-							review.assignTask(assignee, task);
-						]]></activiti:string>
-					</activiti:field>
-				</activiti:taskListener>
-				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
-					<activiti:field name="script">
-						<activiti:string><![CDATA[
-							review.reassignTask(assignee, task);
+							var currentAssignee = '' + task.getAssignee();
+							var previousAssignee = '' + task.getVariableLocal('previousAssignee');
+							if (previousAssignee != currentAssignee) {
+								task.setVariableLocal('previousAssignee', currentAssignee);
+								if (previousAssignee && previousAssignee != 'null') {
+									review.reassignTask(assignee, task);
+								} else {
+									var dueDate = bpm_workflowDueDate;
+									task.setDueDate(dueDate);
+									review.assignTask(assignee, task);
+								}
+							}
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
