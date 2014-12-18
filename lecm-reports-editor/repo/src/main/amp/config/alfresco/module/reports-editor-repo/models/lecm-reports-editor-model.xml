@@ -9,6 +9,7 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
     </imports>
 
     <namespaces>
@@ -147,6 +148,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>sys:temporary</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Описатель отчета -->
@@ -256,6 +260,7 @@
             </associations>
             <mandatory-aspects>
                 <aspect>lecm-rpeditor:reportExtFlagsAspect</aspect>
+                <aspect>sys:temporary</aspect>
             </mandatory-aspects>
         </type>
 
@@ -275,6 +280,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>sys:temporary</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Набор данных -->
@@ -288,6 +296,9 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
+            <mandatory-aspects>
+                <aspect>sys:temporary</aspect>
+            </mandatory-aspects>
         </type>
 
         <!-- Колонка данных -->
@@ -353,6 +364,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>sys:temporary</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 
