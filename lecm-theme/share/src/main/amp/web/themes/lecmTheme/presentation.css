@@ -2323,10 +2323,20 @@ div.currentValueDisplay,
   margin-right: 0;
 }
 
+.yui-skin-lecmTheme.alfresco-share .alf-header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+    padding: 1px 5px 5px;
+}
+.yui-skin-lecmTheme .alf-header div.dijitMenuItem span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 25px;
+}
 .alf-header div.dijitMenuItem span,
 .alf-header div.dijitMenuItem span.alf-menu-bar-label-node a {
-  line-height: 18px;
   font-family: arial, helvetica, sans-serif;
+}
+.yui-skin-lecmTheme.alfresco-share .alf-header .alf-menu-arrow {
+    width: 15px;
 }
 
 .alfresco-share .logo {
