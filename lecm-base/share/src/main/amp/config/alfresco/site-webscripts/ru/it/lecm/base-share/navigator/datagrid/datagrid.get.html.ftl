@@ -26,7 +26,7 @@
             ],
             datagridMeta: {
                 itemType: "cm:content",
-                useChildQuery: <#if isRoot >false<#else>true</#if>,
+                useChildQuery: false,
                 datagridFormId: "file-navigator",
                 <#if !isRoot && args.armSelectedNodeRef?? && args.armSelectedNodeRef != "">
                     nodeRef: "${args.armSelectedNodeRef}",
