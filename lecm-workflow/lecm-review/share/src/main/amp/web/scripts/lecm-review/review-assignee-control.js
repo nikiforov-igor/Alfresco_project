@@ -106,6 +106,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 					formId: 'addEmployeesToReview',
 					mode: 'create',
 					submitType: 'json',
+					ignoreNodes: this._getIgnoreNodes(),
 					showCancelButton: true
 				},
 				destroyOnHide: true,
@@ -156,6 +157,25 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 			if (assigneeControl) {
 				records = assigneeControl.widgets.dataTable.getRecordSet().getRecords();
 				result = records && records.length > 0;
+			}
+
+			return result;
+		},
+		_getIgnoreNodes: function() {
+			var i;
+
+			var dataTable = this.widgets.dataTable;
+			var recordSet = dataTable.getRecordSet();
+			var recordSetLg = recordSet.getLength();
+
+			var result = [];
+
+			if (recordSetLg === 0) {
+				return result;
+			}
+
+			for (i = 0; i < recordSetLg; i++) {
+				result.push(recordSet.getRecord(i).getData('itemData')['assoc_lecm-workflow_assignee-employee-assoc'].value);
 			}
 
 			return result;
