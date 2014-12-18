@@ -136,6 +136,12 @@ i.icon-building {
 
 /* Common styles - end */
 
+/* Домашняя страница - start */
+.dcolumn .dcolumn {
+    margin-top: 0;
+}
+/* Домашняя страница - end */
+
 /* Оформление окон - start */
 .yui-skin-lecmTheme .yui-panel,
 .yui-skin-lecmTheme .dijitDialog {
