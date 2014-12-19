@@ -11,7 +11,7 @@
 							<xs:element name="name" type="xs:string"></xs:element>
 							<xs:element name="name-genitive" type="xs:string" minOccurs="0"></xs:element>
 							<xs:element name="name-dative" type="xs:string" minOccurs="0"></xs:element>
-							<xs:element name="code" type="xs:string"></xs:element>
+							<xs:element name="code" type="xs:string" minOccurs="0"></xs:element>
 						</xs:all>
 					</xs:complexType>
 				</xs:element>

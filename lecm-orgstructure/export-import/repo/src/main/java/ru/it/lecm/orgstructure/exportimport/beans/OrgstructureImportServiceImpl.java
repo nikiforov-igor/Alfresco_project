@@ -47,9 +47,9 @@ import ru.it.lecm.orgstructure.exportimport.entity.StaffList;
  *
  * @author vlevin
  */
-public class OrstructureImportServiceImpl extends BaseBean implements OrgstructureImportService {
+public class OrgstructureImportServiceImpl extends BaseBean implements OrgstructureImportService {
 
-	private final static Logger logger = LoggerFactory.getLogger(OrstructureImportServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(OrgstructureImportServiceImpl.class);
 
 	private OrgstructureBean orgstructureService;
 	private BusinessJournalService businessJournalService;

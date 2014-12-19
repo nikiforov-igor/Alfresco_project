@@ -16,7 +16,7 @@
 	<bean id="orgstructure.export-import.import.service" parent="baseBean"
 		  init-method="init"
 		  depends-on="orgstructure.export-import.model.bootstrap"
-		  class="ru.it.lecm.orgstructure.exportimport.beans.OrstructureImportServiceImpl"
+		  class="ru.it.lecm.orgstructure.exportimport.beans.OrgstructureImportServiceImpl"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:dictionaryService-ref="serviceDictionary"
