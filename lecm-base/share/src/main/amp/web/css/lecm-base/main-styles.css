@@ -140,6 +140,13 @@ i.icon-building {
 .dcolumn .dcolumn {
     margin-top: 0;
 }
+.customise-dashlets div.used div.noOfColumns4 div.column,
+.customise-dashlets div.used div.noOfColumns4 div.column li.usedDashlet {
+    width: 15em;
+}
+.customise-dashlets div.used div.noOfColumns4 div.column ul.usedList {
+    width: 15.5em;
+}
 /* Домашняя страница - end */
 
 /* Оформление окон - start */
