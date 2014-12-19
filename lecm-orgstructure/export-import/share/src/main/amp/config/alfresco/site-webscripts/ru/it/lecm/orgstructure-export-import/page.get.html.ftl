@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
-		<h2>Эспорт</h2>
+		<h2>Экспорт</h2>
 		<a href="/share/proxy/alfresco/lecm/ogstructure/export/positions">Штатные позиции (positions)</a>
 		<br>
 		<a href="/share/proxy/alfresco/lecm/ogstructure/export/employees">Сотрудники (employees)</a>
