@@ -55,6 +55,7 @@
 					<field id="bpm:comment">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
+							<control-param name="containerStyleClass">hidden</control-param>
 						</control>
 					</field>
 					<field id="lecmSign2:bpmCommentValidator">

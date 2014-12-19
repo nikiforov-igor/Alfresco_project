@@ -23,9 +23,12 @@
 	function commentValidation (field, args, event, form) {
 		var valid = false;
 		var status = form.getFormData()['prop_lecmSign2_decision'];
+		var commentContainer = field.parentNode.parentNode.parentNode;
 		if (status === 'REJECTED') {
+			YAHOO.util.Dom.removeClass(commentContainer, "hidden");
 			valid = form.getFormData()['prop_bpm_comment'] != '';
 		} else {
+			YAHOO.util.Dom.addClass(commentContainer, "hidden");
 			valid = true;
 		}
 		return valid;

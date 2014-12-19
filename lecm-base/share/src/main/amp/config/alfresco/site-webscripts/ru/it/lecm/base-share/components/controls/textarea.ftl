@@ -64,7 +64,7 @@
 })();
 //]]></script>
 
-<div class="control textarea editmode">
+<div class="control textarea editmode <#if field.control.params.containerStyleClass??>${field.control.params.containerStyleClass}</#if>">
     <div class="label-div">
         <label for="${fieldHtmlId}">
             ${field.label?html}:
