@@ -29,14 +29,14 @@ public class FormsInfoElementReader implements ConfigElementReader{
 		}
 
 		FormsInfoConfigElement result = new FormsInfoConfigElement();
+		FormTypeElementReader typeReader = new FormTypeElementReader();
+		FormLayoutElementReader layoutReader = new FormLayoutElementReader();
 
 		for(Object obj : element.elements(FORM_TYPE_ELEMENT_ID)) {
-			FormTypeElementReader typeReader = new FormTypeElementReader();
 			FormTypeConfigElement type = (FormTypeConfigElement) typeReader.parse((Element) obj);
 			result.addFormType(type);
 		}
 		for(Object obj : element.elements(FORM_LAYOUT_ID)){
-			FormLayoutElementReader layoutReader = new FormLayoutElementReader();
 			FormLayoutConfigElement layout = (FormLayoutConfigElement) layoutReader.parse((Element) obj);
 			result.addFormLayout(layout);
 		}

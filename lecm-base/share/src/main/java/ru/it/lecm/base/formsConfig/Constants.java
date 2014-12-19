@@ -18,6 +18,7 @@ public final class Constants {
 	public static final String FORM_TYPE_ELEMENT_ID = "form-type";
 	public static final String FORM_LAYOUT_ID = "form-layout";
 	public static final String FORMS_INFO_ID = "forms-info";
+	public static final String CONTROLS_TEMPLATES_ELEMENT_ID = "controls-templates";
 
 	public static final String ATTR_ID = "id";
 	public static final String ATTR_TEMPLATE = "template";
@@ -26,6 +27,8 @@ public final class Constants {
 	public static final String ATTR_VISIBLE = "visible";
 	public static final String ATTR_EVALUATOR_TYPE = "evaluatorType";
 	public static final String ATTR_FORM_ID = "formId";
+	public static final String ATTR_DEFAULT = "default";
+	public static final String ATTR_DESCRIPTION = "description";
 
 	public static final String OBJECT_ELEMENT_ID = "cm:object";
 

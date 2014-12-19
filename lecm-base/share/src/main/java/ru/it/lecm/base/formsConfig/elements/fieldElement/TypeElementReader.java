@@ -30,9 +30,9 @@ public class TypeElementReader implements ConfigElementReader{
 		result.setId(element.attributeValue(ATTR_ID));
 		result.setLocalName(element.attributeValue(ATTR_LOCAL_NAME));
 
+		ControlElementReader reader = new ControlElementReader();
 		for(Object obj : element.elements(CONTROL_ELEMENT_ID)){
 			ControlConfigElement controlElement = new ControlConfigElement();
-			ControlElementReader reader = new ControlElementReader();
 			controlElement = (ControlConfigElement) reader.parse((Element) obj);
 			result.addControl(controlElement);
 		}

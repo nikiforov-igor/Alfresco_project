@@ -30,6 +30,7 @@ public class ControlElementReader implements ConfigElementReader{
 		result.setId(element.attributeValue(ATTR_ID));
 		result.setDisplayName(element.attributeValue(ATTR_LOCAL_NAME));
 		result.setTemplatePath(element.attributeValue(ATTR_TEMPLATE));
+		result.setDefaultControl(Boolean.parseBoolean(element.attributeValue(ATTR_DEFAULT)));
 
 		for(Object obj : element.elements(PARAM_ELEMENT_ID)) {
 			Element param = (Element) obj;
@@ -39,6 +40,7 @@ public class ControlElementReader implements ConfigElementReader{
 			paramObject.setMandatory(Boolean.parseBoolean(param.attributeValue(ATTR_MANDATORY)));
 			paramObject.setVisible(Boolean.parseBoolean(param.attributeValue(ATTR_VISIBLE)));
 			paramObject.setValue((String) param.getData());
+			paramObject.setDescription(param.attributeValue(ATTR_DESCRIPTION));
 			result.addParam(paramObject);
 		}
 

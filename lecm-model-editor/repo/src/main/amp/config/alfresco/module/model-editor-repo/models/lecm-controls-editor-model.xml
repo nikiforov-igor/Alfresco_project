@@ -16,6 +16,7 @@
 	<types>
 		<type name="lecm-controls-editor:control">
 			<parent>cm:folder</parent>
+			<archive>false</archive>
 			<properties>
 				<property name="lecm-controls-editor:control-id">
 					<type>d:text</type>
@@ -40,6 +41,7 @@
 		</type>
 		<type name="lecm-controls-editor:control-param">
 			<parent>cm:content</parent>
+			<archive>false</archive>
 			<properties>
 				<property name="lecm-controls-editor:param-id">
 					<type>d:text</type>

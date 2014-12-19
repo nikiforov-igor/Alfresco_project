@@ -1,0 +1,147 @@
+<!--
+ В этом конфиге будут описаны шаблоны настройки всех контролов которые есть в бизнес платформе
+ На момент написания конфига (18.12.2014) в платформе было найдено 132 контрола.
+ Все они должны быть описаны здесь
+ Опираясь на этот конфиг, редактор контролов будет позволять кастомизировать настройки контролов,
+ генерить файлы подобные controls.xml и использовать уже их в редакторе форм с предзаполненными параметрами
+ controls-templates.xml -> controls.xml -> share-config-custom.xml
+ Этот конфиг управляется тем же механизмом что и controls.xml, а также любой из share-config-custom.xml
+
+ Формат описания контролов в этом файле следующий
+ <control [id="string"] [template="path|string"] [localName="string"]>
+ 	<param [id="string"] [localName="string"] [description="string"] [mandatory="boolean"]>value|string</param>
+ </control>
+
+ Атрибуты контрола
+	id			обязательный атрибут типа string,
+				заполняется только в этом конфиге из интерфейса не меняется,
+				атрибут для внутреннего использования
+				должен быть уникален для каждого контрола
+
+	template	обязательный атрибут типа string,
+				заполняется только в этом конфиге из интерфейса не меняется,
+				в нем нужно указывать путь до ftl-ки с описанием контрола
+
+	localName	обязательный атрибут типа string,
+				заполняется в пользовательском интерфейсе при настройке контролов
+				так как может быть несколько контролов использующих один и тотже template, но с разными параметрами
+				человекочитаемое имя для контрола, чтобы было понятно что это за контрол
+
+ Атрибуты параметра контрола
+	id			обязательный атрибут типа string
+				заполняется только в этом конфиге из интерфейса не меняется
+				в рамках одного контрола все параметры должны иметь разные ИДшники
+
+	localName	обязательный атрибут типа string,
+				заполняется только в этом конфиге из интерфейса не меняется,
+				человекочитаемое имя для параметра контрола
+
+	description	необязательный атрибут типа string,
+				заполняется только в этом конфиге из интерфейса не меняется,
+				если этот атрибут заполнен, то в пользовательском интерфейсе будет сгенерирован tooltip
+				tooltip покажет назначение этого параметра
+
+	mandatory	необязательный атрибут типа boolean
+				может быть заполнен как здесь, так и в пользовательском интерфейсе
+				с помощью этого атрибута можно указать какие параметры обязательны для заполнения а какие нет
+-->
+<alfresco-config>
+	<plug-ins>
+		<element-readers>
+			<element-reader element-name="controls-templates" class="ru.it.lecm.base.formsConfig.elements.controlsTemplatesElement.ControlsTemplatesReader"/>
+		</element-readers>
+	</plug-ins>
+	<config>
+		<controls-templates>
+			<control id="association-tree-picker" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+				<param id="plane" localName="Плоский"/>
+				<param id="defaultValue" localName="Значение по умолчанию"/>
+				<param id="showCreateNewLink" localName="Показывать ссылку создания"/>
+				<param id="showCreateNewButton" localName="Показывать кнопку создания"/>
+				<param id="showSelectedItemsPath" localName=""/>
+				<param id="showSearch" localName="Показывать строку поиска"/>
+				<param id="showViewIncompleteWarning" localName=""/>
+				<param id="showAssocViewForm" localName=""/>
+				<param id="checkType" localName=""/>
+				<param id="forceEditable" localName=""/>
+				<param id="selectedValueContextProperty" localName=""/>
+				<param id="selectedItemsFormArgs" localName=""/>
+				<param id="rootLocation" localName="Корневая директория" mandatory="true"/>
+				<param id="nameSubstituteString" localName=""/>
+				<param id="sortProp" localName=""/>
+				<param id="selectedItemsNameSubstituteString" localName=""/>
+				<param id="treeNodeSubstituteString" localName=""/>
+				<param id="treeNodeTitleSubstituteString" localName=""/>
+				<param id="rootNodeRef" localName=""/>
+				<param id="treeItemType" localName=""/>
+				<param id="changeItemsFireAction" localName=""/>
+				<param id="createNewMessage" localName=""/>
+				<param id="createNewMessageId" localName=""/>
+				<param id="createDialogClass" localName=""/>
+				<param id="defaultValueDataSource" localName=""/>
+				<param id="useStrictFilterByOrg" localName=""/>
+				<param id="childrenDataSource" localName=""/>
+				<param id="fireAction" localName=""/>
+				<param id="endpointType" localName=""/>
+			</control>
+			<control id="association-autocomplete-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+				<param id="defaultValue" localName="Значение по умолчанию"/>
+				<param id="autoCompleteJsName" localName=""/>
+				<param id="treeViewJsName" localName=""/>
+				<param id="defaultValueContextProperty" localName=""/>
+				<param id="selectedItemsFormArgs" localName=""/>
+				<param id="showCreateNewLink" localName="Показывать ссылку создания"/>
+				<param id="showCreateNewButton" localName="Показывать кнопку создания"/>
+				<param id="showSearch" localName="Показывать строку поиска"/>
+				<param id="showViewIncompleteWarning" localName=""/>
+				<param id="useDynamicLoading" localName=""/>
+				<param id="showMandatoryIndicator" localName=""/>
+				<param id="isFieldMandatory" localName=""/>
+				<param id="checkType" localName=""/>
+				<param id="forceEditable" localName=""/>
+				<param id="allowedNodesScript" localName=""/>
+				<param id="endpointMany" localName=""/>
+				<param id="lazyLoading" localName=""/>
+				<param id="parentNodeRef" localName=""/>
+				<param id="startLocation" localName="Корневая директория" mandatory="true"/>
+				<param id="itemType" localName=""/>
+				<param id="maxSearchResults" localName=""/>
+				<param id="selectedItemsNameSubstituteString" localName=""/>
+				<param id="childrenDataSource" localName=""/>
+				<param id="defaultValueDataSource" localName=""/>
+				<param id="useStrictFilterByOrg" localName=""/>
+				<param id="nameSubstituteString" localName=""/>
+				<param id="additionalFilter" localName=""/>
+				<param id="showAssocViewForm" localName=""/>
+				<param id="changeItemsFireAction" localName=""/>
+				<param id="sortProp" localName=""/>
+				<param id="employeeAbsenceMarker" localName=""/>
+				<param id="createNewMessage" localName=""/>
+				<param id="createNewMessageId" localName=""/>
+			</control>
+			<control id="association-select-one-control" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+				<param id="defaultValue" localName=""/>
+				<param id="defaultValueContextProperty" localName=""/>
+				<param id="showCreateNewButton" localName=""/>
+				<param id="notSelectedOptionShow" localName=""/>
+				<param id="mandatory" localName=""/>
+				<param id="forceEditable" localName=""/>
+				<param id="notSelectedOptionLabel" localName=""/>
+				<param id="notSelectedOptionLabelCode" localName=""/>
+				<param id="parentNodeRef" localName=""/>
+				<param id="startLocation" localName=""/>
+				<param id="endpointType" localName=""/>
+				<param id="maxSearchResults" localName=""/>
+				<param id="nameSubstituteString" localName=""/>
+				<param id="sortProp" localName=""/>
+				<param id="additionalFilter" localName=""/>
+				<param id="customDatasource" localName=""/>
+				<param id="primaryCascading" localName=""/>
+				<param id="changeItemsFireAction" localName=""/>
+				<param id="defaultValueDataSource" localName=""/>
+				<param id="forceMultiple" localName=""/>
+				<param id="size" localName=""/>
+			</control>
+		</controls-templates>
+	</config>
+</alfresco-config>

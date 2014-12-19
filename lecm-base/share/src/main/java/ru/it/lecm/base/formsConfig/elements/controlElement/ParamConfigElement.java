@@ -34,6 +34,9 @@ public class ParamConfigElement extends ConfigElementAdapter{
 	@JsonProperty
 	private boolean visible;
 
+	@JsonProperty
+	private String description;
+
 	public ParamConfigElement(String name) {
 		super(name);
 	}
@@ -79,6 +82,14 @@ public class ParamConfigElement extends ConfigElementAdapter{
 
 	public void setMandatory(boolean mandatory) {
 		this.mandatory = mandatory;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/*

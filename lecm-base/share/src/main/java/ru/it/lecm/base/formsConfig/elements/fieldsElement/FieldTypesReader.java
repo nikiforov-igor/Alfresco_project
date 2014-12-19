@@ -29,9 +29,9 @@ public class FieldTypesReader implements ConfigElementReader {
 
 		FieldTypesConfigElement result = new FieldTypesConfigElement();
 
+		TypeElementReader reader = new TypeElementReader();
 		for (Object obj : element.elements(FIELD_TYPE_ELEMENT_ID)) {
 			TypeConfigElement typeElement;
-			TypeElementReader reader = new TypeElementReader();
 			typeElement = (TypeConfigElement) reader.parse((Element) obj);
 			result.addType(typeElement);
 		}
