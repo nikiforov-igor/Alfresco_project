@@ -1,6 +1,8 @@
 package ru.it.lecm.orgstructure.exportimport.webscripts;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.exportimport.beans.OrgstructureImportService;
 import ru.it.lecm.orgstructure.exportimport.entity.BusinessRoles;
 import ru.it.lecm.orgstructure.exportimport.entity.CreatedItems;
@@ -16,6 +18,8 @@ import ru.it.lecm.orgstructure.exportimport.entity.StaffList;
 public class ImportOrgstructureXMLRunner implements AuthenticationUtil.RunAsWork<Object>, Runnable {
 
 	private final OrgstructureImportService orgstructureImportService;
+
+	private final static Logger logger = LoggerFactory.getLogger(ImportOrgstructureXMLRunner.class);
 
 	private final Employees employees;
 	private final Departments departments;
@@ -36,24 +40,28 @@ public class ImportOrgstructureXMLRunner implements AuthenticationUtil.RunAsWork
 
 	@Override
 	public Object doWork() throws Exception {
-		if (positions != null) {
-			orgstructureImportService.importPositions(positions, createdItems);
-		}
+		try {
+			if (positions != null) {
+				orgstructureImportService.importPositions(positions, createdItems);
+			}
 
-		if (employees != null) {
-			orgstructureImportService.importEmployees(employees, createdItems);
-		}
+			if (employees != null) {
+				orgstructureImportService.importEmployees(employees, createdItems);
+			}
 
-		if (departments != null) {
-			orgstructureImportService.importDepartments(departments, createdItems);
-		}
+			if (departments != null) {
+				orgstructureImportService.importDepartments(departments, createdItems);
+			}
 
-		if (staffList != null) {
-			orgstructureImportService.importStaff(staffList, createdItems);
-		}
+			if (staffList != null) {
+				orgstructureImportService.importStaff(staffList, createdItems);
+			}
 
-		if (businessRoles != null) {
-			orgstructureImportService.importBusinessRoles(businessRoles, createdItems);
+			if (businessRoles != null) {
+				orgstructureImportService.importBusinessRoles(businessRoles, createdItems);
+			}
+		} catch (Exception ex) {
+			logger.error("Error!", ex);
 		}
 
 		return null;

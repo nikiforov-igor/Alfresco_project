@@ -269,25 +269,25 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							return false;
 						}
 
-						String firstName = StringUtils.trim(employee.getFirstname());
+						String firstName = StringUtils.trimToNull(employee.getFirstname());
 						if (firstName == null) {
 							logger.error("Невозможно выполнить импорт сотрудника {}: имя не указано", employee);
 							return false;
 						}
 
-						String lastName = StringUtils.trim(employee.getLastname());
+						String lastName = StringUtils.trimToNull(employee.getLastname());
 						if (lastName == null) {
 							logger.error("Невозможно выполнить импорт сотрудника {}: фамилия не указана", employee);
 							return false;
 						}
 
-						String middleName = StringUtils.trim(employee.getMiddlename());
+						String middleName = StringUtils.trimToNull(employee.getMiddlename());
 						if (middleName == null) {
 							logger.error("Невозможно выполнить импорт сотрудника {}: отчество не указано", employee);
 							return false;
 						}
 
-						String email = employee.getEmail();
+						String email = StringUtils.trimToNull(employee.getEmail());
 						if (email == null) {
 							logger.error("Невозможно выполнить импорт сотрудника {}: электронный адрес не указан", employee);
 							return false;
@@ -418,14 +418,14 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							return false;
 						}
 
-						String nameFull = StringUtils.trim(depart.getNameFull());
-						String nameShort = StringUtils.trim(depart.getNameShort());
+						String nameFull = StringUtils.trimToNull(depart.getNameFull());
+						String nameShort = StringUtils.trimToNull(depart.getNameShort());
 						if (nameFull == null || nameShort == null) {
 							logger.error("Невозможно выполнить импорт департамента {}: имя не указано", depart);
 							return false;
 						}
 
-						String code = StringUtils.trim(depart.getCode());
+						String code = StringUtils.trimToNull(depart.getCode());
 						if (code == null) {
 							logger.error("Невозможно выполнить импорт департамента {}: код подразделения не указан", depart);
 							return false;
@@ -511,12 +511,15 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 			while (iterator.hasNext()) {
 				Department depart = iterator.next();
 				String deptPid = depart.getPid();
+				String deptId = depart.getId();
 
-				// первое условие нужно для проверки на null
-				if (deptPid.equals(currentPid)) {
+				if (deptPid == null || deptId == null) {
+					depart.setSortWeigth(999999999);
+					iterator.remove();
+				} else if (deptPid.equals(currentPid)) {
 					depart.setSortWeigth(currentWeigth);
-					if (!pids.contains(depart.getId())) {
-						pids.addLast(depart.getId());
+					if (!pids.contains(deptId)) {
+						pids.addLast(deptId);
 					}
 					iterator.remove();
 				}
@@ -590,8 +593,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						if (employeeId != null) {
 							employeeNode = getValueFromTwoMaps(employeeId, newlyCreatedEmployees, existingEmployees);
 							if (employeeNode == null) {
-								logger.error("Невозможно выполнить импорт штатного расписания {}: сотрудник не найден", staff);
-								return false;
+								logger.warn("В штатном расписании {} сотрудник не найден", staff);
 							}
 						}
 
@@ -603,7 +605,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 
 						NodeRef positionNode = getValueFromTwoMaps(positionId, newlyCreatedPositions, existingPositions);
 						if (positionNode == null) {
-							logger.error("Невозможно выполнить импорт штатного расписания {}: сотрудник не найден", staff);
+							logger.error("Невозможно выполнить импорт штатного расписания {}: штатная позиция не найдена", staff);
 							return false;
 						}
 
@@ -689,8 +691,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							NodeRef departmentNode = getValueFromTwoMaps(departmentID, newlyCreatedDepartments, existingDepartments);
 
 							if (departmentNode == null) {
-								logger.error("Невозможно выполнить импорт бизнес-роли {}: подразделение ({}) не найдено", businessRole, departmentID);
-								return false;
+								logger.warn("В бизнес-роли {} подразделение ({}) не найдено", businessRole, departmentID);
 							} else {
 								departmentNodes.add(departmentNode);
 							}
@@ -702,8 +703,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							NodeRef employeeNode = getValueFromTwoMaps(employeeID, newlyCreatedEmployees, existingEmployees);
 
 							if (employeeNode == null) {
-								logger.error("Невозможно выполнить импорт бизнес-роли {}: сотрудник ({}) не найден", businessRole, employeeID);
-								return false;
+								logger.warn("В бизнес-роли {} сотрудник ({}) не найден", businessRole, employeeID);
 							} else {
 								employeeNodes.add(employeeNode);
 							}
@@ -714,8 +714,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						for (String staffID : staffIDs) {
 							NodeRef staffNode = getValueFromTwoMaps(staffID, newlyCreatedStaff, existingStaff);
 							if (staffNode == null) {
-								logger.error("Невозможно выполнить импорт бизнес-роли {}: штатное расписание ({}) не найдено", businessRole, staffID);
-								return false;
+								logger.error("В бизнес-роли {} штатное расписание ({}) не найдено", businessRole, staffID);
 							} else {
 								staffNodes.add(staffNode);
 							}

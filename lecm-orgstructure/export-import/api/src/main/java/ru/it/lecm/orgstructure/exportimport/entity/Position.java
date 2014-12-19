@@ -42,7 +42,7 @@ public class Position {
 	protected String nameGenitive;
 	@XmlElement(name = "name-dative", namespace = "http://www.it.ru/logicECM/orgstructure/export-import/positions/1.0")
 	protected String nameDative;
-	@XmlElement(required = true, namespace = "http://www.it.ru/logicECM/orgstructure/export-import/positions/1.0")
+	@XmlElement(namespace = "http://www.it.ru/logicECM/orgstructure/export-import/positions/1.0")
 	protected String code;
 
 	/**

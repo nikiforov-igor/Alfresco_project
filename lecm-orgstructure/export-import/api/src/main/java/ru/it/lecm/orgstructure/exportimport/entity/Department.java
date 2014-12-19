@@ -57,7 +57,7 @@ public class Department {
 	@XmlElement(required = true, namespace = "http://www.it.ru/logicECM/orgstructure/export-import/departments/1.0")
 	protected String type;
 	@XmlTransient
-	protected Integer sortWeigth = null;
+	protected int sortWeigth = 999999999;
 
 	/**
 	 * Gets the value of the id property.
