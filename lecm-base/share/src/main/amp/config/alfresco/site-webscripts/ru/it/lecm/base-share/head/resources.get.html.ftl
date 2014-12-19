@@ -29,4 +29,5 @@
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="lecm-head-resources"/>
 	<#-- Исправление баги alfresco: при некоторых условиях во время добавления тега страница перезагружается -->
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/alfresco/tag-editor-fix.js" group="lecm-head-resources"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/constraints/regex-color-validator.js" group="lecm-head-resources"/>
 </@>
