@@ -45,7 +45,6 @@
 
         YAHOO.lang.augmentObject(LogicECM.module.OrgStructure.DictionaryToolbar.prototype, {
             onSearchClick: function (e, obj) {
-                debugger;
                 var searchTerm = Dom.get(this.id + "-full-text-search").value;
 
                 var maySearch = this.options.minSTermLength == null || this.options.minSTermLength <= 0 || searchTerm.length == 0;
