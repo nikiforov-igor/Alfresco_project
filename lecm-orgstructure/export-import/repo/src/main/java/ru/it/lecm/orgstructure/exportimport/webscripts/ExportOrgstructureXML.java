@@ -2,6 +2,9 @@ package ru.it.lecm.orgstructure.exportimport.webscripts;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -17,6 +20,9 @@ public class ExportOrgstructureXML extends AbstractWebScript {
 
 	private OrgstructureExportService orgstructureExportService;
 
+	private final static String CONTENT_DISPOSITION_HEADER_FORMAT = "attachment; filename=orgstructure-export-%s-%s.xml";
+	private final static String TIMESTAMP_DATEFORMAT = "yyMMddHHmmss";
+
 	public void setOrgstructureExportService(OrgstructureExportService orgstructureExportService) {
 		this.orgstructureExportService = orgstructureExportService;
 	}
@@ -26,9 +32,12 @@ public class ExportOrgstructureXML extends AbstractWebScript {
 		final String requestPath = req.getPathInfo();
 		final String invocationMode = StringUtils.substringAfterLast(requestPath, "/");
 
+		final Date now = new Date();
+		final DateFormat dateFormat = new SimpleDateFormat(TIMESTAMP_DATEFORMAT);
+
 		res.setContentEncoding("UTF-8");
 		res.setContentType("text/xml");
-		res.addHeader("Content-Disposition", "attachment; filename=orgstructure-export-" + invocationMode + ".xml");
+		res.addHeader("Content-Disposition", String.format(CONTENT_DISPOSITION_HEADER_FORMAT, invocationMode, dateFormat.format(now)));
 
 		OutputStream outputStream = res.getOutputStream();
 
