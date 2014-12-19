@@ -175,7 +175,8 @@
             'modules/document-details/historic-properties-viewer.css',
             'yui/treeview/assets/skins/sam/treeview.css',
             'components/data-lists/toolbar.css',
-            'css/lecm-orgstructure/orgstructure-tree.css'
+            'css/lecm-orgstructure/orgstructure-tree.css',
+            'css/lecm-orgstructure/orgstructure-arm-tree.css'
         ], initComponents);
     }
 
