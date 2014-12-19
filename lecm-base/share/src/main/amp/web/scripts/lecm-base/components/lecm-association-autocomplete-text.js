@@ -101,6 +101,10 @@ LogicECM.module = LogicECM.module || {};
 				if (changeValue != "") {
 					Dom.get(this.currentValueHtmlId).value = changeValue;
 				}
+
+				if (this.options.mandatory) {
+					YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+				}
 			},
 
 			makeAutocomplete: function() {
