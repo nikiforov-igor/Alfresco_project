@@ -88,12 +88,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	public ScriptNode getSettingsNode() {
 //		TODO: Метод getSettingsNode ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
 //		существование и создать при необходимости
-//              нода создаётся при инициализации бина            
+//              нода создаётся при инициализации бина
 		NodeRef settings = errandsService.getSettingsNode();
 		return new ScriptNode(settings, serviceRegistry, getScope());
 	}
 
-        
+
         //TODO может быть создавать ноду с настройками при создании пользователя?
         //Пока будем создавать здесь - при входе в персональные настройки.
 
@@ -191,7 +191,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 //		TODO: Метод getDefaultSubject в итоге вызывает метод getCurrentUserSettingsNode,
 //		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
 //		при необходимости создать её в короткой транзакции
-//              Здесь создавать её необходимости нет.             
+//              Здесь создавать её необходимости нет.
 //		if(errandsService.getCurrentUserSettingsNode() == null) {
 //			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
 //
@@ -400,6 +400,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         if (NodeRef.isNodeRef(parent)) {
             NodeRef parentRef = new NodeRef(parent);
             QName type = nodeService.getType(parentRef);
+			Scriptable result = null;
             if (type.equals(ErrandsService.TYPE_ERRANDS)) {
                 Set<NodeRef> employees = new HashSet<NodeRef>();
                 //соисполнители - подходят!
@@ -413,8 +414,14 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                     List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(bossRef.get(0).getTargetRef());
                     employees.addAll(departmentEmployees);
                 }
-                return createScriptable(new ArrayList<NodeRef>(employees));
-            }
+                result = createScriptable(new ArrayList<>(employees));
+            } else {
+				List<NodeRef> availableExecutors = errandsService.getAvailableExecutors();
+				if (availableExecutors != null) {
+					result = createScriptable(availableExecutors);
+				}
+			}
+			return result;
         }
         return null;
     }
