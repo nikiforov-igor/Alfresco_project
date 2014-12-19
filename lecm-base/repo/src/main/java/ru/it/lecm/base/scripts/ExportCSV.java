@@ -9,13 +9,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.base.beans.SubstitudeBean;
 
+import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -69,7 +72,8 @@ public class ExportCSV extends AbstractWebScript {
 
 			res.setContentEncoding("UTF-8");
 			res.setContentType("text/csv");
-			res.addHeader("Content-Disposition", "attachment; filename=" + ((fileName != null && !fileName.isEmpty()) ? fileName : "dictionary") + ".csv");
+			String fileNameFinal = ((fileName != null && !fileName.isEmpty()) ? URLDecoder.decode(fileName, "UTF-8") : "dictionary") + ".csv";
+			res.addHeader("Content-Disposition", "filename=\"" + MimeUtility.encodeWord(fileNameFinal, "utf-8", "Q") + "\"");
 			// Create an XML stream writer
 			resOutputStream = res.getOutputStream();
 
