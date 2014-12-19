@@ -2329,6 +2329,13 @@ div.currentValueDisplay,
 .yui-skin-lecmTheme.alfresco-share .alf-header .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
     padding: 1px 5px 5px;
 }
+.yui-skin-lecmTheme.alfresco-share .alf-header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem {
+    padding: 3px 2px 0;
+    margin-right: 2px;
+}
+.yui-skin-lecmTheme.alfresco-share .alf-header .alf-search-box .dijitReset.dijitInline.dijitMenuItemLabel.dijitMenuItem.dijitMenuItemHover {
+    background: #cbcbcb;
+}
 .yui-skin-lecmTheme .alf-header div.dijitMenuItem span {
     display: inline-block;
     vertical-align: middle;
@@ -2339,7 +2346,7 @@ div.currentValueDisplay,
   font-family: arial, helvetica, sans-serif;
 }
 .yui-skin-lecmTheme.alfresco-share .alf-header .alf-menu-arrow {
-    width: 15px;
+    width: 12px;
 }
 
 .alfresco-share .logo {
