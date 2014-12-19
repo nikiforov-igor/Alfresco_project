@@ -131,7 +131,7 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
                 }
                 unit.put(LABEL, formattedString);
                 unit.put(TITLE, formattedString);
-                unit.put(IS_LEAF, !orgstructureService.hasOrgChilds(child, false));
+                unit.put(IS_LEAF, !orgstructureService.hasOrgChilds(child, true));
                 unit.put(EXPAND, child.equals(rootUnit));
                 units.add(unit);
             } catch (JSONException e) {
