@@ -96,6 +96,7 @@
         <type name="lecm-rpeditor:reportTemplate">
             <title>Report Template</title>
             <parent>cm:cmobject</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-rpeditor:templateCode">
                     <title>Template Code</title>
@@ -148,15 +149,13 @@
                     </target>
                 </association>
             </associations>
-            <mandatory-aspects>
-                <aspect>sys:temporary</aspect>
-            </mandatory-aspects>
         </type>
 
         <!-- Описатель отчета -->
         <type name="lecm-rpeditor:reportDescriptor">
             <title>Report Descriptor</title>
             <parent>cm:folder</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-rpeditor:reportCode">
                     <title>Report Code</title>
@@ -260,13 +259,13 @@
             </associations>
             <mandatory-aspects>
                 <aspect>lecm-rpeditor:reportExtFlagsAspect</aspect>
-                <aspect>sys:temporary</aspect>
             </mandatory-aspects>
         </type>
 
         <type name="lecm-rpeditor:subReportDescriptor">
             <title>Sub Report Descriptor</title>
             <parent>lecm-rpeditor:reportDescriptor</parent>
+            <archive>false</archive>
             <associations>
                 <association name="lecm-rpeditor:parentReportTemplateAssoc">
                     <source>
@@ -280,15 +279,13 @@
                     </target>
                 </association>
             </associations>
-            <mandatory-aspects>
-                <aspect>sys:temporary</aspect>
-            </mandatory-aspects>
         </type>
 
         <!-- Набор данных -->
         <type name="lecm-rpeditor:reportDataSource">
             <title>Data Source</title>
             <parent>cm:folder</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-rpeditor:dataSourceCode">
                     <title>Code</title>
@@ -296,15 +293,13 @@
                     <mandatory>true</mandatory>
                 </property>
             </properties>
-            <mandatory-aspects>
-                <aspect>sys:temporary</aspect>
-            </mandatory-aspects>
         </type>
 
         <!-- Колонка данных -->
         <type name="lecm-rpeditor:reportDataColumn">
             <title>Data Column</title>
             <parent>cm:cmobject</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-rpeditor:dataColumnCode">
                     <title>Data Column Code</title>
@@ -364,9 +359,6 @@
                     </target>
                 </association>
             </associations>
-            <mandatory-aspects>
-                <aspect>sys:temporary</aspect>
-            </mandatory-aspects>
         </type>
     </types>
 
