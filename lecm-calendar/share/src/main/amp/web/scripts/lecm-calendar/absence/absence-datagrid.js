@@ -72,11 +72,11 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 											break;
 
 										case "datetime":
-											columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+											columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.defaultDateOnly"));
 											break;
 
 										case "date":
-											columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+											columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.defaultDateOnly"));
 											break;
 
 										case "text":

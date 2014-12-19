@@ -128,7 +128,7 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
                                     break;
 */
                                 case "datetime":
-                                    columnContent += '<span class="datagrid-datetime">' + Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), "dd mmm yyyy HH:MM:ss") + '</span>';
+                                    columnContent += '<span class="datagrid-datetime">' + Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), "dd.mm.yyyy HH:MM:ss") + '</span>';
                                     break;
                                 case "lecm-orgstr:employee":
                                     columnContent += grid.getEmployeeView(data.value, data.displayValue);

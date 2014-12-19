@@ -61,7 +61,7 @@ LogicECM.module.OrgStructure.BusinessRoles = LogicECM.module.OrgStructure.Busine
 										break;
 
 									case "datetime":
-										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("date-format.default"));
+										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("lecm.date-format.default"));
 										if (datalistColumn.name == attributeForShow) {
 											content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'"
 													+ oRecord.getData ("nodeRef")
@@ -73,7 +73,7 @@ LogicECM.module.OrgStructure.BusinessRoles = LogicECM.module.OrgStructure.Busine
 										break;
 
 									case "date":
-										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("date-format.defaultDateOnly"));
+										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("lecm.date-format.defaultDateOnly"));
 										if (datalistColumn.name == attributeForShow) {
 											content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'"
 													+ oRecord.getData ("nodeRef")
