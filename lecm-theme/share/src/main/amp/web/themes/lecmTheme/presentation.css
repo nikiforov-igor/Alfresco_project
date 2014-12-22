@@ -1393,27 +1393,23 @@ body.alfresco-guest
     width: 400px;
 }
 
-.login form
-{
+.login form {
    padding-bottom: 0.75em;
 }
 
 .login input[type="text"],
-.login input[type="password"]
-{
+.login input[type="password"] {
    width: 260px !important;
-   height: 25px;
-   padding: 0;
+   height: 22px;
+   padding: 2px;
 }
 
-.login label
-{
+.login label {
    padding-bottom: 2px;
 }
 
-.login .yui-button
-{
-   margin-left: 1px;
+.login .yui-button {
+   margin-left: 0;
    margin-top: 2px;
 }
 
