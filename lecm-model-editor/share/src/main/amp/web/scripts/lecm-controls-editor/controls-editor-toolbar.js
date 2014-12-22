@@ -8,6 +8,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 
 (function () {
+	var Bubbling = YAHOO.Bubbling;
+
 	LogicECM.module.ControlsEditor.Toolbar = function (containerId) {
 		return LogicECM.module.ControlsEditor.Toolbar.superclass.constructor.call(this, 'LogicECM.module.ControlsEditor.Toolbar', containerId);
 	};
@@ -33,13 +35,20 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 			this.createNewControlClicked = true;
 
 			function doBeforeDialogShow(p_form, p_dialog) {
-				p_dialog.dialog.setHeader("Новый контрол");
+				p_dialog.dialog.setHeader('Новый контрол');
 				p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 				this.createNewControlClicked = false;
 			}
 
 			function onSuccess(serverResponse) {
-				//оповестить датагрид
+				Bubbling.fire('nodeCreated', {
+					nodeRef: serverResponse.json.persistedObject,
+					bubblingLabel: this.options.bubblingLabel
+				});
+				Bubbling.fire('dataItemCreated', {
+					nodeRef: serverResponse.json.persistedObject,
+					bubblingLabel: this.options.bubblingLabel
+				});
 				Alfresco.util.PopupManager.displayMessage({
 					text: this.msg('message.save.success')
 				});

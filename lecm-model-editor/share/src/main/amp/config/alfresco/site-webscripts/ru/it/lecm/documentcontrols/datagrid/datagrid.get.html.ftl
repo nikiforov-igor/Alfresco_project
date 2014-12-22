@@ -1,7 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign datagridId = "controlsDatagrid-" + args.htmlid/>
-<#assign datagridBubblingLabel = bubblingLabel + "-" + args.htmlid/>
+<#assign datagridBubblingLabel = bubblingLabel + "-" + context.pageId + "-" + context.templateId/>
 
 <div id="${datagridId}">
 <@grid.datagrid id=datagridId/>

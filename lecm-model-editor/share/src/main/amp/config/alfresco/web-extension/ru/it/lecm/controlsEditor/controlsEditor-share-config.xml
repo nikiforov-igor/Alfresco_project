@@ -34,6 +34,13 @@
 	</config>
 	<config evaluator="node-type" condition="lecm-controls-editor:control">
 		<forms>
+			<form id="view-node-form">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-controls-editor:control-default"/>
+					<show id="lecm-controls-editor:control-template"/>
+				</field-visibility>
+			</form>
 			<form>
 				<field-visibility>
 					<show id="cm:title"/>

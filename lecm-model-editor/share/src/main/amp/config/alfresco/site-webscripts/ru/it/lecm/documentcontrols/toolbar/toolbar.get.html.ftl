@@ -1,7 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign toolbarId = "controlsToolbar-" + args.htmlid/>
-<#assign datagridBubblingLabel = bubblingLabel + "-" + args.htmlid/>
+<#assign datagridBubblingLabel = bubblingLabel + "-" + context.pageId + "-" + context.templateId/>
 
 <div id="${toolbarId}">
 <@comp.baseToolbar toolbarId true false false>
