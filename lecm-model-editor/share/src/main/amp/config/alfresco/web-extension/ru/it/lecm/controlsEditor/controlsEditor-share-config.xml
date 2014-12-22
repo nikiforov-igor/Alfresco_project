@@ -21,6 +21,7 @@
 					</field>
 					<field id="lecm-controls-editor:control-template">
 						<!-- тут будет контрол который получает все шаблоны и добавляет еще полей на форму -->
+						<control template="/ru/it/lecm/documentcontrols/controls/control-template-control.ftl"/>
 					</field>
 				</appearance>
 			</form>
