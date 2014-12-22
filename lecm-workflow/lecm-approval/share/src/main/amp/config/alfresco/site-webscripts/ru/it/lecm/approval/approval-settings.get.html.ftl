@@ -6,7 +6,9 @@
 	function init() {
 		LogicECM.module.Base.Util.loadResources([
 			'scripts/lecm-approval/approval-settings.js'
-		], [], function() {
+		], [
+            'css/lecm-eds-documents/global-settings.css'
+        ], function() {
 			new LogicECM.module.LecmApprovalSettings('${el}').setMessages(${messages});
 		});
 	}
