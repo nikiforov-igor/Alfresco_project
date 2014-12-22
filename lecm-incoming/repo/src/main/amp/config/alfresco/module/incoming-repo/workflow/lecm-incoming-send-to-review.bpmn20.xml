@@ -20,7 +20,7 @@
 								    	document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
 
 								    	var notificationText = "Вам поступил документ на рассмотрение: ";
-	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
+	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
 	                                    var recipients = [];
 	                                    recipients.push(recipient.nodeRef.toString());
 	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
@@ -60,7 +60,7 @@
 								    	    }
 
 									        var notificationText = "Поступил документ на рассмотрение ";
-		                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
+		                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
 		                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 								    	}
 
@@ -80,7 +80,7 @@
 							            }
 
 								        var notificationText = "Поступил документ на рассмотрение ";
-	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
+	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
 	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 							        }
 
