@@ -10,6 +10,12 @@
 	</#if>
 </#if>
 
+<#if fieldValue?string == "">
+	<#assign valueToShow=msg("form.control.novalue")>
+<#else>
+	<#assign valueToShow=fieldValue>
+</#if>
+
 <#if form.mode == "view">
 	<div class="control control-template-control viewmode">
 		<div class="label-div">
@@ -19,6 +25,11 @@
 			</span>
 			</#if>
 			<label>${field.label?html}:</label>
+		</div>
+		<div class="container">
+			<div class="value-div">
+				${valueToShow?html}
+			</div>
 		</div>
 	</div>
 <#else>
@@ -36,7 +47,6 @@
 				<select id="${fieldHtmlId}" name="${field.name}${nameSuffix}"
 					<#if field.description??>title="${field.description}"</#if>
 					<#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
-					<option value="" selected="selected"></option>
 				</select>
 				<table class="formFieldControlParamsTable">
 					<tbody id="${fieldHtmlId}-params"></tbody>
@@ -49,11 +59,11 @@
 <div class="clear"></div>
 <@inlineScript group="lecm-controls-editor">
 (function() {
-	function() initControl() {
+	function initControl() {
 		var control = new LogicECM.module.ControlsEditor.ControlTemplateControl('${fieldHtmlId}');
 		control.setMessages(${messages});
 		control.setOptions({
-
+			selectedValue: <#if field.value??>"${field.value}"<#else>null</#if>
 		});
 	}
 

@@ -20,6 +20,7 @@ import org.springframework.extensions.webscripts.connector.Response;
 import org.springframework.extensions.webscripts.connector.ResponseStatus;
 import ru.it.lecm.base.formsConfig.elements.fieldsElement.FieldTypesConfigElement;
 import static ru.it.lecm.base.formsConfig.Constants.*;
+import ru.it.lecm.base.formsConfig.elements.controlsTemplatesElement.ControlsTemplatesElement;
 import ru.it.lecm.base.formsConfig.elements.fieldElement.TypeConfigElement;
 import ru.it.lecm.base.formsConfig.elements.formLayoutElement.FormLayoutConfigElement;
 import ru.it.lecm.base.formsConfig.elements.formTypeElement.FormTypeConfigElement;
@@ -39,9 +40,10 @@ public class FormsConfig {
 	public void setScriptRemote(ScriptRemote scriptRemote) {
 		this.scriptRemote = scriptRemote;
 	}
-	private Map<String, TypeConfigElement> fullTypeControlsMap = new HashMap<String, TypeConfigElement>();
-	private List<FormTypeConfigElement> fullFormsTypesList = new ArrayList<FormTypeConfigElement>();
-	private List<FormLayoutConfigElement> fullFormsLayoutsList = new ArrayList<FormLayoutConfigElement>();
+	private Map<String, TypeConfigElement> fullTypeControlsMap;
+	private List<FormTypeConfigElement> fullFormsTypesList;
+	private List<FormLayoutConfigElement> fullFormsLayoutsList;
+	private ControlsTemplatesElement controlsTemplates;
 	private boolean initialized = false;
 
 	public void setConfigService(ConfigService configService) {
@@ -90,7 +92,8 @@ public class FormsConfig {
 		if (root != null) {
 			fullTypeControlsMap = root.getFieldTypesMap();
 		} else {
-			logger.info("Cannot find config for " + FIELD_TYPES_ELEMENT_ID);
+			fullTypeControlsMap = new HashMap<>();
+			logger.warn("Cannot find config for " + FIELD_TYPES_ELEMENT_ID);
 		}
 
 		FormsInfoConfigElement formsInfo = (FormsInfoConfigElement) configResult.getConfigElement(FORMS_INFO_ID);
@@ -98,10 +101,29 @@ public class FormsConfig {
 			fullFormsTypesList = formsInfo.getFormTypeElements();
 			fullFormsLayoutsList = formsInfo.getFormLayoutElements();
 		} else {
-			logger.info("Cannot find config for " + FORMS_INFO_ID);
+			fullFormsTypesList = new ArrayList<>();
+			fullFormsLayoutsList = new ArrayList<>();
+			logger.warn("Cannot find config for " + FORMS_INFO_ID);
+		}
+
+		controlsTemplates = (ControlsTemplatesElement)configResult.getConfigElement(CONTROLS_TEMPLATES_ELEMENT_ID);
+		if (controlsTemplates == null) {
+			controlsTemplates = new ControlsTemplatesElement();
+			logger.warn("Cannot find config for " + CONTROLS_TEMPLATES_ELEMENT_ID);
 		}
 
 		initialized = true;
+	}
+
+	/**
+	 * Возвращает объект, содержащий конфиг для шаблонов-контролов
+	 * @return конфиг для шаблонов контролов. Или пустой или с коллекцией шаблонов
+	 */
+	public ControlsTemplatesElement getControlsTemplates() {
+		if (!initialized) {
+			init();
+		}
+		return controlsTemplates;
 	}
 
 	/**

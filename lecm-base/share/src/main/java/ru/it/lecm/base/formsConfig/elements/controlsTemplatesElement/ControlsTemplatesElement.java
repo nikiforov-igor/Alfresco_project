@@ -1,5 +1,6 @@
 package ru.it.lecm.base.formsConfig.elements.controlsTemplatesElement;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.logging.Log;
@@ -28,7 +29,19 @@ public class ControlsTemplatesElement extends ConfigElementAdapter {
 	}
 
 	public ControlConfigElement addTemplate(ControlConfigElement controlTemplate) {
-		return controls.put(controlTemplate.getId(), controlTemplate);
+		return controls.put(controlTemplate.getTemplatePath(), controlTemplate);
+	}
+
+	public Map<String, ControlConfigElement> getTemplates() {
+		return controls;
+	}
+
+	public Collection<ControlConfigElement> getTemplatesCollection() {
+		return controls.values();
+	}
+
+	public ControlConfigElement getTemplate(final String templatePath) {
+		return controls.get(templatePath);
 	}
 
 	/*

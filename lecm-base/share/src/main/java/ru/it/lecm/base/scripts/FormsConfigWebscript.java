@@ -5,9 +5,11 @@
  */
 package ru.it.lecm.base.scripts;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -59,12 +61,18 @@ public class FormsConfigWebscript extends DeclarativeWebScript {
 				result.put("result", executeGetFormsLayoutsAction());
 			} else if (action.equals("getFormTypes")) {
 				result.put("result", executeGetFormsTypesAction());
+			} else if (action.equals("getControlsTemplates")) {
+				result.put("result", executeGetControlsTemplatesAction());
 			}
 		} catch (Exception ex) {
 			logger.error("Somethig goes wrong while executing FormsConfigWebscript");
 		}
 
 		return result;
+	}
+
+	private String executeGetControlsTemplatesAction() throws IOException {
+		return jsonMapper.writeValueAsString(formsConfigService.getControlsTemplates().getTemplates());
 	}
 
 	private String executeGetControlsByTypeAction(WebScriptRequest req) throws Exception {
@@ -81,12 +89,12 @@ public class FormsConfigWebscript extends DeclarativeWebScript {
 		}
 	}
 
-	private String executeGetFormsLayoutsAction() throws Exception {
+	private String executeGetFormsLayoutsAction() throws IOException {
 		List<FormLayoutConfigElement> layouts = formsConfigService.getFullFormsLayoutsMap();
 		return jsonMapper.writeValueAsString(layouts);
 	}
 
-	private String executeGetFormsTypesAction() throws Exception {
+	private String executeGetFormsTypesAction() throws IOException {
 		List<FormTypeConfigElement> types = formsConfigService.getFullFormsTypesMap();
 		return jsonMapper.writeValueAsString(types);
 	}
