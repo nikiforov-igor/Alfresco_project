@@ -1154,9 +1154,8 @@
     <config evaluator="string-compare" condition="AdvancedSearch">
         <advanced-search>
             <forms>
-                <form>lecm-orgstr:project</form>
-                <form>lecm-orgstr:organization-unit</form>
-                <form>lecm-orgstr:employee</form>
+                <form label="Структурное подразделение" description="Искать структурное подразделение">lecm-orgstr:organization-unit</form>
+                <form labelId="Сотрудник" description="Искать сотрудника">lecm-orgstr:employee</form>
             </forms>
         </advanced-search>
     </config>
