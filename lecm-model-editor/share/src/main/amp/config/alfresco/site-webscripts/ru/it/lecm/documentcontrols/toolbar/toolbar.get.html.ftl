@@ -1,6 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign toolbarId = "controlsToolbar-" + args.htmlid/>
+<#assign datagridBubblingLabel = bubblingLabel + "-" + args.htmlid/>
 
 <div id="${toolbarId}">
 <@comp.baseToolbar toolbarId true false false>
@@ -20,6 +21,10 @@
 <@inlineScript group="lecm-controls-editor">
 (function() {
 	var controlsEditorToolbar = new LogicECM.module.ControlsEditor.Toolbar("${toolbarId}");
+	controlsEditorToolbar.setOptions({
+		destination: "${context.page.properties["typeRoot"]}",
+		bubblingLabel: "${datagridBubblingLabel}"
+	});
 	controlsEditorToolbar.setMessages(${messages});
 })();
 </@>

@@ -1,7 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
-<#assign datagridId = "controlsDatagrid" + args.htmlid/>
-<#assign datagridBubblingLabel = datagridId/>
+<#assign datagridId = "controlsDatagrid-" + args.htmlid/>
+<#assign datagridBubblingLabel = bubblingLabel + "-" + args.htmlid/>
 
 <div id="${datagridId}">
 <@grid.datagrid id=datagridId/>
@@ -11,14 +11,30 @@
 	var Bubbling = YAHOO.Bubbling,
 		datagrid = new LogicECM.module.Base.DataGrid("${datagridId}");
 	datagrid.setMessages(${messages});
+	//TODO: добавить action "по-умолчанию", который позволит только один контрол отметить галкой "по-умолчанию"
 	datagrid.setOptions({
+		allowCreate: false,
+		showActionColumn: true,
+		overrideSortingWith: false,
 		showExtendSearchBlock: false,
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridBubblingLabel}",
 		attributeForShow: "cm:title",
+		actions: [{
+			type: "datagrid-action-link-${datagridBubblingLabel}",
+			id: "onActionEdit",
+			permission: "edit",
+			label: "${msg("actions.edit")}"
+		},{
+			type: "datagrid-action-link-${datagridBubblingLabel}",
+			id: "onActionDelete",
+			permission: "delete",
+			label: "${msg("actions.delete-row")}"
+		}],
 		datagridMeta: {
+			sort: "cm:title|true",
 			itemType: "lecm-controls-editor:control",
-			nodeRef: "${typeRoot}",
+			nodeRef: "${context.page.properties["typeRoot"]}",
 			useChildQuery: false,
 			actionsConfig: {
 				fullDelete: true,

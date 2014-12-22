@@ -1,7 +1,8 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
-<#include "/org/alfresco/components/form/form.dependencies.inc">
 
 <@templateHeader "transitional">
+	<#include "/org/alfresco/components/form/form.dependencies.inc">
+
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" group="lecm-controls-editor"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-controls-editor/controls-editor-toolbar.css" group="lecm-controls-editor"/>
 

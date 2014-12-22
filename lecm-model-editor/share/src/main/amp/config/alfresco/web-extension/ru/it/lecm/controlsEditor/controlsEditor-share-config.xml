@@ -6,10 +6,22 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="cm:title"/>
 					<show id="lecm-controls-editor:control-default"/>
+					<show id="lecm-controls-editor:control-template"/>
 				</field-visibility>
 				<appearance>
-
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecm-controls-editor:control-default">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+							<control-param name="options">true|Да,false|Нет</control-param>
+						</control>
+					</field>
+					<field id="lecm-controls-editor:control-template">
+						<!-- тут будет контрол который получает все шаблоны и добавляет еще полей на форму -->
+					</field>
 				</appearance>
 			</form>
 			<form id="datagrid">
@@ -24,10 +36,35 @@
 		<forms>
 			<form>
 				<field-visibility>
-
+					<show id="cm:title"/>
+					<show id="lecm-controls-editor:control-default"/>
+					<show id="lecm-controls-editor:control-template"/>
+					<show id="lecm-controls-editor:control-params" force="true"/>
 				</field-visibility>
 				<appearance>
-
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecm-controls-editor:control-default">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+							<control-param name="options">true|Да,false|Нет</control-param>
+						</control>
+					</field>
+					<field id="lecm-controls-editor:control-template" read-only="true"/>
+					<field id="lecm-controls-editor:control-params">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="allowCreate">false</control-param>
+							<control-param name="allowDelete">false</control-param>
+							<control-param name="allowEdit">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="useBubbling">true</control-param>
+							<control-param name="usePagination">false</control-param>
+							<control-param name="showLabel">false</control-param>
+							<control-param name="itemType">lecm-controls-editor:control-param</control-param>
+							<control-param name="sort">cm:title|true</control-param>
+							<control-param name="overrideSortingWith">false</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -39,15 +76,28 @@
 		<forms>
 			<form>
 				<field-visibility>
-
+					<show id="cm:title"/>
+					<show id="cm:description"/>
+					<show id="lecm-controls-editor:param-value"/>
 				</field-visibility>
 				<appearance>
-
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-
+					<show id="cm:title"/>
+					<show id="lecm-controls-editor:param-value"/>
+					<show id="cm:description"/>
+					<show id="lecm-controls-editor:param-mandatory"/>
+					<show id="lecm-controls-editor:param-visible"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -56,10 +106,31 @@
 		<forms>
 			<form>
 				<field-visibility>
-
+					<show id="cm:title"/>
+					<show id="lecm-controls-editor:param-value"/>
+					<show id="lecm-controls-editor:param-mandatory"/>
+					<show id="lecm-controls-editor:param-visible"/>
+					<show id="cm:description"/>
 				</field-visibility>
 				<appearance>
-
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecm-controls-editor:param-mandatory">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+							<control-param name="options">true|Да,false|Нет</control-param>
+						</control>
+					</field>
+					<field id="lecm-controls-editor:param-visible">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+							<control-param name="options">true|Да,false|Нет</control-param>
+						</control>
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
