@@ -49,5 +49,14 @@
 <div class="clear"></div>
 <@inlineScript group="lecm-controls-editor">
 (function() {
+	function() initControl() {
+		var control = new LogicECM.module.ControlsEditor.ControlTemplateControl('${fieldHtmlId}');
+		control.setMessages(${messages});
+		control.setOptions({
+
+		});
+	}
+
+	LogicECM.module.Base.Util.loadScripts(['scripts/lecm-controls-editor/control-template-control.js'], initControl);
 })();
 </@>
