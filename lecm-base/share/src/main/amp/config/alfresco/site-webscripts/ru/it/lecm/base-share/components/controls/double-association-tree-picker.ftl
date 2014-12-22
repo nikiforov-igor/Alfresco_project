@@ -130,6 +130,12 @@
 	        <#if params.firstRootLocation??>
 	            rootLocation: "${params.firstRootLocation}",
 	        </#if>
+			<#if params.firstXPathLocation??>
+				xPathLocation: "${params.firstXPathLocation}",
+			</#if>
+			<#if params.firstXPathLocationRoot??>
+				xPathLocationRoot: "${params.firstXPathLocationRoot}",
+			</#if>
 	        <#if field.mandatory??>
 	            mandatory: ${field.mandatory?string},
 	        <#elseif field.endpointMandatory??>
@@ -207,6 +213,12 @@
 		    <#if params.secondRootLocation??>
 			    rootLocation: "${params.secondRootLocation}",
 		    </#if>
+			<#if params.secondXPathLocation??>
+				xPathLocation: "${params.secondXPathLocation}",
+			</#if>
+			<#if params.secondXPathLocationRoot??>
+				xPathLocationRoot: "${params.secondXPathLocationRoot}",
+			</#if>
 		    <#if field.mandatory??>
 			    mandatory: ${field.mandatory?string},
 		    <#elseif field.endpointMandatory??>

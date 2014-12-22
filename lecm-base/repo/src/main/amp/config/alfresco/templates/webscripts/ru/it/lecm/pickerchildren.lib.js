@@ -549,6 +549,13 @@ function resolveNode(reference)
 		else if (reference == "{organization}") {
 			node = companyhome.childByNamePath("Организация");
 		}
+		else if (reference == "{lecmMyPrimaryUnit}")
+		{
+			node = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee());
+		} else if (reference == "{lecmMyOrganization}")
+		{
+			node = orgstructure.getUnitByOrganization(orgstructure.getEmployeeOrganization(orgstructure.getCurrentEmployee()));
+		}
 	}
 	catch (e)
 	{
