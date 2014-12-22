@@ -506,7 +506,6 @@
                             <control-param name="allowedNodesScript">lecm/errands/getAvailableEmployeesForChildErrand?parentDoc={parentDoc}</control-param>
                             <!--<control-param name="applyAllowedFilter">true</control-param>-->
                             <control-param name="param_parentDoc">parentDoc</control-param>
-	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
