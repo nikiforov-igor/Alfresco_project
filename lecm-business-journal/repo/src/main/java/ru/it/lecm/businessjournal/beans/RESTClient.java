@@ -164,6 +164,18 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 					}
 					break;
 				}
+				case ORGANIZATION: {
+					NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+					if (currentEmployee != null) {
+						NodeRef organization = orgstructureService.getEmployeeOrganization(currentEmployee);
+						if (organization != null) {
+							for (NodeRef employee : orgstructureService.getOrganizationEmployees(organization)) {
+								employees.add(employee.toString());
+							}
+						}
+					}
+					break;
+				}
 				case CONTROL: {
 					//todo
 					break;

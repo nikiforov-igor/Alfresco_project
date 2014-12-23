@@ -46,7 +46,7 @@
 	}
 
 	function loadRecords() {
-		var template = '{proxyUri}lecm/business-journal/api/search?type={refs}&days={days}&checkMainObject={checkMainObject}&skipCount={skipCount}&maxItems={maxItems}&whose=';
+		var template = '{proxyUri}lecm/business-journal/api/search?type={refs}&days={days}&checkMainObject={checkMainObject}&skipCount={skipCount}&maxItems={maxItems}&whose=ORGANIZATION';
 		var url = YAHOO.lang.substitute(template, {
 			proxyUri: Alfresco.constants.PROXY_URI,
 			refs: '${refs}',

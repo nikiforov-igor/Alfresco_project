@@ -520,6 +520,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     protected static enum WhoseEnum {
         MY,
         DEPARTMENT,
+		ORGANIZATION,
         CONTROL,
         ALL
     }
