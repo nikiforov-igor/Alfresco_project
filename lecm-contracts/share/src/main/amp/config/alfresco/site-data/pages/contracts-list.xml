@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-    <title>Договора</title>
-    <description>Договора</description>
+    <title>Договоры</title>
+    <description>Договоры</description>
     <template-instance>contracts-list</template-instance>
     <authentication>user</authentication>
 </page>

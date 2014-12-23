@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-    <title>Договора. Панель управления</title>
-    <description>Договора. Панель управления</description>
+    <title>Договоры. Панель управления</title>
+    <description>Договоры. Панель управления</description>
     <template-instance>contracts-main</template-instance>
     <authentication>user</authentication>
 </page>
