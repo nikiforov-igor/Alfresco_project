@@ -25,3 +25,11 @@
 .grid .dashlet.contracts-summary .body .row .column.second a {
     font-weight: bold;
 }
+
+/* Участники договорной деятельности */
+#form-members-list .form-field .datagrid {
+    padding: 10px;
+}
+#form-members-list .form-field .datagrid .datagrid-bar-bottom .yui-u.first{
+    width: 90%;
+}
