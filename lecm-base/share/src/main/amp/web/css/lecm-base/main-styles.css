@@ -167,6 +167,13 @@ i.icon-building {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+.yui-skin-lecmTheme .search .search-icon span.first-child {
+    padding-left: 0;
+    background-position: 5px 5px;
+}
+.yui-skin-lecmTheme .search .search-icon span.first-child button {
+    padding-left: 24px;
+}
 /* Расширенный поиск - end */
 
 /* Оформление окон - start */
