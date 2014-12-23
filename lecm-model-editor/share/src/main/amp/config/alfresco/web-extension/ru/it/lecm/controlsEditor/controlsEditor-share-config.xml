@@ -4,7 +4,7 @@
 	-->
 	<config evaluator="model-type" condition="lecm-controls-editor:control">
 		<forms>
-			<form>
+			<form submission-url="/lecm/controls-editor/type/lecm-controls-editor%3Acontrol/formprocessor">
 				<field-visibility>
 					<show id="cm:title"/>
 					<show id="lecm-controls-editor:control-default"/>

@@ -7,7 +7,21 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 
 (function() {
-	var Dom = YAHOO.util.Dom;
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		mandatoryTemplate = '<span class="mandatory-indicator">{mandatoryIndicator}</span>',
+		descriptionTemplate = '<div class="buttons-div"></div>',
+		paramTemplate = '<div class="control textfield editmode">' +
+							'<div class="label-div">' +
+								'<label for="{paramId}">{paramLocalName}:{paramMandatory}</label>' +
+							'</div>' +
+							'<div class="container">' +
+								'{paramDescription}' +
+								'<div class="value-div">' +
+									'<input id="{paramId}" type="text" tabindex="{paramTabIndex}" name="param_{paramName}" value="{paramValue}"/>' +
+								'</div>' +
+							'</div>' +
+						'</div>';
 
 	LogicECM.module.ControlsEditor.ControlTemplateControl = function(containerId) {
 		return LogicECM.module.ControlsEditor.ControlTemplateControl.superclass.constructor.call(this, 'LogicECM.module.ControlsEditor.ControlTemplateControl', containerId);
@@ -16,13 +30,14 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 	YAHOO.lang.extend(LogicECM.module.ControlsEditor.ControlTemplateControl, Alfresco.component.Base, {
 
 		options: {
+			mandatoryIndicator: null,
 			selectedValue: null
 		},
 		config: {},
 
-		_clearAll: function(selectElement) {
-			while (selectElement.firstChild) {
-				selectElement.removeChild(selectElement.firstChild);
+		_clearAll: function(element) {
+			while (element.firstChild) {
+				element.removeChild(element.firstChild);
 			}
 		},
 
@@ -54,8 +69,44 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 			}
 		},
 
+		onChangeSelect: function(event, obj) {
+			debugger;
+			var i, param, mandatoryHTML, descriptionHTML,
+				paramsHTML = '',
+				configHidden = document.getElementById(this.id + '-control-config-hidden'),
+				paramsContainer = document.getElementById(this.id + '-params'),
+				selectElement = document.getElementById(this.id),
+				selectTabIndex = selectElement.tabIndex;
+				selectedValue = selectElement.value,
+				controlConfig = this.config[selectedValue],
+				controlParams = controlConfig.params;
+
+			configHidden.value = JSON.stringify(controlConfig);
+
+			this._clearAll(paramsContainer);
+
+			for (i in controlParams) {
+				param = controlParams[i];
+				mandatoryHTML = param.mandatory ? YAHOO.lang.substitute(mandatoryTemplate, {mandatoryIndicator: this.options.mandatoryIndicator}) : '';
+				descriptionHTML = descriptionTemplate; //временно, потом будем генерить описание параметра и показывать
+				paramsHTML += YAHOO.lang.substitute(paramTemplate, {
+					paramId: this.id + '-' + param.id,
+					paramLocalName: param.localName ? param.localName : param.id,
+					paramMandatory: mandatoryHTML,
+					paramDescription: descriptionHTML,
+					paramName: param.id,
+					paramValue: param.value ? param.value : '',
+					paramTabIndex: ++selectTabIndex
+				});
+			}
+			paramsContainer.innerHTML = paramsHTML;
+		},
+
 		onReady: function() {
 			console.log('LogicECM.module.ControlsEditor.ControlTemplateControl ready!');
+
+			Event.on(this.id, 'change', this.onChangeSelect, null, this);
+
 			var url = Alfresco.constants.URL_SERVICECONTEXT + 'lecm/forms/getConfig?action=getControlsTemplates';
 
 			function onSuccess(serverResponse) {
@@ -73,11 +124,10 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 				},
 				failureMessage: this.msg('message.failure')
 			});
-
-			//0. смотрим а есть ли у поля уже значение
-			//1. делает ajax-запрос и загружает список контролов какие есть
-			//2. по списку контролов наполняет select
-			//3. для выбранного контрола генерит поля с параметрами
+			// сгенерировать поля, которые являются параметрами контрола
+			// подписать контрол на событие onSelect
+			// чтобы на сервак улетали заполненные параметры контрола (наверное в виде json) hidden-поле в котором этот json будет собираться или как-то так
+			//кастомный датасурс который штатно сохранит control и кастомно сохранит параметры контрола
 		}
 	}, true);
 })();

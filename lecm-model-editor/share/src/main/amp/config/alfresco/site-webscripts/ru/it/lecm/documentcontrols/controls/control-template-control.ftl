@@ -48,13 +48,13 @@
 					<#if field.description??>title="${field.description}"</#if>
 					<#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
 				</select>
-				<table class="formFieldControlParamsTable">
-					<tbody id="${fieldHtmlId}-params"></tbody>
-				</table>
-				<div id="${fieldHtmlId}-hidden-params"></div>
 			</div>
 		</div>
 	</div>
+	<div class="clear"></div>
+	<div id="${fieldHtmlId}-params">
+	</div>
+	<input id="${fieldHtmlId}-control-config-hidden" type="hidden" name="controlConfig"/>
 </#if>
 <div class="clear"></div>
 <@inlineScript group="lecm-controls-editor">
@@ -63,6 +63,7 @@
 		var control = new LogicECM.module.ControlsEditor.ControlTemplateControl('${fieldHtmlId}');
 		control.setMessages(${messages});
 		control.setOptions({
+			mandatoryIndicator: "${msg("form.required.fields.marker")}",
 			selectedValue: <#if field.value??>"${field.value}"<#else>null</#if>
 		});
 	}
