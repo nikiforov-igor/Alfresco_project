@@ -101,7 +101,7 @@
 			<staticText>
 				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Сводный отчет по договорам]]></text>
 			</staticText>
@@ -118,14 +118,14 @@
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Страница "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" evaluationTime="Page" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="8a0773d5-f6b8-4b79-9625-0b895e8835bb" stretchType="RelativeToTallestObject" x="0" y="0" width="397" height="25" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[( ($P{dateReg_lo} == null)
@@ -149,7 +149,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{col_MeasureTag} != null) ? $F{col_MeasureTag} : "Название"]]></textFieldExpression>
 			</textField>
@@ -163,7 +163,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Черновик"]]></textFieldExpression>
 			</textField>
@@ -177,7 +177,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Проект"]]></textFieldExpression>
 			</textField>
@@ -191,7 +191,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["На согласовании"]]></textFieldExpression>
 			</textField>
@@ -205,7 +205,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Согласован"]]></textFieldExpression>
 			</textField>
@@ -219,7 +219,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["На доработке"]]></textFieldExpression>
 			</textField>
@@ -233,7 +233,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["На подписании"]]></textFieldExpression>
 			</textField>
@@ -247,7 +247,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Подписан"]]></textFieldExpression>
 			</textField>
@@ -261,7 +261,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Подписание контрагентом"]]></textFieldExpression>
 			</textField>
@@ -275,7 +275,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Зарегистрирован"]]></textFieldExpression>
 			</textField>
@@ -289,7 +289,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Действует"]]></textFieldExpression>
 			</textField>
@@ -303,7 +303,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Другие"]]></textFieldExpression>
 			</textField>
@@ -317,7 +317,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Итого"]]></textFieldExpression>
 			</textField>
@@ -334,8 +334,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count10} != null ? $F{col_Count10} : 0]]></textFieldExpression>
@@ -349,8 +349,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count11} != null ? $F{col_Count11} : 0]]></textFieldExpression>
@@ -364,8 +364,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_RowSum} != null ? $F{col_RowSum} : 0]]></textFieldExpression>
@@ -379,8 +379,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count4} != null ? $F{col_Count4} : 0]]></textFieldExpression>
@@ -394,8 +394,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count5} != null ? $F{col_Count5} : 0]]></textFieldExpression>
@@ -409,8 +409,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count6} != null ? $F{col_Count6} : 0]]></textFieldExpression>
@@ -424,8 +424,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count7} != null ? $F{col_Count7} : 0]]></textFieldExpression>
@@ -439,8 +439,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count8} != null ? $F{col_Count8} : 0]]></textFieldExpression>
@@ -454,8 +454,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count9} != null ? $F{col_Count9} : 0]]></textFieldExpression>
@@ -469,8 +469,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count3} != null ? $F{col_Count3} : 0]]></textFieldExpression>
@@ -484,8 +484,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count1} != null ? $F{col_Count1} : 0]]></textFieldExpression>
@@ -500,7 +500,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_RowTag}]]></textFieldExpression>
@@ -514,8 +514,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Count2} != null ? $F{col_Count2} : 0]]></textFieldExpression>
@@ -534,7 +534,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Всего"]]></textFieldExpression>
 			</textField>
@@ -547,8 +547,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum1} != null ? $V{colSum1} : 0]]></textFieldExpression>
@@ -562,8 +562,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum2}  != null ? $V{colSum2} : 0]]></textFieldExpression>
@@ -577,8 +577,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum3}  != null ? $V{colSum3} : 0]]></textFieldExpression>
@@ -592,8 +592,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum4}  != null ? $V{colSum4} : 0]]></textFieldExpression>
@@ -607,8 +607,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum5}  != null ? $V{colSum5} : 0]]></textFieldExpression>
@@ -622,8 +622,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum6}  != null ? $V{colSum6} : 0]]></textFieldExpression>
@@ -637,8 +637,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum7}  != null ? $V{colSum7} : 0]]></textFieldExpression>
@@ -652,8 +652,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum8}  != null ? $V{colSum8} : 0]]></textFieldExpression>
@@ -667,8 +667,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum9}  != null ? $V{colSum9} : 0]]></textFieldExpression>
@@ -682,8 +682,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum10}  != null ? $V{colSum10} : 0]]></textFieldExpression>
@@ -697,8 +697,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSum11}  != null ? $V{colSum11} : 0]]></textFieldExpression>
@@ -712,8 +712,8 @@
 					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{colSumRow}  != null ? $V{colSumRow} : 0]]></textFieldExpression>

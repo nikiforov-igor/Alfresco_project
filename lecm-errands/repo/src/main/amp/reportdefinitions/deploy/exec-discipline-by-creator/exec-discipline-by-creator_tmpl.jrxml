@@ -223,7 +223,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="12" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="12" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>

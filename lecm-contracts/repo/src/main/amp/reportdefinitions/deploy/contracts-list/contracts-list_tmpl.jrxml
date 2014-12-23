@@ -45,7 +45,7 @@
 			<staticText>
 				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="802" height="29"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Договорная деятельность]]></text>
 			</staticText>
@@ -60,7 +60,7 @@
 			<textField>
 				<reportElement uuid="6df5d2b4-b246-429d-a894-8f1f1d716bbf" x="1" y="0" width="199" height="29"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Страница "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -78,7 +78,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" isItalic="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" isItalic="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
 			</textField>
@@ -92,7 +92,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Номер договора"]]></textFieldExpression>
 			</textField>
@@ -106,7 +106,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Контрагент"]]></textFieldExpression>
 			</textField>
@@ -120,7 +120,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Вид договора"]]></textFieldExpression>
 			</textField>
@@ -134,7 +134,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Тематика договора"]]></textFieldExpression>
 			</textField>
@@ -148,7 +148,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Дата начала"]]></textFieldExpression>
 			</textField>
@@ -162,7 +162,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Дата завершения"]]></textFieldExpression>
 			</textField>
@@ -176,7 +176,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Исполнитель"]]></textFieldExpression>
 			</textField>
@@ -190,7 +190,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Статус"]]></textFieldExpression>
 			</textField>
@@ -208,7 +208,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_DocKind}]]></textFieldExpression>
@@ -223,7 +223,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[( $F{col_Contragent.name} == null ? "" : $F{col_Contragent.name})
@@ -242,7 +242,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
@@ -257,7 +257,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[( ($F{col_Regnum} != null && !"Не присвоено".equals($F{col_Regnum}) )? $F{col_Regnum} : "не присвоен")]]></textFieldExpression>
@@ -272,7 +272,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Theme} != null ? $F{col_Theme} : ""]]></textFieldExpression>
@@ -287,7 +287,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_DateStart}]]></textFieldExpression>
@@ -302,7 +302,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_DateEnd}]]></textFieldExpression>
@@ -317,7 +317,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{col_Executor} == null ? "" : $F{col_Executor})]]></textFieldExpression>
@@ -332,7 +332,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Status}]]></textFieldExpression>
