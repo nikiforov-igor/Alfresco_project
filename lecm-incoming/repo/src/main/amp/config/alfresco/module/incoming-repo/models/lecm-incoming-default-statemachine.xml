@@ -2905,7 +2905,7 @@
                 message += "Ваше письмо ";
                 message += incoming.properties["lecm-document:title"];
                 message += " от <b>";
-                message += substitude.formatNodeTitle(incoming, "{cm:created?dd-MM-yyyy}");
+                message += substitude.formatNodeTitle(incoming, "{cm:created?dd.MM.yyyy}");
                 message += "</b> зарегистрировано под номером <b>";
                 message += documentScript.getDocumentRegNumber(incoming);
                 message += "</b>.";

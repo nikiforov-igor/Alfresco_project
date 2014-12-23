@@ -279,7 +279,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				}
 				String ordNumber = (String) nodeService.getProperty(ord, DocumentService.PROP_REG_DATA_DOC_NUMBER);
 				Date ordRegDate = (Date) nodeService.getProperty(ord, DocumentService.PROP_REG_DATA_DOC_DATE);
-				String ordRegDateStr = new SimpleDateFormat("dd-MM-yyyy").format(ordRegDate);
+				String ordRegDateStr = new SimpleDateFormat("dd.MM.yyyy").format(ordRegDate);
 
 				StringBuilder errandTtitle = new StringBuilder();
 				errandTtitle.append("Пункт № ").append(pointNumber.toString()).append(" документа ").append(ordDocType);
