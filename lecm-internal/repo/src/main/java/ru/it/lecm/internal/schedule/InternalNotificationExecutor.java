@@ -85,7 +85,7 @@ public class InternalNotificationExecutor implements Job {
                             }
 
                             Date now = normalizeDate(new Date());
-                            Date internalExecutionDate = (Date) nodeService.getProperty(internal, DocumentService.PROP_EDS_EXECUTION_DATE);
+                            Date internalExecutionDate = (Date) nodeService.getProperty(internal, InternalService.PROP_INTERNAL_RESPONSE_DATE);
                             internalExecutionDate = normalizeDate(internalExecutionDate);
                             int days = notificationsService.getSettingsNDays();
                             Date workCalendarDate = calendarBean.getNextWorkingDate(now, days, Calendar.DAY_OF_MONTH);

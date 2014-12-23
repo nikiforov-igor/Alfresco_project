@@ -31,5 +31,6 @@ public interface InternalService {
 	public final static QName ASSOC_ANSWER_TABLE_EMPLOYEE = QName.createQName(ANSWERS_TABLE_NAMESPACE, "employee-assoc");
 	public final static QName ASSOC_ANSWER_TABLE = QName.createQName(ANSWERS_TABLE_NAMESPACE, "answers-assoc");
 
+	public final static QName PROP_INTERNAL_RESPONSE_DATE = QName.createQName(INTERNAL_NAMESPACE, "response-date");
 
 }
