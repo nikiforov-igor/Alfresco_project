@@ -28,4 +28,8 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		NodeRef parent = getServiceRootFolder();
 		return createFolder(parent, folderName);
 	}
+
+	public boolean generateControls(final String typename) {
+		return true;
+	}
 }

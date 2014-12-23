@@ -86,7 +86,25 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 		},
 
 		onGenerateControls: function() {
-			console.log('Invoking onGenerateControls using scope ' + this);
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + 'lecm/controls/generate?typename=' + this.options.typename,
+				successCallback: {
+					scope: this,
+					fn: function(serverResponse) {
+						var json = serverResponse.json;
+						if (json && json.success) {
+							Alfresco.util.PopupManager.displayMessage({
+								text: this.msg('message.generate.success')
+							});
+						} else {
+							Alfresco.util.PopupManager.displayMessage({
+								text: this.msg('message.failure')
+							});
+						}
+					}
+				},
+				failureMessage: this.msg('message.failure')
+			});
 		},
 
 		onDeployControls: function() {

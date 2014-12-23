@@ -70,7 +70,6 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 		},
 
 		onChangeSelect: function(event, obj) {
-			debugger;
 			var i, param, mandatoryHTML, descriptionHTML,
 				paramsHTML = '',
 				configHidden = document.getElementById(this.id + '-control-config-hidden'),
@@ -103,8 +102,6 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 		},
 
 		onReady: function() {
-			console.log('LogicECM.module.ControlsEditor.ControlTemplateControl ready!');
-
 			Event.on(this.id, 'change', this.onChangeSelect, null, this);
 
 			var url = Alfresco.constants.URL_SERVICECONTEXT + 'lecm/forms/getConfig?action=getControlsTemplates';

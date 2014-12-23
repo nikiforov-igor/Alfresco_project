@@ -22,6 +22,7 @@
 (function() {
 	var controlsEditorToolbar = new LogicECM.module.ControlsEditor.Toolbar("${toolbarId}");
 	controlsEditorToolbar.setOptions({
+		typename: "${doctype}",
 		destination: "${context.page.properties["typeRoot"]}",
 		bubblingLabel: "${datagridBubblingLabel}"
 	});
