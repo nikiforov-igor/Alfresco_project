@@ -188,18 +188,18 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 
 		boolean isFiltered = false;
 
-		if (!employees.isEmpty()) {
+		if (objectTypes.size() == 1)  {
+			isFiltered = true;
+			builder.and().eq("objectType", "'" + objectTypes.get(0) + "'");
+		}
+
+		if (employees.size() == 1 && !isFiltered) {
 			isFiltered = true;
 			builder.and().eq("initiator", "'" + employees.get(0) + "'");
 		}
 
-		if (!eventCats.isEmpty() && !isFiltered) {
-			isFiltered = true;
+		if (eventCats.size() == 1 && !isFiltered) {
 			builder.and().eq("eventCategory", "'" + eventCats.get(0) + "'");
-		}
-
-		if (!objectTypes.isEmpty() && !isFiltered) {
-			builder.and().eq("objectType", "'" + objectTypes.get(0) + "'");
 		}
 
 		builder.sort("date", false);
@@ -219,7 +219,8 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 
 		List<BusinessJournalRecord> filtered = new ArrayList<>();
 		for (BusinessJournalRecord record : res) {
-			if (employees.isEmpty() || employees.contains(record.getInitiator().toString())) {
+			NodeRef initiator = record.getInitiator();
+			if (employees.isEmpty() || (initiator != null && employees.contains(initiator.toString()))) {
 				String recordEventCategory = record.getEventCategory() != null ? record.getEventCategory().toString() : null;
 				if (eventCats.isEmpty() || eventCats.contains(recordEventCategory)) {
 					String recordObjectType = record.getObjectType() != null ? record.getObjectType().toString() : null;

@@ -14,7 +14,7 @@
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
 		messageFlag = false,
-		pageCount = 50,
+		pageCount = 100,
 		startIndex = 0;
 
 
