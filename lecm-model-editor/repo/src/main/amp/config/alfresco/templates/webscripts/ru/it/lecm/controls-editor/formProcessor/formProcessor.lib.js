@@ -16,7 +16,7 @@ function createControlParamsFromJSON(persistedObject) {
 	var prefix = 'param_',
 		UUID = Packages.java.util.UUID,
 		control = search.findNode(persistedObject),
-		controlConfig = jsonUtils.toObject(json.get('controlConfig')),
+		controlConfig = eval('(' + json.get('controlConfig') + ')'),
 		jsonKeys = json.keys(),
 		nextKey, paramConfig, param;
 
