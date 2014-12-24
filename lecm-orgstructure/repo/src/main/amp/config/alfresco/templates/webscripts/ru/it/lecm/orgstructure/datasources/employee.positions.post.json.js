@@ -17,7 +17,7 @@ function main() {
         nameSubstituteStrings = (pars.get("nameSubstituteStrings") !== null) ? pars.get("nameSubstituteStrings") : null;
         maxResults = (pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_MAX_RESULTS;
         var sort = pars.get("sort");
-        if (sort !== null) {
+        if (sort !== null && sort != "") {
             sortField = sort.split("\\\|")[0];
             sortAsc = (sort.split("\\\|")[1] == "true");
         }
