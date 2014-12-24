@@ -39,8 +39,8 @@ public class ExportData extends AbstractWebScript {
     /**
      * Формат даты
      */
-    private static final String DATE_FORMAT = "EEE dd MMM YYYY";
-    private static final String DATETIME_FORMAT = "EEE dd MMM YYYY HH:mm";
+    private static final String DATE_FORMAT = "dd.MM.yyyy";
+    private static final String DATETIME_FORMAT = "dd.MM.yyyy HH:mm";
     private RhinoScriptProcessor rhinoScriptProcessor;
 
     public void setNodeService(NodeService nodeService) {
