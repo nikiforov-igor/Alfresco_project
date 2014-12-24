@@ -3,23 +3,7 @@ var archive = ("" + args["archive"] == "true");
 var skippedStatuses = args["skippedStatuses"];
 var considerFilter = args["considerFilter"] ? args["considerFilter"]: null;
 
-var draftPath = documentScript.getDraftsPath();
-var documentPath = documentScript.getDocumentsPath();
-
 var paths = [];
-
-if (draftPath) {
-    paths.push(draftPath);
-}
-
-if (documentPath) {
-    paths.push(documentPath);
-}
-
-var archDirectories = statemachine.getArchiveFolders(type);
-for (var index in archDirectories) {
-    paths.push(archDirectories[index]);
-}
 
 var map = documentScript.getFilters(type, archive);
 
