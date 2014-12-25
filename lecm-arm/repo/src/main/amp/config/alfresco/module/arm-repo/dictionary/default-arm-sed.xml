@@ -200,6 +200,7 @@
 						<property name="cm:name"><![CDATA[Срочная работа]]></property>
 						<property name="lecm-arm:order"><![CDATA[20]]></property>
 						<property name="lecm-arm:search-type"><![CDATA[]]></property>
+						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
 						<property name="lecm-arm:types"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-description"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -210,6 +211,8 @@
 							<item name="cm:Поручения" type="lecm-arm:node">
 								<property name="cm:name"><![CDATA[Поручения]]></property>
 								<property name="lecm-arm:order"><![CDATA[10]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
 								<property name="lecm-arm:types"><![CDATA[lecm-errands:document]]></property>
 								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
 								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
@@ -250,7 +253,7 @@
 									<item name="cm:05d48dfb-982e-44b1-88bf-ac96804c92e3" type="lecm-arm:field">
 										<property name="cm:name"><![CDATA[afd43831-b617-4c6b-888f-e6783d55ea06]]></property>
 										<property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
-										<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:execution-date]]></property>
+										<property name="lecm-arm:field-name"><![CDATA[lecm-errands:limitation-date]]></property>
 										<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 										<property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
 										<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -373,16 +376,6 @@
 									<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/26fb6645-4c06-45d7-9245-b7e8b9ff5d41"/>
 								</assocs>
 							</item>
-							<item name="cm:bb0b7a83-6bf0-44d7-9d84-3bc2ed057f4a" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
-								<property name="cm:name"><![CDATA[b8f6ec88-9f4d-483a-b90a-facb0a0345df]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:execution-date]]></property>
-							</item>
-							<item name="cm:93896a46-d829-4528-a489-43d03189ba2f" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
-								<property name="cm:name"><![CDATA[baacaa56-a709-4329-bf55-f97bb638648b]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
-							</item>
 							<item name="cm:589520ef-e6f9-4f33-b5cf-dc179766f543" type="lecm-arm:field">
 								<property name="cm:name"><![CDATA[ab97571a-4c0a-434e-a725-c2810eb76721]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Название]]></property>
@@ -409,8 +402,6 @@
 							</item>
 						</items>
 						<assocs>
-							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/b8f6ec88-9f4d-483a-b90a-facb0a0345df"/>
-							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/baacaa56-a709-4329-bf55-f97bb638648b"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/ab97571a-4c0a-434e-a725-c2810eb76721"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/af32f35b-63ba-46b3-9653-9a4dea916304"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/fe7a2fd5-2105-443a-9a60-95fcbfed1f88"/>
