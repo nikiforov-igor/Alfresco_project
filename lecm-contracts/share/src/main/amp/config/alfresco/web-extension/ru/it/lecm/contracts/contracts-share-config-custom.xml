@@ -826,7 +826,6 @@
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="sys:node-dbid"/>
                     <show id="lecm-contract:regNumSystem"/>
                     <show id="lecm-contract:regNumProject"/>
                     <show id="lecm-contract:regNumContractor"/>
@@ -839,11 +838,6 @@
                     <show id="lecm-contract:totalAmount"/>
                 </field-visibility>
                 <appearance>
-                    <field id="sys:node-dbid">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
-                            <control-param name="forceEditable">true</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-contract:regNumSystem">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
                             <control-param name="hideValue"/>
