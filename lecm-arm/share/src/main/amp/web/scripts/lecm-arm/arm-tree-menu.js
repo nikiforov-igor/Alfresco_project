@@ -382,14 +382,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		            YAHOO.Bubbling.fire ("updateArmHtmlNode", {
                         armNode: node
 		            });
-	            }
-
-	            YAHOO.Bubbling.fire ("armNodeSelected", {
-		            armNode: node,
-		            bubblingLabel: "documents-arm",
-                    menuState:this.menuState,
-		            isNotGridNode: isNotGridNode
-	            });
+	            } else {
+                    YAHOO.Bubbling.fire ("armNodeSelected", {
+                        armNode: node,
+                        bubblingLabel: "documents-arm",
+                        menuState:this.menuState,
+                        isNotGridNode: isNotGridNode
+                    });
+                }
 
 	            var parent = node;
 	            while (parent.parent != null) {
