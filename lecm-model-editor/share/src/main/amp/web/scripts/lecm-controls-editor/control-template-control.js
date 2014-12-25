@@ -9,6 +9,7 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 (function() {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
+		ComponentManager = Alfresco.util.ComponentManager,
 		mandatoryTemplate = '<span class="mandatory-indicator">{mandatoryIndicator}</span>',
 		descriptionTemplate = '<div class="buttons-div"></div>',
 		paramTemplate = '<div class="control textfield editmode">' +
@@ -30,9 +31,12 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 	YAHOO.lang.extend(LogicECM.module.ControlsEditor.ControlTemplateControl, Alfresco.component.Base, {
 
 		options: {
+			fieldId: null,
 			mandatoryIndicator: null,
 			selectedValue: null
 		},
+		dialogId: null,
+		simpleDialog: null,
 		config: {},
 
 		_clearAll: function(element) {
@@ -45,6 +49,12 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 			var optionElement = document.createElement('option');
 			optionElement.select = true;
 			return optionElement;
+		},
+
+		_centerDialog: function() {
+			if (this.simpleDialog) {
+				this.simpleDialog.dialog.center();
+			}
 		},
 
 		_createOptionElement: function(controlTemplate) {
@@ -99,9 +109,15 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 				});
 			}
 			paramsContainer.innerHTML = paramsHTML;
+			this._centerDialog();
 		},
 
 		onReady: function() {
+			this.dialogId = this.id.replace('_' + this.options.fieldId, '');
+			if (this.dialogId) {
+				this.simpleDialog = ComponentManager.get(this.dialogId);
+			}
+
 			Event.on(this.id, 'change', this.onChangeSelect, null, this);
 
 			var url = Alfresco.constants.URL_SERVICECONTEXT + 'lecm/forms/getConfig?action=getControlsTemplates';
@@ -121,10 +137,6 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 				},
 				failureMessage: this.msg('message.failure')
 			});
-			// сгенерировать поля, которые являются параметрами контрола
-			// подписать контрол на событие onSelect
-			// чтобы на сервак улетали заполненные параметры контрола (наверное в виде json) hidden-поле в котором этот json будет собираться или как-то так
-			//кастомный датасурс который штатно сохранит control и кастомно сохранит параметры контрола
 		}
 	}, true);
 })();

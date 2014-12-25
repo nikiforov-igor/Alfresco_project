@@ -142,6 +142,9 @@
                         <#if field.control.params.fixedHeader??>
                             ,fixedHeader: ${field.control.params.fixedHeader}
                         </#if>
+                        <#if field.control.params.editFormWidth??>
+                            ,editFormWidth: "${field.control.params.editFormWidth}"
+                        </#if>
                     }).setMessages(${messages});
                 datagrid.draw();
             }

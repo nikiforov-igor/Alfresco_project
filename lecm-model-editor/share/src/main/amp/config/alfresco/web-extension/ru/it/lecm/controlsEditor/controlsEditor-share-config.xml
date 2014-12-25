@@ -71,6 +71,7 @@
 							<control-param name="itemType">lecm-controls-editor:control-param</control-param>
 							<control-param name="sort">lecm-controls-editor:param-id|true</control-param>
 							<control-param name="overrideSortingWith">false</control-param>
+							<control-param name="editFormWidth">70em</control-param>
 						</control>
 					</field>
 				</appearance>

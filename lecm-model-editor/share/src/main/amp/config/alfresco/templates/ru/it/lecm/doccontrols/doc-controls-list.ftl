@@ -6,7 +6,6 @@
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" group="lecm-controls-editor"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-controls-editor/controls-editor-toolbar.css" group="lecm-controls-editor"/>
 
-	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js" group="lecm-controls-editor"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js" group="lecm-controls-editor"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js" group="lecm-controls-editor"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js" group="lecm-controls-editor"/>

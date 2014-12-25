@@ -52,7 +52,7 @@
 		</div>
 	</div>
 	<div class="clear"></div>
-	<div id="${fieldHtmlId}-params">
+	<div id="${fieldHtmlId}-params" class="control control-template-params">
 	</div>
 	<input id="${fieldHtmlId}-control-config-hidden" type="hidden" name="controlConfig"/>
 </#if>
@@ -63,11 +63,12 @@
 		var control = new LogicECM.module.ControlsEditor.ControlTemplateControl('${fieldHtmlId}');
 		control.setMessages(${messages});
 		control.setOptions({
+			fieldId: "${field.id}",
 			mandatoryIndicator: "${msg("form.required.fields.marker")}",
 			selectedValue: <#if field.value??>"${field.value}"<#else>null</#if>
 		});
 	}
 
-	LogicECM.module.Base.Util.loadScripts(['scripts/lecm-controls-editor/control-template-control.js'], initControl);
+	LogicECM.module.Base.Util.loadResources(['scripts/lecm-controls-editor/control-template-control.js'], ['css/lecm-controls-editor/controls-template-control.css'], initControl);
 })();
 </@>
