@@ -1,9 +1,9 @@
-.action div{
+#lecm-content .action div {
 	float: left;
 	line-height: 1em;
 }
 
-.action span {
+#lecm-content .action span {
 	display: none;
 }
 
