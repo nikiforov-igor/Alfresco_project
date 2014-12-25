@@ -52,9 +52,12 @@
 		</div>
 	</div>
 	<div class="clear"></div>
-	<div id="${fieldHtmlId}-params" class="control control-template-params">
+	<div class="set-bordered-panel hidden">
+		<input id="${fieldHtmlId}-control-config-hidden" type="hidden" name="controlConfig"/>
+		<div class="set-bordered-panel-heading">Параметры контрола</div>
+		<div id="${fieldHtmlId}-params" class="set-bordered-panel-body control-template-params">
+		</div>
 	</div>
-	<input id="${fieldHtmlId}-control-config-hidden" type="hidden" name="controlConfig"/>
 </#if>
 <div class="clear"></div>
 <@inlineScript group="lecm-controls-editor">

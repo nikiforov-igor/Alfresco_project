@@ -11,13 +11,16 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 		Event = YAHOO.util.Event,
 		ComponentManager = Alfresco.util.ComponentManager,
 		mandatoryTemplate = '<span class="mandatory-indicator">{mandatoryIndicator}</span>',
-		descriptionTemplate = '<div class="buttons-div"></div>',
+		descriptionTemplate = '<span class="help-icon">' +
+									'<img id="{paramId}-help-icon" src="/share/res/components/form/images/help.png"/>' +
+							'</span>' +
+							'<div class="help-text" id="{paramId}-help">{paramDescription}</div>',
 		paramTemplate = '<div class="control textfield editmode">' +
 							'<div class="label-div">' +
 								'<label for="{paramId}">{paramLocalName}:{paramMandatory}</label>' +
 							'</div>' +
 							'<div class="container">' +
-								'{paramDescription}' +
+								'<div class="buttons-div">{paramDescription}</div>' +
 								'<div class="value-div">' +
 									'<input id="{paramId}" type="text" tabindex="{paramTabIndex}" name="param_{paramName}" value="{paramValue}"/>' +
 								'</div>' +
@@ -67,6 +70,10 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 			return optionElement;
 		},
 
+		_toggleHelpText: function(event, fieldId) {
+			Alfresco.util.toggleHelpText(fieldId);
+		},
+
 		applyConfig: function() {
 			var templatePath,
 				selectElement = Dom.get(this.id);
@@ -80,12 +87,12 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 		},
 
 		onChangeSelect: function(event, obj) {
-			var i, param, mandatoryHTML, descriptionHTML,
+			var i, param, mandatoryHTML, descriptionHTML, paramId, helpId, helpIconId,
 				paramsHTML = '',
 				configHidden = document.getElementById(this.id + '-control-config-hidden'),
 				paramsContainer = document.getElementById(this.id + '-params'),
 				selectElement = document.getElementById(this.id),
-				selectTabIndex = selectElement.tabIndex;
+				selectTabIndex = selectElement.tabIndex,
 				selectedValue = selectElement.value,
 				controlConfig = this.config[selectedValue],
 				controlParams = controlConfig.params;
@@ -96,10 +103,18 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 
 			for (i in controlParams) {
 				param = controlParams[i];
-				mandatoryHTML = param.mandatory ? YAHOO.lang.substitute(mandatoryTemplate, {mandatoryIndicator: this.options.mandatoryIndicator}) : '';
-				descriptionHTML = descriptionTemplate; //временно, потом будем генерить описание параметра и показывать
+				paramId = this.id + '-' + param.id;
+				mandatoryHTML = param.mandatory ?
+								YAHOO.lang.substitute(mandatoryTemplate, {
+									mandatoryIndicator: this.options.mandatoryIndicator
+								}) : '';
+				descriptionHTML = param.description ?
+								YAHOO.lang.substitute(descriptionTemplate, {
+									paramId: paramId,
+									paramDescription: param.description
+								}) : '';
 				paramsHTML += YAHOO.lang.substitute(paramTemplate, {
-					paramId: this.id + '-' + param.id,
+					paramId: paramId,
 					paramLocalName: param.localName ? param.localName : param.id,
 					paramMandatory: mandatoryHTML,
 					paramDescription: descriptionHTML,
@@ -109,6 +124,17 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 				});
 			}
 			paramsContainer.innerHTML = paramsHTML;
+
+			for (i in controlParams) {
+				param = controlParams[i];
+				if (param.description) {
+					paramId = this.id + '-' + param.id;
+					helpIconId = paramId + '-help-icon';
+					helpId = paramId + '-help';
+					Alfresco.util.useAsButton(helpIconId, this._toggleHelpText, helpId, this);
+				}
+			}
+			Dom.removeClass(paramsContainer.parentNode, 'hidden');
 			this._centerDialog();
 		},
 
