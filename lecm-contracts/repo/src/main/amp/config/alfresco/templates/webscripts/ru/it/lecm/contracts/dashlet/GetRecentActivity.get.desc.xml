@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webscript>
+	<shortname>Get data for recent activity dashlet</shortname>
+	<url>/lecm/contracts/dashlet/getRecentActivity</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+</webscript>
