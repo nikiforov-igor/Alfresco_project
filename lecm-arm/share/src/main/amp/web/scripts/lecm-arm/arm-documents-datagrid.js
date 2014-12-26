@@ -371,7 +371,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                             break;
 
                                         case "datetime":
-                                            columnContent += '<span class="datagrid-datetime">' + Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.default")) + '</span>';
+                                            columnContent += '<span class="datagrid-datetime">' + Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.defaultDateOnly")) + '</span>';
                                             break;
 
                                         case "date":

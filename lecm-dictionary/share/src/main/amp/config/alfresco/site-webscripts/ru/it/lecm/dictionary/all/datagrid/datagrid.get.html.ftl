@@ -66,7 +66,7 @@
                                             break;
 
                                         case "datetime":
-                                            html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.default"));
+                                            html += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.defaultDateOnly"));
                                             break;
 
                                         case "date":
