@@ -544,9 +544,11 @@ IT.component = IT.component || {};
 				var clazz = rec.getData("class");
 				var NS = clazz.substr(0,clazz.indexOf(":"));
 				//TODO: Как по NS определять его URL?
-				for(var n in args.namespaces) {
-					if(args.namespaces[n].prefix==NS&&!containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
-						args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
+				if(namespace!==NS) {
+					for(var n in args.namespaces) {
+						if(args.namespaces[n].prefix==NS&&!containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
+							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
+						}
 					}
 				}
 			}
