@@ -267,55 +267,6 @@
                                                         <subFolders/>
                                                     </node>
                                                     <node>
-                                                        <type>userTransition</type>
-                                                        <name>f0971023-3aed-4784-9791-dcacb2c85cce</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/b014f6d2-a668-4777-b1f4-cc8b36d76bad
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transition-script</name>
-                                                                <value><![CDATA[(function(){
-    var incoming = bpm_package.children[0];
-    var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
-
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-
-    documentScript.finalizeToUnit(incoming, unit);
-})();]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Удалить]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/4e59d75f-8b81-40bd-ac8c-271abb54204c
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
                                                         <type>transitionWorkflow</type>
                                                         <name>9bcd4724-0b0e-4279-9b8c-e7daa651c27a</name>
                                                         <nodeRef>
