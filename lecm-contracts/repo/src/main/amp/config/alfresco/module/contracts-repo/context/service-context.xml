@@ -520,7 +520,7 @@
 
 	<bean id="webscript.ru.it.lecm.contracts.dashlet.GetRecentActivity.get"
 		  class="ru.it.lecm.contracts.webscripts.GetRecentActivity">
-		<property name="searchService" ref="searchService"/>
+		<property name="searchService" ref="SearchService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="maxDays" value="${lecm.contracts.dashlet.recentActivity.maxDays}"/>
 		<property name="maxRecords" value="${lecm.contracts.dashlet.recentActivity.maxRecords}"/>
