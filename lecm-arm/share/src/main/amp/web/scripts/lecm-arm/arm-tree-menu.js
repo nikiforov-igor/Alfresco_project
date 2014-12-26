@@ -376,12 +376,20 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			            types: node.data.types,
                         reportCodes: node.data.reportCodes
 		            });
+                    YAHOO.Bubbling.fire ("updateArmFilters", {
+                        currentNode: null,
+                        isNotGridNode: isNotGridNode
+                    });
 	            }
 	            if (isHtmlNode) {
                     LogicECM.module.Base.Util.saveAdditionalObjects();
 		            YAHOO.Bubbling.fire ("updateArmHtmlNode", {
                         armNode: node
 		            });
+                    YAHOO.Bubbling.fire ("updateArmFilters", {
+                        currentNode: null,
+                        isNotGridNode: isNotGridNode
+                    });
 	            } else {
                     YAHOO.Bubbling.fire ("armNodeSelected", {
                         armNode: node,

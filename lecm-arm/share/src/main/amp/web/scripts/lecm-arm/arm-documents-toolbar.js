@@ -633,15 +633,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             onUpdateArmFilters: function (layer, args) {
                 var currentNode = args[1].currentNode;
+                var isNotGridNode = args[1].isNotGridNode;
                 this.currentNode = currentNode;
+
+                if (isNotGridNode) {
+                    Dom.setStyle(this.id, "display", "none");
+                } else {
+                    Dom.setStyle(this.id, "display", "block");
+                }
+
                 if (currentNode !== null) {
-                    var isReportNode = this.currentNode.data.nodeType == "lecm-arm:reports-node";
-                    var isHtmlNode = this.currentNode.data.htmlUrl != null && this.currentNode.data.htmlUrl.length > 0;
-                    if (isReportNode || isHtmlNode) {
-                        Dom.setStyle(this.id, "display", "none");
-                    } else {
-                        Dom.setStyle(this.id, "display", "block");
-                    }
                     var filters = currentNode.data.filters;
                     var hasFilters = filters != null && filters.length > 0;
                     var hasColumns = currentNode.data.columns != null && currentNode.data.columns.length > 0;
