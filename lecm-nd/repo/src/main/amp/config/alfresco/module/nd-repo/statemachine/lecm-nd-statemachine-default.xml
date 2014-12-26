@@ -2205,7 +2205,7 @@
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED"]]></value>
+																<value><![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED_FORCED"]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
