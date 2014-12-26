@@ -480,6 +480,11 @@
 		<property name="preferenceService" ref="preferenceService"/>
 	</bean>
 
+    <bean id="userHomeProcessor" class="ru.it.lecm.base.processors.UserHomeProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="USER_HOME"/>
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
+    </bean>
+
 	<bean id="searchQueryProcessorWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SearchQueryProcessorScript">
 		<property name="extensionName">
 			<value>searchQueryProcessor</value>

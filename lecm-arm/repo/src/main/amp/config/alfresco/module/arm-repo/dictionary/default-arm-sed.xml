@@ -20,7 +20,7 @@
 						<property name="lecm-arm:counter-description"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
 						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-						<property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\-aspects\:is\-draft:true]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\-aspects\:is\-draft:true AND {{USER_HOME}}]]></property>
 						<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
 						<items>
 							<item name="cm:Документы" type="lecm-arm:node">
