@@ -316,33 +316,6 @@
 															</subFolder>
 														</subFolders>
 													</node>
-													<node>
-														<type>userTransition</type>
-														<name>ef268298-1149-408b-a67d-b573c8bd44e8</name>
-														<nodeRef>workspace://SpacesStore/314080ab-16f3-4fcd-a17b-42485181567c</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Удалить]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-															<transitionLabelAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/6f2936b6-c514-4abf-a426-7a4f177b0c32</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders/>
-													</node>
 												</nodes>
 											</subFolder>
 										</subFolders>
