@@ -4103,11 +4103,6 @@
 								<property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
-							<item name="cm:972434ed-50d8-4566-b119-2a924a6c7c26" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Идентификатор БД объекта]]></property>
-								<property name="cm:name"><![CDATA[92c75c50-2a01-409c-b38c-f5ec93b1e5de]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[sys:node-dbid]]></property>
-							</item>
 						</items>
 						<assocs>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Закрытые/767add79-545d-4a78-a396-5440290467d4"/>
@@ -4180,11 +4175,6 @@
 								<property name="cm:name"><![CDATA[e9dd1f36-9cc9-4ef4-9dc6-9872aea7a2e7]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:creator]]></property>
 							</item>
-							<item name="cm:31c3f6ea-b823-4475-a63e-8269d833030e" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Идентификатор БД объекта]]></property>
-								<property name="cm:name"><![CDATA[3a49b28c-f7a3-4205-9ced-bd112bed081b]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[sys:node-dbid]]></property>
-							</item>
 						</items>
 						<assocs>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Проекты/d19bff2f-202f-4230-b0e1-9bd82306de79"/>
@@ -4252,11 +4242,6 @@
 								<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
 								<property name="cm:name"><![CDATA[a8fdac26-cdbf-40b7-9f5f-dc014f2ca3c0]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:author-assoc]]></property>
-							</item>
-							<item name="cm:a754ac61-bb4e-4e3f-bdf4-94b4a48b17f4" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Идентификатор БД объекта]]></property>
-								<property name="cm:name"><![CDATA[7caf7ee5-3efa-4efc-a306-b5bde4dfba00]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[sys:node-dbid]]></property>
 							</item>
 						</items>
 						<assocs>
@@ -4336,11 +4321,6 @@
 								<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
 								<property name="cm:name"><![CDATA[72d03ab2-1ce6-4a0f-b0e5-d92e18e17fa1]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:author-assoc]]></property>
-							</item>
-							<item name="cm:46b3e77f-23b5-4795-90da-ab92f2fe39c0" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Идентификатор БД объекта]]></property>
-								<property name="cm:name"><![CDATA[f246397a-56bc-4142-8964-c037fb2f6ba4]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[sys:node-dbid]]></property>
 							</item>
 						</items>
 						<assocs>
