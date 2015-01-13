@@ -10,14 +10,6 @@
                 <default>{default}</default>
 			</properties>
 		</component>
-		<!-- Title -->
-		<component>
-			<region-id>title</region-id>
-			<url>/lecm/statemachine/editor/title</url>
-			<properties>
-				<statemachineId>{statemachineId}</statemachineId>
-			</properties>
-		</component>
 		<!-- Menu -->
 		<!--<component>-->
 			<!--<region-id>menu</region-id>-->

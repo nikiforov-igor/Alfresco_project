@@ -42,42 +42,71 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 	};
 
 	YAHOO.extend(LogicECM.module.ModelEditor.Menu, Alfresco.component.Base, {
+
+		onModelEditorHome: function(event, obj) {
+			Alfresco.util.PopupManager.displayMessage({
+				text: 'Not implementer yet'
+			});
+		},
+
+		onStateMachineHome: function(event, obj) {
+			var docType, statemachineId, param;
+			docType = YAHOO.util.History.getQueryStringParameter('doctype');
+			if (docType) {
+				param = docType.replace(':', '_');
+			} else {
+				statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
+				param = statemachineId;
+			}
+			if (param) {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'statemachine?statemachineId=' + param;
+			} else {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'statemachine';
+			}
+		},
+
+		onFormsEditorHome: function(event, obj) {
+			var docType, statemachineId, param;
+			docType = YAHOO.util.History.getQueryStringParameter('doctype');
+			if (docType) {
+				param = docType;
+			} else {
+				statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
+				param = statemachineId.replace('_', ':');
+			}
+			if (param) {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-forms-list?doctype=' + param;
+			} else {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-forms-list';
+			}
+		},
+
+		onControlsEditorHome: function(event, obj) {
+			var docType, statemachineId, param;
+			docType = YAHOO.util.History.getQueryStringParameter('doctype');
+			if (docType) {
+				param = docType;
+			} else {
+				statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
+				param = statemachineId.replace('_', ':');
+			}
+			if (param) {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-controls-list?doctype=' + param;
+			} else {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-controls-list';
+			}
+		},
+
+		onModelListHome: function(event, obj) {
+			window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-model-list';
+		},
+
 		onReady:function () {
-			this.widgets.modelEditorHomeBtn = Alfresco.util.createYUIButton(this, 'modelEditorHomeBtn', function() {
-				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-model-list';
-			});
-
-			this.widgets.formsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'formsEditorHomeBtn', function() {
-				var docType, statemachineId, param;
-				docType = YAHOO.util.History.getQueryStringParameter('doctype');
-				if (docType) {
-					param = docType;
-				} else {
-					statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
-					param = statemachineId.replace('_', ':');
-				}
-				if (param) {
-					window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-forms-list?doctype='+param;
-				} else {
-					window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-forms-list';
-				}
-			});
-
-			this.widgets.controlsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'controlsEditorHomeBtn', function() {
-				var docType, statemachineId, param;
-				docType = YAHOO.util.History.getQueryStringParameter('doctype');
-				if (docType) {
-					param = docType;
-				} else {
-					statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
-					param = statemachineId.replace('_', ':');
-				}
-				if (param) {
-					window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-controls-list?doctype='+param;
-				} else {
-					window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-controls-list';
-				}
-			});
+			this.widgets.modelEditorHomeBtn = Alfresco.util.createYUIButton(this, 'modelEditorHomeBtn', this.onModelEditorHome);
+			this.widgets.stateMachineHomeBtn = Alfresco.util.createYUIButton(this, 'stateMachineHomeBtn', this.onStateMachineHome);
+			this.widgets.formsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'formsEditorHomeBtn', this.onFormsEditorHome);
+			this.widgets.controlsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'controlsEditorHomeBtn', this.onControlsEditorHome);
+			this.widgets.modelListHomeBtn = Alfresco.util.createYUIButton(this, 'modelListHomeBtn', this.onModelListHome);
 		}
 	});
 })();

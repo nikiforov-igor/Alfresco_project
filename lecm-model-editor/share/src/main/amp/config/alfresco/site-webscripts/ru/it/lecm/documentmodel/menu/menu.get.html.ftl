@@ -7,8 +7,10 @@
 
 <@comp.baseMenu>
 	<@comp.baseMenuButton "modelEditorHome" msg('lecm.modelEditorHome.btn') "modelEditorHome" true true/>
+	<@comp.baseMenuButton "stateMachineHome" msg('lecm.stateMachineHome.btn') "stateMachineHome" true true/>
 	<@comp.baseMenuButton "formsEditorHome" msg('lecm.formsEditorHome.btn') "formsEditorHome" true true/>
 	<@comp.baseMenuButton "controlsEditorHome" msg('lecm.controlsEditorHome.btn') "controlsEditorHome" true true/>
+	<@comp.baseMenuButton "modelListHome" msg('lecm.modelListHome.btn') "modelListHome" true true/>
 </@comp.baseMenu>
 
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-forms-editor/lecm-modeleditor-menu.js"/>

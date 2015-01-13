@@ -2,14 +2,6 @@
 <template-instance>
 	<template-type>ru/it/lecm/doccontrols/doc-controls-list</template-type>
 	<components>
-		<component>
-			<region-id>title</region-id>
-			<url>/components/title/simple-title</url>
-			<properties>
-				<title>Редактор контролов {doctype}</title>
-			</properties>
-		</component>
-
 		<!-- Menu -->
 		<component>
 			<region-id>menu</region-id>

@@ -13,10 +13,10 @@
 		</component>
 
 		<!-- Menu -->
-		<component>
+<!--		<component>
 			<region-id>menu</region-id>
 			<url>/lecm/documentmodel/menu</url>
-		</component>
+		</component>-->
 
 		<!-- Create Content Form Manager -->
 		<component>

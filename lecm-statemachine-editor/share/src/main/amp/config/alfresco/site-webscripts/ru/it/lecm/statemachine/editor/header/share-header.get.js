@@ -1,14 +1,15 @@
-var headerTitle = widgetUtils.findObject(model.jsonModel, "id", "HEADER_TITLE");
-if (headerTitle != null) {
-    if (page.url.args) {
-        if (page.id == "statemachine") {
-            var title = "Statemachine Editor";
-            var url = "/lecm/statemachine/editor/title?" + page.url.queryString;
-            var json = remote.connect("alfresco").get(encodeURI(url));
-            if (json.status == 200) {
-                title = json;
-            }
-            headerTitle.config.label = title;
-        }
-    }
-}
+(function() {
+	var json,
+		title = 'Жизненный цикл',
+		url = '/lecm/statemachine/editor/title?' + page.url.queryString,
+		headerTitle = widgetUtils.findObject(model.jsonModel, 'id', 'HEADER_TITLE');
+		if (headerTitle) {
+			if (page.url.args && 'statemachine' == page.id) {
+				json = remote.connect('alfresco').get(encodeURI(url));
+				if (200 == json.status) {
+					title = json + ' – ' + title;
+				}
+				headerTitle.config.label = title;
+			}
+		}
+})();
