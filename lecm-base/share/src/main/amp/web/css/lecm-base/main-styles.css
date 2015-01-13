@@ -312,15 +312,12 @@ i.icon-building {
     border-bottom-width: 0;
     border-radius: 5px 5px 0 0;
 }
-.yui-skin-lecmTheme .yui-navset .yui-nav li a:focus,
-.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a:focus {
-    outline: 1px dashed #ccc;
-    outline-offset: -6px;
-}
 .yui-skin-lecmTheme .yui-navset .yui-nav li a em,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a em {
-    padding: 5px 15px 2px;
-    border: none;
+    padding: 2px 8px 0;
+    margin: 2px 4px 1px;
+    border: 1px dashed transparent;
+    border-radius: 0;
     font-size: 13px;
     font-weight: bold;
     color: #303030;
@@ -337,10 +334,18 @@ i.icon-building {
 }
 .yui-skin-lecmTheme .yui-navset .yui-nav li.selected a em,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a em {
-    padding-bottom: 4px;
+    margin-bottom: 3px;
     color: #076a8d;
-    border-radius: 4px 4px 0 0;
 }
+.yui-skin-lecmTheme .yui-navset .yui-nav li a:focus,
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a:focus {
+    outline: 0;
+}
+.yui-skin-lecmTheme .yui-navset .yui-nav li a:focus em,
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a:focus em {
+    border-color: #ccc;
+}
+
 .yui-skin-lecmTheme .yui-navset .yui-content,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-content {
     margin: 0;
