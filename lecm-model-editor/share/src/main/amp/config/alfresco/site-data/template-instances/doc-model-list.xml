@@ -2,14 +2,6 @@
 <template-instance>
 	<template-type>ru/it/lecm/docmodel/doc-model-list</template-type>
 	<components>
-		<component>
-			<region-id>title</region-id>
-			<url>/components/title/simple-title</url>
-			<properties>
-				<title>Модели документов</title>
-			</properties>
-		</component>
-
 		<!--Datagrid -->
 		<component>
 			<region-id>datagrid</region-id>

@@ -2,15 +2,6 @@
 <template-instance>
 	<template-type>ru/it/lecm/docmodel/doc-model-edit</template-type>
 	<components>
-
-		<component>
-			<region-id>title</region-id>
-			<url>/components/title/simple-title</url>
-			<properties>
-				<title>Редактор моделей</title>
-			</properties>
-		</component>
-
 		<!-- Menu -->
 		<component>
 			<region-id>menu</region-id>

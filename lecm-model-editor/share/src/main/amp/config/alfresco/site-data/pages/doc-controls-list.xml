@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<title>Редактор контролов</title>
+	<title>Контролы</title>
 	<description>Document controls list</description>
 	<template-instance>doc-controls-list</template-instance>
 	<authentication>user</authentication>

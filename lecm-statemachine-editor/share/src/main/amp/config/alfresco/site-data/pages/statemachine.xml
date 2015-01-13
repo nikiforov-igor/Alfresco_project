@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<title>Statemachine Editor Module</title>
+	<title>Жизненный цикл</title>
 	<description>Statemachine Editor Module</description>
 	<template-instance>statemachine</template-instance>
 	<authentication>user</authentication>
