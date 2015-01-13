@@ -10,6 +10,10 @@
                 <default>{default}</default>
 			</properties>
 		</component>
+		<component>
+			<region-id>deploy</region-id>
+			<url>/lecm/statemachine/deploy</url>
+		</component>
 		<!-- Menu -->
 		<!--<component>-->
 			<!--<region-id>menu</region-id>-->

@@ -48,11 +48,17 @@
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-statemachine-editor/menu.js"></@script>
 </@>
 
+<#assign showContent=page.url.args.statemachineId??>
+<#assign showMenu=showContent>
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@bpage.basePage>
+<@bpage.basePage showMenu=showMenu>
     <#if hasRole>
-        <@region id="content" scope="template" />
+        <#if showContent>
+            <@region id="content" scope="template" />
+        <#else>
+            <@region id="deploy" scope="template" />
+        </#if>
     <#else>
         <@region id="forbidden" scope="template"/>
     </#if>
