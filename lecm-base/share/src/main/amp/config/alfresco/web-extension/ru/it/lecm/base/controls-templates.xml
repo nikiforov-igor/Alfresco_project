@@ -99,6 +99,9 @@
 				<param id="additionalFilter" localName="Дополнительный фильтр"/>
 				<param id="forceMultiple" localName="Принудительный множественный выбор"/>
 			</control>
+			<control id="approval-list-datagrid-control" template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl" localName="Согласование">
+				<param id="editable" localName="Редактируемый" mandatory="false" description="Является ли этот контрол редактируемым"/>
+			</control>
 		</controls-templates>
 	</config>
 </alfresco-config>
