@@ -305,6 +305,12 @@
         <property name="reportsManager" ref="reportsManager"/>
     </bean>
 
+    <bean id="webscript.ru.it.lecm.forms.jasper.form.post"
+          class="ru.it.lecm.reports.forms.ReportMainProducer"
+          parent="webscript">
+        <property name="reportsManager" ref="reportsManager"/>
+    </bean>
+
     <bean id="reportsMgrJavaScriptExtension" class="ru.it.lecm.reports.extensions.ReportManagerJavascriptExtension"
           parent="baseScript">
         <property name="extensionName" value="rptmanager"/>

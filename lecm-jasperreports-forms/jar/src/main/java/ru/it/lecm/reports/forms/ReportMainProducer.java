@@ -1,7 +1,10 @@
 package ru.it.lecm.reports.forms;
 
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.util.PropertyCheck;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -12,8 +15,8 @@ import ru.it.lecm.reports.utils.Utils;
 import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -33,6 +36,8 @@ public class ReportMainProducer extends AbstractWebScript {
 
     final static String PARAM_EXEC = "exec";
     final static String CONTENT_TEXT_HTML_CHARSET_UTF_8 = "text/html;charset=UTF-8";
+    private final static String JSON_PARAMETERS_KEY = "json_form_parameters";
+    private static final transient Logger logger = LoggerFactory.getLogger(ReportMainProducer.class);
 
     private ReportsManager reportsManager;
 
@@ -54,9 +59,28 @@ public class ReportMainProducer extends AbstractWebScript {
      */
     public static Map<String, String> getRequestParameters(WebScriptRequest webScriptRequest) {
         final Map<String, String> result = new HashMap<String, String>();
+        //Get json params
+        String json = webScriptRequest.getParameter(JSON_PARAMETERS_KEY);
+        if (json != null) {
+            try {
+                JSONObject jsonParameters = new JSONObject(json);
+                Iterator<String> keys = jsonParameters.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    String value = jsonParameters.getString(key);
+                    result.put(key, value);
+                }
+            } catch (JSONException e) {
+                logger.error("Error while parsing JSON parameters", e);
+            }
+        }
+
+        //Get query parameters
         for (String paramName : webScriptRequest.getParameterNames()) {
-            String value = webScriptRequest.getParameter(paramName);
-            result.put(paramName, value);
+            if (!JSON_PARAMETERS_KEY.equals(paramName)) {
+                String value = webScriptRequest.getParameter(paramName);
+                result.put(paramName, value);
+            }
         }
         return result;
     }
@@ -66,17 +90,17 @@ public class ReportMainProducer extends AbstractWebScript {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
         PropertyCheck.mandatory(this, "reportGenerators", getReportsManager().getReportGenerators());
 
+        final Map<String, String> requestParameters = getRequestParameters(webScriptRequest);
         final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
         final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
-        final String templateCode = webScriptRequest.getParameter("templateCode");
-        final Map<String, String> requestParameters = getRequestParameters(webScriptRequest);
+        final String templateCode = requestParameters.get("templateCode");
 
         final ReportFileData result = getReportsManager().generateReport(reportName, templateCode, requestParameters);
 
         if (result != null) {
-	        webScriptResponse.setContentType(result.getMimeType());
-	        webScriptResponse.setContentEncoding(result.getEncoding());
-	        webScriptResponse.addHeader("Content-Disposition", "filename=\"" + MimeUtility.encodeWord(result.getFilename(), "utf-8", "Q") + "\"");
+            webScriptResponse.setContentType(result.getMimeType());
+            webScriptResponse.setContentEncoding(result.getEncoding());
+            webScriptResponse.addHeader("Content-Disposition", "filename=\"" + MimeUtility.encodeWord(result.getFilename(), "utf-8", "Q") + "\"");
 
             if (result.getData() != null) {
                 final OutputStream out = webScriptResponse.getOutputStream();
