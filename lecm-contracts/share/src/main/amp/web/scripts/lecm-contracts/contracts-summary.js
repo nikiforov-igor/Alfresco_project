@@ -57,7 +57,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 				proxyUri: Alfresco.constants.PROXY_URI,
 				docType: 'lecm-contract:document',
 				archive: 'false',
-				skippedStatuses: 'Корзина'
+				skippedStatuses: encodeURIComponent('Корзина')
 			});
 			var successCallback = {
 				scope: this,
