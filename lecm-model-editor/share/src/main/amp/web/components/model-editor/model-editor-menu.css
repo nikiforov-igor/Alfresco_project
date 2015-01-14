@@ -12,4 +12,5 @@
 	background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
 }
 #lecm-menu #menu-buttons #menu-buttons-modelListHomeBtn span.first-child {
+	background: url('/share/res/images/lecm-statemachine-editor/back.png') no-repeat 4px 4px;
 }

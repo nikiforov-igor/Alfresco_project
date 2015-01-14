@@ -43,55 +43,84 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 	YAHOO.extend(LogicECM.module.ModelEditor.Menu, Alfresco.component.Base, {
 
-		onModelEditorHome: function(event, obj) {
-			Alfresco.util.PopupManager.displayMessage({
-				text: 'Not implementer yet'
+		options: {
+			nodeRef: null,
+			nodeType: null,
+			fileName: null
+		},
+
+		_getLocalParam: function() {
+			var docType, statemachineId;
+
+			if (this.options.fileName) {
+				return this.options.fileName;
+			}
+
+			docType = YAHOO.util.History.getQueryStringParameter('doctype');
+			if (docType) {
+				return docType;
+			}
+
+			statemachineId = statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
+			if (statemachineId) {
+				return statemachineId;
+			}
+
+			return null;
+		},
+
+		_getRemoteParam: function(successCallbackFn) {
+			var localParam = this._getLocalParam().replace(':', '_'),
+				template = '{proxyUri}lecm/docmodels/details?fileName={fileName}',
+				url = YAHOO.lang.substitute(template, {
+					proxyUri: Alfresco.constants.PROXY_URI,
+					fileName: localParam
+				}),
+				successCallback = {
+					scope: this,
+					fn: successCallbackFn
+				};
+			Alfresco.util.Ajax.jsonGet({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
 			});
 		},
 
+//		onModelEditorHome: function(event, obj) {
+//			var urlTemplate = 'doc-model-edit?formId=edit-model&redirect=/share/page/doc-model-list&nodeRef=';
+//			if (this.options.nodeRef) {
+//				window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + this.options.nodeRef;
+//			} else {
+//				this._getRemoteParam(function(serverResponse) {
+//					var json = serverResponse.json;
+//					window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + json.nodeRef;
+//				});
+//			}
+//		},
+
 		onStateMachineHome: function(event, obj) {
-			var docType, statemachineId, param;
-			docType = YAHOO.util.History.getQueryStringParameter('doctype');
-			if (docType) {
-				param = docType.replace(':', '_');
-			} else {
-				statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
-				param = statemachineId;
-			}
+			var param = this._getLocalParam();
 			if (param) {
-				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'statemachine?statemachineId=' + param;
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'statemachine?statemachineId=' + param.replace(':', '_');
 			} else {
 				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'statemachine';
 			}
 		},
 
 		onFormsEditorHome: function(event, obj) {
-			var docType, statemachineId, param;
-			docType = YAHOO.util.History.getQueryStringParameter('doctype');
-			if (docType) {
-				param = docType;
-			} else {
-				statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
-				param = statemachineId.replace('_', ':');
-			}
+			var param = this._getLocalParam();
 			if (param) {
-				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-forms-list?doctype=' + param;
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-forms-list?doctype=' + param.replace('_', ':');
 			} else {
 				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-forms-list';
 			}
 		},
 
 		onControlsEditorHome: function(event, obj) {
-			var docType, statemachineId, param;
-			docType = YAHOO.util.History.getQueryStringParameter('doctype');
-			if (docType) {
-				param = docType;
-			} else {
-				statemachineId = YAHOO.util.History.getQueryStringParameter('statemachineId');
-				param = statemachineId.replace('_', ':');
-			}
+			var param = this._getLocalParam();
 			if (param) {
-				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-controls-list?doctype=' + param;
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-controls-list?doctype=' + param.replace('_', ':');
 			} else {
 				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'doc-controls-list';
 			}
@@ -102,7 +131,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 
 		onReady:function () {
-			this.widgets.modelEditorHomeBtn = Alfresco.util.createYUIButton(this, 'modelEditorHomeBtn', this.onModelEditorHome);
+//			this.widgets.modelEditorHomeBtn = Alfresco.util.createYUIButton(this, 'modelEditorHomeBtn', this.onModelEditorHome);
 			this.widgets.stateMachineHomeBtn = Alfresco.util.createYUIButton(this, 'stateMachineHomeBtn', this.onStateMachineHome);
 			this.widgets.formsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'formsEditorHomeBtn', this.onFormsEditorHome);
 			this.widgets.controlsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'controlsEditorHomeBtn', this.onControlsEditorHome);

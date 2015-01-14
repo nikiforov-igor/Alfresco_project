@@ -2,12 +2,6 @@
 <template-instance>
 	<template-type>ru/it/lecm/docmodel/doc-model-create</template-type>
 	<components>
-		<!-- Menu -->
-<!--		<component>
-			<region-id>menu</region-id>
-			<url>/lecm/documentmodel/menu</url>
-		</component>-->
-
 		<!-- Create Content Form Manager -->
 		<component>
 			<region-id>create-content-mgr</region-id>
