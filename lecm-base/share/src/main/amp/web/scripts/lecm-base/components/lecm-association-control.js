@@ -1427,6 +1427,14 @@ LogicECM.module = LogicECM.module || {};
 						{
 							var recordData = record.getData();
 							me.selectedItemAdded(recordData);
+//                          IE fix - start : Снять фокус, чтоб убрать рамку-выделение в ИЕ (ALF-3802)
+                            if (navigator.userAgent.search(/MSIE/) > -1) {
+                                var liner = Dom.getAncestorByClassName(target, "yui-dt-liner");
+                                if (liner) {
+                                    liner.blur();
+                                }
+                            }
+//                          IE fix - end
 							if (me.options.fireAction.addItem != null) {
 								var fireName = me.options.fireAction.addItem.split(",");
 								for (var i in fireName){
