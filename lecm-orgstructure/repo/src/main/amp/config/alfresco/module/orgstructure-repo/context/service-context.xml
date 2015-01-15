@@ -350,7 +350,9 @@
         <property name="nodeService" ref="NodeService" />
     </bean>
 
-    <bean name="userOrganizationsSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="userOrganizationsSharedCache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.userOrganizationsSharedCache"/>
+    </bean>
 
     <bean name="userOrganizationsCache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache">

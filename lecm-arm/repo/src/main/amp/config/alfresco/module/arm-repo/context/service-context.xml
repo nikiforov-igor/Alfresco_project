@@ -262,70 +262,90 @@
         </constructor-arg>
     </bean>
 
-    <bean name="arm.columns.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.columns.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.columns.shared.cache"/>
+    </bean>
 
     <bean name="arm.columns.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.columns.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.columns"/>
     </bean>
 
-    <bean name="arm.nodes.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.nodes.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.nodes.shared.cache"/>
+    </bean>
 
     <bean name="arm.nodes.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.nodes.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.nodes"/>
     </bean>
 
-    <bean name="arm.nodes.types.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.nodes.types.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.nodes.types.shared.cache"/>
+    </bean>
 
     <bean name="arm.nodes.types.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.nodes.types.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.nodes.types"/>
     </bean>
 
-    <bean name="arm.filters.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.filters.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.filters.shared.cache"/>
+    </bean>
 
     <bean name="arm.filters.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.filters.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.filters"/>
     </bean>
 
-    <bean name="arm.accordions.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.accordions.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.accordions.shared.cache"/>
+    </bean>
 
     <bean name="arm.accordions.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.accordions.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.accordions"/>
     </bean>
 
-    <bean name="arm.properties.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.properties.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.properties.shared.cache"/>
+    </bean>
 
     <bean name="arm.properties.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.properties.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.properties"/>
     </bean>
 
-    <bean name="arm.parents.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.parents.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.parents.shared.cache"/>
+    </bean>
 
     <bean name="arm.parents.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.parents.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.parents"/>
     </bean>
 
-    <bean name="arm.arms.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.arms.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.arms.shared.cache"/>
+    </bean>
 
     <bean name="arm.arms.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.arms.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.arms"/>
     </bean>
 
-    <bean name="arm.types.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.types.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.types.shared.cache"/>
+    </bean>
 
     <bean name="arm.types.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.types.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.types"/>
     </bean>
 
-    <bean name="arm.rules.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+    <bean name="arm.rules.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.arm.rules.shared.cache"/>
+    </bean>
 
     <bean name="arm.rules.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.rules.shared.cache"/>

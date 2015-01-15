@@ -370,18 +370,11 @@
 
 	<bean id="propertiesInterceptor" class="ru.it.lecm.base.utils.LecmBasePropertiesInterceptor"/>
 
-	<bean name="objTypeSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
-		<!-- <property name="cache">
-			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
-				<property name="cacheManager">
-					<ref bean="internalEHCacheManager" />
-								</property>
-				<property name="cacheName">
-					<value>ru.it.lecm.cache.objTypeCache</value>
-								</property>
-						</bean>
-		</property> -->
-	</bean>
+    <bean name="objTypeSharedCache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.objTypeSharedCache"/>
+    </bean>
+
+
 
 	<bean name="objTypeCache" class="org.alfresco.repo.cache.TransactionalCache">
 		<property name="sharedCache">
@@ -394,18 +387,9 @@
 		<property name="mutable" value="true" />
 	</bean>
 
-	<bean name="typeTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
-		<!-- <property name="cache">
-			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
-				<property name="cacheManager">
-					<ref bean="internalEHCacheManager" />
-								</property>
-				<property name="cacheName">
-					<value>ru.it.lecm.cache.typeTemplateCache</value>
-								</property>
-						</bean>
-		</property> -->
-	</bean>
+    <bean name="typeTemplateSharedCache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.typeTemplateSharedCache"/>
+    </bean>
 
 	<bean name="typeTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
 		<property name="sharedCache">
@@ -418,18 +402,9 @@
 		<property name="mutable" value="true" />
 	</bean>
 
-	<bean name="typeListTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
-		<!-- <property name="cache">
-			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
-				<property name="cacheManager">
-					<ref bean="internalEHCacheManager" />
-								</property>
-				<property name="cacheName">
-					<value>ru.it.lecm.cache.typeListTemplateCache</value>
-								</property>
-						</bean>
-		</property> -->
-	</bean>
+    <bean name="typeListTemplateSharedCache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.typeListTemplateSharedCache"/>
+    </bean>
 
 	<bean name="typeListTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
 		<property name="sharedCache">
