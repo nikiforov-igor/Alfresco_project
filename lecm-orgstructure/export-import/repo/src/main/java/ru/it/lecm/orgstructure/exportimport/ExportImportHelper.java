@@ -18,6 +18,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
+import static ru.it.lecm.base.beans.BaseBean.IS_ACTIVE;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
@@ -54,7 +55,7 @@ public class ExportImportHelper {
 		final SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		final String searchQuery = String.format("+PATH:\"%s//*\" AND TYPE:\"%s\"", nodeService.getPath(rootNode).toPrefixString(namespaceService), nodeType.toPrefixString(namespaceService));
+		final String searchQuery = String.format("+PATH:\"%s//*\" AND TYPE:\"%s\" AND NOT @lecm-dic\\:active:false", nodeService.getPath(rootNode).toPrefixString(namespaceService), nodeType.toPrefixString(namespaceService));
 		sp.setQuery(searchQuery);
 		ResultSet results = null;
 
@@ -108,7 +109,7 @@ public class ExportImportHelper {
 		return result;
 	}
 
-	public List<NodeRef> getAllEmployees() {
+	public List<NodeRef> getAllEmployees(boolean activeOnly) {
 		final NodeRef employeesDir = orgstructureService.getEmployeesDirectory();
 		final List<NodeRef> employeesNodes = new ArrayList<>();
 
@@ -118,7 +119,10 @@ public class ExportImportHelper {
 		final List<ChildAssociationRef> employeesChildAssocs = nodeService.getChildAssocs(employeesDir, employeesType);
 
 		for (ChildAssociationRef employeeChildAssoc : employeesChildAssocs) {
-			employeesNodes.add(employeeChildAssoc.getChildRef());
+			NodeRef employeeNode = employeeChildAssoc.getChildRef();
+			if (!activeOnly || (Boolean) nodeService.getProperty(employeeNode, IS_ACTIVE)) {
+				employeesNodes.add(employeeNode);
+			}
 		}
 		return employeesNodes;
 	}

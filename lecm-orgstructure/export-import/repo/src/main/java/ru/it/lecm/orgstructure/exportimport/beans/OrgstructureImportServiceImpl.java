@@ -165,12 +165,9 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		List<Position> positionsList = positions.getPosition();
 		final int positionsListSize = positionsList.size();
 
-		final Map<String, NodeRef> existingItems = helper.getNodeRefsIDs(orgstructureService.getStaffPositions(true));
+		final Map<String, NodeRef> existingItems = helper.getNodeRefsIDs(orgstructureService.getStaffPositions(false));
 		final Map<String, NodeRef> newlyCreatedPositions = createdItems.getPositions();
 
-//		if (!newlyCreatedItems.containsKey("positions")) {
-//			newlyCreatedItems.put("positions", new HashMap<String, NodeRef>());
-//		}
 		int importedCount = 0;
 
 		for (final Position position : positionsList) {
@@ -195,12 +192,24 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							return false;
 						}
 
-						if (existingItems.containsKey(id) || newlyCreatedPositions.containsKey(id)) {
-							logger.error("Невозможно выполнить импорт должности {}: должность с таким ID уже существует", position);
-							return false;
+						NodeRef existingPosition = getValueFromTwoMaps(id, newlyCreatedPositions, existingItems);
+						if (existingPosition != null) {
+							if (isArchive(existingPosition)) {
+								nodeService.setProperty(existingPosition, IS_ACTIVE, true);
+								logger.info("Существующая должность {} активирована", existingPosition);
+								return true;
+							} else {
+								logger.error("Невозможно выполнить импорт должности {}: должность с таким ID уже существует", position);
+								return false;
+							}
 						}
 
-						NodeRef positionNode = createPosition(id, positionName, StringUtils.trim(position.getNameDative()), StringUtils.trim(position.getNameGenitive()), StringUtils.trim(position.getCode()));
+						NodeRef positionNode = nodeService.getChildByName(positionsRoot, ContentModel.ASSOC_CONTAINS, positionName);
+						if (positionNode == null) {
+							positionNode = createPosition(id, positionName, StringUtils.trim(position.getNameDative()), StringUtils.trim(position.getNameGenitive()), StringUtils.trim(position.getCode()));
+						} else {
+							helper.addID(positionNode, id);
+						}
 
 						newlyCreatedPositions.put(id, positionNode);
 						logger.info("Успешно выполнен импорт должности {}", position);
@@ -219,6 +228,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 				importedCount++;
 			}
 		}
+
 		logger.info("Импортировано {} должностей из {}", importedCount, positionsListSize);
 		logger.info("Закончен импорт справочника должностей");
 	}
@@ -241,7 +251,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 	public void importEmployees(Employees employees, CreatedItems createdItems) {
 		logger.info("Начат импорт списка сотрудников");
 
-		final Map<String, NodeRef> existingItems = helper.getNodeRefsIDs(helper.getAllEmployees());
+		final Map<String, NodeRef> existingItems = helper.getNodeRefsIDs(helper.getAllEmployees(false));
 		final Map<String, NodeRef> newlyCreatedEmployees = createdItems.getEmployees();
 
 		List<Employee> employeeList = employees.getEmployee();
@@ -542,7 +552,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		final Map<String, NodeRef> existingDepartments = helper.getNodeRefsIDs(helper.getAllOrgUnits());
 		final Map<String, NodeRef> newlyCreatedDepartments = createdItems.getDepartments();
 
-		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees());
+		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees(false));
 		final Map<String, NodeRef> newlyCreatedEmployees = createdItems.getEmployees();
 
 		final Map<String, NodeRef> existingPositions = helper.getNodeRefsIDs(orgstructureService.getStaffPositions(true));
@@ -662,7 +672,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		final Map<String, NodeRef> existingDepartments = helper.getNodeRefsIDs(helper.getAllOrgUnits());
 		final Map<String, NodeRef> newlyCreatedDepartments = createdItems.getDepartments();
 
-		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees());
+		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees(false));
 		final Map<String, NodeRef> newlyCreatedEmployees = createdItems.getEmployees();
 
 		List<BusinessRole> businessRolesList = businessRoles.getBusinessRole();

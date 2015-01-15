@@ -98,7 +98,7 @@ public class OrgstructureExportServiceImpl extends BaseBean implements Orgstruct
 		Employees employees = new Employees();
 
 		List<Employee> employeeList = employees.getEmployee();
-		for (NodeRef employeeNode : helper.getAllEmployees()) {
+		for (NodeRef employeeNode : helper.getAllEmployees(true)) {
 
 			Employee employee = new Employee();
 
