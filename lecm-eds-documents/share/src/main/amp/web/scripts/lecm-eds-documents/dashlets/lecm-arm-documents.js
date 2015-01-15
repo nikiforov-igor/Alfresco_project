@@ -128,14 +128,18 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
             loadDocuments: function () {
                 var me = this;
                 if (this.options.isExist) {
+                    var query = me.options.baseQuery;
+                    if (me.options.baseQuery.length > 0 && me.widgets.filters.value != null && me.widgets.filters.value.length > 0) {
+                        query += " AND (" + me.widgets.filters.value + ")"
+                    }
+
                     Alfresco.util.Ajax.jsonPost(
                         {
                             url: Alfresco.constants.PROXY_URI + "lecm/document/getDocumentsByQuery",
                             dataObj: {
                                 skipCount: me.skipItemsCount,
                                 loadCount: me.loadItemsCount,
-                                query: (me.options.baseQuery + (me.options.baseQuery.length > 0  && me.widgets.filters.value.length > 0 ? " AND (" : "") + me.widgets.filters.value +
-                                    (me.options.baseQuery.length > 0 && me.widgets.filters.value.length > 0 ? ")" : ""))
+                                query: query
                             },
                             successCallback: {
                                 fn: function (response) {

@@ -27,7 +27,7 @@ if (arm != null && armNode != null) {
 
     var filtersArray = [];
 
-    var filters = armWrapper.getArmNodeChilds(armNode, true);
+    var filters = armWrapper.getArmNodeChilds(armNode, false);
 
     for (var i = 0; i < filters.size(); i++) {
         var filter = filters.get(i);

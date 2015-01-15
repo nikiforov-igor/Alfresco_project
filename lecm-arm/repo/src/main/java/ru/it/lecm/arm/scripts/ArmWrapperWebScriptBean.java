@@ -39,11 +39,11 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
 
     @SuppressWarnings("unused")
     public List<JSONObject> getArmNodeChilds(ScriptNode node, boolean withOwnQueryOnly) {
-        List<JSONObject> nodes = new ArrayList<JSONObject>();
+        List<JSONObject> nodes = new ArrayList<>();
         List<ArmNode> childNodes = armWrapperService.getChildNodes(node.getNodeRef(), nodeService.getPrimaryParent(node.getNodeRef()).getParentRef(), false);
         for (ArmNode childNode : childNodes) {
             String ownQuery = getFullQuery(childNode, false, false);
-            if (!withOwnQueryOnly || (ownQuery != null && !"".equals(ownQuery.trim()))) {
+            if ((!withOwnQueryOnly || (ownQuery != null && !"".equals(ownQuery.trim()))) && childNode.getNodeType().equals("lecm-arm:node")) {
                 JSONObject result = new JSONObject();
                 try {
                     result.put("title", childNode.getTitle());
