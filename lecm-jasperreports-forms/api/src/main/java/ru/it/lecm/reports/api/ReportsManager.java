@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.api;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
@@ -34,7 +35,13 @@ import java.util.*;
  *
  * @author rabdullin
  */
-public class ReportsManager {
+public class ReportsManager{
+/*
+    public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
+
+    final public QName TYPE_REPORT_DESCRIPTOR = QName.createQName(REPORTS_EDITOR_URI, "reportDescriptor");
+    final static public QName PROP_REPORT_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportCode");
+*/
 
     static final transient Logger logger = LoggerFactory.getLogger(ReportsManager.class);
 
@@ -42,11 +49,6 @@ public class ReportsManager {
     final public static String DEFAULT_REPORT_EXTENSION = ".jrxml";
     final public static String DEFAULT_REPORT_TEMPLATE = "jreportCommonTemplate.jrxml.gen";
     final public static String DEFAULT_SUB_REPORT_TEMPLATE = "sub-jreportCommonTemplate.jrxml.gen";
-
-    /**
-     * Список зарегистрирванных отчётов
-     */
-    private Map<String, ReportDescriptor> descriptors;
 
     private ReportEditorDAO reportEditorDAO; // хранилище отчётов редактора
     private ReportContentDAO contentFileDAO; // файлы готовых отчётов (поставка) в файловой системе
@@ -66,6 +68,17 @@ public class ReportsManager {
     private SubstitudeBean substitudeService;
 
     private XMLExportBean xmlExportBean;
+/*    private XMLImportBean xmlImportBean;*/
+
+    private SimpleCache<String, ReportDescriptor> reportsCache;
+
+/*    public void setXmlImportBean(XMLImportBean xmlImportBean) {
+        this.xmlImportBean = xmlImportBean;
+    }*/
+
+    public void setReportsCache(SimpleCache<String, ReportDescriptor> reportsCache) {
+        this.reportsCache = reportsCache;
+    }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
@@ -158,27 +171,11 @@ public class ReportsManager {
     }
 
     public void init() {
-        if (getDescriptors() != null && getDescriptors().size() > 0) {
-            if (logger.isInfoEnabled()) {// отобразить только названия шаблонов ...
-                logger.info(String.format(
-                        " initialized templates count %s\n\t%s",
-                        getDescriptors().size(),
-                        Utils.getAsString(getDescriptors().keySet(), "\n\t")));
-            } else if (logger.isDebugEnabled()) {// целиком загруженные шаблоны ...
-                logger.debug(String.format(
-                        " initialized templates count %s\n\t%s",
-                        getDescriptors().size(),
-                        Utils.getAsString(getDescriptors().values(), "\n\t")));
-            }
-
-            // добавим обработку подотчетов из репозитория!
-            // нам нужно скопировать их в файловую систему, если их там нет
-            List<ReportDescriptor> availableDescriptors = new ArrayList<ReportDescriptor>();
-            availableDescriptors.addAll(getDescriptors().values());
-
-            for (ReportDescriptor availableDescriptor : availableDescriptors) {
-                copySubreportsTemplatesInternal(availableDescriptor);
-            }
+        scanResources();
+        // добавим обработку подотчетов из репозитория!
+        // нам нужно скопировать их в файловую систему, если их там нет
+        for (String reportCode : getDescriptors().getKeys()) {
+            copySubreportsTemplatesInternal(getDescriptors().get(reportCode));
         }
     }
 
@@ -204,13 +201,84 @@ public class ReportsManager {
      * @param reportMnemoName мнемонический код отчёта (уникальный)
      */
     public ReportDescriptor getRegisteredReportDescriptor(String reportMnemoName) {
-        if (getDescriptors().containsKey(reportMnemoName)) {
-            return getDescriptors().get(reportMnemoName); // FOUND by Mnemonic
+        if (getDescriptors().contains(reportMnemoName)) {
+            return getDescriptors().get(reportMnemoName);
         }
 
         logger.warn(String.format("Report '%s' has no descriptor", reportMnemoName));
-        return null; // NOT FOUND
+        return null;
     }
+
+    /*private ReportDescriptor getReportDescriptorFromSource(String reportCode) {
+        ReportDescriptor descriptor = new ReportDescriptorImpl();
+        descriptor.setMnem(reportCode);
+
+        final ReportContentDAO.IdRContent idDS = DSXMLProducer.makeDsXmlId(descriptor);
+
+        ReportDescriptor reportDescriptor = null;
+        InputStream in = null;
+
+        try {
+            if (contentRepositoryDAO.exists(idDS)) {
+                NodeRef report = getReportDescriptorNodeByCode(reportCode);
+                if (report != null) {
+                    reportDescriptor = getReportEditorDAO().getReportDescriptor(report);
+                }
+            } else if (contentFileDAO.exists(idDS)) {
+                in = contentFileDAO.loadContent(idDS).getContentInputStream();
+                reportDescriptor = DSXMLProducer.parseDSXML(in, idDS.getFileName());
+            }
+        } finally {
+            IOUtils.closeQuietly(in);
+        }
+
+        if (reportDescriptor != null) {
+            return reportDescriptor;
+        }
+        return null;
+    }*/
+
+    /*private boolean isReportExists(String reportCode) {
+        ReportDescriptor descriptor = new ReportDescriptorImpl();
+        descriptor.setMnem(reportCode);
+
+        ReportContentDAO.IdRContent idDS = DSXMLProducer.makeDsXmlId(descriptor);
+        return contentRepositoryDAO.exists(idDS) || contentFileDAO.exists(idDS);
+    }
+
+    private boolean checkReportTimestamp(ReportDescriptor existDescriptor) {
+        ReportContentDAO.IdRContent idDS = DSXMLProducer.makeDsXmlId(existDescriptor);
+        if (contentRepositoryDAO.exists(idDS)) { // проверяем существование отчета в системе
+            NodeRef report = getReportDescriptorNodeByCode(existDescriptor.getMnem());
+            if (report != null) {  // проверяем существование отчета в Редакторе
+                Date lastModified = (Date) serviceRegistry.getNodeService().getProperty(report, ContentModel.PROP_MODIFIED);
+                return lastModified.getTime() == existDescriptor.getTimestamp();
+            }
+        } else if (contentFileDAO.exists(idDS)) {
+            return true; // файлы из поставки не обновляются динамически - если файл есть, считаем, что он актуален
+        }
+        return false;
+    }*/
+
+    /*public NodeRef getReportDescriptorNodeByCode(String rtMnemo) {
+        if (rtMnemo != null && !rtMnemo.isEmpty()) {
+            NodeRef reportRoot =
+                    serviceRegistry.getNodeService().getChildByName(new NodeRef(contentRepositoryDAO.getRoot()), ContentModel.ASSOC_CONTAINS, rtMnemo);
+            if (reportRoot != null) {
+                Set<QName> types = new HashSet<>();
+                types.add(TYPE_REPORT_DESCRIPTOR);
+                List<ChildAssociationRef> reports =
+                        serviceRegistry.getNodeService().getChildAssocs(reportRoot, types);
+                for (ChildAssociationRef report : reports) {
+                    String reportCode = (String) serviceRegistry.getNodeService().getProperty(report.getChildRef(), PROP_REPORT_CODE);
+                    if (reportCode.equals(rtMnemo)) {
+                        return report.getChildRef();
+                    }
+                }
+            }
+        }
+        return null;
+    }*/
 
     /**
      * Получить список зарегистрированных редакторов отчётов для указанного типа
@@ -225,8 +293,8 @@ public class ReportsManager {
     }
 
     public List<ReportDescriptor> getRegisteredReports(String docType, boolean dontFilterByRole) {
-        final Map<String, ReportDescriptor> list = this.getDescriptors();
-        if (list == null || list.isEmpty()) {
+        final SimpleCache<String, ReportDescriptor> list = this.getDescriptors();
+        if (list == null || list.getKeys().isEmpty()) {
             return new ArrayList<>();
         }
 
@@ -254,20 +322,22 @@ public class ReportsManager {
         try {
             if (docType == null) {
                 // не задано фильтрование -> вернуть сразу всё целиком ... без подотчетов
-                for (ReportDescriptor desc : list.values()) {
+                for (String reportDescCode : list.getKeys()) {
+                    ReportDescriptor desc = list.get(reportDescCode);
                     if (!desc.isSubReport()) {
-                        if (dontFilterByRole || hasPermissionToReport(desc, employeeAuth)) {
-                            found.add(desc);
-                        }
+                            if (dontFilterByRole || hasPermissionToReport(desc, employeeAuth)) {
+                                found.add(desc);
+                            }
                     }
                 }
             } else {
-                for (ReportDescriptor desc : list.values()) {
+                for (String reportDescCode: list.getKeys()) {
+                    ReportDescriptor desc = list.get(reportDescCode);
                     if (!desc.isSubReport()) {
-                        final boolean okDocType = (desc.getFlags() == null) || desc.getFlags().isTypeSupported(docType);
-                        if (okDocType && (dontFilterByRole || hasPermissionToReport(desc, employeeAuth))) {
-                            found.add(desc);
-                        }
+                            final boolean okDocType = (desc.getFlags() == null) || desc.getFlags().isTypeSupported(docType);
+                            if (okDocType && (dontFilterByRole || hasPermissionToReport(desc, employeeAuth))) {
+                                found.add(desc);
+                            }
                     }
                 }
             }
@@ -342,12 +412,8 @@ public class ReportsManager {
      * 3) продеплоенные в хранилище дескрипторы.
      * (в этом списке чем ниже тем приоритетнее)
      */
-    public Map<String, ReportDescriptor> getDescriptors() {
-        if (this.descriptors == null) {
-            this.descriptors = new HashMap<String, ReportDescriptor>();
-            scanResources();
-        }
-        return this.descriptors;
+    public SimpleCache<String, ReportDescriptor> getDescriptors() {
+        return this.reportsCache;
     }
 
     /**
@@ -415,7 +481,7 @@ public class ReportsManager {
      */
     public void unregisterReportDescriptor(String reportCode) {
         if (reportCode != null && !reportCode.trim().isEmpty()) {
-            if (getDescriptors().containsKey(reportCode)) {
+            if (getDescriptors().contains(reportCode)) {
                 final ReportDescriptor desc = getDescriptors().get(reportCode);
                 unregisterReportDescriptor(desc);
                 logger.debug(String.format("Report descriptor with name '%s' unregistered", reportCode));
@@ -441,7 +507,7 @@ public class ReportsManager {
                     this.contentRepositoryDAO.delete(new ReportContentDAO.IdRContent(descriptor.getMnem(), "*"));
                 }
             }
-            if (getDescriptors().containsKey(descriptor.getMnem())) {
+            if (getDescriptors().contains(descriptor.getMnem())) {
                 // убираем из списка активных ...
                 getDescriptors().remove(descriptor.getMnem());
                 logger.debug(String.format("Report descriptor with name '%s' unregistered", descriptor.getMnem()));
@@ -457,25 +523,25 @@ public class ReportsManager {
         PropertyCheck.mandatory(this, "contentRepositoryDAO", getContentRepositoryDAO());
 
         final ReportDescriptor desc = this.getRegisteredReportDescriptor(reportCode);
-        final ReportContentDAO.IdRContent idDS = DSXMLProducer.makeDsXmlId(desc);
-        ContentReader result;
-        if (contentRepositoryDAO.exists(idDS)) {
-            // описатеть имеется в репозитории продеплоенных ...
-            result = contentRepositoryDAO.loadContent(idDS);
-        } else if (contentFileDAO.exists(idDS)) {
-            // описатель имеется в стд файловом хранении ...
-            result = contentFileDAO.loadContent(idDS);
-        } else {
-            // непонятно где хранится ...
-            final String msg = String.format("ds-xml cannot be loaded for report '%s':\n\t by id {%s}\n\t (!) not found at repository storage nor at file storage", reportCode, idDS);
-            logger.error(msg);
-            throw new RuntimeException(msg);
-        }
+            final ReportContentDAO.IdRContent idDS = DSXMLProducer.makeDsXmlId(desc);
+            ContentReader result;
+            if (contentRepositoryDAO.exists(idDS)) {
+                // описатеть имеется в репозитории продеплоенных ...
+                result = contentRepositoryDAO.loadContent(idDS);
+            } else if (contentFileDAO.exists(idDS)) {
+                // описатель имеется в стд файловом хранении ...
+                result = contentFileDAO.loadContent(idDS);
+            } else {
+                // непонятно где хранится ...
+                final String msg = String.format("ds-xml cannot be loaded for report '%s':\n\t by id {%s}\n\t (!) not found at repository storage nor at file storage", reportCode, idDS);
+                logger.error(msg);
+                throw new RuntimeException(msg);
+            }
 
-        final ByteArrayOutputStream os = new ByteArrayOutputStream((int) result.getSize());
-        result.getContent(os);
-        return os.toByteArray();
-    }
+            final ByteArrayOutputStream os = new ByteArrayOutputStream((int) result.getSize());
+            result.getContent(os);
+            return os.toByteArray();
+        }
 
 
     /**
@@ -845,16 +911,15 @@ public class ReportsManager {
     /**
      * Просканировать указанное хранилище на наличие дескрипторов отчётов и загрузить их
      *
-     * @param destMap целевой список
      * @param repos   ReportContentDAO
      * @return кол-во загруженных описаний
      */
-    private int scanRepository(final Map<String, ReportDescriptor> destMap, final ReportContentDAO repos, final boolean useImportFormat) {
+    private int scanRepository(final ReportContentDAO repos, final boolean useImportFormat) {
         if (repos == null) {
             return 0;
         }
 
-        final List<ReportContentDAO.IdRContent> found = new ArrayList<ReportContentDAO.IdRContent>();
+        final List<ReportContentDAO.IdRContent> found = new ArrayList<>();
         final ReportContentDAO.ContentEnumerator doEnum = new ReportContentDAO.ContentEnumerator() {
             @Override
             public void lookAtItem(ReportContentDAO.IdRContent id) {
@@ -888,7 +953,7 @@ public class ReportsManager {
                                 }
                             }
                             if (desc != null) {
-                                destMap.put(desc.getMnem(), desc); // (!) найден очередной
+                                getDescriptors().put(desc.getMnem(), desc); // (!) найден очередной
                             }
 
                             found.add(id); // запоминаем только при отсутствии ошибок
@@ -920,8 +985,8 @@ public class ReportsManager {
     private int scanResources() {
         // @NOTE: (!) здесь вызов getDescriptors(); зациклит
         int ifound = 0;
-        ifound += scanRepository(this.descriptors, this.contentFileDAO, false);
-        ifound += scanRepository(this.descriptors, this.contentRepositoryDAO, true);
+        ifound += scanRepository(this.contentFileDAO, false);
+        ifound += scanRepository(this.contentRepositoryDAO, true);
         return ifound;
     }
 
@@ -1081,30 +1146,27 @@ public class ReportsManager {
             }
         }
 
-        // создание импорт-файла ...
-        /*ByteArrayOutputStream importXml = null;
-        try {
-            importXml = new ByteArrayOutputStream();
-            XMLExportBean.XMLExporter xmlDictionaryExporter = xmlExportBean.getXMLExporter(importXml);
-            xmlDictionaryExporter.writeItems(reportRef);
-            xmlDictionaryExporter.close();
-            importXml.flush();
+        // развертывание в сервисе
+        //ByteArrayOutputStream importXml = null;
+        //InputStream is = null;
+       /* try {
+            //importXml = new ByteArrayOutputStream();
+            //XMLExportBean.XMLExporter xmlDictionaryExporter = xmlExportBean.getXMLExporter(importXml);
+            //xmlDictionaryExporter.writeItems(reportRef);
+            //xmlDictionaryExporter.close();
+            //importXml.flush();
 
-            final ReportContentDAO.IdRContent idds = DSXMLProducer.makeImportXmlId(desc);
-            try {
-                // файл создадим только в репозитории (но не в файловом хранилище) ...
-                this.contentRepositoryDAO.storeContent(idds, new ByteArrayInputStream(importXml.toByteArray()));
-            } catch (Throwable ex) {
-                final String msg = String.format(
-                        "Report '%s': error saving ds-xml into storage by id '%s'", desc.getMnem(), idds);
-                logger.error(msg, ex);
-            }
+            //final NodeRef rootDir = new NodeRef(getContentRepositoryDAO().getRoot());
+            //NodeRef reportRoot = serviceRegistry.getNodeService().getChildByName(rootDir, ContentModel.ASSOC_CONTAINS, desc.getMnem());
+            //is = new ByteArrayInputStream(importXml.toByteArray());
+            //XMLImportBean.XMLImporter importer = xmlImportBean.getXMLImporter(is);
+            //XMLImporterInfo info = importer.readItems(reportRoot);
+            //logger.info("{} report import finished. {}", desc.getMnem(), info);
         } catch (XMLStreamException e) {
             logger.error(e.getMessage(), e);
         } finally {
-            if (importXml != null) {
-                importXml.close();
-            }
+            IOUtils.closeQuietly(importXml);
+            IOUtils.closeQuietly(is);
         }*/
     }
 

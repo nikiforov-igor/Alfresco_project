@@ -147,7 +147,7 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
             nodeService.addAspect(report,ContentModel.ASPECT_TEMPORARY, null);
 
             ReportDescriptor desc;
-            if (reportsManager.getDescriptors().containsKey(reportCode)) {
+            if (reportsManager.getDescriptors().contains(reportCode)) {
                 desc = reportsManager.getDescriptors().get(reportCode);
             } else {
                 desc = reportsManager.getReportEditorDAO().getReportDescriptor(report);

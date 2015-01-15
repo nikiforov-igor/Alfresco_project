@@ -245,6 +245,15 @@
         <property name="storeStructurePathFmt" value="/@reportMnemo/@fileName"/>
     </bean>
 
+    <bean name="reports.descriptors.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.reports.descriptors.shared.cache"/>
+    </bean>
+
+    <bean name="reports.descriptors.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="reports.descriptors.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.reports.descriptors"/>
+    </bean>
+
     <!--
             Менеджер шаблонов отчёта
       -->
@@ -297,6 +306,9 @@
         </property>
 
         <property name="xmlExportBean" ref="lecmDictionaryExportBean"/>
+<!--        <property name="xmlImportBean" ref="lecmDictionaryImportBean"/>-->
+
+        <property name="reportsCache" ref="reports.descriptors.cache"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.forms.jasper.form.get"
