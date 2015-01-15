@@ -1056,6 +1056,26 @@
 																<name>transitionLabel</name>
 																<value><![CDATA[Подписать и направить]]></value>
 															</property>
+															<property>
+																<name>transition-script</name>
+																<value><![CDATA[(function() {
+    var assoc, msg;
+    stm_document.properties['lecmSignAspects:isSigned'] = true;
+    stm_document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
+    stm_document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+    stm_document.save();
+    assocs = stm_document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+    if (assocs && assocs.length) {
+        stm_document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+    }
+    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecmSignAspects:signerEmployeeAssoc');
+
+    msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(stm_document, "{lecm-document:ext-present-string}");
+    businessJournal.log(stm_document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(stm_document.nodeRef.toString(), msg), []);
+})();
+]]>
+																</value>
+															</property>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
@@ -3012,6 +3032,26 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 																<name>transitionLabel</name>
 																<value><![CDATA[Подписать и направить]]></value>
 															</property>
+															<property>
+																<name>transition-script</name>
+																<value><![CDATA[(function() {
+    var assoc, msg;
+    stm_document.properties['lecmSignAspects:isSigned'] = true;
+    stm_document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
+    stm_document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+    stm_document.save();
+    assocs = stm_document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+    if (assocs && assocs.length) {
+        stm_document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+    }
+    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecmSignAspects:signerEmployeeAssoc');
+
+    msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(stm_document, "{lecm-document:ext-present-string}");
+    businessJournal.log(stm_document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(stm_document.nodeRef.toString(), msg), []);
+})();
+]]>
+																</value>
+															</property>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
@@ -3965,6 +4005,26 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 															<property>
 																<name>transitionLabel</name>
 																<value><![CDATA[Подписать и направить]]></value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value><![CDATA[(function() {
+    var assoc, msg;
+    stm_document.properties['lecmSignAspects:isSigned'] = true;
+    stm_document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
+    stm_document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+    stm_document.save();
+    assocs = stm_document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+    if (assocs && assocs.length) {
+        stm_document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+    }
+    stm_document.createAssociation(orgstructure.getCurrentEmployee(), 'lecmSignAspects:signerEmployeeAssoc');
+
+    msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(stm_document, "{lecm-document:ext-present-string}");
+    businessJournal.log(stm_document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(stm_document.nodeRef.toString(), msg), []);
+})();
+]]>
+																</value>
 															</property>
 														</properties>
 														<aspects>
@@ -6504,43 +6564,6 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 															<property>
 																<name>scriptLabel</name>
 																<value><![CDATA[направить на регистрацию]]></value>
-															</property>
-														</properties>
-														<aspects/>
-														<associations/>
-														<roleAssociations/>
-														<subFolders/>
-													</node>
-													<node>
-														<type>ScriptActionEntity</type>
-														<name>ce7ee18b-86fc-4eea-a337-6e697ba008f0</name>
-														<nodeRef>workspace://SpacesStore/2c2327a5-19ea-4c82-a1aa-c1cb5b2cc0c1</nodeRef>
-														<properties>
-															<property>
-																<name>actionScript</name>
-																<value><![CDATA[// пришло с "Подписать и направить"
-(function() {
-    var previousStatusName =  statemachine.getPreviousStatusName(stm_document),
-        currentEmployee, resultList, taskDecision;
-
-    if (previousStatusName == "Проект" | previousStatusName == "На доработке" | previousStatusName == "Согласован") {
-        currentEmployee = orgstructure.getCurrentEmployee();
-
-        resultList = signingWorkflow.createEmptyResultList(bpm_package, "Внутренний");
-        signingWorkflow.createResultItem(resultList, currentEmployee);
-
-        taskDecision = signingWorkflow.getSignedDecision(currentEmployee);
-        signingWorkflow.logDecision(resultList, taskDecision);
-
-        signingWorkflow.deleteTempAssigneesList(execution);
-
-        signingWorkflow.addSignBusinessJournalRecord(bpm_package, currentEmployee);
-    }
-})();]]></value>
-															</property>
-															<property>
-																<name>scriptLabel</name>
-																<value><![CDATA[Переход по "Подписать и направить"]]></value>
 															</property>
 														</properties>
 														<aspects/>
