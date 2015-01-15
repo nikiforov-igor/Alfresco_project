@@ -23,7 +23,7 @@ if (arm != null && armNode != null) {
     model.dashletTitle = arm.properties["cm:name"];
     model.isExist = true;
     model.title = armNode.properties["cm:name"];
-    model.baseQuery = armWrapper.getFullQuery(armNode);
+    model.baseQuery = searchQueryProcessor.processQuery(armWrapper.getFullQuery(armNode));
 
     var filtersArray = [];
 
@@ -33,7 +33,7 @@ if (arm != null && armNode != null) {
         var filter = filters.get(i);
         filtersArray.push({
             "title": filter.get("title"),
-            "query": filter.get("query")
+            "query": searchQueryProcessor.processQuery(filter.get("query"))
         });
     }
     model.filters = filtersArray;
