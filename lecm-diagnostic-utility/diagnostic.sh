@@ -6,4 +6,4 @@ do
     eval $var
 done < $file
 
-$alf_java_home/bin/java -cp ".:./lecm-diagnostic-utility-1.0.0.jar:./lib/*" -Dfile.encoding=UTF-8 ru.it.lecm.platform.DiagnosticUtility
+$alf_java_home/bin/java -cp ".:./lecm-diagnostic-utility.jar:./lib/*" -Dfile.encoding=UTF-8 ru.it.lecm.platform.DiagnosticUtility
