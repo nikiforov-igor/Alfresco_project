@@ -14,6 +14,11 @@
    background: transparent url(/share/res/images/lecm-model-list/model_restore.png) no-repeat scroll center center;
    cursor: pointer;
 }
+.models .yui-dt-liner a.edit-control
+{
+   background: transparent url(/share/res/images/lecm-model-list/form_edit.png) no-repeat scroll center center;
+   cursor: pointer;
+}
 .models .yui-dt-liner a.edit-form
 {
    background: transparent url(/share/res/images/lecm-model-list/form_edit.png) no-repeat scroll center center;

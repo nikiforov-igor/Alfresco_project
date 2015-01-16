@@ -50,6 +50,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				{key: "title", label: "Модель документа", sortable: false, formatter: this._formatTitle, width: 250, maxAutoWidth: 250},
 				{key: "active", label: "Активна", sortable: false, formatter: this._formatActive, width: 100, maxAutoWidth: 100},
 				{key: "edit-model", label: "", sortable: false, formatter: this._formatEditModel(), width: 15, maxAutoWidth: 15},
+				{key: "edit-control", label: "", sortable: false, formatter: this._formatEditControl(), width: 15, maxAutoWidth: 15},
 				{key: "edit-form", label: "", sortable: false, formatter: this._formatEditForm(), width: 15, maxAutoWidth: 15},
 				{key: "edit-statemachine", label: "", sortable: false, formatter: this._formatEditStatemachine(), width: 15, maxAutoWidth: 15},
 				{key: "restore-model", label: "", sortable: false, formatter: this._formatRestoreModel(), width: 15, maxAutoWidth: 15},
@@ -60,6 +61,21 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-body", columnDefinitions, this.widgets.dataSource);
 			this.widgets.dataTable.subscribe('cellClickEvent', this._onClickListener);
 			this.widgets.dataTable.subscribe("dataReturnEvent", function(oArgs) {
+				var fakeItem = {
+					isActive: true,
+					isDocumentModel: false,
+					isRestorable: false,
+					modelName: "fakeModel",
+					nodeRef: null,
+					title: "Фиктивная модель",
+					types: [{
+						isDocument: false,
+						modelName: "fakeModel",
+						title: "Фиктивный документ",
+						typeName: "fake"
+					}]
+				};
+				oArgs.response.results.splice(0, 0, fakeItem);
 				this.destination = oArgs.response.meta.metadata.parent;
 			}, this);
 
@@ -191,11 +207,28 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
             };
         },
 
-		_formatEditForm: function () {
+		_formatEditControl: function() {
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
 				if (oRecord.getData("isActiveModel") && oRecord.getData("typeName")) {
+					el.innerHTML = "";
+
+					var editControlLink = document.createElement("a");
+					editControlLink.title = scope.msg("title.controls.edit");
+					Dom.addClass(editControlLink, "edit-control");
+					editControlLink.innerHTML = "&nbsp;";
+					editControlLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-controls-list?doctype=" + oRecord.getData("typeName");
+					el.appendChild(editControlLink);
+				}
+			};
+		},
+
+		_formatEditForm: function () {
+			var scope = this;
+
+			return function (el, oRecord, oColumn, oData, oDataTable) {
+				if (oRecord.getData("isActiveModel") && oRecord.getData("typeName") && oRecord.getData("typeName") != "fake") {
 					el.innerHTML = "";
 
 					var editFormLink = document.createElement("a");
