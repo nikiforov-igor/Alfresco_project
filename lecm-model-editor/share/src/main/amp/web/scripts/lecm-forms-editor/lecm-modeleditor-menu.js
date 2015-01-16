@@ -44,6 +44,12 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 	YAHOO.extend(LogicECM.module.ModelEditor.Menu, Alfresco.component.Base, {
 
 		options: {
+			modelItem: {
+				nodeRef: null,
+				isDocumentModel: null,
+				isModelActive: null,
+				typeName: null,
+			},
 			nodeRef: null,
 			nodeType: null,
 			fileName: null
@@ -52,8 +58,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		_getLocalParam: function() {
 			var docType, statemachineId;
 
-			if (this.options.fileName) {
-				return this.options.fileName;
+			if (this.options.modelItem.typeName) {
+				return this.options.modelItem.typeName;
 			}
 
 			docType = YAHOO.util.History.getQueryStringParameter('doctype');
@@ -69,35 +75,36 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			return null;
 		},
 
-		_getRemoteParam: function(successCallbackFn) {
-			var localParam = this._getLocalParam().replace(':', '_'),
-				template = '{proxyUri}lecm/docmodels/details?fileName={fileName}',
-				url = YAHOO.lang.substitute(template, {
-					proxyUri: Alfresco.constants.PROXY_URI,
-					fileName: localParam
-				}),
-				successCallback = {
-					scope: this,
-					fn: successCallbackFn
-				};
-			Alfresco.util.Ajax.jsonGet({
-				url: url,
-				successCallback: successCallback,
-				failureMessage: this.msg('message.failure')
-			});
-		},
-
-//		onModelEditorHome: function(event, obj) {
-//			var urlTemplate = 'doc-model-edit?formId=edit-model&redirect=/share/page/doc-model-list&nodeRef=';
-//			if (this.options.nodeRef) {
-//				window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + this.options.nodeRef;
-//			} else {
-//				this._getRemoteParam(function(serverResponse) {
-//					var json = serverResponse.json;
-//					window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + json.nodeRef;
-//				});
-//			}
+//		_getRemoteParam: function(successCallbackFn) {
+//			var localParam = this._getLocalParam().replace(':', '_'),
+//				template = '{proxyUri}lecm/docmodels/details?fileName={fileName}',
+//				url = YAHOO.lang.substitute(template, {
+//					proxyUri: Alfresco.constants.PROXY_URI,
+//					fileName: localParam
+//				}),
+//				successCallback = {
+//					scope: this,
+//					fn: successCallbackFn
+//				};
+//			Alfresco.util.Ajax.jsonGet({
+//				url: url,
+//				successCallback: successCallback,
+//				failureMessage: this.msg('message.failure')
+//			});
 //		},
+
+		onModelEditorHome: function(event, obj) {
+			var urlTemplate = 'doc-model-edit?formId=edit-model&redirect=/share/page/doc-model-list&nodeRef=';
+			if (this.options.nodeRef) {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + this.options.nodeRef;
+			} else if (this.options.modelItem.nodeRef) {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + this.options.modelItem.nodeRef;
+			} else {
+				Alfresco.util.PopupManager.displayMessage({
+					text: 'Некорректная попытка перейти в режим редактирования модели'
+				});
+			}
+		},
 
 		onStateMachineHome: function(event, obj) {
 			var param = this._getLocalParam();
@@ -131,10 +138,18 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 
 		onReady:function () {
-//			this.widgets.modelEditorHomeBtn = Alfresco.util.createYUIButton(this, 'modelEditorHomeBtn', this.onModelEditorHome);
-			this.widgets.stateMachineHomeBtn = Alfresco.util.createYUIButton(this, 'stateMachineHomeBtn', this.onStateMachineHome);
-			this.widgets.formsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'formsEditorHomeBtn', this.onFormsEditorHome);
-			this.widgets.controlsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'controlsEditorHomeBtn', this.onControlsEditorHome);
+			this.widgets.modelEditorHomeBtn = Alfresco.util.createYUIButton(this, 'modelEditorHomeBtn', this.onModelEditorHome, {
+				disabled: !(this.options.modelItem.nodeRef && this.options.modelItem.isDocumentModel)
+			});
+			this.widgets.stateMachineHomeBtn = Alfresco.util.createYUIButton(this, 'stateMachineHomeBtn', this.onStateMachineHome, {
+				disabled: !(this.options.modelItem.isModelActive && this.options.modelItem.isDocumentModel && this.options.modelItem.typeName && this.options.modelItem.typeName != 'fake')
+			});
+			this.widgets.formsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'formsEditorHomeBtn', this.onFormsEditorHome, {
+				disabled: !(this.options.modelItem.isModelActive && this.options.modelItem.typeName && this.options.modelItem.typeName != 'fake')
+			});
+			this.widgets.controlsEditorHomeBtn = Alfresco.util.createYUIButton(this, 'controlsEditorHomeBtn', this.onControlsEditorHome, {
+				disabled: !(this.options.modelItem.isModelActive && this.options.modelItem.typeName)
+			});
 			this.widgets.modelListHomeBtn = Alfresco.util.createYUIButton(this, 'modelListHomeBtn', this.onModelListHome);
 		}
 	});

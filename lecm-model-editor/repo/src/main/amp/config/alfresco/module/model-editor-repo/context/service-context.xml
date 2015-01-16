@@ -111,4 +111,12 @@
 		<property name="controlsEditorService" ref="controlsEditorService"/>
 	</bean>
 
+	<bean id="webscript.ru.it.lecm.model.item.get" class="ru.it.lecm.modelEditor.scripts.ModelItemScript" parent="webscript">
+		<property name="contentService" ref="contentService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="modelListService" ref="modelListService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
 </beans>

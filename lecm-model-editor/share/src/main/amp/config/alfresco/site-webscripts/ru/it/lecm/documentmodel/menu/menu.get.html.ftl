@@ -16,9 +16,7 @@
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/model-editor/model-editor-menu.css"/>
 
 <@comp.baseMenu>
-<#--
 	<@comp.baseMenuButton "modelEditorHome" msg('lecm.modelEditorHome.btn') "modelEditorHome" true true/>
--->
 	<@comp.baseMenuButton "stateMachineHome" msg('lecm.stateMachineHome.btn') "stateMachineHome" true true/>
 	<@comp.baseMenuButton "formsEditorHome" msg('lecm.formsEditorHome.btn') "formsEditorHome" true true/>
 	<@comp.baseMenuButton "controlsEditorHome" msg('lecm.controlsEditorHome.btn') "controlsEditorHome" true true/>
@@ -31,6 +29,14 @@
 	var menu = new LogicECM.module.ModelEditor.Menu("menu-buttons");
 	menu.setMessages(${messages});
 	menu.setOptions({
+		<#if modelItem??>
+		modelItem: {
+			<#if modelItem.nodeRef??>nodeRef: '${modelItem.nodeRef}',</#if>
+			<#if modelItem.isDocumentModel??>isDocumentModel: ${modelItem.isDocumentModel?string},</#if>
+			<#if modelItem.isModelActive??>isModelActive: ${modelItem.isModelActive?string},</#if>
+			<#if modelItem.typeName??>typeName: '${modelItem.typeName}'</#if>
+		},
+		</#if>
 	<#if nodeRef??>nodeRef: '${nodeRef}',</#if>
 	<#if nodeType??>nodeType: '${nodeType}',</#if>
 	<#if fileName??>fileName: '${fileName}'</#if>
