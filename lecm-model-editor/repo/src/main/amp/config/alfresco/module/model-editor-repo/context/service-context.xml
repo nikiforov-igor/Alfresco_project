@@ -97,6 +97,8 @@
 		<property name="versionService" ref="versionService"/>
 		<property name="cociService" ref="checkOutCheckInService"/>
 		<property name="contentService" ref="contentService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 		<property name="folders">
 			<map>
 				<entry key="#{CONTROLS_EDITOR_ROOT_ID}" value="Сервис Редактор контролов"/>

@@ -13,6 +13,8 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.version.VersionModel;
 import org.alfresco.service.cmr.coci.CheckOutCheckInService;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
@@ -21,6 +23,7 @@ import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.cmr.version.VersionType;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.io.IOUtils;
@@ -55,6 +58,8 @@ public class ControlsEditorBeanImpl extends BaseBean {
 	private VersionService versionService;
 	private CheckOutCheckInService cociService;
 	private ContentService contentService;
+	private DictionaryService dictionaryService;
+	private NamespaceService namespaceService;
 
 	private NodeRef getDeploymentFolder() {
 		NodeRef folder;
@@ -75,6 +80,20 @@ public class ControlsEditorBeanImpl extends BaseBean {
 	private NodeRef geTypeControlsNode(String typename) {
 		NodeRef parent = getDeploymentFolder();
 		return nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, getTypeControlsFilename(typename));
+	}
+
+	private String getTypeLocalName(String typename) {
+		QName typeQName;
+		String typeLocalName;
+		try {
+			typeQName = QName.createQName(typename, namespaceService);
+			TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
+			typeLocalName = typeDefinition.getTitle(dictionaryService);
+		} catch(RuntimeException ex) {
+			logger.error(ex.getMessage());
+			typeLocalName = "Фиктивное поле";
+		}
+		return typeLocalName;
 	}
 
 	private void generateControlParam(final XMLStreamWriter xmlWriter, final NodeRef paramNode) throws XMLStreamException {
@@ -120,7 +139,7 @@ public class ControlsEditorBeanImpl extends BaseBean {
 			xmlWriter.writeAttribute("template", template);
 		}
 		if (StringUtils.isNotBlank(localName)) {
-			xmlWriter.writeAttribute("locaName", localName);
+			xmlWriter.writeAttribute("localName", localName);
 		}
 		if (StringUtils.isNotBlank(isDefault)) {
 			xmlWriter.writeAttribute("default", isDefault);
@@ -141,6 +160,7 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		xmlWriter.writeStartElement("field-types");
 		xmlWriter.writeStartElement("field-type");
 		xmlWriter.writeAttribute("id", typename);
+		xmlWriter.writeAttribute("localName", getTypeLocalName(typename));
 
 		NodeRef controlsRoot = getTypeRootFolder(typename);
 		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(controlsRoot);
@@ -184,6 +204,14 @@ public class ControlsEditorBeanImpl extends BaseBean {
 
 	public void setContentService(ContentService contentService) {
 		this.contentService = contentService;
+	}
+
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
 	}
 
 	@Override
