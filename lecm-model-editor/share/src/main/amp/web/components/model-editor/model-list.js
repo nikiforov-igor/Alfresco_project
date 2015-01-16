@@ -245,7 +245,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				if (oRecord.getData("isActiveModel") && oRecord.getData("isDocument") && oRecord.getData("typeName")) {
+				if (oRecord.getData("isActiveModel") && oRecord.getData("isDocument") && oRecord.getData("typeName") && oRecord.getData("typeName") != "fake") {
 					el.innerHTML = "";
 
 					var editStatemachineLink = document.createElement("a");
