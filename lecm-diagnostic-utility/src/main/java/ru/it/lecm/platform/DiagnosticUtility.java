@@ -10,10 +10,10 @@ import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.lang.management.ManagementFactory;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -756,6 +756,12 @@ public class DiagnosticUtility {
             for (String key : systemVars.keySet()) {
                 log.info("{} = {}", key, systemVars.get(key));
             }
+            //Переменные среды
+            Properties properties = System.getProperties();
+            for (Object key : properties.keySet()) {
+                log.info("{} = {}", key, properties.get(key));
+            }
+
             success2 = true;
         } catch (Exception e) {
             log.error("Unable to get system variables", e.getMessage());
