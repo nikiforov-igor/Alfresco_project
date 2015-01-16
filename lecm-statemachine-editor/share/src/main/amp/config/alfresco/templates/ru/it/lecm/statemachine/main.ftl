@@ -41,6 +41,7 @@
 
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-statemachine-editor/main.js"></@script>
+    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-statemachine-editor/menu.js"></@script>
     <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-statemachine-editor/editor.css">
 
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-statemachine-editor/menu.css" />
