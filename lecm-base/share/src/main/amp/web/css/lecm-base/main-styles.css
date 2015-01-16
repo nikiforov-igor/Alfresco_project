@@ -331,18 +331,23 @@ i.icon-building {
 .yui-skin-lecmTheme .yui-navset .yui-nav li.selected a,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a {
     background: #fff;
+    border: 1px solid #d2d2d2;
+    border-bottom-width: 0;
 }
 .yui-skin-lecmTheme .yui-navset .yui-nav li.selected a em,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a em {
     margin-bottom: 3px;
     color: #076a8d;
+    border: 1px dashed transparent;
 }
 .yui-skin-lecmTheme .yui-navset .yui-nav li a:focus,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a:focus {
     outline: 0;
 }
 .yui-skin-lecmTheme .yui-navset .yui-nav li a:focus em,
-.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a:focus em {
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a:focus em,
+.yui-skin-lecmTheme .yui-navset .yui-nav li.selected a:focus em,
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a:focus em {
     border-color: #ccc;
 }
 
