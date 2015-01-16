@@ -4044,7 +4044,8 @@
 								<items>
 									<item name="cm:6799ed5a-f5a6-4487-b6e6-8e3725d34b05" type="lecm-arm:statuses-child-rule">
 										<property name="cm:name"><![CDATA[6799ed5a-f5a6-4487-b6e6-8e3725d34b05]]></property>
-										<property name="lecm-arm:statuses-rule"><![CDATA[ALL_ARCHIVE]]></property>
+										<property name="lecm-arm:selected-statuses"><![CDATA[Расторгнут,Отменён,Исполнен,Аннулирован]]></property>
+										<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
 									</item>
 								</items>
 								<assocs>
@@ -4089,7 +4090,6 @@
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Закрытые/6b0e1fde-f507-48b4-b407-c3f5d8a8ef62"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Закрытые/a84fc983-3046-488f-aa18-48d290acde22"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Закрытые/c78af139-3ef1-44e6-86e4-561e4fc6e5d9"/>
-							<!--<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Закрытые/92c75c50-2a01-409c-b38c-f5ec93b1e5de"/>-->
 						</assocs>
 					</item>
 					<item name="cm:Проекты" type="lecm-arm:node">
