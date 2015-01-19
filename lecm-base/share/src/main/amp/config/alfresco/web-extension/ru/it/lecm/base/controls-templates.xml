@@ -53,54 +53,55 @@
 	</plug-ins>
 	<config>
 		<controls-templates>
-			<control id="association-tree-picker" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+			<control id="association-tree-picker" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl" localName="Выбор ассоциации в дереве">
 				<param id="plane" localName="Плоский" description="Является ли справочник плоским или иерархическим"/>
-				<param id="defaultValue" localName="Значение по умолчанию"/>
 				<param id="showCreateNewLink" localName="Показывать ссылку создания"/>
 				<param id="showCreateNewButton" localName="Показывать кнопку создания"/>
-				<param id="showSearch" localName="Показывать строку поиска"/>
-				<param id="forceEditable" localName="Всегда редактировать"/>
 				<param id="rootLocation" localName="Корневая папка" mandatory="true" description="Путь к папке, относительно которой получать элементы справочника"/>
 				<param id="nameSubstituteString" localName="Шаблон имени элемента"/>
-				<param id="sortProp" localName="Сортировать по" description="Свойство элемента справочника по которому осуществлять сортировку"/>
 				<param id="selectedItemsNameSubstituteString" localName="Шаблон имени выбранных элементов"/>
-				<param id="rootNodeRef" localName="Корневой узел" description="Узел, относительно которого получать элементы справочника"/>
+				<param id="treeNodeSubstituteString" localName="Шаблон имени элемента дерева"/>
+				<param id="treeNodeTitleSubstituteString" localName="Шаблон имени заголовка элемента дерева"/>
+				<param id="showSelectedItemsPath" localName="Показывать путь до выбранных элементов"/>
 				<param id="treeItemType" localName="Тип элемента в дереве"/>
 			</control>
-			<control id="association-autocomplete-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-				<param id="defaultValue" localName="Значение по умолчанию"/>
+			<control id="association-autocomplete-control" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl" localName="Выбор ассоциации с автодополнением">
 				<param id="showCreateNewLink" localName="Показывать ссылку создания"/>
 				<param id="showCreateNewButton" localName="Показывать кнопку создания"/>
-				<param id="showSearch" localName="Показывать строку поиска"/>
-				<param id="useDynamicLoading" localName="Использовать динамическую загрузку"/>
-				<param id="showMandatoryIndicator" localName="Отметить поле как обязательное"/>
-				<param id="isFieldMandatory" localName="Обязательное поле" description="Принудительно отметить поле как обязательное"/>
-				<param id="forceEditable" localName="Всегда редактировать"/>
-				<param id="endpointMany" localName="Множественный выбор"/>
-				<param id="lazyLoading" localName="Ленивая загрузка"/>
-				<param id="parentNodeRef" localName="Родительский узел"/>
 				<param id="startLocation" localName="Корневая директория" mandatory="true" description="Путь к папке, относительно которой получать элементы справочника"/>
-				<param id="itemType" localName="Тип элемента"/>
 				<param id="useStrictFilterByOrg" localName="Фильтровать по организации"/>
 				<param id="nameSubstituteString" localName="Шаблон имени элемента"/>
 				<param id="additionalFilter" localName="Дополнительный фильтр"/>
-				<param id="sortProp" localName="Сортировать по" description="Свойство элемента справочника по которому осуществлять сортировку"/>
 				<param id="employeeAbsenceMarker" localName="Отмечать отсутствие" description="при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ"/>
 			</control>
-			<control id="association-select-one-control" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl" localName="Выпадающий список">
-				<param id="defaultValue" localName="Значение по умолчанию"/>
+			<control id="association-select-one-control" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl" localName="Выпадающий список для выбора ассоциации">
 				<param id="showCreateNewButton" localName="Показывать кнопку создания"/>
-				<param id="mandatory" localName="Обязательное поле"/>
-				<param id="forceEditable" localName="Всегда редактировать"/>
-				<param id="parentNodeRef" localName="Родительский узел"/>
 				<param id="startLocation" localName="Корневая папка" mandatory="true" description="Путь к папке, относительно которой получать элементы справочника"/>
 				<param id="nameSubstituteString" localName="Шаблон имени элемента"/>
-				<param id="sortProp" localName="Сортировать по" description="Свойство элемента справочника по которому осуществлять сортировку"/>
 				<param id="additionalFilter" localName="Дополнительный фильтр"/>
-				<param id="forceMultiple" localName="Принудительный множественный выбор"/>
+				<param id="notSelectedOptionShow" localName="Показывать пустой элемент" description="Если true, то по умолчанию показывается элемент без значения ассоциации."/>
+				<param id="notSelectedOptionLabel" localName="Название  для пустого элемента" description="Название для элемента без значения ассоциации"/>
 			</control>
-			<control id="approval-list-datagrid-control" template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl" localName="Согласование">
-				<param id="editable" localName="Редактируемый" mandatory="false" description="Является ли этот контрол редактируемым"/>
+			<control id="approval-list-datagrid-control" template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl" localName="Согласование"/>
+			<control id="date" template="/ru/it/lecm/base-share/components/controls/date.ftl" localName="Дата/время">
+				<param id="showTime" localName="Показывать время" description="true - показывать; false - не показывать"/>
+				<param id="minLimitCurrentDate" localName="Не позволять выбирать дату меньше текущей" description="true - нельзя выбирать дату в прошлом; false - можно выбирать любую дату"/>
+			</control>
+			<control id="lecm-checkbox-control" template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl" localName="Галочка"/>
+			<control id="richtext" template="/ru/it/lecm/base-share/components/controls/richtext.ftl" localName="Многострочное текстовое поле с форматированием">
+				<param id="rows" localName="Количество строк">2</param>
+				<param id="columns" localName="Количество столбцов">60</param>
+			</control>
+			<control id="textfield" template="/ru/it/lecm/base-share/components/controls/textfield.ftl" localName="Однострочное текстовое поле"/>
+			<control id="textarea" template="/ru/it/lecm/base-share/components/controls/textarea.ftl" localName="Многострочное текстовое поле">
+				<param id="rows" localName="Количество строк">2</param>
+				<param id="columns" localName="Количество столбцов">60</param>
+			</control>
+			<control id="selectone" template="/ru/it/lecm/base-share/components/controls/selectone.ftl" localName="Выпадающий список для выбора значения">
+				<param id="options" localName="Перечень значений для выбора" description="Значения для выбора задаются в формате значение1|заголовок1,значение2|заголовок2 и тд."/>
+			</control>
+			<control id="select-one-with-empty" template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl" localName="Выпадающий список для выбора значения с пустым значением по умолчанию">
+				<param id="options" localName="Перечень значений для выбора" description="Значения для выбора задаются в формате значение1|заголовок1,значение2|заголовок2 и тд."/>
 			</control>
 		</controls-templates>
 	</config>
