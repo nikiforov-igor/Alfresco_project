@@ -112,6 +112,7 @@
                             <#if field.control.params.defaultScriptURL?has_content>
                                 defaultScript: '${field.control.params.defaultScriptURL?js_string}',
                                 destination: "${form.destination!""}",
+                                itemKind: "${form.arguments.itemKind!""}",
                             </#if>
                             showTime: ${showTime?string},
                             mandatory: ${field.mandatory?string},

@@ -85,6 +85,7 @@
                     currentValue: "",
                     defaultScript: null,
                     destination: null,
+                    itemKind: null,
                     /**
                      * Flag to determine whether a time field should be visible
                      *
@@ -175,7 +176,7 @@
                         theDate = Alfresco.util.fromISO8601(me.options.currentValue);
                     }
                     else {
-                        if (me.options.defaultScript && me.options.destination) {
+                        if (me.options.defaultScript && (me.options.destination || me.options.itemKind === "workflow")) {
                             var dataObj = {
                                 nodeRef: me.options.destination
                             };
