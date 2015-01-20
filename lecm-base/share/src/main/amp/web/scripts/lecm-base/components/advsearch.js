@@ -278,7 +278,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 //Обработчик на успех
                 function successHandler(sRequest, oResponse, oPayload) {
-                    loadingMessage.hide();
+                    loadingMessage.destroy();
 
                     me.searchStarted = false;
                     // update current state on success
@@ -354,7 +354,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 // Обработчик на неудачу
                 function failureHandler(sRequest, oResponse) {
-                    loadingMessage.hide();
+                    loadingMessage.destroy();
 
                     me.searchStarted = false;
                     me.dataGrid.loadComplete = false;

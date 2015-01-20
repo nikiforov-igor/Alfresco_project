@@ -25,7 +25,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
  */
 (function () {
 
-	var Dom = YAHOO.util.Dom
+	var Dom = YAHOO.util.Dom;
 	var Bubbling = YAHOO.Bubbling;
 	var Event = YAHOO.util.Event;
 
@@ -323,7 +323,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				[ p_dialog.id + "-form-container_h", fileSpan]
 			);
             //Destructor
-            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 		},
 		_deleteStatus: function(nodeRef) {
 			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/status?nodeRef={nodeRef}";

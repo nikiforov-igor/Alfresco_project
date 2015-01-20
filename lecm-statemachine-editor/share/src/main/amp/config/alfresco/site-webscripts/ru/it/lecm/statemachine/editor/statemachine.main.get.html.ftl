@@ -1,9 +1,3 @@
-<#include "/org/alfresco/components/form/form.dependencies.inc">
-
-<@markup id="css">
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-statemachine-editor/main.css" />
-</@>
-
 <div id="statemachine-properties-menu"></div>
 <span class="statemachine-menu">
 		<span id="menu-buttons-properties-menu-button" class="yui-button yui-push-button">
@@ -94,11 +88,7 @@
 </table>
 
 <div id="statuses-cont"></div>
-
-<script type="text/javascript">
-//<![CDATA[
-
-var workflowForm;
+<@inlineScript group="lecm-statemachine-editor">
 (function () {
 	function init() {
 		var statemachineEditor = new LogicECM.module.StatemachineEditor("statemachine");
@@ -133,5 +123,4 @@ var workflowForm;
 
 	YAHOO.util.Event.onDOMReady(init);
 })();
-//]]>
-</script>
+</@>

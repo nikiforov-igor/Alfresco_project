@@ -262,17 +262,20 @@ LogicECM.module.Base.Util = {
 	 *  {String} moduleId - ID модуля, по которому его можно найти в ComponentManager, обязательный
 	 *  {Function} callback - функция, выполняющаяся перед основной работой деструктора, опциональный
 	 *  {Object} callbackArg объект, передающийся параметром в callback, опциональный
+	 *  {Boolean} force - флаг принудительного удаления, опциональный
+	 *                    Если true, то форма будет удалена вместе с другими компонентами, которые были созданы позже ее.
+	 *                    Если false, то будет отменена регистрация компонентов в ComponentsManager
 	 */
 	formDestructor: function(event, args, params) {
 		var formRelatedElementsSelectorTemplate = "[id^='{moduleId}']";
-		var moduleId = params.moduleId, callback = params.callback, callbackArg = params.callbackArg;
+		var moduleId = params.moduleId, callback = params.callback, callbackArg = params.callbackArg, force = params.force;
 
 		var k, w;
 
 		var isFn = YAHOO.lang.isFunction;
 
 		var comMan = Alfresco.util.ComponentManager;
-		var components = comMan.list();
+		var component, components = comMan.list();
 
 		if (isFn(callback)) {
 			callback.call(this, callbackArg);
@@ -305,15 +308,16 @@ LogicECM.module.Base.Util = {
 
 		if (formIndex > -1) {
 			while (components.length > formIndex) { // Не оптимизируй...
-				if (components[formIndex].name != "Alfresco.HtmlUpload" &&
-					components[formIndex].name != "LogicECM.DndUploader" &&
-					components[formIndex].name != "Alfresco.FlashUpload" &&
-					components[formIndex].name != "Alfresco.FileUpload") {
-					LogicECM.module.Base.Util.removeAllBubbles(components[formIndex]);
-//					if (components[formIndex].destroy != undefined) {
-//						components[formIndex].destroy();
-//					}
-					comMan.unregister(components[formIndex]);
+				component = components[formIndex];
+				if (component.name != "Alfresco.HtmlUpload" &&
+					component.name != "LogicECM.DndUploader" &&
+					component.name != "Alfresco.FlashUpload" &&
+					component.name != "Alfresco.FileUpload") {
+					LogicECM.module.Base.Util.removeAllBubbles(component);
+					if (force && isFn(component.destroy)) {
+						component.destroy();
+					}
+					comMan.unregister(component);
 				} else {
 					formIndex++;
 				}
