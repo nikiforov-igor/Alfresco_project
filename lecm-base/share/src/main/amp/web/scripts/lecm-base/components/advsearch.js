@@ -190,21 +190,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (showFilteredLabel == undefined) {
                     showFilteredLabel = true;
                 }
-                var me = this;
-                if (!me.searchStarted) { // если поиск еще не начат (для предотвращения повторного взова метода)
-                    me.searchStarted = true; // блокируем остальные запросы
+                if (!this.searchStarted) { // если поиск еще не начат (для предотвращения повторного взова метода)
+                    this.searchStarted = true; // блокируем остальные запросы
                     // получает данные из формы
-                    var formData = me.currentForm.runtime.getFormData();
-                    formData.datatype = me.currentForm.type;
+                    var formData = this.currentForm.runtime.getFormData();
+                    formData.datatype = this.currentForm.type;
 
                     // формируем запрос
                     //var query = YAHOO.lang.JSON.stringify(formData);
 
                     // включаем поиск во всех вложенных директория относительно родительской
                     var fullTextSearch = {
-                        parentNodeRef:me.dataGrid.datagridMeta.nodeRef
+                        parentNodeRef:this.dataGrid.datagridMeta.nodeRef
                     };
-                    var sConfig = me.currentSearchConfig;
+                    var sConfig = this.currentSearchConfig;
                     if (!sConfig) {
                         sConfig = {};
                     }
@@ -218,15 +217,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
                     sConfig.fullTextSearch = YAHOO.lang.merge(sConfig.fullTextSearch, fullTextSearch);
 
-                    me.dataGrid.datagridMeta.searchConfig = sConfig;
+                    this.dataGrid.datagridMeta.searchConfig = sConfig;
 
                     this.performSearch(
                         {
                             searchConfig:sConfig,
-	                        searchNodes: me.dataGrid.datagridMeta.searchNodes,
+	                        searchNodes: this.dataGrid.datagridMeta.searchNodes,
                             useChildQuery: false, //ищем через solr
-                            searchShowInactive: me.dataGrid.options.searchShowInactive,
-                            sort:me.dataGrid.datagridMeta.sort
+                            searchShowInactive: this.dataGrid.options.searchShowInactive,
+                            sort:this.dataGrid.datagridMeta.sort
                         });
 
                     if (showFilteredLabel) {
