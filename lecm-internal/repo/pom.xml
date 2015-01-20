@@ -123,11 +123,13 @@
             <groupId>ru.it.lecm.workflow.signing</groupId>
             <artifactId>signing-repo-api</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.workflow</groupId>
             <artifactId>workflow-repo-api</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>

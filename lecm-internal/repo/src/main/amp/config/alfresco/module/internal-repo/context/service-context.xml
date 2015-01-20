@@ -77,7 +77,6 @@
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentMembersService" ref="documentMembersService"/>
         <property name="nodeService" ref="NodeService"/>
-        <property name="signingWorkflowService" ref="deprecated.signingWorkflowService"/>
     </bean>
 
     <bean id="internalWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
