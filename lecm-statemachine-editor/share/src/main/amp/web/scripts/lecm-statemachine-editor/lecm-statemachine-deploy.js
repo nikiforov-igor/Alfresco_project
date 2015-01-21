@@ -34,7 +34,6 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 (function () {
 
     var Dom = YAHOO.util.Dom;
-    var Event = YAHOO.util.Event;
 
     LogicECM.module.StatemachineEditor.Deploy = function (htmlId) {
         return LogicECM.module.StatemachineEditor.Deploy.superclass.constructor.call(
