@@ -4317,6 +4317,44 @@
 				<assocs>
 					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Договор. Исполнитель"/>
 				</assocs>
+            </item>
+            <item name="cm:Инструкции" type="lecm-arm:accordion">
+                <property name="cm:name"><![CDATA[Инструкции]]></property>
+                <property name="lecm-arm:order"><![CDATA[130]]></property>
+                <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                <property name="lecm-arm:types"><![CDATA[fms-archive-reg-doc:document]]></property>
+                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                <items>
+                    <item name="cm:Инструкции" type="lecm-arm:html-node">
+                        <property name="cm:name"><![CDATA[Инструкции]]></property>
+                        <property name="lecm-arm:order"><![CDATA[0]]></property>
+                        <property name="lecm-arm:html-url"><![CDATA[page/lecm/navigator/datagrid?root=true]]></property>
+                        <items>
+                            <item name="cm:Узлы" type="lecm-arm:html-node">
+                                <property name="cm:name"><![CDATA[Узлы]]></property>
+                                <property name="lecm-arm:order"><![CDATA[0]]></property>
+                                <property name="lecm-arm:html-url"><![CDATA[page/lecm/navigator/datagrid]]></property>
+                                <items>
+                                    <item name="cm:60420f79-29dd-4cd2-93d5-5a8c46595ebf"
+                                          type="lecm-arm:xpath-child-rule">
+                                        <property name="cm:name">
+                                            <![CDATA[60420f79-29dd-4cd2-93d5-5a8c46595ebf]]></property>
+                                        <property name="lecm-arm:xpath-child-rule-root-xpath">
+                                            <![CDATA[/app:company_home]]></property>
+                                        <property name="lecm-arm:xpath-child-rule-types">
+                                            <![CDATA[cm:content]]></property>
+                                    </item>
+                                </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:node-child-rule-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Инструкции/Инструкции/Узлы/60420f79-29dd-4cd2-93d5-5a8c46595ebf"/>
+                                </assocs>
+                            </item>
+                        </items>
+                    </item>
+                </items>
 			</item>
 		</items>
 	</item>
