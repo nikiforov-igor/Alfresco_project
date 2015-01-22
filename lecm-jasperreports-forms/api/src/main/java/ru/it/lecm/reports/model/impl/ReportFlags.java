@@ -3,12 +3,13 @@ package ru.it.lecm.reports.model.impl;
 import ru.it.lecm.reports.api.model.FlagsExtendable;
 import ru.it.lecm.reports.api.model.QueryDescriptor;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable, QueryDescriptor {
+public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable, QueryDescriptor, Serializable {
     private static final long serialVersionUID = 1L;
 
     private QueryDescriptor queryDesc;
