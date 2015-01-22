@@ -1,7 +1,9 @@
 package ru.it.lecm.reports.api.model;
 
-import java.util.List;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Описатель набора данных.
@@ -10,7 +12,7 @@ import ru.it.lecm.reports.model.impl.ColumnDescriptor;
  * @author rabdullin
  *
  */
-public interface DataSourceDescriptor extends Mnemonicable, L18able {
+public interface DataSourceDescriptor extends Mnemonicable, L18able, Serializable {
 
 	/** Стандартные названия колонок и параметров */
 

@@ -18,11 +18,11 @@ import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.runtime.Execution;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -43,7 +43,6 @@ import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.lang.StringUtils;
-//import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -73,6 +72,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+//import org.joda.time.Days;
 
 /**
  * User: PMelnikov
@@ -725,12 +726,16 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     private NodeRef serviceRoot = null;
     private NodeRef versionsRoot = null;
     //TODO Передеалть в Map?
-    private List<StateMachene> statemachenes = new ArrayList<StateMachene>();
+    private SimpleCache<String, StateMachene> statemachenesCache;
+
+    public void setStatemachenesCache(SimpleCache<String, StateMachene> statemachenesCache) {
+        this.statemachenesCache = statemachenesCache;
+    }
 
     /*
-     * Используется в
-     * 		- helper - getVersionsRoot
-     */
+         * Используется в
+         * 		- helper - getVersionsRoot
+         */
     private NodeRef getServiceRoot() {
     	if(serviceRoot==null) serviceRoot = repositoryHelper.findNodeRef("path","workspace/SpacesStore/Company Home/Business platform/LECM/statemachines".split("/"));
     	return serviceRoot;
@@ -750,24 +755,25 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * 		- LecmWorkflowDeployerImpl -> redeploy
      */
     public void resetStateMachene() {
-    	statemachenes = new ArrayList<StateMachene>();
+    	statemachenesCache.clear();
     }
     /*
      * Используется в
      * 		- helper - getStateMecheneByName
      */
-    private List<StateMachene> getStateMechenes() {
-    	if(statemachenes.size()==0) {
+    private SimpleCache<String, StateMachene> getStateMechenes() {
+    	if(statemachenesCache.getKeys().size() == 0) {
             NodeRef versionsRoot = getVersionsRoot();
             //Проверяем versionsRoot, если существует, то хотя бы одна машина была развернута в системе
             if (versionsRoot != null) {
                 List<ChildAssociationRef> statemacheneRefs = serviceRegistry.getNodeService().getChildAssocs(versionsRoot);
-                for(ChildAssociationRef child:statemacheneRefs) {
-                    statemachenes.add(new StateMachene(child.getChildRef()));
+                for(ChildAssociationRef child : statemacheneRefs) {
+                    StateMachene machine = new StateMachene(child.getChildRef());
+                    statemachenesCache.put(machine.getName(), machine);
                 }
             }
     	}
-    	return statemachenes;
+    	return statemachenesCache;
     }
     /*
      * Используется в
@@ -778,15 +784,12 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     	return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<StateMachene>() {
             @Override
             public StateMachene doWork() throws Exception {
-		    	for(StateMachene sm :getStateMechenes()) {
-			    	if(name.equals(sm.getName())){
-			    		return sm;
-			    	}
-		    	}
-		    	return new StateMachene();
+                StateMachene machene = getStateMechenes().get(name);
+		    	return machene == null ? new StateMachene() : machene;
             }
     	});
     }
+
     public class StateMachene {
     	private String name = null;
     	private QName lastVersionQN = QName.createQName("lecm-stmeditor:last_version", serviceRegistry.getNamespaceService());

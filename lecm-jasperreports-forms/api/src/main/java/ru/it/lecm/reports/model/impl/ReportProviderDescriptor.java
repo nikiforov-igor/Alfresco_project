@@ -4,6 +4,8 @@ import ru.it.lecm.reports.api.model.JavaClassable;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.Mnemonicable;
 
+import java.io.Serializable;
+
 
 /**
  * Провайдер НД.
@@ -11,7 +13,7 @@ import ru.it.lecm.reports.api.model.Mnemonicable;
  */
 public class ReportProviderDescriptor
 		extends JavaClassableImpl
-		implements JavaClassable, Mnemonicable, L18able
+		implements JavaClassable, Mnemonicable, L18able, Serializable
 {
 	private static final long serialVersionUID = 1L;
 

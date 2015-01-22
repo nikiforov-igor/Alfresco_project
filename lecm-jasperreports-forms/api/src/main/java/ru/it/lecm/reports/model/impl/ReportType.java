@@ -3,12 +3,14 @@ package ru.it.lecm.reports.model.impl;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.Mnemonicable;
 
+import java.io.Serializable;
+
 /**
  * Тип отчёта. Фактически на 07/2013 их два: Jasper и OOffice.
  * @author rabdullin
  *
  */
-public class ReportType extends MnemonicNamedItem implements L18able, Mnemonicable {
+public class ReportType extends MnemonicNamedItem implements L18able, Mnemonicable, Serializable {
 	private static final long serialVersionUID = 1L;
 
     /**

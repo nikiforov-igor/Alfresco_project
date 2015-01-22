@@ -4317,7 +4317,7 @@
 				<assocs>
 					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Договор. Исполнитель"/>
 				</assocs>
-			</item>
+            </item>
 		</items>
 	</item>
 </items>

@@ -4,10 +4,11 @@ import ru.it.lecm.reports.model.impl.ReportFlags;
 import ru.it.lecm.reports.model.impl.ReportProviderDescriptor;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public interface ReportDescriptor extends Mnemonicable, L18able {
+public interface ReportDescriptor extends Mnemonicable, L18able, Serializable {
 
     /**
      * Описатель данных.

@@ -1,17 +1,20 @@
 package ru.it.lecm.businessjournal.beans;
 
-import java.io.IOException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -19,14 +22,12 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
-import java.util.*;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.jms.core.MessageCreator;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -47,7 +48,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     private JmsTemplate jmsTemplate;
 	private JmsTemplate jmsTemplateInternal;
 	private JmsTemplate jmsTemplateExternal;
-    final private Map<NodeRef, Boolean> logSettingsCache = Collections.synchronizedMap(new HashMap<NodeRef, Boolean>());
+    private SimpleCache<NodeRef, Boolean> logSettingsCache;
 	private boolean enableResend;
 	private List<String> allowedCategories;
 
@@ -55,22 +56,18 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
 
     public void dropCache() {
-        synchronized (logSettingsCache) {
-            logSettingsCache.clear();
-        }
+        logSettingsCache.clear();
     }
 
 
     public Boolean isEventCategoryOn(NodeRef categoryRef) {
         Boolean result;
-        synchronized (logSettingsCache) {
-            if (logSettingsCache.containsKey(categoryRef)) {
-                result = logSettingsCache.get(categoryRef);
-            } else {
-                result = (null == categoryRef) || !Boolean.FALSE.equals(nodeService.getProperty(categoryRef, BusinessJournalService.PROP_EVENT_CAT_ON));
-                if (null != categoryRef) {
-                    logSettingsCache.put(categoryRef, result);
-                }
+        if (logSettingsCache.getKeys().contains(categoryRef)) {
+            result = logSettingsCache.get(categoryRef);
+        } else {
+            result = (null == categoryRef) || !Boolean.FALSE.equals(nodeService.getProperty(categoryRef, BusinessJournalService.PROP_EVENT_CAT_ON));
+            if (null != categoryRef) {
+                logSettingsCache.put(categoryRef, result);
             }
         }
         return result;
@@ -108,6 +105,10 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void setJmsTemplate(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
+    }
+
+    public void setLogSettingsCache(SimpleCache<NodeRef, Boolean> logSettingsCache) {
+        this.logSettingsCache = logSettingsCache;
     }
 
     /**
