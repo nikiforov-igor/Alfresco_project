@@ -581,7 +581,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, "Редактирование статуса \"" + model.label + "\"");
+						this._setFormDialogTitle(p_form, p_dialog, "Редактирование статуса \"" + model.name + "\"");
 					},
 					scope: this
 				},
