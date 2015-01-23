@@ -1,3 +1,15 @@
+<#include "/org/alfresco/components/component.head.inc">
+
+<#--
+ ALF-3832 временное решение для entreprise-версии alfresco
+ в community-версии, в отличие от entreprise-версии, YAHOO.util.History входит в yui-common.js
+-->
+<@markup id="yui">
+	<#if !DEBUG>
+		<@script type="text/javascript" src="${url.context}/res/yui/history/history.js" group="lecm-head-resources"/>
+	</#if>
+</@>
+
 <@markup id="resources">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/font-awesome.css" group="lecm-head-resources"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/base-styles.css" group="lecm-head-resources"/>
