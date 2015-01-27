@@ -273,7 +273,13 @@ public class XMLImportBeanImpl implements XMLImportBean {
 				    }
 			    } else if (!associationDefinition.isTargetMany()) {
 				    for (AssociationRef existingAssoc : existingAssocs) {
-					    nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
+                        if (!targetRef.equals(existingAssoc.getTargetRef())) {
+                            //очищаем только если есть изменения
+                            nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
+                        } else {
+                            //иначе оставляем имеющуюся ассоциацию
+                            create = false;
+                        }
 				    }
 			    }
 			    if (create) {
