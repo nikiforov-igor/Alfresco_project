@@ -260,23 +260,22 @@ public class XMLImportBeanImpl implements XMLImportBean {
 			    AssociationDefinition associationDefinition = dictionaryService.getAssociation(assocType);
 			    List<AssociationRef> existingAssocs = nodeService.getTargetAssocs(parent, assocType);
 			    boolean create = true;
-			    if (updateMode.isUpdateProperties()) {
-				    for (AssociationRef existingAssoc : existingAssocs) {
-					    if (existingAssoc.getTargetRef().equals(targetRef)) {
-						    create = false;
-						    break;
-					    }
-					    if (!associationDefinition.isTargetMany()) {
-						    create = false;
-						    break;
-					    }
-				    }
-			    } else if (!associationDefinition.isTargetMany()) {
-				    for (AssociationRef existingAssoc : existingAssocs) {
-					    nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
-				    }
-			    }
-			    if (create) {
+
+                for (AssociationRef existingAssoc : existingAssocs) {
+                    if (existingAssoc.getTargetRef().equals(targetRef)) {
+                        create = false;
+                        break;
+                    }
+                    if (!associationDefinition.isTargetMany()) {
+                        if (updateMode.isUpdateProperties()) {
+                            nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
+                        } else {
+                            create = false;
+                        }
+                        break;
+                    }
+                }
+                if (create) {
 				    try {
 					    nodeService.createAssociation(parent, targetRef, assocType);
 				    } catch (AssociationExistsException ignored) {
