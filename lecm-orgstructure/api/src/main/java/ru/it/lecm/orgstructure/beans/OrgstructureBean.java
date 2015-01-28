@@ -453,6 +453,16 @@ public interface OrgstructureBean {
 	List<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly);
 
 	/**
+	 * получить список подразделений в которые входит сотрудник согласно штатному расписанию
+	 * этот список будет содержать или все подразделения или только те, где сотрудник является боссом
+	 * @param employeeRef ссылка на фотрудника
+	 * @param bossUnitsOnly флаг показывающий что нас интересуют только те подразделения где сотрудник - босс
+	 * @param checkAccess учитывать доступ к организации
+	 * @return список подразделений или пустой список
+	 */
+	List<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly, final boolean checkAccess);
+
+	/**
 	 * получение списка подчиненных для указанного сотрудника
 	 * @param employeeRef сотрудник который является боссом
 	 * @return список подчиненных сотрудника по всем подразделениям.

@@ -1219,12 +1219,13 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getEmployeeUnits(final NodeRef employeeRef, final boolean bossUnitsOnly) {
-		return getEmployeeUnits(employeeRef, bossUnitsOnly, false);
+		return getEmployeeUnits(employeeRef, bossUnitsOnly, false, true);
 	}
 
-	private List<NodeRef> getEmployeeUnits(final NodeRef employeeRef, final boolean bossUnitsOnly, final boolean allParents) {
-        return getEmployeeUnits(employeeRef, bossUnitsOnly, allParents, true);
-    }
+	@Override
+	public List<NodeRef> getEmployeeUnits (final NodeRef employeeRef, final boolean bossUnitsOnly, final boolean checkAccess) {
+		return getEmployeeUnits(employeeRef, bossUnitsOnly, false, checkAccess);
+	}
 
     private List<NodeRef> getEmployeeUnits(final NodeRef employeeRef, final boolean bossUnitsOnly, final boolean allParents, final boolean checkAccess) {
         //получаем список штатных расписаний сотрудника
