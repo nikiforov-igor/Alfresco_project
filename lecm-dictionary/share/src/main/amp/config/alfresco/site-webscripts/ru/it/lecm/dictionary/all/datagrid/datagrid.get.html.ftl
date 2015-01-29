@@ -194,8 +194,8 @@
                     showExtendSearchBlock:false,
                     showCheckboxColumn:false,
                     allowCreate: true,
-                    createItemBtnMsg: 'Добавить справочник',
-                    createFormTitleMsg: 'Новый справочник',
+                    createItemBtnMsg: "${msg('button.message.add.dictionary')}",
+                    createFormTitleMsg: "${msg('button.message.new.dictionary')}",
                     actions: [
                         {
                             type:"datagrid-action-link-${bubblingLabel}",

@@ -18,7 +18,7 @@ YAHOO.util.Event.onContentReady("${fieldHtmlId}-value", function () {
                         if (response.json != null && response.json.formatString != null) {
                             var result = response.json.formatString;
                             if (result.trim() == "true" || result.trim() == "false") {
-                                result = result.trim() == "true" ? "Да" : "Нет";
+                                result = result.trim() == "true" ? "${msg("message.yes")}" : "${msg("message.no")}";
                             }
                             YAHOO.util.Dom.get("${fieldHtmlId}-value").innerHTML = result;
                         }

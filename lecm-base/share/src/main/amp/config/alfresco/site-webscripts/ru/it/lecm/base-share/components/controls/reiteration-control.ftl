@@ -35,15 +35,14 @@
     </div>
     <div class="container">
         <div class="control-container" id="${fieldHtmlId}-reiteration-control-container">
-        <#-- TODO: добавить локализацию для дней недели -->
             <div class="rule-body" id="${fieldHtmlId}-week-days-mode">
-                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-1" name="${fieldHtmlId}-week-days-mode-1" value="1"> Понедельник<br/>
-                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-2" name="${fieldHtmlId}-week-days-mode-2" value="2"> Вторник<br/>
-                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-3" name="${fieldHtmlId}-week-days-mode-3" value="3"> Среда<br/>
-                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-4" name="${fieldHtmlId}-week-days-mode-4" value="4"> Четверг<br/>
-                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-5" name="${fieldHtmlId}-week-days-mode-5" value="5"> Пятница<br/>
-                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-6" name="${fieldHtmlId}-week-days-mode-6" value="6"> Суббота<br/>
-                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-7" name="${fieldHtmlId}-week-days-mode-7" value="7"> Воскресенье<br/>
+                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-1" name="${fieldHtmlId}-week-days-mode-1" value="1"> ${msg("lable.day-of-week.monday")}<br/>
+                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-2" name="${fieldHtmlId}-week-days-mode-2" value="2"> ${msg("lable.day-of-week.tuesday")}<br/>
+                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-3" name="${fieldHtmlId}-week-days-mode-3" value="3"> ${msg("lable.day-of-week.wednesday")}<br/>
+                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-4" name="${fieldHtmlId}-week-days-mode-4" value="4"> ${msg("lable.day-of-week.thursday")}<br/>
+                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-5" name="${fieldHtmlId}-week-days-mode-5" value="5"> ${msg("lable.day-of-week.friday")}<br/>
+                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-6" name="${fieldHtmlId}-week-days-mode-6" value="6"> ${msg("lable.day-of-week.saturday")}<br/>
+                <input type="checkbox" id="${fieldHtmlId}-week-days-mode-7" name="${fieldHtmlId}-week-days-mode-7" value="7"> ${msg("lable.day-of-week.sunday")}<br/>
             </div>
             <div class="rule-body hidden1" id="${fieldHtmlId}-month-days-mode">
                 <table class="calendar-grid">

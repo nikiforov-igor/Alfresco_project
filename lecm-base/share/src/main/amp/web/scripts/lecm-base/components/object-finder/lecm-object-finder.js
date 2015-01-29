@@ -49,7 +49,7 @@ function _viewLinkAttributes(id, nodeRef, setId){
                     }
                 }
             },
-            failureMessage: "Элемент не найден или был удалён",
+            failureMessage: Alfresco.component.Base.prototype.msg("message.object-not-found"),
             execScripts:true
         });
     return false;
@@ -89,7 +89,7 @@ LogicECM.module = LogicECM.module || {};
 
 /**
  * ObjectFinder component.
- * 
+ *
  * @namespace Alfresco
  * @class Alfresco.ObjectFinder
  */
@@ -109,10 +109,10 @@ LogicECM.module = LogicECM.module || {};
    var $html = Alfresco.util.encodeHTML,
       $hasEventInterest = Alfresco.util.hasEventInterest,
       $combine = Alfresco.util.combinePaths;
-   
+
    /**
     * ObjectFinder constructor.
-    * 
+    *
     * @param {String} htmlId The HTML id of the parent element
     * @param {String} currentValueHtmlId The HTML id of the parent element
     * @return {Alfresco.ObjectFinder} The new ObjectFinder instance
@@ -145,7 +145,7 @@ LogicECM.module = LogicECM.module || {};
 
       return this;
    };
-   
+
    YAHOO.extend(LogicECM.module.ObjectFinder, Alfresco.component.Base,
    {
       /**
@@ -180,15 +180,15 @@ LogicECM.module = LogicECM.module || {};
           * @type string
           */
          currentValue: "",
-         
+
          /**
           * The id of the item being edited
-          * 
+          *
           * @property currentItem
           * @type string
           */
          currentItem: null,
-         
+
          /**
           * Value type.
           * Whether values are passed into and out of the control as nodeRefs or other data types
@@ -214,16 +214,16 @@ LogicECM.module = LogicECM.module || {};
           * @type string
           */
          itemType: "cm:content",
-         
+
          /**
           * The 'family' of the item to find can be one of the following:
-          * 
+          *
           * - node
           * - category
           * - authority
-          * 
+          *
           * default is "node".
-          * 
+          *
           * @property itemFamily
           * @type string
           */
@@ -231,7 +231,7 @@ LogicECM.module = LogicECM.module || {};
 
          /**
           * Compact mode flag
-          * 
+          *
           * @property compactMode
           * @type boolean
           * @default false
@@ -240,13 +240,13 @@ LogicECM.module = LogicECM.module || {};
 
          /**
           * Multiple Select mode flag
-          * 
+          *
           * @property multipleSelectMode
           * @type boolean
           * @default false
           */
          multipleSelectMode: true,
-         
+
          /**
           * Determines whether a link to the target
           * node should be rendered
@@ -258,7 +258,7 @@ LogicECM.module = LogicECM.module || {};
          showLinkToTarget: false,
 
 	     linkToTarget: "document-details?nodeRef={nodeRef}",
-         
+
          /**
           * Template string or function to use for link to target nodes, must
           * be supplied when showLinkToTarget property is
@@ -269,25 +269,25 @@ LogicECM.module = LogicECM.module || {};
           * @type (string|function)
           */
          targetLinkTemplate: null,
-         
+
          /**
           * Number of characters required for a search
-          * 
+          *
           * @property minSearchTermLength
           * @type int
           * @default 1
           */
          minSearchTermLength: 1,
-         
+
          /**
           * Maximum number of items to display in the results list
-          * 
+          *
           * @property maxSearchResults
           * @type int
           * @default 100
           */
          maxSearchResults: 100,
-         
+
          /**
           * Flag to determine whether the added and removed items
           * should be maintained and posted separately.
@@ -296,13 +296,13 @@ LogicECM.module = LogicECM.module || {};
           * hidden field, if set to false the picker will just
           * update a "${field.name}" hidden field with the current
           * value.
-          * 
+          *
           * @property maintainAddedRemovedItems
           * @type boolean
           * @default true
           */
          maintainAddedRemovedItems: true,
-         
+
          /**
           * Flag to determine whether the picker is in disabled mode
           *
@@ -311,7 +311,7 @@ LogicECM.module = LogicECM.module || {};
           * @default false
           */
          disabled: false,
-         
+
          /**
           * Flag to indicate whether the field is mandatory
           *
@@ -320,7 +320,7 @@ LogicECM.module = LogicECM.module || {};
           * @default false
           */
          mandatory: false,
-         
+
          /**
           * Relative URI of "create new item" data webscript.
           *
@@ -329,7 +329,7 @@ LogicECM.module = LogicECM.module || {};
           * @default ""
           */
          createNewItemUri: "",
-         
+
          /**
           * Icon type to augment "create new item" row.
           *
@@ -405,7 +405,7 @@ LogicECM.module = LogicECM.module || {};
           * @default false
           */
          allowNavigationToContentChildren: false,
-         
+
          /**
           * The label of the select button that triggers the object finder dialog
           *
@@ -413,7 +413,7 @@ LogicECM.module = LogicECM.module || {};
           * @type string
           */
          selectActionLabel: null,
-         
+
          /**
           * The resource id for the label of the select button that triggers the object finder dialog
           *
@@ -421,11 +421,11 @@ LogicECM.module = LogicECM.module || {};
           * @type string
           */
          selectActionLabelId: null,
-         
+
          /**
           * Specifies the location the object finder should start, the following
           * values are supported:
-          * 
+          *
           * - {companyhome}
           * - {userhome}
           * - {siteshome}
@@ -434,7 +434,7 @@ LogicECM.module = LogicECM.module || {};
           * - {parent}
           * - A NodeRef
           * - An XPath
-          * 
+          *
           * @property startLocation
           * @type string
           */
@@ -443,12 +443,12 @@ LogicECM.module = LogicECM.module || {};
          /**
           * Specifies the parameters to pass to the node locator service
           * when determining the start location node.
-          * 
+          *
           * @property startLocationParams
           * @type string
           */
          startLocationParams: null,
-         
+
          /**
           * Specifies the Root Node, above which the object picker will not navigate.
           * Values supported are:
@@ -525,7 +525,7 @@ LogicECM.module = LogicECM.module || {};
 
       /**
        * Resizable columns
-       * 
+       *
        * @property columns
        * @type array
        * @default []
@@ -534,7 +534,7 @@ LogicECM.module = LogicECM.module || {};
 
       /**
        * Single selected item, for when in single select mode
-       * 
+       *
        * @property singleSelectedItem
        * @type string
        */
@@ -542,7 +542,7 @@ LogicECM.module = LogicECM.module || {};
 
       /**
        * Selected items. Keeps a list of selected items for correct Add button state.
-       * 
+       *
        * @property selectedItems
        * @type object
        */
@@ -571,10 +571,10 @@ LogicECM.module = LogicECM.module || {};
          LogicECM.module.ObjectFinder.superclass.setOptions.call(this, obj);
          // TODO: Do we need to filter this object literal before passing it on..?
          this.options.objectRenderer.setOptions(obj);
-         
+
          return this;
       },
-      
+
       /**
        * Set messages for this component.
        *
@@ -600,7 +600,7 @@ LogicECM.module = LogicECM.module || {};
          this.options.selectedValue = items;
          this._loadSelectedItems();
       },
-      
+
       /**
        * Fired by YUI when parent element is available for scripting.
        * Component initialisation, including instantiation of YUI widgets and event listener binding.
@@ -619,7 +619,7 @@ LogicECM.module = LogicECM.module || {};
             {
                Dom.addClass(this.pickerId, "compact");
             }
-         
+
             this._createNavigationControls();
             var itemGroupActionsContainerEl = Dom.get(this.id + "-itemGroupActions");
             if (itemGroupActionsContainerEl)
@@ -629,7 +629,7 @@ LogicECM.module = LogicECM.module || {};
                {
                   var addButtonEl = document.createElement("button");
                   itemGroupActionsContainerEl.appendChild(addButtonEl);
-                  
+
                   var addButtonLabel = this.options.selectActionLabel;
                   if (this.options.selectActionLabelId && this.options.selectActionLabelId.length !== "")
                   {
@@ -664,12 +664,12 @@ LogicECM.module = LogicECM.module || {};
             }
             this.widgets.ok = Alfresco.util.createYUIButton(this, "ok", this.onOK);
             this.widgets.cancel = Alfresco.util.createYUIButton(this, "cancel", this.onCancel);
-            
+
             // force the generated buttons to have a name of "-" so it gets ignored in
             // JSON submit. TODO: remove this when JSON submit behaviour is configurable
             Dom.get(this.id + "-ok-button").name = "-";
             Dom.get(this.id + "-cancel-button").name = "-";
-            
+
             this.widgets.dialog = Alfresco.util.createYUIPanel(this.pickerId,
             {
                width: "60em"
@@ -677,7 +677,7 @@ LogicECM.module = LogicECM.module || {};
             this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
             Dom.addClass(this.pickerId, "object-finder");
          }
-         
+
          this._loadSelectedItems();
       },
 
@@ -704,7 +704,7 @@ LogicECM.module = LogicECM.module || {};
          }
           LogicECM.module.ObjectFinder.superclass.destroy.call(this);
       },
-      
+
       /**
        * Add button click handler, shows picker
        *
@@ -737,7 +737,7 @@ LogicECM.module = LogicECM.module || {};
          this._createResizer();
          this._populateSelectedItems();
          this.options.objectRenderer.onPickerShow();
-         
+
          if (!this.options.objectRenderer.startLocationResolved && (this.options.startLocation || this.options.rootNode || this.options.xPathLocation))
          {
             this._resolveStartLocation();
@@ -746,7 +746,7 @@ LogicECM.module = LogicECM.module || {};
          {
             this._fireRefreshEvent();
          }
-         
+
          p_obj.set("disabled", true);
          Event.preventDefault(e);
       },
@@ -865,7 +865,7 @@ LogicECM.module = LogicECM.module || {};
             {
                Alfresco.logger.debug("Hidden field '" + this.currentValueHtmlId + "' updated to '" + selectedItems.toString() + "'");
             }
-                                 
+
             // inform the forms runtime that the control value has been updated (if field is mandatory)
             if (this.options.mandatory)
             {
@@ -902,7 +902,7 @@ LogicECM.module = LogicECM.module || {};
             Event.preventDefault(e);
          }
       },
-      
+
       /**
        * Triggers a search
        *
@@ -980,7 +980,7 @@ LogicECM.module = LogicECM.module || {};
       {
          var addedItems = [],
             currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
-         
+
          for (var item in this.selectedItems)
          {
             if (this.selectedItems.hasOwnProperty(item))
@@ -1004,7 +1004,7 @@ LogicECM.module = LogicECM.module || {};
       {
          var removedItems = [],
             currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
-         
+
          for (var item in currentItems)
          {
             if (currentItems.hasOwnProperty(item))
@@ -1018,7 +1018,7 @@ LogicECM.module = LogicECM.module || {};
          return removedItems;
       },
 
-      
+
       /**
        * BUBBLING LIBRARY EVENT HANDLERS FOR PAGE EVENTS
        * Disconnected event handlers for inter-component event notification
@@ -1043,7 +1043,7 @@ LogicECM.module = LogicECM.module || {};
 
             if (items === null)
             {
-               displayValue = "<span class=\"error\">" + this.msg("form.control.object-picker.current.failure") + "</span>";            
+               displayValue = "<span class=\"error\">" + this.msg("form.control.object-picker.current.failure") + "</span>";
             }
             else
             {
@@ -1056,7 +1056,7 @@ LogicECM.module = LogicECM.module || {};
                      this.widgets.currentValuesDataTable.deleteRows(0, l);
                   }
                }
-               
+
                for (var key in items)
                {
                   if (items.hasOwnProperty(key))
@@ -1145,7 +1145,7 @@ LogicECM.module = LogicECM.module || {};
                var records = this.widgets.dataTable.getRecordSet().getRecords(),
                   i = 0,
                   il = records.length;
-               
+
                for (; i < il; i++)
                {
                   if (obj.item.nodeRef == records[i].getData().nodeRef)
@@ -1198,7 +1198,7 @@ LogicECM.module = LogicECM.module || {};
             }
          }
       },
-      
+
       /**
        * Parent changed event handler
        *
@@ -1218,7 +1218,7 @@ LogicECM.module = LogicECM.module || {};
             }
          }
       },
-      
+
       /**
        * Parent Details updated event handler
        *
@@ -1296,7 +1296,7 @@ LogicECM.module = LogicECM.module || {};
               }
           }
       },
-      
+
       /**
        * Notification that form is being destroyed.
        *
@@ -1361,7 +1361,7 @@ LogicECM.module = LogicECM.module || {};
          return function ObjectFinder_renderCellIcon(elCell, oRecord, oColumn, oData)
          {
             var iconSize = scope.options.compactMode ? 16 : 32;
-         
+
             oColumn.width = iconSize - 6;
             Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
@@ -1537,9 +1537,9 @@ LogicECM.module = LogicECM.module || {};
                Dom.setStyle(elCell, "width", oColumn.width + (YAHOO.lang.isNumber(oColumn.width) ? "px" : ""));
                Dom.setStyle(elCell.parentNode, "width", oColumn.width + (YAHOO.lang.isNumber(oColumn.width) ? "px" : ""));
             }
-            
+
             // While waiting for the package item actions, only render the actions (remove) in non editable mode
-            if (scope.options.disabled === false) 
+            if (scope.options.disabled === false)
             {
                var links = "", link, listAction;
                for (var i = 0, il = scope.options.listItemActions.length; i < il; i++)
@@ -1595,7 +1595,7 @@ LogicECM.module = LogicECM.module || {};
             var items = eval("("+ response.serverResponse.responseText + ")").data.items,
                item;
             this.selectedItems = {};
-            //this.singleSelectedItem = null; 
+            //this.singleSelectedItem = null;
 
             for (var i = 0, il = items.length; i < il; i++)
             {
@@ -1608,7 +1608,7 @@ LogicECM.module = LogicECM.module || {};
                eventGroup: this
             });
          };
-         
+
          var onFailure = function ObjectFinder__loadSelectedItems_onFailure(response)
          {
             this.selectedItems = null;
@@ -1650,7 +1650,7 @@ LogicECM.module = LogicECM.module || {};
             {
                Dom.get(this.id + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
             }
-            
+
             this._enableActions();
          }
       },
@@ -1664,28 +1664,28 @@ LogicECM.module = LogicECM.module || {};
       _createNavigationControls: function ObjectFinder__createNavigationControls()
       {
          var me = this;
-         
+
          if (this._inAuthorityMode())
          {
             // only show the search box for authority mode
             Dom.setStyle(this.pickerId + "-folderUpContainer", "display", "none");
             Dom.setStyle(this.pickerId + "-navigatorContainer", "display", "none");
             Dom.setStyle(this.pickerId + "-searchContainer", "display", "block");
-            
+
             // setup search widgets
             this.widgets.searchButton = new YAHOO.widget.Button(this.pickerId + "-searchButton");
             this.widgets.searchButton.on("click", this.onSearch, this.widgets.searchButton, this);
-            
+
             // force the generated buttons to have a name of "-" so it gets ignored in
             // JSON submit. TODO: remove this when JSON submit behaviour is configurable
             Dom.get(this.pickerId + "-searchButton").name = "-";
-            
+
             // register the "enter" event on the search text field
             var zinput = Dom.get(this.pickerId + "-searchText");
-            new YAHOO.util.KeyListener(zinput, 
+            new YAHOO.util.KeyListener(zinput,
             {
                keys: 13
-            }, 
+            },
             {
                fn: me.onSearch,
                scope: this,
@@ -1700,20 +1700,20 @@ LogicECM.module = LogicECM.module || {};
                disabled: true
             });
             this.widgets.folderUp.on("click", this.onFolderUp, this.widgets.folderUp, this);
-   
+
             // Navigation drop-down menu
             this.widgets.navigationMenu = new YAHOO.widget.Button(this.pickerId + "-navigator",
-            { 
-               type: "menu", 
+            {
+               type: "menu",
                menu: this.pickerId + "-navigatorMenu",
                lazyloadmenu: false
             });
-            
+
             // force the generated buttons to have a name of "-" so it gets ignored in
             // JSON submit. TODO: remove this when JSON submit behaviour is configurable
             Dom.get(this.pickerId + "-folderUp-button").name = "-";
             Dom.get(this.pickerId + "-navigator-button").name = "-";
-   
+
             this.widgets.navigationMenu.getMenu().subscribe("click", function (p_sType, p_aArgs)
             {
                var menuItem = p_aArgs[1];
@@ -1727,7 +1727,7 @@ LogicECM.module = LogicECM.module || {};
                   });
                }
             });
-            
+
             // Optional "Create New" UI controls
             if (Dom.get(this.pickerId + "-createNew"))
             {
@@ -1737,7 +1737,7 @@ LogicECM.module = LogicECM.module || {};
                   disabled: true
                });
                this.widgets.createNewOK.on("click", this.onCreateNewOK, this.widgets.createNewOK, this);
-   
+
                // Create New - Cancel button
                this.widgets.createNewCancel = new YAHOO.widget.Button(this.pickerId + "-createNewCancel",
                {
@@ -1842,7 +1842,7 @@ LogicECM.module = LogicECM.module || {};
          // Add displayMode as class so we can separate the styling of the currentValue element
          var currentValueEl = Dom.get(this.id + "-currentValueDisplay");
          Dom.addClass(currentValueEl, "object-finder-" + this.options.displayMode);
-         
+
          if (this.options.displayMode == "list")
          {
             // Setup a DataSource for the selected items list
@@ -1916,7 +1916,7 @@ LogicECM.module = LogicECM.module || {};
             YAHOO.Bubbling.addDefaultAction("list-action-event-" + this.eventGroup, fnActionListItemHandler, true);
          }
       },
-      
+
       /**
        * Populate selected items
        *
@@ -1941,11 +1941,11 @@ LogicECM.module = LogicECM.module || {};
             }
          }
       },
-      
+
       /**
        * Resolves the start location provided to the component and refreshes
        * the picker to show the children of that start location.
-       * 
+       *
        * @method _resolveStartLocation
        * @private
        */
@@ -1954,12 +1954,12 @@ LogicECM.module = LogicECM.module || {};
          if (this.options.startLocation || this.options.rootNode || this.options.xPathLocation)
          {
             this.options.startLocation = (this.options.startLocation || this.options.rootNode || this.options.xPathLocation);
-            
+
             if (Alfresco.logger.isDebugEnabled())
             {
                Alfresco.logger.debug("Resolving startLocation of '" + this.options.startLocation + "'");
             }
-            
+
             var startingNodeRef = null;
             var startingNodeRoot = null;
             // check first for the start locations that don't require a remote call
@@ -1986,7 +1986,7 @@ LogicECM.module = LogicECM.module || {};
                   else
                   {
                      startingNodeRef = "alfresco://company/home";
-                     
+
                      if (Alfresco.logger.isDebugEnabled())
                      {
                         Alfresco.logger.warn("To use a start location of {self} a 'currentItem' parameter is required, defaulting to company home");
@@ -2013,7 +2013,7 @@ LogicECM.module = LogicECM.module || {};
                // start location must be a hardcoded nodeRef
                startingNodeRef = this.options.startLocation;
             }
-            
+
             if (startingNodeRef != null)
             {
                // we already know the start location so just refresh
@@ -2032,11 +2032,11 @@ LogicECM.module = LogicECM.module || {};
             this._fireRefreshEvent();
          }
       },
-      
+
       /**
        * Locates the NodeRef for the start location by calling the remote node locator
        * service and refreshes the picker.
-       * 
+       *
        * @method _locateStartingNode
        * @private
        */
@@ -2045,44 +2045,44 @@ LogicECM.module = LogicECM.module || {};
          if (this.options.startLocation && this.options.currentItem && this.options.currentItem !== null)
          {
             var nodeLocator = "companyhome";
-            
+
             // for backwards compatibility support the well known {parent} start location
             if (this.options.startLocation == "{parent}")
             {
                nodeLocator = "ancestor";
             }
-            else if (this.options.startLocation.length > 2 && 
+            else if (this.options.startLocation.length > 2 &&
                      this.options.startLocation.charAt(0) == "{" &&
                      this.options.startLocation.charAt(this.options.startLocation.length-1) == "}")
             {
                // strip off the { } characters
                nodeLocator = this.options.startLocation.substring(1, this.options.startLocation.length-1);
             }
-            
+
             // build the base URL for the nodelocator service call
-            var url = $combine(Alfresco.constants.PROXY_URI, "/api/", this.options.currentItem.replace("://", "/"), 
+            var url = $combine(Alfresco.constants.PROXY_URI, "/api/", this.options.currentItem.replace("://", "/"),
                   "nodelocator", nodeLocator);
-            
+
             // add parameters for the call to the node locator service, if there are any
             if (this.options.startLocationParams && this.options.startLocationParams != null)
             {
                url += "?" + encodeURI(this.options.startLocationParams);
             }
-            
+
             // define success handler
             var successHandler = function ObjectFinder__locateStartingNode_successHandler(response)
             {
                var startingNodeRef = response.json.data.nodeRef;
-               
+
                if (Alfresco.logger.isDebugEnabled())
                {
                   Alfresco.logger.debug("startLocation resolved to: " + startingNodeRef);
                }
-               
+
                this.options.objectRenderer.options.parentNodeRef = startingNodeRef;
                this._fireRefreshEvent();
             };
-            
+
             // define failure handler
             var failureHandler = function ObjectFinder__locateStartingNode_failureHandler(response)
             {
@@ -2090,24 +2090,24 @@ LogicECM.module = LogicECM.module || {};
                {
                   Alfresco.logger.error("Failed to locate node: " + response.serverResponse.responseText);
                }
-               
+
                // just use the defaults, normally company home
                this._fireRefreshEvent();
             };
-            
+
             if (Alfresco.logger.isDebugEnabled())
             {
                Alfresco.logger.debug("Generated nodelocator url: " + url);
             }
-            
+
             // call the node locator webscript
             var config =
             {
                method: "GET",
                url: url,
-               successCallback: 
-               { 
-                  fn: successHandler, 
+               successCallback:
+               {
+                  fn: successHandler,
                   scope: this
                },
                failureCallback:
@@ -2118,21 +2118,21 @@ LogicECM.module = LogicECM.module || {};
             };
             Alfresco.util.Ajax.request(config);
          }
-         else 
+         else
          {
             if (Alfresco.logger.isDebugEnabled())
             {
-               Alfresco.logger.warn("To use a start location of " + this.options.startLocation + 
+               Alfresco.logger.warn("To use a start location of " + this.options.startLocation +
                      " a 'currentItem' parameter is required");
             }
-            
+
             this._fireRefreshEvent();
-         } 
+         }
       },
-      
+
       /**
        * Fires the refreshItemList event to refresh the contents of the picker.
-       * 
+       *
        * @method _fireRefreshEvent
        * @private
        */
@@ -2166,7 +2166,7 @@ LogicECM.module = LogicECM.module || {};
             }
          }
       },
-      
+
       /**
        * Create YUI resizer widget
        *
@@ -2189,7 +2189,7 @@ LogicECM.module = LogicECM.module || {};
             });
             // The resize handle doesn't quite get the element height correct, so it's saved here
             heightFix = this.widgets.resizer.get("height");
-            
+
             this.widgets.resizer.on("resize", function(e)
             {
                 var w = e.width;
@@ -2211,10 +2211,10 @@ LogicECM.module = LogicECM.module || {};
             });
          }
       },
-      
+
       /**
        * Determines whether the picker is in 'authority' mode.
-       * 
+       *
        * @method _inAuthorityMode
        * @return true if the picker is being used to find authorities i.e. users and groups
        * @private
@@ -2241,7 +2241,7 @@ LogicECM.module = LogicECM.module || {};
          if (this.widgets.addButton)
          {
             // Enable the add button
-            this.widgets.addButton.set("disabled", false);                  
+            this.widgets.addButton.set("disabled", false);
          }
 
          if (!this.options.disabled && !this.isReady)
@@ -2259,7 +2259,7 @@ LogicECM.module = LogicECM.module || {};
 
 /**
  * ObjectRenderer component.
- * 
+ *
  * @namespace Alfresco
  * @class Alfresco.ObjectRenderer
  */
@@ -2287,7 +2287,7 @@ LogicECM.module = LogicECM.module || {};
 
    /**
     * ObjectRenderer constructor.
-    * 
+    *
     * @param {object} Instance of the ObjectFinder
     * @return {Alfresco.ObjectRenderer} The new ObjectRenderer instance
     * @constructor
@@ -2313,7 +2313,7 @@ LogicECM.module = LogicECM.module || {};
 
       return this;
    };
-   
+
    YAHOO.extend(LogicECM.module.ObjectRenderer, Alfresco.component.Base,
    {
       /**
@@ -2339,16 +2339,16 @@ LogicECM.module = LogicECM.module || {};
           * @type string
           */
          itemType: "cm:content",
-         
+
          /**
           * The 'family' of the item to find can be one of the following:
-          * 
+          *
           * - node
           * - category
           * - authority
-          * 
+          *
           * default is "node".
-          * 
+          *
           * @property itemFamily
           * @type string
           */
@@ -2364,7 +2364,7 @@ LogicECM.module = LogicECM.module || {};
 
          /**
           * Compact mode flag
-          * 
+          *
           * @property compactMode
           * @type boolean
           * @default false
@@ -2373,13 +2373,13 @@ LogicECM.module = LogicECM.module || {};
 
          /**
           * Maximum number of items to display in the results list
-          * 
+          *
           * @property maxSearchResults
           * @type int
           * @default 100
           */
          maxSearchResults: 100,
-         
+
          /**
           * Relative URI of "create new item" data webscript.
           *
@@ -2388,7 +2388,7 @@ LogicECM.module = LogicECM.module || {};
           * @default ""
           */
          createNewItemUri: "",
-         
+
          /**
           * Icon type to augment "create new item" row.
           *
@@ -2447,7 +2447,7 @@ LogicECM.module = LogicECM.module || {};
 
       /**
        * Object container for storing button instances, indexed by item id.
-       * 
+       *
        * @property addItemButtons
        * @type object
        */
@@ -2455,21 +2455,21 @@ LogicECM.module = LogicECM.module || {};
 
       /**
        * Create new item input control Dom Id
-       * 
+       *
        * @property createNewItemId
        * @type string
        */
       createNewItemId: null,
-      
+
       /**
        * Flag to indicate whether the start location (if present)
        * has been resolved yet or not
-       * 
+       *
        * @property startLocationResolved
        * @type boolean
        */
       startLocationResolved: false,
-      
+
       /**
        * Fired by YUI when parent element is available for scripting.
        * Component initialisation, including instantiation of YUI widgets and event listener binding.
@@ -2502,7 +2502,7 @@ LogicECM.module = LogicECM.module || {};
           LogicECM.module.ObjectRenderer.superclass.destroy.call(this);
       },
 
-      
+
       /**
        * PUBLIC INTERFACE
        */
@@ -2529,7 +2529,7 @@ LogicECM.module = LogicECM.module || {};
       {
          return Alfresco.constants.URL_RESCONTEXT + 'components/images/filetypes/' + Alfresco.util.getFileIcon(item.name, item.type, size);
       },
-      
+
       /**
        * Render item using a passed-in template
        *
@@ -2559,11 +2559,11 @@ LogicECM.module = LogicECM.module || {};
             }
             return $html(me._deactivateLinks(p_value));
          };
-         
+
          return YAHOO.lang.substitute(template, item, renderHelper);
       },
 
-      
+
       /**
        * BUBBLING LIBRARY EVENT HANDLERS FOR PAGE EVENTS
        * Disconnected event handlers for inter-component event notification
@@ -2577,7 +2577,7 @@ LogicECM.module = LogicECM.module || {};
        * @param args {array} Event parameters (depends on event type)
        */
       onRefreshItemList: function ObjectRenderer_onRefreshItemList(layer, args)
-      {   
+      {
          // Check the event is directed towards this instance
          if ($hasEventInterest(this, args))
          {
@@ -2599,7 +2599,7 @@ LogicECM.module = LogicECM.module || {};
        * @param args {array} Event parameters (depends on event type)
        */
       onParentChanged: function ObjectRenderer_onParentChanged(layer, args)
-      {   
+      {
          // Check the event is directed towards this instance
          if ($hasEventInterest(this, args))
          {
@@ -2620,7 +2620,7 @@ LogicECM.module = LogicECM.module || {};
        * @param args {array} Event parameters (depends on event type)
        */
       onSelectedItemChanged: function ObjectRenderer_onSelectedItemChanged(layer, args)
-      {   
+      {
          // Check the event is directed towards this instance
          if ($hasEventInterest(this, args))
          {
@@ -2648,7 +2648,7 @@ LogicECM.module = LogicECM.module || {};
       fnRenderItemIcon: function ObjectRenderer_fnRenderItemIcon()
       {
          var scope = this;
-      
+
          /**
           * Icon datacell formatter
           *
@@ -2690,7 +2690,7 @@ LogicECM.module = LogicECM.module || {};
       fnRenderItemName: function ObjectRenderer_fnRenderItemName()
       {
          var scope = this;
-      
+
          /**
           * Name datacell formatter
           *
@@ -2739,7 +2739,7 @@ LogicECM.module = LogicECM.module || {};
       fnRenderCellAdd: function ObjectRenderer_fnRenderCellAdd()
       {
          var scope = this;
-      
+
          /**
           * Add button datacell formatter
           *
@@ -2752,7 +2752,7 @@ LogicECM.module = LogicECM.module || {};
          return function ObjectRenderer_renderCellAdd(elCell, oRecord, oColumn, oData)
          {
             Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-            
+
             var containerId = Alfresco.util.generateDomId(),
                button;
 
@@ -2761,7 +2761,7 @@ LogicECM.module = LogicECM.module || {};
             {
                elCell.innerHTML = '<a href="#" class="create-new-item create-new-item-' + scope.eventGroup + '" title="' + scope.msg("form.control.object-picker.create-new") + '" tabindex="0"><span class="createNewIcon">&nbsp;</span></a>';
                return;
-            } 
+            }
 
             if (oRecord.getData("selectable"))
             {
@@ -2789,7 +2789,7 @@ LogicECM.module = LogicECM.module || {};
          var elInput = Dom.get(this.createNewItemId),
             uri = $combine("/", this.options.createNewItemUri).substring(1),
             itemName;
-         
+
          if (elInput)
          {
             itemName = elInput.value;
@@ -2869,7 +2869,7 @@ LogicECM.module = LogicECM.module || {};
       {
          var me = this;
 
-         // DataSource definition  
+         // DataSource definition
          var pickerChildrenUrl = Alfresco.constants.PROXY_URI + "lecm/forms/picker/" + this.options.itemFamily;
          this.widgets.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
          {
@@ -2898,13 +2898,13 @@ LogicECM.module = LogicECM.module || {};
                {
                   items = items.slice(0, me.options.maxSearchResults-1);
                }
-               
+
                // Add the special "Create new" record if required
                if (me.options.createNewItemUri !== "" && me.createNewItemId === null)
                {
                   items = [{ type: IDENT_CREATE_NEW }].concat(items);
                }
-               
+
                // Special case for tags, which we want to render differently to categories
                var index, item;
                for (index in items)
@@ -2920,7 +2920,7 @@ LogicECM.module = LogicECM.module || {};
                      }
                   }
                }
-               
+
                // Notify interested parties of the parent details
                YAHOO.Bubbling.fire("parentDetails",
                {
@@ -2935,7 +2935,7 @@ LogicECM.module = LogicECM.module || {};
                   items: items
                };
             }
-            
+
             return updatedResponse;
          };
 
@@ -2946,7 +2946,7 @@ LogicECM.module = LogicECM.module || {};
             { key: "name", label: "Item", sortable: false, formatter: this.fnRenderItemName() },
             { key: "add", label: "Add", sortable: false, formatter: this.fnRenderCellAdd(), width: 16 }
          ];
-         
+
          var initialMessage = this.msg("form.control.object-picker.items-list.loading");
          if (this._inAuthorityMode())
          {
@@ -2988,7 +2988,7 @@ LogicECM.module = LogicECM.module || {};
                   }, YAHOO.env.ua.ie > 0 ? KeyListener.KEYDOWN : "keypress");
                   this.widgets.enterListener.enable();
                }
-               
+
                me.autocompleteDelayId = -1;
                Event.addListener(this.createNewItemId, "keyup", function(p_event)
                {
@@ -3013,11 +3013,11 @@ LogicECM.module = LogicECM.module || {};
                      }, 500);
                   }
                });
-               
+
                Dom.get(this.createNewItemId).focus();
             }
          }, this, true);
-         
+
          // Hook add item action click events (for Compact mode)
          var fnAddItemHandler = function ObjectRenderer__createControls_fnAddItemHandler(layer, args)
          {
@@ -3062,7 +3062,7 @@ LogicECM.module = LogicECM.module || {};
             if (owner !== null)
             {
                var target, rowId, record;
-         
+
                target = args[1].target;
                rowId = target.offsetParent;
                record = me.widgets.dataTable.getRecord(rowId);
@@ -3080,7 +3080,7 @@ LogicECM.module = LogicECM.module || {};
          };
          YAHOO.Bubbling.addDefaultAction("parent-" + this.eventGroup, fnNavigationHandler, true);
       },
-      
+
       /**
        * Updates item list by calling data webscript
        *
@@ -3100,7 +3100,7 @@ LogicECM.module = LogicECM.module || {};
             this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.loading"));
             this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
          }
-         
+
          var successHandler = function ObjectRenderer__updateItems_successHandler(sRequest, oResponse, oPayload)
          {
             this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
@@ -3114,7 +3114,7 @@ LogicECM.module = LogicECM.module || {};
                this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
             }
          };
-         
+
          var failureHandler = function ObjectRenderer__updateItems_failureHandler(sRequest, oResponse)
          {
             if (oResponse.status == 401)
@@ -3135,15 +3135,15 @@ LogicECM.module = LogicECM.module || {};
                }
             }
          };
-         
+
          // build the url to call the pickerchildren data webscript
          var url = this._generatePickerChildrenUrlPath(nodeRef) + this._generatePickerChildrenUrlParams(searchTerm);
-         
+
          if (Alfresco.logger.isDebugEnabled())
          {
             Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
          }
-         
+
          // call the pickerchildren data webscript
          this.widgets.dataSource.sendRequest(url,
          {
@@ -3151,14 +3151,14 @@ LogicECM.module = LogicECM.module || {};
             failure: failureHandler,
             scope: this
          });
-         
+
          // the start location is now resolved
          this.startLocationResolved = true;
       },
-      
+
       /**
        * Determines whether the picker is in 'authority' mode.
-       * 
+       *
        * @method _inAuthorityMode
        * @return true if the picker is being used to find authorities i.e. users and groups
        */
@@ -3166,10 +3166,10 @@ LogicECM.module = LogicECM.module || {};
       {
          return (this.options.itemFamily == "authority");
       },
-      
+
       /**
        * Generates the path fragment of the pickerchildren webscript URL.
-       * 
+       *
        * @method _generatePickerChildrenUrlPath
        * @param nodeRef NodeRef of the parent
        * @return The generated URL
@@ -3179,17 +3179,17 @@ LogicECM.module = LogicECM.module || {};
          // generate the path portion of the url
          return $combine("/", nodeRef.replace("://", "/"), "children");
       },
-      
+
       /**
        * Generates the query parameters for the pickerchildren webscript URL.
-       * 
+       *
        * @method _generatePickerChildrenUrlParams
        * @param searchTerm The search term
        * @return The generated URL
        */
       _generatePickerChildrenUrlParams: function ObjectRenderer__generatePickerChildrenUrlParams(searchTerm)
       {
-         var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) + 
+         var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                       "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
                       "&sortProp=" + encodeURIComponent(this.options.sortProp) +
                       "&openSubstituteSymbol=" + encodeURIComponent(this.options.openSubstituteSymbol) +
@@ -3202,7 +3202,7 @@ LogicECM.module = LogicECM.module || {};
 	     }
 
 
-         // if an XPath start location has been provided and it has not been resolved 
+         // if an XPath start location has been provided and it has not been resolved
          // yet, pass it to the pickerchildren script as a parameter
          if (!this.startLocationResolved && this.options.startLocation &&
               this.options.startLocation.charAt(0) == "/")
@@ -3245,12 +3245,12 @@ LogicECM.module = LogicECM.module || {};
                params += "&rootNode=" + encodeURIComponent(rootNode);
             }
          }
-         
+
          if (this.options.params)
          {
             params += "&" + encodeURI(this.options.params);
          }
-         
+
          return params;
       },
 

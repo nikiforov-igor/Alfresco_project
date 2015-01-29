@@ -8,7 +8,7 @@
     <div class="container">
         <div class="value-div">
             <span><a href="${url.context}/page/document-attachment?nodeRef=${fieldValue}" target="_blank">
-                <img src="${url.context}/components/images/filetypes/img-file-16.png" width="16"/>Просмотреть файл
+                <img src="${url.context}/components/images/filetypes/img-file-16.png" width="16"/>${msg("lable.view.file")}
             </a></span>
         </div>
     </div>

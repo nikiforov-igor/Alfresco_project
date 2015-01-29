@@ -2128,13 +2128,13 @@ LogicECM.module = LogicECM.module || {};
 					if (employeeData) {
 						if (employeeData.isEmployeeAbsent) {
 							var absenceEnd = Alfresco.util.fromISO8601(employeeData.currentAbsenceEnd);
-							result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-unavailable", "Будет доступен с " + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear());
+							result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-unavailable", this.msg("title.employee-available.from") + " " + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear());
 						} else {
                             var title = "";
 							var nextAbsenceStr = employeeData.nextAbsenceStart;
 							if (nextAbsenceStr) {
 								var nextAbsenceDate = Alfresco.util.fromISO8601(nextAbsenceStr);
-								title = "Будет недоступен с " + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear();
+								title = this.msg("title.employee-unavailable.from") + " " + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear();
 							}
                             result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-available", title);
                         }

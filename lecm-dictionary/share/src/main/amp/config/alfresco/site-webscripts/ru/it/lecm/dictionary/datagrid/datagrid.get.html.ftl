@@ -46,7 +46,7 @@
 	                    }
 	                ]
 	            }).setMessages(${messages});
-	
+
 	    if (rootNode) {
 	        YAHOO.Bubbling.fire("activeGridChanged",
 	                {
@@ -58,10 +58,10 @@
 	                });
 	    }
 	}
-	
+
 	function loadDictionary() {
     var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent("${args.dictionaryName}");
-	
+
 	    var callback = {
 	        success: function (oResponse) {
 	            var oResults = eval("(" + oResponse.responseText + ")");
@@ -70,7 +70,7 @@
 	            }
 	        },
 	        failure: function (oResponse) {
-	            alert("Справочник не был загружен. Попробуйте обновить страницу.");
+	            alert("${msg('message.dictionary.loading.fail')}");
 	        }
 	    };
 	    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);

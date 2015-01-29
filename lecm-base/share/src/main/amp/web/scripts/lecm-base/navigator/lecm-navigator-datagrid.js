@@ -105,16 +105,16 @@ LogicECM.module.Navigator = LogicECM.module.Navigator || {};
                                         default:
                                             if (datalistColumn.name == "size") {
                                                 var size = data.value;
-                                                var result = size + " б";
+                                                var result = size + " " + scope.msg("size.bytes");
                                                 if (Math.floor(size / 1024) != 0) {
                                                     size = size / 1024;
-                                                    var result = size.toFixed(2) + " кб";
+                                                    var result = size.toFixed(2) + " " + scope.msg("size.kilobytes");
                                                     if (Math.floor(size / 1024) != 0) {
                                                         size = size / 1024;
-                                                        var result = size.toFixed(2) + " Мб";
+                                                        var result = size.toFixed(2) + " " + scope.msg("size.megabytes");
                                                         if (Math.floor(size / 1024) != 0) {
                                                             size = size / 1024;
-                                                            var result = size.toFixed(2) + " Гб";
+                                                            var result = size.toFixed(2) + " " + scope.msg("size.gigabytes");
                                                         }
                                                     }
                                                 }

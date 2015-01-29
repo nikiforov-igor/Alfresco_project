@@ -133,7 +133,7 @@
                     fn: onSuccessAjaxRequest
                 },
 
-                failureMessage: "Не удалось загрузить данные формы для материнской компании",
+                failureMessage: "${msg("message.load-parent-form.failure")}",
 
                 execScripts: true
             });

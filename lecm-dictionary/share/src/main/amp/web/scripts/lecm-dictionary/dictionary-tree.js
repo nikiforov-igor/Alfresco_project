@@ -227,7 +227,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         me.draw();
                     },
                     failure:function (oResponse) {
-	                    alert("Справочник не был загружен. Попробуйте обновить страницу.");
+	                    alert(me.msg('message.dictionary.loading.fail'));
                     },
                     argument:{
                     }

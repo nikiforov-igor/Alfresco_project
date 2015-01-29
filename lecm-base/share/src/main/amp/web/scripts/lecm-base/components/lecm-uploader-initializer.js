@@ -16,7 +16,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this._initLecmUploader("components/upload/dnd-upload", "lecm-controls-dnd-uploader", uploadersContainer, "dnd");
             }
 		},
-	
+
 		_initLecmUploader: function(url, containerId, uploadersContainer, type) {
 			if (Dom.get(containerId) == null) {
 				var container = document.createElement("div");
@@ -35,45 +35,45 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             switch (type) {
                                 case "html" :
                                     if (Alfresco.HtmlUpload) {
-                                        window.htmlUpload = window.htmlUpload || new Alfresco.HtmlUpload('lecm-controls-html-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                        window.htmlUpload = window.htmlUpload || new Alfresco.HtmlUpload('lecm-controls-html-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                     } else {
                                         LogicECM.module.Base.Util.loadScripts([
                                             'components/upload/html-upload.js'],
                                             function() {
-                                                window.htmlUpload = window.htmlUpload || new Alfresco.HtmlUpload('lecm-controls-html-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                                window.htmlUpload = window.htmlUpload || new Alfresco.HtmlUpload('lecm-controls-html-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                             });
                                     }
                                     break;
                                 case "flash" :
                                     if (Alfresco.FlashUpload) {
-                                        window.flashUpload = window.flashUpload || new Alfresco.FlashUpload('lecm-controls-flash-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                        window.flashUpload = window.flashUpload || new Alfresco.FlashUpload('lecm-controls-flash-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                     } else {
                                         LogicECM.module.Base.Util.loadScripts([
                                             'components/upload/flash-upload.js'],
                                             function() {
-                                                window.flashUpload = window.flashUpload || new Alfresco.FlashUpload('lecm-controls-flash-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                                window.flashUpload = window.flashUpload || new Alfresco.FlashUpload('lecm-controls-flash-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                             });
                                     }
                                     break;
                                 case "file" :
                                     if (Alfresco.FileUpload) {
-                                        window.fileUpload = window.fileUpload || new Alfresco.FileUpload('lecm-controls-file-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                        window.fileUpload = window.fileUpload || new Alfresco.FileUpload('lecm-controls-file-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                     } else {
                                         LogicECM.module.Base.Util.loadScripts([
                                             'components/upload/file-upload.js'],
                                             function() {
-                                                window.fileUpload = window.fileUpload || new Alfresco.FileUpload('lecm-controls-file-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                                window.fileUpload = window.fileUpload || new Alfresco.FileUpload('lecm-controls-file-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                             });
                                     }
                                     break;
                                 case "dnd" :
                                     if (Alfresco.DNDUpload) {
-                                        window.dndUpload = window.dndUpload || new Alfresco.DNDUpload('lecm-controls-dnd-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                        window.dndUpload = window.dndUpload || new Alfresco.DNDUpload('lecm-controls-dnd-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                     } else {
                                         LogicECM.module.Base.Util.loadScripts([
                                             'components/upload/dnd-upload.js'],
                                             function() {
-                                                window.dndUpload = window.dndUpload || new Alfresco.DNDUpload('lecm-controls-dnd-uploader').setMessages({"header.singleUpload": "Загрузить вложение"});
+                                                window.dndUpload = window.dndUpload || new Alfresco.DNDUpload('lecm-controls-dnd-uploader').setMessages({"header.singleUpload": Alfresco.component.Base.prototype.msg("header.upload.attachment")});
                                             });
                                     }
                                     break;
@@ -86,7 +86,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					execScripts: true
 				});
 		},
-	
+
 		initLecmDndUploader: function() {
 			var uploaderContainerId = "lecm-controls-dnd-uploader";
 			var dndUploaderContainer = YAHOO.util.Dom.get(uploaderContainerId);
@@ -94,7 +94,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				dndUploaderContainer = document.createElement("div");
 				dndUploaderContainer.id = uploaderContainerId;
 				document.body.appendChild(dndUploaderContainer);
-	
+
 				Alfresco.util.Ajax.request(
 					{
 						url: Alfresco.constants.URL_SERVICECONTEXT + "components/upload/dnd-upload",

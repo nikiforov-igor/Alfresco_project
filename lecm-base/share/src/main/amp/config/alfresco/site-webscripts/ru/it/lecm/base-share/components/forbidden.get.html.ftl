@@ -6,7 +6,7 @@
 		<#if args.message??>
 		<span>${msg(args.message)}</span>
 		<#else>
-		<span>У вас нет прав для просмотра страницы. Обратитесь к администратору системы.</span>
+		<span>${msg("message.view-page.permissions.deny")}</span>
 		</#if>
 	</h1>
 </div>

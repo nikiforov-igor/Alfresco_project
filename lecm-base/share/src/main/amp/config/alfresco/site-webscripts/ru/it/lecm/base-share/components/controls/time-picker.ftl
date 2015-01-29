@@ -68,14 +68,14 @@
 			fieldNode.zIndex(zIndex+1);
 
 			fieldNode.timepicker({
-				timeFormat: 'HH:mm',
-				timeOnlyTitle: 'Выберите время',
-				timeText: 'Время',
-				hourText: 'Часы',
-				minuteText: 'Минуты',
-				secondText: 'Секунды',
-				currentText: 'Сейчас',
-				closeText: 'Выбрать',
+				timeFormat: '${msg("title.timepicker.timeformat")}',
+				timeOnlyTitle: '${msg("title.timepicker.select-time")}',
+				timeText: '${msg("title.timepicker.time")}',
+				hourText: '${msg("title.timepicker.hours")}',
+				minuteText: '${msg("title.timepicker.minutes")}',
+				secondText: '${msg("title.timepicker.seconds")}',
+				currentText: '${msg("title.timepicker.current")}',
+				closeText: '${msg("title.timepicker.select")}',
 				onSelect: function (selectedDateTime) {
 					YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
 				}

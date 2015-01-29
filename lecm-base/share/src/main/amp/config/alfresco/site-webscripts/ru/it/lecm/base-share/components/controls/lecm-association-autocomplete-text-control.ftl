@@ -121,7 +121,7 @@
 		<#if field.control.params.employeeAbsenceMarker??>
 			employeeAbsenceMarker: "${field.control.params.employeeAbsenceMarker}",
 		</#if>
-		<#if args.ignoreNodes??>                                    о
+		<#if args.ignoreNodes??>                                    
 			ignoreNodes: "${args.ignoreNodes}".split(","),
 		</#if>
 	    <#if args.allowedNodes??>
