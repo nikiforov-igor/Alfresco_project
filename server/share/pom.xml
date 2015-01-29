@@ -312,6 +312,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.barcode</groupId>
+			<artifactId>barcode-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<!--<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -633,6 +640,11 @@
 							<artifactId>types-view-share</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.barcode</groupId>
+							<artifactId>barcode-share</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -938,6 +950,11 @@
                                     <artifactId>types-view-share</artifactId>
                                     <type>amp</type>
                                 </overlay>
+								<overlay>
+									<groupId>ru.it.lecm.barcode</groupId>
+									<artifactId>barcode-share</artifactId>
+									<type>amp</type>
+								</overlay>
                             </overlays>
                         </configuration>
                         <dependencies>

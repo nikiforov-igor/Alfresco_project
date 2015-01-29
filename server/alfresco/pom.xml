@@ -375,6 +375,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.barcode</groupId>
+			<artifactId>barcode-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -753,6 +760,11 @@
 						<overlay>
 							<groupId>ru.it.lecm.types-view</groupId>
 							<artifactId>types-view-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.barcode</groupId>
+							<artifactId>barcode-repo</artifactId>
 							<type>amp</type>
 						</overlay>
 					</overlays>
@@ -1150,6 +1162,11 @@
                                     <artifactId>types-view-repo</artifactId>
                                     <type>amp</type>
                                 </overlay>
+								<overlay>
+									<groupId>ru.it.lecm.barcode</groupId>
+									<artifactId>barcode-repo</artifactId>
+									<type>amp</type>
+								</overlay>
                             </overlays>
                         </configuration>
                         <dependencies>
