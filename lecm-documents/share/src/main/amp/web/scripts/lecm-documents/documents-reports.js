@@ -8,20 +8,30 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
 (function() {
 
     LogicECM.module.Documents.Reports.openReport = function (actionUrl, params) {
-        var newWindow = window.open("about:blank", "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
-        var newDocument = newWindow.document;
-        var body = newDocument.body;
-        var newform = newDocument.createElement("form");
-        newform.action = actionUrl;
-        newform.method = "POST";
-        body.appendChild(newform);
-        var paramsField = newDocument.createElement("input");
-        paramsField.type = "hidden";
-        paramsField.name = "json_form_parameters";
-        paramsField.value = params != null ? JSON.stringify(params) : "";
-        newform.appendChild(paramsField);
-        newform.submit();
-    },
+        var newWindow = window.open(Alfresco.constants.URL_PAGECONTEXT + "lecm/arm/blank", "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+        var loadReport = function () {
+            var newDocument = newWindow.document;
+            var body = newDocument.body;
+            var newform = newDocument.createElement("form");
+            newform.action = actionUrl;
+            newform.method = "POST";
+            body.appendChild(newform);
+            var paramsField = newDocument.createElement("input");
+            paramsField.type = "hidden";
+            paramsField.name = "json_form_parameters";
+            paramsField.value = params != null ? JSON.stringify(params) : "";
+            newform.appendChild(paramsField);
+            newform.submit();
+        }
+
+        if (newWindow.addEventListener) {
+            newWindow.addEventListener("load", loadReport, false);
+        } else if (newWindow.attachEvent) {
+            newWindow.attachEvent("onload", loadReport);
+        } else if (newWindow.onLoad) {
+            newWindow.onload = loadReport;
+        }
+    };
 
         LogicECM.module.Documents.Reports.reportLinkClicked = function(element, param) {
             var reportCode = param.reportCode;
