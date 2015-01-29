@@ -5,6 +5,7 @@ import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.Mnemonicable;
 import ru.it.lecm.reports.utils.ArgsHelper;
 
+import java.io.Serializable;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.List;
  *
  * @author rabdullin
  */
-public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mnemonicable, L18able {
+public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mnemonicable, L18able, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected JavaDataType(String className) {

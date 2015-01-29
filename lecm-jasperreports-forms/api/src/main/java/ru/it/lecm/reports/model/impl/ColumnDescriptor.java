@@ -8,8 +8,8 @@ import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,7 +19,7 @@ import java.util.Set;
  *
  * @author rabdullin
  */
-public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable, L18able, FlagsExtendable, Comparable<ru.it.lecm.reports.model.impl.ColumnDescriptor> {
+public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable, L18able, FlagsExtendable, Comparable<ru.it.lecm.reports.model.impl.ColumnDescriptor>, Serializable {
     private static final long serialVersionUID = 1L;
 
     private JavaDataType dataType;

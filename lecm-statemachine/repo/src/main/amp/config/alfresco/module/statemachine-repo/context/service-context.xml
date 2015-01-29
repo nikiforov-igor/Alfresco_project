@@ -102,7 +102,17 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="workCalendarService" ref="WorkCalendarService" />
+        <property name="statemachenesCache" ref="statemachines.cache" />
 	</bean>
+
+    <bean name="statemachines.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="statemachine.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.statemachines"/>
+    </bean>
+
+    <bean name="statemachine.shared.cache" factory-bean="cacheFactory" factory-method="createCache">
+        <constructor-arg value="cache.statemachine.shared.cache"/>
+    </bean>
 
     <!--<bean id="timerActionHelper" class="ru.it.lecm.statemachine.TimerActionHelper" depends-on="activitiProcessEngineConfiguration, statemachine.LogicEcmModelsBootstrap, stateMachineHelper">
         <property name="serviceRegistry" ref="ServiceRegistry"/>

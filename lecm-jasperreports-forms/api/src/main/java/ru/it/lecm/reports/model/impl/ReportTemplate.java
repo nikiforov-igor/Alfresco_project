@@ -1,15 +1,15 @@
 package ru.it.lecm.reports.model.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.io.IOUtils;
-
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.Mnemonicable;
 
-public class ReportTemplate extends MnemonicNamedItem implements Mnemonicable, L18able {
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+
+public class ReportTemplate extends MnemonicNamedItem implements Mnemonicable, L18able, Serializable {
     private static final long serialVersionUID = 1L;
 
 

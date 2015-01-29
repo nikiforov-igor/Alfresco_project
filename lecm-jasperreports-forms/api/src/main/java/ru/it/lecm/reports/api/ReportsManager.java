@@ -814,6 +814,28 @@ public class ReportsManager{
     }
 
     /**
+     * Тестовый метод для проверки сериализации дескриптора для использования кэширования в кластере
+     */
+    public void serializeDescriptors() {
+        for (String key : reportsCache.getKeys()) {
+            ReportDescriptor descriptor = reportsCache.get(key);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try {
+                ObjectOutputStream sout = new ObjectOutputStream(out);
+                sout.writeObject(descriptor);
+                sout.flush();
+                sout.close();
+
+                ObjectInputStream sin = new ObjectInputStream(new ByteArrayInputStream(out.toByteArray()));
+                ReportDescriptor sDescriptor = (ReportDescriptor) sin.readObject();
+                System.out.println(sDescriptor.equals(descriptor));
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Вернуть mime-тип по расширению.
      *
      * @param extension расширение файла с точкой или без, т.е. вида ".abc" или "abc".
