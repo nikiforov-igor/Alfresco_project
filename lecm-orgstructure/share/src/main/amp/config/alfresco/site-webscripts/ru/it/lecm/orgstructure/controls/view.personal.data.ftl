@@ -38,7 +38,7 @@
             );
             var contId = p_dialog.id + "-form-container";
             Alfresco.util.populateHTML(
-                    [contId + "_h", "Персональная информация" ]
+                    [contId + "_h", "${msg('info.personal-info')}" ]
             );
             p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
         };
@@ -88,7 +88,7 @@
                                         },
                                         failureCallback: {
                                             fn: function () {
-                                                alert("Не удалось создать ассоциацию. Попробуйте обновить страницу")
+                                                alert("${msg('message.association.creation.fail')}")
                                             },
                                             scope: this
                                         }
@@ -100,7 +100,7 @@
                         fn: function DataGrid_onActionCreate_failure() {
                             Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text: "Данные не загружены"
+                                        text: "${msg('message.data.load.fail')}"
                                     });
                         },
                         scope: this
@@ -116,7 +116,7 @@
             );
             var contId = p_dialog.id + "-form-container";
             Alfresco.util.populateHTML(
-                    [contId + "_h", "Персональная информация" ]
+                    [contId + "_h", "${msg('info.personal-info')}" ]
             );
 
             p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
@@ -155,7 +155,7 @@
                         fn: function DataGrid_onActionCreate_failure() {
                             Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text: "Данные не загружены"
+                                        text: "${msg('message.data.load.fail')}"
                                     });
                         },
                         scope: this
@@ -177,7 +177,7 @@
                 }
             },
             failure: function () {
-                alert("Не удалось загрузить персональные данные. Попробуйте обновить страницу.");
+                alert("${msg('message.personal-data.load.fail')}");
             },
             argument: {
             }
@@ -204,7 +204,7 @@
                 }
             },
             failure: function () {
-                alert("Не удалось загрузить персональные данные. Попробуйте обновить страницу.");
+                alert("${msg('message.personal-data.load.fail')}");
             },
             argument: {
             }

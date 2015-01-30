@@ -37,7 +37,7 @@ LogicECM.module.OrgStructure.PROFILE_SETTINGS =  LogicECM.module.OrgStructure.PR
 	                                        fn: function () {
 	                                            Alfresco.util.PopupManager.displayMessage(
 	                                                    {
-	                                                        text:"Данные обновлены"
+	                                                        text:"${msg('message.data.updated')}"
 	                                                    });
 	                                        },
 	                                        scope: this
@@ -46,7 +46,7 @@ LogicECM.module.OrgStructure.PROFILE_SETTINGS =  LogicECM.module.OrgStructure.PR
 	                                        fn: function () {
 	                                            Alfresco.util.PopupManager.displayMessage(
 	                                                    {
-	                                                        text:"Не удалось обновить данные"
+	                                                        text:"${msg('message.data.updated.fail')}"
 	                                                    });
 	                                        },
 	                                        scope: this
@@ -63,11 +63,11 @@ LogicECM.module.OrgStructure.PROFILE_SETTINGS =  LogicECM.module.OrgStructure.PR
 	            execScripts:true
 	        });
 	}
-	
+
 	function init() {
 	    drawForm(LogicECM.module.OrgStructure.PROFILE_SETTINGS.nodeRef);
 	}
-	
+
 	Event.onDOMReady(init);
 })();
 //]]></script>

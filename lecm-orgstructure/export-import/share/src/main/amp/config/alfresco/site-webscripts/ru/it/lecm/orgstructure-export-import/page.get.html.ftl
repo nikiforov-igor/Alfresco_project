@@ -1,46 +1,46 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Экспорт/импорт оргструктуры</title>
+		<title>${msg("title.orgstructure.export.import")}</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	</head>
 	<body>
-		<h2>Экспорт</h2>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/positions">Штатные позиции (positions)</a>
+		<h2>${msg("title.export")}</h2>
+		<a href="/share/proxy/alfresco/lecm/ogstructure/export/positions">${msg("text.staff-positions")} (positions)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/employees">Сотрудники (employees)</a>
+		<a href="/share/proxy/alfresco/lecm/ogstructure/export/employees">${msg("text.employees")} (employees)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/departments">Подразделения (departments)</a>
+		<a href="/share/proxy/alfresco/lecm/ogstructure/export/departments">${msg("text.departments")} (departments)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/staffList">Штатное расписание (staffList)</a>
+		<a href="/share/proxy/alfresco/lecm/ogstructure/export/staffList">${msg("text.staff-list")} (staffList)</a>
 		<br>
-		<a href="/share/proxy/alfresco/lecm/ogstructure/export/businessRoles">Бизнес-роли (businessRoles)</a>
+		<a href="/share/proxy/alfresco/lecm/ogstructure/export/businessRoles">${msg("text.business-roles")} (businessRoles)</a>
 		<br>
-		<h2>Импорт</h2>
+		<h2>${msg("title.import")}</h2>
 		<form action="/share/proxy/alfresco/lecm/ogstructure/import" method="POST" enctype="multipart/form-data">
 			<table border="0">
 				<tr>
-					<td>Штатные позиции (positions):</td>
+					<td>${msg("text.staff-positions")} (positions):</td>
 					<td><input type="file" name="positionsFile"></td>
 				</tr>
 				<tr>
-					<td>Сотрудники (employees):</td>
+					<td>${msg("text.employees")} (employees):</td>
 					<td><input type="file" name="employeesFile"></td>
 				</tr>
 				<tr>
-					<td>Подразделения (departments):</td>
+					<td>${msg("text.departments")} (departments):</td>
 					<td><input type="file" name="departmentsFile"></td>
 				</tr>
 				<tr>
-					<td>Штатное расписание (staffList):</td>
+					<td>${msg("text.staff-list")} (staffList):</td>
 					<td><input type="file" name="staffListFile"></td>
 				</tr>
 				<tr>
-					<td>Бизнес-роли (businessRoles):</td>
+					<td>${msg("text.business-roles")} (businessRoles):</td>
 					<td><input type="file" name="businessRolesFile"></td>
 				</tr>
 			</table>
-			<p><input type="submit" value="Импорт"> <input type="reset"></p>
+			<p><input type="submit" value="${msg('title.import')}"> <input type="reset"></p>
 		</form>
 	</body>
 </html>

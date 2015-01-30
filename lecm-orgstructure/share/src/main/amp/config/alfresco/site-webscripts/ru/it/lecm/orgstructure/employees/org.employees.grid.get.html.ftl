@@ -85,7 +85,7 @@
 	                                var hasNoActiveAbsences = this.makeJquerySyncRequestForAbsence("lecm/orgstructure/api/employeeHasNoAbsences",
 	                                                                                               { nodeRef : p_items.nodeRef },
 	                                                                                               true,
-	                                                                                               "Сотрудник не может быть уволен т.к. имеет активные отсутсвия"
+	                                                                                               "${msg('message.dismissed-employee.fail')}"
 	                                                                                              );
 	                                if (hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences){
 	                                    return true;

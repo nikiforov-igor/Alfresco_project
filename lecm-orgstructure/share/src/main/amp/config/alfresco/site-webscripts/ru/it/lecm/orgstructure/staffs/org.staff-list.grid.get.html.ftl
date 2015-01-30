@@ -47,7 +47,7 @@
                                         var oResult = eval("(" + oResponse.responseText + ")");
                                         if (oResult) {
 
-                                            var hasNoActiveAbsences = LogicECM.module.Base.DataGrid.prototype.checkEmployeeHasNoActiveAbsences(oResult.employee, "Невозможно снять сотрудника, т.к. оформлено отсутствие \n")
+                                            var hasNoActiveAbsences = LogicECM.module.Base.DataGrid.prototype.checkEmployeeHasNoActiveAbsences(oResult.employee, "${msg('message.employee.position.delete.failure.absence')} \n")
 
                                             if (hasNoActiveAbsences && !hasNoActiveAbsences.hasNoActiveAbsences){
                                                 return;
@@ -234,7 +234,7 @@
 
                                                             var hasNoActiveAbsences = LogicECM.module.Base.DataGrid.prototype.checkMakeBossHasNoActiveAbsences(
                                                                     staffRow.nodeRef /*oResult.employee*/,
-                                                                    "Невозможно назначить руководящую позицию из-за отсутствия \n");
+                                                                    "${msg('message.employee.position.primary.add.failure.absence')} \n");
 
                                                             if (!(hasNoActiveAbsences && hasNoActiveAbsences.hasNoActiveAbsences)){
                                                                 return;

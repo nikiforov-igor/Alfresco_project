@@ -33,11 +33,11 @@ function Orgstructure_makeSchedulesRequest() {
 				if (result != null) {
 					var individualScheduleNode = YAHOO.util.Dom.get("${individualScheduleControlId}");
 					if (result.type == "SPECIAL") {
-						individualScheduleNode.innerHTML = "Особый";
+						individualScheduleNode.innerHTML = "${msg('label.special')}";
 					} else if (result.type == "COMMON") {
-						individualScheduleNode.innerHTML = "С " + result.begin + " по " + result.end;
+						individualScheduleNode.innerHTML = "${msg('label.from')} " + result.begin + " ${msg('label.to')} " + result.end;
 					} else {
-						individualScheduleNode.innerHTML = "Отсутствует";
+						individualScheduleNode.innerHTML = "${msg('label.employee-shedule.none')}";
 					}
 				}
 			},
@@ -57,11 +57,11 @@ function Orgstructure_makeSchedulesRequest() {
 				if (result != null) {
 					var parentScheduleNode = YAHOO.util.Dom.get("${parentScheduleControlId}");
 					if (result.type == "SPECIAL") {
-						parentScheduleNode.innerHTML = "Особый";
+						parentScheduleNode.innerHTML = "${msg('label.special')}";
 					} else if (result.type == "COMMON") {
-						parentScheduleNode.innerHTML = "С " + result.begin + " по " + result.end;
+						parentScheduleNode.innerHTML = "${msg('label.from')} " + result.begin + " ${msg('label.to')} " + result.end;
 					} else {
-						parentScheduleNode.innerHTML = "Отсутствует";
+						parentScheduleNode.innerHTML = "${msg('label.employee-shedule.none')}";
 					}
 				}
 			},

@@ -7,7 +7,7 @@ var inputNodeRefs = json.get("nodeRef").split(',');
 for each(var inputNodeRef in inputNodeRefs) {
     var absences = orgstructure.checkNodeRefForAbsence(inputNodeRef);
     for each(var absenceNode in absences) {
-        model.reason = model.reason + absenceNode.properties["cm:name"] + ' имеет активные отсутствия\n';
+        model.reason = model.reason + absenceNode.properties["cm:name"] + ' ' + msg.get('message.has.active.absences') + '\n';
     }
     //logger.log("nodeRefs.hasNoActiveAbsences! reason: "+ inputNodeRef);
     //model.reason = model.reason + inputNodeRef + '\n';
