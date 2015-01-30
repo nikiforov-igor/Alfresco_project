@@ -40,7 +40,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts|| {};
             var contractsArchiveMenu = new YAHOO.widget.Menu("contractsArchiveMenu");
             contractsArchiveMenu.addItems([
                 {
-                    text: "Список договоров",
+                    text: this.msg('label.contracts.list'),
                     onclick: {
                         fn: function () {
                             window.location.href = window.location.protocol + "//" + window.location.host +
@@ -50,7 +50,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts|| {};
                     }
                 },
                 {
-                    text: "Документы к договорам",
+                    text: this.msg('page.lecm-additional-document_additionalDocument'),
                     onclick: {
                         fn: function () {
                             window.location.href = window.location.protocol + "//" + window.location.host +

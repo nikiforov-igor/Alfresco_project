@@ -70,7 +70,7 @@
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
                     <set id="contract-stages" appearance="" label-id="label.contracts.stage" /><!-- tab2 -->
-                    <set id="approvalTab" appearance="" label="Согласование"/>
+                    <set id="approvalTab" appearance="" label-id="label.approval"/>
                     <set id="contract-info" appearance="" parent="common" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
@@ -109,7 +109,7 @@
                     </field>
                     <field id="lecm-contract:dateConclusionContracts" set="date-conclusion"/>
                     <field id="lecm-contract:partner-assoc" set="counterparty-info"/>
-                    <field id="lecm-contract:representative-assoc" set="counterparty-info" label="Представитель">
+                    <field id="lecm-contract:representative-assoc" set="counterparty-info" label-id="label.representative">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
@@ -339,7 +339,7 @@
 	                    </constraint-handlers>
                     </field>
                     <field id="lecm-contract:partner-assoc" set="afterPrice"/>
-                    <field id="lecm-contract:representative-assoc" label="Представитель" set="afterPrice">
+                    <field id="lecm-contract:representative-assoc" label-id="label.representative" set="afterPrice">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
@@ -380,7 +380,7 @@
                     </field>
                     <field id="lecm-contract:regNumContractor" set="afterDates"/>
                     <field id="lecm-contract:locationContract" set="afterDates"/>
-	                <field id="lecm-document-aspects:attachments-temp-assoc" label="Вложения" set="afterDates">
+	                <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments" set="afterDates">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
 			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
 			                <control-param name="directoryName">Вложения</control-param>
@@ -939,7 +939,7 @@
                 </appearance>
 -->
 				<appearance>
-					<field id="lecm-contract:approval" label="Согласование"/>
+					<field id="lecm-contract:approval" label-id="label.approval"/>
 				</appearance>
             </form>
 		</forms>
@@ -1187,7 +1187,7 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
-                    <set id="approvalTab" appearance="" label="Согласование"/>
+                    <set id="approvalTab" appearance="" label-id="label.approval"/>
                     <field id="lecm-additional-document:additionalDocumentType" set="common"/>
                     <field id="lecm-additional-document:number" set="common"/>
                     <field id="lecm-additional-document:date" set="common"/>
@@ -1308,7 +1308,7 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                 </field-visibility>
 	            <appearance>
-		            <field id="lecm-document-aspects:attachments-temp-assoc" label="Вложения">
+		            <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments">
 			            <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
 				            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
 				            <control-param name="directoryName">Вложения</control-param>
@@ -1358,7 +1358,7 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-contract:approval" label="Согласование"/>
+					<field id="lecm-contract:approval" label-id="label.approval"/>
 				</appearance>
 			</form>
         </forms>
@@ -1455,7 +1455,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:indexTableRow" help="Номер этапа должен быть целым числом"/>
+                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
                     <field id="lecm-contract-table-structure:stage-status">
                         <control template="/ru/it/lecm/base-share/components/controls/view-text-control.ftl"/>
                     </field>
@@ -1511,7 +1511,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:indexTableRow" help="Номер этапа должен быть целым числом"/>
+                    <field id="lecm-document:indexTableRow" help-id="label.stage.number.help"/>
                     <!--<field id="lecm-contract-table-structure:attachments-temp-assoc" >-->
                         <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">-->
                             <!--<control-param name="uploadDirectoryPath">{usertemp}</control-param>-->

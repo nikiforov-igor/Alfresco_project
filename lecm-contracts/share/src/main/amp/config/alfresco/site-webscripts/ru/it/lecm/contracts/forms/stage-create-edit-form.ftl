@@ -85,10 +85,10 @@
 			var buttonsContainer = Dom.get("${buttonsContainerId}"),
 				inputStatus = Dom.get(htmlId + "_${propStatus}"),
 
-				LABEL_IN_WORK = "В работу",
-				LABEL_CLOSED = "Закрыть",
-				STATUS_IN_WORK = "В работе",
-				STATUS_CLOSED = "Закрыт";
+				LABEL_IN_WORK = "${msg('label.contracts.start-stage')}",
+				LABEL_CLOSED = "${msg('label.contracts.end-stage')}",
+				STATUS_IN_WORK = "${msg('label.in-work')}",
+				STATUS_CLOSED = "${msg('label.closed')}";
 
 			inWorkButton = new Button({
 				id: htmlId + "_inWorkButton",
@@ -166,7 +166,7 @@
 				startDateHtmlId: "${htmlId}_${propStartDate}",
 				endDateHtmlId: "${htmlId}_${propEndDate}"
 			}).setMessages(${messages});
-	
+
 			new LogicECM.DateRange("${formId}").setOptions({
 				startDateHtmlId: "${htmlId}_${propStartDateReal}",
 				endDateHtmlId: "${htmlId}_${propEndDateReal}"

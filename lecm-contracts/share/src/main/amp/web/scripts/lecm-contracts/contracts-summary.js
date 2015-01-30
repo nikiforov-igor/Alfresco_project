@@ -128,7 +128,7 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 						formEl.innerHTML = text;
 					}
 				},
-				failureMessage: 'Данные не загружены',
+				failureMessage: this.msg('message.data.not.loaded'),
 				execScripts: true
 			});
 			if (this.viewDialog) {

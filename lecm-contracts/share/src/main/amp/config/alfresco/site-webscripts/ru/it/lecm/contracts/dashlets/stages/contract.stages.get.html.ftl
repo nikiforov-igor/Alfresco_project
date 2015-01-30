@@ -8,8 +8,8 @@
         var container;
 
         function drawForm(){
-        	var nodeRef="${nodeRef}", 
-			htmlId='${id}_container', 
+        	var nodeRef="${nodeRef}",
+			htmlId='${id}_container',
 			formId="contract-stages";
 			container = Dom.get('${id}_container');
 			//drawForm("${nodeRef}",'${id}_container', "contract-stages");
@@ -57,11 +57,11 @@
 <div class="dashlet document bordered">
     <div class="title dashlet-title">
         <span>
-            <div class="dashlet-title-text">Этапы договора</div>
+            <div class="dashlet-title-text">${msg('label.contracts.stages')}</div>
             <div class="total-tasks-count">
                 <span class="lecm-dashlet-actions">
                     <a id="${id}-action-add" href="javascript:void(0);" class="add"
-                       title="${msg("dashlet.contract.stages.add.tooltip")}">Добавить этап</a>
+                       title="${msg("dashlet.contract.stages.add.tooltip")}">${msg('label.contract.stage.add')}</a>
                 </span>
             </div>
         </span>
