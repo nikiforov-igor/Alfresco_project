@@ -15,7 +15,7 @@
 								  ignore-resource-not-found="true"
 								  location="classpath:barcode-service.properties, classpath:alfresco-global.properties"/>
 
-	<bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory" depends-on="broker" p:brokerURL="tcp://127.0.0.1:61617"/>
+	<bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory" depends-on="broker" p:brokerURL="${barcode.brokerURL}"/>
 	<amq:queue id="barcodeQueue" physicalName="barcodeQueue" />
 
 	<bean id="cachedConnectionFactory"
@@ -35,7 +35,7 @@
 
 	<amq:broker id="broker" useJmx="false" persistent="true" dataDirectory="${dir.root}/barcodeQueue">
 		<amq:transportConnectors>
-			<amq:transportConnector uri="tcp://127.0.0.1:61617" />
+			<amq:transportConnector uri="${barcode.brokerURL}" />
 		</amq:transportConnectors>
 		<amq:persistenceAdapter>
 			<amq:kahaDB directory="${dir.root}/barcodeQueue/Kaha"/>
