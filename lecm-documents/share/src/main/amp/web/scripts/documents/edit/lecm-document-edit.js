@@ -139,7 +139,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				var regnumberDuplicateRegex = /REGNUMBER_DUPLICATE_EXCEPTION/;
 
 				if (regnumberDuplicateRegex.test(response.serverResponse.responseText)) {
-					message = "Документ с указанным регистрационным номером уже существует в системе! Сохранение невозможно.";
+					message = this.msg("msg.regnum_exist");
 				}
 
 				Alfresco.util.PopupManager.displayPrompt(

@@ -12,16 +12,16 @@ function main() {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
 		if (accessInfo) {
 			if (accessInfo.exists) {
-				model.accessMsg = "У вас нет прав на этот документ. Обратитесь к администратору.";
+				model.accessMsg = "msg.access_denied";
 			} else {
 				if (accessInfo.removed) {
-					model.accessMsg = "Документ был удален.";
+					model.accessMsg = "msg.document_removed";
 				} else {
-					model.accessMsg = "Документ не существует.";
+					model.accessMsg = "msg.no_such_document";
 				}
 			}
 		} else {
-			model.accessMsg = "Документ не найден. Он мог быть удален. Или у вас нет прав. Обратитесь к администратору";
+			model.accessMsg = "msg.document_not_found";
 		}
 	}
 }

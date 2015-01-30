@@ -894,8 +894,8 @@
                     <show id="lecm-document:present-string" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:created" substituteString="{~EMPTY}" label="Дата просмотра"/>
-                    <field id="lecm-document:present-string" label="Название"/>
+                    <field id="cm:created" substituteString="{~EMPTY}" label-id="label.view-date"/>
+                    <field id="lecm-document:present-string" label-id="label.present-string"/>
                 </appearance>
             </form>
         </forms>

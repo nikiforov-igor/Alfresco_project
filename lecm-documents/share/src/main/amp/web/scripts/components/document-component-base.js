@@ -165,7 +165,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             onExpand: function() {
-                this.expandView("Нет данных");
+                this.expandView(this.msg("msg.no_data"));
             },
             onCollapse: function(){
                 this.collapseView();

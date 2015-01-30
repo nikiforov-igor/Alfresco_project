@@ -83,10 +83,10 @@ function main() {
 
 			model.widgets = [documentCreate, documentPreview];
 		} else {
-			model.accessMsg = "У вас нет прав на создание документов этого типа";
+			model.accessMsg = "msg.create_not_allowed";
 		}
 	} else {
-		model.accessMsg = "У вас нет прав на создание документов этого типа";
+		model.accessMsg = "msg.create_not_allowed";
 	}
 }
 

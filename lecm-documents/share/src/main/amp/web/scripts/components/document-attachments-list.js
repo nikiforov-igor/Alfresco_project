@@ -167,7 +167,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	            hasAddAttachmentPerm: false,
 
-				uploaderDialogHeaderTemplate: 'Загрузить в категорию "{categoryName}"',
+				uploaderDialogHeaderTemplate: Alfresco.component.Base.prototype.msg("select.category"),
 
 	            showActions: [
 		            {
@@ -317,7 +317,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        destroyOnHide:true,
 			        doBeforeDialogShow:{
 				        fn: function(p_form, p_dialog) {
-					        var fileSpan = '<span class="light">' + "Добавить вложения" + '</span>';
+					        var fileSpan = '<span class="light">' + this.msg("title.add_attachment") + '</span>';
 					        Alfresco.util.populateHTML(
 						        [ p_dialog.id + "-form-container_h", fileSpan]
 					        );

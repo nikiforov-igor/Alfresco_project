@@ -186,11 +186,11 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                 var me = this;
                 Alfresco.util.PopupManager.displayPrompt(
                     {
-                        title: "Безвозвратное удаление",
-                        text: "Внимание! Все связанные с данным документов объекты и процессы будут удалены! Вы уверены, что хотите удалить этот документ?",
+                        title: this.msg("msg.full_delete.title"),
+                        text: this.msg("msg.full_delete.confirm"),
                         buttons: [
                             {
-                                text: "Да",
+                                text: this.msg("button.yes"),
                                 handler: function dlA_onAction_action() {
                                     this.destroy();
                                     Alfresco.util.Ajax.request(
@@ -209,7 +209,7 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                                 }
                             },
                             {
-                                text: "Отмена",
+                                text: this.msg("button.cancel"),
                                 handler: function ()
                                 {
                                     this.destroy();

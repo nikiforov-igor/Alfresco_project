@@ -65,7 +65,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			return function makeDataRequest() {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
-					text: "Пожалуйста, подождите, документ отправляется",
+					text: this.msg("msg.wait_while_sending"),
 					spanClass: "wait",
 					displayTime: 0,
 					modal: true
@@ -103,7 +103,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 							// Выходим, если всё хорошо
 							if(good.length == responses.length) {
-								message = (responses.length > 1) ? "Документы успешно отправлены" : "Документ успешно отправлен";
+								message = this.msg((responses.length > 1) ? "msg.documents_sent" : "msg.document_sent");
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
 								YAHOO.lang.later(2500, null, hideAndReload);
 								return;
@@ -130,7 +130,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								destroyOnHide: true,
 								doBeforeDialogShow:{
 									fn: function(form, simpleDialog) {
-										simpleDialog.dialog.setHeader("Необходима аутентификация, выберите сертификат");
+										simpleDialog.dialog.setHeader(this.msg("msg.auth_needed"));
 									}
 								},
 								doBeforeAjaxRequest: {
@@ -142,7 +142,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								onFailure: {
 									fn: function() {
 										Alfresco.util.PopupManager.displayMessage({
-											text: "Не удалось открыть форму аутентификации, попробуйте ещё раз"
+											text: this.msg("msg.auth_form_failed")
 										});
 									}
 								}
@@ -155,7 +155,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						fn: function() {
 							loadingPopup.destroy();
 							Alfresco.util.PopupManager.displayMessage({
-								text: "Не удалось отправить документ(ы)"
+								text: this.msg("msg.documents_send_failed")
 							});
 						}
 					}
@@ -169,7 +169,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			formParams.docNodeRef = this.options.nodeRef;
 			formParams.actionURL = null;
-			formParams.title = 'Документы на отправку';
+			formParams.title = this.msg('title.documents_to_send');
 			formParams.htmlId = this.id;
 
 			function sendDocuments(nodeRef){
@@ -212,7 +212,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				destroyOnHide: true,
 				doBeforeDialogShow:{
 					fn: function( p_form, p_dialog ) {
-						p_dialog.dialog.setHeader("Просмотр информации о подписях");
+						p_dialog.dialog.setHeader(this.msg("title.signing_info"));
 						p_form.doBeforeFormSubmit = {
 							fn: function() {
 								this.setAJAXSubmit(false);
@@ -224,7 +224,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				onFailure: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: "Не удалось получить информацию о подписях"
+							text: this.msg("msg.get_signing_info_failed")
 						});
 					},
 					scope: this

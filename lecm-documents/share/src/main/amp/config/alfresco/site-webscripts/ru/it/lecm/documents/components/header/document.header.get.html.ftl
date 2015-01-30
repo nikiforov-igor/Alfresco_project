@@ -125,7 +125,7 @@
 <#else>
     <div class="document-header">
         <div class="status-banner">
-            ${accessMsg}
+            ${msg(accessMsg)}
         </div>
     </div>
 </#if>

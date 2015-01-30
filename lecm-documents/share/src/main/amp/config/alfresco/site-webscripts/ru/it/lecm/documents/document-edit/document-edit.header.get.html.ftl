@@ -2,7 +2,7 @@
 
 <div class="document-header">
     <div class="status-banner">
-        ${accessMsg}
+        ${msg(accessMsg)}
 	    <#if !hasPerm>
 		    <script type="text/javascript">//<![CDATA[
 		        window.location = Alfresco.util.siteURL("document?nodeRef=${nodeRef}");

@@ -58,7 +58,7 @@
     <#if hasStatemachine && (mayAdd!false)>
     <div class="lecm-dashlet-actions">
         <a id="${id}-action-edit" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
-        <a id="${id}-action-collapse" class="collapse" title="Свернуть"></a>
+        <a id="${id}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     </div>
     </#if>
     <div id="${id}_container"></div>

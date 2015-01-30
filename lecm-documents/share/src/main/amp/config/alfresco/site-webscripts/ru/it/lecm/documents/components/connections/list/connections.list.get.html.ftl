@@ -14,7 +14,7 @@
 
 	<div class="metadata-form">
 		<div class="lecm-dashlet-actions">
-        	<a id="${el}-action-collapse" class="collapse" title="Свернуть"></a>
+        	<a id="${el}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
     	</div>
     </div>
 

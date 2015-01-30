@@ -27,7 +27,7 @@
 <#if !hideCollapseButton>
     <div class="metadata-form">
         <div class="lecm-dashlet-actions">
-            <a id="${containerId}-action-collapse" class="collapse" title="Свернуть"></a>
+            <a id="${containerId}-action-collapse" class="collapse" title="${msg("btn.collapse")}"></a>
         </div>
     </div>
 </#if>
@@ -102,5 +102,5 @@
     //]]></script>
 
 </@grid.datagrid>
-<button type="button" id="${containerId}-show-diagram">Показать на диаграмме</button>
+<button type="button" id="${containerId}-show-diagram">${msg("btn.show_on_dagram")}</button>
 </div>

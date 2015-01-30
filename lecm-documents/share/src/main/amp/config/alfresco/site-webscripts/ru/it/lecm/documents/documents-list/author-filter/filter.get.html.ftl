@@ -31,8 +31,8 @@ var authorFilter = new LogicECM.module.Documents.AuthorFilter("${id}").setOption
     </div>
         <span class="align-right yui-button" id="${id}-applyButton">
             <span class="first-child">
-               <button type="button" tabindex="1" title="Применить">
-                   Применить
+               <button type="button" tabindex="1" title="${msg("btn.apply")}">
+                   ${msg("btn.apply")}
                </button>
             </span>
          </span>

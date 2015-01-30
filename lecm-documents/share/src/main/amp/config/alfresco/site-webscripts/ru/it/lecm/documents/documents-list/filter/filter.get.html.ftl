@@ -84,7 +84,7 @@
 
 	                                            var ref = document.createElement('a');
 	                                            ref.hfef="#";
-	                                            ref.title = filter.filter == "*" ? "Все" : filter.filter;
+	                                            ref.title = filter.filter == "*" ? ${msg("msg.all")} : filter.filter;
 	                                            ref.innerHTML = filter.key;
 	                                            ref.setAttribute('class', 'status-button');
 	                                            YAHOO.util.Event.on(ref, 'click', function(ev) {

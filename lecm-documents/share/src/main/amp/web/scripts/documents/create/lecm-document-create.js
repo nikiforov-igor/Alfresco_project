@@ -206,10 +206,10 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				fn: function(serverResponse) {
 					if (serverResponse.json && serverResponse.json.error) {
 						Alfresco.util.PopupManager.displayPrompt({
-							title: 'Ошибка выполнения действия',
-							text: 'При выполнении действия произошла ошибка. Попробуйте обновить страницу и выполнить действие еще раз',
+							title: this.msg('title.action_failed'),
+							text: this.msg('msg.action_failed_text'),
 							buttons: [{
-								text: 'Ок',
+								text: this.msg('button.ok'),
 								handler: function dlA_onAction_action(){
 									this.destroy();
 								}

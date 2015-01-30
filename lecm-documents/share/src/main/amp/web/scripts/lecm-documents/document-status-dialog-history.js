@@ -40,7 +40,11 @@ LogicECM.module.DocumentStatusHistory = LogicECM.module.DocumentStatusHistory ||
 				scope: this
 			},
 			failureMessage: function () {
-				alert("Данные не загружены");
+				Alfresco.util.PopupManager.displayPrompt(
+					{
+						text: this.msg("msg.data_failure")
+					});
+				alert();
 			},
 			scope: this,
 			execScripts: true
