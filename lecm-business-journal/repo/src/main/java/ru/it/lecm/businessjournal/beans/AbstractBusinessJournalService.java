@@ -28,6 +28,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import java.io.IOException;
 import java.util.*;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 
 /**
  * User: pmelnikov
@@ -476,7 +477,10 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     public void log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
-        String initiator = authService.getCurrentUserName();
+        String initiator = AuthenticationUtil.getFullyAuthenticatedUser();
+        if (StringUtils.isEmpty(initiator)) {
+            initiator = AuthenticationUtil.getSystemUserName();
+        }
         log(date, initiator, mainObject, eventCategory, defaultDescription, objects);
     }
 
