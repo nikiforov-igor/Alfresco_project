@@ -141,11 +141,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             //обновить данные в гриде! перестраивать саму таблицу не нужно
             this._setDefaultDataTableErrors(this.widgets.dataTable);
 
-            var searchConfig = this.datagridMeta.searchConfig;
-            if (searchConfig == null) {
+            if (!this.datagridMeta.searchConfig) {
                 this.datagridMeta.searchConfig = {};
                 this.datagridMeta.searchConfig.filter = "";
             }
+            var searchConfig = this.datagridMeta.searchConfig;
 
             if (searchConfig.formData) {
                 if (typeof searchConfig.formData == "string") {
