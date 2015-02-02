@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+	<item name="lecm-dic:Грифы секретности" type="lecm-dic:dictionary">
+		<property name="cm:name">Грифы секретности</property>
+		<property name="lecm-dic:attributeForShow">cm:title</property>
+		<property name="lecm-dic:type">lecm-os:security-classification</property>
+		<property name="lecm-dic:active">true</property>
+		<property name="lecm-dic:plane">true</property>
+		<property name="lecm-dic:description">Грифы секретности</property>
+        <items>
+            <item name="cm:2b496f9d-f392-4743-ac97-a2ebf71818f4" type="lecm-os:security-classification">
+                <property name="lecm-base-aspects:order"><![CDATA[10]]></property>
+                <property name="cm:title"><![CDATA[НС]]></property>
+                <property name="lecm-os:security-classification-comment"><![CDATA[Не секретно]]></property>
+            </item>
+            <item name="cm:c0a2ec5b-64b6-4ed5-b03f-b75ddaa08a3e" type="lecm-os:security-classification">
+                <property name="lecm-base-aspects:order"><![CDATA[20]]></property>
+                <property name="cm:title"><![CDATA[ДСП]]></property>
+                <property name="lecm-os:security-classification-comment">
+                    <![CDATA[Для служебного пользования]]></property>
+            </item>
+            <item name="cm:4f1c5a36-9375-4b11-8585-2eecefddee89" type="lecm-os:security-classification">
+                <property name="lecm-base-aspects:order"><![CDATA[30]]></property>
+                <property name="cm:title"><![CDATA[С]]></property>
+                <property name="lecm-os:security-classification-comment"><![CDATA[Секретно]]></property>
+            </item>
+            <item name="cm:9fae1289-f532-4b0e-a019-6b1b3a302e95" type="lecm-os:security-classification">
+                <property name="lecm-base-aspects:order"><![CDATA[40]]></property>
+                <property name="cm:title"><![CDATA[СС]]></property>
+                <property name="lecm-os:security-classification-comment"><![CDATA[Совершенно секретно]]></property>
+            </item>
+            <item name="cm:35b1ed2e-4e99-4739-9b3a-ff278ade32ce" type="lecm-os:security-classification">
+                <property name="lecm-base-aspects:order"><![CDATA[50]]></property>
+                <property name="cm:title"><![CDATA[ОВ]]></property>
+                <property name="lecm-os:security-classification-comment"><![CDATA[Особо важно]]></property>
+            </item>
+	        <item name="cm:7ab02b8c-4230-46a7-a433-7ce235b6ce32" type="lecm-os:security-classification">
+		        <property name="lecm-base-aspects:order"><![CDATA[60]]></property>
+		        <property name="cm:title"><![CDATA[С «М»]]></property>
+		        <property name="lecm-os:security-classification-comment"><![CDATA[]]></property>
+	        </item>
+	        <item name="cm:008918e6-d04d-446c-9ada-cc3aa656b349" type="lecm-os:security-classification">
+		        <property name="lecm-base-aspects:order"><![CDATA[70]]></property>
+		        <property name="cm:title"><![CDATA[СС «М»]]></property>
+		        <property name="lecm-os:security-classification-comment"><![CDATA[]]></property>
+	        </item>
+        </items>
+	</item>
+</items>

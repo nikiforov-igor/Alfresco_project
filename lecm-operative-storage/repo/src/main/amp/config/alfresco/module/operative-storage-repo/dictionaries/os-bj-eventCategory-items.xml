@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:Копирование" type="lecm-busjournal:eventCategory">
+				<property name="cm:name">Копирование</property>
+				<property name="lecm-busjournal:eventCategory-code">OS_COPY</property>
+			</item>
+			<item name="cm:Перемещение" type="lecm-busjournal:eventCategory">
+				<property name="cm:name">Перемещение</property>
+				<property name="lecm-busjournal:eventCategory-code">OS_MOVE</property>
+			</item>
+		</items>
+	</item>
+</items>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page>
+	<title>Настройки оперативного хранения</title>
+	<title-id>page.operative-storage-settings.title</title-id>
+	<description>Глобальные настройки оперативного хранения</description>
+	<description-id>page.operative-storage.description</description-id>
+	<template-instance>operative-storage-settings</template-instance>
+	<authentication>user</authentication>
+</page>

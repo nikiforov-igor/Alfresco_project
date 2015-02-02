@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<items>
+    <item name="cm:Копирование номенклатурного дела" type="lecm-group-actions:script-action">
+        <property name="cm:name">
+            <![CDATA[Копирование номенклатурного дела]]>
+        </property>
+        <property name="lecm-group-actions:statuses">
+            <![CDATA[]]>
+        </property>
+        <property name="lecm-group-actions:type">
+            <![CDATA[lecm-os:nomenclature-case]]>
+        </property>
+        <property name="lecm-group-actions:order">
+            <![CDATA[0]]>
+        </property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[doc.attr("lecm-os:nomenclature-case-status") == "PROJECT" OR doc.attr("lecm-os:nomenclature-case-status") == "OPEN" OR doc.attr("lecm-os:nomenclature-case-status") == "CLOSED"]]>
+        </property>
+        <property name="lecm-group-actions:isGroup">
+            <![CDATA[true]]>
+        </property>
+        <property name="lecm-group-actions:forCollection">
+            <![CDATA[false]]>
+        </property>
+        <property name="lecm-group-actions:script">
+            <![CDATA[(function (){
+	function copyAllExceptDocs(src, dest) {
+		var copy = src.copy(dest, false);
+		var childs = src.childAssocs["contains"];
+		if(childs == null) return copy;
+		for(var i = 0; i < childs.length; i ++) {
+			var child = childs[i];
+			logger.warn(child.type);
+			logger.warn(child.isSubType("lecm-document:base"));
+			if(child.isSubType("lecm-document:base")) continue;
+			var childCopy = copyAllExceptDocs(child, copy);
+		}
+		return copy;
+	}
+
+	var yearSection = fmsOperativeStorage.getYearSection(document);
+	document.removeAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
+
+	var copy = copyAllExceptDocs(document, folder);
+	document.createAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
+
+	var logText = "Номенклатура дел скопирована";
+	var logObjects = ["" + copy.nodeRef.toString()];
+	businessJournal.log(document.nodeRef.toString(), "FMS_COPY", logText, logObjects);
+})();]]>
+        </property>
+        <items>
+            <item name="cm:Раздел" type="lecm-group-actions:form-field">
+                <property name="cm:name">
+                    <![CDATA[Раздел]]>
+                </property>
+                <property name="lecm-group-actions:field-default-value">
+                    <![CDATA[]]>
+                </property>
+                <property name="lecm-group-actions:field-id">
+                    <![CDATA[folder]]>
+                </property>
+                <property name="lecm-group-actions:field-type">
+                    <![CDATA[lecm-os:nomenclature-unit-section]]>
+                </property>
+                <property name="lecm-group-actions:field-priority">
+                    <![CDATA[0]]>
+                </property>
+            </item>
+        </items>
+    </item>
+</items>

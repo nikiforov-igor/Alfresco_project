@@ -1,0 +1,2 @@
+{"isCentralized": "${result?string}"}
+

@@ -382,6 +382,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.operative-storage</groupId>
+			<artifactId>operative-storage-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -765,6 +772,11 @@
 						<overlay>
 							<groupId>ru.it.lecm.barcode</groupId>
 							<artifactId>barcode-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.operative-storage</groupId>
+							<artifactId>operative-storage-repo</artifactId>
 							<type>amp</type>
 						</overlay>
 					</overlays>

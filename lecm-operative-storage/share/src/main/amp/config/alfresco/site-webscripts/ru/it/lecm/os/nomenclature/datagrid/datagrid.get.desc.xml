@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>nomenclature grid</shortname>
+    <description>nomenclature grid</description>
+    <url>/lecm/os/nomenclature/grid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

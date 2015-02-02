@@ -120,7 +120,8 @@
 		<module>lecm-group-actions</module>
 		<module>lecm-types-view</module>
 		<module>lecm-barcode</module>
-	</modules>
+		<module>lecm-operative-storage</module>
+    </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
         <!--<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>-->

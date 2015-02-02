@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<items>
+    <item name="cm:Закрытие номенклатурного дела" type="lecm-group-actions:script-action">
+        <property name="cm:name">
+            <![CDATA[Закрытие номенклатурного дела]]>
+        </property>
+        <property name="lecm-group-actions:statuses">
+            <![CDATA[]]>
+        </property>
+        <property name="lecm-group-actions:type">
+            <![CDATA[lecm-os:nomenclature-case]]>
+        </property>
+        <property name="lecm-group-actions:order">
+            <![CDATA[0]]>
+        </property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[doc.attr("lecm-os:nomenclature-case-status") == "OPEN"]]>
+        </property>
+        <property name="lecm-group-actions:isGroup">
+            <![CDATA[false]]>
+        </property>
+        <property name="lecm-group-actions:forCollection">
+            <![CDATA[false]]>
+        </property>
+        <property name="lecm-group-actions:script">
+            <![CDATA[document.properties["lecm-os:nomenclature-case-status"] = "CLOSED";
+document.save();]]>
+        </property>
+    </item>
+</items>

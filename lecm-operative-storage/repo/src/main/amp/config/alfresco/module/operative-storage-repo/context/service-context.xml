@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	 <bean id="listOfUsedTypesOS" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-os:security-classification" value="Гриф секретности"/>
+                <entry key="lecm-os:nomenclature-year-section" value="Годовой раздел номенклатуры дел"/>
+                <entry key="lecm-os:nomenclature-unit-section" value="Раздел номенклатуры дел"/>
+                <entry key="lecm-os:nomenclature-case-volume" value="Том номенклатуры"/>
+            </map>
+        </property>
+    </bean>
+
+	<util:list id="operative.storage.models">
+		<value>alfresco/module/${artifactId}/models/os-aspects-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/operative-storage-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/operative-storage-global-settings.xml</value>
+	</util:list>
+
+	<util:list id="operative.storage.labels">
+		<value>alfresco/module/${artifactId}/messages/operative-storage-settings-model</value>
+		<value>alfresco/module/${artifactId}/messages/operative-storage-model</value>
+		<!--<value>alfresco/module/${artifactId}/messages/fms-os</value>-->
+	</util:list>
+
+	<util:list id="operative.storage.dictionaries">
+		<value>alfresco/module/${artifactId}/dictionaries/store-term-dictionary.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/store-entry-dictionary.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/security-classification-dictionary.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/storage-dictionary.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-os-br-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/urgency-classification-dictionary.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/os-bj-eventCategory-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/os-objectType-items.xml</value>
+	</util:list>
+
+	<util:list id="operative.storeage.groupOperations">
+		<value>alfresco/module/${artifactId}/actions/annul-document.xml</value>
+		<value>alfresco/module/${artifactId}/actions/delete-draft-document.xml</value>
+		<value>alfresco/module/${artifactId}/actions/delete-units.xml</value>
+		<value>alfresco/module/${artifactId}/actions/copy-units.xml</value>
+		<value>alfresco/module/${artifactId}/actions/move-units.xml</value>
+		<value>alfresco/module/${artifactId}/actions/copy-nd.xml</value>
+		<value>alfresco/module/${artifactId}/actions/destroy.xml</value>
+		<value>alfresco/module/${artifactId}/actions/mark-to-destroy-nd.xml</value>
+		<value>alfresco/module/${artifactId}/actions/move-nd.xml</value>
+		<value>alfresco/module/${artifactId}/actions/open-nd.xml</value>
+		<value>alfresco/module/${artifactId}/actions/close-nd.xml</value>
+		<value>alfresco/module/${artifactId}/actions/approve-year-section.xml</value>
+		<value>alfresco/module/${artifactId}/actions/delete-year-section.xml</value>
+		<value>alfresco/module/${artifactId}/actions/archive-nd.xml</value>
+		<value>alfresco/module/${artifactId}/actions/close-year-section.xml</value>
+		<value>alfresco/module/${artifactId}/actions/delete-nd.xml</value>
+		<value>alfresco/module/${artifactId}/actions/refuse-to-registration.xml</value>
+		<value>alfresco/module/${artifactId}/actions/move-to-urogo.xml</value>
+		<value>alfresco/module/${artifactId}/actions/move-to-ud.xml</value>
+	</util:list>
+
+	<util:list id="operative.storage.customDictionaries">
+		<value>alfresco/module/${artifactId}/dictionaries/nomenclature.xml</value>
+	</util:list>
+
+	<util:list id="operative.storage.dir.permissions">
+		<value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
+	</util:list>
+
+	<util:list id="operative.storage.arm.dictionaries">
+		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
+	</util:list>
+
+	<util:map id="lecmOperativeStorageFolders">
+		<entry key="#{OPERATIVE_STORAGE_FOLDER_ID}" value="Сервис Оперативное хранение"/>
+	</util:map>
+
+	<util:constant id="OPERATIVE_STORAGE_FOLDER_NAME" static-field="ru.it.lecm.operativestorage.beans.OperativeStorageService.NOMENCLATURE_FOLDER_NAME"/>
+	<util:constant id="OPERATIVE_STORAGE_FOLDER_ID" static-field="ru.it.lecm.operativestorage.beans.OperativeStorageService.OPERATIVE_STORAGE_FOLDER_ID"/>
+
+	<bean id="operative.storage.arm.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
+		  p:dictionaries-ref="operative.storage.arm.dictionaries"/>
+
+	<bean id="operative.storage.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, operative.storage.model.bootstrap, documents.dictionaries.LogicEcmModelsBootstrap,
+		  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap,documents.LogicEcmConnectionTypesBootstrap,
+		  ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap"
+		  p:dictionaries-ref="operative.storage.dictionaries"/>
+
+	<bean id="operative.storage.model.bootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, logicEcmBaseAspectsBootstrap"
+		  p:models-ref="operative.storage.models"
+		  p:labels-ref="operative.storage.labels" />
+
+	<bean id="operative.storage.customDictionaryBootstarp" parent="lecmDictionaryBootstrap"
+		  depends-on="lecmOperativeStorageService operative.storage.model.bootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис Оперативное хранение"
+		  p:dictionaries-ref="operative.storage.customDictionaries" />
+
+	<bean id="lecmOperativeStorageService" parent="baseBean" class="ru.it.lecm.operativestorage.beans.OperativeStorageImpl" init-method="init"
+		  depends-on="lecmPermissionServiceBean"
+		  p:folders-ref="lecmOperativeStorageFolders"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:permissionService-ref="permissionService"
+		  p:authorityService-ref="authorityService"
+	/>
+
+	<bean id="lecmOperativeStorageExtension" parent="baseScript" class="ru.it.lecm.operativestorage.scripts.OperativeStorageJavaScript"
+		  p:extensionName="operativeStorage"
+		  p:operativeStorageService-ref="lecmOperativeStorageService"
+		  p:behaviourFilter-ref="policyBehaviourFilter"
+          p:documentRemovalService-ref="documentsRemovalService"
+          p:nodeService-ref="nodeService"/>
+
+	<bean init-method="init"
+		  class="ru.it.lecm.operativestorage.policies.NomenclatureCasePolicy"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"
+		  p:operativeStorageService-ref="lecmOperativeStorageService"/>
+
+	<bean init-method="init"
+		  class="ru.it.lecm.operativestorage.policies.StorageVolumePolicy"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"/>
+
+
+	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+		  p:dictionaries-ref="operative.storeage.groupOperations"/>
+
+	<bean parent="ServiceFolderPermissionHelper" depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap"
+		  p:serviceBean-ref="lecmOperativeStorageService"
+		  p:permissionsList-ref="operative.storage.dir.permissions"/>
+
+</beans>

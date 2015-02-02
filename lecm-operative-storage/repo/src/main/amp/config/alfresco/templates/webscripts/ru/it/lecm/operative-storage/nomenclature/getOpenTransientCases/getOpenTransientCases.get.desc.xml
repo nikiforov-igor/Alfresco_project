@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Check for open transient cases in nomenclature year</shortname>
+	<description>Check for open transient cases in nomenclature year</description>
+	<url>/lecm/os/nomenclature/getOpenTransientCases?nodeRef={nodeRef}</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>none</transaction>
+</webscript>

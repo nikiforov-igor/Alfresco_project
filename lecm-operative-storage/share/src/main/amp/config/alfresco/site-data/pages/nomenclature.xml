@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Номенклатура дел</title>
+	<description>Номенклатура дел</description>
+	<template-instance>nomenclature</template-instance>
+	<authentication>user</authentication>
+</page>

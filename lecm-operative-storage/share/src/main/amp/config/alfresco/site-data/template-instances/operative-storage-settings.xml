@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template-instance>
+	<template-type>ru/it/lecm/os/settings/operative-storage-settings</template-type>
+	<components>
+		<!-- Title -->
+		<component>
+			<region-id>title</region-id>
+			<url>/lecm/base/title-with-filter-label</url>
+			<properties>
+				<title>page.operative-storage-settings.title</title>
+				<filteredLabel>page.content.filter.label</filteredLabel>
+			</properties>
+		</component>
+		<component>
+			<region-id>operative-storage-settings</region-id>
+			<url>/ru/it/lecm/os/settings/operative-storage-settings</url>
+		</component>
+	</components>
+</template-instance>

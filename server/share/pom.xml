@@ -319,6 +319,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.operative-storage</groupId>
+			<artifactId>operative-storage-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<!--<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -643,6 +650,11 @@
 						<overlay>
 							<groupId>ru.it.lecm.barcode</groupId>
 							<artifactId>barcode-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.operative-storage</groupId>
+							<artifactId>operative-storage-share</artifactId>
 							<type>amp</type>
 						</overlay>
 					</overlays>

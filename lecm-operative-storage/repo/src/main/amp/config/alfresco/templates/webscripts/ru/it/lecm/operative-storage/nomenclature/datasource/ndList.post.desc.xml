@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+   <shortname>List nomenclature</shortname>
+   <description>List</description>
+   <url>/lecm/os/nomenclature/datasource/ndList</url>
+   <authentication>user</authentication>
+   <format default="json"/>
+   <transaction allow="readonly">required</transaction>
+</webscript>

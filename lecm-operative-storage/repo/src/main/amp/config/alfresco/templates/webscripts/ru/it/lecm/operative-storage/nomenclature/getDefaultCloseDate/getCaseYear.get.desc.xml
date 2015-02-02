@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+   <shortname>Get nomenclature case year</shortname>
+   <description>Get nomenclature case year</description>
+   <url>/lecm/operative-storage/nomenclature/getCaseYear</url>
+   <authentication>user</authentication>
+   <format default="json"/>
+   <transaction allow="readonly">required</transaction>
+</webscript>

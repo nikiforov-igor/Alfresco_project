@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="cm:Утверждение номенклатуры дел" type="lecm-group-actions:script-action">
+		<property name="cm:name"><![CDATA[Утверждение номенклатуры дел]]></property>
+		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+		<property name="lecm-group-actions:type"><![CDATA[lecm-os:nomenclature-year-section]]></property>
+		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-os:nomenclature-year-section-status") == "PROJECT"]]></property>
+		<property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
+		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+		<property name="lecm-group-actions:script"><![CDATA[(function() {//Утвердить номенклатуру дел
+    function openCases(cases) {
+        var i, size;
+        if (cases && cases.length) {
+            for(i = 0, size = cases.length; i < size; ++i) {
+                if ('PROJECT' == cases[i].properties['lecm-os:nomenclature-case-status']) {
+                    cases[i].properties['lecm-os:nomenclature-case-status'] = 'OPEN';
+                    cases[i].save();
+                }
+            }
+        }
+    }
+
+    function approveUnits(units) {
+        var i, size;
+        if (units && units.length) {
+            for (i = 0, size = units.length; i < size; ++i) {
+                if ('PROJECT' == units[i].properties['lecm-os:nomenclature-unit-section-status']) {
+                    approveUnits(units[i].getChildAssocsByType('lecm-os:nomenclature-unit-section'));
+                    openCases(units[i].getChildAssocsByType('lecm-os:nomenclature-case'));
+                    units[i].properties['lecm-os:nomenclature-unit-section-status'] = 'APPROVED';
+                    units[i].save();
+                }
+            }
+        }
+    }
+
+    if ('PROJECT' == document.properties['lecm-os:nomenclature-year-section-status']) {
+        approveUnits(document.getChildAssocsByType('lecm-os:nomenclature-unit-section'));
+        document.properties['lecm-os:nomenclature-year-section-status'] = 'APPROVED';
+        document.save();
+    }
+})();]]></property>
+	</item>
+</items>

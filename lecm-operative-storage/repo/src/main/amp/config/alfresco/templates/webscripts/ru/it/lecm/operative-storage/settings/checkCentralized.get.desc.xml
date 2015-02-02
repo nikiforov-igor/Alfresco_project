@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Check centralized flag</shortname>
+	<description>Check centralized flag</description>
+	<url>/lecm/operative-storage/checkCentralized</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+	<transaction>none</transaction>
+</webscript>

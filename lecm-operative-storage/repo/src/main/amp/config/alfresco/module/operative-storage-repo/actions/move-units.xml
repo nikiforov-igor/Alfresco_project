@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<items>
+    <item name="cm:Перемещение раздела номенклатуры дел" type="lecm-group-actions:script-action">
+        <property name="cm:name">
+            <![CDATA[Перемещение раздела номенклатуры дел]]>
+        </property>
+        <property name="lecm-group-actions:statuses">
+            <![CDATA[]]>
+        </property>
+        <property name="lecm-group-actions:type">
+            <![CDATA[lecm-os:nomenclature-unit-section]]>
+        </property>
+        <property name="lecm-group-actions:order">
+            <![CDATA[0]]>
+        </property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[]]>
+        </property>
+        <property name="lecm-group-actions:isGroup">
+            <![CDATA[true]]>
+        </property>
+        <property name="lecm-group-actions:forCollection">
+            <![CDATA[false]]>
+        </property>
+        <property name="lecm-group-actions:script">
+            <![CDATA[(function() {
+	var ContextLoader = Packages.org.springframework.web.context.ContextLoader;
+	var context = ContextLoader.getCurrentWebApplicationContext();
+	var behaviourFilter = context.getBean('policyBehaviourFilter');
+
+	function moveAll(src, dest) {
+		var copy = src.copy(dest, false);
+		var childs = src.childAssocs["contains"];
+		if(childs == null) return copy;
+		for(var i = 0; i < childs.length; i ++) {
+			var child = childs[i];
+			if(child.isSubType("lecm-document:base")) {
+				behaviourFilter.disableBehaviour(child.getQNameType());
+				moveAll(child, copy);
+				behaviourFilter.enableBehaviour(child.getQNameType());
+			} else if ("lecm-os:nomenclature-case" == child.typeShort) {
+				var yearSection = child.assocs["lecm-os:nomenclature-case-year-assoc"][0];
+				child.removeAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
+				moveAll(child, copy);
+			} else {
+				moveAll(child, copy);
+			}
+		}
+	}
+
+	moveAll(document, folder);
+	document.remove();
+})();]]>
+        </property>
+        <items>
+            <item name="cm:folder" type="lecm-group-actions:form-field">
+                <property name="cm:name">
+                    <![CDATA[Раздел]]>
+                </property>
+                <property name="lecm-group-actions:field-default-value">
+                    <![CDATA[]]>
+                </property>
+                <property name="lecm-group-actions:field-id">
+                    <![CDATA[folder]]>
+                </property>
+                <property name="lecm-group-actions:field-type">
+                    <![CDATA[lecm-os:base]]>
+                </property>
+                <property name="lecm-group-actions:field-priority">
+                    <![CDATA[0]]>
+                </property>
+            </item>
+        </items>
+    </item>
+</items>

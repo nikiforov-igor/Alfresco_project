@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+  <shortname>List of avaliable units</shortname>
+  <description>List of avaliable units</description>
+    <url>/lecm/os/nomenclature/datasource/avaliableUnits/{type}/{store_type}/{store_id}/{id}/children</url>
+    <url>/lecm/os/nomenclature/datasource/avaliableUnits/{type}/children</url>
+    <!-- The following 2 URLs are deprectated as of 4.0, the nodelocator service is now used by the picker -->
+    <url>/lecm/os/nomenclature/datasource/avaliableUnits/{type}/{store_type}/{store_id}/{id}/siblings</url>
+    <url>/lecm/os/nomenclature/datasource/avaliableUnits/{type}/{store_type}/{store_id}/{id}/doclib</url>
+  <format default="json"/>
+  <authentication>user</authentication>
+  <transaction>none</transaction>
+</webscript>

@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:Годовой раздел НД" type="lecm-busjournal:objectType">
+				<property name="cm:name">Годовой раздел НД</property>
+				<property name="lecm-busjournal:objectType-code">OS_NOMENCLATURE_YEAR_SECTION</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:nomenclature-year-section</property>
+				<property name="lecm-busjournal:objectType-template">{lecm-os:nomenclature-year-section-year}</property>
+				<property name="lecm-busjournal:objectType-list-template">{lecm-os:nomenclature-year-section-year}</property>
+			</item>
+			<item name="cm:Раздел НД" type="lecm-busjournal:objectType">
+				<property name="cm:name">Раздел НД</property>
+				<property name="lecm-busjournal:objectType-code">OS_NOMENCLATURE_UNIT_SECTION</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:nomenclature-unit-section</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+			</item>
+			<item name="cm:Номенклатура дел" type="lecm-busjournal:objectType">
+				<property name="cm:name">Номенклатура дел</property>
+				<property name="lecm-busjournal:objectType-code">OS_NOMENCLATURE_CASE</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:nomenclature-case</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+			</item>
+			<item name="cm:Том номенклатурного дела" type="lecm-busjournal:objectType">
+				<property name="cm:name">Том номенклатурного дела</property>
+				<property name="lecm-busjournal:objectType-code">OS_CASE_VOLUME</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:nomenclature-case-volume</property>
+				<property name="lecm-busjournal:objectType-template">№ {lecm-os:nomenclature-case-volume-number}</property>
+				<property name="lecm-busjournal:objectType-list-template">№ {lecm-os:nomenclature-case-volume-number}</property>
+			</item>
+<!--			<item name="cm:Раздел перечня ТУД" type="lecm-busjournal:objectType">
+				<property name="cm:name">Раздел перечня ТУД</property>
+				<property name="lecm-busjournal:objectType-code">LECM_FMS_OS_TUD_ENTRY</property>
+				<property name="lecm-busjournal:objectType-class">lecm-fms-os:tud-entry</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+			</item>-->
+			<item name="cm:Гриф секретности" type="lecm-busjournal:objectType">
+				<property name="cm:name">Гриф секретности</property>
+				<property name="lecm-busjournal:objectType-code">OS_SECURITY_CLASSIFICATION</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:security-classification</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+			</item>
+			<item name="cm:Гриф срочности" type="lecm-busjournal:objectType">
+				<property name="cm:name">Гриф срочности</property>
+				<property name="lecm-busjournal:objectType-code">OS_URGENCY_CLASSIFICATION</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:urgency-classification</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+			</item>
+<!--			<item name="cm:Должность" type="lecm-busjournal:objectType">
+				<property name="cm:name">Должность</property>
+				<property name="lecm-busjournal:objectType-code">LECM_FMS_ORGSTR_STAFF_POSITION</property>
+				<property name="lecm-busjournal:objectType-class">lecm-orgstr:staffPosition</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+			</item>-->
+            <item name="cm:Перечень статей" type="lecm-busjournal:objectType">
+				<property name="cm:name">Перечень статей</property>
+				<property name="lecm-busjournal:objectType-code">OS_STORE_ENTRY</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:store-entry</property>
+				<property name="lecm-busjournal:objectType-template">№{lecm-os:store-entry-number}, {cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">№{lecm-os:store-entry-number}, {cm:title}</property>
+			</item>
+            <item name="cm:Срок хранения" type="lecm-busjournal:objectType">
+				<property name="cm:name">Срок хранения</property>
+				<property name="lecm-busjournal:objectType-code">OS_STORE_TERM</property>
+				<property name="lecm-busjournal:objectType-class">lecm-os:store-term</property>
+				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
+				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
+			</item>
+		</items>
+	</item>
+</items>

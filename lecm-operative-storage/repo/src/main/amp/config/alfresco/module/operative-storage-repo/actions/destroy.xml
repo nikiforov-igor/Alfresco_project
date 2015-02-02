@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<items>
+    <item name="cm:Уничтожение номенклатурного дела" type="lecm-group-actions:script-action">
+        <property name="cm:name">
+            <![CDATA[Уничтожение номенклатурного дела]]>
+        </property>
+        <property name="lecm-group-actions:statuses">
+            <![CDATA[]]>
+        </property>
+        <property name="lecm-group-actions:type">
+            <![CDATA[lecm-os:nomenclature-case]]>
+        </property>
+        <property name="lecm-group-actions:order">
+            <![CDATA[0]]>
+        </property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[doc.attr("lecm-os:nomenclature-case-status") == "MARK_TO_DESTROY"]]>
+        </property>
+        <property name="lecm-group-actions:isGroup">
+            <![CDATA[true]]>
+        </property>
+        <property name="lecm-group-actions:forCollection">
+            <![CDATA[false]]>
+        </property>
+        <property name="lecm-group-actions:script">
+            <![CDATA[(function(){
+
+	operativeStorage.revokeAll(document.nodeRef);
+	operativeStorage.cleanVisibilityList(document.nodeRef);
+
+	document.properties["lecm-os:nomenclature-case-status"] = "DESTROYED";
+	document.save();
+
+})();]]>
+        </property>
+    </item>
+</items>

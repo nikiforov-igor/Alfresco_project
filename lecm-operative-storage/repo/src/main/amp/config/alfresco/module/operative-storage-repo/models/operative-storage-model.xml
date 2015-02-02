@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-os:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM Operative Storage model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<import uri="http://www.it.ru/logicECM/base-aspects/1.0" prefix="lecm-base-aspects"/>
+		<import uri="http://www.it.ru/logicECM/model/os/aspects/1.0" prefix="os-aspects"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/operative-storage/1.0" prefix="lecm-os"/>
+	</namespaces>
+
+	<constraints>
+		<constraint name="lecm-os:nomenclature-case-volume-state-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NORMAL</value> <!-- Нормальное состояние -->
+					<value>LOST</value> <!-- Утерян -->
+					<value>DAMAGED</value> <!-- Поврежден -->
+					<value>WASTED</value> <!-- Утрачен -->
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-os:nomenclature-case-status-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PROJECT</value> <!-- Проект -->
+					<value>OPEN</value> <!-- Формирование -->
+					<value>CLOSED</value> <!-- Закрыто -->
+					<value>MARK_TO_DESTROY</value> <!-- К Уничтожению -->
+					<value>DESTROYED</value> <!-- Уничтожено -->
+					<value>DELETED</value> <!-- Удалено -->
+					<value>ARCHIVE</value> <!-- В архиве -->
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-os:urgency-classification-urgency-unit-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>DAYS</value>
+					<value>HOURS</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-os:nomenclature-unit-section-status-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PROJECT</value> <!-- Проект -->
+					<value>APPROVED</value> <!-- Утверждён -->
+					<value>CLOSED</value> <!-- Закрыт -->
+					<value>DELETED</value> <!-- Удален -->
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-os:nomenclature-year-section-status-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PROJECT</value> <!-- Проект -->
+					<value>APPROVED</value> <!-- Утверждена -->
+					<value>CLOSED</value> <!-- Закрыта -->
+					<value>DELETED</value> <!-- Удалена -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+		<type name="lecm-os:base">
+			<title>Базовый тип для номенклатуры</title>
+			<parent>lecm-dic:hierarchical_dictionary_values</parent>
+		</type>
+
+		<type name="lecm-os:nomenclature-year-section">
+			<title>Годовой раздел НД</title>
+			<parent>lecm-dic:hierarchical_dictionary_values</parent>
+			<properties>
+				<property name="lecm-os:nomenclature-year-section-year">
+					<title>Год</title>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-year-section-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-os:nomenclature-year-section-status">
+					<title>Этап ЖЦ</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>PROJECT</default>
+					<constraints>
+						<constraint ref="lecm-os:nomenclature-year-section-status-constraint"/>
+					</constraints>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-os:nomenclature-organization-assoc">
+					<title>Организация</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<default>lecm-os:nomenclature-unit-section</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="lecm-os:nomenclature-unit-section">
+			<title>Раздел номенклатуры дел</title>
+			<parent>lecm-os:base</parent>
+			<properties>
+				<property name="lecm-os:nomenclature-unit-section-index">
+					<title>Индекс</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-unit-section-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+				</property>
+				<property name="lecm-os:nomenclature-unit-section-status">
+					<title>Этап ЖЦ</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>PROJECT</default>
+					<constraints>
+						<constraint ref="lecm-os:nomenclature-unit-section-status-constraint"/>
+					</constraints>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-os:nomenclature-unit-section-unit-assoc">
+					<title>Структурное подразделение</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<!--
+						Так как родитель номенклатурного дела был изменён на cm:folder,
+						для корректного отображения в датагриде и разделов и номенклатурных
+						дел, значение измненено на cm:folder. Теоретически это может вызывать проблемы в случае
+						хранения в НД или разделе каких-то служебных папок
+					-->
+					<default>cm:folder</default>
+				</property>
+			</overrides>
+			<mandatory-aspects>
+				<aspect>cm:titled</aspect>
+				<aspect>os-aspects:sort</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecm-os:nomenclature-case">
+			<title>Номенклатурное дело</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecm-os:nomenclature-case-index">
+					<title>Номенклатурный индекс</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-status">
+					<title>Этап ЖЦ</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>PROJECT</default>
+					<constraints>
+						<constraint ref="lecm-os:nomenclature-case-status-constraint"/>
+					</constraints>
+				</property>
+				<property name="lecm-os:nomenclature-case-valuable">
+					<title>Особо ценное</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-epk">
+					<title>ЭПК</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-transient">
+					<title>Переходящее</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-creation-date">
+					<title>Дата создания</title>
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-close-date">
+					<title>Дата закрытия</title>
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volumes-number">
+					<title>Количество томов</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-inventory-number">
+					<title>Инвентарный номер</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-to-archive">
+					<title>Выделено к передаче в архив Службы</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-to-destruction">
+					<title>Выделено к уничтожению</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-no-permissions-change-on-archivation">
+					<title>Не изменять настройки доступа при передаче в архив</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-visibility-comment">
+					<title>Видимость. Примечание</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-os:nomenclature-case-store-term-assoc">
+					<title>Срок хранения</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-os:store-term</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecm-os:nomenclature-case-visibility-unit-assoc">
+					<title>Видимость для структурного подразделения</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-os:nomenclature-case-visibility-workgroup-assoc">
+					<title>Видимость для рабочей группы</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:workGroup</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-os:nomenclature-case-visibility-employee-assoc">
+					<title>Видимость для сотрудника</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-os:nomenclature-case-security-classification-assoc">
+					<title>Гриф секретности</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-os:security-classification</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!--
+					Данная ассоциация является лютым костылём для возможности получения значения статуса
+					годового раздела из номенклатурного дела в substitudeString
+				-->
+				<association name="lecm-os:nomenclature-case-year-assoc">
+					<title>Номенклатура дел</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-os:nomenclature-year-section</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<child-association name="lecm-os:nomenclature-case-volume-child-assoc">
+					<source>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>lecm-os:nomenclature-case-volume</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</child-association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>cm:titled</aspect>
+				<aspect>os-aspects:sort</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecm-os:nomenclature-case-volume">
+			<title>Том номенклатурного дела</title>
+			<parent>cm:content</parent>
+			<properties>
+				<property name="lecm-os:nomenclature-case-volume-number">
+					<title>Номер</title>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-date-from">
+					<title>Дата с</title>
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-date-till">
+					<title>Дата по</title>
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-pages-number">
+					<title>Количество листов</title>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-rack">
+					<title>Стеллаж №</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-case">
+					<title>Шкаф №</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-shelf">
+					<title>Полка №</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-state">
+					<title>Состояние</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<default>NORMAL</default>
+					<constraints>
+						<constraint ref="lecm-os:nomenclature-case-volume-state-constraint"/>
+					</constraints>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-storage-assoc-text-content">
+					<title>Хранилище</title>
+					<type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+				</property>
+				<property name="lecm-os:nomenclature-case-volume-storage-assoc-ref">
+					<title>Хранилище</title>
+					<type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-os:nomenclature-case-volume-storage-assoc">
+					<title>Хранилище</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-os:storage</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<type name="lecm-os:store-term">
+			<title>Срок хранения номенклатурных дел</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-os:store-term-years">
+					<title>Срок хранения</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:store-term-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="lecm-os:store-term-forever">
+					<title>Хранить вечно</title>
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cm:titled</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecm-os:store-entry">
+			<title>Статья хранения</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-os:store-entry-number">
+					<title>Номер статьи</title>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:store-entry-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-os:store-entry-store-term-assoc">
+					<title>Срок хранения</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-os:store-term</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>cm:titled</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecm-os:security-classification">
+			<title>Гриф секретности</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-os:security-classification-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-base-aspects:orderable</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecm-os:storage">
+			<title>Хранилище</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-os:storage-address">
+					<title>Адрес</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
+				<property name="lecm-os:storage-comment">
+					<title>Примечание</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+		</type>
+	</types>
+
+	<aspects>
+		<aspect name="lecm-os:nomenclature-aspect">
+			<properties>
+				<!-- Нормоконтроль пройден-->
+				<property name="lecm-os:in-case">
+					<type>d:boolean</type>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+
+				<property name="lecm-os:nomenclature-case-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-os:nomenclature-case-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-os:nomenclature-case-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-os:nomenclature-case</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+	</aspects>
+</model>

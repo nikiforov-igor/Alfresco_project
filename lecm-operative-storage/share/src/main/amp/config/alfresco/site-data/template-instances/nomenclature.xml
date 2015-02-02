@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/os/nomenctature</template-type>
+	<components>
+		<!-- Title -->
+		<component>
+			<region-id>title</region-id>
+			<url>/lecm/base/title-with-filter-label</url>
+			<properties>
+				<title>page.title.os.nomenclature</title>
+				<filteredLabel>page.content.filter.label</filteredLabel>
+			</properties>
+		</component>
+		<!-- Toolbar -->
+		<component>
+			<region-id>toolbar</region-id>
+			<url>/lecm/os/nomenclature/toolbar</url>
+		</component>
+		<!-- Edit -->
+		<component>
+			<region-id>main-form</region-id>
+			<url>/lecm/os/nomenclature/grid</url>
+		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
+	</components>
+</template-instance>
