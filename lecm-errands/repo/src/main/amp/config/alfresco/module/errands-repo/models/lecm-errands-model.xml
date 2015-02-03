@@ -29,6 +29,7 @@
                     <value>Поручение</value>
                     <value>Контроль</value>
                     <value>Исполнение</value>
+                    <value>Отчеты соисполнителей</value>
                 </list>
             </parameter>
         </constraint>
