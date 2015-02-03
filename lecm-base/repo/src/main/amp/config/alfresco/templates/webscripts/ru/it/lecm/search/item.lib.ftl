@@ -52,6 +52,15 @@
         "value": ${data.value?string},
         <#elseif data.value?is_number>
         "value": ${data.value?c},
+		<#elseif data.value?is_enumerable>
+			<#assign propValue = "">
+			<#list data.value as value>
+				<#assign propValue = propValue + value>
+				<#if value_has_next>
+					<#assign propValue = propValue + ",">
+				</#if>
+			</#list>
+		"value": "${propValue}",
         <#else>
         "value": "${data.value}",
         </#if>
@@ -62,6 +71,15 @@
         "displayValue": ${data.displayValue?string}
         <#elseif data.displayValue?is_number>
         "displayValue": ${data.displayValue?c}
+		<#elseif data.displayValue?is_enumerable>
+			<#assign propDisplayValue = "">
+			<#list data.displayValue as displayValue>
+				<#assign propDisplayValue = propDisplayValue + displayValue>
+				<#if displayValue_has_next>
+					<#assign propDisplayValue = propDisplayValue + ",">
+				</#if>
+			</#list>
+		"displayValue": "${propDisplayValue}"
         <#else>
         "displayValue": "${data.displayValue}"
         </#if>

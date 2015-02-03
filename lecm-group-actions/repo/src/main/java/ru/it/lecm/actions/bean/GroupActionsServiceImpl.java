@@ -14,6 +14,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * User: pmelnikov
@@ -109,46 +110,49 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         Collections.sort(actions, new Comparator<NodeRef>() {
             @Override
             public int compare(NodeRef o1, NodeRef o2) {
-                long order1 = (Long) nodeService.getProperty(o1, GroupActionsService.PROP_ORDER);
-                long order2 = (Long) nodeService.getProperty(o2, GroupActionsService.PROP_ORDER);
-                if (order1 > order2) {
-                    return 1;
-                } else if (order1 < order2) {
-                        return -1;
-                } else {
-                    return 0;
-                }
+                Long order1 = (Long) nodeService.getProperty(o1, GroupActionsService.PROP_ORDER);
+                Long order2 = (Long) nodeService.getProperty(o2, GroupActionsService.PROP_ORDER);
+                return order1.compareTo(order2);
             }
         });
         return actions;
     }
 
     private List<NodeRef> filterByType(List<NodeRef> actions, List<NodeRef> items) {
-        List<NodeRef> result = new ArrayList<NodeRef>();
+        List<NodeRef> result = new ArrayList<>();
         for (NodeRef action : actions) {
             Serializable property = nodeService.getProperty(action, GroupActionsService.PROP_TYPE);
-            boolean isRight = true;
+            boolean isRight = false;
             if (property != null) {
-                String type = property.toString();
-                if (type != null && !type.isEmpty()) {
-                    QName typeQName = QName.createQName(type, namespaceService);
-                    for (NodeRef item : items) {
-                        TypeDefinition typeDef = dictionaryService.getType(typeQName);
+                List<String> typesStr = (List<String>) property;
+				Map<QName, TypeDefinition> typeToTypeDef = new HashMap<>();
+				for (String typeStr : typesStr) {
+					if (!typeStr.isEmpty()) {
+						QName typeQName = QName.createQName(typeStr, namespaceService);
+						typeToTypeDef.put(typeQName, dictionaryService.getType(typeQName));
+					}
+				}
+				for (NodeRef nodeItem : items) {
+					for (Entry<QName, TypeDefinition> typeItem : typeToTypeDef.entrySet()) {
+						QName typeQName = typeItem.getKey();
+						TypeDefinition typeDef = dictionaryService.getType(typeQName);
                         if (typeDef != null) {
-                            QName itemType = nodeService.getType(item);
-                            if (!itemType.equals(typeQName) || !dictionaryService.isSubClass(itemType, typeQName)) {
-                                isRight = false;
+                            QName itemType = nodeService.getType(nodeItem);
+                            if (itemType.equals(typeQName) || dictionaryService.isSubClass(itemType, typeQName)) {
+                                isRight = true;
                                 break;
                             }
                         } else {
-                            if (!nodeService.hasAspect(item, typeQName)) {
-                                isRight = false;
+                            if (nodeService.hasAspect(nodeItem, typeQName)) {
+                                isRight = true;
                                 break;
                             }
                         }
                     }
                 }
-            }
+            } else {
+				isRight = true;
+			}
             if (isRight) {
                 result.add(action);
             }

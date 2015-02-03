@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * User: AZinovin
@@ -404,7 +405,19 @@ public class XMLImportBeanImpl implements XMLImportBean {
                     xmlr.next();
                 }
 	            if (value != null) {
-	                properties.put(QName.createQName(propName, namespaceService), value.trim());
+					QName propQName = QName.createQName(propName, namespaceService);
+					value = value.trim();
+					// проверяем на multy-value
+					final int valueLength = value.length();
+					if (valueLength > 1 && value.charAt(0) == '[' && value.charAt(valueLength - 1) == ']') {
+						String valueToSplit = value.substring(1, valueLength - 1);
+						String[] splittedValue = StringUtils.split(valueToSplit, ", ");
+						if (splittedValue != null) {
+							properties.put(propQName, new ArrayList<Serializable>(Arrays.asList(splittedValue)));
+						}
+					} else {
+						properties.put(propQName, value);
+					}
 	            }
 	            xmlr.nextTag();//пропускаем закрывающий тэг
             }

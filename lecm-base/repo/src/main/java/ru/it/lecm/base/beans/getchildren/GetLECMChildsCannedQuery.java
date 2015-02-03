@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.*;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Класс, реализующий запрос и фильтрацию для получение списка child элементов ноды
@@ -578,6 +579,11 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
                 result = (((Float) pv1).compareTo((Float) pv2));
 			} else if (pv1 instanceof Double) {
                 result = (((Double) pv1).compareTo((Double) pv2));
+			} else if (pv1 instanceof List) {
+				String str1 = StringUtils.join((ArrayList) pv1, ",");
+				String str2 = StringUtils.join((ArrayList) pv2, ",");
+
+				result = collator.compare(str1, str2); // TODO use collation keys (re: performance)
             } else {
 				// TODO other comparisons
 				throw new RuntimeException("Unsupported sort type: " + pv1.getClass().getName());

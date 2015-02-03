@@ -27,6 +27,7 @@
                 <property name="lecm-group-actions:type">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+                    <multiple>true</multiple>
                 </property>
                 <property name="lecm-group-actions:statuses">
                     <type>d:text</type>
