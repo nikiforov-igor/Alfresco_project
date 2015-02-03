@@ -9,7 +9,7 @@
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:script"><![CDATA[(function(){
-    var regNumber, regDate, additionalStrings;
+    var regNumber, regDate, additionalStrings, reportName;
     var printMode = barcodePrint.getPrintMode().toUpperCase();
     if (printMode == "SERVICE") {
         regNumber = substitude.formatNodeTitle(document, "№{~REGNUM|~PROJECT_REGNUM|Не присвоено}");
@@ -17,7 +17,8 @@
         additionalStrings = [regNumber, regDate];
         barcodePrint.print(document, additionalStrings);
     } else {
-        model.openWindow="proxy/alfresco/lecm/report/barcode-generic?ID=" + document.nodeRef.toString();
+        reportName = barcodePrint.getReportNameByDocumentType(document.getQNameType());
+        model.openWindow="proxy/alfresco/lecm/report/"+ reportName + "?ID=" + document.nodeRef.toString();
     }
 })();]]></property>
 	</item>

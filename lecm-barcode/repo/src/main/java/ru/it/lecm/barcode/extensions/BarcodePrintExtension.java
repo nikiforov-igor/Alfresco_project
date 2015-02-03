@@ -3,6 +3,7 @@ package ru.it.lecm.barcode.extensions;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ValueConverter;
+import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.barcode.beans.BarcodePrintService;
 import ru.it.lecm.barcode.beans.BarcodePrintServiceImpl;
@@ -36,5 +37,9 @@ public class BarcodePrintExtension extends BaseWebScript {
 
 	public String getPrintMode() {
 		return barcodePrintService.getPrintMode();
+	}
+
+	public String getReportNameByDocumentType(QName documentType) {
+		return barcodePrintService.getReportNameByDocumentType(documentType);
 	}
 }
