@@ -5,12 +5,27 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+    <bean id="errands.tableStructure.LogicEcmModelsBootstrap" parent="modelsToRepositoryLoader"
+          depends-on="dictionaryBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-errands-table-structure-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-errands-table-structure-model</value>
+            </list>
+        </property>
+    </bean>
+
 	<bean id="errands.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
 	      depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 		  documents.LogicEcmModelsConnectionsBootstrap,
 		  links.LogicEcmContractsBootstrap,
-		  documents.dictionaries.LogicEcmModelsBootstrap">
+		  documents.dictionaries.LogicEcmModelsBootstrap,
+		  errands.tableStructure.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-model.xml</value>

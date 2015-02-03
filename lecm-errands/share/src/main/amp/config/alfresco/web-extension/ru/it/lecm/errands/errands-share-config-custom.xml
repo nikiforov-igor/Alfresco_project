@@ -59,15 +59,20 @@
                     <show id="lecm-errands:execution-date"/>
                     <!-- Отчет об исполнении -->
                     <show id="lecm-errands:execution-report"/>
+                    <!-- Отчеты соисполнителей -->
+                    <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-errands:is-important">
+                    <set id="common" appearance=""/>
+                    <set id="coexecutors-reports" appearance="title" label-id="title.errands.coexecutors-reports"/>
+
+                    <field id="lecm-errands:is-important" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
                     </field>
-                    <field id="lecm-statemachine:status">
+                    <field id="lecm-statemachine:status" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
                     </field>
-                    <field id="lecm-errands:initiator-assoc">
+                    <field id="lecm-errands:initiator-assoc" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
@@ -78,12 +83,12 @@
 	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:limitation-date" mandatory="true">
+                    <field id="lecm-errands:limitation-date" mandatory="true" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:title">
+                    <field id="lecm-errands:title" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
@@ -94,7 +99,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-	                <field id="lecm-errands:executor-assoc">
+	                <field id="lecm-errands:executor-assoc" set="common">
 		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
@@ -105,17 +110,17 @@
 			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-errands:end-date"/>
-                    <field id="lecm-errands:controller-assoc"/>
-					<field id="lecm-errands:start-date">
+                    <field id="lecm-errands:end-date" set="common"/>
+                    <field id="lecm-errands:controller-assoc" set="common"/>
+					<field id="lecm-errands:start-date" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
 					</field>
-                    <field id="lecm-errands:content">
+                    <field id="lecm-errands:content" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:coexecutors-assoc">
+                    <field id="lecm-errands:coexecutors-assoc" set="common">
 		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
@@ -126,17 +131,24 @@
 			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-document:creator"/>
-                    <field id="lecm-errands:line">
+                    <field id="lecm-document:creator" set="common"/>
+                    <field id="lecm-document:subject-assoc" set="common"/>
+                    <field id="lecm-errands:line" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
                     </field>
-					<field id="lecm-errands:execution-date">
+					<field id="lecm-errands:execution-date" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
 					</field>
-                    <field id="lecm-errands:execution-report">
+                    <field id="lecm-errands:execution-report" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+
+                    <field id="lecm-errands-ts:coexecutor-reports-assoc" set="coexecutors-reports">
+                        <control template="/ru/it/lecm/errands/controls/coexecutors-reports-table-control.ftl">
+                            <control-param name="datagridFormId">coexecutors-reports-datagrid</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -623,6 +635,29 @@
                     <show id="lecm-errands:execution-date"/>
                     <!-- Отчет об исполнении -->
                     <show id="lecm-errands:execution-report"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-errands-ts:coexecutor-report">
+        <forms>
+            <form id="coexecutors-reports-datagrid">
+                <field-visibility>
+                    <show id="lecm-errands-ts:coexecutor-assoc" force="true"/>
+                    <show id="lecm-errands-ts:coexecutor-report-status" force="true"/>
+                    <show id="cm:created" force="true"/>
+                    <show id="lecm-errands-ts:coexecutor-report-attachment-assoc" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-errands-ts:coexecutor-report">
+        <forms>
+            <form id="table-structure-expand">
+                <field-visibility>
+                    <show id="lecm-errands-ts:coexecutor-report-text" force="true"/>
                 </field-visibility>
             </form>
         </forms>

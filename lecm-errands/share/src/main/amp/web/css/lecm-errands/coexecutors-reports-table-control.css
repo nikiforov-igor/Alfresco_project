@@ -1,0 +1,14 @@
+.form-container .coexecutors-report .show-declined-block label {
+	display: inline;
+}
+
+.form-container .coexecutors-report .show-declined-block {
+	text-align: right;
+}
+
+.datagrid .action-set .onActionAcceptCoexecutorReport a {
+	background-image: url(/share/res/images/errands/accept.png);
+}
+.datagrid .action-set .onActionDeclineCoexecutorReport a {
+	background-image: url(/share/res/images/errands/decline.png);
+}

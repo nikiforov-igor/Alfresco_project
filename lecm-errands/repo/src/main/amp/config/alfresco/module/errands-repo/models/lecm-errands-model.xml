@@ -11,6 +11,7 @@
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
+		<import uri="http://www.it.ru/logicECM/errands/table-structure/1.0" prefix="lecm-errands-ts"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/errands/1.0" prefix="lecm-errands"/>
@@ -321,6 +322,9 @@
                     </target>
                 </association>
 			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-errands-ts:coexecutor-reports-aspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 	    <type name="lecm-errands:settings">
