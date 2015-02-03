@@ -635,6 +635,8 @@
                     <show id="lecm-errands:execution-date"/>
                     <!-- Отчет об исполнении -->
                     <show id="lecm-errands:execution-report"/>
+                    <!-- Отчеты соисполнителей -->
+                    <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
                 </field-visibility>
             </form>
         </forms>

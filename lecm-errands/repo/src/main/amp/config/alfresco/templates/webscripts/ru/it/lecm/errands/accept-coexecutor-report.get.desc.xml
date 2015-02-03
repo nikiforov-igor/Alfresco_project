@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Принять отчёт соисполнителя</shortname>
+    <description>Принять отчёт соисполнителя</description>
+    <url>/lecm/errands/coexecutorReport/accept?nodeRef={nodeRef}</url>
+    <authentication>user</authentication>
+    <transaction>required</transaction>
+    <format default="json"/>
+</webscript>

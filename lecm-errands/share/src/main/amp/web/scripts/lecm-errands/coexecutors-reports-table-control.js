@@ -31,7 +31,7 @@ LogicECM.errands = LogicECM.errands || {};
 				{
 					method: Alfresco.util.Ajax.GET,
 					url: Alfresco.constants.PROXY_URI + "lecm/security/api/currentUserHasDynamicBusinessRole?nodeRef=" +
-						encodeURIComponent(this.options.documentNodeRef) + "&role=ERRANDS_EXECUTOR_DYN",
+						encodeURIComponent(this.options.documentNodeRef) + "&role=ERRANDS_EXECUTOR",
 					successCallback: {
 						fn: function (response) {
 							var me = response.config.scope;
