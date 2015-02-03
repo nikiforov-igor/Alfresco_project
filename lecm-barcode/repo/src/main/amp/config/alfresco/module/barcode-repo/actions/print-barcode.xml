@@ -1,15 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Напечатать штрихкод" type="lecm-group-actions:script-action">
-        <property name="cm:name"><![CDATA[Напечатать штрихкод]]></property>
-        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
-        <property name="lecm-group-actions:type"><![CDATA[lecmBarcode:printableDocumentAspect]]></property>
-        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
-        <property
-                name="lecm-group-actions:expression"><![CDATA[@barcodeService.getPrinterNameByEmployee(user.currentUser().employee) != null]]></property>
-        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
-        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
-        <property name="lecm-group-actions:script"><![CDATA[(function(){
+	<item name="cm:Напечатать штрихкод" type="lecm-group-actions:script-action">
+		<property name="cm:name"><![CDATA[Напечатать штрихкод]]></property>
+		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+		<property name="lecm-group-actions:type"><![CDATA[[lecm-incoming:document, lecm-outgoing:document]]]></property>
+		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[@barcodeService.getPrinterNameByEmployee(user.currentUser().employee) != null]]></property>
+		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+		<property name="lecm-group-actions:script"><![CDATA[(function(){
      var regNumber = substitude.formatNodeTitle(document, "№{~REGNUM|~PROJECT_REGNUM|Не присвоено}");
      var regDate = substitude.formatNodeTitle(document, "{~REGDATE|cm:created?dd.MM.yyyy}");
      var additionalStrings = [regNumber, regDate];
@@ -20,15 +19,15 @@
          barcodePrint.print(document, additionalStrings);
      }
 })();]]></property>
-        <items>
-            <item name="cm:Количество" type="lecm-group-actions:form-field">
-                <property name="cm:name"><![CDATA[Количество]]></property>
-                <property name="lecm-group-actions:field-default-value"><![CDATA[1]]></property>
-                <property name="lecm-group-actions:field-id"><![CDATA[print_count]]></property>
-                <property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
-                <property name="lecm-group-actions:field-type"><![CDATA[d:int]]></property>
-                <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
-            </item>
-        </items>
-    </item>
+		<items>
+			<item name="cm:Количество" type="lecm-group-actions:form-field">
+				<property name="cm:name"><![CDATA[Количество]]></property>
+				<property name="lecm-group-actions:field-default-value"><![CDATA[1]]></property>
+				<property name="lecm-group-actions:field-id"><![CDATA[print_count]]></property>
+				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
+				<property name="lecm-group-actions:field-type"><![CDATA[d:int]]></property>
+				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+			</item>
+		</items>
+	</item>
 </items>
