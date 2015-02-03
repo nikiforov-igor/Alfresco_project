@@ -7,6 +7,7 @@
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-statemachine-editor/main.css" group="lecm-statemachine-editor"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-statemachine-editor/menu.css" group="lecm-statemachine-editor"/>
 
+	<@script type="text/javascript" src="${url.context}/res/yui/resize/resize.js" group="lecm-statemachine-editor"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-statemachine-editor/main.js" group="lecm-statemachine-editor"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-statemachine-editor/menu.js" group="lecm-statemachine-editor"/>
 </@>
