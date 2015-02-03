@@ -33,4 +33,8 @@ public class BarcodePrintExtension extends BaseWebScript {
 	public boolean isBarcodeEnabled() {
 		return barcodePrintService.isBarcodeEnabled();
 	}
+
+	public String getPrintMode() {
+		return barcodePrintService.getPrintMode();
+	}
 }

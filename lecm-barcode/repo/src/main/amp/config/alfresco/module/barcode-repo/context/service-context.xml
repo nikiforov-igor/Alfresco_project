@@ -56,6 +56,7 @@
 		  p:substitudeService-ref="substitudeService"
 		  p:threadPoolExecutor-ref="lecm.barcode.thread.pool"
 		  p:reportRenderMode="${lecm.barcode.report.render.mode}"
+		  p:printMode="${lecm.barcode.print.mode}"
 		  p:barcodeEnabled="#{new Boolean('${lecm.barcode.enabled}')}"
 	/>
 
@@ -69,6 +70,25 @@
 	<bean id="lecm.barcode.extension" parent="baseScript" class="ru.it.lecm.barcode.extensions.BarcodePrintExtension"
 		  p:extensionName="barcodePrint"
 		  p:barcodePrintService-ref="barcodeService"
+	/>
+
+	<util:list id="lecm.barcode.reports.files">
+		<value>alfresco/module/barcode-repo/reports/barcode-generic.xml</value>
+	</util:list>
+	<bean id="lecm.barcode.reports.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="reportsEditorService, reportsEditor.LogicEcmDictionariesBootstrap,
+		  reportsEditorOnCreateAssocsPolicy, reportsEditorTemplatePolicy,
+		  dataSourcePolicy, reportDescriptorPolicy"
+		  p:rootPath="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"
+		  p:dictionaries-ref="lecm.barcode.reports.files"
+		  p:xmlImportListener-ref="lecm.barcode.reports.deployer"
+	/>
+
+	<util:list id="lecm.barcode.reports.ids">
+		<value>barcode-generic</value>
+	</util:list>
+	<bean id="lecm.barcode.reports.deployer" parent="reportsDeployer"
+		  p:reportsForDeploy-ref="lecm.barcode.reports.ids"
 	/>
 
 </beans>

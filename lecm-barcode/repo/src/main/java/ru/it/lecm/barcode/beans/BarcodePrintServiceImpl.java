@@ -44,11 +44,13 @@ public class BarcodePrintServiceImpl extends BaseBean implements BarcodePrintSer
 	private final static String PRINT_COMMANDS_DIC_NAME = "Команды печати штрихкодов";
 	private final static String DEFAULT_PRINT_SERVICE_URL = "http://localhost:8080/barcode-print-service";
 	private final static String DEFAULT_REPORT_RENDER_MODE = "REMOTE";
+	private final static String DEFAULT_PRINT_MODE = "REPORT";
 
 	private String printServiceURL = DEFAULT_PRINT_SERVICE_URL;
 	private NodeRef printCommandsDic = null;
 	private String reportRenderMode;
 	private boolean barcodeEnabled;
+	private String printMode;
 
 	private OrgstructureBean orgstructureService;
 	private NamespaceService namespaceService;
@@ -112,6 +114,16 @@ public class BarcodePrintServiceImpl extends BaseBean implements BarcodePrintSer
 	@Override
 	public boolean isBarcodeEnabled() {
 		return barcodeEnabled;
+	}
+
+	@Override
+	public String getPrintMode() {
+		return printMode;
+	}
+
+	public void setPrintMode(String printMode) {
+		boolean validValue = printMode.equalsIgnoreCase("REPORT") || printMode.equalsIgnoreCase("SERVICE");
+		this.printMode = validValue ? printMode : DEFAULT_PRINT_MODE;
 	}
 
 	public void init() {

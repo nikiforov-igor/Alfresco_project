@@ -30,4 +30,6 @@ public interface BarcodePrintService {
 
 	boolean isBarcodeEnabled();
 
+	String getPrintMode();
+
 }
