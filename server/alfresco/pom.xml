@@ -1179,12 +1179,12 @@
 									<artifactId>barcode-repo</artifactId>
 									<type>amp</type>
 								</overlay>
+								<overlay>
+									<groupId>ru.it.lecm.operative-storage</groupId>
+									<artifactId>operative-storage-repo</artifactId>
+									<type>amp</type>
+								</overlay>
                             </overlays>
-							<overlay>
-								<groupId>ru.it.lecm.operative-storage</groupId>
-								<artifactId>operative-storage-repo</artifactId>
-								<type>amp</type>
-							</overlay>
                         </configuration>
                         <dependencies>
                             <dependency>
