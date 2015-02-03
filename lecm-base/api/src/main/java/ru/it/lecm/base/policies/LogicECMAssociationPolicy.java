@@ -45,90 +45,62 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 		this.policyComponent = policyComponent;
 	}
 
-	public void init() {
-		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
-		PropertyCheck.mandatory(this, "nodeService", nodeService);
-		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
-	}
-	/**
-	 * Метод добавляет значение ассоциации в поле объекта с именем 'assoc'-ref и 'assoc'-text-content, если оно существует
-	 * @param nodeAssocRef
-	 */
-	@Override
-	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-		NodeRef record = nodeAssocRef.getSourceRef();
-		String assocQName = nodeAssocRef.getTypeQName().toPrefixString(namespaceService);
-
-		QName propertyRefQName = QName.createQName(assocQName + "-ref", namespaceService);
-		PropertyDefinition propertyDefinition = dictionaryService.getProperty(propertyRefQName);
-		if (propertyDefinition != null) {
-			Serializable oldValue = nodeService.getProperty(record, propertyRefQName);
-			String strOldValue = oldValue != null ? oldValue.toString() : "";
-			String refValue = nodeAssocRef.getTargetRef().toString();
-			if (!strOldValue.contains(refValue)) {
-				if (!strOldValue.isEmpty()) {
-					strOldValue += ";";
-				}
-				strOldValue += refValue;
-			}
-			nodeService.setProperty(record, propertyRefQName, strOldValue);
-		}
-		QName propertyTextQName = QName.createQName(assocQName + "-text-content", namespaceService);
-		propertyDefinition = dictionaryService.getProperty(propertyTextQName);
-		if (propertyDefinition != null) {
-			Serializable oldValue = nodeService.getProperty(record, propertyTextQName);
-			String strOldValue = oldValue != null ? oldValue.toString() : "";
-			Serializable newValue = nodeService.exists(nodeAssocRef.getTargetRef()) ? getSerializable(nodeAssocRef.getTargetRef()) : "";
-			String strNewValue = newValue.toString();
-			if (!strOldValue.contains(strNewValue)) {
-				if (!strOldValue.isEmpty()) {
-					strOldValue += ";";
-				}
-				strOldValue += strNewValue;
-			}
-			nodeService.setProperty(record, propertyTextQName, strOldValue);
-		}
-	}
-
-	/**
-	 * Метод сбрасывает значение ассоциации в поле объекта с именем 'assoc'-ref и 'assoc'-text-content, если оно существует
-	 * @param nodeAssocRef
-	 */
-	@Override
-	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-
-		NodeRef record = nodeAssocRef.getSourceRef();
-		String assocQName = nodeAssocRef.getTypeQName().toPrefixString(namespaceService);
-		QName propertyQName = QName.createQName(assocQName + "-ref", namespaceService);
-
-		PropertyDefinition propertyDefinition = dictionaryService.getProperty(propertyQName);
-		if (propertyDefinition != null) {
-			Serializable oldValue = nodeService.getProperty(record, propertyQName);
-			String strOldValue = oldValue != null ? oldValue.toString() : "";
-			String refValue = nodeAssocRef.getTargetRef().toString();
-			strOldValue = strOldValue.replace(";" + refValue, "");
-			strOldValue = strOldValue.replace(refValue, "");
-            strOldValue = strOldValue.startsWith(";") ? strOldValue.substring(1) : strOldValue;
-			nodeService.setProperty(record, propertyQName, strOldValue);
-		}
-
+    public void init() {
+        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+        PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+        PropertyCheck.mandatory(this, "nodeService", nodeService);
+        PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
+    }
+    /**
+     * Метод добавляет значение ассоциации в поле объекта с именем 'assoc'-ref и 'assoc'-text-content, если оно существует
+     */
+    @Override
+    public void onCreateAssociation(AssociationRef nodeAssocRef) {
+        NodeRef record = nodeAssocRef.getSourceRef();
         updateTextContent(record, nodeAssocRef.getTypeQName());
-	}
+    }
+
+    /**
+     * Метод сбрасывает значение ассоциации в поле объекта с именем 'assoc'-ref и 'assoc'-text-content, если оно существует
+     */
+    @Override
+    public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+        NodeRef record = nodeAssocRef.getSourceRef();
+        updateTextContent(record, nodeAssocRef.getTypeQName());
+    }
 
     protected void updateTextContent(NodeRef nodeRef, QName assocQName) {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builderText = new StringBuilder();
+        StringBuilder builderRef = new StringBuilder();
+
         QName propertyTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-text-content", namespaceService);
-        PropertyDefinition propertyDefinition = dictionaryService.getProperty(propertyTextQName);
-        if (propertyDefinition != null) {
+        QName propertyRefQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-ref", namespaceService);
+
+        PropertyDefinition propertyDefinitionText = dictionaryService.getProperty(propertyTextQName);
+        PropertyDefinition propertyDefinitionRef = dictionaryService.getProperty(propertyRefQName);
+        if (propertyDefinitionText != null || propertyDefinitionRef != null) {
             List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, assocQName);
             for (AssociationRef assoc : assocs) {
                 NodeRef targetRef = assoc.getTargetRef();
                 if (targetRef != null) {
-                    builder.append(getSerializable(targetRef)).append(";");
+                    builderText.append(getSerializable(targetRef)).append(";");
+                    builderRef.append(targetRef.toString()).append(";");
                 }
             }
-            nodeService.setProperty(nodeRef, propertyTextQName, builder.toString());
+            if (propertyDefinitionText != null) { // text-content
+                String textValue = "";
+                if (builderText.length() > 0)  {
+                    textValue = builderText.substring(0, builderText.length() - 1);
+                }
+                nodeService.setProperty(nodeRef, propertyTextQName, textValue);
+            }
+            if (propertyDefinitionRef != null) { // -ref values
+                String textValue = "";
+                if (builderRef.length() > 0)  {
+                    textValue = builderRef.substring(0, builderRef.length() - 1);
+                }
+                nodeService.setProperty(nodeRef, propertyRefQName,textValue);
+            }
         }
     }
 
