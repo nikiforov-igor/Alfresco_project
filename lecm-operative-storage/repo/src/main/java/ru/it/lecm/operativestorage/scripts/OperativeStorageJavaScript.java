@@ -5,17 +5,19 @@
  */
 package ru.it.lecm.operativestorage.scripts;
 
+import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.removal.DocumentsRemovalService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.operativestorage.beans.OperativeStorageService;
 
 /**
@@ -117,6 +119,33 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 			}
 		});
 
+	}
+
+	public void moveToNomenclatureCase(final ScriptNode doc) {
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+
+			@Override
+			public Object doWork() throws Exception {
+
+				NodeRef docNodeRef = doc.getNodeRef();
+
+				List<AssociationRef> assocList = nodeService.getTargetAssocs(docNodeRef, EDSDocumentService.ASSOC_FILE_REGISTER);
+				if(assocList != null && !assocList.isEmpty()) {
+					NodeRef caseRef = assocList.get(0).getTargetRef();
+
+					//Проверка на существование папки "Документы" у НД
+					if(operativeStorageService.getDocuemntsFolder(caseRef) == null) {
+						operativeStorageService.createDocsFolder(caseRef);
+					}
+
+					behaviourFilter.disableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
+					operativeStorageService.moveDocToNomenclatureCase(docNodeRef, caseRef);
+					behaviourFilter.enableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
+				}
+
+				return null;
+			}
+		});
 	}
 
     /**

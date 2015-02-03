@@ -21,8 +21,8 @@
 <@grid.datagrid datagridId false>
 	<script type="text/javascript">//<![CDATA[
 		YAHOO.util.Event.onContentReady ('${id}', function () {
-			var js = ['scripts/os/nomenclature/nomenclature-datagrid.js'];
-			var css = ['css/os/nomenclature-datagrid.css'];
+			var js = ['scripts/lecm-os/nomenclature/nomenclature-datagrid.js'];
+			var css = ['css/lecm-os/nomenclature-datagrid.css'];
 			LogicECM.module.Base.Util.loadResources(js, css, process);
 
 			function process(){

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Списать в дело" type="lecm-group-actions:script-action">
+        <property name="cm:name"><![CDATA[Списать в дело]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[(function() {
+	document.createAssociation(ndCase, "lecm-eds-document:file-register-assoc");
+    operativeStorage.moveToNomenclatureCase(document);
+})();]]></property>
+        <items>
+            <item name="cm:case" type="lecm-group-actions:form-field">
+                <property name="cm:name"><![CDATA[Номенклатурное дело]]></property>
+                <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+                <property name="lecm-group-actions:field-id"><![CDATA[ndCase]]></property>
+                <property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
+                <property name="lecm-group-actions:field-type"><![CDATA[lecm-os:nomenclature-case]]></property>
+                <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+            </item>
+        </items>
+    </item>
+</items>

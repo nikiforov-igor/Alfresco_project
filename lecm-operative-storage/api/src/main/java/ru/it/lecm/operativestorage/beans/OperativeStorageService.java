@@ -88,6 +88,8 @@ public interface OperativeStorageService {
 
 	void moveDocToNomenclatureCase(NodeRef docNodeRef, NodeRef caseNodeRef);
 
+	void moveDocToNomenclatureCase(NodeRef docNodeRef);
+
 	void revokeAll(NodeRef nodeRef);
 
 	void revokePermFromEmployee(NodeRef nodeRef, NodeRef employee);

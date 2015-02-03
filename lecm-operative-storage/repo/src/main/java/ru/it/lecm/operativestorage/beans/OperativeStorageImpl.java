@@ -27,6 +27,8 @@ import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
@@ -242,6 +244,25 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 		nodeService.setProperty(docNodeRef, PROP_IN_CASE, true);
 		nodeService.createAssociation(docNodeRef, caseNodeRef, ASSOC_NOMENCLATURE_CASE);
+
+		nodeService.addAspect(docNodeRef, DocumentService.ASPECT_DONT_MOVE_TO_ARCHIVE_FOLDER, null);
+	}
+
+	@Override
+	public void moveDocToNomenclatureCase(NodeRef docNodeRef) {
+		List<AssociationRef> assocList = nodeService.getTargetAssocs(docNodeRef, EDSDocumentService.ASSOC_FILE_REGISTER);
+		if(assocList != null && !assocList.isEmpty()) {
+			NodeRef caseRef = assocList.get(0).getTargetRef();
+
+			NodeRef docFolder = getDocuemntsFolder(caseRef);
+			QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+			nodeService.moveNode(docNodeRef, docFolder, ContentModel.ASSOC_CONTAINS, assocQName);
+
+			nodeService.setProperty(docNodeRef, PROP_IN_CASE, true);
+			nodeService.createAssociation(docNodeRef, caseRef, ASSOC_NOMENCLATURE_CASE);
+
+			nodeService.addAspect(docNodeRef, DocumentService.ASPECT_DONT_MOVE_TO_ARCHIVE_FOLDER, null);
+		}
 	}
 
 	@Override

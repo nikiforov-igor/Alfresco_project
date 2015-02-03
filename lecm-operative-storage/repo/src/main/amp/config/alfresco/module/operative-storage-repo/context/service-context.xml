@@ -59,8 +59,7 @@
 		<value>alfresco/module/${artifactId}/actions/close-year-section.xml</value>
 		<value>alfresco/module/${artifactId}/actions/delete-nd.xml</value>
 		<value>alfresco/module/${artifactId}/actions/refuse-to-registration.xml</value>
-		<value>alfresco/module/${artifactId}/actions/move-to-urogo.xml</value>
-		<value>alfresco/module/${artifactId}/actions/move-to-ud.xml</value>
+		<value>alfresco/module/${artifactId}/actions/move-doc-to-case.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.customDictionaries">
@@ -75,6 +74,11 @@
 		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
 	</util:list>
 
+	<util:list id="operative.storage.arm.os">
+		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
+		<value>alfresco/module/${artifactId}/arm/os-arm.xml</value>
+	</util:list>
+
 	<util:map id="lecmOperativeStorageFolders">
 		<entry key="#{OPERATIVE_STORAGE_FOLDER_ID}" value="Сервис Оперативное хранение"/>
 	</util:map>
@@ -86,6 +90,11 @@
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
 		  p:dictionaries-ref="operative.storage.arm.dictionaries"/>
+
+	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
+		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ"
+		  p:dictionaries-ref="operative.storage.arm.os"/>
 
 	<bean id="operative.storage.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, operative.storage.model.bootstrap, documents.dictionaries.LogicEcmModelsBootstrap,

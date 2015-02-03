@@ -33,7 +33,7 @@
 
 		LogicECM.module.Base.Util.loadResources([
 			'scripts/lecm-base/components/lecm-toolbar.js',
-			'scripts/os/nomenclature/nomenclature-toolbar.js'
+			'scripts/lecm-os/nomenclature/nomenclature-toolbar.js'
 		], [
 			'components/data-lists/toolbar.css',
 			'css/lecm-dictionary/dictionary-toolbar.css',

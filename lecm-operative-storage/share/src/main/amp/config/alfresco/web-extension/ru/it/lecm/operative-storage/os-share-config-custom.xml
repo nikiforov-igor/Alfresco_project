@@ -158,90 +158,6 @@
         </forms>
     </config>
 
-	<config evaluator="model-type" condition="lecm-os:store-entry">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:title" force="true"/>
-                    <show id="lecm-os:store-entry-number"/>
-                    <show id="lecm-os:store-entry-store-term-assoc"/>
-                    <show id="lecm-os:store-entry-tud-entry-assoc"/>
-                    <show id="lecm-os:store-entry-comment"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                    <field id="lecm-os:store-entry-store-term-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-os:store-entry-tud-entry-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Разделы_x0020_перечня_x0020_ТУД</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                            <control-param name="selectedItemsSubstituteString">{cm:title}</control-param>
-                            <control-param name="treeNodeSubstituteString">{cm:title}</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-			<form id="datagrid">
-				<field-visibility>
-					<show id="cm:title"/>
-					<show id="lecm-os:store-entry-number"/>
-					<show id="lecm-os:store-entry-store-term-assoc"/>
-					<show id="lecm-os:store-entry-tud-entry-assoc"/>
-					<show id="lecm-os:store-entry-comment"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-os:store-entry-store-term-assoc" substituteString="{cm:title}"/>
-					<field id="lecm-os:store-entry-tud-entry-assoc" substituteString="{cm:title}"/>
-				</appearance>
-			</form>
-        </forms>
-    </config>
-    <config evaluator="node-type" condition="lecm-os:store-entry">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:title" force="true"/>
-                    <show id="lecm-os:store-entry-number"/>
-                    <show id="lecm-os:store-entry-store-term-assoc"/>
-                    <show id="lecm-os:store-entry-tud-entry-assoc"/>
-                    <show id="lecm-os:store-entry-comment"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                    <field id="lecm-os:store-entry-store-term-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-os:store-entry-tud-entry-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Разделы_x0020_перечня_x0020_ТУД</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
 	<config evaluator="model-type" condition="lecm-os:store-term">
         <forms>
             <form>
@@ -270,69 +186,6 @@
                 <appearance>
                     <field id="cm:title" mandatory="true" label="Название">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
-	<config evaluator="model-type" condition="lecm-os:tud-entry">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:title" force="true"/>
-                    <show id="lecm-os:tud-entry-number"/>
-                    <show id="lecm-os:tud-entry-store-term-assoc"/>
-                    <show id="lecm-os:tud-entry-comment"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                    <field id="lecm-os:tud-entry-store-term-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-			<form id="datagrid">
-				<field-visibility>
-					<show id="cm:title" force="true"/>
-					<show id="lecm-os:tud-entry-number"/>
-					<show id="lecm-os:tud-entry-store-term-assoc"/>
-					<show id="lecm-os:tud-entry-comment"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-os:tud-entry-store-term-assoc" substituteString="{cm:title}"/>
-				</appearance>
-			</form>
-        </forms>
-    </config>
-
-    <config evaluator="node-type" condition="lecm-os:tud-entry">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:title" force="true"/>
-                    <show id="lecm-os:tud-entry-number"/>
-                    <show id="lecm-os:tud-entry-store-term-assoc"/>
-                    <show id="lecm-os:tud-entry-comment"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                    <field id="lecm-os:tud-entry-store-term-assoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Сроки_x0020_хранения_x0020_номенклатурных_x0020_дел</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                        </control>
                     </field>
                 </appearance>
             </form>
@@ -515,7 +368,7 @@
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="cm:description"/>
                     <show id="os-aspects:sort-value"/>
-                    <show id="actions-fake-field" force="true" />
+                    <!-- <show id="actions-fake-field" force="true" /> -->
                 </field-visibility>
                 <appearance>
                     <field id="cm:title" mandatory="true">
@@ -533,11 +386,11 @@
                     <field id="os-aspects:sort-value">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
-                    <field id="actions-fake-field">
+                    <!-- <field id="actions-fake-field">
                         <control template="/ru/it/lecm/os/controls/status-control.ftl">
                             <control-param name="nodeRef">{node.nodeRef}</control-param>
                         </control>
-                    </field>
+                    </field> -->
                 </appearance>
             </form>
         </forms>
@@ -550,9 +403,7 @@
                     <show id="cm:title"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
-                    <!-- <show id="lecm-os:nomenclature-case-store-entry-assoc"/> -->
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
-                    <!-- <show id="lecm-os:nomenclature-case-urgency-classification-assoc"/> -->
                     <show id="lecm-os:nomenclature-case-valuable"/>
                     <show id="lecm-os:nomenclature-case-epk"/>
                     <show id="lecm-os:nomenclature-case-transient"/>
@@ -581,25 +432,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                         </control>
                     </field>
-                    <!-- <field id="lecm-os:nomenclature-case-store-entry-assoc" set="set1">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статьи_x0020_хранения</control-param>
-                            <control-param name="nameSubstituteString">№{lecm-os:store-entry-number}, {cm:title}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">№{lecm-os:store-entry-number}, {cm:title}</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                        </control>
-                    </field> -->
                     <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set1"/>
-                    <!-- <field id="lecm-os:nomenclature-case-urgency-classification-assoc" set="set1">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_срочности</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{cm:title}</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                        </control>
-                    </field> -->
                     <field id="lecm-os:nomenclature-case-valuable" set="set1"/>
                     <field id="lecm-os:nomenclature-case-epk" set="set1"/>
                     <field id="lecm-os:nomenclature-case-transient" set="set1"/>
@@ -641,9 +474,7 @@
                     <show id="cm:title"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
-                    <!-- <show id="lecm-os:nomenclature-case-store-entry-assoc"/> -->
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
-                    <!-- <show id="lecm-os:nomenclature-case-urgency-classification-assoc"/> -->
                     <show id="lecm-os:nomenclature-case-valuable"/>
                     <show id="lecm-os:nomenclature-case-epk"/>
                     <show id="lecm-os:nomenclature-case-transient"/>
@@ -689,25 +520,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                         </control>
                     </field>
-                    <!-- <field id="lecm-os:nomenclature-case-store-entry-assoc" set="set1" read-only="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статьи_x0020_хранения</control-param>
-                            <control-param name="nameSubstituteString">№{lecm-os:store-entry-number}, {cm:title}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">№{lecm-os:store-entry-number}, {cm:title}</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                        </control>
-                    </field> -->
                     <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set1" read-only="true"/>
-                    <!-- <field id="lecm-os:nomenclature-case-urgency-classification-assoc" set="set1" read-only="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_срочности</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{cm:title}</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                        </control>
-                    </field> -->
                     <field id="lecm-os:nomenclature-case-valuable" set="set1" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-epk" set="set1" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-transient" set="set1" read-only="true"/>
@@ -735,17 +548,11 @@
                     <field id="lecm-os:nomenclature-case-no-permissions-change-on-archivation" set="set3" read-only="true"/>
 
                     <field id="lecm-os:nomenclature-case-volume-child-assoc" set="volumes" read-only="true">
-                        <!-- <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl" >
-                            <control-param name="itemType">lecm-os:nomenclature-case-volume</control-param>
-                            <control-param name="height">100</control-param>
-                            <control-param name="fullDelete">true</control-param>
-                            <control-param name="sort">lecm-group-actions:field-priority|true</control-param>
-                        </control> -->
-                        <!-- <control template="/ru/it/lecm/os/controls/volumes-datagrid-control.ftl">
+                        <control template="/ru/it/lecm/os/controls/volumes-datagrid-control.ftl">
                             <control-param name="itemType">lecm-os:nomenclature-case-volume</control-param>
                             <control-param name="height">400</control-param>
                             <control-param name="itemEditFormId">edit-in-archive</control-param>
-                        </control> -->
+                        </control>
                     </field>
 
                     <field id="lecm-os:nomenclature-case-status" set="volumes" read-only="true">
@@ -762,9 +569,6 @@
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
 
-                    <!-- <field id="nomenclature-case-references" set="references">
-                        <control template="/ru/it/lecm/os/nomenclature/controls/case-references-control.ftl"/>
-                    </field> -->
 
                 </appearance>
             </form>
@@ -775,9 +579,7 @@
                     <show id="cm:title"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
-                    <!-- <show id="lecm-os:nomenclature-case-store-entry-assoc"/> -->
                     <show id="lecm-os:nomenclature-case-security-classification-assoc"/>
-                    <!-- <show id="lecm-os:nomenclature-case-urgency-classification-assoc"/> -->
                     <show id="lecm-os:nomenclature-case-valuable"/>
                     <show id="lecm-os:nomenclature-case-epk"/>
                     <show id="lecm-os:nomenclature-case-transient"/>
@@ -799,10 +601,6 @@
                     <show id="lecm-os:nomenclature-case-status"/>
 
                     <show id="os-aspects:sort-value"/>
-                    <!-- <show id="nomenclature-case-references"/> -->
-
-                    <!--<show id="lecm-os:printFmsListWitness"/>-->
-                    <!-- <show id="lecm-os:printCaseSubstituteCard"/> -->
 
                 </field-visibility>
                 <appearance>
@@ -832,25 +630,7 @@
                             <control-param name="showCreateNewLink">false</control-param>
                         </control>
                     </field>
-                    <!-- <field id="lecm-os:nomenclature-case-store-entry-assoc" set="set1">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Статьи_x0020_хранения</control-param>
-                            <control-param name="nameSubstituteString">№{lecm-os:store-entry-number}, {cm:title}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">№{lecm-os:store-entry-number}, {cm:title}</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                        </control>
-                    </field> -->
                     <field id="lecm-os:nomenclature-case-security-classification-assoc" set="set1"/>
-                    <!-- <field id="lecm-os:nomenclature-case-urgency-classification-assoc" set="set1">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Грифы_x0020_срочности</control-param>
-                            <control-param name="nameSubstituteString">{cm:title}</control-param>
-                            <control-param name="selectedItemsNameSubstituteString">{cm:title}</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                        </control>
-                    </field> -->
                     <field id="lecm-os:nomenclature-case-valuable" set="set1"/>
                     <field id="lecm-os:nomenclature-case-epk" set="set1"/>
                     <field id="lecm-os:nomenclature-case-transient" set="set1"/>
@@ -879,27 +659,7 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-no-permissions-change-on-archivation" set="set3" />
 
-<!--                    <field id="lecm-os:printFmsListWitness" set="set3">
-                        <control template="/ru/it/lecm/fms/controls/printReportBtn.ftl">
-                            <control-param name="reportId">fms-list-witness</control-param>
-                            <control-param name="buttonLabel">Лист-заверитель дела</control-param>
-                        </control>
-                    </field>-->
-
-                    <!-- <field id="lecm-os:printCaseSubstituteCard" set="set3">
-                        <control template="/ru/it/lecm/os/controls/printReportBtn.ftl">
-                            <control-param name="reportId">case_substitute_card</control-param>
-                            <control-param name="buttonLabel">Карта-заместитель дела</control-param>
-                        </control>
-                    </field> -->
-
                     <field id="lecm-os:nomenclature-case-volume-child-assoc" set="volumes" >
-                        <!-- <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
-                            <control-param name="itemType">lecm-os:nomenclature-case-volume</control-param>
-                            <control-param name="height">100</control-param>
-                            <control-param name="fullDelete">true</control-param>
-                            <control-param name="sort">lecm-group-actions:field-priority|true</control-param>
-                        </control> -->
                         <control template="/ru/it/lecm/os/controls/volumes-datagrid-control.ftl">
                             <control-param name="itemType">lecm-os:nomenclature-case-volume</control-param>
                             <control-param name="height">400</control-param>
