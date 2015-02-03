@@ -734,6 +734,10 @@ LogicECM.module.Base.Util = {
 		LogicECM.module.Base.Util.setHeight();
 	});
 
+	YAHOO.Bubbling.on("showPanel", function(layer, args) {
+		args[1].panel.cfg.setProperty("y", 100);
+	});
+
 	/**
 	 * Base resizer
 	 */

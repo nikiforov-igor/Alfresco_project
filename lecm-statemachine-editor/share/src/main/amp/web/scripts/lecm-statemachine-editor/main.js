@@ -32,10 +32,6 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 
 	LogicECM.module.StatemachineEditor = function (htmlId) {
 
-		Bubbling.on("showPanel", function(layer, args) {
-			args[1].panel.cfg.setProperty("y", 50);
-		});
-
 		var module = LogicECM.module.StatemachineEditor.superclass.constructor.call(
 			this,
 			"LogicECM.module.StatemachineEditor",

@@ -5,7 +5,7 @@
 </#if>
 
 <@formLib.renderFormContainer formId=formId>
-<div id="${formId}-tabs" class="yui-navset form-tabs">
+<div id="${formId}-tabs" class="yui-navset form-tabs hidden">
     <ul class="yui-nav">
         <#list form.structure as item>
             <#if item.kind == "set">
