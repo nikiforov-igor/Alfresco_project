@@ -14,36 +14,36 @@
 <div id='${controlId}' class='hidden'>
 
 	<div class="approvalFinishedContainer">
-		Завершено согласований: <span id="${controlId}-approval-completed-count"></span>
-		<a id="${controlId}-show-history-link" href="javascript:void(0)" class="hidden">Смотреть историю</a>
+		${msg("label.approvals.completed")}: <span id="${controlId}-approval-completed-count"></span>
+		<a id="${controlId}-show-history-link" href="javascript:void(0)" class="hidden">${msg("label.view.history")}</a>
 	</div>
 
 	<#if editable>
 	<span id="${controlId}-create-approval-list-button" class="yui-button yui-push-button hidden">
 		<span class="first-child">
-			<button type="button">Создать новое согласование</button>
+			<button type="button">${msg("label.button.new.approval")}</button>
 		</span>
 	</span>
 	<span id="${controlId}-clear-button" class="yui-button yui-push-button hidden">
 		<span class="first-child">
-			<button type="button">Очистить данные согласования</button>
+			<button type="button">${msg("label.button.clear.approval.data")}</button>
 		</span>
 	</span>
 	</#if>
 
 	<div id="${controlId}-approval-container" class="approvalContainer hidden">
 		<div class="approvalControlsContainer">
-			<#if editable><a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a></#if>
-			<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
+			<#if editable><a id="editIteration" class="editIteration" href="javascript:void(0);" title="${msg('title.edit')}"></a></#if>
+			<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="${msg('title.print')}"></a>
 		</div>
 
 		<div class="approvalDescriptionContainer">
 			<div class="approvalRouteDataContainer">
-				<strong>Маршрут:</strong>
+				<strong>${msg("label.route")}</strong>
 				<span id="${controlId}-source-route-info"></span>
 			</div>
 			<div class="approvalStatusContainer">
-				<strong>Статус текущего согласования:</strong>
+				<strong>${msg("label.current.approval.status")}</strong>
 				<span id="${controlId}-current-approval-info"></span>
 			</div>
 		</div>
@@ -51,7 +51,7 @@
 		<#if editable>
 		<span id="${controlId}-add-stage" class="yui-button yui-push-button hidden addStageButton">
 			<span class="first-child">
-				<button type="button">Добавить этап</button>
+				<button type="button">${msg("label.button.add.stage")}</button>
 			</span>
 		</span>
 		</#if>

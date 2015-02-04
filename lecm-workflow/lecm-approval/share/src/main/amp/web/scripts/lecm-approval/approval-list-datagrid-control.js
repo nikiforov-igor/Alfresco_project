@@ -18,7 +18,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.createApprovalListButton = new YAHOO.widget.Button(createApprovalListButtonElement, {
 				type: 'menu',
 				menu: [{
-						text: this.msg('label.button.create.approval.from.route'),
+						text: Alfresco.util.message('label.button.create.approval.from.route'),
 						value: 'route',
 						disabled: false,
 						onclick: {
@@ -26,7 +26,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							scope: this
 						}
 					}, {
-						text: this.msg('label.button.create.approval.empty'),
+						text: Alfresco.util.message('label.button.create.approval.empty'),
 						value: 'empty',
 						disabled: false,
 						onclick: {
@@ -142,41 +142,41 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		approvalHistoryFolder: null,
 		approvalStateSettings: {
 			NOT_EXITS: {
-				stateMsg: 'Не существует',
+				stateMsg: Alfresco.util.message('message.not.exists'),
 				createButtonHandler: function (menuItemValue) {
 					this._createApprovalList(menuItemValue);
 				}
 			},
 			NEW: {
-				stateMsg: 'Не начато'
+				stateMsg: Alfresco.util.message('message.not.started')
 			},
 			ACTIVE: {
-				stateMsg: 'Выполняется',
+				stateMsg: Alfresco.util.message('message.performed'),
 				createButtonHandler: function () {
 					Alfresco.util.PopupManager.displayPrompt({
-						title: this.msg('title.iteration.active'),
-						text: this.msg('message.unable.to.create.list.active')
+						title: Alfresco.util.message('title.iteration.active'),
+						text: Alfresco.util.message('message.unable.to.create.list.active')
 					});
 				}
 			},
 			COMPLETE: {
-				stateMsg: 'Завершено',
+				stateMsg: Alfresco.util.message('message.completed'),
 				createButtonHandler: function (menuItemValue) {
 					var that = this;
 					Alfresco.util.PopupManager.displayPrompt({
-						title: this.msg('title.new.approval.list'),
-						text: this.msg('message.new.approval.list.confirmation'),
+						title: Alfresco.util.message('title.new.approval.list'),
+						text: Alfresco.util.message('message.new.approval.list.confirmation'),
 						close: false,
 						modal: true,
 						buttons: [
 							{
-								text: this.msg('button.yes'),
+								text: Alfresco.util.message('button.yes'),
 								handler: function () {
 									that._createApprovalList(menuItemValue);
 									this.destroy();
 								}
 							}, {
-								text: this.msg('button.no'),
+								text: Alfresco.util.message('button.no'),
 								handler: function () {
 									this.destroy();
 								},
@@ -228,7 +228,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 						}
 					}
 				},
-				failureMessage: this.msg('message.failure'),
+				failureMessage: Alfresco.util.message('message.failure'),
 				execScripts: true,
 				scope: this
 			});
@@ -325,7 +325,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function (form, simpleDialog) {
-						simpleDialog.dialog.setHeader(this.msg('title.new.approval.list.from.route'));
+						simpleDialog.dialog.setHeader(Alfresco.util.message('title.new.approval.list.from.route'));
 						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
@@ -343,8 +343,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							messageSplittedArr = scriptErrors[i].split(' | ');
 							macrosName = messageSplittedArr.splice(0, 2)[1];
 							macrosScript = messageSplittedArr.join(' | ');
-							message = this.msg('message.error.running.macros') + ' ' + macrosName;
-							this.displayErrorMessageWithDetails(this.msg('title.error.running.macros'), message, macrosScript);
+							message = Alfresco.util.message('message.error.running.macros') + ' ' + macrosName;
+							this.displayErrorMessageWithDetails(Alfresco.util.message('title.error.running.macros'), message, macrosScript);
 						}
 						this.getApprovalData(function () {
 							this.fillCurrentApprovalState();
@@ -360,7 +360,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				},
 				onFailure: {
 					fn: function (response) {
-						this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
+						this.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
 					},
 					scope: this
 				}
@@ -389,7 +389,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 						});
 					}
 				},
-				failureMessage: this.msg('message.failure'),
+				failureMessage: Alfresco.util.message('message.failure'),
 				execScripts: true,
 				scope: this
 			});
@@ -403,10 +403,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 			switch (this.approvalState) {
 				case 'ACTIVE':
-					errorText = this.msg('message.unable.to.edit.running.iteration');
+					errorText = Alfresco.util.message('message.unable.to.edit.running.iteration');
 					break;
 				case 'COMPLETE':
-					errorText = this.msg('message.unable.to.edit.complete.iteration');
+					errorText = Alfresco.util.message('message.unable.to.edit.complete.iteration');
 					break;
 				case 'NOT_EXITS':
 					this._createEmptyApprovalLst(this._showEditIterationDialog);
@@ -417,7 +417,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 			if (errorText) {
 				Alfresco.util.PopupManager.displayPrompt({
-					title: this.msg('title.unable.to.edit'),
+					title: Alfresco.util.message('title.unable.to.edit'),
 					text: errorText
 				});
 				return;
@@ -444,7 +444,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function (form, simpleDialog) {
-						simpleDialog.dialog.setHeader(this.msg('label.routes.edit-route.title'));
+						simpleDialog.dialog.setHeader(Alfresco.util.message('label.routes.edit-route.title'));
 						this.editItreationFormOpened = false;
 						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
@@ -453,8 +453,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					},
 					scope: this
 				},
-				failureMessage: 'Не удалось сохранить изменения итерации',
-				successMessage: 'Изменения итерации сохранены'
+				failureMessage: Alfresco.util.message('message.save.iteration.fail'),
+				successMessage: Alfresco.util.message('message.save.iteration.success')
 			});
 
 			editIterationForm.show();
@@ -464,8 +464,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			switch (this.approvalState) {
 				case 'COMPLETE':
 					Alfresco.util.PopupManager.displayPrompt({
-						title: this.msg('title.unable.to.add.stage'),
-						text: this.msg('message.unable.to.add.stage.iteration.completed')
+						title: Alfresco.util.message('title.unable.to.add.stage'),
+						text: Alfresco.util.message('message.unable.to.add.stage.iteration.completed')
 					});
 					break;
 				case 'NOT_EXITS':
@@ -487,19 +487,19 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		onClearButton: function () {
 			var that = this;
 			Alfresco.util.PopupManager.displayPrompt({
-				title: this.msg('title.approval.list.clear'),
-				text: this.msg('message.clear.approval.list'),
+				title: Alfresco.util.message('title.approval.list.clear'),
+				text: Alfresco.util.message('message.clear.approval.list'),
 				close: false,
 				modal: true,
 				buttons: [
 					{
-						text: this.msg('button.yes'),
+						text: Alfresco.util.message('button.yes'),
 						handler: function () {
 							that._deleteApprovalList();
 							this.destroy();
 						}
 					}, {
-						text: this.msg('button.no'),
+						text: Alfresco.util.message('button.no'),
 						handler: function () {
 							this.destroy();
 						},
@@ -511,9 +511,9 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			var approvalMsgTemplate = '{msg} ({additionalMsg})';
 			this.completedApprovalsCountContainer.innerHTML = this.completedApprovalsCount;
 			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo ? YAHOO.lang.substitute(approvalMsgTemplate, {
-				msg: this.msg('label.approval.typical'),
+				msg: Alfresco.util.message('label.approval.typical'),
 				additionalMsg: this.sourceRouteInfo
-			}) : this.msg('label.approval.individual');
+			}) : Alfresco.util.message('label.approval.individual');
 			this.currentApprovalInfoContainer.innerHTML = this.approvalState === 'COMPLETE' ? YAHOO.lang.substitute(approvalMsgTemplate, {
 				msg: this.approvalStateSettings[this.approvalState].stateMsg,
 				additionalMsg: this.approvalResult.title
@@ -571,12 +571,12 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 								},
 								scope: this
 							},
-							failureMessage: this.msg('message.failure')
+							failureMessage: Alfresco.util.message('message.failure')
 						});
 					},
 					scope: this
 				},
-				failureMessage: this.msg('message.failure')
+				failureMessage: Alfresco.util.message('message.failure')
 			});
 		},
 		onShowHistoryButton: function () {
@@ -596,20 +596,20 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function (form, simpleDialog) {
-						simpleDialog.dialog.setHeader(this.msg('title.approval.history'));
+						simpleDialog.dialog.setHeader(Alfresco.util.message('title.approval.history'));
 						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
 						}, {moduleId: simpleDialog.id}, this);
 						form.setAJAXSubmit(false);
-						simpleDialog.widgets.cancelButton.set('label', this.msg('button.close'));
+						simpleDialog.widgets.cancelButton.set('label', Alfresco.util.message('button.close'));
 						simpleDialog.widgets.okButton.addClass('hidden');
 					},
 					scope: this
 				},
 				onFailure: {
 					fn: function (response) {
-						this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
+						this.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
 					},
 					scope: this
 				}
@@ -630,7 +630,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					dataObj: {
 						nodeRef: this.currentIterationNode
 					},
-					failureMessage: this.msg('message.failure')
+					failureMessage: Alfresco.util.message('message.failure')
 				});
 			}
 		}
@@ -639,7 +639,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 	LogicECM.module.Approval.StageExpanded.getCustomCellFormatter = function (grid, elCell, oRecord, oColumn, oData) {
 		function formatState(nodeRef, decisionData, hasComment) {
 			var result,
-				commentIcon = '<img alt="Комментарий" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
+				commentIcon = '<img alt="' + Alfresco.util.message('label.comment') + '" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
 				messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewApprovalResult\')">{value} {icon}</a>';
 
 			if (decisionData.value === 'NO_DECISION') {

@@ -53,7 +53,7 @@
 					var data = response.json.data;
 					if (data) {
 						Alfresco.util.PopupManager.displayMessage( {
-							text: "Переназначено!"
+							text: "${msg('message.reassign')}"
 						});
 
 						YAHOO.lang.later(3000, this, function(data) {
@@ -76,8 +76,8 @@
 			failureCallback: {
 				fn: function(response) {
 					Alfresco.util.PopupManager.displayPrompt({
-						title: this.msg("Ошибка при переназначении задачи"),
-						text: this.msg("Не удалось переназначить задачу на другого пользователя, попробуйте еще раз")
+						title: Alfresco.util.message("message.reassign.task.error"),
+						text: Alfresco.util.message("message.reassign.task.user.error")
 					});
 				},
 				scope: this
@@ -114,7 +114,7 @@
             destroyOnHide: true,
             doBeforeDialogShow: {
                 fn: function ( p_form, p_dialog ) {
-					p_dialog.dialog.setHeader( "Переназначение задачи" );
+					p_dialog.dialog.setHeader( "${msg('title.reassign.task')}" );
                     var frm = Alfresco.util.ComponentManager.get(this.dialog.form.id);
                     frm.formsRuntime.addValidation("${fieldHtmlId}-dialogOverride_reassign-to-employee-cntrl-currentValueDisplay", validateField, null, "DOMSubtreeModified");
                     this.dialog.validate = validateField;

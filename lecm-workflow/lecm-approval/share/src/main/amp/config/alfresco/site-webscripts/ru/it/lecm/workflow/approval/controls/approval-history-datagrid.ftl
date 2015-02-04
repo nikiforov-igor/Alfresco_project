@@ -9,7 +9,7 @@
 
 
 <div id='${controlId}'>
-	<span><a href='javascript:void(0)' id='printApprovalHistoryReport'>Напечатать отчет</a></span>
+	<span><a href='javascript:void(0)' id='printApprovalHistoryReport'>${msg("title.print.approval.history.report")}</a></span>
 	<@grid.datagrid controlId false />
 </div>
 

@@ -58,7 +58,7 @@
 							<control-param name="rows">4</control-param>
 						</control>
 					</field>
-					<field id="lecmApprove3:commentAssoc" label="Документ с замечаниями">
+					<field id="lecmApprove3:commentAssoc" label-id="label.remark.document">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 						</control>
