@@ -30,7 +30,28 @@
 
 			<!-- Title and Version -->
 			<h1 class="thin dark">
-				<select id="all-attachments-select" onchange="window.location = location.protocol + '//' + location.host + location.pathname + '?nodeRef=' + this.options[this.selectedIndex].value">
+				<select id="all-attachments-select" onchange="
+					var categories = [];
+					<#if allAttachments?? && allAttachments.items??>
+						<#list allAttachments.items as item>
+							<#if item.category??>
+								<#if item.attachments??>
+									<#list item.attachments as attachment>
+										categories['${attachment.nodeRef}'] = '${item.category.nodeRef}';
+									</#list>
+								</#if>
+							</#if>
+						</#list>
+					</#if>
+
+					var nodeRef = this.options[this.selectedIndex].value;
+					var url = Alfresco.util.siteURL('document-attachment?nodeRef=' + nodeRef);
+					if (categories[nodeRef].length == 0) {
+						window.open(url,'_blank');
+					} else {
+						window.open(url, '_self');
+					}
+				">
 					<#if allAttachments?? && allAttachments.items??>
 						<#list allAttachments.items as item>
 							<#if item.category??>

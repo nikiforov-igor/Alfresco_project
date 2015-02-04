@@ -40,7 +40,8 @@
 	                                <#list item.attachments as attachment>
 	                                    <li title="${attachment.name!""}" class="text-cropped">
 		                                    <#if hasViewAttachmentPerm>
-			                                    <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}" class="text-cropped">
+			                                    <a href="${url.context}/page/document-attachment?nodeRef=${attachment.nodeRef}" class="text-cropped"
+			                                       <#if item.category.nodeRef == "">target="_blank"</#if>>
 			                                        ${attachment.name!""}
 			                                    </a>
 		                                    <#else>

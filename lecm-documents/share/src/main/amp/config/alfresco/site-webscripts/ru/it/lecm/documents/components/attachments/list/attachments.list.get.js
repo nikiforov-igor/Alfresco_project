@@ -1,5 +1,6 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
@@ -27,6 +28,18 @@ function main() {
         var cats = getCategories(model.nodeRef);
         if (cats != null) {
             model.categories = cats.categories;
+
+	        var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
+	        if (nodeDetails != null && nodeDetails.item != null && nodeDetails.item.node != null &&
+		            nodeDetails.item.node.type == "lecm-errands:document") {
+
+		        model.categories.push({
+			        nodeRef: "errands-base-document-attachments/" + model.nodeRef.replace(":/", ""),
+			        name: "Документ-основание",
+			        path: "",
+			        isReadOnly: true
+		        });
+	        }
         }
 	}
 
