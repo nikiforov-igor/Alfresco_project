@@ -72,34 +72,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             var text = response.serverResponse.responseText;
                             this.expandView(text);
 
-                            this.loadTasks(anchor);
-
                             this.loadMyErrands(anchor);
 
                             this.loadErrandsIssuedByMe(anchor);
-                        },
-                        scope: this
-                    },
-                    failureMessage: this.msg("message.failure"),
-                    scope: this,
-                    execScripts: true
-                });
-            },
-
-            loadTasks: function (anchor) {
-                Alfresco.util.Ajax.request({
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/tasks",
-                    dataObj: {
-                        nodeRef: this.options.nodeRef,
-                        htmlid: this.htmlid,
-                        tasksState: this.tasksState,
-                        isAnchor: (anchor !=null && anchor == "tasksList") ? "true" : "false"
-                    },
-                    successCallback: {
-                        fn: function(response) {
-                            var text = response.serverResponse.responseText;
-                            var listContainer = Dom.get(this.htmlid + "_tasksList");
-                            listContainer.innerHTML = text;
                         },
                         scope: this
                     },
