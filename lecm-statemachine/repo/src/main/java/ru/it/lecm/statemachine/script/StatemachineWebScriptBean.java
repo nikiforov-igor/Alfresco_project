@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
-import ru.it.lecm.statemachine.TransitionResponse;
 import ru.it.lecm.statemachine.bean.WorkflowListBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
@@ -62,6 +61,20 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 	 * @return
 	 */
 	public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, int myTasksLimit) {
+        return getTasks(node, stateParam, addSubordinatesTask, true, myTasksLimit);
+    }
+
+    /**
+     * Возвращает задачи для документа
+     *
+     * @param node                  документ, для которого будет возвращены задачи
+     * @param stateParam            статус задачи
+     * @param addSubordinatesTask   поиск задач подчененных сотрудников
+     * @param addMyTasks            поиск задач текущего сотрудника
+     * @param myTasksLimit          максимальное количество задач
+     * @return
+     */
+    public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, boolean addMyTasks, int myTasksLimit) {
 		if (node == null) {
 			return new WorkflowTaskListBean();
 		}
@@ -72,25 +85,17 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 		}
 
 		final NodeRef nodeRef = node.getNodeRef();
+        String presentString = getDocumentPresentString(nodeRef);
 		BPMState state = BPMState.getValue(stateParam);
 
-		List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
+		List<WorkflowTask> tasks = new ArrayList<>();
 		if (state == BPMState.ACTIVE || state == BPMState.ALL) {
-			List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+			tasks.addAll(AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
 				@Override
 				public List<WorkflowTask> doWork() throws Exception {
 					return stateMachineHelper.getDocumentTasks(nodeRef, true);
 				}
-			});
-
-			List<WorkflowTask> userTasks = stateMachineHelper.getAssignedAndPooledTasks(AuthenticationUtil.getFullyAuthenticatedUser());
-			for (WorkflowTask activeTask : activeTasks) {
-				for (WorkflowTask userTask : userTasks) {
-					if (activeTask.getId().equals(userTask.getId())) {
-						tasks.add(activeTask);
-					}
-				}
-			}
+			}));
 		}
 
 		if (state == BPMState.COMPLETED || state == BPMState.ALL) {
@@ -102,21 +107,21 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 		boolean isBoss = orgstructureService.isBoss(currentEmployee);
 		result.setShowSubordinateTasks(isBoss);
 
-		List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
-		result.setMyTasks(myTasks, myTasksLimit);
+        if (addMyTasks) {
+            List<WorkflowTask> myTasks = stateMachineHelper.filterTasksByAssignees(tasks, Collections.singletonList(currentEmployee));
+            result.setMyTasks(myTasks, myTasksLimit);
 
-		for (WorkflowTaskBean task : result.getMyTasks()) {
-			String presentString = getDocumentPresentString(nodeRef);
-			task.setDocumentPresentString(presentString);
-		}
+            for (WorkflowTaskBean task : result.getMyTasks()) {
+                task.setDocumentPresentString(presentString);
+            }
+        }
 
-		if (addSubordinatesTask) {
+        if (addSubordinatesTask) {
 			List<NodeRef> subordinateEmployees = orgstructureService.getBossSubordinate(currentEmployee);
 			List<WorkflowTask> subordinatesTasks = stateMachineHelper.filterTasksByAssignees(tasks, subordinateEmployees);
 			result.setSubordinatesTasks(subordinatesTasks);
 
 			for (WorkflowTaskBean task : result.getSubordinateTasks()) {
-				String presentString = getDocumentPresentString(nodeRef);
 				task.setDocumentPresentString(presentString);
 			}
 		}
