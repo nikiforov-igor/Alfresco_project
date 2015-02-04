@@ -8,8 +8,6 @@
 
     <div class="body scrollableList" id="${id}_results">
 
-        <div id="${id}_tasksList"></div>
-
         <div id="${id}_myErrandsList"></div>
 
         <div id="${id}_errandsIssuedByMeList"></div>
