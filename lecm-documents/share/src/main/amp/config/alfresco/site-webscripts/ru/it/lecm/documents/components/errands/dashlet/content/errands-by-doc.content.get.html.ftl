@@ -18,7 +18,7 @@
         function createObject() {
             new LogicECM.dashlet.DocErrands("${id}").setOptions(
                     {
-                        maxItems: 20,
+                        maxItems: 50,
                         parentDoc: "${nodeRef}",
                         errandJSON: <#if errand?? >${errand}<#else>{data:[]}</#if>
                     }).setMessages(${messages});
@@ -40,7 +40,7 @@
             <img src="/share/res/images/lecm-documents/errands/out.png" width="24" title="${msg('label.my-errands')}" id="${id}-out-img">
         </span>
         <div class="total-tasks-count">
-            <#if hasStatemachine && isErrandsStarter && errand?? && mayCreateReErrand>
+            <#if mayCreateReErrand && hasStatemachine && hasPermission && isErrandsStarter && errand??>
             <span class="lecm-dashlet-actions">
                 <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.createReErrand('${errandObj.data[0].nodeRef}', '${errandObj.data[0].date}')" class="add"
                    title="${msg("dashlet.add.reerrand.tooltip")}">${msg("dashlet.add.reerrand")}</a>

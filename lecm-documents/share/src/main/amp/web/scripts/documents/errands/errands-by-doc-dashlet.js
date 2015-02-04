@@ -101,13 +101,13 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 /*YAHOO.util.Event.addListener(this.id, "scroll", this.onContainerScroll, this);*/
             },
 
-            onContainerScroll: function (event, scope) {
+/*            onContainerScroll: function (event, scope) {
                 var container = event.currentTarget;
                 if (container.scrollTop + container.clientHeight == container.scrollHeight) {
-                    /*Dom.setStyle(scope.id + "-issued-errands-loading", "visibility", "visible");*/
+                    *//*Dom.setStyle(scope.id + "-issued-errands-loading", "visibility", "visible");*//*
                     scope.populateErrandsList();
                 }
-            },
+            },*/
 
             /**
              * Populate the activity list via Ajax request
@@ -191,14 +191,14 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     desc = "";
 
                 var additionalClassName = "";
-                if (data.isExpired == "true" && (data.status == "В работе" || data.status == "Не исполнено")) {
+                if (data.isExpired == "true" && (data.status == this.msg("label.errand-status-in-work")|| data.status == this.msg("label.errand-status-not-executed"))) {
                     additionalClassName = "errand-expired";
-                } else if (data.status == "Исполнено") {
+                } else if (data.status == this.msg("label.errand-status-executed")) {
                     additionalClassName = "errand-executed";
                 }
 
                 var errandDescription = data.title
-                    + ", исполнитель: " + data.executor_name + ", "
+                    + "," + this.msg("label.errand-author") + ": " + data.executor_name + ", "
                     + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
 
                 desc = "<a href='" + window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT
@@ -216,19 +216,19 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 elCell.className += " " + oColumn.className;
                 oColumn.getThEl().className += "" + oColumn.className;
 
-                if (data.status == "В работе" || data.status == "Не исполнено") {
+                if (data.status == this.msg("label.errand-status-in-work") || data.status == this.msg("label.errand-status-not-executed")) {
                     if (data.isExpired == "true") {
                         desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/errands/expired.png'
                             + '" width="24" alt="' + this.msg("label.expired") + '" title="' + this.msg("label.expired")
                             + '" />';
                     } else {
-                        if (data.status == "Не исполнено") {
+                        if (data.status == this.msg("label.errand-status-not-executed")) {
                             desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/errands/not_executed.png'
                                 + '" width="24" alt="' + this.msg("label.not_executed") + '" title="' + this.msg("label.not_executed")
                                 + '" />';
                         }
                     }
-                } else if (data.status == "Исполнено") {
+                } else if (data.status == this.msg("label.errand-status-executed")) {
                     desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/errands/executed.png'
                         + '" width="24" alt="' + this.msg("label.executed") + '" title="' + this.msg("label.executed")
                         + '" />';
@@ -245,14 +245,15 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 oColumn.getThEl().className += "" + oColumn.className;
 
                 var additionalClassName = "";
-                if (data.isExpired == "true" && (data.status == "В работе" || data.status == "Не исполнено")) {
+                if (data.isExpired == "true" &&
+                    (data.status == this.msg("label.errand-status-in-work") || data.status == this.msg("label.errand-status-not-executed"))) {
                     additionalClassName = "errand-expired";
-                } else if (data.status == "Исполнено") {
+                } else if (data.status == this.msg("label.errand-status-executed")) {
                     additionalClassName = "errand-executed";
                 }
 
                 var errandDescription = data.title + ","
-                    + "автор: " + data.initiator_name + ", "
+                    + this.msg("label.errand-author") + ": " + data.initiator_name + ", "
                     + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
                 desc = "<a href='" + window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT
                     + "document?nodeRef=" + data.nodeRef + "'>" + errandDescription + "</a> ";

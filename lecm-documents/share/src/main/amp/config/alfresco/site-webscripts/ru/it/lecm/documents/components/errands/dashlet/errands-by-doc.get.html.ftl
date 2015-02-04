@@ -33,6 +33,7 @@
                             requestParams: {
                                 nodeRef: "${nodeRef}",
                                 hasStatemachine:${hasStatemachine?string},
+                                hasPermission:${hasPermission?string},
                                 isErrandsStarter:${isErrandsStarter?string},
                                 htmlid:"${id}-content"
                             },

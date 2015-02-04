@@ -35,6 +35,9 @@
 
 .errands-dashlet-content .total-tasks-count {
     padding: 4px;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: bold;
 }
 .errands-dashlet-content .total-tasks-count .lecm-dashlet-actions a{
     text-decoration: none;

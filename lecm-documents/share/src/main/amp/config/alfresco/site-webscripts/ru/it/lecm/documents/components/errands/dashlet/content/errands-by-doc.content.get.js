@@ -4,6 +4,7 @@ function main() {
     model.hasStatemachine = (args["hasStatemachine"] == "true");
     model.nodeRef = args["nodeRef"];
     model.isErrandsStarter = (args["isErrandsStarter"] == "true");
+    model.hasPermission = (args["hasPermission"] == "true");
 
     var url = "/lecm/errands/getIssuedToMeErrands?nodeRef=" + args["nodeRef"] +
     "&maxItems=1&rolesFields=lecm-errands:executor-assoc-ref,lecm-errands:coexecutors-assoc-ref";
