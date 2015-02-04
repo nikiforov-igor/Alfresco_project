@@ -143,7 +143,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     this.skipCount = this.skipCount + response.json.paging.totalItems;
                     if (this.dataTable == null) {
                         var columnDefs = [
-                            { key: "icon", label: "", sortable: false, formatter: this.bind(this.renderIcon), width: "32", className: "image"},
+                            { key: "icon", label: "", sortable: false, formatter: this.bind(this.renderIcon), width: "24", className: "image"},
                             { key: "record", label: "", sortable: false, formatter: this.bind(this.renderCell)}
                         ];
                         var initialSource = new YAHOO.util.DataSource(response.json.data);
@@ -165,7 +165,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 if (this.options.errandJSON != null && this.options.errandJSON.data.length > 0) {
                     if (this.errandTable == null) {
                         var columnDefs = [
-                            { key: "icon", label: "", sortable: false, formatter: this.bind(this.renderIcon), width: "32", className: "image"},
+                            { key: "icon", label: "", sortable: false, formatter: this.bind(this.renderIcon), width: "24", className: "image"},
                             { key: "record", label: "", sortable: false, formatter: this.bind(this.renderCellWithAuthor)}
                         ];
                         var initialSource = new YAHOO.util.DataSource(this.options.errandJSON.data);
@@ -219,18 +219,18 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 if (data.status == "В работе" || data.status == "Не исполнено") {
                     if (data.isExpired == "true") {
                         desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/errands/expired.png'
-                            + '" width="32" alt="' + this.msg("label.expired") + '" title="' + this.msg("label.expired")
+                            + '" width="24" alt="' + this.msg("label.expired") + '" title="' + this.msg("label.expired")
                             + '" />';
                     } else {
                         if (data.status == "Не исполнено") {
                             desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/errands/not_executed.png'
-                                + '" width="32" alt="' + this.msg("label.not_executed") + '" title="' + this.msg("label.not_executed")
+                                + '" width="24" alt="' + this.msg("label.not_executed") + '" title="' + this.msg("label.not_executed")
                                 + '" />';
                         }
                     }
                 } else if (data.status == "Исполнено") {
                     desc = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/errands/executed.png'
-                        + '" width="32" alt="' + this.msg("label.executed") + '" title="' + this.msg("label.executed")
+                        + '" width="24" alt="' + this.msg("label.executed") + '" title="' + this.msg("label.executed")
                         + '" />';
                 }
 
