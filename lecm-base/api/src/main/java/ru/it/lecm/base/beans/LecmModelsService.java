@@ -162,6 +162,16 @@ public class LecmModelsService {
 						if (update) {
 							logger.trace("Models are DIFFERENT. Model content in repository will BE UPDATED.");
 							contentInputStream = modelResource.getInputStream();
+							/*
+							 ALF-3866
+							 если установлена опция lecm.models.useDefaultModels=true и у нас настроена аутентификация с использованием SSO,
+							 то в ситуации, когда во время бутстрапа будет обновлено содержимое модели, произойдет зависание системы.
+							 Зависание произойдет по вот такой последовтельности действий
+							 1) на ноду в репозиторий вешается аспект VERSIONABLE c атрибутами по умолчанию (cm:autoVersion=true, cm:autoVersionOnUpdateProps=true)
+							 2) при коммите этой транзакции сработает policy которая установит ноде новую версию и имя пользователя который загрузил новую версию
+							 3) вычисление имени пользователя происходит в методе org.alfresco.repo.lock.LockServiceImpl.getUserName(), он, в свою очередь, обращается к authenticationService.getCurrentUserName()
+							 4) вызов authenticationService.getCurrentUserName() приводит к зависанию системы на старте с использованием SSO
+							*/
 							if (!nodeService.hasAspect(newNode, ContentModel.ASPECT_VERSIONABLE)) {
 								nodeService.addAspect(newNode, ContentModel.ASPECT_VERSIONABLE, null);
 							}
