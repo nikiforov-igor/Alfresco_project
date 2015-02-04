@@ -139,7 +139,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
             ,
 
             showDataTable: function showDataTableDashlet(response, obj) {
-                if (response.json.data.length > 0) {
+                //if (response.json.data.length > 0) {
                     this.skipCount = this.skipCount + response.json.paging.totalItems;
                     if (this.dataTable == null) {
                         var columnDefs = [
@@ -150,19 +150,21 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         initialSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
                         initialSource.responseSchema = {icon: "icon", record: "record"};
 
-                        this.dataTable = new YAHOO.widget.DataTable(this.id + "-issued-errands", columnDefs, initialSource, {});
-                        this.dataTable.set("MSG_EMPTY", this.msg("message.empty", "LogicECM.dashlet.DocErrands"));
+                        this.dataTable = new YAHOO.widget.DataTable(this.id + "-issued-errands", columnDefs, initialSource,
+                            {"MSG_EMPTY": this.msg("message.errands.empty")
+                        });
+
                         this.dataTable.getTheadEl().hidden = true;
                         this.dataTable.getTableEl().className += "my-errands";
                     } else {
                         this.dataTable.addRows(response.json.data);
                     }
                     /*Dom.setStyle(this.id + "-issued-errands-loading", "visibility", "hidden");*/
-                }
+                //}
             },
 
             showErrandData: function showDataTableDashlet() {
-                if (this.options.errandJSON != null && this.options.errandJSON.data.length > 0) {
+                //if (this.options.errandJSON != null && this.options.errandJSON.data.length > 0) {
                     if (this.errandTable == null) {
                         var columnDefs = [
                             { key: "icon", label: "", sortable: false, formatter: this.bind(this.renderIcon), width: "24", className: "image"},
@@ -172,15 +174,16 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         initialSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
                         initialSource.responseSchema = {icon: "icon", record: "record"};
 
-                        this.errandTable = new YAHOO.widget.DataTable(this.id + "-errand", columnDefs, initialSource, {});
-                        this.errandTable.set("MSG_EMPTY", this.msg("message.empty", "LogicECM.dashlet.DocErrands"));
+                        this.errandTable = new YAHOO.widget.DataTable(this.id + "-errand", columnDefs, initialSource,
+                            {"MSG_EMPTY": this.msg("message.errands.empty")
+                            });
                         this.errandTable.getTheadEl().hidden = true;
                         this.errandTable.getTableEl().className += "my-errands";
                     } else {
                         this.errandTable.getRecordSet().reset();
                         this.errandTable.addRows(this.options.errandJSON.data);
                     }
-                }
+                //}
             },
 
             /**
