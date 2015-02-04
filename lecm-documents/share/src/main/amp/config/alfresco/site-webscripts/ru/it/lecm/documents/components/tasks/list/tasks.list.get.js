@@ -16,7 +16,7 @@ function main() {
 }
 
 function getTasks(nodeRef, tasksState) {
-    var url = "/lecm/statemachine/api/tasks?nodeRef=" + nodeRef + "&state=" + tasksState + "&addSubordinatesTask=true";
+    var url = "/lecm/statemachine/api/tasks?nodeRef=" + nodeRef + "&state=" + tasksState + "&addSubordinatesTask=true&addMyTasks=false";
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         return null;

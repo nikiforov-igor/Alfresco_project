@@ -17,49 +17,6 @@
     <#assign allSeleted = "selected">
 </#if>
 
-    <div class="list-category">
-        <div class="list-category-title">${msg("tasklist.label.mytasks")}</div>
-        <div class="tasks-list-filter">
-            <select id="${id}-tasks-states">
-                <option ${allSeleted} value="all">${msg("tasklist.option.all")}</option>
-                <option ${activeSeleted} value="active">${msg("tasklist.option.active")}</option>
-                <option ${completedSeleted} value="completed">${msg("tasklist.option.completed")}</option>
-            </select>
-        </div>
-        <#if data.myTasks?size == 0>
-            <div class="workflow-task-line">
-                ${msg("tasklist.label.no-tasks")}
-            </div>
-        </#if>
-        <#list data.myTasks as task>
-            <div class="workflow-task-item">
-                <div class="workflow-task-list-picture ${task.workflowTaskPriority}" title="${task.priorityMessage}">&nbsp;</div>
-                <div class="left1">
-                    <div>
-                        <div class="workflow-task-title workflow-task-list-left-column">
-                            <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}:</a>
-                        </div>
-                        <span class="workflow-task-status ${task.type}">${task.typeMessage}</span>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="workflow-task-description">${task.description}</div>
-                    <div>
-                        <div class="workflow-task-list-left-column">
-                            <#if task.dueDate == "">
-                                <#assign dueDate = " - ">
-                            <#else>
-                                <#assign dueDate = task.dueDate>
-                            </#if>
-                            <span class="workflow-task-list-label">${msg("tasklist.label.duedate")}:&nbsp;</span>${dueDate}
-                        </div>
-                        <span class="workflow-task-list-label">${msg("tasklist.label.status")}: </span>${task.statusMessage}
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </#list>
-    </div>
-
     <#if data.showSubordinateTasks == "true">
         <div class="list-category">
             <div class="list-category-title-subordinate">${msg("tasklist.label.subordinatestasks")}</div>
