@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Поручения по документу</shortname>
+    <description>Компонент "Поручения по документу"</description>
+    <family>document-dashlet</family>
+    <url>/lecm/components/dashlets/errands-by-doc</url>
+</webscript>

@@ -1,0 +1,41 @@
+.errands-dashlet-content {
+	padding: 10px;
+}
+
+.errand-link a {
+	padding-right: 30px;
+}
+
+.errands-data,
+.issue-data {
+	clear: both;
+	padding-top: 10px;
+}
+
+.issued-by-me-errands-block {
+    display:inherit;
+}
+
+.issued-to-me-errands-block {
+    border-bottom: 1px solid #6C6C6C;
+}
+
+.errand-expired a {
+    color:red;
+}
+
+.errand-executed a {
+    color:#808080;
+}
+
+.errands-dashlet-content .loading-image-container {
+    text-align: center;
+    visibility: hidden;
+}
+
+.errands-dashlet-content .total-tasks-count {
+    padding: 4px;
+}
+.errands-dashlet-content .total-tasks-count .lecm-dashlet-actions a{
+    text-decoration: none;
+}

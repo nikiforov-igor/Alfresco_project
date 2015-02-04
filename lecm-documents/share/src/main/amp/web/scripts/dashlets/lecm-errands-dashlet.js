@@ -48,6 +48,23 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                 };
 
                 this.onAddErrandClick(args);
+            },
+
+            createReErrand: function Errands_onAddErrandsClick(parentDoc, limit) {
+                if (parentDoc) {
+                    var limitDate = "";
+                    if (limit){
+                        limitDate = limit;
+                    }
+                    var args = {
+                        parentDoc: parentDoc,
+                        parentLimitationDate: limitDate
+                    };
+
+                    this.onAddErrandClick(args);
+                } else {
+                    this.createChildErrand();
+                }
             }
         });
 })();
