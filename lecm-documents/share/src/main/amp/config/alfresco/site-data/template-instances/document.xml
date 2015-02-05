@@ -112,23 +112,6 @@
            </sub-components>
        </component>
 
-       <!-- Мои задачи -->
-       <component>
-           <region-id>tasks</region-id>
-           <sub-components>
-               <sub-component id="default">
-                   <evaluations>
-                       <evaluation>
-                           <url>/lecm/components/dashlets/document-my-tasks</url>
-                           <properties>
-                               <nodeRef>{nodeRef}</nodeRef>
-                           </properties>
-                       </evaluation>
-                   </evaluations>
-               </sub-component>
-           </sub-components>
-       </component>
-
       <!-- Комментарии -->
       <component>
          <region-id>comments</region-id>

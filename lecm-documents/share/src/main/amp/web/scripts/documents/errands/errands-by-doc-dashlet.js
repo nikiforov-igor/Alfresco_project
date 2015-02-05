@@ -155,7 +155,11 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         });
 
                         this.dataTable.getTheadEl().hidden = true;
-                        this.dataTable.getTableEl().className += "my-errands";
+                        if (response.json.data.length > 0) {
+                            this.dataTable.getTableEl().className += "my-errands";
+                        } else {
+                            this.dataTable.getTableEl().className += "my-errands-empty";
+                        }
                     } else {
                         this.dataTable.addRows(response.json.data);
                     }
@@ -178,7 +182,11 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                             {"MSG_EMPTY": this.msg("message.errands.empty")
                             });
                         this.errandTable.getTheadEl().hidden = true;
-                        this.errandTable.getTableEl().className += "my-errands";
+                        if (this.options.errandJSON != null && this.options.errandJSON.data.length > 0) {
+                            this.errandTable.getTableEl().className += "my-errands";
+                        } else {
+                            this.errandTable.getTableEl().className += "my-errands-empty";
+                        }
                     } else {
                         this.errandTable.getRecordSet().reset();
                         this.errandTable.addRows(this.options.errandJSON.data);
@@ -201,7 +209,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 }
 
                 var errandDescription = data.title
-                    + "," + this.msg("label.errand-author") + ": " + data.executor_name + ", "
+                    + "," + this.msg("label.errand-executor") + ": " + data.executor_name + ", "
                     + YAHOO.util.Date.format(new Date(data.date), {format: "%d %b %Y"}, this.msg("locale"));
 
                 desc = "<a href='" + window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT

@@ -42,3 +42,8 @@
 .errands-dashlet-content .total-tasks-count .lecm-dashlet-actions a{
     text-decoration: none;
 }
+
+.dashlet .scrollableList .errands-dashlet-content .my-errands-empty td {
+    color: #b1b3bf;
+    padding-left: 20px;
+}
