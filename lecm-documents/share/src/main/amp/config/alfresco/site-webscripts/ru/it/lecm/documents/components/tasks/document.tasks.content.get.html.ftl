@@ -12,33 +12,24 @@ ${msg("heading")}
 
 <#if data??>
 <div>
-    <div class="total-tasks-count-right <#if data.myTasksTotalCount == 0>hidden1</#if>">${data.myTasksTotalCount}</div>
+    <div class="total-tasks-count-right <#if data.errands?size == 0>hidden1</#if>">${data.errands?size}</div>
 </div>
 </#if>
 
 <div id="${id}-formContainer">
 <#if data??>
     <div class="right-tasks-container">
-	    <#if data?? && data.myTasks?? && (data.myTasks?size > 0)>
+	    <#if data?? && data.errands?? && (data.errands?size > 0)>
 	        <#assign maxMainTextLength = 53>
-	        <#list data.myTasks as task>
-	            <#assign mainTextLength = task.title?length + task.description?length + 2>
-	            <#if mainTextLength < maxMainTextLength>
-	                <#assign description = task.description>
-	            <#else>
-	                <#assign descriptionLength = maxMainTextLength - task.title?length - 5>
-	                <#assign description = task.description?substring(0, descriptionLength)?right_pad(descriptionLength + 3, ".")>
-	            </#if>
+	        <#list data.errands as task>
 	            <div class="right-task">
-	                <div class="workflow-date">${task.startDate}</div>
-	                <div class="workflow-task-status ${task.type}">${task.typeMessage}</div>
-	                <div class="clear"></div>
-	                <div class="workflow-task-main-text text-broken">
+                    <div class="workflow-task-main-text text-broken">
 	                    <span class="workflow-task-title">
-	                        <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}</a>
+	                        <a href="${url.context}/page/document?nodeRef=${task.nodeRef}">${msg('label.from')}: ${task.initiatorName}</a>
 	                    </span>
-	                </div>
-	            </div>
+                    </div>
+                    <div class="workflow-date">${task.dueDate}</div>
+                </div>
 	        </#list>
 		<#else>
 			<div class="block-empty-body">
@@ -49,7 +40,7 @@ ${msg("heading")}
 		</#if>
     </div>
 
-    <#if (data.myTasksTotalCount > 0 && data.myTasksTotalCount > data.myTasksDisplayedCount)>
+    <#if (data.errands?size > 0 && data.errands?size > 5)>
         <div class="right-more-link-arrow" onclick="documentTasksComponentContent.onExpand();"></div>
         <div class="right-more-link" onclick="documentTasksComponentContent.onExpand();">${msg('right.label.more')}</div>
         <div class="clear"></div>
