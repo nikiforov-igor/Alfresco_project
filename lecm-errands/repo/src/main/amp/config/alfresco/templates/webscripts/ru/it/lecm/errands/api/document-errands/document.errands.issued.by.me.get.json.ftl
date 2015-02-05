@@ -1,6 +1,6 @@
 <#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-    "errandsCount": ${errandsCount},
+    "errandsCount": ${errandsCount?string},
     "errands": [
         <#list errandsIssuedByMe as errand>
         {

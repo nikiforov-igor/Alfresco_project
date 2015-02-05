@@ -1,6 +1,6 @@
 <#escape x as jsonUtils.encodeJSONString(x)!''>
 {
-    "errandsCount": "${errandsCount}",
+    "errandsCount": ${errandsCount?string},
     <#if latestErrandNodeRef?exists>
         "latestErrandNodeRef": "${latestErrandNodeRef}",
         "latestErrandStartDate": "${latestErrandStartDate?string("dd.MM.yyyy")}",

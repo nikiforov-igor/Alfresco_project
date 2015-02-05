@@ -97,7 +97,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var formEl = this.getCustomRegion();
                 if (formEl != null) {
                     formEl.innerHTML = "";
-                    currentExtendedComponent = this;
                     formEl.innerHTML = html;
                     // подменяем заголовок
                     var titleEl = this.getDocumentTitle();

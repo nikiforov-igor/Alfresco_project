@@ -1,10 +1,24 @@
 var nodeRef = args['nodeRef'];
 var document = search.findNode(nodeRef);
+var maxItems = args["errandsLimit"] != null ? args["errandsLimit"] : -1;
 
 var filter = args['filter'];
 
+var k = 0;
+var items = [];
+
 var myErrands = errands.getMyDocumentErrands(document, filter);
-model.myErrands = myErrands;
+
+if (myErrands != null && myErrands.length > 0) {
+    for (var i = 0; i < myErrands.length; i++) {
+        if (maxItems < 0 || k < maxItems) {
+                items.push(myErrands[i]);
+                k++;
+        }
+    }
+}
+
+model.myErrands = items;
 model.errandsCount = myErrands.length;
 
 if (myErrands.length > 0) {

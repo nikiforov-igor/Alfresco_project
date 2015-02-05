@@ -5,14 +5,16 @@ function main() {
     AlfrescoUtil.param("nodeRef");
     model.containerHtmlId = args["containerHtmlId"];
 
-    var data = getTasks(model.nodeRef);
+    var data = getErrands(model.nodeRef);
     if (data != null) {
         model.data = data;
     }
 }
 
-function getTasks(nodeRef) {
-    var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"] + "&filter=active&myTasksLimit=5";
+function getErrands(nodeRef) {
+    var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"]
+    + "&filter=" + (args["state"] != null && args["state"] != "" ? args["state"] : "active")
+    + "&errandsLimit=" + (args["errandsLimit"] != null ? args["errandsLimit"]  : "-1");
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         return null;

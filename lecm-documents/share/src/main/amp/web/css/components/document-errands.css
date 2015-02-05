@@ -1,0 +1,22 @@
+.errands-list-filter {
+    margin-bottom: 20px;
+}
+
+.errands-list-filter > select {
+	margin-left: 13px;
+}
+
+.workflow-task-item .workflow-task-title {
+	font-size: 16px;
+}
+
+.right-errand {
+    margin-bottom: 5px;
+}
+
+.total-errands-count-right {
+    background: #ff7504;
+    color: #fff;
+    border-radius: 6px;
+    padding: 4px 8px;
+}

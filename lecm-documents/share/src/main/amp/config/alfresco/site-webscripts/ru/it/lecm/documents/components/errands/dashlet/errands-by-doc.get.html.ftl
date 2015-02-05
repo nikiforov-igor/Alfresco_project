@@ -16,7 +16,7 @@
             </div>
         </span>
         <span class="lecm-dashlet-actions">
-            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentTasksComponent.onExpand()"
+            <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentErrandsComponent.onExpand()"
                class="expand" title="${msg("dashlet.expand.tooltip")}">&nbsp</a>
         </span>
     </div>

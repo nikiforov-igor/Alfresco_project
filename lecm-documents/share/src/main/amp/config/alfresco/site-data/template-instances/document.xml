@@ -246,8 +246,8 @@
 
       <!-- Задачи -->
       <component>
-         <region-id>document-tasks</region-id>
-         <url>/lecm/components/document/document-tasks</url>
+         <region-id>document-errands</region-id>
+         <url>/lecm/components/document/document-errands</url>
          <properties>
             <nodeRef>{nodeRef}</nodeRef>
          </properties>

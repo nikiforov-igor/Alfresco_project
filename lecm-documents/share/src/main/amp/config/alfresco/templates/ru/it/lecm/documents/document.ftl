@@ -39,7 +39,6 @@
 		LogicECM.module = LogicECM.module || {};
 		LogicECM.module.Documents = LogicECM.module.Documents|| {};
 		(function() {
-			//var currentExtendedComponent = null;
 			LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings}<#else>{}</#if>;
 
             var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
@@ -71,7 +70,7 @@
                 <@region id="document-actions" scope="template"/>
                 <@region id="document-metadata" scope="template"/>
                 <@region id="document-attachments" scope="template"/>
-                <@region id="document-tasks" scope="template"/>
+                <@region id="document-errands" scope="template"/>
                 <@region id="document-workflows" scope="template"/>
                 <@region id="document-connections" scope="template"/>
                 <@region id="document-members" scope="template"/>
