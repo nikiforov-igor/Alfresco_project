@@ -8,7 +8,7 @@
 	if (sourceRouteNode) {
 		sourceRouteTitle = sourceRouteNode.properties['cm:title'];
 	} else {
-		sourceRouteTitle = "Индивидуальный маршрут";
+		sourceRouteTitle = msg.get('lecm.routers.individual.route');
 	}
 
 	iterationNode.properties['cm:title'] = sourceRouteTitle;

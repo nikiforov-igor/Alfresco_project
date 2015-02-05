@@ -49,9 +49,9 @@
 					<show id="lecmWorkflowRoutes:stagesControlFake" force="true" />
 				</field-visibility>
 				<appearance>
-					<set id="availability" appearance="bordered-panel" label="Доступность для выбора"/>
-					<set id="params" appearance="bordered-panel" label="Параметры обработки маршрута"/>
-					<set id="stages" appearance="bordered-panel" label="Этапы"/>
+					<set id="availability" appearance="bordered-panel" label-id="lecm.routers.available.selection"/>
+					<set id="params" appearance="bordered-panel" label-id="lecm.routers.process.route.parameters"/>
+					<set id="stages" appearance="bordered-panel" label-id="lecm.routers.stages"/>
 					<field id="cm:title" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
@@ -113,9 +113,9 @@
 					<show id="lecmWorkflowRoutes:stagesControlFake" force="true"/>
 				</field-visibility>
 				<appearance>
-					<set id="availability" appearance="bordered-panel" label="Доступность для выбора"/>
-					<set id="params" appearance="bordered-panel" label="Параметры обработки маршрута"/>
-					<set id="stages" appearance="bordered-panel" label="Этапы"/>
+					<set id="availability" appearance="bordered-panel" label-id="lecm.routers.available.selection"/>
+					<set id="params" appearance="bordered-panel" label-id="lecm.routers.process.route.parameters"/>
+					<set id="stages" appearance="bordered-panel" label-id="lecm.routers.stages"/>
 					<field id="cm:title" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
@@ -164,8 +164,8 @@
 					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:title" label="Этап"/>
-					<field id="lecmApproveAspects:approvalState" label="Статус"/>
+					<field id="cm:title" label-id="lecm.routers.stage"/>
+					<field id="lecmApproveAspects:approvalState" label-id="lecm.routers.status"/>
 				</appearance>
 			</form>
 		</forms>
@@ -179,7 +179,7 @@
 					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:title" mandatory="true" label="Название этапа">
+					<field id="cm:title" mandatory="true" label-id="lecm.routers.stage.name">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:stageWorkflowType">
@@ -210,11 +210,11 @@
 					<show id="lecmWorkflowRoutes:stageItemMacrosAssoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecmWorkflowRoutes:stageItemEmployeeOrMacrosAssocFake" label="Участник"
+					<field id="lecmWorkflowRoutes:stageItemEmployeeOrMacrosAssocFake" label-id="lecm.routers.participant"
 						   substituteString="{lecmWorkflowRoutes:stageItemEmployeeAssoc/lecm-orgstr:employee-short-name} {lecmWorkflowRoutes:stageItemMacrosAssoc/cm:name}"/>
-					<field id="lecmWorkflowRoutes:stageItemEmployeePositionFake" label="Должность"
+					<field id="lecmWorkflowRoutes:stageItemEmployeePositionFake" label-id="lecm.routers.position"
 						   substituteString="{lecmWorkflowRoutes:stageItemEmployeeAssoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
-					<field id="lecmApproveAspects:approvalState" label="Статус"/>
+					<field id="lecmApproveAspects:approvalState" label-id="lecm.routers.status"/>
 				</appearance>
 			</form>
 			<form id="createNewStageItemForEmployee">
@@ -264,7 +264,7 @@
 					<show id="lecmWorkflowRoutes:stageItemTerm"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecmWorkflowRoutes:stageItemEmployeeOrMacrosAssocFake" label="Сотрудник">
+					<field id="lecmWorkflowRoutes:stageItemEmployeeOrMacrosAssocFake" label-id="lecm.routers.employee">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
 							<control-param name="formatString">{lecmWorkflowRoutes:stageItemEmployeeAssoc/lecm-orgstr:employee-short-name}{lecmWorkflowRoutes:stageItemMacrosAssoc/cm:name}</control-param>
 						</control>
@@ -287,7 +287,7 @@
 					<field id="lecmWorkflowRoutes:stageItemComment">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="cm:contains" label="Файл с примечаниями">
+					<field id="cm:contains" label-id="lecm.routers.file.with.notes">
 						<control template="/ru/it/lecm/base-share/components/controls/view-file-link.ftl"/>
 					</field>
 				</appearance>

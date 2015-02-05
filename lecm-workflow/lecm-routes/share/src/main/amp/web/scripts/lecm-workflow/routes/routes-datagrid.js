@@ -42,8 +42,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						},
 						scope: this
 					},
-					successMessage: 'Изменения в маршруте сохранены',
-					failureMessage: 'Не удалось сохранить изменения в маршруте'
+					successMessage: Alfresco.util.message('lecm.routers.route.changes.saved'),
+					failureMessage: Alfresco.util.message('lecm.routers.route.changes.failed')
 				});
 
 				editRouteForm.show();

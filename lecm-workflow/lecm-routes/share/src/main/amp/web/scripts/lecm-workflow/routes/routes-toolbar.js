@@ -60,7 +60,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 								successCallback: {
 									fn: function(r) {
 										Alfresco.util.PopupManager.displayMessage({
-											text: 'Маршрут успешно создан'
+											text: Alfresco.util.message('lecm.routers.route.created')
 										});
 									},
 									scope: this
@@ -69,7 +69,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 									fn: function(r) {
 										this.editDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
-											text: 'Не удалось создать маршрут: ' + r.json.message
+											text: Alfresco.util.message('lecm.routers.route.create.failed') + ': ' + r.json.message
 										});
 									},
 									scope: this
@@ -87,7 +87,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					onFailure: {
 						fn: function(r) {
 							Alfresco.util.PopupManager.displayMessage({
-								text: 'Не удалось создать маршрут: ' + r.json.message
+								text: Alfresco.util.message('lecm.routers.route.create.failed') + ': ' + r.json.message
 							});
 						},
 						scope: this
@@ -124,7 +124,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					fn: function(r) {
 						this.editDialogOpening = false;
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось создать маршрут: ' + r.json.message
+							text: Alfresco.util.message('lecm.routers.route.create.failed') + ': ' + r.json.message
 						});
 					},
 					scope: this

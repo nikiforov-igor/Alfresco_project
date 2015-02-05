@@ -43,7 +43,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 							var recordsSize = this.widgets.dataTable.getRecordSet().getLength();
 
 							if (nameInput) {
-								nameInput.value = 'Этап ' + (recordsSize + 1);
+								nameInput.value = Alfresco.util.message('lecm.routers.stage') + ' ' + (recordsSize + 1);
 							}
 
 							simpleDialog.dialog.setHeader(this.msg('label.routes.create-stage.title'));
@@ -69,7 +69,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 									fn: function (r) {
 										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
-											text: 'Этап успешно создан'
+											text: Alfresco.util.message('lecm.routers.stage.created')
 										});
 									},
 									scope: this
@@ -78,7 +78,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 									fn: function (r) {
 										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
-											text: 'Не удалось создать этап: ' + r.json.message
+											text: Alfresco.util.message('lecm.routers.stage.create.failed') + ': ' + r.json.message
 										});
 									},
 									scope: this
@@ -136,7 +136,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					fn: function (r) {
 						this.editDialogOpening = false;
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось создать этап: ' + r.json.message
+							text: Alfresco.util.message('lecm.routers.stage.create.failed') + ': ' + r.json.message
 						});
 					},
 					scope: this
@@ -176,7 +176,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						// Спасаем тонущий popup
 						Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(editStageFormId + '-form-container_c').style['z-index'] + 1;
 						Alfresco.util.PopupManager.displayMessage({
-							text: this.msg('Изменения в этапе сохранены')
+							text: this.msg('lecm.routers.stage.changes.saved')
 						});
 					},
 					scope: this
@@ -186,7 +186,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						// Спасаем тонущий popup
 						Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(editStageFormId + '-form-container_c').style['z-index'] + 1;
 						Alfresco.util.PopupManager.displayMessage({
-							text: this.msg('Не удалось сохранить изменения в этапе')
+							text: this.msg('lecm.routers.stage.changes.failed')
 						});
 					},
 					scope: this
@@ -210,11 +210,11 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			switch (dialogType) {
 				case 'employee' :
 					formID = 'createNewStageItemForEmployee';
-					dialogHeader = 'Добавить сотрудника в этап';
+					dialogHeader = Alfresco.util.message('lecm.routers.add.employee.to.stage');
 					break;
 				case 'macros' :
 					formID = 'createNewStageItemForMacros';
-					dialogHeader = 'Добавить потенциального участника в этап';
+					dialogHeader = Alfresco.util.message('lecm.routers.add.potential.participant.to.stage');
 					break;
 				default :
 					return;
