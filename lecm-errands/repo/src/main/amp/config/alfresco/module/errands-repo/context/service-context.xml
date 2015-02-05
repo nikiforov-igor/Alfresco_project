@@ -285,6 +285,12 @@
                     <prop key="mimetype">text/xml</prop>
                     <prop key="redeploy">${redeploy.process.definitions}</prop>
                 </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/create-errands.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
             </list>
         </property>
         <property name="models">
@@ -522,6 +528,15 @@
         <property name="reportsForDeploy">
             <list>
                 <value>exec-doc-tree</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/actions/ga-create-errands.xml</value>
             </list>
         </property>
     </bean>

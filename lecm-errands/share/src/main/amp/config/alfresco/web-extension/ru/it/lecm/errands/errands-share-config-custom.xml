@@ -1216,6 +1216,94 @@
         </forms>
     </config>
 
+    <config evaluator="model-type" condition="activiti$createErrands">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecmErrandWf:executorAssoc"/>   <!-- lecm-errands:executor-assoc -->
+                    <show id="lecmErrandWf:isImportant"/>   <!-- lecm-errands:is-important -->
+                    <show id="lecmErrandWf:title"/>   <!-- lecm-errands:title -->
+                    <show id="lecmErrandWf:content"/>   <!-- lecm-errands:content -->
+                    <show id="lecmErrandWf:limitationDate"/>   <!-- lecm-errands:limitation-date -->
+                    <show id="lecmErrandWf:controllerAssoc"/>   <!-- lecm-errands:controller-assoc -->
+                    <show id="lecmErrandWf:coexecutorsAssoc"/>   <!-- lecm-errands:coexecutors-assoc -->
+                    <show id="lecmErrandWf:withoutInitiatorApproval"/>   <!-- lecm-errands:without-initiator-approval -->
+                    <show id="lecmErrandWf:startDate"/>   <!-- lecm-errands:start-date -->
+                    <show id="lecmErrandWf:justInTime"/>   <!-- lecm-errands:just-in-time -->
+
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecmErrandWf:executorAssoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:isImportant">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:title">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:content">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecmErrandWf:limitationDate" mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecmErrandWf:controllerAssoc"/>
+                    <field id="lecmErrandWf:coexecutorsAssoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="employeeAbsenceMarker">true</control-param>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:withoutInitiatorApproval">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultWithoutInitiatorApproval</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:startDate">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmErrandWf:justInTime">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$lecm-errands_document"/>

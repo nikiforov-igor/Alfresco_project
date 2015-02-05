@@ -276,5 +276,88 @@
 				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
 			</mandatory-aspects>
 		</type>
+
+		<type name="lecmErrandWf:createErrands">
+			<title>Поручение</title>
+			<parent>bpm:startTask</parent>
+			<properties>
+				<!-- Важность-->
+				<property name="lecmErrandWf:isImportant">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!-- Заголовок -->
+				<property name="lecmErrandWf:title">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Содержание-->
+				<property name="lecmErrandWf:content">
+					<type>d:text</type>
+				</property>
+				<!-- Срок поручения-->
+				<property name="lecmErrandWf:limitationDate">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+				</property>
+				<!-- Без утверждения Инициатором-->
+				<property name="lecmErrandWf:withoutInitiatorApproval">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<!-- Дата начала -->
+				<property name="lecmErrandWf:startDate">
+					<type>d:date</type>
+				</property>
+				<!-- Точно в срок-->
+				<property name="lecmErrandWf:justInTime">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+			<associations>
+				<!-- Исполнитель -->
+				<association name="lecmErrandWf:executorAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Контролер -->
+				<association name="lecmErrandWf:controllerAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Соисполнители -->
+				<association name="lecmErrandWf:coexecutorsAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</type>
     </types>
 </model>
