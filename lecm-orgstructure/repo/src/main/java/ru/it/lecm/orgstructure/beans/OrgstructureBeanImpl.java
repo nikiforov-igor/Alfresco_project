@@ -2184,6 +2184,22 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         return false;
     }
 
+	public List<NodeRef> getCurrentEmployeeHighestUnits() {
+		List<NodeRef> result = new ArrayList<>();
+		NodeRef employee = getCurrentEmployee();
+		List<NodeRef> employeeUnits = getEmployeeUnits(employee, false, true, false);
+
+		for (NodeRef employeeUnit : employeeUnits) {
+			NodeRef parent = nodeService.getPrimaryParent(employeeUnit).getParentRef();
+			NodeRef potentialOrganizationsRoot = nodeService.getPrimaryParent(parent).getParentRef();
+			if(TYPE_STRUCTURE.equals(nodeService.getType(potentialOrganizationsRoot))) {
+				result.add(employeeUnit);
+			}
+		}
+
+		return result;
+	}
+
     public boolean hasGlobalOrganizationsAccess() {
         Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
         return auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS");

@@ -790,4 +790,6 @@ public interface OrgstructureBean {
     public boolean hasOrgChilds(NodeRef unit, boolean checkAccess);
 
     boolean hasGlobalOrganizationsAccess();
+
+	public List<NodeRef> getCurrentEmployeeHighestUnits();
 }
