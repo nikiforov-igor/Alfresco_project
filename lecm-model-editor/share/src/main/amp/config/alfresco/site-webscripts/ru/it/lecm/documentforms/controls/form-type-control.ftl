@@ -56,16 +56,16 @@
 	</div>
 </#if>
 <div class="clear"></div>
-
-<@formLib.renderFieldHelp field=field />
-<@inlineScript group="lecm-head-resources">
+<@inlineScript>
 (function () {
 
 	function process() {
 		new LogicECM.module.FormsEditor.FormType("${fieldHtmlId}").setOptions({
 			selectedValue: "${fieldValue}",
 			mandatory: ${field.mandatory?string},
-			fromIdField: "${field.control.params.fromIdField!''}"
+			formIdField: "${field.control.params.formIdField!''}",
+			idField: "${field.control.params.idField!''}",
+			defaultIds: [${field.control.params.defaultIds!''}]
 		}).setMessages(${messages});
 	}
 

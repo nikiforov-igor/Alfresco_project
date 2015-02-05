@@ -61,7 +61,7 @@
         </div>
     </div>
 <#else>
-    <div class="control textfield editmode">
+    <div class="control textfield editmode <#if field.control.params.containerStyleClass??>${field.control.params.containerStyleClass}</#if>">
         <div class="label-div">
             <label for="${fieldHtmlId}">${field.label?html}:
                 <#if mandatory>

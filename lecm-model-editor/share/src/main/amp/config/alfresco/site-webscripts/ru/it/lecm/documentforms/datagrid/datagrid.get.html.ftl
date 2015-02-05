@@ -53,7 +53,7 @@
 							bubblingLabel: "${bubblingLabel!''}",
 							showCheckboxColumn: false,
 							attributeForShow: "cm:name",
-							excludeColumns: ["lecm-forms-editor:form-evaluator", "lecm-forms-editor:form-id"],
+							excludeColumns: ["lecm-forms-editor:id", "lecm-forms-editor:form-id", "lecm-forms-editor:form-evaluator"],
 							editFormWidth: "70em"
 						}).setMessages(${messages});
 			}

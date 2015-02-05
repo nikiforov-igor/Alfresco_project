@@ -24,7 +24,6 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 	LogicECM.module.FormsEditor.FormType = function (fieldHtmlId) {
 		LogicECM.module.FormsEditor.FormType.superclass.constructor.call(this, 'LogicECM.module.FormsEditor.FormType', fieldHtmlId, ['container', 'history']);
-		this.formIds = [];
 		return this;
 	};
 
@@ -33,10 +32,12 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 			selectedValue: null,
 			mandatory: false,
 			modelName: null,
-			formIdField: null
+			formIdField: null,
+			idField: null,
+			defaultIds: []
 		},
 
-		formIds: null,
+		formIds: {},
 
 		onReady: function() {
 			YAHOO.util.Event.on(this.id, 'change', this.onSelectChange, this, true);
@@ -68,25 +69,25 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 					fn: function (response) {
 						var select, option,
 							oResult, oResults = response.json,
-							formIdField,
-							selectedFormId = '',
+							idField,
+							idFieldValue,
 							selected, i;
 						if (oResults) {
 							select = Dom.get(this.id);
 
-
-							formIdField = select.form[this.options.formIdField];
-							if (formIdField) {
-								selectedFormId = formIdField.value;
-							}
+							idField = select.form[this.options.idField];
+							idFieldValue = idField ? idField.value : '';
 
 							for (i in oResults) {
 								oResult = oResults[i];
-								oResult.id = oResult.id != null ? oResult.id : '';
-								selected = oResult.evaluatorType == this.options.selectedValue && oResult.id == selectedFormId;
+								oResult.id = oResult.id ? oResult.id : '';
+								selected = oResult.evaluatorType == this.options.selectedValue && oResult.id == idFieldValue;
 
 								if (!this.checkExistForm(existForms, oResult) || selected) {
-									this.formIds[oResult.localName] = oResult.id;
+									this.formIds[oResult.localName] = {
+										id: oResult.id,
+										formId: oResult.formId
+									};
 
 									option = document.createElement('option');
 									option.value = oResult.evaluatorType;
@@ -117,17 +118,28 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 		onSelectChange: function() {
 			var select = Dom.get(this.id),
+				idField = select.form[this.options.idField],
 				formIdField = select.form[this.options.formIdField],
+				formIdFieldContainer,
 				value;
 
-			if (formIdField) {
+			if (idField && formIdField) {
 				value = select[select.selectedIndex].innerHTML;
-				formIdField.value = this.formIds[value];
+				idField.value = this.formIds[value].id;
+				formIdField.value = this.formIds[value].formId;
+				if (formIdField.parentElement && formIdField.parentElement.parentElement && formIdField.parentElement.parentElement.parentElement) {
+					formIdFieldContainer = formIdField.parentElement.parentElement.parentElement;
+					if (this.options.defaultIds.indexOf(idField.value) >= 0) {
+						Dom.addClass(formIdFieldContainer, 'hidden');
+					} else {
+						Dom.removeClass(formIdFieldContainer, 'hidden');
+					}
+				}
 			}
 
 			if (this.options.mandatory) {
 				YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
 			}
 		}
-	 });
+	});
 })();

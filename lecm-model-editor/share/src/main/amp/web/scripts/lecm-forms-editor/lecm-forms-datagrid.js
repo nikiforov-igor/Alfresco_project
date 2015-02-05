@@ -29,7 +29,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 	 */
 	YAHOO.lang.augmentObject(LogicECM.module.FormsEditor.DataGrid.prototype, {
 		formTemplates: null,
-	    formTypes: null,
+		formTypes: null,
 
 		draw: function()  {
 			this.loadConfigs();
@@ -53,20 +53,20 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 				}
 
 				if (oData) {
-					if (oColumn.field == "prop_lecm-forms-editor_form-template" && grid.formTemplates != null) {
+					if (oColumn.field == "prop_lecm-forms-editor_form-template" && grid.formTemplates) {
 						for (var i = 0; i < grid.formTemplates.length; i++) {
 							if (oData.value == grid.formTemplates[i].template) {
 								html += grid.formTemplates[i].localName;
 							}
 						}
 					}
-				} else if (oColumn.field == "prop_lecm-forms-editor_form-type" && grid.formTypes != null) {
+				} else if (oColumn.field == "prop_lecm-forms-editor_form-type" && grid.formTypes) {
 					var evaluator = oRecord.getData("itemData")["prop_lecm-forms-editor_form-evaluator"];
-					var propFormId = oRecord.getData("itemData")["prop_lecm-forms-editor_form-id"];
-					if (evaluator != null && propFormId != null) {
+					var propId = oRecord.getData("itemData")["prop_lecm-forms-editor_id"];
+					if (evaluator && propId) {
 						for (i = 0; i < grid.formTypes.length; i++) {
-							var formId = grid.formTypes[i].id != null ?grid.formTypes[i].id : "";
-							if (evaluator.value == grid.formTypes[i].evaluatorType && propFormId.value == formId) {
+							var id = grid.formTypes[i].id ? grid.formTypes[i].id : "";
+							if (evaluator.value == grid.formTypes[i].evaluatorType && propId.value == id) {
 								html += grid.formTypes[i].localName;
 							}
 						}
@@ -83,7 +83,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 				{
 					fn: function (response) {
 						var oResults = response.json;
-						if (oResults != null) {
+						if (oResults) {
 							this.formTemplates = oResults;
 						}
 					},
@@ -96,7 +96,7 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 				successCallback: {
 					fn: function (response) {
 						var oResults = response.json;
-						if (oResults != null) {
+						if (oResults) {
 							this.formTypes = oResults;
 						}
 					},
