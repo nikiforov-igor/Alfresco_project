@@ -5,6 +5,7 @@
  */
 package ru.it.lecm.operativestorage.beans;
 
+import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
@@ -26,6 +27,7 @@ public interface OperativeStorageService {
 	QName ASSOC_NOMENCLATURE_CASE_VOLUME = QName.createQName(OS_NAMESPACE, "nomenclature-case-volume-child-assoc");
 	QName ASSOC_NOMENCLATURE_CASE_YEAR = QName.createQName(OS_NAMESPACE, "nomenclature-case-year-assoc");
 	QName ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-unit-assoc");
+	QName ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION = QName.createQName(OS_NAMESPACE, "nomenclature-organization-assoc");
 
 
 	String BR_ARCHIVIST = "DA_ARCHIVISTS";
@@ -45,6 +47,8 @@ public interface OperativeStorageService {
 	QName PROP_NOMENCLATURE_UNIT_SECTION_INDEX = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-index");
 	QName PROP_NOMENCLATURE_VOLUMES_NUMBER = QName.createQName(OS_NAMESPACE, "nomenclature-case-volumes-number");
 	QName PROP_NOMENCLATURE_YEAR_SECTION_YEAR = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-year");
+	QName PROP_NOMENCLATURE_YEAR_SECTION_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-status");
+	QName PROP_NOMENCLATURE_CASE_YEAR_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-case-year-section-status");
 	QName TYPE_BASE_OS = QName.createQName(OS_NAMESPACE, "base");
 	QName TYPE_NOMENCLATURE_CASE = QName.createQName(OS_NAMESPACE, "nomenclature-case");
 	QName TYPE_NOMENCLATURE_CASE_VOLUME = QName.createQName(OS_NAMESPACE, "nomenclature-case-volume");
@@ -105,5 +109,7 @@ public interface OperativeStorageService {
 	boolean orgUnitAssociationExists(NodeRef nodeRef, NodeRef orgUnitRef);
 
 	public boolean checkNDSectionAssociationExists(NodeRef orgUnitRef, NodeRef ndSectionRef);
+
+	public List<NodeRef> getOrganizationsYearSections(NodeRef organizationRef);
 
 }

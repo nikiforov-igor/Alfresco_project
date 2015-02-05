@@ -2,7 +2,6 @@
 <#assign dialogId = args.htmlid>
 <script type="text/javascript">
 	(function(){
-		debugger;
 		var visible_id = '${dialogId}_assoc_lecm-os_nomenclature-unit-section-unit-assoc-cntrl-currentValueDisplay';
 		var errorContainer = '${dialogId}_assoc_lecm-os_nomenclature-unit-section-unit-assoc-cntrl-autocomplete-input'
 		var subscribed = false;
@@ -69,7 +68,7 @@
 						} else {
 							valid = false;
 							this.balloon.show();
-						} 
+						}
 					},
 				async: false
 			});

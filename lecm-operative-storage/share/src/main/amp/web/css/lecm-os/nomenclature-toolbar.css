@@ -1,0 +1,12 @@
+#yui-main .nomenclature .datalist-toolbar .header-bar .left > div {
+    height: 31px;
+}
+#yui-main .nomenclature .datalist-toolbar {
+    border-bottom: 1px solid #ccc;
+    overflow-y: hidden;
+}
+
+.datagrid .onActionOpen a {
+    background-image: url(../../components/images/download-file-16.png);
+}
+

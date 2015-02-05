@@ -18,7 +18,7 @@
 </script>
 
 
-<div id="${el}-body" class="os-global-settings">
+<div id="${el}-body" class="eds-global-settings">
 	<div class="yui-g">
 		<div class="yui-u first">
 			<div class="title">${msg('label.title')}</div>

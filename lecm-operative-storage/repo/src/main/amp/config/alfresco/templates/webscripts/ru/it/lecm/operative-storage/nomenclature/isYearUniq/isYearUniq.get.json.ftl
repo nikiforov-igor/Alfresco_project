@@ -1,0 +1,1 @@
+{"uniq": ${result?string}}

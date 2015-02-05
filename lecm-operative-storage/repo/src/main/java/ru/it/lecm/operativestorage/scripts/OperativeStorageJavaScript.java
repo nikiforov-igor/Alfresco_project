@@ -5,13 +5,18 @@
  */
 package ru.it.lecm.operativestorage.scripts;
 
+import java.util.ArrayList;
 import java.util.List;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.RegexQNamePattern;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -195,6 +200,48 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 
 	public boolean orgUnitAssociationExists(String nodeRefStr, String orgUnitRef) {
 		return operativeStorageService.checkNDSectionAssociationExists(new NodeRef(orgUnitRef), new NodeRef(nodeRefStr));
+	}
+
+	public Scriptable getIgnoredYearsString() {
+		boolean isCentralized = (boolean) nodeService.getProperty(operativeStorageService.getSettings(), OperativeStorageService.PROP_OPERATIVE_STORAGE_CENRALIZED);
+		List<NodeRef> includedYears = new ArrayList<>();
+		List<NodeRef> ignoredYears = new ArrayList<>();
+
+		if(!isCentralized) {
+			includedYears = operativeStorageService.getOrganizationsYearSections(null);
+		}
+
+		List<ChildAssociationRef> yearSectionsChildAssocs = nodeService.getChildAssocs(operativeStorageService.getNomenclatureFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+
+		for (ChildAssociationRef child : yearSectionsChildAssocs) {
+			NodeRef potentialIgnoredYear = child.getChildRef();
+			String potentialIgnoredYearStatus = (String) nodeService.getProperty(potentialIgnoredYear, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_STATUS);
+			if((!isCentralized && !includedYears.contains(potentialIgnoredYear)) || !potentialIgnoredYearStatus.equals("APPROVED")) {
+				ignoredYears.add(potentialIgnoredYear);
+			}
+		}
+
+		return createScriptable(ignoredYears);
+	}
+
+	public boolean isYearUniq(String year, String orgNodeRef) {
+		boolean isCentralized = (boolean) nodeService.getProperty(operativeStorageService.getSettings(), OperativeStorageService.PROP_OPERATIVE_STORAGE_CENRALIZED);
+		List<Integer> yearsList = new ArrayList<>();
+
+		if(!isCentralized) {
+			List<NodeRef> yearNodeRefList = operativeStorageService.getOrganizationsYearSections(new NodeRef(orgNodeRef));
+			for (NodeRef yearNodeRef : yearNodeRefList) {
+				yearsList.add((Integer) nodeService.getProperty(yearNodeRef, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+			}
+		} else {
+			List<ChildAssociationRef> assocs = nodeService.getChildAssocs(operativeStorageService.getNomenclatureFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+			for (ChildAssociationRef assoc : assocs) {
+				yearsList.add((Integer) nodeService.getProperty(assoc.getChildRef(), OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+			}
+		}
+
+		return !yearsList.contains(Integer.parseInt(year));
+
 	}
 
 }

@@ -1,2 +1,2 @@
-{"isCentralized": "${result?string}"}
+{"isCentralized": ${result?string}}
 

@@ -17,6 +17,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.Path;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
@@ -409,4 +410,30 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	}
 
-}
+	@Override
+	public List<NodeRef> getOrganizationsYearSections(NodeRef organizationRef) {
+		List<NodeRef> result = new ArrayList<>();
+		List<NodeRef> organizations = new ArrayList<>();
+
+		if(organizationRef != null) {
+			organizations.add(organizationRef);
+		} else {
+			//Если не передали организацию, то возьмём все организации текущего сотрудника
+			organizations = orgstructureService.getCurrentEmployeeHighestUnits();
+		}
+
+		for (NodeRef organization : organizations) {
+			List<AssociationRef> assocList = nodeService.getSourceAssocs(organization, ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION);
+
+			for (AssociationRef assoc : assocList) {
+				result.add(assoc.getSourceRef());
+			}
+
+		}
+
+
+		return result;
+
+	}
+
+		}
