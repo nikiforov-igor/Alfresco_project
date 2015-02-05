@@ -9,7 +9,7 @@
 
 	<span id="${controlId}-add-employee" class="yui-button yui-push-button">
 		<span class="first-child">
-			<button type="button">Добавить участника</button>
+			<button type="button">${msg("lecm.review.label.add.participant")}</button>
 		</span>
 	</span>
 

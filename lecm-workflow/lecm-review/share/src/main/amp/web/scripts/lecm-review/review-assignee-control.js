@@ -23,7 +23,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 		this.name = 'LogicECM.module.Review.AssigneeControl';
 
 		YAHOO.Bubbling.fire('registerValidationHandler', {
-			message: 'Необходимо добавить участников ознакомления',
+			message: Alfresco.util.message('lecm.review.message.add.review.participant'),
 			fieldId: addEmployeeButtonElement,
 			handler: this.assigneesValidator,
 			when: 'keyup'
@@ -81,7 +81,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 				failureCallback: {
 					fn: function () {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось получить nodeRef на список ознакомления'
+							text: Alfresco.util.message('lecm.review.message.get.review-list.ref.fail')
 						});
 					}
 				}
@@ -112,7 +112,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function (p_form, simpleDialog) {
-						simpleDialog.dialog.setHeader('Добавить участников ознакомления');
+						simpleDialog.dialog.setHeader(Alfresco.util.message('lecm.review.title.add.review.participants'));
 						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
