@@ -30,7 +30,8 @@
 <#assign itemType = field.control.params.itemType!''>
 
 <#assign shouldInitAllowed = allowedBusinessRoleId ? has_content>
-<#assign formAddAssigneeTitle = (field.control.params.formAddAssigneeTitle) ! 'Добавить участника'>
+<#assign formAddAssigneeTitle = (field.control.params.formAddAssigneeTitle) ! 'title.workflow.add.participant'>
+<#assign formAddAssigneeTitle = msg(formAddAssigneeTitle)>
 
 <#-- Отправка данных -->
 <#assign concurrencyInputId = namespaceId + '-concurrency-input'>
@@ -49,7 +50,7 @@
 <div id='${containerId}' class="workflow-list-control-container">
 	<#-- Элемент-затемнитель контрола, который показывается на время его инициализации -->
 	<div id="${dimmerId}" class="workflow-list-control-dimmer">
-		<div class="workflow-list-control-dimmer__inner">Подождите, пожалуйста...</div>
+		<div class="workflow-list-control-dimmer__inner">${msg("message.please-wait")}</div>
 	</div>
 
 	<#-- NodeRef на папку -->
@@ -60,7 +61,7 @@
 	<div>
 		<div class="control viewmode">
 			<div class="label-div">
-				<label for="${radioWorkflowTypeId}">Тип бизнес-процесса:</label>
+				<label for="${radioWorkflowTypeId}">${msg("label.business-process.type")}</label>
 			</div>
 			<div class="container">
 				<div class="value-div">
@@ -78,7 +79,7 @@
 	<div>
 		<div class="control viewmode">
 			<div class="label-div">
-				<label for="${menuContainerId}">Список:</label>
+				<label for="${menuContainerId}">${msg("label.list")}:</label>
 			</div>
 			<div class="container">
 				<div class="value-div">
@@ -103,7 +104,7 @@
 
 <#if isRoute>
 	<div class='form-field'>
-		Срок <input type="number" id="${daysToCompleteFieldId}" class="days-to-complete"> дней после отправки по маршруту
+		${msg("label.term")} <input type="number" id="${daysToCompleteFieldId}" class="days-to-complete"> ${msg("label.days.sending.route")}
 	</div>
 </#if>
 </div>

@@ -88,7 +88,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось переместить элемент'
+							text: Alfresco.util.message('label.move.item.fail')
 						});
 					}
 				}
@@ -173,7 +173,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось получить nodeRef на временный список согласования'
+							text: Alfresco.util.message('lable.get.temp.approve.list.noderef.fail')
 						});
 					}
 				}
@@ -216,7 +216,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function(form, simpleDialog) {
-						simpleDialog.dialog.setHeader('Сохранить список как...');
+						simpleDialog.dialog.setHeader(Alfresco.util.message('title.save.list.as'));
 					}
 				},
 				doBeforeAjaxRequest: {
@@ -235,7 +235,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				onFailure: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось открыть форму сохранения списка'
+							text: Alfresco.util.message('message.open.save.list.form.fail')
 						});
 					}
 				}
@@ -283,7 +283,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 						workflowList._updateListsMenu(workflowList.options.currentListRef);
 
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Список успешно сохранён'
+							text: Alfresco.util.message('message.list.saved.success')
 						});
 					}
 				},
@@ -295,9 +295,9 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 
 						// TERNARY? NO!
 						if (response.serverResponse.status === 418) {
-							text = 'Не удалось сохранить список: список с таким именем уже существует';
+							text = Alfresco.util.message('message.same-name.list.saved.fail');
 						} else {
-							text = 'Не удалось сохранить список из-за внутренней ошибки сервера';
+							text = Alfresco.util.message('message.save.list.server.error');
 						}
 
 						Alfresco.util.PopupManager.displayMessage({
@@ -330,7 +330,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 					failureCallback: {
 						fn: function() {
 							Alfresco.util.PopupManager.displayMessage({
-								text: 'Не удалось получить сотрудников бизнес-роли ' + workflowList.options.allowedBusinessRoleId
+								text: Alfresco.util.message('message.get.employees.by.role.fail') + ' ' + workflowList.options.allowedBusinessRoleId
 							});
 						}
 					}
@@ -349,7 +349,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 					menu: [
 						{}
 					],
-					label: 'Выберите список'
+					label: Alfresco.util.message('label.select.list')
 				});
 
 				this.widgets.btnSelectList.getMenu().subscribe('click', this._onListsMenuClick, null, this);
@@ -378,7 +378,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			this.widgets.btnAddAssignee = new YAHOO.widget.Button({
 				container: this.options.buttonsContainerId,
 				type: 'push',
-				label: 'Добавить сотрудника',
+				label: Alfresco.util.message('label.add.employee'),
 				onclick: {
 					fn: this._onAddAssigneeButtonClick,
 					obj: {type: 'assignee'},
@@ -407,8 +407,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				});
 				this.widgets.radioWorkflowType.subscribe('valueChange', this._onConcurrencyChange, null, this);
 				this.widgets.radioWorkflowType.addButtons([
-					{label: 'Последовательное', value: 'sequential', checked: true},
-					{label: 'Параллельное', value: 'parallel'}
+					{label: Alfresco.util.message('label.sequential'), value: 'sequential', checked: true},
+					{label: Alfresco.util.message('label.parallel'), value: 'parallel'}
 				]);
 				this.widgets.radioWorkflowType.getButton(0).setStyle('margin-left', '1px');
 
@@ -419,7 +419,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				this.widgets.btnComputeTerms = new YAHOO.widget.Button({
 					container: this.options.buttonsContainerId,
 					type: 'push',
-					label: 'Рассчитать сроки',
+					label: Alfresco.util.message('label.calculate.terms'),
 					onclick: {
 						fn: this._onComputeTermsButtonClick,
 						scope: this
@@ -445,7 +445,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось рассчитать сроки, попробуйте еще раз'
+							text: Alfresco.util.message('message.calculate.dates.fail')
 						});
 					}
 				}
@@ -527,7 +527,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось сохранить тип списка'
+							text: Alfresco.util.message('message.save.list.type.fail')
 						});
 					}
 				}
@@ -580,7 +580,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось сохранить значение срока'
+							text: Alfresco.util.message('message.save.term.value.fail')
 						});
 					}
 				}
@@ -787,7 +787,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось удалить список'
+							text: Alfresco.util.message('message.remove.list.fail')
 						});
 					}
 				}
@@ -830,7 +830,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 							currentList = lists[i];
 							// TERNARY? NO!
 							if (currentList.nodeRef === response.json.defaultList) {
-								title = 'Список по умолчанию';
+								title = Alfresco.util.message('title.default.list');
 							} else {
 								title = currentList.title;
 							}
@@ -855,7 +855,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось получить перечень списков'
+							text: Alfresco.util.message('message.get.list.of.lists.fail')
 						});
 					}
 				}
@@ -882,7 +882,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 						type: 'datagrid-action-link-' + this.options.datagridId + '-label',
 						id: 'onMoveUp',
 						permission: 'edit',
-						label: 'Переместить вверх',
+						label: Alfresco.util.message('message.move.up'),
 						evaluator: function() {
 							return this.options.concurrency.toLowerCase() === 'sequential';
 						}
@@ -890,7 +890,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 						type: 'datagrid-action-link-' + this.options.datagridId + '-label',
 						id: 'onMoveDown',
 						permission: 'edit',
-						label: 'Переместить вниз',
+						label: Alfresco.util.message('message.move.down'),
 						evaluator: function() {
 							return this.options.concurrency.toLowerCase() === 'sequential';
 						}
@@ -898,7 +898,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 						type: 'datagrid-action-link-' + this.options.datagridId + '-label',
 						id: 'onActionDelete',
 						permission: 'delete',
-						label: 'Удалить'
+						label: Alfresco.util.message('label.remove')
 					}],
 				datagridMeta: {
 					datagridFormId: this._getDatagridFormId(),
@@ -977,7 +977,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 					scope: this,
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'При добавлении элемента произошла ошибка, попробуйте переоткрыть форму'
+							text: Alfresco.util.message('message.adding.item.fail')
 						});
 					}
 				}

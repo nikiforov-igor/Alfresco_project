@@ -9,7 +9,7 @@
 	YAHOO.Bubbling.on('mandatoryControlValueUpdated', function() {
 		if (!subscribed) {
 			YAHOO.Bubbling.fire('registerValidationHandler', {
-				message: 'Необходимо указать комментарий',
+				message: '${msg("signing.message.specify.comment")}',
 				fieldId: commentControl_id,
 				handler: commentValidation,
 				when: 'keyup'
