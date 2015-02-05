@@ -4,7 +4,7 @@
     [
         <#list list as item>
         {
-        "key" : "${item.key}",
+        "key" : "${msg(item.key)}",
         "skip": ${item.skip?string},
         "amount" : ${item.amount},
         "filter" : "${item.filter}"
@@ -14,7 +14,7 @@
     ],
 "members": {
     <#list members as member>
-    "key": "${member.key}",
+    "key": "${msg(member.key)}",
     "amountMembers": ${member.amountMembers}
     </#list>
 }

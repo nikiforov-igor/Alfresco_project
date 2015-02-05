@@ -22,10 +22,10 @@ for (var key in map) {
         filter: map[key]
     });
 }
-if (list.length == 0) { //ддобавляем пункт Все, если у нас не заданы фильтры
+if (list.length == 0) { //добавляем пункт Все, если у нас не заданы фильтры
     var amountDocs = documentScript.getAmountDocuments(types, paths, ["*"], considerFilter);
     list.push({
-        key: "Все",
+        key: "msg.all",
         skip: false,
         amount: amountDocs,
         filter: "*"
@@ -34,7 +34,7 @@ if (list.length == 0) { //ддобавляем пункт Все, если у н
 
 var amountMembers = documentScript.getAmountMembers(type);
 members.push({
-    key: "Участники",
+    key: "msg.participants",
     amountMembers: amountMembers
 });
 model.members = members;

@@ -7,7 +7,7 @@
 </#list>
 <#if (group?size > 0)>
 <#list group as childGroup>
-${space}Группа: ${childGroup.name}
+${space}${msg("msg.group")}: ${childGroup.name}
 <#if childGroup.subGroups?? >
 <#assign subIndent=indent+1 />
 <@printGroup childGroup.subGroups subIndent/>

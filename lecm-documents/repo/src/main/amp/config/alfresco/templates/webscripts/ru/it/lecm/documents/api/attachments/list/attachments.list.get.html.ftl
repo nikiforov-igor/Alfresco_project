@@ -47,6 +47,6 @@
 </div>
 <#else>
 <div class='emptyContainer'>
-	<h1>Для документа не определено ни одной категории вложений</h1>
+	<h1>${msg("no.categories")}</h1>
 </div>
 </#if>

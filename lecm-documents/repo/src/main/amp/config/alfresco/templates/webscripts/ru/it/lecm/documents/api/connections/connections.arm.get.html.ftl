@@ -47,7 +47,7 @@
 		<#if trCount == 0>
 			<tr class="no-records">
                 <td style="width:80px;">&nbsp;</td>
-				<td>Нет связанных документов</td>
+				<td>${msg("no.connected.documents")}</td>
 			</tr>
 		</#if>
 	</tbody>

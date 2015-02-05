@@ -47,7 +47,7 @@ YAHOO.Bubbling.on("graphContainerReady", function() {
 							var linkBlock = '<span class="link-span">' +
 									(oRecord._oData.connectionType ? '<p class="connectionType">' + oRecord._oData.connectionType + '</p>' : '') +
 									'<a target="_blank" href="' + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + nodeRef + '" >' + oData + '</a>' +
-									(oRecord._oData.status ? '<p class="connectionType">Статус: ' + oRecord._oData.status + '</p>' : '') + '</span>';
+									(oRecord._oData.status ? '<p class="connectionType">'+Alfresco.util.message('msg.status') +': ' + oRecord._oData.status + '</p>' : '') + '</span>';
 							var descrBlock = '<div class="item-description">' + directionIconSpan + docTypeIcon + linkBlock + '</div>';
 							el.innerHTML = descrBlock || '--[ No description ]--';
 							if (previosDocRef) {
