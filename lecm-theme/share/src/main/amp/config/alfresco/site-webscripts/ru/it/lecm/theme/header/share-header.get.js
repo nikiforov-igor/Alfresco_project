@@ -10,7 +10,7 @@ var logicECMWidgets = [
         name: "alfresco/header/AlfMenuItem",
         config: {
             id: "SED_MENU_ITEM_ADDITIONAL",
-            label: "Логика СЭД",
+            label: msg.get("label.sed_title"),
             targetUrl: "arm?code=SED",
             iconImage: imagesRoot + "docs_16_light.png"
         }
@@ -20,7 +20,7 @@ var logicECMWidgets = [
         name: "alfresco/header/AlfMenuItem",
         config: {
         id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
-        label: "Справочник организации",
+        label: msg.get("label.orgstructure-dictionary"),
         targetUrl: "orgstructure-dictionary",
         iconImage: imagesRoot + "orgstructure_light.png"
         }
@@ -30,7 +30,7 @@ var logicECMWidgets = [
 	    name: "alfresco/header/AlfMenuItem",
 	    config: {
 	        id: "ADMINISTRATION_MENU_ITEM",
-	        label: "Администрирование",
+	        label: msg.get("label.admin.page"),
 	        targetUrl: "admin",
             iconImage: imagesRoot + "settings_16_light.png"
         }
@@ -43,7 +43,7 @@ var standartWidgets = [
 	    name: "alfresco/header/AlfMenuItem",
 	    config: {
 	        id: "HOME_MENU_ITEM",
-	        label: "Домашняя страница",
+	        label: msg.get("label.home.page"),
 	        targetUrl: "user/" + encodeURIComponent(user.name) + "/dashboard"
 	    }
 	},
@@ -52,7 +52,7 @@ var standartWidgets = [
          name: "alfresco/menus/AlfMenuItem",
          config: {
             id: "PEOPLE_MENU_ITEM",
-            label: "Люди",
+            label: msg.get("label.people"),
             targetUrl: "people-finder"
          }
     }
@@ -64,7 +64,7 @@ if (user.isAdmin || showRepositoryLink == "true") {
          name: "alfresco/menus/AlfMenuItem",
          config: {
             id: "REPOSITORY_MENU_ITEM",
-            label: "Репозиторий",
+            label: msg.get("label.repository"),
             targetUrl: "repository"
          }
     });
@@ -77,7 +77,7 @@ var myWidgets = [
        config:
        {
           id: "MY_TASKS_MENU_ITEM",
-          label: "Мои задачи",
+          label: msg.get("label.my-tasks"),
           iconClass: "alf-mytasks-icon",
           targetUrl: "my-tasks#filter=workflows|active"
        }
@@ -88,7 +88,7 @@ var myWidgets = [
        config:
        {
           id: "MY_WORKFLOWS_MENU_ITEM",
-          label: "Мои процессы",
+          label: msg.get("label.my-workflows"),
           iconClass: "alf-myworkflows-icon",
           targetUrl: "my-workflows#filter=workflows|active"
        }
@@ -98,7 +98,7 @@ var myWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "MY_FILES_MENU_ITEM",
-			label: "Мои файлы",
+			label: msg.get("label.my-files"),
 			targetUrl: "context/mine/myfiles"
 		}
     },
@@ -108,7 +108,7 @@ var myWidgets = [
         config:
         {
            id: "USER_MENU_PROFILE_MENU_ITEM",
-           label: "Мой профиль",
+           label: msg.get("label.my-profile"),
            iconClass: "alf-user-profile-icon",
            targetUrl: "user/" + encodeURIComponent(user.name) + "/profile"
         }
@@ -121,7 +121,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_CONSOLE_MENU_ITEM",
-			label: "Приложение",
+			label: msg.get("label.application"),
 			targetUrl: "console/admin-console/application"
 		}
 	},
@@ -130,7 +130,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_GROUPS_MENU_ITEM",
-			label: "Группы",
+			label: msg.get("label.groups"),
 			targetUrl: "console/admin-console/groups"
 		}
 	},
@@ -139,7 +139,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_REPOSITORY_MENU_ITEM",
-			label: "Репозиторий",
+			label: msg.get("label.admin-repository"),
 			targetUrl: "console/admin-console/repository"
 		}
 	},
@@ -148,7 +148,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_USERS_MENU_ITEM",
-			label: "Пользователи",
+			label: msg.get("label.users"),
 			targetUrl: "console/admin-console/users"
 		}
 	},
@@ -157,7 +157,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_DOC_MODEL_MENU_ITEM",
-			label: "Модель документов",
+			label: msg.get("label.documents.model"),
 			targetUrl: "doc-model-list"
 		}
 	},
@@ -166,7 +166,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_REPORTS_EDITOR_MENU_ITEM",
-			label: "Редактор отчётов",
+			label: msg.get("label.reports.editor"),
 			targetUrl: "reports-editor"
 		}
 	},
@@ -175,7 +175,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_ARM_SETTINGS",
-			label: "Настройка АРМ",
+			label: msg.get("label.arm.settings"),
 			targetUrl: "arm-settings"
 		}
 	},
@@ -184,7 +184,7 @@ var adminWidgets = [
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_GROUP_ACTIONS",
-			label: "Групповые операции",
+			label: msg.get("label.group.actions"),
 			targetUrl: "group-actions"
 		}
 	}
@@ -196,7 +196,7 @@ if (!conditionEditionTeam) {
 		name: "alfresco/menus/AlfMenuItem",
 		config: {
 			id: "ADMIN_REPLIACATION_MENU_ITEM",
-			label: "Репликация",
+			label: msg.get("label.replication"),
 			targetUrl: "console/admin-console/replication-jobs"
 		}
 	});
@@ -208,27 +208,27 @@ var moreMenu = {
     name: "alfresco/header/AlfMenuBarPopup",
     config: {
         id: "LOGIC_ECM_MORE_MENU_BAR",
-        label: "Ещё...",
+        label: msg.get("label.more"),
         widgets: [
 	        {
 	            name: "alfresco/menus/AlfMenuGroup",
 	            id: "LOGIC_ECM_WIDGETS",
 	            config: {
-	                label: "Логика ECM",
+	                label:  msg.get("label.logic-ecm.menu-group"),
 	                widgets: logicECMWidgets
 	            }
 	        },
 	        {
 	            name: "alfresco/menus/AlfMenuGroup",
 	            config: {
-	                label: "Стандартные",
+	                label: msg.get("label.commons.menu-group"),
 	                widgets: standartWidgets
 	            }
 	        },
 	        {
 	            name: "alfresco/menus/AlfMenuGroup",
 	            config: {
-	                label: "Мои...",
+	                label: msg.get("label.my.menu-group"),
 	                widgets: myWidgets
 	            }
 	        }
@@ -240,7 +240,7 @@ if (user.isAdmin){
 	moreMenu.config.widgets.push({
 		name: "alfresco/menus/AlfMenuGroup",
 		config: {
-			label: "Администрирование",
+			label: msg.get("label.administration.menu-group"),
 			widgets: adminWidgets
 		}
 	});
@@ -252,7 +252,7 @@ var appItems = [
 		name: "alfresco/menus/AlfMenuBarItem",
 		config: {
 			id: "SED_MENU_ITEM",
-			label: "Логика СЭД",
+			label: msg.get("label.sed.menu.item"),
 			targetUrl: "arm?code=SED"
 		}
 	},
@@ -261,7 +261,7 @@ var appItems = [
 		name: "logic_ecm/notifications/NotificationsPopup",
 		config: {
 			id: "NOTIFICATIONS",
-			label: "Уведомления"
+			label: msg.get("label.notifications.menu-item")
 		}
 	},
 	{
@@ -269,7 +269,7 @@ var appItems = [
 		name: "alfresco/header/AlfSitesMenu",
 		config: {
 			id: "HEADER_SITES_MENU",
-			label: "Сайты",
+			label: msg.get("label.sites.menu"),
 			currentSite: page.url.templateArgs.site,
 			currentUser: user.name
 		}
