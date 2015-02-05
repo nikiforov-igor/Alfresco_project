@@ -1,11 +1,11 @@
 /**
 * LogicECM root namespace.
-    *
+*
 * @namespace LogicECM
 */
 // Ensure LogicECM root object exists
-if (typeof LogicECM == "undefined" || !LogicECM) {
-    LogicECM = {};
+if (typeof LogicECM == 'undefined' || !LogicECM) {
+	LogicECM = {};
 }
 
 /**
@@ -20,113 +20,114 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
 (function() {
 
-    var Dom = YAHOO.util.Dom;
-    LogicECM.module.FormsEditor.FormType = function (fieldHtmlId)
-    {
-		LogicECM.module.FormsEditor.FormType.superclass.constructor.call(this, "LogicECM.module.FormsEditor.FormType", fieldHtmlId, ["container", "history"]);
-	    this.formIds = [];
-	    return this;
-    };
+	var Dom = YAHOO.util.Dom;
 
-    YAHOO.extend(LogicECM.module.FormsEditor.FormType, Alfresco.component.Base, {
+	LogicECM.module.FormsEditor.FormType = function (fieldHtmlId) {
+		LogicECM.module.FormsEditor.FormType.superclass.constructor.call(this, 'LogicECM.module.FormsEditor.FormType', fieldHtmlId, ['container', 'history']);
+		this.formIds = [];
+		return this;
+	};
+
+	YAHOO.extend(LogicECM.module.FormsEditor.FormType, Alfresco.component.Base, {
 		options: {
 			selectedValue: null,
 			mandatory: false,
 			modelName: null,
-			fromIdField: null
+			formIdField: null
 		},
 
-	    formIds: null,
+		formIds: null,
 
 		onReady: function() {
-			YAHOO.util.Event.on(this.id, "change", this.onSelectChange, this, true);
+			YAHOO.util.Event.on(this.id, 'change', this.onSelectChange, this, true);
 			this.loadExistForms();
 		},
 
-	    loadExistForms: function() {
-		    var modelType = YAHOO.util.History.getQueryStringParameter('doctype');
-		    if (modelType != null) {
-			    Alfresco.util.Ajax.jsonGet({
-				    url:  Alfresco.constants.PROXY_URI + "/lecm/docforms/forms?modelName=" + encodeURIComponent(modelType),
-				    successCallback: {
-					    fn: function (response) {
-						    var oResults = response.json;
-						    if (oResults != null) {
-							    this.loadConfig(oResults);
-						    }
-					    },
-					    scope: this
-				    }
-			    });
-		    } else {
-			    this.loadConfig([]);
-		    }
-	    },
+		loadExistForms: function() {
+			var modelType = YAHOO.util.History.getQueryStringParameter('doctype');
+			if (modelType) {
+				Alfresco.util.Ajax.jsonGet({
+					url:  Alfresco.constants.PROXY_URI + '/lecm/docforms/forms?modelName=' + encodeURIComponent(modelType),
+					successCallback: {
+						scope: this,
+						fn: function (response) {
+							var existForms = response.json ? response.json : [];
+							this.loadConfig(existForms);
+						}
+					}
+				});
+			} else {
+				this.loadConfig([]);
+			}
+		},
 
-	    loadConfig: function(existForms) {
-		    Alfresco.util.Ajax.jsonGet({
-			    url: Alfresco.constants.URL_SERVICECONTEXT + "/lecm/forms/getConfig?action=getFormTypes",
-			    successCallback: {
-				    fn: function (response) {
-					    var oResults = response.json;
-					    if (oResults != null) {
-						    var select = Dom.get(this.id);
+		loadConfig: function(existForms) {
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.URL_SERVICECONTEXT + '/lecm/forms/getConfig?action=getFormTypes',
+				successCallback: {
+					fn: function (response) {
+						var select, option,
+							oResult, oResults = response.json,
+							formIdField,
+							selectedFormId = '',
+							selected, i;
+						if (oResults) {
+							select = Dom.get(this.id);
 
-						    var selectedFormId = "";
-						    var formIdField = select.form[this.options.fromIdField];
-						    if (formIdField != null) {
-							    selectedFormId = formIdField.value;
-						    }
 
-						    for (var i = 0; i < oResults.length; i++) {
+							formIdField = select.form[this.options.formIdField];
+							if (formIdField) {
+								selectedFormId = formIdField.value;
+							}
 
-							    oResults[i].id = oResults[i].id != null ? oResults[i].id : "";
-							    var selected = oResults[i].evaluatorType == this.options.selectedValue && oResults[i].id == selectedFormId;
+							for (i in oResults) {
+								oResult = oResults[i];
+								oResult.id = oResult.id != null ? oResult.id : '';
+								selected = oResult.evaluatorType == this.options.selectedValue && oResult.id == selectedFormId;
 
-							    if (!this.checkExistForm(existForms, oResults[i]) || selected) {
-								    var option = document.createElement("option");
-								    option.value = oResults[i].evaluatorType;
-								    option.innerHTML = oResults[i].localName;
+								if (!this.checkExistForm(existForms, oResult) || selected) {
+									this.formIds[oResult.localName] = oResult.id;
 
-								    if (selected) {
-									    option.selected = true;
-								    }
+									option = document.createElement('option');
+									option.value = oResult.evaluatorType;
+									option.innerHTML = oResult.localName;
+									option.selected = selected;
+									select.appendChild(option);
+								}
+							}
 
-								    this.formIds[oResults[i].localName] = oResults[i].id;
-								    select.appendChild(option);
-							    }
-						    }
+							this.onSelectChange();
+						}
+					},
+					scope: this
+				}
+			});
+		},
 
-						    this.onSelectChange();
-					    }
-				    },
-				    scope: this
-			    }
-		    });
-	    },
-
-	    checkExistForm: function(existFroms, checkForm) {
-			if (existFroms != null && checkForm != null) {
-				for (var i = 0; i < existFroms.length; i++) {
+		checkExistForm: function(existFroms, checkForm) {
+			if (existFroms && checkForm) {
+				for (var i in existFroms) {
 					if (existFroms[i].evaluator == checkForm.evaluatorType && existFroms[i].id == checkForm.id) {
 						return true;
 					}
 				}
 			}
-		    return false
+			return false;
 		},
 
-	    onSelectChange: function() {
-		    var select = Dom.get(this.id);
-		    var formIdField = select.form[this.options.fromIdField];
-		    if (formIdField != null ) {
-			    var value = select[select.selectedIndex].innerHTML;
+		onSelectChange: function() {
+			var select = Dom.get(this.id),
+				formIdField = select.form[this.options.formIdField],
+				value;
 
-			    formIdField.value = this.formIds[value];
-		    }
-		    if (this.options.mandatory) {
-			    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-		    }
-	    }
+			if (formIdField) {
+				value = select[select.selectedIndex].innerHTML;
+				formIdField.value = this.formIds[value];
+			}
+
+			if (this.options.mandatory) {
+				YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
+			}
+		}
 	 });
 })();
