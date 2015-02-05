@@ -180,6 +180,9 @@
 			<#if args.ignoreNodes??>
 				ignoreNodes: "${args.ignoreNodes}".split(","),
 			</#if>
+			<#if params.treeIgnoreNodesScript??>
+				treeIgnoreNodesScript: "${params.treeIgnoreNodesScript}",
+			</#if>
 				showCreateNewLink: ${showCreateNewLink?string},
 				showCreateNewButton: ${showCreateNewButton?string},
 			<#if params.createNewMessage??>

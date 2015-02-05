@@ -170,6 +170,8 @@ LogicECM.module = LogicECM.module || {};
 
 				ignoreNodes: null,
 
+				treeIgnoreNodesScript: null,
+
 				childrenDataSource: "lecm/forms/picker",
 
 				pickerItemsScript: "lecm/forms/picker/items",
@@ -252,6 +254,28 @@ LogicECM.module = LogicECM.module || {};
 								onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this },
 								disabled: true
 							});
+					}
+
+					if (this.options.treeIgnoreNodesScript && this.options.treeIgnoreNodesScript != "") {
+						Alfresco.util.Ajax.request({
+							method: "GET",
+							requestContentType: "application/json",
+							responseContentType: "application/json",
+							url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.treeIgnoreNodesScript,
+							successCallback: {
+								fn: function (response) {
+									context.options.ignoreNodes = response.json.nodes;
+								},
+								scope: this
+							},
+							failureCallback: {
+								fn: function onFailure(response) {
+									context.options.allowedNodes = null;
+								},
+								scope: this
+							},
+							execScripts: true
+						});
 					}
 
 					var context = this;
