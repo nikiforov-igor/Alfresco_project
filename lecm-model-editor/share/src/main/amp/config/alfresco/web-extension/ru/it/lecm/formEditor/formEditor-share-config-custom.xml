@@ -44,6 +44,7 @@
 						<control template="/ru/it/lecm/documentforms/controls/attribute-table-control.ftl">
 							<control-param name="height">100</control-param>
 							<control-param name="bubblingLabel">prop_lecm-forms-editor_form-evaluator</control-param>
+							<control-param name="datasourceUri">lecm/docforms/fields</control-param>
 						</control>
 					</field>
 				</appearance>
