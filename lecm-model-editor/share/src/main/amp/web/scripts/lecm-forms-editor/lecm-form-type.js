@@ -105,10 +105,13 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 			});
 		},
 
-		checkExistForm: function(existFroms, checkForm) {
-			if (existFroms && checkForm) {
-				for (var i in existFroms) {
-					if (existFroms[i].evaluator == checkForm.evaluatorType && existFroms[i].id == checkForm.id) {
+		checkExistForm: function(existForms, checkForm) {
+			var i, existForm;
+			if (existForms && checkForm) {
+				for (i in existForms) {
+					existForm = existForms[i];
+					if (existForm.evaluator == checkForm.evaluatorType && existForm.id == checkForm.id) {
+						checkForm.formId = existForm.formId;
 						return true;
 					}
 				}
