@@ -35,25 +35,6 @@
 	<div id="${datagridId}" class="subscribe">
 		<@grid.datagrid datagridId false/>
 	</div>
-
-	<div id="${addFieldsFormId}" class="yui-panel">
-		<div id="${addFieldsFormId}-head" class="hd">${msg("logicecm.view")}</div>
-		<div id="${addFieldsFormId}-body" class="bd">
-			<div id="${addFieldsFormId}-content" class="fields-table-content"></div>
-			<div class="bdft">
-				<span id="${addFieldsFormId}-add" class="yui-button yui-push-button">
-					<span class="first-child">
-						<button type="button" tabindex="1">${msg("button.add")}</button>
-					</span>
-				</span>
-				<span id="${addFieldsFormId}-cancel" class="yui-button yui-push-button">
-					<span class="first-child">
-						<button type="button" tabindex="0">${msg("button.close")}</button>
-					</span>
-				</span>
-			</div>
-		</div>
-	</div>
 </div>
 <@inlineScript>
 (function() {
