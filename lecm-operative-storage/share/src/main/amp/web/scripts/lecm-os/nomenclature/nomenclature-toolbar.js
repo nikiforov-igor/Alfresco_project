@@ -13,6 +13,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		LogicECM.module.Nomenclature.Toolbar.superclass.constructor.call(this, "LogicECM.module.Nomenclature.Toolbar", htmlId);
 
 		Bubbling.on("selectedItemsChanged", this.onCheck, this);
+		Bubbling.on("dataItemCreated", this.onItemCreated, this);
 		return this;
 	};
 
@@ -527,7 +528,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
                             Bubbling.fire("dataItemCreated", // обновить данные в гриде
 								{
 									nodeRef: response.json.persistedObject,
-									bubblingLabel: this.options.bubblingLabel
+									bubblingLabel: this.options.bubblingLabel,
+									itemType: this.node.itemType
 								});
                             Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
                             Alfresco.util.PopupManager.displayMessage({
@@ -551,6 +553,50 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				createDialog.show();
 			}
 		},
+
+		onItemCreated: function(layer, args) {
+			var object = args[1];
+			var nodeRef = object.nodeRef;
+			if(object.itemType == 'lecm-os:nomenclature-year-section') {
+				Alfresco.util.PopupManager.displayPrompt({
+					title:'Дополнительное действие',
+					text: 'Сформировать разделы номенклатуры по организационной структуре?',
+					buttons:[
+						{
+							text:'Да',
+							handler: {
+								obj: {
+									context: this,
+									yearNodeRef: nodeRef
+								},
+								fn: function(event, obj) {
+									Alfresco.util.Ajax.jsonRequest({
+										method: Alfresco.util.Ajax.GET,
+										url: Alfresco.constants.PROXY_URI + "lecm/os/nomenclature/generateSections?yearRef=" + obj.yearNodeRef,
+										successCallback: {
+											fn: function() {
+				                                Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
+				                                Alfresco.util.PopupManager.displayMessage({
+													text: me.msg("message.delete.success")
+												});
+											}
+										},
+										execScripts: true
+									});
+								}
+							}
+						},
+						{
+							text:'Нет',
+							handler:function DataGridActions__onActionDelete_cancel() {
+								this.destroy();
+							}
+						}
+					]
+				});
+			}
+		},
+
 		onDeleteNode: function() {
 			if (this.node != null) {
 				var me = this;

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -28,6 +29,7 @@ import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -64,7 +66,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	}
 
 	public void init() {
-		if(getSettings() == null) {
+		if (getSettings() == null) {
 			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
 			transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 
@@ -172,8 +174,8 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	@Override
 	public NodeRef getYearSection(NodeRef nodeRef) {
 		NodeRef parent = nodeService.getParentAssocs(nodeRef).get(0).getParentRef();
-		while(parent != null) {
-			if(TYPE_NOMENCLATURE_YEAR_SECTION.equals(nodeService.getType(parent))) {
+		while (parent != null) {
+			if (TYPE_NOMENCLATURE_YEAR_SECTION.equals(nodeService.getType(parent))) {
 				return parent;
 			}
 			parent = nodeService.getParentAssocs(parent).get(0).getParentRef();
@@ -186,11 +188,11 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		NodeRef mainOrgUnit = orgstructureService.getRootUnit();
 
 		if (!nodeService.exists(nodeRef)) {
-            throw new RuntimeException(nodeRef.toString() + " does not exist.");
-        }
-        if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
-            throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
-        }
+			throw new RuntimeException(nodeRef.toString() + " does not exist.");
+		}
+		if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
+			throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
+		}
 
 		NodeRef docFolder = getDocuemntsFolder(nodeRef);
 
@@ -222,11 +224,11 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	@Override
 	public void grantPermissionsToAllArchivists(NodeRef nodeRef) {
 		if (!nodeService.exists(nodeRef)) {
-            throw new RuntimeException(nodeRef.toString() + " does not exist.");
-        }
-        if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
-            throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
-        }
+			throw new RuntimeException(nodeRef.toString() + " does not exist.");
+		}
+		if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
+			throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
+		}
 
 		NodeRef docFolder = getDocuemntsFolder(nodeRef);
 
@@ -252,7 +254,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	@Override
 	public void moveDocToNomenclatureCase(NodeRef docNodeRef) {
 		List<AssociationRef> assocList = nodeService.getTargetAssocs(docNodeRef, EDSDocumentService.ASSOC_FILE_REGISTER);
-		if(assocList != null && !assocList.isEmpty()) {
+		if (assocList != null && !assocList.isEmpty()) {
 			NodeRef caseRef = assocList.get(0).getTargetRef();
 
 			NodeRef docFolder = getDocuemntsFolder(caseRef);
@@ -269,11 +271,11 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	@Override
 	public void revokeAll(NodeRef nodeRef) {
 		if (!nodeService.exists(nodeRef)) {
-            throw new RuntimeException(nodeRef.toString() + " does not exist.");
-        }
-        if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
-            throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
-        }
+			throw new RuntimeException(nodeRef.toString() + " does not exist.");
+		}
+		if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
+			throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
+		}
 
 		NodeRef docFolder = getDocuemntsFolder(nodeRef);
 
@@ -316,11 +318,11 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	@Override
 	public void updatePermissions(NodeRef nodeRef) {
 		if (!nodeService.exists(nodeRef)) {
-            throw new RuntimeException(nodeRef.toString() + " does not exist.");
-        }
-        if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
-            throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
-        }
+			throw new RuntimeException(nodeRef.toString() + " does not exist.");
+		}
+		if (!TYPE_NOMENCLATURE_CASE.isMatch(nodeService.getType(nodeRef))) {
+			throw new RuntimeException(nodeRef.toString() + " is not nomenclature case");
+		}
 
 		NodeRef docFolder = getDocuemntsFolder(nodeRef);
 
@@ -357,7 +359,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		for (ChildAssociationRef unit : unitSections) {
 			allUnits.addAll(getAllChildren(unit.getChildRef()));
 			for (NodeRef unitSection : allUnits) {
-				if(hasOrgUnit(unitSection, orgUnitRef)) {
+				if (hasOrgUnit(unitSection, orgUnitRef)) {
 					return true;
 				}
 			}
@@ -368,7 +370,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	public boolean hasOrgUnit(NodeRef ndUnitRef, NodeRef orgUnitRef) {
 		List<AssociationRef> assocList = nodeService.getTargetAssocs(ndUnitRef, ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT);
-		if(assocList != null && !assocList.isEmpty()) {
+		if (assocList != null && !assocList.isEmpty()) {
 			return orgUnitRef.equals(assocList.get(0).getTargetRef());
 		}
 		return false;
@@ -378,7 +380,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		List<NodeRef> result = new ArrayList<>();
 		List<ChildAssociationRef> subRes = nodeService.getChildAssocs(nodeRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		for (ChildAssociationRef child : subRes) {
-			if(TYPE_NOMENCLATURE_UNIT_SECTION.equals(nodeService.getType(child.getChildRef()))){
+			if (TYPE_NOMENCLATURE_UNIT_SECTION.equals(nodeService.getType(child.getChildRef()))) {
 				result.add(child.getChildRef());
 				result.addAll(getAllChildren(child.getChildRef()));
 			}
@@ -390,7 +392,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	@Override
 	public boolean checkNDSectionAssociationExists(NodeRef orgUnitRef, NodeRef ndSectionRef) {
 		NodeRef yearSection;
-		if(TYPE_NOMENCLATURE_YEAR_SECTION.equals(nodeService.getType(ndSectionRef))) {
+		if (TYPE_NOMENCLATURE_YEAR_SECTION.equals(nodeService.getType(ndSectionRef))) {
 			yearSection = ndSectionRef;
 		} else {
 			yearSection = getYearSection(ndSectionRef);
@@ -400,13 +402,12 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 		for (AssociationRef assoc : assocList) {
 			NodeRef assocYearSection = getYearSection(assoc.getSourceRef());
-			if(assocYearSection.equals(yearSection)) {
+			if (assocYearSection.equals(yearSection)) {
 				return true;
 			}
 		}
 
 		return false;
-
 
 	}
 
@@ -415,7 +416,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		List<NodeRef> result = new ArrayList<>();
 		List<NodeRef> organizations = new ArrayList<>();
 
-		if(organizationRef != null) {
+		if (organizationRef != null) {
 			organizations.add(organizationRef);
 		} else {
 			//Если не передали организацию, то возьмём все организации текущего сотрудника
@@ -431,9 +432,46 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 		}
 
-
 		return result;
 
 	}
 
+	@Override
+	public void createSectionByUnit(NodeRef unitRef, NodeRef root, boolean fuckingDeepCopy) {
+		Map<QName, Serializable> props = new HashMap<>();
+		Map<QName, Serializable> unitProps = nodeService.getProperties(unitRef);
+
+		props.put(ContentModel.PROP_TITLE, unitProps.get(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME));
+		props.put(PROP_NOMENCLATURE_UNIT_SECTION_INDEX, unitProps.get(OrgstructureBean.PROP_UNIT_CODE));
+		props.put(PROP_NOMENCLATURE_UNIT_SECTION_COMMENT, "Создано автоматически");
+
+		NodeRef newUnit;
+		try {
+			newUnit = createNode(root, TYPE_NOMENCLATURE_UNIT_SECTION, UUID.randomUUID().toString(), props);
+			nodeService.createAssociation(newUnit, unitRef, ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT);
+
+			if(fuckingDeepCopy) {
+				List<NodeRef> unitChildren = orgstructureService.getSubUnits(unitRef, true, false, false);
+				for (NodeRef unitChild : unitChildren) {
+					createSectionByUnit(unitChild, newUnit, fuckingDeepCopy);
+				}
+			}
+		} catch (WriteTransactionNeededException ex) {
+			logger.error("For creating unit needed write transaction", ex);
 		}
+
+
+
+	}
+
+	@Override
+	public void createTreeByOrgUnits(NodeRef yearSectionRef) {
+
+		NodeRef organizationRef = nodeService.getTargetAssocs(yearSectionRef, ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION).get(0).getTargetRef();
+
+
+
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+}

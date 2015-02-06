@@ -1,0 +1,1 @@
+operativeStorage.createSectionByUnit(args["yearRef"]);

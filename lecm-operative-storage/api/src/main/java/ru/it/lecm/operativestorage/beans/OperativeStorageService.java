@@ -45,6 +45,7 @@ public interface OperativeStorageService {
 	QName PROP_NOMENCLATURE_CASE_INDEX = QName.createQName(OS_NAMESPACE, "nomenclature-case-index");
 	QName PROP_NOMENCLATURE_CASE_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-case-status");
 	QName PROP_NOMENCLATURE_UNIT_SECTION_INDEX = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-index");
+	QName PROP_NOMENCLATURE_UNIT_SECTION_COMMENT = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-comment");
 	QName PROP_NOMENCLATURE_VOLUMES_NUMBER = QName.createQName(OS_NAMESPACE, "nomenclature-case-volumes-number");
 	QName PROP_NOMENCLATURE_YEAR_SECTION_YEAR = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-year");
 	QName PROP_NOMENCLATURE_YEAR_SECTION_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-status");
@@ -111,5 +112,9 @@ public interface OperativeStorageService {
 	public boolean checkNDSectionAssociationExists(NodeRef orgUnitRef, NodeRef ndSectionRef);
 
 	public List<NodeRef> getOrganizationsYearSections(NodeRef organizationRef);
+
+	void createTreeByOrgUnits(NodeRef yearSectionRef);
+
+	public void createSectionByUnit(NodeRef unitRef, NodeRef root, boolean fuckingDeepCopy);
 
 }

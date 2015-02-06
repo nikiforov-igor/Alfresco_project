@@ -166,10 +166,16 @@
                     <show id="cm:title" force="true"/>
                     <show id="lecm-os:store-term-years"/>
                     <show id="lecm-os:store-term-comment"/>
+                    <show id="lecm-os:store-term-forever"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:title" mandatory="true" label="Название">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+                    </field>
+                    <field id="lecm-os:store-term-forever">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="disabledFieldsIfSelect">lecm-os:store-term-years</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
