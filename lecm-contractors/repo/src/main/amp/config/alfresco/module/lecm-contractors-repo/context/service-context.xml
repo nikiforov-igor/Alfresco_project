@@ -24,7 +24,7 @@
           depends-on="${groupId}.${artifactId}.contractors-model-bootstrap,
                       businessJournalLogEventsPolicy,
                       contractorsPolicy,
-                      сontractorsRepresentativePolicy,
+                      contractorsRepresentativePolicy,
                       contractorsSpecializationPolicy,
                       contractorsLegalFormPolicy,
                       contractorsLinkPolicy" >
@@ -66,7 +66,7 @@
         <property name="contractors" ref="contractorsBean"/>
     </bean>
 
-    <bean id="сontractorsRepresentativePolicy" class="ru.it.lecm.contractors.policies.ContractorsRepresentativePolicy" init-method="init">
+    <bean id="contractorsRepresentativePolicy" class="ru.it.lecm.contractors.policies.ContractorsRepresentativePolicy" init-method="init">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
     </bean>
