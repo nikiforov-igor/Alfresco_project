@@ -75,13 +75,13 @@
                         type: "datagrid-action-link-representatives-datagrid",
                         id: "onPrimaryChange",
                         permission: "edit",
-                        label: "Назначить основным"//"${msg("actions.edit")}"
+                        label: "${msg("action.set_primary")}"//"${msg("actions.edit")}"
                     },
                     {
                         type: "datagrid-action-link-representatives-datagrid",
                         id: "onActionDelete",
                         permission: "delete",
-                        label: "Удалить адресанта"//"${msg("actions.delete-row")}"
+                        label: "${msg("action.delete_addressee")}"//"${msg("actions.delete-row")}"
                     }
                 ],
             </#if>
@@ -199,7 +199,7 @@
             failureCallback: {
                 fn: function() {
                     Alfresco.util.PopupManager.displayMessage({
-                        text: "Не удалось получить список адресантов, уже привязанных к контрагенту."
+                        text: "${msg("msg.get_addressee_list_failure")}"
                     });
                 }
             }

@@ -9,7 +9,7 @@
 <#assign emptyMessageId = field.control.params.emptyMessageId ! "">
 <#assign emptyMessage = (field.control.params.emptyMessage) ! msg(emptyMessageId)>
 <#if emptyMessage?length == 0>
-    <#assign emptyMessage = "Без адресанта...">
+    <#assign emptyMessage = msg("label.no_addressee")>
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>

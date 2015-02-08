@@ -55,25 +55,25 @@ LogicECM.module.Contractors = LogicECM.module.Contractors || {};
                         success: function (oResponse) {
                             var oResults = eval("(" + oResponse.responseText + ")");
                             if (oResults.length > 0) {
-                                var message = "В системе найдены Контрагенты с совпадающим ИНН:<br/>";
+                                var message = Alfresco.util.message("msg.inn_repeated")+":<br/>";
                                 for (var item in oResults) {
                                     message += oResults[item] + "<br/>";
                                 }
                                 Alfresco.util.PopupManager.displayPrompt(
                                     {
-                                        title: "Найдены контрагенты с одинаковым ИНН",
+                                        title: Alfresco.util.message("title.inn_repeated"),
                                         text: message,
                                         noEscape: true,
                                         buttons: [
                                             {
-                                                text: "Ок",
+                                                text: Alfresco.util.message("button.ok"),
                                                 handler: function dlA_onAction_action() {
                                                     this.destroy();
                                                     me._submit();
                                                 }
                                             },
                                             {
-                                                text: "Отмена",
+                                                text: Alfresco.util.message("button.cancel"),
                                                 handler: function dlA_onActionDelete_cancel() {
                                                     this.destroy();
                                                 },

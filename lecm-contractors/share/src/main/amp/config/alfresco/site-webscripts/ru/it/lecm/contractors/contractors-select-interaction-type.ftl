@@ -14,7 +14,7 @@
 <div class="form-field">
     <label>${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 
-    <label for="${fieldHtmlId}-interactionBySpecop">Используя спецоператора</label>
+    <label for="${fieldHtmlId}-interactionBySpecop">${msg("label.use_spec_op")}</label>
     <input id="${fieldHtmlId}-interactionBySpecop" type="radio" name="interactionTypeRadioGroup" value="SPECOP">
 
     <label for="${fieldHtmlId}-interactionByEmail">Email</label>

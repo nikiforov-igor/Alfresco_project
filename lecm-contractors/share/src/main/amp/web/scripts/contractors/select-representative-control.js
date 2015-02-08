@@ -206,7 +206,7 @@ LogicECM.module = LogicECM.module || {};
 
         _showAddRepresentativeForm: function () {
             if (this.globCurrentContractor === null) {
-                window.alert("Необходимо выбрать контрагента");
+                window.alert(Alfresco.util.message("msg.has_to_choose_contractor"));
                 return false;
             }
 
@@ -225,7 +225,7 @@ LogicECM.module = LogicECM.module || {};
                 failureCallback: {
                     fn: function () {
                         Alfresco.util.PopupManager.displayMessage({
-                            text: "Не удалось получить список адресантов, уже привязанных к контрагенту."
+                            text: Alfresco.util.message("msg.get_addressee_list_failure")
                         });
                     }
                 }
@@ -391,7 +391,7 @@ LogicECM.module = LogicECM.module || {};
                     failureCallback: {
                         fn: function () {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось получить список адресантов для выбранного контрагента. Обновите страницу." // Alfresco.component.Base.prototype.msg("")
+                                text: Alfresco.util.message("err.get_addressee_list_failure") // Alfresco.component.Base.prototype.msg("")
                             });
                         }
                     }
