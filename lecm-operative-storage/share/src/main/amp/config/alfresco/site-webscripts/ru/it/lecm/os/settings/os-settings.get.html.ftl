@@ -7,7 +7,7 @@
 		LogicECM.module.Base.Util.loadResources([
 			'scripts/lecm-os/os-settings.js'
 		], [
-            'css/lecm-os/global-settings.css'
+            'css/lecm-eds-documents/global-settings.css'
         ], function() {
 			new LogicECM.module.LecmOSSettings('${el}').setMessages(${messages});
 		});

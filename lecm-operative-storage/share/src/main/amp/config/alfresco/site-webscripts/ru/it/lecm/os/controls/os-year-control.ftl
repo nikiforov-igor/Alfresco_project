@@ -4,6 +4,21 @@
 	(function() {
 		var isCentralized = false;
 		var subscribed = false;
+		var orgXPath;
+
+		function getOrganizationsPath() {
+			Alfresco.util.Ajax.jsonGet(
+			{
+				url: Alfresco.constants.PROXY_URI + "/lecm/os/nomenclature/getOrgPath",
+				successCallback:
+				{
+					fn: function (response) {
+						var oResults = response.json;
+						orgXPath = oResults.xPath;
+					}
+				}
+			});
+		}
 
 		function getSettings() {
 			Alfresco.util.Ajax.jsonGet(
@@ -13,13 +28,14 @@
 				{
 					fn: function (response) {
 						var oResults = response.json;
-						isCentralized = oResults.isCentralized; 
+						isCentralized = oResults.isCentralized;
 					}
 				}
 			});
 		}
 
 		getSettings();
+		// getOrganizationsPath();
 
 		function messageHandler() {
 			if(isCentralized) {
@@ -33,12 +49,41 @@
 			return 'Выбранный год уже существует';
 		}
 
+		function reInitializeThisShit() {
+			debugger;
+			if(isCentralized) {
+				LogicECM.module.Base.Util.disableControl("${args.htmlid}", "lecm-os:nomenclature-organization-assoc");
+			}
+
+			Alfresco.util.Ajax.jsonGet(
+			{
+				url: Alfresco.constants.PROXY_URI + "/lecm/os/nomenclature/getOrgPath",
+				successCallback:
+				{
+					fn: function (response) {
+						var oResults = response.json;
+						orgXPath = oResults.xPath;
+						LogicECM.module.Base.Util.reInitializeControl("${args.htmlid}", "lecm-os:nomenclature-organization-assoc", {
+								rootLocation: orgXPath
+							});
+					}
+				}
+			});
+
+			LogicECM.module.Base.Util.reInitializeControl("${args.htmlid}", "lecm-os:nomenclature-organization-assoc", {
+				rootLocation: orgXPath
+			});
+		}
+
 		YAHOO.Bubbling.on('formValueChanged', function(layer, args) {
 			YAHOO.Bubbling.fire('mandatoryControlValueUpdated');
 		});
 
 		YAHOO.Bubbling.on('afterFormRuntimeInit', function() {
 			if(!subscribed) {
+
+				reInitializeThisShit();
+
 				YAHOO.Bubbling.fire('registerValidationHandler', {
 					message: messageHandler,
 					fieldId: '${fieldHtmlId}',

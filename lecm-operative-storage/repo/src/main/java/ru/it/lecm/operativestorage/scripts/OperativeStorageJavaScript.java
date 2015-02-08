@@ -25,6 +25,7 @@ import ru.it.lecm.documents.removal.DocumentsRemovalService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.operativestorage.beans.OperativeStorageService;
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  *
@@ -248,7 +249,14 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 	public void createSectionByUnit(String yearRef) {
 		NodeRef yearNodeRef = new NodeRef(yearRef);
 		NodeRef organizationRef = nodeService.getTargetAssocs(yearNodeRef, ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION).get(0).getTargetRef();
-		operativeStorageService.createSectionByUnit(nodeService.getPrimaryParent(organizationRef).getParentRef(), yearNodeRef, true);
+		List<ChildAssociationRef> children = nodeService.getChildAssocs(organizationRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+		if(children != null) {
+			for (ChildAssociationRef child : children) {
+				if(OrgstructureBean.TYPE_ORGANIZATION_UNIT.equals(nodeService.getType(child.getChildRef()))) {
+					operativeStorageService.createSectionByUnit(child.getChildRef(), yearNodeRef, true);
+				}
+			}
+		}
 	}
 
 }

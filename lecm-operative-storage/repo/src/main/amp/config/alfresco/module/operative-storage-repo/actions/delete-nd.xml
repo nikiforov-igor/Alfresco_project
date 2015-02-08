@@ -28,7 +28,7 @@
 	document.properties["lecm-os:nomenclature-case-status"] = "DELETED";
 	document.properties["lecm-dic:active"] = false;
 
-	fmsOperativeStorage.revokeAll(document.nodeRef);
+	operativeStorage.revokeAll(document.nodeRef);
 
 	document.save();
 

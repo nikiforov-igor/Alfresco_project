@@ -25,7 +25,7 @@
         <property name="lecm-group-actions:script">
             <![CDATA[(function() {
 	var oldYearRef = document.assocs["lecm-os:nomenclature-case-year-assoc"][0];
-	var newYearRef = fmsOperativeStorage.getYearSection(folder);
+	var newYearRef = operativeStorage.getYearSection(folder);
 
 	document.move(folder);
 

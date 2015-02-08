@@ -270,6 +270,19 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 					destroyOnHide:true,
 					doBeforeDialogShow:{
 						fn: function(p_form, p_dialog) {
+
+							var data = p_form.getFormData();
+							var status = data['prop_lecm-os_nomenclature-year-section-status'];
+
+							switch (status) {
+								case 'PROJECT':
+									p_dialog.widgets.okButton.set('label', "Утвердить");
+									break;
+								case 'APPROVED':
+									p_dialog.widgets.okButton.set('label', "Закрыть");
+									break;
+							}
+
 							var contId = p_dialog.id + "-form-container";
 							if (item.type && item.type != "") {
 								Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
@@ -285,9 +298,19 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 						scope: this,
 						fn: function() {
 
+								var status = document.getElementsByName('prop_lecm-os_nomenclature-year-section-status')[0];
 								var sortField = document.getElementsByName('prop_os-aspects_sort-value')[0];
 								var unitIndexField = document.getElementsByName('prop_lecm-os_nomenclature-unit-section-index');
 								var caseIndexField = document.getElementsByName('prop_lecm-os_nomenclature-case-index');
+
+								switch (status.value) {
+									case 'PROJECT':
+										this.ActionsClickAdapter(item, this.actionsEnum.onActionApproveNomenclatureYear);
+										break;
+									case 'APPROVED':
+										this.ActionsClickAdapter(item, this.actionsEnum.onActionCloseNomenclatureYear, null, this.closeYearSection_Prompt_sync);
+										break;
+								}
 
 								if(unitIndexField && unitIndexField.length) {
 									sortField.value = 'a' + unitIndexField[0].value;
@@ -402,6 +425,50 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				},
 				failureMessage: this.msg('message.failure'),
 				scope: this
+			});
+		},
+
+		closeYearSection_Prompt_sync: function(execFunction, item) {
+			$.ajax({
+				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/getOpenTransientCases?nodeRef=' + item.nodeRef,
+				context: this,
+				success: function (response) {
+						var items = response.items;
+						if (items && items.length) {
+							Alfresco.util.PopupManager.displayPrompt({
+								title:'Закрытие номенклатуры дел',
+								text: 'В текущей номенклатуре дел есть незакрытые переходящие дела. Выберите действие.',
+								buttons:[{
+									text: 'Закрыть все дела',
+									handler: {
+										obj: {
+											context: this,
+											fn: execFunction
+										},
+										fn: closeAllCases
+									}
+								}, {
+									text: 'Перенести переходящие дела',
+									handler: {
+										obj: {
+											context: this,
+											fn: execFunction,
+											items: items
+										},
+										fn: moveOpenTransientCases
+									}
+								}, {
+									text: 'Отмена',
+									handler: {
+										fn: cancel
+									}
+								}]
+							});
+						} else {
+							execFunction.call(this);
+						}
+					},
+				async: false
 			});
 		},
 

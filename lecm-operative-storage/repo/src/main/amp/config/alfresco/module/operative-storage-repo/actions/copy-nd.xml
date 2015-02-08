@@ -38,7 +38,7 @@
 		return copy;
 	}
 
-	var yearSection = fmsOperativeStorage.getYearSection(document);
+	var yearSection = operativeStorage.getYearSection(document);
 	document.removeAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
 
 	var copy = copyAllExceptDocs(document, folder);

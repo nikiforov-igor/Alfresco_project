@@ -576,9 +576,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 										successCallback: {
 											fn: function() {
 				                                Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
-				                                Alfresco.util.PopupManager.displayMessage({
-													text: me.msg("message.delete.success")
-												});
+				                                this.destroy();
 											}
 										},
 										execScripts: true
