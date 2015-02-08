@@ -7,8 +7,8 @@
 <#assign currentItemRef = args.itemId />
 
 <#assign dataUrl = field.control.params.dataUrl />
-<#assign labelText = field.control.params.labelText />
-<#assign formTitle = field.control.params.formTitle />
+<#assign labelText = msg(field.control.params.labelText) />
+<#assign formTitle = msg(field.control.params.formTitle) />
 
 <#if field.control.params.setId??>
     <#assign setId = field.control.params.setId />
