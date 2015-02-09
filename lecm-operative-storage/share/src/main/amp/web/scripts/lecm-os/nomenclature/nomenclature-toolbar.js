@@ -26,6 +26,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		importFromDialog: null,
 		importInfoDialog: null,
 		importErrorDialog: null,
+		nodeChildren: null,
+		allowedNodeChildrenActions: ['Уничтожение номенклатурного дела', 'Передача номенклатурного дела в архив'],
 
 		options: {
 			armSelectedNodeRef: null,
@@ -56,14 +58,50 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				}
 			);
 
+
 			this.toolbarButtons["defaultActive"].groupActionsButton.set("label", this.msg("button.group-actions"));
 			this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
 			this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
-			this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
+			this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", this.options.isRoot);
+
+			if(!this.options.isRoot) {
+				this.toolbarButtons["defaultActive"].groupActionsButton.set("label", "Действия на текущем узле");
+			}
 
 			Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog, {});
 			YAHOO.util.Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
 			YAHOO.util.Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
+		},
+
+		getCurrentNodeCasesToDestroy: function() {
+			var nodeRef = new Alfresco.util.NodeRef(this.options.armSelectedNodeRef);
+
+			var templateUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/picker/node/" + nodeRef.uri + "/children";
+			var templateRequestParams = {
+				selectableType: "lecm-os:nomenclature-case",
+				additionalFilter: "@lecm-os\\:nomenclature-case-status:\"MARK_TO_DESTROY\" OR @lecm-os\\:nomenclature-case-status:\"CLOSED\"",
+				searchTerm: ""
+			};
+
+			Alfresco.util.Ajax.jsonRequest({
+                method: "GET",
+                url: templateUrl,
+                dataObj: templateRequestParams,
+                successCallback: {
+                    fn: function (oResponse) {
+                        this.nodeChildren = oResponse.json.data.items;
+                    },
+                    scope: this
+                },
+                failureCallback: {
+                    fn: function () {
+                    }
+                },
+                scope: this,
+                execScripts: true
+            });
+
+
 		},
 
 		onCheck: function() {
@@ -149,6 +187,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			itemsData.forEach(function(el) {
 				items.push(el.nodeRef);
 			});
+			if(itemsData.length == 0) {
+				this.nodeChildren.forEach(function(el) {
+					items.push(el.nodeRef);
+				});
+			}
 			var loadItem = [];
 			loadItem.push({
 				text: "Загрузка...",
@@ -174,6 +217,9 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						var actionItems = [];
 						var wideActionItems = [];
 						for (var i in json) {
+							if(me.allowedNodeChildrenActions.indexOf(json[i].id) < 0) {
+								continue;
+							}
 							if (!json[i].wide) {
 								actionItems.push({
 									text: json[i].id,
@@ -264,6 +310,50 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			});
 		},
 
+		destroyND_Propmt: function(p_sType, p_aArgs, p_oItem) {
+			var nodeRef = new Alfresco.util.NodeRef(p_oItem.items[0]);
+
+			var html = '<p>';
+			var itemsData = this.modules.dataGrid.getSelectedItems();
+
+			itemsData.forEach(function(el) {
+				var msg = el.itemData['prop_cm_title'].displayValue+ ' ' + el.itemData['prop_lecm-os_fake-index'].displayValue + '<br>';
+				html += "<div class=\"noerror-item\">" + msg + "</div>";
+			});
+
+			Alfresco.util.PopupManager.displayPrompt({
+				title:'Уничтожить дела',
+				text: html,
+				noEscape: true,
+				buttons:[
+					{
+						text:'Ок',
+						handler: {
+							obj: {
+								context: this,
+								p_sType: p_sType,
+								p_aArgs: p_aArgs,
+								p_oItem: p_oItem
+							},
+							fn: destroyCases
+						}
+					},
+					{
+						text:'Отмена',
+						handler:function DataGridActions__onActionDelete_cancel() {
+							this.destroy();
+						}
+					}
+				]
+			});
+
+			function destroyCases(event, obj) {
+				obj.context.onGroupActionsClick(obj.p_sType, obj.p_aArgs, obj.p_oItem);
+				this.destroy();
+			}
+
+		},
+
 		deleteND_Propmt: function(p_sType, p_aArgs, p_oItem) {
 			var nodeRef = new Alfresco.util.NodeRef(p_oItem.items[0]);
 			Alfresco.util.Ajax.jsonRequest({
@@ -313,11 +403,13 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		onGroupActionsClickProxy: function onGroupActionsClickProxy(p_sType, p_aArgs, p_oItem){
-			if ("Удаление номенклатурного дела" == p_oItem.actionId) {
-				this.deleteND_Propmt.call(this, p_sType, p_aArgs, p_oItem)
-			} else {
-				this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
-			}
+			 if ("Удаление номенклатурного дела" == p_oItem.actionId) {
+			 	this.deleteND_Propmt.call(this, p_sType, p_aArgs, p_oItem)
+			 } else if ("Уничтожение номенклатурного дела" == p_oItem.actionId) {
+			 	this.destroyND_Propmt.call(this, p_sType, p_aArgs, p_oItem)
+			 } else {
+			 	this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
+			 }
 		},
 
 		onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
@@ -576,11 +668,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 										successCallback: {
 											fn: function() {
 				                                Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
-				                                this.destroy();
 											}
 										},
 										execScripts: true
 									});
+	                                this.destroy();
 								}
 							}
 						},
@@ -657,6 +749,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		loadSelectedTreeNode: function() {
+
 			if (this.options.isRoot) {
 				Alfresco.util.Ajax.request({
 					method: "GET",
@@ -679,6 +772,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					scope: this
 				});
 			} else if (this.options.armSelectedNodeRef != null) {
+				this.getCurrentNodeCasesToDestroy();
 				Alfresco.util.Ajax.jsonRequest({
 					method: 'GET',
 					url: Alfresco.constants.PROXY_URI + 'api/metadata?nodeRef=' + this.options.armSelectedNodeRef + "&shortQNames",

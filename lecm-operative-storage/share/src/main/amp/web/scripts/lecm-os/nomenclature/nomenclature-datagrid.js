@@ -271,16 +271,18 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 					doBeforeDialogShow:{
 						fn: function(p_form, p_dialog) {
 
-							var data = p_form.getFormData();
-							var status = data['prop_lecm-os_nomenclature-year-section-status'];
+							if(item.type == 'lecm-os:nomenclature-year-section') {
+								var data = p_form.getFormData();
+								var status = data['prop_lecm-os_nomenclature-year-section-status'];
 
-							switch (status) {
-								case 'PROJECT':
-									p_dialog.widgets.okButton.set('label', "Утвердить");
-									break;
-								case 'APPROVED':
-									p_dialog.widgets.okButton.set('label', "Закрыть");
-									break;
+								switch (status) {
+									case 'PROJECT':
+										p_dialog.widgets.okButton.set('label', "Утвердить");
+										break;
+									case 'APPROVED':
+										p_dialog.widgets.okButton.set('label', "Закрыть");
+										break;
+								}
 							}
 
 							var contId = p_dialog.id + "-form-container";
@@ -298,18 +300,22 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 						scope: this,
 						fn: function() {
 
+
+
 								var status = document.getElementsByName('prop_lecm-os_nomenclature-year-section-status')[0];
 								var sortField = document.getElementsByName('prop_os-aspects_sort-value')[0];
 								var unitIndexField = document.getElementsByName('prop_lecm-os_nomenclature-unit-section-index');
 								var caseIndexField = document.getElementsByName('prop_lecm-os_nomenclature-case-index');
 
-								switch (status.value) {
-									case 'PROJECT':
-										this.ActionsClickAdapter(item, this.actionsEnum.onActionApproveNomenclatureYear);
-										break;
-									case 'APPROVED':
-										this.ActionsClickAdapter(item, this.actionsEnum.onActionCloseNomenclatureYear, null, this.closeYearSection_Prompt_sync);
-										break;
+								if(status) {
+									switch (status.value) {
+										case 'PROJECT':
+											this.ActionsClickAdapter(item, this.actionsEnum.onActionApproveNomenclatureYear);
+											break;
+										case 'APPROVED':
+											this.ActionsClickAdapter(item, this.actionsEnum.onActionCloseNomenclatureYear, null, this.closeYearSection_Prompt_sync);
+											break;
+									}
 								}
 
 								if(unitIndexField && unitIndexField.length) {
