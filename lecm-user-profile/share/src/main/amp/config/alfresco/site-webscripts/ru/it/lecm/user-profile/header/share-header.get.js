@@ -3,7 +3,7 @@ var lecmProfile = {
 	    name: "alfresco/header/AlfMenuItem",
 	    config: {
 	        id: "LECM_PROFILE_MENU_ITEM",
-	        label: "Логика ECM. Мой профиль",
+	        label: msg.get("label.ECM.my_profile"),
 	        targetUrl: "my-profile",
 	        iconImage: "/share/res/components/images/header/user-profile_light.png"
 
