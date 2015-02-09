@@ -123,8 +123,8 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         for (NodeRef action : actions) {
             Serializable property = nodeService.getProperty(action, GroupActionsService.PROP_TYPE);
             boolean isRight = false;
-            if (property != null) {
-                List<String> typesStr = (List<String>) property;
+			List<String> typesStr = (List<String>) property;
+			if (typesStr != null && !typesStr.isEmpty()) {
 				Map<QName, TypeDefinition> typeToTypeDef = new HashMap<>();
 				for (String typeStr : typesStr) {
 					if (!typeStr.isEmpty()) {
