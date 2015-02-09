@@ -178,7 +178,7 @@ LogicECM.module.Delegation.Procuracy = LogicECM.module.Delegation.Procuracy || {
 					},
 					scope: this
 				},
-				failureMessage: "не удалось удалить доверенность"
+				failureMessage: Alfresco.util.msg("msg.delete_procuracy.failed")
 			});
 		}
 	}, true);

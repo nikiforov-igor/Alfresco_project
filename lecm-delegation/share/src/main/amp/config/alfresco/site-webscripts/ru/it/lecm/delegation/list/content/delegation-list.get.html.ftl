@@ -34,7 +34,7 @@
                         type: "datagrid-action-link-delegation-list-datagrid",
                         id: "onActionEdit",
                         permission: "edit",
-                        label: "делегировать полномочия"
+                        label: "${msg("btn.delegate")}"
                     }
                 ]
             });

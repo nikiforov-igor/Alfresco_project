@@ -16,6 +16,6 @@
 </script>
 
 <@comp.baseMenu>
-	<@comp.baseMenuButton "delegationList" "перечень делегирования"/>
+	<@comp.baseMenuButton "delegationList" msg("label.delegation_list")/>
 </@comp.baseMenu>
 

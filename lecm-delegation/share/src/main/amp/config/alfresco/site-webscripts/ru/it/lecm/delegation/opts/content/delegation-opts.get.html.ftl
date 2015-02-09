@@ -46,7 +46,7 @@
 <#else>
 <div class="not-fount-procuracy">
 	<h1 class="theme-color-3">
-		<span>Невозможно отобразить страницу с настройками делегирования. Связка пользователь-сотрудник не настроена.</span>
+		<span>${msg("msg.delegation_opts.failed")}</span>
 	</h1>
 </div>
 </#if>

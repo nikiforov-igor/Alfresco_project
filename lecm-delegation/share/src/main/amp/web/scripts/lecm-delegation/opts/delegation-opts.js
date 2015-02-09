@@ -59,7 +59,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
                                 me.viewDialog.destroy();
                             }
 							Alfresco.util.PopupManager.displayMessage ({
-								text:"Данные обновлены"
+								text:Alfersco.util.msg("msg.data_refreshed")
 							});
                             if (!me.options.myProfile) {
                                 YAHOO.Bubbling.fire("datagridRefresh", {
@@ -72,7 +72,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					failureCallback: {
 						fn: function () {
 							Alfresco.util.PopupManager.displayMessage ({
-								text:"Не удалось обновить данные"
+								text: Alfersco.util.msg("msg.data_refresh_failed")
 							});
 						},
 						scope: this
@@ -134,14 +134,14 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 						fn: this.onDelegationOptsPart1,
 						scope: this
 					},
-					failureMessage: "не удалось выполнить запрос, попробуйте обновить страницу",
+					failureMessage: this.msg("msg.request_failed"),
 					execScripts: true
 				});
 
 			} else {
 				Alfresco.util.PopupManager.displayPrompt ({
-					title: "Ошибка отображения параметров делегирования",
-					text: "текущий пользователь не привязан к сотруднику и у него нет параметров делегирования!"
+					title: this.msg("title.procuracy_opts.failed"),
+					text: this.msg("txt.procuracy_opts.failed")
 				});
 			}
 

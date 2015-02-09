@@ -66,7 +66,7 @@
 								type: "datagrid-action-link-${args.datagridId}",
 								id: "onActionEdit",
 								permission: "edit",
-								label: "редактировать доверенность"
+								label: "${msg("actn.edit_procuracy")}"
 							},
 //							{
 //								type: "datagrid-action-link-procuracy-datagrid",
@@ -78,7 +78,7 @@
 								type: "datagrid-action-link-${args.datagridId}",
 								id: "onActionDelete",
 								permission: "delete",
-								label: "удалить доверенность"
+								label: "${msg("actn.delete_procuracy")}"
 							}
 						]
 					<#else/>
