@@ -7,7 +7,7 @@ var getDocumentTitleName = function (type) {
 		var uri = addParamToUrl('/lecm/document-type/settings', 'docType', type);
 		var arm = doGetCall(uri);
 		if (arm && arm.title) {
-			return "Создать " + arm.title;
+			return msg.get("title.new_document").replace('{0}', arm.title);
 		}
 	}
 	return null;
@@ -17,7 +17,7 @@ var getDocumentPresentString = function (nodeRef) {
 	if (nodeRef) {
 		var nodeDetails = DocumentUtils.getNodeDetails(nodeRef);
 		if (nodeDetails) {
-			return 'Редактирование атрибутов. ' + nodeDetails.item.node.properties["lecm-document:ext-present-string"];
+			return msg.get('title.edit_document').replace('{0}', nodeDetails.item.node.properties["lecm-document:ext-present-string"]);
 		}
 	}
 	return null;

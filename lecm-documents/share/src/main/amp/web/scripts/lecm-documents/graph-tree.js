@@ -94,7 +94,7 @@ YAHOO.Bubbling.on("graphContainerReady", function() {
 		 **/
 		myDataTable.subscribe('cellClickEvent', myDataTable.onEventToggleRowExpansion);
 		myDataTable.set("MSG_EMPTY", "");
-		myDataTable.set("MSG_ERROR", "У вас нет прав для просмотра документа");
+		myDataTable.set("MSG_ERROR", Alfresco.util.message("msg.forbiden"));
 
 		myDataTable.nativeCollapseRow = myDataTable.collapseRow;
 		myDataTable.collapseRow = function(record_id) {
