@@ -72,7 +72,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 					failureCallback: {
 						fn: function () {
 							Alfresco.util.PopupManager.displayMessage ({
-								text: Alfersco.util.msg("msg.data_refresh_failed")
+								text: Alfersco.util.message("msg.data_refresh_failed")
 							});
 						},
 						scope: this
@@ -134,14 +134,14 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 						fn: this.onDelegationOptsPart1,
 						scope: this
 					},
-					failureMessage: this.msg("msg.request_failed"),
+					failureMessage: Alfersco.util.message("msg.request_failed"),
 					execScripts: true
 				});
 
 			} else {
 				Alfresco.util.PopupManager.displayPrompt ({
-					title: this.msg("title.procuracy_opts.failed"),
-					text: this.msg("txt.procuracy_opts.failed")
+					title: Alfersco.util.message("title.procuracy_opts.failed"),
+					text: Alfersco.util.message("txt.procuracy_opts.failed")
 				});
 			}
 
