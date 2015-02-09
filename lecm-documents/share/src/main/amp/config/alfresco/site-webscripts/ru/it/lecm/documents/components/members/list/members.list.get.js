@@ -9,6 +9,8 @@ function main() {
     }
     model.mayAdd = hasPermission(model.nodeRef, PERM_MEMBERS_ADD);
     model.hasStatemachine = hasStatemachine(model.nodeRef);
+
+    model.mayDelete = user.isAdmin;
 }
 
 function getMembers(nodeRef) {

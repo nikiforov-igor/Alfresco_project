@@ -27,8 +27,8 @@ LogicECM.module.Members = LogicECM.module.Members || {};
 
 (function () {
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
-
+        Event = YAHOO.util.Event,
+        Bubbling = YAHOO.Bubbling;
 
     LogicECM.module.Members.DocumentMembers = function (id) {
         LogicECM.module.Members.DocumentMembers.superclass.constructor.call(this, "LogicECM.module.Members.DocumentMembers", id, [ "container", "datasource"]);
@@ -36,6 +36,7 @@ LogicECM.module.Members = LogicECM.module.Members || {};
         this.currentMembers = [];
 
         YAHOO.Bubbling.on("memberCreated", this.onMembersUpdate, this);
+        YAHOO.Bubbling.on("onMembersUpdate", this.onMembersUpdate, this);
         return this;
     };
 
@@ -57,6 +58,33 @@ LogicECM.module.Members = LogicECM.module.Members || {};
 
             onReady: function () {
                 this.memberButton = Alfresco.util.createYUIButton(this, this.id + "-addMember-button", this.onAdd.bind(this), {}, Dom.get(this.id + "-addMember-button"));
+
+                this.modules.actions = new LogicECM.module.Base.Actions();
+
+                var me = this;
+                var fnActionHandler = function DataGrid_fnActionHandler(layer, args)
+                {
+                    var owner = Bubbling.getOwnerByTagName(args[1].anchor, "div");
+                    if (owner !== null)
+                    {
+                        var nodeName = owner.getAttribute('data-name');
+                        var nodeRef = owner.getAttribute('data-noderef');
+                        if (typeof me[owner.className] == "function" && nodeName != null && nodeRef != null)
+                        {
+                            me[owner.className].call(me, nodeName, nodeRef);
+                        }
+                    }
+                    return true;
+                };
+                Bubbling.addDefaultAction("list-action-link", fnActionHandler);
+
+                var rows = Dom.getElementsByClassName('detail-list-item');
+                for (var i = 0; i < rows.length; i++)
+                {
+                    Event.addListener(rows[i], "mouseover", this.onEventHighlightRow, {row: rows[i]}, this);
+                    Event.addListener(rows[i], "mouseout", this.onEventUnhighlightRow, {row: rows[i]}, this);
+                }
+
             },
 
             onAdd: function (e, p_obj) {
@@ -127,7 +155,8 @@ LogicECM.module.Members = LogicECM.module.Members || {};
 
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text: this.msg("message.member.add.success")
+                                        text: this.msg("message.member.add.success"),
+                                        displayTime: 3
                                     });
                                 this.doubleClickLock = false;
                             },
@@ -137,7 +166,8 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                             fn: function (response) {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text: this.msg("message.member.add.failure")
+                                        text: this.msg("message.member.add.failure"),
+                                        displayTime: 3
                                     });
                                 this.doubleClickLock = false;
                             },
@@ -169,6 +199,68 @@ LogicECM.module.Members = LogicECM.module.Members || {};
                         scope: this,
                         execScripts: true
                     });
+            },
+
+            onEventHighlightRow: function(e, itemInfo) {
+                Dom.addClass(itemInfo.row, "highlighted");
+            },
+
+            onEventUnhighlightRow: function(e, itemInfo) {
+                Dom.removeClass(itemInfo.row, "highlighted");
+            },
+
+            onActionDelete: function (name, noderef) {
+                if (noderef != null && name != null) {
+                    var me = this;
+
+                    var fnActionDeleteConfirm = function DataGridActions__onActionDelete_confirm(nodeRef) {
+                        this.modules.actions.genericAction(
+                            {
+                                success:{
+                                    event:{
+                                        name:"onMembersUpdate"
+                                    },
+                                    message:me.msg("message.delete.success")
+                                },
+                                failure:{
+                                    message:me.msg("message.delete.failure")
+                                },
+                                webscript:{
+                                    method:Alfresco.util.Ajax.DELETE,
+                                    name:"delete",
+                                    queryString:"full=true"
+                                },
+                                config:{
+                                    requestContentType:Alfresco.util.Ajax.JSON,
+                                    dataObj:{
+                                        nodeRefs:[nodeRef]
+                                    }
+                                }
+                            });
+                    };
+
+                    Alfresco.util.PopupManager.displayPrompt(
+                        {
+                            title:this.msg("message.confirm.delete.title"),
+                            text: this.msg("message.confirm.delete.description", '"' + name + '"'),
+                            buttons:[
+                                {
+                                    text:this.msg("button.delete"),
+                                    handler:function () {
+                                        this.destroy();
+                                        fnActionDeleteConfirm.call(me, noderef);
+                                    }
+                                },
+                                {
+                                    text:this.msg("button.cancel"),
+                                    handler:function () {
+                                        this.destroy();
+                                    },
+                                    isDefault:true
+                                }
+                            ]
+                        });
+                }
             }
         });
 })();

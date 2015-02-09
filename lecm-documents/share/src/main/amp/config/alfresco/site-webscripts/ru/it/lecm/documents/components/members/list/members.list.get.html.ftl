@@ -41,22 +41,38 @@
     </table>
     <hr>
     <@view.viewForm formId="${el}-view-node-form"/>
-    <div class="members-table body scrollableList">
+    <div class="members-scrollable">
+    <table class="members-table">
     <#if members?? && members.items??>
         <#list members.items as member>
-            <div class="detail-list-item">
-                <div class="avatar">
-                    <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${member.employeeRef}"alt="Avatar" />
-                </div>
-                <div class="person">
+            <tr class="detail-list-item <#if member_has_next>border-bottom</#if>">
+                <td class="avatar">
+                    <img src="${url.context}/proxy/alfresco/lecm/profile/employee-photo?nodeRef=${member.employeeRef}" alt="Avatar"/>
+                </td>
+                <td class="member">
                     <h3>${view.showViewLink(member.employeeName, member.employeeRef, "logicecm.employee.view")}</h3>
+
                     <div>${member.employeePosition}</div>
                     <div class="member-ref hidden1">${member.employeeRef}</div>
-                </div>
-                <hr>
-            </div>
+                </td>
+                <td class="list-actions-td">
+                    <div class="list-action-set">
+                        <#if mayDelete>
+                            <div class="onActionDelete" data-noderef="${member.nodeRef!""}"
+                                 data-name="${member.employeeName!""}">
+                                <a title="${msg("action.delete-member.title")}" class="list-action-link" href="#">
+                                        <span>
+                                        ${msg("action.delete-member.title")}
+                                        </span>
+                                </a>
+                            </div>
+                        </#if>
+                    </div>
+                </td>
+            </tr>
         </#list>
     </#if>
+    </table>
     </div>
     <script type="text/javascript">//<![CDATA[
     (function () {
