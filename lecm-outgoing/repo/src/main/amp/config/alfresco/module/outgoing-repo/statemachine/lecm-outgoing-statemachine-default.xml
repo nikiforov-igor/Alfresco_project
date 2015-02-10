@@ -1444,7 +1444,7 @@
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[(function(){ var outgoing = stm_document; outgoingStatemachine.configurePostSendingFinalization(outgoing); })();]]></value>
+																<value><![CDATA[]]></value>
 															</property>
 															<property>
 																<name>scriptLabel</name>
@@ -5361,7 +5361,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[(function(){ var outgoing = stm_document; outgoingStatemachine.configurePostSendingFinalization(outgoing); })();]]></value>
+																<value><![CDATA[]]></value>
 															</property>
 															<property>
 																<name>scriptLabel</name>
@@ -9521,10 +9521,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															<property>
 																<name>actionScript</name>
 																<value><![CDATA[//проставить исходящему ассоциацию на подразделение для финализации
-(function(){
-    var outgoing = stm_document;
-    outgoingStatemachine.configurePostSendingFinalization(outgoing);
-})();]]></value>
+]]></value>
 															</property>
 															<property>
 																<name>scriptLabel</name>
