@@ -7,7 +7,7 @@
         <properties>
             <property>
                 <name>archiveFolder</name>
-                <value><![CDATA[Входящие]]></value>
+                <value><![CDATA[/Архив]]></value>
             </property>
             <property>
                 <name>archiveFolderAdditional</name>
@@ -1100,18 +1100,7 @@
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
     var incoming = bpm_package.children[0];
-    var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
-
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-
-    documentScript.finalizeToUnit(incoming, unit);
+    operativeStorage.moveToNomenclatureCase(incoming);
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -1969,11 +1958,11 @@
     var docTitle = substitude.formatNodeTitle(incoming, "входящий документ {lecm-incoming:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:fullname}");
     notificationText += documentScript.wrapperDocumentLink(incoming, docTitle);
     notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);
-  
+
 	var currentUser =  orgstructure.getCurrentEmployee();
     var logText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
     logText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
-  
+
 
 	businessJournal.log(incoming.nodeRef.toString(), "RETURN_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), logText), []);
 })();]]></value>
@@ -2047,18 +2036,7 @@
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
     var incoming = bpm_package.children[0];
-    var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
-
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-
-    documentScript.finalizeToUnit(incoming, false, unit);
+    operativeStorage.moveToNomenclatureCase(incoming);
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -2941,18 +2919,7 @@
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
     var incoming = bpm_package.children[0];
-    var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
-
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-
-    documentScript.finalizeToUnit(incoming, unit);
+    operativeStorage.moveToNomenclatureCase(incoming);
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -4092,18 +4059,7 @@
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
     var incoming = bpm_package.children[0];
-    var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
-
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-
-    documentScript.finalizeToUnit(incoming, unit);
+    operativeStorage.moveToNomenclatureCase(incoming);
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -5194,7 +5150,7 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
     }
 
     notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);
-  
+
   	businessJournal.log(incoming.nodeRef.toString(), "RETURN_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), notificationText), []);
 })();]]></value>
                                                             </property>
@@ -5382,7 +5338,7 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
       }
     }
   	notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);
-  
+
 
 	businessJournal.log(incoming.nodeRef.toString(), "RETURN_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), notificationText), []);
 })();]]></value>
@@ -6192,23 +6148,12 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
     var incoming = bpm_package.children[0];
-    var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
+    operativeStorage.moveToNomenclatureCase(incoming);
 
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-
-    documentScript.finalizeToUnit(incoming, unit);
-	
 	var currentUser =  orgstructure.getCurrentEmployee();
 	var logText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " исполнил(а) документ ";
     logText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
-  
+
 	businessJournal.log(incoming.nodeRef.toString(), "EXECUTE_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), logText), []);
 })();]]></value>
                                                             </property>
