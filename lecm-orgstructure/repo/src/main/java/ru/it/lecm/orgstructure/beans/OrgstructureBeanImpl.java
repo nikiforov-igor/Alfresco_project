@@ -1187,7 +1187,8 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return getEmployeeByPerson(person, true);
 	}
 
-    private NodeRef getEmployeeByPerson(NodeRef person, boolean checkAccess) {
+	@Override
+	public NodeRef getEmployeeByPerson(NodeRef person, boolean checkAccess) {
 		List<AssociationRef> lRefs = nodeService.getSourceAssocs(person, ASSOC_EMPLOYEE_PERSON);
 		for (AssociationRef lRef : lRefs) {
 			if (!isArchive(lRef.getSourceRef()) && (!checkAccess || hasAccessToOrgElement(lRef.getSourceRef()))) {

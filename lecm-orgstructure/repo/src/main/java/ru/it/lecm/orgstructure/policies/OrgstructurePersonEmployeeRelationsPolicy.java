@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Полиси, которые регулируют отношения между lecm-orgstr:employee (сотрудником)
@@ -337,7 +338,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
      */
     public void onCreatePersonAvatarAssociation(AssociationRef nodeAssocRef) {
         final NodeRef person = nodeAssocRef.getSourceRef();
-        final NodeRef employee = orgstructureService.getEmployeeByPerson(person);
+        final NodeRef employee = orgstructureService.getEmployeeByPerson(person, false);
         // если сотрудник не привязан, то все тщетно
         if (employee != null) {
             // получить ссылку на аватар
@@ -410,7 +411,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
             } else if (!before.isEmpty() && synchronizablePropertiesChanged(before, after)) {
                 // если что-то из этого было изменено, то синхронизируем атрибуты cm:person и lecm-orgstr:employee
                 // для начала пролучаем сотрудника, привязанного к измененному пользователю
-                NodeRef employee = orgstructureService.getEmployeeByPerson(person);
+                NodeRef employee = orgstructureService.getEmployeeByPerson(person, false);
                 // если таковой присутствует...
                 if (employee != null) {
                     // ...то запускаем синхронизацию
@@ -451,7 +452,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
         if (!personMiddleName.isEmpty()) {
             employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME, personMiddleName);
         }
-        employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_EMAIL, personEmail);
+        employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_EMAIL, StringUtils.trim(personEmail));
 
         String employeeSex = (String) employeeProperties.get(OrgstructureBean.PROP_EMPLOYEE_SEX);
         if (!"MALE".equals(employeeSex) || !"FEMALE".equals(employeeSex)) {
@@ -482,7 +483,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
     }
 
     private boolean personNeedsEmployee(NodeRef personNode) {
-        NodeRef employeeNode = orgstructureService.getEmployeeByPerson(personNode);
+        NodeRef employeeNode = orgstructureService.getEmployeeByPerson(personNode, false);
         Set<QName> aspects = nodeService.getAspects(personNode);
         Map<QName, Serializable> personProperties = nodeService.getProperties(personNode);
         String firstName = (String) personProperties.get(ContentModel.PROP_FIRSTNAME);

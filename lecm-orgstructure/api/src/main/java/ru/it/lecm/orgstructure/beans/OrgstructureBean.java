@@ -428,6 +428,7 @@ public interface OrgstructureBean {
 	 * Получение текущего сотрудника по NodeRef пользователя
 	 */
 	NodeRef getEmployeeByPerson(NodeRef person);
+	NodeRef getEmployeeByPerson(NodeRef person, boolean checkAccess);
 
 	/**
 	 * Получение пользователя сотрудника
