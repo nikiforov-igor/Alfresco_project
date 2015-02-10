@@ -7,7 +7,7 @@
 		<properties>
 			<property>
 				<name>archiveFolder</name>
-				<value><![CDATA[Исходящие]]></value>
+				<value><![CDATA[/Архив]]></value>
 			</property>
 			<property>
 				<name>archiveFolderAdditional</name>
@@ -9374,7 +9374,10 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[]]></value>
+																<value><![CDATA[(function() {
+	var document = bpm_package.children[0];
+    operativeStorage.moveToNomenclatureCase(document);
+})();]]></value>
 															</property>
 															<property>
 																<name>transitionLabel</name>
@@ -9405,7 +9408,10 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[]]></value>
+																<value><![CDATA[(function() {
+	var document = bpm_package.children[0];
+    operativeStorage.moveToNomenclatureCase(document);
+})();]]></value>
 															</property>
 															<property>
 																<name>transitionLabel</name>
