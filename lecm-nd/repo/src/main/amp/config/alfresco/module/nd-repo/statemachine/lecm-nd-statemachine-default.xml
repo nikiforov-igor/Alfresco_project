@@ -6,6 +6,10 @@
 		<nodeRef>workspace://SpacesStore/17858a93-7ee7-4504-8be1-d3ec51b2ef5c</nodeRef>
 		<properties>
 			<property>
+				<name>archiveFolder</name>
+				<value><![CDATA[/Архив]]></value>
+			</property>
+			<property>
 				<name>archiveFolderAdditional</name>
 				<value><![CDATA[]]></value>
 			</property>
@@ -9045,6 +9049,13 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
 																<name>transitionExpression</name>
 																<value><![CDATA[doc.hasAspect("lecm-document-aspects:cancelled") == true]]></value>
 															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[(function() {
+	var document = bpm_package.children[0];
+    operativeStorage.moveToNomenclatureCase(document);
+})();]]></value>
+															</property>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
@@ -9073,7 +9084,10 @@ businessJournal.log(nd.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
-																<value><![CDATA[]]></value>
+																<value><![CDATA[(function() {
+	var document = bpm_package.children[0];
+    operativeStorage.moveToNomenclatureCase(document);
+})();]]></value>
 															</property>
 														</properties>
 														<aspects>
