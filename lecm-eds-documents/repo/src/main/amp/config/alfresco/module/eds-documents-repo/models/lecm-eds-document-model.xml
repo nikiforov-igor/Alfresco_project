@@ -168,7 +168,7 @@
 	            </association>
             </associations>
             <mandatory-aspects>
-                <aspect>lecm-document-aspects:finalize-to-unit</aspect>
+                <!--<aspect>lecm-document-aspects:finalize-to-unit</aspect>-->
                 <aspect>lecm-document-aspects:has-reg-document-data</aspect>
                 <aspect>lecm-document-aspects:has-reg-project-data</aspect>
             </mandatory-aspects>
