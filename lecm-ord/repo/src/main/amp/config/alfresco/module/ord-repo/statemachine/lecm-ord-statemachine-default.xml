@@ -6,6 +6,10 @@
 		<nodeRef>workspace://SpacesStore/9f9db8d1-592a-473e-aa82-c0d1aa7a88c4</nodeRef>
 		<properties>
 			<property>
+				<name>archiveFolder</name>
+				<value><![CDATA[/Архив]]></value>
+			</property>
+			<property>
 				<name>archiveFolderAdditional</name>
 				<value><![CDATA[ОРД]]></value>
 			</property>
