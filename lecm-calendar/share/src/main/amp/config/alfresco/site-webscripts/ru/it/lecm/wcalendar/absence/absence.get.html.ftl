@@ -70,6 +70,6 @@ function onShowOnlyActiveChanged() {
 
 <div align="right" class="show-only-archive-container">
 	<input type="checkbox" class="formsCheckBox" id="cbShowOnlyActive" onChange="onShowOnlyActiveChanged()">
-	<label class="checkbox" for="cbShowOnlyActive">Отображать только активные</label>
+	<label class="checkbox" for="cbShowOnlyActive">$msg("lecm.calendar.absence.show.active")</label>
 </div>
 <@grid.datagrid id showViewForm/>

@@ -1,18 +1,18 @@
 (function() {
 
 	var monthNames = {
-		m0: "Январь",
-		m1: "Февраль",
-		m2: "Март",
-		m3: "Апрель",
-		m4: "Май",
-		m5: "Июнь",
-		m6: "Июль",
-		m7: "Август",
-		m8: "Сентябрь",
-		m9: "Октябрь",
-		m10: "Ноябрь",
-		m11: "Декабрь"
+		m0: msg.get("lecm.calendar.absence.january"),
+		m1: msg.get("lecm.calendar.absence.february"),
+		m2: msg.get("lecm.calendar.absence.march"),
+		m3: msg.get("lecm.calendar.absence.april"),
+		m4: msg.get("lecm.calendar.absence.may"),
+		m5: msg.get("lecm.calendar.absence.june"),
+		m6: msg.get("lecm.calendar.absence.july"),
+		m7: msg.get("lecm.calendar.absence.august"),
+		m8: msg.get("lecm.calendar.absence.september"),
+		m9: msg.get("lecm.calendar.absence.october"),
+		m10: msg.get("lecm.calendar.absence.november"),
+		m11: msg.get("lecm.calendar.absence.december")
 	};
 
 	var today = new Date(), daysNumber = 30, finalDate, result = {}, calendarHeader = {};

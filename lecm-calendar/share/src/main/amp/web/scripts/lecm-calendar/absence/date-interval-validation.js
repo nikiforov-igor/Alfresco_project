@@ -15,7 +15,7 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 			LogicECM.module.WCalendar.Absence.dateIntervalValidation.messageValue = text;
 		}
 
-		setMessage('Неверное значение');
+		setMessage(Alfresco.util.message('lecm.absence.msg.wrong.value'));
 
 		var valid = true;
 
@@ -122,5 +122,5 @@ LogicECM.module.WCalendar.Absence.dateIntervalValidation =
 	};
 
 LogicECM.module.WCalendar.Absence.dateIntervalValidation.message = function() {
-	return LogicECM.module.WCalendar.Absence.dateIntervalValidation.messageValue || 'Неверное значение';
+	return LogicECM.module.WCalendar.Absence.dateIntervalValidation.messageValue || Alfresco.util.message('lecm.absence.msg.wrong.value');
 }

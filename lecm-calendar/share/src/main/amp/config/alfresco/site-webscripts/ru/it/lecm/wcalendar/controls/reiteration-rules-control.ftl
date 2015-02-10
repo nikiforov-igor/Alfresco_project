@@ -96,13 +96,13 @@
 <div class="control-container" id="reiteration-control-container">
 	<#-- TODO: добавить локализацию для дней недели -->
 	<div class="rule-body" id="week-days-mode">
-		<input type="checkbox" name="w1" value=true> Понедельник<br/>
-		<input type="checkbox" name="w2" value=true> Вторник<br/>
-		<input type="checkbox" name="w3" value=true> Среда<br/>
-		<input type="checkbox" name="w4" value=true> Четверг<br/>
-		<input type="checkbox" name="w5" value=true> Пятница<br/>
-		<input type="checkbox" name="w6" value=true> Суббота<br/>
-		<input type="checkbox" name="w7" value=true> Воскресенье<br/>
+		<input type="checkbox" name="w1" value=true> ${msg("lecm.absence.lbl.monday")}<br/>
+		<input type="checkbox" name="w2" value=true> ${msg("lecm.absence.lbl.tuesday")}<br/>
+		<input type="checkbox" name="w3" value=true> ${msg("lecm.absence.lbl.wednesday")}<br/>
+		<input type="checkbox" name="w4" value=true> ${msg("lecm.absence.lbl.thursday")}<br/>
+		<input type="checkbox" name="w5" value=true> ${msg("lecm.absence.lbl.friday")}<br/>
+		<input type="checkbox" name="w6" value=true> ${msg("lecm.absence.lbl.saturday")}<br/>
+		<input type="checkbox" name="w7" value=true> ${msg("lecm.absence.lbl.sunday")}<br/>
 	</div>
 	<div class="rule-body hidden1" id="month-days-mode">
 		<table class="calendar-grid">

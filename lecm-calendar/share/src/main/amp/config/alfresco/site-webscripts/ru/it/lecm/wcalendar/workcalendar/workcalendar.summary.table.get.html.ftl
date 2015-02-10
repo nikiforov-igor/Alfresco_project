@@ -43,7 +43,7 @@
 				   <table class="summary-table-header" >
 						<tr cellpadding="1" class="calendar-header">
 							<td class="row-id">№</td>
-							<td class="employee-header employee-name">Сотрудник</td>
+							<td class="employee-header employee-name">${msg("lecm.absence.lbl.employee")}</td>
 							<td>
 								<table>
 									<tr>

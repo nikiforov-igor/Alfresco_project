@@ -42,3 +42,7 @@ function pad(num, size) {
 		s = "0" + s;
 	return s;
 }
+
+LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation.message = function() {
+	return Alfresco.util.message('lecm.calendar.same.date');
+}

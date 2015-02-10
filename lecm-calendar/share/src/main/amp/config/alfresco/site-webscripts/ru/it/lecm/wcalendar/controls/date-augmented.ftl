@@ -118,7 +118,7 @@
               showTime: ${showTime?string},
               mandatory: ${field.mandatory?string},
               validateHandler: <#if validateHandler??>${validateHandler}<#else>null</#if>,
-              message: <#if errorMessage??>${errorMessage}<#else>"Неверное значение"</#if>
+              message: <#if errorMessage??>${errorMessage}<#else>"${msg('lecm.absence.msg.wrong.value')}"</#if>
            }).setMessages(
               ${messages}
            );

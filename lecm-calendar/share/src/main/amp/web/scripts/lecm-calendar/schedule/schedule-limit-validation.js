@@ -44,3 +44,7 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 		return valid;
 	};
 })();
+
+LogicECM.module.WCalendar.Schedule.scheduleLimitValidation.message = function() {
+	return Alfresco.util.message('lecm.calendar.start.date.greater');
+}

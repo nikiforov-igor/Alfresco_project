@@ -46,7 +46,7 @@
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>
-							<control-param name="messageHandler">"Такая дата уже присутствует в календаре"</control-param>
+							<control-param name="messageHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation.message</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -82,7 +82,7 @@
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>
-							<control-param name="messageHandler">"Такая дата уже присутствует в календаре"</control-param>
+							<control-param name="messageHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation.message</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -227,7 +227,7 @@
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Schedule.scheduleLimitValidation</control-param>
-							<control-param name="messageText">"Дата начала больше даты окончания"</control-param>
+							<control-param name="messageText">LogicECM.module.WCalendar.Schedule.scheduleLimitValidation.message</control-param>
 						<control-param name="hideDateFormat">true</control-param>
 						</control>
 						<!-- <constraint-handlers>
@@ -240,7 +240,7 @@
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Schedule.scheduleLimitValidation</control-param>
-							<control-param name="messageText">"Дата начала больше даты окончания"</control-param>
+							<control-param name="messageText">LogicECM.module.WCalendar.Schedule.scheduleLimitValidation.message</control-param>
 						<control-param name="hideDateFormat">true</control-param>
 						</control>
 						<!-- <constraint-handlers>
