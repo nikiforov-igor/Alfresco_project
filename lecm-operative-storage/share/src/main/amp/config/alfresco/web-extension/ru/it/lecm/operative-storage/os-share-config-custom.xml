@@ -287,6 +287,7 @@
 					<show id="lecm-os:nomenclature-year-section-year"/>
 					<show id="lecm-os:nomenclature-year-section-comment"/>
 					<show id="lecm-os:nomenclature-year-section-status"/>
+                    <show id="lecm-os:nomenclature-organization-assoc"/>
 				</field-visibility>
 			</form>
         </forms>
@@ -373,6 +374,7 @@
                     <show id="cm:title"/>
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
+                    <show id="cm:description"/>
                     <show id="os-aspects:sort-value"/>
                     <show id="lecm-os:nomenclature-unit-section-comment"/>
                 </field-visibility>
@@ -386,7 +388,7 @@
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-unit-section-index"/>
-                    <field id="lecm-os:nomenclature-unit-section-comment">
+                    <field id="cm:description">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="os-aspects:sort-value">

@@ -7,6 +7,7 @@ package ru.it.lecm.operativestorage.scripts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.policy.BehaviourFilter;
@@ -15,11 +16,13 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.removal.DocumentsRemovalService;
 import ru.it.lecm.eds.api.EDSDocumentService;
@@ -38,6 +41,16 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 	private BehaviourFilter behaviourFilter;
     private DocumentsRemovalService documentRemovalService;
     private NodeService nodeService;
+	private PermissionService permissionService;
+	private RepositoryStructureHelper repositoryStructureHelper;
+
+	public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+		this.repositoryStructureHelper = repositoryStructureHelper;
+	}
+
+	public void setPermissionService(PermissionService permissionService) {
+		this.permissionService = permissionService;
+	}
 
     public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
@@ -155,6 +168,22 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		});
 	}
 
+	public void moveToNomenclatureCase(final ScriptNode doc, Scriptable employees) {
+		moveToNomenclatureCase(doc);
+		List<NodeRef> employeesList = getNodeRefsFromScriptableCollection(employees);
+		List<AssociationRef> assocList = nodeService.getTargetAssocs(doc.getNodeRef(), EDSDocumentService.ASSOC_FILE_REGISTER);
+		NodeRef caseRef;
+
+		if(assocList != null && !assocList.isEmpty()) {
+			caseRef = assocList.get(0).getTargetRef();
+
+			for (NodeRef employee : employeesList) {
+				operativeStorageService.grantPermToEmployee(caseRef, employee);
+			}
+		}
+
+	}
+
     /**
      * Возвращает ссылку на справки для номенклатуры дел, если папки нет, создает ее
      * @param nodeRefStr
@@ -258,5 +287,38 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 			}
 		}
 	}
+
+	public void moveNode(final ScriptNode document, final String path) {
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                StringTokenizer tokenizer = new StringTokenizer(path, "/");
+                NodeRef nodeRef = repositoryStructureHelper.getCompanyHomeRef();
+                while (tokenizer.hasMoreTokens()) {
+                    String folder = tokenizer.nextToken();
+                    if (!"".equals(folder)) {
+                        NodeRef currentFolder = repositoryStructureHelper.getFolder(nodeRef, folder);
+                        if (currentFolder == null) {
+                            currentFolder = repositoryStructureHelper.createFolder(nodeRef, folder);
+                        }
+                        nodeRef = currentFolder;
+                    }
+                }
+                ChildAssociationRef parent = nodeService.getPrimaryParent(document.getNodeRef());
+                nodeService.moveNode(document.getNodeRef(), nodeRef, ContentModel.ASSOC_CONTAINS, parent.getQName());
+                return null;
+            }
+        });
+    }
+
+    public void setPermission(final ScriptNode document, final String permission, final String authority) {
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                permissionService.setPermission(document.getNodeRef(), authority, permission, true);
+                return null;
+            }
+        });
+    }
 
 }

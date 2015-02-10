@@ -26,7 +26,8 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 			onActionDeleteNomenclatureYear: "Удаление номенклатуры дел",
 			onActionArchiveND: "Передача номенклатурного дела в архив",
 			onActionCloseNomenclatureYear: "Закрытие номенклатуры дел",
-			onActionDeleteND: "Удаление номенклатурного дела"
+			onActionDeleteND: "Удаление номенклатурного дела",
+			onReCreateNomenclature: "Копирование номенклатуры"
 		};
 
 		LogicECM.module.Nomenclature.Datagrid.superclass.constructor.call(this, containerId);
@@ -238,6 +239,10 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 		},
 
 		onActionDeleteND: function(p_items, owner, actionsConfig, fnPrompt) {
+			this.ActionsClickAdapter(p_items, this.actionsEnum[owner.className], actionsConfig, fnPrompt);
+		},
+
+		onReCreateNomenclature: function(p_items, owner, actionsConfig, fnPrompt) {
 			this.ActionsClickAdapter(p_items, this.actionsEnum[owner.className], actionsConfig, fnPrompt);
 		},
 
@@ -588,6 +593,29 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 			}
 		},
 
+		reCreateNomenclature_Prompt: function(execFunction, item) {
+			var yearRef = item.itemData['prop_lecm-os_nomenclature-year-section-year'].value + 1;
+			var orgRef = item.itemData['assoc_lecm-os_nomenclature-organization-assoc'].value;
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'GET',
+				url: Alfresco.constants.PROXY_URI + "lecm/os/nomenclature/isYearUniq?year=" + yearRef + "&orgNodeRef=" + orgRef,
+				successCallback: {
+					scope: this,
+					fn: function(response) {
+						if(!response.json.uniq) {
+							Alfresco.util.PopupManager.displayMessage({
+								text: 'Невозможно создать новую номенклатуру, так как она уже создана'
+							});
+						} else {
+							execFunction.call(this);
+						}
+					}
+				},
+				failureMessage: this.msg('message.failure'),
+				scope: this
+			});
+		},
+
 		deleteNDSectionEvaluator: function(rowData) {
 			var type = rowData.type,
 				status = rowData.itemData["prop_lecm-os_nomenclature-unit-section-status"],
@@ -677,6 +705,13 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 			var type = rowData.type;
 
 			return (type == "lecm-os:nomenclature-case") && LogicECM.Nomenclature.isArchivist;
+		},
+
+		reCreateNomenclatureEvaluator: function(rowData) {
+			var type = rowData.type,
+				status = rowData.itemData['prop_lecm-os_nomenclature-year-section-status'];
+
+			return ('lecm-os:nomenclature-year-section' == type) && ('APPROVED' == status.value);
 		},
 
 		editEvaluator: function(rowData) {

@@ -60,6 +60,7 @@
 		<value>alfresco/module/${artifactId}/actions/delete-nd.xml</value>
 		<value>alfresco/module/${artifactId}/actions/refuse-to-registration.xml</value>
 		<value>alfresco/module/${artifactId}/actions/move-doc-to-case.xml</value>
+		<value>alfresco/module/${artifactId}/actions/recreate-nomenclature.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.customDictionaries">
@@ -72,6 +73,10 @@
 
 	<util:list id="operative.storage.arm.dictionaries">
 		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
+	</util:list>
+
+	<util:list id="operative.storage.reports">
+		<value>alfresco/module/${artifactId}/reports/organization-nomenclature.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.arm.os">
@@ -90,6 +95,13 @@
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
 		  p:dictionaries-ref="operative.storage.arm.dictionaries"/>
+
+	<bean id="operative.storage.reports.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy"
+		  p:rootPath="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"
+		  p:dictionaries-ref="operative.storage.reports"/>
 
 	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
@@ -126,7 +138,9 @@
 		  p:operativeStorageService-ref="lecmOperativeStorageService"
 		  p:behaviourFilter-ref="policyBehaviourFilter"
           p:documentRemovalService-ref="documentsRemovalService"
-          p:nodeService-ref="nodeService"/>
+          p:nodeService-ref="nodeService"
+		  p:permissionService-ref="permissionService"
+		  p:repositoryStructureHelper-ref="repositoryStructureHelper"/>
 
 	<bean init-method="init"
 		  class="ru.it.lecm.operativestorage.policies.NomenclatureCasePolicy"

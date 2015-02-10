@@ -157,6 +157,14 @@
 							label:"${msg("actions.deleteND")}",
 							evaluator: datagrid.deleteNDEvaluator,
 							confirmFunction: datagrid.deleteND_Propmt
+						},
+						{
+							type:"datagrid-action-link-${bubblingId}",
+							id:"onReCreateNomenclature",
+							permission:"edit",
+							label:"${msg("actions.onReCreateNomenclature")}",
+							evaluator: datagrid.reCreateNomenclatureEvaluator,
+							confirmFunction: datagrid.reCreateNomenclature_Prompt
 						}
 					]
 				});
