@@ -746,5 +746,11 @@
                 <module>lecm-diagnostic-utility</module>
             </modules>
         </profile>
+        <profile>
+            <id>lecmReporting</id>
+            <modules>
+                <module>lecm-reporting</module>
+            </modules>
+        </profile>
     </profiles>
 </project>
