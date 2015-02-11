@@ -75,12 +75,6 @@
 		</property>
 	</bean>
 
-	<bean id="LogicECMContentPolicy"
-		  class="ru.it.lecm.base.policy.LogicECMContentPolicy" init-method="init">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
-		<property name="policyComponent" ref="policyComponent"/>
-	</bean>
-
 	<bean id="deleteAction"
 		  class="ru.it.lecm.base.schedule.DeleteActionExecuter"
 		  parent="action-executer">

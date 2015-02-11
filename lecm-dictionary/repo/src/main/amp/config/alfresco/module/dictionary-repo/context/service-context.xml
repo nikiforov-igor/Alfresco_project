@@ -45,7 +45,7 @@
     </bean>
 
     <bean id="lecmDictionaryBootstrap" init-method="bootstrap" abstract="true" parent="baseBean"
-          class="ru.it.lecm.dictionary.bootstrap.LecmDictionaryBootstrap" depends-on="dictionaryBootstrap, LogicECMContentPolicy">
+          class="ru.it.lecm.dictionary.bootstrap.LecmDictionaryBootstrap" depends-on="dictionaryBootstrap">
         <property name="dictionaryBean" ref="serviceDictionary"/>
         <property name="xmlImportBean" ref="lecmDictionaryImportBean"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
