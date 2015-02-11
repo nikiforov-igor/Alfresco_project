@@ -9,7 +9,7 @@
 			name: "alfresco/header/AlfMenuItem",
 			config: {
 				id: "NOMENCLATURE_MENU_ITEM",
-				label: "АРМ Архивариуса",
+				label: msg.get("lecm.os.lbl.archivist.workplace"),
 				targetUrl: "arm?code=archive"
 			}
 		};

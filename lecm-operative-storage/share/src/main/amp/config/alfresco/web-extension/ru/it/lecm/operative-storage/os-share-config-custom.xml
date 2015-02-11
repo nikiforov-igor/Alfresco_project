@@ -89,7 +89,7 @@
                     <show id="lecm-base-aspects:order"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                 </appearance>
@@ -100,7 +100,7 @@
                     <show id="lecm-os:security-classification-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" label="Название">
+                    <field id="cm:title" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                 </appearance>
@@ -117,7 +117,7 @@
                     <show id="lecm-base-aspects:order"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                 </appearance>
@@ -134,7 +134,7 @@
                     <show id="lecm-os:storage-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                 </appearance>
@@ -151,7 +151,7 @@
                     <show id="lecm-os:storage-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                 </appearance>
@@ -169,7 +169,7 @@
                     <show id="lecm-os:store-term-forever"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                     <field id="lecm-os:store-term-forever">
@@ -191,7 +191,7 @@
                     <show id="lecm-os:store-term-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
                 </appearance>
@@ -209,7 +209,7 @@
                     <show id="lecm-os:urgency-classification-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
 					<field id="lecm-os:urgency-classification-urgency-unit">
@@ -225,7 +225,7 @@
 					<show id="lecm-os:urgency-classification-comment"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:title" label="Название">
+					<field id="cm:title" label-id="lecm.os.lbl.name">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
 					<field id="lecm-os:urgency-classification-urgency-value">
@@ -249,7 +249,7 @@
                     <show id="lecm-os:urgency-classification-comment"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:title" mandatory="true" label="Название">
+                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
 					<field id="lecm-os:urgency-classification-urgency-unit">
@@ -738,8 +738,8 @@
                     <show id="lecm-os:nomenclature-case-to-archive" />
                 </field-visibility>
                 <appearance>
-                	<field id="lecm-os:fake-index" substituteString="{lecm-os:nomenclature-unit-section-index}{lecm-os:nomenclature-case-index}" label="Индекс"/>
-                	<field id="lecm-os:fake-type" label="Тип" substituteString=" "/>
+                	<field id="lecm-os:fake-index" substituteString="{lecm-os:nomenclature-unit-section-index}{lecm-os:nomenclature-case-index}" label-id="lecm.os.lbl.index"/>
+                	<field id="lecm-os:fake-type" label-id="lecm.os.lbl.type" substituteString=" "/>
                     <field id="lecm-os:nomenclature-year-section-status-fake" substituteString="{lecm-os:nomenclature-case-year-assoc/lecm-os:nomenclature-year-section-status}"/>
                     <field id="os-aspects:sort-value"/>
                 </appearance>

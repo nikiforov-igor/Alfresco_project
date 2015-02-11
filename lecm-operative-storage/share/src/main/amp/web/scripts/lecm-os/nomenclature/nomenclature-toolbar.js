@@ -194,7 +194,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			}
 			var loadItem = [];
 			loadItem.push({
-				text: "Загрузка...",
+				text: Alfresco.util.message('lecm.os.msg.loading'),
 				disabled: true
 			});
 			if (YAHOO.util.Dom.inDocument(menu.element)) {
@@ -258,7 +258,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						}
 						if (actionItems.length == 0 && wideActionItems.length == 0) {
 							actionItems.push({
-								text: "Нет доступных операций",
+								text: Alfresco.util.message('lecm.os.msg.no.operations'),
 								disabled: true
 							});
 						}
@@ -364,11 +364,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					fn: function(response) {
 						if(response.json.data.items.length) {
 							Alfresco.util.PopupManager.displayPrompt({
-								title:'Удаление номенклатурного дела',
-								text: 'Выбранное дело содержит документы. Продолжить удаление?',
+								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
+								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),
 								buttons:[
 									{
-										text:'Ок',
+										text:Alfresco.util.message('lecm.os.btn.ok'),
 										handler: {
 											obj: {
 												context: this,
@@ -380,7 +380,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 										}
 									},
 									{
-										text:'Отмена',
+										text:Alfresco.util.message('lecm.os.btn.cancel'),
 										handler:function DataGridActions__onActionDelete_cancel() {
 											this.destroy();
 										}
@@ -392,7 +392,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						}
 					}
 				},
-				failureMessage: 'Произошла ошибка',
+				failureMessage: Alfresco.util.message('lecm.os.msg.error'),
 				scope: this
 			});
 
@@ -420,11 +420,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					var me = this;
 					Alfresco.util.PopupManager.displayPrompt(
 						{
-							title: "Выполнение действия",
-							text: "Подтвердите выполнение действия \"" + p_oItem.actionId + "\"",
+							title: Alfresco.util.message('lecm.os.ttl.action.performing'),
+							text: Alfresco.util.message('lecm.os.ttl.confirm.action') + " \"" + p_oItem.actionId + "\"",
 							buttons: [
 								{
-									text: "Ок",
+									text: Alfresco.util.message('lecm.os.btn.ok'),
 									handler: function dlA_onAction_action() {
 										this.destroy();
 										Alfresco.util.Ajax.jsonRequest({
@@ -450,7 +450,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 									}
 								},
 								{
-									text: "Отмена",
+									text: Alfresco.util.message('lecm.os.btn.cancel'),
 									handler: function dlA_onActionDelete_cancel() {
 										this.destroy();
 									},
@@ -523,19 +523,19 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
             Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
 
             Alfresco.util.PopupManager.displayMessage({
-				text: 'Действие "' + actionId + '" успешно выполнено.'
+				text: Alfresco.util.message('lecm.os.msg.action') + ' "' + actionId + '" ' + Alfresco.util.message('lecm.os.msg.completed')
 			});
 		},
 
 		_openMessageWindow: function openMessageWindowFunction(title, message, reload) {
 			Alfresco.util.PopupManager.displayPrompt(
 				{
-					title: "Результат выполнения операции \"" + title + "\"",
+					title: Alfresco.util.message('lecm.os.msg.operation.result') + " \"" + title + "\"",
 					text: message,
 					noEscape: true,
 					buttons: [
 						{
-							text: "Ок",
+							text: Alfresco.util.message('lecm.os.btn.ok'),
 							handler: function dlA_onAction_action()
 							{
 								this.destroy();
@@ -829,15 +829,15 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				});
 
 			if(this.node.itemType == 'cm:folder'){
-				this.toolbarButtons["defaultActive"].newRowButtonAdditional.set("label", "Добавить раздел отдела");
+				this.toolbarButtons["defaultActive"].newRowButtonAdditional.set("label", Alfresco.util.message('lecm.os.lbl.add.depart.section'));
 				this.toolbarButtons["defaultActive"].newRowButtonAdditional.setStyle("display", "inline-block");
-				this.toolbarButtons["defaultActive"].newRowButton.set("label", "Добавить номенклатурное дело");
+				this.toolbarButtons["defaultActive"].newRowButton.set("label", Alfresco.util.message('lecm.os.lbl.add.nomen.doc'));
 			} else {
 				this.toolbarButtons["defaultActive"].newRowButtonAdditional.setStyle("display", "none");
-				this.toolbarButtons["defaultActive"].newRowButton.set("label", "Добавить " + this.getTypeName(this.node.itemType));
+				this.toolbarButtons["defaultActive"].newRowButton.set("label", Alfresco.util.message('lecm.os.lbl.add') + " " + this.getTypeName(this.node.itemType));
 			}
 
-			this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", "Удалить выбранный " + this.getTypeName(this.node.currentItemType));
+			this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", Alfresco.util.message('lecm.os.lbl.remove.selected') + " " + this.getTypeName(this.node.currentItemType));
 
 			this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType != "lecm-dic:dictionary");
 
@@ -846,11 +846,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 		getTypeName: function(type) {
 			if (type == "lecm-os:nomenclature-year-section") {
-				return "годовой раздел";
+				return Alfresco.util.message('lecm.os.lbl.annual.section');
 			} else if (type == "lecm-os:nomenclature-unit-section") {
-				return "раздел управления";
+				return Alfresco.util.message('lecm.os.lbl.management.section');
 			}
-			return "элемент";
+			return Alfresco.util.message('lecm.os.lbl.element');
 		},
 		onExport: function() {
 			if (this.node != null) {

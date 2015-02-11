@@ -24,7 +24,7 @@
 					effectDuration: 0
 				});
 				YAHOO.Bubbling.fire('registerValidationHandler', {
-					message: 'В годовом разделе уже существует раздел номенклатуры, связанный с этим подразделением',
+					message: '${msg("lecm.os.msg.nomencl.exists")}',
 					fieldId: errorContainer,
 					handler: validateHandler.bind(this),
 					when: 'onchange'

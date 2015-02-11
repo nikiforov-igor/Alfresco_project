@@ -31,8 +31,8 @@
 
 				datagrid.setOptions({
 					bubblingLabel: '${bubblingId}',
-					createItemBtnMsg: 'Добавить сотрудника',
-					createFormTitleMsg: 'Сотрудник',
+					createItemBtnMsg: '${msg("dtgrd.label.add.employee")}',
+					createFormTitleMsg: '${msg("dtgrd.label.employee")}',
 					usePagination: false,
 					showExtendSearchBlock: false,
 					showCheckboxColumn: true,

@@ -71,9 +71,9 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 							if(datalistColumn.name == "lecm-os:fake-type") {
 								var type = oRecord.getData().type;
 								if(type == "lecm-os:nomenclature-unit-section") {
-									columnContent += "Раздел";
+									columnContent += Alfresco.util.message('lecm.os.lbl.section');
 								} else {
-									columnContent += "Дело";
+									columnContent += Alfresco.util.message('lecm.os.lbl.document');
 								}
 
 							}
@@ -111,7 +111,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
             Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
 
             Alfresco.util.PopupManager.displayMessage({
-					text: 'Действие "' + actionString + '" успешно выполнено.'
+					text: Alfresco.util.message('lecm.os.msg.action') + ' "' + actionString + '" ' + Alfresco.util.message('lecm.os.msg.completed')
 				});
 
 		},
@@ -403,8 +403,8 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 					fn: function (oResponse) {
 						if(oResponse.json.length) {
 							Alfresco.util.PopupManager.displayPrompt({
-								title:'Удаление раздела',
-								text: 'Отмеченные разделы не пустые. Необходимо удалить сначала подразделы и/или дела.'
+								title:Alfresco.util.message('lecm.os.lbl.remove.section'),
+								text: Alfresco.util.message('lecm.os.msg.not.empty.sections')
 							});
 						} else {
 							execFunction.call(this);
@@ -426,8 +426,8 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 					fn: function(response) {
 						if(response.json.length) {
 							Alfresco.util.PopupManager.displayPrompt({
-								title:'Удаление номенклатуры дел',
-								text: 'Номенклатура дел не пустая. Необходимо сначала удалить все папки и документы, находящиеся в ней'
+								title:Alfresco.util.message('lecm.os.lbl.remove.nomen'),
+								text: Alfresco.util.message('lecm.os.msg.not.empty.nomen')
 							});
 						} else {
 							execFunction.call(this);
@@ -493,10 +493,10 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 						var items = response.json.items;
 						if (items && items.length) {
 							Alfresco.util.PopupManager.displayPrompt({
-								title:'Закрытие номенклатуры дел',
-								text: 'В текущей номенклатуре дел есть незакрытые переходящие дела. Выберите действие.',
+								title:Alfresco.util.message('lecm.os.lbl.close.nomen'),
+								text: Alfresco.util.message('lecm.os.msg.nomen.not.closed.docs'),
 								buttons:[{
-									text: 'Закрыть все дела',
+									text: Alfresco.util.message('lecm.os.msg.all.docs.close'),
 									handler: {
 										obj: {
 											context: this,
@@ -505,7 +505,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 										fn: closeAllCases
 									}
 								}, {
-									text: 'Перенести переходящие дела',
+									text: Alfresco.util.message('lecm.os.msg.move.passing.docs'),
 									handler: {
 										obj: {
 											context: this,
@@ -515,7 +515,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 										fn: moveOpenTransientCases
 									}
 								}, {
-									text: 'Отмена',
+									text: Alfresco.util.message('lecm.os.btn.cancel'),
 									handler: {
 										fn: cancel
 									}
@@ -560,18 +560,18 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 					fn: function(response) {
 						if(response.json.data.items.length) {
 							Alfresco.util.PopupManager.displayPrompt({
-								title:'Удаление номенклатурного дела',
-								text: 'Выбранное дело содержит документы. Продолжить удаление?',
+								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
+								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),
 								buttons:[
 									{
-										text:'Ок',
+										text:Alfresco.util.message('lecm.os.btn.ok'),
 										handler: {
 											obj: this,
 											fn: destroyND
 										}
 									},
 									{
-										text:'Отмена',
+										text:Alfresco.util.message('lecm.os.btn.cancel'),
 										handler:function DataGridActions__onActionDelete_cancel() {
 											this.destroy();
 										}
