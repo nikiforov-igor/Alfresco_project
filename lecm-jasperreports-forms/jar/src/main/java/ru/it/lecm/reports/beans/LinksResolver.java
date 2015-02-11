@@ -2,10 +2,10 @@ package ru.it.lecm.reports.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.generators.SubreportBuilder;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.model.impl.JavaDataType;
@@ -45,16 +45,16 @@ public class LinksResolver {
      * Выполнить разименование ссылки в нативный тип.}
      *
      * @param docId NodeRef
-     * @param linkExpression String
+     * @param column DataFieldColumn
      * @return Object
      */
-    public Object evaluateLinkExpr(NodeRef docId, String linkExpression, String destClassName, Map<String, Object> curProps) {
-        if (linkExpression == null) {
+    public Object evaluateLinkExpr(NodeRef docId, DataFieldColumn column, Map<String, Object> curProps) {
+        if (column == null) {
             return null;
         }
 
-        PropertyCheck.mandatory(this, "services", services);
-        PropertyCheck.mandatory(this, "services.getSubstitudeService", services.getSubstitudeService());
+        final String linkExpression = (column.getValueLink() != null) ? column.getValueLink() : column.getName();
+        final String fldJavaClass = (column.getValueClass() != null) ? column.getValueClassName() : null;
 
 		/*
          * если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ...
@@ -63,7 +63,7 @@ public class LinksResolver {
         // (!) если элемент начинается с "{{", то это спец. элемент, который будет обработан проксёй подстановок.
         Object value = null;
         try {
-            if (curProps != null && curProps.containsKey(linkExpression)) {
+            if (curProps != null && curProps.containsKey(linkExpression)) { // простые свойства и  подотчеты
                 value = curProps.get(linkExpression);
             } else if (isSubstCalcExpr(linkExpression)) { // ссылка или выражение ...
                 value = services.getSubstitudeService().getNodeFieldByFormat(docId, linkExpression);
@@ -75,16 +75,30 @@ public class LinksResolver {
         }
 
         if (value == null) {
-            return null;
+            return !linkExpression.matches(SubreportBuilder.REGEXP_SUBREPORTLINK) ? null : new ArrayList<>();
         }
 
         // типизация value согласно указанному классу ...
-        if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(destClassName)) {
-            final JavaDataType.SupportedTypes type = JavaDataType.SupportedTypes.findType(destClassName);
+        if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(fldJavaClass)) {
+            final JavaDataType.SupportedTypes type = JavaDataType.SupportedTypes.findType(fldJavaClass);
             if (type == null) {
                 return value;
             } else {
-                return type.getValueByRealType(value);
+                // доп условия. Нам может прийти лист NodeRef - преобразуем его к строке.
+                if (value instanceof List && type.equals(JavaDataType.SupportedTypes.STRING)) {
+                    StringBuilder result = new StringBuilder();
+                    for (Object item : ((List)value)) {
+                        if (NodeRef.isNodeRef(item.toString())) {
+                            result.append(getServices().getSubstitudeService().getObjectDescription((NodeRef) item));
+                        } else {
+                            result.append(item.toString());
+                        }
+                        result.append(SubstitudeBean.ASSOC_DELIMITER);
+                    }
+                    return result.length() > 2 ? result.toString().substring(0, result.length() - 2) : result.toString();
+                } else {
+                    return type.getValueByRealType(value);
+                }
             }
         }
         return value;
@@ -95,7 +109,7 @@ public class LinksResolver {
         if (sorting != null && !sorting.isEmpty() && iterator.hasNext()) {
             String[] sortSettings = sorting.split(",");
 
-            TreeMap<MultiplySortObject, Set<org.alfresco.service.cmr.search.ResultSetRow>> treeMap = new TreeMap<MultiplySortObject, Set<ResultSetRow>>();
+            TreeMap<MultiplySortObject, Set<ResultSetRow>> treeMap = new TreeMap<>();
 
             while (iterator.hasNext()) {
                 ResultSetRow next = iterator.next();
@@ -125,7 +139,7 @@ public class LinksResolver {
                 treeMap.get(sortedObj).add(next);
             }
 
-            List<ResultSetRow> list = new ArrayList<ResultSetRow>();
+            List<ResultSetRow> list = new ArrayList<>();
             for (MultiplySortObject multiplySortObject : treeMap.keySet()) {
                 list.addAll(treeMap.get(multiplySortObject));
             }

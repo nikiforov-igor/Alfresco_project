@@ -345,4 +345,24 @@
         <property name="url" value="${lecm.reports.db.url}"/>
         <property name="basicDataSource" ref="dataSource"/>
     </bean>
+
+    <bean id="sqlReportingBootstrap" abstract="true" init-method="bootstrap" parent="baseBean"
+          class="ru.it.lecm.reports.database.SQLReportingBootstrap" depends-on="lecmReportingDatabaseHelper">
+        <property name="bootstrapOnStart" value="#{new Boolean('${lecm.reporting.bootstrapOnStart}')}"/>
+        <property name="dataBaseHelper" ref="lecmReportingDatabaseHelper"/>
+    </bean>
+
+    <bean id="updateLastStatusSQL" parent="sqlReportingBootstrap">
+        <property name="sqlFiles">
+            <list>
+                <value>alfresco/module/${artifactId}/sql/update-last-status.sql</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="orgunitResolver" class="ru.it.lecm.utils.OrgunitResolver" >
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="nodeService" ref="nodeService" />
+    </bean>
+
 </beans>

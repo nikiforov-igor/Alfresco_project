@@ -10,10 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.api.ReportDSContext;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
-import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
+import ru.it.lecm.reports.jasper.utils.JRUtils;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.util.*;
@@ -41,20 +44,32 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
         return mainDoc;
     }
 
-    @Override
-    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-        final LinkedDocumentsDS result = new LinkedDocumentsDS(iterator);
+    protected AlfrescoJRDataSource createDS(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        this.setReportDescriptor(descriptor);
+        LuceneSearchWrapper alfrescoQuery = execQuery(descriptor, parentContext);
+        if (alfrescoQuery == null || alfrescoQuery.getSearchResults() == null) {
+            return null;
+        }
+
+        Iterator<ResultSetRow> iterator = alfrescoQuery.getSearchResults().iterator();
+
+        final LinkedDocumentsDS result = new LinkedDocumentsDS(this);
         result.getContext().setRegistryService(getServices().getServiceRegistry());
-        result.getContext().setJrSimpleProps(jrSimpleProps);
-        result.getContext().setMetaFields(getConfigXML().getMetaFields());
+        result.getContext().setJrSimpleProps(getSimpleColumnNames(this.getReportDescriptor()));
+        result.getContext().setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
+        result.getContext().setResolver(this.getResolver());
+        result.getContext().setRsIter(iterator);
+
+        // фильтр данных ...
+        result.getContext().setFilter(getDataFilter(alfrescoQuery));
         result.buildJoin();
         return result;
     }
 
     private class LinkedDocumentsDS extends TypedJoinDS<Map<String, Serializable>> {
 
-        public LinkedDocumentsDS(Iterator<ResultSetRow> iterator) {
-            super(iterator);
+        public LinkedDocumentsDS(GenericDSProviderBase provider) {
+            super(provider);
         }
 
         @Override
@@ -98,13 +113,13 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
          *
          * @param docId - id документа
          * @return список СВЯЗЕЙ Документов типа DocumentConnectionService.TYPE_CONNECTION,
-         *         связанных с docId так, что выставлено isSystem = true.
+         * связанных с docId так, что выставлено isSystem = true.
          */
         private List<NodeRef> findSystemConnections(NodeRef docId) {
             final NodeService srv = getServices().getServiceRegistry().getNodeService();
             /* получение списка Связей службой документальных связей ... */
             final NodeRef linksRef = getServices().getDocumentConnectionService().getRootFolder(docId); // получить ссылку на "Связи"
-			if (linksRef == null) { //TODO DONE Рефакторинг AL-2733
+            if (linksRef == null) { //TODO DONE Рефакторинг AL-2733
                 return null;
             }
 
@@ -149,7 +164,7 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
                 if (hasInMainDoc == isInMainDoc) {
                     final String link = fld.getValueLink();
                     // данные получаем либо непосредственно из атрибутов, либо по ссылкам
-                    final Serializable value = (ReportDSContextImpl.isCalcField(link))
+                    final Serializable value = getResolver().isSubstCalcExpr(link)
                             ? /* по ссылке */ getServices().getSubstitudeService().formatNodeTitle(docInfo, link)
                             : props.get(QName.createQName(link, ns));
                     resProps.put(fld.getName(), value);

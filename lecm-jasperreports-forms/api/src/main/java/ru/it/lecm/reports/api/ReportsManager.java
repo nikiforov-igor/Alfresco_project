@@ -184,9 +184,13 @@ public class ReportsManager{
         if (subReports != null && !subReports.isEmpty()) {
             for (ReportDescriptor subReport : subReports) { // здесь у нас дескрипторы заполнены не полностью!
                 if (subReport.isSubReport()) { // чтобы избежать возможных ошибок в будущем
-                    copyTemplate(subReport, this.contentRepositoryDAO, this.subreportFileDAO, false);
+                    try {
+                        copyTemplate(subReport, getContentRepositoryDAO(), getSubreportFileDAO(), false);
+                        copySubreportsTemplatesInternal(subReport);
+                    } catch (Exception ex) {
+                        logger.error(ex.getMessage(), ex);
+                    }
                 }
-                copySubreportsTemplatesInternal(subReport);
             }
         }
     }
@@ -430,14 +434,13 @@ public class ReportsManager{
      */
     public void registerReportDescriptor(ReportDescriptor desc, NodeRef reportRef) throws RuntimeException{
         if (desc != null) {
-            this.contentRepositoryDAO.delete(new ReportContentDAO.IdRContent(desc.getMnem(), "*"));
+            getContentRepositoryDAO().delete(new ReportContentDAO.IdRContent(desc.getMnem(), "*"));
+            if (desc.isSubReport()) {
+                getSubreportFileDAO().delete(new ReportContentDAO.IdRContent(desc.getMnem(), "*"));
+            }
             if (desc.getSubreports() != null) {
                 for (ReportDescriptor subReportDescriptor : desc.getSubreports()) {
-                    try {
-                        registerReportDescriptor(subReportDescriptor, null);
-                    } catch (RuntimeException ex) {
-                        logger.error(ex.getMessage(), ex);
-                    }
+                    registerReportDescriptor(subReportDescriptor, null);
                 }
             }
 
@@ -445,7 +448,7 @@ public class ReportsManager{
                 try {
                     createDsFile(desc, reportRef); // создание ds-xml и файла импорта (на всякий случай) для основных отчетов
                 } catch (IOException e) {
-                    logger.error(e.getMessage(), e);
+                    throw new RuntimeException(e);
                 }
             }
 
@@ -1007,8 +1010,8 @@ public class ReportsManager{
     private int scanResources() {
         // @NOTE: (!) здесь вызов getDescriptors(); зациклит
         int ifound = 0;
-        ifound += scanRepository(this.contentFileDAO, false);
-        ifound += scanRepository(this.contentRepositoryDAO, true);
+        ifound += scanRepository(getContentFileDAO(), false);
+        ifound += scanRepository(getContentRepositoryDAO(), true);
         return ifound;
     }
 
@@ -1026,7 +1029,7 @@ public class ReportsManager{
         final boolean isSubreport = desc.isSubReport();
 
         // (!) подотчёты сохраняем еще и  в отдельное (файловое) хранилище ...
-        final ReportContentDAO storage = this.contentRepositoryDAO;
+        final ReportContentDAO storage = getContentRepositoryDAO();
         final ReportContentDAO subReportStorage = getSubreportFileDAO();
 
         for (ReportTemplate template : desc.getReportTemplates()) {
@@ -1159,7 +1162,7 @@ public class ReportsManager{
             final ReportContentDAO.IdRContent idds = DSXMLProducer.makeDsXmlId(desc);
             try {
                 // файл создадим только в репозитории (но не в файловом хранилище) ...
-                this.contentRepositoryDAO.storeContent(idds, new ByteArrayInputStream(dsxml.toByteArray()));
+                getContentRepositoryDAO().storeContent(idds, new ByteArrayInputStream(dsxml.toByteArray()));
             } catch (Throwable ex) {
                 final String msg = String.format(
                         "Report '%s': error saving ds-xml into storage by id '%s'", desc.getMnem(), idds);
@@ -1167,7 +1170,6 @@ public class ReportsManager{
                 throw new RuntimeException(msg, ex);
             }
         }
-
         // развертывание в сервисе
         //ByteArrayOutputStream importXml = null;
         //InputStream is = null;

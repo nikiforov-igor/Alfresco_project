@@ -5,12 +5,16 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.reports.api.ReportDSContext;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.calc.DataGroupCounter;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
+import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.statemachine.StatemachineModel;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.util.*;
@@ -96,12 +100,24 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
         defaults.put(XMLSTATUS_FLAGS_MAP, null); // map
     }
 
-    @Override
-    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-        final DocflowJRDataSource result = new DocflowJRDataSource(iterator);
+    protected AlfrescoJRDataSource createDS(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        this.setReportDescriptor(descriptor);
+        LuceneSearchWrapper alfrescoQuery = execQuery(descriptor, parentContext);
+        if (alfrescoQuery == null || alfrescoQuery.getSearchResults() == null) {
+            return null;
+        }
+
+        Iterator<ResultSetRow> iterator = alfrescoQuery.getSearchResults().iterator();
+
+        final DocflowJRDataSource result = new DocflowJRDataSource(this);
         result.getContext().setRegistryService(getServices().getServiceRegistry());
-        result.getContext().setJrSimpleProps(jrSimpleProps);
-        result.getContext().setMetaFields(getConfigXML().getMetaFields());
+        result.getContext().setJrSimpleProps(getSimpleColumnNames(this.getReportDescriptor()));
+        result.getContext().setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
+        result.getContext().setResolver(this.getResolver());
+        result.getContext().setRsIter(iterator);
+
+        // фильтр данных ...
+        result.getContext().setFilter(getDataFilter(alfrescoQuery));
         result.buildJoin();
         return result;
     }
@@ -145,8 +161,8 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
         // формат и название выбранного способа группировки
         String fmtForTag, nameForTag;
 
-        public DocflowJRDataSource(Iterator<ResultSetRow> iterator) {
-            super(iterator);
+        public DocflowJRDataSource(GenericDSProviderBase provider) {
+            super(provider);
         }
 
         /**

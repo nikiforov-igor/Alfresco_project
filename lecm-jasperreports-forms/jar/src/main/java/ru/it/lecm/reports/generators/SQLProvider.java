@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.JavaDataType;
@@ -30,6 +31,8 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
 
     @SuppressWarnings("unused")
     private ReportsManager reportsManager;
+    @SuppressWarnings("unused")
+    private LinksResolver resolver;
     private DataBaseHelper databaseHelper;
 
     public DataBaseHelper getDatabaseHelper() {
@@ -109,6 +112,21 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
     @Override
     public void setReportDescriptor(ReportDescriptor reportDescriptor) {
         this.reportDescriptor = reportDescriptor;
+    }
+
+    @Override
+    public ReportDescriptor getReportDescriptor() {
+        return this.reportDescriptor;
+    }
+
+    @Override
+    public void setResolver(LinksResolver resolver) {
+        this.resolver = resolver;
+    }
+
+    @Override
+    public LinksResolver getResolver() {
+        return this.resolver;
     }
 
     @Override

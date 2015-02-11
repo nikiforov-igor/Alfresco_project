@@ -1,30 +1,34 @@
 package ru.it.lecm.reports.generators;
 
 import net.sf.jasperreports.engine.*;
+import org.alfresco.repo.search.EmptyResultSet;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFilter;
+import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
-import ru.it.lecm.reports.jasper.GenericJRDataSource;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
 import ru.it.lecm.reports.jasper.filter.DataFilterByLinks;
-import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.rs.NodeRefsResultSet;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
@@ -59,16 +63,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     /**
      * Запрос и НД, полученный после запроса к Альфреско
      */
-    protected LuceneSearchWrapper alfrescoQuery;
-    protected ResultSet alfrescoResult;
     private JRDSConfigXML xmlConfig = null; // для загрузки конфы из ds-xml
-
-    /**
-     * Список простых Альфреско-атрибутов, которые нужны для отчёта.
-     * Имена - с короткими префиксами.
-     * null означает, что ограничений нет.
-     */
-    protected Set<String> jrSimpleProps;
 
     public WKServiceKeeper getServices() {
         return services;
@@ -78,6 +73,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         this.services = services;
     }
 
+    @Override
     public ReportDescriptor getReportDescriptor() {
         return reportDescriptor;
     }
@@ -115,6 +111,10 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         this.resolver = resolver;
     }
 
+    public LinksResolver getResolver() {
+        return this.resolver;
+    }
+
     public void setQueryHelper(LucenePreparedQueryHelper queryHelper) {
         this.queryHelper = queryHelper;
     }
@@ -125,11 +125,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
     public LucenePreparedQueryHelper getQueryHelper() {
         return queryHelper;
-    }
-
-    protected void clearSearch() {
-        alfrescoResult = null;
-        alfrescoQuery = null;
     }
 
     /**
@@ -144,9 +139,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      *
      * @return LucenePreparedQueryHelper
      */
-    protected LuceneSearchWrapper buildQuery() {
-        alfrescoQuery = getQueryHelper().prepareQuery(this.reportDescriptor);
-        return alfrescoQuery;
+    protected LuceneSearchWrapper buildQuery(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        return getQueryHelper().prepareQuery(descriptor, parentContext);
     }
 
     protected JRDSConfigXML getConfigXML() {
@@ -167,51 +161,60 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * Формирует alfrescoResult согласно запросу полученному от buildQueryText и
      * параметрам limit/offset.
      */
-    protected ResultSet execQuery() {
-        final DurationLogger d = new DurationLogger();
-
-        clearSearch();
+    protected LuceneSearchWrapper execQuery(ReportDescriptor descriptor, ReportDSContext parentContext) {
         /* формирование запроса: параметры выбираются непосредственно из reportDescriptor */
-        final LuceneSearchWrapper preparedQuery = this.buildQuery();
+        final LuceneSearchWrapper preparedQuery = this.buildQuery(descriptor, parentContext);
 
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Query to Alfresco:>>>\n%s\n<<<", preparedQuery));
         }
 
-        final SearchParameters search = new SearchParameters();
-        search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        search.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-        search.setQuery(preparedQuery.toString());
-
-        int skipCountOffset = -1,
-                maxItems = UNLIMITED;
-
-        if (this.reportDescriptor.getFlags() != null) {
-            // set offset ...
-            skipCountOffset = this.reportDescriptor.getFlags().getOffset();
-            // set limit ...
-            maxItems = this.reportDescriptor.getFlags().getLimit();
-        }
-        if (skipCountOffset > 0) {
-            search.setSkipCount(skipCountOffset);
-        }
-        if (maxItems != UNLIMITED) {
-            search.setMaxItems(maxItems);
-        }
-
-		/* (!) момент истины - выполнение ЗАПРОСА */
         ResultSet rs = null;
-        if (!preparedQuery.isEmpty()) {
-            rs = getServices().getServiceRegistry().getSearchService().query(search);
+
+        if (!resolver.isSubstCalcExpr(preparedQuery.getQuery().toString())) {
+            final SearchParameters search = new SearchParameters();
+            search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+            search.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+            search.setQuery(preparedQuery.toString());
+
+            int skipCountOffset = -1,
+                    maxItems = UNLIMITED;
+
+            if (this.reportDescriptor.getFlags() != null) {
+                // set offset ...
+                skipCountOffset = this.reportDescriptor.getFlags().getOffset();
+                // set limit ...
+                maxItems = this.reportDescriptor.getFlags().getLimit();
+            }
+            if (skipCountOffset > 0) {
+                search.setSkipCount(skipCountOffset);
+            }
+            if (maxItems != UNLIMITED) {
+                search.setMaxItems(maxItems);
+            }
+
+            /* (!) момент истины - выполнение ЗАПРОСА */
+            if (!preparedQuery.isEmpty()) {
+                rs = getServices().getServiceRegistry().getSearchService().query(search);
+            }
+        } else if (parentContext != null) {
+            NodeRef docId = parentContext.getCurNodeRef();
+            List<NodeRef> children = getServices().getSubstitudeService().getObjectsByTitle(docId, preparedQuery.getQuery().toString());
+            if (children != null && !children.isEmpty()) {
+                rs = new NodeRefsResultSet(getServices().getServiceRegistry().getNodeService(), children);
+            } else {
+                rs = new EmptyResultSet();
+            }
         }
+
+        preparedQuery.setSearchResults(rs);
 
         final int foundCount = (rs != null) ? rs.length() : -1;
-        d.logCtrlDuration(logger, String.format(
-                "\nQuery in {t} msec: found %d rows, limit %d, offset %d" +
-                        "\n>>>%s\n<<<"
-                , foundCount, maxItems, skipCountOffset, preparedQuery));
 
-        return rs;
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Query to Alfresco:foundCount=" + foundCount));
+        }
+        return preparedQuery;
     }
 
     @Override
@@ -232,17 +235,21 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
     @Override
     public JRDataSource create(JasperReport report) throws JRException {
-        if (alfrescoResult == null) { // выполнение запроса ...
-            alfrescoResult = execQuery();
-            if (alfrescoResult == null) {
-                return null;
-            }
+        return createDS(this.reportDescriptor, null);
+    }
+
+    protected AlfrescoJRDataSource createDS(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        this.reportDescriptor = descriptor;
+        LuceneSearchWrapper alfrescoQuery = execQuery(descriptor, parentContext);
+        if (alfrescoQuery == null || alfrescoQuery.getSearchResults() == null) {
+            return null;
         }
 
-        Iterator<ResultSetRow> iterator = alfrescoResult.iterator();
+        Iterator<ResultSetRow> iterator = alfrescoQuery.getSearchResults().iterator();
 
-        final ReportDSContextImpl context = new ReportDSContextImpl();
-        fillContext(context);
+        // Create a new data source
+        final AlfrescoJRDataSource dataSource = new AlfrescoJRDataSource(this);
+        fillContext(alfrescoQuery, dataSource.getContext());
 
         String sortSettings = null;
         String querySort = reportDescriptor.getFlags().getSort();
@@ -250,11 +257,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
             sortSettings = querySort;
         }
 
-        iterator = resolver.sortObjects(iterator, sortSettings, context);
-
-        // Create a new data source
-        final AlfrescoJRDataSource dataSource = newJRDataSource(iterator);
-        fillContext(dataSource.getContext());
+        iterator = resolver.sortObjects(iterator, sortSettings, dataSource.getContext());
+        dataSource.getContext().setRsIter(iterator); // устанавливаем итератор в ДС
 
         return dataSource;
     }
@@ -262,34 +266,39 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     /**
      * Получить список имён простых колонок в виде последовательности пар "тип", "атрибут" (QName Альфреско).
      *
-     * @param list список колонок, в которых выражение является ссылкой на атрибут
      * @return Set<String>
      */
-    public Set<String> getColumnNames(List<ColumnDescriptor> list) {
-        if (list == null || list.isEmpty()) {
+    public Set<String> getSimpleColumnNames(ReportDescriptor descriptor) {
+        if (descriptor == null) {
             return null;
         }
         final Set<String> result = new HashSet<String>();
-        final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
-        for (ColumnDescriptor col : list) {
-            final QName qname = QName.createQName(col.getQNamedExpression(), ns);
-            if (qname != null) {
-                result.add(qname.toPrefixString(ns)); // (!) регим короткое название
-                result.add(col.getColumnName()); //todo denisB ???
+        final NamespaceService namespaceService = getServices().getServiceRegistry().getNamespaceService();
+        final DictionaryService dictionaryService = getServices().getServiceRegistry().getDictionaryService();
+        for (ColumnDescriptor colDesc : descriptor.getDsDescriptor().getColumns()) {
+            final String substituteExpression = colDesc.getExpression();
+            if (!Utils.isStringEmpty(substituteExpression)) {
+                final boolean isSimpleLink = getQueryHelper().isDirectAlfrescoPropertyLink(substituteExpression);
+                if (isSimpleLink) {
+                    // параметр может быть как название свойства, так и названием ассоциации - проверяем
+                    QName expressionQName = null;
+                    try { // создать qname поля ...
+                        expressionQName = QName.createQName(colDesc.getQNamedExpression(), namespaceService);
+                    } catch (InvalidQNameException ignored) {
+                    }
+
+                    if (expressionQName == null) {
+                        continue; // у нас записано нечто непонятное - пропускаем
+                    }
+
+                    final boolean isProperty = (dictionaryService.getProperty(expressionQName) != null);
+                    if (isProperty) {
+                        result.add(colDesc.getQNamedExpression());
+                    }
+                }
             }
         }
         return result;
-    }
-
-    /**
-     * Внутренний метод для создания нужного набора данных.
-     * В потомках позволит менять конретный тип НД.
-     *
-     * @param iterator Iterator<ResultSetRow>
-     * @return AlfrescoJRDataSource
-     */
-    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-        return new GenericJRDataSource(reportDescriptor, resolver, iterator);
     }
 
     /**
@@ -299,9 +308,9 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      *
      * @return DataFilter
      */
-    protected DataFilter getDataFilter() {
+    protected DataFilter getDataFilter(LuceneSearchWrapper alfrescoQuery) {
         // фильтр, который может "заглядывать" по ссылкам
-        if (this.alfrescoQuery.getArgsByLinks() == null || this.alfrescoQuery.getArgsByLinks().isEmpty()) {
+        if (alfrescoQuery.getArgsByLinks() == null || alfrescoQuery.getArgsByLinks().isEmpty()) {
             return null;
         }
 
@@ -309,7 +318,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
         final DataFilterByLinks result = new DataFilterByLinks(getServices().getSubstitudeService());
 
-        for (ColumnDescriptor colDesc : this.alfrescoQuery.getArgsByLinks()) {
+        for (ColumnDescriptor colDesc : alfrescoQuery.getArgsByLinks()) {
             try {
                 DataFilter.FilterType filter;
                 String expression = colDesc.getExpression();
@@ -335,14 +344,14 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      *
      * @param context ReportDSContextImpl
      */
-    private void fillContext(ReportDSContextImpl context) {
+    private void fillContext(LuceneSearchWrapper alfrescoQuery, ReportDSContextImpl context) {
         if (context != null) {
             context.setRegistryService(getServices().getServiceRegistry());
-            context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.getArgsByProps()));
+            context.setJrSimpleProps(getSimpleColumnNames(this.getReportDescriptor()));
             context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
             context.setResolver(this.resolver);
             // фильтр данных ...
-            context.setFilter(getDataFilter());
+            context.setFilter(getDataFilter(alfrescoQuery));
         }
     }
 

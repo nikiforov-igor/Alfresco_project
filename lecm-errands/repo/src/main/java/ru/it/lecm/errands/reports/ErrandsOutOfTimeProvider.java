@@ -1,6 +1,8 @@
 package ru.it.lecm.errands.reports;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.reports.api.ReportDSContext;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchWrapper;
@@ -31,14 +33,14 @@ public class ErrandsOutOfTimeProvider extends GenericDSProviderBase {
     @SuppressWarnings("unused")
     public void setExecUnits(List<String> unitRefs) {
         if (unitRefs != null && !unitRefs.isEmpty()) {
-            Set<NodeRef> allSelectedUnits = new HashSet<NodeRef>();
+            Set<NodeRef> allSelectedUnits = new HashSet<>();
             for (String ref : unitRefs) {
                 if (!ref.isEmpty()){
                     allSelectedUnits.add(new NodeRef(ref));
                     allSelectedUnits.addAll(getServices().getOrgstructureService().getSubUnits(new NodeRef(ref), true, true));
                 }
             }
-            Set<NodeRef> employeesSet = new HashSet<NodeRef>();
+            Set<NodeRef> employeesSet = new HashSet<>();
             for (NodeRef selectedUnit : allSelectedUnits) {
                 employeesSet.addAll(getServices().getOrgstructureService().getUnitEmployees(selectedUnit));
             }
@@ -54,8 +56,8 @@ public class ErrandsOutOfTimeProvider extends GenericDSProviderBase {
     }
 
     @Override
-    protected LuceneSearchWrapper buildQuery() {
-        final LuceneSearchWrapper builder = super.buildQuery();
+    protected LuceneSearchWrapper buildQuery(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        final LuceneSearchWrapper builder = super.buildQuery(descriptor, parentContext);
 
         if (Boolean.TRUE.equals(importantOnly)) {
             builder.emmit(!builder.isEmpty() ? " AND " : "").

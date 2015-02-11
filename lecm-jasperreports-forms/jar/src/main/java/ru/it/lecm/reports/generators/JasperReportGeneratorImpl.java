@@ -1,10 +1,13 @@
 package ru.it.lecm.reports.generators;
 
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
@@ -38,6 +41,7 @@ import java.util.Map;
 public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
     static final String DEFAULT_FILENAME_DATE_SUFFIX = "dd-MM-yy-HH-mm-ss";
+    static final String SQL_IN_SAME_ORGANIZATION = "SQL_IN_SAME_ORGANIZATION";
 
     private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
 
@@ -55,28 +59,66 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
             throw new RuntimeException(String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportDesc.getMnem()));
         }
 
-        final String reportFileName = getTemplateFileName(reportDesc, templateDescriptor, ".jasper");
-        ContentReader reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
-        if (reader == null) {
-            throw new IOException(String.format("Report is missed - file '%s' not found", reportFileName));
-        }
-
-        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        InputStream stm = reader.getContentInputStream();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        InputStream stm = null;
         try {
             // DONE: параметризовать выходной формат
             final JasperReportTargetFileType target = findTargetArg(parameters, reportDesc);
 
-            final JasperReport jasperReport = (JasperReport) JRLoader.loadObject(stm);
-            IOUtils.closeQuietly(stm); // сразу закроем поток отчёта
-            stm = null;
-
 			/* Создание Провайдера */
-            final String dataSourceClass = reportDesc.getProviderDescriptor() != null ?
-                    reportDesc.getProviderDescriptor().getClassName() : jasperReport.getProperty("dataSource");
+            final String dataSourceClass = reportDesc.getProviderDescriptor().getClassName();
             final JRDataSourceProvider dsProvider = createDsProvider(reportsManager, reportDesc, dataSourceClass, parameters);
 
-			/* построение отчёта */
+            String reportFileName;
+            ContentReader reader ;
+            JasperReport jasperReport;
+            /* построение отчёта */
+            if (!(dsProvider instanceof SQLProvider)) {
+                reportFileName = getTemplateFileName(reportDesc, templateDescriptor, ".jasper");
+                reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
+                if (reader == null) {
+                    throw new IOException(String.format("Report is missed - file '%s' not found", reportFileName));
+                }
+                stm = reader.getContentInputStream();
+
+                jasperReport = (JasperReport) JRLoader.loadObject(stm);
+            } else {
+                reportFileName = getTemplateFileName(reportDesc, templateDescriptor, ".jrxml");
+                reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
+                if (reader == null) {
+                    throw new IOException(String.format("Report template is missed - file '%s' not found", reportFileName));
+                }
+
+                stm = reader.getContentInputStream();
+
+                final JasperDesign jasperDesign = JRXmlLoader.load(stm);
+
+                //Build a new query
+                String theQuery = jasperDesign.getQuery().getText();
+
+                if (theQuery != null && theQuery.contains(SQL_IN_SAME_ORGANIZATION)) {
+                    if (!reportDesc.getFlags().isRunAsSystem()) {
+                        if (!reportDesc.getFlags().isIncludeAllOrganizations()) {
+                            theQuery = getQueryHelper().getProcessorService().processQuery(theQuery);//выполним подстановку
+                        } else {
+                            theQuery = getQueryHelper().getProcessorService().processQuery(theQuery, "1=1");//выполним подстановку
+                        }
+                    } else {
+                        theQuery = getQueryHelper().getProcessorService().processQuery(theQuery, "1=1");//выполним подстановку
+                    }
+                }
+
+                //обновляем запрос в отчете
+                JRDesignQuery newQuery = new JRDesignQuery();
+                newQuery.setText(getQueryHelper().getProcessorService().processQuery(theQuery));
+
+                jasperDesign.setQuery(newQuery);
+
+                jasperReport = JasperCompileManager.compileReport(jasperDesign);
+            }
+
+            IOUtils.closeQuietly(stm); // сразу закроем поток отчёта
+
             generateReport(target, outputStream, jasperReport, dsProvider, parameters);
 
             result.setMimeType(target.getMimeType());
@@ -207,7 +249,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
     }
 
     @Override
-    public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) throws Exception {
+    public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) throws Exception{
         compileJrxml(desc, template, templateData, storage);
     }
 

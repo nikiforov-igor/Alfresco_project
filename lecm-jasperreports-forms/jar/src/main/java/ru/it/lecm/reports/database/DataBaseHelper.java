@@ -109,9 +109,6 @@ public class DataBaseHelper {
         } catch (SQLException e) {
             log.warn("Can not create extensions:\n{}", sqlQuery);
         } finally {
-            if (conn != null) {
-                conn.close();
-            }
             if (statement != null) {
                 statement.close();
             }

@@ -124,14 +124,6 @@ public class ReportDSContextImpl implements ReportDSContext {
         this.jrSimpleProps = jrSimpleProps;
     }
 
-    /**
-     * Проверить является ли указанное поле вычисляемым (в понимании SubstitudeBean):
-     * если первый символ "{", то является.
-     */
-    public static boolean isCalcField(final String fldName) {
-        return (fldName != null) && fldName.contains(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && fldName.contains(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
-    }
-
     // TODO: использовать LinksResolver
     @Override
     public Object getPropertyValueByJRField(String reportColumnName) {
@@ -141,10 +133,7 @@ public class ReportDSContextImpl implements ReportDSContext {
 
         // получаем нативное название данных
         final DataFieldColumn fld = metaFields.get(reportColumnName);
-        final String fldAlfName = (fld != null && fld.getValueLink() != null) ? fld.getValueLink() : reportColumnName;
-        final String fldJavaClass = (fld != null && fld.getValueClass() != null) ? fld.getValueClassName() : null;
-
-        return getResolver().evaluateLinkExpr(curNodeRef, fldAlfName, fldJavaClass, curProps);
+        return getResolver().evaluateLinkExpr(curNodeRef, fld, getCurNodeProps());
     }
 
     public LinksResolver getResolver() {

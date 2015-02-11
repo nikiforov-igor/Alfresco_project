@@ -223,7 +223,7 @@ public class XMLMacroGenerator {
 
             // добавление стандартных функций
             destVars.addVar(VNAME_GUID, new GuidAutoValue());
-            destVars.addVar(VNAME_QUERY, new QueryAutoValue(reportDesc.getFlags() != null && reportDesc.getFlags().getText() != null ? reportDesc.getFlags().getText() : ""));
+            destVars.addVar(VNAME_QUERY, new QueryAutoValue(reportDesc.isSQLDataSource() && reportDesc.getFlags() != null && reportDesc.getFlags().getText() != null ? reportDesc.getFlags().getText() : ""));
         }
     }
 
@@ -399,7 +399,7 @@ public class XMLMacroGenerator {
         if (logger.isDebugEnabled())
             logger.debug(String.format("changing xml node '%s' value:\n\t from '%s'\n\t to '%s'", item.getNodeName(), value, result));
 
-       item.setNodeValue(result);
+        item.setNodeValue(result);
 
         return result;
     }
@@ -1490,7 +1490,7 @@ public class XMLMacroGenerator {
 
         @Override
         public Object getValue() {
-            return java.util.UUID.randomUUID();
+            return UUID.randomUUID();
         }
 
         @Override

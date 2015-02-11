@@ -10,13 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.reports.api.ReportDSContext;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.calc.DataGroupCounter;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
+import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.Utils;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.util.*;
@@ -82,8 +86,26 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
     }
 
     @Override
-    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-        return new ExecDisciplineJRDataSource(iterator);
+    protected AlfrescoJRDataSource createDS(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        this.setReportDescriptor(descriptor);
+        LuceneSearchWrapper alfrescoQuery = execQuery(descriptor, parentContext);
+        if (alfrescoQuery == null || alfrescoQuery.getSearchResults() == null) {
+            return null;
+        }
+
+        Iterator<ResultSetRow> iterator = alfrescoQuery.getSearchResults().iterator();
+
+        ExecDisciplineJRDataSource result = new ExecDisciplineJRDataSource(this);
+        result.getContext().setRegistryService(getServices().getServiceRegistry());
+        result.getContext().setJrSimpleProps(getSimpleColumnNames(this.getReportDescriptor()));
+        result.getContext().setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
+        result.getContext().setResolver(this.getResolver());
+        result.getContext().setRsIter(iterator);
+
+        // фильтр данных ...
+        result.getContext().setFilter(getDataFilter(alfrescoQuery));
+
+        return result;
     }
 
     /**
@@ -221,8 +243,8 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
 
         private ErrandsReportFilterParams.DSGroupByInfo groupBy; // способ группировки, заполняется внутри buildJoin
 
-        public ExecDisciplineJRDataSource(Iterator<ResultSetRow> iterator) {
-            super(iterator);
+        public ExecDisciplineJRDataSource(GenericDSProviderBase provider) {
+            super(provider);
         }
 
         /**

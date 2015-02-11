@@ -1,5 +1,7 @@
 package ru.it.lecm.errands.reports;
 
+import ru.it.lecm.reports.api.ReportDSContext;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.utils.LuceneSearchWrapper;
 
@@ -21,8 +23,8 @@ public class ErrandsExpiredToDateProvider extends ErrandsOutOfTimeProvider {
     }
 
     @Override
-    protected LuceneSearchWrapper buildQuery() {
-        final LuceneSearchWrapper builder = super.buildQuery();
+    protected LuceneSearchWrapper buildQuery(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        final LuceneSearchWrapper builder = super.buildQuery(descriptor, parentContext);
 
         boolean hasData = !builder.isEmpty();
 

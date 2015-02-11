@@ -1,6 +1,8 @@
 package ru.it.lecm.reports.generators;
 
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchParameters;
@@ -12,18 +14,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Запрос под Lucene Альфреско:
@@ -42,6 +48,8 @@ public class LucenePreparedQueryHelper {
     public static final String VALUE_PLACEHOLDER = "#value";
     public static final String VALUE_PLACEHOLDER_1 = "#value1";
     public static final String VALUE_PLACEHOLDER_2 = "#value2";
+
+    public final Pattern PARAM_PATTERN = Pattern.compile("\\$P\\{.*?\\}");
 
     private SearchQueryProcessorService processorService;
     private WKServiceKeeper services;
@@ -65,7 +73,7 @@ public class LucenePreparedQueryHelper {
      * в текст запроса)
      * Выполняется проверка заполнения обязательных параметров, с поднятием исключений при ошибках.
      */
-    public LuceneSearchWrapper prepareQuery(final ReportDescriptor reportDescriptor) {
+    public LuceneSearchWrapper prepareQuery(final ReportDescriptor reportDescriptor, final ReportDSContext parentContext) {
         final NamespaceService ns = services.getServiceRegistry().getNamespaceService();
         final DictionaryService dictionaryService = services.getServiceRegistry().getDictionaryService();
 
@@ -75,15 +83,25 @@ public class LucenePreparedQueryHelper {
         int iblog = 0;
 
 		/* создаём базовый запрос: TYPE, ID */
-        final String masterCondition = makeMasterCondition(reportDescriptor);
+        final String masterCondition = !reportDescriptor.isSubReport() ? makeMasterCondition(reportDescriptor) : "";
         bquery.emmit(masterCondition);
 
         String queryText = reportDescriptor.getFlags().getText();
+        boolean isSubstituteQuery = isSubstCalcExpr(queryText);
         if (queryText != null && !queryText.isEmpty()) {
-            bquery.emmit(!bquery.isEmpty() ? " AND " : "")
-                    .emmit("(")
-                    .emmit(processorService.processQuery(reportDescriptor.getFlags().getText()))
-                    .emmit(")");
+            if (parentContext != null) {
+                if (!isSubstituteQuery) {
+                    queryText = insertParamsToQuery(queryText, parentContext);
+                }
+            }
+            if (!isSubstituteQuery) {
+                bquery.emmit(!bquery.isEmpty() ? " AND " : "")
+                        .emmit("(")
+                        .emmit(processorService.processQuery(queryText))
+                        .emmit(")");
+            } else {
+                bquery.emmit(queryText);
+            }
         }
 
 		/* 
@@ -185,22 +203,59 @@ public class LucenePreparedQueryHelper {
         }
 
         boolean hasData = !bquery.isEmpty();
+        if (!isSubstituteQuery) {
+            if (!bquery.getQuery().toString().contains("ID:") && !reportDescriptor.isSubReport()) {
+                // если для родительского отчета нет явного задания ID -> исключаем черновики
+                String condition = emmitFieldCondition((hasData ? " AND NOT(" : ""), "lecm-statemachine-aspects:is-draft", true);
+                bquery.emmit(condition);
+                bquery.emmit(hasData ? ")" : "");
+            }
 
-        if (!bquery.getQuery().toString().contains("ID:")) { // нет явного задания ID -> исключаем черновики
-            String condition = emmitFieldCondition((hasData ? " AND NOT(" : ""), "lecm-statemachine-aspects:is-draft", true);
-            bquery.emmit(condition);
-            bquery.emmit(hasData ? ")" : "");
+            if (!reportDescriptor.getFlags().isIncludeAllOrganizations()) {
+                bquery.emmit((!bquery.isEmpty() ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}"));
+            }
         }
-
-        if (!reportDescriptor.getFlags().isIncludeAllOrganizations()) {
-            bquery.emmit((!bquery.isEmpty() ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}"));
-        }
-
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Quering nodes by Lucene conditions:\n%s\n", blog.toString()));
         }
 
         return bquery;
+    }
+
+    private String insertParamsToQuery(String baseQuery, ReportDSContext context) {
+        if (baseQuery != null && context != null) {
+            // заменяем все ключевые слова
+            NodeRef parent = context.getCurNodeRef();
+
+            NodeService nodeService = services.getServiceRegistry().getNodeService();
+            NamespaceService namespaceService = services.getServiceRegistry().getNamespaceService();
+
+            baseQuery = baseQuery.replaceAll("\\$P\\{PARENT_ID\\}", parent.toString());
+            baseQuery = baseQuery.replaceAll("\\$P\\{PARENT_PATH\\}",nodeService.getPath(parent).toPrefixString(namespaceService));
+
+            // идём по параметрам
+            Matcher m = PARAM_PATTERN.matcher(baseQuery);
+            while (m.find()) {
+                String paramText = m.group();
+                String paramKey = paramText.substring(3, paramText.length() - 1).trim(); // удаляем спецсимволы
+                if (!paramKey.isEmpty()) {
+                    JavaDataType.SupportedTypes type;
+                    Object paramValue = context.getPropertyValueByJRField(paramKey);
+                    if (!(paramValue instanceof List)) { // у нас мог прийти ArrayList - он тоже List
+                        type = paramValue != null ?
+                                JavaDataType.SupportedTypes.findType(paramValue.getClass().getName()) :
+                                JavaDataType.SupportedTypes.NULL;
+                    } else {
+                        type = JavaDataType.SupportedTypes.LIST;
+                    }
+
+                    baseQuery = baseQuery.replaceAll("\\$P\\{" + paramKey + "\\}", type.getFTSPreparedValue(paramValue));
+                }
+            }
+            // заменяем все пустые параметры, если такие остались
+            baseQuery = baseQuery.replaceAll("\\$P\\{.*\\}","*");
+        }
+        return baseQuery;
     }
 
     private String makeProcessedCondition(String processorExpression, ParameterTypedValue parType) {
@@ -651,7 +706,7 @@ public class LucenePreparedQueryHelper {
      *
      * @return true, если колонка содержит просто ссылку на поле
      */
-    private boolean isDirectAlfrescoPropertyLink(final String expression) {
+    public boolean isDirectAlfrescoPropertyLink(final String expression) {
         return (expression != null) && (expression.length() > 0)
                 && Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // есть певая "{" и она одна
                 && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // есть последняя "}" и она одна
@@ -666,6 +721,12 @@ public class LucenePreparedQueryHelper {
     private boolean isProcessedFieldLink(final String expression) {
         return (expression != null) && (expression.length() > 0)
                 && expression.matches(SearchQueryProcessorService.PROC_PATTERN.toString());
+    }
+
+    public boolean isSubstCalcExpr(final String expression) {
+        return (expression != null) &&
+                Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL)
+                && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
     }
 
     public SearchQueryProcessorService getProcessorService() {

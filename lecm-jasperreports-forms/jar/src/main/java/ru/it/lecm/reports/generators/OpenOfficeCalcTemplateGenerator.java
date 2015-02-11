@@ -117,6 +117,7 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
 
                 // формируем значения
                 if (!desc.isSQLDataSource()) {
+                    jrDataSource.next();
                     // по умолчанию - expressions
                     for (ColumnDescriptor colDesc : desc.getDsDescriptor().getColumns()) {
                         Object value = jrDataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
@@ -138,6 +139,21 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                 }
 
                 //тут props точно заполнены для любого провайдера - передаем их в документ!
+                //настроечные props
+                Map<String, Object> settingProps = new HashMap<>();
+                if (props.containsKey("shifted_down")){
+                    Object propValue = props.get("shifted_down");
+                    if (null != propValue){
+                        settingProps.put("shifted_down", propValue);
+                    }
+                }
+                if (props.containsKey("overflow")){
+                    Object propValue = props.get("overflow");
+                    if (null != propValue){
+                        settingProps.put("overflow", propValue);
+                    }
+                }
+
                 int i = 0;
                 for (Map.Entry<String, Object> item : props.entrySet()) {
                     final String propName = item.getKey();
@@ -153,9 +169,13 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                                 //поместим значение переменной в соответсвующую ячейку
                                 XCellRange xCellRange = xSpreadsheet.getCellRangeByName(propName);
                                 XCell xCell = xCellRange.getCellByPosition(0, 0);
-                                xCell.setFormula(propValue.toString());
+                                if (null != propValue){
+                                    xCell.setFormula(propValue.toString());
+                                }else{
+                                    xCell.setFormula("");
+                                }
                             } else { // значение список - отрабатываем его как таблицу
-                                assignTableProperty(xCompDoc, docProperties, propName, (List<Map>) propValue);
+                                assignTableProperty(xCompDoc, docProperties, propName, (List<Map>) propValue, settingProps);
                             }
                         }
                     } catch (Throwable t) {
@@ -203,7 +223,8 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
         }
     }
 
-    public void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects) {
+    @Override
+    public void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects, final Map<String, Object> settingProps) {
         try {
             XSpreadsheet xSpreadsheet = OpenOfficeCalcTemplateGenerator.SpreadsheetManager.getSpreadsheet(xDoc, 0);
             XCellRangeMovement xMovement = UnoRuntime.queryInterface(XCellRangeMovement.class, xSpreadsheet);
@@ -230,6 +251,15 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                 expi++;
             }
 
+            boolean shiftedDown = true;
+            if (settingProps.containsKey("shifted_down")){
+                shiftedDown = Boolean.valueOf(String.valueOf(settingProps.get("shifted_down")));
+            }
+            boolean overflow = true;
+            if (settingProps.containsKey("overflow")){
+                overflow = Boolean.valueOf(String.valueOf(settingProps.get("overflow")));
+            }
+
             int rowIndex = 0;
             for (Object listObject : listObjects) {
                 if (listObject != null) {
@@ -237,12 +267,28 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                         Map<String, Object> objMap = (Map<String, Object>) listObject;
 
                         //добавляем строку
-                        if (rowIndex > 0) {
-                            XCellRange rowCellRange = xSpreadsheet.getCellRangeByPosition(startCol, startRow + rowIndex, endCol, startRow + rowIndex);
-                            XCellRangeAddressable rowRangeAddr = UnoRuntime.queryInterface(XCellRangeAddressable.class, rowCellRange);
-                            xMovement.insertCells(rowRangeAddr.getRangeAddress(), CellInsertMode.DOWN);
+                        if (shiftedDown){
+                            if (rowIndex > 0) {
+                                XCellRange rowCellRange = xSpreadsheet.getCellRangeByPosition(startCol, startRow + rowIndex, endCol, startRow + rowIndex);
+                                XCellRangeAddressable rowRangeAddr = UnoRuntime.queryInterface(XCellRangeAddressable.class, rowCellRange);
+                                xMovement.insertCells(rowRangeAddr.getRangeAddress(), CellInsertMode.DOWN);
+                            }
                         }
 
+                        //если первая ячейка строки заполнена, то перепрыгиваем весь ряд
+                        boolean jump = false;
+                        do {
+                            jump = false;
+                            XCell cell = xSpreadsheet.getCellByPosition(startCol, startRow + rowIndex);
+                            if (!overflow && rowIndex > 0 && !shiftedDown){
+                                if (!cell.getFormula().isEmpty()){
+                                    jump = true;
+                                }
+                            }
+                            if (jump){
+                                rowIndex++;
+                            }
+                        } while (jump);
                         //заполняем её данными из объекта
                         for (int j = 0; j < tableColCount; j++) {
                             XCell cell = xSpreadsheet.getCellByPosition(startCol + j, startRow + rowIndex);
@@ -274,10 +320,12 @@ public class OpenOfficeCalcTemplateGenerator extends OOTemplateGenerator {
                                     valueToWrite = dFormat.format(valueToWrite);
                                 }
                                 cell.setFormula(valueToWrite != null ? String.valueOf(valueToWrite) : "");
+
                             } else {
                                 int rowNum = startRow + 1 + rowIndex;
                                 String resultExp = cellExpression.replaceAll("\\{[^{}]*\\}", String.valueOf(rowNum));
                                 cell.setFormula(resultExp);
+
                             }
                         }
                     }

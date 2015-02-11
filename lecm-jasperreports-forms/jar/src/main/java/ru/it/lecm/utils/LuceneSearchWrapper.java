@@ -1,5 +1,6 @@
 package ru.it.lecm.utils;
 
+import org.alfresco.service.cmr.search.ResultSet;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 
 import java.util.ArrayList;
@@ -16,15 +17,22 @@ public class LuceneSearchWrapper {
     private StringBuilder bquery;
 
     // колонки со сложными условиями (доступ к данных через ассоциации)
-    final private List<ColumnDescriptor> argsByLinks = new ArrayList<ColumnDescriptor>();
+    final private List<ColumnDescriptor> argsByLinks = new ArrayList<>();
 
     // колонки простые - с именем свойств
-    final private List<ColumnDescriptor> argsByProps = new ArrayList<ColumnDescriptor>();
+    final private List<ColumnDescriptor> argsByProps = new ArrayList<>();
+
+    private ResultSet searchResults;
 
     public LuceneSearchWrapper() {
     }
-    public LuceneSearchWrapper(StringBuilder bquery) {
-        this.bquery = bquery;
+
+    public ResultSet getSearchResults() {
+        return searchResults;
+    }
+
+    public void setSearchResults(ResultSet searchResults) {
+        this.searchResults = searchResults;
     }
 
     public void clear() {

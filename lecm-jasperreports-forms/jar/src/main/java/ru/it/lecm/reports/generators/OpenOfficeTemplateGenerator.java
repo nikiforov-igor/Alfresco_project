@@ -124,6 +124,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
 
                 // формируем значения
                 if (!desc.isSQLDataSource()) {
+                    jrDataSource.next();
                     // по умолчанию - expressions
                     for (ColumnDescriptor colDesc : desc.getDsDescriptor().getColumns()) {
                         Object value = jrDataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
@@ -157,7 +158,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
                             if (!(propValue instanceof List)) {
                                 assignTypedProperty(docProperties, propName, propValue);
                             } else { // значение список - отрабатываем его как таблицу
-                                assignTableProperty(xCompDoc, docProperties, propName, (List<Map>) propValue);
+                                assignTableProperty(xCompDoc, docProperties, propName, (List<Map>) propValue, null);
                             }
                         } else {
                             docPropertyContainer.addProperty(propName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, propValue);
@@ -207,7 +208,8 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
         }
     }
 
-    public void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects) {
+    @Override
+    public void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects, final Map<String, Object> settingProps) {
         XTextTablesSupplier tablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xDoc);
 
         XTextTable xDocTable = TableManager.getTable(tablesSupplier, propName);

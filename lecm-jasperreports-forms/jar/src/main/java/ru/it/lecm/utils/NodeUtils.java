@@ -4,21 +4,10 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.beans.LinksResolver;
-import ru.it.lecm.reports.generators.SubreportBuilder;
-import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Утилитки для работы с узлами.
@@ -26,8 +15,6 @@ import java.util.Map;
  * @author rabdullin
  */
 public class NodeUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(NodeUtils.class);
 
     private NodeUtils() {
     }
@@ -114,73 +101,5 @@ public class NodeUtils {
         } // if
 
         return result;
-    }
-
-    /**
-     * Получение свойства по ссылке - либо непосредственно из свойств,
-     * либо по ссылке.
-     * <br/>Если значение НЕ содержит "{}", то предполагается что это обычный
-     * атрибут, иначе - форматированный для SubstitudeService
-     * <br/> Пример:
-     *
-     * @param sourceLink String
-     * @param docId      NodeRef
-     * @param props      список свойств объекта, если null, то свойство будет загружаться непосредственно
-     * @param resolver   LinksResolver
-     * @return полученное значение
-     */
-    public static Object getByLink(String sourceLink, NodeRef docId, Map<QName, Serializable> props, LinksResolver resolver, SubreportBuilder builder) {
-        if (sourceLink == null) {
-            return null;
-        }
-
-        sourceLink = sourceLink.trim();
-        if (sourceLink.isEmpty()) {
-            return null;
-        }
-
-        final NodeService nodeService = resolver.getServices().getServiceRegistry().getNodeService();
-        final NamespaceService ns = resolver.getServices().getServiceRegistry().getNamespaceService();
-
-        Object value;
-        try {
-            if (resolver.isSubstCalcExpr(sourceLink)) {
-                // форматируем значение вида "{a/b/c...}"
-                Map<String, Object> propsMap = new HashMap<String, Object>();
-                if (props != null) {
-                    for (QName qName : props.keySet()) {
-                        propsMap.put(qName.toPrefixString(ns), props.get(qName));
-                    }
-                }
-                value = resolver.evaluateLinkExpr(docId, sourceLink, null, propsMap);
-            } else { // простое значение выбираем в свойствах
-                if (!sourceLink.matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
-                    final QName qname = QName.createQName(sourceLink, ns);
-                    value = (props != null) ? props.get(qname) : nodeService.getProperty(docId, qname);
-                } else {
-                    logger.debug("Include subreport :" + sourceLink);
-                    SubreportBuilder b = null;
-                    if (builder.getSubreport().getSubreports() != null) {
-                        for (ReportDescriptor desc : builder.getSubreport().getSubreports()) {
-                            if (sourceLink.equals("{{subreport::" + desc.getMnem() + "}}")) {
-                                b = new SubreportBuilder((SubReportDescriptorImpl) desc, resolver);
-                            }
-                        }
-                    } else {
-                        logger.debug("Cannot find subreports  for " + builder.getSubreport().getMnem() + ". Skip results");
-                    }
-
-                    value = b != null ? b.buildSubreport(docId, b.getSubreport().getSourceListExpression()) : new ArrayList();
-                }
-            }
-        } catch (Throwable ex) {
-            if (logger != null) {
-                final String msg = String.format("Ignoring problem getting property \n\t for docId %s \n\t by link '%s' -> ignored \n\t %s"
-                        , docId, sourceLink, ex.getMessage());
-                logger.error(msg, ex);
-            }
-            value = null;
-        }
-        return value;
     }
 }

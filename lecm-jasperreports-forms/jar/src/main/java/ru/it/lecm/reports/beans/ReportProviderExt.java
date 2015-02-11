@@ -11,9 +11,13 @@ import ru.it.lecm.reports.generators.ReportGeneratorBase;
  */
 public interface ReportProviderExt {
 
-	void setReportDescriptor(ReportDescriptor reportDescriptor);
+    void setReportDescriptor(ReportDescriptor reportDescriptor);
+    ReportDescriptor getReportDescriptor();
 
-	void setReportsManager(ReportsManager reportsManager);
+    void setResolver(LinksResolver resolver);
+    LinksResolver getResolver();
+
+    void setReportsManager(ReportsManager reportsManager);
 
     void initializeFromGenerator(ReportGeneratorBase baseGenerator);
 }

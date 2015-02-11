@@ -104,42 +104,6 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
                 NodeRef parentTemplate = parentTempRefAssoc.get(0).getTargetRef();
                 subResult.setParentTemplate(createReportTemplate(parentTemplate));
             }
-            // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
-            List<String> sourceTypes = result.getFlags().getSupportedNodeTypes();
-            if (sourceTypes != null) {
-                subResult.setSourceListType(new HashSet<String>(sourceTypes));
-            }
-
-            Map<String, String> customFlags = result.getFlags().getFlagsMap();
-            if (customFlags != null && customFlags.size() > 0) {
-                ItemsFormatDescriptor formatDesc = new ItemsFormatDescriptor();
-
-                String format = customFlags.get("format");
-                if (format != null) {
-                    formatDesc.setFormatString(format);
-                }
-
-                String ifEmpty = customFlags.get("ifEmpty");
-                if (ifEmpty != null) {
-                    formatDesc.setIfEmptyTag(ifEmpty);
-                }
-
-                String delimiter = customFlags.get("delimiter");
-                if (delimiter != null) {
-                    formatDesc.setItemsDelimiter(delimiter);
-                }
-
-                subResult.setItemsFormat(formatDesc);
-            }
-
-            for (ColumnDescriptor subreportColumn : result.getDsDescriptor().getColumns()) {
-                //TODO сюда можно добавить обработку каких-то "особых" столбцов
-                if (subResult.getSubItemsSourceMap() == null) {
-                    subResult.setSubItemsSourceMap(new HashMap<String, String>());
-                }
-                subResult.getSubItemsSourceMap().put(subreportColumn.getColumnName(), subreportColumn.getExpression());
-            }
-
             //установим родителя
             NodeRef parentReport = getNodeService().getPrimaryParent(node).getParentRef();
             ReportDescriptor parent = getReportDescriptor(parentReport, true); // не включаем подочтеты сюда! нужен только "макет основного отчета"

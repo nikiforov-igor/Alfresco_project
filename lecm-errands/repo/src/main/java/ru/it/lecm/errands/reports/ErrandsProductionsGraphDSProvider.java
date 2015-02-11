@@ -4,7 +4,6 @@ import net.sf.jasperreports.engine.JRException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -12,12 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
+import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchWrapper;
@@ -90,21 +92,35 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
             logger.error(e.getMessage(), e);
         }
     }
-
     @Override
-    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-        return new ExecProductionsJRDataSource(iterator);
+    protected AlfrescoJRDataSource createDS(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        this.setReportDescriptor(descriptor);
+        LuceneSearchWrapper alfrescoQuery = execQuery(descriptor, parentContext);
+        if (alfrescoQuery == null || alfrescoQuery.getSearchResults() == null) {
+            return null;
+        }
+
+        ExecProductionsJRDataSource result = new ExecProductionsJRDataSource(this);
+        result.getContext().setRegistryService(getServices().getServiceRegistry());
+        result.getContext().setJrSimpleProps(getSimpleColumnNames(this.getReportDescriptor()));
+        result.getContext().setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));
+        result.getContext().setResolver(this.getResolver());
+        result.getContext().setRsIter(alfrescoQuery.getSearchResults().iterator());
+
+        // фильтр данных ...
+        result.getContext().setFilter(getDataFilter(alfrescoQuery));
+        return result;
     }
 
     @Override
-    protected ResultSet execQuery() {
+    protected LuceneSearchWrapper execQuery(ReportDescriptor descriptor, ReportDSContext parentContext) {
         loadConfig();
-        return super.execQuery();
+        return super.execQuery(descriptor, parentContext);
     }
 
     @Override
-    protected LuceneSearchWrapper buildQuery() {
-        final LuceneSearchWrapper builder = super.buildQuery();
+    protected LuceneSearchWrapper buildQuery(ReportDescriptor descriptor, ReportDSContext parentContext) {
+        final LuceneSearchWrapper builder = super.buildQuery(descriptor, parentContext);
 
         // hasData: становится true после внесения первого любого условия в builder
         boolean hasData = !builder.isEmpty();
@@ -314,8 +330,8 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
 
         private ErrandsReportFilterParams.DSGroupByInfo groupBy; // способ группировки, заполняется внутри buildJoin
 
-        public ExecProductionsJRDataSource(Iterator<ResultSetRow> iterator) {
-            super(iterator);
+        public ExecProductionsJRDataSource(GenericDSProviderBase provider) {
+            super(provider);
         }
 
         /**

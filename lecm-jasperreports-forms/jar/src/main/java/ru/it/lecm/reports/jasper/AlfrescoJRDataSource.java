@@ -3,18 +3,32 @@ package ru.it.lecm.reports.jasper;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
+import org.alfresco.service.cmr.dictionary.Constraint;
+import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceException;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFieldColumn;
+import ru.it.lecm.reports.api.ReportDSContext;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.generators.GenericDSProviderBase;
+import ru.it.lecm.reports.generators.SubreportBuilder;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
+import ru.it.lecm.reports.utils.Utils;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,8 +52,13 @@ public class AlfrescoJRDataSource implements JRDataSource {
 
     private ReportDSContextImpl context = new ReportDSContextImpl();
 
-    public AlfrescoJRDataSource(Iterator<ResultSetRow> iterator) {
-        this.context.setRsIter(iterator);
+    private GenericDSProviderBase provider;
+
+    private ReportDescriptor reportDescriptor;
+
+    public AlfrescoJRDataSource(GenericDSProviderBase provider) {
+        this.provider = provider;
+        this.reportDescriptor = provider.getReportDescriptor();
     }
 
     public void clear() {
@@ -50,16 +69,21 @@ public class AlfrescoJRDataSource implements JRDataSource {
         return context;
     }
 
-    public void setContext(ReportDSContextImpl context) {
-         this.context = context;
+    public ReportDescriptor getReportDescriptor() {
+        return reportDescriptor;
     }
+
+    public void setContext(ReportDSContextImpl context) {
+        this.context = context;
+    }
+
     /**
      * @param propNameWithPrefix название свойства
      * @return true, если свойство простое (т.е. получается непосредственно у объекта)
      */
     protected boolean isPropVisibleInReport(final String propNameWithPrefix) {
-        return (context.getJrSimpleProps() == null) // если нет фильтра -> видно всё
-                || context.getJrSimpleProps().contains(propNameWithPrefix); // или название имеется в списке того, что отрисовывается в отчёте
+        return (context.getJrSimpleProps() != null)
+                && context.getJrSimpleProps().contains(propNameWithPrefix); // или название имеется в списке того, что отрисовывается в отчёте
     }
 
     @Override
@@ -91,7 +115,7 @@ public class AlfrescoJRDataSource implements JRDataSource {
      * @return true, если строка загружена и фильтра нет или строка удовлетворяет
      *         фильтру; и false, если не пропущена фильтром.
      */
-    protected boolean loadAlfNodeProps(NodeRef id) {
+    public boolean loadAlfNodeProps(NodeRef id) {
         // дополнительно фильтруем по критериям, если они есть ...
         if (this.context.getFilter() != null && !context.getFilter().isOk(id)) {
             this.context.setCurNodeProps(null);
@@ -108,30 +132,58 @@ public class AlfrescoJRDataSource implements JRDataSource {
 		 */
         this.context.setCurNodeProps(ensureJRProps());
 
+        this.context.getCurNodeProps().put(DataSourceDescriptor.COLNAME_ID, id.toString()); // добавляем для каждой строки её nodeRef
 		/*
-		 * теперь вносим "нативные" Alfresco-свойства объекта как Map:
+         * теперь вносим "нативные" Alfresco-свойства объекта как Map:
 		 *    Map.key = краткие qname-атрибутов,
 		 *    Map.value = соот-шее атрибуту значение.
 		 * Если список context.getJrSimpleProps() null, то вносятся все 
 		 * Альфреско-атриубуты, иначе только перечисленные в нём.
 		 */
         final NodeService nodeSrv = context.getRegistryService().getNodeService();
+        final DictionaryService dicSrv = context.getRegistryService().getDictionaryService();
         final Map<QName, Serializable> realProps = nodeSrv.getProperties(id);
 
         if (realProps != null) {
+            NamespaceService namespaces = context.getRegistryService().getNamespaceService();
             for (Map.Entry<QName, Serializable> e : realProps.entrySet()) {
                 // переводим название свойства в краткую форму
-                final String key;
-                String key1;
-                try {
-                    key1 = e.getKey().toPrefixString(context.getRegistryService().getNamespaceService());
-                } catch (NamespaceException e1) {
-                    key1 = e.getKey().toString();   //просто чтоб не падало на устаревших данных
-                }
-                // если есть мета-описания - добавим всё, что там упоминается
-                key = key1;
-                if (isPropVisibleInReport(key)) {
-                    context.getCurNodeProps().put(key, e.getValue());
+                //if (!e.getKey().getNamespaceURI().equals(NamespaceService.SYSTEM_MODEL_1_0_URI)) {
+                    String key1;
+                    try {
+                        key1 = e.getKey().toPrefixString(namespaces);
+                    } catch (NamespaceException e1) {
+                        key1 = e.getKey().toString();   //просто чтоб не падало на устаревших данных
+                    }
+                    // если есть мета-описания - добавим всё, что там упоминается
+                    final String key = key1;
+                    if (isPropVisibleInReport(key)) {
+                        Object value = e.getValue();
+                        List<ConstraintDefinition> constraintDefinitionList = dicSrv.getProperty(e.getKey()).getConstraints();
+                        //ищем привязанный LIST_CONSTRAINT
+                        if (constraintDefinitionList != null && !constraintDefinitionList.isEmpty()) {
+                            for (ConstraintDefinition constraintDefinition : constraintDefinitionList) {
+                                Constraint constraint = constraintDefinition.getConstraint();
+                                if (constraint instanceof ListOfValuesConstraint) {
+                                    //получаем локализованное значение для LIST_CONSTRAINT
+                                    String constraintProperty = ((ListOfValuesConstraint) constraint).getDisplayLabel(value.toString(), dicSrv);
+                                    if (constraintProperty != null) {
+                                        value = constraintProperty;
+                                    }
+                                }
+                            }
+                        }
+                        context.getCurNodeProps().put(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + key + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, value);
+                    }
+                //}
+            }
+        }
+
+        if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
+            for (ReportDescriptor subreport : getReportDescriptor().getSubreports()) {
+                if (subreport.isSubReport()) {
+                    final Object subBean = prepareSubReport((SubReportDescriptorImpl) subreport, getContext());
+                    context.getCurNodeProps().put(getAlfAttrNameByJRKey(((SubReportDescriptorImpl) subreport).getDestColumnName()), subBean);
                 }
             }
         }
@@ -153,6 +205,24 @@ public class AlfrescoJRDataSource implements JRDataSource {
     }
 
     /**
+     * Подготовить данные подотчёта по ассоциированныму списку subreport:
+     *
+     * @param subreport SubReportDescriptorImpl
+     * @return <li> ОДНУ строку, если subreport должен форматироваться (строка будет
+     * состоять из форматированных всех элементов ассоциированного списка),
+     * <li> или список бинов List[Object] - по одному на каждую строку
+     */
+    protected Object prepareSubReport(SubReportDescriptorImpl subreport, ReportDSContext parentContext) {
+        if (Utils.isStringEmpty(subreport.getSourceListExpression())) {
+            logger.warn(String.format("SubReport '%s' has empty query", subreport.getMnem()));
+            return null;
+        }
+
+		/* получение списка объектов... */
+        return new SubreportBuilder(subreport, provider).buildSubReport(parentContext);
+    }
+
+    /**
      * Сформировать список обычных (не вычисляемых и не косвенных) свойств,
      * перечисленных в visibleProps.
      * Удобно для случая, когда загружаемые данные по объекту содержат НЕ полный
@@ -160,13 +230,11 @@ public class AlfrescoJRDataSource implements JRDataSource {
      * добавлением мы гарантируем, чтобы curProps содержал всё, что надо для jr.
      */
     private HashMap<String, Object> ensureJRProps() {
-        final HashMap<String, Object> result = new HashMap<String, Object>();
-        if (this.context.getJrSimpleProps() != null) {
+        final HashMap<String, Object> result = new HashMap<>();
+        if (this.getContext().getJrSimpleProps() != null) {
             // все свойства включаем в набор с пустыми значениями
-            for (String fldName : this.context.getJrSimpleProps()) {
-                if (!ReportDSContextImpl.isCalcField(fldName)) { // обычное поле
-                    result.put(fldName, null);
-                }
+            for (String fldName : this.getContext().getJrSimpleProps()) {
+                result.put(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + fldName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, null);
             }
         }
         return result;

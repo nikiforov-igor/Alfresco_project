@@ -25,7 +25,7 @@ public class DataFilterByLinks implements DataFilter {
         this.substitudeBean = substitudeBean;
     }
 
-    public void addFilter(DataFilter.DataFilterDesc desc) {
+    public void addFilter(DataFilterDesc desc) {
         dataLists.add(desc);
     }
 

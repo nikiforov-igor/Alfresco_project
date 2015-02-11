@@ -2,6 +2,7 @@ package ru.it.lecm.reports.jasper;
 
 import net.sf.jasperreports.engine.JRException;
 import org.alfresco.service.cmr.search.ResultSetRow;
+import ru.it.lecm.reports.generators.GenericDSProviderBase;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -21,9 +22,8 @@ public abstract class TypedJoinDS<T> extends AlfrescoJRDataSource {
     private List<T> data;
     private Iterator<T> iterData;
 
-    public TypedJoinDS(Iterator<ResultSetRow> iterator) {
-        super(iterator);
-		// buildData(); <- не проходит, т.к. нет ещё свойств обвязки (services, metadata и пр)
+    public TypedJoinDS(GenericDSProviderBase provider) {
+        super(provider);
     }
 
     public List<T> getData() {
