@@ -8,20 +8,10 @@
         <property name="lecm-dic:plane">true</property>
         <property name="lecm-dic:description">Тип провайдера</property>
         <items>
-<!--            <item name="cm:SubstitudeService" type="lecm-rpeditor:reportProvider">
-                <property name="cm:name">SubstitudeService</property>
-                <property name="lecm-rpeditor:reportProviderCode">PROV_SUSTITUDE</property>
-                <property name="lecm-rpeditor:reportProviderClass">ru.it.lecm.base.beans.SubstitudeBeanImpl</property>
-            </item>-->
             <item name="cm:GenericProvider" type="lecm-rpeditor:reportProvider">
                 <property name="cm:name">genericProvider</property>
                 <property name="lecm-rpeditor:reportProviderCode">PROV_GENERIC_PROVIDER</property>
                 <property name="lecm-rpeditor:reportProviderClass">ru.it.lecm.reports.generators.GenericDSProviderBase</property>
-            </item>
-            <item name="cm:SQLProvider" type="lecm-rpeditor:reportProvider">
-                <property name="cm:name">SQLProvider</property>
-                <property name="lecm-rpeditor:reportProviderCode">SQL_PROVIDER</property>
-                <property name="lecm-rpeditor:reportProviderClass">ru.it.lecm.reports.generators.SQLProvider</property>
             </item>
         </items>
     </item>

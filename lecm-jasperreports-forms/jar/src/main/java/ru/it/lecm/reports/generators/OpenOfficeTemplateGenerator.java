@@ -18,6 +18,7 @@ import com.sun.star.text.XTextTable;
 import com.sun.star.text.XTextTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRDataSourceProvider;
 import org.alfresco.util.PropertyCheck;
 import org.jsoup.Jsoup;
 import ru.it.lecm.base.beans.SubstitudeBean;
@@ -80,19 +81,19 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
      * @param requestParameters список параметров из запроса
      * @param author            автор изменений
      */
-    public void odtSetColumnsAsDocCustomProps(JRDataSource jrDataSource, Map<String, Object> requestParameters, ReportDescriptor desc,
+    public void odtSetColumnsAsDocCustomProps(JRDataSourceProvider jrDataProvider, Map<String, Object> requestParameters, ReportDescriptor desc,
                                               String srcOODocUrl, String destSaveAsUrl, String author) {
 
         final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
 
         PropertyCheck.mandatory(this, "connection", getConnection());
-        PropertyCheck.mandatory(this, "databaseHelper", getDatabaseHelper());
         PropertyCheck.mandatory(this, "templateUrl", srcOODocUrl);
         PropertyCheck.mandatory(this, "reportDesc", desc);
 
         // авто-соединение
         String stage = "Create Desktop";
         try {
+            JRDataSource dataSource = jrDataProvider.create(null);
             final XComponentLoader xLoaderDesktop = getConnection().getDesktop();
 
 			/* (1) Open the document */
@@ -123,11 +124,11 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
                 final Map<String, Object> props = new HashMap<>();
 
                 // формируем значения
-                if (!desc.isSQLDataSource()) {
-                    jrDataSource.next();
+                if (!(jrDataProvider instanceof SQLProvider)) {
+                    dataSource.next();
                     // по умолчанию - expressions
                     for (ColumnDescriptor colDesc : desc.getDsDescriptor().getColumns()) {
-                        Object value = jrDataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
+                        Object value = dataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
                         if (value == null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
                             // пустой подотчет - вместо null подсовываем пустой список
                             value = new ArrayList();
@@ -142,7 +143,7 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
                         props.put(colDesc.getColumnName(), value);
                     }
                 } else {
-                    getSQLPropsValue(desc, requestParameters, docProperties, props);
+                    getSQLPropsValue(desc, ((SQLProvider)jrDataProvider).getConnection(), requestParameters, docProperties, props);
                 }
 
                 //тут props точно заполнены для любого провайдера - передаем их в документ!

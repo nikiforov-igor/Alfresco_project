@@ -35,11 +35,67 @@
 	</bean>
 	
 
-	<!--  SOMEHTING SEEMS WRONG IN DE BEAN CONFIG... -->
-	<bean id="reportingDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-		<property name="jndiName" value="${reporting.db.jndiName}"/>
-	</bean>
-	
+    <bean id="reportingDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${reporting.db.driver}" />
+        <property name="url" value="${reporting.db.url}" />
+        <property name="username" value="${reporting.db.username}" />
+        <property name="password" value="${reporting.db.password}" />
+
+        <property name="initialSize" >
+            <value>${reporting.db.pool.initial}</value>
+        </property>
+        <property name="maxActive" >
+            <value>${reporting.db.pool.max}</value>
+        </property>
+        <property name="minIdle" >
+            <value>${reporting.db.pool.min}</value>
+        </property>
+        <property name="maxIdle" >
+            <value>${reporting.db.pool.idle}</value>
+        </property>
+        <property name="defaultAutoCommit" >
+            <value>false</value>
+        </property>
+        <property name="defaultTransactionIsolation" >
+            <value>${reporting.db.txn.isolation}</value>
+        </property>
+        <property name="maxWait" >
+            <value>${reporting.db.pool.wait.max}</value>
+        </property>
+        <property name="validationQuery" >
+            <value>${reporting.db.pool.validate.query}</value>
+        </property>
+        <property name="timeBetweenEvictionRunsMillis" >
+            <value>${reporting.db.pool.evict.interval}</value>
+        </property>
+        <property name="minEvictableIdleTimeMillis" >
+            <value>${reporting.db.pool.evict.idle.min}</value>
+        </property>
+        <property name="testOnBorrow" >
+            <value>${reporting.db.pool.validate.borrow}</value>
+        </property>
+        <property name="testOnReturn" >
+            <value>${reporting.db.pool.validate.return}</value>
+        </property>
+        <property name="testWhileIdle" >
+            <value>${reporting.db.pool.evict.validate}</value>
+        </property>
+        <property name="removeAbandoned" >
+            <value>${reporting.db.pool.abandoned.detect}</value>
+        </property>
+        <property name="removeAbandonedTimeout" >
+            <value>${reporting.db.pool.abandoned.time}</value>
+        </property>
+        <property name="poolPreparedStatements" >
+            <value>${reporting.db.pool.statements.enable}</value>
+        </property>
+        <property name="maxOpenPreparedStatements" >
+            <value>${reporting.db.pool.statements.max}</value>
+        </property>
+        <property name="logAbandoned" >
+            <value>${reporting.db.pool.abandoned.log}</value>
+        </property>
+    </bean>
 	
 		<!--  MyBatis  config  -->
 		

@@ -1,13 +1,13 @@
-package ru.it.lecm.reports.database;
+package org.alfresco.reporting.db;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.reporting.mybatis.ReportingDAO;
+import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.io.IOUtils;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,12 +18,22 @@ import java.util.List;
  * Date: 03.12.2014
  * Time: 9:47
  */
-public class SQLReportingBootstrap extends BaseBean {
+public class SQLReportingBootstrap {
     private static final transient Logger logger = LoggerFactory.getLogger(SQLReportingBootstrap.class);
 
     private List<String> sqlFiles;
     private boolean bootstrapOnStart;
-    private DataBaseHelper dataBaseHelper;
+    private ReportingDAO reportingDAO;
+
+    private TransactionService transactionService;
+
+    public void setReportingDAO(ReportingDAO reportingDAO) {
+        this.reportingDAO = reportingDAO;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     public void setSqlFiles(List<String> sqlFiles) {
         this.sqlFiles = sqlFiles;
@@ -31,15 +41,6 @@ public class SQLReportingBootstrap extends BaseBean {
 
     public void setBootstrapOnStart(boolean bootstrapOnStart) {
         this.bootstrapOnStart = bootstrapOnStart;
-    }
-
-    public void setDataBaseHelper(DataBaseHelper dataBaseHelper) {
-        this.dataBaseHelper = dataBaseHelper;
-    }
-
-    @Override
-    public NodeRef getServiceRootFolder() {
-        return null;
     }
 
     public void bootstrap() {
@@ -55,11 +56,13 @@ public class SQLReportingBootstrap extends BaseBean {
                         @Override
                         public Object execute() throws Throwable {
                             for (final String sql : sqlFiles) {
-                                logger.debug("Execute SQL: {}", sql);
-                                final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(sql);
-                                InputStreamReader reader = new InputStreamReader(inputStream);
+                                InputStreamReader reader = null;
+                                InputStream inputStream = null;
                                 try {
-                                    ScriptRunner runner = new ScriptRunner(dataBaseHelper.getConnection());
+                                    logger.debug("Execute SQL: {}", sql);
+                                    inputStream = getClass().getClassLoader().getResourceAsStream(sql);
+                                    reader = new InputStreamReader(inputStream);
+                                    ScriptRunner runner = new ScriptRunner(reportingDAO.getConnection());
                                     runner.runScript(reader);
                                     logger.debug("{} execute finished.", sql);
                                 } catch (Exception e) {

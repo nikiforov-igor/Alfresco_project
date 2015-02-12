@@ -12,14 +12,13 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.DateTime;
-import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
@@ -57,16 +56,6 @@ public abstract class OOTemplateGenerator {
     protected DataSource dataSource;
     protected OpenOfficeConnection connection;
 
-    private DataBaseHelper databaseHelper;
-
-    public DataBaseHelper getDatabaseHelper() {
-        return databaseHelper;
-    }
-
-    public void setDatabaseHelper(DataBaseHelper databaseHelper) {
-        this.databaseHelper = databaseHelper;
-    }
-
     public OpenOfficeConnection getConnection() {
         return connection;
     }
@@ -77,7 +66,7 @@ public abstract class OOTemplateGenerator {
 
     public abstract com.sun.star.frame.XStorable saveDocAs(final XComponent xCompDoc, final String destUrl) throws IOException;
 
-    public abstract void odtSetColumnsAsDocCustomProps(JRDataSource jrDataSource, Map<String, Object> requestParameters, ReportDescriptor desc,
+    public abstract void odtSetColumnsAsDocCustomProps(JRDataSourceProvider jrDataProvider, Map<String, Object> requestParameters, ReportDescriptor desc,
                                                        String srcOODocUrl, String destSaveAsUrl, String author);
 
     public abstract void assignTableProperty(final XComponent xDoc, final XPropertySet docProps, final String propName, final List<Map> listObjects,
@@ -126,7 +115,7 @@ public abstract class OOTemplateGenerator {
      *                      null, если сохранить надо под прежним именем.
      * @param author        если не null, то автор, которого надо прописать.
      */
-    public void odtAddColumnsAsDocCustomProps(OpenOfficeConnection connection,
+    public void odtAddColumnsAsDocCustomProps(OpenOfficeConnection connection, JRDataSourceProvider dsProvider,
                                               ReportDescriptor desc, ReportTemplate template, String srcOODocUrl, String destSaveAsUrl,
                                               String author) {
         final boolean needSaveAs = !Utils.isStringEmpty(destSaveAsUrl);
@@ -176,7 +165,7 @@ public abstract class OOTemplateGenerator {
                     }
                 }
             } else {
-                addPropsFromSQLToContainer(desc, userPropsContainer);
+                addPropsFromSQLToContainer(desc, dsProvider, userPropsContainer);
             }
 
             //обработаем подотчеты отдельно
@@ -201,7 +190,7 @@ public abstract class OOTemplateGenerator {
                                             }
                                         }
                                         if (subReportDescriptor.isSQLDataSource()) {  // вариант, когда подотчет SQL
-                                            addPropsFromSQLToContainer(subReportDescriptor, userPropsContainer);
+                                            addPropsFromSQLToContainer(subReportDescriptor, dsProvider, userPropsContainer);
                                             //дополнительно добавляем поле с SQL запросом
                                             userPropsContainer.addProperty(subReportDescriptor.getMnem() + "-query",
                                                     DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, subReportDescriptor.getFlags().getText());
@@ -236,29 +225,31 @@ public abstract class OOTemplateGenerator {
         }
     }
 
-    private void addPropsFromSQLToContainer(ReportDescriptor desc, XPropertyContainer userPropsContainer)
+    private void addPropsFromSQLToContainer(ReportDescriptor desc, JRDataSourceProvider dsProvider, XPropertyContainer userPropsContainer)
             throws PropertyExistException, IllegalTypeException, com.sun.star.lang.IllegalArgumentException {
         Connection sqlConnection = null;
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
-            sqlConnection = getDatabaseHelper().getConnection();
-            String query = Utils.trimmed(desc.getFlags().getText());
-            if (!Utils.isStringEmpty(query)) {
-                int indexWhere = query.toLowerCase().indexOf("where");
-                if (indexWhere > -1) {
-                    query = query.substring(0, indexWhere); // обрезаем все после первого WHERE
-                }
-                statement = sqlConnection.prepareStatement(query);
-                statement.setMaxRows(1);
-                resultSet = statement.executeQuery();
+            if (dsProvider != null) {
+                sqlConnection = ((SQLProvider) dsProvider).getConnection();
+                String query = Utils.trimmed(desc.getFlags().getText());
+                if (!Utils.isStringEmpty(query)) {
+                    int indexWhere = query.toLowerCase().indexOf("where");
+                    if (indexWhere > -1) {
+                        query = query.substring(0, indexWhere); // обрезаем все после первого WHERE
+                    }
+                    statement = sqlConnection.prepareStatement(query);
+                    statement.setMaxRows(1);
+                    resultSet = statement.executeQuery();
 
-                int columnCount = resultSet.getMetaData().getColumnCount();
-                for (int i = 1; i <= columnCount; i++) {
-                    String columnName = resultSet.getMetaData().getColumnName(i);
+                    int columnCount = resultSet.getMetaData().getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = resultSet.getMetaData().getColumnName(i);
 
-                    String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
-                    userPropsContainer.addProperty(desc.isSubReport() ? (desc.getMnem() + "." + columnName) : columnName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                        String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
+                        userPropsContainer.addProperty(desc.isSubReport() ? (desc.getMnem() + "." + columnName) : columnName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -288,14 +279,11 @@ public abstract class OOTemplateGenerator {
         }
     }
 
-    protected void getSQLPropsValue(ReportDescriptor desc, Map<String, Object> paramsToQuery, XPropertySet docProperties, Map<String, Object> propsToAssign) {
-        Connection sqlConnection = null;
+    protected void getSQLPropsValue(ReportDescriptor desc, Connection sqlConnection, Map<String, Object> paramsToQuery, XPropertySet docProperties, Map<String, Object> propsToAssign) {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
 
         try {
-            sqlConnection = getDatabaseHelper().getConnection();
-
             //1 Получаем Query - берем либо базовую, либо заполненную из параметров (если там есть такое свойство)
             String baseQuery = getQueryString(desc, paramsToQuery, docProperties);
 
@@ -326,7 +314,7 @@ public abstract class OOTemplateGenerator {
             List<ReportDescriptor> subReportsList = desc.getSubreports();
             if (subReportsList != null && !subReportsList.isEmpty()) {
                 for (ReportDescriptor subReport : subReportsList) {
-                    propsToAssign.put(subReport.getMnem(), getSubList((SubReportDescriptorImpl) subReport, propsToAssign, docProperties));
+                    propsToAssign.put(subReport.getMnem(), getSubList((SubReportDescriptorImpl) subReport, sqlConnection, propsToAssign, docProperties));
                 }
             }
         } catch (Exception e) {
@@ -351,20 +339,17 @@ public abstract class OOTemplateGenerator {
                     sqlConnection.close();
                 } catch (SQLException e) {
                     logger.error(e.getMessage(), e);
-                }
-            }
+        }
+    }
         }
     }
 
-    protected List<Map> getSubList(SubReportDescriptorImpl subReport, Map<String, Object> propsToAssign, XPropertySet docProperties) {
-        Connection sqlConnection = null;
+    protected List<Map> getSubList(SubReportDescriptorImpl subReport, Connection sqlConnection, Map<String, Object> propsToAssign, XPropertySet docProperties) {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
 
-        List<Map> result = new ArrayList<Map>();
+        List<Map> result = new ArrayList<>();
         try {
-            sqlConnection = getDatabaseHelper().getConnection();
-
             //1 Получаем Query - берем либо базовую, либо заполненную из параметров (если там есть такое свойство)
             String baseQuery = getQueryString(subReport, propsToAssign, docProperties);
 
@@ -378,7 +363,7 @@ public abstract class OOTemplateGenerator {
             int columnCount = resultSet.getMetaData().getColumnCount();
 
             while (resultSet.next()) {
-                Map<String, Object> subObject = new HashMap<String, Object>();
+                Map<String, Object> subObject = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = resultSet.getMetaData().getColumnName(i);
                     Object value = resultSet.getObject(columnName);

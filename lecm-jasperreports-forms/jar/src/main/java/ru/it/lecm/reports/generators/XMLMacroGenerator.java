@@ -1,5 +1,6 @@
 package ru.it.lecm.reports.generators;
 
+import net.sf.jasperreports.engine.JRDataSourceProvider;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.w3c.dom.NodeList;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
@@ -182,7 +182,11 @@ public class XMLMacroGenerator {
     private ReportDescriptor reportDesc;
     private ReportTemplate templateDesc;
 
-    private DataBaseHelper dataSourceContext;
+    private JRDataSourceProvider provider;
+
+    public JRDataSourceProvider getProvider() {
+        return provider;
+    }
 
     /**
      * Глобальные переменные для генерации.
@@ -191,10 +195,10 @@ public class XMLMacroGenerator {
      */
     private MacroValues globals;
 
-    public XMLMacroGenerator(ReportDescriptor rdesc, ReportTemplate template, DataBaseHelper ds) {
+    public XMLMacroGenerator(ReportDescriptor rdesc, ReportTemplate template, JRDataSourceProvider provider) {
         setReportDesc(rdesc);
         this.templateDesc = template;
-        this.dataSourceContext = ds;
+        this.provider = provider;
     }
 
     /**
@@ -219,7 +223,7 @@ public class XMLMacroGenerator {
      */
     protected void initAutoVars(MacroValues destVars) {
         if (this.reportDesc != null) {
-            destVars.addVar(new RefMacroVar<ReportDescriptor>(VNAME_RDesc, this.reportDesc));
+            destVars.addVar(new RefMacroVar<>(VNAME_RDesc, this.reportDesc));
 
             // добавление стандартных функций
             destVars.addVar(VNAME_GUID, new GuidAutoValue());
@@ -410,7 +414,7 @@ public class XMLMacroGenerator {
      * @return инициализированный список подвыражений (с символами '@' в начале)
      */
     private static List<String> findMacroses(String value) {
-        final List<String> result = new ArrayList<String>();
+        final List<String> result = new ArrayList<>();
         final int clen = MacroValue.PFX_REF_MARKER.length();
         if (value != null) {
             int iEnd = 0; // первый необработанный символ ...
@@ -594,26 +598,28 @@ public class XMLMacroGenerator {
                 ResultSet resultSet = null;
                 PreparedStatement statement = null;
                 try {
-                    connection = dataSourceContext.getConnection();
-                    String query = Utils.trimmed(descriptor.getFlags().getText());
-                    if (!Utils.isStringEmpty(query)) {
-                        int indexWhere = query.toLowerCase().indexOf("where");
-                        if (indexWhere > -1) {
-                            query = query.substring(0, indexWhere); // обрезаем все после первого WHERE
-                        }
-                        statement = connection.prepareStatement(query);
-                        statement.setMaxRows(1);
-                        resultSet = statement.executeQuery();
+                    if (getProvider() != null && getProvider() instanceof SQLProvider) {
+                        connection = ((SQLProvider) getProvider()).getConnection();
+                        String query = Utils.trimmed(descriptor.getFlags().getText());
+                        if (!Utils.isStringEmpty(query)) {
+                            int indexWhere = query.toLowerCase().indexOf("where");
+                            if (indexWhere > -1) {
+                                query = query.substring(0, indexWhere); // обрезаем все после первого WHERE
+                            }
+                            statement = connection.prepareStatement(query);
+                            statement.setMaxRows(1);
+                            resultSet = statement.executeQuery();
 
-                        int columnCount = resultSet.getMetaData().getColumnCount();
-                        for (int i = 1; i <= columnCount; i++) {
-                            String columnName = resultSet.getMetaData().getColumnName(i);
-                            int columnType = resultSet.getMetaData().getColumnType(i);
+                            int columnCount = resultSet.getMetaData().getColumnCount();
+                            for (int i = 1; i <= columnCount; i++) {
+                                String columnName = resultSet.getMetaData().getColumnName(i);
+                                int columnType = resultSet.getMetaData().getColumnType(i);
 
-                            index++;
-                            ColumnDescriptor colDesc = new ColumnDescriptor(columnName, JavaDataType.SupportedTypes.findTypeBySQL(columnType));
-                            colDesc.regItem(Locale.getDefault().getCountry(), columnName);
-                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+                                index++;
+                                ColumnDescriptor colDesc = new ColumnDescriptor(columnName, JavaDataType.SupportedTypes.findTypeBySQL(columnType));
+                                colDesc.regItem(Locale.getDefault().getCountry(), columnName);
+                                this.doColumnMacroExpansion(macroKey, colDesc, index);
+                            }
                         }
                     }
                 } catch (SQLException e) {
@@ -638,9 +644,9 @@ public class XMLMacroGenerator {
                             connection.close();
                         } catch (SQLException e) {
                             logger.error(e.getMessage(), e);
-                        }
-                    }
                 }
+            }
+        }
             }
         }
 
@@ -910,7 +916,7 @@ public class XMLMacroGenerator {
          */
         public Map<String, MacroValue> getVars() {
             if (variables == null) {
-                variables = new HashMap<String, MacroValue>();
+                variables = new HashMap<>();
             }
             return variables;
         }

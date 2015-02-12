@@ -5,22 +5,21 @@ import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
-import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.NamedValue;
 import ru.it.lecm.reports.model.impl.ReportFlags;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -29,7 +28,7 @@ import java.util.Map;
 /**
  * Базовый класс для построителей отчётов в runtime.
  */
-public abstract class ReportGeneratorBase implements ReportGenerator {
+public abstract class ReportGeneratorBase implements ReportGenerator, ApplicationContextAware {
     private static final transient Logger log = LoggerFactory.getLogger(ReportGeneratorBase.class);
 
     /**
@@ -37,7 +36,6 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
      */
     final static String PFX_PROPERTY_ITEM = "property.".toLowerCase();
 
-    private DataBaseHelper databaseHelper;
     private WKServiceKeeper services;
     private LinksResolver resolver;
 
@@ -67,23 +65,20 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
         this.resolver = resolver;
     }
 
-    public DataBaseHelper getDatabaseHelper() {
-        return databaseHelper;
+    private static ApplicationContext ctx;
+
+    @Override
+    public void setApplicationContext(ApplicationContext appContext) throws BeansException {
+        ctx = appContext;
     }
 
-    public void setDatabaseHelper(DataBaseHelper databaseHelper) {
-        this.databaseHelper = databaseHelper;
+    public ApplicationContext getApplicationContext() {
+        return ctx;
     }
     /**
      * Предполагается, что входной поток это xml-макет для генератора ru.it.lecm.reports.generators.XMLMacroGenerator
      */
-    @Override
-    public byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc, ReportTemplate template) {
-        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc, template, getDatabaseHelper());
-        final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate(
-                new ByteArrayInputStream(maketData), "Template For Report - " + desc.getMnem());
-        return (result != null) ? result.toByteArray() : null;
-    }
+    public abstract  byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc, ReportTemplate template);
 
     @Override
     public String getTemplateFileName(ReportDescriptor desc, ReportTemplate template, String extension){
@@ -106,19 +101,24 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
      *
      *
      * @return созданный объект заказанного класса
-     * @throws IOException
      */
-    protected JRDataSourceProvider createDsProvider(ReportsManager reportsManager, ReportDescriptor reportDesc, final String dataSourceClass, Map<String, Object> parameters)
-            throws IOException {
-        final String failMsg = "Can not instantiate DataSourceProvider of class <" + dataSourceClass + ">";
-        JRDataSourceProvider resultProvider;
+    protected JRDataSourceProvider createDsProvider(ReportsManager reportsManager, ReportDescriptor reportDesc, final String dataSourceClass, Map<String, Object> parameters){
+        JRDataSourceProvider resultProvider = null;
         try {
             try {
-                final Constructor<?> cons = Class.forName(dataSourceClass).getConstructor(ServiceRegistry.class);
-                resultProvider = (JRDataSourceProvider) cons.newInstance(getServices().getServiceRegistry());
-            } catch (NoSuchMethodException e) {
-                // если нет спец конструктора - пробуем обычный ...
-                resultProvider = (JRDataSourceProvider) Class.forName(dataSourceClass).getConstructor().newInstance();
+                // если у нас ID бина - достаем из контекста
+                resultProvider = (JRDataSourceProvider) getApplicationContext().getBean(dataSourceClass);
+            } catch (BeansException ex) {
+                log.error(ex.getMessage(), ex);
+            }
+            if (resultProvider == null) {
+                try {
+                    final Constructor<?> cons = Class.forName(dataSourceClass).getConstructor(ServiceRegistry.class);
+                    resultProvider = (JRDataSourceProvider) cons.newInstance(getServices().getServiceRegistry());
+                } catch (NoSuchMethodException e) {
+                    // если нет спец конструктора - пробуем обычный ...
+                    resultProvider = (JRDataSourceProvider) Class.forName(dataSourceClass).getConstructor().newInstance();
+                }
             }
 
             // "своих" особо облагородим ...
@@ -132,12 +132,8 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
 
             assignProviderProps(resultProvider, parameters, reportDesc);
 
-        } catch (ClassNotFoundException e) {
-            throw new IOException(failMsg + ". Class not found");
-        } catch (NoSuchMethodException e) {
-            throw new IOException(failMsg + ". Constructor not defined or has incorrect parameters");
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new IOException(failMsg, e);
+        } catch (Exception e) {
+            log.error("Can not instantiate DataSourceProvider of class <" + dataSourceClass + ">" + ". Class not found", e);
         }
         return resultProvider;
     }
@@ -197,7 +193,7 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
             return null;
         }
 
-        final Map<String, String> result = new HashMap<String, String>(reportFlags.flags().size());
+        final Map<String, String> result = new HashMap<>(reportFlags.flags().size());
 
         // сканируем параметры-флаги вида "property.XXX"
         for (NamedValue item : reportFlags.flags()) {

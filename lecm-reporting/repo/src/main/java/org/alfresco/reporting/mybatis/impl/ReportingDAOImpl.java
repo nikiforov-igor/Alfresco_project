@@ -1,5 +1,6 @@
 package org.alfresco.reporting.mybatis.impl;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
@@ -589,6 +590,11 @@ public class ReportingDAOImpl implements ReportingDAO {
     public List reportingSelectTablesPerType(String typename) {
         TypeTableDefinition sfw = new TypeTableDefinition(null, typename.toLowerCase());
         return this.template.selectList("type-tables-tables-per-type", sfw);
+    }
+
+    @Override
+    public Connection getConnection() {
+        return this.template.getConnection();
     }
 
     public String reportingSelectFromWhere(String select, String tablename, String where) {

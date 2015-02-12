@@ -8,9 +8,9 @@ import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
-import ru.it.lecm.reports.database.DataBaseHelper;
 import ru.it.lecm.reports.model.impl.JavaDataType;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,7 +23,7 @@ import java.util.List;
  * Date: 28.11.13
  * Time: 11:59
  */
-public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
+public abstract class SQLProvider implements JRDataSourceProvider, ReportProviderExt,Serializable  {
 
     private static final Logger logger = LoggerFactory.getLogger(SQLProvider.class);
 
@@ -33,11 +33,35 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
     private ReportsManager reportsManager;
     @SuppressWarnings("unused")
     private LinksResolver resolver;
-    private DataBaseHelper databaseHelper;
 
-    public DataBaseHelper getDatabaseHelper() {
-        return databaseHelper;
+    @Override
+    public void setReportDescriptor(ReportDescriptor reportDescriptor) {
+        this.reportDescriptor = reportDescriptor;
     }
+
+    @Override
+    public ReportDescriptor getReportDescriptor() {
+        return this.reportDescriptor;
+    }
+
+    @Override
+    public void setResolver(LinksResolver resolver) {
+        this.resolver = resolver;
+    }
+
+    @Override
+    public LinksResolver getResolver() {
+        return this.resolver;
+    }
+
+    @Override
+    public void setReportsManager(ReportsManager reportsManager) {
+        this.reportsManager = reportsManager;
+    }
+
+    public abstract void initializeFromGenerator(ReportGeneratorBase baseGenerator);
+
+    public abstract Connection getConnection();
 
     @Override
     public boolean supportsGetFieldsOperation() {
@@ -50,7 +74,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
-            connection = getDatabaseHelper().getConnection();
+            connection = getConnection();
             String query = reportDescriptor.getFlags().getText() + " LIMIT 1";
             statement = connection.prepareStatement(query);
 
@@ -93,7 +117,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
                     connection.close();
                 } catch (SQLException e) {
                     logger.error(e.getMessage(), e);
-                }
+        }
             }
         }
         return new JRField[0];
@@ -107,35 +131,5 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
     @Override
     public void dispose(JRDataSource dataSource) throws JRException {
         logger.debug(String.format("Disposing dataSource: %s", (dataSource == null ? "null" : dataSource.getClass().getName())));
-    }
-
-    @Override
-    public void setReportDescriptor(ReportDescriptor reportDescriptor) {
-        this.reportDescriptor = reportDescriptor;
-    }
-
-    @Override
-    public ReportDescriptor getReportDescriptor() {
-        return this.reportDescriptor;
-    }
-
-    @Override
-    public void setResolver(LinksResolver resolver) {
-        this.resolver = resolver;
-    }
-
-    @Override
-    public LinksResolver getResolver() {
-        return this.resolver;
-    }
-
-    @Override
-    public void setReportsManager(ReportsManager reportsManager) {
-        this.reportsManager = reportsManager;
-    }
-
-    @Override
-    public void initializeFromGenerator(ReportGeneratorBase baseGenerator) {
-        this.databaseHelper = baseGenerator.getDatabaseHelper();
     }
 }

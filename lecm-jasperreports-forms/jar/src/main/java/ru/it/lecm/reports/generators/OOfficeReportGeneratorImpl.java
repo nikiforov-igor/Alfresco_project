@@ -209,8 +209,10 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
                                 final String urlWork = toUrl(workFile, connection);
                                 final String author = "LECM USER";
 
+                                final JRDataSourceProvider dsProvider = createDsProvider(null, desc, desc.getProviderDescriptor().getClassName(), null);
+
 								/* Добавление атрибутов из колонок данных и сохранение в urlSave... */
-                                templateGenerator.odtAddColumnsAsDocCustomProps(getConnection(), desc, template, urlWork, null, author);
+                                templateGenerator.odtAddColumnsAsDocCustomProps(getConnection(), dsProvider, desc, template, urlWork, null, author);
 
                                 /** чтение файла в виде буфера ... */
                                 final String errLogInfo = String.format("Fail to load generated [temporary] file: \n '%s'", urlWork);
@@ -335,8 +337,6 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
             throw new IllegalArgumentException("The report file was not specified");
         }
 
-        final JRDataSource dataSource = dsProvider.create(null);
-
         final byte[] result =
                 openOfficeExecWithRetry(new Job<byte[]>() {
 
@@ -349,7 +349,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
                         final String urlSaveAs = toUrl(destDocFile, connection);
 
                         try {
-                            fill(report, requestParameters, dataSource, urlSrc, urlSaveAs);
+                            fill(report, requestParameters, dsProvider, urlSrc, urlSaveAs);
                         } catch (JRException ex) {
                             final String msg = String.format("Error filling report '%s':\n%s", report.getMnem(), ex.getMessage());
                             logger.error(msg, ex);
@@ -372,14 +372,14 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
      *
      * @param report       отчёт
      * @param parameters   параметры
-     * @param jrDataSource набор данных
+     * @param jrProvider провайдер
      * @param urlSrc       исходный файл openOffice (".odt")
      * @param urlSaveAs    целевой файл (может иметь другой формат, например, ".rtf")
      * @throws JRException
      */
-    public void fill(ReportDescriptor report, Map<String, Object> parameters, JRDataSource jrDataSource, String urlSrc, String urlSaveAs) throws JRException {
+    public void fill(ReportDescriptor report, Map<String, Object> parameters, JRDataSourceProvider jrProvider, String urlSrc, String urlSaveAs) throws JRException {
         //в props для обычного провайдера - список заполненных значений, для SQL - дефолтныхce);
-        templateGenerator.odtSetColumnsAsDocCustomProps(jrDataSource, parameters, report, urlSrc, urlSaveAs, null);
+        templateGenerator.odtSetColumnsAsDocCustomProps(jrProvider, parameters, report, urlSrc, urlSaveAs, null);
     }
 
     private abstract class Job<TResult> {

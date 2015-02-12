@@ -139,6 +139,15 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
         return result;
     }
 
+    @Override
+    public byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc, ReportTemplate template) {
+        final JRDataSourceProvider dsProvider = createDsProvider(null, desc, desc.getProviderDescriptor().getClassName(), null);
+        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc, template, dsProvider);
+        final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate(
+                new ByteArrayInputStream(maketData), "Template For Report - " + desc.getMnem());
+        return (result != null) ? result.toByteArray() : null;
+    }
+
     /**
      * Целевой формат отчёта по-умолчанию
      */
@@ -198,11 +207,11 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
                 final JRDataSource dataSource = dataSourceProvider.create(report);
                 jPrint = fillManager.fill(report, reportParameters, dataSource);
             } else {// SQL
-                conn = getDatabaseHelper().getConnection();
+                conn = ((SQLProvider) dataSourceProvider).getConnection();
                 jPrint = fillManager.fill(report, reportParameters, conn);
             }
 
-		/* формирование результата в нужном формате */
+		    /* формирование результата в нужном формате */
             log.debug(String.format("Exporting report '%s' as %s ...", report.getName(), target));
             switch (target) {
                 case PDF:

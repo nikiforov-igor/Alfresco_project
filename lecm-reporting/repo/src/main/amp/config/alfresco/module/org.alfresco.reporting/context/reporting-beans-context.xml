@@ -254,4 +254,34 @@
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="authorityService" ref="authorityService"/>
     </bean>
+
+    <bean id="reporting.LogicEcmDictionariesBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditor.LogicEcmDictionariesBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Справочники"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/org.alfresco.reporting/models/sql-provider-bootstrap.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="reportingSQLProvider"
+          class="org.alfresco.reporting.providers.ReportingSQLProvider" depends-on="reportingDataSource" singleton="false">
+        <property name="dataSource" ref="reportingDataSource" />
+    </bean>
+
+    <bean id="sqlReportingBootstrap" abstract="true" init-method="bootstrap"
+          class="org.alfresco.reporting.db.SQLReportingBootstrap" depends-on="reportingDAO">
+        <property name="bootstrapOnStart" value="#{new Boolean('${lecm.reporting.bootstrapOnStart}')}"/>
+        <property name="reportingDAO" ref="reportingDAO"/>
+        <property name="transactionService" ref="transactionService" />
+    </bean>
+
+    <bean id="updateLastStatusSQL" parent="sqlReportingBootstrap">
+        <property name="sqlFiles">
+            <list>
+                <value>alfresco/module/org.alfresco.reporting/sql/update-last-status.sql</value>
+            </list>
+        </property>
+    </bean>
 </beans>
