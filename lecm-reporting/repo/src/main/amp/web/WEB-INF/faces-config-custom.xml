@@ -9,7 +9,7 @@
 			returns a message to the interface.
 		</description>
 		<managed-bean-name>ExecuteScriptHandlerBean</managed-bean-name>
-		<managed-bean-class>org.alfresco.reporting.web.bean.ExecuteScriptHandlerBean</managed-bean-class>
+		<managed-bean-class>ru.it.lecm.reporting.web.bean.ExecuteScriptHandlerBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
 			<property-name>nodeService</property-name>
@@ -39,7 +39,7 @@
 			returns a message to the interface.
 		</description>
 		<managed-bean-name>HarvestHandlerBean</managed-bean-name>
-		<managed-bean-class>org.alfresco.reporting.web.bean.HarvestHandlerBean</managed-bean-class>
+		<managed-bean-class>ru.it.lecm.reporting.web.bean.HarvestHandlerBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
 			<property-name>nodeService</property-name>
