@@ -33,7 +33,7 @@
 	certsList = new Button({
 		id: "certs",
 		name: "certs",
-		label: "Выбор сертификата",
+		label: "${msg('lecm.signdoc.lbl.select.cert')}",
 		type: "menu",
 		menu: data,
 		container: "selectContainer"

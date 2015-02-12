@@ -9,11 +9,11 @@
 
 	<#-- Не убирайте display: none; Это важно для knockout'а! -->
 	<div data-bind="visible: $root.singsIsEmpty()" style="display: none;">
-		<p>Вложения участвующие в юридически значимом документообороте (ЮЗД) отсутствуют.</p>
-		<p>Чтобы добавить документ/вложение в ЮЗД:</p>
+		<p>${msg('lecm.signdoc.msg.attachs.lsd.absent')}</p>
+		<p>${msg('lecm.signdoc.msg.to.add.attach.lsd')}:</p>
 		<div>
-			<div>1. Перейдите на карточку документа/вложения, которое Вы хотите добавить;</div>
-			<div>2. В правой части карточки поставьте галочку напротив "На подпись".</div>
+			<div>1. ${msg('lecm.signdoc.msg.go.to.card')};</div>
+			<div>2. ${msg('lecm.signdoc.msg.sign.tick')}.</div>
 		</div>
 	</div>
 
@@ -25,7 +25,7 @@
 			<p class="signs-file-header" data-bind="text: fileName"></p>
 
 			<!-- ko if: $root.signsInfoIsEmpty($context) -->
-			<p>Вложение не подписывалось.</p>
+			<p>${msg('lecm.signdoc.msg.attach.not.signed')}</p>
 			<!-- /ko -->
 
 			<!-- ko ifnot: $root.signsInfoIsEmpty($context) -->

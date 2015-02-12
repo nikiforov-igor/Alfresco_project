@@ -6,15 +6,15 @@ YAHOO.util.Event.onDOMReady(function() {
 			var actionScope = this;
 
 			Alfresco.util.PopupManager.displayPrompt({
-				title: "Подтверждение разблокировки",
-				text: "В случае создания новых версий документа, загруженные Электронные подписи будут более недоступны. Вы уверены, что хотите разблокировать функции создания версий?", // the text to display for the user, mandatory
+				title: Alfresco.util.message('lecm.signdoc.msg.unblock.confirm'),
+				text: Alfresco.util.message('lecm.signdoc.msg.unbloc.version.fetures'), // the text to display for the user, mandatory
 				modal: true,
 				buttons: [
 					{
-						text: "Да",
+						text: Alfresco.util.message('lecm.signdoc.yes'),
 						handler: handleYes
 					}, {
-						text: "Нет",
+						text: Alfresco.util.message('lecm.signdoc.no'),
 						handler: function() {
 							this.hide();
 						}
@@ -25,7 +25,7 @@ YAHOO.util.Event.onDOMReady(function() {
 			function handleYes() {
 				actionScope.modules.actions.genericAction({
 					failure: {
-						message: actionScope.msg("Произошла ошибка при разблокировании документа {0}", file.displayName, Alfresco.constants.USERNAME)
+						message: actionScope.msg(Alfresco.util.message('lecm.signdoc.msg.unlock.doc.error') + " {0}", file.displayName, Alfresco.constants.USERNAME)
 					},
 					webscript: {
 						name: "lecm/signed-docflow/unlock?nodeRef={nodeRef}",

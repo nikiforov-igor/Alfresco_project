@@ -62,7 +62,7 @@
 					var date = fromISO8601(value);
 
 					if (key == "isValid") {
-						return value ? "действительна" : "не действительна";
+						return value ? Alfresco.util.message('lecm.signdoc.msg.valid') : Alfresco.util.message('lecm.signdoc.msg.invalid');
 					}
 
 					if (date) {
@@ -74,8 +74,8 @@
 
 				signInfo = toJS(signInfo);
 
-				htmlResult += substitute("<div>{position} {FIO} от {signDate}</div>", signInfo, processSignValues);
-				htmlResult += substitute("<div>Подпись {isValid} на {lastValidate}</div>", signInfo, processSignValues);
+				htmlResult += substitute("<div>{position} {FIO} " + Alfresco.util.message('lecm.signdoc.msg.from') + " {signDate}</div>", signInfo, processSignValues);
+				htmlResult += substitute("<div>" + Alfresco.util.message('lecm.signdoc.msg.signatory') + " {isValid} "+ Alfresco.util.message('lecm.signdoc.msg.on') + " {lastValidate}</div>", signInfo, processSignValues);
 
 				return htmlResult;
 			},
@@ -97,10 +97,10 @@
 				}
 
 				if (current.isOur) {
-					return "от нашей организации";
+					return Alfresco.util.message('lecm.signdoc.msg.from.our.org');
 				}
 
-				return substitute("от {organization}", current);
+				return substitute(Alfresco.util.message('lecm.signdoc.msg.from') + " {organization}", current);
 			},
 			getViewAttributes: function($context) {
 				var i0 = $context.$parentContext.$parentContext.$index(),
@@ -182,7 +182,7 @@
 				failureCallback: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: "Не удалось получить информацию о подписях, попробуйте ещё раз"
+							text: Alfresco.util.message('lecm.signdoc.msg.get.sign.info.fail.try')
 						});
 					}
 				}

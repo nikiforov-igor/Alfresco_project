@@ -31,4 +31,4 @@
 
 	<@formLib.renderFieldHelp field=field />
 </div>
-<button type="button" id="${fieldHtmlId}-cert-button" name="${fieldHtmlId}-cert-button" value="Загрузка из файла">Загрузка из файла</button>
+<button type="button" id="${fieldHtmlId}-cert-button" name="${fieldHtmlId}-cert-button" value="${msg('lecm.signdoc.lbl.load.from.file')}">${msg('lecm.signdoc.lbl.load.from.file')}</button>

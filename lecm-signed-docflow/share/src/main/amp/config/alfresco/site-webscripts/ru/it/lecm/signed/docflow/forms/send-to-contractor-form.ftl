@@ -14,7 +14,7 @@
 
 	<!-- Способ взаимодействия -->
 	<div class="form-field">
-		<label for="${interTypeRadioId}">Взаимодействие с контрагентом, ЮЗД:<span class="mandatory-indicator">*</span></label>
+		<label for="${interTypeRadioId}">${msg("lecm.signdoc.lbl.inter.counterp")}:<span class="mandatory-indicator">*</span></label>
 		<div id="${interTypeRadioId}"></div>
 		<input id="${interTypeId}" class="hidden" name="prop_lecm-contractor_interaction-type" type="text" value="">
 	</div>
@@ -68,7 +68,7 @@
 			return function makeDataRequest() {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
-					text: "Пожалуйста, подождите, документ отправляется",
+					text: "${msg('lecm.signdoc.msg.doc.sending')}",
 					spanClass: "wait",
 					displayTime: 0,
 					modal: true
@@ -99,14 +99,14 @@
 
 							loadingPopup.destroy();
 
-							console.log(">>> Всего отправлено документов: " + responses.length);
-							console.log("Документов, со статусом \"ОК\": " + good.length);
-							console.log("Документов, со статусом отличным от \"OK\": " + bad.length);
-							console.log("Документов, со статусом \"PARTNER_ERROR\": " + partner.length);
+							console.log(">>> ${msg('lecm.signdoc.msg.doc.sent.total')}: " + responses.length);
+							console.log("${msg('lecm.signdoc.msg.docs.with.status')} \"ОК\": " + good.length);
+							console.log("${msg('lecm.signdoc.msg.docs.with.status.other')} \"OK\": " + bad.length);
+							console.log("${msg('lecm.signdoc.msg.docs.with.status')} \"PARTNER_ERROR\": " + partner.length);
 
 							// Выходим, если всё хорошо
 							if(good.length == responses.length) {
-								message = (responses.length > 1) ? "Документы успешно отправлены" : "Документ успешно отправлен";
+								message = (responses.length > 1) ? "${msg('lecm.signdoc.msg.docs.sent.success')}" : "${msg('lecm.signdoc.msg.doc.sent.success')}";
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
 								YAHOO.lang.later(2500, null, hideAndReload);
 								return;
@@ -133,7 +133,7 @@
 								destroyOnHide: true,
 								doBeforeDialogShow:{
 									fn: function(form, simpleDialog) {
-										simpleDialog.dialog.setHeader("Необходима аутентификация, выберите сертификат");
+										simpleDialog.dialog.setHeader("${msg('lecm.signdoc.msg.auth.req')}");
 									}
 								},
 								doBeforeAjaxRequest: {
@@ -145,7 +145,7 @@
 								onFailure: {
 									fn: function() {
 										Alfresco.util.PopupManager.displayMessage({
-											text: "Не удалось открыть форму аутентификации, попробуйте ещё раз"
+											text: "${msg('lecm.signdoc.msg.open.auth.form.failed')}"
 										});
 									}
 								}
@@ -158,7 +158,7 @@
 						fn: function() {
 							loadingPopup.destroy();
 							Alfresco.util.PopupManager.displayMessage({
-								text: "Не удалось отправить документ(ы)"
+								text: "${msg('lecm.signdoc.msg.doc.send.failed')}"
 							});
 						}
 					}
@@ -220,13 +220,13 @@
 
 			interTypeGroup.addButtons([
 				{
-					label: "Используя спецоператора",
+					label: "${msg('lecm.signdoc.lbl.using.sp.oper')}",
 					value: "SPECOP",
 					checked: interType == "SPECOP",
 					disabled: interType == "EMAIL"
 				},
 				{
-					label: "Используя Email",
+					label: "${msg('lecm.signdoc.lbl.using.email')}",
 					value: "EMAIL",
 					checked: interType == "EMAIL",
 					disabled: interType == "SPECOP"
@@ -303,7 +303,7 @@
 		function checkDocument() {
 			function onFailureCallback(response) {
 				Alfresco.util.PopupManager.displayMessage({
-					text: "Не удалось получить данные по контрагенту для документа"
+					text: "${msg('lecm.signdoc.msg.get.counterp.data.failed')}"
 				});
 			}
 

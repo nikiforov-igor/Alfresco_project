@@ -53,7 +53,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function(p_form, p_dialog) {
-						p_dialog.dialog.setHeader("Просмотр информации о подписях");
+						p_dialog.dialog.setHeader(Alfresco.util.message('lecm.signdoc.ttl.view.sign.info'));
 						p_form.doBeforeFormSubmit = {
 							fn: function() {
 								this.setAJAXSubmit(false);
@@ -65,7 +65,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				onFailure: {
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
-							text: "Не удалось получить информацию о подписях"
+							text: Alfresco.util.message('lecm.signdoc.msg.get.sign.info.error')
 						});
 					},
 					scope: this
@@ -111,13 +111,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					contentRef: this.options.nodeRef,
 					doBeforeDialogShow: {
 						fn: function(form, dialog) {
-							dialog.dialog.setHeader("Отправка контрагенту");
+							dialog.dialog.setHeader(Alfresco.util.message('lecm.signdoc.ttl.send.to.counterp'));
 						}
 					},
 					onFailure: {
 						fn: function() {
 							Alfresco.util.PopupManager.displayMessage({
-								text: "Не удалось получить форму отправки, попробуйте ещё раз"
+								text: Alfresco.util.message('lecm.signdoc.msg.get.subm.form.failed')
 							});
 						}
 					}
@@ -148,7 +148,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			return function makeDataRequest() {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
-					text: "Пожалуйста, подождите, запрашиваются подписи контрагента",
+					text: Alfresco.util.message('lecm.signdoc.msg.sign.requested'),
 					spanClass: "wait",
 					displayTime: 0,
 					modal: true
@@ -175,11 +175,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							// Выходим, если всё хорошо
 							if (result.gateResponse.responseType === "OK") {
 								if (result.signatures.length > 1) {
-									message = "Подписи успешно получены";
+									message = Alfresco.util.message('lecm.signdoc.msg.signs.obtained');
 								} else if (result.signatures.length) {
-									message = "Подпись успешно получена";
+									message = Alfresco.util.message('lecm.signdoc.msg.sign.obtained');
 								} else {
-									message = "Новых подписей нет";
+									message = Alfresco.util.message('lecm.signdoc.msg.no.new.signs');
 								}
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({text: message});
 								YAHOO.lang.later(2500, null, hideAndReload);
@@ -210,7 +210,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 									destroyOnHide: true,
 									doBeforeDialogShow: {
 										fn: function(form, simpleDialog) {
-											simpleDialog.dialog.setHeader("Необходима аутентификация, выберите сертификат");
+											simpleDialog.dialog.setHeader(Alfresco.util.message('lecm.signdoc.msg.auth.req'));
 										}
 									},
 									doBeforeAjaxRequest: {
@@ -227,7 +227,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 									onFailure: {
 										fn: function() {
 											Alfresco.util.PopupManager.displayMessage({
-												text: "Не удалось открыть форму аутентификации, попробуйте ещё раз"
+												text: Alfresco.util.message('lecm.signdoc.msg.open.auth.form.failed')
 											});
 										}
 									}
@@ -237,8 +237,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								return;
 							} else {
 								Alfresco.util.PopupManager.displayPrompt({
-									title: "Ошибка при получении подписей документа от контрагента",
-									text: YAHOO.lang.substitute("Код ошибки: {responseType}. {message}", result.gateResponse)
+									title: Alfresco.util.message('lecm.signdoc.msg.get.signs.counter.failed'),
+									text: YAHOO.lang.substitute(Alfresco.util.message('lecm.signdoc.msg.error.code') + ": {responseType}. {message}", result.gateResponse)
 								});
 							}
 						}
@@ -247,7 +247,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						fn: function() {
 							loadingPopup.destroy();
 							Alfresco.util.PopupManager.displayMessage({
-								text: "Не удалось получить подписи"
+								text: Alfresco.util.message('lecm.signdoc.msg.get.signs.failed')
 							});
 						}
 					}
@@ -285,8 +285,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				makeDataRequest();
 			} else {
 				Alfresco.util.PopupManager.displayPrompt({
-					title: "Ошибка при получении подписей документа от контрагента",
-					text: "Этот документ не участвовал в ЭДО ни с одним контрагентом. Прежде чем получать подписи, необходимо направить документ контрагенту"
+					title: Alfresco.util.message('lecm.signdoc.msg.get.signs.counter.failed'),
+					text: Alfresco.util.message('lecm.signdoc.msg.doc.not.involved')
 				});
 			}
 		},
@@ -306,7 +306,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					scope: this,
 					fn: function(response) {
 						Alfresco.util.PopupManager.displayMessage({
-							text: "Не удалось получить данные по контрагенту для документа"
+							text: Alfresco.util.message('lecm.signdoc.msg.get.counterp.data.failed')
 						});
 					}
 				}

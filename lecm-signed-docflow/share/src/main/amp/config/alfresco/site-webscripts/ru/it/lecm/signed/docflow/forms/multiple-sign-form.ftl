@@ -9,7 +9,7 @@
 	<@formLib.renderFormsRuntime formId = formId />
 </#if>
 <#if t == '[]'>
-	<br/><strong>Нет подписываемых вложений</strong>
+	<br/><strong>${msg('lecm.signdoc.lbl.no.sign.attachs')}</strong>
 </#if>
 <@formLib.renderFormContainer formId = formId>
 <#list data as group>

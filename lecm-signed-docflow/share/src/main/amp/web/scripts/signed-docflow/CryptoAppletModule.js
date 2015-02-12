@@ -5,7 +5,7 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 function checkForApplet() {
 	if (!document.getElementsByName('signApplet')) {
 		Alfresco.util.PopupManager.displayMessage({
-			text: 'Не обнаружен крипто-апплет. Дальнейшая работа с ЮЗД невозможна'
+			text: Alfresco.util.message('lecm.signdoc.msg.applet.not.found')
 		});
 		return false;
 	}
@@ -111,7 +111,7 @@ function checkForApplet() {
 				}
 
 				this.loadCertsForm({
-					title: 'Подписание',
+					title: Alfresco.util.message('lecm.signdoc.msg.signing'),
 					actionURL: Alfresco.constants.PROXY_URI + 'lecm/signed-docflow/signContent',
 					doBeforeAjaxCallback: {
 						scope: this,
@@ -121,7 +121,7 @@ function checkForApplet() {
 							form.dataObj = [];
 							signatures = this.signContent(nodeRefList);
 							if (!signatures.length) {
-								Alfresco.util.PopupManager.displayMessage({text: 'Не удалось создать подписи, данные не отправлены'});
+								Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.create.sign.failed')});
 								form.options.actionURL = null;
 								return false;
 							}
@@ -145,12 +145,12 @@ function checkForApplet() {
 
 							if (badResult !== '') {
 								Alfresco.util.PopupManager.displayPrompt({
-									title: 'Ошибка валидации',
-									text: 'Процесс подписания успешно завершился, но следующие файлы подписать не удалось так как они уже были подписаны:<br/>' + badResult,
+									title: Alfresco.util.message('lecm.signdoc.msg.validation.error'),
+									text: Alfresco.util.message('lecm.signdoc.msg.signing.ok.files.already.sign') + ':<br/>' + badResult,
 									noEscape: true
 								});
 							} else {
-								message = (response.json.length > 1) ? 'Документы успешно подписаны' : 'Документ успешно подписан';
+								message = (response.json.length > 1) ? Alfresco.util.message('lecm.signdoc.msg.docs.subscribed') : Alfresco.util.message('lecm.signdoc.msg.doc.subscribed');
 								Alfresco.util.PopupManager.displayMessage({text: message});
 							}
 
@@ -163,7 +163,7 @@ function checkForApplet() {
 					failureCallback: {
 						scope: this,
 						fn: function () {
-							Alfresco.util.PopupManager.displayMessage({text: 'Ошибка при отправке подписей'});
+							Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.sign.send.error')});
 						}
 					}
 
@@ -174,7 +174,7 @@ function checkForApplet() {
 
 				this.loadMultipleForm({
 					docNodeRef: docNodeRef,
-					title: 'Подписание',
+					title: Alfresco.util.message('lecm.signdoc.msg.signing'),
 					actionURL: null,
 					htmlId: this.id,
 					doBeforeAjaxCallback: {
@@ -217,9 +217,9 @@ function checkForApplet() {
 								}
 
 								if (!success) {
-									resText = 'Некоторые подписи не удалось обновить';
+									resText = Alfresco.util.message('lecm.signdoc.msg.some.sign.refresh.failed');
 								} else {
-									resText = 'Все подписи обновлены';
+									resText = Alfresco.util.message('lecm.signdoc.msg.all.signs.updated');
 								}
 
 								Alfresco.util.PopupManager.displayMessage({text: resText});
@@ -234,7 +234,7 @@ function checkForApplet() {
 							scope: this,
 							fn: function () {
 								Alfresco.util.PopupManager.displayMessage({
-									text: 'Не удалось обновить подписи'
+									text: Alfresco.util.message('lecm.signdoc.msg.signs.update.failed')
 								});
 							}
 						}
@@ -287,7 +287,7 @@ function checkForApplet() {
 						fn: function () {
 							var cb;
 
-							Alfresco.util.PopupManager.displayMessage({text: 'Не удалось получить информацию о подписях'});
+							Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.get.sings.info.failed')});
 
 							cb = (options) ? options.failureCallback : null;
 							if (cb && YAHOO.lang.isFunction(cb.fn)) {
@@ -315,7 +315,7 @@ function checkForApplet() {
 			checkForApplet: function () {
 				if (!document.getElementsByName('signApplet')) {
 					Alfresco.util.PopupManager.displayMessage({
-						text: 'Не обнаружен крипто-апплет. Дальнейшая работа с ЮЗД невозможна'
+						text: Alfresco.util.message('lecm.signdoc.msg.applet.not.found')
 					});
 					return false;
 				}
@@ -340,7 +340,7 @@ function checkForApplet() {
 							signApplet.setConfig(config);
 						}
 					},
-					failureMessage: 'Ошибка при загрузке конфигурации для крипто-апплета'
+					failureMessage: Alfresco.util.message('lecm.signdoc.msg.applet.config.load.error')
 				});
 			},
 			getCerts: function () {
@@ -366,7 +366,7 @@ function checkForApplet() {
 				for (var i = 0; i < signatures.length; i++) {
 					if (!signatures[i].validate()) {
 						Alfresco.util.PopupManager.displayMessage({
-							text: 'Подпись не верна'
+							text: Alfresco.util.message('lecm.signdoc.msg.invalid.signature')
 						});
 						result = false;
 					}
@@ -394,7 +394,7 @@ function checkForApplet() {
 							scope: this,
 							fn: function (response) {
 								//[!] Взять на заметку
-								var text = (response.json.signResponse === 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью',
+								var text = (response.json.signResponse === 'SIGN_OK') ? Alfresco.util.message('lecm.signdoc.msg.signature.loaded') : Alfresco.util.message('lecm.signdoc.msg.sign.tested.download.failed'),
 									cb = (options) ? options.successCallback : null;
 								Alfresco.util.PopupManager.displayMessage({text: text});
 
@@ -406,7 +406,7 @@ function checkForApplet() {
 						failureCallback: {
 							scope: this,
 							fn: function () {
-								Alfresco.util.PopupManager.displayMessage({text: 'Загрузка подписи не удалась'});
+								Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.load.sign.failed')});
 
 								var cb = (options) ? options.failureCallback : null;
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
@@ -416,7 +416,7 @@ function checkForApplet() {
 						}
 					});
 				} else {
-					Alfresco.util.PopupManager.displayMessage({text: 'Подпись не действительна, загрузка отменена'});
+					Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.not.valid.sign.cancel')});
 				}
 			},
 			exportSignAction: function (nodeRef) {
@@ -436,7 +436,7 @@ function checkForApplet() {
 						successCallback: {
 							scope: this,
 							fn: function (response) {
-								var text = (response.json.signResponse === 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью',
+								var text = (response.json.signResponse === 'SIGN_OK') ? Alfresco.util.message('lecm.signdoc.msg.signature.loaded') : Alfresco.util.message('lecm.signdoc.msg.sign.tested.download.failed'),
 									cb = (options) ? options.successCallback : null;
 								Alfresco.util.PopupManager.displayMessage({text: text});
 
@@ -448,7 +448,7 @@ function checkForApplet() {
 						failureCallback: {
 							scope: this,
 							fn: function () {
-								Alfresco.util.PopupManager.displayMessage({text: 'Загрузка подписи не удалась'});
+								Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.load.sign.failed')});
 
 								var cb = (options) ? options.failureCallback : null;
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
@@ -458,7 +458,7 @@ function checkForApplet() {
 						}
 					});
 				} else {
-					Alfresco.util.PopupManager.displayMessage({text: 'Подпись не действительна, загрузка отменена'});
+					Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.not.valid.sign.cancel')});
 				}
 			},
 			/*
@@ -529,8 +529,8 @@ function checkForApplet() {
 
 					if (badContent) {
 						Alfresco.util.PopupManager.displayPrompt({
-							title: 'Подпись файла недействительна',
-							text: 'Следующие файлы не прошли проверку:<br/>' + badContent,
+							title: Alfresco.util.message('lecm.signdoc.msg.invalid.file.signature'),
+							text: Alfresco.util.message('lecm.signdoc.msg.files.verify.failed') + ':<br/>' + badContent,
 							noEscape: true
 						});
 					}
@@ -572,7 +572,7 @@ function checkForApplet() {
 				var TSsign = signApplet.sign(TS.toString('yyyy-MM-dd hh:mm'), 'String');
 				var dataObj = {'guidSign': GUIDsign, 'timestamp': TS.toString('yyyy-MM-dd hh:mm'), 'timestampSign': TSsign};
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
-					text: 'Аутентификация',
+					text: Alfresco.util.message('lecm.signdoc.lbl.authentication'),
 					spanClass: 'wait',
 					displayTime: 0,
 					modal: true
@@ -597,7 +597,7 @@ function checkForApplet() {
 								}
 
 							} else {
-								loadingPopup = Alfresco.util.PopupManager.displayMessage({text: 'Не удалось выполнить аутентификацию'});
+								loadingPopup = Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.auth.failed')});
 								YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
 							}
 						}
@@ -607,7 +607,7 @@ function checkForApplet() {
 						fn: function () {
 							loadingPopup.destroy();
 
-							loadingPopup = Alfresco.util.PopupManager.displayMessage({text: 'Не удалось выполнить аутентификацию'});
+							loadingPopup = Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.auth.failed')});
 							YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
 						}
 					}
@@ -616,7 +616,7 @@ function checkForApplet() {
 			},
 			authenticateAction: function (options) {
 				this.loadCertsForm({
-					title: 'Аутентификация',
+					title: Alfresco.util.message('lecm.signdoc.lbl.authentication'),
 					actionURL: null,
 					doBeforeAjaxCallback: {
 						scope: this,
@@ -662,16 +662,16 @@ function checkForApplet() {
 								}
 
 								if (success) {
-									Alfresco.util.PopupManager.displayMessage({text: 'Документы успешно отправлены'});
+									Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.docs.sent')});
 								} else {
-									Alfresco.util.PopupManager.displayMessage({text: 'Произошла ошибка при отправке документов, некоторые документы не были отправлены'});
+									Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.some.docs.not.sent')});
 								}
 							}
 						},
 						failureCallback: {
 							scope: this,
 							fn: function () {
-								Alfresco.util.PopupManager.displayMessage({text: 'Произошла ошибка при отправке'});
+								Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.sending.error')});
 							}
 						}
 					});
@@ -691,7 +691,7 @@ function checkForApplet() {
 			sendToPartnerActionMultiple: function (docNodeRef) {
 				this.loadMultipleForm({
 					docNodeRef: docNodeRef,
-					title: 'Отправка контрагенту',
+					title: Alfresco.util.message('lecm.signdoc.ttl.send.to.counterparty'),
 					actionURL: null,
 					htmlId: this.id,
 					doBeforeAjaxCallback: {
@@ -769,7 +769,7 @@ function checkForApplet() {
 						fn: function (form, obj) {
 							if (!currentSigningCert) {
 								Alfresco.util.PopupManager.displayMessage({
-									text: 'Необходимо выбрать сертификат!'
+									text: Alfresco.util.message('lecm.signdoc.msg.must.select.cert')
 								});
 								return false;
 							}
@@ -844,7 +844,7 @@ function checkForApplet() {
 								}
 								if (!nodeRefList.length) {
 									Alfresco.util.PopupManager.displayMessage({
-										text: 'Необходимо выбрать хотя бы один документ'
+										text: Alfresco.util.message('lecm.signdoc.msg.must.select.one.or.more.docs')
 									});
 									return false;
 								}
@@ -1141,7 +1141,7 @@ Certificate.prototype = {
 		if (this.valid) {
 			template = '<strong>{owner}</strong></br>{organization}</br>{OrgUnit}';
 		} else {
-			template = '<strong>{owner}</strong></br>{organization}</br>{OrgUnit}</br><span style="color: red;">Сертификат не валиден!</span>';
+			template = '<strong>{owner}</strong></br>{organization}</br>{OrgUnit}</br><span style="color: red;">' + Alfresco.util.message('lecm.signdoc.msg.invalid.cert') + '</span>';
 		}
 
 		return YAHOO.lang.substitute(template, dataObj);
@@ -1264,10 +1264,10 @@ function SignatureFromFile(nodeRef) {
 				this.validateDate = now;
 				this.signDate = now;
 			} else {
-				Alfresco.util.PopupManager.displayMessage({text: 'Ошибка при загрузке подписи'});
+				Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.sign.load.error')});
 			}
 		} catch (e) {
-			Alfresco.util.PopupManager.displayMessage({text: 'Ошибка при загрузке подписи'});
+			Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.sign.load.error')});
 		}
 	}
 }
