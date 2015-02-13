@@ -72,11 +72,11 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             var cell = row.insertCell(-1);
             cell.innerHTML = "<input id='" + this.id + "-select-all' type='checkbox' value='-1' />";
             cell = row.insertCell(-1);
-            cell.innerHTML = "Машина состояний";
+            cell.innerHTML = Alfresco.util.message("msg.statemachine");
             cell = row.insertCell(-1);
-            cell.innerHTML = "Восстановлена";
+            cell.innerHTML = Alfresco.util.message("msg.restored");
             cell = row.insertCell(-1);
-            cell.innerHTML = "Развернута";
+            cell.innerHTML = Alfresco.util.message("msg.deployed");
 
             for (var i in this.data) {
                 var item = data[i];
@@ -153,7 +153,7 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
                         var data = "statemachineNodeRef={statemachineNodeRef}&type=deploy&comment={comment}";
                         data = YAHOO.lang.substitute(data, {
                             statemachineNodeRef: packageNodeRef,
-                            comment: "Восстановление машины состояний по умолчанию"
+                            comment: Alfresco.util.message("msg.restore_in_process")
                         });
                         sUrl += "?" + encodeURI(data);
                         document.getElementById(statemachineId + "_deploy").innerHTML = "Wait";

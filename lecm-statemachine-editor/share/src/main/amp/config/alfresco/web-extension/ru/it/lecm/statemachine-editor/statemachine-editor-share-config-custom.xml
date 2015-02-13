@@ -696,7 +696,7 @@
                             <control-param name="fullDelete">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-stmeditor:transition-script" label="Скрипт">
+                    <field id="lecm-stmeditor:transition-script">
                         <!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">20</control-param>
                         </control> -->
@@ -846,7 +846,7 @@
 						</control>
 					</field>
                     <field id="lecm-stmeditor:stopSubWorkflows" />
-                    <field id="lecm-stmeditor:transitionDocumentChangeScript" label="Скрипт">
+                    <field id="lecm-stmeditor:transitionDocumentChangeScript">
                         <!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">20</control-param>
                         </control> -->
@@ -882,7 +882,7 @@
                         </control>
                     </field>
                     <field id="lecm-stmeditor:stopSubWorkflows" />
-                    <field id="lecm-stmeditor:transitionDocumentChangeScript" label="Скрипт">
+                    <field id="lecm-stmeditor:transitionDocumentChangeScript">
                         <!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">20</control-param>
                         </control> -->
@@ -1008,7 +1008,7 @@
                     <show id="lecm-stmeditor:alternativesFolder" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-stmeditor:alternativesFolder" label-id="statemachine.editor.form.label.alternatives">
+                    <field id="lecm-stmeditor:alternativesFolder">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-stmeditor:alternative</control-param>
                             <control-param name="allowCreate">true</control-param>
@@ -1141,8 +1141,8 @@
 					<show id="lecm-stmeditor:inputFromValue" force="true"/>
 				</field-visibility>
                 <appearance>
-                    <set id="sender" appearance="bordered-panel" label-id="Передаваемое значение из машины состояний" />
-                    <set id="receiver" appearance="bordered-panel" label-id="Получаемое значение процессом" />
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.process_receive" />
 	                <field id="lecm-stmeditor:inputToType" set="receiver">
 		                <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
 	                </field>
@@ -1425,7 +1425,7 @@
                                             type: "datagrid-action-link-custom",
                                             id: "onVersionRestore",
                                             permission: "edit",
-                                            label: "Сделать версию текущей"
+                                            label: Alfresco.util.message("action.set_version_as_active")
                                         }
                             ]]>
                             </control-param>

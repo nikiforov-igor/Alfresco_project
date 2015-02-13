@@ -2,7 +2,7 @@
 <span class="statemachine-menu">
 		<span id="menu-buttons-properties-menu-button" class="yui-button yui-push-button">
 	        <span class="first-child">
-	            <button type="button" title="Свойства">&nbsp;</button>
+	            <button type="button" title="${msg('btn.properties')}">&nbsp;</button>
 	        </span>
 	    </span>
 </span>
@@ -10,7 +10,7 @@
 <span class="statemachine-menu">
 		<span id="menu-buttons-deploy-menu-button" class="yui-button yui-push-button">
 	        <span class="first-child">
-	            <button type="button" title="Публикация машины состояний">&nbsp;</button>
+	            <button type="button" title="${msg('btn.deploy_statemachine')}">&nbsp;</button>
 	        </span>
 	    </span>
 </span>
@@ -18,7 +18,7 @@
 <span class="statemachine-menu">
 		<span id="menu-buttons-versions-menu-button" class="yui-button yui-push-button">
 	        <span class="first-child">
-	            <button type="button" title="Версии машины состояний">&nbsp;</button>
+	            <button type="button" title="${msg('btn.statemachine_version')}">&nbsp;</button>
 	        </span>
 	    </span>
 </span>
@@ -46,7 +46,7 @@
 
 <hr/>
 <div class="title">
-    <h3>Карта</h3>
+    <h3>${msg('title.map')}</h3>
 </div>
 <div id="diagram-cont" class="diagram-cont">
     <div>
@@ -56,12 +56,12 @@
 <hr/>
 <table cellpadding="0" cellspacing="2" class="statemachine-statuses-buttons-table">
     <tr>
-        <td class="status-lable"><h3>Статусы</h3></td>
+        <td class="status-lable"><h3>${msg('title.states')}</h3></td>
         <td>
             <span class="statemachine-menu">
                 <span id="menu-buttons-new-status-menu-button" class="yui-button yui-push-button">
                     <span class="first-child">
-                        <button type="button" title="Новый статус">&nbsp;</button>
+                        <button type="button" title="${msg('btn.status')}">&nbsp;</button>
                     </span>
                 </span>
             </span>
@@ -70,7 +70,7 @@
             <span class="statemachine-menu">
                     <span id="menu-buttons-end-event-menu-button" class="yui-button yui-push-button">
                         <span class="first-child">
-                            <button type="button" title="Новый финальный статус">&nbsp;</button>
+                            <button type="button" title="${msg('btn.new_final_state')}">&nbsp;</button>
                         </span>
                     </span>
             </span>
@@ -79,7 +79,7 @@
             <span class="statemachine-menu">
                 <span id="menu-buttons-alternative-start-menu-button" class="yui-button yui-push-button">
                     <span class="first-child">
-                        <button type="button" title="Альтернативные начальные статусы">&nbsp;</button>
+                        <button type="button" title="${msg('btn.alternative_start_states')}">&nbsp;</button>
                     </span>
                 </span>
             </span>

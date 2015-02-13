@@ -36,7 +36,7 @@
 
 		<!-- Основной объект хранилища описаний процессов -->
 		<type name="lecm-stmeditor:statemachine">
-			<title>Logic ECM Base Document</title>
+			<title>Statemachine</title>
 			<parent>cm:folder</parent>
             <archive>false</archive>
             <properties>
@@ -180,7 +180,7 @@
 
 		<!-- Объект Статус -->
 		<type name="lecm-stmeditor:taskStatus">
-			<title>Logic ECM Base Document</title>
+			<title>Logic ECM Task status</title>
 			<parent>lecm-stmeditor:status</parent>
             <archive>false</archive>
             <properties>

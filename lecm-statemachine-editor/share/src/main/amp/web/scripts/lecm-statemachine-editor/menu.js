@@ -72,21 +72,21 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 
             propertiesMenu.addItems([
                 {
-                    text: "Общие свойства",
+                    text: Alfresco.util.message("btn.common_properties"),
                     onclick: {
                         fn: this.editor._editStatemachine,
                         scope: this.editor
                     }
                 },
                 {
-                    text: "Доступ к полям на статусе",
+                    text: Alfresco.util.message("btn.fields_access_permissions"),
                     onclick: {
                         fn: this.editor.formFieldsOnStatus,
                         scope: this.editor
                     }
                 },
                 {
-                    text: "Доступ к категориям вложений на статусе",
+                    text: Alfresco.util.message("btn.attachments_access_permissions"),
                     onclick: {
                         fn: this.editor.attachmentCategoryPermissions,
                         scope: this.editor

@@ -116,19 +116,19 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			var td = document.createElement("td");
 			td.rowSpan = 2;
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Статус";
+			td.innerHTML = Alfresco.util.message("label.status");
 			tr.appendChild(td);
 
 			td = document.createElement("td");
 			td.colSpan = 3;
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Переходы";
+			td.innerHTML = Alfresco.util.message("label.transitions");
 			tr.appendChild(td);
 
 			td = document.createElement("td");
 			td.rowSpan = 2;
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Действия";
+			td.innerHTML = Alfresco.util.message("label.actions");
 			tr.appendChild(td);
 
 			table.appendChild(tr);
@@ -136,17 +136,17 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			tr = document.createElement("tr");
 			td = document.createElement("td");
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Тип перехода";
+			td.innerHTML = Alfresco.util.message("label.transition_type");
 			tr.appendChild(td);
 
 			td = document.createElement("td");
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Условие";
+			td.innerHTML = Alfresco.util.message("label.expression");
 			tr.appendChild(td);
 
 			td = document.createElement("td");
 			td.className = "lecm_tbl_td_h";
-			td.innerHTML = "Статус";
+			td.innerHTML = Alfresco.util.message("label.status");
 			tr.appendChild(td);
 
 			table.appendChild(tr);
@@ -293,7 +293,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, itemId == "lecm-stmeditor:taskStatus" ? "Новый статус" : "Новый финальный статус");
+						this._setFormDialogTitle(p_form, p_dialog, itemId == "lecm-stmeditor:taskStatus" ? Alfresco.util.message("label.new_status") : Alfresco.util.message("label.new_final_state"));
 					},
 					scope: this
 				},
@@ -338,17 +338,17 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			var me = this;
 			var model = obj;
 			Alfresco.util.PopupManager.displayPrompt({
-				title: "Удаление статуса",
-				text: "Вы действительно хотите удалить статус \"" + model.name + "\"",
+				title: Alfresco.util.message("title.delete_state"),
+				text: Alfresco.util.message("message.state_delete_confirmation", this.name, {0:model.name}),
 				buttons: [
 					{
-						text: "Удалить",
+						text: Alfresco.util.message("button.remove"),
 						handler: function dlA_onActionDelete_delete() {
 							this.destroy();
 							me._deleteStatus(model.nodeRef);
 						}
 					},{
-						text: "Отмена",
+						text: Alfresco.util.message("button.cancel"),
 						handler: function dlA_onActionDelete_cancel() {
 							this.destroy();
 						},
@@ -361,8 +361,8 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			var commentConfirm = new LogicECM.module.CommentConfirm();
 			var me = this;
 			commentConfirm.setOptions({
-				title: "Публикация новой версии",
-				fieldTitle: "Примечания к новой версии",
+				title: Alfresco.util.message("title.publish_new_version"),
+				fieldTitle: Alfresco.util.message("label.new_version_comments"),
 				onSave: function save_deployComment(comment) {
 					var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/diagram";
 					var data = "statemachineNodeRef={statemachineNodeRef}&type=deploy&comment={comment}";
@@ -376,7 +376,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 							oResponse.argument.parent._hideSplash();
 							Alfresco.util.PopupManager.displayMessage(
 								{
-									text: "Машина состояний опубликована в системе",
+									text: Alfresco.util.message("msg.statemachine_deployed_successfully"),
 									displayTime: 3
 								});
 						},
@@ -410,7 +410,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, "История версий машины состояний");
+						this._setFormDialogTitle(p_form, p_dialog, Alfresco.util.message("title.statemachine_versions_history"));
 					},
 					scope: this
 				},
@@ -426,11 +426,11 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 		_restoreDefaultStatemachine: function() {
 			var me = this;
 			Alfresco.util.PopupManager.displayPrompt({
-				title: "Восстановление машины состояний по умолчанию",
-				text: "Вы действительно хотите восстановить машину состояний по умолчанию?",
+				title: Alfresco.util.message("title.restore_default_statemachine"),
+				text: Alfresco.util.message("msg.restore_default_statemachine_confirm"),
 				buttons: [
 					{
-						text: "Да",
+						text: Alfresco.util.message("button.yes"),
 						handler: function dlA_onActionDeploy()
 						{
 							this.destroy();
@@ -444,7 +444,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 									oResponse.argument.parent._hideSplash();
 									Alfresco.util.PopupManager.displayMessage(
 										{
-											text: "Машина состояний восстановлена",
+											text: Alfresco.util.message("msg.statemashine_restored"),
 											displayTime: 3
 										});
 									document.location.href = Alfresco.constants.URL_CONTEXT + "page/statemachine?statemachineId=" + oResponse.argument.parent.statemachineId;
@@ -458,7 +458,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 						}
 					},
 					{
-						text: "Нет",
+						text: Alfresco.util.message("button.no"),
 						handler: function dlA_onActionDelete_cancel()
 						{
 							this.destroy();
@@ -472,11 +472,11 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			var me = this;
 			var version = item.itemData["prop_lecm-stmeditor_version"].value;
 			Alfresco.util.PopupManager.displayPrompt({
-				title: "Восстановление машины состояний",
-				text: "Вы действительно хотите восстановить машину состояний с версией " + version + "?",
+				title: Alfresco.util.message("title.restore_statemachine_version"),
+				text: Alfresco.util.message("msg.restore_statemachine_version_confirm", this.name, {0:version}),
 				buttons: [
 					{
-						text: "Да",
+						text: Alfresco.util.message("button.yes"),
 						handler: function dlA_onActionDeploy()
 						{
 							this.destroy();
@@ -496,7 +496,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 									oResponse.argument.parent._hideSplash();
 									Alfresco.util.PopupManager.displayMessage(
 										{
-											text: "Машина состояний восстановлена",
+											text: Alfresco.util.message("msg.statemachine_version_restored"),
 											displayTime: 3
 										});
 									document.location.reload(true);
@@ -510,7 +510,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 						}
 					},
 					{
-						text: "Нет",
+						text: Alfresco.util.message("button.no"),
 						handler: function dlA_onActionDelete_cancel()
 						{
 							this.destroy();
@@ -577,7 +577,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, "Редактирование статуса \"" + model.name + "\"");
+						this._setFormDialogTitle(p_form, p_dialog, Alfresco.util.message("title.edit_state",this.name, {0:model.name}));
 					},
 					scope: this
 				},
@@ -611,7 +611,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, "Свойства машины состояний");
+						this._setFormDialogTitle(p_form, p_dialog, Alfresco.util.message("title.statemachine_properties"));
 					},
 					scope: this
 				}
@@ -638,7 +638,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, "Доступ к полям на статусе");
+						this._setFormDialogTitle(p_form, p_dialog, Alfresco.util.message("title.fields_permissions"));
 					},
 					scope: this
 				}
@@ -664,7 +664,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, "Альтернативные стартовые статусы");
+						this._setFormDialogTitle(p_form, p_dialog, Alfresco.util.message("title.alternative_starts"));
 					},
 					scope: this
 				},
@@ -696,7 +696,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				doBeforeDialogShow:{
 					fn: function(p_form, p_dialog) {
 						this._hideSplash();
-						this._setFormDialogTitle(p_form, p_dialog, "Доступ к категориям вложений на статусе");
+						this._setFormDialogTitle(p_form, p_dialog, Alfresco.util.message("title.attachments_permissions"));
 					},
 					scope: this
 				}
@@ -748,12 +748,12 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				'<div class="form-buttons">' +
 				'<span id="confirm-comment-edit" class="yui-button yui-push-button">' +
 				'<span class="first-child">' +
-				'<button id="confirm-comment-edit-button" type="button" tabindex="0">Ок</button>' +
+				'<button id="confirm-comment-edit-button" type="button" tabindex="0">'+Alfresco.util.message('button.ok')+'</button>' +
 				'</span>' +
 				'</span>' +
 				'<span id="confirm-comment-cancel" class="yui-button yui-push-button">' +
 				'<span class="first-child">' +
-				'<button id="confirm-comment-cancel-button" type="button" tabindex="0">Отмена</button>' +
+				'<button id="confirm-comment-cancel-button" type="button" tabindex="0">'+Alfresco.util.message('button.cancel')+'</button>' +
 				'</span>' +
 				'</span>' +
 				'</div>' +

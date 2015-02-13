@@ -1,7 +1,7 @@
 <div id="deploy-control"></div>
 <span id="deploy-control-button" class="yui-button yui-push-button">
 	<span class="first-child">
-		<button type="button">Развернуть</button>
+		<button type="button">${msg('btn.deploy')}</button>
 	</span>
 </span>
 <@inlineScript group="lecm-statemachine-editor">

@@ -91,15 +91,15 @@ if (statemachineId != null && statemachineId != '') {
             user: "false",
             exp: alternative[i].properties["lecm-stmeditor:alternativeExpression"],
             status: alternative[i].assocs["lecm-stmeditor:alternativeStatus"] != null ? alternative[i].assocs["lecm-stmeditor:alternativeStatus"][0].properties["cm:name"] : "",
-            label: "Автоматический переход"
+            label: msg.get("label.automatic_transition")
         });
     }
 
     startTransitions.push({
         user: "false",
-        exp: "По умолчанию",
+        exp: msg.get("label.default"),
         status: machineStatuses[0].properties["cm:name"],
-        label: "Автоматический переход"
+        label: msg.get("label.automatic_transition")
     });
 
     statuses.push({
@@ -135,13 +135,13 @@ if (statemachineId != null && statemachineId != '') {
 
                     var transitionTypeLabel = "";
                     if (actionId == "WaitForDocumentChange") {
-                        transitionTypeLabel = "По изменению документа";
+                        transitionTypeLabel = msg.get("label.on_document_change");
                     } else if (actionId == "FinishStateWithTransition" && transitionWorkflow != null) {
-                        transitionTypeLabel = "Переход с запуском процесса"
+                        transitionTypeLabel = msg.get("label.transition_with_srart_workflow")
                     } else if (actionId == "FinishStateWithTransition") {
-                        transitionTypeLabel = "Переход выполняемый пользователем"
+                        transitionTypeLabel = msg.get("label.user_transition")
                     } else if (actionId == "TransitionAction") {
-                        transitionTypeLabel = "Переход по завершению ранее запущенного процесса"
+                        transitionTypeLabel = msg.get("label.transition_on_workflow_end")
                     } else {
                         transitionTypeLabel = actionId;
                     }
@@ -161,9 +161,9 @@ if (statemachineId != null && statemachineId != '') {
             var duration = status.properties["lecm-stmeditor:timerDuration"];
             transitions.push({
                 user: false,
-                exp: "Через " + duration + " р.д.",
+                exp: msg.get('label.timer_duration_exp').replace('{0}', duration),
                 status: timeoutStatusLabel,
-                label: "По таймауту"
+                label: msg.get("label.after_timeout")
             });
         }
 		statuses.push({

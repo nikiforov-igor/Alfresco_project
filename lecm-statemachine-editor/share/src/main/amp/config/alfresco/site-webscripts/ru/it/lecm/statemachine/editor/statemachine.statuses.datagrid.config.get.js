@@ -7,7 +7,7 @@ if (json.status == 200) {
         "type": "property",
         "name": "form_field",
         "formsName": "form_field",
-        "label": "Параметр / Статус",
+        "label": msg.get("label.properties_states"),
         "dataType": "text",
         "sortable": false
     });
