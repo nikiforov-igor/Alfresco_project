@@ -76,7 +76,7 @@ LogicECM.module = LogicECM.module || {};
 							actionDiv.innerHTML = action.label;
 							actionDiv.onclick = this.show.bind(this, action);
 							if (action.dueDate) {
-								actionDiv.title = 'Срок исполнения: ' + action.dueDate;
+								actionDiv.title = Alfresco.util.message('label.due_date', this.name ,{0:action.dueDate});
 							}
 							if (action.type == 'task') {
 								actionDiv.className += ' task-marker';
@@ -158,11 +158,11 @@ LogicECM.module = LogicECM.module || {};
 					message += errors[i] + '<br>';
 				}
 				Alfresco.util.PopupManager.displayPrompt({
-					title: 'Выполнение действия',
-					text: message + 'Подтвердите выполнение для этого документа действия "' + action.label + '".',
+					title: Alfresco.util.message('title.execute_action'),
+					text: message + Alfresco.util.message('msg.action_document_confirm', this.name, action.label ),
 					noEscape: true,
 					buttons: [{
-						text: 'Ок',
+						text: Alfresco.util.message('button.ok'),
 						handler: {
 							fn: function (event, obj) {
 								this.destroy();
@@ -174,7 +174,7 @@ LogicECM.module = LogicECM.module || {};
 							}
 						}
 					},{
-						text: 'Отмена',
+						text: Alfresco.util.button('button.cancel'),
 						handler: function(event, obj) {
 							this.destroy();
 						},
@@ -250,11 +250,11 @@ LogicECM.module = LogicECM.module || {};
 				message += errors[i] + '<br>';
 			}
 			Alfresco.util.PopupManager.displayPrompt({
-				title: 'Выполнение действия',
-				text: message + 'Подтвердите выполнение для этого документа действия "' + action.label + '". ',
+				title: Alfresco.util.message('title.execute_action'),
+				text: message + Alfresco.util.message('msg.action_document_confirm', this.name, action.label ),
 				noEscape: true,
 				buttons: [{
-					text: 'Ок',
+					text: Alfresco.util.message('button.ok'),
 					handler: {
 						fn: function(event, obj) {
 							this.destroy();
@@ -266,7 +266,7 @@ LogicECM.module = LogicECM.module || {};
 						}
 					}
 				},{
-					text: 'Отмена',
+					text: Alfresco.util.message('button.cancel'),
 					handler: function(event, obj) {
 						this.destroy();
 					},
@@ -334,10 +334,10 @@ LogicECM.module = LogicECM.module || {};
 					dialog.show();
 				} else {
 					Alfresco.util.PopupManager.displayPrompt({
-						title: 'Выполнение действия',
-						text: 'Подтвердите выполнение действия "' + action.actionId + '"',
+						title: Alfresco.util.message('title.execute_action'),
+						text: message + Alfresco.util.message('msg.action_confirm', this.name, action.actionId ),
 						buttons: [{
-							text: 'Ок',
+							text: Alfresco.util.message('button.ok'),
 							handler: {
 								fn: function(event, obj) {
 									this.destroy();
@@ -366,14 +366,14 @@ LogicECM.module = LogicECM.module || {};
 												}
 											}
 										},
-										failureMessage: obj.msg('message.failure'),
+										failureMessage: Alfresco.util.message('message.failure'),
 										execScripts: true
 									});
 								},
 								obj: this
 							}
 						},{
-							text: 'Отмена',
+							text: Alfresco.util.message('button.cancel'),
 							handler: function(event, obj) {
 								this.destroy();
 							},
@@ -557,10 +557,10 @@ LogicECM.module = LogicECM.module || {};
 					this._hideSplash();
 					if (oResults.error) {
 						Alfresco.util.PopupManager.displayPrompt({
-							title: 'Ошибка выполнения действия',
-							text: 'При выполнении действия произошла ошибка. Попробуйте обновить страницу и выполнить действие еще раз',
+							title: Alfresco.util.message('title.action_error'),
+							text: Alfresco.util.message('msg.action_error'),
 							buttons: [{
-								text: 'Ок',
+								text: Alfresco.util.message('button.ok'),
 								handler: function dlA_onAction_action() {
 									this.destroy();
 								}
@@ -619,11 +619,11 @@ LogicECM.module = LogicECM.module || {};
 
 		_openMessageWindow: function openMessageWindowFunction(title, message, reload) {
 			Alfresco.util.PopupManager.displayPrompt({
-				title: 'Результат выполнения операции "' + title + '"',
+				title: Alfresco.util.message('title.action_result',this.name,{0:title }),
 				text: message,
 				noEscape: true,
 				buttons: [{
-					text: 'Ок',
+					text: Alfresco.util.message('button.ok'),
 					handler: function dlA_onAction_action() {
 						this.destroy();
 						if (reload) {
@@ -648,9 +648,9 @@ LogicECM.module = LogicECM.module || {};
 		show: function showEditFieldsConfirm(nodeRef, label, errors, fields) {
 			var containerDiv = document.createElement('div');
 			var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
-					'<div id="confirm-edit-fields-head" class="hd" title="Ошибка действия &quot;' + label + '&quot;">Ошибка действия "' + label + '"</div>' +
+					'<div id="confirm-edit-fields-head" class="hd" title="'+Alfresco.util.message('title.action_failed')+' &quot;' + label + '&quot;">'+Alfresco.util.message('title.action_failed')+'"' + label + '"</div>' +
 					'<div id="confirm-edit-fields-body" class="bd">' +
-					'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields">Выполнение действия невозможно.<br/>';
+					'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields">'+Alfresco.util.message('msg.action_failed')+'<br/>';
 			for (var i = 0; i < errors.length; i++) {
 				form += errors[i];
 				form += '<br/>';
@@ -661,14 +661,14 @@ LogicECM.module = LogicECM.module || {};
 			if (fields.length > 0) {
 				form += '<span id="confirm-edit-fields-edit" class="yui-button yui-push-button">' +
 						'<span class="first-child">' +
-						'<button id="confirm-edit-fields-edit-button" type="button" tabindex="0">Редактировать</button>' +
+						'<button id="confirm-edit-fields-edit-button" type="button" tabindex="0">'+Alfresco.util.message('btn.edit')+'</button>' +
 						'</span>' +
 						'</span>';
 
 			}
 			form += '<span id="confirm-edit-fields-cancel" class="yui-button yui-push-button">' +
 					'<span class="first-child">' +
-					'<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">Отмена</button>' +
+					'<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">'+Alfresco.util.message('button.cancel')+'</button>' +
 					'</span>' +
 					'</span>' +
 					'</div>' +
