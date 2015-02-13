@@ -183,4 +183,13 @@
             </list>
         </property>
     </bean>
+
+
+    <bean id="ord.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/ord-repo/reports/configs/ords.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>

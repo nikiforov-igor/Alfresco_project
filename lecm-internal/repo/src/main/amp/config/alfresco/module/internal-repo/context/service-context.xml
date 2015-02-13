@@ -197,4 +197,13 @@
             </list>
         </property>
     </bean>
+
+    <bean id="internal.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/internal-repo/reports/configs/internals.properties</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

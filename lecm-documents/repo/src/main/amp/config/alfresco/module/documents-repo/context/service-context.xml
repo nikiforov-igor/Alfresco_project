@@ -648,4 +648,12 @@
         <property name="dictionaryService" ref="dictionaryService"/>
         <property name="parametersBean" ref="additionalParametersBean"/>
     </bean>
+
+    <bean id="documents.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/documents-repo/reports/configs/documents.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>

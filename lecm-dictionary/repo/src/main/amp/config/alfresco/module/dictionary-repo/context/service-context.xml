@@ -194,4 +194,12 @@
             </list>
         </property>
     </bean>
+
+    <bean id="dictionary.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/dictionary-repo/reports/configs/dictionaries.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>

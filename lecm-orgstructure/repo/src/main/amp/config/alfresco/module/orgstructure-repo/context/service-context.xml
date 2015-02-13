@@ -418,4 +418,13 @@
             <ref bean="namespaceService"/>
         </property>
     </bean>
+
+    <bean id="orgstructure.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/orgstructure-repo/reports/configs/orgstructure.properties</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

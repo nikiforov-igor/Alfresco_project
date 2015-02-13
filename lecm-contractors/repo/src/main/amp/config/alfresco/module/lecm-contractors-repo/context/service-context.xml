@@ -178,7 +178,16 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
-	<bean id="${groupId}.${artifactId}.serviceContractorsDictionariesPermissions" parent="ServiceFolderPermissionHelper"
+
+    <bean id="contractors.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/lecm-contractors-repo/reports/configs/contractors.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="${groupId}.${artifactId}.serviceContractorsDictionariesPermissions" parent="ServiceFolderPermissionHelper"
 	      depends-on="serviceDictionary" >
 		<property name="serviceBean" ref="serviceDictionary"/>
 		<property name="permissionsList">

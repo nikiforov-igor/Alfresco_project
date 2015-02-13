@@ -243,4 +243,13 @@
             </list>
         </property>
     </bean>
+
+    <bean id="incoming.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/incoming-repo/reports/configs/incomings.properties</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

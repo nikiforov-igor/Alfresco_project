@@ -112,4 +112,13 @@
             </list>
         </property>
     </bean>
+
+    <bean id="outgoing.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/outgoing-repo/reports/configs/outgoings.properties</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

@@ -540,4 +540,12 @@
             </list>
         </property>
     </bean>
+
+    <bean id="errands.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/errands-repo/reports/configs/errands.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>

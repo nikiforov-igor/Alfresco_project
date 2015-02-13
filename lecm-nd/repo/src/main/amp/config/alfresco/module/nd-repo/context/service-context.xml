@@ -130,4 +130,12 @@
             </list>
         </property>
     </bean>
+
+    <bean id="nd.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/nd-repo/reports/configs/nds.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>

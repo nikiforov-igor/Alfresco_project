@@ -526,4 +526,11 @@
 		<property name="maxRecords" value="${lecm.contracts.dashlet.recentActivity.maxRecords}"/>
 	</bean>
 
+    <bean id="contracts.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+        <property name="configs">
+            <list>
+                <value>alfresco/module/contracts-repo/reports/configs/contracts.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>
