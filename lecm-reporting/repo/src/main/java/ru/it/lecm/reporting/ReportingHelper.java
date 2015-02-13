@@ -10,10 +10,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.httpclient.HttpClient;
@@ -25,7 +22,9 @@ import ru.it.lecm.reporting.execution.ReportTemplate;
 import ru.it.lecm.reporting.execution.ReportingContainer;
 import ru.it.lecm.reporting.execution.ReportingRoot;
 import ru.it.lecm.reporting.util.resource.HierarchicalResourceLoader;
+import ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,6 +45,21 @@ public class ReportingHelper {
     private String vendor;
     private static Log logger = LogFactory.getLog(ReportingHelper.class);
     private HttpClientFactory httpClientFactory;
+
+    private RepositoryReportContentDAOBean reportsService;
+    private ContentService contentService;
+
+    public RepositoryReportContentDAOBean getReportsService() {
+        return reportsService;
+    }
+
+    public void setReportsService(RepositoryReportContentDAOBean reportsService) {
+        this.reportsService = reportsService;
+    }
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
 
     public ReportingHelper() {
     }
@@ -391,7 +405,7 @@ public class ReportingHelper {
         String language = "lucene";
         if("lucene".equalsIgnoreCase((String)this.nodeService.getProperty(harvestDefinition, ReportingModel.PROP_REPORTING_ROOT_QUERY_LANGUAGE))) {
             language = "lucene";
-        }
+    }
 
         if("cmis-alfresco".equalsIgnoreCase((String)this.nodeService.getProperty(harvestDefinition, ReportingModel.PROP_REPORTING_ROOT_QUERY_LANGUAGE))) {
             language = "cmis-alfresco";
@@ -456,5 +470,40 @@ public class ReportingHelper {
             }
         }
         return -1;
+    }
+
+
+    public Properties getTableQueries() {
+        Properties allConfigs = new Properties();
+        if (logger.isDebugEnabled()) {
+            logger.debug("getTableQueries");
+        }
+
+        final NodeRef configsRoot = getReportsService().getServiceRootConfigFolder();
+        if (configsRoot != null) {
+            Set<QName> types = new HashSet<>();
+            types.add(ContentModel.TYPE_CONTENT);
+
+            List<ChildAssociationRef> childs = nodeService.getChildAssocs(configsRoot, types);
+            for (ChildAssociationRef child : childs) {
+                String configName = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+                if (configName.toLowerCase().endsWith(".properties")) {
+                    try {
+                        ContentReader contentReader = contentService.getReader(child.getChildRef(), ContentModel.PROP_CONTENT);
+                        Properties props = new Properties();
+                        props.load(contentReader.getContentInputStream());
+                        for (Object key : props.keySet()) {
+                            allConfigs.put(key, props.getProperty(key.toString()));
+                        }
+                    } catch (ContentIOException var5) {
+                        logger.error(var5.getMessage());
+                    } catch (IOException var6) {
+                        var6.printStackTrace();
+                        logger.error(var6.getMessage());
+                    }
+                }
+            }
+        }
+        return allConfigs;
     }
 }

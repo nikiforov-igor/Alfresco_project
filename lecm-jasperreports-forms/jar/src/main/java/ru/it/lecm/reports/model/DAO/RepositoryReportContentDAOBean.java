@@ -41,6 +41,9 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     final public static String REPORT_SERVICE_FOLDER_ROOT_ID = "REPORT_SERVICE_FOLDER_ID";
     final public static String REPORT_SERVICE_FOLDER_ROOT_NAME = "Сервис построения отчётов";
 
+    final public static String REPORT_SERVICE_FOLDER_ROOT_CONFIG_ID = "REPORT_SERVICE_FOLDER_CONFIG_ID";
+    final public static String REPORT_SERVICE_FOLDER_ROOT_CONFIG_NAME = "Конфигурации";
+
     private static final transient Logger logger = LoggerFactory.getLogger(RepositoryReportContentDAOBean.class);
 
     /**
@@ -73,6 +76,10 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     @Override
     public NodeRef getServiceRootFolder() {
 	return getFolder(REPORT_SERVICE_FOLDER_ROOT_ID);
+    }
+
+    public NodeRef getServiceRootConfigFolder() {
+        return getFolder(REPORT_SERVICE_FOLDER_ROOT_CONFIG_ID);
     }
 
     /**

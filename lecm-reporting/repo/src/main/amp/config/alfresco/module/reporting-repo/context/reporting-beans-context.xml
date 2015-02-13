@@ -233,6 +233,8 @@
 			<ref bean="global-properties" />
 		</property>
         <property name="httpClientFactory" ref="solrClientFactory"/>
+        <property name="reportsService" ref="repositoryReportContentBean"/>
+        <property name="contentService" ref="ContentService"/>
 	</bean>
 
     <bean id="solrClientFactory" class="org.alfresco.httpclient.HttpClientFactory" init-method="init">

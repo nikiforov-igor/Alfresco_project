@@ -113,6 +113,11 @@
     <util:constant id="RSF_ROOT_NAME"
                    static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_NAME"/>
 
+    <util:constant id="RSF_ROOT_CONFIG_ID"
+                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_CONFIG_ID"/>
+    <util:constant id="RSF_ROOT_CONFIG_NAME"
+                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_CONFIG_NAME"/>
+
     <!-- Хранение в репозитории файлов для отчётов (xml-шаблоны, jasper и пр) -->
     <bean id="repositoryReportContentBean"
           class="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean"
@@ -121,6 +126,7 @@
         <property name="folders">
             <map>
                 <entry key="#{RSF_ROOT_ID}" value="#{RSF_ROOT_NAME}"/>
+                <entry key="#{RSF_ROOT_CONFIG_ID}" value="#{RSF_ROOT_NAME}/#{RSF_ROOT_CONFIG_NAME}"/>
             </map>
         </property>
     </bean>
@@ -337,4 +343,15 @@
         <property name="nodeService" ref="nodeService" />
     </bean>
 
+    <bean id="configsToRepositoryLoader" class="ru.it.lecm.reports.bootstrap.ConfigToRepositoryLoader" abstract="true" init-method="init"
+            depends-on="repositoryReportContentBean">
+        <property name="transactionService" ref="transactionService"/>
+        <property name="reportsService" ref="repositoryReportContentBean"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="contentService" ref="ContentService"/>
+
+        <property name="loadConfigs" value="${lecm.reports.loadConfigs}"/>
+        <property name="overrideExisting" value="${lecm.reports.overrideExisting}"/>
+    </bean>
 </beans>

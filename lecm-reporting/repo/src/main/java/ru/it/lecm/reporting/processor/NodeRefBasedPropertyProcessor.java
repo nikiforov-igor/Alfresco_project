@@ -287,7 +287,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                         }
                     }
                 } catch (Exception ignored) {
-                    if (logger.isDebugEnabled()){
+                    if (logger.isDebugEnabled()) {
                         logger.error(ignored.getMessage(), ignored);
                     }
                 }
@@ -313,7 +313,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                         }
                     }
                 } catch (Exception ignored) {
-                    if (logger.isDebugEnabled()){
+                    if (logger.isDebugEnabled()) {
                         logger.error(ignored.getMessage(), ignored);
                     }
                 }
@@ -740,7 +740,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
     public void havestNodes(NodeRef harvestDefinition) {
         try {
             List e = this.getStoreRefList();
-            Properties queries = this.getTableQueries(harvestDefinition);
+            Properties queries = this.getReportingHelper().getTableQueries();
             String language = this.reportingHelper.getSearchLanguage(harvestDefinition);
             this.dbhb.openReportingConnection();
             Enumeration keys = queries.keys();
@@ -885,7 +885,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                                     }
                                     processedMessages.add(deleteMessage.getJMSMessageID());
                                 } else {
-                                    logger.error("Message has no type!!! Message:" +  messageText +"\n");
+                                    logger.error("Message has no type!!! Message:" + messageText + "\n");
                                     processedMessages.add(deleteMessage.getJMSMessageID());
                                 }
                             }
@@ -927,13 +927,13 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         String dateQuery = " ";
         String myTimestamp1 = timestamp1.replaceAll(" ", "T");
         if ("lucene".equalsIgnoreCase(language)) {
-            if (protocol.equalsIgnoreCase("workspace")) {
-                dateQuery = dateQuery + "AND @cm\\:modified:['" + myTimestamp1 + "' TO NOW]";
+        if (protocol.equalsIgnoreCase("workspace")) {
+            dateQuery = dateQuery + "AND @cm\\:modified:['" + myTimestamp1 + "' TO NOW]";
             }
 
             if (protocol.equalsIgnoreCase("archive")) {
-                dateQuery = dateQuery + "AND @sys\\:archivedDate:['" + myTimestamp1 + "' TO NOW]";
-            }
+            dateQuery = dateQuery + "AND @sys\\:archivedDate:['" + myTimestamp1 + "' TO NOW]";
+        }
         }
 
         return dateQuery;
@@ -1042,7 +1042,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 while (msgs.hasMoreElements()) {
                     Message tempMsg = (Message) msgs.nextElement();
                     if (messagesIds.contains(tempMsg.getJMSMessageID())) {
-                        MessageConsumer consumer = session.createConsumer(destination, "JMSMessageID=\'" + tempMsg.getJMSMessageID() +"\'");
+                        MessageConsumer consumer = session.createConsumer(destination, "JMSMessageID=\'" + tempMsg.getJMSMessageID() + "\'");
                         consumer.receive(1000);
                         consumer.close();
                     }
