@@ -256,6 +256,11 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
+				<property name="lecm-os:shared">
+                    <title>Общая область хранения</title>
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-os:nomenclature-case-store-term-assoc">

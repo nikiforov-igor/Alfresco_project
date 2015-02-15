@@ -116,31 +116,6 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		operativeStorageService.grantPermissionsToAllArchivists(nodeRef);
 	}
 
-	public void moveToNomenclatureCase(final String docNodeRefStr, final String caseNodeRefStr) {
-
-		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-
-			@Override
-			public Object doWork() throws Exception {
-
-				NodeRef docNodeRef = new NodeRef(docNodeRefStr);
-				NodeRef caseNodeRef = new NodeRef(caseNodeRefStr);
-
-				//Проверка на существование папки "Документы" у НД
-				if(operativeStorageService.getDocuemntsFolder(caseNodeRef) == null) {
-					operativeStorageService.createDocsFolder(caseNodeRef);
-				}
-
-				behaviourFilter.disableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
-				operativeStorageService.moveDocToNomenclatureCase(docNodeRef, caseNodeRef);
-				behaviourFilter.enableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
-
-				return null;
-			}
-		});
-
-	}
-
 	public void moveToNomenclatureCase(final ScriptNode doc) {
 		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
 
@@ -168,19 +143,20 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		});
 	}
 
-	public void moveToNomenclatureCase(final ScriptNode doc, Scriptable employees) {
+	public void moveToNomenclatureCase(final ScriptNode doc, Scriptable units) {
 		moveToNomenclatureCase(doc);
-		List<NodeRef> employeesList = getNodeRefsFromScriptableCollection(employees);
+		List<NodeRef> unitsList = getNodeRefsFromScriptableCollection(units);
+
 		List<AssociationRef> assocList = nodeService.getTargetAssocs(doc.getNodeRef(), EDSDocumentService.ASSOC_FILE_REGISTER);
 		NodeRef caseRef;
 
-		if(assocList != null && !assocList.isEmpty()) {
+		if(assocList!= null && !assocList.isEmpty()) {
 			caseRef = assocList.get(0).getTargetRef();
-
-			for (NodeRef employee : employeesList) {
-				operativeStorageService.grantPermToEmployee(caseRef, employee);
+			for (NodeRef unit : unitsList) {
+				nodeService.createAssociation(caseRef, unit, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
 			}
 		}
+
 
 	}
 

@@ -146,7 +146,8 @@
 		  class="ru.it.lecm.operativestorage.policies.NomenclatureCasePolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
-		  p:operativeStorageService-ref="lecmOperativeStorageService"/>
+		  p:operativeStorageService-ref="lecmOperativeStorageService"
+		  p:orgstructureService-ref="serviceOrgstructure"/>
 
 	<bean init-method="init"
 		  class="ru.it.lecm.operativestorage.policies.StorageVolumePolicy"

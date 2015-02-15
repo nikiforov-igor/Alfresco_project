@@ -49,6 +49,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	private PermissionService permissionService;
 	private AuthorityService authorityService;
 
+
 	public void setAuthorityService(AuthorityService authorityService) {
 		this.authorityService = authorityService;
 	}
@@ -196,9 +197,18 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 		NodeRef docFolder = getDocuemntsFolder(nodeRef);
 
-		grantPermToUnit(docFolder, mainOrgUnit);
+//		grantPermToUnit(docFolder, mainOrgUnit);
 
 		nodeService.createAssociation(nodeRef, mainOrgUnit, ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
+	}
+
+	public boolean isShared(NodeRef docFolderRef) {
+		List<ChildAssociationRef> assocList = nodeService.getParentAssocs(docFolderRef);
+		if (assocList != null && !assocList.isEmpty()) {
+			NodeRef caseRef = assocList.get(0).getParentRef();
+			return (boolean) nodeService.getProperty(caseRef, PROP_NOMENCLATURE_CASE_IS_SHARED);
+		}
+		return false;
 	}
 
 	@Override
@@ -208,10 +218,9 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	}
 
 	@Override
-	public void grantPermToUnit(NodeRef nodeRef, NodeRef unit) {
-		LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(DEFAULT_GRANTED_ROLE);
-		Types.SGPosition sgUnit = Types.SGKind.SG_OU.getSGPos(unit.getId());
-		lecmPermissionService.grantAccessByPosition(pgGranting, nodeRef, sgUnit);
+	public void grantPermToUnit(NodeRef nodeRef, NodeRef unit, boolean isShared) {
+		String auth = orgstructureService.getOrgstructureUnitAuthority(unit, isShared);
+		permissionService.setPermission(nodeRef, auth, DEFAULT_GRANTED_ROLE, true);
 	}
 
 	@Override
@@ -303,9 +312,13 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public void revokePermFromUnit(NodeRef nodeRef, NodeRef unit) {
-		LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(DEFAULT_GRANTED_ROLE);
-		Types.SGPosition sgUnit = Types.SGKind.SG_OU.getSGPos(unit.getId());
-		lecmPermissionService.revokeAccessByPosition(pgGranting, nodeRef, sgUnit);
+		revokePermFromUnit(nodeRef, unit, isShared(nodeRef));
+	}
+
+	@Override
+	public void revokePermFromUnit(NodeRef nodeRef, NodeRef unit, boolean isShared) {
+		String auth = orgstructureService.getOrgstructureUnitAuthority(unit, isShared);
+		permissionService.deletePermission(nodeRef, auth, DEFAULT_GRANTED_ROLE);
 	}
 
 	@Override
@@ -317,6 +330,9 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public void updatePermissions(NodeRef nodeRef) {
+
+		boolean isShared = (boolean) nodeService.getProperty(nodeRef, PROP_NOMENCLATURE_CASE_IS_SHARED);
+
 		if (!nodeService.exists(nodeRef)) {
 			throw new RuntimeException(nodeRef.toString() + " does not exist.");
 		}
@@ -335,7 +351,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		//подразделениям
 		List<AssociationRef> units = nodeService.getTargetAssocs(nodeRef, ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
 		for (AssociationRef unitAssociationRef : units) {
-			grantPermToUnit(docFolder, unitAssociationRef.getTargetRef());
+			grantPermToUnit(docFolder, unitAssociationRef.getTargetRef(), isShared);
 		}
 
 		//рабочим группам

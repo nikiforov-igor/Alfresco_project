@@ -7,7 +7,7 @@
 		<properties>
 			<property>
 				<name>archiveFolder</name>
-				<value><![CDATA[Внутренние]]></value>
+				<value><![CDATA[/Архив]]></value>
 			</property>
 			<property>
 				<name>archiveFolderAdditional</name>
@@ -937,16 +937,7 @@
 																<name>transition-script</name>
 																<value><![CDATA[(function(){
     var document = stm_document;
-    var fileRegister = document.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-    documentScript.finalizeToUnit(document, unit);
+    operativeStorage.moveToNomenclatureCase(document);
 })();]]></value>
 															</property>
 															<property>
@@ -3986,17 +3977,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																<name>transition-script</name>
 																<value><![CDATA[(function(){
     var document = bpm_package.children[0];
-    var fileRegister = document.assocs["lecm-eds-document:file-register-assoc"];
-    var unit = null;
-    if (fileRegister != null && fileRegister.length == 1) {
-        unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
-    }
-
-    if (unit == null) {
-        unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
-    }
-	if(unit==null) unit = orgstructure.getMainOrganisationUnit();
-    documentScript.finalizeToUnit(document, unit);
+    operativeStorage.moveToNomenclatureCase(document);
 })();]]></value>
 															</property>
 															<property>
@@ -7221,18 +7202,22 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 																<name>transitionDocumentChangeScript</name>
 																<value><![CDATA[//
 (function(){
+	var units = [];
+
     var author = stm_document.assocs["lecm-document:author-assoc"][0];
     var primaryUnit = orgstructure.getPrimaryOrgUnit(author);
-	if(primaryUnit==null) primaryUnit = orgstructure.getMainOrganisationUnit();
+	if(primaryUnit) {
+        units.push(primaryUnit)
+    }
+
     var recipients = stm_document.assocs["lecm-eds-document:recipients-assoc"];
     var additionalUnits = [];
     for each (var recipient in recipients) {
         var unit = orgstructure.getPrimaryOrgUnit(recipient);
-        additionalUnits.push(unit);
+        units.push(unit);
     }
 
-    var isShared = stm_document.properties["lecm-document-aspects:is-shared-folder"];
-    documentScript.finalizeToUnit(stm_document, isShared, primaryUnit, additionalUnits);
+    operativeStorage.moveToNomenclatureCase(stm_document, units);
 
     // Выставляем права на ответы
     var answersTable = stm_document.assocs["lecm-internal-table-structure:answers-assoc"][0];
@@ -7241,11 +7226,11 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
         var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
         var unit = orgstructure.getPrimaryOrgUnit(employee);
         if (primaryUnit != null) {
-            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, isShared); 
+            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, false); 
             answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
         }
         if (unit != null) {
-            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, isShared);
+            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, false);
             answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
         }
     }
@@ -7379,18 +7364,23 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															<property>
 																<name>transition-script</name>
 																<value><![CDATA[(function(){
+
+    var units = [];
+
     var author = stm_document.assocs["lecm-document:author-assoc"][0];
     var primaryUnit = orgstructure.getPrimaryOrgUnit(author);
-	if(primaryUnit==null) primaryUnit = orgstructure.getMainOrganisationUnit();
+	if(primaryUnit) {
+        units.push(primaryUnit)
+    }
+
     var recipients = stm_document.assocs["lecm-eds-document:recipients-assoc"];
     var additionalUnits = [];
     for each (var recipient in recipients) {
         var unit = orgstructure.getPrimaryOrgUnit(recipient);
-        additionalUnits.push(unit);
+        units.push(unit);
     }
 
-    var isShared = stm_document.properties["lecm-document-aspects:is-shared-folder"];
-    documentScript.finalizeToUnit(stm_document, isShared, primaryUnit, additionalUnits);
+    operativeStorage.moveToNomenclatureCase(stm_document, units);
 
     // Выставляем права на ответы
     var answersTable = stm_document.assocs["lecm-internal-table-structure:answers-assoc"][0];
@@ -7398,10 +7388,14 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
     for each (var answer in answers) {
         var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
         var unit = orgstructure.getPrimaryOrgUnit(employee);
-        var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, isShared); 
-        var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, isShared);
-        answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
-        answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
+        if (primaryUnit != null) {
+            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, false); 
+            answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
+        }
+        if (unit != null) {
+            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, false);
+            answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
+        }
     }
 })();]]></value>
 															</property>

@@ -44,6 +44,7 @@ public interface OperativeStorageService {
 	QName PROP_IN_CASE = QName.createQName(OS_NAMESPACE, "in-case");
 	QName PROP_NOMENCLATURE_CASE_INDEX = QName.createQName(OS_NAMESPACE, "nomenclature-case-index");
 	QName PROP_NOMENCLATURE_CASE_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-case-status");
+	QName PROP_NOMENCLATURE_CASE_IS_SHARED = QName.createQName(OS_NAMESPACE, "shared");
 	QName PROP_NOMENCLATURE_UNIT_SECTION_INDEX = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-index");
 	QName PROP_NOMENCLATURE_UNIT_SECTION_COMMENT = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-comment");
 	QName PROP_NOMENCLATURE_VOLUMES_NUMBER = QName.createQName(OS_NAMESPACE, "nomenclature-case-volumes-number");
@@ -85,7 +86,7 @@ public interface OperativeStorageService {
 
 	void grantPermToEmployee(NodeRef nodeRef, NodeRef employee);
 
-	void grantPermToUnit(NodeRef nodeRef, NodeRef unit);
+	void grantPermToUnit(NodeRef nodeRef, NodeRef unit, boolean isShared);
 
 	void grantPermToWG(NodeRef nodeRef, NodeRef group);
 
@@ -100,6 +101,8 @@ public interface OperativeStorageService {
 	void revokePermFromEmployee(NodeRef nodeRef, NodeRef employee);
 
 	void revokePermFromUnit(NodeRef nodeRef, NodeRef unit);
+
+	void revokePermFromUnit(NodeRef nodeRef, NodeRef unit, boolean isShared);
 
 	void revokePermFromWG(NodeRef nodeRef, NodeRef group);
 

@@ -2,6 +2,7 @@
 	LogicECM = LogicECM || {};
 	LogicECM.Nomenclature = LogicECM.Nomenclature || {};
 	LogicECM.Nomenclature.isArchivist = ${isArchivist?string};
+	LogicECM.Nomenclature.isCentralized = ${isCentralized?string};
 //]]></script>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

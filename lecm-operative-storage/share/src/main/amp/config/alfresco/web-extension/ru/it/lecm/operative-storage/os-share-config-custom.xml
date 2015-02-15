@@ -80,51 +80,6 @@
 		</forms>
 	</config>
 
-	<config evaluator="model-type" condition="lecm-os:security-classification">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:title" force="true"/>
-                    <show id="lecm-os:security-classification-comment"/>
-                    <show id="lecm-base-aspects:order"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-            <form id="search">
-                <field-visibility>
-                    <show id="cm:title" force="true"/>
-                    <show id="lecm-os:security-classification-comment"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:title" label-id="lecm.os.lbl.name">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
-	<config evaluator="node-type" condition="lecm-os:security-classification">
-        <forms>
-            <form>
-                <field-visibility>
-                    <show id="cm:title" force="true"/>
-                    <show id="lecm-os:security-classification-comment"/>
-                    <show id="lecm-base-aspects:order"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:title" mandatory="true" label-id="lecm.os.lbl.name">
-                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-                    </field>
-                </appearance>
-            </form>
-        </forms>
-    </config>
-
 	<config evaluator="model-type" condition="lecm-os:storage">
         <forms>
             <form>
@@ -267,6 +222,7 @@
                     <show id="lecm-os:nomenclature-year-section-year"/>
                     <show id="lecm-os:nomenclature-organization-assoc" />
                     <show id="lecm-os:nomenclature-year-section-comment"/>
+                    <show id="disableOrgControl" />
                 </field-visibility>
                 <appearance>
                     <field id="lecm-os:nomenclature-year-section-year">
@@ -278,7 +234,14 @@
                     <field id="lecm-os:nomenclature-organization-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="plane">true</control-param>
+                            <control-param name="changeItemsFireAction">organizationChanged</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
 						</control>
+                    </field>
+                    <field id="disableOrgControl">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-os/controls/organization-disable.js</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -298,7 +261,6 @@
             <form>
                 <field-visibility>
                     <show id="lecm-os:nomenclature-year-section-year"/>
-                    <show id="lecm-os:nomenclature-organization-assoc" />
                     <show id="lecm-os:nomenclature-year-section-comment"/>
                     <show id="lecm-os:nomenclature-year-section-status" />
                 </field-visibility>
@@ -307,11 +269,10 @@
                     <field id="lecm-os:nomenclature-year-section-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
-                    <field id="lecm-os:nomenclature-organization-assoc">
-                        <control template="/ru/it/lecm/os/controls/organization-to-year.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/*</control-param>
-                            <control-param name="plane">true</control-param>
-                            <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
+                    
+                    <field id="disableOrgControl">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-os/controls/organization-disable.js</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-year-section-status">
@@ -413,8 +374,8 @@
                     <show id="lecm-os:nomenclature-case-creation-date"/>
                     <show id="lecm-os:nomenclature-case-close-date"/>
                     <show id="lecm-os:nomenclature-case-inventory-number"/>
-                    <show id="lecm-os:nomenclature-case-to-archive"/>
                     <show id="lecm-os:nomenclature-case-to-destruction"/>
+					<show id="lecm-os:shared"/>
                     <show id="cm:description"/>
                     <show id="lecm-os:nomenclature-case-no-permissions-change-on-archivation"/>
                     <show id="os-aspects:sort-value"/>
@@ -439,6 +400,7 @@
                     <field id="lecm-os:nomenclature-case-valuable" set="set1"/>
                     <field id="lecm-os:nomenclature-case-epk" set="set1"/>
                     <field id="lecm-os:nomenclature-case-transient" set="set1"/>
+					<field id="lecm-os:shared" set="set1"/>
                     <field id="lecm-os:nomenclature-case-creation-date" set="set2">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="defaultValue">now</control-param>
@@ -452,7 +414,6 @@
                     </field>
 
                     <field id="lecm-os:nomenclature-case-inventory-number" set="set3"/>
-                    <field id="lecm-os:nomenclature-case-to-archive" set="set3"/>
                     <field id="lecm-os:nomenclature-case-to-destruction" set="set3"/>
                     <field id="cm:description" set="set3">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
@@ -498,6 +459,8 @@
 
                     <show id="lecm-os:nomenclature-case-status"/>
 
+					<show id="lecm-os:shared"/>
+
                     <show id="os-aspects:sort-value"/>
                     <show id="actions-fake-field" force="true" />
                     <!-- <show id="nomenclature-case-references"/> -->
@@ -534,6 +497,7 @@
                     <field id="lecm-os:nomenclature-case-valuable" set="set1" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-epk" set="set1" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-transient" set="set1" read-only="true"/>
+					<field id="lecm-os:shared" set="set1" read-only="true"/>
                     <field id="lecm-os:nomenclature-case-creation-date" set="set2" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="defaultValue">now</control-param>
@@ -609,9 +573,9 @@
                     <show id="lecm-os:nomenclature-case-visibility-employee-assoc"/>
 
                     <show id="lecm-os:nomenclature-case-status"/>
+					<show id="lecm-os:shared"/>
 
                     <show id="os-aspects:sort-value"/>
-                    <show id="actions-fake-field" force="true" />
 
                 </field-visibility>
                 <appearance>
@@ -622,15 +586,11 @@
                     <set id="volumes" label-id="label.volumes"/>
                     <set id="receipts" label-id="label.receipts"/>
                     <set id="security" label-id="label.security"/>
-                    <!-- <set id="references" label-id="label.references"/> -->
 
                     <field id="cm:title" mandatory="true" set="set1">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
 
-                    <field id="lecm-os:nomenclature-case-status" set="set1">
-                        <control template="/ru/it/lecm/os/controls/disable-to-archive-control.ftl"/>
-                    </field>
 
                     <field id="lecm-os:nomenclature-case-index" set="set1"/>
                     <field id="lecm-os:nomenclature-case-store-term-assoc" set="set1">
@@ -645,6 +605,7 @@
                     <field id="lecm-os:nomenclature-case-valuable" set="set1"/>
                     <field id="lecm-os:nomenclature-case-epk" set="set1"/>
                     <field id="lecm-os:nomenclature-case-transient" set="set1"/>
+                    <field id="lecm-os:shared" set="set1"/>
 
 
 
@@ -673,9 +634,8 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-no-permissions-change-on-archivation" set="set3" />
 
-                    <field id="actions-fake-field" set="set3">
-                        <control template="/ru/it/lecm/os/controls/status-control.ftl">
-                        </control>
+                    <field id="lecm-os:nomenclature-case-status" set="set3">
+                        <control template="/ru/it/lecm/os/controls/status-control.ftl" />
                     </field>
 
                     <field id="lecm-os:nomenclature-case-volume-child-assoc" set="volumes" >
@@ -686,9 +646,9 @@
                         </control>
                     </field>
 
-                    <field id="lecm-os:nomenclature-case-status" set="volumes">
+                    <!-- <field id="lecm-os:nomenclature-case-status" set="volumes">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
-                    </field>
+                    </field> -->
 
                     <field id="lecm-os:nomenclature-case-visibility-unit-assoc" set="security">
 
