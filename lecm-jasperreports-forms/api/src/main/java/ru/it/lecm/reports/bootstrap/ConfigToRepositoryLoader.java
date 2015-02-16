@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean;
+import ru.it.lecm.reports.dao.RepositoryReportContentDAOBean;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -64,7 +64,7 @@ public class ConfigToRepositoryLoader {
         this.overrideExisting = Boolean.valueOf(overrideExisting);
     }
 
-    public void setReportsService(ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean reportsService) {
+    public void setReportsService(RepositoryReportContentDAOBean reportsService) {
         this.reportsService = reportsService;
     }
 

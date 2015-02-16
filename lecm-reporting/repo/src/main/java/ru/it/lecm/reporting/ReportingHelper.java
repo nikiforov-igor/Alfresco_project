@@ -22,7 +22,7 @@ import ru.it.lecm.reporting.execution.ReportTemplate;
 import ru.it.lecm.reporting.execution.ReportingContainer;
 import ru.it.lecm.reporting.execution.ReportingRoot;
 import ru.it.lecm.reporting.util.resource.HierarchicalResourceLoader;
-import ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean;
+import ru.it.lecm.reports.dao.RepositoryReportContentDAOBean;
 
 import java.io.IOException;
 import java.io.InputStream;

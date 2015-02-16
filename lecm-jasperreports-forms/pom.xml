@@ -25,7 +25,6 @@
 		<module>api</module>
 		<module>repo</module>
 		<module>share</module>
-        <module>jar</module>
 	</modules>
 
 </project>

@@ -20,7 +20,7 @@ import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchWrapper;
+import ru.it.lecm.reports.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.util.*;

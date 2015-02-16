@@ -19,22 +19,17 @@
 	  and include them in the AMP, they are provided by Alfresco
 	  -->
 	<dependencies>
-		<dependency>
-			<groupId>ru.it.lecm.reports</groupId>
-			<artifactId>lecm-reports-jar</artifactId>
-			<version>${project.version}</version>
-		 <exclusions>
-		  <exclusion>
-		   <artifactId>juh</artifactId>
-		   <groupId>org.openoffice</groupId>
-		  </exclusion>
-		 </exclusions>
-		</dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.reports</groupId>
-                    <artifactId>lecm-reports-api</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.reports</groupId>
+            <artifactId>lecm-reports-api</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>juh</artifactId>
+                    <groupId>org.openoffice</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>

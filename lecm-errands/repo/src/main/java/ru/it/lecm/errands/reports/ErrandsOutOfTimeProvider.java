@@ -5,7 +5,7 @@ import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchWrapper;
+import ru.it.lecm.reports.utils.LuceneSearchWrapper;
 
 import java.util.ArrayList;
 import java.util.HashSet;

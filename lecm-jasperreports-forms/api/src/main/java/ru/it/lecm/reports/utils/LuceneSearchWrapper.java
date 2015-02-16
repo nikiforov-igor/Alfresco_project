@@ -1,4 +1,4 @@
-package ru.it.lecm.utils;
+package ru.it.lecm.reports.utils;
 
 import org.alfresco.service.cmr.search.ResultSet;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;

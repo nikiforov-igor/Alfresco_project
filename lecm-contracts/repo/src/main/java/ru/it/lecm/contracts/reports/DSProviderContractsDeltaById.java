@@ -16,7 +16,7 @@ import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
-import ru.it.lecm.utils.LuceneSearchWrapper;
+import ru.it.lecm.reports.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.util.*;

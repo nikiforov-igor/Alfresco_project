@@ -23,7 +23,7 @@ import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.utils.LuceneSearchWrapper;
+import ru.it.lecm.reports.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.util.*;

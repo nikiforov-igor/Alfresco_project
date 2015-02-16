@@ -25,7 +25,7 @@ import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchWrapper;
+import ru.it.lecm.reports.utils.LuceneSearchWrapper;
 
 import java.util.*;
 import java.util.regex.Matcher;

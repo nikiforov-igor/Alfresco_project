@@ -1,4 +1,4 @@
-package ru.it.lecm.utils;
+package ru.it.lecm.reports.utils;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;

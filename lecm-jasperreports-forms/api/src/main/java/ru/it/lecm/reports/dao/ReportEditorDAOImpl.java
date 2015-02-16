@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.model.DAO;
+package ru.it.lecm.reports.dao;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.*;

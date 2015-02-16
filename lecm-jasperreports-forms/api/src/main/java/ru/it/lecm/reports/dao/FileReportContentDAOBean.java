@@ -1,4 +1,4 @@
-package ru.it.lecm.reports.model.DAO;
+package ru.it.lecm.reports.dao;
 
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.apache.commons.io.FileUtils;

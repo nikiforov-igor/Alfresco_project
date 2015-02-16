@@ -18,7 +18,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
-import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
+import ru.it.lecm.reports.dao.FileReportContentDAOBean;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;

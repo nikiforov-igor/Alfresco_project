@@ -87,7 +87,7 @@
     <util:constant id="RE_REPORTS_ROOT_NAME"
                    static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_REPORTS_ROOT_NAME"/>
 
-    <bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl" depends-on="wksKeeper"
+    <bean id="reportEditorDAOBean" class="ru.it.lecm.reports.dao.ReportEditorDAOImpl" depends-on="wksKeeper"
           parent="baseBean">
         <property name="services" ref="wksKeeper"/>
         <property name="folders">
@@ -109,18 +109,18 @@
 
     <!--  RSF == Report Service Folder -->
     <util:constant id="RSF_ROOT_ID"
-                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_ID"/>
+                   static-field="ru.it.lecm.reports.dao.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_ID"/>
     <util:constant id="RSF_ROOT_NAME"
-                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_NAME"/>
+                   static-field="ru.it.lecm.reports.dao.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_NAME"/>
 
     <util:constant id="RSF_ROOT_CONFIG_ID"
-                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_CONFIG_ID"/>
+                   static-field="ru.it.lecm.reports.dao.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_CONFIG_ID"/>
     <util:constant id="RSF_ROOT_CONFIG_NAME"
-                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_CONFIG_NAME"/>
+                   static-field="ru.it.lecm.reports.dao.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_CONFIG_NAME"/>
 
     <!-- Хранение в репозитории файлов для отчётов (xml-шаблоны, jasper и пр) -->
     <bean id="repositoryReportContentBean"
-          class="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean"
+          class="ru.it.lecm.reports.dao.RepositoryReportContentDAOBean"
           parent="baseBean">
         <!-- Автоматическое создание каталогов. -->
         <property name="folders">
@@ -138,7 +138,7 @@
       -->
     <!-- Хранение файлов для отчётов в файловой системе (xml-шаблоны, jasper и прнепосредственно из поставки) -->
     <bean id="fileReportContentBean"
-          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          class="ru.it.lecm.reports.dao.FileReportContentDAOBean"
           init-method="init">
 
         <!-- для надёжности - запрещаем запись в предустановленные отчёты -->
@@ -168,7 +168,7 @@
         gen-файлов для генерации шаблонов отчётов
       -->
     <bean id="fileReportTemplatesBean"
-          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          class="ru.it.lecm.reports.dao.FileReportContentDAOBean"
           init-method="init">
         <!-- для надёжности - запрещаем запись -->
         <property name="readonly" value="true"/>
@@ -199,7 +199,7 @@
         Должно быть файловое, т.к. OpenOffice работает именно с ними (не с потоками).
       -->
     <bean id="fileOOReportResultBean"
-          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          class="ru.it.lecm.reports.dao.FileReportContentDAOBean"
           init-method="init">
         <!-- сюда запись надо разрешить ... -->
         <property name="readonly" value="false"/>
@@ -228,7 +228,7 @@
         Должно быть файловое, т.к. , например, jasper ожидает именованный ресурс.
       -->
     <bean id="fileSubreportContentBean"
-          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          class="ru.it.lecm.reports.dao.FileReportContentDAOBean"
           init-method="init">
         <!-- запись надо разрешить ... -->
         <property name="readonly" value="false"/>
@@ -338,7 +338,7 @@
         <property name="reportsManager" ref="reportsManager"/>
     </bean>
 
-    <bean id="orgunitResolver" class="ru.it.lecm.utils.OrgunitResolver" >
+    <bean id="orgunitResolver" class="ru.it.lecm.reports.utils.OrgunitResolver" >
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="nodeService" ref="nodeService" />
     </bean>

@@ -127,7 +127,7 @@
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.reports</groupId>
-            <artifactId>lecm-reports-jar</artifactId>
+            <artifactId>lecm-reports-api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

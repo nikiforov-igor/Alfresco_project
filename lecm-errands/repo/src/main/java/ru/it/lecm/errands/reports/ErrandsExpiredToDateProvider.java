@@ -3,7 +3,7 @@ package ru.it.lecm.errands.reports;
 import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.utils.ArgsHelper;
-import ru.it.lecm.utils.LuceneSearchWrapper;
+import ru.it.lecm.reports.utils.LuceneSearchWrapper;
 
 import java.util.Date;
 
