@@ -35,7 +35,7 @@ function main() {
 
 		        model.categories.push({
 			        nodeRef: "errands-base-document-attachments/" + model.nodeRef.replace(":/", ""),
-			        name: Alfresco.util.message("label.errands.base-document"),
+			        name: msg.get("label.errands.base-document"),
 			        path: "",
 			        isReadOnly: true
 		        });
