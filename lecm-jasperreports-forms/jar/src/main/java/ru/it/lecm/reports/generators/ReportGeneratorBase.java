@@ -109,9 +109,6 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
                 // если у нас ID бина - достаем из контекста
                 resultProvider = (JRDataSourceProvider) getApplicationContext().getBean(dataSourceClass);
             } catch (BeansException ex) {
-                log.error(ex.getMessage(), ex);
-            }
-            if (resultProvider == null) {
                 try {
                     final Constructor<?> cons = Class.forName(dataSourceClass).getConstructor(ServiceRegistry.class);
                     resultProvider = (JRDataSourceProvider) cons.newInstance(getServices().getServiceRegistry());
@@ -120,9 +117,8 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
                     resultProvider = (JRDataSourceProvider) Class.forName(dataSourceClass).getConstructor().newInstance();
                 }
             }
-
             // "своих" особо облагородим ...
-            if (resultProvider instanceof ReportProviderExt) {
+            if (resultProvider != null && resultProvider instanceof ReportProviderExt) {
                 final ReportProviderExt adsp = (ReportProviderExt) resultProvider;
                 adsp.setReportsManager(reportsManager);
                 adsp.initializeFromGenerator(this);

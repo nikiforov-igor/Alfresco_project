@@ -110,29 +110,30 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
     }
 
     public boolean loadConfig() throws JRException {
-        PropertyCheck.mandatory(this, "reportManager", getReportManager());
-
         final String configName = this.getConfigName();
         if (configName == null || configName.length() == 0) {
             return true; // empty config is ok
         }
-        try {
-            final byte[] data = this.getReportManager().loadDsXmlBytes(DSXMLProducer.extractReportName(configName));
-            if (data == null) {
-                throw new JRException(String.format("DS-config not found for report '%s'", configName));
-            }
-            final InputStream fin = new ByteArrayInputStream(data);
+        if (this.getReportManager() != null) {
             try {
-                xmlRead(fin, String.format("config from '%s'", configName));
-                return true; // ONLY HERE IS OK
-            } finally {
-                IOUtils.closeQuietly(fin);
+                final byte[] data = this.getReportManager().loadDsXmlBytes(DSXMLProducer.extractReportName(configName));
+                if (data == null) {
+                    throw new JRException(String.format("DS-config not found for report '%s'", configName));
+                }
+                final InputStream fin = new ByteArrayInputStream(data);
+                try {
+                    xmlRead(fin, String.format("config from '%s'", configName));
+                    return true; // ONLY HERE IS OK
+                } finally {
+                    IOUtils.closeQuietly(fin);
+                }
+            } catch (Throwable ex) { // catch (IOException ex)
+                final String msg = String.format("Fail to load xml config from '%s'", configName);
+                logger.error(msg, ex);
+                // throw new RuntimeException( msg, ex);// TODO: (?) иметь параметр silentExceptions : boolean
             }
-        } catch (Throwable ex) { // catch (IOException ex)
-            final String msg = String.format("Fail to load xml config from '%s'", configName);
-            logger.error(msg, ex);
-            // throw new RuntimeException( msg, ex);// TODO: (?) иметь параметр silentExceptions : boolean
         }
+
         return false; // if errors
     }
 
