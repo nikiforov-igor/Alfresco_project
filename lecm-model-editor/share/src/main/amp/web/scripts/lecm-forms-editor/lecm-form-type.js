@@ -130,8 +130,8 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 				value = select[select.selectedIndex].innerHTML;
 				idField.value = this.formIds[value].id;
 				formIdField.value = this.formIds[value].formId;
-				if (formIdField.parentElement && formIdField.parentElement.parentElement && formIdField.parentElement.parentElement.parentElement) {
-					formIdFieldContainer = formIdField.parentElement.parentElement.parentElement;
+				formIdFieldContainer  = Dom.getAncestorByClassName(formIdField, 'control');
+				if (formIdFieldContainer) {
 					if (this.options.defaultIds.indexOf(idField.value) >= 0) {
 						Dom.addClass(formIdFieldContainer, 'hidden');
 					} else {
