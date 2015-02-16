@@ -16,7 +16,7 @@
 </#if>
 
 <#if form.mode == "view">
-	<div class="control control-template-control viewmode">
+	<div class="control form-type-control viewmode">
 		<div class="label-div">
 			<#if field.mandatory && !(field.value?is_number) && field.value == "">
 			<span class="incomplete-warning">
@@ -32,7 +32,7 @@
 		</div>
 	</div>
 <#else>
-	<div class="control control-template-control editmode">
+	<div class="control form-type-control editmode">
 		<div class="label-div">
 			<label for="${fieldHtmlId}">${field.label?html}:
 				<#if field.mandatory>
