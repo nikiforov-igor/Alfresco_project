@@ -261,8 +261,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			            });
 
                 var exportButtonMenu  = [
-                            { text: "Выгрузить все", value: "all", onclick: { fn: this.onExportClick.bind(this) } },
-                    	    { text: "Выгрузить выбранные", value: "checked", onclick: { fn: this.onExportClick.bind(this) } }
+                            { text: Alfresco.util.message('lecm.arm.lbl.unload.every'), value: "all", onclick: { fn: this.onExportClick.bind(this) } },
+                    	    { text: Alfresco.util.message('lecm.arm.lbl.unload.select'), value: "checked", onclick: { fn: this.onExportClick.bind(this) } }
                     	];
                 this.toolbarButtons["defaultActive"].exportButton = new YAHOO.widget.Button(
                     this.id + "-exportButton",
@@ -307,7 +307,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var items = this.modules.dataGrid.getAllSelectedItems();
                 var loadItem = [];
                 loadItem.push({
-                    text: "Загрузка...",
+                    text: Alfresco.util.message('lecm.arm.lbl.loading'),
                     disabled: true
                 });
                 if (YAHOO.util.Dom.inDocument(menu.element)) {
@@ -368,7 +368,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             }
                             if (actionItems.length == 0 && wideActionItems.length == 0) {
                                 actionItems.push({
-                                    text: "Нет доступных операций",
+                                    text: Alfresco.util.message('lecm.arm.lbl.not.available.oper'),
                                     disabled: true
                                 });
                             }
@@ -403,11 +403,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         var me = this;
                         Alfresco.util.PopupManager.displayPrompt(
                             {
-                                title: "Выполнение действия",
-                                text: "Подтвердите выполнение действия \"" + p_oItem.actionId + "\"",
+                                title: Alfresco.util.message('lecm.arm.ttl.action.perform'),
+                                text: Alfresco.util.message('lecm.arm.msg.action.confirm') + " \"" + p_oItem.actionId + "\"",
                                 buttons: [
                                     {
-                                        text: "Ок",
+                                        text: Alfresco.util.message('lecm.arm.lbl.ok'),
                                         handler: function dlA_onAction_action() {
                                             this.destroy();
                                             Alfresco.util.Ajax.jsonRequest({
@@ -433,7 +433,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                         }
                                     },
                                     {
-                                        text: "Отмена",
+                                        text: Alfresco.util.message('lecm.arm.lbl.cancel'),
                                         handler: function dlA_onActionDelete_cancel() {
                                             this.destroy();
                                         },
@@ -496,11 +496,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 if (value === "checked" && this.modules.dataGrid.getSelectedItems().length == 0 ) {
                     Alfresco.util.PopupManager.displayPrompt(
                         {
-                            title: "Выгрузка выбранных элементов",
-                            text: "Выгрузка выбранных элементов не возможна, так как не выбран ни один элемент",
+                            title: Alfresco.util.message('lecm.arm.ttl.unload.items'),
+                            text: Alfresco.util.message('lecm.arm.msg.unload.elems.fail'),
                             buttons: [
                                 {
-                                    text: "Ок",
+                                    text: Alfresco.util.message('lecm.arm.lbl.ok'),
                                     handler: function dlA_onAction_action() {
                                         this.destroy();
                                     }
@@ -528,12 +528,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             _openMessageWindow: function openMessageWindowFunction(title, message, reload) {
                 Alfresco.util.PopupManager.displayPrompt(
                     {
-                        title: "Результат выполнения операции \"" + title + "\"",
+                        title: Alfresco.util.message('lecm.arm.ttl.oper.res') + " \"" + title + "\"",
                         text: message,
                         noEscape: true,
                         buttons: [
                             {
-                                text: "Ок",
+                                text: Alfresco.util.message('lecm.arm.lbl.ok'),
                                 handler: function dlA_onAction_action()
                                 {
                                     this.destroy();
@@ -609,7 +609,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     } else if (json.openWindow) {
                         window.open(Alfresco.constants.URL_PAGECONTEXT + json.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
                     } else if (json.withErrors) {
-                        this._openMessageWindow(actionId, "Ошибка при выполнении операции \"" + actionId + "\"", false);
+                        this._openMessageWindow(actionId, Alfresco.util.message('lecm.arm.msg.oper.perform.error') + " \"" + actionId + "\"", false);
                     } else {
                         document.location.href = document.location.href;
                     }

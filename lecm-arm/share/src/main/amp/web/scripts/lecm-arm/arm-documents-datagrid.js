@@ -67,7 +67,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             dataType: "text",
                             formsName: "prop_cm_name",
                             name: "cm:name",
-                            label: "Имя",
+                            label: Alfresco.util.message('lecm.arm.lbl.name'),
                             sortable: true,
                             type: "property"
                         }

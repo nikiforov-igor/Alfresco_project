@@ -87,9 +87,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 				var columnDefinitions = [
 					{key: "", label: "", sortable: false, formatter: this.fnRenderCellSelected, width: 16, maxAutoWidth: 16},
-					{key: "title", label: "Описание", sortable: false, width: 200, maxAutoWidth: 300},
-					{key: "name", label: "Название", sortable: false, width: 300, maxAutoWidth: 400},
-					{key: "type", label: "Тип", sortable: false, width: 100, maxAutoWidth: 200}];
+					{key: "title", label: Alfresco.util.message('lecm.arm.lbl.description'), sortable: false, width: 200, maxAutoWidth: 300},
+					{key: "name", label: Alfresco.util.message('lecm.arm.lbl.title.name'), sortable: false, width: 300, maxAutoWidth: 400},
+					{key: "type", label: Alfresco.util.message('lecm.arm.lbl.type'), sortable: false, width: 100, maxAutoWidth: 200}];
 
 				this.widgets.dataTable = new YAHOO.widget.DataTable(this.widgets.dialog.id + "-content", columnDefinitions, this.widgets.dataSource);
 

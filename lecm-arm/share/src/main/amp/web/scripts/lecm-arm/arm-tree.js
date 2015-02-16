@@ -38,7 +38,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 						me.draw();
 					},
 					failure:function (oResponse) {
-						alert("Справочник не был загружен. Попробуйте обновить страницу.");
+						alert(Alfresco.util.message('lecm.arm.msg.load.dict.fail'));
 					},
 					argument:{
 					}

@@ -196,8 +196,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				if (args[1].datagridMeta != null) {
 					this.node = args[1].datagridMeta;
 
-					this.toolbarButtons["defaultActive"].newRowButton.set("label", "Добавить " + this.getTypeName(this.node.itemType));
-					this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", "Удалить выбранный " + this.getTypeName(this.node.currentItemType));
+					this.toolbarButtons["defaultActive"].newRowButton.set("label", Alfresco.util.message('lecm.arm.lbl.add') + " " + this.getTypeName(this.node.itemType));
+					this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", Alfresco.util.message('lecm.arm.lbl.delete.selected') + " " + this.getTypeName(this.node.currentItemType));
 
 					this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType == "lecm-arm:arm");
 					this.toolbarButtons["defaultActive"].newReportsNode.set("disabled", this.node.itemType != "lecm-arm:node" && this.node.itemType != "lecm-arm:reports-node" && this.node.itemType != "lecm-arm:html-node" );
@@ -210,13 +210,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 			getTypeName: function (type) {
 				if (type == "lecm-arm:arm") {
-					return "АРМ";
+					return Alfresco.util.message('page.title.arm');
 				} else if (type == "lecm-arm:accordion"){
-					return "раздел";
+					return Alfresco.util.message('lecm.arm.lbl.section');
 				} else if (type == "lecm-arm:node") {
-					return "узел";
+					return Alfresco.util.message('lecm.arm.lbl.node');
 				}
-				return "элемент";
+				return Alfresco.util.message('lecm.arm.lbl.element');
 			},
 
 			onExport: function() {

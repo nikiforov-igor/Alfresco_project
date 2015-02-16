@@ -75,9 +75,8 @@
     <div id="${el}-columns-list-container" class="columns-table-container">
     <table class="filters-table" cellspacing="0">
         <tr>
-            <th class="filter-title first" title="Восстановить по умолчанию">
-                <a href="#" onclick="LogicECM.module.ARM.restoreColumns()" title="Восстановить по умолчанию">Восстановить
-                    по умолчанию</a>
+            <th class="filter-title first" title="${msg('lecm.arm.ttl.restore.default')}">
+                <a href="#" onclick="LogicECM.module.ARM.restoreColumns()" title="${msg('lecm.arm.ttl.restore.default')}">${msg('lecm.arm.ttl.restore.default')}</a>
             </th>
         </tr>
     <tr class="detail-list-item">
@@ -90,10 +89,10 @@
                        <#if item.checked>checked</#if>>
                 <label class="column-label" title="${item.name}">${item.name}</label>
                 <a id="${item.fieldName}_moveUp" class="moveUpColumn <#if item_index == 0>hidden</#if>"
-                   title="Вверх" href="#" onclick="LogicECM.module.ARM.moveUp(this.parentElement)"><span></span></a>
+                   title="${msg('lecm.arm.ttl.up')}" href="#" onclick="LogicECM.module.ARM.moveUp(this.parentElement)"><span></span></a>
 
                 <a id="${item.fieldName}_moveDown" class="moveDownColumn <#if !item_has_next>hidden</#if>"
-                   title="Вниз" href="#" onclick="LogicECM.module.ARM.moveDown(this.parentElement)"><span></span></a>
+                   title="${msg('lecm.arm.ttl.down')}" href="#" onclick="LogicECM.module.ARM.moveDown(this.parentElement)"><span></span></a>
             </div>
         </#list>
    </td>

@@ -189,15 +189,15 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                         }
 
                         if (this.attrSearchApplied) {
-                            filtersHTML += "<span class='arm-filter-item' title='По атрибутам'>";
-                            filtersHTML += "По атрибутам";
+                            filtersHTML += "<span class='arm-filter-item' title='" + Alfresco.util.message('lecm.arm.lbl.by.attrs') + "'>";
+                            filtersHTML += Alfresco.util.message('lecm.arm.lbl.by.attrs');
                             filtersHTML += this.getRemoveAttrFilterButton();
                             filtersHTML += "</span>";
                         }
 
                         if (this.fullTextSearchApplied) {
-                            filtersHTML += "<span class='arm-filter-item' title='По тексту'>";
-                            filtersHTML += "По тексту";
+                            filtersHTML += "<span class='arm-filter-item' title='" + Alfresco.util.message('lecm.arm.lbl.by.text') + "'>";
+                            filtersHTML += Alfresco.util.message('lecm.arm.lbl.by.text');
                             filtersHTML += this.getRemoveFullTextFilterButton();
                             filtersHTML += "</span>";
                         }

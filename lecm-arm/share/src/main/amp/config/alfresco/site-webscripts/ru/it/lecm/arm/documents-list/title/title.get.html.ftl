@@ -6,7 +6,7 @@
 //]]></script>
 <div class="page-title theme-bg-color-1 theme-border-1" id="title-with-filter-label">
 	<h1 class="theme-color-3">
-		<span>${arm.name!"АРМ"}</span>
+		<span>${arm.name!msg("lecm.arm.title.ttl.arm")}</span>
 		<span class="filtered-label" id="filtered-label">${msg(args.filteredLabel)}</span>
 	</h1>
 </div>
