@@ -128,17 +128,14 @@ public class GroupActionExecutor extends DeclarativeWebScript {
 							HashMap<String, Object> itemResult = new HashMap<String, Object>();
 							itemResult.put("message", (String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING));
 							itemResult.put("withErrors", false);
-							try {
-								try {
-									scriptProcessor.executeScript(scriptContent, scriptModel);
-								} catch (Exception e) {
-									logger.error("Error while execute script: ", e);
-									result.put("withErrors", true);
-								}
-							} catch (Exception e) {
-								logger.error("Error while execute script: ", e);
-								itemResult.put("withErrors", true);
-							}
+                            try {
+                                scriptProcessor.executeScript(scriptContent, scriptModel);
+                            } catch (Exception e) {
+                                logger.error("Error while execute script: ", e);
+                                result.put("withErrors", true);
+                                itemResult.put("withErrors", true);
+                            }
+
 							itemResult.put("redirect", returnModel.get("redirect"));
 							itemResult.put("openWindow", returnModel.get("openWindow"));
 							itemsResult.add(itemResult);
