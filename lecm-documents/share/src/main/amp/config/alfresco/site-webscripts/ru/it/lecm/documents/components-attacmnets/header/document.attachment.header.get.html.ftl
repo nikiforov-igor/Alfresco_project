@@ -10,6 +10,38 @@
 	<#assign fileExt = (fileExtIndex > -1)?string(item.fileName?substring(fileExtIndex + 1)?lower_case, "generic")>
 	<#assign displayName = (item.displayName!item.fileName)?html>
 
+	<script type="text/javascript">
+		(function(){
+			var categories = [];
+			<#if allAttachments?? && allAttachments.items??>
+				<#list allAttachments.items as item>
+					<#if item.category?? && item.attachments??>
+						<#list item.attachments as attachment>
+							categories['${attachment.nodeRef}'] = '${item.category.nodeRef}';
+						</#list>
+					</#if>
+				</#list>
+			</#if>
+
+			function init() {
+				var attachmentSelect = YAHOO.util.Dom.get("all-attachments-select");
+				if (attachmentSelect != null) {
+					YAHOO.util.Event.on(attachmentSelect, "change", function() {
+						var nodeRef = this.options[attachmentSelect.selectedIndex].value;
+						var url = Alfresco.util.siteURL('document-attachment?nodeRef=' + nodeRef);
+						if (categories[nodeRef].length == 0) {
+							window.open(url,'_blank');
+						} else {
+							window.open(url, '_self');
+						}
+					});
+				}
+			}
+
+			YAHOO.util.Event.onDOMReady(init);
+		})();
+	</script>
+
 	<div class="document-header">
         <@view.viewForm formId="${id}-view-modifier-header-form"/>
 		<div class="document-attachment-info">
@@ -30,28 +62,7 @@
 
 			<!-- Title and Version -->
 			<h1 class="thin dark">
-				<select id="all-attachments-select" onchange="
-					var categories = [];
-					<#if allAttachments?? && allAttachments.items??>
-						<#list allAttachments.items as item>
-							<#if item.category??>
-								<#if item.attachments??>
-									<#list item.attachments as attachment>
-										categories['${attachment.nodeRef}'] = '${item.category.nodeRef}';
-									</#list>
-								</#if>
-							</#if>
-						</#list>
-					</#if>
-
-					var nodeRef = this.options[this.selectedIndex].value;
-					var url = Alfresco.util.siteURL('document-attachment?nodeRef=' + nodeRef);
-					if (categories[nodeRef].length == 0) {
-						window.open(url,'_blank');
-					} else {
-						window.open(url, '_self');
-					}
-				">
+				<select id="all-attachments-select">
 					<#if allAttachments?? && allAttachments.items??>
 						<#list allAttachments.items as item>
 							<#if item.category??>
