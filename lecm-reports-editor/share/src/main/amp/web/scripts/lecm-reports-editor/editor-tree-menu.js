@@ -353,13 +353,12 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
     YAHOO.extend(Alfresco.widget.InsituEditorDeployReport, Alfresco.widget.InsituEditorIcon,
         {
             onIconClick: function (e, obj) {
-                var me = this;
                 Alfresco.util.PopupManager.displayPrompt({
-                    title: me.msg("lecm.re.lbl.register-report"),
-                    text: me.msg("lecm.re.lbl.sure-deploy-report"),
+                    title: Alfresco.util.message("lecm.re.lbl.register-report"),
+                    text: Alfresco.util.message("lecm.re.lbl.sure-deploy-report"),
                     buttons: [
                         {
-                            text: me.msg("lecm.re.msg.deploy.yes"),
+                            text: Alfresco.util.message("lecm.re.msg.deploy.yes"),
                             handler: function () {
                                 this.destroy();
                                 var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
@@ -372,7 +371,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                         var response = eval("(" + oResponse.responseText + ")");
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
-                                                text: (response != null && response.success) ? me.msg("lecm.re.msg.deploy.success") : me.msg("lecm.re.msg.deploy.error"),
+                                                text: (response != null && response.success) ? Alfresco.util.message("lecm.re.msg.deploy.success") : Alfresco.util.message("lecm.re.msg.deploy.error"),
                                                 displayTime: 3
                                             });
                                     },
@@ -381,7 +380,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                         alert(oResponse.responseText);
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
-                                                text: me.msg("lecm.re.msg.deploy.error"),
+                                                text: Alfresco.util.message("lecm.re.msg.deploy.error"),
                                                 displayTime: 3
                                             });
                                     },
@@ -391,7 +390,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                             }
                         },
                         {
-                            text: me.msg("lecm.re.msg.deploy.no"),
+                            text: Alfresco.util.message("lecm.re.msg.deploy.no"),
                             handler: function () {
                                 this.destroy();
                                 obj.params.reportTree._treeNodeSelected(obj.params.curElem);

@@ -232,7 +232,6 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
         },
 
         _onNewColumn: function () {
-            var me = this;
             this.isCopy = false;
             if (this.dataSourceId) {
                 var formId =
@@ -246,7 +245,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                 });
             } else {
                 Alfresco.util.PopupManager.displayMessage({
-                    text: me.msg("lecm.re.msg.acttve.source.not.exist")
+                    text: Alfresco.util.message("lecm.re.msg.acttve.source.not.exist")
                 });
             }
         },
@@ -256,7 +255,6 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
         },
 
         _onCopySource: function () {
-            var me = this;
             if (this.dataSourceId) {
                 this.isCopy = true;
                 this._showCreateForm({
@@ -267,7 +265,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                 })
             } else {
                 Alfresco.util.PopupManager.displayMessage({
-                    text: me.msg("lecm.re.msg.acttve.source.not.exist")
+                    text: Alfresco.util.message("lecm.re.msg.acttve.source.not.exist")
                 });
             }
         },
@@ -507,13 +505,12 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 
         _onCopyColumn: function (layer, args) {
             var obj = args[1];
-            var me = this;
             if ((obj !== null) && (obj.columnId !== null) && obj.bubblingLabel == this.bubblingLabel) {
                 if (this.dataSourceId) {
                     this.copyColumn(obj.columnId, obj.sourceId, this.dataSourceId, true);
                 } else {
                     Alfresco.util.PopupManager.displayMessage({
-                        text: me.msg("lecm.re.msg.acttve.source.not.exist")
+                        text: Alfresco.util.message("lecm.re.msg.acttve.source.not.exist")
                     });
                 }
             }
