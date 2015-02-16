@@ -81,6 +81,26 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
                     nodeService.setAssociations(childAssociationRef.getChildRef(),
                             ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(templateFile));
                 }
+            } else {
+                NodeRef template = childAssociationRef.getChildRef();
+                List<AssociationRef> targetAssocs =
+                        nodeService.getTargetAssocs(childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+                NodeRef templateFile;
+                if (targetAssocs != null && !targetAssocs.isEmpty()) {
+                    templateFile = targetAssocs.get(0).getTargetRef();
+
+                    if (nodeService.exists(templateFile)) {
+                        NodeRef parentReport = nodeService.getPrimaryParent(templateFile).getParentRef();
+                        QName parentReportType = nodeService.getType(parentReport);
+                        if (parentReportType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) ||
+                                parentReportType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
+                            NodeRef copiedFile = copyService.copyAndRename(templateFile, parent, ContentModel.ASSOC_CONTAINS, null, false);
+                            if (copiedFile != null) {
+                                nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(copiedFile));
+                            }
+                        }
+                    }
+                }
             }
         } catch (AssociationExistsException ignored) {
         }
@@ -96,29 +116,34 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
             NodeRef parent = nodeService.getPrimaryParent(targetFile).getParentRef();
             QName parentType = nodeService.getType(parent);
             if (!parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) && !parentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
-                // подчистить директорию с отчетом
-                String newFileName = (String) nodeService.getProperty(targetFile, ContentModel.PROP_NAME);
-                List<ChildAssociationRef> childs = nodeService.getChildAssocs(report);
-                for (ChildAssociationRef child : childs) {
-                    QName childType = nodeService.getType(child.getChildRef());
-                    if (childType.equals(ContentModel.TYPE_CONTENT) &&
-                            newFileName.equals(nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME))) {
-                        nodeService.addAspect(child.getChildRef(), ContentModel.ASPECT_TEMPORARY, null);
-                        nodeService.deleteNode(child.getChildRef());
-                    }
-                }
-                // если родитель - не шаблон, переносим файл и удаляем из прежнего места
-                NodeRef copiedFile = copyService.copyAndRename(targetFile, report, ContentModel.ASSOC_CONTAINS, null, false);
-                if (copiedFile != null) {
-                    List<AssociationRef> oldFiles = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
-                    for (AssociationRef oldFile : oldFiles) { // oldTemplate и targetFile
-                        NodeRef oldFileRef = oldFile.getTargetRef();
-                        if (nodeService.exists(oldFileRef) && !nodeService.hasAspect(oldFileRef, ContentModel.ASPECT_PENDING_DELETE)) {
-                            nodeService.addAspect(oldFileRef, ContentModel.ASPECT_TEMPORARY, null);
-                            nodeService.deleteNode(oldFileRef);
+                NodeRef templateParent = nodeService.getPrimaryParent(template).getParentRef();
+                QName templateParentType = nodeService.getType(templateParent);
+                if (templateParentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) ||
+                        templateParentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
+                    // подчистить директорию с отчетом
+                    String newFileName = (String) nodeService.getProperty(targetFile, ContentModel.PROP_NAME);
+                    List<ChildAssociationRef> childs = nodeService.getChildAssocs(report);
+                    for (ChildAssociationRef child : childs) {
+                        QName childType = nodeService.getType(child.getChildRef());
+                        if (childType.equals(ContentModel.TYPE_CONTENT) &&
+                                newFileName.equals(nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME))) {
+                            nodeService.addAspect(child.getChildRef(), ContentModel.ASPECT_TEMPORARY, null);
+                            nodeService.deleteNode(child.getChildRef());
                         }
                     }
-                    nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(copiedFile));
+                    // если родитель - не шаблон, переносим файл и удаляем из прежнего места
+                    NodeRef copiedFile = copyService.copyAndRename(targetFile, report, ContentModel.ASSOC_CONTAINS, null, false);
+                    if (copiedFile != null) {
+                        List<AssociationRef> oldFiles = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+                        for (AssociationRef oldFile : oldFiles) { // oldTemplate и targetFile
+                            NodeRef oldFileRef = oldFile.getTargetRef();
+                            if (nodeService.exists(oldFileRef) && !nodeService.hasAspect(oldFileRef, ContentModel.ASPECT_PENDING_DELETE)) {
+                                nodeService.addAspect(oldFileRef, ContentModel.ASPECT_TEMPORARY, null);
+                                nodeService.deleteNode(oldFileRef);
+                            }
+                        }
+                        nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(copiedFile));
+                    }
                 }
             }
         }
