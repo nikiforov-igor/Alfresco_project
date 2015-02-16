@@ -246,7 +246,7 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                     var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                         var contId = p_dialog.id + "-form-container";
                         Alfresco.util.populateHTML(
-                                [contId + "_h", "Создание" ]
+                                [contId + "_h", Alfresco.util.message('lecm.gracts.creation') ]
                         );
                         me.editDialogOpening = false;
                         p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
