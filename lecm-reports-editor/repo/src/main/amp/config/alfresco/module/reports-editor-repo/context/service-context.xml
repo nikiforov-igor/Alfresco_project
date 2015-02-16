@@ -217,7 +217,6 @@
 						<value>lecm-rpeditor:reportQueryLimit</value>
 						<value>lecm-rpeditor:reportQueryPgSize</value>
 						<value>lecm-rpeditor:reportQuerySort</value>
-						<value>lecm-rpeditor:reportIsDeployed</value>
 						<value>lecm-rpeditor:reportProviderAssoc</value>
 						<value>lecm-rpeditor:reportTemplateAssoc</value>
 						<value>lecm-rpeditor:businessRolesAssoc</value>
@@ -238,7 +237,6 @@
 						<value>lecm-rpeditor:reportQueryLimit</value>
 						<value>lecm-rpeditor:reportQueryPgSize</value>
 						<value>lecm-rpeditor:reportQuerySort</value>
-						<value>lecm-rpeditor:reportIsDeployed</value>
 						<value>lecm-rpeditor:reportProviderAssoc</value>
 						<value>lecm-rpeditor:reportTemplateAssoc</value>
 						<value>lecm-rpeditor:businessRolesAssoc</value>
@@ -269,4 +267,13 @@
 			</map>
 		</constructor-arg>
 	</bean>
+
+    <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/reports-editor-repo/actions/deploy-report.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>

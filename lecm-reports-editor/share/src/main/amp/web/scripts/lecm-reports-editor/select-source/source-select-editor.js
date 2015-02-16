@@ -83,9 +83,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                             fn: function (response) {
                                 alert(response.json.message);
                                 Alfresco.util.PopupManager.displayMessage({
-                                    text: "Не удалось получить список столбцов для текущего набора данных"
+                                    text: this.msg("lecm.re.msg.source.columns.list.error")
                                 });
-                            }
+                            },
+                            scope: this
                         },
                         execScripts: true,
                         requestContentType: "application/json",
@@ -143,7 +144,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                             if (response.json.overallSuccess) {
                                 if (fireUpdateEvent) {
                                     Alfresco.util.PopupManager.displayMessage({
-                                        text: "Столбец добавлен в набор"
+                                        text: this.msg("lecm.re.msg.datasource.column.copied")
                                     }, Dom.get("selectSourcePanel"));
                                     // обновляем список колонок
                                     YAHOO.Bubbling.fire("updateReportSourceColumns");
@@ -156,9 +157,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         fn: function (response) {
                             alert(response.json.message);
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось скопировать шаблон"
+                                text: this.msg("lecm.re.msg.datasource.copy.error")
                             });
-                        }
+                        },
+                        scope: this
                     },
                     execScripts: true,
                     requestContentType: "application/json",
@@ -204,7 +206,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     }
                 }
             } else {
-                alert("Не выбран ни один элемент!");
+                alert(this.msg("lecm.re.msg.no.element.select"));
             }
         },
 

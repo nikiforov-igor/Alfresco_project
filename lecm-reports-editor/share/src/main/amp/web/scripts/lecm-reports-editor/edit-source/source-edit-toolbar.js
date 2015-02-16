@@ -134,7 +134,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     successCallback: {
                         fn: function (response) {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Набор скопирован"
+                                text: this.msg("lecm.re.msg.datasource.copied")
                             });
                         },
                         scope: this
@@ -142,9 +142,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     failureCallback: {
                         fn: function () {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось скопировать шаблон"
+                                text: this.msg("lecm.re.msg.datasource.copy.error")
                             });
-                        }
+                        },
+                        scope: this
                     },
                     execScripts: true,
                     requestContentType: "application/json",
@@ -221,15 +222,17 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     failureCallback: {
                         fn: function () {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось получить список шаблонов"
+                                text: this.msg("lecm.re.msg.sources.list.error")
                             });
-                        }
+                        },
+                        scope: this
                     },
                     execScripts: true
                 });
         },
 
         _onNewColumn: function () {
+            var me = this;
             this.isCopy = false;
             if (this.dataSourceId) {
                 var formId =
@@ -243,7 +246,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                 });
             } else {
                 Alfresco.util.PopupManager.displayMessage({
-                    text: "Нет активного набора!"
+                    text: me.msg("lecm.re.msg.acttve.source.not.exist")
                 });
             }
         },
@@ -253,6 +256,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
         },
 
         _onCopySource: function () {
+            var me = this;
             if (this.dataSourceId) {
                 this.isCopy = true;
                 this._showCreateForm({
@@ -263,7 +267,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                 })
             } else {
                 Alfresco.util.PopupManager.displayMessage({
-                    text: "Нет активного набора!"
+                    text: me.msg("lecm.re.msg.acttve.source.not.exist")
                 });
             }
         },
@@ -432,7 +436,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                             }
                                             if (k == oResults.length - 1) {
                                                 Alfresco.util.PopupManager.displayMessage({
-                                                        text: "Набор скопирован"
+                                                        text: this.msg("lecm.re.msg.datasource.copied")
                                                     }, Dom.get("selectSourcePanel")
                                                 );
                                             }
@@ -445,9 +449,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                 fn: function (response) {
                                     alert(response.json.message);
                                     Alfresco.util.PopupManager.displayMessage({
-                                        text: "Не удалось получить список столбцов для набора данных"
+                                        text: this.msg("lecm.re.msg.source.columns.list.error")
                                     }, Dom.get("selectSourcePanel"));
-                                }
+                                },
+                                scope: this
                             },
                             execScripts: true,
                             requestContentType: "application/json",
@@ -476,7 +481,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                             if (response.json.overallSuccess) {
                                 if (fireUpdateEvent) {
                                     Alfresco.util.PopupManager.displayMessage({
-                                        text: "Столбец добавлен в набор"
+                                        text: this.msg("lecm.re.msg.datasource.column.copied")
                                     }, Dom.get("selectSourcePanel"));
                                     // обновляем список колонок
                                     YAHOO.Bubbling.fire("updateReportSourceColumns");
@@ -489,9 +494,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         fn: function (response) {
                             alert(response.json.message);
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось скопировать шаблон"
+                                text: this.msg("lecm.re.msg.datasource.copy.error")
                             });
-                        }
+                        },
+                        scope: this
                     },
                     execScripts: true,
                     requestContentType: "application/json",
@@ -501,12 +507,13 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 
         _onCopyColumn: function (layer, args) {
             var obj = args[1];
+            var me = this;
             if ((obj !== null) && (obj.columnId !== null) && obj.bubblingLabel == this.bubblingLabel) {
                 if (this.dataSourceId) {
                     this.copyColumn(obj.columnId, obj.sourceId, this.dataSourceId, true);
                 } else {
                     Alfresco.util.PopupManager.displayMessage({
-                        text: "Нет активного набора!"
+                        text: me.msg("lecm.re.msg.acttve.source.not.exist")
                     });
                 }
             }

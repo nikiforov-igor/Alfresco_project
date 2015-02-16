@@ -20,6 +20,16 @@
             </span>
         </div>
 
+        <div class="group-actions">
+            <div class="actions">
+                <span id="${toolbarId}-groupActionsButton" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button">${msg("button.group-actions")}</button>
+                   </span>
+                </span>
+            </div>
+        </div>
+
 	    <div class="import-xml"  title="${msg('button.import-xml')}">
 	        <span id="${toolbarId}-importXmlButton" class="yui-button yui-push-button">
 	            <span class="first-child">
@@ -121,11 +131,11 @@
                     onActionDeploy: function (item) {
                         var me = this;
                         Alfresco.util.PopupManager.displayPrompt({
-                            title: "Регистрация отчета",
-                            text: "Вы действительно хотите добавить отчет в систему?",
+                            title: this.msg("lecm.re.lbl.register-report"),
+                            text: this.msg("lecm.re.lbl.sure-deploy-report"),
                             buttons: [
                                 {
-                                    text: "Да",
+                                    text: this.msg("lecm.re.msg.deploy.yes"),
                                     handler: function () {
                                         this.destroy();
                                         var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
@@ -145,7 +155,7 @@
                                                         });
                                                 Alfresco.util.PopupManager.displayMessage(
                                                         {
-                                                            text: (response != null && response.success) ? "Отчет зарегистрирован в системе" : "При развертывании отчета произошла ошибка",
+                                                            text: (response != null && response.success) ? me.msg("lecm.re.msg.deploy.success") : me.msg("lecm.re.msg.deploy.error"),
                                                             displayTime: 3
                                                         });
                                             },
@@ -154,7 +164,7 @@
                                                 alert(oResponse.responseText);
                                                 Alfresco.util.PopupManager.displayMessage(
                                                         {
-                                                            text: "При регистрации отчета произошла ошибка",
+                                                            text: me.msg("lecm.re.msg.deploy.error"),
                                                             displayTime: 3
                                                         });
                                             },
@@ -167,7 +177,7 @@
                                     }
                                 },
                                 {
-                                    text: "Нет",
+                                    text: this.msg("lecm.re.msg.deploy.no"),
                                     handler: function dlA_onActionDelete_cancel() {
                                         this.destroy();
                                     },
@@ -300,7 +310,17 @@
 
 	                onActionExportXML: function(item) {
 			            document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export?nodeRef=" + item.nodeRef;
-		            }
+		            },
+
+                    getAllSelectedItems: function DataGrid_getSelectedItems() {
+                        var items = [];
+                        for (var item in this.selectedItems) {
+                            if (this.selectedItems.hasOwnProperty(item) && this.selectedItems[item]) {
+                                items.push(item);
+                            }
+                        }
+                        return items;
+                    }
                 }, true);
 
                 function createDatagrid() {
@@ -330,7 +350,7 @@
 	                                }
                                 ],
                                 bubblingLabel: "${reportsLabel}",
-                                showCheckboxColumn: false
+                                showCheckboxColumn: true
                             }).setMessages(${messages});
 
                     YAHOO.Bubbling.fire("activeGridChanged", {

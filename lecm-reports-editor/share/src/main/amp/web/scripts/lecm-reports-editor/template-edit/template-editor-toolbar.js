@@ -188,9 +188,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     failureCallback: {
                         fn: function () {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось получить список шаблонов"
+                                text: this.msg("lecm.re.msg.sources.list.error")
                             });
-                        }
+                        },
+                        scope: this
                     },
                     execScripts: true
                 });
@@ -268,7 +269,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     successCallback: {
                         fn: function (response) {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Выполнено"
+                                text: this.msg("lecm.re.msg.action.executed")
                             });
                             if (response.json.overallSuccess) {
                                 var templateId = response.json.results[0].nodeRef;
@@ -285,9 +286,10 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         fn: function (response) {
                             alert(response.json.message);
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось скопировать шаблон"
+                                text: this.msg("lecm.re.msg.datasource.copy.error")
                             });
-                        }
+                        },
+                        scope: this
                     },
                     execScripts: true,
                     requestContentType: "application/json",

@@ -19,11 +19,11 @@
         function init() {
             var deployFunction = function() {
                 Alfresco.util.PopupManager.displayPrompt({
-                    title: "Регистрация отчета",
-                    text: "Вы действительно хотите добавить отчет в систему?",
+                    title: "${msg('lecm.re.lbl.register-report')}",
+                    text: "${msg('lecm.re.lbl.sure-deploy-report')}",
                     buttons: [
                         {
-                            text: "Да",
+                            text: "${msg('lecm.re.msg.deploy.yes')}",
                             handler: function dlA_onActionDeploy() {
                                 this.destroy();
                                 var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
@@ -35,7 +35,7 @@
                                         var response = eval("(" + oResponse.responseText + ")");;
                                         Alfresco.util.PopupManager.displayMessage(
                                                 {
-                                                    text: (response != null && response.success) ? "Отчет зарегистрирован в системе" : "При развертывании отчета произошла ошибка",
+                                                    text: (response != null && response.success) ? "${msg('lecm.re.msg.deploy.success')}" : "${msg('lecm.re.msg.deploy.error')}",
                                                     displayTime: 3
                                                 });
                                     },
@@ -43,7 +43,7 @@
                                         alert(oResponse.responseText);
                                         Alfresco.util.PopupManager.displayMessage(
                                                 {
-                                                    text: "При регистрации отчета произошла ошибка",
+                                                    text: "${msg('lecm.re.msg.deploy.error')}",
                                                     displayTime: 3
                                                 });
                                     },
@@ -53,7 +53,7 @@
                             }
                         },
                         {
-                            text: "Нет",
+                            text: "${msg('lecm.re.msg.deploy.no')}",
                             handler: function dlA_onActionDelete_cancel() {
                                 this.destroy();
                             },
@@ -103,7 +103,7 @@
                                                 fn: function () {
                                                     Alfresco.util.PopupManager.displayMessage(
                                                             {
-                                                                text: "Настройки обновлены"
+                                                                text: "${msg('message.save.settings.success')}"
                                                             });
                                                 },
                                                 scope: this
@@ -113,7 +113,7 @@
                                                     alert(response.json.message);
                                                     Alfresco.util.PopupManager.displayMessage(
                                                             {
-                                                                text: "Не удалось обновить настройки"
+                                                                text: "${msg('message.save.settings.error')}"
                                                             });
                                                 },
                                                 scope: this

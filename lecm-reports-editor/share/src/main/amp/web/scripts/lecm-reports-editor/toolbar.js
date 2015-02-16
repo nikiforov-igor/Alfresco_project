@@ -10,7 +10,11 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 
 (function () {
     LogicECM.module.ReportsEditor.Toolbar = function (htmlId) {
-        return LogicECM.module.ReportsEditor.Toolbar.superclass.constructor.call(this, "LogicECM.module.ReportsEditor.Toolbar", htmlId);
+        LogicECM.module.ReportsEditor.Toolbar.superclass.constructor.call(this, "LogicECM.module.ReportsEditor.Toolbar", htmlId);
+
+        YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
+
+        return this;
     };
 
     YAHOO.extend(LogicECM.module.ReportsEditor.Toolbar, LogicECM.module.Base.Toolbar);
@@ -33,15 +37,31 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         value: 'create'
                     });
 
-	            this.toolbarButtons['defaultActive'].push(
-		            Alfresco.util.createYUIButton(this, "importXmlButton", this.showImportDialog)
-	            );
-	            this.importFromSubmitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML,{
-		            disabled: true
-	            });
-	            Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog,{});
-	            YAHOO.util.Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
-	            YAHOO.util.Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
+                this.toolbarButtons["defaultActive"].groupActionsButton = new YAHOO.widget.Button(
+                        this.id + "-groupActionsButton",
+                    {
+                        type: "menu",
+                        menu: [],
+                        disabled: false
+                    }
+                );
+
+                if (Dom.get(this.id + "-groupActionsButton") != null) {
+                    this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
+                    this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().cfg.setProperty("classname", "group-actions-dialog");
+                    this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
+                    this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
+                }
+
+                this.toolbarButtons['defaultActive'].push(
+                    Alfresco.util.createYUIButton(this, "importXmlButton", this.showImportDialog)
+                );
+                this.importFromSubmitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML,{
+                    disabled: true
+                });
+                Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog,{});
+                YAHOO.util.Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
+                YAHOO.util.Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
             },
 
             onNewRow: function () {
@@ -125,6 +145,226 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                             scope: this
                         }
                     }).show();
+            },
+
+            onCheckDocumentFinished: function onCheckDocumentFinished_Function() {
+                var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+                var menu = button.getMenu();
+                var items = this.modules.dataGrid.getAllSelectedItems();
+                var loadItem = [];
+                loadItem.push({
+                    text: "Загрузка...",
+                    disabled: true
+                });
+                if (YAHOO.util.Dom.inDocument(menu.element)) {
+                    menu.clearContent();
+                    menu.addItems(loadItem);
+                    menu.render();
+                } else {
+                    menu.itemData = loadItem;
+                }
+                var me = this;
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/groupActions/list",
+                    dataObj: {
+                        items: JSON.stringify(items)
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            var json = oResponse.json;
+                            var actionItems = [];
+                            var wideActionItems = [];
+                            for (var i in json) {
+                                if (!json[i].wide) {
+                                    actionItems.push({
+                                        text: json[i].id,
+                                        value: json[i].id,
+                                        onclick: {
+                                            fn: me.onGroupActionsClick,
+                                            obj: {
+                                                actionId: json[i].id,
+                                                type: json[i].type,
+                                                withForm: json[i].withForm,
+                                                items: items,
+                                                workflowId: json[i].workflowId,
+                                                label: json[i].id
+                                            },
+                                            scope: me
+                                        }
+                                    });
+                                } else {
+                                    wideActionItems.push({
+                                        text: json[i].id,
+                                        value: json[i].id,
+                                        onclick: {
+                                            fn: me.onGroupActionsClick,
+                                            obj: {
+                                                actionId: json[i].id,
+                                                type: json[i].type,
+                                                withForm: json[i].withForm,
+                                                items: items,
+                                                workflowId: json[i].workflowId,
+                                                label: json[i].id
+                                            },
+                                            scope: me
+                                        }
+                                    });
+                                }
+                            }
+                            if (actionItems.length == 0 && wideActionItems.length == 0) {
+                                actionItems.push({
+                                    text: this.msg("lecm.re.msg.no.operations"),
+                                    disabled: true
+                                });
+                            }
+                            if (actionItems.length != 0 && wideActionItems.length != 0) {
+                                wideActionItems[0].classname = "toplineditem";
+                            }
+                            if (YAHOO.util.Dom.inDocument(menu.element)) {
+                                menu.clearContent();
+                                menu.addItems(actionItems);
+                                menu.addItems(wideActionItems);
+                                menu.render();
+                            } else {
+                                menu.addItems(actionItems);
+                                menu.addItems(wideActionItems);
+                            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function () {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+            },
+            clearOperationsList: function clearOperationsListFunction() {
+                var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+                var menu = button.getMenu();
+                if (YAHOO.util.Dom.inDocument(menu.element)) {
+                    menu.clearContent();
+                    menu.render();
+                }
+            },
+
+            onCheckDocument: function () {
+                var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+
+                var buttonName = this.msg("button.group-actions");
+                var items = this.modules.dataGrid.getAllSelectedItems();
+                if (items.length == 0) {
+                    button.set("disabled", true);
+                } else {
+                    button.set("disabled", false);
+                    buttonName += "<span class=\"group-actions-counter\">";
+                    buttonName += "(" + items.length + ")";
+                    buttonName += "</span>";
+                }
+
+                button.set("label", buttonName);
+            },
+
+            onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
+                var items = p_oItem.items;
+                if (p_oItem.type == "lecm-group-actions:script-action") {
+                    var me = this;
+                    Alfresco.util.PopupManager.displayPrompt(
+                        {
+                            title: this.msg("lecm.re.ttl.action.performing"),
+                            text: this.msg("lecm.re.ttl.confirm.action") + " \"" + p_oItem.actionId + "\"",
+                            buttons: [
+                                {
+                                    text: this.msg("lecm.re.btn.ok"),
+                                    handler: function dlA_onAction_action() {
+                                        this.destroy();
+                                        Alfresco.util.Ajax.jsonRequest({
+                                            method: "POST",
+                                            url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+                                            dataObj: {
+                                                items: items,
+                                                actionId: p_oItem.actionId
+                                            },
+                                            successCallback: {
+                                                fn: function (oResponse) {
+                                                    me._actionResponse(p_oItem.actionId, oResponse, items);
+                                                }
+                                            },
+                                            failureCallback: {
+                                                fn: function () {
+                                                }
+                                            },
+                                            scope: me,
+                                            execScripts: true
+                                        });
+
+                                    }
+                                },
+                                {
+                                    text: this.msg("lecm.re.btn.cancel"),
+                                    handler: function dlA_onActionDelete_cancel() {
+                                        this.destroy();
+                                    },
+                                    isDefault: true
+                                }
+                            ]
+                        });
+                }
+            },
+            _actionResponse: function actionResponseFunction(actionId, response, items) {
+                var json = eval("(" + response.serverResponse.responseText + ")");
+                if (json.forCollection) {
+                    if (json.redirect != "") {
+                        document.location.href = Alfresco.constants.URL_PAGECONTEXT + json.redirect;
+                    } else if (json.openWindow) {
+                        window.open(Alfresco.constants.URL_PAGECONTEXT + json.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                    } else if (json.withErrors) {
+                        this._openMessageWindow(actionId, this.msg("lecm.re.action.error") + " \"" + actionId + "\"", false);
+                    } else {
+                        document.location.href = document.location.href;
+                    }
+                } else {
+                    var message = "";
+                    for (var i in json.items) {
+                        var item = json.items[i];
+                        var itemMessage = "";
+                        var datagridItem = this.modules.dataGrid._findRecordByParameter(items[i], "nodeRef");
+                        if (datagridItem != null) {
+                            itemMessage = datagridItem.getData().itemData["prop_cm_name"].displayValue;
+                        }
+
+                        if (item.redirect != "") {
+                            document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+                        } else if (item.openWindow) {
+                            window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                        } else {
+                            message += "<div class=\"" + (item.withErrors ? "error-item" : "noerror-item") + "\">" + itemMessage + "</div>";
+                        }
+                    }
+                    if (message != "") {
+                        this._openMessageWindow(actionId, message, true);
+                    }
+                }
+            },
+            _openMessageWindow: function openMessageWindowFunction(title, message, reload) {
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: this.msg("lecm.re.msg.operation.result") + " \"" + title + "\"",
+                        text: message,
+                        noEscape: true,
+                        buttons: [
+                            {
+                                text: this.msg("lecm.re.btn.ok"),
+                                handler: function dlA_onAction_action()
+                                {
+                                    this.destroy();
+                                    if (reload) {
+                                        document.location.href = document.location.href;
+                                    }
+                                }
+                            }]
+                    });
             }
         }, true);
 })();

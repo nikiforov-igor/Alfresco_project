@@ -56,8 +56,8 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                 menu.menuState = YAHOO.lang.JSON.parse(menuPref);
             } else {
                 menu.menuState = {
-                    expanded: "",
-                    selected: "",
+                    expanded: "reports",
+                    selected: "reports",
                     redirectUrl: "reports-editor"
                 };
             }
@@ -353,12 +353,13 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
     YAHOO.extend(Alfresco.widget.InsituEditorDeployReport, Alfresco.widget.InsituEditorIcon,
         {
             onIconClick: function (e, obj) {
+                var me = this;
                 Alfresco.util.PopupManager.displayPrompt({
-                    title: "Регистрация отчета",
-                    text: "Вы действительно хотите добавить отчет в систему?",
+                    title: me.msg("lecm.re.lbl.register-report"),
+                    text: me.msg("lecm.re.lbl.sure-deploy-report"),
                     buttons: [
                         {
-                            text: "Да",
+                            text: me.msg("lecm.re.msg.deploy.yes"),
                             handler: function () {
                                 this.destroy();
                                 var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
@@ -371,7 +372,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                         var response = eval("(" + oResponse.responseText + ")");
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
-                                                text: (response != null && response.success) ? "Отчет зарегистрирован в системе" : "При развертывании отчета произошла ошибка",
+                                                text: (response != null && response.success) ? me.msg("lecm.re.msg.deploy.success") : me.msg("lecm.re.msg.deploy.error"),
                                                 displayTime: 3
                                             });
                                     },
@@ -380,7 +381,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                         alert(oResponse.responseText);
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
-                                                text: "При развертывании отчета произошла ошибка",
+                                                text: me.msg("lecm.re.msg.deploy.error"),
                                                 displayTime: 3
                                             });
                                     },
@@ -390,7 +391,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                             }
                         },
                         {
-                            text: "Нет",
+                            text: me.msg("lecm.re.msg.deploy.no"),
                             handler: function () {
                                 this.destroy();
                                 obj.params.reportTree._treeNodeSelected(obj.params.curElem);

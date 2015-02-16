@@ -46,6 +46,17 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
         return result;
     }
 
+    /**
+     * Метод для групповой операции
+     */
+    public boolean deployReport(final String reportDescNode, boolean throwException) throws Exception{
+        boolean result = deployReport(reportDescNode);
+        if (!result && throwException) {
+            throw new Exception("Deploy report failed!");
+        }
+        return true;
+    }
+
     public boolean undeployReport(final String reportCode) {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 

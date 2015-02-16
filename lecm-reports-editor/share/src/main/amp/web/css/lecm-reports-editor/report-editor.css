@@ -95,6 +95,9 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
     background: url('/share/res/components/images/select-invert-16.png') no-repeat 12px 4px;
     padding-left: 24px;
 }
+#yui-main #reports-editor-panel .datalist-toolbar .import-xml span.first-child {
+    padding-left: 10px;
+}
 
 .datagrid .onActionDeploy a {
     background-image: url("/share/res/images/lecm-reports-editor/deploy-report-16.png");
@@ -176,4 +179,18 @@ span.insitu-deploy-report
 
 .yui-panel.reports-selectSourcePanel .selectSourcePanel-form > div {
     overflow: hidden;
+}
+
+div.noerror-item
+{
+    background: url('/share/res/images/lecm-arm/noerror.png') no-repeat 0 0;
+    padding: 0 0 10px 20px;
+    text-align: left;
+}
+
+div.error-item
+{
+    background: url('/share/res/images/lecm-arm/error.png') no-repeat 0 0;
+    padding: 0 0 10px 20px;
+    text-align: left;
 }
