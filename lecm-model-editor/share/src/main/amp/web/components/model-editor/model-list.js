@@ -47,8 +47,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			// DataTable column defintions
 			var columnDefinitions = [
 				{key: "expand", label: "", sortable: false, formatter: this._formatExpandModel(), width: 15, maxAutoWidth: 15},
-				{key: "title", label: "Модель документа", sortable: false, formatter: this._formatTitle, width: 250, maxAutoWidth: 250},
-				{key: "active", label: "Активна", sortable: false, formatter: this._formatActive, width: 100, maxAutoWidth: 100},
+				{key: "title", label: Alfresco.util.message('lecm.meditor.lbl.document.model'), sortable: false, formatter: this._formatTitle, width: 250, maxAutoWidth: 250},
+				{key: "active", label: Alfresco.util.message('lecm.meditor.lbl.active'), sortable: false, formatter: this._formatActive, width: 100, maxAutoWidth: 100},
 				{key: "edit-model", label: "", sortable: false, formatter: this._formatEditModel(), width: 15, maxAutoWidth: 15},
 				{key: "edit-control", label: "", sortable: false, formatter: this._formatEditControl(), width: 15, maxAutoWidth: 15},
 				{key: "edit-form", label: "", sortable: false, formatter: this._formatEditForm(), width: 15, maxAutoWidth: 15},
@@ -67,11 +67,11 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					isRestorable: false,
 					modelName: "fakeModel",
 					nodeRef: null,
-					title: "Фиктивная модель",
+					title: Alfresco.util.message('lecm.meditor.ttl.fake.model'),
 					types: [{
 						isDocument: false,
 						modelName: "fakeModel",
-						title: "Фиктивный документ",
+						title: Alfresco.util.message('lecm.meditor.ttl.fake.document'),
 						typeName: "fake"
 					}]
 				};
@@ -83,7 +83,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				var destination = this.widgets.dataTable.destination;
 				var url = Alfresco.constants.URL_PAGECONTEXT + "doc-model-create?formId=create-model&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list&destination=" + destination + "&itemId=cm:dictionaryModel&mimeType=text/xml";
 				window.location = url;
-			}, {label: "Создать"});
+			}, {label: Alfresco.util.message('lecm.meditor.lbl.create')});
 
 			// Finally show the component body here to prevent UI artifacts on YUI button decoration
 			Dom.setStyle(this.id + "-body", "visibility", "visible");
@@ -122,7 +122,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				el.innerHTML = "";
 
 				var activeElement = document.createElement("span");
-				activeElement.innerHTML = (oRecord.getData("isActive") ? "Да" : "Нет");
+				activeElement.innerHTML = (oRecord.getData("isActive") ? Alfresco.util.message('lecm.meditor.lbl.yes') : Alfresco.util.message('lecm.meditor.lbl.no'));
 				el.appendChild(activeElement);
 			}
 		},
@@ -179,7 +179,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
                             url: Alfresco.constants.PROXY_URI + "lecm/models/restore?modelName=" + oRecord.getData("modelName"),
                             successCallback: {
                                 fn: function (response, obj) {
-                                    Alfresco.util.PopupManager.displayMessage({ text: "Модель восстановлена" });
+                                    Alfresco.util.PopupManager.displayMessage({ text: Alfresco.util.message('lecm.meditor.msg.model.restored') });
                                 },
                                 scope: this
                             },
@@ -187,7 +187,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
                                 fn: function (response, obj) {
                                     Alfresco.util.PopupManager.displayMessage(
                                         {
-                                            text: Alfresco.util.message("Ошибка восстановления модели")
+                                            text: Alfresco.util.message("lecm.meditor.msg.model.restored.failed")
                                         });
                                 },
                                 scope: this
@@ -197,7 +197,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
                             }
                         };
 
-                        if (confirm('Вы действительно хотите восстановить модель по-умолчанию?')) {
+                        if (confirm(Alfresco.util.message('lecm.meditor.msg.defaul.model'))) {
                             Alfresco.util.Ajax.jsonRequest(config);
                         }
 
@@ -274,11 +274,11 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 							close: false
 						});
 
-						mySimpleDialog.setHeader("Внимание!");
-						mySimpleDialog.setBody("Нельзя удалить активную модель");
+						mySimpleDialog.setHeader(Alfresco.util.message('lecm.meditor.ttl.caution'));
+						mySimpleDialog.setBody(Alfresco.util.message('lecm.meditor.msg.can.not.remove.act.model'));
 						mySimpleDialog.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN);
 						mySimpleDialog.cfg.queueProperty("buttons", [
-							{ text: "Ок", handler: function () {
+							{ text: Alfresco.util.message('lecm.meditor.lbl.ok'), handler: function () {
 								this.hide();
 							} }
 						]);
@@ -301,7 +301,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 								fn: function (response, obj) {
 									Alfresco.util.PopupManager.displayMessage(
 										{
-											text: Alfresco.util.message("Ошибка удаления модели")
+											text: Alfresco.util.message("lecm.meditor.msg.delete.model.fail")
 										});
 								},
 								scope: this
@@ -311,7 +311,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 							}
 						};
 
-						if (confirm('Вы действительно хотите удалить модель?')) {
+						if (confirm(Alfresco.util.message('lecm.meditor.msg.want.delete.model'))) {
 							Alfresco.util.Ajax.jsonRequest(config);
 						}
 					}

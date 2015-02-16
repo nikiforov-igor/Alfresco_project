@@ -35,7 +35,7 @@ LogicECM.module.ControlsEditor = LogicECM.module.ControlsEditor || {};
 			this.createNewControlClicked = true;
 
 			function doBeforeDialogShow(p_form, p_dialog) {
-				p_dialog.dialog.setHeader('Новый контрол');
+				p_dialog.dialog.setHeader(Alfresco.util.message('lecm.meditor.ttl.new.control'));
 				p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 				this.createNewControlClicked = false;
 			}

@@ -9,5 +9,5 @@
 	}).setMessages(${messages});
 //]]></script>
 <div class="form-manager">
-	<h1>Документ: ${fileName}</h1>
+	<h1>${msg("lecm.meditor.lbl.document")}: ${fileName}</h1>
 </div>

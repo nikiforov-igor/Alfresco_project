@@ -23,4 +23,4 @@
 <div id="${id}-body" class="datagrid models">
    
 </div>
-<div id="${id}-button">Добавить</div>
+<div id="${id}-button">${msg("lecm.meditor.lbl.add")}</div>

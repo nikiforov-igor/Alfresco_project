@@ -43,16 +43,16 @@
 		<!-- Field data -->
 		<input id="${fieldHtmlId}" name="${field.name}" type="hidden" />
 		<!-- Controls -->
-		<div id="${fieldHtmlId}_loading">Загрузка данных...</div>
+		<div id="${fieldHtmlId}_loading">${msg("lecm.meditor.msg.load.data")}</div>
 		<div id="${fieldHtmlId}_props" class="hidden1">
 			<div id="${fieldHtmlId}_title"></div>
-			<label><b>Категории вложений</b></label>
+			<label><b>${msg("lecm.meditor.lbl.attachs.categors")}</b></label>
 			<div id="${fieldHtmlId}_categories" class="form-field"></div>
-			<label><b>Атрибуты</b></label>
+			<label><b>${msg("lecm.meditor.lbl.attrs")}</b></label>
 			<div id="${fieldHtmlId}_attributes" class="form-container form-field"></div>
-			<label><b>Ассоциации<b/></label>
+			<label><b>${msg("lecm.meditor.lbl.assocs")}<b/></label>
 			<div id="${fieldHtmlId}_associations" class="form-container form-field"></div>
-			<label><b>Таблицы<b/></label>
+			<label><b>${msg("lecm.meditor.lbl.tables")}<b/></label>
 			<div id="${fieldHtmlId}_tables" class="form-container form-field"></div>
 		</div>
 		<!-- Debug -->	

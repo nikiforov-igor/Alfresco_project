@@ -101,7 +101,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				window.location.href = Alfresco.constants.URL_PAGECONTEXT + urlTemplate + this.options.modelItem.nodeRef;
 			} else {
 				Alfresco.util.PopupManager.displayMessage({
-					text: 'Некорректная попытка перейти в режим редактирования модели'
+					text: Alfresco.util.message('lecm.meditor.msg.incorrect.editing.mode')
 				});
 			}
 		},

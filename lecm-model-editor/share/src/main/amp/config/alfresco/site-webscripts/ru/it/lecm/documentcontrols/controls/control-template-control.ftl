@@ -54,7 +54,7 @@
 	<div class="clear"></div>
 	<div class="set-bordered-panel hidden">
 		<input id="${fieldHtmlId}-control-config-hidden" type="hidden" name="controlConfig"/>
-		<div class="set-bordered-panel-heading">Параметры контрола</div>
+		<div class="set-bordered-panel-heading">${msg("lecm.meditor.ttl.control.params")}</div>
 		<div id="${fieldHtmlId}-params" class="set-bordered-panel-body control-template-params">
 		</div>
 	</div>

@@ -780,11 +780,11 @@ IT.component = IT.component || {};
 				
 				//Ассоциации
 				this.tablesDialogEl = [
-		                            { name: "table", label: "Таблица", type:"select", options: dTables, showdefault: false }
+		                            { name: "table", label: Alfresco.util.message('lecm.meditor.lbl.table'), type:"select", options: dTables, showdefault: false }
 		                        ];
 
 				this.tablesColumnDefs = [ 
-		                            { className: "viewmode-label", key:"table", label:"Таблица", dropdownOptions : dTables, formatter: "dropdown", width : 737, maxAutoWidth : 737 },
+		                            { className: "viewmode-label", key:"table", label:Alfresco.util.message('lecm.meditor.lbl.table'), dropdownOptions : dTables, formatter: "dropdown", width : 737, maxAutoWidth : 737 },
 		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 } 
 		                        ];
 				this.tablesResponseSchema = { fields : [{key : "table"}] };
@@ -809,50 +809,50 @@ IT.component = IT.component || {};
 			var onSuccessAssoc = function ContentControl__populateAssoc_onSuccess(response) {
 				var r = response.json;
 				var dAssociations = [""];
-				var dTypes = ["",{label:"Любой",value:"d:any"},{label:"Текст",value:"d:text"},{label:"Контент",value:"d:content"},{label:"Целое",value:"d:int"},{label:"Дл.целое",value:"d:long"},{label:"Дробное",value:"d:float"},{label:"Дл.дробное",value:"d:double"},{label:"Дата",value:"d:date"},{label:"Дата/время",value:"d:datetime"},{label:"Булево",value:"d:boolean"},{label:"Имя типа",value:"d:qname"},{label:"Ссылка",value:"d:noderef"},{label:"Категория",value:"d:category"}];
+				var dTypes = ["",{label:Alfresco.util.message('lecm.meditor.lbl.any'),value:"d:any"},{label:Alfresco.util.message('lecm.meditor.lbl.text'),value:"d:text"},{label:Alfresco.util.message('lecm.meditor.lbl.content'),value:"d:content"},{label:Alfresco.util.message('lecm.meditor.lbl.integer'),value:"d:int"},{label:Alfresco.util.message('lecm.meditor.lbl.long'),value:"d:long"},{label:Alfresco.util.message('lecm.meditor.lbl.float'),value:"d:float"},{label:Alfresco.util.message('lecm.meditor.lbl.double'),value:"d:double"},{label:Alfresco.util.message('lecm.meditor.lbl.date'),value:"d:date"},{label:Alfresco.util.message('lecm.meditor.lbl.datetime'),value:"d:datetime"},{label:Alfresco.util.message('lecm.meditor.lbl.boolean'),value:"d:boolean"},{label:Alfresco.util.message('lecm.meditor.lbl.qname'),value:"d:qname"},{label:Alfresco.util.message('lecm.meditor.lbl.noderef'),value:"d:noderef"},{label:Alfresco.util.message('lecm.meditor.lbl.category'),value:"d:category"}];
 				//Категории
-				this.categoryDialogEl = {"name":{name:"name",label:"Категория",type:"input",value:""}};
+				this.categoryDialogEl = {"name":{name:"name",label:Alfresco.util.message('lecm.meditor.lbl.category'),type:"input",value:""}};
 				this.categoryColDefs = 	[
-		                       	 	{ className: "viewmode-label", key:"name", label:"Категория", formatter: this._formatText, width: 360, maxAutoWidth: 360 },
+		                       	 	{ className: "viewmode-label", key:"name", label:Alfresco.util.message('lecm.meditor.lbl.category'), formatter: this._formatText, width: 360, maxAutoWidth: 360 },
 		                       	 	{ key : "delete", label : "", formatter:this._formatActions, width: 15, maxAutoWidth: 15} 
 								];
 				this.categoryResponseSchema = { fields : [{key : "name"}] };
 				//Атрибуты
 				this.attributesDialogEl = {
-									"_name": { name: "_name", label: "Имя", type:"input", value: "" },
-									"title": { name: "title", label: "Заголовок", type:"input", value: "" },
-									"type": { name: "type", label: "Тип", type:"select", options: dTypes, showdefault: false },
-									"mandatory": { name: "mandatory", label: "Обязательный", type:"select", options: [{label:"Да",value:"true"},{label:"Нет",value:"false"}], value: "false", showdefault: false },
-									"_enabled": { name: "_enabled", label: "Индексировать", type:"select", options: [{label:"Да",value:"true"},{label:"Нет",value:"false"}], value: "false", showdefault: false }
+									"_name": { name: "_name", label: Alfresco.util.message('lecm.meditor.lbl.name'), type:"input", value: "" },
+									"title": { name: "title", label: Alfresco.util.message('lecm.meditor.lbl.title'), type:"input", value: "" },
+									"type": { name: "type", label: Alfresco.util.message('lecm.meditor.lbl.type'), type:"select", options: dTypes, showdefault: false },
+									"mandatory": { name: "mandatory", label: Alfresco.util.message('lecm.meditor.lbl.mandatory'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
+									"_enabled": { name: "_enabled", label: Alfresco.util.message('lecm.meditor.lbl.index'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false }
 									//"validator": { name: "validator", label: "Валидатор", type:"select", options: [""], showdefault: false },
 								};
 				this.attributesColumnDefs = [ 
-		                            { className: "viewmode-label", key:"_name", label:"Имя", formatter : this._formatText, width : 170, maxAutoWidth : 170 }, 
-		                            { className: "viewmode-label", key : "title", label : "Заголовок", formatter : this._formatText, width : 170, maxAutoWidth : 170 }, 
-		                            { className: "viewmode-label", key : "type", label : "Тип", dropdownOptions : dTypes, formatter : "dropdown", width : 100, maxAutoWidth : 100 }, 
-		                            { className: "viewmode-label", key : "mandatory", label : "Обязательный", formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key : "_enabled", label : "Индексировать", formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
+		                            { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter : this._formatText, width : 170, maxAutoWidth : 170 }, 
+		                            { className: "viewmode-label", key : "title", label : Alfresco.util.message('lecm.meditor.lbl.title'), formatter : this._formatText, width : 170, maxAutoWidth : 170 }, 
+		                            { className: "viewmode-label", key : "type", label : Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dTypes, formatter : "dropdown", width : 100, maxAutoWidth : 100 }, 
+		                            { className: "viewmode-label", key : "mandatory", label : Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
+		                            { className: "viewmode-label", key : "_enabled", label : Alfresco.util.message('lecm.meditor.lbl.index'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
 		                            //{ key : "validator", label : "Валидатор", width : 70, maxAutoWidth : 70, dropdownOptions: [""], formatter:  "dropdown" },
 		                            { key : "delete", label : "", formatter : this._formatActions, width : 15, maxAutoWidth : 15} 
 		                        ];
 				this.attribyteResponseSchema = { fields : [{key : "_id"}, {key : "_name"}, {key : "title"}, {key : "type"}, {key : "mandatory"}, {key : "_enabled"}, {key : "validator"}] };
 				//Ассоциации
 				this.associationsDialogEl = [
-				                    { name: "_name", label: "Имя", type:"input" },
-		                            { name: "title", label: "Заголовок", type:"input" },
-		                            { name: "class", label: "Тип", type:"select", options: dAssociations, showdefault: false },
-		                            { name: "mandatory", label: "Обязательная", type:"select", options: [{label:"Да",value:"true"}, {label:"Нет",value:"false"}], value: "false", showdefault: false },
-		                            { name: "many", label: "Множественная", type:"select", options: [{label:"Да",value:"true"}, {label:"Нет",value:"false"}], value: "false", showdefault: false },
+				                    { name: "_name", label: Alfresco.util.message('lecm.meditor.lbl.name'), type:"input" },
+		                            { name: "title", label: Alfresco.util.message('lecm.meditor.lbl.title'), type:"input" },
+		                            { name: "class", label: Alfresco.util.message('lecm.meditor.lbl.type'), type:"select", options: dAssociations, showdefault: false },
+		                            { name: "mandatory", label: Alfresco.util.message('lecm.meditor.lbl.mandatory'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"}, {label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
+		                            { name: "many", label: Alfresco.util.message('lecm.meditor.lbl.multiple'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"}, {label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
 		                        ];
 				for(j in r) {
 					dAssociations.push({label:r[j].title+" - "+r[j].name,value:r[j].name});
 				}
 				this.associationsColumnDefs = [
-				                    { className: "viewmode-label", key:"_name", label:"Имя", formatter: this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key:"title", label:"Заголовок", formatter: this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key:"class", label:"Тип", dropdownOptions : dAssociations, formatter: "dropdown", width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key:"mandatory", label:"Обязательная", formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
-		                            { className: "viewmode-label", key:"many", label:"Множественная", formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
+				                    { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
+		                            { className: "viewmode-label", key:"title", label:Alfresco.util.message('lecm.meditor.lbl.title'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
+		                            { className: "viewmode-label", key:"class", label:Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dAssociations, formatter: "dropdown", width : 100, maxAutoWidth : 100 },
+		                            { className: "viewmode-label", key:"mandatory", label:Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
+		                            { className: "viewmode-label", key:"many", label:Alfresco.util.message('lecm.meditor.lbl.multiple'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
 		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 } 
 		                        ];
 				this.associationResponseSchema = { fields : [{key : "_name"}, {key : "class"}, {key : "title"}, {key : "mandatory"}, {key : "many"}] };
@@ -895,7 +895,7 @@ IT.component = IT.component || {};
 				};// onSuccess
 				// Failure handler
 				var onFailure = function ContentControl_populateContent_onFailure(response) {
-					var elText = document.createTextNode("Ошибка получения данных");
+					var elText = document.createTextNode(Alfresco.util.message('lecm.meditor.msg.get.data.error'));
 					Dom.get(this.id+"_base").appendChild(elText);
 					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: failure");
 				};// onFailure
@@ -972,7 +972,7 @@ IT.component = IT.component || {};
 		    var target = oArgs.target;
 		    var column = this.getColumn(target);
 		    if (column.key == 'delete') {
-				if (confirm('Вы действительно хотите удалить строку?')) {
+				if (confirm(Alfresco.util.message('lecm.meditor.msg.approve.delete.row'))) {
 					this.deleteRow(target);
 					Bubbling.fire("mandatoryControlValueUpdated", this);
 				}
@@ -1019,37 +1019,37 @@ IT.component = IT.component || {};
 		    this.tablesDialog.render();
 			//Описание
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Input({ name: "model_description", label: "<b>Описание модели</b>", value: (this.model_description||""), help:"Описание модели"} );
+			var input = new IT.widget.Input({ name: "model_description", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.model.desc') + "</b>", value: (this.model_description||""), help:Alfresco.util.message('lecm.meditor.lbl.model.desc')} );
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Заголовок
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Input({ name: "typeTitle", label: "<b>Описание документа</b>", value: (this.typeTitle||""), help:"Описание документа" } );
+			var input = new IT.widget.Input({ name: "typeTitle", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.doc.desc') + "</b>", value: (this.typeTitle||""), help:Alfresco.util.message('lecm.meditor.lbl.doc.desc') } );
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Родительский документ
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Select({ name: "parentRef", label: "<b>Родительский документ</b>", help:"Родительский документ", options: [{label:"LECM BASE",value:"lecm-document:base"},{label:"LECM EDS BASE",value:"lecm-eds-document:base"}], value: (this.parentRef||"lecm-document:base"), showdefault: false });
+			var input = new IT.widget.Select({ name: "parentRef", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.parent.doc') + "</b>", help:Alfresco.util.message('lecm.meditor.lbl.parent.doc'), options: [{label:"LECM BASE",value:"lecm-document:base"},{label:"LECM EDS BASE",value:"lecm-eds-document:base"}], value: (this.parentRef||"lecm-document:base"), showdefault: false });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Шаблон строки представления
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Input({ name: "presentString", label: "<b>Шаблон строки представления</b>", value: (this.presentString||""), help:"Шаблон строки представления" });
+			var input = new IT.widget.Input({ name: "presentString", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.templ.pres.string') + "</b>", value: (this.presentString||""), help:Alfresco.util.message('lecm.meditor.lbl.templ.pres.string') });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//АРМ
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Input({ name: "armUrl", label: "<b>Страница списка документов</b>", value: (this.armUrl||""), help:"Страница списка документов" });
+			var input = new IT.widget.Input({ name: "armUrl", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.docs.list.page') + "</b>", value: (this.armUrl||""), help:Alfresco.util.message('lecm.meditor.lbl.docs.list.page') });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Автор
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Input({ name: "authorProperty", label: "<b>Автор</b>", value: (this.authorProperty||""), help:"Автор" });
+			var input = new IT.widget.Input({ name: "authorProperty", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.author') + "</b>", value: (this.authorProperty||""), help:Alfresco.util.message('lecm.meditor.lbl.author') });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Рег номера
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Input({ name: "regNumbersProperties", label: "<b>Рег номера</b>", value: (this.regNumbersProperties||""), help:"Рег номера" });
+			var input = new IT.widget.Input({ name: "regNumbersProperties", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.reg.numbers') + "</b>", value: (this.regNumbersProperties||""), help:Alfresco.util.message('lecm.meditor.lbl.reg.numbers') });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			
@@ -1061,12 +1061,12 @@ IT.component = IT.component || {};
 			
 			//Рейтингуемый
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Select({ name: "rating", label: "<b>Рейтингуемый</b>", help:"Рейтингуемый", options: [{label:"Да",value:"true"},{label:"Нет",value:"false"}], value: (this.rating||"false"), showdefault: false });
+			var input = new IT.widget.Select({ name: "rating", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.rating') + "</b>", help:Alfresco.util.message('lecm.meditor.lbl.rating'), options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: (this.rating||"false"), showdefault: false });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//ЮЗД
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Select({ name: "signed", label: "<b>Участвует в ЮЗД</b>", help:"Участвует в ЮЗД", options: [{label:"Да",value:"true"},{label:"Нет",value:"false"}], value: (this.signed||"false"), showdefault: false });
+			var input = new IT.widget.Select({ name: "signed", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.take.part.edi') + "</b>", help:Alfresco.util.message('lecm.meditor.lbl.take.part.edi'), options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: (this.signed||"false"), showdefault: false });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Категории вложений
@@ -1079,7 +1079,7 @@ IT.component = IT.component || {};
 			});
 			var categoryAddSpan = document.createElement("span");
 			if (Button) {
-                var oYUIButton = new Button({ label: "Добавить", type: "button" });
+                var oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
                 oYUIButton.appendTo(categoryAddSpan);
                 oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.categoryDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
@@ -1099,7 +1099,7 @@ IT.component = IT.component || {};
 			});
 			var attributesAddSpan = document.createElement("span");
 			if (Button) {
-                var oYUIButton = new Button({ label: "Добавить", type: "button" });
+                var oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
                 oYUIButton.appendTo(attributesAddSpan);
                 oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.attributesDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
@@ -1119,7 +1119,7 @@ IT.component = IT.component || {};
 			});
             var associationsAddSpan = document.createElement("span");
 			if (Button) {
-                oYUIButton = new Button({ label: "Добавить", type: "button" });
+                oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
                 oYUIButton.appendTo(associationsAddSpan);
                 oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.associationsDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
@@ -1134,7 +1134,7 @@ IT.component = IT.component || {};
 			});
             var tablesAddSpan = document.createElement("span");
 			if (Button) {
-                oYUIButton = new Button({ label: "Добавить", type: "button" });
+                oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
                 oYUIButton.appendTo(tablesAddSpan);
                 oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.tablesDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}

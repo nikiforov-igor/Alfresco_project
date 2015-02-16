@@ -23,12 +23,12 @@ IT.widget = IT.widget || {};
 
 		var header = document.createElement("div");
 		// Dom.addClass(header, "hd");
-		header.innerHTML = "Добавить";
+		header.innerHTML = Alfresco.util.message('lecm.meditor.lbl.add');
 
 		// YAHOO.util.Event.addListener(header, "mousemove", YAHOO.util.DragDropMgr.handleMouseMove);
 		var oSpan = document.createElement("span");
 		if (Button) {
-			oYUIButton = new Button({ label: "Добавить", type: "button" });
+			oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
 			//oYUIButton.set("id", id+"_btn");
 			oYUIButton.appendTo(oSpan);
 			oYUIButton.set("onclick", { 

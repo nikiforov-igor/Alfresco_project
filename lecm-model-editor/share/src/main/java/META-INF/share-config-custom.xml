@@ -59,7 +59,7 @@
                		<set id="content" label-id="it.model.content" />
                		<field id="cm:name" set="parameters">
 		                <constraint-handlers>
-			                <constraint type="REGEX" validation-handler="LogicECM.module.modelNameValidation" message="Недопустимое имя модели" event="keyup"/>
+			                <constraint type="REGEX" validation-handler="LogicECM.module.modelNameValidation" message-id="lecm.meditor.msg.invalid.model.name" event="keyup"/>
 		                </constraint-handlers>
                		</field>
                		<field id="cm:modelActive" set="parameters" />
