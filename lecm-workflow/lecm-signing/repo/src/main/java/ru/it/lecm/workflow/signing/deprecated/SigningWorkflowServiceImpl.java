@@ -28,6 +28,7 @@ import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowService;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 
 /**
  *
@@ -285,6 +286,9 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		if (resultListRoot == null) {
 			try {
 				resultListRoot = createFolder(parentRef, "Подписание");
+			} catch(DuplicateChildNodeNameException ex) {
+				logger.warn("Folder 'Подписание' already exists for document {}. Caused by: {}", parentRef, ex.getMessage());
+				resultListRoot = getFolder(parentRef, "Подписание");
 			} catch (WriteTransactionNeededException ex) {
 				logger.debug("Can't create folder.", ex);
 				throw new RuntimeException(ex);
