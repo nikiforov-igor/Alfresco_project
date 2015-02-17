@@ -273,6 +273,7 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/reports-editor-repo/actions/deploy-report.xml</value>
+                <value>alfresco/module/reports-editor-repo/actions/undeploy-report.xml</value>
             </list>
         </property>
     </bean>

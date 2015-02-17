@@ -187,6 +187,63 @@
                         });
                     },
 
+                    onActionUnDeploy: function (item) {
+                        var me = this;
+                        Alfresco.util.PopupManager.displayPrompt({
+                            title: this.msg("lecm.re.lbl.unregister-report"),
+                            text: this.msg("lecm.re.lbl.sure-undeploy-report"),
+                            buttons: [
+                                {
+                                    text: this.msg("lecm.re.msg.deploy.yes"),
+                                    handler: function () {
+                                        this.destroy();
+                                        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/undeployReport?reportCode={reportCode}";
+                                        sUrl = YAHOO.lang.substitute(sUrl, {
+                                            reportCode: item.itemData["prop_lecm-rpeditor_reportCode"].value
+                                        });
+                                        me._showSplash();
+                                        var callback = {
+                                            success: function (oResponse) {
+                                                oResponse.argument.parent._hideSplash();
+                                                item.itemData["prop_lecm-rpeditor_reportIsDeployed"] = {value: false, displayValue: false};
+                                                YAHOO.Bubbling.fire("dataItemUpdated",
+                                                        {
+                                                            item: item,
+                                                            bubblingLabel: me.options.bubblingLabel
+                                                        });
+                                                Alfresco.util.PopupManager.displayMessage(
+                                                        {
+                                                            text: me.msg("lecm.re.msg.undeploy.success"),
+                                                            displayTime: 3
+                                                        });
+                                            },
+                                            failure: function (oResponse) {
+                                                oResponse.argument.parent._hideSplash();
+                                                Alfresco.util.PopupManager.displayMessage(
+                                                        {
+                                                            text: me.msg("lecm.re.msg.undeploy.error"),
+                                                            displayTime: 3
+                                                        });
+                                            },
+                                            argument: {
+                                                parent: me
+                                            },
+                                            timeout: 30000
+                                        };
+                                        YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                                    }
+                                },
+                                {
+                                    text: this.msg("lecm.re.msg.deploy.no"),
+                                    handler: function dlA_onActionDelete_cancel() {
+                                        this.destroy();
+                                    },
+                                    isDefault: true
+                                }
+                            ]
+                        });
+                    },
+
                     _showSplash: function () {
                         this.splashScreen = Alfresco.util.PopupManager.displayMessage(
                                 {
@@ -330,6 +387,17 @@
                                 showExtendSearchBlock: false,
                                 forceSubscribing: true,
                                 actions: [
+                                    {
+                                        type: "datagrid-action-link-${reportsLabel}",
+                                        id: "onActionUnDeploy",
+                                        permission: "edit",
+                                        label: "${msg("actions.undeploy")}",
+                                        evaluator: function (rowData) {
+                                            var itemData = rowData.itemData;
+                                            return itemData["prop_lecm-rpeditor_reportIsDeployed"].value
+                                                    || itemData["prop_lecm-rpeditor_reportIsDeployed"].value == "true";
+                                        }
+                                    },
                                     {
                                         type: "datagrid-action-link-${reportsLabel}",
                                         id: "onActionDeploy",
