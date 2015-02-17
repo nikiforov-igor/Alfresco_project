@@ -60,15 +60,17 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                ReportsEditorModel.TYPE_REPORT_TEMPLATE, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, new JavaBehaviour(this, "onCreateAssociation"));
+                ReportsEditorModel.TYPE_REPORT_TEMPLATE, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     @Override
     public void onCreateNode(ChildAssociationRef childAssociationRef) {
-        NodeRef parent = childAssociationRef.getParentRef();
+        NodeRef parent = childAssociationRef.getParentRef(); // директория "Шаблоны" или дескриптор Отчета
         QName parentType = nodeService.getType(parent);
         try {
-            if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) || parentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
+            // Вариант 1 - нода шаблона создается внутри дескриптора отчета
+            if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)
+                    || parentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
                 // связываем с отчетом
                 nodeService.createAssociation(parent, childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
 
@@ -81,7 +83,7 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
                     nodeService.setAssociations(childAssociationRef.getChildRef(),
                             ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(templateFile));
                 }
-            } else {
+            } else {// Вариант 2 - нода шаблона создается внутри справочника Шаблонов (путем копирования или реального создания)
                 NodeRef template = childAssociationRef.getChildRef();
                 List<AssociationRef> targetAssocs =
                         nodeService.getTargetAssocs(childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
@@ -92,6 +94,7 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
                     if (nodeService.exists(templateFile)) {
                         NodeRef parentReport = nodeService.getPrimaryParent(templateFile).getParentRef();
                         QName parentReportType = nodeService.getType(parentReport);
+                        // если мы скопировали шаблон - нужно скопировать и файл шаблона
                         if (parentReportType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) ||
                                 parentReportType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
                             NodeRef copiedFile = copyService.copyAndRename(templateFile, parent, ContentModel.ASSOC_CONTAINS, null, false);
@@ -110,14 +113,14 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
     public void onCreateAssociation(AssociationRef nodeAssocRef) {
         NodeRef targetFile = nodeAssocRef.getTargetRef();
         NodeRef template = nodeAssocRef.getSourceRef();
-        NodeRef report = nodeService.getPrimaryParent(nodeAssocRef.getSourceRef()).getParentRef();
 
         if (nodeService.exists(targetFile)) {
             NodeRef parent = nodeService.getPrimaryParent(targetFile).getParentRef();
             QName parentType = nodeService.getType(parent);
             if (!parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) && !parentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
-                NodeRef templateParent = nodeService.getPrimaryParent(template).getParentRef();
-                QName templateParentType = nodeService.getType(templateParent);
+                // 2 случая: загружаем новый и берем из temp, берем из готовых шаблонов
+                NodeRef report = nodeService.getPrimaryParent(template).getParentRef();
+                QName templateParentType = nodeService.getType(report);
                 if (templateParentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) ||
                         templateParentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
                     // подчистить директорию с отчетом
@@ -131,13 +134,15 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
                             nodeService.deleteNode(child.getChildRef());
                         }
                     }
-                    // если родитель - не шаблон, переносим файл и удаляем из прежнего места
+                    // так как родитель - не шаблон, переносим файл и удаляем из прежнего места
                     NodeRef copiedFile = copyService.copyAndRename(targetFile, report, ContentModel.ASSOC_CONTAINS, null, false);
                     if (copiedFile != null) {
                         List<AssociationRef> oldFiles = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
                         for (AssociationRef oldFile : oldFiles) { // oldTemplate и targetFile
                             NodeRef oldFileRef = oldFile.getTargetRef();
-                            if (nodeService.exists(oldFileRef) && !nodeService.hasAspect(oldFileRef, ContentModel.ASPECT_PENDING_DELETE)) {
+                            if (nodeService.exists(oldFileRef)
+                                    && !targetFile.equals(oldFileRef)
+                                    && !nodeService.hasAspect(oldFileRef, ContentModel.ASPECT_PENDING_DELETE)) {
                                 nodeService.addAspect(oldFileRef, ContentModel.ASPECT_TEMPORARY, null);
                                 nodeService.deleteNode(oldFileRef);
                             }
