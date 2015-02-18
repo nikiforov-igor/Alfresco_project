@@ -59,7 +59,7 @@ public class BaseWebScriptBean extends BaseWebScript {
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
-	
+
 	public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
@@ -319,5 +319,10 @@ public class BaseWebScriptBean extends BaseWebScript {
 			}
 		}
 		return null;
+	}
+
+	public boolean isAspect(String prefixedType) {
+		QName typeQName = QName.createQName(prefixedType, namespaceService);
+		return dictionaryService.getAspect(typeQName) != null;
 	}
 }
