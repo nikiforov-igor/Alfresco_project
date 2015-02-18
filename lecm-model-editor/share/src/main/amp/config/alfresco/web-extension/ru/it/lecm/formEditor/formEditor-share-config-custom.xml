@@ -112,10 +112,17 @@
 					<show id="lecm-forms-editor:attr-index"/>
 					<show id="lecm-forms-editor:attr-set"/>
 					<show id="lecm-forms-editor:attr-tab"/>
+					<show id="lecm-forms-editor:attr-help"/>
+					<show id="lecm-forms-editor:attr-mandatory"/>
 					<show id="lecm-forms-editor:attr-control"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-forms-editor:attr-name" read-only="true"/>
+					<field id="lecm-forms-editor:attr-mandatory">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
+							<control-param name="options">true|Да,false|Нет</control-param>
+						</control>
+					</field>
 					<field id="lecm-forms-editor:attr-control">
 						<control template="/ru/it/lecm/documentforms/controls/form-field-component-control.ftl"/>
 					</field>
@@ -133,8 +140,16 @@
 					<show id="lecm-forms-editor:attr-index"/>
 					<show id="lecm-forms-editor:attr-set"/>
 					<show id="lecm-forms-editor:attr-tab"/>
-					<show id="lecm-forms-editor:attr-control"/>
+					<show id="lecm-forms-editor:attr-help"/>
+					<show id="lecm-forms-editor:attr-mandatory"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-forms-editor:attr-mandatory">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
+							<control-param name="options">true|Да,false|Нет</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>

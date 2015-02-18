@@ -25,6 +25,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -57,6 +58,11 @@ public class FormsEditorBeanImpl extends BaseBean {
 	public static final QName PROP_ATTR_TAB = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-tab");
 	public static final QName PROP_ATTR_SET = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-set");
 	public static final QName PROP_ATTR_CONTROL = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-control");
+	public static final QName PROP_ATTR_MANDATORY = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-mandatory");
+	public static final QName PROP_ATTR_FOR_MODE = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-for-mode");
+	public static final QName PROP_ATTR_DESCRIPTION = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-description");
+	public static final QName PROP_ATTR_HELP = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-help");
+	public static final QName PROP_ATTR_READ_ONLY = QName.createQName(FORM_EDITOR_NAMESPACE_URI, "attr-read-only");
 
 	public static final String FORMS_EDITOR_ROOT_ID = "FORMS_EDITOR_ROOT_ID";
 	public static final String FORMS_EDITOR_MODELS_DEPLOY_UUID = "lecm_forms_container";
@@ -475,6 +481,10 @@ public class FormsEditorBeanImpl extends BaseBean {
 			    xmlw.writeStartElement("show");
 				String attrName = (String) nodeService.getProperty(field, PROP_ATTR_NAME);
 				xmlw.writeAttribute("id", attrName);
+				Serializable forMode = nodeService.getProperty(field, PROP_ATTR_FOR_MODE);
+				if (forMode != null && !forMode.toString().trim().isEmpty()) {
+					xmlw.writeAttribute("for-mode", forMode.toString());
+				}
 			    xmlw.writeEndElement();
 			}
 		}
@@ -496,6 +506,26 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 				String attrLabel = (String) nodeService.getProperty(field, PROP_ATTR_TITLE);
 				xmlw.writeAttribute("label", attrLabel);
+
+				Serializable mandatory = nodeService.getProperty(field, PROP_ATTR_MANDATORY);
+				if (mandatory != null && !mandatory.toString().trim().isEmpty()) {
+					xmlw.writeAttribute("mandatory", mandatory.toString());
+				}
+
+				Serializable description = nodeService.getProperty(field, PROP_ATTR_DESCRIPTION);
+				if (description != null && !description.toString().trim().isEmpty()) {
+					xmlw.writeAttribute("description", description.toString());
+				}
+
+				Serializable help = nodeService.getProperty(field, PROP_ATTR_HELP);
+				if (help != null && !help.toString().trim().isEmpty()) {
+					xmlw.writeAttribute("help", help.toString());
+				}
+
+				Serializable readOnly = nodeService.getProperty(field, PROP_ATTR_READ_ONLY);
+				if (readOnly != null && !readOnly.toString().trim().isEmpty()) {
+					xmlw.writeAttribute("read-only", readOnly.toString());
+				}
 
 				String tab = (String) nodeService.getProperty(field, PROP_ATTR_TAB);
 				if (tab != null && tab.trim().length() == 0) {
