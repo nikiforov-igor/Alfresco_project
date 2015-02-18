@@ -168,7 +168,9 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				var query = getFilterParams(argsSearchTerm, parentXPath);
 
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
-                    var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders);
+                    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+
+                    var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders, ctx);
                     if (selectableQuery !== "") {
                         query = (query !== "" ? (query + ' AND (') : '(') + selectableQuery + ')';
                     }
@@ -369,27 +371,29 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 	}
 }
 
-function getItemSelectableQuery(selectableType, showFolders) {
-	var selectable = '', types, typesLength, type;
+function getItemSelectableQuery(selectableType, showFolders, ctx) {
+    var selectable = '';
 
-	if (selectableType) {
-		types = selectableType.split(",");
-		typesLength = types.length;
-		for (var i = 0; i < typesLength; i++) {
-			type = types[i];
-			if (type.length > 0) {
-				var isAspect = base.isAspect(type);
-				selectable = (selectable ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + '"' + selectableType + '"';
-			}
-	}
-		if (selectable) {
-			selectable = "(" + selectable + ")";
-		}
-	}
+    var dictionaryService = ctx.getBean("dictionaryService");
+    var namespaceService = ctx.getBean("namespaceService");
 
-	selectable = selectable + (selectable ? " OR (" : "(")
-		+ ('((TYPE:"cm:folder" OR TYPE:"app:folderlink") AND NOT TYPE:"cm:systemfolder") AND ' + (showFolders == "true" ? 'ISNOTNULL:"cm:name"' : 'ISNULL:"cm:name"')) + ')';
-	return selectable;
+    if (selectableType !== null && selectableType !== "") {
+        var types = selectableType.split(",");
+        for (var i = 0; i < types.length; i++) {
+            if (types[i].length > 0) {
+                var typeQName = Packages.org.alfresco.service.namespace.QName.createQName(types[i], namespaceService);
+                var isAspect = (dictionaryService.getAspect(typeQName) != null);
+                selectable = (selectable !== "" ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + "\"" + selectableType + "\"";
+            }
+        }
+        if (selectable !== "") {
+            selectable = "(" + selectable + ")";
+        }
+    }
+
+    selectable = selectable + (selectable !== "" ? " OR (" : "(")
+        + ("((TYPE:\"cm:folder\" OR TYPE:\"app:folderlink\") AND NOT TYPE:\"cm:systemfolder\") AND " + (showFolders == "true" ? "ISNOTNULL:\"cm:name\"" : "ISNULL:\"cm:name\"")) + ")";
+    return selectable;
 }
 
 function isItemSelectable(node, selectableType) {
