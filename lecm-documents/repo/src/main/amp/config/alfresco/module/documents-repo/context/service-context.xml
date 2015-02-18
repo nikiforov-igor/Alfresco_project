@@ -39,8 +39,8 @@
         </property>
         <property name="labels">
             <list>
-                <value>alfresco/module/documents-repo/messages/lecm-documents</value>
-                <value>alfresco/module/documents-repo/messages/lecm-document-aspects-model</value>
+                <value>alfresco/module/documents-repo/messages/lecm-document-model</value>
+                <value>alfresco/module/documents-repo/messages/lecm-document-workflow-model</value>
             </list>
         </property>
     </bean>
@@ -52,6 +52,11 @@
                 <value>alfresco/module/documents-repo/models/lecm-document-member-model.xml</value>
             </list>
         </property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/documents-repo/messages/lecm-document-member-model</value>
+			</list>
+		</property>
     </bean>
 
 	<bean id="documents.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
@@ -65,7 +70,7 @@
 		</property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/documents-repo/messages/lecm-documents-dictionaries-model</value>
+				<value>alfresco/module/documents-repo/messages/lecm-document-dictionaries-model</value>
 				<value>alfresco/module/documents-repo/messages/lecm-delivery-method-dictionary-model</value>
 				<value>alfresco/module/documents-repo/messages/lecm-doc-type-dictionary-model</value>
 			</list>
@@ -96,6 +101,11 @@
                 <value>alfresco/module/documents-repo/models/lecm-document-frequency-analysis-model.xml</value>
             </list>
         </property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/documents-repo/messages/lecm-document-frequency-analysis-model</value>
+			</list>
+		</property>
     </bean>
 
     <bean id="frequencyAnalysisService" init-method="init" class="ru.it.lecm.documents.beans.DocumentFrequencyAnalysisServiceImpl" parent="baseBean"
@@ -136,6 +146,11 @@
                 <value>alfresco/module/documents-repo/models/lecm-connection-model.xml</value>
             </list>
         </property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/documents-repo/messages/lecm-connection-model</value>
+			</list>
+		</property>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionTypesBootstrap" parent="dictionaryModelBootstrap"
@@ -145,6 +160,11 @@
                 <value>alfresco/module/documents-repo/models/lecm-connection-types-model.xml</value>
             </list>
         </property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/documents-repo/messages/lecm-connection-types-model</value>
+			</list>
+		</property>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionAspectBootstrap" parent="dictionaryModelBootstrap"
@@ -154,6 +174,11 @@
                 <value>alfresco/module/documents-repo/models/lecm-connection-aspect-model.xml</value>
             </list>
         </property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/documents-repo/messages/lecm-connection-aspect-model</value>
+			</list>
+		</property>
     </bean>
 
     <bean id="documents.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
@@ -162,17 +187,17 @@
                         businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-connection-types.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-connection-available-types.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-document-subjects.xml</value>
-	            <value>alfresco/module/documents-repo/models/lecm-file-register.xml</value>
-	            <value>alfresco/module/documents-repo/models/lecm-delivery-method.xml</value>
-	            <value>alfresco/module/documents-repo/models/lecm-document-type.xml</value>
-			    <value>alfresco/module/documents-repo/models/lecm-file-register-objectType-items.xml</value>
-			    <value>alfresco/module/documents-repo/models/lecm-reg-data-objectType-items.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-document-type-items.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-delivery-method-items.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-document-objectType-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-connection-available-types.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-document-subjects.xml</value>
+	            <value>alfresco/module/documents-repo/dictionaries/lecm-file-register.xml</value>
+	            <value>alfresco/module/documents-repo/dictionaries/lecm-delivery-method.xml</value>
+	            <value>alfresco/module/documents-repo/dictionaries/lecm-document-type.xml</value>
+			    <value>alfresco/module/documents-repo/dictionaries/lecm-file-register-objectType-items.xml</value>
+			    <value>alfresco/module/documents-repo/dictionaries/lecm-reg-data-objectType-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-document-type-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-delivery-method-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-document-objectType-items.xml</value>
 		    </list>
 	    </property>
     </bean>
@@ -181,7 +206,7 @@
           depends-on="documents.LogicEcmConnectionTypesBootstrap">
 	    <property name="dictionaries">
 		    <list>
-			    <value>alfresco/module/documents-repo/models/lecm-connection-types-items.xml</value>
+			    <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types-items.xml</value>
 		    </list>
 	    </property>
     </bean>
@@ -288,7 +313,7 @@
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
-                <value>alfresco/module/documents-repo/models/lecm-business-journal-eventCategory-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
             </list>
         </property>
     </bean>
