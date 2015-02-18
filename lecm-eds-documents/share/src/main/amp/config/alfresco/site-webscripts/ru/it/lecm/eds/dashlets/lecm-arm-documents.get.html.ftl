@@ -37,7 +37,7 @@
 //]]></script>
 
 <div class="dashlet arm-documents">
-    <div class="title">СЭД: <#if settings?? && settings.title?length == 0>Дашлет не настроен<#else>${settings.title}</#if></div>
+    <div class="title">${msg("lecm.edsdocs.ttl.edi")}: <#if settings?? && settings.title?length == 0>${msg("lecm.edsdocs.ttl.dashlet.not.set")}<#else>${settings.title}</#if></div>
     <div class="toolbar flat-button">
         <div class="hidden">
          <span class="align-left yui-button yui-menu-button" id="${id}-filters">

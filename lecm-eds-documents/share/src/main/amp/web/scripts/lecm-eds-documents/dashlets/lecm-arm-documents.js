@@ -119,7 +119,7 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
 
                     this.dataTable.getRecordSet().reset();
                     this.dataTable.render();
-                    this.dataTable.showTableMessage("Загрузка данных...");
+                    this.dataTable.showTableMessage(Alfresco.util.message('lecm.edsdocs.msg.loading'));
                     this.loadDocuments();
                     this.services.preferences.set(this.buildPreferences(PREF_FILTER), this.widgets.filters.get("label"));
                 }
@@ -164,7 +164,7 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
                             }
                         });
                 } else {
-                    this.dataTable.set("MSG_EMPTY", "Этот дашлет не настроен");
+                    this.dataTable.set("MSG_EMPTY", Alfresco.util.message('lecm.edsdocs.msg.dashlet.not.config'));
                     this.dataTable.render();
                 }
             },
@@ -199,8 +199,8 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
                     this.dataTable.getTheadEl().hidden = true;
                     this.dataTable.getTableEl().className += "eds-documents";
 
-                    this.dataTable.set("MSG_EMPTY", "Нет документов");
-                    this.dataTable.set("MSG_ERROR", "Ошибка при выполнении запроса");
+                    this.dataTable.set("MSG_EMPTY", Alfresco.util.message('lecm.edsdocs.msg.no.docs'));
+                    this.dataTable.set("MSG_ERROR", Alfresco.util.message('lecm.edsdocs.msg.request.error'));
 
                     YAHOO.util.Event.addListener(this.id + "-main", "scroll", this.onContainerScroll, this);
 
