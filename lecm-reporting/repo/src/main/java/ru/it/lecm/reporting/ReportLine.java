@@ -103,7 +103,7 @@ public class ReportLine {
       }
 
       if(returnString != null) {
-         returnString = returnString.replaceAll("\'", "_").replaceAll("\"", "_");
+         returnString = returnString.replace("\'", "\'\'");
       }
 
       return returnString;
