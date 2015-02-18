@@ -14,7 +14,7 @@
 	<bean class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
 		<property name="resourceBundles">
 			<list>
-				<!-- <value>alfresco.web-extension.ru.it.lecm.barcode.form</value> -->
+				<value>alfresco.web-extension.ru.it.lecm.barcode.barcode</value>
 			</list>
 		</property>
 	</bean>

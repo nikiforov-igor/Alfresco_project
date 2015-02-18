@@ -22,14 +22,14 @@
    }
    </style>
 <table>
-	<caption><h3>Свойства</h3></caption>
+	<caption><h3>${msg('lecm.viewtps.lbl.properties')}</h3></caption>
 	<tr>
-		<th>Имя</th>
-		<th>Описание</th>
-		<th>Тип</th>
-		<th>По-умолчанию</th>
-		<th>Обязательное</th>
-		<th>Индекс</th>
+		<th>${msg('lecm.viewtps.lbl.name')}</th>
+		<th>${msg('lecm.viewtps.lbl.description')}</th>
+		<th>${msg('lecm.viewtps.lbl.type')}</th>
+		<th>${msg('lecm.viewtps.lbl.default')}</th>
+		<th>${msg('lecm.viewtps.lbl.mandatory')}</th>
+		<th>${msg('lecm.viewtps.lbl.index')}</th>
 	</tr>
 	<#assign orders = propsHierarchy?keys>
 	<#list orders?sort as order>
@@ -62,14 +62,14 @@
 
 </br>
 <table>
-	<caption><h3>Ассоциации</h3></caption>
+	<caption><h3>${msg('lecm.viewtps.lbl.associations')}</h3></caption>
 	<tr>
-		<th>Имя</th>
-		<th>Описание</th>
-		<th>Тип цели</th>
-		<th>Обязательность цели</th>
-		<th>Множественность цели</th>
-		<th>Дочерняя</th>
+		<th>${msg('lecm.viewtps.lbl.name')}</th>
+		<th>${msg('lecm.viewtps.lbl.description')}</th>
+		<th>${msg('lecm.viewtps.lbl.target.type')}</th>
+		<th>${msg('lecm.viewtps.lbl.target.mandatory')}</th>
+		<th>${msg('lecm.viewtps.lbl.target.many')}</th>
+		<th>${msg('lecm.viewtps.lbl.child')}</th>
 	</tr>
 	<#assign orders = assocsHierarchy?keys>
 	<#list orders?sort as order>
@@ -111,10 +111,10 @@
 
 </br>
 <table>
-	<caption><h3>Аспекты</h3></caption>
+	<caption><h3>${msg('lecm.viewtps.lbl.aspects')}</h3></caption>
 	<tr>
-		<th>Имя</th>
-		<th>Описание</th>
+		<th>${msg('lecm.viewtps.lbl.name')}</th>
+		<th>${msg('lecm.viewtps.lbl.description')}</th>
 	</tr>
 	<#assign orders = aspectsHierarchy?keys>
 	<#list orders?sort as order>

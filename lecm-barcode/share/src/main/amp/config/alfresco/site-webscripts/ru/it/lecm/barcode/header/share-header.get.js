@@ -7,7 +7,7 @@
 		name: 'logic_ecm/search-barcode/searchBarcode',
 		config: {
 			id: 'SEARCH_BARCODE',
-			label: 'Поиск по ШК'
+			label: msg.get('lecm.barcode.lbl.search.for.barcode')
 		}
 	};
 

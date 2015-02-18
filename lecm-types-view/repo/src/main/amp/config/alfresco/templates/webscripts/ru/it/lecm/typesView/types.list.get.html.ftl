@@ -18,11 +18,11 @@
    }
    </style>
 <table>
-	<caption><h3>Типы</h3></caption>
+	<caption><h3>${msg('lecm.viewtps.lbl.types')}</h3></caption>
 	<tr>
-		<th>Номер</th>
-		<th>Имя</th>
-		<th>Описание</th>
+		<th>${msg('lecm.viewtps.lbl.number')}</th>
+		<th>${msg('lecm.viewtps.lbl.name')}</th>
+		<th>${msg('lecm.viewtps.lbl.description')}</th>
 	</tr>
 	<#assign it = 1>
 	<#list typeNames as typeName>
@@ -42,11 +42,11 @@
 </table>
 </br>
 <table>
-	<caption><h3>Аспекты</h3></caption>
+	<caption><h3>${msg('lecm.viewtps.lbl.aspects')}</h3></caption>
 	<tr>
-		<th>Номер</th>
-		<th>Имя</th>
-		<th>Описание</th>
+		<th>${msg('lecm.viewtps.lbl.number')}</th>
+		<th>${msg('lecm.viewtps.lbl.name')}</th>
+		<th>${msg('lecm.viewtps.lbl.description')}</th>
 	</tr>
 	<#assign it = 1>
 	<#list aspectNames as aspectName>

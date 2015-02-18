@@ -104,7 +104,7 @@ define(["dojo/_base/declare",
 					Dom.setStyle(this.emptyResultId, "display", "block");
 				} else {
 					this.emptyResultId = this.popup.id + '_empty';
-					domConstruct.place('<div id="' + this.emptyResultId + '" type="text" value="" class="empty-result">Документ не найден</div>', this.popup.domNode);
+					domConstruct.place('<div id="' + this.emptyResultId + '" type="text" value="" class="empty-result">' + Alfresco.util.message('lecm.barcode.doc.not.found') + '</div>', this.popup.domNode);
 				}
 
 				Dom.get(this.searchInputId).select();
