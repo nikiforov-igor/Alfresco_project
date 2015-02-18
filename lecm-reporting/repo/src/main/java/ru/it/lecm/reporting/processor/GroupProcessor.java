@@ -45,8 +45,7 @@ public class GroupProcessor extends PropertyProcessor {
 
    public void processGroups(String tableName) {
       logger.debug("enter processGroups");
-      ReportLine rl = new ReportLine(tableName, this.getSimpleDateFormat(), this.reportingHelper);
-      this.dbhb.openReportingConnection();
+      ReportLine rl = new ReportLine(tableName, this.reportingHelper);
 
       try {
          Properties e = new Properties();
@@ -90,7 +89,6 @@ public class GroupProcessor extends PropertyProcessor {
          logger.fatal("processGroups - terrible error:");
          var19.printStackTrace();
       } finally {
-         this.dbhb.closeReportingConnection();
          rl.reset();
       }
 

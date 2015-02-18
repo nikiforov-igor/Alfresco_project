@@ -57,11 +57,9 @@ public class SitePersonProcessor extends PropertyProcessor {
 
    public void processSitePerson(String tableName) throws Exception {
       logger.debug("enter processSitePerson");
-      this.dbhb.openReportingConnection();
-
       try {
          tableName = this.reportingHelper.getValidTableName(tableName);
-         ReportLine e = new ReportLine(tableName, this.getSimpleDateFormat(), this.reportingHelper);
+         ReportLine e = new ReportLine(tableName, this.reportingHelper);
          Properties classToColumnType = this.getClassToColumnType();
          Properties replacementTypes = this.getReplacementDataType();
          Properties definition = new Properties();
@@ -116,8 +114,6 @@ public class SitePersonProcessor extends PropertyProcessor {
       } catch (Exception var25) {
          logger.fatal("Exception selectFromWhere: " + var25.getMessage());
          throw new Exception(var25);
-      } finally {
-         this.dbhb.closeReportingConnection();
       }
 
       if(logger.isDebugEnabled()) {

@@ -101,12 +101,11 @@ public class PersonProcessor extends PropertyProcessor {
 
    public void processPersons(String tableName) throws Exception {
       logger.debug("Enter processPerson");
-      this.dbhb.openReportingConnection();
 
       try {
          tableName = this.dbhb.fixTableColumnName(tableName);
          this.dbhb.createEmptyTables(tableName);
-         ReportLine e = new ReportLine(tableName, this.getSimpleDateFormat(), this.reportingHelper);
+         ReportLine e = new ReportLine(tableName, this.reportingHelper);
          Object stmt = null;
          Properties definition = new Properties();
          long highestDbId = 0L;
@@ -201,8 +200,6 @@ public class PersonProcessor extends PropertyProcessor {
       } catch (Exception var27) {
          logger.fatal("Exception processPersson: " + var27.getMessage());
          throw new Exception(var27);
-      } finally {
-         this.dbhb.closeReportingConnection();
       }
 
       if(logger.isDebugEnabled()) {

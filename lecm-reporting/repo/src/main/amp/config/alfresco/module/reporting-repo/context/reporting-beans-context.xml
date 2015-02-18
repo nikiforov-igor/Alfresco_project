@@ -216,7 +216,7 @@
     </bean>
 
 	
-	<bean id="ReportingHelper" class="ru.it.lecm.reporting.ReportingHelper" >
+	<bean id="ReportingHelper" class="ru.it.lecm.reporting.ReportingHelper" init-method="init">
 		<property name="nodeService">
 			<ref bean="NodeService" />
 		</property>

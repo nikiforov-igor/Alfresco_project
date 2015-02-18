@@ -62,8 +62,6 @@ public class AuditingExportProcessor extends PropertyProcessor {
    void processQueueValues(String table) throws Exception {}
 
    public void havestNodes(NodeRef harvestDefinition) {
-      this.dbhb.openReportingConnection();
-
       try {
          String e = (String)this.getNodeService().getProperty(harvestDefinition, ReportingModel.PROP_REPORTING_AUDIT_QUERIES);
          if(e != null) {
@@ -91,10 +89,7 @@ public class AuditingExportProcessor extends PropertyProcessor {
       } catch (Exception var14) {
          logger.fatal("Exception havestNodes: " + var14.getMessage());
          throw new AlfrescoRuntimeException(var14.getMessage());
-      } finally {
-         this.dbhb.closeReportingConnection();
       }
-
    }
 
    public void processAuditingExport(final String auditFeed, final String tableName) {
@@ -118,7 +113,7 @@ public class AuditingExportProcessor extends PropertyProcessor {
          }
 
          Long fromTime = Long.valueOf(startDate.getTime() + 1L);
-         final ReportLine rl = new ReportLine(tableName, this.getSimpleDateFormat(), this.reportingHelper);
+         final ReportLine rl = new ReportLine(tableName, this.reportingHelper);
          final Properties replacementTypes = this.reportingHelper.getReplacementDataType();
          boolean letsContinue = true;
 

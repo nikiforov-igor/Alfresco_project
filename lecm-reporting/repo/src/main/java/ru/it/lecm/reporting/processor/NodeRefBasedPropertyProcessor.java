@@ -2,7 +2,6 @@ package ru.it.lecm.reporting.processor;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.site.SiteModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.repository.Path.ChildAssocElement;
@@ -11,8 +10,8 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,39 +19,27 @@ import org.json.JSONObject;
 import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.jms.core.JmsTemplate;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.reporting.Constants;
 import ru.it.lecm.reporting.ReportLine;
 import ru.it.lecm.reporting.ReportingHelper;
 import ru.it.lecm.reporting.mybatis.UpdateWhere;
 
 import javax.jms.*;
 import javax.jms.Queue;
-import java.io.IOException;
 import java.util.*;
 
 public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
-    private VersionService versionService;
-    private ContentService contentService;
     private String COLUMN_SIZE = "";
     private static Log logger = LogFactory.getLog(NodeRefBasedPropertyProcessor.class);
-    private Integer minutesShift = 30; //
-    private Integer solrMinutesShift = 10; //
+
     private ActiveMQConnectionFactory connectionFactory;
     private JmsTemplate templateProducer;
-
-    public ContentService getContentService() {
-        return this.contentService;
-    }
-
-    public void setContentService(ContentService contentService) {
-        this.contentService = contentService;
-    }
 
     public NodeRefBasedPropertyProcessor(ServiceRegistry serviceRegistry, ReportingHelper helper) throws Exception {
         this.setNodeService(serviceRegistry.getNodeService());
         this.setNamespaceService(serviceRegistry.getNamespaceService());
         this.setDictionaryService(serviceRegistry.getDictionaryService());
         this.setFileFolderService(serviceRegistry.getFileFolderService());
-        this.setContentService(serviceRegistry.getContentService());
         this.setSearchService(serviceRegistry.getSearchService());
         this.versionService = serviceRegistry.getVersionService();
         super.versionService = serviceRegistry.getVersionService();
@@ -71,30 +58,12 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         }
     }
 
-    private String getSiteName(NodeRef currentRef) {
-        String siteName = "";
-        if (currentRef != null) {
-            NodeRef rootNode = this.getNodeService().getRootNode(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-            NodeRef siteRef = null;
-            boolean siteTypeFound = this.getNodeService().getType(currentRef).equals(SiteModel.TYPE_SITE);
-            if (siteTypeFound) {
-                siteRef = currentRef;
-            }
+    public void setConnectionFactory(ActiveMQConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
-            while (!currentRef.equals(rootNode) && !siteTypeFound) {
-                currentRef = this.getNodeService().getPrimaryParent(currentRef).getParentRef();
-                siteTypeFound = this.getNodeService().getType(currentRef).equals(SiteModel.TYPE_SITE);
-                if (siteTypeFound) {
-                    siteRef = currentRef;
-                }
-            }
-
-            if (siteRef != null) {
-                siteName = (String) this.getNodeService().getProperty(siteRef, ContentModel.PROP_NAME);
-            }
-        }
-
-        return siteName;
+    public void setTemplateProducer(JmsTemplate templateProducer) {
+        this.templateProducer = templateProducer;
     }
 
     private String toDisplayPath(Path path) {
@@ -119,98 +88,50 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
     private Properties processAssociationDefinitions(Properties definition, NodeRef nodeRef) throws Exception {
         String blockNameSpaces;
         try {
-            List e = this.getNodeService().getChildAssocs(nodeRef);
-            if (e.size() > 0) {
-                blockNameSpaces = this.getClassToColumnType().getProperty("noderefs", "-");
-                if (this.getReplacementDataType().containsKey("child_noderef")) {
-                    blockNameSpaces = this.getReplacementDataType().getProperty("child_noderef", "-").trim();
+            List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
+            if (childAssocs.size() > 0) {
+                blockNameSpaces = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
+                if (this.getReplacementDataType().containsKey(Constants.COLUMN_CHILD_NODEREF)) {
+                    blockNameSpaces = this.getReplacementDataType().getProperty(Constants.COLUMN_CHILD_NODEREF, "-").trim();
                 }
 
-                definition.setProperty("child_noderef", blockNameSpaces);
+                definition.setProperty(Constants.COLUMN_CHILD_NODEREF, blockNameSpaces);
             }
         } catch (Exception var19) {
             logger.error("processAssociationDefinitions: child_noderef ERROR! " + var19.getMessage());
         }
 
         try {
-            ChildAssociationRef var21 = this.getNodeService().getPrimaryParent(nodeRef);
-            if (var21 != null) {
-                blockNameSpaces = this.getClassToColumnType().getProperty("noderef", "-");
-                if (this.getReplacementDataType().containsKey("parent_noderef")) {
-                    blockNameSpaces = this.getReplacementDataType().getProperty("parent_noderef", "-").trim();
+            ChildAssociationRef parentRef = this.getNodeService().getPrimaryParent(nodeRef);
+            if (parentRef != null) {
+                blockNameSpaces = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-");
+                if (this.getReplacementDataType().containsKey(Constants.COLUMN_PARENT_NODEREF)) {
+                    blockNameSpaces = this.getReplacementDataType().getProperty(Constants.COLUMN_PARENT_NODEREF, "-").trim();
                 }
 
-                definition.setProperty("parent_noderef", blockNameSpaces);
+                definition.setProperty(Constants.COLUMN_PARENT_NODEREF, blockNameSpaces);
             }
         } catch (Exception var18) {
             logger.error("processAssociationDefinitions: parent_noderef ERROR!");
         }
 
         try {
-            Collection var22 = this.getDictionaryService().getAllAssociations();
             blockNameSpaces = this.globalProperties.getProperty("reporting.harvest.blockNameSpaces", "");
             String[] startValues = blockNameSpaces.split(",");
 
-            for (Object aVar22 : var22) {
-                QName type = (QName) aVar22;
-                String key = "";
-                String shortName = this.replaceNameSpaces(type.toString());
-                boolean stop = nodeRef.toString().startsWith("versionStore") || nodeRef.toString().startsWith("archive");
 
-                for (String startValue : startValues) {
-                    stop = shortName.startsWith(startValue.trim());
-                    if (stop) {
-                        break;
-                    }
-                }
+            try {
+                List<AssociationRef> targetAssocs = this.getNodeService().getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+                processAssocs(definition, startValues, targetAssocs);
+            } catch (Exception var17) {
+                logger.error("processAssociationDefinitions: Target_Association ERROR!");
+            }
 
-                if (!stop) {
-                    List var23;
-                    String var24;
-                    try {
-                        var23 = this.getNodeService().getTargetAssocs(nodeRef, type);
-                        if (var23.size() > 0) {
-                            key = type.toString();
-                            key = this.replaceNameSpaces(key);
-                            if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
-                                var24 = this.getClassToColumnType().getProperty("noderefs", "-");
-                                if (this.getReplacementDataType().containsKey(key)) {
-                                    var24 = this.getReplacementDataType().getProperty(key, "-").trim();
-                                }
-
-                                if (logger.isDebugEnabled()) {
-                                    logger.debug("Target: Setting " + key + "=" + var24);
-                                }
-
-                                definition.setProperty(key, var24);
-                            }
-                        }
-                    } catch (Exception var17) {
-                        logger.error("processAssociationDefinitions: Target_Association ERROR! key=" + key);
-                    }
-
-                    try {
-                        var23 = this.getNodeService().getSourceAssocs(nodeRef, type);
-                        if (var23.size() > 0) {
-                            logger.debug("Found a Source association! " + type.toString());
-                            key = type.toString();
-                            key = this.replaceNameSpaces(key);
-                            if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
-                                var24 = this.getClassToColumnType().getProperty("noderefs", "-");
-                                if (this.getReplacementDataType().containsKey(key)) {
-                                    var24 = this.getReplacementDataType().getProperty(key, "-").trim();
-                                }
-
-                                definition.setProperty(key, var24);
-                            }
-                        }
-                    } catch (Exception var16) {
-                        logger.warn("processAssociationDefinitions: Source_Association ERROR! key=" + key);
-                        logger.warn(" Messg: " + var16.getMessage());
-                        logger.warn(" Cause: " + var16.getCause());
-                        logger.warn(" Error: " + var16.toString());
-                    }
-                }
+            try {
+                List<AssociationRef> sourceAssocs = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+                processAssocs(definition, startValues, sourceAssocs);
+            } catch (Exception var16) {
+                logger.error("processAssociationDefinitions: Source_Association ERROR!");
             }
         } catch (Exception var20) {
             logger.warn("processAssociationDefinitions: source-target ERROR!");
@@ -220,23 +141,51 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return definition;
     }
 
+    private void processAssocs(Properties definition, String[] startValues, List<AssociationRef> assocsList) {
+        boolean stop;
+        String assocValue;
+        for (AssociationRef targetAssoc : assocsList) {
+            String shortName = this.replaceNameSpaces(targetAssoc.getTypeQName().toString());
+            if (definition.getProperty(shortName) == null) {
+                for (String startValue : startValues) {
+                    stop = shortName.startsWith(startValue.trim());
+                    if (stop) {
+                        break;
+                    }
+                }
+                if (!this.getBlacklist().toLowerCase().contains("," + shortName.toLowerCase() + ",") && !shortName.equals("-")) {
+                    assocValue = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
+                    if (this.getReplacementDataType().containsKey(shortName)) {
+                        assocValue = this.getReplacementDataType().getProperty(shortName, "-").trim();
+                    }
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Target: Setting " + shortName + "=" + assocValue);
+                    }
+
+                    definition.setProperty(shortName, assocValue);
+                }
+            }
+        }
+    }
+
     private ReportLine processAssociationValues(ReportLine rl, NodeRef nodeRef) throws Exception {
         try {
-            List assocTypes = this.getNodeService().getChildAssocs(nodeRef);
-            long i$ = (long) Math.min(assocTypes.size(), Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
-            long shortName = (long) assocTypes.size();
-            if (shortName > 0L && shortName <= i$) {
+            List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
+            long min = (long) Math.min(childAssocs.size(), Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
+            long shortName = childAssocs.size();
+            if (shortName > 0L && shortName <= min) {
                 String maxChildCount = "";
 
                 ChildAssociationRef numberOfChildCars;
-                for (Iterator i$1 = assocTypes.iterator(); i$1.hasNext(); maxChildCount = maxChildCount + numberOfChildCars.getChildRef()) {
-                    numberOfChildCars = (ChildAssociationRef) i$1.next();
+                for (Iterator iterator = childAssocs.iterator(); iterator.hasNext(); maxChildCount = maxChildCount + numberOfChildCars.getChildRef()) {
+                    numberOfChildCars = (ChildAssociationRef) iterator.next();
                     if (maxChildCount.length() > 0) {
                         maxChildCount = maxChildCount + ",";
                     }
                 }
 
-                rl.setLine("child_noderef", this.getClassToColumnType().getProperty("noderefs", "-"), maxChildCount, this.getReplacementDataType());
+                rl.setLine(Constants.COLUMN_CHILD_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), maxChildCount, this.getReplacementDataType());
             }
         } catch (Exception var19) {
             logger.warn("Error in processing processAssociationValues");
@@ -244,46 +193,46 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         }
 
         try {
-            ChildAssociationRef assocTypes1 = this.getNodeService().getPrimaryParent(nodeRef);
-            if (assocTypes1 != null) {
-                String i$3 = assocTypes1.getParentRef().toString();
-                rl.setLine("parent_noderef", this.getClassToColumnType().getProperty("noderef", "-"), i$3, this.getReplacementDataType());
+            ChildAssociationRef primaryParent = this.getNodeService().getPrimaryParent(nodeRef);
+            if (primaryParent != null) {
+                String parentRef = primaryParent.getParentRef().toString();
+                rl.setLine(Constants.COLUMN_PARENT_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"), parentRef, this.getReplacementDataType());
             }
         } catch (Exception var16) {
             logger.warn("Exception in getting primary Parent noderef: " + var16.getMessage());
         }
 
-        Collection assocTypes2 = this.getDictionaryService().getAllAssociations();
-
-        for (Object anAssocTypes2 : assocTypes2) {
-            QName type = (QName) anAssocTypes2;
-            String shortName1 = this.replaceNameSpaces(type.toString());
-            if (!shortName1.startsWith("trx") && !shortName1.startsWith("act") && !shortName1.startsWith("wca")) {
-                List e;
+        Collection<QName> allAssociations = this.getDictionaryService().getAllAssociations();
+        int maxAssocsCount = Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.sourcetarget.assocs", "20"));
+        for (QName type : allAssociations) {
+            String assocShortName = this.replaceNameSpaces(type.toString());
+            if (!assocShortName.startsWith("trx")
+                    && !assocShortName.startsWith("act")
+                    && !assocShortName.startsWith("wca")) {
+                List assocValues;
                 String key;
                 String value;
-                Iterator i$2;
+                Iterator it;
                 AssociationRef ar;
-                long maxChildCount1;
-                long numberOfChildCars1;
+                long maxChildCount;
+                long numberOfChildCars;
                 try {
-                    e = this.getNodeService().getTargetAssocs(nodeRef, type);
-                    maxChildCount1 = (long) Math.min(e.size(), Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.sourcetarget.assocs", "20")));
-                    numberOfChildCars1 = (long) e.size();
-                    if (numberOfChildCars1 > 0L && numberOfChildCars1 <= maxChildCount1) {
-                        key = type.toString();
-                        key = this.replaceNameSpaces(key);
-                        if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-") && e.size() > 0) {
+                    assocValues = this.getNodeService().getTargetAssocs(nodeRef, type);
+                    maxChildCount = Math.min(assocValues.size(), maxAssocsCount);
+                    numberOfChildCars = assocValues.size();
+                    if (numberOfChildCars > 0L && numberOfChildCars <= maxChildCount) {
+                        key = this.replaceNameSpaces(type.toString());
+                        if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
                             value = "";
 
-                            for (i$2 = e.iterator(); i$2.hasNext(); value = value + ar.getTargetRef().toString()) {
-                                ar = (AssociationRef) i$2.next();
+                            for (it = assocValues.iterator(); it.hasNext(); value = value + ar.getTargetRef().toString()) {
+                                ar = (AssociationRef) it.next();
                                 if (value.length() > 0) {
                                     value = value + ",";
                                 }
                             }
 
-                            rl.setLine(key, this.getClassToColumnType().getProperty("noderefs", "-"), value, this.getReplacementDataType());
+                            rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
                         }
                     }
                 } catch (Exception ignored) {
@@ -293,23 +242,23 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 }
 
                 try {
-                    e = this.getNodeService().getSourceAssocs(nodeRef, type);
-                    maxChildCount1 = (long) Math.min(e.size(), Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.sourcetarget.assocs", "20")));
-                    numberOfChildCars1 = (long) e.size();
-                    if (numberOfChildCars1 > 0L && numberOfChildCars1 <= maxChildCount1) {
+                    assocValues = this.getNodeService().getSourceAssocs(nodeRef, type);
+                    maxChildCount = Math.min(assocValues.size(), maxAssocsCount);
+                    numberOfChildCars = assocValues.size();
+                    if (numberOfChildCars > 0L && numberOfChildCars <= maxChildCount) {
                         key = type.toString();
                         key = this.replaceNameSpaces(key);
-                        if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-") && e != null && e.size() > 0) {
+                        if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-") && assocValues != null && assocValues.size() > 0) {
                             value = "";
 
-                            for (i$2 = e.iterator(); i$2.hasNext(); value = value + ar.getSourceRef().toString()) {
-                                ar = (AssociationRef) i$2.next();
+                            for (it = assocValues.iterator(); it.hasNext(); value = value + ar.getSourceRef().toString()) {
+                                ar = (AssociationRef) it.next();
                                 if (value.length() > 0) {
                                     value = value + ",";
                                 }
                             }
 
-                            rl.setLine(key, this.getClassToColumnType().getProperty("noderefs", "-"), value, this.getReplacementDataType());
+                            rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
                         }
                     }
                 } catch (Exception ignored) {
@@ -352,33 +301,33 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         }
 
         try {
-            rl.setLine("noderef", this.getClassToColumnType().getProperty("noderef"), nodeRef.toString(), this.getReplacementDataType());
+            rl.setLine(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
         } catch (Exception var26) {
             var26.printStackTrace();
         }
 
-        String aspectString;
+        String valueString;
         try {
-            aspectString = this.nodeService.getType(nodeRef).toPrefixString(namespaceService);
-            rl.setLine("object_type", this.getClassToColumnType().getProperty("object_type", ""), aspectString, this.getReplacementDataType());
+            valueString = this.nodeService.getType(nodeRef).toPrefixString(namespaceService);
+            rl.setLine(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, ""), valueString, this.getReplacementDataType());
         } catch (Exception var25) {
             logger.debug("EXCEPTION: // it does not have a Type. Bad luck. Don\'t crash (versionStore?!)");
         }
 
-        aspectString = "";
+        valueString = "";
 
         try {
-            Set path = this.nodeService.getAspects(nodeRef);
+            Set<QName> path = this.nodeService.getAspects(nodeRef);
 
             QName site;
-            for (Iterator displayPath = path.iterator(); displayPath.hasNext(); aspectString = aspectString + site.getLocalName()) {
+            for (Iterator displayPath = path.iterator(); displayPath.hasNext(); valueString = valueString + site.getLocalName()) {
                 site = (QName) displayPath.next();
-                if (aspectString.length() > 0) {
-                    aspectString = aspectString + ",";
+                if (valueString.length() > 0) {
+                    valueString = valueString + ",";
                 }
             }
 
-            rl.setLine("aspects", this.getClassToColumnType().getProperty("aspects", ""), aspectString, this.getReplacementDataType());
+            rl.setLine(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, ""), valueString, this.getReplacementDataType());
         } catch (Exception var29) {
             logger.error(var29.getMessage(), var29);
         }
@@ -388,20 +337,9 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         try {
             Path path1 = this.getNodeService().getPath(nodeRef);
             displayPath1 = this.toDisplayPath(path1);
-            rl.setLine("path", this.getClassToColumnType().getProperty("path"), displayPath1, this.getReplacementDataType());
+            rl.setLine(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH), displayPath1, this.getReplacementDataType());
         } catch (Exception var24) {
             logger.error(var24.getMessage(), var24);
-        }
-
-        String site1;
-
-        try {
-            site1 = this.getSiteName(nodeRef);
-            rl.setLine("site", this.getClassToColumnType().getProperty("site"), site1, this.getReplacementDataType());
-        } catch (Exception ignored) {
-            if (logger.isDebugEnabled()) {
-                logger.error(ignored.getMessage(), ignored);
-            }
         }
 
         QName myType = this.getNodeService().getType(nodeRef);
@@ -423,13 +361,13 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     logger.debug("Setting Ref from archive to orig_noderef!!!");
                 }
 
-                rl.setLine("orig_noderef", this.getClassToColumnType().getProperty("noderef"), size.toString(), this.getReplacementDataType());
+                rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), size.toString(), this.getReplacementDataType());
             } else {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Setting currentRef to orig_noderef!!!");
                 }
 
-                rl.setLine("orig_noderef", this.getClassToColumnType().getProperty("noderef"), nodeRef.toString(), this.getReplacementDataType());
+                rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
             }
         }
 
@@ -483,7 +421,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     origNodeRef1 = e1.getChildRef();
                 }
             } catch (Exception var18) {
-                logger.warn("Exception getting orig_noderef" + var18.getStackTrace());
+                logger.warn("Exception getting orig_noderef" + Arrays.toString(var18.getStackTrace()));
             }
 
             try {
@@ -493,19 +431,19 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                         logger.debug("Master says: " + (masterRef != null ? masterRef.toString() : null));
                     }
 
-                    rl.setLine("orig_noderef", this.getClassToColumnType().getProperty("noderef"), masterRef != null ? masterRef.toString() : null, this.getReplacementDataType());
+                    rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), masterRef != null ? masterRef.toString() : null, this.getReplacementDataType());
                 } else if (origNodeRef1 != null) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Setting Ref from archive to orig_noderef!!!");
                     }
 
-                    rl.setLine("orig_noderef", this.getClassToColumnType().getProperty("noderef"), origNodeRef1.toString(), this.getReplacementDataType());
+                    rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), origNodeRef1.toString(), this.getReplacementDataType());
                 } else {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Setting currentRef to orig_noderef!!!");
                     }
 
-                    rl.setLine("orig_noderef", this.getClassToColumnType().getProperty("noderef"), nodeRef.toString(), this.getReplacementDataType());
+                    rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
                 }
             } catch (Exception ignored) {
                 if (logger.isDebugEnabled()) {
@@ -524,19 +462,18 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
             try {
                 definition = this.processPropertyDefinitions(definition, nodeRef);
-                definition.setProperty("orig_noderef", this.getClassToColumnType().getProperty("noderef", "-"));
+                definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
             } catch (Exception var9) {
                 logger.warn("processQueueDefinition: ERROR: versionNodes.containsKey or before " + var9.getMessage());
                 var9.printStackTrace();
             }
 
             try {
-                definition.setProperty("orig_noderef", this.getClassToColumnType().getProperty("noderef", "-"));
-                definition.setProperty("site", this.getClassToColumnType().getProperty("site", "-"));
-                definition.setProperty("path", this.getClassToColumnType().getProperty("path", "-"));
-                definition.setProperty("noderef", this.getClassToColumnType().getProperty("noderef", "-"));
-                definition.setProperty("object_type", this.getClassToColumnType().getProperty("object_type", "-"));
-                definition.setProperty("aspects", this.getClassToColumnType().getProperty("aspects", "-"));
+                definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                definition.setProperty(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH, "-"));
+                definition.setProperty(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                definition.setProperty(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, "-"));
+                definition.setProperty(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, "-"));
                 QName var11 = this.getNodeService().getType(nodeRef);
                 if (logger.isDebugEnabled()) {
                     logger.debug("processQueueDefinition: qname=" + var11);
@@ -551,14 +488,14 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
                     definition.setProperty("mimetype", this.getClassToColumnType().getProperty("mimetype", "-"));
                     definition.setProperty(this.COLUMN_SIZE, this.getClassToColumnType().getProperty(this.COLUMN_SIZE, "-"));
-                    definition.setProperty("cm_workingCopyLlink", this.getClassToColumnType().getProperty("noderef", "-"));
-                    definition.setProperty("cm_lockOwner", this.getClassToColumnType().getProperty("noderef", "-"));
-                    definition.setProperty("cm_lockType", this.getClassToColumnType().getProperty("noderef", "-"));
+                    definition.setProperty("cm_workingCopyLlink", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                    definition.setProperty("cm_lockOwner", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                    definition.setProperty("cm_lockType", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
                     definition.setProperty("cm_expiryDate", this.getClassToColumnType().getProperty("datetime", "-"));
                     definition.setProperty("sys_archivedDate", this.getClassToColumnType().getProperty("datetime", "-"));
-                    definition.setProperty("sys_archivedBy", this.getClassToColumnType().getProperty("noderef", "-"));
-                    definition.setProperty("sys_archivedOriginalOwner", this.getClassToColumnType().getProperty("noderef", "-"));
-                    definition.setProperty("versioned", this.getClassToColumnType().getProperty("noderef", "-"));
+                    definition.setProperty("sys_archivedBy", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                    definition.setProperty("sys_archivedOriginalOwner", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                    definition.setProperty("versioned", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
                 }
 
                 if (this.getDictionaryService().isSubClass(var11, ContentModel.TYPE_PERSON)) {
@@ -604,7 +541,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             logger.debug("************ Found " + this.queue.size() + " entries in " + table + " **************** " + this.method);
         }
 
-        ReportLine rl = new ReportLine(table, this.getSimpleDateFormat(), this.reportingHelper);
+        ReportLine rl = new ReportLine(table, this.reportingHelper);
         int queuesize = this.queue.size();
 
         Set<String> types = getTypesPerTable(table);
@@ -622,7 +559,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
                 rl = this.processNodeToMap(identifier, table, rl);
 
-                String shortTypeName = rl.getValue("object_type");
+                String shortTypeName = rl.getValue(Constants.COLUMN_OBJECT_TYPE).toLowerCase();
                 if (!types.contains(shortTypeName)) {
                     this.dbhb.createLastTypesTableRow(table, shortTypeName);
                     types.add(shortTypeName);
@@ -680,7 +617,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 } catch (RecoverableDataAccessException var18) {
                     throw new AlfrescoRuntimeException("processQueueValues2: " + var18.getMessage());
                 } catch (Exception var19) {
-                    logger.fatal("processQueueValues Exception2: " + var19.getStackTrace());
+                    logger.error("processQueueValues Exception2: " + Arrays.toString(var19.getStackTrace()));
                 } finally {
                     rl.reset();
                 }
@@ -733,16 +670,11 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return tablesSet;
     }
 
-    public void addToQueue(Object nodeRef, NodeRef masterRef) {
-        this.addToQueue(nodeRef.toString() + "," + masterRef.toString());
-    }
-
     public void havestNodes(NodeRef harvestDefinition) {
         try {
-            List e = this.getStoreRefList();
+            List<StoreRef> stores = this.getStoreRefList();
+
             Properties queries = this.getReportingHelper().getTableQueries();
-            String language = this.reportingHelper.getSearchLanguage(harvestDefinition);
-            this.dbhb.openReportingConnection();
             Enumeration keys = queries.keys();
 
             long shiftFromDB = getTimestampFromDBShift() * 60000;
@@ -756,13 +688,13 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 lastSolrIndexDate = new Date(solrTimestamp - solrShift);
             }
 
-            List<Message> messagesAboutDelete = getMessagesAboutDelete();
+            List<Message> messagesAboutDelete = getMessagesAboutDelete();//получим до старта синхронизации
 
             while (keys.hasMoreElements()) {
                 String tableName = (String) keys.nextElement();
                 String query = (String) queries.get(tableName);
                 tableName = this.dbhb.fixTableColumnName(tableName);
-                Iterator storeIterator = e.iterator();
+                Iterator storeIterator = stores.iterator();
                 if (!this.dbhb.tableIsRunning(tableName)) {
                     this.dbhb.createEmptyTables(tableName);
 
@@ -793,7 +725,8 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
                         while (letsContinue) {
                             ++loopcount;
-                            String fullQuery = query + this.queryClauseTimestamp(language, timestampStart, storeRef.getProtocol()) + this.queryClauseOrderBy(language, startDbId);
+                            String fullQuery = query + this.queryClauseTimestamp(timestampStart, storeRef.getProtocol())
+                                    + this.queryClauseOrderBy(startDbId);
                             if (logger.isInfoEnabled()) {
                                 logger.info("harvest: StoreProtocol = " + storeRef.getProtocol() + " fullQuery = " + fullQuery);
                             }
@@ -820,7 +753,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                                         }
                                     } catch (Exception var35) {
                                         logger.info("NodeRef appears broken: " + var35.getMessage());
-                                        logger.info("   " + var35.getStackTrace());
+                                        logger.info("   " + Arrays.toString(var35.getStackTrace()));
                                     }
                                 }
 
@@ -896,23 +829,22 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             }
         } catch (Exception var36) {
             logger.info("Fatality: " + var36.getMessage());
-        } finally {
-            this.dbhb.closeReportingConnection();
         }
     }
 
     private Integer getTimestampFromDBShift() {
-        String shift = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.timestamp.fromDB.shift", minutesShift.toString());
-        return Integer.parseInt(shift);
-    }
-    private Integer getSolrTimestampShift() {
-        String shift = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.timestamp.solr.shift", solrMinutesShift.toString());
+        String shift = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.timestamp.fromDB.shift", "30");
         return Integer.parseInt(shift);
     }
 
-    private ArrayList getStoreRefList() {
+    private Integer getSolrTimestampShift() {
+        String shift = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.timestamp.solr.shift", "10");
+        return Integer.parseInt(shift);
+    }
+
+    private List<StoreRef> getStoreRefList() {
         String[] stores = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.stores", "").split(",");
-        ArrayList storeRefArray = new ArrayList();
+        List<StoreRef> storeRefArray = new ArrayList<>();
 
         for (String store : stores) {
             logger.debug("Adding store: " + store);
@@ -923,58 +855,25 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return storeRefArray;
     }
 
-    public String queryClauseTimestamp(String language, String timestamp1, String protocol) {
+    private String queryClauseTimestamp(String timestamp1, String protocol) {
         String dateQuery = " ";
         String myTimestamp1 = timestamp1.replaceAll(" ", "T");
-        if ("lucene".equalsIgnoreCase(language)) {
         if (protocol.equalsIgnoreCase("workspace")) {
             dateQuery = dateQuery + "AND @cm\\:modified:['" + myTimestamp1 + "' TO NOW]";
-            }
-
-            if (protocol.equalsIgnoreCase("archive")) {
+        } else if (protocol.equalsIgnoreCase("archive")) {
             dateQuery = dateQuery + "AND @sys\\:archivedDate:['" + myTimestamp1 + "' TO NOW]";
-        }
         }
 
         return dateQuery;
     }
 
-    public String queryClauseOrderBy(String language, long dbid) {
+    private String queryClauseOrderBy(long dbid) {
         String orderBy = "";
-        if ("lucene".equalsIgnoreCase(language) && dbid > 0L) {
-            orderBy = orderBy + "AND @sys\\:node\\-dbid:[" + (dbid + 1L) + " TO MAX]";
+        if (dbid > 0L) {
+            orderBy = "AND @sys\\:node\\-dbid:[" + (dbid + 1L) + " TO MAX]";
         }
 
         return orderBy;
-    }
-
-    public String getOrderBy(String language) {
-        String orderBy = " ";
-        if ("lucene".equalsIgnoreCase(language)) {
-            orderBy = orderBy + ContentModel.PROP_NODE_DBID.toString();
-        }
-
-        return orderBy;
-    }
-
-    private Properties getTableQueries(NodeRef nodeRef) {
-        Properties p = new Properties();
-        if (logger.isDebugEnabled()) {
-            logger.debug("getTableQueries, nodeRef=" + nodeRef);
-        }
-
-        try {
-            ContentService e = this.getContentService();
-            ContentReader contentReader = e.getReader(nodeRef, ContentModel.PROP_CONTENT);
-            p.load(contentReader.getContentInputStream());
-        } catch (ContentIOException var5) {
-            logger.error(var5.getMessage());
-        } catch (IOException var6) {
-            var6.printStackTrace();
-            logger.error(var6.getMessage());
-        }
-
-        return p;
     }
 
     protected List<Message> getMessagesAboutDelete() throws JMSException {
@@ -1065,13 +964,5 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 connection.close();
             }
         }
-    }
-
-    public void setConnectionFactory(ActiveMQConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
-
-    public void setTemplateProducer(JmsTemplate templateProducer) {
-        this.templateProducer = templateProducer;
     }
 }

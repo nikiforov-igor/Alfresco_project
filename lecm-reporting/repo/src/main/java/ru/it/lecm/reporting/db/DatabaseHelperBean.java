@@ -17,11 +17,6 @@ public class DatabaseHelperBean {
     private WorkflowDAO workflowDAO;
     private ReportingHelper reportingHelper;
 
-
-    public String fixTableColumnName(String inName) {
-        return this.reportingHelper.getValidTableName(inName);
-    }
-
     private ReportingHelper getReportingHelper() {
         return this.reportingHelper;
     }
@@ -42,24 +37,17 @@ public class DatabaseHelperBean {
         this.globalProperties = properties;
     }
 
-
     public ReportingDAO getReportingDAO() {
         return reportingDAO;
     }
 
-    public void logAllProperties() {
-        Enumeration keys = this.globalProperties.keys();
 
-        while (keys.hasMoreElements()) {
-            String key = (String) keys.nextElement();
-            if (key.contains("reporting.") && logger.isDebugEnabled()) {
-                logger.debug(key + "=" + this.globalProperties.getProperty(key));
-            }
-        }
+    public String fixTableColumnName(String inName) {
+        return this.reportingHelper.getValidTableName(inName);
     }
 
     public Map getShowTables() {
-        HashMap sm = new HashMap();
+        Map<String, String> sm = new HashMap<>();
         List tables = this.reportingDAO.getShowTables();
         logger.debug("Found show tables results: " + tables.size());
 
@@ -221,7 +209,7 @@ public class DatabaseHelperBean {
             } else {
                 while (keys.hasNext()) {
                     String key = (String) keys.next();
-                    logger.info("  " + key + " (" + (String) e.get(key) + ")");
+                    logger.info("  " + key + " (" + e.get(key) + ")");
                 }
             }
         } catch (Exception var5) {
@@ -251,10 +239,6 @@ public class DatabaseHelperBean {
         return this.workflowDAO.getCompletedProcesses(fromDate);
     }
 
-    public HashMap getPropertiesForWorkflownstance(String id) {
-        return this.workflowDAO.getPropertiesForWorkflowTask(id);
-    }
-
     public boolean isEnabled() {
         return !this.globalProperties.getProperty("reporting.enabled", "true").equalsIgnoreCase("false");
     }
@@ -281,7 +265,6 @@ public class DatabaseHelperBean {
         if (logger.isDebugEnabled()) {
             logger.debug("exit extendTable");
         }
-
     }
 
     public String selectFromWhere(String select, String from, String where) throws Exception {
@@ -588,11 +571,5 @@ public class DatabaseHelperBean {
     public void dropLastTimestampTable() {
         logger.debug("enter dropLastTimestampTable table=lastsuccessfulrun");
         this.reportingDAO.dropTable("lastsuccessfulrun");
-    }
-
-    public void openReportingConnection() {
-    }
-
-    public void closeReportingConnection() {
     }
 }

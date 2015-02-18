@@ -352,7 +352,7 @@ public class WorkflowTaskPropertyProcessor extends PropertyProcessor {
    public void processQueueValues(String table) throws Exception {
       table = this.dbhb.fixTableColumnName(table);
       logger.debug("processQueueValues: pocessing " + this.getQueue().size() + " entries");
-      ReportLine rl = new ReportLine(table, this.getSimpleDateFormat(), this.reportingHelper);
+      ReportLine rl = new ReportLine(table, this.reportingHelper);
       Iterator queueIterator = this.getQueue().iterator();
 
       while(queueIterator.hasNext()) {
@@ -373,7 +373,6 @@ public class WorkflowTaskPropertyProcessor extends PropertyProcessor {
             logger.debug("Harvesting Activiti workflowTasks");
          }
 
-         this.dbhb.openReportingConnection();
          String nowFormattedDate = this.reportingHelper.getSimpleDateFormat().format(new Date());
          String formattedDate = this.dbhb.getLastTimestamp("workflowtask");
          List myTaskList = this.dbhb.getCreatedTasks(formattedDate);
@@ -401,8 +400,6 @@ public class WorkflowTaskPropertyProcessor extends PropertyProcessor {
          if(logger.isDebugEnabled()) {
             logger.debug("Found total of " + this.getQueue().size() + " workflow tasks...");
          }
-
-         this.dbhb.closeReportingConnection();
       }
 
    }

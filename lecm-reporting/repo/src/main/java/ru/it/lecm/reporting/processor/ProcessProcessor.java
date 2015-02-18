@@ -10,7 +10,6 @@ import ru.it.lecm.reporting.ReportLine;
 import ru.it.lecm.reporting.ReportingHelper;
 import ru.it.lecm.reporting.db.DatabaseHelperBean;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -48,10 +47,6 @@ public class ProcessProcessor extends PropertyProcessor {
       this.setGlobalProperties(reportingHelper.getGlobalProperties());
       this.setNamespaces(reportingHelper.getNameSpaces());
       this.setBlacklist(reportingHelper.getBlacklist());
-   }
-
-   private String getPropertyValue(Serializable s, String dtype, boolean multiValued) {
-      return "";
    }
 
    private ReportLine processToReportingLine(ReportLine rl, String key, String type, String value) {
@@ -142,7 +137,7 @@ public class ProcessProcessor extends PropertyProcessor {
    public void processQueueValues(String table) throws Exception {
       table = this.dbhb.fixTableColumnName(table);
       logger.debug("processQueueValues: pocessing " + this.getQueue().size() + " entries");
-      ReportLine rl = new ReportLine(table, this.getSimpleDateFormat(), this.reportingHelper);
+      ReportLine rl = new ReportLine(table, this.reportingHelper);
       Iterator queueIterator = this.getQueue().iterator();
 
       while(queueIterator.hasNext()) {
@@ -158,7 +153,6 @@ public class ProcessProcessor extends PropertyProcessor {
    }
 
    public void havestNodes() {
-      this.dbhb.openReportingConnection();
       if(this.getGlobalProperties().getProperty("system.workflow.engine.activiti.enabled", "true").toLowerCase().equals("true")) {
          if(logger.isDebugEnabled()) {
             logger.debug("Harvesting Activiti workflowTasks");
@@ -191,8 +185,6 @@ public class ProcessProcessor extends PropertyProcessor {
             logger.debug("Found total of " + this.getQueue().size() + " workflow instancess...");
          }
       }
-
-      this.dbhb.closeReportingConnection();
    }
 
    void havestNodes(NodeRef harvestDefinition) {}

@@ -59,8 +59,6 @@ public class CategoryProcessor extends PropertyProcessor {
          logger.debug("enter Categories");
       }
 
-      this.dbhb.openReportingConnection();
-
       try {
          Collection e = this.categoryService.getRootCategories(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, ContentModel.ASPECT_GEN_CLASSIFIABLE);
          ArrayList carObject = (ArrayList)this.getNodeService().getProperty(harvestDefinition, ReportingModel.PROP_REPORTING_CATEGORIES);
@@ -83,8 +81,6 @@ public class CategoryProcessor extends PropertyProcessor {
       } catch (Exception var11) {
          var11.printStackTrace();
          logger.fatal("Exception in harvestNodes() " + var11.getMessage());
-      } finally {
-         this.dbhb.closeReportingConnection();
       }
 
       if(logger.isDebugEnabled()) {
@@ -115,7 +111,7 @@ public class CategoryProcessor extends PropertyProcessor {
 
       if(rootCatRef != null) {
          columnName = this.dbhb.fixTableColumnName(columnName);
-         ReportLine rl = new ReportLine(tableName, this.getSimpleDateFormat(), this.reportingHelper);
+         ReportLine rl = new ReportLine(tableName, this.reportingHelper);
          Properties definition = new Properties();
          definition.setProperty(columnName, this.reportingHelper.getClassToColumnType().getProperty("path", "-"));
          definition.setProperty("label", this.reportingHelper.getClassToColumnType().getProperty("label", "-"));
