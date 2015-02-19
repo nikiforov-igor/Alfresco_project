@@ -426,7 +426,7 @@ function getSearchResults(params) {
             language: "fts-alfresco",
             onerror: "no-results"
         };
-        total = searchCounter.query(queryDef, useFilterByOrg, useOnlyInSameOrg);
+        total = searchCounter.query(queryDef, false, false);
 
         var sortColumns = [];
         if (sortField.column.charAt(0) == '.') {
