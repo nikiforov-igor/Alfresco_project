@@ -11,21 +11,21 @@
 		<div class="new-row">
 			<span id="${toolbarId}-newTemplateButton" class="yui-button yui-push-button">
 				<span class="first-child">
-					<button type="button" title="Загрузить">Загрузить</button>
+					<button type="button" title="${msg('lecm.repedit.lbl.upload')}">${msg('lecm.repedit.lbl.upload')}</button>
 				</span>
 			</span>
 		</div>
 		<div class="new-row">
 			<span id="${toolbarId}-newTemplateFromSourceButton" class="yui-button yui-push-button">
 				<span class="first-child">
-					<button type="button" title="Новый из набора данных">Новый из набора данных</button>
+					<button type="button" title="${msg('lecm.repedit.lbl.new.from.data')}">${msg('lecm.repedit.lbl.new.from.data')}</button>
 				</span>
 			</span>
 		</div>
 		<div class="new-row">
 			<span id="${toolbarId}-newFromDicButton" class="yui-button yui-push-button">
 				<span class="first-child">
-					<button type="button" title="Сохранить как...">Выбрать из справочника</button>
+					<button type="button" title="${msg('lecm.repedit.lbl.save.as')}">${msg('lecm.repedit.lbl.select.from.dic')}</button>
 				</span>
 			</span>
 		</div>
@@ -33,7 +33,7 @@
 </div>
 
 <div id="selectTemplatePanel" class="yui-panel hidden1">
-    <div id="selectTemplatePanel-select-head" class="hd">Выбрать</div>
+    <div id="selectTemplatePanel-select-head" class="hd">${msg('lecm.repedit.lbl.select')}</div>
     <div id="selectTemplatePanel-select-body" class="bd">
         <div id="selectTemplatePanel-select-content">
             <div id="selectTemplatePanel-content" >

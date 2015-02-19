@@ -45,7 +45,7 @@
 </@comp.baseToolbar>
 </div>
 <div id="selectSourcePanel" class="yui-panel hidden1 reports-selectSourcePanel">
-    <div id="selectSourcePanel-select-head" class="hd">Выбрать</div>
+    <div id="selectSourcePanel-select-head" class="hd">${msg('lecm.repedit.lbl.select')}</div>
     <div id="selectSourcePanel-select-body" class="bd">
         <div id="selectSourcePanel-select-content">
             <div id="selectSourcePanel-content" >
