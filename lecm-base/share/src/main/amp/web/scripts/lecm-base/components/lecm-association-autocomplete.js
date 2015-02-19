@@ -287,6 +287,9 @@ LogicECM.module = LogicECM.module || {};
                     if (me.options.useDynamicLoading) {
                         oAC.generateRequest = function (sQuery) {
                             var searchData = "";
+
+                            Dom.addClass(me.controlId + "-autocomplete-input", "wait-for-load");
+
                             for (var column in me.searchProperties) {
                                 searchData += column + ":" + decodeURIComponent(sQuery) + "#";
                             }
@@ -302,6 +305,7 @@ LogicECM.module = LogicECM.module || {};
                             var results = oResponse.results;
 
                             // Если после нажатия enter возращается только один результат, то он сразу подставляется в поле
+							var res;
                             if (me.byEnter && results && results.length == 1) {
                                 me.byEnter = false;
                                 var result = results[0];
@@ -316,10 +320,12 @@ LogicECM.module = LogicECM.module || {};
                                 me.updateSelectedItems();
                                 me.updateFormFields();
                                 me.updateInputUI();
-                                return false;
+                                res = false;
                             } else {
-                                return true;
+                                res = true;
                             }
+                            Dom.removeClass(me.controlId + "-autocomplete-input", "wait-for-load");
+							return res;
                         };
 
                         oAC.queryDelay = 0.5;

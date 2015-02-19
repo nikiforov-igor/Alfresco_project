@@ -128,6 +128,9 @@ LogicECM.module = LogicECM.module || {};
 				if (me.options.useDynamicLoading) {
 					oAC.generateRequest = function(sQuery) {
 						var searchData = "";
+
+						Dom.addClass(me.controlId + "-autocomplete-input", "wait-for-load");
+
 						for(var column in me.searchProperties) {
 							searchData += column + ":" + decodeURIComponent(sQuery) + "#";
 						}
@@ -137,7 +140,13 @@ LogicECM.module = LogicECM.module || {};
 
 						return me._generateChildrenUrlParams(searchData);
 					};
+					oAC.doBeforeLoadData = function(sQuery , oResponse , oPayload) {
+						Dom.removeClass(me.controlId + "-autocomplete-input", "wait-for-load");
+						return true;
+					};
+
 					oAC.queryDelay = 1;
+
 				}
 
 				oAC.minQueryLength = 3;

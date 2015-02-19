@@ -123,7 +123,7 @@ LogicECM.module = LogicECM.module || {};
 
 			treeItemType: null,
 
-            maxSearchResults: 100,
+            maxSearchResults: 20,
 
             maxSearchResultsWithSearch: 20,
 
@@ -1135,7 +1135,7 @@ LogicECM.module = LogicECM.module || {};
                     tree:this.tree,
                     context: this
                 },
-                timeout:7000
+                timeout: 60000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
@@ -2071,7 +2071,7 @@ LogicECM.module = LogicECM.module || {};
 			} else if (this.options.maxSearchResults != null) {
 				return this.options.maxSearchResults;
 			}
-			return 100;
+			return 20;
 		},
 
 		onDisableControl: function (layer, args) {

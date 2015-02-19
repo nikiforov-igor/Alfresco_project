@@ -125,7 +125,7 @@ LogicECM.module = LogicECM.module || {};
 
 				treeItemType: null,
 
-				maxSearchResults: 100,
+                maxSearchResults: 20,
 
 				maxSearchResultsWithSearch: 20,
 
@@ -653,6 +653,9 @@ LogicECM.module = LogicECM.module || {};
 					var oAC = new YAHOO.widget.AutoComplete(this.options.controlId + "-autocomplete-input", this.options.controlId + "-autocomplete-container", oDS);
 					oAC.generateRequest = function (sQuery) {
 						var searchData = "";
+
+						Dom.addClass(me.options.controlId + "-autocomplete-input", "wait-for-load");
+
 						for (var column in me.searchProperties) {
 							searchData += column + ":" + decodeURIComponent(sQuery) + "#";
 						}
@@ -677,6 +680,7 @@ LogicECM.module = LogicECM.module || {};
                         var results = oResponse.results;
 
                         // Если после нажатия enter возращается только один результат, то он сразу подставляется в поле
+						var res;
                         if (me.byEnter && results && results.length == 1) {
                             me.byEnter = false;
                             var result = results[0];
@@ -694,10 +698,12 @@ LogicECM.module = LogicECM.module || {};
                             me.updateFormFields();
                             me.updateSelectedItems();
                             me.updateAddButtons();
-                            return false;
+							res = false;
                         } else {
-                            return true;
+							res = true;
                         }
+						Dom.removeClass(me.options.controlId + "-autocomplete-input", "wait-for-load");
+						return res;
                     };
 					oAC.queryDelay = 0.5;
 					oAC.minQueryLength = 3;
@@ -1319,7 +1325,7 @@ LogicECM.module = LogicECM.module || {};
 						tree:this.tree,
 						context: this
 					},
-					timeout:7000
+                    timeout:60000
 				};
 				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 			},
@@ -2258,7 +2264,7 @@ LogicECM.module = LogicECM.module || {};
 				} else if (this.options.maxSearchResults != null) {
 					return this.options.maxSearchResults;
 				}
-				return 100;
+                return 20;
 			},
 
 			onDisableControl: function (layer, args) {

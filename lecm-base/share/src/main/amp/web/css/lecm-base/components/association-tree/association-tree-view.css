@@ -176,3 +176,7 @@ span.insitu-delete-orgchart
 	visibility: hidden;
 	width: 16px;
 }
+
+.wait-for-load {
+	background: url('/share/res/components/images/lightbox/loading.gif') no-repeat center, #F2F2F2 !important;
+}
