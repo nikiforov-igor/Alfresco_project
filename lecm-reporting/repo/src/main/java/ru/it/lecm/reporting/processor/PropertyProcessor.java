@@ -2,7 +2,10 @@ package ru.it.lecm.reporting.processor;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -37,27 +40,19 @@ abstract class PropertyProcessor {
     protected ReportingHelper reportingHelper;
     protected String method = "SINGLE_INSTANCE";
     private static Log logger = LogFactory.getLog(PropertyProcessor.class);
-    protected List queue = new ArrayList();
+    protected List<Object> queue = new ArrayList<>();
     Properties dataDictionary;
     Properties replacementDataTypes;
     Properties globalProperties;
     Properties namespaces;
     String blacklist;
 
-    public NamespaceService getNamespaceService() {
-        return namespaceService;
-    }
-
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
 
-    public void setQueue(List theQueue) {
-        this.queue = theQueue;
-    }
-
     public void resetQueue() {
-        this.queue = new ArrayList();
+        this.queue = new ArrayList<>();
     }
 
     public SearchService getSearchService() {
@@ -259,62 +254,73 @@ abstract class PropertyProcessor {
         logger.debug("Exit setTableDefinition");
     }
 
-    public Properties processPropertyDefinitions(Properties definition, NodeRef nodeRef) {
+    public Properties processPropertyDefinitions(Properties definition, QName objectType) {
         if (logger.isDebugEnabled()) {
-            logger.debug("enter processPropertyDefinitions #props=" + definition.size() + " and nodeRef " + nodeRef);
+            logger.debug("enter processPropertyDefinitions #props=" + definition.size() + " and objectType=" + objectType);
         }
 
         try {
-            Map<QName, Serializable> e = this.nodeService.getProperties(nodeRef);
-            if (logger.isDebugEnabled()) {
-                logger.debug("processPropertyDefinitions: Size of map=" + e.size());
-            }
+            TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
 
-            for (QName e1 : e.keySet()) {
-                String key = "";
-                String type = "";
+            if (typeDef != null) {
+                Map<QName, PropertyDefinition> properties = new HashMap<>();
+                properties.putAll(typeDef.getProperties());
 
-                try {
-                    if (e1 != null) {
-                        key = this.replaceNameSpaces(e1.toString());
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("processPropertyDefinitions: Processing key " + key);
-                        }
-
-                        if (!key.startsWith("{urn:schemas_microsoft_com:}") && !definition.containsKey(key)) {
-                            type = "";
-                            if (this.getReplacementDataType().containsKey(key)) {
-                                type = this.getReplacementDataType().getProperty(key, "-").trim();
-                            } else {
-                                type = "-";
-
-                                try {
-                                    type = this.dictionaryService.getProperty(e1).getDataType().toString().trim();
-                                    type = type.substring(type.indexOf("}") + 1, type.length());
-                                    type = this.getClassToColumnType().getProperty(type, "-");
-                                } catch (NullPointerException var9) {
-                                    logger.info("Silent drop of NullPointerException against " + key);
-                                }
-                            }
-
-                            if (type != null && !type.equals("-") && !type.equals("") && !key.equals("") && !this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",")) {
-                                definition.setProperty(key, type);
-                                if (logger.isDebugEnabled()) {
-                                    logger.debug("processPropertyDefinitions: Adding column " + key + "=" + type);
-                                }
-                            } else if (logger.isDebugEnabled()) {
-                                logger.debug("Ignoring column " + key + "=" + type);
-                            }
-                        }
-                    }
-                } catch (Exception var10) {
-                    logger.error("processPropertyDefinitions: Property not found! Property below...");
-                    logger.error("processPropertyDefinitions: type=" + type + ", key=" + key);
-                    var10.printStackTrace();
+                List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
+                for (AspectDefinition defaultAspect : defaultAspects) {
+                    properties.putAll(defaultAspect.getProperties());
                 }
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("processPropertyDefinitions: end while");
+                    logger.debug("processPropertyDefinitions: Size of map=" + properties.size());
+                }
+
+                for (QName propName : properties.keySet()) {
+                    String key = "";
+                    String type = "";
+
+                    try {
+                        if (propName != null) {
+                            key = this.replaceNameSpaces(propName.toString());
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("processPropertyDefinitions: Processing key " + key);
+                            }
+
+                            if (!key.startsWith("{urn:schemas_microsoft_com:}") && !definition.containsKey(key)) {
+                                type = "";
+                                if (this.getReplacementDataType().containsKey(key)) {
+                                    type = this.getReplacementDataType().getProperty(key, "-").trim();
+                                } else {
+                                    type = "-";
+
+                                    try {
+                                        type = properties.get(propName).getDataType().toString().trim();
+                                        type = type.substring(type.indexOf("}") + 1, type.length());
+                                        type = this.getClassToColumnType().getProperty(type, "-");
+                                    } catch (NullPointerException var9) {
+                                        logger.info("Silent drop of NullPointerException against " + key);
+                                    }
+                                }
+
+                                if (type != null && !type.equals("-") && !type.equals("") && !key.equals("") && !this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",")) {
+                                    definition.setProperty(key, type);
+                                    if (logger.isDebugEnabled()) {
+                                        logger.debug("processPropertyDefinitions: Adding column " + key + "=" + type);
+                                    }
+                                } else if (logger.isDebugEnabled()) {
+                                    logger.debug("Ignoring column " + key + "=" + type);
+                                }
+                            }
+                        }
+                    } catch (Exception var10) {
+                        logger.error("processPropertyDefinitions: Property not found! Property below...");
+                        logger.error("processPropertyDefinitions: type=" + type + ", key=" + key);
+                        var10.printStackTrace();
+                    }
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("processPropertyDefinitions: end while");
+                    }
                 }
             }
         } catch (Exception var11) {
@@ -324,6 +330,7 @@ abstract class PropertyProcessor {
 
         return definition;
     }
+
     @SuppressWarnings("unused")
     private String getCategoryDisplayPath(NodeRef category) {
         String returnString = (String) this.getNodeService().getProperty(category, ContentModel.PROP_NAME);
@@ -339,25 +346,17 @@ abstract class PropertyProcessor {
         return returnString;
     }
 
-    public String getPropertyValue(NodeRef nodeRef, QName qname, String dtype, boolean multiValued) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Enter getPropertyValue (4 params), qname=" + qname + ", noderef=" + nodeRef + ", dtype=" + dtype);
-        }
-
+    public String getPropertyValue(Serializable value, String dtype, boolean multiValued) {
         String returnValue = "";
-        Serializable s = this.getNodeService().getProperty(nodeRef, qname);
-        if (logger.isDebugEnabled()) {
-            logger.debug("getPropertyType Serialized=" + s);
-        }
 
         if (!"category".equals(dtype)) {
             if (multiValued) {
-                List propValue = (List) this.getNodeService().getProperty(nodeRef, qname);
+                List propValue = (List) value;
                 if (propValue != null && !propValue.isEmpty() && propValue.size() > 0) {
                     int cnt;
                     switch (dtype) {
                         case "date":
-                        case "datetime":{
+                        case "datetime": {
                             SimpleDateFormat formatter = this.getSimpleDateFormat();
 
                             for (Object aVar11 : propValue) {
@@ -365,14 +364,14 @@ abstract class PropertyProcessor {
                             }
                             break;
                         }
-                        case "id" :
-                        case "long" :{
+                        case "id":
+                        case "long": {
                             for (cnt = 0; cnt < propValue.size(); ++cnt) {
                                 returnValue = returnValue + Long.toString((Long) propValue.get(cnt)) + ",";
                             }
                             break;
                         }
-                        case "int" :{
+                        case "int": {
                             for (cnt = 0; cnt < propValue.size(); ++cnt) {
                                 returnValue = returnValue + Integer.toString((Integer) propValue.get(cnt)) + ",";
                             }
@@ -411,46 +410,46 @@ abstract class PropertyProcessor {
                         }
                     }
                 }
-            } else if (s != null) {
+            } else if (value != null) {
                 switch (dtype) {
                     case "date":
-                    case "datetime":{
+                    case "datetime": {
                         SimpleDateFormat categories = this.getSimpleDateFormat();
                         Calendar i$ = Calendar.getInstance();
-                        i$.setTimeInMillis(((Date) s).getTime());
-                        returnValue = categories.format((Date) s);
+                        i$.setTimeInMillis(((Date) value).getTime());
+                        returnValue = categories.format((Date) value);
                         break;
                     }
-                    case "id" :
-                    case "long" :{
-                        returnValue = Long.toString((Long) s);
+                    case "id":
+                    case "long": {
+                        returnValue = Long.toString((Long) value);
                         break;
                     }
-                    case "int" :{
-                        returnValue = Integer.toString((Integer) s);
+                    case "int": {
+                        returnValue = Integer.toString((Integer) value);
                         break;
                     }
                     case "float":
                     case "double": {
-                        returnValue = Double.toString((Double) s);
+                        returnValue = Double.toString((Double) value);
                         break;
                     }
                     case "boolean": {
-                        returnValue = Boolean.toString((Boolean) s);
+                        returnValue = Boolean.toString((Boolean) value);
                         break;
                     }
                     case "text": {
-                        returnValue = s.toString();
+                        returnValue = value.toString();
                         break;
                     }
                     case "noderef": {
-                        returnValue = s.toString();
+                        returnValue = value.toString();
                         break;
                     }
                 }
 
                 if (returnValue.equals("")) {
-                    returnValue = String.valueOf(s);
+                    returnValue = String.valueOf(value);
                 }
             }
         } else {
@@ -458,7 +457,7 @@ abstract class PropertyProcessor {
                 logger.debug("I am a category!");
             }
 
-            List categories = (List) this.nodeService.getProperty(nodeRef, qname);
+            List categories = (List) value;
             String catName;
             if (categories != null) {
                 for (Iterator var16 = categories.iterator(); var16.hasNext(); returnValue = returnValue + catName) {
@@ -480,7 +479,6 @@ abstract class PropertyProcessor {
     }
 
     public ReportLine processPropertyValues(ReportLine rl, NodeRef nodeRef) {
-        Map<QName, Serializable> map = this.nodeService.getProperties(nodeRef);
         if (logger.isDebugEnabled()) {
             logger.debug("processPropertyValues enter " + nodeRef);
         }
@@ -491,31 +489,46 @@ abstract class PropertyProcessor {
                 rl.setLine("cm_lockOwner", this.getClassToColumnType().getProperty("noderef", ""), null, this.getReplacementDataType());
                 rl.setLine("cm_lockType", this.getClassToColumnType().getProperty("noderef", ""), null, this.getReplacementDataType());
                 rl.setLine("cm_expiryDate", this.getClassToColumnType().getProperty("datetime", ""), null, this.getReplacementDataType());
-            } catch (Exception var13) {
-                logger.error("processPropertyValues Exception " + var13.getMessage());
-                var13.printStackTrace();
+            } catch (Exception ex) {
+                logger.error("processPropertyValues Exception " + ex.getMessage());
             }
         }
 
-        for (QName propQName : map.keySet()) {
-            String key = "";
-            String dtype = "";
+        QName objectType = getNodeService().getType(nodeRef);
+        TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
 
-            try {
-                key = propQName.toString();
-                if (!key.startsWith("{urn:schemas_microsoft_com:}")) {
-                    key = this.replaceNameSpaces(key);
-                    dtype = this.dictionaryService.getProperty(propQName).getDataType().toString();
-                    dtype = dtype.substring(dtype.indexOf("}") + 1, dtype.length()).trim();
-                    String type = this.getClassToColumnType().getProperty(dtype, "-");
-                    boolean multiValued = this.dictionaryService.getProperty(propQName).isMultiValued();
-                    if (!this.blacklist.toLowerCase().contains("," + key.toLowerCase() + ",") && !type.equals("-")) {
-                        String value = this.getPropertyValue(nodeRef, propQName, dtype, multiValued);
-                        rl.setLine(key, type, value, this.getReplacementDataType());
+        if (typeDef != null) {
+            Map<QName, Serializable> propsMap = this.nodeService.getProperties(nodeRef);
+
+            Map<QName, PropertyDefinition> properties = new HashMap<>();
+            properties.putAll(typeDef.getProperties());
+
+            List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
+            for (AspectDefinition defaultAspect : defaultAspects) {
+                properties.putAll(defaultAspect.getProperties());
+            }
+
+            for (QName propQName : properties.keySet()) {
+                String key = "";
+                String dtype = "";
+
+                try {
+                    PropertyDefinition propDefinition = properties.get(propQName);
+                    key = propQName.toString();
+                    if (!key.startsWith("{urn:schemas_microsoft_com:}")) {
+                        key = this.replaceNameSpaces(key);
+                        dtype = propDefinition.getDataType().toString();
+                        dtype = dtype.substring(dtype.indexOf("}") + 1, dtype.length()).trim();
+                        String type = this.getClassToColumnType().getProperty(dtype, "-");
+                        boolean multiValued = propDefinition.isMultiValued();
+                        if (!this.blacklist.toLowerCase().contains("," + key.toLowerCase() + ",") && !type.equals("-")) {
+                            String value = this.getPropertyValue(propsMap.get(propQName), dtype, multiValued);
+                            rl.setLine(key, type, value, this.getReplacementDataType());
+                        }
                     }
+                } catch (Exception var12) {
+                    logger.debug("processPropertyValues: Error in object, property " + key + " not found! (" + dtype + ")");
                 }
-            } catch (Exception var12) {
-                logger.debug("processPropertyValues: Error in object, property " + key + " not found! (" + dtype + ")");
             }
         }
 

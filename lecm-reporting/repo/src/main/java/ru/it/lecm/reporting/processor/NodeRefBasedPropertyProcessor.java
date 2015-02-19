@@ -3,6 +3,10 @@ package ru.it.lecm.reporting.processor;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.AspectDefinition;
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
+import org.alfresco.service.cmr.dictionary.ClassDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.repository.Path.ChildAssocElement;
 import org.alfresco.service.cmr.repository.Path.Element;
@@ -85,7 +89,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return displayPath.toString();
     }
 
-    private Properties processAssociationDefinitions(Properties definition, NodeRef nodeRef) throws Exception {
+    private Properties processAssociationDefinitions(Properties definition, NodeRef nodeRef, QName objectType) throws Exception {
         String blockNameSpaces;
         try {
             List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
@@ -119,19 +123,48 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             blockNameSpaces = this.globalProperties.getProperty("reporting.harvest.blockNameSpaces", "");
             String[] startValues = blockNameSpaces.split(",");
 
+            TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
+            if (typeDef != null) {
+                Map<QName,AssociationDefinition> associations = new HashMap<>();
+                associations.putAll(typeDef.getAssociations());
 
-            try {
-                List<AssociationRef> targetAssocs = this.getNodeService().getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-                processAssocs(definition, startValues, targetAssocs);
-            } catch (Exception var17) {
-                logger.error("processAssociationDefinitions: Target_Association ERROR!");
-            }
+                List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
+                for (AspectDefinition defaultAspect : defaultAspects) {
+                    associations.putAll(defaultAspect.getAssociations());
+                }
 
-            try {
-                List<AssociationRef> sourceAssocs = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-                processAssocs(definition, startValues, sourceAssocs);
-            } catch (Exception var16) {
-                logger.error("processAssociationDefinitions: Source_Association ERROR!");
+                boolean stop;
+                String assocValue;
+
+                for (QName assocName : associations.keySet()) {
+                    String shortName = this.replaceNameSpaces(assocName.toString());
+                    if (definition.getProperty(shortName) == null) {
+                        for (String startValue : startValues) {
+                            stop = shortName.startsWith(startValue.trim());
+                            if (stop) {
+                                break;
+                            }
+                        }
+                        if (!this.getBlacklist().toLowerCase().contains("," + shortName.toLowerCase() + ",") && !shortName.equals("-")) {
+                            assocValue = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
+                            if (this.getReplacementDataType().containsKey(shortName)) {
+                                assocValue = this.getReplacementDataType().getProperty(shortName, "-").trim();
+                            }
+
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Target: Setting " + shortName + "=" + assocValue);
+                            }
+
+                            definition.setProperty(shortName, assocValue);
+                        }
+                    }
+                }
+                try {
+                    List<AssociationRef> sourceAssocs = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+                    processAssocs(definition, startValues, sourceAssocs);
+                } catch (Exception var16) {
+                    logger.error("processAssociationDefinitions: Source_Association ERROR!");
+                }
             }
         } catch (Exception var20) {
             logger.warn("processAssociationDefinitions: source-target ERROR!");
@@ -141,7 +174,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return definition;
     }
 
-    private void processAssocs(Properties definition, String[] startValues, List<AssociationRef> assocsList) {
+   private void processAssocs(Properties definition, String[] startValues, List<AssociationRef> assocsList) {
         boolean stop;
         String assocValue;
         for (AssociationRef targetAssoc : assocsList) {
@@ -172,7 +205,8 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
     private ReportLine processAssociationValues(ReportLine rl, NodeRef nodeRef) throws Exception {
         try {
             List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
-            long min = (long) Math.min(childAssocs.size(), Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
+            long min = (long) Math.min(childAssocs.size(),
+                    Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
             long shortName = childAssocs.size();
             if (shortName > 0L && shortName <= min) {
                 String maxChildCount = "";
@@ -202,69 +236,86 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             logger.warn("Exception in getting primary Parent noderef: " + var16.getMessage());
         }
 
-        Collection<QName> allAssociations = this.getDictionaryService().getAllAssociations();
-        int maxAssocsCount = Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.sourcetarget.assocs", "20"));
-        for (QName type : allAssociations) {
-            String assocShortName = this.replaceNameSpaces(type.toString());
-            if (!assocShortName.startsWith("trx")
-                    && !assocShortName.startsWith("act")
-                    && !assocShortName.startsWith("wca")) {
-                List assocValues;
-                String key;
-                String value;
-                Iterator it;
-                AssociationRef ar;
-                long maxChildCount;
-                long numberOfChildCars;
-                try {
-                    assocValues = this.getNodeService().getTargetAssocs(nodeRef, type);
-                    maxChildCount = Math.min(assocValues.size(), maxAssocsCount);
-                    numberOfChildCars = assocValues.size();
-                    if (numberOfChildCars > 0L && numberOfChildCars <= maxChildCount) {
-                        key = this.replaceNameSpaces(type.toString());
-                        if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
-                            value = "";
+        QName objectType = getNodeService().getType(nodeRef);
+        TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
 
-                            for (it = assocValues.iterator(); it.hasNext(); value = value + ar.getTargetRef().toString()) {
-                                ar = (AssociationRef) it.next();
-                                if (value.length() > 0) {
-                                    value = value + ",";
+        if (typeDef != null) {
+            Map<QName, AssociationDefinition> associations = new HashMap<>();
+            associations.putAll(typeDef.getAssociations());
+
+            List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
+            for (AspectDefinition defaultAspect : defaultAspects) {
+                associations.putAll(defaultAspect.getAssociations());
+            }
+
+            int maxAssocsCount = Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.sourcetarget.assocs", "20"));
+            List<AssociationRef> assocValues;
+            String key;
+            String value;
+            Iterator it;
+            AssociationRef ar;
+            long maxChildCount;
+            long numberOfChildCars;
+
+            for (QName assocQName : associations.keySet()) {
+                if (!associations.get(assocQName).isChild()) {
+                    String assocShortName = this.replaceNameSpaces(assocQName.toString());
+                    if (!assocShortName.startsWith("trx")
+                            && !assocShortName.startsWith("act")
+                            && !assocShortName.startsWith("wca")) {
+                        try {
+                            assocValues = this.getNodeService().getTargetAssocs(nodeRef, assocQName);
+                            maxChildCount = Math.min(assocValues.size(), maxAssocsCount);
+                            numberOfChildCars = assocValues.size();
+                            if (numberOfChildCars <= maxChildCount) {
+                                key = this.replaceNameSpaces(assocQName.toString());
+                                if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
+                                    value = "";
+
+                                    for (it = assocValues.iterator(); it.hasNext(); value = value + ar.getTargetRef().toString()) {
+                                        ar = (AssociationRef) it.next();
+                                        if (value.length() > 0) {
+                                            value = value + ",";
+                                        }
+                                    }
+
+                                    rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
                                 }
                             }
-
-                            rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
+                        } catch (Exception ex) {
+                            //if (logger.isDebugEnabled()) {
+                            logger.error(ex.getMessage(), ex);
+                            //}
                         }
-                    }
-                } catch (Exception ignored) {
-                    if (logger.isDebugEnabled()) {
-                        logger.error(ignored.getMessage(), ignored);
                     }
                 }
+            }
 
-                try {
-                    assocValues = this.getNodeService().getSourceAssocs(nodeRef, type);
-                    maxChildCount = Math.min(assocValues.size(), maxAssocsCount);
-                    numberOfChildCars = assocValues.size();
-                    if (numberOfChildCars > 0L && numberOfChildCars <= maxChildCount) {
-                        key = type.toString();
-                        key = this.replaceNameSpaces(key);
-                        if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-") && assocValues != null && assocValues.size() > 0) {
+            try {
+                assocValues = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+                Map<String, String> sourceValues = new HashMap<>();
+                for (AssociationRef assocValue : assocValues) {
+                    key = assocValue.getTypeQName().toString();
+                    key = this.replaceNameSpaces(key);
+                    if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
+                        value = sourceValues.get(key);
+                        if (value == null) {
                             value = "";
-
-                            for (it = assocValues.iterator(); it.hasNext(); value = value + ar.getSourceRef().toString()) {
-                                ar = (AssociationRef) it.next();
-                                if (value.length() > 0) {
-                                    value = value + ",";
-                                }
-                            }
-
-                            rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
                         }
+                        NodeRef sourceValue = assocValue.getSourceRef();
+                        if (value.length() > 0) {
+                            value = value + ",";
+                        }
+                       sourceValues.put(key, value + sourceValue.toString());
                     }
-                } catch (Exception ignored) {
-                    if (logger.isDebugEnabled()) {
-                        logger.error(ignored.getMessage(), ignored);
-                    }
+                }
+                for (String sourceKey : sourceValues.keySet()) {
+                    rl.setLine(sourceKey, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"),
+                            sourceValues.get(sourceKey), this.getReplacementDataType());
+                }
+            } catch (Exception ignored) {
+                if (logger.isDebugEnabled()) {
+                    logger.error(ignored.getMessage(), ignored);
                 }
             }
         }
@@ -274,43 +325,36 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
     protected ReportLine processNodeToMap(String identifier, String table, ReportLine rl) {
         this.dbhb.fixTableColumnName(table);
-        if (logger.isDebugEnabled()) {
-            logger.debug("processNodeToMap, identifier=" + identifier);
-        }
-
-        NodeRef masterRef = null;
-        NodeRef nodeRef = new NodeRef(identifier.split(",")[0]);
-        if (identifier.contains(",")) {
-            masterRef = new NodeRef(identifier.split(",")[1]);
-        }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Enter processNodeToMap nodeRef=" + nodeRef);
+            logger.debug("Enter processNodeToMap nodeRef=" + identifier);
         }
+
+        NodeRef nodeRef = new NodeRef(identifier);
 
         try {
             rl = this.processPropertyValues(rl, nodeRef);
-        } catch (Exception var28) {
-            var28.printStackTrace();
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
 
         try {
             rl = this.processAssociationValues(rl, nodeRef);
-        } catch (Exception var27) {
-            var27.printStackTrace();
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
 
         try {
             rl.setLine(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
-        } catch (Exception var26) {
-            var26.printStackTrace();
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
 
         String valueString;
         try {
             valueString = this.nodeService.getType(nodeRef).toPrefixString(namespaceService);
             rl.setLine(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, ""), valueString, this.getReplacementDataType());
-        } catch (Exception var25) {
+        } catch (Exception ex) {
             logger.debug("EXCEPTION: // it does not have a Type. Bad luck. Don\'t crash (versionStore?!)");
         }
 
@@ -328,8 +372,8 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             }
 
             rl.setLine(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, ""), valueString, this.getReplacementDataType());
-        } catch (Exception var29) {
-            logger.error(var29.getMessage(), var29);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
 
         String displayPath1;
@@ -338,8 +382,8 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             Path path1 = this.getNodeService().getPath(nodeRef);
             displayPath1 = this.toDisplayPath(path1);
             rl.setLine(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH), displayPath1, this.getReplacementDataType());
-        } catch (Exception var24) {
-            logger.error(var24.getMessage(), var24);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
         }
 
         QName myType = this.getNodeService().getType(nodeRef);
@@ -352,8 +396,8 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     logger.debug("ORIGIN: child:" + e.getChildRef() + " parent: " + e.getParentRef());
                     size = e.getChildRef();
                 }
-            } catch (Exception var22) {
-                logger.fatal("Exception getting orig_noderef" + Arrays.toString(var22.getStackTrace()));
+            } catch (Exception ex) {
+                logger.fatal("Exception getting orig_noderef" + ex.getMessage());
             }
 
             if (size != null) {
@@ -428,10 +472,10 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 if (nodeRef.toString().startsWith("version")) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Setting nodeRef to orig_noderef - VERSION!!!");
-                        logger.debug("Master says: " + (masterRef != null ? masterRef.toString() : null));
+                        //logger.debug("Master says: " + (masterRef != null ? masterRef.toString() : null));
                     }
 
-                    rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), masterRef != null ? masterRef.toString() : null, this.getReplacementDataType());
+                    //rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), masterRef != null ? masterRef.toString() : null, this.getReplacementDataType());
                 } else if (origNodeRef1 != null) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Setting Ref from archive to orig_noderef!!!");
@@ -459,9 +503,9 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         Properties definition = new Properties();
         for (Object aQueue : this.queue) {
             NodeRef nodeRef = new NodeRef(aQueue.toString().split(",")[0]);
-
+            QName objectType = this.getNodeService().getType(nodeRef);
             try {
-                definition = this.processPropertyDefinitions(definition, nodeRef);
+                definition = this.processPropertyDefinitions(definition, objectType);
                 definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
             } catch (Exception var9) {
                 logger.warn("processQueueDefinition: ERROR: versionNodes.containsKey or before " + var9.getMessage());
@@ -474,12 +518,13 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 definition.setProperty(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
                 definition.setProperty(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, "-"));
                 definition.setProperty(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, "-"));
-                QName var11 = this.getNodeService().getType(nodeRef);
+
                 if (logger.isDebugEnabled()) {
-                    logger.debug("processQueueDefinition: qname=" + var11);
+                    logger.debug("processQueueDefinition: qname=" + objectType);
                 }
 
-                if (!this.getDictionaryService().isSubClass(var11, ContentModel.TYPE_CONTENT) && !this.getDictionaryService().getType(var11).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
+                if (!this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_CONTENT)
+                        && !this.getDictionaryService().getType(objectType).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
                     logger.debug("processQueueDefinition: NOOOOO! We are NOT a subtype of Content!");
                 } else {
                     if (logger.isDebugEnabled()) {
@@ -498,7 +543,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     definition.setProperty("versioned", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
                 }
 
-                if (this.getDictionaryService().isSubClass(var11, ContentModel.TYPE_PERSON)) {
+                if (this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_PERSON)) {
                     definition.setProperty("enabled", this.getClassToColumnType().getProperty("boolean", "-"));
                 }
 
@@ -522,7 +567,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             }
 
             try {
-                definition = this.processAssociationDefinitions(definition, nodeRef);
+                definition = this.processAssociationDefinitions(definition, nodeRef, objectType);
             } catch (Exception var8) {
                 logger.warn("Error getting assoc definitions" + var8.getMessage());
                 var8.printStackTrace();
@@ -557,7 +602,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     logger.debug("processQueueValues: " + q + "/" + queuesize + ": " + numberOfRows);
                 }
 
-                rl = this.processNodeToMap(identifier, table, rl);
+                rl = this.processNodeToMap(nodeRef.toString(), table, rl);
 
                 String shortTypeName = rl.getValue(Constants.COLUMN_OBJECT_TYPE).toLowerCase();
                 if (!types.contains(shortTypeName)) {
