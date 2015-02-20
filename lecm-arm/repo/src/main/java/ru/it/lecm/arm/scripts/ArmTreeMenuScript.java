@@ -16,10 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import ru.it.lecm.arm.beans.ArmColumn;
-import ru.it.lecm.arm.beans.ArmFilter;
-import ru.it.lecm.arm.beans.ArmFilterValue;
-import ru.it.lecm.arm.beans.ArmWrapperServiceImpl;
+import ru.it.lecm.arm.beans.*;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -65,8 +62,13 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 	private DocumentService documentService;
         private LecmTransactionHelper lecmTransactionHelper;
 	private TransactionService transtactionService;
+    private ArmServiceImpl armService;
 
-        public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+    public void setArmService(ArmServiceImpl armService) {
+        this.armService = armService;
+    }
+
+    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
             this.lecmTransactionHelper = lecmTransactionHelper;
         }
 
@@ -147,6 +149,13 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(LABEL, node.getTitle());
             if (!isAccordionNode) {
                 result.put(IS_LEAF, !service.hasChildNodes(node));
+                boolean isAggregate = false;
+                if (node.getNodeRef() != null) {
+                    Object isAggregationNode = armService.getCachedProperties(node.getNodeRef()).get(ArmService.PROP_IS_AGGREGATION_NODE);
+                    isAggregate = Boolean.TRUE.equals(isAggregationNode);
+                }
+
+                result.put("isAggregate", isAggregate);
             }
             result.put(FILTER, getFiltersJSON(node.getAvaiableFilters()));
 

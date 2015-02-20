@@ -111,6 +111,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="stateMachineService" ref="stateMachineHelper"/>
 		<property name="documentService" ref="documentService"/>
+		<property name="armService" ref="armService"/>
 	</bean>
 
 	<bean id="armWrapperService"

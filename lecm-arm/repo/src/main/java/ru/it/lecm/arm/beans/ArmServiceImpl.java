@@ -611,7 +611,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         logger.info("Arm cache cleared for '{}'!!!", user);
     }
 
-    /*package*/ Map<QName, Serializable> getCachedProperties(NodeRef nodeRef) {
+    public Map<QName, Serializable> getCachedProperties(NodeRef nodeRef) {
         if (!propertiesCache.contains(nodeRef)) {
             propertiesCache.put(nodeRef, nodeService.getProperties(nodeRef));
         }

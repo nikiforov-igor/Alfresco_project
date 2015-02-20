@@ -44,6 +44,7 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                         usePagination: true,
                         pageSize: 20,
                         showExtendSearchBlock: true,
+                        searchShowInactive: true,
                         actions: [
                             {
                             type: "datagrid-action-link-documents-arm",

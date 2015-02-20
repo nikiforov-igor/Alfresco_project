@@ -171,7 +171,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             this.search.performSearch({
                 searchConfig: searchConfig,
-                searchShowInactive: this.options.searchShowInactive,
+                searchShowInactive: true,
                 parent: this.datagridMeta.nodeRef,
                 searchNodes: this.datagridMeta.searchNodes,
                 itemType: this.datagridMeta.itemType,
@@ -297,13 +297,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             if (node) {
                 var query = node.data.searchQuery;
                 if (query && query.length > 0) {
+                    var include = !node.data.isAggregate;
                     if (!buffer) {
                         buffer = [];
+                        include = true;
                     }
                     if (!parentId) {
                         parentId = node.id;
                     }
-                    if (parentId == node.id) {
+                    if ((parentId == node.id) && include) {
                         buffer.push(query);
                     }
                 }

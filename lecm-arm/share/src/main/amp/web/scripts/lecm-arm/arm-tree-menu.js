@@ -251,7 +251,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 counterDesc: oResults[nodeIndex].counterDesc,
 	                            htmlUrl: oResults[nodeIndex].htmlUrl,
                                 reportCodes: oResults[nodeIndex].reportCodes,
-	                            searchType: oResults[nodeIndex].searchType
+	                            searchType: oResults[nodeIndex].searchType,
+                                isAggregate: oResults[nodeIndex].isAggregate
                             };
 
                             // добавляем элемент в дерево
@@ -310,13 +311,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             if (node) {
                 var query = node.data ? node.data.searchQuery : node.searchQuery;
                 if (query && query.length > 0) {
+                    var include = node.data ? !node.data.isAggregate : true;
                     if (!buffer) {
                         buffer = [];
+                        include = true;
                     }
                     if (!parentId) {
                         parentId = node.id;
                     }
-                    if (parentId == node.id) {
+                    if ((parentId == node.id) && include) {
                         buffer.push(query);
                     }
                 }
