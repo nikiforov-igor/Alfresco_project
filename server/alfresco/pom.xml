@@ -1240,6 +1240,41 @@
                     <scope>runtime</scope>
                     <type>amp</type>
                 </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.internal</groupId>
+                    <artifactId>internal-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.incoming</groupId>
+                    <artifactId>incoming-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.outgoing</groupId>
+                    <artifactId>outgoing-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.nd</groupId>
+                    <artifactId>nd-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.ord</groupId>
+                    <artifactId>ord-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
             </dependencies>
             <build>
                 <plugins>
@@ -1451,6 +1486,32 @@
                                 <overlay>
                                     <groupId>ru.it.lecm.operative-storage</groupId>
                                     <artifactId>operative-storage-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <!-- Дополнительные модули СЭД -->
+                                <overlay>
+                                    <groupId>ru.it.lecm.internal</groupId>
+                                    <artifactId>internal-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.incoming</groupId>
+                                    <artifactId>incoming-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.outgoing</groupId>
+                                    <artifactId>outgoing-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.nd</groupId>
+                                    <artifactId>nd-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.ord</groupId>
+                                    <artifactId>ord-repo</artifactId>
                                     <type>amp</type>
                                 </overlay>
                                 <!-- доп модуль Reporting-->
