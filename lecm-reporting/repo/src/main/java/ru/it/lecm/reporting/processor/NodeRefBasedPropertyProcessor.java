@@ -5,7 +5,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
-import org.alfresco.service.cmr.dictionary.ClassDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.repository.Path.ChildAssocElement;
@@ -38,6 +37,9 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
     private ActiveMQConnectionFactory connectionFactory;
     private JmsTemplate templateProducer;
+
+    private Map<QName, Properties> typePropsDefinitions = new HashMap<>();
+    private Map<QName, Properties> typeAssocsDefinitions = new HashMap<>();
 
     public NodeRefBasedPropertyProcessor(ServiceRegistry serviceRegistry, ReportingHelper helper) throws Exception {
         this.setNodeService(serviceRegistry.getNodeService());
@@ -119,56 +121,66 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             logger.error("processAssociationDefinitions: parent_noderef ERROR!");
         }
 
-        try {
-            blockNameSpaces = this.globalProperties.getProperty("reporting.harvest.blockNameSpaces", "");
-            String[] startValues = blockNameSpaces.split(",");
+        TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
+        blockNameSpaces = this.globalProperties.getProperty("reporting.harvest.blockNameSpaces", "");
+        String[] startValues = blockNameSpaces.split(",");
 
-            TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
-            if (typeDef != null) {
-                Map<QName,AssociationDefinition> associations = new HashMap<>();
-                associations.putAll(typeDef.getAssociations());
+        if (typeAssocsDefinitions.containsKey(objectType)) {
+            definition.putAll(typeAssocsDefinitions.get(objectType));
+        } else {
+            Properties assocsFromDefinition = new Properties();
+            try {
+                if (typeDef != null) {
+                    Map<QName,AssociationDefinition> associations = new HashMap<>();
+                    associations.putAll(typeDef.getAssociations());
 
-                List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
-                for (AspectDefinition defaultAspect : defaultAspects) {
-                    associations.putAll(defaultAspect.getAssociations());
-                }
+                    List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
+                    for (AspectDefinition defaultAspect : defaultAspects) {
+                        associations.putAll(defaultAspect.getAssociations());
+                    }
 
-                boolean stop;
-                String assocValue;
+                    boolean stop;
+                    String assocValue;
 
-                for (QName assocName : associations.keySet()) {
-                    String shortName = this.replaceNameSpaces(assocName.toString());
-                    if (definition.getProperty(shortName) == null) {
-                        for (String startValue : startValues) {
-                            stop = shortName.startsWith(startValue.trim());
-                            if (stop) {
-                                break;
+                    for (QName assocName : associations.keySet()) {
+                        String shortName = this.replaceNameSpaces(assocName.toString());
+                        if (definition.getProperty(shortName) == null) {
+                            for (String startValue : startValues) {
+                                stop = shortName.startsWith(startValue.trim());
+                                if (stop) {
+                                    break;
+                                }
                             }
-                        }
-                        if (!this.getBlacklist().toLowerCase().contains("," + shortName.toLowerCase() + ",") && !shortName.equals("-")) {
-                            assocValue = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
-                            if (this.getReplacementDataType().containsKey(shortName)) {
-                                assocValue = this.getReplacementDataType().getProperty(shortName, "-").trim();
-                            }
+                            if (!this.getBlacklist().toLowerCase().contains("," + shortName.toLowerCase() + ",") && !shortName.equals("-")) {
+                                assocValue = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
+                                if (this.getReplacementDataType().containsKey(shortName)) {
+                                    assocValue = this.getReplacementDataType().getProperty(shortName, "-").trim();
+                                }
 
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("Target: Setting " + shortName + "=" + assocValue);
-                            }
+                                if (logger.isDebugEnabled()) {
+                                    logger.debug("Target: Setting " + shortName + "=" + assocValue);
+                                }
 
-                            definition.setProperty(shortName, assocValue);
+                                assocsFromDefinition.setProperty(shortName, assocValue);
+                                definition.setProperty(shortName, assocValue);
+                            }
                         }
                     }
                 }
-                try {
-                    List<AssociationRef> sourceAssocs = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-                    processAssocs(definition, startValues, sourceAssocs);
-                } catch (Exception var16) {
-                    logger.error("processAssociationDefinitions: Source_Association ERROR!");
-                }
+            } catch (Exception var20) {
+                logger.warn("processAssociationDefinitions: source-target ERROR!");
+                var20.printStackTrace();
             }
-        } catch (Exception var20) {
-            logger.warn("processAssociationDefinitions: source-target ERROR!");
-            var20.printStackTrace();
+            typeAssocsDefinitions.put(objectType, assocsFromDefinition);
+        }
+
+        if (typeDef != null) {
+            try {
+                List<AssociationRef> sourceAssocs = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+                processAssocs(definition, startValues, sourceAssocs);
+            } catch (Exception var16) {
+                logger.error("processAssociationDefinitions: Source_Association ERROR!");
+            }
         }
 
         return definition;
@@ -504,49 +516,60 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         for (Object aQueue : this.queue) {
             NodeRef nodeRef = new NodeRef(aQueue.toString().split(",")[0]);
             QName objectType = this.getNodeService().getType(nodeRef);
-            try {
-                definition = this.processPropertyDefinitions(definition, objectType);
-                definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-            } catch (Exception var9) {
-                logger.warn("processQueueDefinition: ERROR: versionNodes.containsKey or before " + var9.getMessage());
-                var9.printStackTrace();
+            if (typePropsDefinitions.containsKey(objectType)) {
+                definition = typePropsDefinitions.get(objectType);
+            } else {
+                try {
+                    definition = this.processPropertyDefinitions(definition, objectType);
+                    definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                } catch (Exception var9) {
+                    logger.warn("processQueueDefinition: ERROR: versionNodes.containsKey or before " + var9.getMessage());
+                    var9.printStackTrace();
+                }
+
+                try {
+                    definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                    definition.setProperty(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH, "-"));
+                    definition.setProperty(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                    definition.setProperty(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, "-"));
+                    definition.setProperty(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, "-"));
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("processQueueDefinition: qname=" + objectType);
+                    }
+
+                    if (!this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_CONTENT)
+                            && !this.getDictionaryService().getType(objectType).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
+                        logger.debug("processQueueDefinition: NOOOOO! We are NOT a subtype of Content!");
+                    } else {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("processQueueDefinition: YEAH! We are a subtype of Content! " + ContentModel.TYPE_CONTENT);
+                        }
+
+                        definition.setProperty("mimetype", this.getClassToColumnType().getProperty("mimetype", "-"));
+                        definition.setProperty(this.COLUMN_SIZE, this.getClassToColumnType().getProperty(this.COLUMN_SIZE, "-"));
+                        definition.setProperty("cm_workingCopyLlink", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                        definition.setProperty("cm_lockOwner", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                        definition.setProperty("cm_lockType", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                        definition.setProperty("cm_expiryDate", this.getClassToColumnType().getProperty("datetime", "-"));
+                        definition.setProperty("sys_archivedDate", this.getClassToColumnType().getProperty("datetime", "-"));
+                        definition.setProperty("sys_archivedBy", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                        definition.setProperty("sys_archivedOriginalOwner", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                        definition.setProperty("versioned", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                    }
+
+                    if (this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_PERSON)) {
+                        definition.setProperty("enabled", this.getClassToColumnType().getProperty("boolean", "-"));
+                    }
+                } catch (Exception var10) {
+                    logger.info("unexpeted error in node " + nodeRef.toString());
+                    logger.info("unexpeted error in node " + var10.getMessage());
+                }
+
+                typePropsDefinitions.put(objectType, definition);
             }
 
             try {
-                definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                definition.setProperty(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH, "-"));
-                definition.setProperty(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                definition.setProperty(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, "-"));
-                definition.setProperty(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, "-"));
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("processQueueDefinition: qname=" + objectType);
-                }
-
-                if (!this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_CONTENT)
-                        && !this.getDictionaryService().getType(objectType).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
-                    logger.debug("processQueueDefinition: NOOOOO! We are NOT a subtype of Content!");
-                } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("processQueueDefinition: YEAH! We are a subtype of Content! " + ContentModel.TYPE_CONTENT);
-                    }
-
-                    definition.setProperty("mimetype", this.getClassToColumnType().getProperty("mimetype", "-"));
-                    definition.setProperty(this.COLUMN_SIZE, this.getClassToColumnType().getProperty(this.COLUMN_SIZE, "-"));
-                    definition.setProperty("cm_workingCopyLlink", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                    definition.setProperty("cm_lockOwner", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                    definition.setProperty("cm_lockType", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                    definition.setProperty("cm_expiryDate", this.getClassToColumnType().getProperty("datetime", "-"));
-                    definition.setProperty("sys_archivedDate", this.getClassToColumnType().getProperty("datetime", "-"));
-                    definition.setProperty("sys_archivedBy", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                    definition.setProperty("sys_archivedOriginalOwner", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                    definition.setProperty("versioned", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                }
-
-                if (this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_PERSON)) {
-                    definition.setProperty("enabled", this.getClassToColumnType().getProperty("boolean", "-"));
-                }
-
                 if (this.getNodeService().hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
                     String type = this.getClassToColumnType().getProperty("text", "-");
                     if (this.getReplacementDataType().containsKey("cm_versionLabel")) {
@@ -561,9 +584,9 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
                     definition.setProperty("cm_versionType", type);
                 }
-            } catch (Exception var10) {
+            } catch (Exception ex) {
                 logger.info("unexpeted error in node " + nodeRef.toString());
-                logger.info("unexpeted error in node " + var10.getMessage());
+                logger.info("unexpeted error in node " + ex.getMessage());
             }
 
             try {
