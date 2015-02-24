@@ -7,7 +7,7 @@ function Binder(options) {
 
 	function throwException(paramName) {
 		//console.log('Binder: не был задан параметр при создании экземпляра (%s)', paramName);
-		throw 'Binder: при создании экземпляра не был задан параметр (' + paramName + ')';
+		throw 'Binder: ' + Alfresco.util.message('lecm.base.msg.param.not.set') + ' (' + paramName + ')';
 	}
 
 	this.bubblingLayer = options.bubblingLayer || throwException('bubblingLayer');
@@ -23,7 +23,7 @@ function Binder(options) {
 		try {
 			currentId = obj.getIdFn.call(obj, args[1]);
 		} catch (e) {
-			console.log('Binder: не удалось разрешить ID компонента (' + currentId + ')');
+			console.log('Binder: ' + Alfresco.util.message('lecm.base.msg.resolve.com.id.fail') + ' (' + currentId + ')');
 			return false;
 		}
 
@@ -92,7 +92,7 @@ Binder.prototype._initComponents = function() {
 			components[i] = matchedComponent;
 			matchedComponent = null;
 		} else {
-			throw 'Binder: не найден компонент (' + query.id + ')';
+			throw 'Binder: ' + Alfresco.util.message('lecm.base.msg.comp.not.found') + ' (' + query.id + ')';
 		}
 	}
 };

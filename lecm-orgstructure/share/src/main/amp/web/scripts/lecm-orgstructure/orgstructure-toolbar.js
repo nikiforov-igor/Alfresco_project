@@ -121,7 +121,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             onStructureClick: function BaseToolbar_onStructureClick() {
-                window.open(Alfresco.constants.PROXY_URI + "/lecm/orgstructure/diagram", "Структура организации", "top=0,left=0,height=768,width=1024");
+                window.open(Alfresco.constants.PROXY_URI + "/lecm/orgstructure/diagram", Alfresco.util.message('header.orgstructure.label'), "top=0,left=0,height=768,width=1024");
             },
             onExport: function onExport_function() {
                 var orgMetadata = this.modules.dataGrid.datagridMeta;

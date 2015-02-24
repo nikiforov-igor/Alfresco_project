@@ -10,9 +10,13 @@
 		<value>alfresco/module/${artifactId}/models/lecm-reservation-aspects-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/reservation-workflow-model.xml</value>
 	</util:list>
+        <util:list id="reservation.labels">
+                <value>alfresco/module/${artifactId}/messages/reservation-workflow-model</value>   
+        </util:list>
 	<bean id="reservation.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="statemachine.aspects.LogicEcmModelsBootstrap"
-		  p:models-ref="reservation.models"/>
+		  p:models-ref="reservation.models"
+                  p:labels-ref="reservation.labels"/>
 
 	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
