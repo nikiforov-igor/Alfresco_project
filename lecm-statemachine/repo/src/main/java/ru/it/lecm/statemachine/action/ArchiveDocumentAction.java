@@ -39,6 +39,8 @@ import java.util.regex.Pattern;
  */
 public class ArchiveDocumentAction extends StateMachineAction implements ExecutionListener {
 
+	private final static String legacyAdditionalPathRegex = "\\{([\\w-]*?):([\\w-]*?)\\}";
+	private final static Pattern legacyAdditionalPathPattern = Pattern.compile(legacyAdditionalPathRegex);
     private String archiveFolderPath = "/Archive";
     private String archiveFolderPathAdditional = "";
     private String status = "UNKNOWN";
@@ -258,16 +260,23 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
     }
 
     private NodeRef createAdditionalPath(NodeRef node, NodeRef rootPath) {
-        Pattern pattern = Pattern.compile("\\{(.*?):(.*?)\\}");
-        String path = archiveFolderPathAdditional;
-        Matcher matcher = pattern.matcher(path);
-        while (matcher.find()) {
-            String prefix = matcher.group(1);
-            String attributeName = matcher.group(2);
-            QName attribute = QName.createQName(prefix, attributeName, getServiceRegistry().getNamespaceService());
-            String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
-            path = path.replace("{" + prefix + ":" + attributeName + "}", value);
-        }
+		String path;
+		if (archiveFolderPathAdditional.matches(legacyAdditionalPathRegex)) {
+			// fallback to legacy mechanism
+			path = archiveFolderPathAdditional;
+			Matcher matcher = legacyAdditionalPathPattern.matcher(path);
+			while (matcher.find()) {
+				String prefix = matcher.group(1);
+				String attributeName = matcher.group(2);
+				QName attribute = QName.createQName(prefix, attributeName, getServiceRegistry().getNamespaceService());
+				String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
+				path = path.replace("{" + prefix + ":" + attributeName + "}", value);
+			}
+		} else {
+			DocumentService documentService = getDocumentService();
+			path = documentService.execStringExpression(node, archiveFolderPathAdditional);
+		}
+
         try {
             StringTokenizer tokenizer = new StringTokenizer(path, "/");
             NodeService nodeService = getServiceRegistry().getNodeService();

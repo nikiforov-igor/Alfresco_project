@@ -22,7 +22,7 @@ import org.springframework.context.expression.BeanFactoryResolver;
  */
 public class Expression {
 
-	private Map<String, Object> state = new HashMap<String, Object>();
+	private Map<String, Object> state = new HashMap<>();
 	private ExpressionDocument doc;
 	private ExpressionUser user;
 	private StandardEvaluationContext context;
@@ -49,7 +49,7 @@ public class Expression {
 		this.context.setBeanResolver(new BeanFactoryResolver(this.applicationContext));
     }
 
-	public boolean execute(String expression) {
+	public boolean executeAsBoolean(String expression) {
 		if ("".equals(expression)) {
 			expression = "true";
 		}
@@ -61,6 +61,16 @@ public class Expression {
             return false;
         }
     }
+
+	public String executeAsString(String expression) {
+		try {
+			String result = new SpelExpressionParser().parseExpression(expression).getValue(context, String.class);
+			return result != null ? result : "";
+		} catch (Exception e) {
+			logger.error("Expression: " + expression + " has errors", e);
+			return "";
+		}
+	}
 
 	public Object state(String variableName) {
 		return state.get(variableName);

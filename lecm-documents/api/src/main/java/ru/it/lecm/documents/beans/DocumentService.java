@@ -311,12 +311,20 @@ public interface DocumentService {
     public Collection<QName> getDocumentSubTypes();
 
     /**
-     * Выполнение выражения для документа
+     * Выполнение булева выражения для документа
      * @param document
      * @param expression
      * @return
      */
     public boolean execExpression(NodeRef document, String expression);
+
+    /**
+     * Выполнение строкового выражения для документа
+     * @param document
+     * @param expression
+     * @return
+     */
+    public String execStringExpression(NodeRef document, String expression);
 
     /**
      * Установить настройки финализации в папку подразделения

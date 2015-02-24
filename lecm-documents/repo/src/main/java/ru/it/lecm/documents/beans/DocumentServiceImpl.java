@@ -74,7 +74,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     public void setDocumentTableService(DocumentTableService documentTableService) {
         this.documentTableService = documentTableService;
     }
-    
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -767,8 +767,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     @Override
     public boolean execExpression(NodeRef document, String expression) {
         Expression evaluator = new Expression(document, serviceRegistry, applicationContext);
-        return evaluator.execute(expression);
+        return evaluator.executeAsBoolean(expression);
     }
+
+	@Override
+	public String execStringExpression(NodeRef document, String expression) {
+		Expression evaluator = new Expression(document, serviceRegistry, applicationContext);
+		return evaluator.executeAsString(expression);
+	}
 
     @Override
     public void finalizeToUnit(NodeRef document, Boolean sharedFolder, NodeRef primaryUnit, List<NodeRef> additionalUnits) {
