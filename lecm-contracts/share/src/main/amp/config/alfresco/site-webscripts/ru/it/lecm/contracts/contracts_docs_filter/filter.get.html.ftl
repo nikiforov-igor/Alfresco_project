@@ -26,7 +26,7 @@
 	            statusesFilter = _generatePropertyFilterStr ("${args.includedStatuses}", "lecm-statemachine:status");
 	        </#if>
 
-	        YAHOO.Bubbling.fire ("reСreateDatagrid", {
+	        YAHOO.Bubbling.fire ("reCreateDatagrid", {
 	            datagridMeta: {
 	                searchConfig: {
 	                    filter: (filterStr.length > 0 ?  filterStr + " AND " : "")

@@ -97,7 +97,7 @@
 
 	                                                var formId = (("datagrid_" + this.key).split(" ").join("_"));
 
-	                                                YAHOO.Bubbling.fire ("reСreateDatagrid", {
+	                                                YAHOO.Bubbling.fire ("reCreateDatagrid", {
 	                                                    datagridMeta: {
 	                                                        datagridFormId: formId,
 	                                                        searchConfig: {
@@ -169,7 +169,7 @@
 	                                                statusesFilter = _generatePropertyFilterStr ("${args.includedStatuses}", "lecm-statemachine:status");
 	                                            </#if>
 
-	                                            YAHOO.Bubbling.fire ("reСreateDatagrid", {
+	                                            YAHOO.Bubbling.fire ("reCreateDatagrid", {
 	                                                datagridMeta: {
 	                                                    datagridFormId: formId,
 	                                                    searchConfig: {

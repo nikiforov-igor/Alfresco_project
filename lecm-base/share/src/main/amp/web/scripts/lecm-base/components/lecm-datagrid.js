@@ -99,7 +99,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
-        Bubbling.on("reСreateDatagrid", this.onReCreateDatagrid, this);
+        Bubbling.on("reCreateDatagrid", this.onReCreateDatagrid, this);
 
         /* Deferred list population until DOM ready */
         this.deferredListPopulation = new Alfresco.util.Deferred(["onReady", "onGridTypeChanged"],
@@ -3147,7 +3147,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        Bubbling.unsubscribe("dataItemsDeleted", this.onDataItemsDeleted, this);
 			        Bubbling.unsubscribe("datagridRefresh", this.onDataGridRefresh, this);
 			        Bubbling.unsubscribe("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
-			        Bubbling.unsubscribe("reСreateDatagrid", this.onReCreateDatagrid, this);
+			        Bubbling.unsubscribe("reCreateDatagrid", this.onReCreateDatagrid, this);
 
 			        this.destroyDatatable();
 		        }
