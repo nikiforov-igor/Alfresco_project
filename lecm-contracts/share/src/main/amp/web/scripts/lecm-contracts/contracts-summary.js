@@ -75,14 +75,14 @@ LogicECM.module.Contracts.dashlet = LogicECM.module.Contracts.dashlet || {};
 								if (!listItem.skip) {
 									this.createRow(YAHOO.lang.substitute(template, {
 										bold: index === 0 ? 'bold' : '',
-										message: this.message[listItem.key],
+										message: this.message[listItem.key]?this.message[listItem.key]:listItem.key,
 										href: Alfresco.constants.URL_PAGECONTEXT + 'arm?code=SED&path=Договоры/' + encodeURIComponent(listItem.key),
 										amount: listItem.amount
 									}));
 								}
 							}
 							this.createRow(YAHOO.lang.substitute(membersTemplate, {
-								message: this.message[members.key],
+								message: this.message[members.key]?this.message[members.key]:members.key,
 								onclick: 'LogicECM.module.Contracts.dashlet.Summary.instance.showDialog();',
 								amount: members.amountMembers
 							}));
