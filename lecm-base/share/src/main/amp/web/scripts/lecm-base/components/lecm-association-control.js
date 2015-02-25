@@ -318,7 +318,7 @@ LogicECM.module = LogicECM.module || {};
 						}
 					}
 
-					Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll.bind(this));
+					Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll, this, true);
 
 					if (!this.options.lazyLoading) {
 						this._loadSearchProperties();
@@ -1677,7 +1677,7 @@ LogicECM.module = LogicECM.module || {};
 				this.startLocationResolved = true;
 			},
 
-			onPickerItemsContainerScroll: function() {
+			onPickerItemsContainerScroll: function(event, object) {
 				var container = event.currentTarget;
 				if (container.scrollTop + container.clientHeight == container.scrollHeight) {
 					Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
