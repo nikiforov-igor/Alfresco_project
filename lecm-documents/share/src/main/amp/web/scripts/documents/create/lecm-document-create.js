@@ -175,24 +175,31 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			var deferredLabels = ['chooseState', 'connectDocuments', 'workflowTask'];
 			this.deferredFormSubmitSuccessRedirect = new Alfresco.util.Deferred(deferredLabels, defferedConfig);
 
-			if (this.options.actionId && this.options.actionType && this.options.taskId) {
-				deferredLabels.splice(deferredLabels.indexOf('chooseState'), 1);
-				this._chooseState('chooseState', this.options.actionType, this.options.taskId, null, this.options.actionId);
-			}
-
+			var fn;
 			if (this.options.connectionType && this.options.parentDocumentNodeRef) {
 				deferredLabels.splice(deferredLabels.indexOf('connectDocuments'), 1);
-				this._connectDocuments('connectDocuments', createdDocument);
+				fn = function(document) {
+					this._connectDocuments('connectDocuments', document);
+				};
 			} else if (this.options.workflowTask) {
 				deferredLabels.splice(deferredLabels.indexOf('workflowTask'), 1);
-				this._workflowTask('workflowTask', createdDocument);
+				fn = function(document) {
+					this._workflowTask('workflowTask', document);
+				};
 			}
+			if (this.options.actionId && this.options.actionType && this.options.taskId) {
+				deferredLabels.splice(deferredLabels.indexOf('chooseState'), 1);
+				this._chooseState('chooseState', this.options.actionType, this.options.taskId, null, this.options.actionId, fn, createdDocument);
+			} else if (YAHOO.lang.isFunction(fn)) {
+				fn.call(this, createdDocument);
+			}
+
 			for (index in deferredLabels) {
 				this.deferredFormSubmitSuccessRedirect.fulfil(deferredLabels[index]);
 			}
 		},
 
-		_chooseState: function(deferredLabel, type, taskId, formResponse, actionId) {
+		_chooseState: function(deferredLabel, type, taskId, formResponse, actionId, callback, callbackParams) {
 			var template = '{proxyUri}lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}';
 			var url = YAHOO.lang.substitute(template, {
 				proxyUri: Alfresco.constants.PROXY_URI,
@@ -217,6 +224,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 						});
 					}
 					this.deferredFormSubmitSuccessRedirect.fulfil(deferredLabel);
+					if (YAHOO.lang.isFunction(callback)) {
+						callback.call(this, callbackParams);
+					}
 				}
 			};
 			Alfresco.util.Ajax.jsonGet({
