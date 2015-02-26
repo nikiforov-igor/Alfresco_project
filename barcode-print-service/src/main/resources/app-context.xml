@@ -26,7 +26,7 @@
 	<jms:listener-container container-type="default"
 							connection-factory="cachedConnectionFactory"
 							acknowledge="client"
-							concurrency="1"
+							concurrency="10-100"
 							recovery-interval="5000">
 		<jms:listener destination="barcodeQueue" ref="listener"/>
 	</jms:listener-container>
