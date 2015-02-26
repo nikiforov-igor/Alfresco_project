@@ -538,7 +538,7 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}
 			}
-
+			this.doubleClickLock = false;
 			window.location.href = url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params);
 		},
 		_chooseState: function(type, taskId, formResponse, actionId) {
