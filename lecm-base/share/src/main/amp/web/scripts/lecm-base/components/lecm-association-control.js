@@ -1352,6 +1352,7 @@ LogicECM.module = LogicECM.module || {};
 			{
 				this.currentNode = node;
 				this.isSearch = false;
+				this.searchData = "";
 				this._updateItems(node.data.nodeRef, "");
 			},
 
