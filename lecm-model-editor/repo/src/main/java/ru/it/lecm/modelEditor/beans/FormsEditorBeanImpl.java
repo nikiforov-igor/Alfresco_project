@@ -69,9 +69,9 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	public static final String FAKE_ATTRIBUTE_TYPE = "fake";
 
-	private NamespaceService namespaceService;
-	private DictionaryService dictionaryService;
-	private Repository repository;
+	protected NamespaceService namespaceService;
+	protected DictionaryService dictionaryService;
+	protected Repository repository;
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -377,7 +377,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return true;
 	}
 
-	private String getModelConfig(String modelName) {
+	protected String getModelConfig(String modelName) {
 		List<NodeRef> forms = getModelForms(modelName);
 		if (forms != null) {
 			StringWriter out = null;
@@ -442,7 +442,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		}
 	}
 
-	private void writeForm(XMLStreamWriter xmlw, NodeRef form) throws XMLStreamException {
+	protected void writeForm(XMLStreamWriter xmlw, NodeRef form) throws XMLStreamException {
 		String evaluator = (String) nodeService.getProperty(form, PROP_FORM_EVALUATOR);
 	    if (evaluator != null) {
 		    xmlw.writeStartElement("form");
@@ -474,7 +474,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 	    }
 	}
 
-	private void writeFieldsVisibility(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
+	protected void writeFieldsVisibility(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
 		xmlw.writeStartElement("field-visibility");
 		if (fields != null) {
 			for (NodeRef field: fields) {
@@ -485,13 +485,14 @@ public class FormsEditorBeanImpl extends BaseBean {
 				if (forMode != null && !forMode.toString().trim().isEmpty()) {
 					xmlw.writeAttribute("for-mode", forMode.toString());
 				}
+				xmlw.writeAttribute("force", "true");
 			    xmlw.writeEndElement();
 			}
 		}
 		xmlw.writeEndElement();
 	}
 
-	private void writeAppearance(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
+	protected void writeAppearance(XMLStreamWriter xmlw, List<NodeRef> fields) throws XMLStreamException {
 		xmlw.writeStartElement("appearance");
 		Map<String, List<String>> sets = getSets(fields);
 
@@ -557,7 +558,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		xmlw.writeEndElement();
 	}
 
-	private void writeControl(XMLStreamWriter xmlw, NodeRef field) throws XMLStreamException {
+	protected void writeControl(XMLStreamWriter xmlw, NodeRef field) throws XMLStreamException {
 		String control = (String) nodeService.getProperty(field, PROP_ATTR_CONTROL);
 		if (control != null && control.trim().length() > 0) {
 			try {
@@ -594,7 +595,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		}
 	}
 
-	private void writeSets(XMLStreamWriter xmlw, Map<String, List<String>> sets) throws XMLStreamException {
+	protected void writeSets(XMLStreamWriter xmlw, Map<String, List<String>> sets) throws XMLStreamException {
 		if (sets != null) {
 			int tabIndex = 0;
 			for (String tab: sets.keySet()) {
@@ -622,7 +623,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		}
 	}
 
-	private Map<String, List<String>> getSets(List<NodeRef> fields) {
+	protected Map<String, List<String>> getSets(List<NodeRef> fields) {
 		Map<String, List<String>> result = new LinkedHashMap<String, List<String>>();
 		result.put(null, new ArrayList<String>());
 		for (NodeRef field: fields) {
@@ -645,7 +646,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
-	private void createAttribute(final NodeRef formRef, final ClassAttributeDefinition attrDef, final int order) {
+	protected void createAttribute(final NodeRef formRef, final ClassAttributeDefinition attrDef, final int order) {
 		PropertyMap props = new PropertyMap();
 		String name = attrDef.getName().toPrefixString(namespaceService);
 		String title = StringUtils.defaultString(attrDef.getTitle(dictionaryService));

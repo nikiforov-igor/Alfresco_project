@@ -28,12 +28,12 @@ import java.util.*;
  * Time: 9:48
  */
 public class ModelsListBeanImpl extends BaseBean {
-	private DictionaryService dictionaryService;
-	private Repository repository;
-	private ContentService contentService;
-	private NamespaceService namespaceService;
-	private DocumentService documentService;
-	private LecmModelsService lecmModelsService;
+	protected DictionaryService dictionaryService;
+	protected Repository repository;
+	protected ContentService contentService;
+	protected NamespaceService namespaceService;
+	protected DocumentService documentService;
+	protected LecmModelsService lecmModelsService;
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;

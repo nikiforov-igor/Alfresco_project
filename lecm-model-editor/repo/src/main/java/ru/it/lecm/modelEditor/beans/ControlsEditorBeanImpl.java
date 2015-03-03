@@ -43,25 +43,25 @@ public class ControlsEditorBeanImpl extends BaseBean {
 	private final static Logger logger = LoggerFactory.getLogger(ControlsEditorBeanImpl.class);
 	public static final String CONTROLS_EDITOR_ROOT_ID = "CONTROLS_EDITOR_ROOT_ID";
 
-	private final static String CONTROLS_EDITOR_NAMESPACE = "http://www.it.ru/lecm/controls/editor/1.0";
-	private final static String CONTROLS_EDITOR_PREFIX = "lecm-controls-editor";
-	private final static QName TYPE_CONTROL = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control");
-	private final static QName TYPE_CONTROL_PARAM = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-param");
-	private final static QName PROP_CONTROL_ID = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-id");
-	private final static QName PROP_CONTROL_TEMPLATE = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-template");
-	private final static QName PROP_CONTROL_DEFAULT = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-default");
-	private final static QName PROP_PARAM_ID = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-id");
-	private final static QName PROP_PARAM_VALUE = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-value");
-	private final static QName PROP_PARAM_MANDATORY = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-mandatory");
-	private final static QName PROP_PARAM_VISIBLE = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-visible");
+	public final static String CONTROLS_EDITOR_NAMESPACE = "http://www.it.ru/lecm/controls/editor/1.0";
+	public final static String CONTROLS_EDITOR_PREFIX = "lecm-controls-editor";
+	public final static QName TYPE_CONTROL = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control");
+	public final static QName TYPE_CONTROL_PARAM = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-param");
+	public final static QName PROP_CONTROL_ID = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-id");
+	public final static QName PROP_CONTROL_TEMPLATE = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-template");
+	public final static QName PROP_CONTROL_DEFAULT = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "control-default");
+	public final static QName PROP_PARAM_ID = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-id");
+	public final static QName PROP_PARAM_VALUE = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-value");
+	public final static QName PROP_PARAM_MANDATORY = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-mandatory");
+	public final static QName PROP_PARAM_VISIBLE = QName.createQName(CONTROLS_EDITOR_NAMESPACE, "param-visible");
 
-	private VersionService versionService;
-	private CheckOutCheckInService cociService;
-	private ContentService contentService;
-	private DictionaryService dictionaryService;
-	private NamespaceService namespaceService;
+	protected VersionService versionService;
+	protected CheckOutCheckInService cociService;
+	protected ContentService contentService;
+	protected DictionaryService dictionaryService;
+	protected NamespaceService namespaceService;
 
-	private NodeRef getDeploymentFolder() {
+	protected NodeRef getDeploymentFolder() {
 		NodeRef folder;
 		NodeRef nodeRef = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, FORMS_EDITOR_MODELS_DEPLOY_UUID);
 		if (nodeService.exists(nodeRef)) {
@@ -73,16 +73,16 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		return folder;
 	}
 
-	private String getTypeControlsFilename(String typename) {
+	protected String getTypeControlsFilename(String typename) {
 		return typename.replace(":", "_") + "-controls.xml";
 	}
 
-	private NodeRef geTypeControlsNode(String typename) {
+	protected NodeRef geTypeControlsNode(String typename) {
 		NodeRef parent = getDeploymentFolder();
 		return nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, getTypeControlsFilename(typename));
 	}
 
-	private String getTypeLocalName(String typename) {
+	protected String getTypeLocalName(String typename) {
 		QName typeQName;
 		String typeLocalName;
 		try {
@@ -96,7 +96,7 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		return typeLocalName;
 	}
 
-	private void generateControlParam(final XMLStreamWriter xmlWriter, final NodeRef paramNode) throws XMLStreamException {
+	protected void generateControlParam(final XMLStreamWriter xmlWriter, final NodeRef paramNode) throws XMLStreamException {
 		xmlWriter.writeStartElement("param");
 		Map<QName, Serializable> props = nodeService.getProperties(paramNode);
 		String id = (String)props.get(PROP_PARAM_ID);
@@ -124,7 +124,7 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		xmlWriter.writeEndElement();
 	}
 
-	private void generateControl(final XMLStreamWriter xmlWriter, final NodeRef controlNode) throws XMLStreamException {
+	protected void generateControl(final XMLStreamWriter xmlWriter, final NodeRef controlNode) throws XMLStreamException {
 		xmlWriter.writeStartElement("control");
 		Map<QName, Serializable> props = nodeService.getProperties(controlNode);
 		String id = (String)props.get(PROP_CONTROL_ID);
@@ -152,7 +152,7 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		xmlWriter.writeEndElement();
 	}
 
-	private String generateControlsXML(final String typename) throws XMLStreamException {
+	protected String generateControlsXML(final String typename) throws XMLStreamException {
 		StringWriter stringWriter = new StringWriter();
 		XMLStreamWriter xmlWriter = XMLOutputFactory.newFactory().createXMLStreamWriter(stringWriter);
 		xmlWriter.writeStartElement("alfresco-config");
@@ -177,7 +177,7 @@ public class ControlsEditorBeanImpl extends BaseBean {
 		return result;
 	}
 
-	private void writeControlsXML(final NodeRef configNode, final String typename) {
+	protected void writeControlsXML(final NodeRef configNode, final String typename) {
 		ContentWriter writer = contentService.getWriter(configNode, ContentModel.PROP_CONTENT, true);
 
 		if (writer != null) {
