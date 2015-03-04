@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -41,6 +42,7 @@ import java.util.List;
 public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService, ApplicationContextAware {
 
 	private final static Logger logger = LoggerFactory.getLogger(RegNumbersServiceImpl.class);
+	private final static String SEARCH_QUERY_TEMPLATE_WITH_REGDATE = "TYPE:\"%s\" AND regnumberTemplate:\"%s\" AND @lecm\\-document\\-aspects:reg\\-data\\-date:[\"%d-01-01T00:00:00\" TO \"%d-12-31T23:59:59\"]";
 	private final static String SEARCH_QUERY_TEMPLATE = "TYPE:\"%s\" AND regnumberTemplate:\"%s\"";
 	/**
 	 * Ищем регистрационные номера в этих полях документа
@@ -106,12 +108,27 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 	@Override
 	public boolean isNumberUnique(String number, QName documentType) {
+		return isNumberUnique(number, documentType, null);
+	}
+
+	@Override
+	public boolean isNumberUnique(String number, QName documentType, Date regDate) {
+		String query;
 		boolean isUnique;
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		sp.setQuery(String.format(SEARCH_QUERY_TEMPLATE, documentType.toString(), number));
-        if (documentType.toString().equals("lecm-contract:document")) {
+		if (regDate != null) {
+			DateTime dt = new DateTime(regDate);
+			int year = dt.getYear();
+
+			query = String.format(SEARCH_QUERY_TEMPLATE_WITH_REGDATE, documentType.toString(), number, year, year);
+		} else {
+			query = String.format(SEARCH_QUERY_TEMPLATE, documentType.toString(), number);
+		}
+		sp.setQuery(query);
+
+        if (documentType.toPrefixString(namespaceService).equals("lecm-contract:document")) {
             sp.addQueryTemplate("regnumberTemplate", "%lecm\\-contract:regNumSystem");
         } else {
             sp.addQueryTemplate("regnumberTemplate", REGNUMBER_SEARCH_TEMPLATE);
@@ -285,7 +302,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
             Serializable number = nodeService.getProperty(documentNode, propNumber);
             String regNumber = null;
-            Date regDate;
+            Date regDate = new Date();
             if (number != null && !number.toString().isEmpty() && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
                 regNumber = number.toString();
                 //номер уже есть
@@ -308,7 +325,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 					if (regNumber.equals(prevRegNum)){
 						throw new TemplateRunException("Can't generate unique regNumber for document "+documentNode.toString()+": reg. number didn't modyfied after retry.");
 					}
-                } while (!isNumberUnique(regNumber, documentType));
+                } while (!isNumberUnique(regNumber, documentType, regDate));
 
                 nodeService.setProperty(documentNode, propNumber, regNumber);
                 if (propIsRegistered != null) {
@@ -322,7 +339,6 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                 }
             }
 
-            regDate = new Date();
             nodeService.setProperty(documentNode, propDate, regDate);
             documentService.setDocumentActualNumber(documentNode,regNumber);
             documentService.setDocumentActualDate(documentNode, regDate);

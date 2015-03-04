@@ -1,5 +1,6 @@
 package ru.it.lecm.regnumbers;
 
+import java.util.Date;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
@@ -118,6 +119,18 @@ public interface RegNumbersService {
 	 * @return уникальный/не уникальный
 	 */
 	boolean isNumberUnique(String number, QName documentType);
+
+	/**
+	 * Проверить, является ли номер документа уникальным в рамках указанного типа документа и года
+	 *
+	 * @param number номер документа, который необходимо проверить на
+	 * уникальность.
+	 * @param documentType тип документов, в рамках которого проверять уникальность номера
+	 * @param regDate в рамках какого года проверять уникальность регистрационного номера. в качестве атрибута для сравнения используется дата
+	 * регистрации документа
+	 * @return уникальный/не уникальный
+	 */
+	boolean isNumberUnique(String number, QName documentType, Date regDate);
 
 	/**
 	 * Проверить, является ли шаблон номера синтаксический верным с точки зрения

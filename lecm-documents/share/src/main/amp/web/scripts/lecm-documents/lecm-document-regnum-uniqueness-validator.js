@@ -11,7 +11,8 @@ LogicECM.module.Documents.regnumUniqueness = LogicECM.module.Documents.regnumUni
 LogicECM.module.Documents.regnumUniqueness.validator = function (field, args, event, form, silent, message) {
     var valid = false,
         optsObj = {
-            regNumber: field.value
+            regNumber: field.value,
+			documentNodeRef: YAHOO.util.History.getQueryStringParameter('nodeRef')
         };
     if (LogicECM.module.Documents.regnumUniqueness.cleanValue == null) {
         LogicECM.module.Documents.regnumUniqueness.cleanValue = field.value;

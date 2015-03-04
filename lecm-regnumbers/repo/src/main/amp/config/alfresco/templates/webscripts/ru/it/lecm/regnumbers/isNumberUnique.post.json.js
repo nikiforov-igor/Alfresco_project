@@ -1,13 +1,16 @@
-var request = jsonUtils.toObject(json);
+(function () {
+	var request = jsonUtils.toObject(json);
 
-var regNumber = request.regNumber;
-var documentNodeRef = request.documentNodeRef;
+	var regNumber = request.regNumber;
+	var documentNodeRef = request.documentNodeRef;
 
-if (regNumber && documentNodeRef) {
-	model.isNumberUnique = regnumbers.isNumberUnique(regNumber, documentNodeRef);
-} else if (regNumber && !documentNodeRef) {
-	model.isNumberUnique = regnumbers.isNumberUnique(regNumber);
-} else {
-	status.code = 400;
-	status.message = "Insifficient params!";
-}
+	if (regNumber && documentNodeRef) {
+		model.isNumberUnique = regnumbers.isNumberUnique(regNumber, documentNodeRef, true);
+	} else if (regNumber && !documentNodeRef) {
+		model.isNumberUnique = regnumbers.isNumberUnique(regNumber);
+	} else {
+		status.code = 400;
+		status.message = "Insifficient params!";
+	}
+
+})();

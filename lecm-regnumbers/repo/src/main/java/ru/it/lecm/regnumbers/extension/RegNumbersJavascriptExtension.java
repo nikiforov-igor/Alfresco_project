@@ -1,11 +1,13 @@
 package ru.it.lecm.regnumbers.extension;
 
+import java.util.Date;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
@@ -104,7 +106,8 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 	}
 
 	/**
-	 * Проверить, является ли номер документа уникальным в рамках определенного типа документа
+	 * Проверить, является ли номер документа уникальным в рамках определенного типа документа и года.
+	 * Год определяется по дате регистрации документа.
 	 *
 	 * @param number номер документа, который необходимо проверить на
 	 * уникальность.
@@ -112,14 +115,66 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 	 * @return уникальный/не уникальный
 	 */
 	public boolean isNumberUnique(String number, String documentNodeRefStr) {
+		return isNumberUnique(number, documentNodeRefStr, true);
+	}
+
+	/**
+	 * Проверить, является ли номер документа уникальным в рамках определенного типа документа и года.
+	 * Год определяется по дате регистрации документа.
+	 *
+	 * @param number номер документа, который необходимо проверить на
+	 * уникальность.
+	 * @param documentNodeRef NodeRef документа, в рамках типа которого проверять уникальность номера
+	 * @return уникальный/не уникальный
+	 */
+	public boolean isNumberUnique(String number, ScriptNode documentNodeRef) {
+		return isNumberUnique(number, documentNodeRef.getNodeRef().toString(), true);
+	}
+
+	/**
+	 * Проверить, является ли номер документа уникальным в рамках определенного типа документа и, опционально, года.
+	 * Год определяется по дате регистрации документа.
+	 *
+	 * @param number номер документа, который необходимо проверить на
+	 * уникальность.
+	 * @param documentNodeRefStr NodeRef документа, в рамках типа которого проверять уникальность номера
+	 * @param registrationYearOnly искать ли номер документа только в рамках одного года
+	 * @return уникальный/не уникальный
+	 */
+	public boolean isNumberUnique(String number, String documentNodeRefStr, boolean registrationYearOnly) {
+		boolean result;
 		NodeRef documentNodeRef = new NodeRef(documentNodeRefStr);
 		QName documentType = nodeService.getType(documentNodeRef);
-		return regNumbersService.isNumberUnique(number, documentType);
+		if (registrationYearOnly) {
+			Date regDate = (Date) nodeService.getProperty(documentNodeRef, DocumentService.PROP_REG_DATA_DOC_DATE);
+			if (regDate == null) {
+				regDate = new Date();
+			}
+			result = regNumbersService.isNumberUnique(number, documentType, regDate);
+		} else {
+			result = regNumbersService.isNumberUnique(number, documentType);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Проверить, является ли номер документа уникальным в рамках определенного типа документа и, опционально, года.
+	 * Год определяется по дате регистрации документа.
+	 *
+	 * @param number номер документа, который необходимо проверить на
+	 * уникальность.
+	 * @param documentNodeRef NodeRef документа, в рамках типа которого проверять уникальность номера
+	 * @param registrationYearOnly искать ли номер документа только в рамках одного года
+	 * @return уникальный/не уникальный
+	 */
+	public boolean isNumberUnique(String number, ScriptNode documentNodeRef, boolean registrationYearOnly) {
+		return isNumberUnique(number, documentNodeRef.getNodeRef().toString(), registrationYearOnly);
 	}
 
 	/**
 	 * Получить регистрационный номер для документа по указанному шаблону и
-	 * записать его в указанноый атрибут документа.
+	 * записать его в указанный атрибут документа.
 	 *
 	 * @param documentNode ссылка на экземпляр документа, которому необходимо
 	 * присвоить номер.
@@ -147,7 +202,7 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 
 	/**
 	 * Получить регистрационный номер для документа по указанному шаблону и
-	 * записать его в указанноый атрибут документа.
+	 * записать его в указанный атрибут документа.
 	 *
 	 * @param documentNode ссылка на экземпляр документа, которому необходимо
 	 * присвоить номер.

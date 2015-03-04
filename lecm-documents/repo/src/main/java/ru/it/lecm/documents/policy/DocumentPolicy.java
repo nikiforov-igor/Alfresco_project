@@ -252,8 +252,13 @@ public class DocumentPolicy extends BaseBean
 					projectRegNumber = (String) after.get(DocumentService.PROP_REG_DATA_PROJECT_NUMBER),
 					newRegNumber = (String) after.get(DocumentService.PROP_DOCUMENT_REGNUM);
 			if (newRegNumber != null && !newRegNumber.equals("Не присвоено") && !newRegNumber.equals(documentRegNumber) && !newRegNumber.equals(projectRegNumber)) {
+				QName documentType = nodeService.getType(nodeRef);
+				Date regDate = (Date) nodeService.getProperty(nodeRef, DocumentService.PROP_REG_DATA_DOC_DATE);
+				if (regDate == null) {
+					regDate = new Date();
+				}
 				// изменился только актуальный регистрационный номер. кто-то поменял его руками.
-				if (!regNumbersService.isNumberUnique(newRegNumber)) {
+				if (!regNumbersService.isNumberUnique(newRegNumber, documentType, regDate)) {
 					// кто-то пытается записать уже существующий регистрационный номер. надо громко упасть
 					throw new IllegalArgumentException(String.format("REGNUMBER_DUPLICATE_EXCEPTION Regnumber %s is already in use", newRegNumber));
 				} else {
