@@ -158,6 +158,7 @@
                 itemType: "${field.control.params.itemType!""}",
                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
                 useChildQuery: false,
+                useFilterByOrg: false,
                 createFormId: "${field.control.params.createFormId!""}",
                 nodeRef: nodeRef,
                 actionsConfig: {

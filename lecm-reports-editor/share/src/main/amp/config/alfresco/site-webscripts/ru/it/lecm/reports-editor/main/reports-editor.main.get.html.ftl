@@ -423,6 +423,7 @@
 
                     YAHOO.Bubbling.fire("activeGridChanged", {
                         datagridMeta: {
+                            useFilterByOrg: false,
                             itemType: "lecm-rpeditor:reportDescriptor",
 	                        useChildQuery:true,
                             nodeRef: LogicECM.module.ReportsEditor.SETTINGS.reportsContainer,

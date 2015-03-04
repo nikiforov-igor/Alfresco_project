@@ -121,6 +121,7 @@
 
                     YAHOO.Bubbling.fire("activeGridChanged", {
                                 datagridMeta: {
+                                    useFilterByOrg: false,
                                     itemType: "lecm-rpeditor:reportDataColumn",
                                     nodeRef: "${activeSourceId!"NOT_LOAD"}",
                                     useChildQuery:true,

@@ -60,6 +60,7 @@
 				    </#if>
 			    ],
 			    datagridMeta: {
+				    useFilterByOrg: false,
 				    itemType: "${field.control.params.itemType!""}",
 				    datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
 				    createFormId: "${field.control.params.createFormId!""}",

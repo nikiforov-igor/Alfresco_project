@@ -10,6 +10,7 @@
                     LogicECM.module.Base.DataGrid.prototype.onActionEmployeeAdd = function DataGridActions_onActionEmployeeAdd(p_item, owner, actionsConfig, fnCallback) {
                         var me = this;
                         var metaData = {
+                            useFilterByOrg: false,
                             itemType: "lecm-orgstr:employee-link",
                             createFormId: "selectEmployeeWithNoAbsences",
                             nodeRef: p_item.nodeRef,

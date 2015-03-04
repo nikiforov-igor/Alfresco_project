@@ -18,6 +18,7 @@
 	YAHOO.util.Event.onContentReady('${datagridId}', function() {
 		YAHOO.Bubbling.fire('activeGridChanged', {
 			datagridMeta: {
+				 useFilterByOrg: false,
 				itemType: '${itemType}',
 				nodeRef: '${nodeRef}',
 				useChildQuery: true,

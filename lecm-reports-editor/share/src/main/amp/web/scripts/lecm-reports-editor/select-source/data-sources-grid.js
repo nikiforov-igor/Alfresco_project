@@ -18,9 +18,9 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 		LogicECM.module.ReportsEditor.SourcesGrid.superclass.constructor.call(this, containerId);
 		return this;
 	};
-	
+
 	YAHOO.lang.extend(LogicECM.module.ReportsEditor.SourcesGrid, LogicECM.module.Base.DataGrid);
-	
+
 	YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
 		mainDataGridLabel: null,
 		onActionSelectSource: function(item) {
@@ -37,17 +37,18 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 					this.afterDataGridUpdate[i].call(this);
 				}
 				this.afterDataGridUpdate = [];
-				
+
 				var nodeRef = "NOT_LOAD";
 				var selectItem = this.widgets.dataTable.getSelectedTrEls()[0];
 				if (selectItem != undefined) {
 					var numItems = this.widgets.dataTable.getTrIndex(selectItem);
 					nodeRef = this.widgets.dataTable.getRecordSet().getRecord(numItems).getData().nodeRef;
 				}
-				
+
 				YAHOO.Bubbling.fire("activeGridChanged",
 						{
 							datagridMeta: {
+								useFilterByOrg: false,
 								itemType: "lecm-rpeditor:reportDataColumn",
                                 useChildQuery:true,
 								nodeRef: nodeRef,
@@ -67,18 +68,18 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 					me.beforeRenderFunction();
 				},
 						me.widgets.dataTable, true);
-				
+
 				this.widgets.dataTable.subscribe("rowClickEvent", this.onEventSelectRow, this, true);
 				this.widgets.dataTable.subscribe("unselectAllRowsEvent", this.onEventUnselectAllRows, this, true);
 			}
 			this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
 				showExtendSearchBlock: false
 			});
-			
+
 			var searchConfig = this.datagridMeta.searchConfig;
 			var sort = this.datagridMeta.sort;
 			var searchShowInactive = false;
-			
+
 			if (!searchConfig) {
 				searchConfig = {};
 			}
@@ -94,7 +95,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 				this.initialSearchConfig = {fullTextSearch: null};
 				this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
 			}
-			
+
 			this.search.performSearch({
 				parent: this.datagridMeta.nodeRef,
 				itemType: this.datagridMeta.itemType,
@@ -113,6 +114,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 			YAHOO.Bubbling.fire("activeGridChanged",
 					{
 						datagridMeta: {
+							useFilterByOrg: false,
 							itemType: "lecm-rpeditor:reportDataColumn",
 							nodeRef: selectItem.getData().nodeRef,
 							sort: "lecm-rpeditor:dataColumnCode|true"
@@ -147,19 +149,19 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 											if (obj.oldNodeRef) {
 												// очищаем выделение
 												this.widgets.dataTable.unselectAllRows();
-												
+
 												//выделяем новую строку
 												this.widgets.dataTable.selectRow(recordFound);
-												
+
 												// удаляем из таблицы предыдущее значение (оно более никогда не будет использовано)
 												var oldRecord = this._findRecordByParameter(obj.oldNodeRef, "nodeRef");
 												if (oldRecord !== null) {
 													this.widgets.dataTable.deleteRow(oldRecord);
 												}
 											}
-											
+
 											recordFound.getData().itemData.selected = true;
-											
+
 											// помечаем запись, которую скопировали как выбранную (чтобы скрыть кнопку выбора)
 											if (obj.copiedRef) {
 												var copiedRecord = this._findRecordByParameter(obj.copiedRef, "nodeRef");
@@ -167,12 +169,12 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
 													copiedRecord.getData().itemData.selected = true;
 												}
 											}
-											
+
 											//фиксируем набор данных в Редакторе
 											YAHOO.Bubbling.fire("selectDataSource", {
 												dataSourceId: item.nodeRef
 											});
-											
+
 										}
 									};
 									this.afterDataGridUpdate.push(fnAfterUpdate);

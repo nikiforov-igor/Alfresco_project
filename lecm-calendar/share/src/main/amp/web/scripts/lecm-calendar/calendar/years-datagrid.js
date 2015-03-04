@@ -107,6 +107,7 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 				YAHOO.Bubbling.fire("activeGridChanged",
 						{
 							datagridMeta: {
+								useFilterByOrg: false,
 								itemType: "lecm-cal:working-days",
 								nodeRef: selectItem.getData().nodeRef,
 								actionsConfig: {
@@ -119,6 +120,7 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 				YAHOO.Bubbling.fire("activeGridChanged",
 						{
 							datagridMeta: {
+								useFilterByOrg: false,
 								itemType: "lecm-cal:non-working-days",
 								nodeRef: selectItem.getData().nodeRef,
 								actionsConfig: {

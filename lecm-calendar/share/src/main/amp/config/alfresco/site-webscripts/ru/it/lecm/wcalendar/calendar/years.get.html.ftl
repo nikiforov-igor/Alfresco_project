@@ -15,6 +15,7 @@
             showCheckboxColumn: false,
             bubblingLabel: LogicECM.module.WCalendar.Calendar.YEARS_LABEL,
             datagridMeta:{
+                useFilterByOrg: false,
                 itemType: LogicECM.module.WCalendar.Calendar.CALENDAR_CONTAINER.itemType,
                 nodeRef: LogicECM.module.WCalendar.Calendar.CALENDAR_CONTAINER.nodeRef
                 //searchConfig: {

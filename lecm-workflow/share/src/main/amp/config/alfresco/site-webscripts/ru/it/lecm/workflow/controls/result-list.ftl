@@ -95,6 +95,7 @@
                 showExtendSearchBlock: false,
                 actions: [],
                 datagridMeta: {
+                    useFilterByOrg: false,
                     itemType: "${itemType}",
                     useChildQuery: true,
                     datagridFormId: "datagrid",

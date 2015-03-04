@@ -59,6 +59,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 							this.approvalContainerPath = response.json.approvalContainerPath;
 							YAHOO.Bubbling.fire("activeGridChanged", {
 								datagridMeta: {
+									useFilterByOrg: false,
 									itemType: this.approvalListType,
 									nodeRef: this.approvalContainer,
 									datagridFormId: this.options.approvalListDatagridId, //"approvalListDataGridControl",
@@ -168,6 +169,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		YAHOO.util.Event.onContentReady(containerId, function() {
 			YAHOO.Bubbling.fire("activeGridChanged", {
 				datagridMeta: {
+					useFilterByOrg: false,
 					itemType: this.approvalItemType,
 					nodeRef: this.approvalListNodeRef,
 					useChildQuery: true,

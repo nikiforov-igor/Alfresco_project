@@ -67,6 +67,7 @@
 									var oResults = response.json;
 									if (oResults != null && oResults.nodeRef != null) {
 										datagrid.options.datagridMeta = {
+											useFilterByOrg: false,
 											itemType: "lecm-forms-editor:form",
 											nodeRef: oResults.nodeRef,
 											actionsConfig:{

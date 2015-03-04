@@ -32,6 +32,7 @@
 				}
 			],
             datagridMeta:{
+                useFilterByOrg: false,
                 itemType: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType,
                 nodeRef: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef,
                 datagridFormId: "absenceProfileDatagrid"

@@ -90,6 +90,7 @@
                         ],
                         datagridMeta: {
                             itemType: "lecm-connect:connection",
+                            useFilterByOrg: false,
                             useChildQuery: true,
                             nodeRef: tempdir,
                             createFormId: "connection-types-not-filtered",

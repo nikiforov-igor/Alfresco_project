@@ -83,6 +83,7 @@
 				sort: 'lecm-forms-editor:attr-index|true',
 				itemType: 'lecm-forms-editor:attr',
 				useChildQuery: true,
+				useFilterByOrg: false,
 				nodeRef: '${form.arguments.itemId}',
 				actionsConfig:{
 					fullDelete:true

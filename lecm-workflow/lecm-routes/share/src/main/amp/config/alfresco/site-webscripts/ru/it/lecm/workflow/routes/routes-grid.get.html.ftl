@@ -18,6 +18,7 @@
                 bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
                 excludeColumns: ['lecmApproveAspects:approvalState'],
                 datagridMeta:{
+                    useFilterByOrg: false,
                     itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.routeType,
                     nodeRef: LogicECM.module.Routes.Const.ROUTES_CONTAINER.nodeRef,
                     searchConfig: {

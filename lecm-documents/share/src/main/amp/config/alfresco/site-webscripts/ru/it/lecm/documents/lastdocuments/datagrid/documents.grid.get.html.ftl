@@ -30,6 +30,7 @@
                         overrideSortingWith: false,
                         datagridMeta: {
                             itemType: "lecm-document:base",
+                            useFilterByOrg: false,
                             useChildQuery: false,
                             datagridFormId: "last-documents-list",
                             searchNodes: JSON.stringify(searchNodes)
@@ -37,14 +38,14 @@
 	                }).setMessages(${messages});
                     datagrid.draw();
 	            }
-	
+
 	            function init() {
                     LogicECM.module.Base.Util.loadScripts([
                         'scripts/lecm-base/components/advsearch.js',
                         'scripts/lecm-base/components/lecm-datagrid.js'
                     ], createDatagrid);
 	            }
-	
+
 	            YAHOO.util.Event.onDOMReady(init);
 			})();
             //]]></script>

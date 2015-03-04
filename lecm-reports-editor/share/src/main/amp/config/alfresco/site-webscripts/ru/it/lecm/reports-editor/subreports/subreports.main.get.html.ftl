@@ -195,6 +195,7 @@ YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
 
                 YAHOO.Bubbling.fire("activeGridChanged", {
                     datagridMeta: {
+                        useFilterByOrg: false,
                         itemType: "lecm-rpeditor:subReportDescriptor",
                         nodeRef: "${args.reportId}",
                         useChildQuery:true,

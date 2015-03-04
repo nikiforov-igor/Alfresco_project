@@ -31,6 +31,7 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
             bubblingLabel: LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL,
             dataSource: "/lecm/wcalendar/schedule/get/list",
             datagridMeta: {
+                useFilterByOrg: false,
                 itemType: LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER.itemType,
                 nodeRef: LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER.nodeRef
                 //searchConfig: {

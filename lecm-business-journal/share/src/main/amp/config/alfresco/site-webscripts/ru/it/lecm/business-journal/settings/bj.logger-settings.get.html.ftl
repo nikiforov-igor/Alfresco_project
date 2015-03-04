@@ -25,6 +25,7 @@
                                 YAHOO.Bubbling.fire("activeGridChanged",
                                         {
                                             datagridMeta: {
+                                                useFilterByOrg: false,
                                                 itemType: rootNode.itemType,
                                                 nodeRef: rootNode.nodeRef
                                             },

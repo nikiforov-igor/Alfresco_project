@@ -85,6 +85,7 @@ LogicECM.module.Signing = LogicECM.module.Signing || {};
 							if (this.signingListRef) {
 								YAHOO.Bubbling.fire("activeGridChanged", {
 									datagridMeta: {
+										useFilterByOrg: false,
 										itemType: this.signingItemType,
 										useChildQuery: true,
 										nodeRef: this.signingListRef,

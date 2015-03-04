@@ -37,6 +37,7 @@
 				isApproval: true
 			},
 			datagridMeta: {
+				useFilterByOrg: false,
 				actionsConfig: {
 					fullDelete: true,
 					trash: false
@@ -47,6 +48,7 @@
 
 		YAHOO.Bubbling.fire('activeGridChanged', {
 			datagridMeta:{
+				useFilterByOrg: false,
 				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.routeType,
 				nodeRef: '${itemId}',
 				useChildQuery: true,

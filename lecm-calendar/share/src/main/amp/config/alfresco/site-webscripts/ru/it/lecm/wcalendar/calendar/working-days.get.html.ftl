@@ -15,6 +15,7 @@
             showCheckboxColumn: false,
             bubblingLabel: LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL,
             datagridMeta: {
+                useFilterByOrg: false,
                 itemType: "lecm-cal:working-days",
                 nodeRef: "NOT_LOAD",
                 actionsConfig: {

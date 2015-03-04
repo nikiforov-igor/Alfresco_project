@@ -110,6 +110,7 @@
                         datagridMeta: {
                             itemType: "${field.control.params.itemType!field.endpointType!""}",
                             useChildQuery: true,
+                            useFilterByOrg: false,
                             datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
                             createFormId: "${field.control.params.createFormId!""}",
                             nodeRef: <#if field.value?? && field.value != "">"${field.value}"<#else>"${form.arguments.itemId}"</#if>,

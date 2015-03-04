@@ -19,7 +19,7 @@
     <@grid.datagrid containerId false>
         <script type="text/javascript">//<![CDATA[
             (function () {
-                
+
                 function init() {
                     LogicECM.module.Base.DataGrid.prototype.onActionMakePrimary = function DataGridActions_onActionMakePrimary(p_item) {
 	                    var me = this;
@@ -119,6 +119,7 @@
 	                        </#if>
                         ],
                         datagridMeta: {
+                                useFilterByOrg: false,
                                 itemType: "lecm-orgstr:staff-list",
                                 datagridFormId: "employee-positions",
                                 nodeRef: <#if field.value?? && field.value != "">"${field.value}"<#else>"${form.arguments.itemId}"</#if>
@@ -132,7 +133,7 @@
 
                     datagrid.draw();
                 }
-                    
+
                 function loadDeps() {
                     LogicECM.module.Base.Util.loadScripts([
                         'scripts/lecm-base/components/lecm-datagrid.js'
@@ -142,7 +143,7 @@
                 YAHOO.util.Event.onDOMReady(function (){
                     loadDeps();
                 });
-                    
+
             })();
         //]]></script>
     </@grid.datagrid>

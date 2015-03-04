@@ -58,6 +58,7 @@
                 pageSize: 10,
                 showExtendSearchBlock: true,
                 datagridMeta: {
+                    useFilterByOrg: false,
                     itemType: "lecm-busjournal:bjRecord",
                     datagridFormId: "bjHistory",
                     createFormId: "",

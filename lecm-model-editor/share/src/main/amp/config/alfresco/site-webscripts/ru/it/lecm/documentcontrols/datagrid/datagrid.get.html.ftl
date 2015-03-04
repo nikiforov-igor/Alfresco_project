@@ -36,6 +36,7 @@
 			itemType: "lecm-controls-editor:control",
 			nodeRef: "${context.page.properties["typeRoot"]}",
 			useChildQuery: false,
+			useFilterByOrg: false,
 			actionsConfig: {
 				fullDelete: true,
 				trash: false

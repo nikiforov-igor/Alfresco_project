@@ -171,6 +171,7 @@ LogicECM.module = LogicECM.module || {};
 						actions: actions,
                         splitActionsAt: splitActionAt,
 						datagridMeta: {
+							useFilterByOrg: false,
 							itemType: this.tableData.rowType,
 							datagridFormId: this.options.datagridFormId,
 							createFormId: "",

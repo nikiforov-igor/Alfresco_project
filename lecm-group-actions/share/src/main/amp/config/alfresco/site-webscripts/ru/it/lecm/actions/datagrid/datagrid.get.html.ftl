@@ -401,6 +401,7 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                 }
             ],
             datagridMeta: {
+                useFilterByOrg: false,
                 itemType: "lecm-group-actions:base-action",
                 nodeRef: "${nodeRef!""}",
                 datagridFormId: "datagrid",

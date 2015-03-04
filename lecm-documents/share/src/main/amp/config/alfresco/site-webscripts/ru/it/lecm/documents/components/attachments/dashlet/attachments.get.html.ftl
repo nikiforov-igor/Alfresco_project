@@ -90,6 +90,7 @@
                         ],
                         datagridMeta: {
                             itemType: "cm:content",
+                            useFilterByOrg: false,
                             datagridFormId: "attachments-dashlet-table",
                             createFormId: "",
                             nodeRef: selectValue,

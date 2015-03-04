@@ -212,6 +212,7 @@
                     ],
                     datagridMeta:{
                         //createFormId: '',
+                        useFilterByOrg: false,
                         itemType: "lecm-dic:dictionary",
                         nodeRef: rootNodeRef
                     }

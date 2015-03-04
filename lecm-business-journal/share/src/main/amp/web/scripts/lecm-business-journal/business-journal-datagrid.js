@@ -287,7 +287,8 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
                                             var obj = {
                                                 datagridMeta: this.datagridMeta
                                             };
-                                            YAHOO.Bubbling.fire("activeGridChanged", obj);                                        }
+                                            YAHOO.Bubbling.fire("activeGridChanged", obj);
+                                        }
                                     } else {
                                         Alfresco.util.PopupManager.displayMessage(
                                             {

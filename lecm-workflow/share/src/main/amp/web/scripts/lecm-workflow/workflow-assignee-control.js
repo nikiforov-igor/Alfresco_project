@@ -901,6 +901,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 						label: Alfresco.util.message('label.remove')
 					}],
 				datagridMeta: {
+					useFilterByOrg: false,
 					datagridFormId: this._getDatagridFormId(),
 					itemType: 'lecm-workflow:assignee',
 					useChildQuery: true,

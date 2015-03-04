@@ -59,6 +59,7 @@
 	YAHOO.util.Event.onContentReady("${datagridId}", function () {
 		YAHOO.Bubbling.fire("activeGridChanged", {
 			datagridMeta:{
+				useFilterByOrg: false,
 				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType,
 				nodeRef: '${itemId}',
 				useChildQuery: true,

@@ -48,6 +48,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 		renewDatagrid: function () {
 			YAHOO.Bubbling.fire('activeGridChanged', {
 				datagridMeta: {
+					useFilterByOrg: false,
 					datagridFormId: 'reviewAssigneeList',
 					itemType: 'lecm-workflow:assignee',
 					nodeRef: this.assigneeListNode,

@@ -268,6 +268,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		fireGridChanged: function (useChildQuery) {
 			YAHOO.Bubbling.fire('activeGridChanged', {
 				datagridMeta: {
+					useFilterByOrg: false,
 					itemType: this.stageType,
 					nodeRef: this.currentIterationNode,
 					useChildQuery: !!useChildQuery,

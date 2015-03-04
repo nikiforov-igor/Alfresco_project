@@ -96,6 +96,7 @@
                                                     attributeForShow:"cm:name",
                                                     advSearchFormId: "${advSearchFormId!''}",
                                                     datagridMeta:{
+                                                        useFilterByOrg: false,
                                                         itemType: root.itemType,
                                                         nodeRef: root.nodeRef,
                                                         actionsConfig:{

@@ -68,6 +68,7 @@
 
                             YAHOO.Bubbling.fire("activeGridChanged", {
                                         datagridMeta: {
+                                            useFilterByOrg: false,
                                             datagridFormId: "short-datagrid",
                                             itemType: "lecm-rpeditor:reportDataColumn",
                                             nodeRef: "NOT_LOAD",
@@ -118,6 +119,7 @@
 
                             YAHOO.Bubbling.fire("activeGridChanged", {
                                 datagridMeta: {
+                                    useFilterByOrg: false,
                                     itemType: "lecm-rpeditor:reportDataSource",
                                     useChildQuery: true,
                                     nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer

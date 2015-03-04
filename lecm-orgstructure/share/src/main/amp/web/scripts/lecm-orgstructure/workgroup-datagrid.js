@@ -50,6 +50,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 YAHOO.Bubbling.fire("activeGridChanged",
                     {
                         datagridMeta: {
+							useFilterByOrg: false,
                             itemType: "lecm-orgstr:workforce",
                             nodeRef: nodeRef,
                             actionsConfig: {
@@ -154,6 +155,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             YAHOO.Bubbling.fire("activeGridChanged",
                 {
                     datagridMeta: {
+						useFilterByOrg: false,
                         itemType: "lecm-orgstr:workforce",
                         nodeRef: selectItem.getData().nodeRef,
                         actionsConfig: {

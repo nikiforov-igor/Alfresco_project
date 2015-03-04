@@ -15,6 +15,7 @@
             bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_LABEL,
             dataSource: "/lecm/wcalendar/absence/get/list/admin",
             datagridMeta: {
+                useFilterByOrg: false,
                 itemType: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType,
                 nodeRef: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef,
                 datagridFormId: "absenceAdminDatagrid",

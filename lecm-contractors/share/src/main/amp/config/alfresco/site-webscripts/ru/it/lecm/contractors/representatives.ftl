@@ -87,6 +87,7 @@
             </#if>
 
                 datagridMeta: {
+                    useFilterByOrg: false,
                     itemType: __itemType__,
                     nodeRef: "${contractorRef}",
                     actionsConfig: {

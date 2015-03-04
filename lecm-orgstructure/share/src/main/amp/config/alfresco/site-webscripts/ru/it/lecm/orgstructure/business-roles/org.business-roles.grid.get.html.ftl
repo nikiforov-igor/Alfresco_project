@@ -31,6 +31,7 @@
 	                YAHOO.util.Event.onContentReady ('${id}', function () {
 	                    YAHOO.Bubbling.fire ("activeGridChanged", {
 	                        datagridMeta: {
+                                useFilterByOrg: false,
 	                            itemType: LogicECM.module.OrgStructure.BUSINESS_ROLES_SETTINGS.itemType,
 	                            nodeRef: LogicECM.module.OrgStructure.BUSINESS_ROLES_SETTINGS.nodeRef,
 	                            actionsConfig:{

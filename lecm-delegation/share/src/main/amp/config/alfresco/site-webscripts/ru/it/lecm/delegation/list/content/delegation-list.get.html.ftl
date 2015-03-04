@@ -21,6 +21,7 @@
                 expandable: true,
                 expandDataSource: 'lecm/delegation/procuraciesDatagrid',
                 datagridMeta:{
+                    useFilterByOrg: false,
                     useChildQuery: true,
                     itemType: LogicECM.module.Delegation.Const.itemType,
                     nodeRef: LogicECM.module.Delegation.Const.nodeRef

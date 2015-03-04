@@ -84,6 +84,7 @@
 				isApproval: true
 			},
 			datagridMeta: {
+				useFilterByOrg: false,
 				actionsConfig: {
 					fullDelete: true,
 					trash: false

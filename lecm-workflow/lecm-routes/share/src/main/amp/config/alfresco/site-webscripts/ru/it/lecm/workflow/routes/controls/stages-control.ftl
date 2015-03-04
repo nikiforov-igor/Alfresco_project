@@ -68,6 +68,7 @@
 
 		YAHOO.Bubbling.fire("activeGridChanged", {
 			datagridMeta:{
+				useFilterByOrg: false,
 				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageType,
 				nodeRef: '${itemId}',
 				sort: 'cm:created|true',
