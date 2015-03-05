@@ -48,7 +48,7 @@
 
 <#--uncomment to display "Show Inactive" checkbox-->
 <#--<@grid.datagrid containerId true gridId+"form" showCheckBox>-->
-<@grid.datagrid containerId true gridId+"form" false>
+<@grid.datagrid containerId true>
     <script type="text/javascript">//<![CDATA[
     (function () {
     	function createDatagrid() {
