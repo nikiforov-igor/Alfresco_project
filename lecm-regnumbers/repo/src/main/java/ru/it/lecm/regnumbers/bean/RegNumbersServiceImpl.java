@@ -42,8 +42,8 @@ import org.joda.time.DateTime;
 public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService, ApplicationContextAware {
 
 	private final static Logger logger = LoggerFactory.getLogger(RegNumbersServiceImpl.class);
-	private final static String SEARCH_QUERY_TEMPLATE_WITH_REGDATE = "TYPE:\"%s\" AND regnumberTemplate:\"%s\" AND @lecm\\-document\\-aspects:reg\\-data\\-date:[\"%d-01-01T00:00:00\" TO \"%d-12-31T23:59:59\"]";
-	private final static String SEARCH_QUERY_TEMPLATE = "TYPE:\"%s\" AND regnumberTemplate:\"%s\"";
+	private final static String SEARCH_QUERY_TEMPLATE_WITH_REGDATE = "TYPE:\"%s\" AND =regnumberTemplate:\"%s\" AND @lecm\\-document\\-aspects:reg\\-data\\-date:[\"%d-01-01T00:00:00\" TO \"%d-12-31T23:59:59\"]";
+	private final static String SEARCH_QUERY_TEMPLATE = "TYPE:\"%s\" AND =regnumberTemplate:\"%s\"";
 	/**
 	 * Ищем регистрационные номера в этих полях документа
 	 */
