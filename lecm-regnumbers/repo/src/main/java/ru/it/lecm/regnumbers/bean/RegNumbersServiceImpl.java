@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.joda.time.DateTime;
 
 /**
@@ -48,6 +49,8 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	 * Ищем регистрационные номера в этих полях документа
 	 */
 	private final static String REGNUMBER_SEARCH_TEMPLATE = "%lecm\\-document:regnum";
+	private NodeRef templateDictionaryNode;
+
 	private ApplicationContext applicationContext;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
@@ -60,6 +63,15 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	public final void init() {
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
+		PropertyCheck.mandatory(this, "searchService", searchService);
+		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
+		PropertyCheck.mandatory(this, "documentService", documentService);
+		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+		PropertyCheck.mandatory(this, "documentConnectionService", documentConnectionService);
+		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
+
+		templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
 	}
 
 	public void setNamespaceService(final NamespaceService namespaceService) {
@@ -216,7 +228,19 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 	@Override
 	public NodeRef getTemplateNodeByCode(String dictionaryTemplateCode) {
-		return dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
+		NodeRef result = null;
+
+		List<ChildAssociationRef> dictionaryValuesAssocs = nodeService.getChildAssocsByPropertyValue(templateDictionaryNode, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
+
+		for (ChildAssociationRef assoc : dictionaryValuesAssocs) {
+			NodeRef templateNode = assoc.getChildRef();
+			if (!isArchive(templateNode)) {
+				result = templateNode;
+				break;
+			}
+		}
+
+		return result;
 	}
 
 	@Override
