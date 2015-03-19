@@ -121,7 +121,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
 //		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
 //		существование и создать при необходимости
-//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.                
+//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.
 //		if(errandsService.getSettingsNode() == null) {
 //			try {
 //				errandsService.createSettingsNode();
@@ -144,7 +144,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
 //		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
 //		существование и создать при необходимости
-//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.                                
+//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.
 //		if(errandsService.getSettingsNode() == null) {
 //			try {
 //				errandsService.createSettingsNode();
@@ -174,10 +174,24 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
                             documentConnectionService.createConnection(document, errandDoc, DocumentConnectionService.DICTIONARY_VALUE_FOR_INFORMATION, true, true);
 
                             documentMembersService.addMemberWithoutCheckPermission(document, executor, new HashMap<QName, Serializable>());
+
+							List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
+							if(coexecutors != null) {
+								for (AssociationRef coexecutor : coexecutors) {
+									documentMembersService.addMemberWithoutCheckPermission(document, coexecutor.getTargetRef(), new HashMap<QName, Serializable>());
+								}
+							}
                         }
                     }
                 } else {
                     documentMembersService.addMemberWithoutCheckPermission(baseDoc, executor, new HashMap<QName, Serializable>());
+
+					List<AssociationRef> coexecutors = nodeService.getTargetAssocs(errandDoc, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
+					if(coexecutors != null) {
+						for (AssociationRef coexecutor : coexecutors) {
+							documentMembersService.addMemberWithoutCheckPermission(baseDoc, coexecutor.getTargetRef(), new HashMap<QName, Serializable>());
+						}
+					}
                 }
             }
         }
