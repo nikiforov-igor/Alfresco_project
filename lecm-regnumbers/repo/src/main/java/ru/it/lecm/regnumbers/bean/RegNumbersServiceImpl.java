@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 
 /**
@@ -127,6 +128,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	public boolean isNumberUnique(String number, QName documentType, Date regDate) {
 		String query;
 		boolean isUnique;
+		String numberTransformed = StringUtils.trim(number).toUpperCase();
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
@@ -134,9 +136,9 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 			DateTime dt = new DateTime(regDate);
 			int year = dt.getYear();
 
-			query = String.format(SEARCH_QUERY_TEMPLATE_WITH_REGDATE, documentType.toString(), number, year, year);
+			query = String.format(SEARCH_QUERY_TEMPLATE_WITH_REGDATE, documentType.toString(), numberTransformed, year, year);
 		} else {
-			query = String.format(SEARCH_QUERY_TEMPLATE, documentType.toString(), number);
+			query = String.format(SEARCH_QUERY_TEMPLATE, documentType.toString(), numberTransformed);
 		}
 		sp.setQuery(query);
 
@@ -351,7 +353,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 					}
                 } while (!isNumberUnique(regNumber, documentType, regDate));
 
-                nodeService.setProperty(documentNode, propNumber, regNumber);
+                nodeService.setProperty(documentNode, propNumber, StringUtils.trim(regNumber).toUpperCase());
                 if (propIsRegistered != null) {
                     nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
                 }
