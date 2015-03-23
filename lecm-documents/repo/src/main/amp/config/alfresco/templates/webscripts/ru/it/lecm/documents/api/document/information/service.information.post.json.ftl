@@ -1,4 +1,5 @@
 {
 	 "statemachineVer" : "${statemachineVer}"
-	,"statemachineId" : "${statemachineId}"
+	,"statemachineId" : "${statemachineId}",
+	 "dbId": "${dbId?c}"
 }

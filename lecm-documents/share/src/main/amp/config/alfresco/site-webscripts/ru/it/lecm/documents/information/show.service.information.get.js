@@ -5,6 +5,7 @@ function main (){
 	var url = '/lecm/document/information/getServiceInformation';
 	var statemachineVer = "";
 	var statemachineId = "";
+	var dbId = "";
 	var jsonParam = {
 			documentRef:  model.nodeRef
 		}
@@ -14,9 +15,11 @@ function main (){
 		var result = eval('(' + serviceInfoResponse + ')');
 		statemachineVer = result.statemachineVer;
 		statemachineId = result.statemachineId;
+		dbId = result.dbId;
 	}
 	model.statemachineVer = statemachineVer;
 	model.statemachineId = statemachineId;
+	model.dbId = dbId;
 }
 
 main ();

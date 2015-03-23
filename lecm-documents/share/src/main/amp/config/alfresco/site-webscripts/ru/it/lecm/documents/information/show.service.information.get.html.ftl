@@ -11,4 +11,10 @@
 			<span class="viewmode-value">${statemachineId}</span>
 		</div>
 	</div>
-</div>	
+	<div class="form-field">
+		<div class="viewmode-field">
+			<span class="viewmode-label">${msg("text.db.id")}:</span>
+			<span class="viewmode-value">${dbId}</span>
+		</div>
+	</div>
+</div>
