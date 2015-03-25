@@ -121,6 +121,7 @@
 		<module>lecm-types-view</module>
 		<module>lecm-barcode</module>
 		<module>lecm-operative-storage</module>
+		<module>lecm-events</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

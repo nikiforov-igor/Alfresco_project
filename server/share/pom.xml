@@ -326,6 +326,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.events</groupId>
+			<artifactId>events-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<!--<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -657,6 +664,11 @@
 							<artifactId>operative-storage-share</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.events</groupId>
+							<artifactId>events-share</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -972,6 +984,11 @@
 									<artifactId>operative-storage-share</artifactId>
 									<type>amp</type>
 								</overlay>
+	                            <overlay>
+		                            <groupId>ru.it.lecm.events</groupId>
+		                            <artifactId>events-share</artifactId>
+		                            <type>amp</type>
+	                            </overlay>
                             </overlays>
                         </configuration>
                         <dependencies>

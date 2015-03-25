@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+	<util:constant id="EVENTS_ROOT_ID" static-field="ru.it.lecm.events.beans.EventsService.EVENTS_ROOT_ID"/>
+
+	<bean id="eventsService" class="ru.it.lecm.events.beans.EventsServiceImpl" parent="baseBean"
+	      depends-on="ServiceRegistry, nodeService, transactionService">
+		<!-- Автоматическое создание каталогов. -->
+		<property name="folders">
+			<map>
+				<entry key="#{EVENTS_ROOT_ID}" value="Сервис Мероприятия"/>
+			</map>
+		</property>
+	</bean>
+
+</beans>
