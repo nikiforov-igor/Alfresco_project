@@ -353,7 +353,8 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 					}
                 } while (!isNumberUnique(regNumber, documentType, regDate));
 
-                nodeService.setProperty(documentNode, propNumber, StringUtils.trim(regNumber).toUpperCase());
+				regNumber = StringUtils.trim(regNumber).toUpperCase();
+                nodeService.setProperty(documentNode, propNumber, regNumber);
                 if (propIsRegistered != null) {
                     nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
                 }
@@ -366,7 +367,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             }
 
             nodeService.setProperty(documentNode, propDate, regDate);
-            documentService.setDocumentActualNumber(documentNode,regNumber);
+            documentService.setDocumentActualNumber(documentNode, regNumber);
             documentService.setDocumentActualDate(documentNode, regDate);
 
             if (!onlyReserve) {
