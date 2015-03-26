@@ -297,6 +297,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                      Bubbling.fire("activeGridChanged",
                          {
 	                         datagridMeta: {
+                        useFilterByOrg: false,
                         itemType: node.data.childType,
 	                    currentItemType: node.data.type,
                         recreate: true,

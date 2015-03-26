@@ -27,6 +27,7 @@
             datagridMeta: {
                 itemType: "cm:content",
                 useChildQuery: false,
+                useFilterByOrg: false,
                 datagridFormId: "file-navigator",
                 <#if !isRoot && args.armSelectedNodeRef?? && args.armSelectedNodeRef != "">
                     nodeRef: "${args.armSelectedNodeRef}",
