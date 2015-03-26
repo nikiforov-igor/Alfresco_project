@@ -516,6 +516,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
             actionUrl: Alfresco.constants.PROXY_URI + "calendar/create",
             ajaxSubmitMethod: Alfresco.util.Ajax.POST,
             displayDate: displayDate,
+            templateRequestParams:
+            {
+               site: this.options.siteId
+            },
             onSuccess:
             {
                fn: this.onEventSaved,

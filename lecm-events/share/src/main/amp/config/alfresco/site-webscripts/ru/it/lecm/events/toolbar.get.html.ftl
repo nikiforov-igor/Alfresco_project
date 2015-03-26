@@ -7,7 +7,7 @@
 
 <@markup id="js">
    <#-- JavaScript Dependencies -->
-   <@script type="text/javascript" src="${url.context}/res/components/calendar/toolbar.js" group="calendar"/>
+   <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-calendar-toolbar.js" group="calendar"/>
 </@>
 
 <@markup id="widgets">
@@ -22,14 +22,12 @@
    <@uniqueIdDiv>
       <div id="${el}-body" class="toolbar calendar-toolbar theme-bg-2">
          <div class="yui-ge calendar-bar">
-            <#if role = "SiteCollaborator" || role = "SiteManager">
-               <div class="yui-u flat-button addEventContainer">
-                  <div id="${el}-viewButtons" class="addEvent">
-                     <button id="${el}-addEvent-button" name="addEvent">${msg("button.add-event")}</button>
-                  </div>
+            <div class="yui-u flat-button addEventContainer">
+               <div id="${el}-viewButtons" class="addEvent">
+                  <button id="${el}-addEvent-button" name="addEvent">${msg("button.add-event")}</button>
                </div>
-               <span class="separator">&nbsp;</span>
-            </#if>
+            </div>
+            <span class="separator">&nbsp;</span>
             <div class="yui-u first theme-bg-1">
                <button id="${el}-today-button" class="today-button">${msg("button.today")}</button>
                <#if viewToolbarNav >

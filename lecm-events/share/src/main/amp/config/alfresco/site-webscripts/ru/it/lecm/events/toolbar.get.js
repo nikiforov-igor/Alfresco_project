@@ -57,7 +57,7 @@ function main()
    
    var calendarToolbar = {
       id : "CalendarToolbar",
-      name : "Alfresco.CalendarToolbar",
+      name : "LogicECM.module.Calendar.Toolbar",
       assignTo : "calendarToolbar",
       initArgs : ["\"" + args.htmlid + "\"", enabledViewList, "\"" + model.defaultView + "\""]
    };
