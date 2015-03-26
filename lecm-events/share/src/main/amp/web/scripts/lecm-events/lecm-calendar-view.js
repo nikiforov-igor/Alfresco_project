@@ -866,7 +866,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
          var params = Alfresco.util.getQueryStringParameters(),
             dateBookmark = this.getDateFromUrl();
-         params.view = Alfresco.util.ComponentManager.findFirst("Alfresco.CalendarToolbar").enabledViews[arguments[1][1].activeView];
+         params.view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[arguments[1][1].activeView];
          if (dateBookmark !== "")
          {
             params.date = dateBookmark;

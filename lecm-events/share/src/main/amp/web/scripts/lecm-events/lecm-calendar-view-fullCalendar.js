@@ -131,7 +131,7 @@
          YAHOO.Bubbling.on("viewChanged", function (e, args)
          {
             // gets the view changed to from the index of the button in the event object of the passed in parameters
-            var view = Alfresco.util.ComponentManager.findFirst("Alfresco.CalendarToolbar").enabledViews[args[1].activeView];
+            var view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[args[1].activeView];
             if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA)
             {
                this.onViewChanged.apply(this, arguments);
