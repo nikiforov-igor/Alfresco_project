@@ -43,6 +43,19 @@
             <region-id>documents-tree</region-id>
             <url>/lecm/arm/documents-tree-menu</url>
         </component>
+
+        <component>
+            <region-id>calendar-toolbar</region-id>
+            <url>/lecm/events/toolbar</url>
+        </component>
+        <component>
+            <region-id>calendar-view</region-id>
+            <url>/lecm/events/view</url>
+        </component>
+        <component>
+            <region-id>mini-calendar</region-id>
+            <url>/lecm/events/mycalendar</url>
+        </component>
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>

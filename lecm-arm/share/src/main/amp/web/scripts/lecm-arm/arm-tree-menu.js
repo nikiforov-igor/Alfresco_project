@@ -22,6 +22,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         YAHOO.Bubbling.on("updateCurrentColumns", this.onUpdateSelectedColumns, this);
         YAHOO.Bubbling.on("armRefreshSelectedTreeNode", this.onRefreshSelectedTreeNode, this);
+        YAHOO.Bubbling.on("dateChanged", this.onCalSelect, this);
 
         return this;
     };
@@ -370,11 +371,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	            var isHtmlNode = node.data.htmlUrl != null && node.data.htmlUrl.length > 0;
 	            var isNotGridNode = isReportNode || isHtmlNode;
 
+                Dom.setStyle("arm-documents-toolbar", "display", "block");
 	            Dom.setStyle("arm-documents-grid", "display", isNotGridNode ? "none" : "block");
 	            Dom.setStyle("arm-documents-reports", "display", !isReportNode ? "none" : "block");
 	            Dom.setStyle("arm-documents-html", "display", !isHtmlNode ? "none" : "block");
 
-	            if (isReportNode) {
+                Dom.setStyle("arm-calendar-toolbar", "display", "none");
+                Dom.setStyle("arm-calendar", "display", "none");
+
+                if (isReportNode) {
 		            YAHOO.Bubbling.fire ("updateArmReports", {
 			            types: node.data.types,
                         reportCodes: node.data.reportCodes
@@ -415,6 +420,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.menuState.pageNum = 1;
 
             LogicECM.module.Base.Util.setCookie(this._buildPreferencesKey(), this._buildPreferencesValue(), {expires:this.expiresDate});
+        },
+
+        onCalSelect: function (e, args) {
+            Dom.setStyle("arm-documents-toolbar", "display", "none");
+            Dom.setStyle("arm-documents-grid", "display", "none");
+            Dom.setStyle("arm-documents-reports", "display", "none");
+            Dom.setStyle("arm-documents-html", "display", "none");
+
+            Dom.setStyle("arm-calendar-toolbar", "display", "block");
+            Dom.setStyle("arm-calendar", "display", "block");
         },
 
         drawCounterValue: function (data, query, labelElement) {

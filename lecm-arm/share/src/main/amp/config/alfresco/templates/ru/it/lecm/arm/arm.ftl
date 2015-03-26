@@ -43,8 +43,13 @@
 <div id="no_menu_page" class="sticky-wrapper">
 <@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
         <div class="yui-t1" id="arm-with-tree">
-            <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree"]>
-                    <@region id="toolbar" scope="template" />
+            <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree", "mini-calendar"]>
+                    <div id="arm-documents-toolbar">
+                        <@region id="toolbar" scope="template" />
+                    </div>
+                    <div id="arm-calendar-toolbar" class="hidden1">
+                        <@region id="calendar-toolbar" scope="template" class="toolbar" />
+                    </div>
                     <div id="arm-documents-grid">
                     <@region id="documents-grid" scope="template" />
                     </div>
@@ -53,6 +58,9 @@
                     </div>
                     <div id="arm-documents-html" class="hidden1">
                     <@region id="arm-html-node" scope="template" />
+                    </div>
+                    <div id="arm-calendar" class="hidden1">
+                        <@region id="calendar-view" scope="template" class="view" />
                     </div>
             </@panels.twoPanels>
         </div>
