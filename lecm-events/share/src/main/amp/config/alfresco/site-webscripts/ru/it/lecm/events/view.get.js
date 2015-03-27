@@ -10,7 +10,7 @@ function main()
    // Widget instantiation metadata...
    var calendarView = {
       id : "CalendarView",
-      name : "LogicECM.module.Calendar.View",
+      name : "LogicECM.module.Calendar.FullView",
       assignTo : "calendarView",
       initArgs : ["\"" + args.htmlid + "Container\""],
       options : {

@@ -163,19 +163,19 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
        * @method render
        *
        */
-      render: function ()
-      {
-         if (this.calendarView === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA ) {
-
-            // initialise DOM Event registration
-            this.initEvents();
-            // Load events. Rest of init is handled by a call back from the event loading.
-            this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
-         } else {
-            // FullCalendar handles event loading and callbacks, so call the function that triggers that.
-            this.renderEvents();
-         }
-      },
+      //render: function ()
+      //{
+      //   if (this.calendarView === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA ) {
+      //
+      //      // initialise DOM Event registration
+      //      this.initEvents();
+      //      // Load events. Rest of init is handled by a call back from the event loading.
+      //      this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
+      //   } else {
+      //      // FullCalendar handles event loading and callbacks, so call the function that triggers that.
+      //      this.renderEvents();
+      //   }
+      //},
 
       displayMessage: function (message, name)
       {

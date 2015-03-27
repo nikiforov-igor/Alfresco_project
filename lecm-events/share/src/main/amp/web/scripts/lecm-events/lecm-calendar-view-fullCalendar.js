@@ -35,8 +35,19 @@
       dateFormat = Alfresco.thirdparty.dateFormat,
       History = YAHOO.util.History,
       $jCalendar = ""; // Cache the jQuery selector. Populated in renderEvents after DOM has rendered.
-   
-   YAHOO.lang.augmentObject(LogicECM.module.Calendar.View.prototype,
+
+   LogicECM.module.Calendar.FullView = function (htmlId)
+   {
+      this.id = htmlId;
+      LogicECM.module.Calendar.FullView.superclass.constructor.call(this, htmlId);
+
+      return this;
+   };
+
+   YAHOO.extend(LogicECM.module.Calendar.FullView, LogicECM.module.Calendar.View);
+
+
+   YAHOO.lang.augmentObject(LogicECM.module.Calendar.FullView.prototype,
    {
 
       /**
@@ -60,12 +71,10 @@
          }
       },
 
-      /**
-       * Loads the jQuery Plugin Full Calendar, fetches the events and renders them.
-       * Called by CalendarView_render()
-       *
-       * @method renderEvents
-       */
+      render: function () {
+         this.renderEvents();
+      },
+
       renderEvents: function ()
       {
          // YUI History
@@ -132,13 +141,13 @@
          {
             // gets the view changed to from the index of the button in the event object of the passed in parameters
             var view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[args[1].activeView];
-            if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA)
-            {
-               this.onViewChanged.apply(this, arguments);
-            }
-            else
-            {
+            if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA) {
+               //this.onViewChanged.apply(this, arguments);
                History.navigate("view", view);
+               Dom.setStyle(this.id, "display", "none");
+            } else {
+               History.navigate("view", view);
+               Dom.setStyle(this.id, "display", "block");
             }
          }, this);
 
@@ -450,7 +459,10 @@
        */
       onViewNav: function (view)
       {
-         $jCalendar.fullCalendar("changeView", this.getFullCalendarViewType(view));
+         var view = this.getFullCalendarViewType(view);
+         if (view != null) {
+            $jCalendar.fullCalendar("changeView", view);
+         }
       },
 
       /**
