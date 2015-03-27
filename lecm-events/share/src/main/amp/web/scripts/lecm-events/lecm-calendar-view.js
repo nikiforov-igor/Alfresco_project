@@ -15,6 +15,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       Event = YAHOO.util.Event,
       Sel = YAHOO.util.Selector,
       $html = Alfresco.util.encodeHTML,
+      $siteURL = Alfresco.util.siteURL,
       fromISO8601 = Alfresco.util.fromISO8601,
       toISO8601 = Alfresco.util.toISO8601,
       dateFormat = Alfresco.thirdparty.dateFormat;
@@ -139,7 +140,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       {
          Alfresco.util.Ajax.request(
          {
-            url: Alfresco.constants.PROXY_URI + "calendar/events/" + this.options.siteId + "/user",
+            url: Alfresco.constants.PROXY_URI + "lecm/events/user",
             dataObj:
             {
                from: toISO8601(this.options.startDate).split('T')[0],
@@ -278,31 +279,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       onEventsLoaded: function (o)
       {
          var data = YAHOO.lang.JSON.parse(o.serverResponse.responseText).events;
-         var siteEvents = [];
          var events = [];
          var comparisonFn = null;
          var viewStartDate = this.options.startDate;
          var viewEndDate = this.options.endDate;
-         var site = this.options.siteId;
 
          // Trigger Mini Calendar's rendering before filtering the events
          YAHOO.Bubbling.fire("eventDataLoad",data);
 
-         for (var i = 0; i < data.length; i++)
-         {
-            var ev = data[i];
-
-            // Escape User Input Strings to avoid XSS
-            ev.title = $html(ev.title);
-            ev.where = $html(ev.where);
-            ev.description = $html(ev.description);
-
-            if (ev.site == site)
-            {
-               siteEvents.push(ev);
-            }
-         }
-         data = siteEvents;
          // TODO: These take no account of timezone. E.g. day view of 6th June. server time = GMT+1000, event time = 06 JUN 2010 05:00GMT+1000, date returned from server is 05 JUN 2010 19:00GMT+0000. 05 JUN != 06 JUN.
          // TODO: This would be better done on the server in the userevents webscript
          comparisonFn = function()
@@ -331,13 +315,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                var datum = {};
 
                // Legacy properties (to be factored out or rolled up over time)
+               datum.nodeRef = ev.nodeRef || '';
                datum.desc = ev.description || '';
                datum.name = ev.title;
-               datum.isoutlook = ev.isoutlook == "true" ? "isoutlook" : "";
                datum.contEl = 'div';
                datum.from = ev.startAt.iso8601;
                datum.to = ev.endAt.iso8601;
-               datum.uri = '/calendar/event/' + this.options.siteId + '/' + ev.name + '?date=' + ev.startAt.iso8601;
                datum.hidden = '';
                datum.allday = '';
                datum.isMultiDay = (!Alfresco.CalendarHelper.isSameDay(date, endDate));
@@ -492,46 +475,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
        * @param date {Date} Javascript date object containing the start date for the new event.
        *
        */
-      showAddDialog: function (date)
-      {
-         var displayDate;
-         // if from toolbar add event
-         if (YAHOO.lang.isUndefined(date))
-         {
-            date = Alfresco.util.fromISO8601(this.getDateFromUrl()) || new Date();
-         }
-
-         this.currentDate = displayDate = date;
-
-         if (this.eventDialog)
-         {
-            this.eventDialog.dialog.destroy();
-            delete this.eventDialog;
-         }
-
-         var editInfo = new Alfresco.EventInfo(this.id);
-
-         this.eventDialog = editInfo.initEditDialog(
-         {
-            actionUrl: Alfresco.constants.PROXY_URI + "calendar/create",
-            ajaxSubmitMethod: Alfresco.util.Ajax.POST,
-            displayDate: displayDate,
-            templateRequestParams:
-            {
-               site: this.options.siteId
-            },
-            onSuccess:
-            {
-               fn: this.onEventSaved,
-               scope: this
-            },
-            onFailure:
-            {
-               fn: this.onEventSaveFailed,
-               scope: this
-            }
-         });
-         this.eventDialog.show();
+      showAddDialog: function (date) {
+         window.location.href =
+             Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=lecm-events:document&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=lecm-events:document");
       },
 
       /**
@@ -545,16 +491,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       showDialog: function(e, elTarget)
       {
          var event = this.getEventObj(elTarget);
-         // Set up the dialog box
-         this.setUpDialog(e, elTarget, event);
-
-         // if the edit window isn't already showing, show it!
-         if (!this.eventInfoPanel.isShowing)
-         {
-            this.eventInfoPanel.show(event);
-         }
-
-         Event.preventDefault(e);
+         window.location = $siteURL("document?nodeRef=" + event.nodeRef);
       },
 
       /**

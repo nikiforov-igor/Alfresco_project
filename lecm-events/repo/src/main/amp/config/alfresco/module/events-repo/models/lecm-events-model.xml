@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-events:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Мероприятия</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/events/1.0" prefix="lecm-events"/>
+    </namespaces>
+
+    <constraints>
+        <constraint name="lecm-events:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+            <parameter name="presentString">
+                <value><![CDATA[Мероприятие {lecm-events:title}]]></value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-events:attachment-categories" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Вложения</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-events:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+            <parameter name="authorProperty">
+                <value>lecm-document:creator-ref</value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-events:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+            <parameter name="armUrl">
+                <value>arm?code=SED</value>
+            </parameter>
+        </constraint>
+    </constraints>
+
+    <types>
+        <type name="lecm-events:document">
+            <title>Logic Ecm Events Document</title>
+            <parent>lecm-document:base</parent>
+            <properties>
+                <!-- Заголовок -->
+                <property name="lecm-events:title">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Дата начала мероприятия -->
+                <property name="lecm-events:from-date">
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Дата окончания мероприятия-->
+                <property name="lecm-events:to-date">
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Весмь день-->
+                <property name="lecm-events:all-day">
+                    <type>d:boolean</type>
+                </property>
+                <!-- Описание -->
+                <property name="lecm-events:description">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+        </type>
+    </types>
+</model>

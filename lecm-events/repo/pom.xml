@@ -51,6 +51,10 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-remote-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ru.it.lecm.events</groupId>
             <artifactId>events-repo-api</artifactId>
             <version>${project.version}</version>

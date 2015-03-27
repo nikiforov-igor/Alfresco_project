@@ -254,7 +254,7 @@
                eventSources:
                [
                   {
-                     url: Alfresco.constants.PROXY_URI + "calendar/events/" + me.options.siteId + "/user?repeating=all",
+                     url: Alfresco.constants.PROXY_URI + "lecm/events/user?repeating=all",
                      startParam: "from",
                      startParamFn: function(rangeStart)
                      {
@@ -285,7 +285,7 @@
                                  end: parseISO8601(event.endAt.iso8601),
                                  allDay: (event.allday === "true") ? true : false,
                                  location: $html(event.where),
-                                 uri: "/calendar/event/" + me.options.siteId + "/" + $html(event.name) + "?date=" + event.startAt.iso8601.split("T")[0],
+                                 uri: "document?nodeRef=" + event.nodeRef,
                                  description: $html(event.description),
                                  title: event.title,
                                  where: $html(event.where),
