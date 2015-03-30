@@ -54,6 +54,11 @@
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-remote-api</artifactId>
         </dependency>
+		<dependency>
+			<groupId>org.mnode.ical4j</groupId>
+			<artifactId>ical4j</artifactId>
+			<version>1.0.2</version>
+		</dependency>
         <dependency>
             <groupId>ru.it.lecm.events</groupId>
             <artifactId>events-repo-api</artifactId>
