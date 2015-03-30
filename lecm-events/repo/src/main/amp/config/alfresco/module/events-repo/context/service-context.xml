@@ -34,11 +34,12 @@
 		</property>
 	</bean>
 
-	<!-- Lists the Calendar Events for a user -->
-	<bean id="webscript.ru.it.lecm.events.userevents.get"
-	      class="ru.it.lecm.events.scripts.LecmUserCalendarEntriesGet"
-	      parent="webscript">
-		<property name="nodeService" ref="NodeService"/>
+	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"
+	      depends-on="nodeService, eventsService">
+		<property name="extensionName">
+			<value>events</value>
+		</property>
+		<property name="nodeService" ref="nodeService"/>
 		<property name="searchService" ref="searchService"/>
 	</bean>
 </beans>
