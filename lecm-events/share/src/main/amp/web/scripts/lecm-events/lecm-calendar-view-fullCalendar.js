@@ -72,6 +72,10 @@
       },
 
       render: function () {
+         var hash = window.location.hash;
+         var view = hash.substring(hash.indexOf("view=") + 5).split("&")[0] || Alfresco.util.getQueryStringParameter('view') || this.options.view;
+         this.onUpdateView(view);
+
          this.renderEvents();
       },
 
@@ -141,14 +145,8 @@
          {
             // gets the view changed to from the index of the button in the event object of the passed in parameters
             var view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[args[1].activeView];
-            if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA) {
-               //this.onViewChanged.apply(this, arguments);
-               History.navigate("view", view);
-               Dom.setStyle(this.id, "display", "none");
-            } else {
-               History.navigate("view", view);
-               Dom.setStyle(this.id, "display", "block");
-            }
+            History.navigate("view", view);
+            this.onUpdateView(view);
          }, this);
 
          // Mini Calendar
@@ -164,7 +162,15 @@
             oldResizerFn();
             $jCalendar.fullCalendar("render");
          }
+      },
 
+      onUpdateView: function(view) {
+         if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA) {
+            //this.onViewChanged.apply(this, arguments);
+            Dom.setStyle(this.id, "display", "none");
+         } else {
+            Dom.setStyle(this.id, "display", "block");
+         }
       },
 
       /**

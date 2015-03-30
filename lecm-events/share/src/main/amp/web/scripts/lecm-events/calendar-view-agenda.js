@@ -37,7 +37,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.initEvents();
 
 			this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
-			this.onUpdateView(this.options.view);
+
+			var hash = window.location.hash;
+			var view = hash.substring(hash.indexOf("view=") + 5).split("&")[0] || Alfresco.util.getQueryStringParameter('view') || this.options.view;
+			this.onUpdateView(view);
 
 			YAHOO.Bubbling.on("viewChanged", function (e, args) {
 				var view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[args[1].activeView];
@@ -132,7 +135,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				html = "";
 
 			// build up cell content
-			html = '<a href="' + data.uri + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
+			html = '<a href="' + $siteURL("document?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
 
 			// write to DOM
 			elCell.innerHTML = html;
