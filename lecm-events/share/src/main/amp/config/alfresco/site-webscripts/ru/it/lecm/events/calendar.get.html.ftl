@@ -5,7 +5,7 @@
 
 <@markup id="js">
    <#-- JavaScript Dependencies -->
-   <@script type="text/javascript" src="${url.context}/res/components/calendar/calendar.js" group="calendar"/>
+   <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-mini-calendar.js" group="calendar"/>
 </@>
 
 <@markup id="widgets">

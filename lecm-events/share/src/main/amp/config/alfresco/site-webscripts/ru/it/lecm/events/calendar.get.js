@@ -2,7 +2,7 @@ function main()
 {
    var calendar = {
       id : "Calendar",
-      name : "Alfresco.Calendar",
+      name : "LogicECM.module.MiniCalendar",
       assignTo : "calendar",
       useOptions: false
    };
