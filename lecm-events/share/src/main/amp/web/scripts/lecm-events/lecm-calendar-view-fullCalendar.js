@@ -6,10 +6,7 @@
     */
    // Uses jQuery and FullCalendar functions for FullCalendar functions and YUI ones for Alfresco data
    var fc = $.fullCalendar,
-      formatDate = fc.formatDate,
       parseISO8601 = fc.parseISO8601,
-      addDays = fc.addDays,
-      applyAll = fc.applyAll,
       $html = Alfresco.util.encodeHTML,
       fromISO8601 = Alfresco.util.fromISO8601,
       toISO8601 = Alfresco.util.toISO8601,
@@ -95,14 +92,6 @@
 
          // invoke Full Calendar
          this.initFullCalendar();
-
-         // Edit dialogue events
-         YAHOO.Bubbling.on("eventEdited", this.onEventEdited, this);
-         YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
-         YAHOO.Bubbling.on("eventDeleted", this.onEventDeleted, this);
-
-         // Tag events
-         YAHOO.Bubbling.on("tagSelected", this.onTagSelected, this);
 
          // Nav events.
          YAHOO.Bubbling.on("todayNav", function ()
@@ -369,11 +358,8 @@
        *
        * @method getEvents
        */
-      getEvents: function ()
-      {
+      getEvents: function () {
          $jCalendar.fullCalendar("refetchEvents");
-
-         this.refreshTags();
       },
 
       /**

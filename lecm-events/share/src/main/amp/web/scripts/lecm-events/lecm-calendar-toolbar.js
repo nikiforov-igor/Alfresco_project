@@ -151,7 +151,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (this.todayButton != null) // Note: Today button will be null if elements are hidden serverside
 			{
 				// Disable Nav for Agenda view which uses a different navigation model
-				if (this.endWidth(selectedButton.get("id"), "agenda")) {
+				if (this.endWidth(selectedButton.get("id"), LogicECM.module.Calendar.View.VIEWTYPE_AGENDA)) {
 					this.todayButton.set('disabled', true);
 					this.nextButton.set('disabled', true);
 					this.prevButton.set('disabled', true);
@@ -162,7 +162,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 
 				// Work Hours button needs disabling in both month and agenda views.
-				if (this.endWidth(selectedButton.get("id"), "month") || this.endWidth(selectedButton.get("id"), "agenda"))
+				if (this.endWidth(selectedButton.get("id"), LogicECM.module.Calendar.View.VIEWTYPE_MONTH) || this.endWidth(selectedButton.get("id"), LogicECM.module.Calendar.View.VIEWTYPE_AGENDA))
 				{
 					this.workHoursButton.set('disabled', true);
 				}

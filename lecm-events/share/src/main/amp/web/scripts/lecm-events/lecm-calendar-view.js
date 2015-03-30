@@ -14,7 +14,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
    var Dom = YAHOO.util.Dom,
       Event = YAHOO.util.Event,
       Sel = YAHOO.util.Selector,
-      $html = Alfresco.util.encodeHTML,
       $siteURL = Alfresco.util.siteURL,
       fromISO8601 = Alfresco.util.fromISO8601,
       toISO8601 = Alfresco.util.toISO8601,
@@ -113,21 +112,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       {
          Event.on(this.id, 'click', this.onInteractionEvent, this, true);
          Event.on(this.id, 'dblclick', this.onInteractionEvent, this, true);
-
-         //YAHOO.Bubbling.on("eventEdited", this.onEventEdited, this);
-         //YAHOO.Bubbling.on("eventEditedAfter", this.onAfterEventEdited, this);
-         //YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
-         //YAHOO.Bubbling.on("eventSavedAfter", this.onAfterEventSaved, this);
-         //YAHOO.Bubbling.on("eventDeleted", this.onEventDeleted, this);
-         //YAHOO.Bubbling.on("eventDeletedAfter", this.onAfterEventDeleted, this);
-         //
-         //YAHOO.Bubbling.on("tagSelected", this.onTagSelected, this);
-         //YAHOO.Bubbling.on("viewChanged", this.onViewChanged, this);
-         //YAHOO.Bubbling.on("dateChanged", this.onCalSelect, this);
-         //if (this.calendarView == LogicECM.module.Calendar.View.VIEWTYPE_DAY | this.calendarView == LogicECM.module.Calendar.View.VIEWTYPE_WEEK)
-         //{
-         //   YAHOO.Bubbling.on("eventResized", this.onEventResized, this);
-         //}
       },
 
       /**
@@ -153,29 +137,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                fn: this.onEventsLoaded,
                scope: this
             },
-               failureMessage: Alfresco.util.message("load.fail", "Alfresco.CalendarView")
+               failureMessage: Alfresco.util.message("load.fail", "LogicECM.module.Calendar.View")
            });
       },
-
-      /**
-       * Renders view
-       *
-       * @method render
-       *
-       */
-      //render: function ()
-      //{
-      //   if (this.calendarView === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA ) {
-      //
-      //      // initialise DOM Event registration
-      //      this.initEvents();
-      //      // Load events. Rest of init is handled by a call back from the event loading.
-      //      this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
-      //   } else {
-      //      // FullCalendar handles event loading and callbacks, so call the function that triggers that.
-      //      this.renderEvents();
-      //   }
-      //},
 
       displayMessage: function (message, name)
       {
@@ -324,7 +288,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                datum.to = ev.endAt.iso8601;
                datum.hidden = '';
                datum.allday = '';
-               datum.isMultiDay = (!Alfresco.CalendarHelper.isSameDay(date, endDate));
+               datum.isMultiDay = (!LogicECM.module.Calendar.Helper.isSameDay(date, endDate));
                datum.isAllDay = (ev.allday == "true") ? true : false;
                datum.el = 'div';
 
@@ -428,7 +392,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                   if (!event.isAllDay)
                   {
                      // If event is not the last day of the repeating sequence, it lasts all day.
-                     if (!Alfresco.CalendarHelper.isSameDay(iterationDay, endDay))
+                     if (!LogicECM.module.Calendar.Helper.isSameDay(iterationDay, endDay))
                      {
                         clonedEvent.isAllDay = true;
                      } else
@@ -596,7 +560,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
             // ugly
             for (var i = 1; i < args[0][0].length; i++)
             {
-               args[0][0][i] = Alfresco.CalendarHelper.padZeros(args[0][0][i]);
+               args[0][0][i] = LogicECM.module.Calendar.Helper.padZeros(args[0][0][i]);
             }
             Dom.get(this.currPopUpCalContext).value = args[0][0].join('-');
             // add one hour as default
@@ -789,177 +753,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       {
          var today = new Date();
          var params = Alfresco.util.getQueryStringParameters();
-         params.date = today.getFullYear() + '-' + Alfresco.CalendarHelper.padZeros((~ ~ (1 * (today.getMonth()))) + 1) + '-' + Alfresco.CalendarHelper.padZeros(today.getDate());
+         params.date = today.getFullYear() + '-' + LogicECM.module.Calendar.Helper.padZeros((~ ~ (1 * (today.getMonth()))) + 1) + '-' + LogicECM.module.Calendar.Helper.padZeros(today.getDate());
          window.location = window.location.href.split('?')[0] + Alfresco.util.toQueryString(params);
-      },
-
-      /**
-       * Handler for when calendar view is changed (agenda button is clicked)
-       *
-       * @method onViewChanged
-       *
-       */
-      onViewChanged: function ()
-      {
-
-         var params = Alfresco.util.getQueryStringParameters(),
-            dateBookmark = this.getDateFromUrl();
-         params.view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[arguments[1][1].activeView];
-         if (dateBookmark !== "")
-         {
-            params.date = dateBookmark;
-         }
-         // Remove both current parameters and current bookmarks
-         var navURL = window.location.href.split('?')[0].split('#')[0],
-            paramsString = Alfresco.util.toQueryString(params);
-
-         if (params.view === "agenda")
-         {
-            // Add params as query string for Agenda
-            navURL += paramsString;
-
-         } else
-         {
-            // Otherwise add as a URL Fragment for CalendarView
-            navURL += paramsString.replace("?", "#");
-         }
-
-         // Send the user there:
-         window.location = navURL;
-      },
-
-      /**
-       * Handler for when date mini calendar is selected
-       *
-       * @method onNav
-       * @param e {Object}
-       * @param args {Object}
-       *
-       */
-      onCalSelect: function (e, args)
-      {
-         var date = args[1].date;
-         var params = Alfresco.util.getQueryStringParameters();
-         params.date = dateFormat(date, 'yyyy-mm-dd');
-         var newLoc = window.location.href.split('?')[0] + Alfresco.util.toQueryString(params);
-         window.location = newLoc;
-      },
-      /**
-       * Handler for when a tag is selected
-       *
-       * @method onTagSelected
-       *
-       */
-      onTagSelected: function (e, args)
-      {
-         var tagName = arguments[1][1].tagname;
-
-         // all tags
-         if (tagName == Alfresco.util.message('label.all-tags', 'Alfresco.TagComponent'))
-         {
-            this.options.tag = null;
-         }
-         else
-         {
-            this.options.tag = tagName;
-         }
-         this.updateTitle();
-         this.getEvents();
-      },
-
-      /**
-       * Handler for eventEdited event. Updates event in DOM in response to updated event data.
-       *
-       * @method  onEventEdited
-       *
-       * @param e {object} event object
-       * @param o {object} new event data
-       */
-      onEventEdited : function (e,o)
-      {
-         this.getEvents()
-         YAHOO.Bubbling.fire("eventEditedAfter");
-      },
-
-      /**
-       * Handler for when event is saved
-       *
-       * @method onEventSaved
-       *
-       * @param o {object} response object
-       */
-      onEventSaved : function (o)
-      {
-         this.getEvents();
-         var result = YAHOO.lang.JSON.parse(o.serverResponse.responseText);
-         if (!result.error)
-         {
-            YAHOO.Bubbling.fire("eventSavedAfter");
-            this.displayMessage('message.created.success',this.name);
-         }
-         else
-         {
-            this.onEventSaveFailed();
-         }
-      },
-
-      /**
-       * Triggered when an event can't be created
-       *
-       * @method: onEventSaveFailed
-       */
-      onEventSaveFailed: function ()
-      {
-         Alfresco.util.PopupManager.displayMessage(
-         {
-            text: Alfresco.util.message('message.created.failure', this.name)
-         });
-      },
-
-      /**
-       * Handler for when an event is deleted
-       *
-       * @method  onEventDeleted
-       */
-      onEventDeleted : function ()
-      {
-         this.getEvents();
-         YAHOO.Bubbling.fire("eventDeletedAfter");
-         this.msg('message.deleted.success', this.name);
-      },
-
-      onAfterEventSaved: function (e, args)
-      {
-         // Refresh the tag component
-         this.refreshTags();
-
-         // Confirm success to the user
-         this.displayMessage('message.created.success', this.name);
-      },
-
-      onAfterEventDeleted: function (e, args)
-      {
-         this.refreshTags();
-         this.displayMessage('message.deleted.success', this.name);
-      },
-
-      onAfterEventEdited: function (e, args)
-      {
-         // Refresh the tag component
-         this.refreshTags();
-      },
-
-      refreshTags: function ()
-      {
-         YAHOO.lang.later(500, YAHOO.Bubbling, 'fire', 'tagRefresh');
-      },
-
-      /**
-       * Stub function - to be overridden on the view level (e.g. by CalendarAgendaView_updateTitle)
-       */
-      updateTitle: function ()
-      {
-         return;
       },
 
       /**
@@ -1004,18 +799,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
    LogicECM.module.Calendar.View.VIEWTYPE_AGENDA = 'agenda';
 })();
 
-/**
- * Alfresco.CalendarHelper. Helper object consisting of useful helper methods
- *
- * @constructor
- */
-Alfresco.CalendarHelper = (function Alfresco_CalendarHelper()
+LogicECM.module.Calendar.Helper = (function ()
 {
-   var Dom = YAHOO.util.Dom,
-       fromISO8601 = Alfresco.util.fromISO8601,
-       toISO8601 = Alfresco.util.toISO8601,
-       dateFormat = Alfresco.thirdparty.dateFormat;
-   var templates = [];
+   var fromISO8601 = Alfresco.util.fromISO8601;
 
    return {
 
@@ -1027,84 +813,9 @@ Alfresco.CalendarHelper = (function Alfresco_CalendarHelper()
        * @param value {Object} value to pad
        * @return {String} padded value
        */
-      padZeros: function Alfresco_CalendarHelper_padZeros(value)
+      padZeros: function (value)
       {
          return (value < 10) ? '0' + value : value;
-      },
-
-      /**
-       * Converts a date string in the input field to a date object.
-       *
-       * @method getDateFromField
-       *
-       * @param field {DOM Object} input element
-       * @return d {Date}
-       */
-      getDateFromField: function Alfresco_CalendarHelper_getDateFromField(field)
-      {
-         var dateString = Dom.getAttribute(field, "rel");
-         var d = (dateString !== "") ? fromISO8601(dateString) : new Date();
-         return d;
-      },
-
-      /**
-       * Formats the date
-       *
-       * @param date {Date}
-       * @param field {DOM Object} DOM object of element
-       */
-      writeDateToField: function Alfresco_CalendarHelper_writeDateToField(date, field)
-      {
-         var formattedDate = dateFormat(date, Alfresco.util.message("date-format.fullDate"));
-         field.value = formattedDate;
-         Dom.setAttribute(field, "rel", toISO8601(date));
-      },
-
-      /**
-       * Add an template using specified name as a reference
-       */
-      addTemplate: function Alfresco_CalendarHelper_addTemplate(name, template)
-      {
-         templates[name] = template;
-      },
-
-      /**
-       * Retreives specified template
-       *
-       * @method getTemplate
-       * @param name {string} Name of template to retrieve
-       * @return {string} template
-       */
-      getTemplate: function Alfresco_CalendarHelper_getTemplate(name)
-      {
-         return templates[name];
-      },
-
-      /**
-       * renders template as a DOM HTML element. Element is *not* added to document
-       *
-       * @param name Name of template to render
-       * @param data Data to render template against
-       * @return HTMLElement Newly created div
-       */
-      renderTemplate: function Alfresco_CalendarHelper_renderTemplate(name, data)
-      {
-         var el = document.createElement('div');
-         if (templates[name] && el)
-         {
-            var el = YAHOO.lang.isString(el) ? Dom.get(el) : el;
-            var template = templates[name];
-            var div = document.createElement('div');
-            if (data)
-            {
-               template = YAHOO.lang.substitute(template, data);
-            }
-
-            div.innerHTML = template;
-            el.appendChild(div.firstChild);
-
-            return el.lastChild;
-         }
       },
 
       /**
@@ -1116,7 +827,7 @@ Alfresco.CalendarHelper = (function Alfresco_CalendarHelper()
        *
        * @return {Boolean} flag indicating if the dates are the same or not
        */
-      isSameDay: function Alfresco_CalendarHelper_isSameDay(dateOne, dateTwo)
+      isSameDay: function (dateOne, dateTwo)
       {
          if (typeof(dateOne) === "string")
          {
@@ -1135,7 +846,7 @@ Alfresco.CalendarHelper = (function Alfresco_CalendarHelper()
        *
        * @return {Boolean} flag indicating whether event is a timed event or not
        */
-      isAllDay: function Alfresco_CalendarHelper_isTimedEvent(eventData)
+      isAllDay: function (eventData)
       {
          var isSameDay = this.isSameDay(eventData.from, eventData.to);
          var isMidnight = (eventData.end == eventData.start && "00:00") ? true : false;
@@ -1143,23 +854,3 @@ Alfresco.CalendarHelper = (function Alfresco_CalendarHelper()
       }
    };
 })();
-
-Alfresco.CalendarHelper.addTemplate('vevent', '<{el} class="vevent {allday} {hidden} {isoutlook} theme-bg-color-1 theme-border-2"> ' +
-'<{contEl}>' +
-'<p class="dates">' +
-'<span class="dtstart" title="{from}">{start}</span> - ' +
-'<span class="dtend" title="{to}">{end}</span>' +
-'</p>' +
-'<p class="description">{desc}</p>' +
-'<a class="summary theme-color-1" href="{uri}">{name}</a>' +
-'<span class="location">{where}</span>' +
-'<span class="duration" title="{duration}">{duration}</span>' +
-'<span class="category">{tags}</span>' +
-'</{contEl}>' +
-'</{el}>');
-Alfresco.CalendarHelper.addTemplate('agendaDay', '<h2>{date}</h2>');
-
-Alfresco.CalendarHelper.addTemplate('agendaDayItem', '<li class="vevent"><span>{start} - {end}</span>' +
-'<a href="{uri}" class="summary">{name}</a></li>');
-Alfresco.CalendarHelper.addTemplate('createEventButton', '<button id="addEventButton"><img src="{addEventUrl}" alt="{addEvent}" /></button>');
-Alfresco.CalendarHelper.addTemplate('taggedTitle', "<span class=\"tagged\">{taggedWith} <span class=\"theme-color-2\">'{tag}'</span></span>");

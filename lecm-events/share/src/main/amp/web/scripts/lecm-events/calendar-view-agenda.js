@@ -102,12 +102,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var startDate = new Date(data.startAt.iso8601.split('T')[0]),
 					endDate = new Date(data.endAt.iso8601.split('T')[0]),
 					displayDate = new Date(data.renderDate);
-				if (Alfresco.CalendarHelper.isSameDay(startDate, displayDate) && (startDate < endDate))
+				if (LogicECM.module.Calendar.Helper.isSameDay(startDate, displayDate) && (startDate < endDate))
 				{
 					endDate.setHours(23,59,59,999);
 					end = formatDate(endDate.toISOString(), this.msg("date-format.shortTime"));
 				} else
-				if (Alfresco.CalendarHelper.isSameDay(endDate, displayDate) && (startDate < endDate))
+				if (LogicECM.module.Calendar.Helper.isSameDay(endDate, displayDate) && (startDate < endDate))
 				{
 					startDate.setHours(0,0,1,1);
 					start = formatDate(startDate.toISOString(), this.msg("date-format.shortTime"));
@@ -583,22 +583,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 
 			this.titleEl.innerHTML = this.msg("title.agenda", startDateString, endDateString);
-
-			// add tag info to title,
-			tagTitleEl = Dom.getElementsByClassName('tagged', "span", this.titleEl);
-			if (tagTitleEl.length > 1)
-			{
-				this.titleEl.removeChild(tagTitleEl[0]);
-			}
-			if (this.options.tag)
-			{
-				tagTitleEl = Alfresco.CalendarHelper.renderTemplate('taggedTitle',
-					{
-						taggedWith: this.msg('label.tagged-with'),
-						tag: this.options.tag
-					});
-				this.titleEl.appendChild(tagTitleEl);
-			}
 		},
 
 		/**

@@ -6,13 +6,11 @@
 <@markup id="js">
    <#-- JavaScript Dependencies -->
    <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-calendar-view.js" group="calendar"/>
    <@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js" group="calendar"/>
    <@script type="text/javascript" src="${url.context}/res/jquery/jquery-ui-1.8.11.custom.min.js" group="calendar"/>
    <@script type="text/javascript" src="${url.context}/res/jquery/fullcalendar/fullcalendar.js" group="calendar"/>
+   <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-calendar-view.js" group="calendar"/>
    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-calendar-view-fullCalendar.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/components/calendar/eventinfo.js" group="calendar"/>
-   <@script type="text/javascript" src="${url.context}/res/modules/taglibrary/taglibrary.js" group="calendar"/>
 </@>
 
 <@markup id="widgets">

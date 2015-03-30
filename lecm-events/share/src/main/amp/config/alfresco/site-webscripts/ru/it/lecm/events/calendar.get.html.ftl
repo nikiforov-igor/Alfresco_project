@@ -10,10 +10,6 @@
 
 <@markup id="widgets">
    <@createWidgets group="calendar"/>
-   <@inlineScript group="calendar">
-      <#-- JavaScript to be executed AFTER widget instantiation here -->
-      calendar.setSiteId("${page.url.templateArgs.site!""}");
-   </@>
 </@>
 
 <@markup id="html">

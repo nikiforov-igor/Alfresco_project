@@ -8,8 +8,6 @@
     <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js" group="calendar"/>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/lecm-calendar-view.js" group="calendar"/>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/calendar-view-agenda.js" group="calendar"/>
-    <@script type="text/javascript" src="${url.context}/res/components/calendar/eventinfo.js" group="calendar"/>
-    <@script type="text/javascript" src="${url.context}/res/modules/taglibrary/taglibrary.js" group="calendar"/>
 </@>
 
 <@markup id="widgets">
