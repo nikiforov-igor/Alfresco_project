@@ -70,6 +70,7 @@ public class LecmUserCalendarEntriesGet extends DeclarativeWebScript {
                 result.put("title", title);
                 result.put("description", nodeService.getProperty(entry, EventsService.PROP_EVENT_DESCRIPTION));
                 result.put("allday", isAllDay);
+                result.put("where", "");
                 result.put("start", removeTimeZoneIfRequired(start, isAllDay, removeTimezone));
                 result.put("end", removeTimeZoneIfRequired(end, isAllDay, removeTimezone));
                 String legacyDateFormat = "yyyy-MM-dd";

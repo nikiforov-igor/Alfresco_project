@@ -1,6 +1,6 @@
 <@markup id="css" >
    <#-- CSS Dependencies -->
-   <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/calendar/calendar.css" group="calendar"/>
+   <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/calendar.css" group="calendar"/>
 </@>
 
 <@markup id="js">

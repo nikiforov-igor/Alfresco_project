@@ -10,6 +10,7 @@
 				"title": "${event.title}",
 				"description": "${event.description}",
 				"allday": "${event.allday?string}",
+				"where": "${event.where?string}",
 				"startAt": {
 					"iso8601": "${event.start}",
 					"legacyTime": "${event.legacyTimeFrom}"

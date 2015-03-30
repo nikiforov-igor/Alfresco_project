@@ -114,20 +114,20 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
          Event.on(this.id, 'click', this.onInteractionEvent, this, true);
          Event.on(this.id, 'dblclick', this.onInteractionEvent, this, true);
 
-         YAHOO.Bubbling.on("eventEdited", this.onEventEdited, this);
-         YAHOO.Bubbling.on("eventEditedAfter", this.onAfterEventEdited, this);
-         YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
-         YAHOO.Bubbling.on("eventSavedAfter", this.onAfterEventSaved, this);
-         YAHOO.Bubbling.on("eventDeleted", this.onEventDeleted, this);
-         YAHOO.Bubbling.on("eventDeletedAfter", this.onAfterEventDeleted, this);
-
-         YAHOO.Bubbling.on("tagSelected", this.onTagSelected, this);
-         YAHOO.Bubbling.on("viewChanged", this.onViewChanged, this);
-         YAHOO.Bubbling.on("dateChanged", this.onCalSelect, this);
-         if (this.calendarView == LogicECM.module.Calendar.View.VIEWTYPE_DAY | this.calendarView == LogicECM.module.Calendar.View.VIEWTYPE_WEEK)
-         {
-            YAHOO.Bubbling.on("eventResized", this.onEventResized, this);
-         }
+         //YAHOO.Bubbling.on("eventEdited", this.onEventEdited, this);
+         //YAHOO.Bubbling.on("eventEditedAfter", this.onAfterEventEdited, this);
+         //YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
+         //YAHOO.Bubbling.on("eventSavedAfter", this.onAfterEventSaved, this);
+         //YAHOO.Bubbling.on("eventDeleted", this.onEventDeleted, this);
+         //YAHOO.Bubbling.on("eventDeletedAfter", this.onAfterEventDeleted, this);
+         //
+         //YAHOO.Bubbling.on("tagSelected", this.onTagSelected, this);
+         //YAHOO.Bubbling.on("viewChanged", this.onViewChanged, this);
+         //YAHOO.Bubbling.on("dateChanged", this.onCalSelect, this);
+         //if (this.calendarView == LogicECM.module.Calendar.View.VIEWTYPE_DAY | this.calendarView == LogicECM.module.Calendar.View.VIEWTYPE_WEEK)
+         //{
+         //   YAHOO.Bubbling.on("eventResized", this.onEventResized, this);
+         //}
       },
 
       /**
@@ -241,10 +241,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
             data = this.widgets.Data[date].events;
             for (var i = 0; i < data.length; i++)
             {
-               if (data[i].uri === "/calendar/event/" + element.href.split("/calendar/event/")[1]) // element.href needs hostname and port stripping.
-               {
+               //if (data[i].uri === "/calendar/event/" + element.href.split("/calendar/event/")[1]) // element.href needs hostname and port stripping.
+               //{
                   result = data[i];
-               }
+               //}
             }
          }
          return result;
@@ -318,6 +318,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                datum.nodeRef = ev.nodeRef || '';
                datum.desc = ev.description || '';
                datum.name = ev.title;
+               datum.where = ev.where;
                datum.contEl = 'div';
                datum.from = ev.startAt.iso8601;
                datum.to = ev.endAt.iso8601;

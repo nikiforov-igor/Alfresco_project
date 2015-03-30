@@ -15,6 +15,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		Event = YAHOO.util.Event,
 		Selector = YAHOO.util.Selector,
 		fromISO8601 = Alfresco.util.fromISO8601,
+		$siteURL = Alfresco.util.siteURL,
 		toISO8601 = Alfresco.util.toISO8601,
 		formatDate = Alfresco.util.formatDate,
 		dateFormat = Alfresco.thirdparty.dateFormat,
@@ -33,6 +34,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.AgendaView.prototype, {
 
 		render: function () {
+			this.initEvents();
+
 			this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
 			this.onUpdateView(this.options.view);
 
@@ -195,7 +198,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				html = "",
 				actions = [],
 				rel = this.getRel(data),
-				template = '<a href="' + data.uri + '" class="{type}" title="{tooltip}" rel="' + rel + '"><span>{label}</span></a>',
+				template = '<a href="{url}" class="{type}" title="{tooltip}" rel="' + rel + '"><span>{label}</span></a>',
 				write = false,
 				isEdit = false,
 				isDelete = false,
@@ -207,22 +210,23 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			isDelete = data.permissions.isDelete;
 
 			// NOTE: DOM order (Delete, Edit, Info) is reverse of display order (Info, Edit, Delete), due to right float.
-			if (write && !data.isoutlook) {
+			if (write) {
 				// Delete
-				if (isDelete) {
-					actions.push(YAHOO.lang.substitute(template,
-						{
-							type:"deleteAction",
-							label: me.msg("agenda.action.delete.label"),
-							tooltip: me.msg("agenda.action.delete.tooltip")
-						}));
-				}
+				//if (isDelete) {
+				//	actions.push(YAHOO.lang.substitute(template,
+				//		{
+				//			type:"deleteAction",
+				//			label: me.msg("agenda.action.delete.label"),
+				//			tooltip: me.msg("agenda.action.delete.tooltip")
+				//		}));
+				//}
 
 				// Edit
 				if (isEdit) {
 					actions.push(YAHOO.lang.substitute(template,
 						{
 							type:"editAction",
+							url: $siteURL("document-edit?nodeRef=" + data.nodeRef),
 							label: me.msg("agenda.action.edit.label"),
 							tooltip: me.msg("agenda.action.edit.tooltip")
 						}));
@@ -233,6 +237,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			actions.push(YAHOO.lang.substitute(template,
 				{
 					type:"infoAction summary",
+					url: $siteURL("document?nodeRef=" + data.nodeRef),
 					label: me.msg("agenda.action.info.label"),
 					tooltip: me.msg("agenda.action.info.tooltip")
 				}));
@@ -626,7 +631,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				result = (resultReplace.length > 0)? resultReplace : result ;
 
 				// add in ellipsis and the html wrapped show more string
-				result = '<span class="truncatedText">' + result + ellipsis + " " + '<a href="' + event.uri + '" rel="'+ this.getRel(event) +'" class="showMore">' + showMore + '</a>.'
+				result = '<span class="truncatedText">' + result + ellipsis + " " + '<a href="javascript:void(0);" rel="'+ this.getRel(event) +'" class="showMore">' + showMore + '</a>.'
 			}
 			return result;
 		},
@@ -636,7 +641,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var event = this.getEventObj(el),
 				containerEl = el.parentNode,
 				text = $html(event.description),
-				showLess = '<a href="' + event.uri + '" rel="' + el.rel + '" class="showLess">' + this.msg("agenda.truncate.show-less") + '</a>';
+				showLess = '<a href="javascript:void(0);" rel="' + el.rel + '" class="showLess">' + this.msg("agenda.truncate.show-less") + '</a>';
 
 			containerEl.innerHTML = text + " " + showLess;
 		},
