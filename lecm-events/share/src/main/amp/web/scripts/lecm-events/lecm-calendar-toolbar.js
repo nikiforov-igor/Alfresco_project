@@ -41,18 +41,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	LogicECM.module.Calendar.Toolbar.prototype =
 	{
 		/**
-		 * Sets the current site for this component.
-		 *
-		 * @property siteId
-		 * @type string
-		 */
-		setSiteId: function(siteId)
-		{
-			this.siteId = siteId;
-			return this;
-		},
-
-		/**
 		 * Set messages for this component.
 		 *
 		 * @method setMessages
@@ -144,7 +132,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		onToggleWorkHours: function(e)
 		{
 			// Note the title is reversed since it reflects what will happen if the user clicks the button.
-			this.workHoursButton.set("title", Alfresco.util.message(this.workHoursButton.get("checked") ? "button.work-hours.all" : "button.work-hours.working", 'Alfresco.CalendarToolbar'));
+			this.workHoursButton.set("title", Alfresco.util.message(this.workHoursButton.get("checked") ? "button.work-hours.all" : "button.work-hours.working", 'LogicECM.module.Calendar.Toolbar'));
 			this._fireEvent("toggleWorkHours");
 		},
 
@@ -163,21 +151,18 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (this.todayButton != null) // Note: Today button will be null if elements are hidden serverside
 			{
 				// Disable Nav for Agenda view which uses a different navigation model
-				if (selectedButton.get('label') === Alfresco.util.message('label.agenda', 'Alfresco.CalendarView'))
-				{
+				if (this.endWidth(selectedButton.get("id"), "agenda")) {
 					this.todayButton.set('disabled', true);
 					this.nextButton.set('disabled', true);
 					this.prevButton.set('disabled', true);
-				}
-				else
-				{
+				} else {
 					this.todayButton.set('disabled', false);
 					this.nextButton.set('disabled', false);
 					this.prevButton.set('disabled', false);
 				}
 
 				// Work Hours button needs disabling in both month and agenda views.
-				if (selectedButton.get('label') === Alfresco.util.message('label.month', 'Alfresco.CalendarView') || selectedButton.get('label') === Alfresco.util.message('label.agenda', 'Alfresco.CalendarView'))
+				if (this.endWidth(selectedButton.get("id"), "month") || this.endWidth(selectedButton.get("id"), "agenda"))
 				{
 					this.workHoursButton.set('disabled', true);
 				}
@@ -188,6 +173,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			}
 		},
+		endWidth: function(text, postfix) {
+			return text.indexOf(postfix) == (text.length - postfix.length);
+		},
+
 		_fireEvent: function(type)
 		{
 			YAHOO.Bubbling.fire(type,
