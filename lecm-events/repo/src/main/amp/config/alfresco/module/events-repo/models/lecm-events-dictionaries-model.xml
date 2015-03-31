@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-events-dic:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Справочники мероприятий</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+        <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/events/dictionaries/1.0" prefix="lecm-events-dic"/>
+    </namespaces>
+
+    <types>
+        <type name="lecm-events-dic:locations">
+            <title>Места проведения мероприятий</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+            <properties>
+                <property name="lecm-events-dic:locations-note">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events-dic:locations-address">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events-dic:locations-privilege-level">
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                    <default>0</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events-dic:locations-code">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+
+                <property name="lecm-events-dic:locations-organization-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events-dic:locations-organization-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-events-dic:locations-organization-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contractor:contractor-type</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+    </types>
+</model>
