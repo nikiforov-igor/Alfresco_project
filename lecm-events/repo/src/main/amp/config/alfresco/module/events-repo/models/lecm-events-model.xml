@@ -10,6 +10,7 @@
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/logicECM/events/dictionaries/1.0" prefix="lecm-events-dic"/>
+        <import uri="http://www.it.ru/logicECM/events/table-structure/1.0" prefix="lecm-events-ts"/>
         <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
     </imports>
     <namespaces>
@@ -170,6 +171,10 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>lecm-events-ts:members-table-aspect</aspect>
+                <aspect>lecm-events-ts:resources-table-aspect</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 </model>

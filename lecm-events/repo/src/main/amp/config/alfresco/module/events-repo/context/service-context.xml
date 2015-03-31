@@ -21,12 +21,29 @@
 		</property>
 	</bean>
 
+	<bean id="events.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
+	      depends-on="documents.LogicEcmModelsBootstrap,
+		      events.dictionaries.LogicEcmModelsBootstrap,
+		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-events-table-structure-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-events-table-structure-model</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="events.LogicEcmInternalBootstrap" parent="modelsToRepositoryLoader"
 	      depends-on="dictionaryBootstrap,
 					 ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					 documents.LogicEcmModelsConnectionsBootstrap,
 					 documents.dictionaries.LogicEcmModelsBootstrap,
-					 events.dictionaries.LogicEcmModelsBootstrap">
+					 events.dictionaries.LogicEcmModelsBootstrap,
+					 events.LogicEcmContractsTableStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-events-model.xml</value>

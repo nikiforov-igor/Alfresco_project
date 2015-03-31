@@ -26,10 +26,14 @@
                     <show id="lecm-events:from-date"/>
                     <!-- Дата окончания мероприятия -->
                     <show id="lecm-events:to-date"/>
+                    <!-- Участники -->
+                    <show id="lecm-events-ts:members-assoc"/>
                     <!-- Приглашённые -->
                     <show id="lecm-events:invited-members-assoc"/>
                     <!-- Место проведения -->
                     <show id="lecm-events:location-assoc"/>
+                    <!-- Ресурсы -->
+                    <show id="lecm-events-ts:resources-assoc"/>
                     <!-- Инициатор -->
                     <show id="lecm-events:initiator-assoc"/>
                     <!-- Описание -->
@@ -40,6 +44,18 @@
                 <appearance>
                     <field id="lecm-events:description">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-events-ts:members-assoc">
+                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-events-ts:resources-assoc">
+                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                            <control-param name="isTableSortable">false</control-param>
+                            <control-param name="refreshAfterCreate">true</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
@@ -74,6 +90,32 @@
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                 </appearance>
+            </form>
+            <form id="statemachine-editable-fields">
+                <field-visibility>
+                    <!-- Заголовок -->
+                    <show id="lecm-events:title"/>
+                    <!-- Весмь день -->
+                    <show id="lecm-events:all-day"/>
+                    <!-- Дата начала мероприятия -->
+                    <show id="lecm-events:from-date"/>
+                    <!-- Дата окончания мероприятия -->
+                    <show id="lecm-events:to-date"/>
+                    <!-- Участники -->
+                    <show id="lecm-events-ts:members-assoc"/>
+                    <!-- Приглашённые -->
+                    <show id="lecm-events:invited-members-assoc"/>
+                    <!-- Место проведения -->
+                    <show id="lecm-events:location-assoc"/>
+                    <!-- Ресурсы -->
+                    <show id="lecm-events-ts:resources-assoc"/>
+                    <!-- Инициатор -->
+                    <show id="lecm-events:initiator-assoc"/>
+                    <!-- Описание -->
+                    <show id="lecm-events:description"/>
+                    <!-- Тематика -->
+                    <show id="lecm-document:subject-assoc"/>
+                </field-visibility>
             </form>
         </forms>
     </config>
@@ -286,6 +328,55 @@
                         </control>
                     </field>
                 </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-events-ts:members">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-events-ts:members-status"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="model-type" condition="lecm-events-ts:members">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-events-ts:members-employee-assoc"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-events-ts:members-employee-assoc"/>
+                    <show id="lecm-events-ts:members-status"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="node-type" condition="lecm-events-ts:resources">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-events-ts:resources-status"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+    <config evaluator="model-type" condition="lecm-events-ts:resources">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-events-ts:resources-data-assoc"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-events-ts:resources-data-assoc"/>
+                    <show id="lecm-events-ts:resources-status"/>
+                </field-visibility>
             </form>
         </forms>
     </config>
