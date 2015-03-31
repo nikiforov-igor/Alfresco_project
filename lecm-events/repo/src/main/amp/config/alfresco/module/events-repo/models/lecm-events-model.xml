@@ -9,6 +9,8 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/events/dictionaries/1.0" prefix="lecm-events-dic"/>
+        <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/events/1.0" prefix="lecm-events"/>
@@ -88,7 +90,86 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <!--Повторяется-->
+                <property name="lecm-events:repeatable">
+                    <type>d:boolean</type>
+                </property>
+                <!--На подтверждение ресурсов-->
+                <property name="lecm-events:on-resource-confirmation">
+                    <type>d:boolean</type>
+                </property>
+
+                <property name="lecm-events:location-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events:location-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events:invited-members-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events:invited-members-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
+            <associations>
+                <!--Место проведения-->
+                <association name="lecm-events:location-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-events-dic:locations</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Приглашенные -->
+                <association name="lecm-events:invited-members-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-representative:representative-type</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <!--Инициатор-->
+                <association name="lecm-events:initiator-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
         </type>
     </types>
 </model>
