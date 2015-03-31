@@ -87,5 +87,6 @@
 		</property>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="searchService" ref="searchService"/>
+		<property name="eventService" ref="eventsService"/>
 	</bean>
 </beans>

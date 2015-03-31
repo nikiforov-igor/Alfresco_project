@@ -1,5 +1,6 @@
 package ru.it.lecm.events.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -22,7 +23,8 @@ import java.util.*;
  */
 public class EventsWebScriptBean extends BaseWebScript {
     private SearchService searchService;
-    protected NodeService nodeService;
+    private NodeService nodeService;
+    private EventsService eventService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -30,6 +32,10 @@ public class EventsWebScriptBean extends BaseWebScript {
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
+    }
+
+    public void setEventService(EventsService eventService) {
+        this.eventService = eventService;
     }
 
     public List<Map<String, Object>> getUserEvents( String fromDate, String toDate) {
@@ -57,7 +63,13 @@ public class EventsWebScriptBean extends BaseWebScript {
                 result.put("title", title);
                 result.put("description", nodeService.getProperty(entry, EventsService.PROP_EVENT_DESCRIPTION));
                 result.put("allday", isAllDay);
-                result.put("where", "");
+
+                NodeRef location = eventService.getEventLocation(entry);
+                if (location != null) {
+                    result.put("where", nodeService.getProperty(location, ContentModel.PROP_NAME));
+                } else {
+                    result.put("where", "");
+                }
                 result.put("start", formatDate(start, isAllDay));
                 result.put("end", formatDate(end, isAllDay));
                 String legacyDateFormat = "yyyy-MM-dd";

@@ -13,4 +13,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     public NodeRef getServiceRootFolder() {
         return getFolder(EVENTS_ROOT_ID);
     }
+
+    @Override
+    public NodeRef getEventLocation(NodeRef event) {
+        return findNodeByAssociationRef(event, ASSOC_EVENT_LOCATION, TYPE_EVENT_LOCATION, ASSOCIATION_TYPE.TARGET);
+    }
 }
