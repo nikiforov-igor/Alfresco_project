@@ -7,7 +7,8 @@
 
 	<bean id="events.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
 	      depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary,
-	        ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap">
+	        ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
+	        ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-events-dictionaries-model.xml</value>
@@ -43,6 +44,7 @@
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-locations.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-resources.xml</value>
 			</list>
 		</property>
 	</bean>
