@@ -44,6 +44,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * User: dbashmakov
@@ -248,7 +249,7 @@ public class DocumentPolicy extends BaseBean
 		 надо проверить, что этот номер никому больше не присвоем
 		 */
 		if (isChangeProperty(before, after, DocumentService.PROP_DOCUMENT_REGNUM)) {
-			String documentRegNumber = (String) after.get(DocumentService.PROP_REG_DATA_DOC_NUMBER),
+			final String documentRegNumber = (String) after.get(DocumentService.PROP_REG_DATA_DOC_NUMBER),
 					projectRegNumber = (String) after.get(DocumentService.PROP_REG_DATA_PROJECT_NUMBER),
 					newRegNumber = (String) after.get(DocumentService.PROP_DOCUMENT_REGNUM);
 			if (newRegNumber != null && !newRegNumber.equals("Не присвоено") && !newRegNumber.equals(documentRegNumber) && !newRegNumber.equals(projectRegNumber)) {
@@ -265,15 +266,19 @@ public class DocumentPolicy extends BaseBean
 					// выясняем, откуда взялся регистрационный номер
 					String oldRegNumber = (String) before.get(DocumentService.PROP_DOCUMENT_REGNUM);
 					QName regNumberProp;
-					if (oldRegNumber.equals(documentRegNumber)) {
+					if (oldRegNumber.equalsIgnoreCase(documentRegNumber)) {
 						regNumberProp = DocumentService.PROP_REG_DATA_DOC_NUMBER;
-					} else if (oldRegNumber.equals(projectRegNumber)) {
+					} else if (oldRegNumber.equalsIgnoreCase(projectRegNumber)) {
 						regNumberProp = DocumentService.PROP_REG_DATA_PROJECT_NUMBER;
 					} else {
 						// что-то пошло не так
 						throw new IllegalStateException(String.format("Error persisting regnumber %s", documentRegNumber));
 					}
-					setPropertyAsSystem(nodeRef, regNumberProp, newRegNumber);
+					final String newRegNumberTrimmedUpper = StringUtils.trim(newRegNumber).toUpperCase();
+					setPropertyAsSystem(nodeRef, regNumberProp, newRegNumberTrimmedUpper);
+					if (!newRegNumber.equals(newRegNumberTrimmedUpper)) {
+						setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_REGNUM, newRegNumberTrimmedUpper);
+					}
 				}
 			}
 		}
