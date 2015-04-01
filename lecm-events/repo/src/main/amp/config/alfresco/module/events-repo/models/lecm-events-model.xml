@@ -95,6 +95,37 @@
                 <property name="lecm-events:repeatable">
                     <type>d:boolean</type>
                 </property>
+                <!-- Дата начала периода -->
+                <property name="lecm-events:repeatable-start-period">
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Дата окончания периода -->
+                <property name="lecm-events:repeatable-end-period">
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Правила -->
+                <property name="lecm-events:repeatable-rule">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+
                 <!--На подтверждение ресурсов-->
                 <property name="lecm-events:on-resource-confirmation">
                     <type>d:boolean</type>

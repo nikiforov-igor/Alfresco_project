@@ -28,6 +28,12 @@
                     <show id="lecm-events:to-date"/>
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
+                    <!-- Дата начала периода -->
+                    <show id="lecm-events:repeatable-start-period"/>
+                    <!-- Дата окончания периода -->
+                    <show id="lecm-events:repeatable-end-period"/>
+                    <!-- Правила -->
+                    <show id="lecm-events:repeatable-rule"/>
                     <!-- Участники -->
                     <show id="lecm-events-ts:members-assoc"/>
                     <!-- Приглашённые -->
@@ -44,8 +50,8 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-events:description">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    <field id="lecm-events:repeatable-rule">
+                        <control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />
                     </field>
                     <field id="lecm-events-ts:members-assoc">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
@@ -58,6 +64,20 @@
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-events:description">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <!-- Форма просмотра на главной странице-->
+            <form id="main-page-dashlets">
+                <field-visibility>
+                    <show id="viewMetadata"/>
+                </field-visibility>
+                <appearance>
+                    <field id="viewMetadata">
+                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -78,6 +98,12 @@
                     <show id="lecm-events:to-date"/>
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
+                    <!-- Дата начала периода -->
+                    <show id="lecm-events:repeatable-start-period"/>
+                    <!-- Дата окончания периода -->
+                    <show id="lecm-events:repeatable-end-period"/>
+                    <!-- Правила -->
+                    <show id="lecm-events:repeatable-rule"/>
                     <!-- Участники -->
                     <show id="lecm-events:temp-members-assoc"/>
                     <!-- Приглашённые -->
@@ -94,6 +120,9 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-events:repeatable-rule">
+                        <control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />
+                    </field>
                     <field id="lecm-events:description">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
