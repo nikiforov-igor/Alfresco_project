@@ -78,10 +78,14 @@
                     <show id="lecm-events:to-date"/>
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
+                    <!-- Участники -->
+                    <show id="lecm-events:temp-members-assoc"/>
                     <!-- Приглашённые -->
                     <show id="lecm-events:invited-members-assoc"/>
                     <!-- Место проведения -->
                     <show id="lecm-events:location-assoc"/>
+                    <!-- Ресурсы -->
+                    <show id="lecm-events:temp-resources-assoc"/>
                     <!-- Инициатор -->
                     <show id="lecm-events:initiator-assoc"/>
                     <!-- Описание -->
