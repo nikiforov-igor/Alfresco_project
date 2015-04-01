@@ -229,7 +229,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					actions.push(YAHOO.lang.substitute(template,
 						{
 							type:"editAction",
-							url: $siteURL("document-edit?nodeRef=" + data.nodeRef),
+							url: $siteURL("event-edit?nodeRef=" + data.nodeRef),
 							label: me.msg("agenda.action.edit.label"),
 							tooltip: me.msg("agenda.action.edit.tooltip")
 						}));
