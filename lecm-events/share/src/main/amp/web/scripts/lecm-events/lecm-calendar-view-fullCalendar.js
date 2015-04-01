@@ -270,7 +270,7 @@
                                  end: parseISO8601(event.endAt.iso8601),
                                  allDay: (event.allday === "true") ? true : false,
                                  location: $html(event.where),
-                                 uri: "document?nodeRef=" + event.nodeRef,
+                                 uri: "event?nodeRef=" + event.nodeRef,
                                  description: $html(event.description),
                                  title: event.title,
                                  where: $html(event.where),

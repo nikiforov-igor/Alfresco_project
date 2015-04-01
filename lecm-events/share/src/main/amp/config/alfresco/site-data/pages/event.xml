@@ -4,6 +4,6 @@
     <title-id>page.events.title</title-id>
     <description>Events Component</description>
     <description-id>page.events.description</description-id>
-    <template-instance>events</template-instance>
+    <template-instance>event</template-instance>
     <authentication>user</authentication>
 </page>

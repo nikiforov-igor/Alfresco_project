@@ -135,7 +135,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				html = "";
 
 			// build up cell content
-			html = '<a href="' + $siteURL("document?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
+			html = '<a href="' + $siteURL("event?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
 
 			// write to DOM
 			elCell.innerHTML = html;
@@ -240,7 +240,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			actions.push(YAHOO.lang.substitute(template,
 				{
 					type:"infoAction summary",
-					url: $siteURL("document?nodeRef=" + data.nodeRef),
+					url: $siteURL("event?nodeRef=" + data.nodeRef),
 					label: me.msg("agenda.action.info.label"),
 					tooltip: me.msg("agenda.action.info.tooltip")
 				}));

@@ -456,7 +456,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       showDialog: function(e, elTarget)
       {
          var event = this.getEventObj(elTarget);
-         window.location = $siteURL("document?nodeRef=" + event.nodeRef);
+         window.location = $siteURL("event?nodeRef=" + event.nodeRef);
       },
 
       /**
