@@ -442,7 +442,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
        */
       showAddDialog: function (date) {
          window.location.href =
-             Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=lecm-events:document&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=lecm-events:document");
+             Alfresco.constants.URL_PAGECONTEXT + "event-create?documentType=lecm-events:document&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=lecm-events:document");
       },
 
       /**
