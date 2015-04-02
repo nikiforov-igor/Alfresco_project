@@ -4,7 +4,7 @@
 	<components>
 		<component>
 			<region-id>content</region-id>
-			<url>/lecm/documents/edit/content</url>
+			<url>/lecm/events/edit/content</url>
 		</component>
 		<component>
 			<region-id>not-permission-header</region-id>
