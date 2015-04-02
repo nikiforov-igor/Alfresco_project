@@ -36,3 +36,25 @@ LogicECM.module.Events.changeAllDayValidation =
 		}
 		return true;
 	};
+
+LogicECM.module.Events.changeRepeatableValidation =
+	function (field, args,  event, form, silent, message) {
+		if (field.form != null) {
+			var repeatable = field.value == "true";
+
+			var startPeriod = field.form["prop_lecm-events_repeatable-start-period"];
+			var endPeriod = field.form["prop_lecm-events_repeatable-end-period"];
+			var repeatableRule = field.form["prop_lecm-events_repeatable-rule"];
+
+			if (startPeriod != null) {
+				Dom.setStyle(startPeriod.parentNode.parentNode.parentNode, "display", !repeatable ? "none" : "block");
+			}
+			if (endPeriod != null) {
+				Dom.setStyle(endPeriod.parentNode.parentNode.parentNode, "display", !repeatable ? "none" : "block");
+			}
+			if (repeatableRule != null) {
+				Dom.setStyle(repeatableRule.parentNode, "display", !repeatable ? "none" : "block");
+			}
+		}
+		return true;
+	};
