@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>event-create-content</shortname>
+    <description>event-create-content</description>
+	<url>/lecm/events/create/content</url>
+	<format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>
