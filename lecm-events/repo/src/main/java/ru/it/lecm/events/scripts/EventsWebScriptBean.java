@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.util.ISO8601DateFormat;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.events.beans.EventsService;
 
@@ -117,5 +118,13 @@ public class EventsWebScriptBean extends BaseWebScript {
         DateFormat simpleDateFormat = new SimpleDateFormat((null != datePattern) ? (datePattern) : (ALL_DAY_DATETIME_PATTERN));
 
         return simpleDateFormat.format(date);
+    }
+
+    public Scriptable getAvailableLocations() {
+        List<NodeRef> results = eventService.getAvailableEventLocations();
+        if (results != null) {
+            return createScriptable(results);
+        }
+        return null;
     }
 }

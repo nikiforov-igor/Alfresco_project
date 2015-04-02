@@ -78,6 +78,8 @@
 				<entry key="#{EVENTS_ROOT_ID}" value="Сервис Мероприятия"/>
 			</map>
 		</property>
+		<property name="dictionaryBean" ref="serviceDictionary"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"
