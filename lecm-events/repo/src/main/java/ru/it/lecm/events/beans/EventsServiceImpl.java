@@ -47,8 +47,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
             for (NodeRef location: locations) {
                 NodeRef locationOrganization = findNodeByAssociationRef(location, ASSOC_EVENT_LOCATION_ORGANIZATION, null, ASSOCIATION_TYPE.TARGET);
+                Integer locationPrivelegeLevel = (Integer) nodeService.getProperty(location, PROP_EVENT_LOCATION_PRIVILEGE_LEVEL);
 
-                if (currentEmployeeOrganization != null && currentEmployeeOrganization.equals(locationOrganization)) {
+                if (currentEmployeeOrganization != null && currentEmployeeOrganization.equals(locationOrganization) &&
+                        (locationPrivelegeLevel == 0 || getCurrentUserLocationPrivilegeLevel() >= locationPrivelegeLevel)) {
                     results.add(location);
                 }
             }
@@ -62,5 +64,26 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             return orgstructureBean.getEmployeeOrganization(currentEmployee);
         }
         return null;
+    }
+
+    private int getCurrentUserLocationPrivilegeLevel() {
+        int result = 0;
+        NodeRef locationsPrivilegeLevelDic = dictionaryBean.getDictionaryByName("Уровни привилегий для выбора мест проведения");
+        if (locationsPrivilegeLevelDic != null) {
+            List<NodeRef> privilegeLevels = dictionaryBean.getChildren(locationsPrivilegeLevelDic);
+            for (NodeRef privilegeLevel: privilegeLevels) {
+                NodeRef role = findNodeByAssociationRef(privilegeLevel, ASSOC_EVENT_LOCATION_PL_ROLE, null, ASSOCIATION_TYPE.TARGET);
+                if (role != null) {
+                    String roleId = orgstructureBean.getBusinessRoleIdentifier(role);
+                    if (roleId != null && orgstructureBean.isCurrentEmployeeHasBusinessRole(roleId)) {
+                        Integer level = (Integer) nodeService.getProperty(privilegeLevel, PROP_EVENT_LOCATION_PL_LEVEL);
+                        if (level != null && level > result) {
+                            result = level;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 }
