@@ -158,7 +158,7 @@
                         <input id="${controlId}-time" name="-" type="text" class="time-entry"
                                <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
                                <#else>tabindex="0"</#if> />
-                        <div>
+                        <div id="${controlId}-time-format">
                             <span class="time-format<#if disabled>-disabled</#if>">${msg("form.control.date-picker.display.time.format")}</span>
                         </div>
                     </#if>
