@@ -3,6 +3,6 @@
     <description>Check available location an members on create event</description>
     <url>/lecm/events/event/checkAvailable</url>
     <format default="json"/>
-    <authentication>user</authentication>
+    <authentication runas="admin">user</authentication>
     <transaction>none</transaction>
 </webscript>
