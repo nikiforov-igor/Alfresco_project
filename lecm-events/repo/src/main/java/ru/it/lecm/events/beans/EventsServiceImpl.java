@@ -72,12 +72,14 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             int currentUserResourcesPrivilegeLevel = getCurrentUserResourcesPrivilegeLevel();
 
             for (NodeRef resource: resources) {
-                NodeRef resourceOrganization = findNodeByAssociationRef(resource, ASSOC_EVENT_RESOURCE_ORGANIZATION, null, ASSOCIATION_TYPE.TARGET);
-                Integer resourcePrivilegeLevel = (Integer) nodeService.getProperty(resource, PROP_EVENT_RESOURCE_PRIVILEGE_LEVEL);
+                if ((Boolean) nodeService.getProperty(resource, PROP_EVENT_RESOURCE_AVAILABLE)) {
+                    NodeRef resourceOrganization = findNodeByAssociationRef(resource, ASSOC_EVENT_RESOURCE_ORGANIZATION, null, ASSOCIATION_TYPE.TARGET);
+                    Integer resourcePrivilegeLevel = (Integer) nodeService.getProperty(resource, PROP_EVENT_RESOURCE_PRIVILEGE_LEVEL);
 
-                if (currentEmployeeOrganization != null && currentEmployeeOrganization.equals(resourceOrganization) &&
-                        (resourcePrivilegeLevel == 0 || currentUserResourcesPrivilegeLevel >= resourcePrivilegeLevel)) {
-                    results.add(resource);
+                    if (currentEmployeeOrganization != null && currentEmployeeOrganization.equals(resourceOrganization) &&
+                            (resourcePrivilegeLevel == 0 || currentUserResourcesPrivilegeLevel >= resourcePrivilegeLevel)) {
+                        results.add(resource);
+                    }
                 }
             }
         }
