@@ -13,6 +13,8 @@ LogicECM.module.Events.changeAllDayValidation =
 			var fromDate = field.form["prop_lecm-events_from-date"];
 			var toDate = field.form["prop_lecm-events_to-date"];
 
+			var formId = form.formId.replace("-form", "");
+
 			var fromTime = Dom.get(fromDate.id + "-cntrl-time");
 			var toTime = Dom.get(toDate.id + "-cntrl-time");
 
@@ -22,11 +24,27 @@ LogicECM.module.Events.changeAllDayValidation =
 				Dom.setStyle(fromTime.id, "display", allDay ? "none" : "block");
 				Dom.setStyle(fromTime.id + "-format", "display", allDay ? "none" : "block");
 
+				if (allDay && fromTime.value != "00:01") {
+					fromTime.value = "00:01";
+					YAHOO.Bubbling.fire("handleFieldChange", {
+						formId: formId,
+						fieldId: "lecm-events:from-date"
+					});
+				}
+
 				if (!allDay && fromTime.value.length == 0) {
 					Dom.addClass(fromTime.id, "invalid");
 				}
 			}
 			if (toTime != null) {
+				if (allDay && toTime.value != "23:59") {
+					toTime.value = "23:59";
+					YAHOO.Bubbling.fire("handleFieldChange", {
+						formId: formId,
+						fieldId: "lecm-events:to-date"
+					});
+				}
+
 				Dom.setStyle(toTime.id, "display", allDay ? "none" : "block");
 				Dom.setStyle(toTime.id + "-format", "display", allDay ? "none" : "block");
 				if (!allDay && toTime.value.length == 0) {

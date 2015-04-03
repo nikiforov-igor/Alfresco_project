@@ -63,6 +63,7 @@
 
 	    YAHOO.Bubbling.on("disableControl", me.onDisableControl, this);
 	    YAHOO.Bubbling.on("enableControl", me.onEnableControl, this);
+	    YAHOO.Bubbling.on("handleFieldChange", me.onHandleFieldChange, this);
 
         return me;
     };
@@ -474,6 +475,12 @@
 			            if (!this.options.disabled) {
 				            Dom.get(this.id + "-date").disabled = false;
 			            }
+		            }
+	            },
+
+                onHandleFieldChange: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            this._handleFieldChange();
 		            }
 	            }
             };
