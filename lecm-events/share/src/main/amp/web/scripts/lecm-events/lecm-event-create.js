@@ -87,6 +87,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						scope: this
 					}
 				});
+			} else {
+				if (YAHOO.lang.isFunction(fn) && scope) {
+					fn.call(scope);
+				}
 			}
 		}
 	}, true);

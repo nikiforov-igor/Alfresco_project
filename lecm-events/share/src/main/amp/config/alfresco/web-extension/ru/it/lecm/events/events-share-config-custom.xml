@@ -140,8 +140,21 @@
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-events:repeatable-rule">
+                    <field id="lecm-events:repeatable-start-period" mandatory="true">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-events:repeatable-end-period" mandatory="true">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-events:repeatable-rule" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+                        </constraint-handlers>
                     </field>
                     <field id="lecm-events:location-assoc">
                         <control>

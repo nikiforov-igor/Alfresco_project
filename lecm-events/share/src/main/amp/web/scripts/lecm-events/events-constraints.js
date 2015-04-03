@@ -76,3 +76,12 @@ LogicECM.module.Events.changeRepeatableValidation =
 		}
 		return true;
 	};
+
+LogicECM.module.Events.repeatableValidation =
+	function (field, args,  event, form, silent, message) {
+		if (field.form != null) {
+			var repeatable = field.form["prop_lecm-events_repeatable"];
+			return repeatable.value == "false" || field.value.length > 0
+		}
+		return false;
+	};
