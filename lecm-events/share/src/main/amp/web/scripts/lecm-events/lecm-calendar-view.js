@@ -441,8 +441,36 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
        *
        */
       showAddDialog: function (date) {
+         if (date == null) {
+            var historyDate = YAHOO.util.History.getBookmarkedState("date");
+            if (historyDate != null) {
+               date = Alfresco.util.fromISO8601(historyDate);
+            }
+            if (date == null) {
+               date = new Date();
+               date.setHours(0);
+               date.setMinutes(0);
+               date.setSeconds(0);
+               date.setMilliseconds(0);
+            }
+         }
+
+         var fromDate = new Date(date.getTime()),
+             toDate = new Date(date.getTime());
+
+         if (date.getHours() == 0) {
+            fromDate.setHours(12);
+            toDate.setHours(13);
+         } else {
+            toDate.setHours(fromDate.getHours() + 1);
+         }
+
+         var params = "documentType=lecm-events:document";
+         params += "&prop_lecm-events_from-date=" + Alfresco.util.toISO8601(fromDate);
+         params += "&prop_lecm-events_to-date=" + Alfresco.util.toISO8601(toDate);
+
          window.location.href =
-             Alfresco.constants.URL_PAGECONTEXT + "event-create?documentType=lecm-events:document&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=lecm-events:document");
+             Alfresco.constants.URL_PAGECONTEXT + "event-create?documentType=lecm-events:document&" + LogicECM.module.Base.Util.encodeUrlParams(params);
       },
 
       /**
