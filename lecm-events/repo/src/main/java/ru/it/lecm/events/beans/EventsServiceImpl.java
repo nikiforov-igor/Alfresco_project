@@ -1,6 +1,7 @@
 package ru.it.lecm.events.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -36,7 +37,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     @Override
-    public List<NodeRef> getAvailableEventLocations() {
+         public List<NodeRef> getAvailableUserLocations() {
         List<NodeRef> results = null;
         NodeRef locationsDic = dictionaryBean.getDictionaryByName("Места проведения мероприятий");
         if (locationsDic != null) {
@@ -44,14 +45,39 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
             List<NodeRef> locations = dictionaryBean.getChildren(locationsDic);
             NodeRef currentEmployeeOrganization = getCurrentEmployeeOrganization();
+            int currentUserLocationPrivilegeLevel = getCurrentUserLocationPrivilegeLevel();
 
             for (NodeRef location: locations) {
                 NodeRef locationOrganization = findNodeByAssociationRef(location, ASSOC_EVENT_LOCATION_ORGANIZATION, null, ASSOCIATION_TYPE.TARGET);
-                Integer locationPrivelegeLevel = (Integer) nodeService.getProperty(location, PROP_EVENT_LOCATION_PRIVILEGE_LEVEL);
+                Integer locationPrivilegeLevel = (Integer) nodeService.getProperty(location, PROP_EVENT_LOCATION_PRIVILEGE_LEVEL);
 
                 if (currentEmployeeOrganization != null && currentEmployeeOrganization.equals(locationOrganization) &&
-                        (locationPrivelegeLevel == 0 || getCurrentUserLocationPrivilegeLevel() >= locationPrivelegeLevel)) {
+                        (locationPrivilegeLevel == 0 || currentUserLocationPrivilegeLevel >= locationPrivilegeLevel)) {
                     results.add(location);
+                }
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public List<NodeRef> getAvailableUserResources() {
+        List<NodeRef> results = null;
+        NodeRef resourcesDic = dictionaryBean.getDictionaryByName("Ресурсы");
+        if (resourcesDic != null) {
+            results = new ArrayList<>();
+
+            List<NodeRef> resources = dictionaryBean.getChildren(resourcesDic);
+            NodeRef currentEmployeeOrganization = getCurrentEmployeeOrganization();
+            int currentUserResourcesPrivilegeLevel = getCurrentUserResourcesPrivilegeLevel();
+
+            for (NodeRef resource: resources) {
+                NodeRef resourceOrganization = findNodeByAssociationRef(resource, ASSOC_EVENT_RESOURCE_ORGANIZATION, null, ASSOCIATION_TYPE.TARGET);
+                Integer resourcePrivilegeLevel = (Integer) nodeService.getProperty(resource, PROP_EVENT_RESOURCE_PRIVILEGE_LEVEL);
+
+                if (currentEmployeeOrganization != null && currentEmployeeOrganization.equals(resourceOrganization) &&
+                        (resourcePrivilegeLevel == 0 || currentUserResourcesPrivilegeLevel >= resourcePrivilegeLevel)) {
+                    results.add(resource);
                 }
             }
         }
@@ -67,16 +93,24 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     private int getCurrentUserLocationPrivilegeLevel() {
+        return getCurrentUserDicPrivilegeLevel("Уровни привилегий для выбора мест проведения", ASSOC_EVENT_LOCATION_PL_ROLE, PROP_EVENT_LOCATION_PL_LEVEL);
+    }
+
+    private int getCurrentUserResourcesPrivilegeLevel() {
+        return getCurrentUserDicPrivilegeLevel("Уровни привилегий для выбора ресурсов", ASSOC_EVENT_RESOURCES_PL_ROLE, PROP_EVENT_RESOURCES_PL_LEVEL);
+    }
+
+    private int getCurrentUserDicPrivilegeLevel(String dicName, QName dicRoleAssoc, QName dicLevelProp) {
         int result = 0;
-        NodeRef locationsPrivilegeLevelDic = dictionaryBean.getDictionaryByName("Уровни привилегий для выбора мест проведения");
-        if (locationsPrivilegeLevelDic != null) {
-            List<NodeRef> privilegeLevels = dictionaryBean.getChildren(locationsPrivilegeLevelDic);
+        NodeRef privilegeLevelDic = dictionaryBean.getDictionaryByName(dicName);
+        if (privilegeLevelDic != null) {
+            List<NodeRef> privilegeLevels = dictionaryBean.getChildren(privilegeLevelDic);
             for (NodeRef privilegeLevel: privilegeLevels) {
-                NodeRef role = findNodeByAssociationRef(privilegeLevel, ASSOC_EVENT_LOCATION_PL_ROLE, null, ASSOCIATION_TYPE.TARGET);
+                NodeRef role = findNodeByAssociationRef(privilegeLevel, dicRoleAssoc, null, ASSOCIATION_TYPE.TARGET);
                 if (role != null) {
                     String roleId = orgstructureBean.getBusinessRoleIdentifier(role);
                     if (roleId != null && orgstructureBean.isCurrentEmployeeHasBusinessRole(roleId)) {
-                        Integer level = (Integer) nodeService.getProperty(privilegeLevel, PROP_EVENT_LOCATION_PL_LEVEL);
+                        Integer level = (Integer) nodeService.getProperty(privilegeLevel, dicLevelProp);
                         if (level != null && level > result) {
                             result = level;
                         }

@@ -34,6 +34,11 @@ public interface EventsService {
     public static final QName ASSOC_EVENT_LOCATION_PL_ROLE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-pl-br-assoc");
     public static final QName PROP_EVENT_LOCATION_PL_LEVEL = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-pl-level");
 
+    public static final QName ASSOC_EVENT_RESOURCE_ORGANIZATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-organization-assoc");
+    public static final QName PROP_EVENT_RESOURCE_PRIVILEGE_LEVEL = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-privilege-level");
+    public static final QName ASSOC_EVENT_RESOURCES_PL_ROLE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-pl-br-assoc");
+    public static final QName PROP_EVENT_RESOURCES_PL_LEVEL = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-pl-level");
+
     public static final QName TYPE_EVENT_MEMBERS_TABLE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "membersTable");
     public static final QName TYPE_EVENT_MEMBERS_TABLE_ROW = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members");
     public static final QName TYPE_EVENT_RESOURCES_TABLE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resourcesTable");
@@ -44,5 +49,7 @@ public interface EventsService {
 
     NodeRef getEventLocation(NodeRef event);
 
-    List<NodeRef> getAvailableEventLocations();
+    List<NodeRef> getAvailableUserLocations();
+
+    List<NodeRef> getAvailableUserResources();
 }

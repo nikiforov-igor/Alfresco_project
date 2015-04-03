@@ -3,7 +3,7 @@
 function main() {
 	var data = [];
 
-	var availableLocations = events.getAvailableLocations();
+	var availableLocations = events.getAvailableUserLocations();
 	if (availableLocations != null) {
 		var filter = getFilterForAvailableElement(availableLocations);
 		data = getPickerChildrenItems(filter);
