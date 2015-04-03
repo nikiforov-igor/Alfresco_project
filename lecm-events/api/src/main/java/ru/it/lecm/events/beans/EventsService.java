@@ -3,6 +3,7 @@ package ru.it.lecm.events.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,9 +49,15 @@ public interface EventsService {
     public static final QName ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-employee-assoc");
     public static final QName ASSOC_EVENT_RESOURCES_TABLE_RESOURCE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources-data-assoc");
 
+    List<NodeRef> getEvents(String fromDate, String toDate);
+
+    public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter);
+
     NodeRef getEventLocation(NodeRef event);
 
     List<NodeRef> getAvailableUserLocations();
 
     List<NodeRef> getAvailableUserResources();
+
+    boolean checkLocationAvailable(NodeRef location, Date fromDate, Date toDate, boolean allDay);
 }

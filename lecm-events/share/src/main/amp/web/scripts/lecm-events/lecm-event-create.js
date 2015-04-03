@@ -24,6 +24,70 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			} else {
 				window.location.href = Alfresco.constants.URL_PAGECONTEXT + 'event?nodeRef=' + nodeRef;
 			}
+		},
+
+		onBeforeFormRuntimeInit: function(layer, args) {
+			this.runtimeForm = args[1].runtime;
+			var submitElement = this.runtimeForm.submitElements[0];
+			var originalSubmitFunction = submitElement.submitForm;
+
+			submitElement.submitForm = this.onSubmit.bind(this, originalSubmitFunction, submitElement);
+
+			this.runtimeForm.setAJAXSubmit(true, {
+				successCallback: {
+					scope: this,
+					fn: this.onFormSubmitSuccess
+				},
+				failureCallback: {
+					scope: this,
+					fn: this.onFormSubmitFailure
+				}
+			});
+		},
+
+		onSubmit: function(fn, scope) {
+			if (this.runtimeForm.validate()) {
+				this._showSplash();
+
+				var fromDate = Dom.get(this.runtimeForm.formId)["prop_lecm-events_from-date"];
+				var toDate = Dom.get(this.runtimeForm.formId)["prop_lecm-events_to-date"];
+				var allDay = Dom.get(this.runtimeForm.formId)["prop_lecm-events_all-day"];
+				var location = Dom.get(this.runtimeForm.formId)["assoc_lecm-events_location-assoc"];
+
+				Alfresco.util.Ajax.jsonPost({
+					url: Alfresco.constants.PROXY_URI + "lecm/events/event/checkAvailable",
+					dataObj: {
+						"fromDate": fromDate.value,
+						"toDate": toDate.value,
+						"allDay": allDay.value,
+						"location": location.value
+					},
+					successCallback: {
+						fn: function refreshSuccess(response) {
+							var json = response.json;
+
+							if (json.locationAvailable) {
+								if (YAHOO.lang.isFunction(fn) && scope) {
+									fn.call(scope);
+								}
+							} else {
+								this._hideSplash();
+								Alfresco.util.PopupManager.displayMessage(
+									{
+										text: this.msg("message.event.location.notAvailable")
+									});
+							}
+						},
+						scope: this
+					},
+					failureCallback: {
+						fn: function refreshFailure(response) {
+							console.log(response);
+						},
+						scope: this
+					}
+				});
+			}
 		}
 	}, true);
 })();
