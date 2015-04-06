@@ -81,6 +81,7 @@
 		<property name="dictionaryBean" ref="serviceDictionary"/>
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 		<property name="searchService" ref="searchService"/>
+		<property name="workCalendarService" ref="WorkCalendarService"/>
 	</bean>
 
 	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"

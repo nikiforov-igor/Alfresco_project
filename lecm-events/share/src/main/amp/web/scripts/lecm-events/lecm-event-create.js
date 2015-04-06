@@ -53,6 +53,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var toDate = Dom.get(this.runtimeForm.formId)["prop_lecm-events_to-date"];
 				var allDay = Dom.get(this.runtimeForm.formId)["prop_lecm-events_all-day"];
 				var location = Dom.get(this.runtimeForm.formId)["assoc_lecm-events_location-assoc"];
+				var members = Dom.get(this.runtimeForm.formId)["assoc_lecm-events_temp-members-assoc"];
 
 				Alfresco.util.Ajax.jsonPost({
 					url: Alfresco.constants.PROXY_URI + "lecm/events/event/checkAvailable",
@@ -60,15 +61,57 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						"fromDate": fromDate.value,
 						"toDate": toDate.value,
 						"allDay": allDay.value,
-						"location": location.value
+						"location": location.value,
+						"members": members.value.split(",")
 					},
 					successCallback: {
 						fn: function refreshSuccess(response) {
 							var json = response.json;
 
 							if (json.locationAvailable) {
-								if (YAHOO.lang.isFunction(fn) && scope) {
-									fn.call(scope);
+								var notAvailableEmployees = "";
+								if (json.members != null) {
+									for (var i = 0; i < json.members.length; i++) {
+										if (!json.members[i].available) {
+											if (notAvailableEmployees.length > 0) {
+												notAvailableEmployees += ", "
+											}
+											notAvailableEmployees += json.members[i].name;
+										}
+									}
+								}
+
+								if (notAvailableEmployees.length > 0)  {
+									this._hideSplash();
+
+									Alfresco.util.PopupManager.displayPrompt(
+										{
+											title: this.msg("title.confirm.event.employees.notAvailable"),
+											text: this.msg("message.event.employees.notAvailable", notAvailableEmployees),
+											buttons:[
+												{
+													text:this.msg("button.ok"),
+													handler:function () {
+														this.destroy();
+														if (YAHOO.lang.isFunction(fn) && scope) {
+															fn.call(scope);
+														}
+													}
+												},
+												{
+													text:this.msg("button.cancel"),
+													handler:function () {
+														this.destroy();
+													},
+													isDefault:true
+												}
+											]
+										});
+
+								} else {
+									if (YAHOO.lang.isFunction(fn) && scope) {
+										fn.call(scope);
+									}
 								}
 							} else {
 								this._hideSplash();

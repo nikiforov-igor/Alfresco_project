@@ -11,6 +11,7 @@ import org.alfresco.util.ISO8601DateFormat;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     private DictionaryBean dictionaryBean;
     private OrgstructureBean orgstructureBean;
     private SearchService searchService;
+    private IWorkCalendar workCalendarService;
 
     final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -51,6 +53,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
+    }
+
+    public void setWorkCalendarService(IWorkCalendar workCalendarService) {
+        this.workCalendarService = workCalendarService;
     }
 
     public List<NodeRef> getEvents(String fromDate, String toDate) {
@@ -193,5 +199,36 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
 
         return events == null || events.size() == 0;
+    }
+
+    public boolean checkMemberAvailable(NodeRef member, Date fromDate, Date toDate, boolean allDay) {
+        List<Date> employeeWorkindDays = workCalendarService.getEmployeeWorkindDays(member, fromDate, toDate);
+        if (employeeWorkindDays.size() == 0) {
+            return false;
+        } else {
+            if (allDay) {
+                Calendar fromDateCal = Calendar.getInstance();
+                fromDateCal.setTime(fromDate);
+                fromDateCal.set(Calendar.HOUR_OF_DAY, 0);
+                fromDateCal.set(Calendar.MINUTE, 1);
+                fromDateCal.set(Calendar.SECOND, 0);
+                fromDateCal.set(Calendar.MILLISECOND, 0);
+                fromDate = fromDateCal.getTime();
+
+                Calendar toDateCal = Calendar.getInstance();
+                toDateCal.setTime(toDate);
+                toDateCal.set(Calendar.HOUR_OF_DAY, 23);
+                toDateCal.set(Calendar.MINUTE, 59);
+                toDateCal.set(Calendar.SECOND, 0);
+                toDateCal.set(Calendar.MILLISECOND, 0);
+                toDate = toDateCal.getTime();
+            }
+
+            String additionalFilter = " AND @lecm\\-events\\:temp\\-members\\-assoc\\-ref:\"" + member.toString() + "\"";
+
+            List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
+
+            return events == null || events.size() == 0;
+        }
     }
 }

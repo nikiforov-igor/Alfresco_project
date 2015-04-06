@@ -60,4 +60,6 @@ public interface EventsService {
     List<NodeRef> getAvailableUserResources();
 
     boolean checkLocationAvailable(NodeRef location, Date fromDate, Date toDate, boolean allDay);
+
+    boolean checkMemberAvailable(NodeRef member, Date fromDate, Date toDate, boolean allDay);
 }

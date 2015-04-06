@@ -113,14 +113,28 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public boolean checkLocationAvailable(String location, String fromDate, String toDate, boolean allDay) {
-        ParameterCheck.mandatory("documentNodeRef", location);
-        ParameterCheck.mandatory("documentNodeRef", fromDate);
-        ParameterCheck.mandatory("documentNodeRef", toDate);
-        ParameterCheck.mandatory("documentNodeRef", allDay);
+        ParameterCheck.mandatory("location", location);
+        ParameterCheck.mandatory("fromDate", fromDate);
+        ParameterCheck.mandatory("toDate", toDate);
+        ParameterCheck.mandatory("allDay", allDay);
 
         NodeRef locationRef = new NodeRef(location);
         if (this.nodeService.exists(locationRef)) {
             return eventService.checkLocationAvailable(locationRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay);
+        }
+
+        return false;
+    }
+
+    public boolean checkMemberAvailable(String member, String fromDate, String toDate, boolean allDay) {
+        ParameterCheck.mandatory("member", member);
+        ParameterCheck.mandatory("fromDate", fromDate);
+        ParameterCheck.mandatory("toDate", toDate);
+        ParameterCheck.mandatory("allDay", allDay);
+
+        NodeRef memberRef = new NodeRef(member);
+        if (this.nodeService.exists(memberRef)) {
+            return eventService.checkMemberAvailable(memberRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay);
         }
 
         return false;
