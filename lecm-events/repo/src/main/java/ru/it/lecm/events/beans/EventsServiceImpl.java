@@ -231,4 +231,12 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             return events == null || events.size() == 0;
         }
     }
+
+    public List<NodeRef> getResourceResponsible(NodeRef resource) {
+        return findNodesByAssociationRef(resource, ASSOC_EVENT_RESOURCE_RESPONSIBLE, null, ASSOCIATION_TYPE.TARGET);
+    }
+
+    public NodeRef getEventInitiator(NodeRef event) {
+        return findNodeByAssociationRef(event, ASSOC_EVENT_INITIATOR, null, ASSOCIATION_TYPE.TARGET);
+    }
 }

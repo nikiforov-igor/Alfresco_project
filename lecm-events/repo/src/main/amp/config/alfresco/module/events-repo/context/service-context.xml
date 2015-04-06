@@ -98,5 +98,9 @@
 	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentTableService" ref="documentTableService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+		<property name="eventService" ref="eventsService"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="documentService" ref="documentService"/>
 	</bean>
 </beans>

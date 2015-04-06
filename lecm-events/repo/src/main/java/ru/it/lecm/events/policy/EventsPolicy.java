@@ -1,24 +1,25 @@
 package ru.it.lecm.events.policy;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.service.namespace.RegexQNamePattern;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
+import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -28,6 +29,13 @@ import java.util.Set;
 public class EventsPolicy extends BaseBean {
     private PolicyComponent policyComponent;
     private DocumentTableService documentTableService;
+    private LecmPermissionService lecmPermissionService;
+    private EventsService eventService;
+    private NotificationsService notificationsService;
+    private DocumentService documentService;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -35,6 +43,22 @@ public class EventsPolicy extends BaseBean {
 
     public void setDocumentTableService(DocumentTableService documentTableService) {
         this.documentTableService = documentTableService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setEventService(EventsService eventService) {
+        this.eventService = eventService;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 
     @Override
@@ -50,6 +74,10 @@ public class EventsPolicy extends BaseBean {
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_RESOURCES,
                 new JavaBehaviour(this, "onCreateAddResources", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+                EventsService.TYPE_EVENT,
+                new JavaBehaviour(this, "onCreateEvent", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     public void onCreateAddMembers(AssociationRef nodeAssocRef) {
@@ -57,6 +85,19 @@ public class EventsPolicy extends BaseBean {
         NodeRef event = nodeAssocRef.getSourceRef();
         //Участник
         NodeRef member = nodeAssocRef.getTargetRef();
+
+        lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader));
+        //Отправка уведомления
+        NodeRef initiator = eventService.getEventInitiator(event);
+        if (initiator != null) {
+            String author = AuthenticationUtil.getSystemUserName();
+            String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+            Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+            String text = employeeName + " приглашает на мероприятие " + documentService.wrapAsDocumentLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+            List<NodeRef> recipients = new ArrayList<>();
+            recipients.add(member);
+            notificationsService.sendNotification(author, event, text, recipients, null);
+        }
 
         NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
         if (tableDataRootFolder != null) {
@@ -84,7 +125,23 @@ public class EventsPolicy extends BaseBean {
         //Мероприятие
         NodeRef event = nodeAssocRef.getSourceRef();
         //Участник
-        NodeRef member = nodeAssocRef.getTargetRef();
+        NodeRef resource = nodeAssocRef.getTargetRef();
+
+        List<NodeRef> responsible = eventService.getResourceResponsible(resource);
+        if (responsible != null) {
+            for (NodeRef employee: responsible) {
+                lecmPermissionService.grantDynamicRole("EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN", event, employee.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader));
+
+                Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+
+                //Отправка уведомления
+                String author = AuthenticationUtil.getSystemUserName();
+                String text = "Запланированное " + documentService.wrapAsDocumentLink(event) + " требует привлечения ресурсов за которые вы ответственны. Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+                List<NodeRef> recipients = new ArrayList<>();
+                recipients.add(employee);
+                notificationsService.sendNotification(author, event, text, recipients, null);
+            }
+        }
 
         NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
         if (tableDataRootFolder != null) {
@@ -98,7 +155,7 @@ public class EventsPolicy extends BaseBean {
                     try {
                         NodeRef createdNode = createNode(table, EventsService.TYPE_EVENT_RESOURCES_TABLE_ROW, null, null);
                         if (createdNode != null) {
-                            nodeService.createAssociation(createdNode, member, EventsService.ASSOC_EVENT_RESOURCES_TABLE_RESOURCE);
+                            nodeService.createAssociation(createdNode, resource, EventsService.ASSOC_EVENT_RESOURCES_TABLE_RESOURCE);
                         }
                     } catch (WriteTransactionNeededException ex) {
                         throw new RuntimeException(ex);
@@ -106,5 +163,9 @@ public class EventsPolicy extends BaseBean {
                 }
             }
         }
+    }
+
+    public void onCreateEvent(ChildAssociationRef childAssocRef) {
+
     }
 }

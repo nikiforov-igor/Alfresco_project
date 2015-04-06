@@ -26,6 +26,7 @@ public interface EventsService {
     public static final QName PROP_EVENT_DESCRIPTION = QName.createQName(EVENTS_NAMESPACE_URI, "description");
 
     public static final QName ASSOC_EVENT_LOCATION = QName.createQName(EVENTS_NAMESPACE_URI, "location-assoc");
+    public static final QName ASSOC_EVENT_INITIATOR = QName.createQName(EVENTS_NAMESPACE_URI, "initiator-assoc");
     public static final QName ASSOC_EVENT_TEMP_MEMBERS = QName.createQName(EVENTS_NAMESPACE_URI, "temp-members-assoc");
     public static final QName ASSOC_EVENT_TEMP_RESOURCES = QName.createQName(EVENTS_NAMESPACE_URI, "temp-resources-assoc");
 
@@ -36,6 +37,7 @@ public interface EventsService {
     public static final QName PROP_EVENT_LOCATION_PL_LEVEL = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-pl-level");
 
     public static final QName ASSOC_EVENT_RESOURCE_ORGANIZATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-organization-assoc");
+    public static final QName ASSOC_EVENT_RESOURCE_RESPONSIBLE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-responsible-assoc");
     public static final QName PROP_EVENT_RESOURCE_PRIVILEGE_LEVEL = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-privilege-level");
     public static final QName PROP_EVENT_RESOURCE_AVAILABLE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-available");
     public static final QName ASSOC_EVENT_RESOURCES_PL_ROLE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources-pl-br-assoc");
@@ -62,4 +64,8 @@ public interface EventsService {
     boolean checkLocationAvailable(NodeRef location, Date fromDate, Date toDate, boolean allDay);
 
     boolean checkMemberAvailable(NodeRef member, Date fromDate, Date toDate, boolean allDay);
+
+    List<NodeRef> getResourceResponsible(NodeRef resource);
+
+    NodeRef getEventInitiator(NodeRef event);
 }
