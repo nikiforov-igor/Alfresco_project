@@ -128,6 +128,8 @@
                     <show id="lecm-events:description"/>
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
+                    <!--Вложения-->
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-events:all-day">
@@ -173,6 +175,13 @@
                     </field>
                     <field id="lecm-events:description">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:attachments-temp-assoc" label="Вложения">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">Вложения</control-param>
+                            <control-param name="suppressRefreshEvent">true</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
