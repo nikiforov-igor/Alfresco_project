@@ -27,12 +27,14 @@ public interface EventsService {
 
     public static final QName ASSOC_EVENT_LOCATION = QName.createQName(EVENTS_NAMESPACE_URI, "location-assoc");
     public static final QName ASSOC_EVENT_INITIATOR = QName.createQName(EVENTS_NAMESPACE_URI, "initiator-assoc");
+    public static final QName ASSOC_EVENT_INVITED_MEMBERS = QName.createQName(EVENTS_NAMESPACE_URI, "invited-members-assoc");
     public static final QName ASSOC_EVENT_TEMP_MEMBERS = QName.createQName(EVENTS_NAMESPACE_URI, "temp-members-assoc");
     public static final QName ASSOC_EVENT_TEMP_RESOURCES = QName.createQName(EVENTS_NAMESPACE_URI, "temp-resources-assoc");
 
     public static final QName TYPE_EVENT_LOCATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations");
     public static final QName ASSOC_EVENT_LOCATION_ORGANIZATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-organization-assoc");
     public static final QName PROP_EVENT_LOCATION_PRIVILEGE_LEVEL = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-privilege-level");
+    public static final QName PROP_EVENT_LOCATION_ADDRESS = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-address");
     public static final QName ASSOC_EVENT_LOCATION_PL_ROLE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-pl-br-assoc");
     public static final QName PROP_EVENT_LOCATION_PL_LEVEL = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-pl-level");
 
