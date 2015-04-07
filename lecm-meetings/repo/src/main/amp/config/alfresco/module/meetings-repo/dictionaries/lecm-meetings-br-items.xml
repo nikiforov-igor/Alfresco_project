@@ -2,37 +2,48 @@
 <items>
 	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
 		<items updateMode="CreateOrUpdate">
-<!--			<item name="cm:Мероприятия.Создатели" type="lecm-orgstr:business-role">
-				<property name="cm:name">Мероприятия.Создатели</property>
-				<property name="lecm-orgstr:business-role-identifier">EVENTS_CREATOR</property>
+			<item name="cm:Совещания.Создатели" type="lecm-orgstr:business-role">
+				<property name="cm:name">Совещания.Создатели</property>
+				<property name="lecm-orgstr:business-role-identifier">MEETINGS_CREATOR</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право на создание мероприятий. Статическая роль.</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право на создание совещания. Статическая роль.</property>
 			</item>
-			<item name="cm:Мероприятия.Инициатор" type="lecm-orgstr:business-role">
-				<property name="cm:name">Мероприятия.Инициатор </property>
-				<property name="lecm-orgstr:business-role-identifier">EVENTS_INITIATOR</property>
+			<item name="cm:Совещания.Инициатор" type="lecm-orgstr:business-role">
+				<property name="cm:name">Совещания.Инициатор</property>
+				<property name="lecm-orgstr:business-role-identifier">MEETINGS_INITIATOR</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, от имени которого создано мероприятие. Динамическая роль.</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудник, создавший совещание. Динамическая роль.</property>
 			</item>
-			<item name="cm:Мероприятия.Участник" type="lecm-orgstr:business-role">
-				<property name="cm:name">Мероприятия.Участник</property>
-				<property name="lecm-orgstr:business-role-identifier">EVENTS_MEMBER</property>
+                        <item name="cm:Совещания.Председатель" type="lecm-orgstr:business-role">
+				<property name="cm:name">Совещания.Председатель</property>
+				<property name="lecm-orgstr:business-role-identifier">MEETINGS_CHAIRMAN</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Участник мероприятия. Динамическая роль.</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудник, от имени которого создано совещание. Динамическая роль.</property>
 			</item>
-			<item name="cm:Мероприятия.Технолог" type="lecm-orgstr:business-role">
-				<property name="cm:name">Мероприятия.Технолог</property>
-				<property name="lecm-orgstr:business-role-identifier">EVENTS_ENGINEER</property>
+                        <item name="cm:Совещания.Секретарь" type="lecm-orgstr:business-role">
+				<property name="cm:name">Совещания.Секретарь</property>
+				<property name="lecm-orgstr:business-role-identifier">MEETINGS_SECRETARY</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description">Секретарь совещания. Динамическая роль</property>
+			</item>
+                        <item name="cm:Совещания.Участники" type="lecm-orgstr:business-role">
+				<property name="cm:name">Совещания.Участники</property>
+				<property name="lecm-orgstr:business-role-identifier">MEETINGS_MEMBERS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description">Участник совещания. Динамическая роль.</property>
+			</item>
+                        <item name="cm:Совещания.Согласующие повестку" type="lecm-orgstr:business-role">
+				<property name="cm:name">Совещания.Согласующие повестку</property>
+				<property name="lecm-orgstr:business-role-identifier">MEETINGS_AGENDA_AGREED_MEN</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, ответственные за согласование повестки</property>
+			</item>
+                        <item name="cm:Совещания.Технолог" type="lecm-orgstr:business-role">
+				<property name="cm:name">Совещания.Технолог</property>
+				<property name="lecm-orgstr:business-role-identifier">MEETINGS_ENGINEER</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Статическая роль. Сотрудник может редактировать, удалять и отзывать любые мероприятия</property>
+				<property name="lecm-orgstr:business-role-description">Статическая роль. Сотрудник может редактировать и удалять любые совещания</property>
 			</item>
-			<item name="cm:Ответственные за ресурсы" type="lecm-orgstr:business-role">
-				<property name="cm:name">Ответственные за ресурсы</property>
-				<property name="lecm-orgstr:business-role-identifier">EVENTS_RESPONSIBLE_FOR_RESOURCES</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Динамическая роль. Сотрудники ответственные за предоставление ресурсов.</property>
-			</item>
--->		  
-		</items>
+        	</items>
 	</item>
 </items>
