@@ -396,6 +396,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.meetings</groupId>
+			<artifactId>meetings-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -789,6 +796,11 @@
 						<overlay>
 							<groupId>ru.it.lecm.events</groupId>
 							<artifactId>events-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.meetings</groupId>
+							<artifactId>meetings-repo</artifactId>
 							<type>amp</type>
 						</overlay>
 					</overlays>
@@ -1201,6 +1213,11 @@
 		                            <artifactId>events-repo</artifactId>
 		                            <type>amp</type>
 	                            </overlay>
+								<overlay>
+		                            <groupId>ru.it.lecm.meetings</groupId>
+		                            <artifactId>meetings-repo</artifactId>
+		                            <type>amp</type>
+	                            </overlay>
                             </overlays>
                         </configuration>
                         <dependencies>
@@ -1534,6 +1551,11 @@
 	                            <overlay>
 		                            <groupId>ru.it.lecm.events</groupId>
 		                            <artifactId>events-repo</artifactId>
+		                            <type>amp</type>
+	                            </overlay>
+								<overlay>
+		                            <groupId>ru.it.lecm.meetings</groupId>
+		                            <artifactId>meetings-repo</artifactId>
 		                            <type>amp</type>
 	                            </overlay>
                                 <!-- доп модуль Reporting-->

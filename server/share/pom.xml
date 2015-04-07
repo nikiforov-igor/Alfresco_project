@@ -333,6 +333,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.meetings</groupId>
+			<artifactId>meetings-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<!--<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -669,6 +676,11 @@
 							<artifactId>events-share</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.meetings</groupId>
+							<artifactId>meetings-share</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -987,6 +999,11 @@
 	                            <overlay>
 		                            <groupId>ru.it.lecm.events</groupId>
 		                            <artifactId>events-share</artifactId>
+		                            <type>amp</type>
+	                            </overlay>
+								<overlay>
+		                            <groupId>ru.it.lecm.meetings</groupId>
+		                            <artifactId>meetings-share</artifactId>
 		                            <type>amp</type>
 	                            </overlay>
                             </overlays>
