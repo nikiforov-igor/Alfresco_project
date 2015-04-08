@@ -11,7 +11,7 @@
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/events/1.0" prefix="lecm-events"/>
         <!--<import uri="http://www.it.ru/logicECM/meetings/dictionaries/1.0" prefix="lecm-meetings-dic"/>-->
-        <!--<import uri="http://www.it.ru/logicECM/meetings/table-structure/1.0" prefix="lecm-meetings-ts"/>-->
+        <import uri="http://www.it.ru/logicECM/meetings/table-structure/1.0" prefix="lecm-meetings-ts"/>
         <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
     </imports>
     <namespaces>
@@ -48,16 +48,16 @@
             <title>Logic Ecm Meetings Document</title>
             <parent>lecm-events:document</parent>
             <properties>
-                <!-- Заголовок -->
-<!--                <property name="lecm-events:title">
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
+                <!-- Согласовать повестку -->
+                <property name="lecm-meetings:approve-agenda">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+<!--                    <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
                         <tokenised>both</tokenised>
-                    </index>
-                </property>-->
+                    </index>-->
+                </property>
                 <!-- Дата начала мероприятия -->
 <!--                <property name="lecm-events:from-date">
                     <type>d:datetime</type>
@@ -198,6 +198,56 @@
                     </index>
                 </property>
 				
+				<property name="lecm-meetings:secretary-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-meetings:secretary-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				
+				<property name="lecm-meetings:participants-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-meetings:participants-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				
+				<property name="lecm-meetings:attended-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-meetings:attended-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
 				
             </properties>
             <associations>
@@ -213,74 +263,46 @@
                         <many>false</many>
                     </target>
                 </association>
-                <!--Место проведения-->
-<!--                <association name="lecm-events:location-assoc">
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-events-dic:locations</class>
-                        <mandatory>true</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>-->
-                <!-- Приглашенные -->
-<!--                <association name="lecm-events:invited-members-assoc">
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-representative:representative-type</class>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>-->
-                <!--Инициатор-->
-<!--                <association name="lecm-events:initiator-assoc">
+				<!--Секретарь-->
+                <association name="lecm-meetings:secretary-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
-                </association>-->
-
-                <!--Участники на форме создания-->
-<!--                <association name="lecm-events:temp-members-assoc">
+                </association>
+				<!-- Технические участники -->
+				<association name="lecm-meetings:participants-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
-                </association>-->
-                <!--Ресурсы на форме создания-->
-<!--                <association name="lecm-events:temp-resources-assoc">
+                </association>
+				<!-- Присутствовали -->
+				<association name="lecm-meetings:attended-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </source>
                     <target>
-                        <class>lecm-events-dic:resources</class>
+                        <class>lecm-orgstr:employee</class>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
-                </association>-->
-				
-				
+                </association>
 				
             </associations>
             <mandatory-aspects>
-<!--                <aspect>lecm-events-ts:members-table-aspect</aspect>
-                <aspect>lecm-events-ts:resources-table-aspect</aspect>-->
+                <aspect>lecm-meetings-ts:items-table-aspect</aspect>
             </mandatory-aspects>
         </type>
     </types>

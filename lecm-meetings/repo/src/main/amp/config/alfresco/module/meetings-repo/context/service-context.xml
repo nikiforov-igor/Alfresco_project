@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 	<bean id="meetings.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary,
+		  depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary,
 	        ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
 	        ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
@@ -23,7 +23,7 @@
      
   
 	<bean id="meetings.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
-	      depends-on="documents.LogicEcmModelsBootstrap,
+		  depends-on="documents.LogicEcmModelsBootstrap,
 		      meetings.dictionaries.LogicEcmModelsBootstrap,
 		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
@@ -39,7 +39,7 @@
 	</bean>
   
 	<bean id="meetings.LogicEcmInternalBootstrap" parent="modelsToRepositoryLoader"
-	      depends-on="dictionaryBootstrap,
+		  depends-on="dictionaryBootstrap,
 					 ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					 documents.LogicEcmModelsConnectionsBootstrap,
 					 documents.dictionaries.LogicEcmModelsBootstrap,
@@ -59,11 +59,11 @@
 	</bean>
 	
 	<bean id="meetings.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="meetings.dictionaries.LogicEcmModelsBootstrap">
+		  depends-on="meetings.dictionaries.LogicEcmModelsBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-br-items.xml</value>
-                                <value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -71,7 +71,7 @@
 	<util:constant id="MEETINGS_ROOT_ID" static-field="ru.it.lecm.meetings.beans.MeetingsService.MEETINGS_ROOT_ID"/>
 
 	<bean id="meetingsService" class="ru.it.lecm.meetings.beans.MeetingsServiceImpl" parent="baseBean"
-	      depends-on="meetings.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService">
+		  depends-on="meetings.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService">
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -81,7 +81,7 @@
 	</bean>
 
 	<bean id="meetingsScript" parent="baseScript" class="ru.it.lecm.meetings.scripts.MeetingsWebScriptBean"
-	      depends-on="nodeService, meetingsService">
+		  depends-on="nodeService, meetingsService">
 		<property name="extensionName">
 			<value>meetings</value>
 		</property>
@@ -89,11 +89,11 @@
 		<property name="meetingsService" ref="meetingsService"/>
 	</bean>
 
-<!--	
-	<bean id="meetingsPolicy" class="ru.it.lecm.meetings.policy.MeetingsPolicy" parent="baseBean"
-	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="documentTableService" ref="documentTableService"/>
-	</bean>
--->
+	<!--	
+		<bean id="meetingsPolicy" class="ru.it.lecm.meetings.policy.MeetingsPolicy" parent="baseBean"
+			   init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
+			<property name="policyComponent" ref="policyComponent"/>
+			<property name="documentTableService" ref="documentTableService"/>
+		</bean>
+	-->
 </beans>
