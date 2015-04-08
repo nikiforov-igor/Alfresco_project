@@ -156,7 +156,7 @@ public class EventsPolicy extends BaseBean {
         //Участник
         NodeRef member = nodeAssocRef.getTargetRef();
 
-        lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader));
+        lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
         //Отправка уведомления
         NodeRef initiator = eventService.getEventInitiator(event);
         if (initiator != null) {

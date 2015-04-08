@@ -1,6 +1,7 @@
 package ru.it.lecm.events.scripts;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
@@ -8,6 +9,7 @@ import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.events.beans.EventsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +23,7 @@ import java.util.*;
 public class EventsWebScriptBean extends BaseWebScript {
     private NodeService nodeService;
     private EventsService eventService;
+    private OrgstructureBean orgstructureBean;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -28,6 +31,10 @@ public class EventsWebScriptBean extends BaseWebScript {
 
     public void setEventService(EventsService eventService) {
         this.eventService = eventService;
+    }
+
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
@@ -138,5 +145,17 @@ public class EventsWebScriptBean extends BaseWebScript {
         }
 
         return false;
+    }
+
+    public ScriptNode getCurrentEmployeeEventMemberRow(ScriptNode event) {
+        ParameterCheck.mandatory("event", event);
+
+        NodeRef row = eventService.getMemberTableRow(event.getNodeRef(), orgstructureBean.getCurrentEmployee());
+
+        if (row != null) {
+            return new ScriptNode(row, serviceRegistry, getScope());
+        }
+
+        return null;
     }
 }

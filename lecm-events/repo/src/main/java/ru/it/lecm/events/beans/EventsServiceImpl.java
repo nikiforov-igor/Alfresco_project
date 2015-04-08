@@ -1,5 +1,6 @@
 package ru.it.lecm.events.beans;
 
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -9,16 +10,15 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ISO8601DateFormat;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -30,6 +30,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     private OrgstructureBean orgstructureBean;
     private SearchService searchService;
     private IWorkCalendar workCalendarService;
+    private DocumentTableService documentTableService;
 
     final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -57,6 +58,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     public void setWorkCalendarService(IWorkCalendar workCalendarService) {
         this.workCalendarService = workCalendarService;
+    }
+
+    public void setDocumentTableService(DocumentTableService documentTableService) {
+        this.documentTableService = documentTableService;
     }
 
     public List<NodeRef> getEvents(String fromDate, String toDate) {
@@ -238,5 +243,40 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     public NodeRef getEventInitiator(NodeRef event) {
         return findNodeByAssociationRef(event, ASSOC_EVENT_INITIATOR, null, ASSOCIATION_TYPE.TARGET);
+    }
+
+    public NodeRef getMemberTableRow(NodeRef event, NodeRef employee) {
+        NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
+        if (tableDataRootFolder != null) {
+            Set<QName> typeSet = new HashSet<>(1);
+            typeSet.add(EventsService.TYPE_EVENT_MEMBERS_TABLE);
+            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(tableDataRootFolder, typeSet);
+            if (childAssocs != null && childAssocs.size() == 1) {
+                NodeRef table = childAssocs.get(0).getChildRef();
+                if (table != null) {
+                    List<NodeRef> rows = documentTableService.getTableDataRows(table);
+                    if (rows != null) {
+                        for (NodeRef row: rows) {
+                            NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
+                            if (rowEmployee.equals(employee)) {
+                                return row;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getCurrentEmployeeMemberStatus(NodeRef event) {
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        if (currentEmployee != null) {
+            NodeRef memberTableRow = getMemberTableRow(event, currentEmployee);
+            if (memberTableRow != null) {
+                return (String) nodeService.getProperty(memberTableRow, PROP_EVENT_MEMBERS_STATUS);
+            }
+        }
+        return null;
     }
 }

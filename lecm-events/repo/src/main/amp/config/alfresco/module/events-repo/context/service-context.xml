@@ -84,6 +84,7 @@
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 		<property name="searchService" ref="searchService"/>
 		<property name="workCalendarService" ref="WorkCalendarService"/>
+		<property name="documentTableService" ref="documentTableService"/>
 	</bean>
 
 	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"
@@ -93,6 +94,7 @@
 		</property>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="eventService" ref="eventsService"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="eventsPolicy" class="ru.it.lecm.events.policy.EventsPolicy" parent="baseBean"
@@ -110,5 +112,14 @@
 		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="defaultFromEmail" value="${mail.from.default}"/>
+	</bean>
+
+	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/actions/member-accept.xml</value>
+			</list>
+		</property>
 	</bean>
 </beans>

@@ -56,6 +56,7 @@ public interface EventsService {
     public static final QName TYPE_EVENT_RESOURCES_TABLE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resourcesTable");
     public static final QName TYPE_EVENT_RESOURCES_TABLE_ROW = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources");
 
+    public static final QName PROP_EVENT_MEMBERS_STATUS = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-status");
     public static final QName ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-employee-assoc");
     public static final QName ASSOC_EVENT_RESOURCES_TABLE_RESOURCE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources-data-assoc");
 
@@ -76,4 +77,8 @@ public interface EventsService {
     List<NodeRef> getResourceResponsible(NodeRef resource);
 
     NodeRef getEventInitiator(NodeRef event);
+
+    NodeRef getMemberTableRow(NodeRef event, NodeRef employee);
+
+    String getCurrentEmployeeMemberStatus(NodeRef event);
 }

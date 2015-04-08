@@ -335,7 +335,7 @@ LogicECM.module = LogicECM.module || {};
 				} else {
 					Alfresco.util.PopupManager.displayPrompt({
 						title: Alfresco.util.message('title.execute_action'),
-						text: message + Alfresco.util.message('msg.action_confirm', this.name, action.actionId ),
+						text: Alfresco.util.message('msg.action_confirm', this.name, action.actionId ),
 						buttons: [{
 							text: Alfresco.util.message('button.ok'),
 							handler: {
