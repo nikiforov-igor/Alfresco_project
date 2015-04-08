@@ -92,7 +92,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
         if (null == saveDirectoryRef) {
             saveDirectoryRef = createPath(rootRef, directoryPath);
         }
-        
+
         ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
                 QName.createQName(NOTIFICATIONS_ACTIVE_CHANNEL_NAMESPACE_URI, GUID.generate()),
                 TYPE_NOTIFICATION_ACTIVE_CHANNEL, properties);
@@ -137,12 +137,16 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
         int result = 0;
         NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
         if (currentEmloyeeNodeRef != null) {
-            List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
-            for (AssociationRef ref : lRefs) {
-                if (isNewNotification(ref.getSourceRef())) {
-                    result++;
-                }
-            }
+			String employeeName = (String) nodeService.getProperty(currentEmloyeeNodeRef, ContentModel.PROP_NAME);
+			NodeRef rootRef = getRootRef();
+			List<String> directoryPath = getDirectoryPath(employeeName, null);
+			NodeRef notificationsDirectoryRef = getFolder(rootRef, directoryPath);
+			if (notificationsDirectoryRef != null) {
+				List<ChildAssociationRef> unreadChildAssocs = nodeService.getChildAssocsByPropertyValue(notificationsDirectoryRef, PROP_IS_READ, false);
+				if (unreadChildAssocs != null) {
+					result = unreadChildAssocs.size();
+				}
+			}
         }
         return result;
     }
