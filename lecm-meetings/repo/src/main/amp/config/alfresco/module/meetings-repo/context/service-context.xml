@@ -63,6 +63,7 @@
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-br-items.xml</value>
+                                <value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
 			</list>
 		</property>
 	</bean>

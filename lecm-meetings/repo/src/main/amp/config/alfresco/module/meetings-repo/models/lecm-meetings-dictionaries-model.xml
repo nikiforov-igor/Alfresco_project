@@ -14,6 +14,21 @@
     </namespaces>
 
     <types>
+        <type name="lecm-meetings-dic:agenda-point-states">
+            <title>Статусы пункта повестки</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+            <properties>
+                <property name="lecm-meetings-dic:agenda-point-state-code">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+        </type>
 <!--        <type name="lecm-meetings-dic:locations">
             <title>Места проведения мероприятий</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
