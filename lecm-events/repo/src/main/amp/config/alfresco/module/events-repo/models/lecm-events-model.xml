@@ -125,10 +125,16 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <!--Является повторным-->
+                <property name="lecm-events:is-repeated">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
 
                 <!--На подтверждение ресурсов-->
                 <property name="lecm-events:on-resource-confirmation">
                     <type>d:boolean</type>
+                    <default>false</default>
                 </property>
 
                 <property name="lecm-events:location-assoc-ref">
@@ -179,6 +185,22 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-events:repeated-events-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events:repeated-events-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
             <associations>
                 <!--Место проведения-->
@@ -197,7 +219,7 @@
                 <association name="lecm-events:invited-members-assoc">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-representative:representative-type</class>
@@ -238,6 +260,19 @@
                     </source>
                     <target>
                         <class>lecm-events-dic:resources</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+
+                <!--Созданные мероприятия, на основе данного-->
+                <association name="lecm-events:repeated-events-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-events:document</class>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>

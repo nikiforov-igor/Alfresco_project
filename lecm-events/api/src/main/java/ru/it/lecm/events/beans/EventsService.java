@@ -24,12 +24,18 @@ public interface EventsService {
     public static final QName PROP_EVENT_TO_DATE = QName.createQName(EVENTS_NAMESPACE_URI, "to-date");
     public static final QName PROP_EVENT_ALL_DAY = QName.createQName(EVENTS_NAMESPACE_URI, "all-day");
     public static final QName PROP_EVENT_DESCRIPTION = QName.createQName(EVENTS_NAMESPACE_URI, "description");
+    public static final QName PROP_EVENT_REPEATABLE = QName.createQName(EVENTS_NAMESPACE_URI, "repeatable");
+    public static final QName PROP_EVENT_REPEATABLE_RULE = QName.createQName(EVENTS_NAMESPACE_URI, "repeatable-rule");
+    public static final QName PROP_EVENT_REPEATABLE_START_PERIOD = QName.createQName(EVENTS_NAMESPACE_URI, "repeatable-start-period");
+    public static final QName PROP_EVENT_REPEATABLE_END_PERIOD = QName.createQName(EVENTS_NAMESPACE_URI, "repeatable-end-period");
+    public static final QName PROP_EVENT_IS_REPEATED = QName.createQName(EVENTS_NAMESPACE_URI, "is-repeated");
 
     public static final QName ASSOC_EVENT_LOCATION = QName.createQName(EVENTS_NAMESPACE_URI, "location-assoc");
     public static final QName ASSOC_EVENT_INITIATOR = QName.createQName(EVENTS_NAMESPACE_URI, "initiator-assoc");
     public static final QName ASSOC_EVENT_INVITED_MEMBERS = QName.createQName(EVENTS_NAMESPACE_URI, "invited-members-assoc");
     public static final QName ASSOC_EVENT_TEMP_MEMBERS = QName.createQName(EVENTS_NAMESPACE_URI, "temp-members-assoc");
     public static final QName ASSOC_EVENT_TEMP_RESOURCES = QName.createQName(EVENTS_NAMESPACE_URI, "temp-resources-assoc");
+    public static final QName ASSOC_EVENT_REPEATED_EVENTS = QName.createQName(EVENTS_NAMESPACE_URI, "repeated-events-assoc");
 
     public static final QName TYPE_EVENT_LOCATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations");
     public static final QName ASSOC_EVENT_LOCATION_ORGANIZATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-organization-assoc");

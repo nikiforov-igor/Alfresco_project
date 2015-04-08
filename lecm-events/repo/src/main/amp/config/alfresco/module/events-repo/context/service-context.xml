@@ -65,6 +65,7 @@
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-locations-pl.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-resources-pl.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-br-items.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-connection-types-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -102,10 +103,11 @@
 		<property name="eventService" ref="eventsService"/>
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="documentService" ref="documentService"/>
+		<property name="documentConnectionService" ref="documentConnectionService"/>
 		<property name="mailService" ref="mailService"/>
 		<property name="templateService" ref="templateService"/>
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
-		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="defaultFromEmail" value="${mail.from.default}"/>
 	</bean>

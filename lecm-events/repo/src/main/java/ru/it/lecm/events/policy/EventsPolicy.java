@@ -6,8 +6,16 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.GUID;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,7 +23,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.contractors.api.Contractors;
-import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
@@ -27,12 +35,10 @@ import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * User: AIvkin
@@ -48,17 +54,24 @@ public class EventsPolicy extends BaseBean {
     private EventsService eventService;
     private NotificationsService notificationsService;
     private DocumentService documentService;
+    private DocumentConnectionService documentConnectionService;
     private TemplateService templateService;
     private JavaMailSender mailService;
     private OrgstructureBean orgstructureBean;
-    private DocumentAttachmentsService documentAttachmentsService;
     private ContentService contentService;
+    private ThreadPoolExecutor threadPoolExecutor;
     private String defaultFromEmail;
+    private TransactionListener transactionListener;
+
+    private static final String EVENTS_TRANSACTION_LISTENER = "events_transaction_listaner";
 
     private static final String INVITED_MEMBERS_MESSAGE_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/events/invited-members-message-content.ftl";
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+    private final static String WEEK_DAYS = "week-days";
+    private final static String MONTH_DAYS = "month-days";
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -96,16 +109,20 @@ public class EventsPolicy extends BaseBean {
         this.orgstructureBean = orgstructureBean;
     }
 
-    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
-        this.documentAttachmentsService = documentAttachmentsService;
-    }
-
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
     }
 
+    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        this.threadPoolExecutor = threadPoolExecutor;
+    }
+
     public void setDefaultFromEmail(String defaultFromEmail) {
         this.defaultFromEmail = defaultFromEmail;
+    }
+
+    public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
     }
 
     @Override
@@ -114,6 +131,8 @@ public class EventsPolicy extends BaseBean {
     }
 
     public final void init() {
+        transactionListener = new EventPolicyTransactionListener();
+
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_MEMBERS,
                 new JavaBehaviour(this, "onCreateAddMembers", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -180,7 +199,7 @@ public class EventsPolicy extends BaseBean {
 
         List<NodeRef> responsible = eventService.getResourceResponsible(resource);
         if (responsible != null) {
-            for (NodeRef employee: responsible) {
+            for (NodeRef employee : responsible) {
                 lecmPermissionService.grantDynamicRole("EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN", event, employee.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader));
 
                 Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
@@ -269,23 +288,26 @@ public class EventsPolicy extends BaseBean {
                 List<NodeRef> attachments = new ArrayList<>();
                 List<AssociationRef> attachmentsAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_TEMP_ATTACHMENTS);
                 if (attachmentsAssocs != null) {
-                    for (AssociationRef attachment: attachmentsAssocs) {
+                    for (AssociationRef attachment : attachmentsAssocs) {
                         attachments.add(attachment.getTargetRef());
                     }
                 }
-                for (final NodeRef attachment: attachments) {
+                for (final NodeRef attachment : attachments) {
                     String attachmentName = MimeUtility.encodeText((String) nodeService.getProperty(attachment, ContentModel.PROP_NAME), "UTF-8", null);
                     helper.addAttachment(attachmentName, new DataSource() {
                         public InputStream getInputStream() throws IOException {
                             ContentReader reader = contentService.getReader(attachment, ContentModel.PROP_CONTENT);
                             return reader.getContentInputStream();
                         }
+
                         public OutputStream getOutputStream() throws IOException {
                             throw new IOException("Read-only data");
                         }
+
                         public String getContentType() {
                             return contentService.getReader(attachment, ContentModel.PROP_CONTENT).getMimetype();
                         }
+
                         public String getName() {
                             return nodeService.getProperty(attachment, ContentModel.PROP_NAME).toString();
                         }
@@ -300,6 +322,172 @@ public class EventsPolicy extends BaseBean {
     }
 
     public void onCreateEvent(ChildAssociationRef childAssocRef) {
+        NodeRef event = childAssocRef.getChildRef();
 
+        AlfrescoTransactionSupport.bindListener(this.transactionListener);
+
+        List<NodeRef> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+        if (pendingActions == null) {
+            pendingActions = new ArrayList<>();
+            AlfrescoTransactionSupport.bindResource(EVENTS_TRANSACTION_LISTENER, pendingActions);
+        }
+
+        // Check that action has only been added to the list once
+        Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
+        if (repeatable != null && repeatable && !pendingActions.contains(event)) {
+            pendingActions.add(event);
+        }
+    }
+
+    private class EventPolicyTransactionListener implements TransactionListener {
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public void beforeCommit(boolean readOnly) {
+
+        }
+
+        @Override
+        public void beforeCompletion() {
+
+        }
+
+        @Override
+        public void afterCommit() {
+            List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+            if (pendingDocs != null) {
+                while (!pendingDocs.isEmpty()) {
+                    final NodeRef event = pendingDocs.remove(0);
+                    final String ruleContent = (String) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_RULE);
+                    final Date startPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
+                    final Date endPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
+
+                    if (ruleContent != null && startPeriod != null && endPeriod != null) {
+                        try {
+                            JSONObject rule = new JSONObject(ruleContent);
+                            String type = rule.getString("type");
+                            JSONArray data = rule.getJSONArray("data");
+
+                            List<Integer> weekDays = new ArrayList<>();
+                            List<Integer> monthDays = new ArrayList<>();
+
+                            if (type.equals(WEEK_DAYS)) {
+                                for (int i = 0; i < data.length(); i++) {
+                                    if (data.getInt(i) == 7) {
+                                        weekDays.add(Calendar.SUNDAY);
+                                    } else {
+                                        weekDays.add(data.getInt(i) + 1);
+                                    }
+                                }
+                            } else if (type.equals(MONTH_DAYS)) {
+                                for (int i = 0; i < data.length(); i++) {
+                                    monthDays.add(data.getInt(i));
+                                }
+                            }
+
+                            final Calendar calStart = Calendar.getInstance();
+                            calStart.setTime(startPeriod);
+                            Calendar calEnd = Calendar.getInstance();
+                            calEnd.setTime(endPeriod);
+
+                            while (calStart.before(calEnd)) {
+                                int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
+                                int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
+                                if (weekDays.contains(weekDay) || monthDays.contains(monthDay)) {
+
+                                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                        @Override
+                                        public Void execute() throws Throwable {
+                                            QName docType = nodeService.getType(event);
+                                            NodeRef parentRef = nodeService.getPrimaryParent(event).getParentRef();
+                                            QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
+                                            Map<QName, Serializable> properties = copyProperties(event, calStart.getTime());
+
+                                            if (properties != null) {
+                                                // создаем ноду
+                                                ChildAssociationRef createdNodeAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQname, docType, properties);
+                                                copyAssocs(event, createdNodeAssoc.getChildRef());
+
+                                                nodeService.createAssociation(event, createdNodeAssoc.getChildRef(), EventsService.ASSOC_EVENT_REPEATED_EVENTS);
+
+                                                documentConnectionService.createConnection(event, createdNodeAssoc.getChildRef(), "hasRepeated", true);
+                                            }
+
+                                            return null;
+                                        }
+                                    }, false, true);
+                                }
+
+                                calStart.add(Calendar.DAY_OF_YEAR, 1);
+                            }
+                        } catch (JSONException e) {
+                            logger.error("Error parse repeatable rule", e);
+                        }
+                    }
+                }
+            }
+        }
+
+        public Map<QName, Serializable> copyProperties(NodeRef event, Date newStartDate) {
+            Map<QName, Serializable> oldProperties = nodeService.getProperties(event);
+            Map<QName, Serializable> newProperties = new HashMap<>();
+
+            Date dateFrom = (Date) oldProperties.get(EventsService.PROP_EVENT_FROM_DATE);
+            int dayCount = daysBetween(dateFrom, newStartDate);
+            if (dayCount != 0) {
+                // копируем свойства
+                List<QName> propertiesToCopy = new ArrayList<>();
+                propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
+                propertiesToCopy.add(EventsService.PROP_EVENT_ALL_DAY);
+                propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+
+                for (QName propName : propertiesToCopy) {
+                    newProperties.put(propName, oldProperties.get(propName));
+                }
+
+                Calendar calFrom = Calendar.getInstance();
+                calFrom.setTime(dateFrom);
+                calFrom.add(Calendar.DAY_OF_YEAR, dayCount);
+                newProperties.put(EventsService.PROP_EVENT_FROM_DATE, calFrom.getTime());
+
+                Calendar calTo = Calendar.getInstance();
+                calTo.setTime((Date) oldProperties.get(EventsService.PROP_EVENT_TO_DATE));
+                calTo.add(Calendar.DAY_OF_YEAR, dayCount);
+                newProperties.put(EventsService.PROP_EVENT_TO_DATE, calTo.getTime());
+
+                newProperties.put(EventsService.PROP_EVENT_IS_REPEATED, true);
+
+                return newProperties;
+            } else {
+                return null;
+            }
+        }
+
+        public void copyAssocs(NodeRef oldEvent, NodeRef newEvent) {
+            List<QName> assocsToCopy = new ArrayList<>();
+            assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
+            assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
+            assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+            assocsToCopy.add(EventsService.ASSOC_EVENT_TEMP_MEMBERS);
+            assocsToCopy.add(EventsService.ASSOC_EVENT_TEMP_RESOURCES);
+
+            for (QName assocQName : assocsToCopy) {
+                List<NodeRef> targets = findNodesByAssociationRef(oldEvent, assocQName, null, ASSOCIATION_TYPE.TARGET);
+                nodeService.setAssociations(newEvent, assocQName, targets);
+            }
+        }
+
+        private int daysBetween(Date d1, Date d2){
+            return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+        }
+
+        @Override
+        public void afterRollback() {
+
+        }
     }
 }

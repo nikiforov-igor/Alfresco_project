@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Типы связи" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+	        <item name="cm:Повторное" type="lecm-connect-types:connection-type">
+                <property name="cm:name">Повторное</property>
+                <property name="lecm-connect-types:reverse-name">Является повторным к</property>
+                <property name="lecm-connect-types:code">hasRepeated</property>
+            </item>
+        </items>
+    </item>
+</items>
