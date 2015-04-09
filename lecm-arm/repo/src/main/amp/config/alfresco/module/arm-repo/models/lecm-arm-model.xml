@@ -38,6 +38,17 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!--Показывать календарь-->
+				<property name="lecm-arm:show-calendar">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<overrides>
 				<property name="lecm-dic:valueContainsType">

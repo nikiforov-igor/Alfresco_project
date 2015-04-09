@@ -34,6 +34,7 @@
         LogicECM.module.ARM.SETTINGS.ARM_CODE = "${page.url.args.code!''}";
         LogicECM.module.ARM.SETTINGS.ARM_PATH = ${path!'{}'};
         LogicECM.module.ARM.SETTINGS.ARM_TYPE = "USER";
+        LogicECM.module.ARM.SETTINGS.ARM_SHOW_CALENDAR = ${showCalendar?string};
     //]]></script>
 </@>
 
@@ -43,13 +44,21 @@
 <div id="no_menu_page" class="sticky-wrapper">
 <@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
         <div class="yui-t1" id="arm-with-tree">
-            <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree", "mini-calendar"]>
+            <#if showCalendar>
+                <#assign leftRegions = ["accordion-toolbar","documents-tree","mini-calendar"]>
+            <#else>
+                <#assign leftRegions = ["accordion-toolbar","documents-tree"]>
+            </#if>
+
+            <@panels.twoPanels initialWidth=300 leftRegions=leftRegions>
                     <div id="arm-documents-toolbar">
                         <@region id="toolbar" scope="template" />
                     </div>
-                    <div id="arm-calendar-toolbar" class="hidden1">
-                        <@region id="calendar-toolbar" scope="template" class="toolbar" />
-                    </div>
+                    <#if showCalendar>
+	                    <div id="arm-calendar-toolbar" class="hidden1">
+                            <@region id="calendar-toolbar" scope="template" class="toolbar" />
+	                    </div>
+                    </#if>
                     <div id="arm-documents-grid">
                     <@region id="documents-grid" scope="template" />
                     </div>
@@ -59,10 +68,12 @@
                     <div id="arm-documents-html" class="hidden1">
                     <@region id="arm-html-node" scope="template" />
                     </div>
-                    <div id="arm-calendar" class="hidden1">
-                        <@region id="calendar-view" scope="template" class="view" />
-                        <@region id="calendar-agenda" scope="template" class="view" />
-                    </div>
+                    <#if showCalendar>
+                        <div id="arm-calendar" class="hidden1">
+                            <@region id="calendar-view" scope="template" class="view" />
+                            <@region id="calendar-agenda" scope="template" class="view" />
+                        </div>
+                    </#if>
             </@panels.twoPanels>
         </div>
     <@region id="dependencies" scope="template" />

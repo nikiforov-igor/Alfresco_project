@@ -24,7 +24,7 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:code" force="true"/>
-					<!--<show id="lecm-arm:use-by-default" force="true"/>-->
+					<show id="lecm-arm:show-calendar" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:code">
@@ -44,7 +44,7 @@
 				<field-visibility>
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:code" force="true"/>
-					<!--<show id="lecm-arm:use-by-default" force="true"/>-->
+					<show id="lecm-arm:show-calendar" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:code">

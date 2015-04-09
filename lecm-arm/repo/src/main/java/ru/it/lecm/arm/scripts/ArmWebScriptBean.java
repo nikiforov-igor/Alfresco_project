@@ -391,4 +391,9 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
     public void setArmWrapperService(ArmWrapperServiceImpl armWrapperService) {
         this.armWrapperService = armWrapperService;
     }
+
+    public boolean checkShowCalendar(String code) {
+        NodeRef armRef = armService.getArmByCode(code);
+        return armRef != null && (Boolean) nodeService.getProperty(armRef, ArmService.PROP_ARM_SHOW_CALENDAR);
+    }
 }
