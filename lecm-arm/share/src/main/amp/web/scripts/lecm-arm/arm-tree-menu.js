@@ -76,6 +76,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				    var oResults = eval("(" + oResponse.responseText + ")");
 				    if (oResults != null) {
 					    me.accordionItems = oResults;
+
+                        if (LogicECM.module.ARM.SETTINGS.ARM_SHOW_CALENDAR) {
+                            me.accordionItems.push({
+                                id: "calendar",
+                                label: this.msg("lecm.arm.lbl.calendar")
+                            })
+                        }
+
 					    var accordionContent = "";
 					    for (var i = 0; i < me.accordionItems.length; i++) {
 						    accordionContent += me.getAccordionItemHtml(me.accordionItems[i]);
@@ -136,7 +144,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    onAccordionClick : function(e, node) {
 		    if (this.shownAccordionItem == null || this.shownAccordionItem != node) {
 			    if (!node.createdTree) {
-				    this._createTree(node);
+                    if (node.id == "calendar") {
+                        this._createCalendar();
+                    } else {
+                        this._createTree(node);
+                    }
 				    node.createdTree = true;
 			    }
 			    if (this.shownAccordionItem != null) {
@@ -190,6 +202,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		    }
 		    return this.accordionHeight;
 	    },
+
+        _createCalendar: function() {
+            var parentNode = Dom.get("ac-content-calendar");
+            parentNode.innerHTML = "";
+
+            var miniCalendar = Dom.get("arm-mini-calendar");
+            Dom.setStyle(miniCalendar.id, "display", "block");
+            parentNode.appendChild(miniCalendar);
+        },
 
         _createTree: function (node) {
             this.tree = new YAHOO.widget.TreeView("ac-content-" + node.id);
