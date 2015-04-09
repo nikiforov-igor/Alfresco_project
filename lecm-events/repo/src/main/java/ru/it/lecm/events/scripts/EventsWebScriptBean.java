@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -157,5 +158,9 @@ public class EventsWebScriptBean extends BaseWebScript {
         }
 
         return null;
+    }
+
+    public String wrapperEventLink(ScriptNode node, String description) {
+        return wrapperLink(node.getNodeRef().toString(), description, EventsService.EVENT_LINK_URL);
     }
 }

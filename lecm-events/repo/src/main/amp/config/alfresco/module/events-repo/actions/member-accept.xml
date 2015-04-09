@@ -20,7 +20,7 @@ if (memberRow != null) {
 		var notificationText = "Сотрудник ";
 		notificationText += documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
 		notificationText += " подтвердил свое участие в мероприятии ";
-		notificationText += documentScript.wrapperDocumentLink(document, "{lecm-events:title}");
+		notificationText += events.wrapperEventLink(document, "{lecm-events:title}");
 
 		var fromDate = document.properties["lecm-events:from-date"];
 		if (fromDate != null) {

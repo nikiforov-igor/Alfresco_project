@@ -12,6 +12,7 @@ import org.alfresco.util.ISO8601DateFormat;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -278,5 +279,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             }
         }
         return null;
+    }
+
+    public String wrapAsEventLink(NodeRef documentRef) {
+        return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), EVENT_LINK_URL);
     }
 }

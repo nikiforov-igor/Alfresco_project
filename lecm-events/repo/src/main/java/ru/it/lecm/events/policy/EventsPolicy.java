@@ -163,7 +163,7 @@ public class EventsPolicy extends BaseBean {
             String author = AuthenticationUtil.getSystemUserName();
             String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
             Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-            String text = employeeName + " приглашает на мероприятие " + documentService.wrapAsDocumentLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+            String text = employeeName + " приглашает на мероприятие " + eventService.wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
             List<NodeRef> recipients = new ArrayList<>();
             recipients.add(member);
             notificationsService.sendNotification(author, event, text, recipients, null);
@@ -206,7 +206,7 @@ public class EventsPolicy extends BaseBean {
 
                 //Отправка уведомления
                 String author = AuthenticationUtil.getSystemUserName();
-                String text = "Запланированное " + documentService.wrapAsDocumentLink(event) + " требует привлечения ресурсов за которые вы ответственны. Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+                String text = "Запланированное " + eventService.wrapAsEventLink(event) + " требует привлечения ресурсов за которые вы ответственны. Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
                 List<NodeRef> recipients = new ArrayList<>();
                 recipients.add(employee);
                 notificationsService.sendNotification(author, event, text, recipients, null);

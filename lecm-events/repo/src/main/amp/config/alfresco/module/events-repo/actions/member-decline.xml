@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="cm:Отклонить приглашение" type="lecm-group-actions:workflow-action">
+        <property name="cm:name"><![CDATA[Отклонить приглашение]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-events:document]]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property
+                name="lecm-group-actions:expression"><![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_MEMBER_DYN"))  AND (@eventsService.getCurrentEmployeeMemberStatus(doc.getNodeRef()).equals("EMPTY") OR @eventsService.getCurrentEmployeeMemberStatus(doc.getNodeRef()).equals("CONFIRMED"))]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:workflow"><![CDATA[activiti$eventsMemberDecline]]></property>
+    </item>
+</items>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecmEventsWf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Logic ECM events workflow model</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+        <import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/events/workflow/1.0" prefix="lecmEventsWf"/>
+    </namespaces>
+
+    <types>
+        <type name="lecmEventsWf:memberDecline">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmEventsWf:memberDeclineReason">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
+    </types>
+</model>

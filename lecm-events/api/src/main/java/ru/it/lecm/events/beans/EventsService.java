@@ -60,6 +60,8 @@ public interface EventsService {
     public static final QName ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-employee-assoc");
     public static final QName ASSOC_EVENT_RESOURCES_TABLE_RESOURCE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources-data-assoc");
 
+    public static final String EVENT_LINK_URL = "/share/page/event";
+
     List<NodeRef> getEvents(String fromDate, String toDate);
 
     public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter);
@@ -81,4 +83,6 @@ public interface EventsService {
     NodeRef getMemberTableRow(NodeRef event, NodeRef employee);
 
     String getCurrentEmployeeMemberStatus(NodeRef event);
+
+    String wrapAsEventLink(NodeRef documentRef);
 }
