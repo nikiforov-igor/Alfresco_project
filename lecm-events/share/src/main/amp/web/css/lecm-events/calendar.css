@@ -1453,10 +1453,10 @@ div.fullCalendar
    color:#333333;
 }
 
-div.fullCalendar .fc-content
-{
-   left: -9px;
-}
+/*div.fullCalendar .fc-content*/
+/*{*/
+   /*left: -9px;*/
+/*}*/
 
 div.fullCalendar .fc-header-title h2
 {
@@ -1467,7 +1467,7 @@ div.fullCalendar .fc-header-title h2
 
 div.fullCalendar th
 {
-   padding: 2px 0;
+   padding: 2px 0 4px;
 }
 
 div.fullCalendar .fc-widget-header,
@@ -1526,10 +1526,13 @@ div.fullCalendar .fc-event-vert .fc-event-bg
 {
    cursor: pointer;
    float: none;
-   margin: 0 4px 0 2px;
    margin: 0 2px;
    padding: 0;
    width: auto;
+}
+.fc-grid .fc-sat .fc-day-number,
+.fc-grid .fc-sun .fc-day-number {
+   color: #f90000;
 }
 
 .fc-grid .fc-other-month .fc-day-number {
@@ -1592,4 +1595,71 @@ div.calendar-bar div.flat-button.work-hours span.yui-checkbox-button-disabled
 div.fullCalendar th.fc-widget-header
 {
    font-weight: normal;
+}
+
+/* Calendar toolbar */
+.yui-skin-lecmTheme .calendar-toolbar button:focus {
+    outline: none;
+}
+.yui-skin-lecmTheme .calendar-toolbar .yui-button,
+.yui-skin-lecmTheme .calendar-toolbar .yui-button .first-child {
+    border-color: transparent;
+}
+.yui-skin-lecmTheme .calendar-toolbar .yui-button.yui-button-checked,
+.yui-skin-lecmTheme .calendar-toolbar .yui-button.yui-button-checked .first-child {
+    background: none;
+    border-color: #b7b7b7;
+}
+.yui-skin-lecmTheme .calendar-toolbar .addEvent button {
+    background-position: 5px 5px;
+    padding-left: 25px;
+}
+
+.yui-skin-lecmTheme .calendar-toolbar .flat-button.work-hours {
+    display: none;
+}
+
+.yui-skin-lecmTheme .calendar-bar {
+    width: 100%;
+}
+.yui-skin-lecmTheme .calendar-bar .leftContainer {
+    width: 180px;
+    float: left;
+}
+.yui-skin-lecmTheme .calendar-bar .restContainer {
+    width: auto;
+    min-width: 180px;
+    overflow: hidden;
+}
+.yui-skin-lecmTheme .calendar-bar .restContainer .rightContainer {
+    float: right;
+    margin-top: 8px;
+}
+.yui-skin-lecmTheme .calendar-bar .restContainer .centerContainer {
+    width: auto;
+    overflow: hidden;
+    text-align: center;
+}
+.yui-skin-lecmTheme .calendar-bar .restContainer .centerContainer .first {
+    width: 100%;
+    float: none;
+    padding: 0.5em 0;
+}
+
+/* Calendar view */
+.yui-skin-lecmTheme .alf-calendar.fullCalendar .fc-content .fc-widget-header {
+    text-align: left;
+    padding-left: 10px;
+    text-transform: capitalize;
+    font-weight: bold;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+}
+.yui-skin-lecmTheme .alf-calendar.fullCalendar .fc-state-highlight {
+    background: none;
+    /*border: 1px solid #666;*/
+}
+.yui-skin-lecmTheme .alf-calendar.fullCalendar .fc-today {
+    background: #e4f3fa;
 }
