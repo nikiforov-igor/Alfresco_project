@@ -155,6 +155,7 @@
                     <list>
                         <value>cm:name</value>
                         <value>lecm-arm:code</value>
+                        <value>lecm-arm:show-calendar</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:accordion">

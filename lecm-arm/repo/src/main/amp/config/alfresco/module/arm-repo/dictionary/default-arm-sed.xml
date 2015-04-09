@@ -3,6 +3,7 @@
 	<item name="cm:АРМ СЭД" type="lecm-arm:arm">
 		<property name="cm:name"><![CDATA[АРМ СЭД]]></property>
 		<property name="lecm-arm:code"><![CDATA[SED]]></property>
+		<property name="lecm-arm:show-calendar"><![CDATA[true]]></property>
 		<items>
 			<item name="cm:Моя работа" type="lecm-arm:accordion">
 				<property name="cm:name"><![CDATA[Моя работа]]></property>
