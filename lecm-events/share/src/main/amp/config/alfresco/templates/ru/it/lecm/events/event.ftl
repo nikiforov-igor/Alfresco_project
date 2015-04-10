@@ -11,6 +11,7 @@
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-save-last.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-component-base.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-events/events-constraints.js"></@script>
 
 <#-- Скрипт для валидатора. Было решено вставить сюда, чтобы хотя бы не тащить вообще на все страницы -->
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js"></@script>

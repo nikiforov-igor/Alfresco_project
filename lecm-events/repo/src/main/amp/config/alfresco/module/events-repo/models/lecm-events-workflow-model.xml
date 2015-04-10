@@ -30,5 +30,28 @@
                 <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
             </mandatory-aspects>
         </type>
+
+        <type name="lecmEventsWf:requestNewTime">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <!-- Дата начала мероприятия -->
+                <property name="lecmEventsWf:requestNewTimeFromDate">
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <!--Дата окончания мероприятия-->
+                <property name="lecmEventsWf:requestNewTimeToDate">
+                    <type>d:datetime</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <!--Весмь день-->
+                <property name="lecmEventsWf:requestNewTimeAllDay">
+                    <type>d:boolean</type>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
     </types>
 </model>

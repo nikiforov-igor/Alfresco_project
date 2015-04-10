@@ -120,6 +120,7 @@
 			<list>
 				<value>alfresco/module/${artifactId}/actions/member-accept.xml</value>
 				<value>alfresco/module/${artifactId}/actions/member-decline.xml</value>
+				<value>alfresco/module/${artifactId}/actions/member-request-new-time.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -132,6 +133,12 @@
 				<props>
 					<prop key="engineId">activiti</prop>
 					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-events-member-decline.bpmn20.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
+				</props>
+				<props>
+					<prop key="engineId">activiti</prop>
+					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-events-member-request-new-time.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
 					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>

@@ -9,51 +9,60 @@ var Dom = YAHOO.util.Dom;
 
 LogicECM.module.Events.changeAllDayValidation =
 	function (field, args,  event, form, silent, message) {
-		if (field.form != null) {
-			var fromDate = field.form["prop_lecm-events_from-date"];
-			var toDate = field.form["prop_lecm-events_to-date"];
+		return LogicECM.module.Events.baseChangeAllDayValidation(field, form, "lecm-events:from-date", "lecm-events:to-date");
+	};
 
-			var formId = form.formId.replace("-form", "");
+LogicECM.module.Events.requestNewTimeChangeAllDayValidation =
+	function (field, args,  event, form, silent, message) {
+		return LogicECM.module.Events.baseChangeAllDayValidation(field, form, "lecmEventsWf:requestNewTimeFromDate", "lecmEventsWf:requestNewTimeToDate");
+	};
 
-			var fromTime = Dom.get(fromDate.id + "-cntrl-time");
-			var toTime = Dom.get(toDate.id + "-cntrl-time");
+LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromDateFieldId, toDateFieldId) {
+	if (field.form != null) {
+		var fromDate = field.form["prop_" + fromDateFieldId.replace(":", "_")];
+		var toDate = field.form["prop_" + toDateFieldId.replace(":", "_")];
 
-			var allDay = field.value == "true";
+		var formId = form.formId.replace("-form", "");
 
-			if (fromTime != null) {
-				Dom.setStyle(fromTime.id, "display", allDay ? "none" : "block");
-				Dom.setStyle(fromTime.id + "-format", "display", allDay ? "none" : "block");
+		var fromTime = Dom.get(fromDate.id + "-cntrl-time");
+		var toTime = Dom.get(toDate.id + "-cntrl-time");
 
-				if (allDay && fromTime.value != "00:01") {
-					fromTime.value = "00:01";
-					YAHOO.Bubbling.fire("handleFieldChange", {
-						formId: formId,
-						fieldId: "lecm-events:from-date"
-					});
-				}
+		var allDay = field.value == "true";
 
-				if (!allDay && fromTime.value.length == 0) {
-					Dom.addClass(fromTime.id, "invalid");
-				}
+		if (fromTime != null) {
+			Dom.setStyle(fromTime.id, "display", allDay ? "none" : "block");
+			Dom.setStyle(fromTime.id + "-format", "display", allDay ? "none" : "block");
+
+			if (allDay && fromTime.value != "00:01") {
+				fromTime.value = "00:01";
+				YAHOO.Bubbling.fire("handleFieldChange", {
+					formId: formId,
+					fieldId: fromDateFieldId
+				});
 			}
-			if (toTime != null) {
-				if (allDay && toTime.value != "23:59") {
-					toTime.value = "23:59";
-					YAHOO.Bubbling.fire("handleFieldChange", {
-						formId: formId,
-						fieldId: "lecm-events:to-date"
-					});
-				}
 
-				Dom.setStyle(toTime.id, "display", allDay ? "none" : "block");
-				Dom.setStyle(toTime.id + "-format", "display", allDay ? "none" : "block");
-				if (!allDay && toTime.value.length == 0) {
-					Dom.addClass(toTime.id, "invalid");
-				}
+			if (!allDay && fromTime.value.length == 0) {
+				Dom.addClass(fromTime.id, "invalid");
 			}
 		}
-		return true;
-	};
+		if (toTime != null) {
+			if (allDay && toTime.value != "23:59") {
+				toTime.value = "23:59";
+				YAHOO.Bubbling.fire("handleFieldChange", {
+					formId: formId,
+					fieldId: toDateFieldId
+				});
+			}
+
+			Dom.setStyle(toTime.id, "display", allDay ? "none" : "block");
+			Dom.setStyle(toTime.id + "-format", "display", allDay ? "none" : "block");
+			if (!allDay && toTime.value.length == 0) {
+				Dom.addClass(toTime.id, "invalid");
+			}
+		}
+	}
+	return true;
+};
 
 LogicECM.module.Events.changeRepeatableValidation =
 	function (field, args,  event, form, silent, message) {
