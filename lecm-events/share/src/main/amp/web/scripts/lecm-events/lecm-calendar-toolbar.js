@@ -14,11 +14,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		Event = YAHOO.util.Event,
 		Element = YAHOO.util.Element;
 
-	/**
-	 * Alfresco Slingshot aliases
-	 */
-	var $html = Alfresco.util.encodeHTML;
-
 	LogicECM.module.Calendar.Toolbar = function(containerId, enabledViews, defaultView) {
 		this.name = "LogicECM.module.Calendar.Toolbar";
 		this.id = containerId;
@@ -70,28 +65,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 *
 		 * @method init
 		 */
-		init: function()
-		{
-			/* Add Event Button */
-			if (Dom.get(this.id + "-addEvent-button"))
-			{
-				Alfresco.util.createYUIButton(this, "addEvent-button", this.onButtonClick);
-			}
-			Alfresco.util.createYUIButton(this, "publishEvents-button", null,
-				{
-					type: "link"
-				});
+		init: function() {
 			this.nextButton = Alfresco.util.createYUIButton(this, "next-button", this.onNextNav);
 			this.nextButton.addClass("next-button");
 			this.prevButton = Alfresco.util.createYUIButton(this, "prev-button", this.onPrevNav);
 			this.prevButton.addClass("prev-button");
 			this.todayButton = Alfresco.util.createYUIButton(this, "today-button", this.onTodayNav);
-
-			this.workHoursButton = Alfresco.util.createYUIButton(this, "workHours-button", this.onToggleWorkHours,
-				{
-					type: "checkbox",
-					checked:true
-				});
 
 			this.navButtonGroup = new YAHOO.widget.ButtonGroup(this.id + "-navigation");
 			if (typeof(this.navButtonGroup) != "undefined" && this.navButtonGroup._buttons != null ) // Will be undefined / null if navigation is hidden serverside (e.g. only one view enabled)
@@ -129,13 +108,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this._fireEvent("todayNav");
 		},
 
-		onToggleWorkHours: function(e)
-		{
-			// Note the title is reversed since it reflects what will happen if the user clicks the button.
-			this.workHoursButton.set("title", Alfresco.util.message(this.workHoursButton.get("checked") ? "button.work-hours.all" : "button.work-hours.working", 'LogicECM.module.Calendar.Toolbar'));
-			this._fireEvent("toggleWorkHours");
-		},
-
 		onNavigation: function(e)
 		{
 			this.disableButtons(e.newValue.index);
@@ -160,47 +132,17 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					this.nextButton.set('disabled', false);
 					this.prevButton.set('disabled', false);
 				}
-
-				// Work Hours button needs disabling in both month and agenda views.
-				if (this.endWidth(selectedButton.get("id"), LogicECM.module.Calendar.View.VIEWTYPE_MONTH) || this.endWidth(selectedButton.get("id"), LogicECM.module.Calendar.View.VIEWTYPE_AGENDA))
-				{
-					this.workHoursButton.set('disabled', true);
-				}
-				else
-				{
-					this.workHoursButton.set('disabled', false);
-				}
-
 			}
 		},
 		endWidth: function(text, postfix) {
 			return text.indexOf(postfix) == (text.length - postfix.length);
 		},
 
-		_fireEvent: function(type)
-		{
+		_fireEvent: function(type) {
 			YAHOO.Bubbling.fire(type,
 				{
 					source: this
 				});
-		},
-
-		/**
-		 * Fired when the "Add Event" button is clicked.
-		 * Displays the event creation form. Initialises the
-		 * form if it hasn't been initialised.
-		 *
-		 * @param e {object} DomEvent
-		 * @param obj {object} Object passed back from addListener method
-		 * @method  onButtonClick
-		 */
-		onButtonClick: function(e)
-		{
-			var obj = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.View");
-			if (obj)
-			{
-				obj.showAddDialog();
-			}
 		}
 	};
 })();

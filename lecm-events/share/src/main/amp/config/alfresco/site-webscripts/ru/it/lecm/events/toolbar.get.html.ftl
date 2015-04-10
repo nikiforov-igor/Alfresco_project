@@ -22,13 +22,6 @@
    <@uniqueIdDiv>
       <div id="${el}-body" class="toolbar calendar-toolbar theme-bg-2">
          <div class="yui-ge calendar-bar">
-             <div class="leftContainer">
-                <div class="yui-u flat-button addEventContainer">
-                   <div id="${el}-viewButtons" class="addEvent">
-                      <button id="${el}-addEvent-button" name="addEvent" title="${msg("button.add-event")}">${msg("button.add-event")}</button>
-                   </div>
-                </div>
-             </div>
              <div class="restContainer">
                  <div class="rightContainer">
                      <#if viewToolbarNav >
@@ -47,13 +40,6 @@
                                ${day!""}${week!""}${month!""}${agenda!""}
                           </div>
                        </#if>
-                    </div>
-                    <div class="flat-button work-hours">
-                       <span id="${el}-workHours-button" class="yui-button yui-checkbox-button">
-                          <span class="first-child">
-                             <button name="workHours"></button>
-                          </span>
-                       </span>
                     </div>
                  </div>
              </div>
