@@ -45,6 +45,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         expiresDate: new Date(),
 
+        calendarNode: null,
+
         onReady: function () {
             var date = new Date;
             date.setDate(date.getDate() + 30);
@@ -78,10 +80,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					    me.accordionItems = oResults;
 
                         if (LogicECM.module.ARM.SETTINGS.ARM_SHOW_CALENDAR) {
-                            me.accordionItems.push({
+                            this.calendarNode = {
                                 id: "calendar",
-                                label: this.msg("lecm.arm.lbl.calendar")
-                            })
+                                label: this.msg("lecm.arm.lbl.calendar"),
+                                createTypes: [
+                                    {
+                                        disabled: false,
+                                        label: "Мероприятие",
+                                        type: "lecm-events:document"
+                                    }
+                                ]
+                            };
+
+                            me.accordionItems.push(this.calendarNode);
                         }
 
 					    var accordionContent = "";
@@ -126,6 +137,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         Event.on("ac-head-" + obj.node.id, 'click', this.onAccordionClick, obj.node, this);
                         if (obj.forceExpand) {
                             this.onAccordionClick(null, obj.node);
+                            if (node.id == "calendar") {
+                                YAHOO.Bubbling.fire("dateChanged",
+                                    {
+                                        date: new Date()
+                                    })
+                            }
                         }
                         Event.onAvailable("ac-label-" + obj.node.id, function (obj) {
                             obj.context.drawCounterValue(obj.node, obj.context.getSearchQuery(obj.node), YAHOO.util.Dom.get("ac-label-" + obj.node.id));
@@ -444,6 +461,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         onCalSelect: function (e, args) {
+            LogicECM.module.Base.Util.setCookie(this._buildPreferencesKey(), YAHOO.lang.JSON.stringify({
+                accordion: "calendar",
+                selected: "",
+                pageNum: 1
+            }), {expires:this.expiresDate});
+
             Dom.setStyle("arm-documents-toolbar", "display", "none");
             Dom.setStyle("arm-documents-grid", "display", "none");
             Dom.setStyle("arm-documents-reports", "display", "none");

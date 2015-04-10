@@ -52,7 +52,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA) {
 				Dom.setStyle(this.id, "display", "block");
 			} else {
-				//History.navigate("view", view);
 				Dom.setStyle(this.id, "display", "none");
 			}
 		},

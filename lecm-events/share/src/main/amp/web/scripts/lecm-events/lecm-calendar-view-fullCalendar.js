@@ -11,7 +11,6 @@
       fromISO8601 = Alfresco.util.fromISO8601,
       toISO8601 = Alfresco.util.toISO8601,
       dateFormat = Alfresco.thirdparty.dateFormat,
-      History = YAHOO.util.History,
       $jCalendar = ""; // Cache the jQuery selector. Populated in renderEvents after DOM has rendered.
 
    LogicECM.module.Calendar.FullView = function (htmlId)
@@ -57,36 +56,7 @@
          this.renderEvents();
       },
 
-      renderEvents: function ()
-      {
-         // YUI History
-         var bookmarkedView = History.getBookmarkedState("view") || this.options.view,
-            bookmarkedDate = History.getBookmarkedState("date") || dateFormat(this.options.startDate, "yyyy-mm-dd");
-
-         // Register History Manager callbacks
-         History.register("view", bookmarkedView, function (view)
-         {
-            this.onViewNav(view);
-         }, {}, this);
-         History.register("date", bookmarkedDate, function (date)
-         {
-            this.onDateNav(date);
-         }, {}, this);
-
-         // Initialize the browser history management library
-         try
-         {
-             History.initialize("yui-history-field", "yui-history-iframe");
-         }
-         catch(e)
-         {
-            /*
-             * The only exception that gets thrown here is when the browser is
-             * not supported (Opera, or not A-grade)
-             */
-            Alfresco.logger.error("LogicECM.module.Calendar.View: Couldn't initialize HistoryManager.", e);
-         }
-
+      renderEvents: function () {
          // Prevent unnecessary DOM lookups and cache the jQuery object for the calendar container.
          $jCalendar = $('#' + this.options.id);
 
@@ -115,15 +85,20 @@
          {
             // gets the view changed to from the index of the button in the event object of the passed in parameters
             var view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[args[1].activeView];
-            History.navigate("view", view);
+            this.onViewNav(view);
             this.onUpdateView(view);
          }, this);
 
          // Mini Calendar
-         YAHOO.Bubbling.on("dateChanged", function (e, args)
-         {
-            History.navigate("date", dateFormat(args[1].date, "yyyy-mm-dd"));
+         YAHOO.Bubbling.on("dateChanged", function (e, args) {
+            this.onDateNav(args[1].date);
          }, this);
+
+         var me = this;
+         setTimeout(function () {
+            me.onDateNav(new Date());
+         }, 1000)
+
 
          // Override Resizer callback function (while keeping the old one):
          var oldResizerFn = Alfresco.widget.Resizer.prototype.onResizeNotification
@@ -151,8 +126,8 @@
        */
       initFullCalendar: function ()
       {
-         var date = fromISO8601(History.getBookmarkedState("date")) || this.options.startDate,
-            view = History.getBookmarkedState("view") || this.options.view;
+         var date = new Date(),
+            view = this.options.view;
 
          // jQuery resets context so 'this' becomes the HTML element passed in, but we need a handle to the CalendarFullCalendar component:
          var me = this;

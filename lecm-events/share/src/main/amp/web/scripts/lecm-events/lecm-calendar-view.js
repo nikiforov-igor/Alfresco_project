@@ -442,10 +442,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
        */
       showAddDialog: function (date) {
          if (date == null) {
-            var historyDate = YAHOO.util.History.getBookmarkedState("date");
-            if (historyDate != null) {
-               date = Alfresco.util.fromISO8601(historyDate);
-            }
             if (date == null) {
                date = new Date();
                date.setHours(0);
