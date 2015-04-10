@@ -92,6 +92,8 @@
          // Mini Calendar
          YAHOO.Bubbling.on("dateChanged", function (e, args) {
             this.onDateNav(args[1].date);
+
+            $jCalendar.fullCalendar('select', args[1].date);
          }, this);
 
          var me = this;
