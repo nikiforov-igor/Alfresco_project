@@ -12,7 +12,9 @@ LogicECM.module = LogicECM.module || {};
 	 */
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
-		Element = YAHOO.util.Element;
+		Element = YAHOO.util.Element,
+		toISO8601 = Alfresco.util.toISO8601,
+		fromISO8601 = Alfresco.util.fromISO8601;
 
 	/**
 	 * Alfresco Slingshot aliases
@@ -88,15 +90,9 @@ LogicECM.module = LogicECM.module || {};
 			this.calendar = new YAHOO.widget.Calendar("calendar", { navigator:true });
 			// Set localised properties
 			Alfresco.util.calI18nParams(this.calendar);
-			var calView = Alfresco.util.ComponentManager.findFirst('Alfresco.CalendarView');
-			if (calView)
-			{
-				var startDate = calView.options.startDate;
-				this.calendar.setMonth(startDate.getMonth());
-				this.calendar.setYear(startDate.getFullYear());
-			}
 			this.calendar.render();
 			this.calendar.selectEvent.subscribe(this.onDateSelected, this, true);
+			this.calendar.changePageEvent.subscribe(this.onChangeCalendarPage, this, true);
 
 			// Register for changes to the calendar data
 			YAHOO.Bubbling.on("eventDataLoad", this.onEventDataLoad, this);
@@ -119,6 +115,44 @@ LogicECM.module = LogicECM.module || {};
 				{
 					date: selDate
 				})
+		},
+
+		onChangeCalendarPage: function (p_type, p_args, p_obj) {
+			var fromDate = p_args[0];
+			var toDate = p_args[1];
+
+			if (fromDate != null && toDate != null) {
+				Alfresco.util.Ajax.request(
+					{
+						url: Alfresco.constants.PROXY_URI + "lecm/events/user",
+						dataObj:
+						{
+							from: toISO8601(fromDate).split('T')[0],
+							to: toISO8601(toDate).split('T')[0]
+						},
+						//filter out non relevant events for current view
+						successCallback:
+						{
+							fn: this.onEventsLoaded,
+							scope: this
+						},
+						failureMessage: Alfresco.util.message("load.fail", "LogicECM.module.Calendar.View")
+					});
+			}
+		},
+
+		onEventsLoaded: function (o)
+		{
+			var data = YAHOO.lang.JSON.parse(o.serverResponse.responseText).events;
+
+			for (var i = 0; i < data.length; i++) {
+				var ev = data[i];
+				var date = fromISO8601(ev.startAt.iso8601);
+				var endDate = fromISO8601(ev.endAt.iso8601);
+			 	if (date != null && endDate != null) {
+
+			    }
+			}
 		},
 
 		/*
