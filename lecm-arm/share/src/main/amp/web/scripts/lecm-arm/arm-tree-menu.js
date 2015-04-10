@@ -86,7 +86,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 createTypes: [
                                     {
                                         disabled: false,
-                                        label: "Мероприятие",
+                                        label: this.msg("lecm.arm.lbl.event"),
                                         type: "lecm-events:document"
                                     }
                                 ]
@@ -466,6 +466,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 selected: "",
                 pageNum: 1
             }), {expires:this.expiresDate});
+
+            YAHOO.Bubbling.fire ("updateArmToolbar", {
+                createTypes: this.calendarNode.createTypes
+            });
 
             Dom.setStyle("arm-documents-toolbar", "display", "none");
             Dom.setStyle("arm-documents-grid", "display", "none");

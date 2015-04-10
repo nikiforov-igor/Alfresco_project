@@ -95,20 +95,6 @@
 
             $jCalendar.fullCalendar('select', args[1].date);
          }, this);
-
-         var me = this;
-         setTimeout(function () {
-            me.onDateNav(new Date());
-         }, 1000)
-
-
-         // Override Resizer callback function (while keeping the old one):
-         var oldResizerFn = Alfresco.widget.Resizer.prototype.onResizeNotification
-         Alfresco.widget.Resizer.prototype.onResizeNotification = function ()
-         {
-            oldResizerFn();
-            $jCalendar.fullCalendar("render");
-         }
       },
 
       onUpdateView: function(view) {
