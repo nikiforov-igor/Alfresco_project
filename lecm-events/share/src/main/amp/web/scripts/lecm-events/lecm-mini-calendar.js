@@ -12,6 +12,7 @@ LogicECM.module = LogicECM.module || {};
 	 */
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
+		Selector = YAHOO.util.Selector,
 		Element = YAHOO.util.Element,
 		toISO8601 = Alfresco.util.toISO8601,
 		fromISO8601 = Alfresco.util.fromISO8601;
@@ -92,7 +93,7 @@ LogicECM.module = LogicECM.module || {};
 			Alfresco.util.calI18nParams(this.calendar);
 			this.calendar.render();
 			this.calendar.selectEvent.subscribe(this.onDateSelected, this, true);
-			this.calendar.changePageEvent.subscribe(this.onChangeCalendarPage, this, true);
+			this.calendar.changePageEvent.subscribe(this.loadEvents, this, true);
 
 			// Register for changes to the calendar data
 			YAHOO.Bubbling.on("eventDataLoad", this.onEventDataLoad, this);
@@ -117,10 +118,11 @@ LogicECM.module = LogicECM.module || {};
 				})
 		},
 
-		onChangeCalendarPage: function (p_type, p_args, p_obj) {
-			var fromDate = p_args[0];
-			var toDate = p_args[1];
+        loadEvents: function (p_type, p_args, p_obj) {
+			var fromDate = p_args[1];
+			var toDate = new Date(new Date(fromDate).setMonth(fromDate.getMonth()+1));
 
+            //console.log("loadEvents: from " + fromDate + " to " + toDate);
 			if (fromDate != null && toDate != null) {
 				Alfresco.util.Ajax.request(
 					{
@@ -150,7 +152,17 @@ LogicECM.module = LogicECM.module || {};
 				var date = fromISO8601(ev.startAt.iso8601);
 				var endDate = fromISO8601(ev.endAt.iso8601);
 			 	if (date != null && endDate != null) {
+                    var cellIndex = this.calendar.getCellIndex(date);
 
+                    if (cellIndex > -1) {
+                        //todo: может есть какой-то свой метод в календаре, чтоб взять ячейку
+                        // пока через dom
+                        var tds = Selector.query("#" + this.calendar.id + " td");
+
+                        if (tds && tds.length > 0) {
+                            Dom.addClass(tds[cellIndex], "with-events");
+                        }
+                    }
 			    }
 			}
 		},
@@ -206,6 +218,7 @@ LogicECM.module = LogicECM.module || {};
 					var event = events[i];
 					if (event)
 					{
+						//var from = event.startAt.iso8601 || event.from || event.dtstart || event.when; todo: сейчас в selected вообще ничего не кладется, только сегодня
 						var from = event.from || event.dtstart || event.when;
 
 						selectedDates.push(Alfresco.util.formatDate(Alfresco.thirdparty.fromISO8601(from),"mm/dd/yyyy"));
@@ -215,6 +228,11 @@ LogicECM.module = LogicECM.module || {};
 				this.calendar.cfg.setProperty("selected", selectedDates.join(','));
 				this.calendar.render();
 
+                //load events for this month
+                var date = new Date();
+                date.setDate(1);
+                date.setHours(0,0,0);
+                this.loadEvents(null, [null, new Date(date)]);
 			}
 		},
 

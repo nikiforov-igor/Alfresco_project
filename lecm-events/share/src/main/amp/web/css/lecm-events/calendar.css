@@ -301,7 +301,7 @@ div.cal-event-entry a
 
 div.calendar-currentMonth
 {
-   margin-right: 15px;
+   margin-top: 5px;
    text-align: center;
    clear: left;
 }
@@ -335,16 +335,16 @@ span.eventTime label
 
 /* The top spacing should go on the table in order to prevent a large whitespace while content is loading. */
 
-#calendar
-{
-   margin: 0 10px;
-   padding: 5px;
-}
+/*#calendar*/
+/*{*/
+   /*margin: 0 10px;*/
+   /*padding: 5px;*/
+/*}*/
 
-#calendar table
-{
-   margin: 0.5em 0 1em;
-}
+/*#calendar table*/
+/*{*/
+   /*margin: 0.5em 0 1em;*/
+/*}*/
 
 .alfresco-share .yui-calcontainer
 {
@@ -1167,26 +1167,6 @@ div.agendaview ul li
 
 /* Mini calendar stylings */
 
-.alfresco-share .yui-calendar .calnavright,
-.alfresco-share .yui-calendar .calnavleft
-{
-   height: auto;
-   width: 30px;
-   top: -3px;
-}
-
-.alfresco-share .yui-calendar .calnavright
-{
-   background: url(../../components/calendar/images/cal-next-but.png) no-repeat;
-   *height: 21px;
-}
-
-.alfresco-share .yui-calendar .calnavleft
-{
-   background: url(../../components/calendar/images/cal-prev-but.png) no-repeat;
-   *height: 21px;
-}
-
 .alfresco-share div.calendar-currentMonth .yui-button
 {
    background: url(../../components/calendar/images/toolbar-unchecked-gradient.gif) 0 0;
@@ -1507,10 +1487,10 @@ div.fullCalendar .fc-view-month .fc-event-multiday .fc-event-time
    padding-left: 5px;
 }
 
-div.fullCalendar .fc-event-title
-{
-   padding: 0 0 0 5px;
-}
+/*div.fullCalendar .fc-event-title*/
+/*{*/
+   /*padding: 0 0 0 5px;*/
+/*}*/
 
 div.fullCalendar .fc-agenda-days .fc-event-title
 {
@@ -1532,7 +1512,7 @@ div.fullCalendar .fc-event-vert .fc-event-bg
 }
 .fc-grid .fc-sat .fc-day-number,
 .fc-grid .fc-sun .fc-day-number {
-   color: #f90000;
+   color: #cf2700;
 }
 
 .fc-grid .fc-other-month .fc-day-number {
@@ -1615,10 +1595,6 @@ div.fullCalendar th.fc-widget-header
     padding-left: 25px;
 }
 
-.yui-skin-lecmTheme .calendar-toolbar .flat-button.work-hours {
-    display: none;
-}
-
 .yui-skin-lecmTheme .calendar-bar {
     width: 100%;
 }
@@ -1658,8 +1634,113 @@ div.fullCalendar th.fc-widget-header
 }
 .yui-skin-lecmTheme .alf-calendar.fullCalendar .fc-state-highlight {
     background: none;
-    /*border: 1px solid #666;*/
+}
+.yui-skin-lecmTheme .fc-content .fc-cell-overlay {
+    background: none;
+    border: 1px solid #666;
 }
 .yui-skin-lecmTheme .alf-calendar.fullCalendar .fc-today {
     background: #e4f3fa;
+}
+
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner span.fc-event-time {
+    margin-right: 1px;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event:hover div.fc-event-inner {
+    color: #0066cc;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event:hover div.fc-event-inner span {
+    border-bottom: 1px dotted #0066cc;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.fc-event-allday {
+    border: 1px solid #666;
+}
+
+/* Mini-calendar */
+#ac-content-calendar {
+    padding-left: 0;
+}
+.arm-mini-calendar {
+    text-align: center;
+}
+.arm-mini-calendar > .yui-calcontainer {
+    float: none;
+    padding: 0;
+}
+.arm-mini-calendar > .yui-calcontainer > table.yui-calendar {
+    margin: 12px auto 0;
+}
+
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar .calnavleft {
+    left: 0;
+    margin-left: 0;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar .calnavright {
+    right: 0;
+    margin-right: 0;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar a.calnav,
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar a.calnav:hover {
+    border: none;
+    background: none;
+    text-transform: capitalize;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar a.calnav:hover {
+    text-decoration: underline;
+}
+
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar .calweekdaycell {
+    font-weight: normal;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell {
+    border-color: transparent;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.oom {
+    background: none;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.oom a {
+    color: #ccc;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.selectable {
+    background: #efefef;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.selectable a {
+    color: #333;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.today {
+    background: #efefef;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.today a {
+    background: #efefef;
+    border: 1px solid #666;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.today.calcellhover a {
+    background: #ccc;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.with-events a {
+    position: relative;
+    overflow: hidden;
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.with-events a:after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #0770da;
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.wd6 a,
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.wd0 a {
+    color: #cf2700;
 }
