@@ -87,7 +87,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                     {
                                         disabled: false,
                                         label: this.msg("lecm.arm.lbl.event"),
-                                        type: "lecm-events:document"
+                                        type: "lecm-events:document",
+                                        page: "event-create"
                                     }
                                 ]
                             };

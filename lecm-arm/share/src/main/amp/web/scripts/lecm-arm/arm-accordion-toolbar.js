@@ -43,7 +43,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
         },
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
-			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=" + p_oItem.type);
+			window.location.href = Alfresco.constants.URL_PAGECONTEXT + p_oItem.page + "?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=" + p_oItem.type);
 		},
 		onUpdateArmToolbar: function(layer, args) {
 			var createTypes = args[1].createTypes;
@@ -54,6 +54,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 				var items = [];
 				for (var i = 0; i < createTypes.length; i++) {
 					var type = createTypes[i];
+					var page = "document-create";
+					if (type.page != null) {
+						page = type.page;
+					}
+
 					items.push({
 						text: type.label,
 						value: type.type,
@@ -62,7 +67,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 							fn: this.onNewRow,
 							obj: {
 								type: type.type,
-								typeLabel: type.label
+								typeLabel: type.label,
+								page: page
 							},
 							scope: this
 						}
