@@ -77,6 +77,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
        */
       calendarView: '',
 
+      viewDialog: null,
+
       /**
        * Set multiple initialization options at once.
        *
@@ -480,7 +482,48 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
       showDialog: function(e, elTarget)
       {
          var event = this.getEventObj(elTarget);
-         window.location = $siteURL("event?nodeRef=" + event.nodeRef);
+         //window.location = $siteURL("event?nodeRef=" + event.nodeRef);
+
+         var viewFormId = this.id + "-viewForm";
+
+         var obj = {
+            htmlid:event.nodeRef.replace("workspace://SpacesStore/","").replace("-",""),
+            itemKind:"node",
+            itemId:event.nodeRef,
+            formId: "popup-form",
+            mode:"view"
+         };
+
+         var me = this;
+         Alfresco.util.Ajax.request(
+             {
+                url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+                dataObj: obj,
+                successCallback:{
+                   fn:function(response) {
+                      var formEl = Dom.get(viewFormId + "-content");
+                      formEl.innerHTML = response.serverResponse.responseText;
+
+                      if (me.viewDialog == null) {
+                         me.viewDialog = Alfresco.util.createYUIPanel(viewFormId,
+                             {
+                                width: "50em"
+                             });
+                         me.widgets.cancelButton = Alfresco.util.createYUIButton(me, "viewForm-cancel", me.onCancelDialogClick);
+                      }
+
+                      Dom.setStyle(viewFormId, "display", "block");
+                      me.viewDialog.show();
+                   }
+                },
+                failureMessage:"message.failure",
+                execScripts:true
+             });
+         return false;
+      },
+
+      onCancelDialogClick: function() {
+         this.viewDialog.hide();
       },
 
       /**

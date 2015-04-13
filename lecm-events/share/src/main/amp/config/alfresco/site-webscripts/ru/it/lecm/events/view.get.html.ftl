@@ -32,5 +32,20 @@
           <div id="${el}View">
           </div>
       </div>
+
+      <#assign  viewFormId = el + "Container-viewForm"/>
+      <div id="${viewFormId}" class="yui-panel hidden1">
+          <div id="${viewFormId}-head" class="hd">${msg("logicecm.view")}</div>
+          <div id="${viewFormId}-body" class="bd">
+              <div id="${viewFormId}-content"></div>
+              <div class="bdft">
+                   <span id="${viewFormId}-cancel" class="yui-button yui-push-button">
+                       <span class="first-child">
+                           <button type="button" tabindex="0">${msg("button.close")}</button>
+                       </span>
+                   </span>
+              </div>
+          </div>
+      </div>
    </@>
 </@>
