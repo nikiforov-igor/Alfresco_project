@@ -77,8 +77,10 @@ public interface EventsService {
     List<NodeRef> getAvailableUserResources();
 
     boolean checkLocationAvailable(NodeRef location, Date fromDate, Date toDate, boolean allDay);
+    boolean checkLocationAvailable(NodeRef location, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay);
 
     boolean checkMemberAvailable(NodeRef member, Date fromDate, Date toDate, boolean allDay);
+    boolean checkMemberAvailable(NodeRef member, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay);
 
     List<NodeRef> getResourceResponsible(NodeRef resource);
 

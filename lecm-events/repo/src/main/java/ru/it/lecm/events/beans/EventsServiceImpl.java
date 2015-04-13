@@ -8,9 +8,7 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.ISO8601DateFormat;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
@@ -50,7 +48,29 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     public List<NodeRef> getEventMembers(NodeRef event) {
-        return findNodesByAssociationRef(event, ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+        List<NodeRef> results = new ArrayList<>();
+
+        NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
+        if (tableDataRootFolder != null) {
+            Set<QName> typeSet = new HashSet<>(1);
+            typeSet.add(EventsService.TYPE_EVENT_MEMBERS_TABLE);
+            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(tableDataRootFolder, typeSet);
+            if (childAssocs != null && childAssocs.size() == 1) {
+                NodeRef table = childAssocs.get(0).getChildRef();
+                if (table != null) {
+                    List<NodeRef> rows = documentTableService.getTableDataRows(table);
+                    if (rows != null) {
+                        for (NodeRef row: rows) {
+                            NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
+                            if (rowEmployee != null) {
+                                results.add(rowEmployee);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return results;
     }
 
     public List<NodeRef> getEventInvitedMembers(NodeRef event) {
@@ -190,6 +210,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     public boolean checkLocationAvailable(NodeRef location, Date fromDate, Date toDate, boolean allDay) {
+        return checkLocationAvailable(location, null, fromDate, toDate, allDay);
+    }
+
+    public boolean checkLocationAvailable(NodeRef location, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay) {
         if (allDay) {
             Calendar fromDateCal = Calendar.getInstance();
             fromDateCal.setTime(fromDate);
@@ -209,6 +233,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         }
 
         String additionalFilter = " AND @lecm\\-events\\:location\\-assoc\\-ref:\"" + location.toString() + "\"";
+        if (ignoreNode != null) {
+            additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
+        }
 
         List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
 
@@ -216,6 +243,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     public boolean checkMemberAvailable(NodeRef member, Date fromDate, Date toDate, boolean allDay) {
+        return checkMemberAvailable(member, null, fromDate, toDate, allDay);
+    }
+
+    public boolean checkMemberAvailable(NodeRef member, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay) {
         List<Date> employeeWorkindDays = workCalendarService.getEmployeeWorkindDays(member, fromDate, toDate);
         if (employeeWorkindDays.size() == 0) {
             return false;
@@ -239,6 +270,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             }
 
             String additionalFilter = " AND @lecm\\-events\\:temp\\-members\\-assoc\\-ref:\"" + member.toString() + "\"";
+            if (ignoreNode != null) {
+                additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
+            }
 
             List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
 
