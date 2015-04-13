@@ -197,26 +197,26 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     }
 
 	private void sendNotification(NotificationUnit notification, boolean dontCheckAccessToObject) {
-		logger.debug("###### sendNotification begin ######");
+		logger.trace("###### sendNotification begin ######");
 		if (notification != null && notification.getRecipientRef() != null && notification.getObjectRef() != null) {
 			String employeeLogin = this.orgstructureService.getEmployeeLogin(notification.getRecipientRef());
-			logger.debug("###### Notification, recipient, object checked successfully. ######");
-			logger.debug("###### {} ######", notification.getDescription());
+			logger.trace("###### Notification, recipient, object checked successfully. ######");
+			logger.trace("###### {} ######", notification.getDescription());
 			Boolean hasReadAccess = null;
-			logger.debug("###### dontCheckAccessToObject = {} ######", dontCheckAccessToObject);
+			logger.trace("###### dontCheckAccessToObject = {} ######", dontCheckAccessToObject);
 			if (employeeLogin != null && (dontCheckAccessToObject || (hasReadAccess = lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin)))) {
-				logger.debug("###### Employee login = {} ######", employeeLogin);
-				logger.debug("###### hasReadAccess = {} ######", hasReadAccess);
+				logger.trace("###### Employee login = {} ######", employeeLogin);
+				logger.trace("###### hasReadAccess = {} ######", hasReadAccess);
 				if (getChannels().containsKey(notification.getTypeRef())) {
 					NotificationChannelBeanBase channelBean = getChannels().get(notification.getTypeRef());
 					if (channelBean != null) {
-						logger.debug("###### channelBean = {} ######", channelBean.getClass().getName());
+						logger.trace("###### channelBean = {} ######", channelBean.getClass().getName());
 						channelBean.sendNotification(notification);
 					}
 				}
 			}
 		}
-		logger.debug("###### sendNotification end ######");
+		logger.trace("###### sendNotification end ######");
 	}
 
     /**
