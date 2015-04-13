@@ -98,6 +98,12 @@ LogicECM.module = LogicECM.module || {};
 			// Register for changes to the calendar data
 			YAHOO.Bubbling.on("eventDataLoad", this.onEventDataLoad, this);
 			YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
+
+			//load events for this month
+			var date = new Date();
+			date.setDate(1);
+			date.setHours(0,0,0);
+			this.loadEvents(null, [null, new Date(date)]);
 		},
 
 		/**
@@ -227,12 +233,6 @@ LogicECM.module = LogicECM.module || {};
 				// Get the data and refresh the view
 				this.calendar.cfg.setProperty("selected", selectedDates.join(','));
 				this.calendar.render();
-
-                //load events for this month
-                var date = new Date();
-                date.setDate(1);
-                date.setHours(0,0,0);
-                this.loadEvents(null, [null, new Date(date)]);
 			}
 		},
 
