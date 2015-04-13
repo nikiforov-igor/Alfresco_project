@@ -54,6 +54,9 @@ public class EventsWebScriptBean extends BaseWebScript {
             result.put("description", nodeService.getProperty(entry, EventsService.PROP_EVENT_DESCRIPTION));
             result.put("allday", isAllDay);
 
+            result.put("members", eventService.getEventMembers(entry));
+            result.put("invitedMembers", eventService.getEventInvitedMembers(entry));
+
             NodeRef location = eventService.getEventLocation(entry);
             if (location != null) {
                 result.put("where", nodeService.getProperty(location, ContentModel.PROP_NAME));

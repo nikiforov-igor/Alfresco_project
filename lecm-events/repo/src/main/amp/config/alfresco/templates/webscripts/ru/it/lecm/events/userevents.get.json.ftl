@@ -20,6 +20,24 @@
 					"legacyTime": "${event.legacyTimeTo}"
 				},
 
+                "members": [
+                    <#list event.members as member>
+                        {
+                            "nodeRef": "${member.nodeRef}",
+                            "name": "${member.properties["lecm-orgstr:employee-short-name"]}"
+                        }<#if member_has_next>,</#if>
+                    </#list>
+                ],
+
+                "invitedMembers": [
+                    <#list event.invitedMembers as invited>
+                        {
+                            "nodeRef": "${invited.nodeRef}",
+                            "name": "${invited.properties["lecm-representative:surname"]} ${invited.properties["lecm-representative:firstname"]} ${invited.properties["lecm-representative:middlename"]}"
+                        }<#if invited_has_next>,</#if>
+                    </#list>
+                ],
+
 				"permissions": {
 					"isEdit": ${event.canEdit?string},
 					"isDelete": ${event.canDelete?string}

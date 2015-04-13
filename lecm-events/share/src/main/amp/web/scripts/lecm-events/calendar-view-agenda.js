@@ -134,7 +134,36 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				html = "";
 
 			// build up cell content
-			html = '<a href="' + $siteURL("event?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
+			//html = '<a href="' + $siteURL("event?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
+			html = '<div>' + data.name + "</div>";
+
+			var members = data.members;
+			var membersString = this.msg("label.events.members") + ": ";
+			if (members != null) {
+				for (var i = 0; i < members.length; i++) {
+					var member = members[i];
+					membersString += '<a href="' + $siteURL('view-metadata?nodeRef=' + member.nodeRef) + '">' + member.name + '</a>';
+					if (i < members.length - 1) {
+						membersString += ",";
+					}
+				}
+			}
+			html += '<div>' + membersString + "</div>";
+
+			var invitedMembers = data.invitedMembers;
+			var invitedMembersString = this.msg("label.events.invitedMembers") + ": ";
+			if (invitedMembers != null) {
+				for (i = 0; i < invitedMembers.length; i++) {
+					var invitedMember = invitedMembers[i];
+					invitedMembersString += '<a href="' + $siteURL('view-metadata?nodeRef=' + invitedMember.nodeRef) + '">' + invitedMember.name + '</a>';
+					if (i < invitedMember.length - 1) {
+						invitedMembersString += ",";
+					}
+				}
+			}
+			html += '<div>' + invitedMembersString + "</div>";
+
+			html += '<div>' + data.description + "</div>"
 
 			// write to DOM
 			elCell.innerHTML = html;
@@ -405,7 +434,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					[
 						{key: "start", formatter:this.bind(this.renderCellStart)}, // both the start and end times.
 						{key: "name", formatter:this.bind(this.renderCellName)},
-						{key: "description", formatter:this.bind(this.renderCellDescription)},
+						//{key: "description", formatter:this.bind(this.renderCellDescription)},
 						{key: "where", formatter:this.bind(this.renderCellLocation)},
 						{key: "actions", formatter:this.bind(this.renderCellActions)}
 					],
@@ -601,7 +630,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var showMore = this.msg("agenda.truncate.show-more"),
 				ellipsis = this.msg("agenda.truncate.ellipsis"),
 				truncateTo = parseInt(length) || parseInt(this.options.truncateLength) || 100, // use default and ensure int.
-				text = $html(event.description),
+				text = event.description,
 				result = text,
 				resultReplace = "";
 

@@ -49,6 +49,14 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         return findNodeByAssociationRef(event, ASSOC_EVENT_LOCATION, TYPE_EVENT_LOCATION, ASSOCIATION_TYPE.TARGET);
     }
 
+    public List<NodeRef> getEventMembers(NodeRef event) {
+        return findNodesByAssociationRef(event, ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+    }
+
+    public List<NodeRef> getEventInvitedMembers(NodeRef event) {
+        return findNodesByAssociationRef(event, ASSOC_EVENT_INVITED_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+    }
+
     public void setDictionaryBean(DictionaryBean dictionaryBean) {
         this.dictionaryBean = dictionaryBean;
     }
