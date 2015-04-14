@@ -44,5 +44,11 @@
             <artifactId>business-journal-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>ru.it.lecm.base</groupId>
+			<artifactId>base-repo-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+	</dependencies>
 </project>

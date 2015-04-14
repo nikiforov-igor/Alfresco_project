@@ -24,7 +24,7 @@ import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -52,7 +52,7 @@ public class ActionsScript extends DeclarativeWebScript {
     private GroupActionsService groupActionsService;
     private AuthenticationService authService;
     private LecmPermissionService lecmPermissionService;
-    private StateMachineHelper stateMachineService;
+    private LifecycleStateMachineHelper stateMachineService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     private final static String STATEMACHINE_EDITOR_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
@@ -61,7 +61,7 @@ public class ActionsScript extends DeclarativeWebScript {
     public final static QName PROP_FORM_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromValue");
 
 
-    public void setStateMachineService(StateMachineHelper stateMachineService) {
+    public void setStateMachineService(LifecycleStateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
     }
 
@@ -94,7 +94,7 @@ public class ActionsScript extends DeclarativeWebScript {
             return response;
         }
         /*NEW HELPER*/
-        //StateMachineHelper helper = new StateMachineHelper();
+        //LifecycleStateMachineHelper helper = new LifecycleStateMachineHelper();
 
         if (taskId != null && stateMachineService.getCurrentExecutionId(taskId) == null && !stateMachineService.isFinal(new NodeRef(documentRef))) {
             HashMap<String, Object> actionResult = new HashMap<String, Object>();

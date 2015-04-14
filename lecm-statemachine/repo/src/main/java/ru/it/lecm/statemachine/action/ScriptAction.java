@@ -9,7 +9,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 
 /**
  * User: PMelnikov
@@ -48,7 +48,7 @@ public class ScriptAction extends StateMachineAction implements PostponedAction 
     }
 
     @Override
-    public void postponedExecution(final String taskId, final StateMachineHelper helper) {
+    public void postponedExecution(final String taskId, final LifecycleStateMachineHelper helper) {
         if (!"".equals(script)) {
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                 @Override

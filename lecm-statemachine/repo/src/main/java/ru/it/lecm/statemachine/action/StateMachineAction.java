@@ -13,10 +13,8 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -29,7 +27,7 @@ import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 //import ru.it.lecm.statemachine.TimerActionHelper;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
@@ -50,7 +48,7 @@ abstract public class StateMachineAction {
     public static final String PROP_OUTPUT_VARIABLE = "outputVariable";
     public static final String PROP_OUTPUT_VALUE = "outputValue";
     
-    private StateMachineHelper stateMachineHelper;
+    private LifecycleStateMachineHelper stateMachineHelper;
     
     private static final transient Logger logger = LoggerFactory.getLogger(StateMachineAction.class);
 
@@ -113,13 +111,13 @@ abstract public class StateMachineAction {
         return documentService;
     }
 
-    public StateMachineHelper getStateMachineHelper() {
+    public LifecycleStateMachineHelper getStateMachineHelper() {
     	WebApplicationContext ctx = ContextLoader.getCurrentWebApplicationContext();
-    	StateMachineHelper stateMachineHelper = (StateMachineHelper) ctx.getBean("stateMachineHelper");
+    	LifecycleStateMachineHelper stateMachineHelper = (LifecycleStateMachineHelper) ctx.getBean("lifecycleStateMachineHelper");
         return stateMachineHelper;
     }
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+    public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
 

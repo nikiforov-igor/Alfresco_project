@@ -14,11 +14,9 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 //import ru.it.lecm.statemachine.TimerActionHelper;
 import ru.it.lecm.statemachine.action.StateMachineAction;
-import ru.it.lecm.statemachine.action.StatusChangeAction;
-import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +44,7 @@ public class StateMachineHandler {
 //    private TimerActionHelper timerActionHelper;
     private DocumentService documentService;
     private PermissionService permissionService;
-    private StateMachineHelper stateMachineHelper;
+    private LifecycleStateMachineHelper stateMachineHelper;
 
 	private String processId = "";
 
@@ -162,7 +160,7 @@ public class StateMachineHandler {
         this.permissionService = permissionService;
 	}
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+    public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
 

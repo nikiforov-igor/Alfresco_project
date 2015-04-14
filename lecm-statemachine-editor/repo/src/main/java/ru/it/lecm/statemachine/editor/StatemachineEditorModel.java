@@ -77,6 +77,9 @@ public class StatemachineEditorModel {
     public final static QName PROP_ALTERNATIVES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativesFolder");
     public final static QName PROP_TRANSITION_SCRIPT = QName.createQName(STATEMACHINE_EDITOR_URI, "transition-script");
     public final static QName PROP_TRANSITION_DOCUMENT_CHANGE_SCRIPT = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionDocumentChangeScript");
+    public final static QName PROP_SIMPLE_DOCUMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "simple-document");
+    public final static QName PROP_NOT_ARM_CREATED = QName.createQName(STATEMACHINE_EDITOR_URI, "notArmCreate");
+    public final static QName PROP_STATIC_ROLE_PRIVILEGE = QName.createQName(STATEMACHINE_EDITOR_URI, "static-role-privilege");
 
 	public final static QName ASSOC_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatus");
     public final static QName ASSOC_ALTERNATIVE_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativeStatus");

@@ -13,8 +13,7 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.statemachine.StateMachineHelper;
-import ru.it.lecm.statemachine.StatemachineActionConstants;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.PostponedAction;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -67,7 +66,7 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
 	}
 
     @Override
-    public void postponedExecution(final String taskId, StateMachineHelper helper) {
+    public void postponedExecution(final String taskId, LifecycleStateMachineHelper helper) {
         AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
 
             @Override
@@ -75,7 +74,7 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
                 NodeService nodeService = getServiceRegistry().getNodeService();
 
                 WorkflowService workflowService = getServiceRegistry().getWorkflowService();
-                WorkflowTask task = workflowService.getTaskById(StateMachineHelper.ACTIVITI_PREFIX + taskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""));
+                WorkflowTask task = workflowService.getTaskById(LifecycleStateMachineHelper.ACTIVITI_PREFIX + taskId.replace(LifecycleStateMachineHelper.ACTIVITI_PREFIX, ""));
 
                 DictionaryService dictionaryService = getServiceRegistry().getDictionaryService();
 

@@ -910,6 +910,7 @@
 		<forms>
 			<form id="statemachine-editor-edit-statemachine">
 				<field-visibility>
+					<show id="lecm-stmeditor:simple-document" force="true"/>
 					<show id="lecm-stmeditor:archiveFolder" force="true"/>
 					<show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
 					<show id="lecm-stmeditor:notArmCreate" force="true"/>
@@ -917,6 +918,11 @@
 					<show id="lecm-stmeditor:dynamicRolesList" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-stmeditor:simple-document">
+						<control>
+							<control-param name="attentionMessageKey">statetemachine.lifecicle.attention</control-param>
+						</control>
+					</field>
 					<field id="lecm-stmeditor:archiveFolderAdditional" />
 					<field id="lecm-stmeditor:staticRolesList">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
@@ -937,6 +943,35 @@
                         </control>
                     </field>
                 </appearance>
+			</form>
+			<form id="statemachine-editor-edit-statemachine-simple">
+				<field-visibility>
+					<show id="lecm-stmeditor:simple-document" force="true"/>
+					<show id="lecm-stmeditor:archiveFolder" force="true"/>
+					<show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
+					<show id="lecm-stmeditor:notArmCreate" force="true"/>
+					<show id="lecm-stmeditor:staticRolesList" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:simple-document">
+						<control>
+							<control-param name="attentionMessageKey">statetemachine.lifecicle.attention</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:archiveFolderAdditional" />
+					<field id="lecm-stmeditor:staticRolesList">
+						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+							<control-param name="itemType">lecm-stmeditor:static-role-item</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="height">200</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="createFormId">simple-document</control-param>
+							<control-param name="editFormId">simple-document</control-param>
+							<control-param name="datagridFormId">simple-document-datagrid</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
             <form id="statemachine-editor-edit-statemachine-finalize-to-unit">
                 <field-visibility>
@@ -1041,6 +1076,31 @@
 					<field id="lecm-stmeditor:isCreator" />
 				</appearance>
 			</form>
+			<form id="simple-document">
+				<field-visibility>
+					<show id="lecm-stmeditor:role-assoc" force="true"/>
+					<show id="lecm-stmeditor:static-role-privilege" force="true"/>
+					<show id="lecm-stmeditor:isCreator" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:role-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:static-role-privilege">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/privileges</control-param>
+							<control-param name="withEmpty">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:isCreator" />
+				</appearance>
+			</form>
 		</forms>
 	</config>
 
@@ -1062,6 +1122,44 @@
 					</field>
 					<field id="lecm-stmeditor:isCreator" />
 				</appearance>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-stmeditor:role-assoc" force="true"/>
+					<show id="lecm-stmeditor:isCreator" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="simple-document">
+				<field-visibility>
+					<show id="lecm-stmeditor:role-assoc" force="true"/>
+					<show id="lecm-stmeditor:static-role-privilege" force="true"/>
+					<show id="lecm-stmeditor:isCreator" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-stmeditor:role-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:static-role-privilege">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">/lecm/statemachine/editor/privileges</control-param>
+							<control-param name="withEmpty">false</control-param>
+						</control>
+					</field>
+					<field id="lecm-stmeditor:isCreator" />
+				</appearance>
+			</form>
+			<form id="simple-document-datagrid">
+				<field-visibility>
+					<show id="lecm-stmeditor:role-assoc" force="true"/>
+					<show id="lecm-stmeditor:static-role-privilege" force="true"/>
+					<show id="lecm-stmeditor:isCreator" force="true"/>
+				</field-visibility>
 			</form>
 		</forms>
 	</config>

@@ -94,14 +94,19 @@
 		var statemachineEditor = new LogicECM.module.StatemachineEditor("statemachine");
         statemachineEditor.setStatemachineId("${page.url.args.statemachineId}");
         statemachineEditor.setMessages(${messages});
+
+        var menu = new LogicECM.module.StatemachineEditor.Menu("menu-buttons");
+        menu.setMessages(${messages});
+        menu.setEditor(statemachineEditor);
+        statemachineEditor.setInitCallback(function() {
+            menu.draw();
+        });
+
         statemachineEditor.draw();
         if (<#if page.url.args.default??>true<#else>false</#if>) {
             statemachineEditor._restoreDefaultStatemachine();
         }
-        var menu = new LogicECM.module.StatemachineEditor.Menu("menu-buttons");
-        menu.setMessages(${messages});
-        menu.setEditor(statemachineEditor);
-        menu.draw();
+
 
         // Resizer
         var Dom = YAHOO.util.Dom;

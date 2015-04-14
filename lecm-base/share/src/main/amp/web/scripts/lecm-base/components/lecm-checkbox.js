@@ -24,6 +24,7 @@ LogicECM.module = LogicECM.module || {};
     {
         LogicECM.module.Checkbox.superclass.constructor.call(this, "LogicECM.module.Checkbox", fieldHtmlId, ["container", "datasource"]);
         this.checkboxId = fieldHtmlId + "-entry";
+        this.attentionId = fieldHtmlId + "-attention";
 	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 	    YAHOO.Bubbling.on("disableRelatedFields", this.onDisableRelatedFields, this);
@@ -42,10 +43,13 @@ LogicECM.module = LogicECM.module || {};
                             defaultValueDataSource: null,
                             disabledFieldsIfSelect: null,
                             disabledFieldsIfNotSelect: null,
-	                        fireMandatoryByChange: false
+	                        fireMandatoryByChange: false,
+                            attentionMessage: null
                         },
                 checkboxId: null,
+                attentionId: null,
                 checkbox: null,
+                initValue: null,
                 setOptions: function(obj)
                 {
                     LogicECM.module.Checkbox.superclass.setOptions.call(this, obj);
@@ -64,12 +68,16 @@ LogicECM.module = LogicECM.module || {};
                         }
                         YAHOO.util.Event.addListener(this.checkbox, "click", this.onChange, this, true);
                     }
+                    this.initValue = this.checkbox.checked;
                     this.onChange();
+                    Dom.setStyle(this.attentionId, 'display', 'none');
+
 	                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
                 },
                 loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
                     if (this.options.defaultValue != null) {
                         this.checkbox.checked = this.options.defaultValue == "true";
+                        this.initValue = this.checkbox.checked;
                     } else {
                         if (this.options.defaultValueDataSource != null) {
                             var me = this;
@@ -82,6 +90,7 @@ LogicECM.module = LogicECM.module || {};
                                                 if (oResults != null && oResults.checked != null) {
 	                                                me.options.defaultValue = oResults.checked;
                                                     me.checkbox.checked = oResults.checked == "true";
+                                                    me.initValue = me.checkbox.checked;
                                                 }
                                             }
                                         },
@@ -93,6 +102,12 @@ LogicECM.module = LogicECM.module || {};
                 onChange: function() {
                     var el = Dom.get(this.id);
 	                el.value = this.checkbox.checked;
+                    if (this.checkbox.checked != this.initValue && this.options.attentionMessage != null) {
+                        Dom.get(this.attentionId).innerHTML = this.options.attentionMessage;
+                        Dom.setStyle(this.attentionId, 'display', 'block');
+                    } else {
+                        Dom.setStyle(this.attentionId, 'display', 'none');
+                    }
                     this.checkDisableRelatedFields();
                     YAHOO.Bubbling.fire("formValueChanged", {
                        eventGroup: this,

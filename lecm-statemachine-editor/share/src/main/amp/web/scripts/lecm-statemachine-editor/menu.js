@@ -83,14 +83,16 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
                     onclick: {
                         fn: this.editor.formFieldsOnStatus,
                         scope: this.editor
-                    }
+                    },
+                    disabled: this.editor.isSimple
                 },
                 {
                     text: Alfresco.util.message("btn.attachments_access_permissions"),
                     onclick: {
                         fn: this.editor.attachmentCategoryPermissions,
                         scope: this.editor
-                    }
+                    },
+                    disabled: this.editor.isSimple
                 }
             ]);
 
@@ -117,19 +119,22 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             var onClickNewStatusMenuButton = function(e) {
                 this.editor._createStatus();
             };
-            Alfresco.util.createYUIButton(this, "new-status-menu-button", onClickNewStatusMenuButton, {});
+            var newStatusButton = Alfresco.util.createYUIButton(this, "new-status-menu-button", onClickNewStatusMenuButton, {});
+            newStatusButton.set('disabled', this.editor.isSimple);
 
             //End Status
             var onClickEndEventMenuButton = function(e) {
                 this.editor._createEndEvent();
             };
-            Alfresco.util.createYUIButton(this, "end-event-menu-button", onClickEndEventMenuButton, {});
+            var endEventButton = Alfresco.util.createYUIButton(this, "end-event-menu-button", onClickEndEventMenuButton, {});
+            endEventButton.set('disabled', this.editor.isSimple);
 
             //New AlternativeStart
             var onClickAlternativeStartMenuButton = function(e) {
                 this.editor.editAlternativeStarts();
             };
-            Alfresco.util.createYUIButton(this, "alternative-start-menu-button", onClickAlternativeStartMenuButton, {});
+            var altStartButton = Alfresco.util.createYUIButton(this, "alternative-start-menu-button", onClickAlternativeStartMenuButton, {});
+            altStartButton.set('disabled', this.editor.isSimple);
 
             //Export
             var onButtonClick5 = function (e) {

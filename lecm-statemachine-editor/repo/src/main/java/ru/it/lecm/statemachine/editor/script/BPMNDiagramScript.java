@@ -22,6 +22,7 @@ import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.bean.LecmWorkflowDeployer;
+import ru.it.lecm.statemachine.editor.SimpleDocumentDeployer;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 import ru.it.lecm.statemachine.editor.export.XMLExporter;
 
@@ -29,8 +30,8 @@ import javax.xml.stream.XMLStreamException;
 import java.io.*;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: PMelnikov
@@ -49,6 +50,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
     private LecmBasePropertiesService propertiesService;
 	private ProcessEngine activitiProcessEngine;
 	private StateMachineServiceBean statemachineService;
+	private SimpleDocumentDeployer simpleDocumentDeployer;
 
 	public void setStatemachineService(StateMachineServiceBean statemachineService) {
 		this.statemachineService = statemachineService;
@@ -126,18 +128,40 @@ public class BPMNDiagramScript extends AbstractWebScript {
 					ContentWriter writer = contentService.getWriter(file, ContentModel.PROP_CONTENT, true);
 					writer.setMimetype("text/xml");
 					ByteArrayInputStream is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
-					logger.debug("Деплой процесса для "+machineName);
-		            WorkflowDeployment wd = lecmWorkflowDeployer.deploy("activiti", "text/xml", is, fileName);
-		            String lastVersion = wd.getDefinition().getVersion();
-		            is.close();
-		            is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
 					writer.putContent(is);
 					is.close();
-		            //Создаем версию
-		            NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
-		            NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_VERSIONS);
-		            NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, machineName);
-		            
+
+
+					//Рвзворачиваем и создаем версию
+					NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
+					NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_VERSIONS);
+					NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, machineName);
+
+					Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
+					long newVersion = 0;
+					if (lastVersionProp != null) {
+						try {
+							newVersion = Long.valueOf(lastVersionProp.toString());
+						} catch (NumberFormatException e) {}
+					}
+					newVersion++;
+					String lastVersion = Long.toString(newVersion);
+
+					Boolean isSimpleDocument = false;
+					Object isSimpleDocumentObj = nodeService.getProperty(statemachine, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT);
+					if (isSimpleDocumentObj != null) {
+						isSimpleDocument = (Boolean) isSimpleDocumentObj;
+					}
+
+					if (!isSimpleDocument) {
+						logger.debug("Деплой процесса для " + machineName);
+						is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+						WorkflowDeployment wd = lecmWorkflowDeployer.deploy("activiti", "text/xml", is, fileName);
+						is.close();
+					} else {
+						simpleDocumentDeployer.appendType(statemachine);
+					}
+
 		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, "version_" + lastVersion);
 					if (version == null) {
 						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
@@ -273,4 +297,9 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		BpmnModel model = activitiProcessEngine.getRepositoryService().getBpmnModel(definitionId);
 		return new BPMNGraphGenerator().generateByModel(model, history);
 	}
+
+	public void setSimpleDocumentDeployer(SimpleDocumentDeployer simpleDocumentDeployer) {
+		this.simpleDocumentDeployer = simpleDocumentDeployer;
+	}
+
 }

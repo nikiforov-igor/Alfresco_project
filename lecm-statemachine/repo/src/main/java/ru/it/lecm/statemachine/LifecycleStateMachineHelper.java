@@ -86,8 +86,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * 1. Запускать пользовательские процессы из машины состояний
  * 2. Передавать сигнал о завершении пользовательского процесс машине состояний с передачей переменных из пользовательского процесса
  */
-public class StateMachineHelper implements StateMachineServiceBean, InitializingBean {
-	private final static Logger logger = LoggerFactory.getLogger(StateMachineHelper.class);
+public class LifecycleStateMachineHelper implements StateMachineServiceBean, InitializingBean {
+	private final static Logger logger = LoggerFactory.getLogger(LifecycleStateMachineHelper.class);
 
     public static String ACTIVITI_PREFIX = "activiti$";
 
@@ -572,6 +572,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * Используется в
      * 		- машинах состояний (Исходящие, ОРД, НД, Внутренний, Входящий - теперь используется альтернативный метод)
      */
+    @Override
     public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName, Task task) {
     	boolean result = false;
     	if (task != null) {
@@ -701,6 +702,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * 		- document-type.settings.get.js
      * 		- documents.summary.get.js
      */
+    @Override
     public Set<String> getArchiveFolders(String documentType) {
         HashSet<String> folders = new HashSet<String>();
         String statmachene = documentType.replace(":", "_");
@@ -1655,6 +1657,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * 		- state.fields.get.js
      */
     //TODO По возможности "выпилить" или объединить с isEditableField
+    @Override
     public StateFields getStateFields(NodeRef document) {
     	String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         if (executionId != null) {
@@ -1676,6 +1679,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * 		- /lecm/statemachine/api/field/editable - editable.field.get.js
      */
     //TODO Выпилить ?? или объединить с getStateFields
+    @Override
     public boolean isEditableField(NodeRef document, String field) {
     	String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
     	field = field.replace(":", "_");
@@ -1895,6 +1899,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * 		- evaluator.lib.js
      * 		- permission-utils.js -> has.statemachine.get.js-(/lecm/documents/hasStatemachine)
      */
+    @Override
     public boolean hasStatemachine(NodeRef document) {
         Object statemachineId = serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         return statemachineId != null;
@@ -1907,6 +1912,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     * Используется в
     * 		- service.information.post.json.js
     */
+    @Override
     public String getStatemachineVersion(NodeRef document) {
         String result = null;
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
@@ -1986,6 +1992,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * Используется в
      * 		- групповых операциях
      */
+    @Override
     public void executeTransitionAction(NodeRef document, String actionName) {
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String taskId = getCurrentTaskId(statemachineId);
@@ -2032,6 +2039,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * Используется в
      * 		- StatemachineWebScriptBean - getTasks, getDocumentsTasks
      */
+    @Override
     public List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
         if (tasks == null || tasks.isEmpty() || assigneesEmployees == null || assigneesEmployees.isEmpty()) {
             return new ArrayList<WorkflowTask>();
@@ -2085,6 +2093,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 	 * 		- documentsTasks.get.js
 	 * 		- StatemachineWebScriptBean - getDocumentsTasks
 	 */
+    @Override
     public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
         List<WorkflowTask> result = new ArrayList<WorkflowTask>();
 
@@ -2172,6 +2181,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * 		- StatemachineWebScriptBean - getDocumentsTasks
      * 		- helper - getDocumentsWithActiveTasks, getDocumentsTasks
      */
+    @Override
     public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
         NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
         List<ChildAssociationRef> childAssocs = serviceRegistry.getNodeService().getChildAssocs(wfPackage);
@@ -2192,6 +2202,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * 		- ActionsScript
      * 		- StatemachineWebScriptBean - getTasks
      */
+    @Override
     public List<WorkflowTask> getDocumentTasks(NodeRef documentRef, boolean activeTasks) {
         boolean hasPermission = lecmPermissionService.hasPermission(LecmPermissionService.PERM_WF_TASK_LIST, documentRef);
         if (!hasPermission) {

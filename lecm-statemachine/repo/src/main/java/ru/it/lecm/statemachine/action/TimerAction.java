@@ -3,7 +3,7 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.bpmn.model.BaseElement;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.expression.TransitionExpression;
 
 import java.util.ArrayList;
@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 public class TimerAction extends StateMachineAction implements PostponedAction {
 
@@ -60,7 +59,7 @@ public class TimerAction extends StateMachineAction implements PostponedAction {
     }
 
     @Override
-    public void postponedExecution(String taskId, StateMachineHelper helper) {
+    public void postponedExecution(String taskId, LifecycleStateMachineHelper helper) {
         final String stateMachineExecutionId = helper.getCurrentExecutionId(taskId);
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             @Override

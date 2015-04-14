@@ -76,7 +76,7 @@
     <bean id="logicECMBPMNParser" class="ru.it.lecm.statemachine.listener.LogicECMBPMNParser" depends-on="stateMachineHandler">
         <!--  <property name="stateMachineHandler" ref="stateMachineHandler"/> -->
         <property name="documentService" ref="documentService"/>
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
 	</bean>
 
 	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.statemachine.LecmWorkflowDeployerImpl">
@@ -88,10 +88,10 @@
 		<property name="authenticationContext" ref="authenticationContext" />
 		<property name="transactionService" ref="transactionService" />
         <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
 	</bean>
 
-	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StateMachineHelper">
+	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
@@ -105,7 +105,22 @@
         <property name="statemachenesCache" ref="statemachines.cache" />
 	</bean>
 
-    <bean name="statemachines.cache" class="org.alfresco.repo.cache.TransactionalCache">
+	<bean id="simpleStateMachineHelper" class="ru.it.lecm.statemachine.SimpleStatemachineHelper">
+		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+	</bean>
+
+	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StatemachineHelperProxy">
+		<property name="simpleStatemachineHelper" ref="simpleStateMachineHelper" />
+		<property name="lifecycleStateMachineHelper" ref="lifecycleStateMachineHelper" />
+		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
+		<property name="namespaceService" ref="namespaceService" />
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+
+	<bean name="statemachines.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="statemachine.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.statemachines"/>
     </bean>
@@ -140,7 +155,7 @@
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="documentService" ref="documentService"/>
         <property name="permissionService" ref="permissionService"/>
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
     </bean>
 
     <bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"
@@ -155,7 +170,7 @@
 	    <property name="documentService" ref="documentService"/>
         <property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
         <property name="transactionService" ref="transactionService"/>
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
     </bean>
 
 	<bean id="workflowUtil" class="ru.it.lecm.statemachine.util.DocumentWorkflowUtil" >
@@ -174,6 +189,8 @@
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="stateMachineHelper" ref="stateMachineHelper"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
+		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
+		<property name="documentService" ref="documentService"/>
 	</bean>
 
     <bean id="stateMachineDeleteDocumentPolicy" class="ru.it.lecm.statemachine.policy.StateMachineDeleteDocumentPolicy" init-method="init">
@@ -187,7 +204,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.actions.get"
@@ -200,13 +217,13 @@
 		<property name="groupActionsService" ref="groupActionsService"/>
         <property name="authService" ref="authenticationService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
-		<property name="stateMachineService" ref="stateMachineHelper"/>
+		<property name="stateMachineService" ref="lifecycleStateMachineHelper"/>
     </bean>
 
     <bean id="statemachine.endWorkflowEvent"
           class="ru.it.lecm.statemachine.action.listener.EndWorkflowEvent">
         <!-- <property name="documentService" ref="documentService"/> -->
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
     </bean>
 
 	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl" />
@@ -331,4 +348,11 @@
 			</list>
 		</property>
 	</bean>-->
+
+	<bean id="simpleDocumentRegistry" class="ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl" parent="baseBean">
+		<property name="repositoryHelper" ref="repositoryHelper" />
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+		<property name="permissionService" ref="permissionService"/>
+	</bean>
+
 </beans>

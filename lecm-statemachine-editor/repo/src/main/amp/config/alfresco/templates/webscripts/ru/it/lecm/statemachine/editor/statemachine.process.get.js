@@ -69,6 +69,8 @@ if (statemachineId != null && statemachineId != '') {
 	model.machineNodeRef = machine.nodeRef.toString();
 	model.packageNodeRef = statuses.nodeRef.toString();
 	model.versionsNodeRef = version.nodeRef.toString();
+    var isSimple = machine.properties["lecm-stmeditor:simple-document"];
+	model.isSimple = isSimple != null && isSimple;
 
     var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
     var dictionaryService = ctx.getBean("dictionaryService");

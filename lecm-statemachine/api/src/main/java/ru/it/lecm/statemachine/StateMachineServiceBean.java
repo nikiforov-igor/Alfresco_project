@@ -1,7 +1,9 @@
 package ru.it.lecm.statemachine;
 
+import org.activiti.engine.task.Task;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,20 @@ public interface StateMachineServiceBean {
 	 * @return
 	 */
 	boolean isStarter(String type);
+
+	/*
+     * Используется в
+     * 		- StatemachineWebScriptBean - getDocumentsTasks
+     * 		- helper - getDocumentsWithActiveTasks, getDocumentsTasks
+     */
+	NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes);
+
+	/*
+         * Используется в
+         * 		- ActionsScript
+         * 		- StatemachineWebScriptBean - getTasks
+         */
+	List<WorkflowTask> getDocumentTasks(NodeRef documentRef, boolean activeTasks);
 
 	/**
 	 * Возвращает можно ли создавать документ определенного типа из АРМ-а
@@ -100,6 +116,59 @@ public interface StateMachineServiceBean {
 
 	boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority);
 
+	/*
+     * Используется в
+     * 		- state.fields.get.js
+     */
+    //TODO По возможности "выпилить" или объединить с isEditableField
+	StateFields getStateFields(NodeRef document);
+
+	/*
+         * Используется в
+         * 		- /lecm/statemachine/api/field/editable - editable.field.get.js
+         */
+    //TODO Выпилить ?? или объединить с getStateFields
+	boolean isEditableField(NodeRef document, String field);
+
+	/*
+     * Проверка наличия машины состояний у документа
+     * @param document
+     * @return
+     *
+     * Используется в
+     * 		- evaluator.lib.js
+     * 		- permission-utils.js -> has.statemachine.get.js-(/lecm/documents/hasStatemachine)
+     */
+	boolean hasStatemachine(NodeRef document);
+
+	/*
+        * @param document
+        * @return Версия машины состояний для документа
+        *
+        * Используется в
+        * 		- service.information.post.json.js
+        */
+	String getStatemachineVersion(NodeRef document);
+
+	/*
+             * Используется в
+             * 		- групповых операциях
+             */
+	void executeTransitionAction(NodeRef document, String actionName);
+
+	/*
+         * Используется в
+         * 		- StatemachineWebScriptBean - getTasks, getDocumentsTasks
+         */
+	List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees);
+
+	/*
+	 * Используется в
+	 * 		- documentsTasks.get.js
+	 * 		- StatemachineWebScriptBean - getDocumentsTasks
+	 */
+	List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser);
+
 	/**
 	 * Останавливает процесс по его Id
 	 *
@@ -114,6 +183,25 @@ public interface StateMachineServiceBean {
 	void sendSignal(String executionId);
 
 	boolean isServiceWorkflow(WorkflowInstance workflow);
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+     * Аналог grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName)
+     * но получает инфу о таске из 4-го параметра
+     *
+     * Используется в
+     * 		- машинах состояний (Исходящие, ОРД, НД, Внутренний, Входящий - теперь используется альтернативный метод)
+     */
+	boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName, Task task);
+
+	/*
+     * Используется в
+     * 		- additional.docs.byType.get.js
+     * 		- contracts.settings.get.js
+     * 		- document-type.settings.get.js
+     * 		- documents.summary.get.js
+     */
+	Set<String> getArchiveFolders(String documentType);
 
 	void resetStateMachene();
 

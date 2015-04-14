@@ -48,6 +48,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 		packageNodeRef: null,
 		machineNodeRef: null,
 		versionsNodeRef: null,
+		isSimple: null,
 		isFinalizeToUnit: null,
 		layout: null,
 		startActionsMenu: null,
@@ -60,9 +61,14 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 		versionsForm: null,
 		listeners: [],
 		options:{},
+		initCallback: null,
 
 		setStatemachineId: function(statemachineId) {
 			this.statemachineId = statemachineId;
+		},
+
+		setInitCallback: function setInitCallback_function(callback) {
+			this.initCallback = callback;
 		},
 
 		draw: function () {
@@ -71,6 +77,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			el.innerHTML = "";
 
 			this._showSplash();
+			var me = this;
 			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/process?statemachineId=" + this.statemachineId;
 			var callback = {
 				success:function (oResponse) {
@@ -80,6 +87,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 					oResponse.argument.parent.machineNodeRef = oResults.machineNodeRef;
 					oResponse.argument.parent.versionsNodeRef = oResults.versionsNodeRef;
 					oResponse.argument.parent.isFinalizeToUnit = oResults.isFinalizeToUnit;
+					oResponse.argument.parent.isSimple = oResults.isSimple;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
 					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=diagram";
 					sUrl = YAHOO.lang.substitute(sUrl, {
@@ -87,6 +95,10 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 					});
 					var diagram = document.getElementById("diagram");
 					diagram.src = sUrl;
+					if (me.initCallback && typeof(me.initCallback) === "function") {
+						me.initCallback.call();
+						me.initCallback = null;
+					}
 				},
 				argument:{
 					parent: this
@@ -182,7 +194,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			td.className = "lecm_tbl_td_" + parity;
 			td.style.textAlign = "center";
 
-			if (model.type == "start") {
+			if (model.type == "start" && !this.isSimple) {
 				var edit = document.createElement("a");
 				edit.className = "lecm_tbl_action_edit";
 				edit.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -197,7 +209,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			}
 
 
-			if (model.type == "default" || model.type == "normal") {
+			if ((model.type == "default" || model.type == "normal") && !this.isSimple) {
 				var edit = document.createElement("a");
 				edit.className = "lecm_tbl_action_edit";
 				edit.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -212,7 +224,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				}
 			}
 
-			if (model.type == "normal") {
+			if (model.type == "normal"  && !this.isSimple) {
 				var span = document.createElement("span");
 				span.innerHTML = "&nbsp;&nbsp;";
 				td.appendChild(span);
@@ -599,7 +611,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				itemId: this.machineNodeRef,
 				mode: "edit",
 				submitType: "json",
-				formId: this.isFinalizeToUnit ? "statemachine-editor-edit-statemachine-finalize-to-unit" : "statemachine-editor-edit-statemachine"
+				formId: this.isFinalizeToUnit ? "statemachine-editor-edit-statemachine-finalize-to-unit" : (this.isSimple ? "statemachine-editor-edit-statemachine-simple" : "statemachine-editor-edit-statemachine")
 			});
 
 			this._showSplash();
@@ -614,6 +626,12 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 						this._setFormDialogTitle(p_form, p_dialog, Alfresco.util.message("title.statemachine_properties"));
 					},
 					scope: this
+				},
+				onSuccess:{
+					fn:function (response) {
+						document.location.reload(true);
+					},
+					scope:this
 				}
 			}).show();
 

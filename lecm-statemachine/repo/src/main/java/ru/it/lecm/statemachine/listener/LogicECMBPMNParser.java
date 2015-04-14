@@ -1,28 +1,15 @@
 package ru.it.lecm.statemachine.listener;
 
 import org.activiti.bpmn.model.BaseElement;
-import org.activiti.bpmn.model.StartEvent;
-import org.activiti.bpmn.model.EndEvent;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.bpmn.model.ScriptTask;
-import org.activiti.bpmn.model.ServiceTask;
 import org.activiti.bpmn.model.Process;
-import org.activiti.bpmn.model.ExtensionElement;
-import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.parse.BpmnParseHandler;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.impl.pvm.process.ScopeImpl;
-import org.activiti.engine.impl.pvm.process.TransitionImpl;
 
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.action.listener.EndWorkflowEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collection;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class LogicECMBPMNParser implements BpmnParseHandler  {
 //	private static StateMachineHandler stateMachineHandler;
 	private static DocumentService documentService;
-	private static StateMachineHelper stateMachineHelper;
+	private static LifecycleStateMachineHelper stateMachineHelper;
 	
 	private static final transient Logger logger = LoggerFactory.getLogger(LogicECMBPMNParser.class);
 	
@@ -48,7 +35,7 @@ public class LogicECMBPMNParser implements BpmnParseHandler  {
 	public void setDocumentService(DocumentService documentService) {
 		LogicECMBPMNParser.documentService = documentService;
     }
-	public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+	public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
 

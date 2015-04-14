@@ -58,6 +58,9 @@
 			<#if field.control.params.disabledFieldsIfSelect??>
 				disabledFieldsIfSelect: "${field.control.params.disabledFieldsIfSelect}".split(","),
 			</#if>
+			<#if field.control.params.attentionMessageKey??>
+                attentionMessage: "${msg(field.control.params.attentionMessageKey)}",
+			</#if>
 			<#if field.control.params.disabledFieldsIfNotSelect??>
 				disabledFieldsIfNotSelect: "${field.control.params.disabledFieldsIfNotSelect}".split(","),
 			</#if>
@@ -103,6 +106,7 @@
 					   <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
 					   <#if field.control.params.style??>style="${field.control.params.style}"</#if> />
 				<label for="${fieldHtmlId}-entry" class="checkbox">${field.label?html}</label>
+				<div id="${fieldHtmlId}-attention" class="error"></div>
 			</div>
 		</div>
 	</div>

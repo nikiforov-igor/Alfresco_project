@@ -9,20 +9,16 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.StateMachineEventCategory;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.TransitionResponse;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -35,7 +31,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 	private static ServiceRegistry serviceRegistry;
     private static DocumentFrequencyAnalysisService frequencyAnalysisService;
     private static OrgstructureBean orgstructureService;
-    private StateMachineHelper stateMachineHelper;
+    private LifecycleStateMachineHelper stateMachineHelper;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         StartWorkflowScript.orgstructureService = orgstructureService;
@@ -49,7 +45,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 		StartWorkflowScript.serviceRegistry = serviceRegistry;
 	}
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+    public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
 

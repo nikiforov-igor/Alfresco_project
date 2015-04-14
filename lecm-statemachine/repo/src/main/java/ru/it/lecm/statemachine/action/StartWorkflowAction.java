@@ -7,14 +7,10 @@ import org.activiti.bpmn.model.BaseElement;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
-import ru.it.lecm.statemachine.StateMachineEventCategory;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
-
-import java.util.Collections;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +73,7 @@ public class StartWorkflowAction extends StateMachineAction implements Postponed
                     @Override
                     public Object doWork() throws Exception {
                         String currentTaskId = getStateMachineHelper().getCurrentTaskId(stateMachineExecutionId);
-                        String executionId = getStateMachineHelper().startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
+                        String executionId = getStateMachineHelper().startUserWorkflowProcessing(currentTaskId.replace(LifecycleStateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
                         getStateMachineHelper().setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
                         //Обозначить запуск процесса в документе
                         WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, workflowId, currentTaskId, actionName, id, eventName);
@@ -92,7 +88,7 @@ public class StartWorkflowAction extends StateMachineAction implements Postponed
 	}
 
     @Override
-    public void postponedExecution(String taskId, final StateMachineHelper helper) {
+    public void postponedExecution(String taskId, final LifecycleStateMachineHelper helper) {
 //        final String stateMachineExecutionId = helper.getCurrentExecutionId(taskId);
 //        final NodeRef document = helper.get StatemachineDocument(stateMachineExecutionId);
 //        final String actionName = StateMachineActionsImpl.getActionNameByClass(StartWorkflowAction.class);
@@ -105,7 +101,7 @@ public class StartWorkflowAction extends StateMachineAction implements Postponed
 //            @Override
 //            public Object doWork() throws Exception {
 //                String currentTaskId = helper.getCurrentTaskId(stateMachineExecutionId);
-//                String executionId = helper.startUserWorkflowProcessing(currentTaskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
+//                String executionId = helper.startUserWorkflowProcessing(currentTaskId.replace(LifecycleStateMachineHelper.ACTIVITI_PREFIX, ""), workflowId, assignee);
 //                getStateMachineHelper().setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
 //                //Обозначить запуск процесса в документе
 //                WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, workflowId, currentTaskId, actionName, id, ExecutionListener.EVENTNAME_START);

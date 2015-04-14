@@ -79,6 +79,9 @@
                     <#if field.control.params.overrideSortingWith??>
                         overrideSortingWith: ${field.control.params.overrideSortingWith?string},
                     </#if>
+                    <#if field.control.params.editFormId??>
+                        editForm: "${field.control.params.editFormId?string}",
+                    </#if>
                     showExtendSearchBlock: false,
                         actions: [
                             <#if field.control.params.actionsDescriptor?? >

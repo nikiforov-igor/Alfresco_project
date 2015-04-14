@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.bean.WorkflowListBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskBean;
 import ru.it.lecm.statemachine.bean.WorkflowTaskListBean;
@@ -26,7 +27,7 @@ import java.util.*;
 public class StatemachineWebScriptBean extends BaseWebScript {
 
 	private OrgstructureBean orgstructureService;
-	private StateMachineHelper stateMachineHelper;
+	private StateMachineServiceBean stateMachineHelper;
 
 	private final static Logger logger = LoggerFactory.getLogger(StatemachineWebScriptBean.class);
 
@@ -34,7 +35,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 		this.orgstructureService = orgstructureService;
 	}
 
-	public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
 		this.stateMachineHelper = stateMachineHelper;
 	}
 

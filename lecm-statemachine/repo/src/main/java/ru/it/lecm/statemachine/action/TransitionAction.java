@@ -2,10 +2,6 @@ package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.bpmn.model.BaseElement;
-import org.alfresco.service.cmr.repository.NodeRef;
-
-import ru.it.lecm.statemachine.StateMachineHelper;
-import ru.it.lecm.statemachine.StatemachineActionConstants;
 
 import java.util.ArrayList;
 import java.util.List;

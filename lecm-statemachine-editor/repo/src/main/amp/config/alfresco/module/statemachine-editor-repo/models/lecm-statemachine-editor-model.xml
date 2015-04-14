@@ -70,6 +70,10 @@
 		            <type>d:boolean</type>
 		            <default>false</default>
 	            </property>
+				<property name="lecm-stmeditor:simple-document">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecm-stmeditor:documentsFolder">
@@ -119,6 +123,10 @@
                     <type>d:boolean</type>
                     <mandatory>true</mandatory>
                 </property>
+				<property name="lecm-stmeditor:static-role-privilege">
+					<type>d:text</type>
+					<default></default>
+				</property>
             </properties>
             <mandatory-aspects>
                 <aspect>lecm-stmeditor:business-role</aspect>

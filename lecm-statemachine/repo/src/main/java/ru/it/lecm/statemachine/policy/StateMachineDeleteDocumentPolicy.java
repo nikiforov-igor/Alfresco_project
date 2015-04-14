@@ -7,7 +7,8 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 /**
@@ -20,13 +21,13 @@ public class StateMachineDeleteDocumentPolicy implements NodeServicePolicies.Bef
 	private PolicyComponent policyComponent;
 
 	final static Logger logger = LoggerFactory.getLogger(StateMachineDeleteDocumentPolicy.class);
-    private StateMachineHelper stateMachineHelper;
+    private StateMachineServiceBean stateMachineHelper;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
 	}
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
 

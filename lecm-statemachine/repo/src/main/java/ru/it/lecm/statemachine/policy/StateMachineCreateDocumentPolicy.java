@@ -20,24 +20,25 @@ import org.alfresco.service.cmr.workflow.WorkflowDefinition;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.logging.Level;
+
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
+import ru.it.lecm.statemachine.SimpleDocumentRegistryItem;
 
 /**
  * User: PMelnikov
@@ -53,13 +54,19 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     private TransactionListener transactionListener;
     private BusinessJournalService businessJournalService;
 	private DocumentConnectionService documentConnectionService;
+    private SimpleDocumentRegistryImpl simpleDocumentRegistry;
+    private DocumentService documentService;
 
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
 	}
 
+    public void setSimpleDocumentRegistry(SimpleDocumentRegistryImpl simpleDocumentRegistry) {
+        this.simpleDocumentRegistry = simpleDocumentRegistry;
+    }
+
     final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
-    private StateMachineHelper stateMachineHelper;
+    private StateMachineServiceBean stateMachineHelper;
 
     public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
         this.threadPoolExecutor = threadPoolExecutor;
@@ -77,6 +84,10 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         this.businessJournalService = businessJournalService;
     }
 
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
+
     public final void init() {
 		logger.debug( "Installing Policy ...");
 
@@ -90,25 +101,58 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	public void onCreateNode(final ChildAssociationRef childAssocRef) {
         final NodeRef docRef = childAssocRef.getChildRef();
         final NodeService nodeService = serviceRegistry.getNodeService();
-        //append status aspect to new document
-        HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
-        aspectProps.put(StatemachineModel.PROP_STATUS, "Новый");
-        nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
+        final QName type = nodeService.getType(docRef);
+
         serviceRegistry.getPermissionService().setPermission(docRef, "ORGUNIT", "Read", false);
-        // Ensure that the transaction listener is bound to the transaction
-        AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
-        // Add the pending action to the transaction resource
-        List<NodeRef> pendingActions = AlfrescoTransactionSupport
-                .getResource(STM_POST_TRANSACTION_PENDING_DOCS);
-        if (pendingActions == null) {
-            pendingActions = new ArrayList<NodeRef>();
-            AlfrescoTransactionSupport.bindResource(STM_POST_TRANSACTION_PENDING_DOCS, pendingActions);
-        }
+        if (!simpleDocumentRegistry.isSimpleDocument(type)) {
+            //append status aspect to new document
+            HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
+            aspectProps.put(StatemachineModel.PROP_STATUS, "Новый");
+            nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
 
-        // Check that action has only been added to the list once
-        if (!pendingActions.contains(docRef)) {
-            pendingActions.add(docRef);
+            // Ensure that the transaction listener is bound to the transaction
+            AlfrescoTransactionSupport.bindListener(this.transactionListener);
+
+            // Add the pending action to the transaction resource
+            List<NodeRef> pendingActions = AlfrescoTransactionSupport
+                    .getResource(STM_POST_TRANSACTION_PENDING_DOCS);
+            if (pendingActions == null) {
+                pendingActions = new ArrayList<NodeRef>();
+                AlfrescoTransactionSupport.bindResource(STM_POST_TRANSACTION_PENDING_DOCS, pendingActions);
+            }
+
+            // Check that action has only been added to the list once
+            if (!pendingActions.contains(docRef)) {
+                pendingActions.add(docRef);
+            }
+        } else {
+            try {
+                SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
+
+                String additionalPath = documentService.execStringExpression(docRef, registryItem.getAdditionalPath());
+                String[] splitPath = additionalPath.split("/");
+                List<String> path = new ArrayList<>();
+                for (String pathItem : splitPath) {
+                    if (!"".equals(pathItem)) {
+                        path.add(pathItem);
+                    }
+                }
+                NodeRef storeRef;
+                if (path.isEmpty()) {
+                    storeRef = registryItem.getTypeRoot();
+                } else {
+                    storeRef = simpleDocumentRegistry.getFolder(registryItem.getTypeRoot(), path);
+                    if (storeRef == null) {
+                        storeRef = simpleDocumentRegistry.createPath(registryItem.getTypeRoot(), path);
+                    }
+                }
+                String name = nodeService.getProperty(docRef, ContentModel.PROP_NAME).toString();
+                QName storeQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+                nodeService.moveNode(docRef, storeRef, ContentModel.ASSOC_CONTAINS, storeQName);
+            } catch (WriteTransactionNeededException e) {
+                logger.error("Can not move document " + docRef);
+            }
         }
 
 		//Вынесено создание папки "Связи"
@@ -119,7 +163,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 		}
     }
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
 

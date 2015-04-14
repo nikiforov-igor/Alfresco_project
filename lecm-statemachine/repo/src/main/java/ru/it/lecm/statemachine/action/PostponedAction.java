@@ -1,6 +1,6 @@
 package ru.it.lecm.statemachine.action;
 
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 
 /**
  * User: pmelnikov
@@ -9,5 +9,5 @@ import ru.it.lecm.statemachine.StateMachineHelper;
  */
 public interface PostponedAction {
 
-    public void postponedExecution(String taskId, StateMachineHelper helper);
+    public void postponedExecution(String taskId, LifecycleStateMachineHelper helper);
 }

@@ -5,15 +5,13 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,7 +26,7 @@ import java.util.List;
 public class EndWorkflowEvent implements ExecutionListener {
 
     private static DocumentService documentService;
-    private StateMachineHelper stateMachineHelper;
+    private LifecycleStateMachineHelper stateMachineHelper;
 
     @Override
     public void notify(final DelegateExecution delegateExecution) throws Exception {
@@ -38,7 +36,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                 if (AuthenticationUtil.getFullyAuthenticatedUser() == null) {
                     return null;
                 }
-                String executionId = StateMachineHelper.ACTIVITI_PREFIX + delegateExecution.getId();
+                String executionId = LifecycleStateMachineHelper.ACTIVITI_PREFIX + delegateExecution.getId();
                 //TODO Здесь выполняется получение документа из переменных процесса по executionId
                 NodeRef document = stateMachineHelper.getStatemachineDocument(executionId);
                 if (document == null) {
@@ -122,7 +120,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                         }
 
                         //stateMachineHelper.nextTransition(taskId);
-                        stateMachineHelper.sendMessage(messageName, statemachineId.replace(StateMachineHelper.ACTIVITI_PREFIX,""));
+                        stateMachineHelper.sendMessage(messageName, statemachineId.replace(LifecycleStateMachineHelper.ACTIVITI_PREFIX,""));
                     }
 	                utils.removeWorkflow(document, executionId);
                 }
@@ -138,7 +136,7 @@ public class EndWorkflowEvent implements ExecutionListener {
     	this.documentService = documentService;
     }
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+    public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
 }

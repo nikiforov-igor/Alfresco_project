@@ -17,7 +17,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
@@ -40,7 +40,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 	private ThreadPoolExecutor threadPoolExecutor;
 	private TransactionListener transactionListener;
 	private TransactionService transactionService;
-	private StateMachineHelper stateMachineHelper;
+	private LifecycleStateMachineHelper stateMachineHelper;
 	final static Logger logger = LoggerFactory.getLogger(WaitForDocumentChangeListenerPolicy.class);
 
 	private static final String WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER = "wait_for_document_change_transaction_listener";
@@ -108,7 +108,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 		this.transactionService = transactionService;
 	}
 
-	public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+	public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
 		this.stateMachineHelper = stateMachineHelper;
 	}
 

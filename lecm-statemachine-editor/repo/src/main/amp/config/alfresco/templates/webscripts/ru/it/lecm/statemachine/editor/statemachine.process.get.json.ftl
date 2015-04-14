@@ -4,6 +4,7 @@
     machineNodeRef: "${machineNodeRef}",
     versionsNodeRef: "${versionsNodeRef}",
     isFinalizeToUnit: ${isFinalizeToUnit?string},
+    isSimple: ${isSimple?string},
     statuses: [
     <#list statuses as status>
         <@printStatus status />

@@ -56,7 +56,7 @@ public class LecmWorkflowDeployerImpl extends AbstractLifecycleBean implements L
 	private AuthenticationContext authenticationContext;
 	private TransactionService transactionService;
 	private ServiceRegistry serviceRegistry;
-	private StateMachineHelper stateMachineHelper;
+	private LifecycleStateMachineHelper stateMachineHelper;
 
 	private static final String ENGINE_ID = "activiti";
 	private static final String MIMETYPE = "text/xml";
@@ -172,7 +172,7 @@ public class LecmWorkflowDeployerImpl extends AbstractLifecycleBean implements L
         this.serviceRegistry = serviceRegistry;
     }
 
-    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+    public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
     
