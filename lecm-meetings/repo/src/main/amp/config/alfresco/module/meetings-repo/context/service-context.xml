@@ -5,9 +5,11 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 	<bean id="meetings.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary,
-	        ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
-	        ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+		  depends-on="dictionaryBootstrap
+				,ru.it.lecm.dictionary.dictionary-repo.dictionary
+				,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap
+				,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap
+				,documents.dictionaries.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-meetings-dictionaries-model.xml</value>
