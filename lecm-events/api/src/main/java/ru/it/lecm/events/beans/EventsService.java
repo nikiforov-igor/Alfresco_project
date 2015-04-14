@@ -93,5 +93,5 @@ public interface EventsService {
 
     String wrapAsEventLink(NodeRef documentRef);
 
-    void onAfterUpdate(NodeRef event);
+    void onAfterUpdate(NodeRef event, String updateRepeated);
 }

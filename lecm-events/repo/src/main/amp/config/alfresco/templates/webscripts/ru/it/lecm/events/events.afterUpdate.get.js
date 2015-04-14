@@ -1,1 +1,1 @@
-events.onAfterUpdate(args['eventNodeRef']);
+events.onAfterUpdate(args['eventNodeRef'], args['updateRepeated']);

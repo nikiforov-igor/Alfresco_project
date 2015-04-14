@@ -460,5 +460,18 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
             return null;
         }
     }
-        
+
+	@Override
+	public NodeRef getTable(NodeRef document, QName tableType) {
+		NodeRef tableDataRootFolder = getRootFolder(document);
+		if (tableDataRootFolder != null) {
+			Set<QName> typeSet = new HashSet<>(1);
+			typeSet.add(tableType);
+			List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(tableDataRootFolder, typeSet);
+			if (childAssocs != null && childAssocs.size() == 1) {
+				return childAssocs.get(0).getChildRef();
+			}
+		}
+		return null;
+	}
 }

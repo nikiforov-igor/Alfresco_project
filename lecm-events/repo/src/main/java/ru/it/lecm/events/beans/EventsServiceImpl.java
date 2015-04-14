@@ -26,10 +26,7 @@ import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -116,6 +113,32 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                             NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
                             if (rowEmployee != null) {
                                 results.add(rowEmployee);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
+    public List<NodeRef> getEventResources(NodeRef event) {
+        List<NodeRef> results = new ArrayList<>();
+
+        NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
+        if (tableDataRootFolder != null) {
+            Set<QName> typeSet = new HashSet<>(1);
+            typeSet.add(EventsService.TYPE_EVENT_RESOURCES_TABLE);
+            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(tableDataRootFolder, typeSet);
+            if (childAssocs != null && childAssocs.size() == 1) {
+                NodeRef table = childAssocs.get(0).getChildRef();
+                if (table != null) {
+                    List<NodeRef> rows = documentTableService.getTableDataRows(table);
+                    if (rows != null) {
+                        for (NodeRef row : rows) {
+                            NodeRef rowResource = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_RESOURCES_TABLE_RESOURCE, null, ASSOCIATION_TYPE.TARGET);
+                            if (rowResource != null) {
+                                results.add(rowResource);
                             }
                         }
                     }
@@ -340,23 +363,39 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         return findNodeByAssociationRef(event, ASSOC_EVENT_INITIATOR, null, ASSOCIATION_TYPE.TARGET);
     }
 
+    public NodeRef getResourcesTable(NodeRef event) {
+        return documentTableService.getTable(event, TYPE_EVENT_RESOURCES_TABLE);
+    }
+
+    public NodeRef getMemberTable(NodeRef event) {
+        return documentTableService.getTable(event, TYPE_EVENT_MEMBERS_TABLE);
+    }
+
+    public NodeRef getResourceTableRow(NodeRef event, NodeRef employee) {
+        NodeRef table = getResourcesTable(event);
+        if (table != null) {
+            List<NodeRef> rows = documentTableService.getTableDataRows(table);
+            if (rows != null) {
+                for (NodeRef row : rows) {
+                    NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_RESOURCES_TABLE_RESOURCE, null, ASSOCIATION_TYPE.TARGET);
+                    if (rowEmployee.equals(employee)) {
+                        return row;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public NodeRef getMemberTableRow(NodeRef event, NodeRef employee) {
-        NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
-        if (tableDataRootFolder != null) {
-            Set<QName> typeSet = new HashSet<>(1);
-            typeSet.add(EventsService.TYPE_EVENT_MEMBERS_TABLE);
-            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(tableDataRootFolder, typeSet);
-            if (childAssocs != null && childAssocs.size() == 1) {
-                NodeRef table = childAssocs.get(0).getChildRef();
-                if (table != null) {
-                    List<NodeRef> rows = documentTableService.getTableDataRows(table);
-                    if (rows != null) {
-                        for (NodeRef row : rows) {
-                            NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
-                            if (rowEmployee.equals(employee)) {
-                                return row;
-                            }
-                        }
+        NodeRef table = getMemberTable(event);
+        if (table != null) {
+            List<NodeRef> rows = documentTableService.getTableDataRows(table);
+            if (rows != null) {
+                for (NodeRef row : rows) {
+                    NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
+                    if (rowEmployee.equals(employee)) {
+                        return row;
                     }
                 }
             }
@@ -379,12 +418,17 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), EVENT_LINK_URL);
     }
 
-    public void onAfterUpdate(NodeRef event) {
+    public void onAfterUpdate(NodeRef event, String updateRepeated) {
         updateMembers(event);
         sendNotificationsToInvitedMembers(event);
+
+        Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
+        if (repeatable != null && repeatable && updateRepeated != null) {
+            updateRepeatedEvents(event, updateRepeated);
+        }
     }
 
-    public void updateMembers(NodeRef event) {
+    private void updateMembers(NodeRef event) {
         List<NodeRef> newMembers = getEventMembers(event);
         List<NodeRef> oldMembers = findNodesByAssociationRef(event, ASSOC_EVENT_OLD_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
 
@@ -439,7 +483,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         nodeService.setAssociations(event, EventsService.ASSOC_EVENT_OLD_MEMBERS, getEventMembers(event));
     }
 
-    public void sendNotificationsToInvitedMembers(NodeRef event) {
+    private void sendNotificationsToInvitedMembers(NodeRef event) {
         List<NodeRef> invitedMembers = getEventInvitedMembers(event);
         for (NodeRef representative : invitedMembers) {
             String email = (String) nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_EMAIL);
@@ -516,5 +560,108 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 }
             }
         }
+    }
+
+    private void updateRepeatedEvents(NodeRef event, String updateRepeated) {
+        List<NodeRef> allRepeatedEvents = findNodesByAssociationRef(event, ASSOC_EVENT_REPEATED_EVENTS, TYPE_EVENT, ASSOCIATION_TYPE.TARGET);
+        if (allRepeatedEvents != null) {
+            for (NodeRef repeatedEvent: allRepeatedEvents) {
+                Date eventFromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+                Date repeatedEventFromDate = (Date) nodeService.getProperty(repeatedEvent, EventsService.PROP_EVENT_FROM_DATE);
+
+                if ("ALL".equals(updateRepeated)) {
+                    updateRepeatedEvent(event, repeatedEvent);
+                } else if ("ALL_NEXT".equals(updateRepeated) && eventFromDate.before(repeatedEventFromDate)) {
+                    updateRepeatedEvent(event, repeatedEvent);
+                } else if ("ALL_PREV".equals(updateRepeated) && eventFromDate.after(repeatedEventFromDate)) {
+                    updateRepeatedEvent(event, repeatedEvent);
+                }
+            }
+        }
+    }
+
+    private void updateRepeatedEvent(NodeRef event, NodeRef repeatedEvent) {
+        // копируем свойства
+        Map<QName, Serializable> oldProperties = nodeService.getProperties(event);
+        Map<QName, Serializable> newProperties = nodeService.getProperties(repeatedEvent);
+        List<QName> propertiesToCopy = new ArrayList<>();
+
+        propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
+        propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+
+        propertiesToCopy.add(PROP_EVENT_ALL_DAY);
+
+        Calendar calOldFrom = Calendar.getInstance();
+        calOldFrom.setTime((Date) oldProperties.get(PROP_EVENT_FROM_DATE));
+        Calendar calNewFrom = Calendar.getInstance();
+        calNewFrom.setTime((Date) newProperties.get(PROP_EVENT_FROM_DATE));
+        calNewFrom.set(Calendar.HOUR_OF_DAY, calOldFrom.get(Calendar.HOUR_OF_DAY));
+        calNewFrom.set(Calendar.MINUTE, calOldFrom.get(Calendar.MINUTE));
+        newProperties.put(PROP_EVENT_FROM_DATE, calNewFrom.getTime());
+
+        Calendar calOldTo = Calendar.getInstance();
+        calOldTo.setTime((Date) oldProperties.get(PROP_EVENT_TO_DATE));
+        Calendar calNewTo = Calendar.getInstance();
+        calNewTo.setTime((Date) newProperties.get(PROP_EVENT_TO_DATE));
+        calNewTo.set(Calendar.HOUR_OF_DAY, calOldTo.get(Calendar.HOUR_OF_DAY));
+        calNewTo.set(Calendar.MINUTE, calOldTo.get(Calendar.MINUTE));
+        newProperties.put(PROP_EVENT_TO_DATE, calNewTo.getTime());
+
+        for (QName propName : propertiesToCopy) {
+            newProperties.put(propName, oldProperties.get(propName));
+        }
+        nodeService.setProperties(repeatedEvent, newProperties);
+
+        //Копируем ассоциации
+        List<QName> assocsToCopy = new ArrayList<>();
+        assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
+        assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
+        assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+        for (QName assocQName : assocsToCopy) {
+            List<NodeRef> targets = findNodesByAssociationRef(event, assocQName, null, ASSOCIATION_TYPE.TARGET);
+            nodeService.setAssociations(repeatedEvent, assocQName, targets);
+        }
+
+        //Обновляем участников
+        List<NodeRef> eventMembers = getEventMembers(event);
+        List<NodeRef> repeatedEventMembers = getEventMembers(repeatedEvent);
+        for(NodeRef member: eventMembers) {
+            if (!repeatedEventMembers.contains(member)) {
+                nodeService.createAssociation(repeatedEvent, member, ASSOC_EVENT_TEMP_MEMBERS);
+            }
+        }
+        NodeRef membersTable = getMemberTable(repeatedEvent);
+        if (membersTable != null) {
+            for(NodeRef member: repeatedEventMembers) {
+                if (!eventMembers.contains(member)) {
+                    NodeRef memberTableRow = getMemberTableRow(repeatedEvent, member);
+                    if (memberTableRow != null) {
+                        nodeService.removeChild(membersTable, memberTableRow);
+                    }
+                }
+            }
+        }
+
+        //Обновляем ресурсы
+        List<NodeRef> eventResources = getEventResources(event);
+        List<NodeRef> repeatedEventResources = getEventResources(repeatedEvent);
+        for(NodeRef resource: eventResources) {
+            if (!repeatedEventResources.contains(resource)) {
+                nodeService.createAssociation(repeatedEvent, resource, ASSOC_EVENT_TEMP_RESOURCES);
+            }
+        }
+        NodeRef resourcesTable = getResourcesTable(repeatedEvent);
+        if (resourcesTable != null) {
+            for(NodeRef resource: repeatedEventResources) {
+                if (!eventResources.contains(resource)) {
+                    NodeRef resourceTableRow = getResourceTableRow(repeatedEvent, resource);
+                    if (resourceTableRow != null) {
+                        nodeService.removeChild(resourcesTable, resourceTableRow);
+                    }
+                }
+            }
+        }
+
+        onAfterUpdate(repeatedEvent, null);
     }
 }

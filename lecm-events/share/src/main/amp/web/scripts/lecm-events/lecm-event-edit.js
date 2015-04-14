@@ -16,25 +16,49 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.Edit.prototype, {
 		onFormSubmitSuccess: function (response) {
-			var nodeRef = response.json.persistedObject;
+			var repeatable = Dom.get(this.runtimeForm.formId)["prop_lecm-events_repeatable"];
+			if (repeatable.value == "true") {
+				var updateRepeatableFormId = this.id + "-update-repeated-form";
+				var dialog = Alfresco.util.createYUIPanel(updateRepeatableFormId,
+					{
+						width: "50em",
+						close: false
+					});
+				Alfresco.util.createYUIButton(this, "update-repeated-form-ok", this.onUpdateEvent);
+				Dom.setStyle(updateRepeatableFormId, "display", "block");
+				dialog.show();
 
+				this._hideSplash();
+			} else {
+				this.onUpdateEvent();
+			}
+		},
+
+		onUpdateEvent: function() {
+			var radio = document.getElementsByName('events-update-repeated');
+			var updateRepeatedValue = "THIS";
+			for(var i = 0; i < radio.length; i++){
+				if(radio[i].checked){
+					updateRepeatedValue = radio[i].value;
+				}
+			}
+
+			var me = this;
 			Alfresco.util.Ajax.request(
 				{
 					url: Alfresco.constants.PROXY_URI + "lecm/events/afterUpdate",
 					dataObj: {
-						eventNodeRef: nodeRef
+						eventNodeRef: this.options.nodeRef,
+						updateRepeated: updateRepeatedValue
 					},
-					//filter out non relevant events for current view
-					successCallback:
-					{
+					successCallback: {
 						fn: function (o) {
-							window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + nodeRef;
+							window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + me.options.nodeRef;
 						},
 						scope: this
 					},
 					failureMessage: this.msg("load.fail")
 				});
-
 		},
 
 		onBeforeFormRuntimeInit: function(layer, args) {

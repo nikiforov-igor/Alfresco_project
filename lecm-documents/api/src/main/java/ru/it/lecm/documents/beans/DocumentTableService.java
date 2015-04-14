@@ -171,4 +171,6 @@ public interface DocumentTableService {
      */
     public String moveTableRowDown(NodeRef tableRow);
 
+	public NodeRef getTable(NodeRef document, QName tableType);
+
 }

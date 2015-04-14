@@ -29,11 +29,11 @@
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
                     <!-- Дата начала периода -->
-                    <show id="lecm-events:repeatable-start-period"/>
+                    <!--<show id="lecm-events:repeatable-start-period"/>-->
                     <!-- Дата окончания периода -->
-                    <show id="lecm-events:repeatable-end-period"/>
+                    <!--<show id="lecm-events:repeatable-end-period"/>-->
                     <!-- Правила -->
-                    <show id="lecm-events:repeatable-rule"/>
+                    <!--<show id="lecm-events:repeatable-rule"/>-->
                     <!-- Участники -->
                     <show id="lecm-events-ts:members-assoc"/>
                     <!-- Приглашённые -->
@@ -55,14 +55,15 @@
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-events:repeatable">
-                        <constraint-handlers>
-                            <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
-                        </constraint-handlers>
-                    </field>
-                    <field id="lecm-events:repeatable-rule">
-                        <control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />
-                    </field>
+                    <!--<field id="lecm-events:repeatable">-->
+                        <!--<constraint-handlers>-->
+                            <!--<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>-->
+                        <!--</constraint-handlers>-->
+                        <!--<control template="/org/alfresco/components/form/controls/hidden.ftl"/>-->
+                    <!--</field>-->
+                    <!--<field id="lecm-events:repeatable-rule">-->
+                        <!--<control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />-->
+                    <!--</field>-->
                     <field id="lecm-events-ts:members-assoc">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="isTableSortable">false</control-param>

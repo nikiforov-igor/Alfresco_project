@@ -35,5 +35,25 @@
 			<div id="${el}-body" class="document-metadata"></div>
 			<div id="${el}-preview" class="document-preview body"></div>
 		</div>
+
+		<#assign  updateRepeatedFormId = el + "-update-repeated-form"/>
+		<div id="${updateRepeatedFormId}" class="yui-panel hidden1">
+			<div id="${updateRepeatedFormId}-head" class="hd">${msg("logicecm.view")}</div>
+			<div id="${updateRepeatedFormId}-body" class="bd">
+				<div id="${updateRepeatedFormId}-content">
+					<input type="radio" name="events-update-repeated" value="THIS" checked> ${msg("label.events.update.repeated.this")}<br/>
+					<input type="radio" name="events-update-repeated" value="ALL"> ${msg("label.events.update.repeated.all")}<br/>
+					<input type="radio" name="events-update-repeated" value="ALL_NEXT"> ${msg("label.events.update.repeated.all_nex")}<br/>
+					<input type="radio" name="events-update-repeated" value="ALL_PREV"> ${msg("label.events.update.repeated.all_prev")}<br/>
+				</div>
+				<div class="bdft">
+                   <span id="${updateRepeatedFormId}-ok" class="yui-button yui-push-button">
+                       <span class="first-child">
+                           <button type="button" tabindex="0">${msg("button.ok")}</button>
+                       </span>
+                   </span>
+				</div>
+			</div>
+		</div>
 	</@>
 </@>

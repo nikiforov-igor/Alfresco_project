@@ -189,12 +189,13 @@ public class EventsWebScriptBean extends BaseWebScript {
         return wrapperLink(node.getNodeRef().toString(), description, EventsService.EVENT_LINK_URL);
     }
 
-    public void onAfterUpdate(String event) {
+    public void onAfterUpdate(String event, String updateRepeated) {
         ParameterCheck.mandatory("event", event);
+        ParameterCheck.mandatory("updateRepeated", updateRepeated);
 
         NodeRef eventRef = new NodeRef(event);
         if (this.nodeService.exists(eventRef)) {
-            eventService.onAfterUpdate(eventRef);
+            eventService.onAfterUpdate(eventRef, updateRepeated);
         }
     }
 }
