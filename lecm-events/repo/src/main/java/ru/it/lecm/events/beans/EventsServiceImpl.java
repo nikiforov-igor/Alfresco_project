@@ -1,15 +1,19 @@
 package ru.it.lecm.events.beans;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
@@ -18,6 +22,14 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
+import javax.activation.DataSource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -28,6 +40,8 @@ import java.util.*;
  * Time: 14:44
  */
 public class EventsServiceImpl extends BaseBean implements EventsService {
+    private final static Logger logger = LoggerFactory.getLogger(EventsServiceImpl.class);
+
     private DictionaryBean dictionaryBean;
     private OrgstructureBean orgstructureBean;
     private SearchService searchService;
@@ -36,9 +50,16 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     private LecmPermissionService lecmPermissionService;
     private NotificationsService notificationsService;
 
+    private TemplateService templateService;
+    private JavaMailSender mailService;
+    private ContentService contentService;
+    private String defaultFromEmail;
+
     final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
     final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+    private static final String INVITED_MEMBERS_UPDATE_EVENT_MESSAGE_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/events/invited-members-update-event-message-content.ftl";
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
@@ -50,6 +71,22 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
+    }
+
+    public void setTemplateService(TemplateService templateService) {
+        this.templateService = templateService;
+    }
+
+    public void setMailService(JavaMailSender mailService) {
+        this.mailService = mailService;
+    }
+
+    public void setDefaultFromEmail(String defaultFromEmail) {
+        this.defaultFromEmail = defaultFromEmail;
+    }
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
     }
 
     @Override
@@ -75,7 +112,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 if (table != null) {
                     List<NodeRef> rows = documentTableService.getTableDataRows(table);
                     if (rows != null) {
-                        for (NodeRef row: rows) {
+                        for (NodeRef row : rows) {
                             NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
                             if (rowEmployee != null) {
                                 results.add(rowEmployee);
@@ -314,7 +351,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 if (table != null) {
                     List<NodeRef> rows = documentTableService.getTableDataRows(table);
                     if (rows != null) {
-                        for (NodeRef row: rows) {
+                        for (NodeRef row : rows) {
                             NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
                             if (rowEmployee.equals(employee)) {
                                 return row;
@@ -343,13 +380,18 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     public void onAfterUpdate(NodeRef event) {
+        updateMembers(event);
+        sendNotificationsToInvitedMembers(event);
+    }
+
+    public void updateMembers(NodeRef event) {
         List<NodeRef> newMembers = getEventMembers(event);
         List<NodeRef> oldMembers = findNodesByAssociationRef(event, ASSOC_EVENT_OLD_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
 
         List<NodeRef> oldAndNewMembers = new ArrayList<>();
         List<NodeRef> onlyOldMembers = new ArrayList<>();
         List<NodeRef> onlyNewMembers;
-        for (NodeRef oldMember: oldMembers) {
+        for (NodeRef oldMember : oldMembers) {
             if (newMembers.contains(oldMember)) {
                 oldAndNewMembers.add(oldMember);
             } else {
@@ -366,14 +408,14 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             String author = AuthenticationUtil.getSystemUserName();
             String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
 
-            for (NodeRef member: oldAndNewMembers) {
+            for (NodeRef member : oldAndNewMembers) {
                 String text = employeeName + " обновил информацию по мероприятию " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
                 List<NodeRef> recipients = new ArrayList<>();
                 recipients.add(member);
                 notificationsService.sendNotification(author, event, text, recipients, null);
             }
 
-            for (NodeRef member: onlyNewMembers) {
+            for (NodeRef member : onlyNewMembers) {
                 lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
 
                 String text = employeeName + " пригласил вас на мероприятие " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
@@ -382,7 +424,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 notificationsService.sendNotification(author, event, text, recipients, null);
             }
 
-            for (NodeRef member: onlyOldMembers) {
+            for (NodeRef member : onlyOldMembers) {
                 lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, member.getId());
                 lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, member);
 
@@ -395,5 +437,84 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 
         nodeService.setAssociations(event, EventsService.ASSOC_EVENT_OLD_MEMBERS, getEventMembers(event));
+    }
+
+    public void sendNotificationsToInvitedMembers(NodeRef event) {
+        List<NodeRef> invitedMembers = getEventInvitedMembers(event);
+        for (NodeRef representative : invitedMembers) {
+            String email = (String) nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_EMAIL);
+            if (email != null && email.length() > 0) {
+
+                try {
+                    Map<String, Object> mailTemplateModel = new HashMap<>();
+
+                    mailTemplateModel.put("title", nodeService.getProperty(event, EventsService.PROP_EVENT_TITLE));
+                    mailTemplateModel.put("description", nodeService.getProperty(event, EventsService.PROP_EVENT_DESCRIPTION));
+                    NodeRef initiator = getEventInitiator(event);
+                    if (initiator != null) {
+                        mailTemplateModel.put("initiator", nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
+                    }
+
+                    Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+                    Date toDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_TO_DATE);
+                    if (fromDate != null && toDate != null) {
+                        String fromDateString = dateFormat.format(fromDate);
+                        String toDateString = dateFormat.format(toDate);
+                        if (fromDateString.equals(toDateString)) {
+                            mailTemplateModel.put("date", fromDateString);
+                        } else {
+                            mailTemplateModel.put("date", " с " + fromDateString + " по " + toDateString);
+                        }
+                    }
+
+                    NodeRef location = getEventLocation(event);
+                    if (location != null) {
+                        mailTemplateModel.put("location", nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS));
+                    }
+
+                    String mailText = templateService.processTemplate(INVITED_MEMBERS_UPDATE_EVENT_MESSAGE_TEMPLATE, mailTemplateModel);
+
+                    MimeMessage message = mailService.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                    helper.setTo(email);
+                    helper.setFrom(defaultFromEmail);
+                    helper.setSubject("");
+                    helper.setText(mailText, true);
+
+                    List<NodeRef> attachments = new ArrayList<>();
+                    List<AssociationRef> attachmentsAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_TEMP_ATTACHMENTS);
+                    if (attachmentsAssocs != null) {
+                        for (AssociationRef attachment : attachmentsAssocs) {
+                            attachments.add(attachment.getTargetRef());
+                        }
+                    }
+                    for (final NodeRef attachment : attachments) {
+                        String attachmentName = MimeUtility.encodeText((String) nodeService.getProperty(attachment, ContentModel.PROP_NAME), "UTF-8", null);
+                        helper.addAttachment(attachmentName, new DataSource() {
+                            public InputStream getInputStream() throws IOException {
+                                ContentReader reader = contentService.getReader(attachment, ContentModel.PROP_CONTENT);
+                                return reader.getContentInputStream();
+                            }
+
+                            public OutputStream getOutputStream() throws IOException {
+                                throw new IOException("Read-only data");
+                            }
+
+                            public String getContentType() {
+                                return contentService.getReader(attachment, ContentModel.PROP_CONTENT).getMimetype();
+                            }
+
+                            public String getName() {
+                                return nodeService.getProperty(attachment, ContentModel.PROP_NAME).toString();
+                            }
+                        });
+                    }
+
+                    mailService.send(message);
+                } catch (MessagingException | UnsupportedEncodingException e) {
+                    logger.error("Error send mail", e);
+                }
+            }
+        }
     }
 }
