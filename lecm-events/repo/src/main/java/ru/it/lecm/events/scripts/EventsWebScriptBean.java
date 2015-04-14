@@ -188,4 +188,13 @@ public class EventsWebScriptBean extends BaseWebScript {
     public String wrapperEventLink(ScriptNode node, String description) {
         return wrapperLink(node.getNodeRef().toString(), description, EventsService.EVENT_LINK_URL);
     }
+
+    public void onAfterUpdate(String event) {
+        ParameterCheck.mandatory("event", event);
+
+        NodeRef eventRef = new NodeRef(event);
+        if (this.nodeService.exists(eventRef)) {
+            eventService.onAfterUpdate(eventRef);
+        }
+    }
 }

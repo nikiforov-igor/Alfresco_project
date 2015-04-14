@@ -16,7 +16,25 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.Edit.prototype, {
 		onFormSubmitSuccess: function (response) {
-			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + response.json.persistedObject;
+			var nodeRef = response.json.persistedObject;
+
+			Alfresco.util.Ajax.request(
+				{
+					url: Alfresco.constants.PROXY_URI + "lecm/events/afterUpdate",
+					dataObj: {
+						eventNodeRef: nodeRef
+					},
+					//filter out non relevant events for current view
+					successCallback:
+					{
+						fn: function (o) {
+							window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + nodeRef;
+						},
+						scope: this
+					},
+					failureMessage: this.msg("load.fail")
+				});
+
 		},
 
 		onBeforeFormRuntimeInit: function(layer, args) {

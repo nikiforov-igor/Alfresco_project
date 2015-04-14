@@ -1,0 +1,1 @@
+events.onAfterUpdate(args['eventNodeRef']);

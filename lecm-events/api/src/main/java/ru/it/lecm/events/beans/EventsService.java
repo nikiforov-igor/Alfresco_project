@@ -36,6 +36,7 @@ public interface EventsService {
     public static final QName ASSOC_EVENT_TEMP_MEMBERS = QName.createQName(EVENTS_NAMESPACE_URI, "temp-members-assoc");
     public static final QName ASSOC_EVENT_TEMP_RESOURCES = QName.createQName(EVENTS_NAMESPACE_URI, "temp-resources-assoc");
     public static final QName ASSOC_EVENT_REPEATED_EVENTS = QName.createQName(EVENTS_NAMESPACE_URI, "repeated-events-assoc");
+    public static final QName ASSOC_EVENT_OLD_MEMBERS = QName.createQName(EVENTS_NAMESPACE_URI, "old-members-assoc");
 
     public static final QName TYPE_EVENT_LOCATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations");
     public static final QName ASSOC_EVENT_LOCATION_ORGANIZATION = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "locations-organization-assoc");
@@ -91,4 +92,6 @@ public interface EventsService {
     String getCurrentEmployeeMemberStatus(NodeRef event);
 
     String wrapAsEventLink(NodeRef documentRef);
+
+    void onAfterUpdate(NodeRef event);
 }

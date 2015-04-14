@@ -85,6 +85,8 @@
 		<property name="searchService" ref="searchService"/>
 		<property name="workCalendarService" ref="WorkCalendarService"/>
 		<property name="documentTableService" ref="documentTableService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+		<property name="notificationsService" ref="notificationsService"/>
 	</bean>
 
 	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"

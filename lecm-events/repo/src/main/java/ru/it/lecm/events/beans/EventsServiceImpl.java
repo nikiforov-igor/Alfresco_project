@@ -1,5 +1,6 @@
 package ru.it.lecm.events.beans;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -12,7 +13,9 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.text.DateFormat;
@@ -30,11 +33,23 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     private SearchService searchService;
     private IWorkCalendar workCalendarService;
     private DocumentTableService documentTableService;
+    private LecmPermissionService lecmPermissionService;
+    private NotificationsService notificationsService;
 
     final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
     }
 
     @Override
@@ -325,5 +340,60 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     public String wrapAsEventLink(NodeRef documentRef) {
         return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), EVENT_LINK_URL);
+    }
+
+    public void onAfterUpdate(NodeRef event) {
+        List<NodeRef> newMembers = getEventMembers(event);
+        List<NodeRef> oldMembers = findNodesByAssociationRef(event, ASSOC_EVENT_OLD_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+
+        List<NodeRef> oldAndNewMembers = new ArrayList<>();
+        List<NodeRef> onlyOldMembers = new ArrayList<>();
+        List<NodeRef> onlyNewMembers;
+        for (NodeRef oldMember: oldMembers) {
+            if (newMembers.contains(oldMember)) {
+                oldAndNewMembers.add(oldMember);
+            } else {
+                onlyOldMembers.add(oldMember);
+            }
+        }
+
+        newMembers.removeAll(oldAndNewMembers);
+        onlyNewMembers = newMembers;
+
+        NodeRef initiator = getEventInitiator(event);
+        Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+        if (initiator != null && fromDate != null) {
+            String author = AuthenticationUtil.getSystemUserName();
+            String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+
+            for (NodeRef member: oldAndNewMembers) {
+                String text = employeeName + " обновил информацию по мероприятию " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+                List<NodeRef> recipients = new ArrayList<>();
+                recipients.add(member);
+                notificationsService.sendNotification(author, event, text, recipients, null);
+            }
+
+            for (NodeRef member: onlyNewMembers) {
+                lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
+
+                String text = employeeName + " пригласил вас на мероприятие " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+                List<NodeRef> recipients = new ArrayList<>();
+                recipients.add(member);
+                notificationsService.sendNotification(author, event, text, recipients, null);
+            }
+
+            for (NodeRef member: onlyOldMembers) {
+                lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, member.getId());
+                lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, member);
+
+                String text = "Вам не требуется присутствовать на мероприятии " + wrapAsEventLink(event);
+                List<NodeRef> recipients = new ArrayList<>();
+                recipients.add(member);
+                notificationsService.sendNotification(author, event, text, recipients, null, true);
+            }
+        }
+
+
+        nodeService.setAssociations(event, EventsService.ASSOC_EVENT_OLD_MEMBERS, getEventMembers(event));
     }
 }

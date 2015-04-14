@@ -332,9 +332,7 @@ public class EventsPolicy extends BaseBean {
             AlfrescoTransactionSupport.bindResource(EVENTS_TRANSACTION_LISTENER, pendingActions);
         }
 
-        // Check that action has only been added to the list once
-        Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
-        if (repeatable != null && repeatable && !pendingActions.contains(event)) {
+        if (!pendingActions.contains(event)) {
             pendingActions.add(event);
         }
     }
@@ -362,70 +360,90 @@ public class EventsPolicy extends BaseBean {
             if (pendingDocs != null) {
                 while (!pendingDocs.isEmpty()) {
                     final NodeRef event = pendingDocs.remove(0);
-                    final String ruleContent = (String) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_RULE);
-                    final Date startPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
-                    final Date endPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
 
-                    if (ruleContent != null && startPeriod != null && endPeriod != null) {
-                        try {
-                            JSONObject rule = new JSONObject(ruleContent);
-                            String type = rule.getString("type");
-                            JSONArray data = rule.getJSONArray("data");
+                    //Запись стары
+                    final List<NodeRef> members = eventService.getEventMembers(event);
+                    if (members != null) {
+                        transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                            @Override
+                            public Void execute() throws Throwable {
+                                for (NodeRef member: members) {
+                                    nodeService.createAssociation(event, member, EventsService.ASSOC_EVENT_OLD_MEMBERS);
+                                }
 
-                            List<Integer> weekDays = new ArrayList<>();
-                            List<Integer> monthDays = new ArrayList<>();
+                                return null;
+                            }
+                        }, false, true);
+                    }
 
-                            if (type.equals(WEEK_DAYS)) {
-                                for (int i = 0; i < data.length(); i++) {
-                                    if (data.getInt(i) == 7) {
-                                        weekDays.add(Calendar.SUNDAY);
-                                    } else {
-                                        weekDays.add(data.getInt(i) + 1);
+                    //Создание повторных
+                    Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
+                    if (repeatable != null && repeatable) {
+                        final String ruleContent = (String) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_RULE);
+                        final Date startPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
+                        final Date endPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
+
+                        if (ruleContent != null && startPeriod != null && endPeriod != null) {
+                            try {
+                                JSONObject rule = new JSONObject(ruleContent);
+                                String type = rule.getString("type");
+                                JSONArray data = rule.getJSONArray("data");
+
+                                List<Integer> weekDays = new ArrayList<>();
+                                List<Integer> monthDays = new ArrayList<>();
+
+                                if (type.equals(WEEK_DAYS)) {
+                                    for (int i = 0; i < data.length(); i++) {
+                                        if (data.getInt(i) == 7) {
+                                            weekDays.add(Calendar.SUNDAY);
+                                        } else {
+                                            weekDays.add(data.getInt(i) + 1);
+                                        }
+                                    }
+                                } else if (type.equals(MONTH_DAYS)) {
+                                    for (int i = 0; i < data.length(); i++) {
+                                        monthDays.add(data.getInt(i));
                                     }
                                 }
-                            } else if (type.equals(MONTH_DAYS)) {
-                                for (int i = 0; i < data.length(); i++) {
-                                    monthDays.add(data.getInt(i));
-                                }
-                            }
 
-                            final Calendar calStart = Calendar.getInstance();
-                            calStart.setTime(startPeriod);
-                            Calendar calEnd = Calendar.getInstance();
-                            calEnd.setTime(endPeriod);
+                                final Calendar calStart = Calendar.getInstance();
+                                calStart.setTime(startPeriod);
+                                Calendar calEnd = Calendar.getInstance();
+                                calEnd.setTime(endPeriod);
 
-                            while (calStart.before(calEnd)) {
-                                int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
-                                int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
-                                if (weekDays.contains(weekDay) || monthDays.contains(monthDay)) {
+                                while (calStart.before(calEnd)) {
+                                    int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
+                                    int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
+                                    if (weekDays.contains(weekDay) || monthDays.contains(monthDay)) {
 
-                                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-                                        @Override
-                                        public Void execute() throws Throwable {
-                                            QName docType = nodeService.getType(event);
-                                            NodeRef parentRef = nodeService.getPrimaryParent(event).getParentRef();
-                                            QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
-                                            Map<QName, Serializable> properties = copyProperties(event, calStart.getTime());
+                                        transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                            @Override
+                                            public Void execute() throws Throwable {
+                                                QName docType = nodeService.getType(event);
+                                                NodeRef parentRef = nodeService.getPrimaryParent(event).getParentRef();
+                                                QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
+                                                Map<QName, Serializable> properties = copyProperties(event, calStart.getTime());
 
-                                            if (properties != null) {
-                                                // создаем ноду
-                                                ChildAssociationRef createdNodeAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQname, docType, properties);
-                                                copyAssocs(event, createdNodeAssoc.getChildRef());
+                                                if (properties != null) {
+                                                    // создаем ноду
+                                                    ChildAssociationRef createdNodeAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQname, docType, properties);
+                                                    copyAssocs(event, createdNodeAssoc.getChildRef());
 
-                                                nodeService.createAssociation(event, createdNodeAssoc.getChildRef(), EventsService.ASSOC_EVENT_REPEATED_EVENTS);
+                                                    nodeService.createAssociation(event, createdNodeAssoc.getChildRef(), EventsService.ASSOC_EVENT_REPEATED_EVENTS);
 
-                                                documentConnectionService.createConnection(event, createdNodeAssoc.getChildRef(), "hasRepeated", true);
+                                                    documentConnectionService.createConnection(event, createdNodeAssoc.getChildRef(), "hasRepeated", true);
+                                                }
+
+                                                return null;
                                             }
+                                        }, false, true);
+                                    }
 
-                                            return null;
-                                        }
-                                    }, false, true);
+                                    calStart.add(Calendar.DAY_OF_YEAR, 1);
                                 }
-
-                                calStart.add(Calendar.DAY_OF_YEAR, 1);
+                            } catch (JSONException e) {
+                                logger.error("Error parse repeatable rule", e);
                             }
-                        } catch (JSONException e) {
-                            logger.error("Error parse repeatable rule", e);
                         }
                     }
                 }
