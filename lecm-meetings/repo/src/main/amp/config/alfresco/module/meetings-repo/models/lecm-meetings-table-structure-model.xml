@@ -36,7 +36,7 @@
 
     <types>
         <type name="lecm-meetings-ts:item">
-            <title>Пункт повестки</title>
+            <title>Agenda item</title>
             <parent>lecm-document:tableDataRow</parent>
             <properties>
 				<!--Формулировка-->
@@ -126,7 +126,7 @@
             </associations>
         </type>
         <type name="lecm-meetings-ts:itemsTable">
-            <title>Повестка совещания</title>
+            <title>Agenda</title>
             <parent>lecm-document:tableData</parent>
             <overrides>
                 <property name="lecm-document:tableDataRowType">

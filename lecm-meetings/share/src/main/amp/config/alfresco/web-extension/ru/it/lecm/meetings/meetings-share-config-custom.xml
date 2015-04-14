@@ -1,0 +1,360 @@
+<alfresco-config>
+	<!--    <config>
+		<forms>
+			<default-controls>
+				<type name="association:lecm-events-dic:locations" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Места_x0020_проведения_x0020_мероприятий</control-param>
+					<control-param name="plane">true</control-param>
+				</type>
+				<type name="association:lecm-events-dic:resources" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+					<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Ресурсы</control-param>
+					<control-param name="plane">true</control-param>
+				</type>
+			</default-controls>
+		</forms>
+	</config>-->
+	<config>
+		<forms>
+			<dependencies>
+				<js src="/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js"/>
+				<js src="/scripts/lecm-events/events-constraints.js"/>
+				<!--js src="/scripts/lecm-contracts/get-stage-delete-message.js"/-->
+			</dependencies>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-meetings:document">
+		<forms>
+			<form>
+				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-events:title"/>
+					<!-- Весмь день -->
+					<show id="lecm-events:all-day"/>
+					<!-- Дата начала мероприятия -->
+					<show id="lecm-events:from-date"/>
+					<!-- Дата окончания мероприятия -->
+					<show id="lecm-events:to-date"/>
+					<!-- Повторное -->
+					<show id="lecm-events:repeatable"/>
+					<!-- Дата начала периода -->
+					<show id="lecm-events:repeatable-start-period"/>
+					<!-- Дата окончания периода -->
+					<show id="lecm-events:repeatable-end-period"/>
+					<!-- Правила -->
+					<show id="lecm-events:repeatable-rule"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-meetings:secretary-assoc"/>
+					<!-- Участники -->
+					<show id="lecm-events-ts:members-assoc"/>
+					<!-- Приглашённые -->
+					<show id="lecm-events:invited-members-assoc"/>
+					<!-- Место проведения -->
+					<show id="lecm-events:location-assoc"/>
+					<!-- Ресурсы -->
+					<show id="lecm-events-ts:resources-assoc"/>
+					<!-- Инициатор -->
+					<show id="lecm-events:initiator-assoc"/>
+					<!-- Описание -->
+					<show id="lecm-events:description"/>
+					<!-- Тематика -->
+					<show id="lecm-document:subject-assoc"/>
+					
+					<!--Повестка-->
+					<show id="lecm-meetings-ts:items-assoc"/>
+				</field-visibility>
+				<appearance>
+					<set id="common" label-id="label.common"/>
+					<set id="items" label-id="label.items"/>
+					
+					<field id="lecm-events:title" set="common" />
+					<field id="lecm-events:all-day" set="common" >
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<!-- Дата начала мероприятия -->
+					<field id="lecm-events:from-date" set="common"/>
+					<!-- Дата окончания мероприятия -->
+					<field id="lecm-events:to-date" set="common"/>
+					<field id="lecm-events:repeatable" set="common">
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<!-- Дата начала периода -->
+					<field id="lecm-events:repeatable-start-period" set="common"/>
+					<!-- Дата окончания периода -->
+					<field id="lecm-events:repeatable-end-period" set="common"/>
+					<field id="lecm-events:repeatable-rule" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />
+					</field>
+					<!--Председатель-->
+					<field id="lecm-meetings:chairman-assoc" set="common"/>
+					<!--Секретарь-->
+					<field id="lecm-meetings:secretary-assoc" set="common"/>
+					<!--участники-->
+					<field id="lecm-events-ts:members-assoc" set="common">
+						<control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+							<control-param name="isTableSortable">false</control-param>
+							<control-param name="refreshAfterCreate">true</control-param>
+						</control>
+					</field>
+					<!--Приглашенные-->
+					<field id="lecm-events:invited-members-assoc" set="common"/>
+					<!-- Место проведения -->
+					<field id="lecm-events:location-assoc" set="common"/>
+					<!--Ресурсы-->
+					<field id="lecm-events-ts:resources-assoc" set="common">
+						<control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+							<control-param name="isTableSortable">false</control-param>
+							<control-param name="refreshAfterCreate">true</control-param>
+						</control>
+					</field>
+					<!-- Инициатор -->
+					<field id="lecm-events:initiator-assoc" set="common"/>
+					<!-- Описание -->
+					<field id="lecm-events:description" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
+					<!-- Тематика -->
+					<field id="lecm-document:subject-assoc" set="common"/>
+					
+					<!--Закладка "Повестка"-->
+					<field id="lecm-meetings-ts:items-assoc" set="items">
+						<control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+							<control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
+							<control-param name="datagridFormId">items-datagrid</control-param>
+							<control-param name="expandable">false</control-param>
+							<!--<control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
+							<control-param name="isTableSortable">false</control-param>
+							<control-param name="refreshAfterCreate">true</control-param>
+							<!--<control-param name="deleteMessageFunction"></control-param>-->
+							<control-param name="editFormTitleMsg">meeting.item.edit.form.title</control-param>
+							<control-param name="createFormTitleMsg">meeting.item.create.form.title</control-param>
+							<control-param name="viewFormTitleMsg">meeting.item.view.form.title</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<!-- Форма просмотра на главной странице-->
+			<form id="main-page-dashlets">
+				<field-visibility>
+					<show id="viewMetadata"/>
+				</field-visibility>
+				<appearance>
+					<field id="viewMetadata">
+						<control template="/ru/it/lecm/events/controls/event-view-metadata-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+			<!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
+			<form id="document">
+				<field-visibility>
+					<!--Заголовок--> 
+					<show id="lecm-events:title"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-meetings:secretary-assoc"/>
+					<!--Статус-->
+					<show id="lecm-statemachine:status"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-meetings:document">
+		<forms>
+			<form>
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-events:title"/>
+					<!-- Весмь день -->
+					<show id="lecm-events:all-day"/>
+					<!-- Дата начала мероприятия -->
+					<show id="lecm-events:from-date"/>
+					<!-- Дата окончания мероприятия -->
+					<show id="lecm-events:to-date"/>
+					<!-- Повторное -->
+					<show id="lecm-events:repeatable"/>
+					<!-- Дата начала периода -->
+					<show id="lecm-events:repeatable-start-period"/>
+					<!-- Дата окончания периода -->
+					<show id="lecm-events:repeatable-end-period"/>
+					<!-- Правила -->
+					<show id="lecm-events:repeatable-rule"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-meetings:secretary-assoc"/>
+					<!-- Участники -->
+					<show id="lecm-events:temp-members-assoc"/>
+					<!-- Приглашённые -->
+					<show id="lecm-events:invited-members-assoc"/>
+					<!-- Место проведения -->
+					<show id="lecm-events:location-assoc"/>
+					<!-- Ресурсы -->
+					<show id="lecm-events:temp-resources-assoc"/>
+					<!-- Инициатор -->
+					<show id="lecm-events:initiator-assoc"/>
+					<!-- Описание -->
+					<show id="lecm-events:description"/>
+					<!-- Тематика -->
+					<show id="lecm-document:subject-assoc"/>
+					<!--Вложения-->
+					<show id="lecm-document-aspects:attachments-temp-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-events:all-day">
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable">
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-start-period" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-end-period" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-rule" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<!--Председатель-->
+					<field id="lecm-meetings:chairman-assoc"/>
+					<!--Секретарь-->
+					<field id="lecm-meetings:secretary-assoc"/>
+					<field id="lecm-events:location-assoc">
+						<control>
+							<control-param name="childrenDataSource">lecm/events/locations/picker</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:temp-resources-assoc">
+						<control>
+							<control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:initiator-assoc">
+						<control>
+							<control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:description">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
+					<field id="lecm-document-aspects:attachments-temp-assoc" label="Вложения">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
+							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
+							<control-param name="directoryName">Вложения</control-param>
+							<control-param name="suppressRefreshEvent">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="statemachine-editable-fields">
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-events:title"/>
+					<!-- Весмь день -->
+					<show id="lecm-events:all-day"/>
+					<!-- Дата начала мероприятия -->
+					<show id="lecm-events:from-date"/>
+					<!-- Дата окончания мероприятия -->
+					<show id="lecm-events:to-date"/>
+					<!-- Повторное -->
+					<show id="lecm-events:repeatable"/>
+					<!-- Участники -->
+					<show id="lecm-events-ts:members-assoc"/>
+					<!-- Приглашённые -->
+					<show id="lecm-events:invited-members-assoc"/>
+					<!-- Место проведения -->
+					<show id="lecm-events:location-assoc"/>
+					<!-- Ресурсы -->
+					<show id="lecm-events-ts:resources-assoc"/>
+					<!-- Инициатор -->
+					<show id="lecm-events:initiator-assoc"/>
+					<!-- Описание -->
+					<show id="lecm-events:description"/>
+					<!-- Тематика -->
+					<show id="lecm-document:subject-assoc"/>
+					<!--Повестка-->
+					<show id="lecm-meetings-ts:items-assoc"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	
+	<config evaluator="model-type" condition="lecm-meetings-ts:item">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-document:indexTableRow" force="true"/>
+					<show id="lecm-meetings-ts:reporter-assoc"/>
+					<show id="lecm-meetings-ts:coreporter-assoc"/>
+					<show id="lecm-meetings-ts:item-name"/>
+					<show id="lecm-meetings-ts:content"/>
+				</field-visibility>
+				<appearance>
+					
+					<field id="lecm-document:indexTableRow" force="true"/>
+					<field id="lecm-meetings-ts:reporter-assoc"/>
+					<field id="lecm-meetings-ts:coreporter-assoc"/>
+					<field id="lecm-meetings-ts:item-name"/>
+					<field id="lecm-meetings-ts:content">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="items-datagrid">
+				<field-visibility>
+					<show id="lecm-document:indexTableRow" force="true"/>
+					<show id="lecm-meetings-ts:reporter-assoc"/>
+					<show id="lecm-meetings-ts:item-name"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	
+	<config evaluator="node-type" condition="lecm-meetings-ts:item">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-document:indexTableRow" force="true"/>
+					<show id="lecm-meetings-ts:reporter-assoc"/>
+					<show id="lecm-meetings-ts:coreporter-assoc"/>
+					<show id="lecm-meetings-ts:item-name"/>
+					<show id="lecm-meetings-ts:content"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-document:indexTableRow" force="true"/>
+					<field id="lecm-meetings-ts:reporter-assoc"/>
+					<field id="lecm-meetings-ts:coreporter-assoc"/>
+					<field id="lecm-meetings-ts:item-name"/>
+					<field id="lecm-meetings-ts:content">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	
+</alfresco-config>
