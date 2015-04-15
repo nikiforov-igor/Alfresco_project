@@ -639,6 +639,10 @@
                     <type>d:long</type>
                     <mandatory>true</mandatory>
                 </property>
+				<property name="lecm-stmeditor:version-is-simple-document">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
                 <property name="lecm-stmeditor:publishDate">
                     <type>d:datetime</type>
                     <mandatory>true</mandatory>

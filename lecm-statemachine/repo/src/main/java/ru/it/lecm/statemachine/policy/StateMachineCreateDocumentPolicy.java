@@ -23,6 +23,7 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -130,14 +131,17 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             try {
                 SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
 
-                String additionalPath = documentService.execStringExpression(docRef, registryItem.getAdditionalPath());
-                String[] splitPath = additionalPath.split("/");
                 List<String> path = new ArrayList<>();
-                for (String pathItem : splitPath) {
-                    if (!"".equals(pathItem)) {
-                        path.add(pathItem);
+                if (StringUtils.isNotEmpty(registryItem.getAdditionalPath())) {
+                    String additionalPath = documentService.execStringExpression(docRef, registryItem.getAdditionalPath());
+                    String[] splitPath = additionalPath.split("/");
+                    for (String pathItem : splitPath) {
+                        if (!"".equals(pathItem)) {
+                            path.add(pathItem);
+                        }
                     }
                 }
+
                 NodeRef storeRef;
                 if (path.isEmpty()) {
                     storeRef = registryItem.getTypeRoot();

@@ -952,10 +952,14 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    										if("type".equals(rolesListProp.getLocalName())&&"static-role-item".equals(rolesListProp.getTextContent())) {
 			    											isStatic = true;
 			    										}
-			    										if("properties".equals(rolesListProp.getLocalName())&&rolesListProp.getFirstChild()!=null) {
-			    											if("name".equals(rolesListProp.getFirstChild().getFirstChild().getLocalName())&&"isCreator".equals(rolesListProp.getFirstChild().getFirstChild().getTextContent())){
-			    												isCreator = Boolean.parseBoolean(rolesListProp.getFirstChild().getLastChild().getTextContent());
-			    											}
+			    										if("properties".equals(rolesListProp.getLocalName())) {
+                                                            NodeList nl9 = rolesListProp.getChildNodes();
+                                                            for(int s = 0; s < nl9.getLength(); s++) {
+                                                                Node n11 = nl9.item(s);
+                                                                if("name".equals(n11.getFirstChild().getLocalName())&&"isCreator".equals(n11.getFirstChild().getTextContent())){
+                                                                    isCreator = Boolean.parseBoolean(n11.getLastChild().getTextContent());
+                                                                }
+                                                            }
 			    										}
 			    										if("roleAssociations".equals(rolesListProp.getLocalName())&&rolesListProp.getFirstChild()!=null) {
 			    											if("type".equals(rolesListProp.getFirstChild().getFirstChild().getLocalName())&&"role-assoc".equals(rolesListProp.getFirstChild().getFirstChild().getTextContent())){

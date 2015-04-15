@@ -137,15 +137,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 					NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_VERSIONS);
 					NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, machineName);
 
-					Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
-					long newVersion = 0;
-					if (lastVersionProp != null) {
-						try {
-							newVersion = Long.valueOf(lastVersionProp.toString());
-						} catch (NumberFormatException e) {}
-					}
-					newVersion++;
-					String lastVersion = Long.toString(newVersion);
 
 					Boolean isSimpleDocument = false;
 					Object isSimpleDocumentObj = nodeService.getProperty(statemachine, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT);
@@ -153,20 +144,36 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						isSimpleDocument = (Boolean) isSimpleDocumentObj;
 					}
 
+					String lastVersion;
 					if (!isSimpleDocument) {
 						logger.debug("Деплой процесса для " + machineName);
 						is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
 						WorkflowDeployment wd = lecmWorkflowDeployer.deploy("activiti", "text/xml", is, fileName);
+						lastVersion = wd.getDefinition().getVersion();
 						is.close();
 					} else {
 						simpleDocumentDeployer.appendType(statemachine);
+						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
+						long newVersion = 0;
+						if (lastVersionProp != null) {
+							try {
+								newVersion = Long.valueOf(lastVersionProp.toString());
+							} catch (NumberFormatException e) {}
+						}
+						newVersion++;
+						lastVersion = Long.toString(newVersion);
+						//Сохраняем свойсвтва контейнера версий
+						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					}
 
-		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, "version_" + lastVersion);
+					String versionFolderName = "version_" + (isSimpleDocument ? "NA_" + lastVersion : lastVersion);
+
+		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, versionFolderName);
 					if (version == null) {
 						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
-			            props.put(ContentModel.PROP_NAME, "version_" + lastVersion);
+			            props.put(ContentModel.PROP_NAME, versionFolderName);
 			            props.put(StatemachineEditorModel.PROP_VERSION, lastVersion);
+			            props.put(StatemachineEditorModel.PROP_VERSION_IS_SIMPLE_DOCUMENT, isSimpleDocument);
 			            props.put(StatemachineEditorModel.PROP_PUBLISH_DATE, new Date());
 			            if (req.getParameter("comment") != null) {
 			                props.put(StatemachineEditorModel.PROP_PUBLISH_COMMENT, req.getParameter("comment"));
@@ -174,13 +181,14 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						ChildAssociationRef childAssocRef = nodeService.createNode(
 		                    statemachineVersions,
 		                    ContentModel.ASSOC_CONTAINS,
-		                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName("version_" + lastVersion)),
+		                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(versionFolderName)),
 		                    StatemachineEditorModel.TYPE_VERSION,
 		                    props);
 		            	version = childAssocRef.getChildRef();
 					} else {
 						Map<QName, Serializable> props = nodeService.getProperties(version);
 						props.put(StatemachineEditorModel.PROP_VERSION, lastVersion);
+						props.put(StatemachineEditorModel.PROP_VERSION_IS_SIMPLE_DOCUMENT, isSimpleDocument);
 			            props.put(StatemachineEditorModel.PROP_PUBLISH_DATE, new Date());
 			            if (req.getParameter("comment") != null) {
 			                props.put(StatemachineEditorModel.PROP_PUBLISH_COMMENT, req.getParameter("comment"));
@@ -225,9 +233,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		            } catch (org.alfresco.service.cmr.model.FileExistsException e) {
 		            	logger.error("Не удалось скопировать файл", e);
 		            }
-
-		            //Сохраняем свойсвтва контейнера версий
-		            nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 
 		            statemachineService.resetStateMachene();
 		            

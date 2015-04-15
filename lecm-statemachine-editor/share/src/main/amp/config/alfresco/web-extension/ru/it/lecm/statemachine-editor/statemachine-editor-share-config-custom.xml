@@ -1547,11 +1547,13 @@
             <form>
                 <field-visibility>
                     <show id="lecm-stmeditor:version" force="true"/>
+                    <show id="lecm-stmeditor:version-is-simple-document" force="true"/>
                     <show id="lecm-stmeditor:publishDate" force="true"/>
                     <show id="lecm-stmeditor:publishComment" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:version" />
+                    <field id="lecm-stmeditor:version-is-simple-document" />
                     <field id="lecm-stmeditor:publishDate" />
                     <field id="lecm-stmeditor:publishComment" />
                 </appearance>
