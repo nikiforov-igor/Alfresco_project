@@ -151,9 +151,11 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						WorkflowDeployment wd = lecmWorkflowDeployer.deploy("activiti", "text/xml", is, fileName);
 						lastVersion = wd.getDefinition().getVersion();
 						is.close();
+						//Сохраняем свойсвтва контейнера версий
+						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 					} else {
 						simpleDocumentDeployer.appendType(statemachine);
-						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
+						Object lastVersionProp = nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT_LAST_VERSION);
 						long newVersion = 0;
 						if (lastVersionProp != null) {
 							try {
@@ -162,8 +164,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 						}
 						newVersion++;
 						lastVersion = Long.toString(newVersion);
-						//Сохраняем свойсвтва контейнера версий
-						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
+						nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_SIMPLE_DOCUMENT_LAST_VERSION, lastVersion);
 					}
 
 					String versionFolderName = "version_" + (isSimpleDocument ? "NA_" + lastVersion : lastVersion);

@@ -626,8 +626,12 @@
                     <type>d:long</type>
                     <mandatory>true</mandatory>
                 </property>
-            </properties>
-        </type>
+				<property name="lecm-stmeditor:simple-document-last-version">
+					<type>d:long</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
 
         <!-- Version Object -->
         <type name="lecm-stmeditor:versionContainer">

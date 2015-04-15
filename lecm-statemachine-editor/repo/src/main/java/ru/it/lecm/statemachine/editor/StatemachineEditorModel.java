@@ -70,6 +70,7 @@ public class StatemachineEditorModel {
 	public final static QName PROP_STATIC_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "staticRolesList");
 	public final static QName PROP_DYNAMIC_ROLES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "dynamicRolesList");
 	public final static QName PROP_LAST_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "last_version");
+	public final static QName PROP_SIMPLE_DOCUMENT_LAST_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "simple-document-last-version");
 	public final static QName PROP_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "version");
 	public final static QName PROP_VERSION_IS_SIMPLE_DOCUMENT = QName.createQName(STATEMACHINE_EDITOR_URI, "version-is-simple-document");
 	public final static QName PROP_PUBLISH_DATE = QName.createQName(STATEMACHINE_EDITOR_URI, "publishDate");
