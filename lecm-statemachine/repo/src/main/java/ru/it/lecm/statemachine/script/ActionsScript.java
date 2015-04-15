@@ -110,56 +110,46 @@ public class ActionsScript extends DeclarativeWebScript {
         }
 
         NodeRef nodeRef = new NodeRef(documentRef);
-        NodeService nodeService = serviceRegistry.getNodeService();
-        String statemachineId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
-        if (statemachineId != null) {
-            if (req.getParameter("actionId") != null) {
-                String actionId = req.getParameter("actionId");
-                HashMap<String, Object> result = getActions(nodeRef, statemachineId);
-                ArrayList<HashMap<String, Object>> actions = (ArrayList<HashMap<String, Object>>) result.get("actions");
-                HashMap<String, Object> action = null;
-                for (HashMap<String, Object> a : actions) {
-                    if (a.get("actionId").equals(actionId)) {
-                        action = a;
-                        break;
-                    }
+        if (req.getParameter("actionId") != null) {
+            String actionId = req.getParameter("actionId");
+            HashMap<String, Object> result = getActions(nodeRef);
+            ArrayList<HashMap<String, Object>> actions = (ArrayList<HashMap<String, Object>>) result.get("actions");
+            HashMap<String, Object> action = null;
+            for (HashMap<String, Object> a : actions) {
+                if (a.get("actionId").equals(actionId)) {
+                    action = a;
+                    break;
                 }
-                if (action != null) {
-                    HashMap<String, Object> actionResult = new HashMap<String, Object>();
-                    actionResult.put("errors", action.get("errors"));
-                    actionResult.put("doesNotBlock", action.get("doesNotBlock"));
-                    actionResult.put("fields", action.get("fields"));
-                    JSONObject jsonResponse = new JSONObject(actionResult);
-                    HashMap<String, Object> response = new HashMap<String, Object>();
-                    response.put("result", jsonResponse.toString());
-                    return response;
-                } else {
-                    JSONObject jsonResponse = new JSONObject();
-                    HashMap<String, Object> response = new HashMap<String, Object>();
-                    response.put("result", jsonResponse.toString());
-                    return response;
-                }
+            }
+            if (action != null) {
+                HashMap<String, Object> actionResult = new HashMap<String, Object>();
+                actionResult.put("errors", action.get("errors"));
+                actionResult.put("doesNotBlock", action.get("doesNotBlock"));
+                actionResult.put("fields", action.get("fields"));
+                JSONObject jsonResponse = new JSONObject(actionResult);
+                HashMap<String, Object> response = new HashMap<String, Object>();
+                response.put("result", jsonResponse.toString());
+                return response;
             } else {
-                HashMap<String, Object> result = getActions(nodeRef, statemachineId);
-                JSONObject jsonResponse = new JSONObject(result);
+                JSONObject jsonResponse = new JSONObject();
                 HashMap<String, Object> response = new HashMap<String, Object>();
                 response.put("result", jsonResponse.toString());
                 return response;
             }
         } else {
-            JSONObject jsonResponse = new JSONObject();
+            HashMap<String, Object> result = getActions(nodeRef);
+            JSONObject jsonResponse = new JSONObject(result);
             HashMap<String, Object> response = new HashMap<String, Object>();
             response.put("result", jsonResponse.toString());
             return response;
         }
     }
 
-    private HashMap<String, Object> getActions(final NodeRef nodeRef, String statemachineId) {
+    private HashMap<String, Object> getActions(final NodeRef nodeRef) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         ArrayList<HashMap<String, Object>> actionsList = new ArrayList<HashMap<String, Object>>();
         NodeService nodeService = serviceRegistry.getNodeService();
         final WorkflowService workflowService = serviceRegistry.getWorkflowService();
-        List<WorkflowPath> paths = workflowService.getWorkflowPaths(statemachineId);
 
         Map<String, Long> counts = getActionsCounts(nodeRef);
         List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
@@ -189,121 +179,125 @@ public class ActionsScript extends DeclarativeWebScript {
             }
         }
 
-        for (WorkflowPath path : paths) {
-            final String pathId = path.getId();
-            List<WorkflowTask> tasks = org.alfresco.repo.security.authentication.AuthenticationUtil.runAsSystem(new org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
-                @Override
-                public List<WorkflowTask> doWork() throws Exception {
-                    return workflowService.getTasksForWorkflowPath(pathId);
-                }
-            });
+        String statemachineId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
+        if (statemachineId != null) {
+            List<WorkflowPath> paths = workflowService.getWorkflowPaths(statemachineId);
+            for (WorkflowPath path : paths) {
+                final String pathId = path.getId();
+                List<WorkflowTask> tasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+                    @Override
+                    public List<WorkflowTask> doWork() throws Exception {
+                        return workflowService.getTasksForWorkflowPath(pathId);
+                    }
+                });
 
-            for (WorkflowTask task : tasks) {
-                result.put("taskId", task.getId());
-                Map<QName, Serializable> properties = task.getProperties();
-                NodeRef packageRef = (NodeRef) properties.get(WorkflowModel.ASSOC_PACKAGE);
-                NodeRef documentRef = nodeService.getChildAssocs(packageRef).get(0).getChildRef();
+                for (WorkflowTask task : tasks) {
+                    result.put("taskId", task.getId());
+                    Map<QName, Serializable> properties = task.getProperties();
+                    NodeRef packageRef = (NodeRef) properties.get(WorkflowModel.ASSOC_PACKAGE);
+                    NodeRef documentRef = nodeService.getChildAssocs(packageRef).get(0).getChildRef();
 
-                if (hasExecutionPermission) {
+                    if (hasExecutionPermission) {
 
-                    //TODO Сразу передавать нужные параметры
-                    List<StateMachineAction> actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class));
-                    for (StateMachineAction action : actions) {
-                        FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
-                        List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
-                        for (FinishStateWithTransitionAction.NextState state : states) {
-                            ArrayList<String> messages = new ArrayList<String>();
-                            HashSet<String> fields = new HashSet<String>();
-                            boolean hideAction = false;
-                            boolean doesNotBlock = true;
-                            for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
-                                if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                    messages.add(condition.getErrorMessage());
-                                    fields.addAll(condition.getFields());
-                                    hideAction = hideAction || condition.isHideAction();
-                                    doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
-                                }
-                            }
-
-                            Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, state.getVariables().getInput());
-
-                            if (!hideAction) {
-                                Long count = counts.get(state.getActionId());
-                                if (count == null) {
-                                    count = 0L;
+                        //TODO Сразу передавать нужные параметры
+                        List<StateMachineAction> actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class));
+                        for (StateMachineAction action : actions) {
+                            FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
+                            List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
+                            for (FinishStateWithTransitionAction.NextState state : states) {
+                                ArrayList<String> messages = new ArrayList<String>();
+                                HashSet<String> fields = new HashSet<String>();
+                                boolean hideAction = false;
+                                boolean doesNotBlock = true;
+                                for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
+                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
+                                        messages.add(condition.getErrorMessage());
+                                        fields.addAll(condition.getFields());
+                                        hideAction = hideAction || condition.isHideAction();
+                                        doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
+                                    }
                                 }
 
-                                HashMap<String, Object> resultState = new HashMap<String, Object>();
-                                resultState.put("type", "trans");
-                                resultState.put("actionId", state.getActionId());
-                                resultState.put("label", state.getLabel());
-                                resultState.put("workflowId", state.getWorkflowId());
-                                resultState.put("errors", messages);
-                                resultState.put("doesNotBlock", doesNotBlock);
-                                resultState.put("fields", fields);
-                                resultState.put("count", count);
-                                resultState.put("variables", variables);
-                                resultState.put("isForm", state.isForm());
-                                if (state.isForm()) {
-                                    resultState.put("documentType", state.getFormType());
-                                    resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
-                                    resultState.put("connectionType", state.getFormConnection());
-                                    resultState.put("connectionIsSystem", state.isSystemFormConnection());
-                                    resultState.put("connectionIsReverse", state.isReverseFormConnection());
-                                    resultState.put("autoFill", state.isAutoFill());
-                                }
-                                actionsList.add(resultState);
+                                Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, state.getVariables().getInput());
 
+                                if (!hideAction) {
+                                    Long count = counts.get(state.getActionId());
+                                    if (count == null) {
+                                        count = 0L;
+                                    }
+
+                                    HashMap<String, Object> resultState = new HashMap<String, Object>();
+                                    resultState.put("type", "trans");
+                                    resultState.put("actionId", state.getActionId());
+                                    resultState.put("label", state.getLabel());
+                                    resultState.put("workflowId", state.getWorkflowId());
+                                    resultState.put("errors", messages);
+                                    resultState.put("doesNotBlock", doesNotBlock);
+                                    resultState.put("fields", fields);
+                                    resultState.put("count", count);
+                                    resultState.put("variables", variables);
+                                    resultState.put("isForm", state.isForm());
+                                    if (state.isForm()) {
+                                        resultState.put("documentType", state.getFormType());
+                                        resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
+                                        resultState.put("connectionType", state.getFormConnection());
+                                        resultState.put("connectionIsSystem", state.isSystemFormConnection());
+                                        resultState.put("connectionIsReverse", state.isReverseFormConnection());
+                                        resultState.put("autoFill", state.isAutoFill());
+                                    }
+                                    actionsList.add(resultState);
+
+                                }
                             }
                         }
-                    }
 
-                    //TODO getTaskActionsByName сразу передавать нужные параметры
-                    actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class));
-                    for (StateMachineAction action : actions) {
-                        UserWorkflow userWorkflow = (UserWorkflow) action;
-                        List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
-                        for (UserWorkflow.UserWorkflowEntity entity : entities) {
-                            ArrayList<String> messages = new ArrayList<String>();
-                            HashSet<String> fields = new HashSet<String>();
-                            boolean hideAction = false;
-                            boolean doesNotBlock = true;
-                            for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
-                                if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                    messages.add(condition.getErrorMessage());
-                                    fields.addAll(condition.getFields());
-                                    hideAction = hideAction || condition.isHideAction();
-                                    doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
+                        //TODO getTaskActionsByName сразу передавать нужные параметры
+                        actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class));
+                        for (StateMachineAction action : actions) {
+                            UserWorkflow userWorkflow = (UserWorkflow) action;
+                            List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
+                            for (UserWorkflow.UserWorkflowEntity entity : entities) {
+                                ArrayList<String> messages = new ArrayList<String>();
+                                HashSet<String> fields = new HashSet<String>();
+                                boolean hideAction = false;
+                                boolean doesNotBlock = true;
+                                for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
+                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
+                                        messages.add(condition.getErrorMessage());
+                                        fields.addAll(condition.getFields());
+                                        hideAction = hideAction || condition.isHideAction();
+                                        doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
+                                    }
                                 }
-                            }
 
-                            Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
+                                Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
 
-                            if (!hideAction) {
-                                Long count = counts.get(entity.getId());
-                                if (count == null) {
-                                    count = 0L;
+                                if (!hideAction) {
+                                    Long count = counts.get(entity.getId());
+                                    if (count == null) {
+                                        count = 0L;
+                                    }
+                                    HashMap<String, Object> workflow = new HashMap<String, Object>();
+                                    workflow.put("type", "user");
+                                    workflow.put("actionId", entity.getId());
+                                    workflow.put("label", entity.getLabel());
+                                    workflow.put("workflowId", entity.getWorkflowId());
+                                    workflow.put("errors", messages);
+                                    workflow.put("doesNotBlock", doesNotBlock);
+                                    workflow.put("fields", fields);
+                                    workflow.put("count", count);
+                                    workflow.put("variables", variables);
+                                    workflow.put("isForm", false);
+                                    actionsList.add(workflow);
                                 }
-                                HashMap<String, Object> workflow = new HashMap<String, Object>();
-                                workflow.put("type", "user");
-                                workflow.put("actionId", entity.getId());
-                                workflow.put("label", entity.getLabel());
-                                workflow.put("workflowId", entity.getWorkflowId());
-                                workflow.put("errors", messages);
-                                workflow.put("doesNotBlock", doesNotBlock);
-                                workflow.put("fields", fields);
-                                workflow.put("count", count);
-                                workflow.put("variables", variables);
-                                workflow.put("isForm", false);
-                                actionsList.add(workflow);
                             }
                         }
                     }
                 }
             }
+            //Сортируем по частоте использования
+            sort(actionsList);
         }
-        //Сортируем по частоте использования
-        sort(actionsList);
 
         if (hasExecutionPermission) {
             List<NodeRef> groupActions = groupActionsService.getActiveActions(nodeRef);
@@ -349,8 +343,8 @@ public class ActionsScript extends DeclarativeWebScript {
                 actionsList.add(actionStruct);
             }
         }
-        if(actionsList.size()>0) {
-        	result.put("actions", actionsList);
+        if (actionsList.size() > 0) {
+            result.put("actions", actionsList);
         }
         return result;
     }
