@@ -34,17 +34,20 @@
       </div>
 
       <#assign  viewFormId = el + "Container-viewForm"/>
-      <div id="${viewFormId}" class="yui-panel hidden1">
+      <div id="${viewFormId}" class="yui-panel hidden1 event-dialog">
           <div id="${viewFormId}-head" class="hd">${msg("logicecm.view")}</div>
           <div id="${viewFormId}-body" class="bd">
-              <div id="${viewFormId}-content"></div>
-              <div class="bdft">
-                   <span id="${viewFormId}-cancel" class="yui-button yui-push-button">
-                       <span class="first-child">
-                           <button type="button" tabindex="0">${msg("button.close")}</button>
-                       </span>
-                   </span>
+              <div class="right-part">
+                  <ul class="event-actions">
+                      <li class="event-accept"><a href="#">Принять</a></li>
+                      <li class="event-reject"><a href="#">Отклонить</a></li>
+                      <li class="event-more"><a href="#">Подробее</a></li>
+                      <li class="event-edit"><a href="#">Редактировать</a></li>
+                      <li class="event-remove"><a href="#">Удалить</a></li>
+                      <li><a href="#">Еще</a></li>
+                  </ul>
               </div>
+              <div id="${viewFormId}-content" class="center-part"></div>
           </div>
       </div>
    </@>

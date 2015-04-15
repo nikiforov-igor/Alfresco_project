@@ -507,9 +507,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                       if (me.viewDialog == null) {
                          me.viewDialog = Alfresco.util.createYUIPanel(viewFormId,
                              {
-                                width: "50em"
+                                 width: "60em",
+                                 modal: false
                              });
-                         me.widgets.cancelButton = Alfresco.util.createYUIButton(me, "viewForm-cancel", me.onCancelDialogClick);
                       }
 
                       Dom.setStyle(viewFormId, "display", "block");

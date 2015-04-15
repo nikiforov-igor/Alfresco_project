@@ -1637,7 +1637,7 @@ div.fullCalendar th.fc-widget-header
 }
 .yui-skin-lecmTheme .fc-content .fc-cell-overlay {
     background: none;
-    border: 1px solid #666;
+    border: 1px solid #333;
 }
 .yui-skin-lecmTheme .alf-calendar.fullCalendar .fc-today {
     background: #e4f3fa;
@@ -1648,6 +1648,25 @@ div.fullCalendar th.fc-widget-header
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 1.5;
+    box-sizing: border-box;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-accepted,
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-rejected,
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-another-time,
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-initiator {
+    padding-right: 20px;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-accepted {
+    background: url(../../images/lecm-events/thumb_up.png) no-repeat center right;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-rejected {
+    background: url(../../images/lecm-events/thumb_down.png) no-repeat center right;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-another-time {
+    background: url(../../images/lecm-events/clock.png) no-repeat center right;
+}
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-initiator {
+    background: url(../../images/lecm-events/horn.png) no-repeat center right;
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner span.fc-event-time {
     margin-right: 1px;
@@ -1744,3 +1763,58 @@ div.fullCalendar th.fc-widget-header
 .yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.wd0 a {
     color: #cf2700;
 }
+
+/* Всплывающее окно с краткой информацией о мероприятии */
+.yui-panel.event-dialog .hd {
+    display: none;
+}
+.yui-panel.event-dialog .bd {
+    width: auto;
+    overflow: hidden;
+}
+.yui-panel.event-dialog .right-part {
+    float: right;
+    width: 140px;
+    padding: 40px 20px;
+}
+.yui-panel.event-dialog .right-part ul.event-actions li {
+    font-weight: bold;
+    box-sizing: border-box;
+    padding: 10px 22px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+.yui-panel.event-dialog .right-part ul.event-actions li a,
+.yui-panel.event-dialog .right-part ul.event-actions li a:hover {
+    color: #000;
+}
+.yui-panel.event-dialog .right-part ul.event-actions li.event-accept {
+    background: url(../../images/lecm-events/event_accept1.png) no-repeat center left;
+}
+.yui-panel.event-dialog .right-part ul.event-actions li.event-reject {
+    background: url(../../images/lecm-events/event_reject1.png) no-repeat center left;
+}
+.yui-panel.event-dialog .right-part ul.event-actions li.event-more {
+    background: url(../../images/lecm-events/event_more1.png) no-repeat center left;
+}
+.yui-panel.event-dialog .right-part ul.event-actions li.event-edit {
+    background: url(../../images/lecm-events/event_edit1.png) no-repeat center left;
+}
+.yui-panel.event-dialog .right-part ul.event-actions li.event-remove {
+    background: url(../../images/lecm-events/event_remove1.png) no-repeat center left;
+}
+.yui-panel.event-dialog .center-part {
+    width: auto;
+    overflow: hidden;
+    position: relative;
+}
+.yui-panel.event-dialog .center-part:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, #fff, #aaa, #fff);
+}
+
