@@ -47,7 +47,7 @@
                     <!-- Описание -->
                     <show id="lecm-events:description"/>
                     <!-- Тематика -->
-                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-events:subject-assoc"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-events:all-day">
@@ -159,7 +159,7 @@
                     <!-- Описание -->
                     <show id="lecm-events:description"/>
                     <!-- Тематика -->
-                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-events:subject-assoc"/>
                     <!--Вложения-->
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
                 </field-visibility>
@@ -227,7 +227,7 @@
                             <control-param name="defaultValueDataSource">lecm/orgstructure/api/getCurrentEmployee</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc">
+                    <field id="lecm-events:subject-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                         </control>
@@ -243,34 +243,6 @@
                         </control>
                     </field>
                 </appearance>
-            </form>
-            <form id="statemachine-editable-fields">
-                <field-visibility>
-                    <!-- Заголовок -->
-                    <show id="lecm-events:title"/>
-                    <!-- Весмь день -->
-                    <show id="lecm-events:all-day"/>
-                    <!-- Дата начала мероприятия -->
-                    <show id="lecm-events:from-date"/>
-                    <!-- Дата окончания мероприятия -->
-                    <show id="lecm-events:to-date"/>
-                    <!-- Повторное -->
-                    <show id="lecm-events:repeatable"/>
-                    <!-- Участники -->
-                    <show id="lecm-events-ts:members-assoc"/>
-                    <!-- Приглашённые -->
-                    <show id="lecm-events:invited-members-assoc"/>
-                    <!-- Место проведения -->
-                    <show id="lecm-events:location-assoc"/>
-                    <!-- Ресурсы -->
-                    <show id="lecm-events-ts:resources-assoc"/>
-                    <!-- Инициатор -->
-                    <show id="lecm-events:initiator-assoc"/>
-                    <!-- Описание -->
-                    <show id="lecm-events:description"/>
-                    <!-- Тематика -->
-                    <show id="lecm-document:subject-assoc"/>
-                </field-visibility>
             </form>
         </forms>
     </config>

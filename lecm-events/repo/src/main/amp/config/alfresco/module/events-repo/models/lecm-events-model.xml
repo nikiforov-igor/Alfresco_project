@@ -12,6 +12,7 @@
         <import uri="http://www.it.ru/logicECM/events/dictionaries/1.0" prefix="lecm-events-dic"/>
         <import uri="http://www.it.ru/logicECM/events/table-structure/1.0" prefix="lecm-events-ts"/>
         <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/events/1.0" prefix="lecm-events"/>
@@ -142,7 +143,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-events:location-assoc-text-content">
@@ -150,7 +151,23 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events:subject-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events:subject-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-events:invited-members-assoc-ref">
@@ -158,7 +175,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-events:invited-members-assoc-text-content">
@@ -174,7 +191,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-events:temp-members-assoc-text-content">
@@ -190,7 +207,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-events:old-members-assoc-text-content">
@@ -206,7 +223,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-events:repeated-events-assoc-text-content">
@@ -253,6 +270,19 @@
                         <class>lecm-orgstr:employee</class>
                         <mandatory>true</mandatory>
                         <many>false</many>
+                    </target>
+                </association>
+                <!-- Тематика -->
+                <association name="lecm-events:subject-assoc">
+                    <title>Тематика</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-doc-dic:subjects</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
                     </target>
                 </association>
 
