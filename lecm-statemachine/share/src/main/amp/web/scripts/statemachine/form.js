@@ -121,7 +121,7 @@ LogicECM.module = LogicECM.module || {};
 				proxyUri: Alfresco.constants.PROXY_URI,
 				documentNodeRef: encodeURIComponent(this.options.nodeRef),
 				actionId: encodeURIComponent(action.actionId),
-				taskId: encodeURIComponent(this.taskId)
+				taskId: encodeURIComponent(this.taskId == null ? "" : this.taskId)
 			});
 			var successCallback = {
 				scope: this,

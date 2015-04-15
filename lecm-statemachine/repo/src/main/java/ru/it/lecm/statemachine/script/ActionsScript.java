@@ -14,6 +14,7 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
@@ -96,7 +97,7 @@ public class ActionsScript extends DeclarativeWebScript {
         /*NEW HELPER*/
         //LifecycleStateMachineHelper helper = new LifecycleStateMachineHelper();
 
-        if (taskId != null && stateMachineService.getCurrentExecutionId(taskId) == null && !stateMachineService.isFinal(new NodeRef(documentRef))) {
+        if (StringUtils.isNotEmpty(taskId) && stateMachineService.getCurrentExecutionId(taskId) == null && !stateMachineService.isFinal(new NodeRef(documentRef))) {
             HashMap<String, Object> actionResult = new HashMap<String, Object>();
             ArrayList<String> errors = new ArrayList<String>();
             errors.add("Статус документа изменился! Обновите страницу документа для получения списка доступных действий.");
