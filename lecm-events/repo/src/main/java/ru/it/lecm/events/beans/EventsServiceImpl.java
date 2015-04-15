@@ -562,21 +562,44 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         }
     }
 
-    private void updateRepeatedEvents(NodeRef event, String updateRepeated) {
-        List<NodeRef> allRepeatedEvents = findNodesByAssociationRef(event, ASSOC_EVENT_REPEATED_EVENTS, TYPE_EVENT, ASSOCIATION_TYPE.TARGET);
-        if (allRepeatedEvents != null) {
-            for (NodeRef repeatedEvent: allRepeatedEvents) {
-                Date eventFromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-                Date repeatedEventFromDate = (Date) nodeService.getProperty(repeatedEvent, EventsService.PROP_EVENT_FROM_DATE);
+    public List<NodeRef> getNextRepeatedEvents(NodeRef event) {
+        List<NodeRef> results = new ArrayList<>();
+        NodeRef nextEvent = findNodeByAssociationRef(event, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.TARGET);
+        while (nextEvent != null && !nextEvent.equals(event)) {
+            results.add(nextEvent);
+            nextEvent = findNodeByAssociationRef(nextEvent, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.TARGET);
+        }
+        return results;
+    }
 
-                if ("ALL".equals(updateRepeated)) {
-                    updateRepeatedEvent(event, repeatedEvent);
-                } else if ("ALL_NEXT".equals(updateRepeated) && eventFromDate.before(repeatedEventFromDate)) {
-                    updateRepeatedEvent(event, repeatedEvent);
-                } else if ("ALL_PREV".equals(updateRepeated) && eventFromDate.after(repeatedEventFromDate)) {
-                    updateRepeatedEvent(event, repeatedEvent);
-                }
-            }
+    public List<NodeRef> getPrevRepeatedEvents(NodeRef event) {
+        List<NodeRef> results = new ArrayList<>();
+        NodeRef nextEvent = findNodeByAssociationRef(event, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.SOURCE);
+        while (nextEvent != null && !nextEvent.equals(event)) {
+            results.add(nextEvent);
+            nextEvent = findNodeByAssociationRef(nextEvent, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.SOURCE);
+        }
+        return results;
+    }
+
+    public List<NodeRef> getAllRepeatedEvents(NodeRef event) {
+        List<NodeRef> results = new ArrayList<>();
+        results.addAll(getNextRepeatedEvents(event));
+        results.addAll(getPrevRepeatedEvents(event));
+        return results;
+    }
+
+    private void updateRepeatedEvents(NodeRef event, String updateRepeated) {
+        List<NodeRef> updateEvents = new ArrayList<>();
+        if ("ALL".equals(updateRepeated)) {
+            updateEvents = getAllRepeatedEvents(event);
+        } else if ("ALL_NEXT".equals(updateRepeated)) {
+            updateEvents = getNextRepeatedEvents(event);
+        } else if ("ALL_PREV".equals(updateRepeated)) {
+            updateEvents = getPrevRepeatedEvents(event);
+        }
+        for (NodeRef repeatedEvent: updateEvents) {
+            updateRepeatedEvent(event, repeatedEvent);
         }
     }
 
