@@ -58,11 +58,16 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	@Override
 	public NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException {
 		//TODO Рефакторинг AL-2733
-		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
+		NodeRef existRootFolder = getRootFolder(documentRef);
+		if (existRootFolder == null) {
+			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
-		NodeRef connectionRef = createFolder(documentRef, DOCUMENT_CONNECTIONS_ROOT_NAME);
-		hideNode(connectionRef, false);
-		return connectionRef;
+			NodeRef connectionRef = createFolder(documentRef, DOCUMENT_CONNECTIONS_ROOT_NAME);
+			hideNode(connectionRef, false);
+			return connectionRef;
+		} else {
+			return existRootFolder;
+		}
 	}
 
 	@Override

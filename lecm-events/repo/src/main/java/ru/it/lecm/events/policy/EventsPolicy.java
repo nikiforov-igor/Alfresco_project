@@ -361,13 +361,13 @@ public class EventsPolicy extends BaseBean {
                 while (!pendingDocs.isEmpty()) {
                     final NodeRef event = pendingDocs.remove(0);
 
-                    //Запись стары
+                    //Запись старых участников
                     final List<NodeRef> members = eventService.getEventMembers(event);
                     if (members != null) {
                         transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
                             @Override
                             public Void execute() throws Throwable {
-                                for (NodeRef member: members) {
+                                for (NodeRef member : members) {
                                     nodeService.createAssociation(event, member, EventsService.ASSOC_EVENT_OLD_MEMBERS);
                                 }
 
@@ -378,7 +378,8 @@ public class EventsPolicy extends BaseBean {
 
                     //Создание повторных
                     Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
-                    if (repeatable != null && repeatable) {
+                    Boolean isRepeated = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_IS_REPEATED);
+                    if (repeatable != null && repeatable && (isRepeated == null || !isRepeated)) {
                         final String ruleContent = (String) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_RULE);
                         final Date startPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
                         final Date endPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
@@ -406,19 +407,28 @@ public class EventsPolicy extends BaseBean {
                                     }
                                 }
 
-                                final Calendar calStart = Calendar.getInstance();
-                                calStart.setTime(startPeriod);
-                                Calendar calEnd = Calendar.getInstance();
-                                calEnd.setTime(endPeriod);
+                                final List<Integer> weekDaysFinal = weekDays;
+                                final List<Integer> monthDaysFinal = monthDays;
 
-                                while (calStart.before(calEnd)) {
-                                    int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
-                                    int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
-                                    if (weekDays.contains(weekDay) || monthDays.contains(monthDay)) {
+                                final Date eventFromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
 
-                                        transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-                                            @Override
-                                            public Void execute() throws Throwable {
+                                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                    @Override
+                                    public Void execute() throws Throwable {
+                                        NodeRef lastCreatedEvent = null;
+
+                                        final Calendar calStart = Calendar.getInstance();
+                                        calStart.setTime(startPeriod);
+                                        Calendar calEnd = Calendar.getInstance();
+                                        calEnd.setTime(endPeriod);
+
+                                        boolean createdEventConnection = false;
+
+                                        while (calStart.before(calEnd)) {
+                                            int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
+                                            int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
+                                            if (weekDaysFinal.contains(weekDay) || monthDaysFinal.contains(monthDay)) {
+
                                                 QName docType = nodeService.getType(event);
                                                 NodeRef parentRef = nodeService.getPrimaryParent(event).getParentRef();
                                                 QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
@@ -427,20 +437,47 @@ public class EventsPolicy extends BaseBean {
                                                 if (properties != null) {
                                                     // создаем ноду
                                                     ChildAssociationRef createdNodeAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQname, docType, properties);
-                                                    copyAssocs(event, createdNodeAssoc.getChildRef());
+                                                    NodeRef createdEvent = createdNodeAssoc.getChildRef();
+                                                    documentConnectionService.createRootFolder(createdEvent);
+                                                    copyAssocs(event, createdEvent);
 
-                                                    nodeService.createAssociation(event, createdNodeAssoc.getChildRef(), EventsService.ASSOC_EVENT_REPEATED_EVENTS);
+                                                    nodeService.createAssociation(event, createdEvent, EventsService.ASSOC_EVENT_REPEATED_EVENTS);
 
-                                                    documentConnectionService.createConnection(event, createdNodeAssoc.getChildRef(), "hasRepeated", true);
+                                                    Date createdFromDate = (Date) nodeService.getProperty(createdEvent, EventsService.PROP_EVENT_FROM_DATE);
+                                                    Date lastCreatedFromDate = null;
+                                                    if (lastCreatedEvent != null) {
+                                                        lastCreatedFromDate = (Date) nodeService.getProperty(lastCreatedEvent, EventsService.PROP_EVENT_FROM_DATE);
+                                                    }
+
+                                                    if ((lastCreatedFromDate == null || lastCreatedFromDate.before(eventFromDate)) && createdFromDate.after(eventFromDate)) {
+                                                        if (lastCreatedEvent != null) {
+                                                            documentConnectionService.createConnection(lastCreatedEvent, event, "hasRepeated", true);
+                                                            nodeService.createAssociation(lastCreatedEvent, event, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+                                                        }
+                                                        documentConnectionService.createConnection(event, createdEvent, "hasRepeated", true);
+                                                        nodeService.createAssociation(event, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+
+                                                        createdEventConnection = true;
+                                                    } else if (lastCreatedEvent != null) {
+                                                        documentConnectionService.createConnection(lastCreatedEvent, createdEvent, "hasRepeated", true);
+                                                        nodeService.createAssociation(lastCreatedEvent, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+                                                    }
+
+                                                    lastCreatedEvent = createdEvent;
                                                 }
-
-                                                return null;
                                             }
-                                        }, false, true);
-                                    }
 
-                                    calStart.add(Calendar.DAY_OF_YEAR, 1);
-                                }
+                                            calStart.add(Calendar.DAY_OF_YEAR, 1);
+                                        }
+
+                                        if (!createdEventConnection && lastCreatedEvent != null) {
+                                            documentConnectionService.createConnection(lastCreatedEvent, event, "hasRepeated", true);
+                                        }
+
+                                        return null;
+                                    }
+                                }, false, true);
+
                             } catch (JSONException e) {
                                 logger.error("Error parse repeatable rule", e);
                             }
@@ -462,6 +499,11 @@ public class EventsPolicy extends BaseBean {
                 propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
                 propertiesToCopy.add(EventsService.PROP_EVENT_ALL_DAY);
                 propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+
+                propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE);
+                propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE_RULE);
+                propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
+                propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
 
                 for (QName propName : propertiesToCopy) {
                     newProperties.put(propName, oldProperties.get(propName));
@@ -499,8 +541,8 @@ public class EventsPolicy extends BaseBean {
             }
         }
 
-        private int daysBetween(Date d1, Date d2){
-            return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+        private int daysBetween(Date d1, Date d2) {
+            return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
         }
 
         @Override
