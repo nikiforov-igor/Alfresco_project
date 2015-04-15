@@ -163,7 +163,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 			html += '<div>' + invitedMembersString + "</div>";
 
-			html += '<div>' + data.description + "</div>"
+			html += '<div>' + this.msg("label.events.description") + ": " + data.description + "</div>"
 
 			// write to DOM
 			elCell.innerHTML = html;
