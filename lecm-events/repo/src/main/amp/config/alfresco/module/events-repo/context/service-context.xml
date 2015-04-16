@@ -162,4 +162,9 @@
 		</property>
 		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
 	</bean>
+
+	<bean id="events.defaultStatemachine" parent="defaultStatemachines">
+		<property name="statemachineName" value="lecm-events:document" />
+		<property name="path" value="alfresco/module/${artifactId}/models/lecm-events-default-statemacine.xml" />
+	</bean>
 </beans>
