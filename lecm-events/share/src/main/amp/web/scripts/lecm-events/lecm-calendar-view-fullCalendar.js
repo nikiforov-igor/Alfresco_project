@@ -224,6 +224,15 @@
 
                            $.each(filteredEvents, function(i, event)
                            {
+                              var className = "";
+                              if (event.userMemberStatus == "CONFIRMED") {
+                                 className = "event-accepted";
+                              } else if (event.userMemberStatus == "DECLINED") {
+                                 className = "event-rejected";
+                              } else if (event.userIsInitiator) {
+                                 className = "event-initiator"
+                              }
+
                               // Map Alfresco Event object to FullCalendar Event Object (ensuring that existing properties are still present)
                               // Parse user input strings for XSS
                               parsedEvents.push(YAHOO.lang.augmentObject(
@@ -237,7 +246,8 @@
                                  description: $html(event.description),
                                  title: event.title,
                                  where: $html(event.where),
-                                 url: Alfresco.constants.URL_CONTEXT + event.url
+                                 url: Alfresco.constants.URL_CONTEXT + "event?nodeRef=" + event.nodeRef,
+                                 className: className
                               }, event));
                            });
                         }

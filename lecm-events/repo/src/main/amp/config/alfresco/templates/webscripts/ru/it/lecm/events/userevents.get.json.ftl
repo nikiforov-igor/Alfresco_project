@@ -11,6 +11,8 @@
 				"description": "${event.description}",
 				"allday": "${event.allday?string}",
 				"where": "${event.where?string}",
+				"userMemberStatus": "${event.userMemberStatus}",
+				"userIsInitiator": ${event.userIsInitiator?string},
 				"startAt": {
 					"iso8601": "${event.start}",
 					"legacyTime": "${event.legacyTimeFrom}"

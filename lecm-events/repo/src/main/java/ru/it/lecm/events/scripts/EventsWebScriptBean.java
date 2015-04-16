@@ -70,6 +70,11 @@ public class EventsWebScriptBean extends BaseWebScript {
             result.put("legacyTimeFrom", formatDate(start, isAllDay, legacyTimeFormat));
             result.put("legacyDateTo", formatDate(end, isAllDay, legacyDateFormat));
             result.put("legacyTimeTo", formatDate(end, isAllDay, legacyTimeFormat));
+
+            result.put("userMemberStatus", eventService.getCurrentEmployeeMemberStatus(entry));
+            result.put("userIsInitiator", eventService.getEventInitiator(entry).equals(orgstructureBean.getCurrentEmployee()));
+
+
             // Check the permissions the user has on the entry
 //                AccessStatus canEdit = permissionService.hasPermission(entry.getNodeRef(), PermissionService.WRITE);
 //                AccessStatus canDelete = permissionService.hasPermission(entry.getNodeRef(), PermissionService.DELETE);

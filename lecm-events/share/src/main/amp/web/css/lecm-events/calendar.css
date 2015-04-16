@@ -1656,16 +1656,16 @@ div.fullCalendar th.fc-widget-header
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-initiator {
     padding-right: 20px;
 }
-.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-accepted {
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-accepted div.fc-event-inner {
     background: url(../../images/lecm-events/thumb_up.png) no-repeat center right;
 }
-.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-rejected {
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-rejected div.fc-event-inner {
     background: url(../../images/lecm-events/thumb_down.png) no-repeat center right;
 }
-.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-another-time {
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-another-time div.fc-event-inner {
     background: url(../../images/lecm-events/clock.png) no-repeat center right;
 }
-.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner.event-initiator {
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-initiator div.fc-event-inner {
     background: url(../../images/lecm-events/horn.png) no-repeat center right;
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner span.fc-event-time {
