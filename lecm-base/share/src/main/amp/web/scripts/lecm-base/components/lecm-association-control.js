@@ -81,6 +81,12 @@ LogicECM.module = LogicECM.module || {};
 
 			alreadyShowCreateNewLink: false,
 
+			cancelItems: null,
+
+			cancelSingleSelectedItem: null,
+
+			tempDisabled: false,
+
 			options:
 			{
 				// скрывать ли игнорируемые ноды в дереве
@@ -121,11 +127,15 @@ LogicECM.module = LogicECM.module || {};
 
 				rootNodeRef: "",
 
+				hasPermAddChildren: false,
+
+				wasLoadWindowData: false,
+
 				itemType: "cm:content",
 
 				treeItemType: null,
 
-                maxSearchResults: 20,
+				maxSearchResults: 20,
 
 				maxSearchResultsWithSearch: 20,
 
@@ -170,9 +180,9 @@ LogicECM.module = LogicECM.module || {};
 
 				ignoreNodes: null,
 
-				treeIgnoreNodesScript: null,
-
 				childrenDataSource: "lecm/forms/picker",
+
+				treeBranchesDatasource: "lecm/components/association-tree",
 
 				pickerItemsScript: "lecm/forms/picker/items",
 
@@ -196,7 +206,11 @@ LogicECM.module = LogicECM.module || {};
 
 				fieldId: null,
 
-				formId: false
+				formId: false,
+
+				doNotCheckAccess: false,
+
+				resetValue: false
 			},
 
 			onReady: function () {
@@ -209,6 +223,8 @@ LogicECM.module = LogicECM.module || {};
 
 			init: function()
 			{
+				this.wasLoadWindowData = false;
+
 				this.options.controlId = this.id + '-cntrl';
 				if (this.options.prefixPickerId == null) {
 					this.options.prefixPickerId = this.options.controlId;
@@ -249,33 +265,11 @@ LogicECM.module = LogicECM.module || {};
 
 					if (this.options.showCreateNewButton && this.widgets.createNewButton == null) {
 						this.widgets.createNewButton =  new YAHOO.widget.Button(
-								this.options.prefixPickerId + "-tree-picker-create-new-button",
+							this.options.prefixPickerId + "-tree-picker-create-new-button",
 							{
 								onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this },
 								disabled: true
 							});
-					}
-
-					if (this.options.treeIgnoreNodesScript && this.options.treeIgnoreNodesScript != "") {
-						Alfresco.util.Ajax.request({
-							method: "GET",
-							requestContentType: "application/json",
-							responseContentType: "application/json",
-							url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.treeIgnoreNodesScript,
-							successCallback: {
-								fn: function (response) {
-									context.options.ignoreNodes = response.json.nodes;
-								},
-								scope: this
-							},
-							failureCallback: {
-								fn: function onFailure(response) {
-									context.options.allowedNodes = null;
-								},
-								scope: this
-							},
-							execScripts: true
-						});
 					}
 
 					var context = this;
@@ -434,15 +428,17 @@ LogicECM.module = LogicECM.module || {};
 			_loadSelectedItems: function (clearCurrentDisplayValue, updateForms)
 			{
 				var arrItems = "";
-				if (this.options.selectedValue != null) {
-					arrItems = this.options.selectedValue;
-				}
-				else if (this.options.currentValue != null && this.isNodeRef(this.options.currentValue)) {
-					arrItems = this.options.currentValue;
-				}
+				if (!this.options.resetValue) {
+					if (this.options.selectedValue != null) {
+						arrItems = this.options.selectedValue;
+					}
+					else if (this.options.currentValue != null && this.isNodeRef(this.options.currentValue)) {
+						arrItems = this.options.currentValue;
+					}
 
-				if (arrItems == "" && this.defaultValue != null) {
-					arrItems += this.defaultValue;
+					if (arrItems == "" && this.defaultValue != null) {
+						arrItems += this.defaultValue;
+					}
 				}
 
 				var onSuccess = function (response)
@@ -601,13 +597,19 @@ LogicECM.module = LogicECM.module || {};
 					this.widgets.ok = new YAHOO.widget.Button(this.options.prefixPickerId + "-ok",
 						{ onclick: { fn: this.onOk, obj: null, scope: this } });
 					this.widgets.cancel = new YAHOO.widget.Button(this.options.prefixPickerId + "-cancel",
-						{ onclick: { fn: this.onCancel, obj: null, scope: this } });
+						{ onclick: { fn: this.onCancelWithReset, obj: null, scope: this } });
+
+					var width = "500px";
+					if (!this.options.plane) {
+						width = "800px";
+					}
 
 					this.widgets.dialog = Alfresco.util.createYUIPanel(this.options.pickerId,
 						{
-							width: "500px"
+							width: width
 						});
 					this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
+					this.widgets.dialog.cancelEvent.subscribe(this.onCancelWithReset, null, this);
 
 					if (this.options.showSearch) {
 						// Setup search button
@@ -639,8 +641,8 @@ LogicECM.module = LogicECM.module || {};
 			makeAutocomplete: function () {
 				var me = this;
 				var oDS;
-                me.byEnter = false;
-                if (!this.options.lazyLoading) {
+				me.byEnter = false;
+				if (!this.options.lazyLoading) {
 					var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node/children";
 					oDS = new YAHOO.util.XHRDataSource(url);
 					oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
@@ -669,43 +671,44 @@ LogicECM.module = LogicECM.module || {};
 					};
 					oAC.formatResult = function(oResultData, sQuery, sResultMatch) {
 						if (!me.options.plane) {
-							var name = oResultData[4] + sResultMatch;
+							var name = sResultMatch;
 							var path = oResultData[3] + sResultMatch;
 							return "<div title='" + path + "'>" + name + "</div>";
 						} else {
 							return sResultMatch;
 						}
 					};
-                    oAC.doBeforeLoadData = function(sQuery , oResponse , oPayload) {
-                        var results = oResponse.results;
+					oAC.doBeforeLoadData = function(sQuery , oResponse , oPayload) {
+						var results = oResponse.results;
 
-                        // Если после нажатия enter возращается только один результат, то он сразу подставляется в поле
+						// Если после нажатия enter возращается только один результат, то он сразу подставляется в поле
 						var res;
-                        if (me.byEnter && results && results.length == 1) {
-                            me.byEnter = false;
-                            var result = results[0];
-                            var node = {
-                                name: result.name,
-                                selectedName: result.selectedName,
-                                nodeRef: result.nodeRef,
-                                path: result.path,
-                                simplePath: result.simplePath
-                            };
+						if (me.byEnter && results && results.length == 1) {
+							me.byEnter = false;
+							var result = results[0];
+							var node = {
+								name: result.name,
+								selectedName: result.selectedName,
+								nodeRef: result.nodeRef,
+								path: result.path,
+								simplePath: result.simplePath
+							};
 
-                            me.selectedItems[node.nodeRef] = node;
-                            me.singleSelectedItem = node;
+							me.selectedItems[node.nodeRef] = node;
+							me.singleSelectedItem = node;
 
-                            me.updateFormFields();
-                            me.updateSelectedItems();
-                            me.updateAddButtons();
+							me.updateFormFields();
+							me.updateSelectedItems();
+							me.updateAddButtons();
 							res = false;
-                        } else {
+						} else {
 							res = true;
-                        }
+						}
 						Dom.removeClass(me.options.controlId + "-autocomplete-input", "wait-for-load");
 						return res;
-                    };
-					oAC.queryDelay = 0.5;
+					};
+					oAC.queryDelay = 3
+					;
 					oAC.minQueryLength = 3;
 					oAC.prehighlightClassName = "yui-ac-prehighlight";
 					oAC.useShadow = true;
@@ -713,44 +716,46 @@ LogicECM.module = LogicECM.module || {};
 					oAC._bFocused = true;
 
 					var selectItemHandler = function (sType, aArgs) {
-						var node = {
-							name: aArgs[2][0],
-							selectedName: aArgs[2][1],
-							nodeRef: aArgs[2][2],
-							path: aArgs[2][3],
-							simplePath: aArgs[2][4]
-						};
+						if (this.options.multipleSelectMode || (Object.keys(this.selectedItems).length == 0)) {
+							var node = {
+								name: aArgs[2][0],
+								selectedName: aArgs[2][1],
+								nodeRef: aArgs[2][2],
+								path: aArgs[2][3],
+								simplePath: aArgs[2][4]
+							};
 
-						this.selectedItems[node.nodeRef] = node;
-						this.singleSelectedItem = node;
+							this.selectedItems[node.nodeRef] = node;
+							this.singleSelectedItem = node;
 
-						this.updateFormFields();
-						this.updateSelectedItems();
-						this.updateAddButtons();
+							this.updateFormFields();
+							this.updateSelectedItems();
+							this.updateAddButtons();
+						}
 					}.bind(this);
 					oAC.itemSelectEvent.subscribe(selectItemHandler);
 
-                    // Register the "enter" event on the autocomplete text field
-                    var input = Dom.get(this.options.controlId + "-autocomplete-input");
-                    new KeyListener(input,
-                        {
-                            keys: 13
-                        },
-                        {
-                            fn: function(eventName, args) {
-                                var e = args[1];
-                                var text = input.value;
+					// Register the "enter" event on the autocomplete text field
+					var input = Dom.get(this.options.controlId + "-autocomplete-input");
+					new KeyListener(input,
+						{
+							keys: 13
+						},
+						{
+							fn: function(eventName, args) {
+								var e = args[1];
+								var text = input.value;
 
-                                if (text && text != "") {
-                                    me.byEnter = true;
-	                                clearTimeout(oAC._nDelayID);
-                                    oAC.sendQuery(text);
-                                }
-                                Event.stopEvent(e);
-                            },
-                            scope: this,
-                            correctScope: true
-                        }, "keydown").enable();
+								if (text && text != "") {
+									me.byEnter = true;
+									clearTimeout(oAC._nDelayID);
+									oAC.sendQuery(text);
+								}
+								Event.stopEvent(e);
+							},
+							scope: this,
+							correctScope: true
+						}, "keydown").enable();
 				}
 			},
 
@@ -834,6 +839,23 @@ LogicECM.module = LogicECM.module || {};
 				this.backToControl();
 			},
 
+			onCancelWithReset: function(e, p_obj)
+			{
+				this.onCancel(e, p_obj);
+				this.selectedItems =  JSON.parse(this.cancelItems);
+				if (!this.options.multipleSelectMode) {
+					if (this.cancelSingleSelectedItem != null) {
+						this.singleSelectedItem = JSON.parse(this.cancelSingleSelectedItem);
+					} else {
+						this.singleSelectedItem = null;
+					}
+				}
+				this.updateFormFields();
+				this.updateSelectedItems();
+				this.updateAddButtons();
+
+			},
+
 			// после закрытия диалога вернуть фокус в исходный контрол
 			backToControl: function() {
 				var controlBtn = Dom.get(this.options.prefixPickerId + "-tree-picker-button-button");
@@ -883,8 +905,25 @@ LogicECM.module = LogicECM.module || {};
 			// Render dialog with tree picker
 			showTreePicker: function (e, p_obj)
 			{
-				if( ! this.widgets.dialog )
+				if(!this.widgets.dialog || this.options.rootNodeRef.length == 0)
 					return;
+
+				if (!this.wasLoadWindowData) {
+					this.wasLoadWindowData = true;
+					if (!this.options.plane) {
+						this.treeViewClicked(this.rootNode);
+						this.tree.onEventToggleHighlight(this.rootNode);
+					} else {
+						this.treeViewClicked(
+							{
+								data: {
+									isContainer: true,
+									nodeRef: this.options.rootNodeRef,
+									hasPermAddChildren: this.options.hasPermAddChildren
+								}
+							});
+					}
+				}
 
 				// Enable esc listener
 				if (!this.widgets.escapeListener)
@@ -896,7 +935,7 @@ LogicECM.module = LogicECM.module || {};
 						{
 							fn: function(eventName, keyEvent)
 							{
-								this.onCancel();
+								this.onCancelWithReset();
 								Event.stopEvent(keyEvent[1]);
 							},
 							scope: this,
@@ -914,7 +953,12 @@ LogicECM.module = LogicECM.module || {};
 				if (Dom.get(this.options.controlId + "-selectedItems") != null) {
 					this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
 				}
-
+				this.cancelItems = JSON.stringify(this.selectedItems);
+				if (!this.options.multipleSelectMode && this.singleSelectedItem != null) {
+					this.cancelSingleSelectedItem = JSON.stringify(this.singleSelectedItem);
+				} else {
+					this.cancelSingleSelectedItem = null;
+				}
 				this.setTabbingOrder();
 
 				Event.preventDefault(e);
@@ -1224,18 +1268,25 @@ LogicECM.module = LogicECM.module || {};
 										this.options.rootNodeRef = oResults.nodeRef;
 
 										this.tree.draw();
-										this.treeViewClicked(this.rootNode);
-										this.tree.onEventToggleHighlight(this.rootNode);
+										if (!this.options.showAutocomplete) {
+											this.wasLoadWindowData = true;
+											this.treeViewClicked(this.rootNode);
+											this.tree.onEventToggleHighlight(this.rootNode);
+										}
 									} else {
 										this.options.rootNodeRef = oResults.nodeRef;
-										this.treeViewClicked(
-											{
-												data: {
-													isContainer: true,
-													nodeRef: this.options.rootNodeRef,
-													hasPermAddChildren: oResults.hasPermAddChildren
-												}
-											});
+										this.options.hasPermAddChildren = oResults.hasPermAddChildren;
+										if (!this.options.showAutocomplete) {
+											this.wasLoadWindowData = true;
+											this.treeViewClicked(
+												{
+													data: {
+														isContainer: true,
+														nodeRef: this.options.rootNodeRef,
+														hasPermAddChildren: this.options.hasPermAddChildren
+													}
+												});
+										}
 									}
 									this._loadSelectedItems(this.options.clearFormsOnStart, true);
 
@@ -1325,14 +1376,14 @@ LogicECM.module = LogicECM.module || {};
 						tree:this.tree,
 						context: this
 					},
-                    timeout:60000
+					timeout:60000
 				};
 				YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 			},
 
 			_generateItemsUrlPath: function (nodeRef)
 			{
-				return $combine(Alfresco.constants.PROXY_URI, "/lecm/components/association-tree/", nodeRef.replace("://", "/"), "items");
+				return $combine(Alfresco.constants.PROXY_URI, "/" + this.options.treeBranchesDatasource + "/", nodeRef.replace("://", "/"), "items");
 			},
 
 			_generateItemsUrlParams: function ()
@@ -1459,12 +1510,12 @@ LogicECM.module = LogicECM.module || {};
 							var recordData = record.getData();
 							me.selectedItemAdded(recordData);
 //                          IE fix - start : Снять фокус, чтоб убрать рамку-выделение в ИЕ (ALF-3802)
-                            if (navigator.userAgent.search(/MSIE/) > -1) {
-                                var liner = Dom.getAncestorByClassName(target, "yui-dt-liner");
-                                if (liner) {
-                                    liner.blur();
-                                }
-                            }
+							if (navigator.userAgent.search(/MSIE/) > -1) {
+								var liner = Dom.getAncestorByClassName(target, "yui-dt-liner");
+								if (liner) {
+									liner.blur();
+								}
+							}
 //                          IE fix - end
 							if (me.options.fireAction.addItem != null) {
 								var fireName = me.options.fireAction.addItem.split(",");
@@ -1778,21 +1829,31 @@ LogicECM.module = LogicECM.module || {};
 						allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
 					}
 
-					if (additionalFilter) {
-						additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
+					if (additionalFilter != null && additionalFilter.length > 0) {
+						var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+						var singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+
+						additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
 					} else {
 						additionalFilter = allowedNodesFilter;
 					}
 				}
 
 				if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
-					var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";
+					var ignoreNodesFilter = "";
 					for (var i = 0; i < this.options.ignoreNodes.length; i++) {
-						ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
+						if (ignoreNodesFilter !== "") {
+							ignoreNodesFilter += " AND ";
+						}
+						ignoreNodesFilter += "NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
 					}
 
+					var addBrackets = this.options.ignoreNodes.length > 1;
 					if (additionalFilter != null && additionalFilter.length > 0) {
-						additionalFilter = "(" + additionalFilter + ") AND (" + ignoreNodesFilter + ")";
+						var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+						var singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+
+						additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND " + (addBrackets ? "(" : "") + ignoreNodesFilter + (addBrackets ? ")" : "");
 					} else {
 						additionalFilter = ignoreNodesFilter;
 					}
@@ -1806,7 +1867,9 @@ LogicECM.module = LogicECM.module || {};
 					"&additionalFilter=" + encodeURIComponent(additionalFilter) +
 					"&pathRoot=" + encodeURIComponent(this.options.rootLocation) +
 					"&pathNameSubstituteString=" + encodeURIComponent(this.options.treeNodeSubstituteString) +
-					"&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
+					"&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
+					'&doNotCheckAccess=' + encodeURIComponent("" + this.options.doNotCheckAccess) +
+					'&rootNodeRef=' + encodeURIComponent("" + this.options.rootNodeRef);
 
 				if (forAutocomplete) {
 					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);
@@ -1834,12 +1897,14 @@ LogicECM.module = LogicECM.module || {};
 
 			removeNode: function (event, params)
 			{
-				delete this.selectedItems[params.node.nodeRef];
-				this.singleSelectedItem = null;
-				this.updateSelectedItems();
-				this.updateAddButtons();
-				if (params.updateForms) {
-					this.updateFormFields();
+				if (!this.tempDisabled) {
+					delete this.selectedItems[params.node.nodeRef];
+					this.singleSelectedItem = null;
+					this.updateSelectedItems();
+					this.updateAddButtons();
+					if (params.updateForms) {
+						this.updateFormFields();
+					}
 				}
 			},
 
@@ -1851,11 +1916,7 @@ LogicECM.module = LogicECM.module || {};
 
 				for (var i in items) {
 					if (typeof(items[i]) != "function") {
-						if (this.options.plane || !this.options.showPath) {
-							var displayName = items[i].selectedName;
-						} else {
-							displayName = items[i].simplePath + items[i].selectedName;
-						}
+						var displayName = items[i].selectedName;
 
 						if (this.options.itemType == "lecm-orgstr:employee") {
 							var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
@@ -1871,15 +1932,11 @@ LogicECM.module = LogicECM.module || {};
 
 			updateAddedSelectedItem: function(item) {
 				var fieldId = this.options.pickerId + "-selected-elements";
-				if (this.options.plane || !this.options.showPath) {
-					var displayName = item.selectedName;
-				} else {
-					displayName =item.simplePath + item.selectedName;
-				}
+				var displayName = item.selectedName;
 
 				if (this.options.itemType == "lecm-orgstr:employee") {
-                    var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
-                    Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
+					var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
+					Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
 				} else {
 					Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, item), this.getRemoveButtonHTML(item));
 				}
@@ -1954,11 +2011,7 @@ LogicECM.module = LogicECM.module || {};
 						el.innerHTML = '';
 					}
 					for (var i in this.selectedItems) {
-						if (this.options.plane || !this.options.showPath) {
-							var displayName = this.selectedItems[i].selectedName;
-						} else {
-							displayName = this.selectedItems[i].simplePath + this.selectedItems[i].selectedName;
-						}
+						var displayName = this.selectedItems[i].selectedName;
 
 						if(this.options.disabled) {
 							if (this.options.itemType == "lecm-orgstr:employee") {
@@ -1968,8 +2021,8 @@ LogicECM.module = LogicECM.module || {};
 							}
 						} else {
 							if (this.options.itemType == "lecm-orgstr:employee") {
-                                var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
-                                el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+								var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
+								el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 							} else {
 								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 							}
@@ -2049,7 +2102,8 @@ LogicECM.module = LogicECM.module || {};
 					YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
 						selectedItems: this.selectedItems,
 						formId: this.options.formId,
-						fieldId: this.options.fieldId
+						fieldId: this.options.fieldId,
+						control: this
 					});
 				}
 			},
@@ -2118,38 +2172,40 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			updateViewForm: function () {
-				var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
+				if (!this.options.disabled) {
+					var sUrl = this._generateRootUrlPath(this.options.rootNodeRef) + this._generateRootUrlParams();
 
-				Alfresco.util.Ajax.jsonGet(
-					{
-						url: sUrl,
-						successCallback:
+					Alfresco.util.Ajax.jsonGet(
 						{
-							fn: function (response) {
-								var oResults = response.json;
-								if (oResults != null) {
-									this.rootNode =  {
-										label:oResults.title,
-										data: {
-											nodeRef:oResults.nodeRef,
-											type:oResults.type,
-											displayPath: oResults.displayPath
-										}
-									};
-									this.options.rootNodeRef = oResults.nodeRef;
-									this._loadSelectedItems(this.options.clearFormsOnStart, true);
-								}
+							url: sUrl,
+							successCallback: {
+								fn: function (response) {
+									var oResults = response.json;
+									if (oResults != null) {
+										this.rootNode = {
+											label: oResults.title,
+											data: {
+												nodeRef: oResults.nodeRef,
+												type: oResults.type,
+												displayPath: oResults.displayPath
+											}
+										};
+										this.options.rootNodeRef = oResults.nodeRef;
+										this._loadSelectedItems(this.options.clearFormsOnStart, true);
+									}
+								},
+								scope: this
 							},
-							scope: this
-						},
-						failureCallback:
-						{
-							fn: function (oResponse) {
-								alert(YAHOO.lang.JSON.parse(oResponse.responseText));
-							},
-							scope: this
-						}
-					});
+							failureCallback: {
+								fn: function (oResponse) {
+									alert(YAHOO.lang.JSON.parse(oResponse.responseText));
+								},
+								scope: this
+							}
+						});
+				} else {
+					this._loadSelectedItems(this.options.clearFormsOnStart, true);
+				}
 			},
 
 			getEmployeeAbsenceMarkeredHTML: function(nodeRef, displayName, showLinkTitle) {
@@ -2159,22 +2215,22 @@ LogicECM.module = LogicECM.module || {};
 					if (employeeData) {
 						if (employeeData.isEmployeeAbsent) {
 							var absenceEnd = Alfresco.util.fromISO8601(employeeData.currentAbsenceEnd);
-							result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-unavailable", this.msg("title.employee-available.from") + " " + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear());
+							result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-unavailable", "Будет доступен с " + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear());
 						} else {
-                            var title = "";
+							var title = "";
 							var nextAbsenceStr = employeeData.nextAbsenceStart;
 							if (nextAbsenceStr) {
 								var nextAbsenceDate = Alfresco.util.fromISO8601(nextAbsenceStr);
-								title = this.msg("title.employee-unavailable.from") + " " + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear();
+								title = "Будет недоступен с " + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear();
 							}
-                            result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-available", title);
-                        }
-                    } else {
-                        result = Util.getControlEmployeeView(nodeRef, displayName, showLinkTitle);
+							result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-available", title);
+						}
+					} else {
+						result = Util.getControlEmployeeView(nodeRef, displayName, showLinkTitle);
 					}
 				} else {
-                    result = Util.getControlEmployeeView(nodeRef, displayName, showLinkTitle);
-                }
+					result = Util.getControlEmployeeView(nodeRef, displayName, showLinkTitle);
+				}
 				return result;
 
 				function leadingZero(value) {
@@ -2189,16 +2245,16 @@ LogicECM.module = LogicECM.module || {};
 
 			getEmployeesAbsenceInformation: function (items) {
 				var requestObj = [];
-                var selectedItems = this.selectedItems;
-                var selectedItemsArray = [];
+				var selectedItems = this.selectedItems;
+				var selectedItemsArray = [];
 
-                if (selectedItems) {
-                    for (var key in selectedItems) {
-                        selectedItemsArray.push(selectedItems[key]);
-                    }
-                    items = items.concat(selectedItemsArray);
-                }
-                for (var i = 0; i < items.length; i++) {
+				if (selectedItems) {
+					for (var key in selectedItems) {
+						selectedItemsArray.push(selectedItems[key]);
+					}
+					items = items.concat(selectedItemsArray);
+				}
+				for (var i = 0; i < items.length; i++) {
 					var item = items[i];
 					if (item.type === "lecm-orgstr:employee") {
 						requestObj.push({"nodeRef": item.nodeRef});
@@ -2265,7 +2321,7 @@ LogicECM.module = LogicECM.module || {};
 				} else if (this.options.maxSearchResults != null) {
 					return this.options.maxSearchResults;
 				}
-                return 20;
+				return 20;
 			},
 
 			onDisableControl: function (layer, args) {
@@ -2273,18 +2329,49 @@ LogicECM.module = LogicECM.module || {};
 					if (this.widgets.pickerButton != null) {
 						this.widgets.pickerButton.set('disabled', true);
 					}
+
+					var input = Dom.get(this.options.controlId + "-autocomplete-input");
+					if (input != null) {
+						input.disabled = true;
+					}
+					this.tempDisabled = true;
+
+					var added = Dom.get(this.options.controlId + "-added");
+					if (added != null) {
+						added.disabled = true;
+					}
+					var removed = Dom.get(this.options.controlId + "-removed");
+					if (removed != null) {
+						removed.disabled = true;
+					}
 				}
 			},
 
 			onEnableControl: function (layer, args) {
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-					if (!this.options.disabled && this.widgets.pickerButton != null) {
-						this.widgets.pickerButton.set('disabled', false);
+					if (!this.options.disabled) {
+						if (this.widgets.pickerButton != null) {
+							this.widgets.pickerButton.set('disabled', false);
 
-						if (this.widgets.dialog != null) {
-							this.widgets.dialog.hide();
+							if (this.widgets.dialog != null) {
+								this.widgets.dialog.hide();
+							}
+						}
+
+						var input = Dom.get(this.options.controlId + "-autocomplete-input");
+						if (input != null) {
+							input.disabled = false;
+						}
+						var added = Dom.get(this.options.controlId + "-added");
+						if (added != null) {
+							added.disabled = false;
+						}
+						var removed = Dom.get(this.options.controlId + "-removed");
+						if (removed != null) {
+							removed.disabled = false;
 						}
 					}
+					this.tempDisabled = false;
 				}
 			},
 

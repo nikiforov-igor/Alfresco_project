@@ -1,5 +1,15 @@
 <#assign formId=args.htmlid?js_string + "-form">
 
+<#assign defaultValue = "">
+<#if form.arguments[field.name]?has_content>
+    <#assign defaultValue = form.arguments[field.name]>
+</#if>
+
+<#assign value = field.value>
+<#if value == "" && defaultValue != "">
+    <#assign value = defaultValue>
+</#if>
+
 <script type="text/javascript">
     (function () {
 
@@ -14,7 +24,7 @@
 
         function createControl() {
             var reiteration = new LogicECM.module.Base.Reiteration("${fieldHtmlId}").setOptions({
-                value: <#if field.value == "">{}<#else>${field.value}</#if>
+                value: <#if value == "">{}<#else>${value}</#if>
             });
             reiteration.setMessages(
                 ${messages}
@@ -75,6 +85,6 @@
             <div id="${fieldHtmlId}-reiteration-rules-error-container" class="reiteration-rules-error-container"></div>
         </div>
     </div>
-    <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${field.value?html}"/>
+    <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${value?html}"/>
 </div>
 <div class="clear"></div>

@@ -190,6 +190,19 @@ public class EventsWebScriptBean extends BaseWebScript {
         return null;
     }
 
+    public Scriptable getEventMembers(ScriptNode event) {
+        return createScriptable(eventService.getEventMembers(event.getNodeRef()));
+    }
+
+    public Scriptable getEventInvitedMembers(ScriptNode event) {
+        return createScriptable(eventService.getEventInvitedMembers(event.getNodeRef()));
+    }
+
+    public Scriptable getEventResources(ScriptNode event) {
+        return createScriptable(eventService.getEventResources(event.getNodeRef()));
+    }
+
+
     public String wrapperEventLink(ScriptNode node, String description) {
         return wrapperLink(node.getNodeRef().toString(), description, EventsService.EVENT_LINK_URL);
     }

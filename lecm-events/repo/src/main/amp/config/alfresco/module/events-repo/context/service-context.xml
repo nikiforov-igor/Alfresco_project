@@ -127,6 +127,7 @@
 				<value>alfresco/module/${artifactId}/actions/member-accept.xml</value>
 				<value>alfresco/module/${artifactId}/actions/member-decline.xml</value>
 				<value>alfresco/module/${artifactId}/actions/member-request-new-time.xml</value>
+				<value>alfresco/module/${artifactId}/actions/create-copy.xml</value>
 			</list>
 		</property>
 	</bean>

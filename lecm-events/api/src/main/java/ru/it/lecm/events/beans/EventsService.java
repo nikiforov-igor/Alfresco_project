@@ -74,6 +74,8 @@ public interface EventsService {
 
     List<NodeRef> getEventInvitedMembers(NodeRef event);
 
+    List<NodeRef> getEventResources(NodeRef event);
+
     List<NodeRef> getAvailableUserLocations();
 
     List<NodeRef> getAvailableUserResources();
