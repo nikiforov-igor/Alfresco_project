@@ -158,7 +158,6 @@ div.boxOutline
    color: #333;
    padding: 0.5em;
    border-bottom: 1px solid #D4D4D4;
-   margin-left: -10px;
 }
 
 #calTitle span.tagged
@@ -923,12 +922,6 @@ div.hourSegment .vevent
 
 /* agenda view */
 
-.agendaview
-{
-   border-bottom: 1px solid #D4D4D4;
-   margin-left: -10px;
-}
-
 .agendaview h1
 {
    border-bottom: 1px solid #D4D4D4;
@@ -1260,17 +1253,11 @@ tr.early {
    margin: auto -10px;
 }
 
-#arm-calendar .yui-dt-col-start div
-{
-   padding-left: 38px;
-   background: url("../../components/calendar/images/calendarEntry.png") no-repeat 15px 8px;
-}
-
 .yui-dt-col-actions a
 {
    display: block;
    float: left;
-   width: 20px;
+   width: 18px;
    height: 16px;
    text-indent: -999em;
    background: transparent no-repeat 2px;
@@ -1278,17 +1265,13 @@ tr.early {
    border: 1px solid transparent;
 }
 
-#arm-calendar .yui-dt-col-where .yui-dt-liner
-{
-   background: url("../../components/calendar/images/location.png") no-repeat 15px 8px;
-   padding-left: 36px;
-}
-
 #arm-calendar .yui-dt-col-where .yui-dt-liner.empty
 {
    background-image: none;
 }
 
+#arm-calendar .acceptAction,
+#arm-calendar .rejectAction,
 #arm-calendar .infoAction,
 #arm-calendar .editAction,
 #arm-calendar .deleteAction
@@ -1297,6 +1280,8 @@ tr.early {
    visibility: hidden;
 }
 
+#arm-calendar .yui-dt-highlighted .acceptAction,
+#arm-calendar .yui-dt-highlighted .rejectAction,
 #arm-calendar .yui-dt-highlighted .infoAction,
 #arm-calendar .yui-dt-highlighted .editAction,
 #arm-calendar .yui-dt-highlighted .deleteAction
@@ -1304,18 +1289,19 @@ tr.early {
    visibility: visible;
 }
 
-#arm-calendar .infoAction
-{
-   background-image: url("../../components/calendar/images/eventInfo.png");
+#arm-calendar .acceptAction {
+    background-image: url(../../images/lecm-events/event_accept.png);
 }
-
-#arm-calendar .editAction
-{
+#arm-calendar .rejectAction {
+    background-image: url(../../images/lecm-events/event_reject.png);
+}
+#arm-calendar .infoAction {
+    background-image: url(../../images/lecm-events/event_more.png);
+}
+#arm-calendar .editAction {
    background-image: url("../../components/calendar/images/editEvent.png");
 }
-
-#arm-calendar .deleteAction
-{
+#arm-calendar .deleteAction {
    background-image: url("../../components/calendar/images/deleteEvent.png");
 }
 
@@ -1578,6 +1564,9 @@ div.fullCalendar th.fc-widget-header
 }
 
 /* Calendar toolbar */
+.yui-skin-lecmTheme .calendar-toolbar {
+    margin-left: 0;
+}
 .yui-skin-lecmTheme .calendar-toolbar button:focus {
     outline: none;
 }
@@ -1798,10 +1787,12 @@ div.fullCalendar th.fc-widget-header
     background: url(../../images/lecm-events/event_more.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-edit {
-    background: url(../../images/lecm-events/event_edit.png) no-repeat center left;
+    background: url("../../components/calendar/images/editEvent.png") no-repeat center left;
+    /*background: url(../../images/lecm-events/event_edit.png) no-repeat center left;*/
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-remove {
-    background: url(../../images/lecm-events/event_remove.png) no-repeat center left;
+    background: url("../../components/calendar/images/deleteEvent.png") no-repeat center left;
+    /*background: url(../../images/lecm-events/event_remove.png) no-repeat center left;*/
 }
 .yui-panel.event-dialog .center-part {
     width: auto;
@@ -1818,3 +1809,57 @@ div.fullCalendar th.fc-widget-header
     background: linear-gradient(to bottom, #fff, #aaa, #fff);
 }
 
+/* Календарь - Повестка */
+.alf-calendar.agendaview .dayContainer {
+    border-bottom: 1px solid #ccc;
+}
+.alf-calendar.agendaview .dayContainer.is-today {
+    background: #e4f3fa;
+}
+.alf-calendar.agendaview .dayTitle {
+    float: left;
+    width: 120px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+.alf-calendar.agendaview .dayContent {
+    margin-left: 120px;
+    background: #fff;
+}
+.alf-calendar.agendaview .dayContent .yui-dt-data tr.yui-dt-even,
+.alf-calendar.agendaview .dayContent .yui-dt-data tr.yui-dt-odd,
+.alf-calendar.agendaview .dayContent .yui-dt-data tr.yui-dt-even.yui-dt-highlighted,
+.alf-calendar.agendaview .dayContent .yui-dt-data tr.yui-dt-odd.yui-dt-highlighted {
+    background: #fff;
+}
+.alf-calendar.agendaview .dayContent .event-name {
+    font-weight: bold;
+    cursor: pointer;
+    padding-left: 20px;
+}
+.alf-calendar.agendaview .dayContent .event-name,
+.alf-calendar.agendaview .dayContent .event-info-container > div {
+    margin-bottom: 5px;
+}
+.alf-calendar.agendaview .dayContent .event-name + .event-info-container {
+    height: 0;
+    padding-left: 20px;
+    overflow-y: hidden;
+    -webkit-transition: height 0.3s 0.1s;
+    -moz-transition: height 0.3s 0.1s;
+    transition: height 0.3s 0.1s;
+}
+.alf-calendar.agendaview .dayContent .event-name.collapsed {
+    background: url("../../components/images/collapsed.png") no-repeat center left;
+}
+.alf-calendar.agendaview .dayContent .event-name.expanded {
+    background: url("../../components/images/expanded.png") no-repeat center left;
+}
+.alf-calendar.agendaview .dayContent .event-name.collapsed + .event-info-container {
+    height: 0;
+}
+.alf-calendar.agendaview .dayContent .event-name.expanded + .event-info-container {
+    height: 60px;
+}

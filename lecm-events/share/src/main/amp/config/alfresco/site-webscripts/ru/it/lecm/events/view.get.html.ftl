@@ -41,7 +41,7 @@
                   <ul class="event-actions">
                       <li class="event-accept"><a href="#">Принять</a></li>
                       <li class="event-reject"><a href="#">Отклонить</a></li>
-                      <li class="event-more"><a id="${viewFormId}-action-more" href="#">Подробее</a></li>
+                      <li class="event-more"><a id="${viewFormId}-action-more" href="#">Подробнее</a></li>
                       <li class="event-edit"><a id="${viewFormId}-action-edit" href="#">Редактировать</a></li>
                       <li class="event-remove"><a href="#">Удалить</a></li>
                       <li><a href="#">Еще</a></li>

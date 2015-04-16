@@ -71,6 +71,22 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Event.addListener(navEls, "click", this.bind(this.onLoadEvents));
 		},
 
+        collapseAllEvent: function() {
+            var events = Dom.getElementsByClassName("event-name expanded", "div", this.options.id);
+
+            if (events && events.length > 0) {
+                Dom.replaceClass(nameEl, "expanded", "collapsed");
+            }
+        },
+
+        expandAllEvents: function() {
+            var events = Dom.getElementsByClassName("event-name collapsed", "div", this.options.id);
+
+            if (events && events.length > 0) {
+                Dom.replaceClass(nameEl, "collapsed", "expanded");
+            }
+        },
+
 		/**
 		 *  CELL RENDERERS
 		 */
@@ -135,7 +151,23 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			// build up cell content
 			//html = '<a href="' + $siteURL("event?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
-			html = '<div>' + data.name + "</div>";
+
+            var nameEl = document.createElement('div');
+            var id = this.options.id + "-event-name-" + data.nodeRef;
+            nameEl.id = id;
+            nameEl.innerHTML = data.name;
+            Dom.addClass(nameEl, "event-name collapsed");
+            YAHOO.util.Event.addListener(id, "click", function() {
+                var nameEl = this;
+                if (Dom.hasClass(nameEl, "collapsed")) {
+                    Dom.replaceClass(nameEl, "collapsed", "expanded");
+                } else {
+                    Dom.replaceClass(nameEl, "expanded", "collapsed");
+                }
+            });
+
+            html += nameEl.outerHTML;
+            html += '<div class="event-info-container">';
 
 			var members = data.members;
 			var membersString = this.msg("label.events.members") + ": ";
@@ -161,12 +193,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					}
 				}
 			}
-			html += '<div>' + invitedMembersString + "</div>";
-
-			html += '<div>' + this.msg("label.events.description") + ": " + data.description + "</div>"
+            html += '<div>' + invitedMembersString + "</div>";
+            html += '<div>' + this.msg("label.events.description") + ": " + data.description + "</div>";
+            html += '</div>';
 
 			// write to DOM
-			elCell.innerHTML = html;
+			elCell.innerHTML += html;
 		},
 
 		/**
@@ -243,14 +275,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			// NOTE: DOM order (Delete, Edit, Info) is reverse of display order (Info, Edit, Delete), due to right float.
 			if (write) {
 				// Delete
-				//if (isDelete) {
-				//	actions.push(YAHOO.lang.substitute(template,
-				//		{
-				//			type:"deleteAction",
-				//			label: me.msg("agenda.action.delete.label"),
-				//			tooltip: me.msg("agenda.action.delete.tooltip")
-				//		}));
-				//}
+				if (isDelete) {
+					actions.push(YAHOO.lang.substitute(template,
+						{
+							type:"deleteAction",
+							label: me.msg("agenda.action.delete.label"),
+							tooltip: me.msg("agenda.action.delete.tooltip")
+						}));
+				}
 
 				// Edit
 				if (isEdit) {
@@ -272,6 +304,23 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					label: me.msg("agenda.action.info.label"),
 					tooltip: me.msg("agenda.action.info.tooltip")
 				}));
+
+            // Accept/reject actions
+            if (true) { //todo: Проверка на добавление этих кнопок
+                actions.push(YAHOO.lang.substitute(template,
+                    {
+                        type: "rejectAction",
+                        label: me.msg("agenda.action.reject.label"),
+                        tooltip: me.msg("agenda.action.reject.tooltip")
+                    }));
+                actions.push(YAHOO.lang.substitute(template,
+                    {
+                        type: "acceptAction",
+                        label: me.msg("agenda.action.accept.label"),
+                        tooltip: me.msg("agenda.action.accept.tooltip")
+                    }));
+
+            }
 
 			html = actions.join(" ");
 
@@ -464,22 +513,29 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this.removeDay(date);
 			}
 
-			var parentEl = document.createElement('div'), // the container for each day.
-				titleEl = document.createElement('h2'), // the day heading.
+			var containerEl = document.createElement('div'), // the container for each day with title.
+			    parentEl = document.createElement('div'), // the container for each day.
+				titleEl = document.createElement('div'), // the day heading.
 				kids = Dom.getChildren(grandParentEl), // all the elements containing DataTables
 				dateTime = fromISO8601(date).getTime(), // makes date comparisons easier
 				insertBeforeThisEl,
 				today = Alfresco.util.toISO8601(new Date()).split("T")[0];
-			parentEl.id = this.options.id + "-dt-" + date;
-			titleEl.id = this.options.id + "-head-" + date;
+
+            containerEl.id = this.options.id + "-cont-" + date;
+            Dom.addClass(containerEl, "dayContainer");
+
+            parentEl.id = this.options.id + "-dt-" + date;
+            Dom.addClass(parentEl, "dayContent");
+
+            titleEl.id = this.options.id + "-head-" + date;
 			Dom.addClass(titleEl, "dayTitle");
 			titleEl.innerHTML = Alfresco.util.relativeDate(fromISO8601(date), this.msg("date-format.dayDateMonth"), {limit: true});
 			Dom.setAttribute(titleEl, "title", formatDate(fromISO8601(date), this.msg("date-format.fullDate")));
 
-			// Add highlighting on today's element.
+            // Add highlighting on today's element.
 			if (date === today)
 			{
-				Dom.addClass(parentEl, "theme-bg-color-2")
+				Dom.addClass(containerEl, "is-today");
 			}
 
 			// Write elements to DOM
@@ -495,15 +551,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 			}
 
-			if (insertBeforeThisEl)
-			{
-				Dom.insertBefore(titleEl, insertBeforeThisEl);
-				Dom.insertBefore(parentEl, insertBeforeThisEl);
+            containerEl.appendChild(titleEl);
+            containerEl.appendChild(parentEl);
+
+			if (insertBeforeThisEl) {
+				Dom.insertBefore(containerEl, insertBeforeThisEl);
 			}
-			else // looks like this is the last date we've currently got, so stick it on the end.
-			{
-				grandParentEl.appendChild(titleEl);
-				grandParentEl.appendChild(parentEl);
+			else { // looks like this is the last date we've currently got, so stick it on the end.
+				grandParentEl.appendChild(containerEl);
 			}
 
 			// instantiate the dataTable.

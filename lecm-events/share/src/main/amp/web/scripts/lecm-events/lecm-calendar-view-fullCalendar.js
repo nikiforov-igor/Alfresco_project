@@ -159,7 +159,7 @@
                monthNames: me.msg("months.long").split(","),
                monthNamesShort: me.msg("months.short").split(","),
                dayNames: me.msg("days.long").split(","),
-               dayNamesShort: me.msg("days.medium").split(","),
+               dayNamesShort: me.msg("days.short").split(","),
                buttonText:
                {
                   month: me.msg("label.month"),
