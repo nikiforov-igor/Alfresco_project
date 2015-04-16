@@ -111,6 +111,13 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         aspectProps.put(StatemachineModel.PROP_STATUS, "Новый");
         nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
 
+        //Вынесено создание папки "Связи"
+        try {
+            documentConnectionService.createRootFolder(docRef);
+        } catch (WriteTransactionNeededException ex) {
+            logger.error("Cannot create connections root folder", ex);
+        }
+
         if (!simpleDocumentRegistry.isSimpleDocument(type)) {
             // Ensure that the transaction listener is bound to the transaction
             AlfrescoTransactionSupport.bindListener(this.transactionListener);
@@ -128,43 +135,42 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                 pendingActions.add(docRef);
             }
         } else {
-            try {
-                SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                @Override
+                public Object doWork() throws Exception {
+                    try {
+                        SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
 
-                List<String> path = new ArrayList<>();
-                if (StringUtils.isNotEmpty(registryItem.getAdditionalPath())) {
-                    String additionalPath = documentService.execStringExpression(docRef, registryItem.getAdditionalPath());
-                    String[] splitPath = additionalPath.split("/");
-                    for (String pathItem : splitPath) {
-                        if (!"".equals(pathItem)) {
-                            path.add(pathItem);
+                        List<String> path = new ArrayList<>();
+                        if (StringUtils.isNotEmpty(registryItem.getAdditionalPath())) {
+                            String additionalPath = documentService.execStringExpression(docRef, registryItem.getAdditionalPath());
+                            String[] splitPath = additionalPath.split("/");
+                            for (String pathItem : splitPath) {
+                                if (!"".equals(pathItem)) {
+                                    path.add(pathItem);
+                                }
+                            }
                         }
-                    }
-                }
 
-                NodeRef storeRef;
-                if (path.isEmpty()) {
-                    storeRef = registryItem.getTypeRoot();
-                } else {
-                    storeRef = simpleDocumentRegistry.getFolder(registryItem.getTypeRoot(), path);
-                    if (storeRef == null) {
-                        storeRef = simpleDocumentRegistry.createPath(registryItem.getTypeRoot(), path);
+                        NodeRef storeRef;
+                        if (path.isEmpty()) {
+                            storeRef = registryItem.getTypeRoot();
+                        } else {
+                            storeRef = simpleDocumentRegistry.getFolder(registryItem.getTypeRoot(), path);
+                            if (storeRef == null) {
+                                storeRef = simpleDocumentRegistry.createPath(registryItem.getTypeRoot(), path);
+                            }
+                        }
+                        String name = nodeService.getProperty(docRef, ContentModel.PROP_NAME).toString();
+                        QName storeQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+                        nodeService.moveNode(docRef, storeRef, ContentModel.ASSOC_CONTAINS, storeQName);
+                    } catch (WriteTransactionNeededException e) {
+                        logger.error("Can not move document " + docRef);
                     }
+                    return null;
                 }
-                String name = nodeService.getProperty(docRef, ContentModel.PROP_NAME).toString();
-                QName storeQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
-                nodeService.moveNode(docRef, storeRef, ContentModel.ASSOC_CONTAINS, storeQName);
-            } catch (WriteTransactionNeededException e) {
-                logger.error("Can not move document " + docRef);
-            }
+            });
         }
-
-		//Вынесено создание папки "Связи"
-		try {
-			documentConnectionService.createRootFolder(docRef);
-		} catch (WriteTransactionNeededException ex) {
-			logger.error("Cannot create connections root folder", ex);
-		}
     }
 
     public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
