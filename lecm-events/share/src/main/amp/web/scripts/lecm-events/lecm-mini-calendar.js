@@ -99,11 +99,7 @@ LogicECM.module = LogicECM.module || {};
 			YAHOO.Bubbling.on("eventDataLoad", this.onEventDataLoad, this);
 			YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
 
-			//load events for this month
-			var date = new Date();
-			date.setDate(1);
-			date.setHours(0,0,0);
-			this.loadEvents(null, [null, new Date(date)]);
+			this.loadThisMonthEvent();
 		},
 
 		/**
@@ -122,6 +118,14 @@ LogicECM.module = LogicECM.module || {};
 				{
 					date: selDate
 				})
+		},
+
+		loadThisMonthEvent: function() {
+			//load events for this month
+			var date = new Date();
+			date.setDate(1);
+			date.setHours(0,0,0);
+			this.loadEvents(null, [null, new Date(date)]);
 		},
 
         loadEvents: function (p_type, p_args, p_obj) {
@@ -161,13 +165,7 @@ LogicECM.module = LogicECM.module || {};
                     var cellIndex = this.calendar.getCellIndex(date);
 
                     if (cellIndex > -1) {
-                        //todo: может есть какой-то свой метод в календаре, чтоб взять ячейку
-                        // пока через dom
-                        var tds = Selector.query("#" + this.calendar.id + " td");
-
-                        if (tds && tds.length > 0) {
-                            Dom.addClass(tds[cellIndex], "with-events");
-                        }
+                        Dom.addClass(this.calendar.cells[cellIndex], "with-events");
                     }
 			    }
 			}
@@ -248,6 +246,7 @@ LogicECM.module = LogicECM.module || {};
 			var today = new Date();
 			this.calendar.cfg.setProperty("pagedate", today.getMonth() + 1 + "/" + today.getFullYear());
 			this.calendar.render();
+			this.loadThisMonthEvent();
 			Event.preventDefault(e);
 		},
 
