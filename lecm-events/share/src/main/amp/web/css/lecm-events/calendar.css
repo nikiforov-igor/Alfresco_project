@@ -1789,19 +1789,19 @@ div.fullCalendar th.fc-widget-header
     color: #000;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-accept {
-    background: url(../../images/lecm-events/event_accept1.png) no-repeat center left;
+    background: url(../../images/lecm-events/event_accept.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-reject {
-    background: url(../../images/lecm-events/event_reject1.png) no-repeat center left;
+    background: url(../../images/lecm-events/event_reject.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-more {
-    background: url(../../images/lecm-events/event_more1.png) no-repeat center left;
+    background: url(../../images/lecm-events/event_more.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-edit {
-    background: url(../../images/lecm-events/event_edit1.png) no-repeat center left;
+    background: url(../../images/lecm-events/event_edit.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-remove {
-    background: url(../../images/lecm-events/event_remove1.png) no-repeat center left;
+    background: url(../../images/lecm-events/event_remove.png) no-repeat center left;
 }
 .yui-panel.event-dialog .center-part {
     width: auto;
