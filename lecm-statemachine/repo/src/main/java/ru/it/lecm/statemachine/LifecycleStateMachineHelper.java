@@ -2219,7 +2219,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(documentRef, true);
         String executionId = (String) serviceRegistry.getNodeService().getProperty(documentRef, StatemachineModel.PROP_STATEMACHINE_ID);
         for (WorkflowInstance workflow : activeWorkflows) {
-        	if(!executionId.equals(workflow.getId())) {
+        	if(!workflow.getId().equals(executionId)) {
         		List<WorkflowTask> tasks = getWorkflowTasks(workflow, activeTasks);
             	result.addAll(tasks);
         	}
