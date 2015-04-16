@@ -512,6 +512,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                              });
                       }
 
+                      Dom.get(viewFormId + "-action-more").href = $siteURL("event?nodeRef=" + event.nodeRef);
+                      Dom.get(viewFormId + "-action-edit").href = $siteURL("event-edit?nodeRef=" + event.nodeRef);
+
                       Dom.setStyle(viewFormId, "display", "block");
                       me.viewDialog.show();
                    }
