@@ -20,6 +20,7 @@
                     <value>EMPTY</value>
                     <value>CONFIRMED</value>
                     <value>DECLINED</value>
+                    <value>REQUEST_NEW_TIME</value>
                 </list>
             </parameter>
         </constraint>

@@ -229,6 +229,8 @@
                                  className = "event-accepted";
                               } else if (event.userMemberStatus == "DECLINED") {
                                  className = "event-rejected";
+                              } else if (event.userMemberStatus == "REQUEST_NEW_TIME") {
+                                 className = "event-another-time";
                               } else if (event.userIsInitiator) {
                                  className = "event-initiator"
                               }

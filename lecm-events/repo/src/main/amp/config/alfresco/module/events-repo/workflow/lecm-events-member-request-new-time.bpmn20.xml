@@ -15,6 +15,7 @@
                             if (document != null) {
                                 var memberRow = events.getCurrentEmployeeEventMemberRow(document);
                                 if (memberRow != null) {
+                                    memberRow.properties["lecm-events-ts:members-status"] = "REQUEST_NEW_TIME";
                                     memberRow.properties["lecm-events-ts:members-from-date"] = lecmEventsWf_requestNewTimeFromDate;
                                     memberRow.properties["lecm-events-ts:members-to-date"] = lecmEventsWf_requestNewTimeToDate;
                                     memberRow.properties["lecm-events-ts:members-all-day"] = lecmEventsWf_requestNewTimeAllDay;
