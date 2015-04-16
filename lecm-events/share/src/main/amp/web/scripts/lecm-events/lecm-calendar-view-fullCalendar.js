@@ -146,8 +146,8 @@
                maxTime: (me.options.fcOpts.showWorkHours) ? me.options.fcOpts.maxTimeWorkHours : me.options.fcOpts.maxTimeToggle,
                aspectRatio: me.options.fcOpts.aspectRatio,
                slotMinutes: me.options.fcOpts.slotMinutes,
-               disableDragging: me.options.fcOpts.disableDragging,
-               disableResizing: me.options.fcOpts.disableResizing,
+               disableDragging: true,
+               disableResizing: true,
 
                // This is treated as a maximum height for day and week views - if it's set too small, you'll get an internal scrollbar.
                height: 2000,
@@ -266,17 +266,6 @@
                   return false;
                 },
 
-               // Update the event following drag and drop.
-               eventDrop: function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view)
-               {
-                  me.updateEvent(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view);
-               },
-
-               eventResize: function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view)
-               {
-                  me.updateEvent(event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view);
-               },
-
                viewDisplay: function (view)
                {
                   // reset height for month view to ensure use of aspect ratio so we get square boxes.
@@ -293,34 +282,6 @@
                   {
                      me.showAddDialog(date);
                   }
-               },
-
-               /**
-                * Triggered by FullCalendar after an event has been updated (e.g. by drag and drop)
-                *
-                * @method afterEventChange
-                * @param eventID - the unique ID of the event that has moved
-                */
-               afterEventChange: function (eventID)
-               {
-                  // the filter returns an array for when multiple (e.g. repeated) events share an ID)
-                  var events = $jCalendar.fullCalendar("clientEvents", eventID);
-
-                  // keep the Alfresco properties in sync w/ the event object ones.
-                  for (var i=0; i < events.length; i++)
-                  {
-                     var event = events[i],
-                     startISO8601 = toISO8601(event.start),
-                     endISO8601 = toISO8601(event.end) || startISO8601;
-                     event.startAt =
-                     {
-                        iso8601: startISO8601
-                     }
-                     event.endAt =
-                     {
-                        iso8601: endISO8601
-                     }
-                  }
                }
 
             });
@@ -335,51 +296,6 @@
        */
       getEvents: function () {
          $jCalendar.fullCalendar("refetchEvents");
-      },
-
-      /**
-       * Updates an event following a drag interaction
-       *
-       * @method updateEvent
-       */
-      updateEvent: function (event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view)
-      {
-         // Map FullCalendar event object back to an Alfresco Event object:
-         // For now this is in the same format as the EventInfo form submits - except it uses the ISO8601 datetime strings to help with timezone support.
-         var end = event.end || event.start, // event.end is null for all day events that only span a single day
-            alfEvent =
-            {
-               desc: event.description,
-               docfolder: event.docfolder || "",
-               startAt:
-               {
-                  iso8601: toISO8601(event.start)
-               },
-               endAt:
-               {
-                  iso8601: toISO8601(end)
-               },
-               page: Alfresco.constants.PAGEID,
-               site: Alfresco.constants.SITE,
-               tags: (event.tags) ? event.tags.join() : [],
-               what: event.title,
-               where: event.where
-            };
-         // allday property needs to be missing for it to be false.
-         if (event.allDay)
-         {
-            alfEvent.allday = "true";
-         }
-
-         Alfresco.util.Ajax.jsonPut(
-         {
-            url: Alfresco.constants.PROXY_URI + "calendar/event/" + Alfresco.constants.SITE + "/" + event.name,
-            dataObj: alfEvent,
-            failureCallback:
-            {
-               fn: revertFunc
-            }
-         });
       },
 
       /**
