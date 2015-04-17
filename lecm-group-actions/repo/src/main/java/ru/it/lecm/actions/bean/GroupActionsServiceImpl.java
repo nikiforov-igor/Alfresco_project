@@ -76,8 +76,8 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
 
 
     @Override
-    public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems) {
-        return getActiveActions(forItems, true);
+    public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems, boolean group) {
+        return getActiveActions(forItems, group);
     }
 
     public List<NodeRef> getActiveActions(NodeRef item) {

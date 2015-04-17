@@ -1,4 +1,7 @@
-var actions = groupActions.getActiveGroupActions(json.get("items"));
+var items = json.get("items");
+var group = json.has("group") ? json.get("group") == true : true;
+
+var actions = groupActions.getActiveGroupActions(items, group);
 
 var result = [];
 

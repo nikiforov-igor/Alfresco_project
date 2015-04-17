@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
 import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.actions.bean.GroupActionsServiceImpl;
+import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.ByteArrayInputStream;
@@ -76,6 +77,13 @@ public class GroupActionExecutor extends DeclarativeWebScript {
         if (actionId != null) {
             action = nodeService.getChildByName(actionsService.getHomeRef(), ContentModel.ASSOC_CONTAINS, actionId);
         }
+
+        List<NodeRef> actions = actionsService.getActiveGroupActions(items, true);
+        actions.addAll(actionsService.getActiveGroupActions(items, false));
+        if (!actions.contains(action)) {
+            throw new IllegalStateException("Action \"" + actionId + "\" not found for this items and user");
+        }
+
         final HashMap<String, Object> result = new HashMap<String, Object>();
         if (action != null && items.size() > 0) {
             Map<String, Object> model = new HashMap<String, Object>(8, 1.0f);

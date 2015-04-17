@@ -75,7 +75,7 @@ public class GroupActionsScript extends BaseWebScript {
         return results;
     }
 
-    public Scriptable getActiveGroupActions(String jsonItems) {
+    public Scriptable getActiveGroupActions(String jsonItems, boolean group) {
         List<NodeRef> forItems = new ArrayList<NodeRef>();
         try {
             JSONArray array = new JSONArray(jsonItems);
@@ -87,7 +87,7 @@ public class GroupActionsScript extends BaseWebScript {
         } catch (JSONException e) {
             logger.error("Error while parsing input data", e);
         }
-        return createScriptable(actionsService.getActiveGroupActions(forItems));
+        return createScriptable(actionsService.getActiveGroupActions(forItems, group));
     }
 
 }

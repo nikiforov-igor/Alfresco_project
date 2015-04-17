@@ -459,7 +459,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 showCancelButton: true
                             };
                         var responseHandler = function(response) {
-                                document.location.href = document.location.href;
+                                document.location.reload();
                             }
                         var me = this;
                         LogicECM.CurrentModules = {};
@@ -538,7 +538,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 {
                                     this.destroy();
                                     if (reload) {
-                                        document.location.href = document.location.href;
+                                        document.location.reload();
                                     }
                                 }
                             }]
@@ -611,7 +611,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     } else if (json.withErrors) {
                         this._openMessageWindow(actionId, Alfresco.util.message('lecm.arm.msg.oper.perform.error') + " \"" + actionId + "\"", false);
                     } else {
-                        document.location.href = document.location.href;
+                        document.location.reload();
                     }
                 } else {
                     var message = "";

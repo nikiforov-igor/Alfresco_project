@@ -43,7 +43,7 @@ public interface GroupActionsService {
      * @param forItems
      * @return
      */
-    List<NodeRef> getActiveGroupActions(List<NodeRef> forItems);
+    List<NodeRef> getActiveGroupActions(List<NodeRef> forItems, boolean group);
 
     /**
      * Вывод не груповвых действий для документа
