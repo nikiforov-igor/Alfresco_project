@@ -21,8 +21,8 @@
 			</list>
 		</property>
 	</bean>
-  
-     
+	
+
   
 	<bean id="meetings.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="documents.LogicEcmModelsBootstrap,
@@ -60,12 +60,54 @@
 		</property>
 	</bean>
 	
+	<bean id="protocol.meetings.LogicEcmProtocolTableStructureBootstrap" parent="modelsToRepositoryLoader"
+		  depends-on="documents.LogicEcmModelsBootstrap,
+		      dictionaryBootstrap,
+		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-protocol-table-structure-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-protocol-table-structure-model</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="protocol.meetings.LogicEcmProtocolBootstrap" parent="modelsToRepositoryLoader"
+		  depends-on="dictionaryBootstrap,
+					 ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+					 eds.models.bootstrap,
+					 protocol.meetings.LogicEcmProtocolTableStructureBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-protocol-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-protocol-model</value>
+			</list>
+		</property>
+	</bean>
+	
 	<bean id="meetings.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="meetings.dictionaries.LogicEcmModelsBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-br-items.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="protocol.meetings.LogicEcmProtocolDictionariesBootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="documents.dictionaries.LogicEcmModelsBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-doc-types.xml</value>
 			</list>
 		</property>
 	</bean>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-protocol-ts:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Табличные данные протокола совещания</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/protocol/table-structure/1.0" prefix="lecm-protocol-ts"/>
+    </namespaces>
+
+	<constraints>
+		<constraint name="lecm-protocol-ts:point-statuses" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>ON_EXECUTION</value>
+					<value>EXECUTED</value>
+					<value>NOT_EXECUTED</value>
+					<value>OVERDUE</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>	
+
+    <types>
+        <type name="lecm-protocol-ts:point">
+            <title>Point</title>
+            <parent>lecm-document:tableDataRow</parent>
+            <properties>
+				<!-- Срок исполнения -->
+                <property name="lecm-protocol-ts:execution-date">
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
+				<!--Формулировка-->
+                <property name="lecm-protocol-ts:point-formulation">
+                    <type>d:text</type>
+					<mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<!--Описание-->
+				<property name="lecm-protocol-ts:point-desc">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<!--Решение-->
+                <property name="lecm-protocol-ts:decision">
+                    <type>d:text</type>
+					<mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<!--Примечание-->
+                <property name="lecm-protocol-ts:note">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<!-- Фактическая дата исполнения -->
+                <property name="lecm-protocol-ts:execution-date-real">
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                </property>
+				<!--Статус пункта-->
+				<property name="lecm-protocol-ts:point-status">
+					<type>d:text</type>
+					<default>NOT_EXECUTED</default>
+					<constraints>
+						<constraint ref="lecm-protocol-ts:point-statuses"/>
+					</constraints>
+				</property>
+				
+				<!--Служебные атрибуты-->
+				<property name="lecm-protocol-ts:reporter-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-protocol-ts:reporter-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<property name="lecm-protocol-ts:coreporter-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-protocol-ts:coreporter-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<property name="lecm-protocol-ts:executor-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-protocol-ts:executor-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <associations>
+				<!--Докладчик-->
+                <association name="lecm-protocol-ts:reporter-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+				<!--Содокладчики-->
+                <association name="lecm-protocol-ts:coreporter-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+				<!--Исполнитель-->
+                <association name="lecm-protocol-ts:executor-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+        <type name="lecm-protocol-ts:pointsTable">
+            <title>Points table</title>
+            <parent>lecm-document:tableData</parent>
+            <overrides>
+                <property name="lecm-document:tableDataRowType">
+                    <default>lecm-protocol-ts:point</default>
+                </property>
+                <property name="lecm-document:pageSize">
+                    <default>5</default>
+                </property>
+            </overrides>
+        </type>
+    </types> 
+	
+	
+    <aspects>
+        <aspect name="lecm-protocol-ts:points-table-aspect">
+            <parent>lecm-document:tableDataAspect</parent>
+            <properties>
+                <property name="lecm-protocol-ts:points-assoc-text-content">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-protocol-ts:points-assoc">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-protocol-ts:pointsTable</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+    </aspects>
+</model>
