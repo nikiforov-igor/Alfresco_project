@@ -19,7 +19,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		toISO8601 = Alfresco.util.toISO8601,
 		formatDate = Alfresco.util.formatDate,
 		dateFormat = Alfresco.thirdparty.dateFormat,
-		DateMath = YAHOO.widget.DateMath;
+		DateMath = YAHOO.widget.DateMath,
+        collapsedClass = "collapsed",
+        expandedClass = "expanded";
 
 	LogicECM.module.Calendar.AgendaView = function (htmlId)
 	{
@@ -69,21 +71,23 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			// Unhide the nav, now it is usable
 			Dom.removeClass(navEls, "hidden");
 			Event.addListener(navEls, "click", this.bind(this.onLoadEvents));
+			Event.addListener(this.id + "_expand_all", "click", this.bind(this.expandAllEvents));
+			Event.addListener(this.id + "_collapse_all", "click", this.bind(this.collapseAllEvents));
 		},
 
-        collapseAllEvent: function() {
-            var events = Dom.getElementsByClassName("event-name expanded", "div", this.options.id);
+        collapseAllEvents: function() {
+            var events = Dom.getElementsByClassName("event-name " + expandedClass, "div", this.options.id);
 
             if (events && events.length > 0) {
-                Dom.replaceClass(nameEl, "expanded", "collapsed");
+                Dom.replaceClass(events, expandedClass, collapsedClass);
             }
         },
 
         expandAllEvents: function() {
-            var events = Dom.getElementsByClassName("event-name collapsed", "div", this.options.id);
+            var events = Dom.getElementsByClassName("event-name " + collapsedClass, "div", this.options.id);
 
             if (events && events.length > 0) {
-                Dom.replaceClass(nameEl, "collapsed", "expanded");
+                Dom.replaceClass(events, collapsedClass, expandedClass);
             }
         },
 
@@ -156,13 +160,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
             var id = this.options.id + "-event-name-" + data.nodeRef;
             nameEl.id = id;
             nameEl.innerHTML = data.name;
-            Dom.addClass(nameEl, "event-name collapsed");
+            Dom.addClass(nameEl, "event-name " + collapsedClass);
             YAHOO.util.Event.addListener(id, "click", function() {
                 var nameEl = this;
-                if (Dom.hasClass(nameEl, "collapsed")) {
-                    Dom.replaceClass(nameEl, "collapsed", "expanded");
+                if (Dom.hasClass(nameEl, collapsedClass)) {
+                    Dom.replaceClass(nameEl, collapsedClass, expandedClass);
                 } else {
-                    Dom.replaceClass(nameEl, "expanded", "collapsed");
+                    Dom.replaceClass(nameEl, expandedClass, collapsedClass);
                 }
             });
 

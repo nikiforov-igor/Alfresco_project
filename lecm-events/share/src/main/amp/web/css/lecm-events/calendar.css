@@ -157,7 +157,6 @@ div.boxOutline
    font-size: 146%;
    color: #333;
    padding: 0.5em;
-   border-bottom: 1px solid #D4D4D4;
 }
 
 #calTitle span.tagged
@@ -1810,8 +1809,20 @@ div.fullCalendar th.fc-widget-header
 }
 
 /* Календарь - Повестка */
+div.agenda-header {
+    border-bottom: 1px solid #d4d4d4;
+    clear: both;
+    overflow: hidden;
+}
+.agenda-header h2 {
+    float: left;
+}
+.agenda-header div {
+    float: left;
+    margin: 13px 10px 0;
+}
 .alf-calendar.agendaview .dayContainer {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #d4d4d4;
     clear: both;
     overflow-y: hidden;
 }

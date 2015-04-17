@@ -22,7 +22,11 @@
         <#assign el=args.htmlid?html>
 		<!-- agenda -->
 		<a href="" class="previousEvents hidden agendaNav">${msg("agenda.previous")}</a>
-		<h2 id="calTitle">&nbsp;</h2>
+		<div class="agenda-header">
+            <h2 id="calTitle">&nbsp;</h2>
+            <div><a href="#" id="${el}_expand_all">Развернуть всё</a></div>
+            <div><a href="#" id="${el}_collapse_all">Свернуть всё</a></div>
+        </div>
 		<div id="${el}Container" class="alf-calendar agendaview">
 			<div id="${el}View">
 				<div id="${el}View-noEvent" class="noEvent">
