@@ -46,7 +46,14 @@
 				}
 			}<#if event_has_next>,</#if>
         </#list>
-	]
+	],
     </#if>
+	<#if nonWorkindDays??>
+		"nonWorkindDays": [
+			<#list nonWorkindDays as day>
+		        "${day?string("yyyy-MM-dd")}"<#if day_has_next>,</#if>
+			</#list>
+		]
+	</#if>
 }
 </#escape>
