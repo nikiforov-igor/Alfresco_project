@@ -1747,7 +1747,8 @@ div.fullCalendar th.fc-widget-header
 
 /* Всплывающее окно с краткой информацией о мероприятии */
 .yui-panel.event-dialog .hd {
-    display: none;
+    background: #fff;
+    color: #333;
 }
 .yui-panel.event-dialog .bd {
     width: auto;
