@@ -260,6 +260,19 @@
                               }, event));
                            });
                         }
+                         var nonWorking = data.nonWorkingDays;
+                         if (nonWorking && nonWorking.length > 0) {
+                             for (var i = 0; i < nonWorking.length; i++) {
+                                 var nw = nonWorking[i];
+                                 if (nw != null) {
+                                     //var cellIndex = this.calendar.getCellIndex(fromISO8601(nw));
+                                     //
+                                     //if (cellIndex > -1) {
+                                     //    Dom.addClass(this.calendar.cells[cellIndex], "non-working");
+                                     //}
+                                 }
+                             }
+                         }
 
                         return parsedEvents;
                      }

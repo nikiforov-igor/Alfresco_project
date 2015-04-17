@@ -11,7 +11,7 @@
 			nonWorkingDays.push(new Date(date));
 		}
 	}
-	model.nonWorkindDays = nonWorkingDays;
+	model.nonWorkingDays = nonWorkingDays;
 }());
 
 function DateFromISO8601() {

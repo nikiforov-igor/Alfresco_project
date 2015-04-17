@@ -156,6 +156,7 @@ LogicECM.module = LogicECM.module || {};
 		onEventsLoaded: function (o)
 		{
 			var data = YAHOO.lang.JSON.parse(o.serverResponse.responseText).events;
+			var nonWorking = YAHOO.lang.JSON.parse(o.serverResponse.responseText).nonWorkingDays;
 
 			for (var i = 0; i < data.length; i++) {
 				var ev = data[i];
@@ -166,6 +167,16 @@ LogicECM.module = LogicECM.module || {};
 
                     if (cellIndex > -1) {
                         Dom.addClass(this.calendar.cells[cellIndex], "with-events");
+                    }
+			    }
+			}
+            for (i = 0; i < nonWorking.length; i++) {
+				var nw = nonWorking[i];
+			 	if (nw != null) {
+                    var cellIndex = this.calendar.getCellIndex(fromISO8601(nw));
+
+                    if (cellIndex > -1) {
+                        Dom.addClass(this.calendar.cells[cellIndex], "non-working");
                     }
 			    }
 			}

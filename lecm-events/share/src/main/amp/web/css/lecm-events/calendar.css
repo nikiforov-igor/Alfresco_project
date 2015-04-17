@@ -1747,8 +1747,7 @@ div.fullCalendar th.fc-widget-header
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.wd6 a,
-.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.wd0 a {
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.non-working a {
     color: #cf2700;
 }
 
