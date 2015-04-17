@@ -25,6 +25,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		this.prevButton = null;
 		this.todayButton = null;
 
+		this.isAgenda = false;
+
 		/* Load YUI Components */
 		Alfresco.util.YUILoaderHelper.require(["button", "container", "connection"], this.onComponentsLoaded, this);
 
@@ -85,7 +87,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					if (this.navButtonGroup._buttons[i]._button.id.match(view))
 					{
 						this.navButtonGroup.check(i);
-						this.disableButtons(i);
+						this.updateButtons(i);
 						break;
 					}
 				}
@@ -93,44 +95,49 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
-		onNextNav: function(e)
-		{
-			this._fireEvent("nextNav");
+		onNextNav: function(e) {
+			if (this.isAgenda) {
+				this._fireEvent("nextAgendaNav");
+			} else {
+				this._fireEvent("nextNav");
+			}
 		},
 
-		onPrevNav: function(e)
-		{
-			this._fireEvent("prevNav");
+		onPrevNav: function(e) {
+			if (this.isAgenda) {
+				this._fireEvent("prevAgendaNav");
+			} else {
+				this._fireEvent("prevNav");
+			}
 		},
 
-		onTodayNav: function(e)
-		{
-			this._fireEvent("todayNav");
+		onTodayNav: function(e) {
+			if (this.isAgenda) {
+				this._fireEvent("todayAgendaNav");
+			} else {
+				this._fireEvent("todayNav");
+			}
 		},
 
 		onNavigation: function(e)
 		{
-			this.disableButtons(e.newValue.index);
+			this.updateButtons(e.newValue.index);
 
 			YAHOO.Bubbling.fire("viewChanged",
 				{
 					activeView: e.newValue.index
 				});
 		},
-		disableButtons : function(butIndex)
+		updateButtons : function(butIndex)
 		{
 			var selectedButton = this.navButtonGroup.getButtons()[butIndex];
 			if (this.todayButton != null) // Note: Today button will be null if elements are hidden serverside
 			{
 				// Disable Nav for Agenda view which uses a different navigation model
 				if (this.endWidth(selectedButton.get("id"), LogicECM.module.Calendar.View.VIEWTYPE_AGENDA)) {
-					this.todayButton.set('disabled', true);
-					this.nextButton.set('disabled', true);
-					this.prevButton.set('disabled', true);
+					this.isAgenda = true;
 				} else {
-					this.todayButton.set('disabled', false);
-					this.nextButton.set('disabled', false);
-					this.prevButton.set('disabled', false);
+					this.isAgenda = false;
 				}
 			}
 		},

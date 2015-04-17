@@ -35,8 +35,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.AgendaView.prototype, {
 
+		initStartDate: null,
+		initEndDate: null,
+
 		render: function () {
 			this.initEvents();
+
+			this.initStartDate = this.options.startDate;
+			this.initEndDate = this.options.endDate;
 
 			this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
 
@@ -65,12 +71,18 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		/**
 		 * Triggered after events have loaded - bind necessary Agenda specific events.
 		 */
-		initAgendaEvents: function ()
-		{
-			var navEls = Dom.getElementsByClassName("agendaNav");
-			// Unhide the nav, now it is usable
-			Dom.removeClass(navEls, "hidden");
-			Event.addListener(navEls, "click", this.bind(this.onLoadEvents));
+		initAgendaEvents: function () {
+			YAHOO.Bubbling.on("nextAgendaNav", function (e, args) {
+				this.onLoadEvents(false);
+			}, this);
+			YAHOO.Bubbling.on("prevAgendaNav", function (e, args) {
+				this.onLoadEvents(true);
+			}, this);
+			YAHOO.Bubbling.on("todayAgendaNav", function (e, args) {
+				this.options.startDate = this.initStartDate;
+				this.options.endDate = this.initEndDate;
+				this.getEvents();
+			}, this);
 			Event.addListener(this.id + "_expand_all", "click", this.bind(this.expandAllEvents));
 			Event.addListener(this.id + "_collapse_all", "click", this.bind(this.collapseAllEvents));
 		},
@@ -464,14 +476,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this.initAgendaEvents();
 				this.eventsInitialised = true;
 			}
-
-			// TODO: This should be triggered by the eventDataLoaded event.
-			// Has a DOM element been informing the user that data is being loaded?
-			if (this.loadingLabelBuffer && this.loadingEl)
-			{
-				this.loadingEl.innerHTML = this.loadingLabelBuffer;
-				this.loadingEl = this.loadingLabelBuffer = null;
-			}
 		},
 
 		/**
@@ -598,34 +602,21 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		/**
 		 * Triggered when the previous/next links are clicked.
 		 */
-		onLoadEvents: function (e)
-		{
-			// prevent multiple load events happening simultaneously.
-			if (!this.loadingEl)
-			{
-				var step = 30, // number of days to add each time
-					dayInMS = 24 * 60 * 60 * 1000; // milliseconds in one day
+		onLoadEvents: function (previus) {
+			var step = 30, // number of days to add each time
+				dayInMS = 24 * 60 * 60 * 1000; // milliseconds in one day
 
-				// Let the user know we're loading new content
-				var target = Event.getTarget(e);
-				this.loadingLabelBuffer = target.innerHTML; // store for later so we can revert
-				this.loadingEl = target;
-				this.loadingEl.innerHTML = this.msg("message.loading");
-
-				// Update the start or end date as appropriate
-				if (YAHOO.util.Selector.test(this.loadingEl, 'a.previousEvents'))
-				{
-					this.options.startDate = new Date(this.options.startDate.getTime() - (step * dayInMS));
-				}
-				else if (YAHOO.util.Selector.test(this.loadingEl, 'a.nextEvents'))
-				{
-					this.options.endDate = new Date(this.options.endDate.getTime() + (step * dayInMS));
-				}
-
-				// get a fresh list of events from server, this calls the render functions on success
-				this.getEvents();
+			// Update the start or end date as appropriate
+			if (previus) {
+				this.options.startDate = new Date(this.options.startDate.getTime() - (step * dayInMS));
+				this.options.endDate = new Date(this.options.endDate.getTime() - (step * dayInMS));
+			} else {
+				this.options.startDate = new Date(this.options.startDate.getTime() + (step * dayInMS));
+				this.options.endDate = new Date(this.options.endDate.getTime() + (step * dayInMS));
 			}
-			Event.preventDefault(e);
+
+			// get a fresh list of events from server, this calls the render functions on success
+			this.getEvents();
 		},
 
 

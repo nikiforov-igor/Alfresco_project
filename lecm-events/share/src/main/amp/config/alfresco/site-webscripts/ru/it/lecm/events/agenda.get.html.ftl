@@ -21,7 +21,6 @@
     <@uniqueIdDiv>
         <#assign el=args.htmlid?html>
 		<!-- agenda -->
-		<a href="" class="previousEvents hidden agendaNav">${msg("agenda.previous")}</a>
 		<div class="agenda-header">
             <h2 id="calTitle">&nbsp;</h2>
             <div><a href="#" id="${el}_expand_all">Развернуть всё</a></div>
@@ -34,6 +33,5 @@
 				</div>
 			</div>
 		</div>
-		<div class="nextEventsContainer">&nbsp;<a href="" class="nextEvents hidden agendaNav">${msg("agenda.next")}</a></div>
     </@>
 </@>
