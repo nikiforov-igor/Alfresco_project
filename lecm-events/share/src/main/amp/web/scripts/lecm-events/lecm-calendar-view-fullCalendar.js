@@ -27,6 +27,8 @@
    YAHOO.lang.augmentObject(LogicECM.module.Calendar.FullView.prototype,
    {
 
+      PREFERENCE_KEY: "ru.it.lecm.calendar.state.",
+
       /**
        * Converts Alfresco view type into FullCalendar view type
        *
@@ -302,11 +304,23 @@
                   {
                      me.showAddDialog(date);
                   }
+               },
+
+               loading: function (notLoad) {
+                  if (!notLoad) {
+                     YAHOO.Bubbling.fire("calendarReady");
+                  }
                }
 
             });
 
          });
+      },
+
+      saveLastView: function saveLastView(view) {
+         var date = new Date;
+         date.setDate(date.getDate() + 30);
+         LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + LogicECM.currentUser, view, {expires: date});
       },
 
       /**
@@ -341,11 +355,14 @@
        * @method onViewNav
        * @param view {string} ["day"|"week"|"month"]
        */
-      onViewNav: function (view)
+      onViewNav: function (viewPar)
       {
-         var view = this.getFullCalendarViewType(view);
+         var view = this.getFullCalendarViewType(viewPar);
          if (view != null) {
             $jCalendar.fullCalendar("changeView", view);
+            this.saveLastView(viewPar);
+         } else {
+            this.saveLastView("agenda");
          }
       },
 

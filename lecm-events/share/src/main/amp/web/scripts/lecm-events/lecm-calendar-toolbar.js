@@ -31,12 +31,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		Alfresco.util.YUILoaderHelper.require(["button", "container", "connection"], this.onComponentsLoaded, this);
 
 		Alfresco.util.ComponentManager.register(this);
-
+		YAHOO.Bubbling.on("calendarReady", this.onCalendarReady, this);
 		return this;
 	};
 
 	LogicECM.module.Calendar.Toolbar.prototype =
 	{
+		PREFERENCE_KEY: "ru.it.lecm.calendar.state.",
 		/**
 		 * Set messages for this component.
 		 *
@@ -92,6 +93,23 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					}
 				}
 				this.navButtonGroup.on("checkedButtonChange", this.onNavigation, this.navButtonGroup, this);
+			}
+		},
+
+		onCalendarReady: function onCalendarReady() {
+			var calendarPref = LogicECM.module.Base.Util.getCookie(this.PREFERENCE_KEY  + LogicECM.currentUser);
+			if (calendarPref !== null) {
+				for (var i = 0; i < this.navButtonGroup._buttons.length; i++) {
+					if (this.navButtonGroup._buttons[i]._button.id.match(calendarPref)) {
+						this.updateButtons(i);
+
+						YAHOO.Bubbling.fire("viewChanged",
+							{
+								activeView: i
+							});
+						break;
+					}
+				}
 			}
 		},
 
