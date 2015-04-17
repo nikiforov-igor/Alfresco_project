@@ -1495,10 +1495,6 @@ div.fullCalendar .fc-event-vert .fc-event-bg
    padding: 0;
    width: auto;
 }
-.fc-grid .fc-sat .fc-day-number,
-.fc-grid .fc-sun .fc-day-number {
-   color: #cf2700;
-}
 
 .fc-grid .fc-other-month .fc-day-number {
    color: #CACACA;
@@ -1643,18 +1639,19 @@ div.fullCalendar th.fc-widget-header
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-another-time div.fc-event-inner,
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-initiator div.fc-event-inner {
     padding-right: 20px;
+    background: transparent no-repeat top 2px right 2px;
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-accepted div.fc-event-inner {
-    background: url(../../images/lecm-events/thumb_up.png) no-repeat center right;
+    background-image: url(../../images/lecm-events/thumb_up.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-rejected div.fc-event-inner {
-    background: url(../../images/lecm-events/thumb_down.png) no-repeat center right;
+    background-image: url(../../images/lecm-events/thumb_down.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-another-time div.fc-event-inner {
-    background: url(../../images/lecm-events/clock.png) no-repeat center right;
+    background-image: url(../../images/lecm-events/clock.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-initiator div.fc-event-inner {
-    background: url(../../images/lecm-events/horn.png) no-repeat center right;
+    background-image: url(../../images/lecm-events/horn.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner span.fc-event-time {
     margin-right: 1px;
@@ -1746,9 +1743,6 @@ div.fullCalendar th.fc-widget-header
     -ms-transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
-}
-.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.non-working a {
-    color: #cf2700;
 }
 
 /* Всплывающее окно с краткой информацией о мероприятии */
@@ -1874,4 +1868,58 @@ div.agenda-header {
 }
 .alf-calendar.agendaview .dayContent .event-name.expanded + .event-info-container {
     height: 60px;
+}
+
+/* Календарь - Неделя, День */
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-agenda-days tbody th.fc-widget-header,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-agenda-days tbody th.fc-widget-header {
+    border-right-color: #eaeaea;
+}
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-agenda-allday th.fc-widget-header {
+    display: none;
+}
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-agenda-slots th.fc-widget-header,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-agenda-allday th.fc-widget-header,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-agenda-slots th.fc-widget-header {
+    color: #888;
+    font-weight: normal !important;
+}
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-agenda-slots tr:not(.fc-minor) td,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-agenda-slots tr:not(.fc-minor) td {
+    background: rgba(202, 226, 237, 0.4);
+}
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-event:not(.fc-event-allday),
+.alf-calendar .fc-content .fc-view-agendaDay .fc-event:not(.fc-event-allday) {
+    background: #fff;
+    border: none;
+}
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-event:not(.fc-event-allday) .fc-event-inner,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-event:not(.fc-event-allday) .fc-event-inner {
+    right: -3px;
+    margin: 0;
+    border: 1px solid #b0b0b0;
+    padding-top: 2px;
+    padding-left: 3px;
+    overflow-y: hidden;
+}
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-event .fc-event-head,
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-event .fc-event-bg,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-event .fc-event-head,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-event .fc-event-bg {
+    display: none;
+}
+.alf-calendar .fc-content .fc-view-agendaWeek .fc-event-content .fc-event-title,
+.alf-calendar .fc-content .fc-view-agendaDay .fc-event-content .fc-event-title {
+    max-width: 100%;
+    white-space: normal;
+}
+.alf-calendar .fc-content .fc-view-agendaDay .fc-today {
+    background: #fff;
+}
+
+/* Выходные и праздничные дни */
+.yui-skin-lecmTheme .arm-mini-calendar .yui-calendar td.calcell.non-working a,
+.alf-calendar .fc-view-month .fc-widget-content.non-working .fc-day-number,
+.alf-calendar .fc-view-agendaWeek .fc-widget-header.non-working {
+    color: #cf2700;
 }
