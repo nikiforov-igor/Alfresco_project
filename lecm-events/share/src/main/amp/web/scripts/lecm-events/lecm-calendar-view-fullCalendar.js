@@ -307,7 +307,7 @@
       },
 
       saveLastView: function saveLastView(view) {
-         var date = new Date;
+         var date = new Date();
          date.setDate(date.getDate() + 30);
          LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + LogicECM.currentUser, view, {expires: date});
       },
@@ -323,23 +323,25 @@
          var view = $jCalendar.fullCalendar("getView");
          if (this.nonWorking) {
             var startCalendar = view.visStart;
-            for (i = 0; i < this.nonWorking.length; i++) {
-               var nw = this.nonWorking[i];
-               if (nw != null) {
-                  var date = fromISO8601(nw);
-                  var dayDiff = (date.getTime() - startCalendar.getTime())/(1000*60*60*24);
+            if (startCalendar != null) {
+               for (i = 0; i < this.nonWorking.length; i++) {
+                  var nw = this.nonWorking[i];
+                  if (nw != null) {
+                     var date = fromISO8601(nw);
+                     var dayDiff = (date.getTime() - startCalendar.getTime())/(1000*60*60*24);
 
-                  if (view.name === this.options.fcOpts.monthView) {
-                     var className = "fc-day" + dayDiff;
-                     var elements = Dom.getElementsByClassName(className, "td");
-                     if (elements != null && elements.length > 0) {
-                        Dom.addClass(elements[0], "non-working");
-                     }
-                  } else if (view.name === this.options.fcOpts.weekView) {
-                     className = "fc-col" + dayDiff;
-                     elements = Dom.getElementsByClassName(className, "th");
-                     if (elements != null && elements.length > 0) {
-                        Dom.addClass(elements[0], "non-working");
+                     if (view.name === this.options.fcOpts.monthView) {
+                        var className = "fc-day" + dayDiff;
+                        var elements = Dom.getElementsByClassName(className, "td");
+                        if (elements != null && elements.length > 0) {
+                           Dom.addClass(elements[0], "non-working");
+                        }
+                     } else if (view.name === this.options.fcOpts.weekView) {
+                        className = "fc-col" + dayDiff;
+                        elements = Dom.getElementsByClassName(className, "th");
+                        if (elements != null && elements.length > 0) {
+                           Dom.addClass(elements[0], "non-working");
+                        }
                      }
                   }
                }
