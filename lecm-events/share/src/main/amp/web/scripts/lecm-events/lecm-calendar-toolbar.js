@@ -101,12 +101,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (calendarPref !== null) {
 				for (var i = 0; i < this.navButtonGroup._buttons.length; i++) {
 					if (this.navButtonGroup._buttons[i]._button.id.match(calendarPref)) {
-						this.updateButtons(i);
-
-						YAHOO.Bubbling.fire("viewChanged",
-							{
-								activeView: i
-							});
+						this.navButtonGroup.check(i);
 						break;
 					}
 				}
