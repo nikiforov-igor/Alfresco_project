@@ -192,6 +192,7 @@ LogicECM.module = LogicECM.module || {};
 
 				this.calendar.cfg.setProperty("selected", dates.join(","));
 				this.calendar.render();
+				this.loadThisMonthEvent();
 
 				Alfresco.util.PopupManager.displayMessage(
 					{
@@ -231,6 +232,7 @@ LogicECM.module = LogicECM.module || {};
 				// Get the data and refresh the view
 				this.calendar.cfg.setProperty("selected", selectedDates.join(','));
 				this.calendar.render();
+				this.loadThisMonthEvent();
 			}
 		},
 
