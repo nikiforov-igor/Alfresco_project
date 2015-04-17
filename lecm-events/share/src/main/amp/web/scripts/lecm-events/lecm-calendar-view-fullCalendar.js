@@ -262,20 +262,8 @@
                               }, event));
                            });
                         }
-                         var nonWorking = data.nonWorkingDays;
-                         if (nonWorking && nonWorking.length > 0) {
-                             for (var i = 0; i < nonWorking.length; i++) {
-                                 var nw = nonWorking[i];
-                                 if (nw != null) {
-                                     //var cellIndex = this.calendar.getCellIndex(fromISO8601(nw));
-                                     //
-                                     //if (cellIndex > -1) {
-                                     //    Dom.addClass(this.calendar.cells[cellIndex], "non-working");
-                                     //}
-                                 }
-                             }
-                         }
-
+                        me.nonWorking = data.nonWorkingDays;
+                        me.updateNonWorkingDays();
                         return parsedEvents;
                      }
                   }
@@ -295,6 +283,7 @@
                   {
                      $jCalendar.fullCalendar("option", "height", null);
                   }
+                  me.updateNonWorkingDays();
                },
 
                dayClick: function (date, allDay, jsEvent, view)
@@ -321,6 +310,41 @@
          var date = new Date;
          date.setDate(date.getDate() + 30);
          LogicECM.module.Base.Util.setCookie(this.PREFERENCE_KEY  + LogicECM.currentUser, view, {expires: date});
+      },
+      
+      updateNonWorkingDays: function() {
+         var nonWorkingElements = Dom.getElementsByClassName("non-working");
+         if (nonWorkingElements != null) {
+            for (var i = 0; i < nonWorkingElements.length; i++) {
+               Dom.removeClass(nonWorkingElements[i], "non-working");
+            }
+         }
+
+         var view = $jCalendar.fullCalendar("getView");
+         if (this.nonWorking) {
+            var startCalendar = view.visStart;
+            for (i = 0; i < this.nonWorking.length; i++) {
+               var nw = this.nonWorking[i];
+               if (nw != null) {
+                  var date = fromISO8601(nw);
+                  var dayDiff = (date.getTime() - startCalendar.getTime())/(1000*60*60*24);
+
+                  if (view.name === this.options.fcOpts.monthView) {
+                     var className = "fc-day" + dayDiff;
+                     var elements = Dom.getElementsByClassName(className, "td");
+                     if (elements != null && elements.length > 0) {
+                        Dom.addClass(elements[0], "non-working");
+                     }
+                  } else if (view.name === this.options.fcOpts.weekView) {
+                     className = "fc-col" + dayDiff;
+                     elements = Dom.getElementsByClassName(className, "th");
+                     if (elements != null && elements.length > 0) {
+                        Dom.addClass(elements[0], "non-working");
+                     }
+                  }
+               }
+            }
+         }
       },
 
       /**
@@ -364,6 +388,7 @@
          } else {
             this.saveLastView("agenda");
          }
+         this.updateNonWorkingDays();
       },
 
       /**
