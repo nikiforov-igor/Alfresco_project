@@ -169,7 +169,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			//html = '<a href="' + $siteURL("event?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
 
             var nameEl = document.createElement('div');
-            var id = this.options.id + "-event-name-" + data.nodeRef;
+            var id = this.options.id + "-event-name-" + data.renderDate + "_" + data.nodeRef;
             nameEl.id = id;
             nameEl.innerHTML = data.name;
             Dom.addClass(nameEl, "event-name " + collapsedClass);
