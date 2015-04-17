@@ -795,6 +795,12 @@ LogicECM.module.Base.Util = {
 				Dom.setStyle(this.options.divRight, "margin-left", this.marginLeft + width + "px");
 			}
 			YAHOO.Bubbling.fire("SetHeaderWidth");
+
+			// Callback
+			this.onResizeNotification();
+		},
+
+		onResizeNotification: function () {
 		}
 	});
 

@@ -95,6 +95,13 @@
 
             $jCalendar.fullCalendar('select', args[1].date);
          }, this);
+
+         // Override Resizer callback function (while keeping the old one):
+         var oldResizerFn = LogicECM.module.Base.Resizer.prototype.onResizeNotification;
+         LogicECM.module.Base.Resizer.prototype.onResizeNotification = function () {
+            oldResizerFn();
+            $jCalendar.fullCalendar("render");
+         }
       },
 
       onUpdateView: function(view) {
