@@ -2141,17 +2141,31 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         return organization;
     }
 
+	private NodeRef getOrg(NodeRef unit, NodeRef rootUnit) {
+		ChildAssociationRef parent = nodeService.getPrimaryParent(unit);
+		if (parent != null) {
+			if (rootUnit.equals(parent.getParentRef())) {
+				return unit;
+			} else {
+				return getOrg(parent.getParentRef(), rootUnit);
+			}
+		} else {
+			return null;
+		}
+	}
+
     @Override
     public NodeRef getUnitByOrganization(NodeRef organization) {
+		NodeRef structureRef = getRootUnit();
         if (nodeService.hasAspect(organization, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
             List<AssociationRef> parents = nodeService.getSourceAssocs(organization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
             for (AssociationRef parent : parents) {
                 QName type = nodeService.getType(parent.getSourceRef());
                 if (type.equals(TYPE_ORGANIZATION_UNIT)){
-                    return parent.getSourceRef();
-                }
-            }
-        }
+					return getOrg(parent.getSourceRef(), structureRef);
+				}
+			}
+		}
         return null;
     }
 

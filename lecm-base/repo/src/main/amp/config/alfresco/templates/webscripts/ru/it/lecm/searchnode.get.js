@@ -46,11 +46,17 @@ function main()
                     root = node;
                 }
             }
-            var nodes = root.childrenByXPath(argsXPathLocation);
-            if (nodes.length > 0)
-            {
-                nodeRef = String(nodes[0].nodeRef);
+
+            if(argsXPathLocation == '{currentLocation}') {
+                nodeRef = node.nodeRef.toString();
+            } else {
+                var nodes = root.childrenByXPath(argsXPathLocation);
+                if (nodes.length > 0)
+                {
+                    nodeRef = String(nodes[0].nodeRef);
+                }
             }
+
         }
 
         resultNode = resolveNode(nodeRef);
