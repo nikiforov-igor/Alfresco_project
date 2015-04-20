@@ -4,6 +4,9 @@
         <property name="cm:name">
             <![CDATA[Выделение номенклатурного дела к уничтожению]]>
         </property>
+        <property name="cm:title">
+            <![CDATA[Выделение номенклатурного дела к уничтожению]]>
+        </property>
         <property name="lecm-group-actions:statuses">
             <![CDATA[]]>
         </property>

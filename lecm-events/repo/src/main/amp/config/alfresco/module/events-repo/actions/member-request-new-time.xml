@@ -2,6 +2,7 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Предложить другое время" type="lecm-group-actions:workflow-action">
         <property name="cm:name"><![CDATA[Предложить другое время]]></property>
+        <property name="cm:title"><![CDATA[Предложить другое время]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[[lecm-events:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>

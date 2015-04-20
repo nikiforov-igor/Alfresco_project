@@ -2,6 +2,7 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Подготовка к отправке" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Подготовить к отправке]]></property>
+        <property name="cm:title"><![CDATA[Подготовить к отправке]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован]]></property>
         <property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]></property>
         <property name="lecm-group-actions:order"><![CDATA[20]]></property>

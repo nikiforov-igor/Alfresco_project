@@ -307,7 +307,13 @@ public class ActionsScript extends DeclarativeWebScript {
                 HashMap<String, Object> actionStruct = new HashMap<String, Object>();
                 actionStruct.put("type", "group");
                 actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
-                actionStruct.put("label", nodeService.getProperty(action, ContentModel.PROP_NAME));
+                Object title = nodeService.getProperty(action, ContentModel.PROP_TITLE);
+                if (title == null || "".equals(title)) {
+                    actionStruct.put("label", nodeService.getProperty(action, ContentModel.PROP_NAME));
+                } else {
+                    actionStruct.put("label", title);
+                }
+
                 QName type = nodeService.getType(action);
                 if (type.equals(GroupActionsService.TYPE_GROUP_DOCUMENT_ACTION)) {
                     actionStruct.put("subtype", "document");

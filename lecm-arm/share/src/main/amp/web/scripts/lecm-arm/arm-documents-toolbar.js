@@ -332,7 +332,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             for (var i in json) {
                                 if (!json[i].wide) {
                                     actionItems.push({
-                                        text: json[i].id,
+                                        text: json[i].title,
                                         value: json[i].id,
                                         onclick: {
                                             fn: me.onGroupActionsClick,
@@ -342,14 +342,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                                 withForm: json[i].withForm,
                                                 items: items,
                                                 workflowId: json[i].workflowId,
-                                                label: json[i].id
+                                                label: json[i].title
                                             },
                                             scope: me
                                         }
                                     });
                                 } else {
                                     wideActionItems.push({
-                                        text: json[i].id,
+                                        text: json[i].title,
                                         value: json[i].id,
                                         onclick: {
                                             fn: me.onGroupActionsClick,
@@ -359,7 +359,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                                 withForm: json[i].withForm,
                                                 items: items,
                                                 workflowId: json[i].workflowId,
-                                                label: json[i].id
+                                                label: json[i].title
                                             },
                                             scope: me
                                         }
@@ -404,7 +404,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         Alfresco.util.PopupManager.displayPrompt(
                             {
                                 title: Alfresco.util.message('lecm.arm.ttl.action.perform'),
-                                text: Alfresco.util.message('lecm.arm.msg.action.confirm') + " \"" + p_oItem.actionId + "\"",
+                                text: Alfresco.util.message('lecm.arm.msg.action.confirm') + " \"" + p_oItem.label + "\"",
                                 buttons: [
                                     {
                                         text: Alfresco.util.message('lecm.arm.lbl.ok'),
@@ -419,7 +419,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                                 },
                                                 successCallback: {
                                                     fn: function (oResponse) {
-                                                        me._actionResponse(p_oItem.actionId, oResponse);
+                                                        me._actionResponse(p_oItem.label, oResponse);
                                                     }
                                                 },
                                                 failureCallback: {
@@ -550,7 +550,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var doBeforeDialogShow = function (p_form, p_dialog) {
                     var contId = p_dialog.id + "-form-container";
                     Alfresco.util.populateHTML(
-                        [contId + "_h", item.actionId ]
+                        [contId + "_h", item.label ]
                     );
 
                     Dom.addClass(contId, "metadata-form-edit");
@@ -584,7 +584,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         },
                         onSuccess: {
                             fn: function DataGrid_onActionCreate_success(response) {
-                                me._actionResponse(item.actionId, response);
+                                me._actionResponse(item.label, response);
                             },
                             scope: this
                         },
@@ -601,7 +601,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }).show();
             },
 
-            _actionResponse: function actionResponseFunction(actionId, response) {
+            _actionResponse: function actionResponseFunction(label, response) {
                 var json = eval("(" + response.serverResponse.responseText + ")");
                 if (json.forCollection) {
                     if (json.redirect != "") {
@@ -609,7 +609,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     } else if (json.openWindow) {
                         window.open(Alfresco.constants.URL_PAGECONTEXT + json.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
                     } else if (json.withErrors) {
-                        this._openMessageWindow(actionId, Alfresco.util.message('lecm.arm.msg.oper.perform.error') + " \"" + actionId + "\"", false);
+                        this._openMessageWindow(label, Alfresco.util.message('lecm.arm.msg.oper.perform.error') + " \"" + label + "\"", false);
                     } else {
                         document.location.reload();
                     }
@@ -626,7 +626,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         }
                     }
                     if (message != "") {
-                        this._openMessageWindow(actionId, message, true);
+                        this._openMessageWindow(label, message, true);
                     }
                 }
             },

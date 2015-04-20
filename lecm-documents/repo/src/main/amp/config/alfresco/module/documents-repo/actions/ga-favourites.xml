@@ -2,6 +2,7 @@
 <items>
     <item name="cm:Добавить в избранное" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Добавить в избранное]]></property>
+        <property name="cm:title"><![CDATA[Добавить в избранное]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[100]]></property>
@@ -12,6 +13,7 @@
     </item>
     <item name="cm:Удалить из избранного" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Удалить из избранного]]></property>
+        <property name="cm:title"><![CDATA[Удалить из избранного]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[110]]></property>

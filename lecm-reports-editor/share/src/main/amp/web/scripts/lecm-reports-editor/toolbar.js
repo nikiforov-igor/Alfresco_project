@@ -178,7 +178,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                             for (var i in json) {
                                 if (!json[i].wide) {
                                     actionItems.push({
-                                        text: json[i].id,
+                                        text: json[i].title,
                                         value: json[i].id,
                                         onclick: {
                                             fn: me.onGroupActionsClick,
@@ -188,14 +188,14 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                                 withForm: json[i].withForm,
                                                 items: items,
                                                 workflowId: json[i].workflowId,
-                                                label: json[i].id
+                                                label: json[i].title
                                             },
                                             scope: me
                                         }
                                     });
                                 } else {
                                     wideActionItems.push({
-                                        text: json[i].id,
+                                        text: json[i].title,
                                         value: json[i].id,
                                         onclick: {
                                             fn: me.onGroupActionsClick,
@@ -205,7 +205,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                                                 withForm: json[i].withForm,
                                                 items: items,
                                                 workflowId: json[i].workflowId,
-                                                label: json[i].id
+                                                label: json[i].title
                                             },
                                             scope: me
                                         }
@@ -273,7 +273,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     Alfresco.util.PopupManager.displayPrompt(
                         {
                             title: this.msg("lecm.re.ttl.action.performing"),
-                            text: this.msg("lecm.re.ttl.confirm.action") + " \"" + p_oItem.actionId + "\"",
+                            text: this.msg("lecm.re.ttl.confirm.action") + " \"" + p_oItem.label + "\"",
                             buttons: [
                                 {
                                     text: this.msg("lecm.re.btn.ok"),
@@ -312,7 +312,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         });
                 }
             },
-            _actionResponse: function actionResponseFunction(actionId, response, items) {
+            _actionResponse: function actionResponseFunction(label, response, items) {
                 var json = eval("(" + response.serverResponse.responseText + ")");
                 if (json.forCollection) {
                     if (json.redirect != "") {
@@ -320,7 +320,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                     } else if (json.openWindow) {
                         window.open(Alfresco.constants.URL_PAGECONTEXT + json.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
                     } else if (json.withErrors) {
-                        this._openMessageWindow(actionId, this.msg("lecm.re.action.error") + " \"" + actionId + "\"", false);
+                        this._openMessageWindow(label, this.msg("lecm.re.action.error") + " \"" + label + "\"", false);
                     } else {
                         document.location.href = document.location.href;
                     }
@@ -343,7 +343,7 @@ LogicECM.module.ReportsEditor = LogicECM.module.ReportsEditor|| {};
                         }
                     }
                     if (message != "") {
-                        this._openMessageWindow(actionId, message, true);
+                        this._openMessageWindow(label, message, true);
                     }
                 }
             },

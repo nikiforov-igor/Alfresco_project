@@ -2,6 +2,7 @@
 <items>
     <item name="cm:Удалить" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Удалить]]></property>
+        <property name="cm:title"><![CDATA[Удалить]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Черновик;Новый]]></property>
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>

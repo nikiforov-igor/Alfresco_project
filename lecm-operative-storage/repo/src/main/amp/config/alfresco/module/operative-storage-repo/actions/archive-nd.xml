@@ -4,6 +4,9 @@
         <property name="cm:name">
             <![CDATA[Передача номенклатурного дела в архив]]>
         </property>
+        <property name="cm:title">
+            <![CDATA[Передача номенклатурного дела в архив]]>
+        </property>
         <property name="lecm-group-actions:statuses">
             <![CDATA[]]>
         </property>

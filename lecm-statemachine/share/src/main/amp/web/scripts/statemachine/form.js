@@ -335,7 +335,7 @@ LogicECM.module = LogicECM.module || {};
 				} else {
 					Alfresco.util.PopupManager.displayPrompt({
 						title: Alfresco.util.message('title.execute_action'),
-						text: Alfresco.util.message('msg.action_confirm', this.name, action.actionId ),
+						text: Alfresco.util.message('msg.action_confirm', this.name, action.label ),
 						buttons: [{
 							text: Alfresco.util.message('button.ok'),
 							handler: {
@@ -362,7 +362,7 @@ LogicECM.module = LogicECM.module || {};
 													window.location.reload(true);
 												} else {
 													message = '<div class=\'' + (item.withErrors ? 'error-item' : 'noerror-item') + '\'>' + item.message + '</div>';
-													this._openMessageWindow(action.actionId, message, true);
+													this._openMessageWindow(action.label, message, true);
 												}
 											}
 										},
@@ -446,7 +446,7 @@ LogicECM.module = LogicECM.module || {};
 				doBeforeDialogShow: {
 					scope: this,
 					fn: function(p_form, p_dialog) {
-						p_dialog.dialog.setHeader(action.actionId);
+						p_dialog.dialog.setHeader(action.label);
 
 						var contId = p_dialog.id + '-form-container';
 						Dom.addClass(contId, 'metadata-form-edit');
@@ -469,7 +469,7 @@ LogicECM.module = LogicECM.module || {};
 							window.location.reload(true);
 						} else {
 							message = '<div class="' + (item.withErrors ? 'error-item' : 'noerror-item') + '">' + item.message + '</div>';
-							this._openMessageWindow(action.actionId, message, true);
+							this._openMessageWindow(action.label, message, true);
 						}
 					}
 				},

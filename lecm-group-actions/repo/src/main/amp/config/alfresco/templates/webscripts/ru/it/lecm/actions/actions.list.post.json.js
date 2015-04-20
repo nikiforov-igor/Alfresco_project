@@ -8,6 +8,7 @@ var result = [];
 for each (var action in actions) {
     result.push({
         id: action.properties["cm:name"],
+        title: action.properties["cm:title"] == null || action.properties["cm:title"] == "" ? action.properties["cm:name"] : action.properties["cm:title"],
         wide: "".equals(action.properties["lecm-group-actions:type"]),
         type: action.getTypeShort(),
         withForm: action.children.length > 0,

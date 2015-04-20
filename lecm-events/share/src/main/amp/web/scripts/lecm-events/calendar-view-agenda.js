@@ -359,7 +359,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 									withForm: action.withForm,
 									items: items,
 									workflowId: action.workflowId,
-									label: action.id
+									label: action.title
 								};
 
 								if (actionObj.actionId === "Принять приглашение") {

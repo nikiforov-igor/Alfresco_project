@@ -65,6 +65,7 @@
                 <entry key="lecm-group-actions:script-action">
                     <list>
                         <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-group-actions:expression</value>
                         <value>lecm-group-actions:type</value>
                         <value>lecm-group-actions:statuses</value>
@@ -87,6 +88,7 @@
                 <entry key="lecm-group-actions:workflow-action">
                     <list>
                         <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-group-actions:expression</value>
                         <value>lecm-group-actions:type</value>
                         <value>lecm-group-actions:statuses</value>
@@ -98,6 +100,7 @@
                 <entry key="lecm-group-actions:document-action">
                     <list>
                         <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-group-actions:expression</value>
                         <value>lecm-group-actions:type</value>
                         <value>lecm-group-actions:statuses</value>

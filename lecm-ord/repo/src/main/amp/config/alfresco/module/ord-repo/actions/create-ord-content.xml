@@ -2,6 +2,7 @@
 <items updateMode="CreateOrUpdate">
 	<item name="cm:Создать документ по шаблону" type="lecm-group-actions:script-action">
 		<property name="cm:name"><![CDATA[Создать документ по шаблону]]></property>
+		<property name="cm:title"><![CDATA[Создать документ по шаблону]]></property>
 		<property name="lecm-group-actions:statuses"><![CDATA[Проект;На согласовании;Согласован;На подписании;На доработке;Подписан;На регистрации;Зарегистрирован;На исполнении]]></property>
 		<property name="lecm-group-actions:type"><![CDATA[lecm-ord:document]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>

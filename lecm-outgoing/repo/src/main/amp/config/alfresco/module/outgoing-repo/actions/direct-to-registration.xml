@@ -2,6 +2,7 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Направить на регистрацию" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Направить на регистрацию]]></property>
+        <property name="cm:title"><![CDATA[Направить на регистрацию]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Подписан]]></property>
         <property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]></property>
         <property name="lecm-group-actions:order"><![CDATA[10]]></property>

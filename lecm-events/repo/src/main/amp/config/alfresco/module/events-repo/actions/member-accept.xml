@@ -2,6 +2,7 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Принять приглашение" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Принять приглашение]]></property>
+        <property name="cm:title"><![CDATA[Принять приглашение]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[[lecm-events:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>

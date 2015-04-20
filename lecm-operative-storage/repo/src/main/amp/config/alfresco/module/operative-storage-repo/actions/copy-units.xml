@@ -4,6 +4,9 @@
         <property name="cm:name">
             <![CDATA[Копирование раздела номенклатуры дел]]>
         </property>
+        <property name="cm:title">
+            <![CDATA[Копирование раздела номенклатуры дел]]>
+        </property>
         <property name="lecm-group-actions:statuses">
             <![CDATA[]]>
         </property>

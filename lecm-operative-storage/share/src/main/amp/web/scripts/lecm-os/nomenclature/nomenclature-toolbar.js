@@ -222,7 +222,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							}
 							if (!json[i].wide) {
 								actionItems.push({
-									text: json[i].id,
+									text: json[i].title,
 									value: json[i].id,
 									onclick: {
 										fn: me.onGroupActionsClickProxy,
@@ -232,14 +232,14 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 											withForm: json[i].withForm,
 											items: items,
 											workflowId: json[i].workflowId,
-											label: json[i].id
+											label: json[i].title
 										},
 										scope: me
 									}
 								});
 							} else {
 								wideActionItems.push({
-									text: json[i].id,
+									text: json[i].title,
 									value: json[i].id,
 									onclick: {
 										fn: me.onGroupActionsClickProxy,
@@ -249,7 +249,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 											withForm: json[i].withForm,
 											items: items,
 											workflowId: json[i].workflowId,
-											label: json[i].id
+											label: json[i].title
 										},
 										scope: me
 									}

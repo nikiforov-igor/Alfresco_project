@@ -2,6 +2,7 @@
 <items>
     <item name="cm:Копирование номенклатуры" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Копирование номенклатуры]]></property>
+        <property name="cm:title"><![CDATA[Копирование номенклатуры]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
 		<property name="lecm-group-actions:type"><![CDATA[lecm-os:nomenclature-year-section]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>

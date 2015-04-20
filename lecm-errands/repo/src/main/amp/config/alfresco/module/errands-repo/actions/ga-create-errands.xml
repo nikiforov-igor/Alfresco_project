@@ -2,6 +2,7 @@
 <items>
     <item name="cm:Создать поручения" type="lecm-group-actions:workflow-action">
         <property name="cm:name"><![CDATA[Создать поручения]]></property>
+        <property name="cm:title"><![CDATA[Создать поручения]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
