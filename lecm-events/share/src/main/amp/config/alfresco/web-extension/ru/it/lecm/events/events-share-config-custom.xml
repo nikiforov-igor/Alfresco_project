@@ -102,10 +102,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-events-ts:members-assoc">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
-                            <control-param name="isTableSortable">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/events/controls/events-members-view-control.ftl"/>
                     </field>
                     <field id="lecm-events:description">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
