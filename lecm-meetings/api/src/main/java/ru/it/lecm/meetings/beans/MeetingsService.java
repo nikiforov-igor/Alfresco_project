@@ -1,5 +1,9 @@
 package ru.it.lecm.meetings.beans;
 
+import org.alfresco.service.namespace.QName;
+
+
+
 
 
 /**
@@ -9,5 +13,14 @@ package ru.it.lecm.meetings.beans;
 public interface MeetingsService {
 
 	public static final String MEETINGS_ROOT_ID = "MEETINGS_ROOT_ID";
+	
+	public static final String MEETINGS_NAMESPACE = "http://www.it.ru/logicECM/meetings/1.0";
+	public static final String MEETINGS_TS_NAMESPACE = "http://www.it.ru/logicECM/meetings/table-structure/1.0";
+	
+	public static final QName TYPE_MEETINGS_TS_AGENDA_ITEM = QName.createQName(MEETINGS_TS_NAMESPACE, "item");
+	public static final QName TYPE_MEETINGS_TS_AGENDA_TABLE = QName.createQName(MEETINGS_TS_NAMESPACE, "itemsTable");
+	public static final QName ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS = QName.createQName(MEETINGS_TS_NAMESPACE, "attachments-assoc");
+	
+	
 	
 }

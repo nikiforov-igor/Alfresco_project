@@ -1,64 +1,54 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:p="http://www.springframework.org/schema/p"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:util="http://www.springframework.org/schema/util"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
-	<bean id="meetings.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	
+	<util:list id="meetingsDictionariesModels">
+		<value>alfresco/module/${artifactId}/models/lecm-meetings-dictionaries-model.xml</value>
+	</util:list>
+	<util:list id="meetingsDictionariesLabels">
+		<value>alfresco/module/${artifactId}/messages/lecm-meetings-dictionaries-model</value>
+	</util:list>
+	
+	<bean id="meetings.dictionaries.modelsBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap
 				,ru.it.lecm.dictionary.dictionary-repo.dictionary
 				,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap
 				,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap
-				,documents.dictionaries.LogicEcmModelsBootstrap">
-		<property name="models">
-			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-meetings-dictionaries-model.xml</value>
-			</list>
-		</property>
-		<property name="labels">
-			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-meetings-dictionaries-model</value>
-			</list>
-		</property>
-	</bean>
-	
-
+				,documents.dictionaries.LogicEcmModelsBootstrap"
+		  p:models-ref="meetingsDictionariesModels"
+		  p:labels-ref="meetingsDictionariesLabels"
+	/>
   
-	<bean id="meetings.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
-		  depends-on="documents.LogicEcmModelsBootstrap,
-		      meetings.dictionaries.LogicEcmModelsBootstrap,
-		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
-		<property name="models">
-			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-meetings-table-structure-model.xml</value>
-			</list>
-		</property>
-		<property name="labels">
-			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-meetings-table-structure-model</value>
-			</list>
-		</property>
-	</bean>
+	<util:list id="meetingsModels">
+		<value>alfresco/module/${artifactId}/models/lecm-meetings-table-structure-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-meetings-model.xml</value>
+	</util:list>
+	<util:list id="meetingsLabels">
+		<value>alfresco/module/${artifactId}/messages/lecm-meetings-table-structure-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-meetings-model</value>
+	</util:list>
   
-	<bean id="meetings.LogicEcmInternalBootstrap" parent="modelsToRepositoryLoader"
+	<bean id="meetings.ModelsBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="dictionaryBootstrap,
-					 ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
-					 documents.LogicEcmModelsConnectionsBootstrap,
-					 documents.dictionaries.LogicEcmModelsBootstrap,
-					 events.LogicEcmInternalBootstrap,
-					 meetings.dictionaries.LogicEcmModelsBootstrap,
-					 meetings.LogicEcmContractsTableStructureBootstrap">
-		<property name="models">
-			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-meetings-model.xml</value>
-			</list>
-		</property>
-		<property name="labels">
-			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-meetings-model</value>
-			</list>
-		</property>
-	</bean>
+					meetings.dictionaries.modelsBootstrap,
+					documents.LogicEcmModelsConnectionsBootstrap,
+					documents.dictionaries.LogicEcmModelsBootstrap,
+
+					events.LogicEcmInternalBootstrap
+				 "
+		  p:models-ref="meetingsModels"		 
+		  p:labels-ref="meetingsLabels"		 
+	/>
+		
+	
+	<util:list id="meetingsDictionaries">
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-br-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
+	</util:list>
 	
 	<bean id="protocol.meetings.LogicEcmProtocolTableStructureBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="documents.LogicEcmModelsBootstrap,
@@ -94,14 +84,9 @@
 	</bean>
 	
 	<bean id="meetings.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="meetings.dictionaries.LogicEcmModelsBootstrap">
-		<property name="dictionaries">
-			<list>
-				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-br-items.xml</value>
-				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
-			</list>
-		</property>
-	</bean>
+		  depends-on="meetings.dictionaries.modelsBootstrap"
+		  p:dictionaries-ref="meetingsDictionaries"
+	/>
 	
 	<bean id="protocol.meetings.LogicEcmProtocolDictionariesBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="documents.dictionaries.LogicEcmModelsBootstrap">
@@ -115,7 +100,7 @@
 	<util:constant id="MEETINGS_ROOT_ID" static-field="ru.it.lecm.meetings.beans.MeetingsService.MEETINGS_ROOT_ID"/>
 
 	<bean id="meetingsService" class="ru.it.lecm.meetings.beans.MeetingsServiceImpl" parent="baseBean"
-		  depends-on="meetings.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService">
+		  depends-on="meetings.ModelsBootstrap, ServiceRegistry, nodeService, transactionService">
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -125,19 +110,22 @@
 	</bean>
 
 	<bean id="meetingsScript" parent="baseScript" class="ru.it.lecm.meetings.scripts.MeetingsWebScriptBean"
-		  depends-on="nodeService, meetingsService">
-		<property name="extensionName">
-			<value>meetings</value>
-		</property>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="meetingsService" ref="meetingsService"/>
-	</bean>
+		  depends-on="nodeService, meetingsService"
+		  p:nodeService-ref="nodeService"
+		  p:meetingsService-ref="meetingsService"
+		  p:extensionName="meetings"
+	/>
 
-	<!--	
-		<bean id="meetingsPolicy" class="ru.it.lecm.meetings.policy.MeetingsPolicy" parent="baseBean"
-			   init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
-			<property name="policyComponent" ref="policyComponent"/>
-			<property name="documentTableService" ref="documentTableService"/>
-		</bean>
-	-->
+	<bean id="meetingsPolicy" class="ru.it.lecm.meetings.policy.MeetingsPolicy" parent="baseBean"
+		  init-method="init" 
+		  depends-on="documents.LogicEcmModelsBootstrap,
+				meetingsService,
+				documentTableService,
+				policyComponent"
+		  p:documentTableService-ref="documentTableService"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"
+		  p:policyComponent-ref="policyComponent"
+		  
+	/>
+	
 </beans>
