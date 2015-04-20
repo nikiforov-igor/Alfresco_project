@@ -89,6 +89,7 @@
             var view = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.Toolbar").enabledViews[args[1].activeView];
             this.onViewNav(view);
             this.onUpdateView(view);
+            $jCalendar.fullCalendar("render");
          }, this);
 
          // Mini Calendar

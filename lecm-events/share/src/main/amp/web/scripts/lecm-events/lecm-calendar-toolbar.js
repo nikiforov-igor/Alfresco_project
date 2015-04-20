@@ -102,6 +102,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				for (var i = 0; i < this.navButtonGroup._buttons.length; i++) {
 					if (this.navButtonGroup._buttons[i]._button.id.match(calendarPref)) {
 						this.navButtonGroup.check(i);
+						this.updateButtons(i);
 						break;
 					}
 				}
