@@ -110,12 +110,10 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 		<property name="eventService" ref="eventsService"/>
 		<property name="notificationsService" ref="notificationsService"/>
-		<property name="documentService" ref="documentService"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 		<property name="mailService" ref="mailService"/>
 		<property name="templateService" ref="templateService"/>
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
-		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="defaultFromEmail" value="${mail.from.default}"/>
 	</bean>

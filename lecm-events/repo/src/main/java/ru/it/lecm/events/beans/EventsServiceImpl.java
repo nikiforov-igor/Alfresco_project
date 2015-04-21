@@ -23,7 +23,6 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import javax.activation.DataSource;
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 import java.io.*;
@@ -555,7 +554,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                     }
 
                     mailService.send(message);
-                } catch (MessagingException | UnsupportedEncodingException e) {
+                } catch (Exception e) {
                     logger.error("Error send mail", e);
                 }
             }

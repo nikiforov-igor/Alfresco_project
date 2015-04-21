@@ -32,7 +32,6 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import javax.activation.DataSource;
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 import java.io.*;
@@ -53,13 +52,11 @@ public class EventsPolicy extends BaseBean {
     private LecmPermissionService lecmPermissionService;
     private EventsService eventService;
     private NotificationsService notificationsService;
-    private DocumentService documentService;
     private DocumentConnectionService documentConnectionService;
     private TemplateService templateService;
     private JavaMailSender mailService;
     private OrgstructureBean orgstructureBean;
     private ContentService contentService;
-    private ThreadPoolExecutor threadPoolExecutor;
     private String defaultFromEmail;
     private TransactionListener transactionListener;
 
@@ -93,10 +90,6 @@ public class EventsPolicy extends BaseBean {
         this.notificationsService = notificationsService;
     }
 
-    public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
-    }
-
     public void setTemplateService(TemplateService templateService) {
         this.templateService = templateService;
     }
@@ -111,10 +104,6 @@ public class EventsPolicy extends BaseBean {
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
-    }
-
-    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
-        this.threadPoolExecutor = threadPoolExecutor;
     }
 
     public void setDefaultFromEmail(String defaultFromEmail) {
@@ -315,7 +304,7 @@ public class EventsPolicy extends BaseBean {
                 }
 
                 mailService.send(message);
-            } catch (MessagingException | UnsupportedEncodingException e) {
+            } catch (Exception e) {
                 logger.error("Error send mail", e);
             }
         }
