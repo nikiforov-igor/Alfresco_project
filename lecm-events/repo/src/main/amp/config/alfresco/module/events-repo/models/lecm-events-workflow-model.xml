@@ -53,5 +53,17 @@
                 <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
             </mandatory-aspects>
         </type>
+
+        <type name="lecmEventsWf:removeRepeatable">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <!-- Тип удаления -->
+                <property name="lecmEventsWf:removeRepeatableType">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
+
     </types>
 </model>

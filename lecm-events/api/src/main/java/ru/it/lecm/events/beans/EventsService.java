@@ -2,7 +2,9 @@ package ru.it.lecm.events.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.BaseBean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,4 +99,11 @@ public interface EventsService {
     String wrapAsEventLink(NodeRef documentRef);
 
     void onAfterUpdate(NodeRef event, String updateRepeated);
+
+    List<NodeRef> getNextRepeatedEvents(NodeRef event);
+
+    List<NodeRef> getPrevRepeatedEvents(NodeRef event);
+
+    List<NodeRef> getAllRepeatedEvents(NodeRef event);
+
 }

@@ -234,6 +234,15 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-events:removed">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
             <associations>
                 <!--Место проведения-->

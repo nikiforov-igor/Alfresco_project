@@ -35,7 +35,7 @@
                         </control>
                     </field>
                     <field id="lecm-group-actions:script" >
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
                             <control-param name="rows">30</control-param>
                         </control>
                     </field>
@@ -70,7 +70,7 @@
                         </control>
                     </field>
                     <field id="lecm-group-actions:script">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
                             <control-param name="rows">30</control-param>
                         </control>
                     </field>

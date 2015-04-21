@@ -43,8 +43,7 @@
                       <li id="${viewFormId}-action-reject" class="event-reject"><a href="#">Отклонить</a></li>
                       <li class="event-more"><a id="${viewFormId}-action-more" href="#">Подробнее</a></li>
                       <li class="event-edit"><a id="${viewFormId}-action-edit" href="#">Редактировать</a></li>
-                      <li class="event-remove"><a href="#">Удалить</a></li>
-                      <li><a href="#">Еще</a></li>
+                      <li id="${viewFormId}-action-delete" class="event-remove"><a href="#">Удалить</a></li>
                   </ul>
               </div>
               <div id="${viewFormId}-content" class="center-part"></div>

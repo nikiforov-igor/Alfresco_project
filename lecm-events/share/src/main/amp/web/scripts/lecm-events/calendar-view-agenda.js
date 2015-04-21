@@ -351,6 +351,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						var acceptActionObject = null;
 						var rejectId = null;
 						var rejectActionObject = null;
+						var deleteId = null;
+						var deleteActionObject = null;
 						if (armToolbar) {
 							actions.forEach(function (action) {
 								var actionObj = {
@@ -382,6 +384,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 											tooltip: me.msg("agenda.action.reject.tooltip")
 										}));
 									rejectActionObject = actionObj;
+								} else if (actionObj.label === "Удалить") {
+									deleteId = Alfresco.util.generateDomId();
+									cellActions.push(YAHOO.lang.substitute(template,
+										{
+											id: deleteId,
+											type: "deleteAction",
+											label: me.msg("agenda.action.delete.label"),
+											tooltip: me.msg("agenda.action.delete.tooltip")
+										}));
+									deleteActionObject = actionObj;
 								}
 							});
 
@@ -395,7 +407,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 									armToolbar.onGroupActionsClick(null, null, rejectActionObject);
 								});
 							}
-							if (acceptId != null || rejectId != null) {
+							if (deleteId != null) {
+								YAHOO.util.Event.addListener(deleteId, "click", function() {
+									armToolbar.onGroupActionsClick(null, null, deleteActionObject);
+								});
+							}
+							if (acceptId != null || rejectId != null || deleteId != null) {
 								var html = cellActions.join(" ");
 								cell.innerHTML = html;
 							}

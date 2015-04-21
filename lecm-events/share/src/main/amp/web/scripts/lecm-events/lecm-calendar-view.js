@@ -534,6 +534,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
              var viewFormId = this.id + "-viewForm";
              Dom.setStyle(viewFormId + "-action-accept", "display", "none");
              Dom.setStyle(viewFormId + "-action-reject", "display", "none");
+             Dom.setStyle(viewFormId + "-action-delete", "display", "none");
              var me = this;
              var items = [];
              items.push(event.nodeRef);
@@ -571,6 +572,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                                   armToolbar.onGroupActionsClick(null, null, actionObj);
                                });
                                Dom.setStyle(viewFormId + "-action-reject", "display", "block");
+                            } else if (actionObj.label === "Удалить") {
+                               YAHOO.util.Event.removeListener(viewFormId + "-action-delete", "click");
+                               YAHOO.util.Event.addListener(viewFormId + "-action-delete", "click", function() {
+                                  armToolbar.onGroupActionsClick(null, null, actionObj);
+                               });
+                               Dom.setStyle(viewFormId + "-action-delete", "display", "block");
                             }
                          });
                       }

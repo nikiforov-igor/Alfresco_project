@@ -549,10 +549,31 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$eventsRemoveRepeatable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmEventsWf:removeRepeatableType"/>
+
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmEventsWf:removeRepeatableType">
+                        <control template="/ru/it/lecm/events/controls/event-repeatable-type.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$eventsMemberDecline"/>
             <workflow name="activiti$eventsRequestNewTime"/>
+            <workflow name="activiti$removeRepeatable"/>
         </hidden-workflows>
     </config>
 </alfresco-config>

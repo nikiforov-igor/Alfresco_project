@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="cm:Мероприятие. Удалить" type="lecm-group-actions:script-action">
+        <property name="cm:name"><![CDATA[Мероприятие. Удалить]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-events:document]]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") AND doc.attr("lecm-events:repeatable") == false]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="cm:title"><![CDATA[Удалить]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[var toDate = document.properties["lecm-events:to-date"]
+document.properties["lecm-events:removed"] = true;
+document.save();
+
+if (toDate.getTime() >= new Date().getTime()) {
+	var currentUser = orgstructure.getCurrentEmployee();
+    var members = events.getEventMembers(document);
+	var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+		notificationText +=  " отменил проведение мероприятия ";
+		notificationText += documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
+	notifications.sendNotificationFromCurrentUser(members, notificationText, document, true);
+
+  	var invitedMembers = events.getEventInvitedMembers(document);
+    var from = currentUser.properties["lecm-orgstr:employee-email"];
+    if (from != null && from != "") {
+      for each (var member in invitedMembers) {
+        var email = member.properties["lecm-representative:email"];
+        if (email != null && email != "") {
+          var mail = actions.create("mail");
+          mail.parameters.to = email;
+          var subjectText = "Отмена проведения мероприятия";
+		  mail.parameters.subject = subjectText;
+          mail.parameters.from = from;
+		  var text = "Уважаемые коллеги!<br/>" + documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]);
+	      text +=  " отменил проведение мероприятия ";
+		  text += documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
+          mail.parameters.text = text;
+          mail.parameters.send_after_commit = true;
+          try {
+          	mail.execute(document);
+          } catch(e) {}
+        }
+      }
+    }
+
+}
+]]></property>
+    </item>
+</items>

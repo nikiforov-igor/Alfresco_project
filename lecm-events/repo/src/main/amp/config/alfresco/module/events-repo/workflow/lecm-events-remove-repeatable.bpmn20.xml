@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/events/workflow/removeRepeatable/1.0">
+    <process id="eventsRemoveRepeatable" name="Мероприятия: Удаление повторяющегося мероприятия">
+        <startEvent id="startRemoveRepeatable" name="Start" activiti:formKey="lecmEventsWf:removeRepeatable"></startEvent>
+        <endEvent id="endRemoveRepeatable" name="End"></endEvent>
+        <scriptTask id="removeRepeatable" name="Request New Time" scriptFormat="javascript">
+            <extensionElements>
+                <activiti:executionListener event="start"
+                                            class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+                            if (document != null) {
+                                var type = lecmEventsWf_removeRepeatableType;
+                                var repeatableEvents = events.getRepetableEvents(document, type);
+                                for each(var ev in repeatableEvents) {
+                                    removeEvent(ev);
+                                }
+                                removeEvent(document);
+                            }
+
+                            function removeEvent(event) {
+                                var toDate = event.properties["lecm-events:to-date"]
+                                event.properties["lecm-events:removed"] = true;
+                                event.save();
+
+                                if (toDate.getTime() >= new Date().getTime()) {
+                                    var currentUser = orgstructure.getCurrentEmployee();
+                                    var members = events.getEventMembers(document);
+                                    var notificationText = documentScript.wrapperLink(currentUser,
+                                    currentUser.properties["lecm-orgstr:employee-short-name"]);
+                                    notificationText += " отменил проведение мероприятия ";
+                                    notificationText += documentScript.wrapperDocumentLink(document,
+                                    "{lecm-document:present-string}");
+                                    notifications.sendNotificationFromCurrentUser(members, notificationText, document, true);
+
+                                    var invitedMembers = events.getEventInvitedMembers(document);
+                                    var from = currentUser.properties["lecm-orgstr:employee-email"];
+                                    if (from != null && from != "") {
+                                        for each (var member in invitedMembers) {
+                                            var email = member.properties["lecm-representative:email"];
+                                            if (email != null && email != "") {
+                                                var mail = actions.create("mail");
+                                                mail.parameters.to = email;
+                                                var subjectText = "Отмена проведения мероприятия";
+                                                mail.parameters.subject = subjectText;
+                                                mail.parameters.from = from;
+                                                var text = "Уважаемые коллеги!<br/>" + documentScript.wrapperLink(currentUser,
+                                                currentUser.properties["lecm-orgstr:employee-short-name"]);
+                                                text += " отменил проведение мероприятия ";
+                                                text += documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
+                                                mail.parameters.text = text;
+                                                mail.parameters.send_after_commit = true;
+                                                try {
+                                                mail.execute(document);
+                                                } catch(e) {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            ]]>
+                        </activiti:string>
+                    </activiti:field>
+                </activiti:executionListener>
+            </extensionElements>
+            <script></script>
+        </scriptTask>
+        <receiveTask id="eventsReceiveTask" name="Receive Task"></receiveTask>
+        <sequenceFlow id="flow1" name="" sourceRef="startRemoveRepeatable" targetRef="removeRepeatable"></sequenceFlow>
+        <sequenceFlow id="flow2" name="" sourceRef="removeRepeatable" targetRef="eventsReceiveTask"></sequenceFlow>
+        <sequenceFlow id="flow3" name="" sourceRef="eventsReceiveTask" targetRef="endRemoveRepeatable"></sequenceFlow>
+    </process>
+</definitions>

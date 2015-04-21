@@ -127,6 +127,8 @@
 				<value>alfresco/module/${artifactId}/actions/member-request-new-time.xml</value>
 				<value>alfresco/module/${artifactId}/actions/create-copy.xml</value>
 				<value>alfresco/module/${artifactId}/actions/additional-agreement.xml</value>
+				<value>alfresco/module/${artifactId}/actions/ga-remove-event.xml</value>
+				<value>alfresco/module/${artifactId}/actions/ga-remove-repeatable-event.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -145,6 +147,12 @@
 				<props>
 					<prop key="engineId">activiti</prop>
 					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-events-member-request-new-time.bpmn20.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
+				</props>
+				<props>
+					<prop key="engineId">activiti</prop>
+					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-events-remove-repeatable.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
 					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>

@@ -216,4 +216,16 @@ public class EventsWebScriptBean extends BaseWebScript {
             eventService.onAfterUpdate(eventRef, updateRepeated);
         }
     }
+
+    public Scriptable getRepetableEvents(ScriptNode event, String filterType) {
+        List<NodeRef> repeatableEvents = new ArrayList<>();
+        if ("ALL".equals(filterType)) {
+            repeatableEvents = eventService.getAllRepeatedEvents(event.getNodeRef());
+        } else if ("ALL_NEXT".equals(filterType)) {
+            repeatableEvents = eventService.getNextRepeatedEvents(event.getNodeRef());
+        } else if ("ALL_PREV".equals(filterType)) {
+            repeatableEvents = eventService.getPrevRepeatedEvents(event.getNodeRef());
+        }
+        return createScriptable(repeatableEvents);
+    }
 }
