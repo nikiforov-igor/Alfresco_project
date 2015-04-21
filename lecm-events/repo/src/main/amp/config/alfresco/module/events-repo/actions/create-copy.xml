@@ -96,7 +96,7 @@
     }
 
     var encodeParams = Packages.org.apache.commons.codec.binary.Base64.encodeBase64String(new java.lang.String(params).getBytes());
-    model.redirect = 'document-create?documentType=lecm-events:document&p1=' + encodeURIComponent(encodeParams) + '&p2=' + encodeURIComponent(hashCode(params));
+    model.redirect = 'event-create?documentType=lecm-events:document&p1=' + encodeURIComponent(encodeParams) + '&p2=' + encodeURIComponent(hashCode(params));
 }
 
 function hashCode(str) {
