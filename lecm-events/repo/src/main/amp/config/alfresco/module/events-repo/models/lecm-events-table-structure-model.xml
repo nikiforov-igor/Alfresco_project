@@ -40,6 +40,9 @@
             <title>Участники</title>
             <parent>lecm-document:tableDataRow</parent>
             <properties>
+                <property name="lecm-events-ts:members-participation-required">
+                    <type>d:boolean</type>
+                </property>
                 <property name="lecm-events-ts:members-status">
                     <type>d:text</type>
                     <default>EMPTY</default>
