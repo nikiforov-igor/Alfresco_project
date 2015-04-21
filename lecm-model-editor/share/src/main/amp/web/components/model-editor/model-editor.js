@@ -6,26 +6,26 @@ IT.component = IT.component || {};
 
 (function() {
 	var Dom = YAHOO.util.Dom, Bubbling = YAHOO.Bubbling, Button = YAHOO.widget.Button, DataTable = YAHOO.widget.DataTable, Lang = YAHOO.lang;
-	
+
 	IT.component.ModelEditor = function ModelEditor_constructor(htmlId, components) {
 		IT.component.ModelEditor.superclass.constructor.call(this, "IT.component.ModelEditor", htmlId, components);
-		
+
 		return this;
 	};
 
-	YAHOO.extend(IT.component.ModelEditor, Alfresco.component.Base, 
+	YAHOO.extend(IT.component.ModelEditor, Alfresco.component.Base,
 	{
 		//Свойства
 		storage : null,
-		
+
 		modelObject : {},
-		categoryArray : [],		
+		categoryArray : [],
 		attributesArray : [],
 		associationsArray : [],
 		tablesArray : [],
 		namespaces : [],
 		initSuccess : false,
-		                       
+
 		options : {
 			nodeRef : null,
 			currentUser : null
@@ -102,17 +102,17 @@ IT.component = IT.component || {};
 					return true;
 				},
 				when: "keyup"
-		    }); 
-			
+		    });
+
 		},//onReady
 		//Инициализация внутренних объектов на основе полученного контента
 		_initObjects: function() {
 			if(YAHOO.lang.isValue(this.modelObject.model._name)) {
 				this.prop_cm_name = (this.modelObject.model._name.substr(this.modelObject.model._name.indexOf(":")+1,this.modelObject.model._name.length)).replace("Model","");
 				this.prop_model_name = (this.modelObject.model._name.substr(this.modelObject.model._name.indexOf(":")+1,this.modelObject.model._name.length));
-				
+
 				this.prop_namespace_name = (this.modelObject.model._name.substr(0,this.modelObject.model._name.indexOf(":")));
-				
+
 				this.model_description = this.modelObject.model.description;
 				if(YAHOO.lang.isObject(this.modelObject.model.types)) {
 					if(YAHOO.lang.isArray(this.modelObject.model.types.type)) {
@@ -292,6 +292,8 @@ IT.component = IT.component || {};
 								if(c.parameter[p]._name==="presentString") {
 									if(YAHOO.lang.isString(c.parameter[p].value)){
 										this.presentString = c.parameter[p].value;
+									} else if(YAHOO.lang.isObject(c.parameter[p].value)){
+										this.presentString = c.parameter[p].value["#cdata"];
 									}
 								}
 							}
@@ -300,6 +302,8 @@ IT.component = IT.component || {};
 							if(c.parameter._name==="presentString") {
 								if(YAHOO.lang.isString(c.parameter.value)){
 									this.presentString = c.parameter.value;
+								} else if(YAHOO.lang.isObject(c.parameter.value)){
+									this.presentString = c.parameter.value["#cdata"];
 								}
 							}
 						}
@@ -397,7 +401,7 @@ IT.component = IT.component || {};
 				}
 			}
 			this.categoryArray = tmpCategoryArray;
-			
+
 			var tmpAttributesArray = [];
 			var tmpAssociationsArray = [];
 			if(YAHOO.lang.isObject(this.modelObject.model.types)) {
@@ -420,11 +424,11 @@ IT.component = IT.component || {};
 						var a = this.modelObject.model.types.type[0].associations.association;
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
-								tmpAssociationsArray[i] = {"_name":(a[i]._name.substr(a[i]._name.indexOf(":")+1,a[i]._name.length)), "title":a[i].title, 
+								tmpAssociationsArray[i] = {"_name":(a[i]._name.substr(a[i]._name.indexOf(":")+1,a[i]._name.length)), "title":a[i].title,
 										"class":a[i].target["class"], "mandatory":a[i].target.mandatory, "many":a[i].target.many};
 							}
 						} else {
-							tmpAssociationsArray.push({"_name":(a._name.substr(a._name.indexOf(":")+1,a._name.length)), "title":a.title, 
+							tmpAssociationsArray.push({"_name":(a._name.substr(a._name.indexOf(":")+1,a._name.length)), "title":a.title,
 									"class":a.target["class"], "mandatory":a.target.mandatory, "many":a.target.many});
 						}
 					}
@@ -448,11 +452,11 @@ IT.component = IT.component || {};
 						var a = this.modelObject.model.types.type.associations.association;
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
-								tmpAssociationsArray[i] = {"_name":(a[i]._name.substr(a[i]._name.indexOf(":")+1,a[i]._name.length)), "title":a[i].title, 
+								tmpAssociationsArray[i] = {"_name":(a[i]._name.substr(a[i]._name.indexOf(":")+1,a[i]._name.length)), "title":a[i].title,
 										"class":a[i].target["class"], "mandatory":a[i].target.mandatory, "many":a[i].target.many};
 							}
 						} else {
-							tmpAssociationsArray.push({"_name":(a._name.substr(a._name.indexOf(":")+1,a._name.length)), "title":a.title, 
+							tmpAssociationsArray.push({"_name":(a._name.substr(a._name.indexOf(":")+1,a._name.length)), "title":a.title,
 									"class":a.target["class"], "mandatory":a.target.mandatory, "many":a.target.many});
 						}
 					}
@@ -497,9 +501,9 @@ IT.component = IT.component || {};
 					}
 				}
 			}
-			
+
 			this.tablesArray = tmpTablesArray;
-						
+
 		},//_initObjects
 		//Обработчик событий валидации формы (заполняет скрытое поле для отправки контента вместе с формой)
 		_validate:  function validate_model(field, args, event, form, silent, message) {
@@ -523,7 +527,7 @@ IT.component = IT.component || {};
 				args.modelObject.model["_name"]=""+namespace+":"+modelName;
 				args.modelObject.model["description"]=""+modelDescription;
 				args.modelObject.model["author"]=""+userName;
-				args.modelObject.model["published"]=""+modelPublished.getFullYear()+ 
+				args.modelObject.model["published"]=""+modelPublished.getFullYear()+
 								"-"+month[modelPublished.getMonth()]+
 								"-"+(modelPublished.getDate()<10 ? "0" : "")+modelPublished.getDate();
 				args.modelObject.model["version"]="1.0";
@@ -713,7 +717,7 @@ IT.component = IT.component || {};
 				}
 				args.modelObject.model.types.type.associations.association = associations;
 			}
-			
+
 			//rating
 			if(!YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])) {
 				args.modelObject.model.types.type["mandatory-aspects"] = {};
@@ -739,17 +743,17 @@ IT.component = IT.component || {};
 			for(var i in records) {
 				var rec = records[i];
 				if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,rec.getData("table"))) {
-					args.modelObject.model.types.type["mandatory-aspects"].aspect.push((rec.getData("table")||""));	
+					args.modelObject.model.types.type["mandatory-aspects"].aspect.push((rec.getData("table")||""));
 				}
 			}
-			
+
 			//json2xml
 			var xval = json2xml(args.modelObject,"");
 			//set field hidden input
 			Dom.get(field.id).value = xval;
 			//validation conditions
 			//if(Dom.get(field.id).value.length > 0) return true;
-			
+
 			//Alfresco.util.Ajax.request({
 			//	url : Alfresco.constants.URL_SERVICECONTEXT + "config",
 			//	method : "POST",
@@ -762,7 +766,7 @@ IT.component = IT.component || {};
 	        //       {
 	        //       }, scope : this }
 			//});// request
-			
+
 			if(args.widgets.categoriesDataTable.getRecordSet().getLength()>0) return true;
 			if(args.widgets.attributesDataTable.getRecordSet().getLength()>0) return true;
 			if(args.widgets.associationsDataTable.getRecordSet().getLength()>0) return true;
@@ -777,18 +781,18 @@ IT.component = IT.component || {};
 				for(j in r) {
 					dTables.push({label:r[j].title+" - "+r[j].name,value:r[j].name});
 				}
-				
+
 				//Ассоциации
 				this.tablesDialogEl = [
 		                            { name: "table", label: Alfresco.util.message('lecm.meditor.lbl.table'), type:"select", options: dTables, showdefault: false }
 		                        ];
 
-				this.tablesColumnDefs = [ 
+				this.tablesColumnDefs = [
 		                            { className: "viewmode-label", key:"table", label:Alfresco.util.message('lecm.meditor.lbl.table'), dropdownOptions : dTables, formatter: "dropdown", width : 737, maxAutoWidth : 737 },
-		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 } 
+		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 }
 		                        ];
 				this.tablesResponseSchema = { fields : [{key : "table"}] };
-				
+
 				if (callback && callback.successCallback) {
 					Dom.get(this.id+"_loading").setAttribute("style", "display:none");
 					Dom.get(this.id+"_props").setAttribute("style", "display:block");
@@ -796,7 +800,7 @@ IT.component = IT.component || {};
 				}
 			}
 			var onFailureTables = function ContentControl__populateTables_onFailure(response) {
-				
+
 			};// onFailure
 			Alfresco.util.Ajax.request({
 				url : Alfresco.constants.PROXY_URI + "api/classes/lecm-document_tableDataAspect/subclasses?r=false",//"api/dictionary",
@@ -814,7 +818,7 @@ IT.component = IT.component || {};
 				this.categoryDialogEl = {"name":{name:"name",label:Alfresco.util.message('lecm.meditor.lbl.category'),type:"input",value:""}};
 				this.categoryColDefs = 	[
 		                       	 	{ className: "viewmode-label", key:"name", label:Alfresco.util.message('lecm.meditor.lbl.category'), formatter: this._formatText, width: 360, maxAutoWidth: 360 },
-		                       	 	{ key : "delete", label : "", formatter:this._formatActions, width: 15, maxAutoWidth: 15} 
+		                       	 	{ key : "delete", label : "", formatter:this._formatActions, width: 15, maxAutoWidth: 15}
 								];
 				this.categoryResponseSchema = { fields : [{key : "name"}] };
 				//Атрибуты
@@ -826,14 +830,14 @@ IT.component = IT.component || {};
 									"_enabled": { name: "_enabled", label: Alfresco.util.message('lecm.meditor.lbl.index'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false }
 									//"validator": { name: "validator", label: "Валидатор", type:"select", options: [""], showdefault: false },
 								};
-				this.attributesColumnDefs = [ 
-		                            { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter : this._formatText, width : 170, maxAutoWidth : 170 }, 
-		                            { className: "viewmode-label", key : "title", label : Alfresco.util.message('lecm.meditor.lbl.title'), formatter : this._formatText, width : 170, maxAutoWidth : 170 }, 
-		                            { className: "viewmode-label", key : "type", label : Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dTypes, formatter : "dropdown", width : 100, maxAutoWidth : 100 }, 
+				this.attributesColumnDefs = [
+		                            { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
+		                            { className: "viewmode-label", key : "title", label : Alfresco.util.message('lecm.meditor.lbl.title'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
+		                            { className: "viewmode-label", key : "type", label : Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dTypes, formatter : "dropdown", width : 100, maxAutoWidth : 100 },
 		                            { className: "viewmode-label", key : "mandatory", label : Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
 		                            { className: "viewmode-label", key : "_enabled", label : Alfresco.util.message('lecm.meditor.lbl.index'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
 		                            //{ key : "validator", label : "Валидатор", width : 70, maxAutoWidth : 70, dropdownOptions: [""], formatter:  "dropdown" },
-		                            { key : "delete", label : "", formatter : this._formatActions, width : 15, maxAutoWidth : 15} 
+		                            { key : "delete", label : "", formatter : this._formatActions, width : 15, maxAutoWidth : 15}
 		                        ];
 				this.attribyteResponseSchema = { fields : [{key : "_id"}, {key : "_name"}, {key : "title"}, {key : "type"}, {key : "mandatory"}, {key : "_enabled"}, {key : "validator"}] };
 				//Ассоциации
@@ -851,12 +855,12 @@ IT.component = IT.component || {};
 				                    { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
 		                            { className: "viewmode-label", key:"title", label:Alfresco.util.message('lecm.meditor.lbl.title'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
 		                            { className: "viewmode-label", key:"class", label:Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dAssociations, formatter: "dropdown", width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key:"mandatory", label:Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
-		                            { className: "viewmode-label", key:"many", label:Alfresco.util.message('lecm.meditor.lbl.multiple'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
-		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 } 
+		                            { className: "viewmode-label", key:"mandatory", label:Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 },
+		                            { className: "viewmode-label", key:"many", label:Alfresco.util.message('lecm.meditor.lbl.multiple'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 },
+		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 }
 		                        ];
 				this.associationResponseSchema = { fields : [{key : "_name"}, {key : "class"}, {key : "title"}, {key : "mandatory"}, {key : "many"}] };
-				
+
 				if (callback && callback.successCallback) {
 					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
 					//Dom.get(this.id+"_loading").setAttribute("style", "display:none");
@@ -865,7 +869,7 @@ IT.component = IT.component || {};
 				}
 			};// onSuccess
 			var onFailureAssoc = function ContentControl_populateContent_onFailure(response) {
-				
+
 			};// onFailure
 			//api/classes/cm_cmobject/subclasses?r=true
 			//api/classes/cm_content/subclasses?r=false
@@ -884,7 +888,7 @@ IT.component = IT.component || {};
 					var responseXML = response.serverResponse.responseXML;
 					if(responseXML==null||responseXML.documentElement==null)
 						responseXML = parseXML(response.serverResponse.responseText);
-					
+
 					this.modelObject = YAHOO.lang.JSON.parse(xml2json(responseXML,""));
 					this._initObjects();
 					//render form
@@ -910,7 +914,7 @@ IT.component = IT.component || {};
 			} else {
 				this.modelObject = { model:{} };
 				this._initObjects();
-				
+
 				//Dom.get(this.id+"_loading").setAttribute("style", "display:none");
 				//Dom.get(this.id+"_props").setAttribute("style", "display:block");
 				//render form
@@ -919,7 +923,7 @@ IT.component = IT.component || {};
 					callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._populateTables, scope : this } } );
 				}
 			}// if
-			
+
 			var onSuccessNS = function ContentControl_populateContent_onSuccess(response) {
 				var r = response.json;
 				this.namespaces = r;
@@ -940,19 +944,19 @@ IT.component = IT.component || {};
 	        bChecked = (bChecked==="true") ? " checked=\"checked\"" : "";
 	        el.innerHTML = "<input type=\"checkbox\"" + bChecked +
 	                " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\" />";
-	        
+
 	        YAHOO.util.Event.addListener(el,"change",function(e, oSelf) {
 		    	var elTarget = YAHOO.util.Event.getTarget(e);
 		        oSelf.fireEvent("valueChangeEvent", {event:e, target:elTarget});
 		    },oDT);
-	    },//_formatBoolean	    
+	    },//_formatBoolean
 	    //Форматер для полей ввода в таблице
 	    _formatText : function(el, oRecord, oColumn, oData, oDataTable) {
 	    	var oDT = oDataTable || this;
 	        var value = (Lang.isValue(oData)) ? Lang.escapeHTML(oData.toString()) : "",
 	            markup = "<input style=\"width:"+oColumn.width+"px;\" type=\"text\" value=\"" + value + "\" title=\"" + value + "\" />";
 	        el.innerHTML = markup;
-	        
+
 	        YAHOO.util.Event.addListener(el,"keyup",function(e, oSelf) {
 		    	var elTarget = YAHOO.util.Event.getTarget(e);
 		        oSelf.fireEvent("valueChangeEvent", {event:e, target:elTarget});
@@ -1052,13 +1056,13 @@ IT.component = IT.component || {};
 			var input = new IT.widget.Input({ name: "regNumbersProperties", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.reg.numbers') + "</b>", value: (this.regNumbersProperties||""), help:Alfresco.util.message('lecm.meditor.lbl.reg.numbers') });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
-			
+
 			//Шаблон строки представления для списка
 			//var oSpan = document.createElement("span");
 			//var input = new IT.widget.Input({ name: "listPresentString", label: "Шаблон строки представления для списка", value: (this.listPresentString||"") });
 			//input.render(oSpan);
 			//Dom.get(this.id+"_title").appendChild(oSpan);
-			
+
 			//Рейтингуемый
 			var oSpan = document.createElement("span");
 			var input = new IT.widget.Select({ name: "rating", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.rating') + "</b>", help:Alfresco.util.message('lecm.meditor.lbl.rating'), options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: (this.rating||"false"), showdefault: false });
@@ -1090,7 +1094,7 @@ IT.component = IT.component || {};
 			this.widgets.attributesDataTable.subscribe('cellClickEvent',this._deleteRow);
 			this.widgets.attributesDataTable.on("valueChangeEvent", function(args) {
 				var e = args.event, t = args.target, r = this.getRecord(t), c = this.getColumn(this.getCellIndex(t.parentNode));
-				if(t.type === "checkbox") { r.setData(c.key, ""+t.checked); } 
+				if(t.type === "checkbox") { r.setData(c.key, ""+t.checked); }
 				else { r.setData(c.key, ""+t.value); }
 			});
 			this.widgets.attributesDataTable.on("dropdownChangeEvent", function(args) {
@@ -1110,7 +1114,7 @@ IT.component = IT.component || {};
 			this.widgets.associationsDataTable.subscribe('cellClickEvent',this._deleteRow);
 			this.widgets.associationsDataTable.on("valueChangeEvent", function(args) {
 				var e = args.event, t = args.target, r = this.getRecord(t), c = this.getColumn(this.getCellIndex(t.parentNode));
-				if(t.type === "checkbox") { r.setData(c.key, ""+t.checked); } 
+				if(t.type === "checkbox") { r.setData(c.key, ""+t.checked); }
 				else { r.setData(c.key, ""+t.value); }
 			});
 			this.widgets.associationsDataTable.on("dropdownChangeEvent", function(args) {
@@ -1262,7 +1266,7 @@ IT.component = IT.component || {};
 										o["#text"] = X.escape(n.nodeValue);
 									else if (n.nodeType == 4) // cdata node
 										o["#cdata"] = X.escape(n.nodeValue);
-									else if (n.nodeType == 8) {// 
+									else if (n.nodeType == 8) {//
 										// comment node
 									} else if (o[n.nodeName]) { // multiple
 																// occurence of
