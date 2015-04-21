@@ -8,23 +8,11 @@
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/protocol/table-structure/1.0" prefix="lecm-protocol-ts"/>
     </namespaces>
-
-	<constraints>
-		<constraint name="lecm-protocol-ts:point-statuses" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>ON_EXECUTION</value>
-					<value>EXECUTED</value>
-					<value>NOT_EXECUTED</value>
-					<value>OVERDUE</value>
-				</list>
-			</parameter>
-		</constraint>
-	</constraints>	
 
     <types>
         <type name="lecm-protocol-ts:point">
@@ -80,15 +68,6 @@
                     <type>d:date</type>
                     <mandatory>false</mandatory>
                 </property>
-				<!--Статус пункта-->
-				<property name="lecm-protocol-ts:point-status">
-					<type>d:text</type>
-					<default>NOT_EXECUTED</default>
-					<constraints>
-						<constraint ref="lecm-protocol-ts:point-statuses"/>
-					</constraints>
-				</property>
-				
 				<!--Служебные атрибуты-->
 				<property name="lecm-protocol-ts:reporter-assoc-ref">
                     <type>d:text</type>
@@ -138,8 +117,36 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<property name="lecm-protocol-ts:point-status-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-protocol-ts:point-status-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
             <associations>
+				<!--Статус пункта-->
+				<association name="lecm-protocol-ts:point-status-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-dic:plane_dictionary_values</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
 				<!--Докладчик-->
                 <association name="lecm-protocol-ts:reporter-assoc">
                     <source>

@@ -53,6 +53,7 @@
 	<bean id="protocol.meetings.LogicEcmProtocolTableStructureBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="documents.LogicEcmModelsBootstrap,
 		      dictionaryBootstrap,
+			  ru.it.lecm.dictionary.dictionary-repo.dictionary,
 		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
@@ -93,6 +94,7 @@
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-doc-types.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-point-status.xml</value>
 			</list>
 		</property>
 	</bean>

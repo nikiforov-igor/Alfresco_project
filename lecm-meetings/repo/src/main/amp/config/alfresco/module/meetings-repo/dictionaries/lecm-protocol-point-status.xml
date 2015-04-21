@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items updateMode="CreateOrUpdate">
+	<item name="lecm-dic:Статусы пунктов протокола" type="lecm-dic:dictionary">
+        <property name="cm:name">Статусы пунктов протокола</property>
+        <property name="lecm-dic:description">Справочник статусов пунктов протокола</property>
+        <property name="lecm-dic:type">lecm-dic:plane_dictionary_values</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:active">true</property>
+		<items>
+			<item name="cm:На исполнении" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">На исполнении</property>
+			</item>
+			<item name="cm:Исполнен" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Исполнен</property>
+			</item>
+			<item name="cm:Не исполнен" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Не исполнен</property>
+			</item>
+			<item name="cm:Просрочен" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Просрочен</property>
+			</item>
+		</items>
+	</item>
+</items>
