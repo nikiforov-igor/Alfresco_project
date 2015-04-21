@@ -21,7 +21,7 @@
     <constraints>
         <constraint name="lecm-events:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[Мероприятие {lecm-events:title}]]></value>
+                <value><![CDATA[{lecm-events:title}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-events:attachment-categories" type="LIST">
