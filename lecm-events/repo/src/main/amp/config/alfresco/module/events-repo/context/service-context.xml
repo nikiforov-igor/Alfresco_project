@@ -176,4 +176,65 @@
 		<property name="statemachineName" value="lecm-events:document" />
 		<property name="path" value="alfresco/module/${artifactId}/models/lecm-events-default-statemacine.xml" />
 	</bean>
+
+	<bean id="events.eventsNotificationExecutor" class="ru.it.lecm.events.schedule.EventNotificationExecutor" parent="action-executer">
+		<property name="ignoreLock" value="false"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="calendarBean" ref="WorkCalendarService"/>
+		<property name="eventService" ref="eventsService"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+		<property name="publicAction" value="false" />
+		<property name="mailService" ref="mailService"/>
+		<property name="defaultFromEmail" value="${mail.from.default}"/>
+	</bean>
+
+	<bean id="events.eventsNotificationSchedule" class="ru.it.lecm.events.schedule.EventNotificationSchedule">
+		<property name="transactionMode">
+			<value>ISOLATED_TRANSACTIONS</value>
+		</property>
+		<property name="compensatingActionMode">
+			<value>IGNORE</value>
+		</property>
+		<property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 5 */1 * ?</value>
+		</property>
+		<property name="firstStartExpression">
+			<value>0 */15 * * * ?</value>
+		</property>
+		<property name="onServerStart">
+			<value>false</value>
+		</property>
+		<property name="jobName">
+			<value>events-sys-agent-status</value>
+		</property>
+		<property name="jobGroup">
+			<value>events-status</value>
+		</property>
+		<property name="triggerName">
+			<value>events-sys-agent-status-trigger</value>
+		</property>
+		<property name="triggerGroup">
+			<value>events-status-trigger</value>
+		</property>
+		<property name="scheduler">
+			<ref bean="schedulerFactory"/>
+		</property>
+		<property name="actionService">
+			<ref bean="ActionService"/>
+		</property>
+		<property name="transactionService">
+			<ref bean="TransactionService"/>
+		</property>
+		<property name="runAsUser">
+			<value>System</value>
+		</property>
+		<property name="documentService" ref="documentService"/>
+		<property name="calendarBean" ref="WorkCalendarService"/>
+		<property name="notificationsService" ref="notificationsService"/>
+	</bean>
+
 </beans>
