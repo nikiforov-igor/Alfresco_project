@@ -23,10 +23,13 @@
 					<show id="lecm-eds-document:file-register-assoc"/>
 					<!--Пункты-->
 					<show id="lecm-protocol-ts:points-assoc"/>
+					<!--Список согласующих-->
+					<show id="lecm-contract:approval" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" label-id="label.attributes"/>
 					<set id="points" label-id="label.points"/>
+					<set id="approvalTab" appearance="" label-id="label.approval"/>
 					
 					<field id="lecm-document:title" set="common" />
 					<field id="lecm-eds-document:document-type-assoc" set="common">
@@ -69,6 +72,11 @@
 							<control-param name="createFormTitleMsg">protocol.item.create.form.title</control-param>
 							<control-param name="viewFormTitleMsg">protocol.item.view.form.title</control-param>
 						</control>
+					</field>
+					
+					<!--Список согласующих-->
+					<field id="lecm-contract:approval" set="approvalTab">
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
 				</appearance>
 			</form>
@@ -183,7 +191,12 @@
 					<show id="lecm-eds-document:note"/>
 					<!--Пункты-->
 					<show id="lecm-protocol-ts:points-assoc"/>
+					<!--Список согласующих-->
+					<show id="lecm-contract:approval"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-contract:approval" label-id="label.approval"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>	

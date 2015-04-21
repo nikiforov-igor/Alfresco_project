@@ -130,4 +130,8 @@
 		  
 	/>
 	
+	<bean id="protocol.statemachine.bootstrap" parent="defaultStatemachines"
+		  p:statemachineName="lecm-protocol:document"
+		  p:path="alfresco/module/${artifactId}/statemachine/lecm-protocol-statemachine-default.xml"/>
+	
 </beans>
