@@ -7,9 +7,9 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 (function () {
-	var Dom = YAHOO.util.Dom,
+    var Dom = YAHOO.util.Dom,
         Anim = YAHOO.util.Anim,
-		Event = YAHOO.util.Event;
+        Event = YAHOO.util.Event;
 
     LogicECM.module.ARM.TreeMenu = function (htmlId) {
         LogicECM.module.ARM.TreeMenu.superclass.constructor.call(
@@ -18,11 +18,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
 
-	    this.accordionItems = [];
+        this.accordionItems = [];
 
         YAHOO.Bubbling.on("updateCurrentColumns", this.onUpdateSelectedColumns, this);
         YAHOO.Bubbling.on("armRefreshSelectedTreeNode", this.onRefreshSelectedTreeNode, this);
-        YAHOO.Bubbling.on("dateChanged", this.onCalSelect, this);
 
         return this;
     };
@@ -37,11 +36,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         menuState: null,
 
-	    shownAccordionItem: null,
+        shownAccordionItem: null,
 
-	    accordionItems: null,
+        accordionItems: null,
 
-	    accordionHeight: null,
+        accordionHeight: null,
 
         expiresDate: new Date(),
 
@@ -70,14 +69,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             menu.createAccordion();
         },
 
-	    createAccordion: function() {
-		    var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE;
-		    var me = this;
-		    var callback = {
-			    success: function (oResponse) {
-				    var oResults = eval("(" + oResponse.responseText + ")");
-				    if (oResults != null) {
-					    me.accordionItems = oResults;
+        createAccordion: function() {
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE;
+            var me = this;
+            var callback = {
+                success: function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    if (oResults != null) {
+                        me.accordionItems = oResults;
 
                         if (LogicECM.module.ARM.SETTINGS.ARM_SHOW_CALENDAR) {
                             this.calendarNode = {
@@ -96,33 +95,33 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             me.accordionItems.push(this.calendarNode);
                         }
 
-					    var accordionContent = "";
-					    for (var i = 0; i < me.accordionItems.length; i++) {
-						    accordionContent += me.getAccordionItemHtml(me.accordionItems[i]);
-					    }
-					    Dom.get(me.id + "-headlines").innerHTML = accordionContent;
-					    me.initAccordion();
-				    }
-			    },
-			    failure: function (oResponse) {
-				    Alfresco.util.PopupManager.displayMessage(
-					    {
-						    text:me.msg("message.details.failure") + ": " + oResponse
-					    });
-			    },
-			    scope: this
-		    };
-		    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-	    },
+                        var accordionContent = "";
+                        for (var i = 0; i < me.accordionItems.length; i++) {
+                            accordionContent += me.getAccordionItemHtml(me.accordionItems[i]);
+                        }
+                        Dom.get(me.id + "-headlines").innerHTML = accordionContent;
+                        me.initAccordion();
+                    }
+                },
+                failure: function (oResponse) {
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text:me.msg("message.details.failure") + ": " + oResponse
+                        });
+                },
+                scope: this
+            };
+            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+        },
 
-	    getAccordionItemHtml: function(node) {
-			var result = "";
-		    result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'>";
-		    result += node.label;
+        getAccordionItemHtml: function(node) {
+            var result = "";
+            result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'>";
+            result += node.label;
             result += "<span id='" + "ac-label-" + node.id + "' class='accordion-label'></span>";
-		    result += "</div><div id='ac-content-" + node.id + "' class='accordion-content wait-container'><div class='wait'></div></div></li>";
-		    return result;
-	    },
+            result += "</div><div id='ac-content-" + node.id + "' class='accordion-content wait-container'><div class='wait'></div></div></li>";
+            return result;
+        },
 
         initAccordion: function () {
             var context = this;
@@ -138,11 +137,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         Event.on("ac-head-" + obj.node.id, 'click', this.onAccordionClick, obj.node, this);
                         if (obj.forceExpand) {
                             this.onAccordionClick(null, obj.node);
-                            if (node.id == "calendar") {
-                                YAHOO.Bubbling.fire("dateChanged",
-                                    {
-                                        date: new Date()
-                                    })
+                            if (obj.node.id == "calendar") {
+                                this.onCalSelect();
                             }
                         }
                         Event.onAvailable("ac-label-" + obj.node.id, function (obj) {
@@ -159,27 +155,30 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
         },
 
-	    onAccordionClick : function(e, node) {
-		    if (this.shownAccordionItem == null || this.shownAccordionItem != node) {
-			    if (!node.createdTree) {
+        onAccordionClick : function(e, node) {
+            if (this.shownAccordionItem == null || this.shownAccordionItem != node) {
+                if (!node.createdTree) {
                     if (node.id == "calendar") {
                         this._createCalendar();
                     } else {
                         this._createTree(node);
                     }
-				    node.createdTree = true;
-			    }
-			    if (this.shownAccordionItem != null) {
-			        this.collapseAccordion(this.shownAccordionItem);
-			    }
-			    this.expandAccordion(node);
-			    this.shownAccordionItem = node;
-		    }
-	    },
+                    node.createdTree = true;
+                }
+                if (node.id == "calendar") {
+                    this.onCalSelect();
+                }
+                if (this.shownAccordionItem != null) {
+                    this.collapseAccordion(this.shownAccordionItem);
+                }
+                this.expandAccordion(node);
+                this.shownAccordionItem = node;
+            }
+        },
 
-	    expandAccordion: function(node) {
-		    Dom.addClass("ac-head-" + node.id, "shown");
-		    Dom.addClass("ac-content-" + node.id, "shown");
+        expandAccordion: function(node) {
+            Dom.addClass("ac-head-" + node.id, "shown");
+            Dom.addClass("ac-content-" + node.id, "shown");
             var attributes = {
                 height: {
                     from: 0,
@@ -193,12 +192,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.backOut);
             anim.animate();
-		    this.menuState.accordion = node.id;
-	    },
+            this.menuState.accordion = node.id;
+        },
 
-	    collapseAccordion: function(node) {
-		    Dom.removeClass("ac-head-" + node.id, "shown");
-		    Dom.removeClass("ac-content-" + node.id, "shown");
+        collapseAccordion: function(node) {
+            Dom.removeClass("ac-head-" + node.id, "shown");
+            Dom.removeClass("ac-content-" + node.id, "shown");
 
             var attributes = {
                 height: {
@@ -212,14 +211,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             };
             var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.easeBoth);
             anim.animate();
-	    },
+        },
 
-	    getAccordionHeight: function() {
-		    if (this.accordionHeight == null) {
-			    this.accordionHeight = Dom.getY("lecm-content-ft") - Dom.getY(this.id) - 34 * this.accordionItems.length;
-		    }
-		    return this.accordionHeight;
-	    },
+        getAccordionHeight: function() {
+            if (this.accordionHeight == null) {
+                this.accordionHeight = Dom.getY("lecm-content-ft") - Dom.getY(this.id) - 34 * this.accordionItems.length;
+            }
+            return this.accordionHeight;
+        },
 
         _createCalendar: function() {
             var parentNode = Dom.get("ac-content-calendar");
@@ -228,6 +227,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             var miniCalendar = Dom.get("arm-mini-calendar");
             Dom.setStyle(miniCalendar.id, "display", "block");
             parentNode.appendChild(miniCalendar);
+            this.onCalSelect();
         },
 
         _createTree: function (node) {
@@ -241,16 +241,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     armNode: null,
                     bubblingLabel: "documents-arm",
                     menuState:this.menuState,
-	                isNotGridNode:false
+                    isNotGridNode:false
                 });
             }
             var root = this.tree.getRoot();
-	        root.data.nodeRef  = node.nodeRef;
-	        root.data.armNodeRef  = node.armNodeRef;
-	        root.data.createTypes  = node.createTypes;
-	        root.data.searchQuery  = node.searchQuery;
-	        root.data.searchType  = node.searchType;
-	        root.id  = node.id;
+            root.data.nodeRef  = node.nodeRef;
+            root.data.armNodeRef  = node.armNodeRef;
+            root.data.createTypes  = node.createTypes;
+            root.data.searchQuery  = node.searchQuery;
+            root.data.searchType  = node.searchType;
+            root.id  = node.id;
             this._loadTree(root);
 
             this.tree.subscribe('clickEvent', function (event) {
@@ -289,9 +289,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 counter: oResults[nodeIndex].counter,
                                 counterLimit: oResults[nodeIndex].counterLimit,
                                 counterDesc: oResults[nodeIndex].counterDesc,
-	                            htmlUrl: oResults[nodeIndex].htmlUrl,
+                                htmlUrl: oResults[nodeIndex].htmlUrl,
                                 reportCodes: oResults[nodeIndex].reportCodes,
-	                            searchType: oResults[nodeIndex].searchType,
+                                searchType: oResults[nodeIndex].searchType,
                                 isAggregate: oResults[nodeIndex].isAggregate
                             };
 
@@ -329,10 +329,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 },
                 failure: function (oResponse) {
-	                Alfresco.util.PopupManager.displayMessage(
-		                {
-			                text:otree.msg("message.arm.load.failure")
-		                });
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text:otree.msg("message.arm.load.failure")
+                        });
 
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
@@ -383,9 +383,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _treeNodeSelected: function (node) {
-	        if (this.selectedNode != null) {
-	            this.selectedNode.tree.onEventToggleHighlight(this.selectedNode);
-	        }
+            if (this.selectedNode != null) {
+                this.selectedNode.tree.onEventToggleHighlight(this.selectedNode);
+            }
 
             this.selectedNode = node;
             this.tree.onEventToggleHighlight(node);
@@ -407,37 +407,37 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
 
                 var isReportNode = node.data.nodeType == "lecm-arm:reports-node";
-	            var isHtmlNode = node.data.htmlUrl != null && node.data.htmlUrl.length > 0;
-	            var isNotGridNode = isReportNode || isHtmlNode;
+                var isHtmlNode = node.data.htmlUrl != null && node.data.htmlUrl.length > 0;
+                var isNotGridNode = isReportNode || isHtmlNode;
 
                 Dom.setStyle("arm-documents-toolbar", "display", "block");
-	            Dom.setStyle("arm-documents-grid", "display", isNotGridNode ? "none" : "block");
-	            Dom.setStyle("arm-documents-reports", "display", !isReportNode ? "none" : "block");
-	            Dom.setStyle("arm-documents-html", "display", !isHtmlNode ? "none" : "block");
+                Dom.setStyle("arm-documents-grid", "display", isNotGridNode ? "none" : "block");
+                Dom.setStyle("arm-documents-reports", "display", !isReportNode ? "none" : "block");
+                Dom.setStyle("arm-documents-html", "display", !isHtmlNode ? "none" : "block");
 
                 Dom.setStyle("arm-calendar-toolbar", "display", "none");
                 Dom.setStyle("arm-calendar", "display", "none");
 
                 if (isReportNode) {
-		            YAHOO.Bubbling.fire ("updateArmReports", {
-			            types: node.data.types,
+                    YAHOO.Bubbling.fire ("updateArmReports", {
+                        types: node.data.types,
                         reportCodes: node.data.reportCodes
-		            });
+                    });
                     YAHOO.Bubbling.fire ("updateArmFilters", {
                         currentNode: null,
                         isNotGridNode: isNotGridNode
                     });
-	            }
-	            if (isHtmlNode) {
+                }
+                if (isHtmlNode) {
                     LogicECM.module.Base.Util.saveAdditionalObjects();
-		            YAHOO.Bubbling.fire ("updateArmHtmlNode", {
+                    YAHOO.Bubbling.fire ("updateArmHtmlNode", {
                         armNode: node
-		            });
+                    });
                     YAHOO.Bubbling.fire ("updateArmFilters", {
                         currentNode: null,
                         isNotGridNode: isNotGridNode
                     });
-	            } else {
+                } else {
                     YAHOO.Bubbling.fire ("armNodeSelected", {
                         armNode: node,
                         bubblingLabel: "documents-arm",
@@ -446,14 +446,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     });
                 }
 
-	            var parent = node;
-	            while (parent.parent != null) {
-		            parent = parent.parent;
-	            }
+                var parent = node;
+                while (parent.parent != null) {
+                    parent = parent.parent;
+                }
 
-	            YAHOO.Bubbling.fire ("updateArmToolbar", {
-		            createTypes: parent.data.createTypes
-	            });
+                YAHOO.Bubbling.fire ("updateArmToolbar", {
+                    createTypes: parent.data.createTypes
+                });
             }
             // сбрасываем после того, как отослали запрос к гриду
             this.menuState.pageNum = 1;
@@ -479,6 +479,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             Dom.setStyle("arm-calendar-toolbar", "display", "block");
             Dom.setStyle("arm-calendar", "display", "block");
+            YAHOO.Bubbling.fire("dateChanged",
+                {
+                    date: new Date()
+                });
         },
 
         drawCounterValue: function (data, query, labelElement) {
@@ -526,9 +530,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             fn: function (oResponse) {
                                 if (oResponse != null) {
                                     if (labelElement) {
-	                                    var counterSpan = "<span title=\"" + data.counterDesc + "\" class=\"accordion-counter-label\">";
-	                                    counterSpan += "(" + (oResponse.json !== null ? oResponse.json : "-" )+ ")";
-	                                    counterSpan += "</span>";
+                                        var counterSpan = "<span title=\"" + data.counterDesc + "\" class=\"accordion-counter-label\">";
+                                        counterSpan += "(" + (oResponse.json !== null ? oResponse.json : "-" )+ ")";
+                                        counterSpan += "</span>";
 
                                         labelElement.innerHTML = labelElement.innerHTML + counterSpan;
                                     }
@@ -548,20 +552,20 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _getTextNodeId: function (node, idsArray) {
-	        if (node != null) {
-		        var id = node.id;
-		        if (id) {
-			        if (!idsArray) {
-				        idsArray = [];
-			        }
-			        idsArray.push(id);
-			        return this._getTextNodeId(node.parent, idsArray);
-		        } else {
-			        return idsArray.reverse().join(".");
-		        }
-	        } else {
-		        return idsArray.reverse().join(".");
-	        }
+            if (node != null) {
+                var id = node.id;
+                if (id) {
+                    if (!idsArray) {
+                        idsArray = [];
+                    }
+                    idsArray.push(id);
+                    return this._getTextNodeId(node.parent, idsArray);
+                } else {
+                    return idsArray.reverse().join(".");
+                }
+            } else {
+                return idsArray.reverse().join(".");
+            }
         },
 
         _buildPreferencesValue: function () {

@@ -55,7 +55,7 @@
                         <@region id="toolbar" scope="template" />
                     </div>
                     <#if showCalendar>
-	                    <div id="arm-calendar-toolbar">
+	                    <div id="arm-calendar-toolbar" class="hidden1">
                             <@region id="calendar-toolbar" scope="template" class="toolbar" />
 	                    </div>
                     </#if>
@@ -69,7 +69,7 @@
                     <@region id="arm-html-node" scope="template" />
                     </div>
                     <#if showCalendar>
-                        <div id="arm-calendar">
+                        <div id="arm-calendar" class="hidden1">
                             <@region id="calendar-view" scope="template" class="view" />
                             <@region id="calendar-agenda" scope="template" class="view" />
                         </div>
