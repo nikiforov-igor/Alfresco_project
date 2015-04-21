@@ -22,11 +22,13 @@ function main() {
 		}
 	} else if (members != null) {
 		for (var i = 0; i < members.length(); i++) {
-			membersResult.push({
-				nodeRef: members.get(i),
-				name: substitude.formatNodeTitle(members.get(i), "{lecm-orgstr:employee-short-name}"),
-				available: events.checkMemberAvailable(members.get(i), event, fromDate, toDate, allDay == "true")
-			});
+			if (members.get(i).length > 0) {
+				membersResult.push({
+					nodeRef: members.get(i),
+					name: substitude.formatNodeTitle(members.get(i), "{lecm-orgstr:employee-short-name}"),
+					available: events.checkMemberAvailable(members.get(i), event, fromDate, toDate, allDay == "true")
+				});
+			}
 		}
 	}
 	model.members = membersResult;
