@@ -35,7 +35,8 @@
                     <!-- Правила -->
                     <!--<show id="lecm-events:repeatable-rule"/>-->
                     <!-- Участники -->
-                    <show id="lecm-events-ts:members-assoc"/>
+                    <show id="lecm-events:temp-members-assoc"/>
+                    <show id="lecm-events:temp-members-assoc-json"/>
                     <!-- Приглашённые -->
                     <show id="lecm-events:invited-members-assoc"/>
                     <!-- Место проведения -->
@@ -64,11 +65,18 @@
                     <!--<field id="lecm-events:repeatable-rule">-->
                         <!--<control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />-->
                     <!--</field>-->
-                    <field id="lecm-events-ts:members-assoc">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
-                            <control-param name="isTableSortable">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
+                    <field id="lecm-events:temp-members-assoc">
+                        <control template="/ru/it/lecm/events/controls/events-members-control.ftl">
+                            <control-param name="plane">true</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+                            <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+                            <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
                         </control>
+                    </field>
+                    <field id="lecm-events:temp-members-assoc-json">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-events-ts:resources-assoc">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">

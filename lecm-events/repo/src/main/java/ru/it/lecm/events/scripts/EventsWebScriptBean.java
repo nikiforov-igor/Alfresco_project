@@ -190,6 +190,19 @@ public class EventsWebScriptBean extends BaseWebScript {
         return null;
     }
 
+    public ScriptNode getEmployeeEventMemberRow(String event, String member) {
+        ParameterCheck.mandatory("event", event);
+        ParameterCheck.mandatory("member", member);
+
+        NodeRef row = eventService.getMemberTableRow(new NodeRef(event), new NodeRef(member));
+
+        if (row != null) {
+            return new ScriptNode(row, serviceRegistry, getScope());
+        }
+
+        return null;
+    }
+
     public Scriptable getEventMembers(ScriptNode event) {
         return createScriptable(eventService.getEventMembers(event.getNodeRef()));
     }

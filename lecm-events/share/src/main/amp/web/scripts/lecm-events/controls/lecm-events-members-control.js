@@ -24,6 +24,100 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	YAHOO.extend(LogicECM.module.Calendar.MembersControl, LogicECM.module.AssociationTokenControl, {});
 
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.MembersControl.prototype, {
+		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
+			var arrItems = "";
+			if (!this.options.resetValue) {
+				if (this.options.selectedValue != null) {
+					arrItems = this.options.selectedValue;
+				}
+				else if (this.options.currentValue != null && this.isNodeRef(this.options.currentValue)) {
+					arrItems = this.options.currentValue;
+				}
+
+				if (arrItems == "" && this.defaultValue != null) {
+					arrItems += this.defaultValue;
+				}
+			}
+
+			var onSuccess = function (response)
+			{
+				var items = response.json.data.items,
+					item;
+				this.selectedItems = {};
+
+				this.singleSelectedItem = null;
+				for (var i = 0, il = items.length; i < il; i++) {
+					item = items[i];
+					if (!this.options.checkType || item.type == this.options.itemType) {
+						this.selectedItems[item.nodeRef] = item;
+
+						if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
+							this.singleSelectedItem = item;
+						}
+					}
+				}
+
+				if(!this.options.disabled)
+				{
+					this.updateSelectedItems();
+					this.updateAddButtons();
+				}
+				if (updateForms) {
+					this.updateFormFields(clearCurrentDisplayValue);
+				}
+			};
+
+			var onFailure = function (response)
+			{
+				this.selectedItems = {};
+			};
+
+			if (arrItems !== "")
+			{
+				Alfresco.util.Ajax.jsonRequest(
+					{
+						url: Alfresco.constants.PROXY_URI + this.options.pickerItemsScript,
+						method: "POST",
+						dataObj:
+						{
+							items: arrItems.split(","),
+							itemValueType: "nodeRef",
+							itemNameSubstituteString: this.options.nameSubstituteString,
+							sortProp: this.options.sortProp,
+							selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
+							pathRoot: this.options.rootLocation,
+							pathNameSubstituteString: this.options.treeNodeSubstituteString,
+							eventNodeRef: this.options.eventNodeRef
+						},
+						successCallback:
+						{
+							fn: onSuccess,
+							scope: this
+						},
+						failureCallback:
+						{
+							fn: onFailure,
+							scope: this
+						}
+					});
+			}
+			else
+			{
+				// if disabled show the (None) message
+				this.selectedItems = {};
+				this.singleSelectedItem = null;
+				if (!this.options.disabled) {
+					this.updateSelectedItems();
+					this.updateAddButtons();
+				} else if (Dom.get(this.options.controlId + "-currentValueDisplay") != null && Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML.trim() === "") {
+					Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
+				}
+				if (updateForms) {
+					this.updateFormFields(clearCurrentDisplayValue);
+				}
+			}
+		},
+
 		updateFormFields: function (clearCurrentDisplayValue) {
 			// Just element
 			if (clearCurrentDisplayValue == null) {
@@ -154,7 +248,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		getMandatoryCheckboxHTML: function (node) {
-			return '<input type="checkbox" class="members-mandatory" id="' + this.getMandatoryCheckboxId(node) + '"></a>';
+			var checked = "";
+			if (node.memberMandatory != null && node.memberMandatory) {
+				checked = ' checked="checked"';
+			}
+
+			return '<input type="checkbox" class="members-mandatory"' + checked + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
 		},
 
 		attachMandatoryCheckboxClickListener: function (node) {
@@ -162,7 +261,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		mandatoryCheckboxClick: function (event, node) {
-			this.selectedItems[node.nodeRef].mandatory = event.target.checked;
+			this.selectedItems[node.nodeRef].memberMandatory = event.target.checked;
 			this.updateJsonField();
 		},
 
@@ -173,8 +272,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (selectedItems != null) {
 				for (var i = 0; i < selectedItems.length; i++) {
 					var mandatory = false;
-					if (this.selectedItems[selectedItems[i]].mandatory != null) {
-						mandatory = this.selectedItems[selectedItems[i]].mandatory;
+					if (this.selectedItems[selectedItems[i]].memberMandatory != null) {
+						mandatory = this.selectedItems[selectedItems[i]].memberMandatory;
 					}
 
 					members.push({

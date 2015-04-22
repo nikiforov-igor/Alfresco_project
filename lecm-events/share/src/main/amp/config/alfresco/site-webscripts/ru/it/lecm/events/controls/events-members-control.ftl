@@ -210,9 +210,13 @@
             <#if params.childrenDataSource??>
 				childrenDataSource: "${params.childrenDataSource}",
             </#if>
+            <#if params.pickerItemsScript??>
+	            pickerItemsScript: "${params.pickerItemsScript}",
+            </#if>
             <#if defaultValue?has_content>
 				defaultValue: "${defaultValue?string}",
             </#if>
+            eventNodeRef: "${form.arguments.itemId}",
             <#if params.fireAction?? && params.fireAction != "">
 				fireAction: {
                     <#list params.fireAction?split(optionSeparator) as typeValue>
