@@ -145,10 +145,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						//if (this.options.itemType == "lecm-orgstr:employee") {
 						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
 						//} else {
-							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]));
+							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], true));
 						//}
 					} else {
-						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i]) + this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], false) + this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 
 						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 						YAHOO.util.Event.onAvailable(this.getMandatoryCheckboxId(this.selectedItems[i]), this.attachMandatoryCheckboxClickListener, this.selectedItems[i], this);
@@ -247,13 +247,18 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			return "mchbx-" + this.options.prefixPickerId + node.nodeRef
 		},
 
-		getMandatoryCheckboxHTML: function (node) {
+		getMandatoryCheckboxHTML: function (node, disabled) {
 			var checked = "";
 			if (node.memberMandatory != null && node.memberMandatory) {
 				checked = ' checked="checked"';
 			}
 
-			return '<input type="checkbox" class="members-mandatory"' + checked + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
+			var disabledStr = "";
+			if (disabled != null && disabled) {
+				disabledStr = ' disabled="disabled"';
+			}
+
+			return '<input type="checkbox" class="members-mandatory"' + checked + disabledStr + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
 		},
 
 		attachMandatoryCheckboxClickListener: function (node) {
