@@ -42,7 +42,7 @@
                     <!-- Место проведения -->
                     <show id="lecm-events:location-assoc"/>
                     <!-- Ресурсы -->
-                    <show id="lecm-events-ts:resources-assoc"/>
+                    <show id="lecm-events:temp-resources-assoc"/>
                     <!-- Инициатор -->
                     <show id="lecm-events:initiator-assoc"/>
                     <!-- Описание -->
@@ -78,10 +78,9 @@
                     <field id="lecm-events:temp-members-assoc-json">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
-                    <field id="lecm-events-ts:resources-assoc">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
-                            <control-param name="isTableSortable">false</control-param>
-                            <control-param name="refreshAfterCreate">true</control-param>
+                    <field id="lecm-events:temp-resources-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:description">

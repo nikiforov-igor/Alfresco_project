@@ -19,7 +19,6 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import javax.activation.DataSource;
@@ -43,7 +42,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     private SearchService searchService;
     private IWorkCalendar workCalendarService;
     private DocumentTableService documentTableService;
-    private LecmPermissionService lecmPermissionService;
     private NotificationsService notificationsService;
 
     private TemplateService templateService;
@@ -59,10 +57,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
-    }
-
-    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-        this.lecmPermissionService = lecmPermissionService;
     }
 
     public void setNotificationsService(NotificationsService notificationsService) {
@@ -96,55 +90,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     public List<NodeRef> getEventMembers(NodeRef event) {
-        List<NodeRef> results = new ArrayList<>();
-
-        NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
-        if (tableDataRootFolder != null) {
-            Set<QName> typeSet = new HashSet<>(1);
-            typeSet.add(EventsService.TYPE_EVENT_MEMBERS_TABLE);
-            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(tableDataRootFolder, typeSet);
-            if (childAssocs != null && childAssocs.size() == 1) {
-                NodeRef table = childAssocs.get(0).getChildRef();
-                if (table != null) {
-                    List<NodeRef> rows = documentTableService.getTableDataRows(table);
-                    if (rows != null) {
-                        for (NodeRef row : rows) {
-                            NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
-                            if (rowEmployee != null) {
-                                results.add(rowEmployee);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return results;
+        return findNodesByAssociationRef(event, ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
     }
 
     public List<NodeRef> getEventResources(NodeRef event) {
-        List<NodeRef> results = new ArrayList<>();
-
-        NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
-        if (tableDataRootFolder != null) {
-            Set<QName> typeSet = new HashSet<>(1);
-            typeSet.add(EventsService.TYPE_EVENT_RESOURCES_TABLE);
-            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(tableDataRootFolder, typeSet);
-            if (childAssocs != null && childAssocs.size() == 1) {
-                NodeRef table = childAssocs.get(0).getChildRef();
-                if (table != null) {
-                    List<NodeRef> rows = documentTableService.getTableDataRows(table);
-                    if (rows != null) {
-                        for (NodeRef row : rows) {
-                            NodeRef rowResource = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_RESOURCES_TABLE_RESOURCE, null, ASSOCIATION_TYPE.TARGET);
-                            if (rowResource != null) {
-                                results.add(rowResource);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return results;
+        return findNodesByAssociationRef(event, ASSOC_EVENT_TEMP_RESOURCES, null, ASSOCIATION_TYPE.TARGET);
     }
 
     public List<NodeRef> getEventInvitedMembers(NodeRef event) {
@@ -432,18 +382,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         List<NodeRef> oldMembers = findNodesByAssociationRef(event, ASSOC_EVENT_OLD_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
 
         List<NodeRef> oldAndNewMembers = new ArrayList<>();
-        List<NodeRef> onlyOldMembers = new ArrayList<>();
-        List<NodeRef> onlyNewMembers;
         for (NodeRef oldMember : oldMembers) {
             if (newMembers.contains(oldMember)) {
                 oldAndNewMembers.add(oldMember);
-            } else {
-                onlyOldMembers.add(oldMember);
             }
         }
-
-        newMembers.removeAll(oldAndNewMembers);
-        onlyNewMembers = newMembers;
 
         NodeRef initiator = getEventInitiator(event);
         Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
@@ -456,25 +399,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 List<NodeRef> recipients = new ArrayList<>();
                 recipients.add(member);
                 notificationsService.sendNotification(author, event, text, recipients, null);
-            }
-
-            for (NodeRef member : onlyNewMembers) {
-                lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
-
-                String text = employeeName + " пригласил вас на мероприятие " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
-                List<NodeRef> recipients = new ArrayList<>();
-                recipients.add(member);
-                notificationsService.sendNotification(author, event, text, recipients, null);
-            }
-
-            for (NodeRef member : onlyOldMembers) {
-                lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, member.getId());
-                lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, member);
-
-                String text = "Вам не требуется присутствовать на мероприятии " + wrapAsEventLink(event);
-                List<NodeRef> recipients = new ArrayList<>();
-                recipients.add(member);
-                notificationsService.sendNotification(author, event, text, recipients, null, true);
             }
         }
 
@@ -610,6 +534,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
         propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
         propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+        propertiesToCopy.add(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
 
         propertiesToCopy.add(PROP_EVENT_ALL_DAY);
 
@@ -652,15 +577,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 nodeService.createAssociation(repeatedEvent, member, ASSOC_EVENT_TEMP_MEMBERS);
             }
         }
-        NodeRef membersTable = getMemberTable(repeatedEvent);
-        if (membersTable != null) {
-            for(NodeRef member: repeatedEventMembers) {
-                if (!eventMembers.contains(member)) {
-                    NodeRef memberTableRow = getMemberTableRow(repeatedEvent, member);
-                    if (memberTableRow != null) {
-                        nodeService.removeChild(membersTable, memberTableRow);
-                    }
-                }
+        for(NodeRef member: repeatedEventMembers) {
+            if (!eventMembers.contains(member)) {
+                nodeService.removeAssociation(repeatedEvent, member, ASSOC_EVENT_TEMP_MEMBERS);
             }
         }
 
@@ -672,15 +591,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 nodeService.createAssociation(repeatedEvent, resource, ASSOC_EVENT_TEMP_RESOURCES);
             }
         }
-        NodeRef resourcesTable = getResourcesTable(repeatedEvent);
-        if (resourcesTable != null) {
-            for(NodeRef resource: repeatedEventResources) {
-                if (!eventResources.contains(resource)) {
-                    NodeRef resourceTableRow = getResourceTableRow(repeatedEvent, resource);
-                    if (resourceTableRow != null) {
-                        nodeService.removeChild(resourcesTable, resourceTableRow);
-                    }
-                }
+        for(NodeRef resource: repeatedEventResources) {
+            if (!eventResources.contains(resource)) {
+                nodeService.removeAssociation(repeatedEvent, resource, ASSOC_EVENT_TEMP_RESOURCES);
             }
         }
 

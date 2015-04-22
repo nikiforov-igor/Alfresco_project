@@ -126,9 +126,17 @@ public class EventsPolicy extends BaseBean {
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_MEMBERS,
                 new JavaBehaviour(this, "onCreateAddMembers", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+                EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_MEMBERS,
+                new JavaBehaviour(this, "onRemoveMember", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_RESOURCES,
                 new JavaBehaviour(this, "onCreateAddResources", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+                EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_RESOURCES,
+                new JavaBehaviour(this, "onRemoveResources", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_INVITED_MEMBERS,
@@ -179,6 +187,34 @@ public class EventsPolicy extends BaseBean {
                     }
                 }
             }
+        }
+    }
+
+    public void onRemoveMember(AssociationRef nodeAssocRef) {
+        NodeRef event = nodeAssocRef.getSourceRef();
+        NodeRef member = nodeAssocRef.getTargetRef();
+
+        lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, member.getId());
+        lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, member);
+
+        NodeRef tableRow = eventService.getMemberTableRow(event, member);
+        if (tableRow != null) {
+            nodeService.removeChild(nodeService.getPrimaryParent(tableRow).getParentRef(), tableRow);
+        }
+
+        String text = "Вам не требуется присутствовать на мероприятии " + eventService.wrapAsEventLink(event);
+        List<NodeRef> recipients = new ArrayList<>();
+        recipients.add(member);
+        notificationsService.sendNotification(AuthenticationUtil.getSystemUserName(), event, text, recipients, null, true);
+    }
+
+    public void onRemoveResources(AssociationRef nodeAssocRef) {
+        NodeRef event = nodeAssocRef.getSourceRef();
+        NodeRef resource = nodeAssocRef.getTargetRef();
+
+        NodeRef tableRow = eventService.getResourceTableRow(event, resource);
+        if (tableRow != null) {
+            nodeService.removeChild(nodeService.getPrimaryParent(tableRow).getParentRef(), tableRow);
         }
     }
 
@@ -482,6 +518,7 @@ public class EventsPolicy extends BaseBean {
 
                                         if (!createdEventConnection && lastCreatedEvent != null) {
                                             documentConnectionService.createConnection(lastCreatedEvent, event, "hasRepeated", true);
+                                            nodeService.createAssociation(lastCreatedEvent, event, EventsService.ASSOC_NEXT_REPEATED_EVENT);
                                         }
 
                                         return null;

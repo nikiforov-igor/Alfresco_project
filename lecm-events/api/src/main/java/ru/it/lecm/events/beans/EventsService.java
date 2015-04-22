@@ -96,6 +96,8 @@ public interface EventsService {
 
     NodeRef getMemberTableRow(NodeRef event, NodeRef employee);
 
+    NodeRef getResourceTableRow(NodeRef event, NodeRef employee);
+
     String getCurrentEmployeeMemberStatus(NodeRef event);
 
     String wrapAsEventLink(NodeRef documentRef);

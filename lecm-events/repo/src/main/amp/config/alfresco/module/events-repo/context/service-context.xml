@@ -85,7 +85,6 @@
 		<property name="searchService" ref="searchService"/>
 		<property name="workCalendarService" ref="WorkCalendarService"/>
 		<property name="documentTableService" ref="documentTableService"/>
-		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="mailService" ref="mailService"/>
 		<property name="templateService" ref="templateService"/>
