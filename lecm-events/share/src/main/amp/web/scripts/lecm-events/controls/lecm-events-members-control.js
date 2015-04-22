@@ -145,10 +145,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						//if (this.options.itemType == "lecm-orgstr:employee") {
 						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
 						//} else {
-							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], true));
+							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], true) + this.getMemberStatusHTML(this.selectedItems[i]));
 						//}
 					} else {
-						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], false) + this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], false) + this.getMemberStatusHTML(this.selectedItems[i]) + this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 
 						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 						YAHOO.util.Event.onAvailable(this.getMandatoryCheckboxId(this.selectedItems[i]), this.attachMandatoryCheckboxClickListener, this.selectedItems[i], this);
@@ -259,6 +259,25 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 
 			return '<input type="checkbox" class="members-mandatory"' + checked + disabledStr + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
+		},
+
+		getMemberStatusHTML: function (node) {
+			var img = "";
+			if (node.memberStatus == "EMPTY") {
+				img = "event_remove.png";
+			} else if (node.memberStatus == "CONFIRMED") {
+				img = "thumb_up.png";
+			} else if (node.memberStatus == "DECLINED") {
+				img = "thumb_down.png";
+			} else if (node.memberStatus == "REQUEST_NEW_TIME") {
+				img = "clock.png";
+			}
+
+			if (img.length > 0) {
+				return '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status"/>';
+			} else {
+				return "";
+			}
 		},
 
 		attachMandatoryCheckboxClickListener: function (node) {
