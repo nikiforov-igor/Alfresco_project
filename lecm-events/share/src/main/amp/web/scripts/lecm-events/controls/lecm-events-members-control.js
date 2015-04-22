@@ -1,0 +1,194 @@
+if (typeof LogicECM == "undefined" || !LogicECM) {
+	LogicECM = {};
+}
+
+LogicECM.module = LogicECM.module || {};
+LogicECM.module.Calendar = LogicECM.module.Calendar || {};
+
+(function()
+{
+	/**
+	 * Alfresco Slingshot aliases
+	 */
+	var Dom = YAHOO.util.Dom,
+		Util = LogicECM.module.Base.Util;
+
+	LogicECM.module.Calendar.MembersControl = function (htmlId)
+	{
+		this.id = htmlId;
+		LogicECM.module.Calendar.MembersControl.superclass.constructor.call(this, htmlId);
+
+		return this;
+	};
+
+	YAHOO.extend(LogicECM.module.Calendar.MembersControl, LogicECM.module.AssociationTokenControl, {});
+
+	YAHOO.lang.augmentObject(LogicECM.module.Calendar.MembersControl.prototype, {
+		updateFormFields: function (clearCurrentDisplayValue) {
+			// Just element
+			if (clearCurrentDisplayValue == null) {
+				clearCurrentDisplayValue = true;
+			}
+
+			var el;
+			el = Dom.get(this.options.controlId + "-currentValueDisplay");
+			var autocompleteInput = Dom.get(this.options.controlId + "-autocomplete-input");
+
+			if (autocompleteInput != null) {
+				autocompleteInput.value = "";
+				Dom.setStyle(autocompleteInput, "display", this.canAutocompleteInputShow() ? "block" : "none");
+			}
+			Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
+
+			if (el != null) {
+				if (clearCurrentDisplayValue) {
+					el.innerHTML = '';
+				}
+				for (var i in this.selectedItems) {
+					var displayName = this.selectedItems[i].selectedName;
+
+					if(this.options.disabled) {
+						//if (this.options.itemType == "lecm-orgstr:employee") {
+						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
+						//} else {
+							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]));
+						//}
+					} else {
+						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i]) + this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+
+						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
+						YAHOO.util.Event.onAvailable(this.getMandatoryCheckboxId(this.selectedItems[i]), this.attachMandatoryCheckboxClickListener, this.selectedItems[i], this);
+					}
+				}
+			}
+
+			if(!this.options.disabled)
+			{
+				var addItems = this.getAddedItems();
+
+				// Update added fields in main form to be submitted
+				el = Dom.get(this.options.controlId + "-added");
+				if (el != null) {
+					if (clearCurrentDisplayValue) {
+						el.value = '';
+					}
+					for (i in addItems) {
+						el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
+					}
+				}
+
+				var selectedItems = this.getSelectedItems();
+				var removedItems = this.getRemovedItems();
+
+				// Update removed fields in main form to be submitted
+				var removedEl = Dom.get(this.options.controlId + "-removed");
+				if (removedEl != null) {
+					removedEl.value = '';
+					for (i in removedItems) {
+						removedEl.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
+					}
+				}
+
+
+				// Update selectedItems fields in main form to pass them between popup and form
+				el = Dom.get(this.options.controlId + "-selectedItems");
+				if (el != null) {
+					if (clearCurrentDisplayValue) {
+						el.value = '';
+					}
+					for (i in selectedItems) {
+						el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
+					}
+
+					//убираем selected из removed
+					if (removedEl != null) {
+						for (var k in Alfresco.util.arrayToObject(el.value.split(","))) {
+							if (k.length > 0) {
+								removedEl.value = removedEl.value.replace(k + ',', '');
+								removedEl.value = removedEl.value.replace(k, '');
+							}
+						}
+					}
+					if (this.options.setCurrentValue && Dom.get(this.id) != null) {
+						Dom.get(this.id).value = el.value;
+					}
+				}
+
+
+				if (this.options.mandatory) {
+					YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+				}
+
+				YAHOO.Bubbling.fire("formValueChanged",
+					{
+						eventGroup:this,
+						addedItems:addItems,
+						removedItems:removedItems,
+						selectedItems:selectedItems,
+						selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
+					});
+			}
+
+			this.updateJsonField();
+
+			if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+				YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+					selectedItems: this.selectedItems,
+					formId: this.options.formId,
+					fieldId: this.options.fieldId,
+					control: this
+				});
+			}
+		},
+
+		getMemberView: function (displayValue, item) {
+			var result = "<span class='not-person'>";
+			result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a>";
+			result += "</span>";
+
+			return result;
+		},
+
+		getMandatoryCheckboxId: function(node) {
+			return "mchbx-" + this.options.prefixPickerId + node.nodeRef
+		},
+
+		getMandatoryCheckboxHTML: function (node) {
+			return '<input type="checkbox" class="members-mandatory" id="' + this.getMandatoryCheckboxId(node) + '"></a>';
+		},
+
+		attachMandatoryCheckboxClickListener: function (node) {
+			YAHOO.util.Event.on(this.getMandatoryCheckboxId(node), 'click', this.mandatoryCheckboxClick, node, this);
+		},
+
+		mandatoryCheckboxClick: function (event, node) {
+			this.selectedItems[node.nodeRef].mandatory = event.target.checked;
+			this.updateJsonField();
+		},
+
+		updateJsonField: function() {
+			var members = [];
+
+			var selectedItems = this.getSelectedItems();
+			if (selectedItems != null) {
+				for (var i = 0; i < selectedItems.length; i++) {
+					var mandatory = false;
+					if (this.selectedItems[selectedItems[i]].mandatory != null) {
+						mandatory = this.selectedItems[selectedItems[i]].mandatory;
+					}
+
+					members.push({
+						nodeRef: selectedItems[i],
+						mandatory: mandatory
+					})
+				}
+			}
+
+			var jsonFieldName = "prop_" + this.options.fieldId.replace(":", "_") + "-json";
+			var form = Dom.get(this.options.formId +"-form");
+			if (form != null && form[jsonFieldName] != null) {
+				form[jsonFieldName].value = JSON.stringify(members);
+			}
+		}
+	}, true);
+})();

@@ -168,7 +168,9 @@ public class EventsPolicy extends BaseBean {
                 if (table != null) {
                     // создаем строку
                     try {
-                        NodeRef createdNode = createNode(table, EventsService.TYPE_EVENT_MEMBERS_TABLE_ROW, null, null);
+                        Map<QName, Serializable> props = new HashMap<>();
+                        props.put(EventsService.PROP_EVENT_MEMBERS_PARTICIPATION_REQUIRED, getMemberMandatory(event, member));
+                        NodeRef createdNode = createNode(table, EventsService.TYPE_EVENT_MEMBERS_TABLE_ROW, null, props);
                         if (createdNode != null) {
                             nodeService.createAssociation(createdNode, member, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE);
                         }
@@ -178,6 +180,25 @@ public class EventsPolicy extends BaseBean {
                 }
             }
         }
+    }
+
+    private boolean getMemberMandatory(NodeRef event, NodeRef member) {
+        String membersMandatory = (String) nodeService.getProperty(event, EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
+        if (membersMandatory != null) {
+            try {
+                JSONArray membersMandatoryJson = new JSONArray(membersMandatory);
+                for (int i = 0; i < membersMandatoryJson.length(); i++) {
+                    JSONObject obj = membersMandatoryJson.getJSONObject(i);
+                    if (obj != null && member.toString().equals(obj.get("nodeRef"))) {
+                        return obj.getBoolean("mandatory");
+                    }
+                }
+            } catch (JSONException e) {
+                logger.error("Error parse members mandatory json", e);
+            }
+
+        }
+        return false;
     }
 
     public void onCreateAddResources(AssociationRef nodeAssocRef) {

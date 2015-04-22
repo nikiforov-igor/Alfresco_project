@@ -31,6 +31,7 @@ public interface EventsService {
     public static final QName PROP_EVENT_REPEATABLE_START_PERIOD = QName.createQName(EVENTS_NAMESPACE_URI, "repeatable-start-period");
     public static final QName PROP_EVENT_REPEATABLE_END_PERIOD = QName.createQName(EVENTS_NAMESPACE_URI, "repeatable-end-period");
     public static final QName PROP_EVENT_IS_REPEATED = QName.createQName(EVENTS_NAMESPACE_URI, "is-repeated");
+    public static final QName PROP_EVENT_MEMBERS_MANDATORY_JSON = QName.createQName(EVENTS_NAMESPACE_URI, "temp-members-assoc-json");
 
     public static final QName ASSOC_EVENT_LOCATION = QName.createQName(EVENTS_NAMESPACE_URI, "location-assoc");
     public static final QName ASSOC_EVENT_INITIATOR = QName.createQName(EVENTS_NAMESPACE_URI, "initiator-assoc");
@@ -61,6 +62,7 @@ public interface EventsService {
     public static final QName TYPE_EVENT_RESOURCES_TABLE_ROW = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources");
 
     public static final QName PROP_EVENT_MEMBERS_STATUS = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-status");
+    public static final QName PROP_EVENT_MEMBERS_PARTICIPATION_REQUIRED = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-participation-required");
     public static final QName ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-employee-assoc");
     public static final QName ASSOC_EVENT_RESOURCES_TABLE_RESOURCE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources-data-assoc");
 

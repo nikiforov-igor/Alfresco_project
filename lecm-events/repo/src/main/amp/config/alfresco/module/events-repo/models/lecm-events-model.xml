@@ -138,6 +138,16 @@
                     <default>false</default>
                 </property>
 
+                <property name="lecm-events:temp-members-assoc-json">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+
                 <property name="lecm-events:location-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">
