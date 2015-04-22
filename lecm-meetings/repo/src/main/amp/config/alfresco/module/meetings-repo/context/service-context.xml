@@ -50,39 +50,25 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
 	</util:list>
 	
-	<bean id="protocol.meetings.LogicEcmProtocolTableStructureBootstrap" parent="modelsToRepositoryLoader"
+	
+	<util:list id="protocolModels">
+		<value>alfresco/module/${artifactId}/models/lecm-protocol-table-structure-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-protocol-model.xml</value>
+	</util:list>
+	<util:list id="protocolLabels">
+		<value>alfresco/module/${artifactId}/messages/lecm-protocol-table-structure-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-protocol-model</value>
+	</util:list>
+	
+	<bean id="protocol.ModelsBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="documents.LogicEcmModelsBootstrap,
 		      dictionaryBootstrap,
 			  ru.it.lecm.dictionary.dictionary-repo.dictionary,
-		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
-		<property name="models">
-			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-protocol-table-structure-model.xml</value>
-			</list>
-		</property>
-		<property name="labels">
-			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-protocol-table-structure-model</value>
-			</list>
-		</property>
-	</bean>
-	
-	<bean id="protocol.meetings.LogicEcmProtocolBootstrap" parent="modelsToRepositoryLoader"
-		  depends-on="dictionaryBootstrap,
-					 ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
-					 eds.models.bootstrap,
-					 protocol.meetings.LogicEcmProtocolTableStructureBootstrap">
-		<property name="models">
-			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-protocol-model.xml</value>
-			</list>
-		</property>
-		<property name="labels">
-			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-protocol-model</value>
-			</list>
-		</property>
-	</bean>
+		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+  			  eds.models.bootstrap"
+		  p:models-ref="protocolModels"		 
+		  p:labels-ref="protocolLabels"		 
+	/>
 	
 	<bean id="meetings.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="meetings.dictionaries.modelsBootstrap"
@@ -95,6 +81,7 @@
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-doc-types.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-point-status.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-regnumbers-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -133,5 +120,25 @@
 	<bean id="protocol.statemachine.bootstrap" parent="defaultStatemachines"
 		  p:statemachineName="lecm-protocol:document"
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-protocol-statemachine-default.xml"/>
+	
+	<util:list id="protocol.taggedCounterRegistrator.tags">
+		<value>project</value>
+	</util:list>
+	<bean id="protocol.taggedCounterRegistrator"
+		  parent="regNumbersTaggedCounterRegistrator"
+		  p:documentType="lecm-protocol:document"
+		  p:tags-ref="protocol.taggedCounterRegistrator.tags"/>
+	
+	<bean id="protocolService" class="ru.it.lecm.meetings.beans.ProtocolServiceImpl" parent="baseBean"
+		  depends-on="protocol.ModelsBootstrap,
+                      ServiceRegistry, nodeService, transactionService">
+	</bean>
+	
+	<bean id="protocolScript" parent="baseScript" class="ru.it.lecm.meetings.scripts.ProtocolWebScriptBean"
+		  depends-on="nodeService, protocolService"
+		  p:nodeService-ref="nodeService"
+		  p:protocolService-ref="protocolService"
+		  p:extensionName="protocol"
+	/>
 	
 </beans>
