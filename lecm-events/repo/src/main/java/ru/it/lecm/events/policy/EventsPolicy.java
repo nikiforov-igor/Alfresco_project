@@ -37,7 +37,6 @@ import javax.mail.internet.MimeUtility;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * User: AIvkin
@@ -125,7 +124,6 @@ public class EventsPolicy extends BaseBean {
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_MEMBERS,
                 new JavaBehaviour(this, "onCreateAddMembers", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_MEMBERS,
                 new JavaBehaviour(this, "onRemoveMember", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -133,7 +131,6 @@ public class EventsPolicy extends BaseBean {
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_RESOURCES,
                 new JavaBehaviour(this, "onCreateAddResources", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
                 EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_RESOURCES,
                 new JavaBehaviour(this, "onRemoveResources", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -145,6 +142,10 @@ public class EventsPolicy extends BaseBean {
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 EventsService.TYPE_EVENT,
                 new JavaBehaviour(this, "onCreateEvent", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                EventsService.TYPE_EVENT,
+                new JavaBehaviour(this, "onUpdateEvent", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     public void onCreateAddMembers(AssociationRef nodeAssocRef) {
@@ -219,20 +220,20 @@ public class EventsPolicy extends BaseBean {
     }
 
     private boolean getMemberMandatory(NodeRef event, NodeRef member) {
-        String membersMandatory = (String) nodeService.getProperty(event, EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
-        if (membersMandatory != null) {
-            try {
-                JSONArray membersMandatoryJson = new JSONArray(membersMandatory);
-                for (int i = 0; i < membersMandatoryJson.length(); i++) {
-                    JSONObject obj = membersMandatoryJson.getJSONObject(i);
-                    if (obj != null && member.toString().equals(obj.get("nodeRef"))) {
-                        return obj.getBoolean("mandatory");
-                    }
-                }
-            } catch (JSONException e) {
-                logger.error("Error parse members mandatory json", e);
-            }
+        return getMemberMandatory(member, (String) nodeService.getProperty(event, EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON));
+    }
 
+    private boolean getMemberMandatory(NodeRef member, String membersMandatory) {
+        try {
+            JSONArray membersMandatoryJson = new JSONArray(membersMandatory);
+            for (int i = 0; i < membersMandatoryJson.length(); i++) {
+                JSONObject obj = membersMandatoryJson.getJSONObject(i);
+                if (obj != null && member.toString().equals(obj.get("nodeRef"))) {
+                    return obj.getBoolean("mandatory");
+                }
+            }
+        } catch (JSONException e) {
+            logger.error("Error parse members mandatory json", e);
         }
         return false;
     }
@@ -380,6 +381,27 @@ public class EventsPolicy extends BaseBean {
 
         if (!pendingActions.contains(event)) {
             pendingActions.add(event);
+        }
+    }
+
+    public void onUpdateEvent(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        final String membersMandatoryJsonBefore = (String) before.get(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
+        final String membersMandatoryJsonAfter = (String) after.get(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
+
+        if (membersMandatoryJsonAfter != null && !membersMandatoryJsonAfter.equals(membersMandatoryJsonBefore)) {
+            NodeRef membersTable = eventService.getMemberTable(nodeRef);
+
+            if (membersTable != null) {
+                List<NodeRef> rows = documentTableService.getTableDataRows(membersTable);
+                if (rows != null) {
+                    for (NodeRef row : rows) {
+                        NodeRef rowEmployee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
+                        if (rowEmployee != null) {
+                            nodeService.setProperty(row, EventsService.PROP_EVENT_MEMBERS_PARTICIPATION_REQUIRED, getMemberMandatory(rowEmployee, membersMandatoryJsonAfter));
+                        }
+                    }
+                }
+            }
         }
     }
 

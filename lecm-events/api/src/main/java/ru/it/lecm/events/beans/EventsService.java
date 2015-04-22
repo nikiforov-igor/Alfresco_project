@@ -94,6 +94,8 @@ public interface EventsService {
 
     NodeRef getEventInitiator(NodeRef event);
 
+    NodeRef getMemberTable(NodeRef event);
+
     NodeRef getMemberTableRow(NodeRef event, NodeRef employee);
 
     NodeRef getResourceTableRow(NodeRef event, NodeRef employee);
