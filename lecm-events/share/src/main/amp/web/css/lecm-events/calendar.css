@@ -1651,10 +1651,8 @@ div.fullCalendar th.fc-widget-header
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-rejected div.fc-event-inner,
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-another-time div.fc-event-inner,
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-initiator div.fc-event-inner,
-.yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-accepted div.fc-event-inner,
-.yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-rejected div.fc-event-inner,
-.yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-another-time div.fc-event-inner,
-.yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-initiator div.fc-event-inner {
+.yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event div.fc-event-inner
+{
    padding-right: 20px;
    background: transparent no-repeat top 2px right 2px;
 }
