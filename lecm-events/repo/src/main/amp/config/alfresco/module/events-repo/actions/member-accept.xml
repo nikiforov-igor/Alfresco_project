@@ -15,6 +15,17 @@ if (memberRow != null) {
 	memberRow.properties["lecm-events-ts:members-status"] = "CONFIRMED";
 	memberRow.save();
 
+	var repeatableEvents = events.getRepetableEvents(document, "ALL");
+	if (repeatableEvents != null) {
+		for (var i = 0; i < repeatableEvents.length; i++) {
+			memberRow = events.getCurrentEmployeeEventMemberRow(repeatableEvents[i]);
+			if (memberRow != null) {
+				memberRow.properties["lecm-events-ts:members-status"] = "CONFIRMED";
+				memberRow.save();
+			}
+		}
+	}
+
 	var currentEmployee = orgstructure.getCurrentEmployee();
 	var initiator = document.assocs["lecm-events:initiator-assoc"][0];
 	if (currentEmployee != null && initiator != null) {

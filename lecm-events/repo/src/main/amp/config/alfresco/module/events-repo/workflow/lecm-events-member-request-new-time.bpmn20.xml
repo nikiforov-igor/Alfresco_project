@@ -10,7 +10,7 @@
             <extensionElements>
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
-                        <activiti:string>
+                        <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
                             if (document != null) {
                                 var memberRow = events.getCurrentEmployeeEventMemberRow(document);
@@ -22,9 +22,23 @@
                                     memberRow.save();
                                 }
 
+                                var repeatableEvents = events.getRepetableEvents(document, "ALL");
+                                if (repeatableEvents != null) {
+                                    for (var i = 0; i < repeatableEvents.length; i++) {
+                                        memberRow = events.getCurrentEmployeeEventMemberRow(repeatableEvents[i]);
+                                        if (memberRow != null) {
+                                            memberRow.properties["lecm-events-ts:members-status"] = "REQUEST_NEW_TIME";
+                                            memberRow.properties["lecm-events-ts:members-from-date"] = lecmEventsWf_requestNewTimeFromDate;
+                                            memberRow.properties["lecm-events-ts:members-to-date"] = lecmEventsWf_requestNewTimeToDate;
+                                            memberRow.properties["lecm-events-ts:members-all-day"] = lecmEventsWf_requestNewTimeAllDay;
+                                            memberRow.save();
+                                        }
+                                    }
+                                }
+
                                 var currentEmployee = orgstructure.getCurrentEmployee();
                                 var initiator = document.assocs["lecm-events:initiator-assoc"][0];
-                                if (currentEmployee != null &amp;&amp; initiator != null) {
+                                if (currentEmployee != null && initiator != null) {
                                     var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
                                     notificationText += " предложил новое время проведения мероприятия: ";
                                     notificationText += events.wrapperEventLink(document, "{lecm-events:title}");
@@ -43,7 +57,7 @@
                                     notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
                                 }
                             }
-                        </activiti:string>
+                        ]]></activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
