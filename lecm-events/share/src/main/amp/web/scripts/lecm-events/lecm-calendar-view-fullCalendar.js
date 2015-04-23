@@ -304,14 +304,7 @@
 
                     });
 
-                $jCalendar.limitEvents(3);
-
-                //$jCalendar.limitEvents({
-                //  maxEvents: 3,
-                //  viewMoreClick: function(){
-                //    alert('custom click handler fired');
-                //  }
-                //});
+                $jCalendar.limitEvents(4);
 
              });
           },

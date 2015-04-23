@@ -93,7 +93,7 @@
             _viewDisplay = opt.viewDisplay,
             _events = opt.events,
             _windowResize = opt.windowResize,
-            initialized = false;
+            initialized = null;
 
         $.extend(opt, {
             eventRender: function(event, element){
@@ -126,10 +126,12 @@
 
                                     return false;
                                 });
-                            if (!initialized) {
+                            if (initialized == null) {
                                 self.increaseHeight(25, false, td);
+                                initialized = td.find(".fc-day-content").css("height");
+                            } else {
+                                td.find(".fc-day-content").css("height", initialized);
                             }
-                            initialized = true;
                         }
                         if ($.isFunction(_eventRender)) _eventRender(event, element);
                         return false; //prevents event from being rendered
