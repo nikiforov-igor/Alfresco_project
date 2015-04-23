@@ -159,7 +159,7 @@
                 });
 
             bubbleObject.mouseout(function(ev) {
-                if (bubbleObject.find(ev.target).length == 0) {
+                if (bubbleObject.find(ev.toElement).length == 0 && !bubbleObject.is(ev.toElement)) {
                     $.fn.formBubble.close(bubbleObject);
                 }
             });
