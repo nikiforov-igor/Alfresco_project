@@ -1633,6 +1633,11 @@ div.fullCalendar th.fc-widget-header
    background: #e4f3fa;
 }
 
+.yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.fc-event-allday,
+.yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.fc-event-allday {
+    display: block;
+    background: #f1f1f1;
+}
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner,
 .yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event div.fc-event-inner {
    overflow: hidden;
