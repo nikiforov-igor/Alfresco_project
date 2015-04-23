@@ -214,7 +214,7 @@
 
         day.formBubble({
             graphics: {
-                close: true,
+                close: false,
                 pointer: false
             },
             offset: {
@@ -241,7 +241,7 @@
                         var apptStartDay = parseInt($.fullCalendar.formatDate(this.start,'d')), //should be comparing date instead of day (bug with gray dates) <-- fix
                             apptEndDay = parseInt($.fullCalendar.formatDate(this.end,'d')),
                             event = this.element.clone(false).attr('style', '').css('width', elemWidth);
-                        var li = $('<li></li>');
+                        var li = $('<li>');
                         event.attr("href", "javascript:void(0);");
                         if (apptStartDay < dayValue) $(event).addClass('arrow-left');
                         if (apptEndDay > dayValue) $(event).addClass('arrow-right');
@@ -251,7 +251,7 @@
                             var calObj = Alfresco.util.ComponentManager.findFirst("LogicECM.module.Calendar.View");
                             calObj.showDialog(null, eventObj);
                             $.fn.formBubble.close();
-                        }).prepend(li);
+                        }).appendTo(li);
                         li.appendTo(eventList)
                     });
 
