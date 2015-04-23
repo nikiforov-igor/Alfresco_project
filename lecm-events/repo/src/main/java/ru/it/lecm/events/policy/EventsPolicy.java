@@ -156,15 +156,18 @@ public class EventsPolicy extends BaseBean {
 
         lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
         //Отправка уведомления
-        NodeRef initiator = eventService.getEventInitiator(event);
-        if (initiator != null) {
-            String author = AuthenticationUtil.getSystemUserName();
-            String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-            Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-            String text = employeeName + " приглашает на мероприятие " + eventService.wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
-            List<NodeRef> recipients = new ArrayList<>();
-            recipients.add(member);
-            notificationsService.sendNotification(author, event, text, recipients, null);
+        Boolean isRepeated = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_IS_REPEATED);
+        if (isRepeated == null || !isRepeated) {
+            NodeRef initiator = eventService.getEventInitiator(event);
+            if (initiator != null) {
+                String author = AuthenticationUtil.getSystemUserName();
+                String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+                String text = employeeName + " приглашает на мероприятие " + eventService.wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+                List<NodeRef> recipients = new ArrayList<>();
+                recipients.add(member);
+                notificationsService.sendNotification(author, event, text, recipients, null);
+            }
         }
 
         NodeRef tableDataRootFolder = documentTableService.getRootFolder(event);
@@ -288,82 +291,86 @@ public class EventsPolicy extends BaseBean {
         //Участник
         NodeRef representative = nodeAssocRef.getTargetRef();
 
-        String email = (String) nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_EMAIL);
-        if (email != null && email.length() > 0) {
+        Boolean isRepeated = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_IS_REPEATED);
+        if (isRepeated == null || !isRepeated) {
 
-            try {
-                Map<String, Object> mailTemplateModel = new HashMap<>();
+            String email = (String) nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_EMAIL);
+            if (email != null && email.length() > 0) {
 
-                mailTemplateModel.put("title", nodeService.getProperty(event, EventsService.PROP_EVENT_TITLE));
-                mailTemplateModel.put("description", nodeService.getProperty(event, EventsService.PROP_EVENT_DESCRIPTION));
-                NodeRef initiator = eventService.getEventInitiator(event);
-                if (initiator != null) {
-                    mailTemplateModel.put("initiator", nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
+                try {
+                    Map<String, Object> mailTemplateModel = new HashMap<>();
 
-                    NodeRef organization = orgstructureBean.getEmployeeOrganization(initiator);
-                    if (organization != null) {
-                        mailTemplateModel.put("organization", nodeService.getProperty(organization, Contractors.PROP_CONTRACTOR_FULLNAME));
+                    mailTemplateModel.put("title", nodeService.getProperty(event, EventsService.PROP_EVENT_TITLE));
+                    mailTemplateModel.put("description", nodeService.getProperty(event, EventsService.PROP_EVENT_DESCRIPTION));
+                    NodeRef initiator = eventService.getEventInitiator(event);
+                    if (initiator != null) {
+                        mailTemplateModel.put("initiator", nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
+
+                        NodeRef organization = orgstructureBean.getEmployeeOrganization(initiator);
+                        if (organization != null) {
+                            mailTemplateModel.put("organization", nodeService.getProperty(organization, Contractors.PROP_CONTRACTOR_FULLNAME));
+                        }
                     }
-                }
 
-                Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-                Date toDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_TO_DATE);
-                if (fromDate != null && toDate != null) {
-                    String fromDateString = dateFormat.format(fromDate);
-                    String toDateString = dateFormat.format(toDate);
-                    if (fromDateString.equals(toDateString)) {
-                        mailTemplateModel.put("date", fromDateString);
-                    } else {
-                        mailTemplateModel.put("date", " с " + fromDateString + " по " + toDateString);
+                    Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+                    Date toDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_TO_DATE);
+                    if (fromDate != null && toDate != null) {
+                        String fromDateString = dateFormat.format(fromDate);
+                        String toDateString = dateFormat.format(toDate);
+                        if (fromDateString.equals(toDateString)) {
+                            mailTemplateModel.put("date", fromDateString);
+                        } else {
+                            mailTemplateModel.put("date", " с " + fromDateString + " по " + toDateString);
+                        }
                     }
-                }
 
-                NodeRef location = eventService.getEventLocation(event);
-                if (location != null) {
-                    mailTemplateModel.put("location", nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS));
-                }
-
-                String mailText = templateService.processTemplate(INVITED_MEMBERS_MESSAGE_TEMPLATE, mailTemplateModel);
-
-                MimeMessage message = mailService.createMimeMessage();
-                MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-                helper.setTo(email);
-                helper.setFrom(defaultFromEmail);
-                helper.setSubject("");
-                helper.setText(mailText, true);
-
-                List<NodeRef> attachments = new ArrayList<>();
-                List<AssociationRef> attachmentsAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_TEMP_ATTACHMENTS);
-                if (attachmentsAssocs != null) {
-                    for (AssociationRef attachment : attachmentsAssocs) {
-                        attachments.add(attachment.getTargetRef());
+                    NodeRef location = eventService.getEventLocation(event);
+                    if (location != null) {
+                        mailTemplateModel.put("location", nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS));
                     }
+
+                    String mailText = templateService.processTemplate(INVITED_MEMBERS_MESSAGE_TEMPLATE, mailTemplateModel);
+
+                    MimeMessage message = mailService.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+                    helper.setTo(email);
+                    helper.setFrom(defaultFromEmail);
+                    helper.setSubject("");
+                    helper.setText(mailText, true);
+
+                    List<NodeRef> attachments = new ArrayList<>();
+                    List<AssociationRef> attachmentsAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_TEMP_ATTACHMENTS);
+                    if (attachmentsAssocs != null) {
+                        for (AssociationRef attachment : attachmentsAssocs) {
+                            attachments.add(attachment.getTargetRef());
+                        }
+                    }
+                    for (final NodeRef attachment : attachments) {
+                        String attachmentName = MimeUtility.encodeText((String) nodeService.getProperty(attachment, ContentModel.PROP_NAME), "UTF-8", null);
+                        helper.addAttachment(attachmentName, new DataSource() {
+                            public InputStream getInputStream() throws IOException {
+                                ContentReader reader = contentService.getReader(attachment, ContentModel.PROP_CONTENT);
+                                return reader.getContentInputStream();
+                            }
+
+                            public OutputStream getOutputStream() throws IOException {
+                                throw new IOException("Read-only data");
+                            }
+
+                            public String getContentType() {
+                                return contentService.getReader(attachment, ContentModel.PROP_CONTENT).getMimetype();
+                            }
+
+                            public String getName() {
+                                return nodeService.getProperty(attachment, ContentModel.PROP_NAME).toString();
+                            }
+                        });
+                    }
+
+                    mailService.send(message);
+                } catch (Exception e) {
+                    logger.error("Error send mail", e);
                 }
-                for (final NodeRef attachment : attachments) {
-                    String attachmentName = MimeUtility.encodeText((String) nodeService.getProperty(attachment, ContentModel.PROP_NAME), "UTF-8", null);
-                    helper.addAttachment(attachmentName, new DataSource() {
-                        public InputStream getInputStream() throws IOException {
-                            ContentReader reader = contentService.getReader(attachment, ContentModel.PROP_CONTENT);
-                            return reader.getContentInputStream();
-                        }
-
-                        public OutputStream getOutputStream() throws IOException {
-                            throw new IOException("Read-only data");
-                        }
-
-                        public String getContentType() {
-                            return contentService.getReader(attachment, ContentModel.PROP_CONTENT).getMimetype();
-                        }
-
-                        public String getName() {
-                            return nodeService.getProperty(attachment, ContentModel.PROP_NAME).toString();
-                        }
-                    });
-                }
-
-                mailService.send(message);
-            } catch (Exception e) {
-                logger.error("Error send mail", e);
             }
         }
     }
