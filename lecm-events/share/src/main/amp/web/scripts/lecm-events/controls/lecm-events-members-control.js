@@ -264,7 +264,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		getMemberStatusHTML: function (node) {
 			var img = "";
 			if (node.memberStatus == "EMPTY") {
-				img = "event_remove.png";
+				img = "waiting.png";
 			} else if (node.memberStatus == "CONFIRMED") {
 				img = "thumb_up.png";
 			} else if (node.memberStatus == "DECLINED") {

@@ -28,15 +28,17 @@
 				});
 	}
 	function init() {
-		LogicECM.module.Base.Util.loadScripts([
+		LogicECM.module.Base.Util.loadResources([
 			'scripts/lecm-events/controls/lecm-events-members-view-control.js'
-		], drawForm);
+        ], [
+            'css/lecm-base/components/lecm-events-members-view-control.css'
+        ], drawForm);
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 
-<div class="control document-table-control with-grid">
+<div class="control events-members-view-control with-grid">
 	<div class="label-div">
 		<label for="${controlId}">
         ${field.label?html}:

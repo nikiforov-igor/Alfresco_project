@@ -141,7 +141,8 @@
 				'scripts/lecm-events/controls/lecm-events-members-control.js',
 				'modules/simple-dialog.js'
 			], [
-				'css/lecm-base/components/lecm-association-token-control.css'
+				'css/lecm-base/components/lecm-association-token-control.css',
+				'css/lecm-base/components/lecm-events-members-control.css'
 			], createControl);
 		}
 		function createControl(){
