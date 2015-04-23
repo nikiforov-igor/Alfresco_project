@@ -1462,6 +1462,11 @@ div.fullCalendar .fc-event-time
    padding: 0 0 0 5px;
 }
 
+.yui-skin-lecmTheme  .form-bubble .form-bubble-content .fc-event .fc-event-time
+{
+   font-weight: bold;
+}
+
 div.fullCalendar .fc-view-month .fc-event-time
 {
    padding: 0;
