@@ -575,6 +575,7 @@ public class EventsPolicy extends BaseBean {
                 propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
                 propertiesToCopy.add(EventsService.PROP_EVENT_ALL_DAY);
                 propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+                propertiesToCopy.add(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
 
                 propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE);
                 propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE_RULE);
