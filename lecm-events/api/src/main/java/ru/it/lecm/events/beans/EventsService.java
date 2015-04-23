@@ -62,6 +62,10 @@ public interface EventsService {
     public static final QName TYPE_EVENT_RESOURCES_TABLE_ROW = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources");
 
     public static final QName PROP_EVENT_MEMBERS_STATUS = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-status");
+    public static final QName PROP_EVENT_MEMBERS_DECLINE_REASON = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-decline-reason");
+    public static final QName PROP_EVENT_MEMBERS_FROM_DATE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-from-date");
+    public static final QName PROP_EVENT_MEMBERS_TO_DATE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-to-date");
+    public static final QName PROP_EVENT_MEMBERS_ALL_DAY = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-all-day");
     public static final QName PROP_EVENT_MEMBERS_PARTICIPATION_REQUIRED = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-participation-required");
     public static final QName ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-employee-assoc");
     public static final QName ASSOC_EVENT_RESOURCES_TABLE_RESOURCE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources-data-assoc");

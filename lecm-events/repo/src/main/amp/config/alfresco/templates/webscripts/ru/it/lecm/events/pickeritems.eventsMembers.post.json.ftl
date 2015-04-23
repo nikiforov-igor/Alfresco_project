@@ -31,8 +31,8 @@
                     "selectable" : ${row.selectable?string},
                     </#if>
                 "nodeRef": "${row.item.nodeRef}",
-                "memberStatus": "${row.memberStatus}",
-                "memberMandatory": ${row.memberMandatory?string}
+                "memberStatus": "${row.memberStatus!"EMPTY"}",
+                "memberMandatory": <#if row.memberMandatory??>${row.memberMandatory?string}<#else>false</#if>
             }<#if row_has_next>,</#if>
             </#list>
         ]
