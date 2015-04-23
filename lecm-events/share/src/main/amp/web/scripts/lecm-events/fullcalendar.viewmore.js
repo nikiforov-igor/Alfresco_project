@@ -116,7 +116,7 @@
 
                     if (td.data('apptCount') > maxEvents) {
                         if (!td.find('.events-view-more').length) {
-                            viewMoreButton = $('<div class="events-view-more"><a href="#view-more"><span>View More</span></a></div>')
+                            viewMoreButton = $('<div class="events-view-more"><a href="#view-more"><span>' + Alfresco.util.message('label.events.showAll') + ' ' + (td.data('appointments').length + 1) + '</span></a></div>')
                                 .appendTo(td)
                                 .click(function () {
                                     var viewMoreClick = self.opts.viewMoreClick;
@@ -130,9 +130,10 @@
                                 self.increaseHeight(25, false, td);
                                 initialized = td.find(".fc-day-content").css("height");
                             } else {
-                                td.find(".fc-day-content").css("height", initialized);
+                                td.find(".fc-day-content").css("height", initialized)
                             }
                         }
+                        td.find('.events-view-more').children('a').children('span').text(Alfresco.util.message('label.events.showAll') + ' ' + + (td.data('appointments').length + 1));
                         if ($.isFunction(_eventRender)) _eventRender(event, element);
                         return false; //prevents event from being rendered
                     }
@@ -230,7 +231,7 @@
                     var content = bubble.find(".form-bubble-content")
 
                     var startDate =  getDateFromCell(day, calInstance),
-                        startDateLabel = startDate.toString("MMM dS"),
+                        startDateLabel = startDate.toLocaleDateString(),
                         dayValue = parseInt(day.find('.fc-day-number').text()),
                         eventList=$('<ul></ul>').prepend('<li><h5>' + startDateLabel + '</h5></li>');
 

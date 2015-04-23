@@ -1,7 +1,7 @@
 .events-view-more a {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  text-decoration: none;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    text-decoration: none;
     background-color: #f1f1f1;
     color: #000;
     border: solid 1px #cbcbcb !important;
@@ -13,22 +13,21 @@
 }
 
 .form-bubble.overlay {
-  padding: 14px 14px 10px 14px !important;
-  background-color: #EBF5FF;
-  border-top: none !important;
-  -moz-border-radius: 0 0 5px 5px !important;
-  -webkit-border-radius: 0 0 5px 5px !important;
-  background-image: -moz-linear-gradient(100% 100% 90deg, white, #ebf5ff);
-  -moz-box-shadow: none !important;
-  -webkit-box-shadow: none !important; }
+    padding: 14px 14px 10px 14px !important;
+    background-color: #EBF5FF;
+    -moz-border-radius: 5px 5px !important;
+    -webkit-border-radius: 5px 5px !important;
+    background-image: -moz-linear-gradient(100% 100% 90deg, white, #ebf5ff);
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important; }
 
 .form-bubble.calendar-overlay {
-  -moz-border-radius: 0;
-  -moz-box-shadow: none;
-  -webkit-border-radius: 0;
-  -webkit-box-shadow: none;
-  background-color: #f5f5f5; }
-  
+    -moz-border-radius: 0;
+    -moz-box-shadow: none;
+    -webkit-border-radius: 0;
+    -webkit-box-shadow: none;
+    background-color: #f5f5f5; }
+
 
 #calendar{
     margin-top:0;
@@ -60,13 +59,13 @@ thead {
 .fc-today{
     background-color:#fffdd2 !important;
 }
-  .form-bubble .form-bubble-content ul {
+.form-bubble .form-bubble-content ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 .events-view-more a span {
-      padding: 5px;
+    padding: 5px;
 }
 .events-view-more a:hover {
     background-color: #fff;
@@ -78,10 +77,10 @@ thead {
     z-index: 8;
 }
 .fc-event.arrow-right a {
-  background: url("../images/arrow-right.png") no-repeat scroll right 2px; }
+    background: url("../images/arrow-right.png") no-repeat scroll right 2px; }
 
 
 
 .fc-event.arrow-left a span {
-  padding-left: 9px;
-  background: url("../images/arrow-left.png") no-repeat scroll left 2px transparent; }
+    padding-left: 9px;
+    background: url("../images/arrow-left.png") no-repeat scroll left 2px transparent; }
