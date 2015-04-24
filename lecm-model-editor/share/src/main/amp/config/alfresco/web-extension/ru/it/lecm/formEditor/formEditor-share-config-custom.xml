@@ -119,8 +119,8 @@
 				<appearance>
 					<field id="lecm-forms-editor:attr-name" read-only="true"/>
 					<field id="lecm-forms-editor:attr-mandatory">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-							<control-param name="options">true|Да,false|Нет</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+							<control-param name="options">false|Нет,true|Да</control-param>
 						</control>
 					</field>
 					<field id="lecm-forms-editor:attr-control">
@@ -145,8 +145,8 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-forms-editor:attr-mandatory">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
-							<control-param name="options">true|Да,false|Нет</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
+							<control-param name="options">false|Нет,true|Да</control-param>
 						</control>
 					</field>
 				</appearance>
