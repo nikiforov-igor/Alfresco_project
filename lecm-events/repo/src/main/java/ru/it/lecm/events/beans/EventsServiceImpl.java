@@ -146,12 +146,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     @Override
-    public List<NodeRef> getAvailableUserLocations() {
-        List<NodeRef> results = null;
+    public List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode) {
+        List<NodeRef> results = new ArrayList<>();
         NodeRef locationsDic = dictionaryBean.getDictionaryByName("Места проведения мероприятий");
         if (locationsDic != null) {
-            results = new ArrayList<>();
-
             List<NodeRef> locations = dictionaryBean.getChildren(locationsDic);
             NodeRef currentEmployeeOrganization = getCurrentEmployeeOrganization();
             int currentUserLocationPrivilegeLevel = getCurrentUserLocationPrivilegeLevel();
@@ -166,6 +164,35 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                 }
             }
         }
+
+        final String fromDateFinal = fromDate;
+        final String toDateFinal = toDate;
+        final NodeRef ignoreNodeFinal = ignoreNode;
+
+        Set<NodeRef> unavailableLocations = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Set<NodeRef>>() {
+            @Override
+            public Set<NodeRef> doWork() throws Exception {
+                Set<NodeRef> results = new HashSet<>();
+
+                String additionalFilter = "";
+                if (ignoreNodeFinal != null) {
+                    additionalFilter += " AND NOT ID:\"" + ignoreNodeFinal.toString() + "\"";
+                }
+                List<NodeRef> existEvents = getEvents(fromDateFinal, toDateFinal, additionalFilter);
+                if (existEvents != null) {
+                    for (NodeRef event: existEvents) {
+                        NodeRef location = getEventLocation(event);
+                        if (location != null) {
+                            results.add(location);
+                        }
+                    }
+                }
+                return results;
+            }
+        });
+
+        results.removeAll(unavailableLocations);
+
         return results;
     }
 

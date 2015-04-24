@@ -94,3 +94,59 @@ LogicECM.module.Events.repeatableValidation =
 		}
 		return false;
 	};
+
+
+LogicECM.module.Events.updateLocationDSValidationLastFromDate = null;
+LogicECM.module.Events.updateLocationDSValidationLastToDate = null;
+LogicECM.module.Events.updateLocationDSValidation =
+	function (field, args,  event, form, silent, message) {
+		if (field.form != null) {
+			var fromDateValueInput = field.form["prop_lecm-events_from-date"];
+			var toDateValueInput = field.form["prop_lecm-events_to-date"];
+
+			var fromDateInput = Dom.get(fromDateValueInput.id + "-cntrl-time");
+			var toDateInput = Dom.get(toDateValueInput.id + "-cntrl-time");
+			var fromTimeInput = Dom.get(fromDateValueInput.id + "-cntrl-time");
+			var toTimeInput = Dom.get(toDateValueInput.id + "-cntrl-time");
+
+			if (fromDateValueInput != null && toDateValueInput != null &&
+					fromDateInput != null && toDateInput != null &&
+					fromTimeInput != null && toTimeInput != null) {
+
+				var fromDate = fromDateValueInput.value;
+				var toDate = toDateValueInput.value;
+
+				var formId = form.formId.replace("-form", "");
+
+				if (fromDate.length > 0 && toDate.length > 0 &&
+					!Dom.hasClass(fromDateInput, "invalid") && !Dom.hasClass(toDateInput, "invalid") &&
+					!Dom.hasClass(fromTimeInput, "invalid") && !Dom.hasClass(toTimeInput, "invalid")) {
+
+					var reinitialize = false;
+					if (LogicECM.module.Events.updateLocationDSValidationLastFromDate == null ||
+						LogicECM.module.Events.updateLocationDSValidationLastFromDate != fromDate){
+
+						LogicECM.module.Events.updateLocationDSValidationLastFromDate = fromDate;
+						reinitialize = true;
+					}
+					if (LogicECM.module.Events.updateLocationDSValidationLastToDate == null ||
+						LogicECM.module.Events.updateLocationDSValidationLastToDate != toDate){
+
+						LogicECM.module.Events.updateLocationDSValidationLastToDate = toDate;
+						reinitialize = true;
+					}
+
+					LogicECM.module.Base.Util.enableControl(formId, "lecm-events:location-assoc");
+					if (reinitialize) {
+						LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-events:location-assoc", {
+							fromDate: fromDate,
+							toDate: toDate
+						});
+					}
+				} else {
+					LogicECM.module.Base.Util.disableControl(formId, "lecm-events:location-assoc");
+				}
+			}
+		}
+		return true;
+	};

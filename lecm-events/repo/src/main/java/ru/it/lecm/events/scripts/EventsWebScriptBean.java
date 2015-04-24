@@ -111,8 +111,16 @@ public class EventsWebScriptBean extends BaseWebScript {
         return simpleDateFormat.format(date);
     }
 
-    public Scriptable getAvailableUserLocations() {
-        List<NodeRef> results = eventService.getAvailableUserLocations();
+    public Scriptable getAvailableUserLocations(String fromDate, String toDate, String ignoreNode) {
+        ParameterCheck.mandatory("fromDate", fromDate);
+        ParameterCheck.mandatory("toDate", toDate);
+
+        NodeRef ignoreNodeRef = null;
+        if (ignoreNode != null) {
+            ignoreNodeRef = new NodeRef(ignoreNode);
+        }
+
+        List<NodeRef> results = eventService.getAvailableUserLocations(fromDate, toDate, ignoreNodeRef);
         if (results != null) {
             return createScriptable(results);
         }

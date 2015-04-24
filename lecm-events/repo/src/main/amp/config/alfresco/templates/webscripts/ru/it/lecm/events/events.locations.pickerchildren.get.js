@@ -3,7 +3,11 @@
 function main() {
 	var data = [];
 
-	var availableLocations = events.getAvailableUserLocations();
+	var fromDate = args['fromDate'];
+	var toDate = args['toDate'];
+	var event = args['eventNodeRef'];
+
+	var availableLocations = events.getAvailableUserLocations(fromDate, toDate, event);
 	if (availableLocations != null) {
 		var filter = getFilterForAvailableElement(availableLocations);
 		data = getPickerChildrenItems(filter);

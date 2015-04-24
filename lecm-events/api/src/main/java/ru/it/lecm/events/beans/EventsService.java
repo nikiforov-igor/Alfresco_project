@@ -84,7 +84,7 @@ public interface EventsService {
 
     List<NodeRef> getEventResources(NodeRef event);
 
-    List<NodeRef> getAvailableUserLocations();
+    List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode);
 
     List<NodeRef> getAvailableUserResources();
 
