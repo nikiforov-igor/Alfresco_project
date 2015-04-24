@@ -165,33 +165,35 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             }
         }
 
-        final String fromDateFinal = fromDate;
-        final String toDateFinal = toDate;
-        final NodeRef ignoreNodeFinal = ignoreNode;
+        if (fromDate != null && toDate != null) {
+            final String fromDateFinal = fromDate;
+            final String toDateFinal = toDate;
+            final NodeRef ignoreNodeFinal = ignoreNode;
 
-        Set<NodeRef> unavailableLocations = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Set<NodeRef>>() {
-            @Override
-            public Set<NodeRef> doWork() throws Exception {
-                Set<NodeRef> results = new HashSet<>();
+            Set<NodeRef> unavailableLocations = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Set<NodeRef>>() {
+                @Override
+                public Set<NodeRef> doWork() throws Exception {
+                    Set<NodeRef> results = new HashSet<>();
 
-                String additionalFilter = "";
-                if (ignoreNodeFinal != null) {
-                    additionalFilter += " AND NOT ID:\"" + ignoreNodeFinal.toString() + "\"";
-                }
-                List<NodeRef> existEvents = getEvents(fromDateFinal, toDateFinal, additionalFilter);
-                if (existEvents != null) {
-                    for (NodeRef event: existEvents) {
-                        NodeRef location = getEventLocation(event);
-                        if (location != null) {
-                            results.add(location);
+                    String additionalFilter = "";
+                    if (ignoreNodeFinal != null) {
+                        additionalFilter += " AND NOT ID:\"" + ignoreNodeFinal.toString() + "\"";
+                    }
+                    List<NodeRef> existEvents = getEvents(fromDateFinal, toDateFinal, additionalFilter);
+                    if (existEvents != null) {
+                        for (NodeRef event: existEvents) {
+                            NodeRef location = getEventLocation(event);
+                            if (location != null) {
+                                results.add(location);
+                            }
                         }
                     }
+                    return results;
                 }
-                return results;
-            }
-        });
+            });
 
-        results.removeAll(unavailableLocations);
+            results.removeAll(unavailableLocations);
+        }
 
         return results;
     }
