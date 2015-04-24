@@ -23,6 +23,7 @@
 
 <@markup id="css">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" group="document-create"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-create-page.css"/>
 </@>
 
 <@markup id="widgets">
@@ -33,8 +34,7 @@
 	<@uniqueIdDiv>
 		<#if hasPermission>
 			<div class="container">
-				<div id="${el}-body" class="document-metadata"></div>
-				<div id="${el}-preview" class="document-preview body"></div>
+				<div id="${el}-body" class="event-create"></div>
 			</div>
 		<#else>
 			<div class="document-header">

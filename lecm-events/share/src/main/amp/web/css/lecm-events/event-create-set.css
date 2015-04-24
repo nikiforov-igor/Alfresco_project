@@ -1,0 +1,100 @@
+.create-event-set {
+    width: auto;
+    overflow: hidden;
+}
+.create-event-set .event-create-right {
+    width: 300px;
+    float: right;
+    word-wrap: break-word;
+    /*border: 1px solid #aaaaaa;*/
+    /*border-right: 0;*/
+    /*border-radius: 5px 0 0 5px;*/
+    background: #fafafa;
+    margin-top: 2px;
+}
+.create-event-set .event-create-right h2 {
+    font-size: 13px;
+    font-weight: bold;
+    color: #303030;
+}
+.create-event-set .event-create-right h2 + div {
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+.create-event-set .event-create-right h2.alfresco-twister-closed + div {
+    display: none;
+}
+.create-event-set .event-create-right h2.alfresco-twister-open + div {
+    display: block;
+}
+
+.create-event-set .event-create-right .event-create-actions,
+.create-event-set .event-create-right .event-create-attachments {
+    /*background-color: #ccc;*/
+    border-top: 1px solid #ccc;
+    padding: 10px 12px;
+}
+.create-event-set .event-create-right .event-create-actions ul li {
+    margin: 7px 0;
+    padding-left: 20px;
+}
+.create-event-set .event-create-right .event-create-actions ul li.event-save {
+    background: url("../../images/lecm-events/event_add.png") no-repeat center left;
+}
+.create-event-set .event-create-right .event-create-actions ul li.event-cancel {
+    background: url("../../images/lecm-events/event_remove.png") no-repeat center left;
+}
+.create-event-set .event-create-right .event-create-actions ul li a,
+.create-event-set .event-create-right .event-create-actions ul li a:hover {
+    color: #333;
+    vertical-align: middle;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .label-div {
+    display: none;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .uploader-block {
+    float: none;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .uploader-block fieldset {
+    width: 100%;
+    height: 120px;
+    border: 3px dashed #9d9d9d;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding-top: 30px;
+    background: #f2f5f8;
+    box-sizing: border-box;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .uploader-block fieldset span.drag-tip {
+    padding: 0 40px;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .uploader-block fieldset legend {
+    display: none;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .container .buttons-div {
+    display: none;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul {
+    border: none;
+    margin: 0;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li {
+    background: none;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .remove-icon {
+    display: none;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .ci-value-div a,
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .ci-value-div a:hover {
+    color: #999;
+}
+.create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .ci-value-div img {
+    margin: 0 5px -3px 0;
+}
+
+.create-event-set .event-create-center {
+    width: auto;
+    overflow: hidden;
+    padding-right: 20px;
+}
+
