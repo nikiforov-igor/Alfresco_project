@@ -126,9 +126,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-//        sp.addSort("@" + ContentModel.PROP_NAME, true);
-        String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO " + toDate + "] AND @lecm\\-events\\:to\\-date:[" + fromDate + " TO MAX] AND @lecm\\-events\\:removed: false " + additionalFilter;
+        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+        String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + toDate + "\"> AND @lecm\\-events\\:to\\-date:<\"" + fromDate + "\" TO MAX] AND @lecm\\-events\\:removed: false " + additionalFilter;
         sp.setQuery(query);
 
         ResultSet searchResult = null;
