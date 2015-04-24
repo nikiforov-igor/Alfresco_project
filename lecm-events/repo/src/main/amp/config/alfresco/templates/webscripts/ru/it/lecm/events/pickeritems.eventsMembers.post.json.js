@@ -10,6 +10,8 @@ function main()
 			if (tableRow != null) {
 				items.results[i].memberStatus = tableRow.properties["lecm-events-ts:members-status"];
 				items.results[i].memberMandatory = tableRow.properties["lecm-events-ts:members-participation-required"];
+				items.results[i].memberDeclineReason = tableRow.properties["lecm-events-ts:members-decline-reason"];
+				items.results[i].memberFromDate = tableRow.properties["lecm-events-ts:members-from-date"];
 			}
 		}
 	}

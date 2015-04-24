@@ -263,18 +263,21 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		getMemberStatusHTML: function (node) {
 			var img = "";
+			var title = "";
 			if (node.memberStatus == "EMPTY") {
 				img = "waiting.png";
 			} else if (node.memberStatus == "CONFIRMED") {
 				img = "thumb_up.png";
 			} else if (node.memberStatus == "DECLINED") {
 				img = "thumb_down.png";
+				title = node.memberDeclineReason;
 			} else if (node.memberStatus == "REQUEST_NEW_TIME") {
-				img = "clock.png";
+				img = "clock_yellow.jpg";
+				title = node.memberFromDate;
 			}
 
 			if (img.length > 0) {
-				return '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status"/>';
+				return '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status" title="' + title + '"/>';
 			} else {
 				return "";
 			}
