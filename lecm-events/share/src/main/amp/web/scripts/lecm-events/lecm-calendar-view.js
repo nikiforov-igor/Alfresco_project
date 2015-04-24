@@ -501,6 +501,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                     dataObj: obj,
                     successCallback:{
                        fn:function(response) {
+                          Dom.get(viewFormId + "-head").innerHTML = event.typeTitle;
+
                           var formEl = Dom.get(viewFormId + "-content");
                           formEl.innerHTML = response.serverResponse.responseText;
 

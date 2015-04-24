@@ -2,6 +2,8 @@ package ru.it.lecm.events.scripts;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
@@ -24,6 +26,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     private NodeService nodeService;
     private EventsService eventService;
     private OrgstructureBean orgstructureBean;
+    private DictionaryService dictionaryService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -35,6 +38,10 @@ public class EventsWebScriptBean extends BaseWebScript {
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
+    }
+
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
@@ -74,6 +81,12 @@ public class EventsWebScriptBean extends BaseWebScript {
             result.put("userMemberStatus", eventService.getCurrentEmployeeMemberStatus(entry));
             result.put("userIsInitiator", eventService.getEventInitiator(entry).equals(orgstructureBean.getCurrentEmployee()));
 
+            String typeTitle = "";
+            TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(entry));
+            if (typeDef != null) {
+                typeTitle = typeDef.getTitle(dictionaryService);
+            }
+            result.put("typeTitle", typeTitle);
 
             // Check the permissions the user has on the entry
 //                AccessStatus canEdit = permissionService.hasPermission(entry.getNodeRef(), PermissionService.WRITE);

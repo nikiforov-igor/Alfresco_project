@@ -11,6 +11,7 @@
 				"description": "${event.description}",
 				"allday": "${event.allday?string}",
 				"where": "${event.where?string}",
+				"typeTitle": "${event.typeTitle?string}",
 				"userMemberStatus": "${event.userMemberStatus}",
 				"userIsInitiator": ${event.userIsInitiator?string},
 				"startAt": {
