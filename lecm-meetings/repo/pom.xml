@@ -53,6 +53,36 @@
             <artifactId>meetings-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.eds-documents</groupId>
+			<artifactId>eds-documents-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+            <groupId>ru.it.lecm.documents</groupId>
+            <artifactId>documents-repo-api</artifactId>
+            <version>${project.version}</version>
+			<scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.security</groupId>
+            <artifactId>lecm-security-api</artifactId>
+            <version>${project.version}</version>
+			<scope>provided</scope>
+        </dependency>
+		<dependency>
+		    <groupId>ru.it.lecm.errands</groupId>
+		    <artifactId>errands-repo-api</artifactId>
+		    <version>${platform.version}</version>
+			<scope>provided</scope>
+	    </dependency>
+		<dependency>
+            <groupId>ru.it.lecm.dictionary</groupId>
+            <artifactId>dictionary-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

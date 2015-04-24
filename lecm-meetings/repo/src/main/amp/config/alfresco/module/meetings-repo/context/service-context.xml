@@ -65,7 +65,8 @@
 		      dictionaryBootstrap,
 			  ru.it.lecm.dictionary.dictionary-repo.dictionary,
 		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
-  			  eds.models.bootstrap"
+  			  eds.models.bootstrap,
+			  errands.LogicEcmModelsBootstrap"
 		  p:models-ref="protocolModels"		 
 		  p:labels-ref="protocolLabels"		 
 	/>
@@ -82,6 +83,7 @@
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-doc-types.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-point-status.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-regnumbers-items.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-event-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -131,14 +133,18 @@
 	
 	<bean id="protocolService" class="ru.it.lecm.meetings.beans.ProtocolServiceImpl" parent="baseBean"
 		  depends-on="protocol.ModelsBootstrap,
-                      ServiceRegistry, nodeService, transactionService">
-	</bean>
+                      ServiceRegistry, nodeService, transactionService"
+		  p:lecmDictionaryService-ref="serviceDictionary"/>
 	
 	<bean id="protocolScript" parent="baseScript" class="ru.it.lecm.meetings.scripts.ProtocolWebScriptBean"
 		  depends-on="nodeService, protocolService"
 		  p:nodeService-ref="nodeService"
 		  p:protocolService-ref="protocolService"
-		  p:extensionName="protocol"
+		  p:documentService-ref="documentService"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+		  p:documentEventService-ref="documentEventService"
+		  p:documentConnectionService-ref="documentConnectionService"
+		  p:extensionName="protocolService"
 	/>
 	
 </beans>

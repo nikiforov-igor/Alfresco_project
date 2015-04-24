@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Смена статуса пункта протокола" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Смена статуса пункта протокола</property>
+                <property name="lecm-busjournal:eventCategory-code">PROTOCOL_POINT_STATUS_CHANGE</property>
+            </item>
+        </items>
+    </item>
+</items>

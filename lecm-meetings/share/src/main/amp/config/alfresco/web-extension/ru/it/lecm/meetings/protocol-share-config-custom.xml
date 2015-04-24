@@ -21,6 +21,8 @@
 					<show id="lecm-document:subject-assoc"/>
 					<!--Дело-->
 					<show id="lecm-eds-document:file-register-assoc"/>
+					<!--Автосоздание поручений-->
+					<show id="lecm-protocol:errands-autocreation"/>
 					<!--Пункты-->
 					<show id="lecm-protocol-ts:points-assoc"/>
 					<!--Список согласующих-->
@@ -57,6 +59,7 @@
 					</field>
 					<field id="lecm-document:subject-assoc" set="common"/>
 					<field id="lecm-eds-document:file-register-assoc" set="common"/>
+					<field id="lecm-protocol:errands-autocreation" set="common"/>
 					
 					<!--Закладка "Пункты"-->
 					<field id="lecm-protocol-ts:points-assoc" set="points">
@@ -132,7 +135,8 @@
 					<show id="lecm-document:subject-assoc"/>
 					<!--Дело-->
 					<show id="lecm-eds-document:file-register-assoc"/>
-					
+					<!--Автосоздание поручений-->
+					<show id="lecm-protocol:errands-autocreation"/>
 					<!--Вложения-->
 					<show id="lecm-document-aspects:attachments-temp-assoc"/>
 				</field-visibility>
@@ -164,6 +168,7 @@
 					</field>
 					<field id="lecm-document:subject-assoc"/>
 					<field id="lecm-eds-document:file-register-assoc"/>
+					<field id="lecm-protocol:errands-autocreation"/>
 					
 					<field id="lecm-document-aspects:attachments-temp-assoc" label-id="meetings.attachments">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
@@ -193,6 +198,8 @@
 					<show id="lecm-protocol-ts:points-assoc"/>
 					<!--Список согласующих-->
 					<show id="lecm-contract:approval"/>
+					<!--Автосоздание поручений-->
+					<show id="lecm-protocol:errands-autocreation"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label-id="label.approval"/>
@@ -263,6 +270,7 @@
 					<show id="lecm-protocol-ts:execution-date" force="true"/>
 					<show id="lecm-protocol-ts:execution-date-real" force="true"/>
 					<show id="lecm-protocol-ts:note" force="true"/>
+					<show id="lecm-protocol-ts:errand-assoc"/>
 				</field-visibility>
 				<appearance>
 					<set id="common"/>
@@ -272,7 +280,7 @@
 					<field id="lecm-document:indexTableRow" force="true" set="item0"/>
 					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">{lecm-protocol-ts:point/cm:name}</control-param>
+                            <control-param name="formatString">{lecm-protocol-ts:point-status-assoc/cm:name}</control-param>
                         </control>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
@@ -290,6 +298,13 @@
 					<field id="lecm-protocol-ts:note" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
+                        </control>
+					</field>
+					<field id="lecm-protocol-ts:errand-assoc" set="item1">
+						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">
+                                <![CDATA[<a href='/share/page/document?nodeRef={lecm-protocol-ts:errand-assoc/nodeRef}'>{lecm-protocol-ts:errand-assoc/lecm-document:present-string}</a>]]>
+                            </control-param>
                         </control>
 					</field>
 				</appearance>
