@@ -22,7 +22,7 @@ function main() {
 		}
 	} else if (members != null) {
 		for (var i = 0; i < members.length(); i++) {
-			if (members.get(i).length > 0) {
+			if (members.get(i).length() > 0) {
 				membersResult.push({
 					nodeRef: members.get(i),
 					name: substitude.formatNodeTitle(members.get(i), "{lecm-orgstr:employee-short-name}"),
