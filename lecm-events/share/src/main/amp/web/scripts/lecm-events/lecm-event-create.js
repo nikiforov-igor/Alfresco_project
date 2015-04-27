@@ -33,6 +33,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			submitElement.submitForm = this.onSubmit.bind(this, originalSubmitFunction, submitElement);
 
+			var actionSubmit = Dom.get(this.id + "-event-action-save");
+			if (actionSubmit != null) {
+				YAHOO.util.Event.addListener(actionSubmit, "click", this.onSubmit.bind(this, originalSubmitFunction, submitElement));
+			}
+
+			var actionCancel = Dom.get(this.id + "-event-action-cancel");
+			if (actionCancel != null) {
+				YAHOO.util.Event.addListener(actionCancel, "click", this.onCancelButtonClick, null, this);
+			}
+
 			this.runtimeForm.setAJAXSubmit(true, {
 				successCallback: {
 					scope: this,

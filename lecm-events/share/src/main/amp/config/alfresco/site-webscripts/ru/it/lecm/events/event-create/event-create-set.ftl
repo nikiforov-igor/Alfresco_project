@@ -7,18 +7,18 @@
         <div class="event-create-right">
             <div class="event-create-actions">
                 <h2 class="alfresco-twister alfresco-twister-open">
-                    Действия при создании
+                    ${msg("label.events.actions.onCreate")}
                 </h2>
                 <div>
                     <ul>
-                        <li class="event-save"><a href="#">Сохранить</a></li>
-                        <li class="event-cancel"><a href="#">Отменить</a></li>
+                        <li class="event-save"><a id="${id}-event-action-save" href="#">${msg("button.create")}</a></li>
+                        <li class="event-cancel"><a id="${id}-event-action-cancel" href="#">${msg("button.cancel")}</a></li>
                     </ul>
                 </div>
             </div>
             <div class="event-create-attachments">
                 <h2 class="alfresco-twister alfresco-twister-open">
-                    Вложения
+                    ${msg("label.events.attachments")}
                 </h2>
                 <@formLib.renderField field=form.fields[item.id] />
             </div>
