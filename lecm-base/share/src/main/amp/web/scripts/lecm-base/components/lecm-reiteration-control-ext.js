@@ -127,11 +127,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             setValue: function setValue_function(value) {
-                if (value === null) {
-                    return;
-                }
                 var node = YAHOO.util.Selector.query('.active', this.id + '-switch-type-container', true);
                 var type = node.id.replace(this.switchTypePrefix, '');
+                if (value === null) {
+                    this._switchType(type, "week-days");
+                    return;
+                }
                 this._switchType(type, value.type);
                 for (var i in value.data) {
                     var node = value.data[i];
@@ -141,7 +142,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             getSummary: function getSummary_function(value) {
                 if (value === null) {
-                    return "(Не задано)";
+                    return "(" + Alfresco.util.message("label.reiteration.not-specified") + ")";
                 }
                 var summary = ""
                 if (value.type === "week-days") {
@@ -183,7 +184,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         ]
                     });
 
-                    this.panel.setHeader(Alfresco.util.message("label.events.repeat"));
+                    this.panel.setHeader(Alfresco.util.message("label.reiteration.repeat"));
 
                     var html  = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">'
                     html += '<div id="' + this.id + '-switch-type-container" style="text-align: center"><span id="' + this.switchTypePrefix +'week-days" class="button active">' + Alfresco.util.message("label.schedule.form.week-days-type") + '</span><span id="' + this.switchTypePrefix +'month-days" class="button">' + Alfresco.util.message("label.schedule.form.month-days-type") + '</span></div>';
