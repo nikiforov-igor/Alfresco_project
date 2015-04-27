@@ -114,10 +114,12 @@ LogicECM.module = LogicECM.module || {};
 		{
 			var selected = p_args[0];
 			var selDate = this.calendar.toDate(selected[0]);
+			YAHOO.Bubbling.fire("beforeDateChanged",{});
+
 			YAHOO.Bubbling.fire("dateChanged",
 				{
 					date: selDate
-				})
+				});
 		},
 
 		loadThisMonthEvent: function() {
@@ -128,11 +130,11 @@ LogicECM.module = LogicECM.module || {};
 			this.loadEvents(null, [null, new Date(date)]);
 		},
 
-        loadEvents: function (p_type, p_args, p_obj) {
+		loadEvents: function (p_type, p_args, p_obj) {
 			var fromDate = p_args[1];
 			var toDate = new Date(new Date(fromDate).setMonth(fromDate.getMonth()+1));
 
-            //console.log("loadEvents: from " + fromDate + " to " + toDate);
+			//console.log("loadEvents: from " + fromDate + " to " + toDate);
 			if (fromDate != null && toDate != null) {
 				Alfresco.util.Ajax.request(
 					{
@@ -162,23 +164,23 @@ LogicECM.module = LogicECM.module || {};
 				var ev = data[i];
 				var date = fromISO8601(ev.startAt.iso8601);
 				var endDate = fromISO8601(ev.endAt.iso8601);
-			 	if (date != null && endDate != null) {
-                    var cellIndex = this.calendar.getCellIndex(date);
+				if (date != null && endDate != null) {
+					var cellIndex = this.calendar.getCellIndex(date);
 
-                    if (cellIndex > -1) {
-                        Dom.addClass(this.calendar.cells[cellIndex], "with-events");
-                    }
-			    }
+					if (cellIndex > -1) {
+						Dom.addClass(this.calendar.cells[cellIndex], "with-events");
+					}
+				}
 			}
-            for (i = 0; i < nonWorking.length; i++) {
+			for (i = 0; i < nonWorking.length; i++) {
 				var nw = nonWorking[i];
-			 	if (nw != null) {
-                    var cellIndex = this.calendar.getCellIndex(fromISO8601(nw));
+				if (nw != null) {
+					var cellIndex = this.calendar.getCellIndex(fromISO8601(nw));
 
-                    if (cellIndex > -1) {
-                        Dom.addClass(this.calendar.cells[cellIndex], "non-working");
-                    }
-			    }
+					if (cellIndex > -1) {
+						Dom.addClass(this.calendar.cells[cellIndex], "non-working");
+					}
+				}
 			}
 		},
 

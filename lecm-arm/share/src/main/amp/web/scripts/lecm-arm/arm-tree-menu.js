@@ -22,6 +22,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         YAHOO.Bubbling.on("updateCurrentColumns", this.onUpdateSelectedColumns, this);
         YAHOO.Bubbling.on("armRefreshSelectedTreeNode", this.onRefreshSelectedTreeNode, this);
+        YAHOO.Bubbling.on("beforeDateChanged", this.onCalSelect, this);
 
         return this;
     };
@@ -139,6 +140,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             this.onAccordionClick(null, obj.node);
                             if (obj.node.id == "calendar") {
                                 this.onCalSelect();
+                                YAHOO.Bubbling.fire("dateChanged",
+                                    {
+                                        date: new Date()
+                                    });
                             }
                         }
                         Event.onAvailable("ac-label-" + obj.node.id, function (obj) {
@@ -164,9 +169,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         this._createTree(node);
                     }
                     node.createdTree = true;
-                }
-                if (node.id == "calendar") {
-                    this.onCalSelect();
                 }
                 if (this.shownAccordionItem != null) {
                     this.collapseAccordion(this.shownAccordionItem);
@@ -227,7 +229,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             var miniCalendar = Dom.get("arm-mini-calendar");
             Dom.setStyle(miniCalendar.id, "display", "block");
             parentNode.appendChild(miniCalendar);
-            this.onCalSelect();
         },
 
         _createTree: function (node) {
@@ -479,10 +480,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             Dom.setStyle("arm-calendar-toolbar", "display", "block");
             Dom.setStyle("arm-calendar", "display", "block");
-            YAHOO.Bubbling.fire("dateChanged",
-                {
-                    date: new Date()
-                });
         },
 
         drawCounterValue: function (data, query, labelElement) {
