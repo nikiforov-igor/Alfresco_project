@@ -28,6 +28,8 @@
                     <show id="lecm-events:to-date"/>
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
+                    <!-- Правила повторности-->
+                    <show id="lecm-events:repeatable-rule"/>
                     <!-- Участники -->
                     <show id="lecm-events:temp-members-assoc"/>
                     <show id="lecm-events:temp-members-assoc-json"/>
@@ -60,6 +62,14 @@
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
                         </constraint-handlers>
                     </field>
+
+                    <field id="lecm-events:repeatable-rule" mandatory="true" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+                        </constraint-handlers>
+                    </field>
+
                     <field id="lecm-events:temp-members-assoc">
                         <control template="/ru/it/lecm/events/controls/events-members-control.ftl">
                             <control-param name="plane">true</control-param>
@@ -241,7 +251,7 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:repeatable-rule" mandatory="true" set="createEventSet">
-                        <control template="/ru/it/lecm/base-share/components/controls/reiteration-control.ftl" />
+                        <control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
                         </constraint-handlers>
