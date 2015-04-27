@@ -63,6 +63,8 @@
 
 	    YAHOO.Bubbling.on("disableControl", me.onDisableControl, this);
 	    YAHOO.Bubbling.on("enableControl", me.onEnableControl, this);
+        YAHOO.Bubbling.on("hideControl", me.onHideControl, this);
+        YAHOO.Bubbling.on("showControl", me.onShowControl, this);
 	    YAHOO.Bubbling.on("handleFieldChange", me.onHandleFieldChange, this);
 
         return me;
@@ -169,6 +171,8 @@
                  * @method onReady
                  */
                 draw: function() {
+                    LogicECM.module.Base.Util.createComponentReadyElementId(this.id + "-date", this.options.formId, this.options.fieldId);
+
                     var me = this;
                     var theDate = null;
 
@@ -477,6 +481,18 @@
 			            }
 		            }
 	            },
+
+                onHideControl: function (layer, args) {
+                    if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                        Dom.setStyle(this.id + "-parent", "display", "none");
+                    }
+                },
+
+                onShowControl: function (layer, args) {
+                    if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                        Dom.setStyle(this.id + "-parent", "display", "block");
+                    }
+                },
 
                 onHandleFieldChange: function (layer, args) {
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {

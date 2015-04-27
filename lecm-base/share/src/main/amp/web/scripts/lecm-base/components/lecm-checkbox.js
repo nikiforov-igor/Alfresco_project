@@ -43,6 +43,8 @@ LogicECM.module = LogicECM.module || {};
                             defaultValueDataSource: null,
                             disabledFieldsIfSelect: null,
                             disabledFieldsIfNotSelect: null,
+                            hideFieldsIfSelect: null,
+                            hideFieldsIfNotSelect: null,
 	                        fireMandatoryByChange: false,
                             attentionMessage: null
                         },
@@ -67,10 +69,13 @@ LogicECM.module = LogicECM.module || {};
                             this.loadDefaultValue();
                         }
                         YAHOO.util.Event.addListener(this.checkbox, "click", this.onChange, this, true);
+                        this.initValue = this.checkbox.checked;
+
+                        this.onChange();
+                        Dom.setStyle(this.attentionId, 'display', 'none');
+                    } else {
+                        this.hideRelatedFields();
                     }
-                    this.initValue = this.checkbox.checked;
-                    this.onChange();
-                    Dom.setStyle(this.attentionId, 'display', 'none');
 
 	                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
                 },
@@ -109,6 +114,7 @@ LogicECM.module = LogicECM.module || {};
                         Dom.setStyle(this.attentionId, 'display', 'none');
                     }
                     this.checkDisableRelatedFields();
+                    this.hideRelatedFields();
                     YAHOO.Bubbling.fire("formValueChanged", {
                        eventGroup: this,
                        addedItems: [],
@@ -156,6 +162,31 @@ LogicECM.module = LogicECM.module || {};
 						            LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
 					            }
 				            }
+			            }
+		            }
+	            },
+
+                hideRelatedFields: function() {
+		            var el = Dom.get(this.id);
+                    var selected = Dom.get(this.id).value == "true";
+		            if (this.options.hideFieldsIfNotSelect != null) {
+			            for (var i = 0; i < this.options.hideFieldsIfNotSelect.length; i++) {
+                            var fieldId = this.options.hideFieldsIfNotSelect[i];
+                            if (!selected) {
+                                LogicECM.module.Base.Util.hideControl(this.options.formId, fieldId);
+                            } else {
+                                LogicECM.module.Base.Util.showControl(this.options.formId, fieldId);
+                            }
+			            }
+		            }
+		            if (this.options.hideFieldsIfSelect != null) {
+			            for (i = 0; i < this.options.hideFieldsIfSelect.length; i++) {
+                            fieldId = this.options.hideFieldsIfSelect[i];
+                            if (selected) {
+                                LogicECM.module.Base.Util.hideControl(this.options.formId, fieldId);
+                            } else {
+                                LogicECM.module.Base.Util.showControl(this.options.formId, fieldId);
+                            }
 			            }
 		            }
 	            },

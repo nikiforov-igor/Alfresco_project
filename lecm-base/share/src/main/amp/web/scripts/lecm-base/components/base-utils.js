@@ -628,6 +628,22 @@ LogicECM.module.Base.Util = {
 			});
 		});
 	},
+	hideControl: function(formId, fieldId) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
+			YAHOO.Bubbling.fire("hideControl", {
+				formId: formId,
+				fieldId: fieldId
+			});
+		});
+	},
+	showControl: function(formId, fieldId) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
+			YAHOO.Bubbling.fire("showControl", {
+				formId: formId,
+				fieldId: fieldId
+			});
+		});
+	},
 
 	reInitializeControl: function(formId, fieldId, options) {
 		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {

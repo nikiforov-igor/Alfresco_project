@@ -36,8 +36,10 @@
     <#assign maxLimit = form.arguments[field.control.params.maxLimitArg]!"" />
 </#if>
 
+<#assign controlId = fieldHtmlId + "-cntrl">
+
 <#if form.mode == "view">
-<div class="control date viewmode">
+<div id="${controlId}-parent" class="control date viewmode">
     <div class="label-div">
         <#if field.mandatory && field.value == "">
         <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png"
@@ -45,12 +47,34 @@
         </#if>
         <label>${field.label?html}:</label>
     </div>
-    <div class="container">
+    <div id="${controlId}-container" class="container">
         <div class="value-div">
+	        <script type="text/javascript">//<![CDATA[
+	        (function () {
+		        function initBoobling() {
+			        LogicECM.module.Base.Util.createComponentReadyElementId("${controlId}-container", "${args.htmlid}", "${field.configName}");
+
+			        YAHOO.Bubbling.on("hideControl", onHideControl);
+			        YAHOO.Bubbling.on("showControl", onShowControl);
+		        }
+                function onHideControl(layer, args) {
+	                if ("${args.htmlid}" == args[1].formId && "${field.configName}" == args[1].fieldId) {
+		                Dom.setStyle("${controlId}-parent", "display", "none");
+	                }
+                }
+                function onShowControl(layer, args) {
+	                if ("${args.htmlid}" == args[1].formId && "${field.configName}" == args[1].fieldId) {
+		                Dom.setStyle("${controlId}-parent", "display", "block");
+	                }
+                }
+
+		        YAHOO.util.Event.onContentReady("${controlId}-parent", initBoobling);
+	        })();
+	        //]]></script>
+
             <#if field.value == "">
                 ${msg("form.control.novalue")}
             <#elseif !multiValued>
-                <#assign controlId = fieldHtmlId + "-cntrl">
 
                 <script type="text/javascript">//<![CDATA[
                 (function () {
@@ -87,8 +111,6 @@
     </div>
 </div>
 <#elseif !multiValued>
-        <#assign controlId = fieldHtmlId + "-cntrl">
-
         <#assign currentValue = defaultValue?js_string>
         <#if  !currentValue?has_content && !disabled > 
              <#assign currentValue = field.control.params.defaultValue!""?js_string>
@@ -130,7 +152,7 @@
         })();
         //]]></script>
 
-        <div class="control date editmode">
+        <div id="${controlId}-parent" class="control date editmode">
             <div class="label-div">
                 <label for="${controlId}-date">
                     ${field.label?html}:

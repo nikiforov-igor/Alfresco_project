@@ -61,7 +61,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         LogicECM.module.Base.ReiterationExt.superclass.constructor.call(this, "LogicECM.module.Base.ReiterationExt", htmlId, ["button", "container"]);
 
         this.switchTypePrefix = this.id +'-swith-type-button-';
-        this.typeContainerPrefix = this.id +'-type-container-'
+        this.typeContainerPrefix = this.id +'-type-container-';
+
+        YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
+        YAHOO.Bubbling.on("showControl", this.onShowControl, this);
 
         return this;
     };
@@ -85,6 +88,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         this.openDialog();
                     }.bind(this));
                 }
+
+                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
 
             getControlValue: function getControlValue_function() {
@@ -263,7 +268,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     Dom.addClass(ev.target, 'checked');
                 }
                 this.updateSummary();
-            }
+            },
 
+            onHideControl: function (layer, args) {
+                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                    Dom.setStyle(this.id + "-parent", "display", "none");
+                }
+            },
+
+            onShowControl: function (layer, args) {
+                if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+                    Dom.setStyle(this.id + "-parent", "display", "block");
+                }
+            }
         });
 })();

@@ -28,6 +28,10 @@
                     <show id="lecm-events:to-date"/>
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
+                    <!-- Дата начала периода -->
+                    <show id="lecm-events:repeatable-start-period"/>
+                    <!-- Дата окончания периода -->
+                    <show id="lecm-events:repeatable-end-period"/>
                     <!-- Правила повторности-->
                     <show id="lecm-events:repeatable-rule"/>
                     <!-- Участники -->
@@ -63,11 +67,15 @@
                         </constraint-handlers>
                     </field>
 
-                    <field id="lecm-events:repeatable-rule" mandatory="true" read-only="true">
+                    <field id="lecm-events:repeatable" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="hideFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-events:repeatable-start-period" read-only="true"/>
+                    <field id="lecm-events:repeatable-end-period" read-only="true"/>
+                    <field id="lecm-events:repeatable-rule" read-only="true">
                         <control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
-                        </constraint-handlers>
                     </field>
 
                     <field id="lecm-events:temp-members-assoc">

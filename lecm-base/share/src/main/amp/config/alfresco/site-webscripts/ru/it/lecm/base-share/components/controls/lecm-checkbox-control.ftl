@@ -58,11 +58,17 @@
 			<#if field.control.params.disabledFieldsIfSelect??>
 				disabledFieldsIfSelect: "${field.control.params.disabledFieldsIfSelect}".split(","),
 			</#if>
+			<#if field.control.params.hideFieldsIfSelect??>
+				hideFieldsIfSelect: "${field.control.params.hideFieldsIfSelect}".split(","),
+			</#if>
 			<#if field.control.params.attentionMessageKey??>
                 attentionMessage: "${msg(field.control.params.attentionMessageKey)}",
 			</#if>
 			<#if field.control.params.disabledFieldsIfNotSelect??>
 				disabledFieldsIfNotSelect: "${field.control.params.disabledFieldsIfNotSelect}".split(","),
+			</#if>
+			<#if field.control.params.hideFieldsIfNotSelect??>
+				hideFieldsIfNotSelect: "${field.control.params.hideFieldsIfNotSelect}".split(","),
 			</#if>
 				fireMandatoryByChange: "${fireMandatoryByChange?string}",
 				mode: "${form.mode}",
@@ -86,6 +92,7 @@
 				<#else>
 					${msg("form.control.checkbox.no")}
 				</#if>
+				<input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="<#if isTrue>true<#else>false</#if>" />
 			</div>
 		</div>
 	</div>

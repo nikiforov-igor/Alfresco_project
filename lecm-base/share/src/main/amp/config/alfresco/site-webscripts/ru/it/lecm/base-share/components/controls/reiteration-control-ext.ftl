@@ -27,6 +27,10 @@
 
         function createControl() {
             var reiteration = new LogicECM.module.Base.ReiterationExt("${fieldHtmlId}");
+	        reiteration.setOptions({
+                fieldId: "${field.configName}",
+                formId: "${args.htmlid}"
+            });
             reiteration.setMessages(
                 ${messages}
             );
@@ -37,7 +41,7 @@
     })();
 </script>
 
-<div class="control reiteration editmode">
+<div id="${fieldHtmlId}-parent" class="control reiteration editmode">
     <div class="label-div">
         <label for="${fieldHtmlId}-displayValue">
         ${field.label?html}:
