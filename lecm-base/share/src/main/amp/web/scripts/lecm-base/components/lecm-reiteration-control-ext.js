@@ -80,9 +80,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var message = this.getSummary(this.getControlValue());
                 var el = Dom.get(this.id + '-displayValue');
                 el.innerHTML = message;
-                Event.addListener(el, 'click', function () {
-                    this.openDialog();
-                }.bind(this));
+                if (el.tagName === "A") {
+                    Event.addListener(el, 'click', function () {
+                        this.openDialog();
+                    }.bind(this));
+                }
             },
 
             getControlValue: function getControlValue_function() {
@@ -143,15 +145,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
                 var summary = ""
                 if (value.type === "week-days") {
-                    summary += "Каждую неделю, ";
+                    summary += Alfresco.util.message("label.schedule.form.week-days-type") + ", ";
                     for (var i in value.data) {
                         var index = parseInt(value.data[i] - 1);
                         summary += this.daysFull[index] + ', ';
                     }
                 } else if (value.type === "month-days") {
-                    summary += "Каждый месяц, ";
+                    summary += Alfresco.util.message("label.schedule.form.month-days-type") + ", " + Alfresco.util.message("date-unit.plural.day") +": ";
                     for (var i in value.data) {
-                        summary += value.data[i] + '-го числа, ';
+                        summary += value.data[i] + ', ';
                     }
                 }
                 summary = summary.substring(0, summary.length - 2);
@@ -176,15 +178,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         model: true,
                         constraintoviewport: true,
                         buttons: [
-                            { text:"Сохранить", handler: this.onOk.bind(this), isDefault:true },
-                            { text:"Отменить",  handler: this.onCancel.bind(this)}
+                            { text: Alfresco.util.message("form.button.submit.label"), handler: this.onOk.bind(this), isDefault:true },
+                            { text: Alfresco.util.message("button.cancel"),  handler: this.onCancel.bind(this)}
                         ]
                     });
 
-                    this.panel.setHeader("Повторять");
+                    this.panel.setHeader(Alfresco.util.message("label.events.repeat"));
 
                     var html  = '<div id="' + this.id + '-dialog-panel-container" class="reiteration">'
-                    html += '<div id="' + this.id + '-switch-type-container" style="text-align: center"><span id="' + this.switchTypePrefix +'week-days" class="button active">Каждую неделю</span><span id="' + this.switchTypePrefix +'month-days" class="button">Каждый месяц</span></div>';
+                    html += '<div id="' + this.id + '-switch-type-container" style="text-align: center"><span id="' + this.switchTypePrefix +'week-days" class="button active">' + Alfresco.util.message("label.schedule.form.week-days-type") + '</span><span id="' + this.switchTypePrefix +'month-days" class="button">' + Alfresco.util.message("label.schedule.form.month-days-type") + '</span></div>';
                     html += '<div class="delim">&nbsp;</div>';
                     html += '<div id="' + this.typeContainerPrefix +'week-days" class="container hidden1">';
                     html += '<div class="container-aligment">';
