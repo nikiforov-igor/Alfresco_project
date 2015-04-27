@@ -84,6 +84,7 @@
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-point-status.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-regnumbers-items.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-event-items.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-bj-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -144,6 +145,7 @@
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
 		  p:documentEventService-ref="documentEventService"
 		  p:documentConnectionService-ref="documentConnectionService"
+		  p:businessJournalService-ref="businessJournalService"
 		  p:extensionName="protocolService"
 	/>
 	

@@ -21,6 +21,7 @@ public interface ProtocolService {
 	
 	public static final QName PROP_PROTOCOL_POINT_FORMULATION = QName.createQName(PROTOCOL_TS_NAMESPACE, "point-formulation");
 	public static final QName PROP_PROTOCOL_POINT_EXEC_DATE = QName.createQName(PROTOCOL_TS_NAMESPACE, "execution-date");
+	public static final QName PROP_PROTOCOL_POINT_DATE_REAL = QName.createQName(PROTOCOL_TS_NAMESPACE, "execution-date-real");
 	public static final QName ASSOC_PROTOCOL_POINTS = QName.createQName(PROTOCOL_TS_NAMESPACE, "points-assoc");
 	public static final QName ASSOC_PROTOCOL_POINT_EXECUTOR = QName.createQName(PROTOCOL_TS_NAMESPACE, "executor-assoc");
 	public static final QName ASSOC_PROTOCOL_POINT_ERRAND = QName.createQName(PROTOCOL_TS_NAMESPACE, "errand-assoc");
@@ -37,5 +38,8 @@ public interface ProtocolService {
 	public static final String PROTOCOL_POINT_DICTIONARY_NAME = "Статусы пунктов протокола";
 	
 	public void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
+	public NodeRef getErrandLinkedPoint(NodeRef errand);
+	public Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
+	public String getPointStatus(NodeRef point);
 
 }

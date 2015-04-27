@@ -235,8 +235,16 @@
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" />
-					<field id="lecm-protocol-ts:execution-date" />
-					<field id="lecm-protocol-ts:execution-date-real" />
+					<field id="lecm-protocol-ts:execution-date" >
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
+					<field id="lecm-protocol-ts:execution-date-real" >
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
 					<field id="lecm-protocol-ts:note" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -271,6 +279,7 @@
 					<show id="lecm-protocol-ts:execution-date-real" force="true"/>
 					<show id="lecm-protocol-ts:note" force="true"/>
 					<show id="lecm-protocol-ts:errand-assoc"/>
+					<show id="lecm-protocol:executed-button"/>
 				</field-visibility>
 				<appearance>
 					<set id="common"/>
@@ -293,8 +302,16 @@
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" set="item1"/>
-					<field id="lecm-protocol-ts:execution-date" set="item1"/>
-					<field id="lecm-protocol-ts:execution-date-real" set="item1"/>
+					<field id="lecm-protocol-ts:execution-date" set="item1">
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
+					<field id="lecm-protocol-ts:execution-date-real" set="item1">
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
 					<field id="lecm-protocol-ts:note" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -307,6 +324,9 @@
                             </control-param>
                         </control>
 					</field>
+					<field id="lecm-protocol:executed-button" set="item1">
+                        <control template="/ru/it/lecm/meetings/components/controls/execute-point-control.ftl"/>
+                    </field>
 				</appearance>
 			</form>
 			<form id="points-datagrid">

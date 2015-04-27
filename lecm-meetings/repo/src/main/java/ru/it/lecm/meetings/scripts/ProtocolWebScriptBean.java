@@ -21,6 +21,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentEventService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -29,6 +30,7 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.meetings.beans.ProtocolService;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 /**
  *
@@ -41,6 +43,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 	private LecmPermissionService lecmPermissionService;
 	private DocumentConnectionService documentConnectionService;
 	private DocumentEventService documentEventService;
+	private BusinessJournalService businessJournalService;
 	
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -64,6 +67,10 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 	
 	public void setDocumentEventService(DocumentEventService documentEventService) {
 		this.documentEventService = documentEventService;
+	}
+	
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 	
 	/**
@@ -150,5 +157,81 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 				documentEventService.subscribe(errand, protocol);
 			}
 		}
+	}
+	
+	public void changePointStatusByErrand(ScriptNode protocolSNode){
+		NodeRef protocol = protocolSNode.getNodeRef();
+        Set<NodeRef> senders = documentEventService.getEventSenders(protocol);
+		for (NodeRef sender : senders){
+			if (ErrandsService.TYPE_ERRANDS.equals(nodeService.getType(sender))){
+				String errandStatus = (String) nodeService.getProperty(sender, StatemachineModel.PROP_STATUS);
+				NodeRef point = protocolService.getErrandLinkedPoint(sender);
+				if (null!=point){
+					if (!checkPointExecutedStatus(point) && "Исполнено".equals(errandStatus)){
+						// переведем пункт в статус "Исполнен"
+						protocolService.changePointStatus(point,ProtocolService.P_STATUSES.EXECUTED_STATUS);
+						//установим атрибут дату исполнеия
+						nodeService.setProperty(point, ProtocolService.PROP_PROTOCOL_POINT_DATE_REAL, new Date());
+						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
+						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Исполнен", pointNumber);
+						List<String> secondaryObj = Arrays.asList(point.toString());
+						businessJournalService.log("System", protocol, "PROTOCOL_POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+					}
+					if (!checkPointExecutedStatus(point) && "Не исполнено".equals(errandStatus)){
+						// переведем пункт в статус "Не исполнен"
+						protocolService.changePointStatus(point,ProtocolService.P_STATUSES.NOT_EXECUTED_STATUS);
+						//установим атрибут дата исполнеия
+						nodeService.setProperty(point, ProtocolService.PROP_PROTOCOL_POINT_DATE_REAL, new Date());
+						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
+						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Не исполнен", pointNumber);
+						List<String> secondaryObj = Arrays.asList(point.toString());
+						businessJournalService.log("System", protocol, "PROTOCOL_POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+					}
+
+					Boolean is_expired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
+					if (!checkPointExecutedStatus(point) && !"Исполнено".equals(errandStatus) && is_expired){
+						// переведем пункт в статус "Просрочен"
+						protocolService.changePointStatus(point, ProtocolService.P_STATUSES.EXPIRED_STATUS);
+						//запись в бизнес журнал о том, что пункт перешел в статус просрочен
+						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+						String bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
+						List<String> secondaryObj = Arrays.asList(point.toString());
+						businessJournalService.log("System", protocol, "PROTOCOL_POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+					}
+				}
+			}
+			// удалим отправителей из списка, чтобы в следующий раз были только новые
+			documentEventService.removeEventSender(protocol, sender);
+		}
+	}
+	
+	public void changePointStatus(String sPointRef, String status){
+		if (null!=sPointRef && !sPointRef.isEmpty()){
+			NodeRef point = new NodeRef(sPointRef);
+			if (nodeService.exists(point)){
+				protocolService.changePointStatus(point,ProtocolService.P_STATUSES.valueOf(status));
+			}
+		}
+	}
+
+	public Boolean checkPointExecutedStatus(String sPointRef){
+		if (null != sPointRef && !sPointRef.isEmpty()){
+			NodeRef point = new NodeRef(sPointRef);
+			if (nodeService.exists(point)){
+				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.EXECUTED_STATUS);
+			}
+		}
+		return false;
+	}
+	
+	public Boolean checkPointExecutedStatus(NodeRef point){
+		if (null != point){
+			if (nodeService.exists(point)){
+				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.EXECUTED_STATUS);
+			}
+		}
+		return false;
 	}
 }

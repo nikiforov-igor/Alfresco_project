@@ -31,7 +31,7 @@
 					<node>
 						<type>taskStatus</type>
 						<name>Черновик</name>
-						<nodeRef>workspace://SpacesStore/ba303e6b-b03f-406b-a70b-b78ca9283fd8</nodeRef>
+						<nodeRef>workspace://SpacesStore/8491c3cb-d9a8-424a-84d8-e37b08e3cb06</nodeRef>
 						<properties>
 							<property>
 								<name>forDraft</name>
@@ -54,7 +54,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/a75e5d1f-1c6a-432b-9ee5-957a31f917f9</nodeRef>
+										<nodeRef>workspace://SpacesStore/678c8cbb-a5a8-4fa8-9baf-5194edefea33</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -69,7 +69,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/38edb095-cddf-429b-b617-12e5d39b71b8</nodeRef>
+										<nodeRef>workspace://SpacesStore/a5ac8296-ffb8-4750-9b1c-a07482cd1d09</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -84,7 +84,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/21924830-741c-4d70-85ed-ab09d5c54de7</nodeRef>
+										<nodeRef>workspace://SpacesStore/f9b749b1-52db-468d-a9b0-4efcf24d7352</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -99,7 +99,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/ab3d9fd9-55c3-4452-9896-095f3775d6c4</nodeRef>
+										<nodeRef>workspace://SpacesStore/4544efa1-13bf-4ad2-ad01-5293aaa8c268</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -119,7 +119,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>1c73f96b-7b69-4a99-a74d-1598572c0f5d</name>
-										<nodeRef>workspace://SpacesStore/9d0cc022-5655-41d4-9714-bdde67bc2a5f</nodeRef>
+										<nodeRef>workspace://SpacesStore/6281bf10-3cce-4cae-8ba5-25ddde3ad7ce</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -138,7 +138,7 @@
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>3310ec2e-1365-442f-9077-1bc851b90050</name>
-										<nodeRef>workspace://SpacesStore/b0983293-1937-46fb-a8df-25f7f69b1418</nodeRef>
+										<nodeRef>workspace://SpacesStore/d01f15c8-5f42-402e-90ec-fc3fcc7803d8</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -157,7 +157,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>0e295264-ab30-4c13-ba28-57c8d9188cc6</name>
-										<nodeRef>workspace://SpacesStore/f5a53805-0866-4845-83b2-d61efd79ac1d</nodeRef>
+										<nodeRef>workspace://SpacesStore/12dc09eb-12d0-4615-80f5-b1438872f54f</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -178,7 +178,7 @@
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>5f27e660-714c-46fc-b346-979b0ce6b82f</name>
-														<nodeRef>workspace://SpacesStore/f6aa3eab-7720-4960-903c-04e79f2e9e24</nodeRef>
+														<nodeRef>workspace://SpacesStore/92424398-6899-4ba5-8800-4119ce799f5f</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -221,7 +221,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>b10e0246-5448-41f5-a67d-ffd7f41408b2</name>
-										<nodeRef>workspace://SpacesStore/2d062f7a-0b71-4438-96ae-3d47e3ec9c3d</nodeRef>
+										<nodeRef>workspace://SpacesStore/f859b53a-24ea-46cf-938f-bb1a60b401fa</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -240,7 +240,7 @@
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>173bc05e-ebdd-4cd5-a31f-32160bf7a12d</name>
-										<nodeRef>workspace://SpacesStore/47c86b4b-8cb9-42fc-a6a8-91525d57a2f8</nodeRef>
+										<nodeRef>workspace://SpacesStore/5bb38350-e9a6-459f-a9a6-56c573a8ae5c</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -261,7 +261,7 @@
 													<node>
 														<type>userTransition</type>
 														<name>53767ff8-c8fb-4ddf-94df-e9273cc989fc</name>
-														<nodeRef>workspace://SpacesStore/3bd49ebc-43d6-43b8-a0ca-728eea936063</nodeRef>
+														<nodeRef>workspace://SpacesStore/3bb3201e-81ec-4c44-9f5f-dabd015a7ee3</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -279,7 +279,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/26471a91-6933-4889-b1f0-290510410a64</reference>
+																<reference>workspace://SpacesStore/588b8ef2-ab81-475f-9080-9b43486bee85</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -292,7 +292,7 @@
 									<node>
 										<type>UserWorkflow</type>
 										<name>7cf5cfde-bb30-4f82-b3cf-bedc8a1d91c2</name>
-										<nodeRef>workspace://SpacesStore/2e1ba27e-a889-4154-85db-33fd972fc445</nodeRef>
+										<nodeRef>workspace://SpacesStore/0e4c7903-01b2-4c12-a12e-3f39eda56d6f</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -311,7 +311,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>4973edb7-f377-400f-aed3-816eddc96e31</name>
-										<nodeRef>workspace://SpacesStore/7a6f2c65-28d5-431a-b57b-92b40f041e10</nodeRef>
+										<nodeRef>workspace://SpacesStore/d39ad1f2-95f5-4192-9aba-88eb46e013c8</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -330,7 +330,7 @@
 									<node>
 										<type>TransitionAction</type>
 										<name>58c1a240-7032-48c7-ba04-97a3453d92aa</name>
-										<nodeRef>workspace://SpacesStore/b471dd25-50e2-4ca7-a6de-3900bf6a4b59</nodeRef>
+										<nodeRef>workspace://SpacesStore/d4149c1a-a18e-40cd-8827-6e280b71b3c3</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -349,7 +349,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>14a9b84c-911a-4acc-bcb4-e178f6a6d97b</name>
-										<nodeRef>workspace://SpacesStore/46d8cba5-9673-45d7-8f8f-efb8b7c9e2a0</nodeRef>
+										<nodeRef>workspace://SpacesStore/21477fd6-16dd-481f-b082-bad7ec1e18ef</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -368,7 +368,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>950204e8-cc7e-4d74-b87b-b2966b3a47ab</name>
-										<nodeRef>workspace://SpacesStore/cd89bba5-02f8-4234-bac9-7d0d0e4becb1</nodeRef>
+										<nodeRef>workspace://SpacesStore/e10a8b77-6fac-4ef2-8bd2-2000c6ee2136</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -392,7 +392,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/9afca3bf-5403-4492-951b-1d87981cbab1</nodeRef>
+										<nodeRef>workspace://SpacesStore/7288565b-d33c-4c07-a0b4-c15458aeb1a6</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -407,7 +407,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/1e1f89a1-190b-43d7-899d-9aecc22f76a2</nodeRef>
+										<nodeRef>workspace://SpacesStore/a9e6b346-3bf8-434a-97cc-c77f4210268a</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -422,7 +422,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/c781f919-e4fc-4d17-8fe9-49f11606dbbe</nodeRef>
+										<nodeRef>workspace://SpacesStore/fd3fc510-c2a7-467a-9c61-e465cee175ec</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -437,7 +437,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/2c9c80d6-8146-4007-b750-d72c5f17865a</nodeRef>
+										<nodeRef>workspace://SpacesStore/f78821f2-3025-4c1a-8151-98691af83681</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -452,7 +452,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/a0afc86b-7f73-437f-a29c-8608d779f0b4</nodeRef>
+										<nodeRef>workspace://SpacesStore/c5111bf9-f5de-4052-ade6-2c229a59c706</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -467,7 +467,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/65c6d6bf-47f7-4870-8706-4e0f24914f9b</nodeRef>
+										<nodeRef>workspace://SpacesStore/a8c6bf2b-ddfb-4718-b853-281d185a5564</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -482,7 +482,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/f1927c17-f1ea-4591-b106-f258345a8f48</nodeRef>
+										<nodeRef>workspace://SpacesStore/f21fe5eb-7ef6-427d-b1e0-311a4dfe3f89</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -497,7 +497,22 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/5ce4a16b-4e5a-464d-9077-9d0c6c7d8ce8</nodeRef>
+										<nodeRef>workspace://SpacesStore/fbb48eb6-6e52-4b56-80eb-47473788580c</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/90050fda-8d09-4866-9708-b36919841bf0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -516,7 +531,7 @@
 					<node>
 						<type>taskStatus</type>
 						<name>Проект</name>
-						<nodeRef>workspace://SpacesStore/26471a91-6933-4889-b1f0-290510410a64</nodeRef>
+						<nodeRef>workspace://SpacesStore/588b8ef2-ab81-475f-9080-9b43486bee85</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -535,7 +550,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/14a12514-a675-4dde-9ad8-3809009dbe81</nodeRef>
+										<nodeRef>workspace://SpacesStore/6df55366-e226-4782-b033-1405e32d9c1e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -550,7 +565,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/575a57d2-eb55-4f3b-9752-6d5aa3fa463d</nodeRef>
+										<nodeRef>workspace://SpacesStore/dc8d7db9-8f09-4d58-8fb8-23dc217cd1e3</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -565,7 +580,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/8e702805-7834-47aa-a65f-35367a0919ff</nodeRef>
+										<nodeRef>workspace://SpacesStore/8dbff263-cb8d-4089-b54e-59565b0501d0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -580,7 +595,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/6cd82f18-038d-4937-b7e9-7800aa41a7eb</nodeRef>
+										<nodeRef>workspace://SpacesStore/db51db17-2946-49f3-a269-37a9f6cafb12</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -600,7 +615,7 @@
 									<node>
 										<type>static-role</type>
 										<name>aa394d48-5124-4847-b16e-bb921fc261f3</name>
-										<nodeRef>workspace://SpacesStore/908c4186-45aa-4f28-9613-eed7e7b50abc</nodeRef>
+										<nodeRef>workspace://SpacesStore/0c91df3c-5a30-4721-aaa6-4cbe492640a5</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -628,7 +643,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>6eedbf7f-0f6d-48b1-84a7-f718ed364af3</name>
-										<nodeRef>workspace://SpacesStore/cef0f37d-45ae-4e26-9a17-693fd1dbe2a0</nodeRef>
+										<nodeRef>workspace://SpacesStore/04bc8a5e-d689-4f5f-a61f-f22b49940e4a</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -647,7 +662,7 @@
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>1332222d-3a31-44f0-a832-f12bd8202ca0</name>
-										<nodeRef>workspace://SpacesStore/7dce2d91-b125-4e28-abc0-1a2c03f79640</nodeRef>
+										<nodeRef>workspace://SpacesStore/7c0ea8fd-6675-4b5b-8f37-869f4bf36044</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -668,7 +683,7 @@
 													<node>
 														<type>transition</type>
 														<name>b61c45bb-226c-4fec-af8a-eff431b3f794</name>
-														<nodeRef>workspace://SpacesStore/6839a23a-81e1-4d15-9264-46dc6f357021</nodeRef>
+														<nodeRef>workspace://SpacesStore/a4a29ee3-58be-4223-be2d-487ecc0fc28f</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -689,7 +704,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/67802c94-9a29-44fc-8c1f-cce6e573f2d6</reference>
+																<reference>workspace://SpacesStore/9d9c1bda-5a79-4a32-8afc-34eadca4d95f</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -702,7 +717,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>bc1ec0f2-e1ed-4520-ac36-b700ccd82d74</name>
-										<nodeRef>workspace://SpacesStore/4fd03d8f-a285-4aaf-bbc2-c7489f0a9eef</nodeRef>
+										<nodeRef>workspace://SpacesStore/02ca226d-1c16-4e76-b093-b13dc2e49614</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -723,7 +738,7 @@
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>f60d24a2-f307-4382-b0eb-19b38e5e6d0c</name>
-														<nodeRef>workspace://SpacesStore/c077b65a-385c-4403-89c3-a60879a61311</nodeRef>
+														<nodeRef>workspace://SpacesStore/6e9227bf-858f-42e6-a351-334efd1f01ed</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -751,7 +766,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>9f84ed12-f9d3-4022-9909-96ca510a9f81</name>
-										<nodeRef>workspace://SpacesStore/3e8b4a1e-3536-4ef0-beb2-b617773ed722</nodeRef>
+										<nodeRef>workspace://SpacesStore/7e586143-0302-45cd-9b9d-5cc13369af1c</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -770,7 +785,7 @@
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>1748ce54-9f89-4be8-8d7b-2c2d2ead2964</name>
-										<nodeRef>workspace://SpacesStore/bc794032-5200-40e4-953e-d2b7e775cba8</nodeRef>
+										<nodeRef>workspace://SpacesStore/94bb080b-5cdb-4fa8-922e-d33b49e674d1</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -791,7 +806,7 @@
 													<node>
 														<type>userTransition</type>
 														<name>06302b8b-ac8c-43cf-ab2c-12fcba3b05ca</name>
-														<nodeRef>workspace://SpacesStore/05fe998d-ec93-4e47-8c1f-e64f575b5546</nodeRef>
+														<nodeRef>workspace://SpacesStore/cf43ce5a-5df6-4048-b834-162be66a7ae9</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -809,7 +824,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/cd70cc9c-2c85-46b5-8b2c-4ad4610fd75f</reference>
+																<reference>workspace://SpacesStore/065eb867-fb34-4c60-9d45-112fa7bf56fd</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -818,7 +833,7 @@
 													<node>
 														<type>userTransition</type>
 														<name>f65ceb8c-0b29-4c9e-9e22-2a6897a644ba</name>
-														<nodeRef>workspace://SpacesStore/e99ea170-cf97-4def-a30c-a0316091c175</nodeRef>
+														<nodeRef>workspace://SpacesStore/5c4b53bf-a63d-4d44-9d8f-8a88a3469d46</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -836,7 +851,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/5ebf2a0d-e22a-4f30-b69b-f925fe1a5481</reference>
+																<reference>workspace://SpacesStore/c45388c1-2db0-4aad-8e1e-67848faeea36</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -849,7 +864,7 @@
 									<node>
 										<type>UserWorkflow</type>
 										<name>6c79bc35-0ba4-4d8c-a725-a6c36a17c254</name>
-										<nodeRef>workspace://SpacesStore/0b69b751-4393-41cb-8354-a3f56e55edbc</nodeRef>
+										<nodeRef>workspace://SpacesStore/28e892d4-2d37-4852-b431-9c2ff225a64b</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -870,7 +885,7 @@
 													<node>
 														<type>UserWorkflowEntity</type>
 														<name>b9382f06-f43f-421e-931a-9a9c6f5ad329</name>
-														<nodeRef>workspace://SpacesStore/ff50a172-2610-4f49-95d7-4d0c902079f3</nodeRef>
+														<nodeRef>workspace://SpacesStore/16c70e71-514d-43c7-9fba-a691475683ef</nodeRef>
 														<properties>
 															<property>
 																<name>workflowId</name>
@@ -893,7 +908,7 @@
 																	<node>
 																		<type>conditionAccess</type>
 																		<name>433bd348-bb0f-4979-80ae-bb464d6e1f94</name>
-																		<nodeRef>workspace://SpacesStore/c608b2c3-ca9e-4d53-9c2b-b73ab664f5fd</nodeRef>
+																		<nodeRef>workspace://SpacesStore/0d41a0e3-f683-4879-80d2-a01f586b46a0</nodeRef>
 																		<properties>
 																			<property>
 																				<name>does-not-block</name>
@@ -928,7 +943,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>32289f76-8121-4580-8b9a-e6deb2cca7ce</name>
-										<nodeRef>workspace://SpacesStore/c3cc1653-8ac9-443f-ad79-e06e4b9a3d0f</nodeRef>
+										<nodeRef>workspace://SpacesStore/fc2a234e-2af1-48a3-8c7a-02d52c07e942</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -947,7 +962,7 @@
 									<node>
 										<type>TransitionAction</type>
 										<name>5c35042f-9a27-42d8-a38d-ef2a9c50b777</name>
-										<nodeRef>workspace://SpacesStore/9d929d0e-1f11-4622-a380-eebaf788000d</nodeRef>
+										<nodeRef>workspace://SpacesStore/8dbf8755-bcfe-490e-99d8-279e43809968</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -966,7 +981,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>2f3600c4-c98b-4851-b62a-8b2ba0d726e9</name>
-										<nodeRef>workspace://SpacesStore/0da12de7-cf5d-4185-a159-7db842b132c3</nodeRef>
+										<nodeRef>workspace://SpacesStore/ae93c8bc-8f69-4a39-96af-201d6eb8bc4b</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -985,7 +1000,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>e531e583-e3c0-4444-b7b8-a2f863af53df</name>
-										<nodeRef>workspace://SpacesStore/a30b367f-60da-46d9-8b71-8b8120523558</nodeRef>
+										<nodeRef>workspace://SpacesStore/c9fe6625-0475-4692-b085-1502fd61954a</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1009,7 +1024,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/4da0c2af-7e65-48b0-a61c-726cdcfeab9f</nodeRef>
+										<nodeRef>workspace://SpacesStore/413a0611-fb76-4cd8-ae9a-6387c8e4c0fd</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1024,7 +1039,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/42cfbbaf-4e87-4f28-8641-ca2818ae2fca</nodeRef>
+										<nodeRef>workspace://SpacesStore/46354b32-6b4a-4a4b-8848-40ca00cee6d3</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1039,7 +1054,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/07c1e87f-d9b6-4981-9e43-f3145af8d40c</nodeRef>
+										<nodeRef>workspace://SpacesStore/305ec471-c321-4d85-ad53-7a066db2c7b0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1054,7 +1069,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/5e4169ba-da46-48fd-8195-1a4376475b88</nodeRef>
+										<nodeRef>workspace://SpacesStore/23b89f64-8594-4bd5-93b1-b410d46bf202</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1069,7 +1084,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/73feac83-4b10-4331-b9cb-54ba57564e5e</nodeRef>
+										<nodeRef>workspace://SpacesStore/275ff023-a8d8-4ea4-88c9-322199a5b6b2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1084,7 +1099,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/b917f68f-b405-4c48-8d1a-37bb022ee5db</nodeRef>
+										<nodeRef>workspace://SpacesStore/2f6d67e3-313f-446a-bfdf-12e4ec8cb629</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1099,7 +1114,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/3914123d-0fde-43ce-bee9-6b303bdaa5ae</nodeRef>
+										<nodeRef>workspace://SpacesStore/43ca9f05-4f00-48c2-a20d-ed98315fb3f9</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1114,7 +1129,22 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/8f576358-69a3-42ce-ab27-844114f89806</nodeRef>
+										<nodeRef>workspace://SpacesStore/0d66dfcf-d2ad-4027-bec4-9720551d4ecb</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/93f307e5-0649-4ea6-a08d-49e94a3dfd94</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1134,7 +1164,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>16acc0cb-59fb-494f-8c66-6f9ab2a2617a</name>
-										<nodeRef>workspace://SpacesStore/ce27f6c3-90db-4ace-a375-002aeb177247</nodeRef>
+										<nodeRef>workspace://SpacesStore/c35b6c55-be70-4f4f-9ae0-4d4a9a6aabb6</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1157,7 +1187,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>47a527d1-81f0-4321-8e6f-b855c4bb509b</name>
-										<nodeRef>workspace://SpacesStore/bbf073b1-2ad4-4b49-8760-badd1bcfb4e2</nodeRef>
+										<nodeRef>workspace://SpacesStore/3de69547-a8fa-455e-9a64-50acd2ac2927</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1180,7 +1210,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>9340dbf0-0a8a-4f34-bb8c-fd0f6649f2cb</name>
-										<nodeRef>workspace://SpacesStore/e145ae97-1f77-4490-a2f8-79dc58f4f47c</nodeRef>
+										<nodeRef>workspace://SpacesStore/cda12d3e-4794-443f-9925-ae401a41eccd</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1207,7 +1237,7 @@
 					<node>
 						<type>taskStatus</type>
 						<name>На подписании</name>
-						<nodeRef>workspace://SpacesStore/67802c94-9a29-44fc-8c1f-cce6e573f2d6</nodeRef>
+						<nodeRef>workspace://SpacesStore/9d9c1bda-5a79-4a32-8afc-34eadca4d95f</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -1226,7 +1256,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/a3d1d495-756b-4f3b-84d5-02346527207d</nodeRef>
+										<nodeRef>workspace://SpacesStore/62e615e8-a282-4702-a82b-f2f1dfe27355</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1241,7 +1271,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/a0e6b201-3c76-4180-a721-3f2f0677e3e5</nodeRef>
+										<nodeRef>workspace://SpacesStore/0b21cf60-e1ba-4f14-8afa-f9928094b11e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1256,7 +1286,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/f0c52fae-9534-4581-bd88-2c6de56fc502</nodeRef>
+										<nodeRef>workspace://SpacesStore/10db468e-ffdf-4c03-b454-6d7f321e278c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1271,7 +1301,7 @@
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/d7db44b0-f08a-4320-9a1f-804ba663682d</nodeRef>
+										<nodeRef>workspace://SpacesStore/d32e07e9-f429-4cab-8a10-e935484b0f9b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1291,7 +1321,7 @@
 									<node>
 										<type>static-role</type>
 										<name>2c5f1602-6a90-4388-94e4-1dd0ed33c2a7</name>
-										<nodeRef>workspace://SpacesStore/bb3077e5-3b43-4c2e-afdc-f47fe3dbebf9</nodeRef>
+										<nodeRef>workspace://SpacesStore/9418c62c-8ffd-484c-90a3-43884c2553af</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1319,7 +1349,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>a9c816a9-feb6-4d6c-b634-1eb256c5d3b6</name>
-										<nodeRef>workspace://SpacesStore/ce93b028-b790-4a37-8644-11b2413a98e2</nodeRef>
+										<nodeRef>workspace://SpacesStore/16a26c23-16bb-46d7-8aaf-73c4ff6a66cc</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1338,7 +1368,7 @@
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>57db15b2-535e-4de9-b0a7-b050bc89551f</name>
-										<nodeRef>workspace://SpacesStore/9b52ecdd-7fe7-46db-a6ce-5bcb9fbaf829</nodeRef>
+										<nodeRef>workspace://SpacesStore/d020446a-0285-4b65-9ad5-0f2fd4098e21</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1359,7 +1389,7 @@
 													<node>
 														<type>transition</type>
 														<name>c4484a5a-2eb5-4bcf-bfa8-4821ad407065</name>
-														<nodeRef>workspace://SpacesStore/91cf2fef-2ef1-49fe-959c-23bb386a40ed</nodeRef>
+														<nodeRef>workspace://SpacesStore/6062bcf4-d180-4733-af46-f75584ea2734</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1380,7 +1410,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/d9efb17a-1afe-46c1-9266-c4408aa91a1d</reference>
+																<reference>workspace://SpacesStore/a37b89d8-024c-4293-9e2a-a2845c010609</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -1389,7 +1419,7 @@
 													<node>
 														<type>transition</type>
 														<name>0887b00a-1a0b-4248-9c6b-25bfadec76b7</name>
-														<nodeRef>workspace://SpacesStore/75ad7eb1-6334-47ba-aa87-9f882367047d</nodeRef>
+														<nodeRef>workspace://SpacesStore/bd967494-4fa9-4aed-aa17-7dd2a9d13302</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1410,7 +1440,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/d9efb17a-1afe-46c1-9266-c4408aa91a1d</reference>
+																<reference>workspace://SpacesStore/a37b89d8-024c-4293-9e2a-a2845c010609</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -1419,7 +1449,7 @@
 													<node>
 														<type>transition</type>
 														<name>6ab690ad-2829-44e6-a635-c290cc213528</name>
-														<nodeRef>workspace://SpacesStore/594ad749-f0bd-46e2-ad79-c8084f4832ed</nodeRef>
+														<nodeRef>workspace://SpacesStore/a5caf3b7-27e4-4fea-8f98-e79398d05025</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1440,7 +1470,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/2eba93a8-7343-4180-98f0-e7719f20e00e</reference>
+																<reference>workspace://SpacesStore/657cb068-62b3-4b17-ae4f-576927525caa</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -1449,7 +1479,7 @@
 													<node>
 														<type>transition</type>
 														<name>601c3e92-2d4e-4ac1-bce1-22e469148c98</name>
-														<nodeRef>workspace://SpacesStore/a27de50f-8efe-4115-ae5f-b9172bb40ff1</nodeRef>
+														<nodeRef>workspace://SpacesStore/5730ce5b-3496-4d8c-bc87-0c66a824de93</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1470,7 +1500,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/d9efb17a-1afe-46c1-9266-c4408aa91a1d</reference>
+																<reference>workspace://SpacesStore/a37b89d8-024c-4293-9e2a-a2845c010609</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -1479,7 +1509,7 @@
 													<node>
 														<type>transition</type>
 														<name>9cfeafd2-bb83-4447-9642-91889e95b81a</name>
-														<nodeRef>workspace://SpacesStore/a9de5a56-bfdd-4b55-9ed6-81d75795d7de</nodeRef>
+														<nodeRef>workspace://SpacesStore/d6be71ba-7b7a-4402-8401-b238301b277a</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1500,7 +1530,7 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/2eba93a8-7343-4180-98f0-e7719f20e00e</reference>
+																<reference>workspace://SpacesStore/657cb068-62b3-4b17-ae4f-576927525caa</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -1513,7 +1543,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>487281d8-b17a-4de9-b3a3-96b5f042ae1e</name>
-										<nodeRef>workspace://SpacesStore/56d260d9-8fcf-4901-8c21-0210282cede2</nodeRef>
+										<nodeRef>workspace://SpacesStore/9a2810f8-2b5c-4cf1-8750-d5ed13dd5c1a</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1534,7 +1564,7 @@
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>0ff6b8bf-e0d2-4548-adfe-910e5450c837</name>
-														<nodeRef>workspace://SpacesStore/8d955417-dfa9-45d2-828f-49ac81306974</nodeRef>
+														<nodeRef>workspace://SpacesStore/4f9718fc-9678-4d64-a598-3a558fdcaf4b</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -1561,7 +1591,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>e065fb84-70b4-4e3e-89d7-2d3ea42b5dc6</name>
-										<nodeRef>workspace://SpacesStore/1db6fef9-462a-483e-8a95-59bf359bf418</nodeRef>
+										<nodeRef>workspace://SpacesStore/00f1d80e-1820-4c71-bd98-3bfb0b3b5ea7</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1580,7 +1610,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>e94dc92a-9993-422c-bb37-f0fef0b299fc</name>
-										<nodeRef>workspace://SpacesStore/e67e9fee-a9fc-4425-8423-f54bcc37f539</nodeRef>
+										<nodeRef>workspace://SpacesStore/04c1e6c4-4f67-4247-8c2b-4563fc9db196</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1601,7 +1631,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>e4b9ff5e-be2b-49d6-9d13-cf3a31357f60</name>
-														<nodeRef>workspace://SpacesStore/b46a8a8d-4dc5-4f9e-8966-ceb77168051f</nodeRef>
+														<nodeRef>workspace://SpacesStore/7239356c-3135-4904-89aa-901f9d50bef4</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1629,7 +1659,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>966d483a-8f25-47a8-afc8-f1b63e8c24da</name>
-														<nodeRef>workspace://SpacesStore/da69d4f1-2c29-435a-a1de-6a6d56e78d5b</nodeRef>
+														<nodeRef>workspace://SpacesStore/71dd2c7b-6826-4287-ac9f-4109ba134ecc</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1661,7 +1691,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>UserWorkflow</type>
 										<name>793707b3-35f3-4bfd-bbf0-a8cf42eb2749</name>
-										<nodeRef>workspace://SpacesStore/5b85f4e9-1521-42f2-8e56-249e53051340</nodeRef>
+										<nodeRef>workspace://SpacesStore/b1b2ef2b-6b0d-47fb-9eef-52846d032b97</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1680,7 +1710,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>e5e1bd96-546a-4573-9b09-eba18e756203</name>
-										<nodeRef>workspace://SpacesStore/6424854d-b4a4-4a49-8cdf-ae5ac663c367</nodeRef>
+										<nodeRef>workspace://SpacesStore/fe6c6e10-c690-4fd5-a3fd-96c516f19f91</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1699,7 +1729,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TransitionAction</type>
 										<name>f10ef03f-c520-4765-a727-f7c9ce376e3b</name>
-										<nodeRef>workspace://SpacesStore/3aa57b1d-367b-4e9c-bda7-a15c63bac552</nodeRef>
+										<nodeRef>workspace://SpacesStore/4810c0c2-8ea0-4dc8-b288-ba2f038b5575</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1718,7 +1748,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>6301d48e-043a-4768-846a-ad841fe05715</name>
-										<nodeRef>workspace://SpacesStore/61df51a5-7720-4b71-a7ec-23b8942a4e38</nodeRef>
+										<nodeRef>workspace://SpacesStore/8870149a-c95f-4fba-9ea4-60e6dba71a5c</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1737,7 +1767,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>f78399f8-fb5d-4e0f-a8b1-f04ce9a470cb</name>
-										<nodeRef>workspace://SpacesStore/4dd2c1c1-c845-4579-867d-43f2befd84c6</nodeRef>
+										<nodeRef>workspace://SpacesStore/2c7e753c-fdf5-40ad-a315-119b3b86a09c</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1761,7 +1791,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/9d638d5e-572c-453e-8163-0b888263925c</nodeRef>
+										<nodeRef>workspace://SpacesStore/ce6c997a-3ab3-4bf1-836f-bc668912b8fb</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1776,7 +1806,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/be29a5e8-6f76-44af-9743-88c105646c28</nodeRef>
+										<nodeRef>workspace://SpacesStore/cf5e8494-c456-4325-aff3-e17b2e6497f7</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1791,7 +1821,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/6f19a7c5-4e42-4896-9aec-92345266029a</nodeRef>
+										<nodeRef>workspace://SpacesStore/725f3571-8e8e-4ed8-a2fd-e102aa32bc2a</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1806,7 +1836,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/e76b5540-994a-4875-ac78-a1c362c36605</nodeRef>
+										<nodeRef>workspace://SpacesStore/f2189fd5-e494-42d8-aff2-2c2066c3dbff</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1821,7 +1851,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/f19fb597-0a26-432f-9aa0-9914f0150d4c</nodeRef>
+										<nodeRef>workspace://SpacesStore/a73a7c8b-2e70-40ce-8ba7-2b916a7bb9bc</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1836,7 +1866,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/a7f7ce77-3e3c-42f4-a1a6-fc8a9d25f7ee</nodeRef>
+										<nodeRef>workspace://SpacesStore/cea7286b-06d3-470c-80f5-3b7550852e5b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1851,7 +1881,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/64d647c5-d41e-479f-ab2f-cf3b5f3486da</nodeRef>
+										<nodeRef>workspace://SpacesStore/be592515-8545-49c2-af6b-e5caf1f9a028</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1866,7 +1896,22 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/1708f6c4-ee86-4fcf-9b26-e70db1f7c350</nodeRef>
+										<nodeRef>workspace://SpacesStore/653a9d28-6cc9-4356-84f0-4b512119aca0</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/0eac7d37-d852-40de-bde8-389d4d863106</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1886,7 +1931,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>2e3da661-2a93-4b5c-a95c-b7820f6027e6</name>
-										<nodeRef>workspace://SpacesStore/ab1c7809-f6b8-4b9c-9218-f4847e33aa1f</nodeRef>
+										<nodeRef>workspace://SpacesStore/2e11bc44-cf5a-42ae-9711-f2f153f5a30b</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1909,7 +1954,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>c471cbdb-e88e-4b91-a6c8-8ce3f82e0f0e</name>
-										<nodeRef>workspace://SpacesStore/5f5320cd-21e3-4756-9707-332064c9bd5b</nodeRef>
+										<nodeRef>workspace://SpacesStore/42bde298-1d1f-450c-aa91-3e2daa093988</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1932,7 +1977,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>34fa3d8d-40be-44ae-a9b7-1bcf74197ea0</name>
-										<nodeRef>workspace://SpacesStore/59b5ad4d-6dfb-42db-b568-1a9d0fea6bfc</nodeRef>
+										<nodeRef>workspace://SpacesStore/a95f29b8-0322-4791-9196-0e80afd9d390</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1959,7 +2004,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>taskStatus</type>
 						<name>На доработке</name>
-						<nodeRef>workspace://SpacesStore/2eba93a8-7343-4180-98f0-e7719f20e00e</nodeRef>
+						<nodeRef>workspace://SpacesStore/657cb068-62b3-4b17-ae4f-576927525caa</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -1978,7 +2023,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/5c940138-4990-4f9b-915b-62bd1a67426f</nodeRef>
+										<nodeRef>workspace://SpacesStore/4a4b130e-0d2f-4919-ae0b-b08651809652</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1993,7 +2038,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/942fe849-095b-42d8-b43a-f2f18218bcc4</nodeRef>
+										<nodeRef>workspace://SpacesStore/59d80cb2-d029-4990-8373-0e9a36eee23b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2008,7 +2053,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/bbc136ac-88ca-4a9d-9ed0-92abe985b659</nodeRef>
+										<nodeRef>workspace://SpacesStore/46a1db52-3013-49ba-9d37-4a488d429c6f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2023,7 +2068,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/2a3cbaaa-ec32-445e-bdb4-0cdcfc354add</nodeRef>
+										<nodeRef>workspace://SpacesStore/3ff2db8b-0da3-4600-bdd0-6853bdbd2f44</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2043,7 +2088,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>static-role</type>
 										<name>532ac9d6-4ef4-41a5-a7f1-b134aa49125b</name>
-										<nodeRef>workspace://SpacesStore/de3c52e9-68db-48e0-815f-548b67b9debe</nodeRef>
+										<nodeRef>workspace://SpacesStore/3aef6f96-e5a9-4271-9678-1232e07ffd85</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -2071,7 +2116,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>52dfa4bd-17c3-464a-b187-613e8db6f802</name>
-										<nodeRef>workspace://SpacesStore/7f48a123-57ba-4323-98ae-2f8e6e49f5df</nodeRef>
+										<nodeRef>workspace://SpacesStore/c4bc5da6-b0e8-43ea-b855-6e9729a25cb6</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2090,7 +2135,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>bf2286f8-86bc-4257-ba78-cf5dc65dafc7</name>
-										<nodeRef>workspace://SpacesStore/943fa55c-440a-4386-847f-c0d557f77b5c</nodeRef>
+										<nodeRef>workspace://SpacesStore/06795aba-a173-4de9-9e2b-7b1b1813ef57</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2111,7 +2156,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>transition</type>
 														<name>1c88e1d8-ef70-40fa-82ab-84d5ea6f0d00</name>
-														<nodeRef>workspace://SpacesStore/da36bfff-e8d9-4cd8-b617-22a31f7bfede</nodeRef>
+														<nodeRef>workspace://SpacesStore/83a12c36-468a-4727-8b58-462c286782b8</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -2132,7 +2177,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/67802c94-9a29-44fc-8c1f-cce6e573f2d6</reference>
+																<reference>workspace://SpacesStore/9d9c1bda-5a79-4a32-8afc-34eadca4d95f</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -2145,7 +2190,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>5c0a22b2-6ded-4a05-8b2d-a809ba824a4e</name>
-										<nodeRef>workspace://SpacesStore/458b8ea2-52fd-45af-836b-aa8564b82f74</nodeRef>
+										<nodeRef>workspace://SpacesStore/06fc6c8d-8a02-4183-a099-6360601a5ea0</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2166,7 +2211,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>f456f7b0-737d-4447-a27e-70d02aca6271</name>
-														<nodeRef>workspace://SpacesStore/fa540d66-ae0c-4f53-9b69-c36f793046f8</nodeRef>
+														<nodeRef>workspace://SpacesStore/e84e67a0-86b7-4505-840b-b8bc72863fd9</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -2202,7 +2247,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>bb5d71fc-2158-4653-a721-c592f6e3d703</name>
-										<nodeRef>workspace://SpacesStore/bcd7ac65-02cf-44b4-b5f5-dd64b7e868a7</nodeRef>
+										<nodeRef>workspace://SpacesStore/81d4ce45-a58f-484c-ad83-d00225e21ebe</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2221,7 +2266,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>a640af83-4abc-4de0-ada2-07c5f15ee442</name>
-										<nodeRef>workspace://SpacesStore/ab7c037c-acb2-4644-b786-18113ee09bbf</nodeRef>
+										<nodeRef>workspace://SpacesStore/67a051ea-559d-4222-8cb8-8a8134a5d7f5</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2242,7 +2287,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>6a5a21bd-66ea-4032-a926-5951392756eb</name>
-														<nodeRef>workspace://SpacesStore/c5867d75-e2f8-4d14-802d-71059229d74e</nodeRef>
+														<nodeRef>workspace://SpacesStore/23bc365f-11bf-4b93-a367-ae6b2577e5b6</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -2260,7 +2305,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/5ebf2a0d-e22a-4f30-b69b-f925fe1a5481</reference>
+																<reference>workspace://SpacesStore/c45388c1-2db0-4aad-8e1e-67848faeea36</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -2269,7 +2314,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>fa939ef3-8cd0-4e53-b549-e3e94b95a45a</name>
-														<nodeRef>workspace://SpacesStore/58a97dee-2879-4324-a2eb-ff78ed569b15</nodeRef>
+														<nodeRef>workspace://SpacesStore/0919c366-7678-4dc5-9102-7126ce4ed6dd</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -2287,7 +2332,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/cd70cc9c-2c85-46b5-8b2c-4ad4610fd75f</reference>
+																<reference>workspace://SpacesStore/065eb867-fb34-4c60-9d45-112fa7bf56fd</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -2300,7 +2345,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>UserWorkflow</type>
 										<name>e9856e52-257b-4798-890c-0001a3f25c86</name>
-										<nodeRef>workspace://SpacesStore/0bc7d96f-6cbe-40d4-9689-a5af447e4839</nodeRef>
+										<nodeRef>workspace://SpacesStore/3c9370d1-f462-4f31-a4a3-4349c7c24080</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2321,7 +2366,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>UserWorkflowEntity</type>
 														<name>6e2fd57f-b090-44b2-8d93-504a502accce</name>
-														<nodeRef>workspace://SpacesStore/0e9ed438-b357-4747-a29f-5eb4c551c178</nodeRef>
+														<nodeRef>workspace://SpacesStore/77fe3347-97d4-46c5-ac42-cb9410f35170</nodeRef>
 														<properties>
 															<property>
 																<name>workflowId</name>
@@ -2344,7 +2389,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																	<node>
 																		<type>conditionAccess</type>
 																		<name>29a76f21-05b5-4bd0-8df5-71b23e7d9f91</name>
-																		<nodeRef>workspace://SpacesStore/a40941c2-870a-4872-a3ed-4a732e404cbe</nodeRef>
+																		<nodeRef>workspace://SpacesStore/f7aa73c3-6597-4e35-b6f5-47f55a21f42d</nodeRef>
 																		<properties>
 																			<property>
 																				<name>does-not-block</name>
@@ -2379,7 +2424,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>226f9bd1-4c61-4ddb-aa56-8634dfa566c8</name>
-										<nodeRef>workspace://SpacesStore/d9f64e7a-ef39-4a45-afb2-1751bba7e754</nodeRef>
+										<nodeRef>workspace://SpacesStore/33c9c9bc-e657-42f9-a95a-e9369a8ccb09</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2398,7 +2443,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TransitionAction</type>
 										<name>35d9df4e-b47d-4c9d-8765-844a01122b24</name>
-										<nodeRef>workspace://SpacesStore/d2c809a2-0e5c-45ce-b7cf-0704f55e8f5b</nodeRef>
+										<nodeRef>workspace://SpacesStore/85fc36bb-ad98-4e05-9ad1-e5af92b5727b</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2417,7 +2462,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>6cc3ea9a-bf3b-415c-8c51-864a9da8bbf1</name>
-										<nodeRef>workspace://SpacesStore/8911a916-15ef-4ca1-98ab-1ee01e14eb87</nodeRef>
+										<nodeRef>workspace://SpacesStore/b0db1f8d-592e-46dc-ae6f-87d8f39fa42d</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2436,7 +2481,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>620cc739-cf65-439e-9298-5160b01b1f2d</name>
-										<nodeRef>workspace://SpacesStore/7f0a7866-0b8c-4b1b-b850-260de3492613</nodeRef>
+										<nodeRef>workspace://SpacesStore/6b616467-b9fe-4f9a-8674-61b7bd46eece</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2460,7 +2505,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/5eee4368-881c-4efc-b9a5-6404ea4d30f3</nodeRef>
+										<nodeRef>workspace://SpacesStore/a7b01ed4-5e24-4141-91e3-b681e766cf81</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2475,7 +2520,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/6f19f6a9-0173-4df7-9316-92b4caed113d</nodeRef>
+										<nodeRef>workspace://SpacesStore/217f4f5a-603b-46c1-97e0-3d782e369d2d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2490,7 +2535,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/556f73de-9f03-4be7-90bc-42dce4c326cb</nodeRef>
+										<nodeRef>workspace://SpacesStore/c14d33c9-4574-45cd-a6dc-7f8d8015dc36</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2505,7 +2550,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/a874ac97-9b1c-4d5d-9ed0-ab413e6a87e5</nodeRef>
+										<nodeRef>workspace://SpacesStore/3da54613-3444-4ccb-a961-678d45a2451d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2520,7 +2565,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/b099dd36-4a40-43b4-8af1-8238a541010f</nodeRef>
+										<nodeRef>workspace://SpacesStore/28caf286-b747-43fe-b321-cc840ad59501</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2535,7 +2580,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/8d248b2a-075a-4aec-9ef2-1348efd8576f</nodeRef>
+										<nodeRef>workspace://SpacesStore/e7f3548c-0d35-4dde-a415-64e4ffaaf486</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2550,7 +2595,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/edf86100-b1a0-46dc-a9cb-7e26040edb9d</nodeRef>
+										<nodeRef>workspace://SpacesStore/26239d6c-b7b7-4aa1-8f81-6ff9290b39b6</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2565,7 +2610,22 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/c62cb7ac-c0a5-4d33-89c9-7eed4367ae2c</nodeRef>
+										<nodeRef>workspace://SpacesStore/76338371-f7d7-4b7e-8602-e1d2cfcda5e4</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/7f45c3bb-9759-40c5-a7c4-afa08045715c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2585,7 +2645,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>e8eea582-c7b4-4b06-8a72-c59d2d77a374</name>
-										<nodeRef>workspace://SpacesStore/727cb5bd-21be-499b-a33b-c9f1cdb16852</nodeRef>
+										<nodeRef>workspace://SpacesStore/a892264c-c799-4cd9-a823-87f4f4ab578f</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -2608,7 +2668,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>98535169-0baf-43e8-a715-707b3a14682d</name>
-										<nodeRef>workspace://SpacesStore/e59459e4-5309-4b03-b801-6bb70dba2db3</nodeRef>
+										<nodeRef>workspace://SpacesStore/480dea57-7572-44a5-8d62-e4b4a257de72</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -2631,7 +2691,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>fcea48f2-02e0-4bdd-b096-fd95f1bb578d</name>
-										<nodeRef>workspace://SpacesStore/297b10a9-e40c-4624-b5a5-481eb9b34094</nodeRef>
+										<nodeRef>workspace://SpacesStore/ad50d6f0-fc89-48aa-b6f1-d4bb4e8064d1</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -2658,7 +2718,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>taskStatus</type>
 						<name>Подписан</name>
-						<nodeRef>workspace://SpacesStore/d9efb17a-1afe-46c1-9266-c4408aa91a1d</nodeRef>
+						<nodeRef>workspace://SpacesStore/a37b89d8-024c-4293-9e2a-a2845c010609</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -2677,7 +2737,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/0d849516-17df-4f46-b03e-cb9cd4184ea1</nodeRef>
+										<nodeRef>workspace://SpacesStore/920251f0-6e5c-416f-bdd8-a0964fd2696b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2692,7 +2752,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/0249f60a-d0a8-47aa-aa3e-bef31b81a0d7</nodeRef>
+										<nodeRef>workspace://SpacesStore/107c392b-2aa1-4535-aa99-a724f4a7b9c2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2707,7 +2767,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/ec1979ac-494b-48e6-96e3-06ec331a1772</nodeRef>
+										<nodeRef>workspace://SpacesStore/9212d437-4411-4188-9e90-88e333857d04</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2722,7 +2782,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/3d441ece-3d11-43df-b864-4b6f5584e1ed</nodeRef>
+										<nodeRef>workspace://SpacesStore/93500aae-b01b-49e6-972a-edff37b9aa25</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2742,7 +2802,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>static-role</type>
 										<name>40658f31-4768-473e-b900-dc50d6a6183d</name>
-										<nodeRef>workspace://SpacesStore/d5da30a2-9ff4-4a61-bd47-f9e8f9dbce24</nodeRef>
+										<nodeRef>workspace://SpacesStore/e48f6b81-2bfc-4d49-bb40-1b0168101248</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -2770,7 +2830,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>98c394e7-1a6d-4124-9578-66bf133b27e5</name>
-										<nodeRef>workspace://SpacesStore/08c195a7-c428-4469-b9e5-701644fad4b0</nodeRef>
+										<nodeRef>workspace://SpacesStore/5a29a0e3-c764-47fb-a473-5cc171273a13</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2789,7 +2849,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>019c3ef2-6f06-41c1-a177-bc06979731eb</name>
-										<nodeRef>workspace://SpacesStore/37a41e88-2b17-489b-930e-3760082b4c62</nodeRef>
+										<nodeRef>workspace://SpacesStore/b1d287c5-904e-4afb-99b4-67c9b5845a5f</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2808,7 +2868,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>e979388c-fe49-4053-8de0-9b4196e3285c</name>
-										<nodeRef>workspace://SpacesStore/0cddfe55-5125-4dcf-954c-e419f0b44b87</nodeRef>
+										<nodeRef>workspace://SpacesStore/7aea29c9-fdd4-4ac6-8c51-bac81aa894a4</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2827,7 +2887,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>57894e47-9ba6-452f-aa7c-7ee5ffd5ff6e</name>
-										<nodeRef>workspace://SpacesStore/15d6ecf9-1817-4872-857b-150441e6e31e</nodeRef>
+										<nodeRef>workspace://SpacesStore/9f9f9420-70cd-437c-9809-f6738b63709f</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2846,7 +2906,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>29c8a6c0-7ee0-4c0c-a0b7-129bcb5f089a</name>
-										<nodeRef>workspace://SpacesStore/e728dd8a-0cbc-46ba-ab4f-4091ae4c26b2</nodeRef>
+										<nodeRef>workspace://SpacesStore/614dae94-1e17-4427-9bf0-60663552bbe9</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2867,7 +2927,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>0ad46c15-d402-42c2-98ad-b5e3878fc4a6</name>
-														<nodeRef>workspace://SpacesStore/95621668-cdeb-4baa-a62d-040bc5f6be8a</nodeRef>
+														<nodeRef>workspace://SpacesStore/89fa4e6a-67a2-4b0d-93a3-41ee5ca6e69e</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -2885,7 +2945,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/cd70cc9c-2c85-46b5-8b2c-4ad4610fd75f</reference>
+																<reference>workspace://SpacesStore/065eb867-fb34-4c60-9d45-112fa7bf56fd</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -2898,7 +2958,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>UserWorkflow</type>
 										<name>3572b201-68bb-4e96-a7ba-25ea250e022c</name>
-										<nodeRef>workspace://SpacesStore/60313c12-f254-447e-a12b-28e353275786</nodeRef>
+										<nodeRef>workspace://SpacesStore/510eb871-944d-455d-8188-cfed68cfb654</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2917,7 +2977,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>5c806080-ddce-4d60-bda9-981144202d77</name>
-										<nodeRef>workspace://SpacesStore/0082632f-cfa2-4c12-9cff-8d6ce8623afe</nodeRef>
+										<nodeRef>workspace://SpacesStore/5ac13ddd-57ec-457b-bc65-3ef832b67868</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2936,7 +2996,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TransitionAction</type>
 										<name>0e5fa352-8d8d-4f48-8ce6-fa65e901479a</name>
-										<nodeRef>workspace://SpacesStore/6ccfafcc-6c94-4d06-998c-ab1ce1bfb708</nodeRef>
+										<nodeRef>workspace://SpacesStore/7130fb15-e724-41d2-93c6-ec9744adc299</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2955,7 +3015,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>08395e6e-34b2-4d64-bae0-d25e438c3c63</name>
-										<nodeRef>workspace://SpacesStore/44b9938f-252f-4476-a7e7-f986c05ca36b</nodeRef>
+										<nodeRef>workspace://SpacesStore/ea5e40f4-91a8-4347-8dbc-5838480b93a4</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2974,7 +3034,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>e2066800-d8c4-46e7-9b9c-539d28b2ae5c</name>
-										<nodeRef>workspace://SpacesStore/28a9f8da-0718-472d-9a3d-d7c897adcff8</nodeRef>
+										<nodeRef>workspace://SpacesStore/a0ff2bd2-9176-4cb8-871f-fc1582879ab3</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2998,7 +3058,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/e04c7ee7-143a-4666-859d-103e3f03e075</nodeRef>
+										<nodeRef>workspace://SpacesStore/e4cf01aa-bfe3-4851-b447-403982acab82</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3013,7 +3073,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/4418cdb8-7a29-4e82-8aec-28a02444f90a</nodeRef>
+										<nodeRef>workspace://SpacesStore/17715ded-2924-45e5-9c58-e54a5e1d6012</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3028,7 +3088,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/040d3b0a-813d-40de-9c7d-c9b4d0794eb3</nodeRef>
+										<nodeRef>workspace://SpacesStore/086a906a-1410-4e8d-9af6-bb52a6e810db</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3043,7 +3103,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/1e1512f5-0b7c-4278-bbe6-aef5d11060a2</nodeRef>
+										<nodeRef>workspace://SpacesStore/1a3e1031-49c7-4d29-a41b-03a4681212ae</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3058,7 +3118,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/64a3c91c-9b33-44a4-8f1e-a6352013ad4f</nodeRef>
+										<nodeRef>workspace://SpacesStore/30fccb56-3e75-4a72-b804-20271f65ceb2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3073,7 +3133,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/e7a57c1b-59fb-4731-a49a-fbee5963b6a2</nodeRef>
+										<nodeRef>workspace://SpacesStore/5505d435-94af-4a4c-8c17-9ed1568cd59c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3088,7 +3148,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/5903deb4-fb26-44f7-8f4c-c157fb40abbc</nodeRef>
+										<nodeRef>workspace://SpacesStore/a0dfd575-31b0-483e-92b7-2af6cf1f2740</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3103,11 +3163,26 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/2a7c2a17-7d5d-4be8-a4ba-f2b32aeacbbd</nodeRef>
+										<nodeRef>workspace://SpacesStore/7ea306e1-de6c-436a-a45c-278bed17c882</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/eac0e139-a44b-4f43-86ff-4e3cccc9e8c4</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -3123,7 +3198,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>8067e220-40b9-41ed-b8d3-a0338085e472</name>
-										<nodeRef>workspace://SpacesStore/baab442a-fbe5-4940-9808-95c3c7e14c6c</nodeRef>
+										<nodeRef>workspace://SpacesStore/04b30429-984e-4a26-a58c-8f01da3c9704</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3146,7 +3221,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>516e6266-6479-4a27-afb1-cf1e8b6cd8d2</name>
-										<nodeRef>workspace://SpacesStore/1a9f4958-65d1-4f10-8229-81861a0e1e44</nodeRef>
+										<nodeRef>workspace://SpacesStore/c0d350dd-cdd9-4724-8661-74d64d8b694b</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3169,7 +3244,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>4d27c860-ef97-49ec-af3f-ede0e89a8288</name>
-										<nodeRef>workspace://SpacesStore/d6011e27-17a1-4747-b7d5-f618c67f35ce</nodeRef>
+										<nodeRef>workspace://SpacesStore/f3e94566-51a3-46a8-8e5c-053c2327790d</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3196,7 +3271,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>taskStatus</type>
 						<name>На регистрации</name>
-						<nodeRef>workspace://SpacesStore/cd70cc9c-2c85-46b5-8b2c-4ad4610fd75f</nodeRef>
+						<nodeRef>workspace://SpacesStore/065eb867-fb34-4c60-9d45-112fa7bf56fd</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -3215,7 +3290,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/f2b5e37e-e4f2-4037-8ffa-06d477de3c18</nodeRef>
+										<nodeRef>workspace://SpacesStore/bdc33107-50d7-42a0-8ab6-629a954ecbe5</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3230,7 +3305,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/add3a8d6-97b6-49f0-884a-a1098060a8ee</nodeRef>
+										<nodeRef>workspace://SpacesStore/a649fcc9-1854-48d6-b7ad-66bcee4c7890</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3245,7 +3320,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/ee6c7ca3-10ef-41df-bfc5-5f71bdbcd447</nodeRef>
+										<nodeRef>workspace://SpacesStore/f9cd2a42-c897-430c-80cd-14c8c3b617df</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3260,7 +3335,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/1d18e125-5933-4b15-9bb8-b38099eead98</nodeRef>
+										<nodeRef>workspace://SpacesStore/1ef1a17f-8cb3-407f-8b50-c3ea8756f46b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3280,7 +3355,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>static-role</type>
 										<name>833d57d7-2cc7-4518-bfbb-1e0d7fc81785</name>
-										<nodeRef>workspace://SpacesStore/106d17e2-04d8-4ee9-9a3f-9f15f9377007</nodeRef>
+										<nodeRef>workspace://SpacesStore/1ed5db54-3b6d-4a7b-86ca-3c6219a78d1e</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3308,7 +3383,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>52c5422f-a8bf-4fce-aede-3530aad5a350</name>
-										<nodeRef>workspace://SpacesStore/16c4d02b-edf7-4038-afa9-0273d7551c82</nodeRef>
+										<nodeRef>workspace://SpacesStore/bd621db5-b46d-4226-93eb-1d1c7c116fb5</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3327,7 +3402,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>ff138be4-eee1-4711-8c4d-5c9bf0a8fb90</name>
-										<nodeRef>workspace://SpacesStore/2070a9a7-1f1c-4d6f-ae39-9623b9d88802</nodeRef>
+										<nodeRef>workspace://SpacesStore/f3b91b9a-7189-4ed9-bb01-aba9ba5ea943</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3346,7 +3421,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>cac7cbd3-a6a7-47e3-8fe8-73437ae12f5c</name>
-										<nodeRef>workspace://SpacesStore/b2068fcd-c6a0-4c06-8f16-97c1dea5e0a3</nodeRef>
+										<nodeRef>workspace://SpacesStore/3910059e-0543-479e-9465-15b1df16a176</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3367,7 +3442,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>2d4653ee-d020-4a21-93f9-7b3bc5581d24</name>
-														<nodeRef>workspace://SpacesStore/ad63d790-bf9b-49d3-93e4-ed6fcf9ccbc0</nodeRef>
+														<nodeRef>workspace://SpacesStore/99dde3c5-0592-44de-8072-879482dca738</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -3407,7 +3482,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>5a5c41d3-c395-48e2-a513-b35b25dcb4d0</name>
-										<nodeRef>workspace://SpacesStore/e54493bd-e4a8-482c-89d2-784e9aad9dca</nodeRef>
+										<nodeRef>workspace://SpacesStore/b4b208f3-99cb-433c-9ef8-f99f39267cfc</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3426,7 +3501,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>67da9bf0-aabe-46cf-9058-179a4acc4708</name>
-										<nodeRef>workspace://SpacesStore/ee78e124-90a6-4bfc-bb1f-02d3daff1272</nodeRef>
+										<nodeRef>workspace://SpacesStore/468ccf60-c93d-4faf-8c07-0caa4df65c1f</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3447,7 +3522,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>58876b9c-5cc5-4619-ba59-dd30164b4026</name>
-														<nodeRef>workspace://SpacesStore/2a167b84-99d5-479e-865f-8714e61b1918</nodeRef>
+														<nodeRef>workspace://SpacesStore/45b8b74a-ec1a-4c02-8a37-eef81fa4cb33</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -3465,7 +3540,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/2eba93a8-7343-4180-98f0-e7719f20e00e</reference>
+																<reference>workspace://SpacesStore/657cb068-62b3-4b17-ae4f-576927525caa</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -3474,7 +3549,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>97e0e672-6ac1-422f-aa3d-c4ea35769d3b</name>
-														<nodeRef>workspace://SpacesStore/715b748d-b566-47d7-bdc7-048bdd11b763</nodeRef>
+														<nodeRef>workspace://SpacesStore/30b25413-aadc-4f97-89eb-77c497a9f1f5</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -3492,7 +3567,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/fac25b59-5ce9-4038-9966-9a9bf395b0f9</reference>
+																<reference>workspace://SpacesStore/f0bc1a57-df99-4826-8197-d4c77d677de3</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -3505,7 +3580,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>UserWorkflow</type>
 										<name>dcfbd55a-8ef9-4ba2-9799-058ae540b43d</name>
-										<nodeRef>workspace://SpacesStore/9d4159ee-d1f0-48b9-acc1-53a421025285</nodeRef>
+										<nodeRef>workspace://SpacesStore/a8ede2b8-abac-48eb-b4dd-dd08c450bbc4</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3524,7 +3599,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>3dfebba8-08b9-47be-b04a-48e29f86054c</name>
-										<nodeRef>workspace://SpacesStore/2463cac5-6b58-4823-a3c5-58f56349fa20</nodeRef>
+										<nodeRef>workspace://SpacesStore/ea50b925-d8f6-4209-83c6-d1aa49752ca6</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3543,7 +3618,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TransitionAction</type>
 										<name>c98506b3-1bb7-4d5c-b0d9-88314ed0a949</name>
-										<nodeRef>workspace://SpacesStore/ad08d0a7-cb7b-4600-b6d9-4689b48791f5</nodeRef>
+										<nodeRef>workspace://SpacesStore/35f043bc-47e2-4d7e-b35d-5792481a7e98</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3562,7 +3637,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>7f7a3ff7-d9dd-4277-ad87-3d50a3395782</name>
-										<nodeRef>workspace://SpacesStore/cf41f5a3-cbfc-4aa5-9f96-0e041da650da</nodeRef>
+										<nodeRef>workspace://SpacesStore/b9da2fd3-de9f-446d-9445-e285ec1949a8</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3581,7 +3656,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>8290a5de-253b-4af8-afab-baa87b6996fc</name>
-										<nodeRef>workspace://SpacesStore/081c481c-b464-45b5-94c3-957803759867</nodeRef>
+										<nodeRef>workspace://SpacesStore/a801816d-fa1e-4849-9a33-c9d65a00c87a</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3605,7 +3680,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/67917b9d-ca87-49be-b02f-2412008da4e3</nodeRef>
+										<nodeRef>workspace://SpacesStore/38de4776-fb20-4570-8ba3-14f3b86635e1</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3620,7 +3695,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/7d3c139e-18b2-4ba0-9c12-c2d68ed6cdc2</nodeRef>
+										<nodeRef>workspace://SpacesStore/7bfc0ef2-efdc-40b4-80fe-b53658c94fbf</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3635,7 +3710,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/f2bf3d4b-783e-4c96-b1a9-3f665c69f104</nodeRef>
+										<nodeRef>workspace://SpacesStore/2982d897-49be-4e2b-a777-c6bc2fa65231</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3650,7 +3725,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/16fa454a-ce46-41d1-b039-edd8277957f6</nodeRef>
+										<nodeRef>workspace://SpacesStore/cd12320d-7aec-4d9c-84fc-dfa94431d96d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3665,7 +3740,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/58651ee2-8db6-4d0e-a50a-0610241f7c65</nodeRef>
+										<nodeRef>workspace://SpacesStore/f3e75161-b4cf-4017-b3b8-ba971033e070</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3680,7 +3755,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/7e055d5e-72dc-4303-8a22-9cda6ca5785d</nodeRef>
+										<nodeRef>workspace://SpacesStore/1ef3b66c-9d6b-410b-99a5-7f43c5cc3951</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3695,7 +3770,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/4a3e67cd-5e41-4006-b36c-a84957fc8da6</nodeRef>
+										<nodeRef>workspace://SpacesStore/00ef2f69-ae91-4920-97db-ee952cfa974b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3710,7 +3785,22 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/129a773a-29a9-4b30-87ab-a1c9df8a9e21</nodeRef>
+										<nodeRef>workspace://SpacesStore/38231099-4d08-4549-800c-0fc71fe79f60</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/185651d3-4f3a-4ab4-909c-bd18890c7e09</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3730,7 +3820,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>b463fc97-a258-46e1-a0da-1325d67221a6</name>
-										<nodeRef>workspace://SpacesStore/0eaa1c2d-0144-463c-9a8e-25635b9e1c2e</nodeRef>
+										<nodeRef>workspace://SpacesStore/9c43152d-7259-49d4-9e64-4c713c40d219</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3753,7 +3843,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>8cb2ff6d-a3a8-4e3f-ac3c-fd8ee3f9dc3f</name>
-										<nodeRef>workspace://SpacesStore/b3e68204-4b08-4087-8fa4-a536a2c01955</nodeRef>
+										<nodeRef>workspace://SpacesStore/cb76e5fb-9d6b-4a3d-b169-7786ec0ae907</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3776,7 +3866,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>0ae7509c-5771-481c-9859-a3c5632b167b</name>
-										<nodeRef>workspace://SpacesStore/b3aa4a82-9770-4d51-8658-c32ab5c94e2d</nodeRef>
+										<nodeRef>workspace://SpacesStore/937b1b32-5a6d-48da-a661-026b60fa21fc</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3803,7 +3893,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>taskStatus</type>
 						<name>Зарегистрирован</name>
-						<nodeRef>workspace://SpacesStore/fac25b59-5ce9-4038-9966-9a9bf395b0f9</nodeRef>
+						<nodeRef>workspace://SpacesStore/f0bc1a57-df99-4826-8197-d4c77d677de3</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -3822,7 +3912,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/f6f0613d-a569-4bb4-b834-fbb80ca2beb6</nodeRef>
+										<nodeRef>workspace://SpacesStore/48aaa87a-323c-46c5-87b0-85029b870477</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3837,7 +3927,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/a85482be-235b-44eb-899b-f0877ed12a95</nodeRef>
+										<nodeRef>workspace://SpacesStore/b885f7d7-4b45-4b6e-8f16-2c97901005f8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3852,7 +3942,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/8c61f665-f3d4-4e01-9400-229dabed60a6</nodeRef>
+										<nodeRef>workspace://SpacesStore/82c4282f-b315-40ff-8f82-63ebcbb117f0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3867,7 +3957,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/d5baac4e-d5a4-41cc-a44e-506dde28f60e</nodeRef>
+										<nodeRef>workspace://SpacesStore/e9d8dbd1-de3b-4752-863a-b4dbc0a2df54</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3887,7 +3977,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>static-role</type>
 										<name>77fc760a-c65b-4c49-a49b-968531b3a0f0</name>
-										<nodeRef>workspace://SpacesStore/af1bbc50-5100-45fd-be67-58a794909a76</nodeRef>
+										<nodeRef>workspace://SpacesStore/97e2f58f-2ebf-4a9c-95a9-48cbde44e93e</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -3915,7 +4005,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>31b6be46-683f-45ae-9b93-327fbed09db1</name>
-										<nodeRef>workspace://SpacesStore/d6aef56d-2388-48c6-9120-7e45f6e6edb4</nodeRef>
+										<nodeRef>workspace://SpacesStore/a2427b8d-a7e1-4f19-8160-78218a958467</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3934,7 +4024,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>fb36eeef-5cf3-453d-9e72-0670577ba5ca</name>
-										<nodeRef>workspace://SpacesStore/75260b4a-d743-4cb5-a1e2-2754b91b2c26</nodeRef>
+										<nodeRef>workspace://SpacesStore/2d350f61-c443-4167-ae69-1927c0a056e7</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3948,12 +4038,48 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>e992a3bd-ae84-45ea-b7b5-c3d3c586aab7</name>
+														<nodeRef>workspace://SpacesStore/68e286d3-d40b-40e3-90c3-5e122579d795</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value><![CDATA[doc.attr("lecm-protocol:errands-autocreation")==true]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>workspace://SpacesStore/00ae0509-f1dc-4a26-ad5b-a5c832a6a828</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>ScriptAction</type>
 										<name>27b6050e-0cc0-460b-913f-e152ca008b38</name>
-										<nodeRef>workspace://SpacesStore/102996bf-0ce9-4fbd-9d44-5bb91f83e554</nodeRef>
+										<nodeRef>workspace://SpacesStore/2f8fd66a-f6c0-433b-ba56-c2609bfcfe49</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3967,12 +4093,73 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>d9f9228b-fa8f-4a2c-af36-e6d8f30fa1f7</name>
+														<nodeRef>workspace://SpacesStore/ca7f31d8-a819-45f7-9357-a93cc8ec9651</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[(function(){
+    regnumbers.registerDocument(stm_document, "PROTOCOL_NUMBER");
+})();]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Регистрация протокола]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>9c617353-b98b-476e-8ae6-a57f924d60e1</name>
+														<nodeRef>workspace://SpacesStore/35c2adf3-4af2-4b2e-ab4e-c1eaea7fd9b3</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[(function(){
+    var protocol = stm_document;
+    var auto = protocol.properties["lecm-protocol:errands-autocreation"];
+    if (auto) {
+        var tableAssocs = protocol.assocs["lecm-protocol-ts:points-assoc"];
+        if (tableAssocs!==null && tableAssocs.length > 0){
+            var table = tableAssocs[0];
+            var  pointAssocs = table.childAssocs["cm:contains"];
+            if (pointAssocs!==null && pointAssocs.length > 0 ){
+                // формируем поручения
+                protocolService.formErrands(protocol);
+            }
+        }
+
+    }
+})();]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Сформировать поручения]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
 										<name>2f325b80-f23e-4cbb-86f9-8c5be2525dd0</name>
-										<nodeRef>workspace://SpacesStore/9c0d07c9-97ed-4948-8764-3ea04981f96e</nodeRef>
+										<nodeRef>workspace://SpacesStore/66f59666-87d9-4259-bd70-e1c35ed72ae7</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -3991,7 +4178,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>e041db56-d3f1-4430-8423-1425794413b7</name>
-										<nodeRef>workspace://SpacesStore/e559f7d3-2589-428c-af03-48ae82b0fdf0</nodeRef>
+										<nodeRef>workspace://SpacesStore/40020473-a2b0-4c6c-9abd-d0b3e7a2f846</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4012,7 +4199,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>6e2f67f6-7482-4ba6-b11a-2387483eef9a</name>
-														<nodeRef>workspace://SpacesStore/f70fb681-5ba6-4364-acc5-a0224a8d6b69</nodeRef>
+														<nodeRef>workspace://SpacesStore/7232c884-9a08-4250-9f03-ae43516fc775</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -4037,7 +4224,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/e595e1cb-b66a-4069-8bb9-e7ef90e36b16</reference>
+																<reference>workspace://SpacesStore/fb946dae-a985-4978-b1e2-3f9f01edd07b</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -4046,7 +4233,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>68bb0bbb-efcc-4119-b3fd-a32c76ee621f</name>
-														<nodeRef>workspace://SpacesStore/4e9e7a39-c79d-4ce7-bd45-2df45ede562e</nodeRef>
+														<nodeRef>workspace://SpacesStore/d4b3709b-bdbd-4b3b-80f8-eeec49e893d7</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -4064,7 +4251,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/5ebf2a0d-e22a-4f30-b69b-f925fe1a5481</reference>
+																<reference>workspace://SpacesStore/c45388c1-2db0-4aad-8e1e-67848faeea36</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -4073,7 +4260,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>64d8027e-c661-46d1-b91f-7cc39d818677</name>
-														<nodeRef>workspace://SpacesStore/a6bca745-9b1d-4425-a427-bf83ff9108e4</nodeRef>
+														<nodeRef>workspace://SpacesStore/51c551b6-a2ed-4c13-8b0e-9e1613e21ddf</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -4091,7 +4278,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/b28d0095-38e7-445c-afb0-e2a82b4a27d2</reference>
+																<reference>workspace://SpacesStore/00ae0509-f1dc-4a26-ad5b-a5c832a6a828</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -4104,7 +4291,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>UserWorkflow</type>
 										<name>9f24596a-c23e-4135-b273-50fc927e3141</name>
-										<nodeRef>workspace://SpacesStore/11b6c8a7-a418-45f6-a01a-ae5581e17f6c</nodeRef>
+										<nodeRef>workspace://SpacesStore/7191cf21-4499-4786-9dbc-eb16c5b93ef7</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4123,7 +4310,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>1248eb75-be38-4248-9ac8-d96f9942d005</name>
-										<nodeRef>workspace://SpacesStore/8ff5b24e-ac1f-4f7f-9631-0046c97f36ec</nodeRef>
+										<nodeRef>workspace://SpacesStore/e8b608b8-51bf-4109-9fd2-375f6e7e1638</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4142,7 +4329,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TransitionAction</type>
 										<name>2a09ccb2-315d-41b5-a875-466cbea6ff28</name>
-										<nodeRef>workspace://SpacesStore/f572eee9-9995-402b-b546-5e5b8bfcfe25</nodeRef>
+										<nodeRef>workspace://SpacesStore/79e12488-b929-4286-9158-38b253f497f2</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4161,7 +4348,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>11983511-be7f-4e64-8571-abef5e3bc31e</name>
-										<nodeRef>workspace://SpacesStore/e61e91a6-dd1a-4262-9a54-8c945983a683</nodeRef>
+										<nodeRef>workspace://SpacesStore/ca0a01d9-b99e-41a6-ad82-4656996c9f8e</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4180,7 +4367,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>bb3bbf63-d441-487c-a737-611441dde948</name>
-										<nodeRef>workspace://SpacesStore/adc392f9-6ef9-4e80-8888-e8436e94bc48</nodeRef>
+										<nodeRef>workspace://SpacesStore/31c8f6f4-892d-4a67-95d0-cdffd81775f2</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4204,7 +4391,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/a29e31c5-8cc1-471b-b36d-330410903923</nodeRef>
+										<nodeRef>workspace://SpacesStore/011c7c04-b906-4aaa-ae88-671fb79244d3</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4219,7 +4406,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/c8881c64-f527-42e9-bb7c-c1d9d92c0a16</nodeRef>
+										<nodeRef>workspace://SpacesStore/f7a199f6-9b0a-4da2-8a5e-d48fb765b4f4</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4234,7 +4421,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/dae723e3-7b7e-4fac-b40f-52b4652d7348</nodeRef>
+										<nodeRef>workspace://SpacesStore/8d0a8124-c68a-4ee3-a270-7adcd827d27d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4249,7 +4436,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/f6bd6c30-7937-4e92-9e3a-7a9e9d3fc02f</nodeRef>
+										<nodeRef>workspace://SpacesStore/5fbec32f-d4b7-4575-9fab-59a010650ff8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4264,7 +4451,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/2f664f2d-3a51-4e24-a61d-52dbe3100349</nodeRef>
+										<nodeRef>workspace://SpacesStore/a4b598fb-3d8b-43c5-ab18-4359f9c032bd</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4279,7 +4466,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/f7815ca9-dcff-43a2-b986-13c154504954</nodeRef>
+										<nodeRef>workspace://SpacesStore/f7f511cb-b64c-43a8-9ba3-fad4d28a0fff</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4294,7 +4481,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/e84d2857-6d08-4f94-bae0-4b5770eb19f5</nodeRef>
+										<nodeRef>workspace://SpacesStore/b9b9a13c-f22a-438e-a6ea-a8747d433a64</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4309,7 +4496,22 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/305ecd0d-3607-48ba-8100-31293f13a795</nodeRef>
+										<nodeRef>workspace://SpacesStore/f605acda-4450-4f9f-acb2-b3da1c557e28</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/327e3a42-729b-434b-8b8e-201b1850fe2e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4329,7 +4531,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>628d603c-b562-4105-8a4d-e1f560c08867</name>
-										<nodeRef>workspace://SpacesStore/d6ca0015-7775-4f51-93b1-2b772d40b1fa</nodeRef>
+										<nodeRef>workspace://SpacesStore/c36caa26-5f15-4a80-8078-4cd6abc0bec3</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -4352,7 +4554,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>778903a8-d4cb-4247-9b49-bf028822060c</name>
-										<nodeRef>workspace://SpacesStore/62bf9ca5-4e6f-4cc0-bb6b-5aa10422e698</nodeRef>
+										<nodeRef>workspace://SpacesStore/01c5b695-5986-4789-94f6-351011f878cc</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -4375,7 +4577,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>78b8b393-5748-4782-8188-8764c0e9b42d</name>
-										<nodeRef>workspace://SpacesStore/b000698a-a41e-4b59-82c9-2eda2a5c1dec</nodeRef>
+										<nodeRef>workspace://SpacesStore/9593325b-dc44-4f8a-ba16-99ad9d6ffc3f</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -4402,7 +4604,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>taskStatus</type>
 						<name>На исполнении</name>
-						<nodeRef>workspace://SpacesStore/b28d0095-38e7-445c-afb0-e2a82b4a27d2</nodeRef>
+						<nodeRef>workspace://SpacesStore/00ae0509-f1dc-4a26-ad5b-a5c832a6a828</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -4421,7 +4623,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/fdccf36a-112d-48ab-88f3-5a25a9e2098d</nodeRef>
+										<nodeRef>workspace://SpacesStore/3cfacff7-9713-4c6a-b209-7e47c21a94f8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4436,7 +4638,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/72b9ec8c-f2b2-45be-ae4d-77d9e4bee91a</nodeRef>
+										<nodeRef>workspace://SpacesStore/753d8e59-6628-4413-912d-c8d4893792fe</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4451,7 +4653,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/7be8be5e-9561-429e-9aa9-25b2227d45a8</nodeRef>
+										<nodeRef>workspace://SpacesStore/0abe7640-aa4f-4f71-9c43-f29fbe26cec4</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4466,7 +4668,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/f7939776-1f6f-46a6-b8ac-f51d0a0d8a3d</nodeRef>
+										<nodeRef>workspace://SpacesStore/414465f0-532d-4ff7-836a-bf2d77eac411</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4486,7 +4688,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>static-role</type>
 										<name>60291138-70fa-4eb2-aa82-29da3d6df105</name>
-										<nodeRef>workspace://SpacesStore/0b3e75bf-97ce-448f-9507-1c79fd916378</nodeRef>
+										<nodeRef>workspace://SpacesStore/acb68bb8-e6f5-469a-9330-53748cad835b</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -4514,7 +4716,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>5c4146a7-3170-4677-81e5-f493927d7110</name>
-										<nodeRef>workspace://SpacesStore/21d84191-cdfd-4175-a9a2-f8e8404579d7</nodeRef>
+										<nodeRef>workspace://SpacesStore/900fd256-cd73-47f6-afa9-b1337fded457</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4533,7 +4735,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>ee699f53-3ee5-43d3-a18a-e32634b5a8c6</name>
-										<nodeRef>workspace://SpacesStore/b8f98a0f-d25c-4293-a304-28349373dd0c</nodeRef>
+										<nodeRef>workspace://SpacesStore/be726c0e-21fe-4d19-9fc3-cc05930cf36e</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4547,12 +4749,43 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>0636a6bf-5ce1-4a1a-8375-733e082cfc2b</name>
+														<nodeRef>workspace://SpacesStore/f95bff5d-bc63-41a6-a0fb-af82fc0a4c59</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value><![CDATA[doc.attr("lecm-document-aspects:event-sender") != ""]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[protocolService.changePointStatusByErrand(stm_document);]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>ScriptAction</type>
 										<name>d235862f-da23-4b13-9f4d-97cda63d2776</name>
-										<nodeRef>workspace://SpacesStore/226f6507-7860-4d04-b62d-337dc023e24b</nodeRef>
+										<nodeRef>workspace://SpacesStore/332e6129-a481-4dbd-a220-52cbc1c99c38</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4571,7 +4804,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>cda903ef-6c0c-4879-97f6-835dfde28f23</name>
-										<nodeRef>workspace://SpacesStore/9c436a9e-9f73-4564-93d7-e993d5738ea2</nodeRef>
+										<nodeRef>workspace://SpacesStore/ede2041d-f3c7-48e9-9d35-3b72ff9f7d4d</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4590,7 +4823,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>294122d4-aa73-429a-9d36-8508ed0179c7</name>
-										<nodeRef>workspace://SpacesStore/0a609587-ffd6-4903-80f4-17f125e3bd00</nodeRef>
+										<nodeRef>workspace://SpacesStore/d9818a60-9484-470a-97f4-d46955089a22</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4611,7 +4844,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 													<node>
 														<type>userTransition</type>
 														<name>0d9efdb4-f0ac-45c9-b707-495c37b33d63</name>
-														<nodeRef>workspace://SpacesStore/53a1bee2-fbe0-4908-9e47-83432fd65a56</nodeRef>
+														<nodeRef>workspace://SpacesStore/98215224-293e-4a77-8eab-bfc9a84e2d8a</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -4636,7 +4869,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/e595e1cb-b66a-4069-8bb9-e7ef90e36b16</reference>
+																<reference>workspace://SpacesStore/fb946dae-a985-4978-b1e2-3f9f01edd07b</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -4649,7 +4882,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>UserWorkflow</type>
 										<name>61772fba-19fa-4be9-b39f-29b2130db339</name>
-										<nodeRef>workspace://SpacesStore/7ae66630-0d42-49b7-bd3c-2429118ed2c0</nodeRef>
+										<nodeRef>workspace://SpacesStore/d2666c1a-2501-41c9-bb86-ede028d8f4d6</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4668,7 +4901,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>StartWorkflow</type>
 										<name>988ed15c-1909-4419-80b1-734bf872e38b</name>
-										<nodeRef>workspace://SpacesStore/bbd2475a-bd78-4e22-b0cc-492d7c00bfd3</nodeRef>
+										<nodeRef>workspace://SpacesStore/461c9d3c-b322-4dc2-b689-e109474b2051</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4687,7 +4920,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TransitionAction</type>
 										<name>8066d234-b824-4f02-a2c7-b3addfaf2e15</name>
-										<nodeRef>workspace://SpacesStore/9ed42e58-c6e1-43a2-baa7-e39aa9f781e1</nodeRef>
+										<nodeRef>workspace://SpacesStore/a3a81225-5dc8-48fc-913c-7cb1785b3d73</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4706,7 +4939,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>ecce82bc-7fdc-4bcb-b21d-76371eac5e3e</name>
-										<nodeRef>workspace://SpacesStore/e8139040-8ab7-4063-be73-512409132c04</nodeRef>
+										<nodeRef>workspace://SpacesStore/b8a27d08-7fb5-4279-9776-b1beea54e632</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4725,7 +4958,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>TimerAction</type>
 										<name>de5cce94-1e63-4318-85c8-dbe086ccde7e</name>
-										<nodeRef>workspace://SpacesStore/766c4218-eb51-45d3-8321-684eef041864</nodeRef>
+										<nodeRef>workspace://SpacesStore/605a7493-341d-4dac-9cd7-a08127a06147</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4749,7 +4982,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/bd9682e1-6971-4142-be75-9c437252fc31</nodeRef>
+										<nodeRef>workspace://SpacesStore/3bbbdf38-fb43-429d-80f6-beb0ccb9387b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4764,7 +4997,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/f2b2a83d-f128-4e8c-a01f-90081d54747d</nodeRef>
+										<nodeRef>workspace://SpacesStore/88eb9d66-6f78-4557-bbe7-1a0eaff54bce</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4779,7 +5012,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/74e1304e-8c41-4023-ac37-91b9077f0ce9</nodeRef>
+										<nodeRef>workspace://SpacesStore/73bbbe1f-919f-49aa-8a20-048c90d181b5</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4794,7 +5027,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/7c5a9a89-fea2-4369-bd0a-e0573154f691</nodeRef>
+										<nodeRef>workspace://SpacesStore/7a8743e4-5676-45c6-8411-65f6da60db1d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4809,7 +5042,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/6e6f4226-027a-47b4-9f6f-1bab785af030</nodeRef>
+										<nodeRef>workspace://SpacesStore/81e3139e-d226-4547-bec8-ea5530ebf088</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4824,7 +5057,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/5d849961-b75c-4df3-88f5-7a576dbce067</nodeRef>
+										<nodeRef>workspace://SpacesStore/e0e17fd5-b8c8-4c2b-84fe-fccab9a75482</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4839,7 +5072,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/5cb72d7d-ff77-4e4e-8b65-438fed0deeb9</nodeRef>
+										<nodeRef>workspace://SpacesStore/30f704e3-eb03-4ecb-8e54-31ed79bace78</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4854,7 +5087,22 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/a8f3e91e-8c2d-4ba8-9131-43f3e985e493</nodeRef>
+										<nodeRef>workspace://SpacesStore/1a23bd37-534d-4f93-9be6-d26edafd9d26</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/8f874e81-1a25-4336-8559-5e7492a73ef8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4874,7 +5122,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>f19ec05e-d391-44b1-bec9-78f3531c0235</name>
-										<nodeRef>workspace://SpacesStore/5c190bcd-da09-49f7-b3d5-951d8369c4e1</nodeRef>
+										<nodeRef>workspace://SpacesStore/0318a3e4-23d8-4b43-b52a-d06ae35b2960</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -4897,7 +5145,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>68efe001-4143-4ed9-b58d-b9a1071a2319</name>
-										<nodeRef>workspace://SpacesStore/0e4112c2-49ef-455e-80e4-199e3df23f2b</nodeRef>
+										<nodeRef>workspace://SpacesStore/a136ac50-5452-47d0-9875-4e7a46485ae3</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -4920,7 +5168,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>dynamic-role</type>
 										<name>35a58d4b-ce38-45ca-bb2a-260563ef689d</name>
-										<nodeRef>workspace://SpacesStore/8b7a5650-f884-48f8-872e-fa6ecfbb36b9</nodeRef>
+										<nodeRef>workspace://SpacesStore/09d3d055-f99a-4219-9f80-5faf1207658d</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -4947,7 +5195,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>endEvent</type>
 						<name>На хранении</name>
-						<nodeRef>workspace://SpacesStore/e595e1cb-b66a-4069-8bb9-e7ef90e36b16</nodeRef>
+						<nodeRef>workspace://SpacesStore/fb946dae-a985-4978-b1e2-3f9f01edd07b</nodeRef>
 						<properties/>
 						<aspects/>
 						<associations/>
@@ -4959,7 +5207,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/ceeeb21c-520b-47eb-a853-1eae7bd02d47</nodeRef>
+										<nodeRef>workspace://SpacesStore/718676c6-93c2-44d1-893e-2e048df172aa</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4974,7 +5222,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/90eaccaa-deec-4f0e-94d1-a9f82907a5f8</nodeRef>
+										<nodeRef>workspace://SpacesStore/912bf341-97fa-42bd-8c8e-8e7053b7907f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4989,7 +5237,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/e436eb25-92c2-4500-b3aa-ff624841efcf</nodeRef>
+										<nodeRef>workspace://SpacesStore/c3dc2af4-9713-431e-bb54-b2955a918ea8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5004,7 +5252,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/a62f5a5c-bab1-4d74-8312-f5076eef836e</nodeRef>
+										<nodeRef>workspace://SpacesStore/8504cdd5-2d21-4758-b68a-8f8b2ffe0539</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5024,7 +5272,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>e8aa0f99-2c89-4e16-a1eb-3fc6bf329bb4</name>
-										<nodeRef>workspace://SpacesStore/25de957f-40e9-4669-be55-53103123a036</nodeRef>
+										<nodeRef>workspace://SpacesStore/eaf336b0-764f-4353-9a51-3155ae94f39c</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -5048,7 +5296,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/f2ea638e-6f5e-4d5c-bffb-5b6cdc4cd7d9</nodeRef>
+										<nodeRef>workspace://SpacesStore/becf70be-7a29-48fd-aa13-42e18a2fe3ee</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5063,7 +5311,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/ad7e0d7a-e16a-4ab1-a7fd-cab7b53822f1</nodeRef>
+										<nodeRef>workspace://SpacesStore/370e49ba-6f36-4ef0-b81d-855f2a83399d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5078,7 +5326,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/801176e9-42a3-4919-afb6-7df2916e2c6e</nodeRef>
+										<nodeRef>workspace://SpacesStore/3d674a5c-f357-4755-8d3e-86b6aa56f31f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5093,7 +5341,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/6bb428a1-3064-4689-80a1-b1f9b4187883</nodeRef>
+										<nodeRef>workspace://SpacesStore/14c8161a-fbfa-48e0-8c3d-b3a45bbe2476</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5108,7 +5356,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/0672043c-31fb-4df3-9ecd-c86422d7985d</nodeRef>
+										<nodeRef>workspace://SpacesStore/250408e8-6110-4524-bbc2-b14650bebc25</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5123,7 +5371,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/2ee33141-406e-4b54-a399-2cb1f26d6f1e</nodeRef>
+										<nodeRef>workspace://SpacesStore/d74b4b97-cde4-467b-bf25-1949f9e4976c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5138,7 +5386,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/7a4acef5-aa67-4f16-848f-3489e2c7923c</nodeRef>
+										<nodeRef>workspace://SpacesStore/8223b134-ffb0-41d8-907c-a74b863d5480</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5153,7 +5401,22 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/34f5b56d-191c-425f-b392-b6a50c0cd67c</nodeRef>
+										<nodeRef>workspace://SpacesStore/69e80870-5a9d-4a22-9bf3-21d9f751190e</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/57476a66-f1fc-4fca-97f6-adbaf246ed38</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5172,7 +5435,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>endEvent</type>
 						<name>Удален</name>
-						<nodeRef>workspace://SpacesStore/5ebf2a0d-e22a-4f30-b69b-f925fe1a5481</nodeRef>
+						<nodeRef>workspace://SpacesStore/c45388c1-2db0-4aad-8e1e-67848faeea36</nodeRef>
 						<properties/>
 						<aspects/>
 						<associations/>
@@ -5184,7 +5447,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Документ</name>
-										<nodeRef>workspace://SpacesStore/cf800c59-5924-469e-b72e-17ee452e25fa</nodeRef>
+										<nodeRef>workspace://SpacesStore/52157e2a-6385-444b-8606-842372d4fcf8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5199,7 +5462,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Приложение</name>
-										<nodeRef>workspace://SpacesStore/da756f5b-4986-4bc5-9e7f-c52f4679021a</nodeRef>
+										<nodeRef>workspace://SpacesStore/cba75508-6a44-4af1-a3f9-6cf75a92368c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5214,7 +5477,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Подлинник</name>
-										<nodeRef>workspace://SpacesStore/2a8d5413-4b80-4201-b094-19eef0e52f87</nodeRef>
+										<nodeRef>workspace://SpacesStore/1def2fa0-ac54-4709-b605-191b3c64e572</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5229,7 +5492,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>Прочее</name>
-										<nodeRef>workspace://SpacesStore/985458ae-6fe7-492f-989b-5006a46529bd</nodeRef>
+										<nodeRef>workspace://SpacesStore/79bda7f4-6e7d-453b-865f-b95e1128ee85</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5249,7 +5512,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>ScriptAction</type>
 										<name>149c5fa6-36ad-4c7d-bb37-c3bcec7bcfa9</name>
-										<nodeRef>workspace://SpacesStore/a67b15a3-87b8-4b5d-bbbb-fb3c0ad7105d</nodeRef>
+										<nodeRef>workspace://SpacesStore/27ba44a4-7e7e-4b37-b11e-41280c279082</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -5273,7 +5536,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_title</name>
-										<nodeRef>workspace://SpacesStore/9eb0ea79-7b94-4f8a-ab4e-b86385fabefd</nodeRef>
+										<nodeRef>workspace://SpacesStore/892a1d48-07c9-4260-bb18-8c430221d927</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5288,7 +5551,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_document-type-assoc</name>
-										<nodeRef>workspace://SpacesStore/2340a66d-8bb4-4c9c-b3cc-ca65b23bfb15</nodeRef>
+										<nodeRef>workspace://SpacesStore/c5010731-1fec-4d26-8320-68d8119efea6</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5303,7 +5566,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-document_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/65b8cc64-cbe8-4c82-840d-c1173920cbd0</nodeRef>
+										<nodeRef>workspace://SpacesStore/4b69f210-cf8c-4d23-9211-832bb6e8c7b6</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5318,7 +5581,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_file-register-assoc</name>
-										<nodeRef>workspace://SpacesStore/922df2c4-fd16-4979-b974-d9494715728d</nodeRef>
+										<nodeRef>workspace://SpacesStore/d738d5f1-0896-4718-8ac8-a4fbfaec6a6c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5333,7 +5596,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_summaryContent</name>
-										<nodeRef>workspace://SpacesStore/6a21ce3d-ed53-40b4-9c10-9cdc94427529</nodeRef>
+										<nodeRef>workspace://SpacesStore/e17f1183-03da-49c5-a161-c8cc9bb80dbd</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5348,7 +5611,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
-										<nodeRef>workspace://SpacesStore/d3f9dc7c-bec9-43a6-9377-5080e3221447</nodeRef>
+										<nodeRef>workspace://SpacesStore/d5a3af82-689d-4a20-9ffc-101f45e91c8e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5363,7 +5626,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-protocol-ts_points-assoc</name>
-										<nodeRef>workspace://SpacesStore/a560f048-1720-4040-9305-42858c96b061</nodeRef>
+										<nodeRef>workspace://SpacesStore/81536d22-c69c-4c29-9c1a-cc1f41c1bab6</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5378,7 +5641,22 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									<node>
 										<type>documentField</type>
 										<name>lecm-contract_approval</name>
-										<nodeRef>workspace://SpacesStore/bc8e453d-7cdb-4d78-8187-acc4d53cc5e9</nodeRef>
+										<nodeRef>workspace://SpacesStore/275a89ae-e21d-457d-b6fd-1507da6c2db5</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_errands-autocreation</name>
+										<nodeRef>workspace://SpacesStore/386cea44-fab5-4ebe-a665-657bcfcb0c7c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5402,7 +5680,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>static-role-item</type>
 						<name>c1cd8548-d38e-40af-a1ba-aefc226336eb</name>
-						<nodeRef>workspace://SpacesStore/12259387-b9db-4862-8a30-640e0fe3030f</nodeRef>
+						<nodeRef>workspace://SpacesStore/76f4c97e-835d-4f7f-be7c-030e23524d4d</nodeRef>
 						<properties>
 							<property>
 								<name>static-role-privilege</name>
@@ -5428,7 +5706,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>dynamic-role-item</type>
 						<name>2bf4dc42-4a19-415c-9b65-55e7be92946c</name>
-						<nodeRef>workspace://SpacesStore/e44b8a4d-3896-4b59-a889-a4f3e2c820c7</nodeRef>
+						<nodeRef>workspace://SpacesStore/89fd822c-5328-45d5-9e50-5544a45388aa</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
@@ -5445,7 +5723,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>dynamic-role-item</type>
 						<name>fbf8757e-3df5-4148-b2bf-b2f6e811603b</name>
-						<nodeRef>workspace://SpacesStore/7249ded5-c657-456b-8921-e5d9c93026bb</nodeRef>
+						<nodeRef>workspace://SpacesStore/2e30d9a6-c7a0-43a2-9e31-3d64e9a04721</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
@@ -5462,7 +5740,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					<node>
 						<type>dynamic-role-item</type>
 						<name>3bfa2ada-6ff2-4aa6-8732-1b833ece98fb</name>
-						<nodeRef>workspace://SpacesStore/d60c7a9c-bc47-4c3b-8363-035dcdab5fca</nodeRef>
+						<nodeRef>workspace://SpacesStore/712e900c-94d8-41b3-ad02-81d87c2d9a76</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
