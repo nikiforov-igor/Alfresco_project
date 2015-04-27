@@ -304,7 +304,7 @@
 
                     });
 
-                $jCalendar.limitEvents(4);
+                $jCalendar.limitEvents(3);
 
              });
           },

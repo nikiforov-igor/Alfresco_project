@@ -79,7 +79,7 @@
         if (windowResized) fcDayContent.height(1);
 
         cellHeight = cells.eq(0).height(),
-            fcDayContentHeight = cellHeight - cells.eq(0).find('.fc-day-number').height();
+            fcDayContentHeight = cellHeight - cells.eq(0).find('.fc-day-number').height() - height;
 
         fcDayContent.height(fcDayContentHeight);
     };
@@ -117,7 +117,7 @@
                     if (td.data('apptCount') > maxEvents) {
                         if (!td.find('.events-view-more').length) {
                             viewMoreButton = $('<div class="events-view-more"><a href="#view-more"><span>' + Alfresco.util.message('label.events.showAll') + ' ' + (td.data('appointments').length + 1) + '</span></a></div>')
-                                .appendTo(td)
+                                .appendTo(td.children('div'))
                                 .click(function () {
                                     var viewMoreClick = self.opts.viewMoreClick;
 
@@ -127,7 +127,7 @@
                                     return false;
                                 });
                             if (initialized == null) {
-                                self.increaseHeight(25, false, td);
+                                self.increaseHeight(20, false, td);
                                 initialized = td.find(".fc-day-content").css("height");
                             } else {
                                 td.find(".fc-day-content").css("height", initialized)
