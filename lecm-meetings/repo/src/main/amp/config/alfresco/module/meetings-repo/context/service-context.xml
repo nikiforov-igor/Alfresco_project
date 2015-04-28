@@ -37,7 +37,7 @@
 					meetings.dictionaries.modelsBootstrap,
 					documents.LogicEcmModelsConnectionsBootstrap,
 					documents.dictionaries.LogicEcmModelsBootstrap,
-
+					lecm.approve3.model.bootstrap,
 					events.LogicEcmInternalBootstrap
 				 "
 		  p:models-ref="meetingsModels"		 
@@ -89,10 +89,43 @@
 		</property>
 	</bean>
 
+<!--	<bean id="meetingsWorkflowBootstrap" parent="workflowDeployer"
+		  depends-on="statemachine.aspects.LogicEcmModelsBootstrap,
+				     ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,">
+		<property name="workflowDefinitions">
+			<list>
+				<props>
+					<prop key="engineId">activiti</prop>
+					<prop key="location">alfresco/module/${artifactId}/workflow/agenda-approval-workflow.bpmn20.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
+					<prop key="redeploy">true</prop>
+				</props>
+			</list>
+		</property>
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-meetings-workflow-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-meetings-workflow-model</value>
+			</list>
+		</property>
+		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
+	</bean>-->
+
 	<util:constant id="MEETINGS_ROOT_ID" static-field="ru.it.lecm.meetings.beans.MeetingsService.MEETINGS_ROOT_ID"/>
 
 	<bean id="meetingsService" class="ru.it.lecm.meetings.beans.MeetingsServiceImpl" parent="baseBean"
-		  depends-on="meetings.ModelsBootstrap, ServiceRegistry, nodeService, transactionService">
+		  depends-on="meetings.ModelsBootstrap, ServiceRegistry, nodeService, transactionService, businessJournalService, WorkflowService, personService, stateMachineHelper"
+		  p:workflowService-ref="WorkflowService"
+		  p:personService-ref="personService"
+		  p:stateMachineService-ref="stateMachineHelper"	
+		  p:businessJournalService-ref="businessJournalService"
+		  
+	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -123,6 +156,10 @@
 	<bean id="protocol.statemachine.bootstrap" parent="defaultStatemachines"
 		  p:statemachineName="lecm-protocol:document"
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-protocol-statemachine-default.xml"/>
+
+	<bean id="meetings.statemachine.bootstrap" parent="defaultStatemachines"
+		 p:statemachineName="lecm-meetings:document"
+		 p:path="alfresco/module/${artifactId}/statemachine/lecm-meetings-statemachine-default.xml"/>
 	
 	<util:list id="protocol.taggedCounterRegistrator.tags">
 		<value>project</value>

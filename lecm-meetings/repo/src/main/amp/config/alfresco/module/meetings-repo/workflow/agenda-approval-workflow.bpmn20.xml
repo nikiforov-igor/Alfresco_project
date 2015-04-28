@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.it.ru/logicECM/workflow/meetings/agenda-approval/1.0">
+	<process id="agendaApprovementWorkflow" name="Совещания: Согласование повестки" isExecutable="true">
+		<startEvent id="startevent1" name="Start" activiti:formKey="lecmMeetingsWf:selectApprovals"></startEvent>
+		<scriptTask id="alfrescoScripttask1" name="Prepare approval" scriptFormat="javascript" activiti:autoStoreVariables="false">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="runAs">
+						<activiti:string><![CDATA[workflow]]></activiti:string>
+					</activiti:field>
+					<activiti:field name="script">
+						<activiti:string><![CDATA[(function(){ /*создание листа подписания, запуск стандартного подписания*/
+						var document = bpm_package.children[0];
+						var approvals = document.assocs['lecm-events:temp-members-assoc']
+						if (approvals && approvals.size()>0) {
+							var iteration = routesService.createEmptyIteration(document);
+							iteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject']=false;
+							iteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision']=true;
+							iteration.save();
+							var stage = routesService.createNewTemporaryNode(iteration.getNodeRef(),"lecmWorkflowRoutes:stage");
+							stage.properties['lecmWorkflowRoutes:stageWorkflowType'] = "PARALLEL";
+							stage.properties['lecmWorkflowRoutes:stageWorkflowTerm'] = 2;
+							var today = new Date();
+							stage.properties['cm:title'] = "Согласование повестки от "+today.getDate()+"."+(today.getMonth()>9?today.getMonth():("0"+today.getMonth()))+"."+today.getYear();
+							stage.save();							
+							stage.removeAspect('sys:temporary');
+							for (i = 0, size = approvals.size(); i < size; ++i) {
+								var stageItem = routesService.createNewTemporaryNode(stage.getNodeRef(),"lecmWorkflowRoutes:stageItem");
+								stageItem.save();								
+								stageItem.createAssociation(approvals.get(i),  'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+								stageItem.removeAspect('sys:temporary');
+							}	
+						}
+					  })();]]></activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+			<script></script>
+		</scriptTask>
+		<serviceTask id="commitScript1" name="Alfresco Script Task" activiti:async="true" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+				<activiti:field name="script">
+					<activiti:string><![CDATA[(function() { /* empty script for breaking transaction */
+					})();
+					]]></activiti:string>
+				</activiti:field>
+				<activiti:field name="runAs">
+					<activiti:string><![CDATA[workflow]]></activiti:string>
+				</activiti:field>
+			</extensionElements>
+		</serviceTask>
+		<endEvent id="endevent" name="End"></endEvent>
+		<sequenceFlow id="startflow" sourceRef="startevent1" targetRef="alfrescoScripttask1"></sequenceFlow>
+		<sequenceFlow id="recieveFlow" sourceRef="alfrescoScripttask1" targetRef="commitScript1"></sequenceFlow>
+		<sequenceFlow id="endflow" sourceRef="commitScript1" targetRef="endevent"></sequenceFlow>
+	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_agendaApprovementWorkflow">
+		<bpmndi:BPMNPlane bpmnElement="agendaApprovementWorkflow" id="BPMNPlane_agendaApprovementWorkflow">
+			<bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+				<omgdc:Bounds height="35.0" width="35.0" x="140.0" y="240.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="alfrescoScripttask1" id="BPMNShape_alfrescoScripttask1">
+				<omgdc:Bounds height="55.0" width="105.0" x="210.0" y="230.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="commitScript1" id="BPMNShape_commitScript1">
+				<omgdc:Bounds height="55.0" width="105.0" x="350.0" y="230.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="endevent" id="BPMNShape_endevent">
+				<omgdc:Bounds height="35.0" width="35.0" x="490.0" y="240.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNEdge bpmnElement="startflow" id="BPMNEdge_startflow">
+				<omgdi:waypoint x="175.0" y="257.0"></omgdi:waypoint>
+				<omgdi:waypoint x="210.0" y="257.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="recieveFlow" id="BPMNEdge_recieveFlow">
+				<omgdi:waypoint x="315.0" y="257.0"></omgdi:waypoint>
+				<omgdi:waypoint x="350.0" y="257.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="endflow" id="BPMNEdge_endflow">
+				<omgdi:waypoint x="455.0" y="257.0"></omgdi:waypoint>
+				<omgdi:waypoint x="490.0" y="257.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
+</definitions>

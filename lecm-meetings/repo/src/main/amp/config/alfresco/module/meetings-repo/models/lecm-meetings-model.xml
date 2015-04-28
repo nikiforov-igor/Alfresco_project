@@ -10,6 +10,7 @@
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/events/1.0" prefix="lecm-events"/>
+		<import uri="http://www.it.ru/logicECM/model/approval/aspects/1.0" prefix="lecmApproveAspects"/>
         <!--<import uri="http://www.it.ru/logicECM/meetings/dictionaries/1.0" prefix="lecm-meetings-dic"/>-->
         <import uri="http://www.it.ru/logicECM/meetings/table-structure/1.0" prefix="lecm-meetings-ts"/>
         <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
@@ -303,6 +304,7 @@
             </associations>
             <mandatory-aspects>
                 <aspect>lecm-meetings-ts:items-table-aspect</aspect>
+                <aspect>lecmApproveAspects:approvalDetailsAspect</aspect>
             </mandatory-aspects>
         </type>
     </types>

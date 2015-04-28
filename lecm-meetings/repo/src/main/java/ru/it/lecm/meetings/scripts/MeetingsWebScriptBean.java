@@ -1,5 +1,7 @@
 package ru.it.lecm.meetings.scripts;
 
+import java.util.List;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeService;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.meetings.beans.MeetingsService;
@@ -28,5 +30,10 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		this.meetingsService = meetingsService;
 	}
 	
+//	public List<ScriptNode> getAttendees(ScriptNode document) {
+//		
+//		meetingsService.getAttendees(document.getNodeRef());
+//		return null;
+//	}
 	
 }
