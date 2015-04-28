@@ -2972,7 +2972,67 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>15774c72-9fb6-4484-8014-0d95b00b6c68</name>
+														<nodeRef>workspace://SpacesStore/19b56b77-be2a-431e-9b5b-78c956397082</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value><![CDATA[activiti$lecmReview]]></value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value><![CDATA[Направить на ознакомление]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>16e34443-8ce0-44b9-9b00-ea02bf925138</name>
+																		<nodeRef>workspace://SpacesStore/0e71b0dc-c9c9-4af6-88f0-eaed7196ebe6</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value><![CDATA[VALUE]]></value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value><![CDATA[Документ]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
@@ -4896,7 +4956,67 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>29700194-f99f-4862-a532-01df84a76f34</name>
+														<nodeRef>workspace://SpacesStore/f1fd7380-d3ed-4fac-ba6d-8b8a0bf239f4</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value><![CDATA[activiti$lecmReview]]></value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value><![CDATA[Направить на ознакомление]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>20475f6b-be0f-4ef3-83cc-6b768743fa13</name>
+																		<nodeRef>workspace://SpacesStore/b5f84118-7c68-4b33-b47a-6aa5d50d31e8</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value><![CDATA[VALUE]]></value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value><![CDATA[Документ]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
