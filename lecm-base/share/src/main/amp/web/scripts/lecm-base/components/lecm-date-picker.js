@@ -119,7 +119,8 @@
                     minLimit: null,
                     maxLimit: null,
 	                fieldId: null,
-	                formId: false
+	                formId: false,
+                    changeFireAction: null
                 },
 
 	            tempDisabled: false,
@@ -382,6 +383,12 @@
 
                         // always inform the forms runtime that the control value has been updated
                         YAHOO.Bubbling.fire("mandatoryControlValueUpdated", me);
+
+                        if (me.options.changeFireAction != null) {
+                            YAHOO.Bubbling.fire(me.options.changeFireAction, {
+                                date: isoValue
+                            });
+                        }
                     }
                     else {
                         Dom.addClass(me.id + "-date", "invalid");

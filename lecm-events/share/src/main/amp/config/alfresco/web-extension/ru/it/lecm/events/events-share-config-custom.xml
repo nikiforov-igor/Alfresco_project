@@ -26,6 +26,8 @@
                     <show id="lecm-events:from-date"/>
                     <!-- Дата окончания мероприятия -->
                     <show id="lecm-events:to-date"/>
+                    <!-- Сообщение при смене времени-->
+                    <show id="lecm-events:change-date-message" force="true"/>
                     <!-- Повторное -->
                     <show id="lecm-events:repeatable"/>
                     <!-- Дата начала периода -->
@@ -57,14 +59,23 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:from-date">
+                        <control>
+                            <control-param name="changeFireAction">changeEventFromDate</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:to-date">
+                        <control>
+                            <control-param name="changeFireAction">changeEventToDate</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
                         </constraint-handlers>
+                    </field>
+                    <field id="lecm-events:change-date-message">
+                        <control template="/ru/it/lecm/events/controls/event-changeTiem-message-control.ftl"/>
                     </field>
 
                     <field id="lecm-events:repeatable" read-only="true">

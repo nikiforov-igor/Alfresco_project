@@ -136,6 +136,9 @@
                                 destination: "${form.destination!""}",
                                 itemKind: "${form.arguments.itemKind!""}",
                             </#if>
+                            <#if field.control.params.changeFireAction??>
+	                            changeFireAction: "${field.control.params.changeFireAction}",
+                            </#if>
                             showTime: ${showTime?string},
                             mandatory: ${field.mandatory?string},
                             minLimit: "${minLimit?string}",
