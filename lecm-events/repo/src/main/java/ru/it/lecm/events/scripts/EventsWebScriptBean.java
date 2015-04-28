@@ -108,6 +108,11 @@ public class EventsWebScriptBean extends BaseWebScript {
         return results;
     }
 
+    public Scriptable getUserNearestEvents(ScriptNode currentEmployee, int maxItems) {
+        String additionalFilter = " AND (@lecm\\-events\\:temp\\-members\\-assoc\\-ref: \"*" + currentEmployee.getNodeRef() + "*\" OR @lecm\\-events\\:initiator\\-assoc\\-ref: \"" + currentEmployee.getNodeRef() + "\")";
+        return createScriptable(eventService.getNearestEvents(formatDate(new Date(), false), maxItems, additionalFilter));
+    }
+
     private String formatDate(Date date, Boolean isAllDay) {
         return formatDate(date, isAllDay, null);
     }

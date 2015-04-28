@@ -146,6 +146,34 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     @Override
+    public List<NodeRef> getNearestEvents(String fromDate, int maxCount, String additionalFilter) {
+        List<NodeRef> results = new ArrayList<>();
+
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+        sp.addSort(EventsService.PROP_EVENT_FROM_DATE.toString(), true);
+        sp.setMaxItems(maxCount);
+
+        String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO MAX> AND @lecm\\-events\\:removed: false " + (additionalFilter == null ? "" : additionalFilter);
+        sp.setQuery(query);
+
+        ResultSet searchResult = null;
+        try {
+            searchResult = searchService.query(sp);
+            for (ResultSetRow row : searchResult) {
+                results.add(row.getNodeRef());
+            }
+        } finally {
+            if (searchResult != null) {
+                searchResult.close();
+            }
+        }
+
+        return results;
+    }
+
+    @Override
     public List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode) {
         List<NodeRef> results = new ArrayList<>();
         NodeRef locationsDic = dictionaryBean.getDictionaryByName("Места проведения мероприятий");

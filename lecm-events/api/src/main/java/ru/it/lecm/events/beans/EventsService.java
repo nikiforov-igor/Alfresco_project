@@ -84,6 +84,8 @@ public interface EventsService {
 
     List<NodeRef> getEventResources(NodeRef event);
 
+    List<NodeRef> getNearestEvents(String fromDate, int maxCount, String additionalFilter);
+
     List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode);
 
     List<NodeRef> getAvailableUserResources();

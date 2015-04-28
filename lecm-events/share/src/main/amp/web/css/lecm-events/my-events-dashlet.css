@@ -1,0 +1,18 @@
+.dashlet.my-events .header {
+    font-size: 116%;
+    margin: 0 10px;
+}
+
+.dashlet.my-events .location {
+    margin: 0 10px;
+}
+
+.dashlet.my-events .delim {
+    background-color: #ddd;
+    height: 1px;
+    margin: 5px 0;
+}
+
+.createEvent {
+    background-image: url('/share/res/components/calendar/images/add-event-16.png');
+}
