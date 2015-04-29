@@ -444,7 +444,8 @@ i.icon-building {
 .control .container .value-div > input[type=text],
 .control .container .value-div > div.control-selected-values,
 .control .container .value-div > select,
-.control .container .value-div > textarea {
+.control .container .value-div > textarea,
+.control.date .container .value-div > div > input[type=text] {
     width: 100%;
     height: auto;
     min-height: 28px;

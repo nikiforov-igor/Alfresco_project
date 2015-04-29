@@ -109,3 +109,15 @@
     margin-right: 10px;
 }
 
+/* Контрол выбора даты/времени */
+.create-event-set .event-create-center .control.date .container,
+.create-event-set .event-create-center .control.date .value-div {
+    float: left;
+}
+.create-event-set .event-create-center .control.date .value-div div.date-entry-container,
+.create-event-set .event-create-center .control.date .value-div div.time-entry-container {
+    width: 150px;
+    float: left;
+    padding-right: 5px;
+}
+

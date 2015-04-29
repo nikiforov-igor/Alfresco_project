@@ -176,19 +176,23 @@
                 </#if>
                 <div class="value-div">
                     <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${defaultValue?html}"/>
-                    <input id="${controlId}-date" name="-" type="text" class="mandatory-highlightable"
-                           <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
-                           <#else>tabindex="0"</#if> />
-                    <div>
-                        <span class="date-format <#if hideDateFormat>hidden1</#if>">${msg("lecm.form.control.date-picker.display.date.format")}</span>
+                    <div class="date-entry-container">
+                        <input id="${controlId}-date" name="-" type="text" class="date-entry mandatory-highlightable"
+                               <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
+                               <#else>tabindex="0"</#if> />
+                        <div>
+                            <span class="date-format <#if hideDateFormat>hidden1</#if>">${msg("lecm.form.control.date-picker.display.date.format")}</span>
+                        </div>
                     </div>
 
                     <#if showTime>
-                        <input id="${controlId}-time" name="-" type="text" class="time-entry"
-                               <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
-                               <#else>tabindex="0"</#if> />
-                        <div id="${controlId}-time-format">
-                            <span class="time-format<#if disabled>-disabled</#if>">${msg("form.control.date-picker.display.time.format")}</span>
+                        <div class="time-entry-container">
+                            <input id="${controlId}-time" name="-" type="text" class="time-entry"
+                                   <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
+                                   <#else>tabindex="0"</#if> />
+                            <div id="${controlId}-time-format">
+                                <span class="time-format<#if disabled>-disabled</#if>">${msg("form.control.date-picker.display.time.format")}</span>
+                            </div>
                         </div>
                     </#if>
                 </div>
