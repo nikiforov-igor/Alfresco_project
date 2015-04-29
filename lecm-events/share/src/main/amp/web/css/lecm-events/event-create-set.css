@@ -81,9 +81,6 @@
 .create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li {
     background: none;
 }
-.create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .remove-icon {
-    display: none;
-}
 .create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .ci-value-div a,
 .create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .ci-value-div a:hover {
     color: #999;
