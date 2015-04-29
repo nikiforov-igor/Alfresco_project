@@ -108,7 +108,7 @@
           },
 
           onUpdateView: function(view) {
-             if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA) {
+             if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA || view === LogicECM.module.Calendar.View.VIEWTYPE_SEARCH) {
                 //this.onViewChanged.apply(this, arguments);
                 Dom.setStyle(this.id, "display", "none");
              } else {
@@ -391,7 +391,11 @@
                 $jCalendar.fullCalendar("changeView", view);
                 this.saveLastView(viewPar);
              } else {
-                this.saveLastView("agenda");
+                if (viewPar == LogicECM.module.Calendar.View.VIEWTYPE_AGENDA) {
+                   this.saveLastView("agenda");
+                } else if (viewPar == LogicECM.module.Calendar.View.VIEWTYPE_SEARCH) {
+                   this.saveLastView("search");
+                }
              }
              this.updateNonWorkingDays();
           },

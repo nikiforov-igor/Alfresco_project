@@ -76,6 +76,8 @@ public interface EventsService {
 
     public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter);
 
+    public List<NodeRef> searchEvents(String filter);
+
     NodeRef getEventLocation(NodeRef event);
 
     List<NodeRef> getEventMembers(NodeRef event);

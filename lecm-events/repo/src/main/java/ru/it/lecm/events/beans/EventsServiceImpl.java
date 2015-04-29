@@ -145,6 +145,30 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         return results;
     }
 
+    public List<NodeRef> searchEvents(String filter) {
+        List<NodeRef> results = new ArrayList<>();
+
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+        String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:removed: false " + filter;
+        sp.setQuery(query);
+
+        ResultSet searchResult = null;
+        try {
+            searchResult = searchService.query(sp);
+            for (ResultSetRow row : searchResult) {
+                results.add(row.getNodeRef());
+            }
+        } finally {
+            if (searchResult != null) {
+                searchResult.close();
+            }
+        }
+
+        return results;
+    }
+
     @Override
     public List<NodeRef> getNearestEvents(String fromDate, int maxCount, String additionalFilter) {
         List<NodeRef> results = new ArrayList<>();

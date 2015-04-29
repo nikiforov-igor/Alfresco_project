@@ -928,6 +928,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
    LogicECM.module.Calendar.View.VIEWTYPE_MONTH = 'month';
    LogicECM.module.Calendar.View.VIEWTYPE_DAY = 'day';
    LogicECM.module.Calendar.View.VIEWTYPE_AGENDA = 'agenda';
+   LogicECM.module.Calendar.View.VIEWTYPE_SEARCH = 'search';
 })();
 
 LogicECM.module.Calendar.Helper = (function ()

@@ -57,6 +57,10 @@
             <url>/lecm/events/agenda</url>
         </component>
         <component>
+            <region-id>calendar-search</region-id>
+            <url>/lecm/events/search</url>
+        </component>
+        <component>
             <region-id>mini-calendar</region-id>
             <url>/lecm/events/mycalendar</url>
         </component>

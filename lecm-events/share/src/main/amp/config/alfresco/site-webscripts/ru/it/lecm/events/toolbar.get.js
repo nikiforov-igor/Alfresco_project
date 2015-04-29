@@ -34,27 +34,21 @@ function main()
    model.viewToolbarNav = (model.enabledViews.day || model.enabledViews.week || model.enabledViews.month) // see if the Today, Previous and Next navigation items are relevant
    
    var enabledViewList = [];
-   if (model.enabledViews.day)
-   {
-      model.day = '<input id="' + args.htmlid + '-day" type="radio" name="navigation" value="' + msg.get("button.day") + '" />';
-      enabledViewList.push("\"day\"");
-   }
-   if (model.enabledViews.week)
-   {
-      model.week ='<input id="' + args.htmlid + '-week" type="radio" name="navigation" value="' + msg.get("button.week") + '" />';
-      enabledViewList.push("\"week\"");
-   }   
-   if (model.enabledViews.month)
-   {
-      model.month ='<input id="' + args.htmlid + '-month" type="radio" name="navigation" value="' + msg.get("button.month") + '" />';
-      enabledViewList.push("\"month\"");
-   }
-   if (model.enabledViews.agenda)
-   {
-      model.agenda ='<input id="' + args.htmlid + '-agenda" type="radio" name="navigation" value="' + msg.get("button.agenda") + '" />';
-      enabledViewList.push("\"agenda\"");
-   }
-   
+   model.day = '<input id="' + args.htmlid + '-day" type="radio" name="navigation" value="' + msg.get("button.day") + '" />';
+   enabledViewList.push("\"day\"");
+
+   model.week ='<input id="' + args.htmlid + '-week" type="radio" name="navigation" value="' + msg.get("button.week") + '" />';
+   enabledViewList.push("\"week\"");
+
+   model.month ='<input id="' + args.htmlid + '-month" type="radio" name="navigation" value="' + msg.get("button.month") + '" />';
+   enabledViewList.push("\"month\"");
+
+   model.agenda ='<input id="' + args.htmlid + '-agenda" type="radio" name="navigation" value="' + msg.get("button.agenda") + '" />';
+   enabledViewList.push("\"agenda\"");
+
+   model.search ='<input id="' + args.htmlid + '-search" type="radio" name="navigation" value="' + msg.get("button.search") + '" />';
+   enabledViewList.push("\"search\"");
+
    var calendarToolbar = {
       id : "CalendarToolbar",
       name : "LogicECM.module.Calendar.Toolbar",

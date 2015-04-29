@@ -327,6 +327,15 @@
                     </field>
                 </appearance>
             </form>
+            <form id="searchColumns">
+                <field-visibility>
+                    <show id="lecm-events:title"/>
+                    <show id="lecm-events:temp-members-assoc-text-content"/>
+                    <show id="lecm-events:invited-members-assoc-text-content"/>
+                    <show id="lecm-events:location-assoc-text-content"/>
+                    <show id="lecm-events:description"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 

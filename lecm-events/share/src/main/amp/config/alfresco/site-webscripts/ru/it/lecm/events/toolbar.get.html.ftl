@@ -37,7 +37,7 @@
                        <#if viewToolbarViewCount>
                           <div id="${el}-navigation" class="yui-buttongroup inline">
                              <#-- Don't insert linefeeds between these <input> tags -->
-                               ${day!""}${week!""}${month!""}${agenda!""}
+                               ${day!""}${week!""}${month!""}${agenda!""}${search!""}
                           </div>
                        </#if>
                     </div>

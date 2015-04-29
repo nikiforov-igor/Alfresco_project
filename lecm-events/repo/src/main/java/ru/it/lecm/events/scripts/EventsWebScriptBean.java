@@ -45,8 +45,12 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
-        List<Map<String, Object>> results = new ArrayList<>();
         List<NodeRef> events = eventService.getEvents(fromDate, toDate);
+        return processEvents(events);
+    }
+
+    private List<Map<String, Object>> processEvents( List<NodeRef> events) {
+        List<Map<String, Object>> results = new ArrayList<>();
         for (NodeRef entry : events) {
             // Build the object
             Map<String, Object> result = new HashMap<>();
@@ -104,8 +108,12 @@ public class EventsWebScriptBean extends BaseWebScript {
             // Save this one
             results.add(result);
         }
-
         return results;
+    }
+
+    public List<Map<String, Object>> searchUserEvents(String filter) {
+        List<NodeRef> events = eventService.searchEvents(filter);
+        return processEvents(events);
     }
 
     public Scriptable getUserNearestEvents(ScriptNode currentEmployee, int maxItems) {

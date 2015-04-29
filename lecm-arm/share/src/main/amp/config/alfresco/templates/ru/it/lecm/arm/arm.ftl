@@ -72,6 +72,7 @@
                         <div id="arm-calendar" class="hidden1">
                             <@region id="calendar-view" scope="template" class="view" />
                             <@region id="calendar-agenda" scope="template" class="view" />
+                            <@region id="calendar-search" scope="template" class="view" />
                         </div>
                     </#if>
             </@panels.twoPanels>
