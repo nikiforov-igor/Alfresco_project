@@ -4319,6 +4319,37 @@
 					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Договор. Исполнитель"/>
 				</assocs>
             </item>
+			<item name="cm:Ресурсы" type="lecm-arm:accordion">
+				<property name="cm:name"><![CDATA[Ресурсы]]></property>
+				<property name="lecm-arm:order"><![CDATA[60]]></property>
+				<property name="lecm-arm:search-type"><![CDATA[]]></property>
+				<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+				<property name="lecm-arm:types"><![CDATA[lecm-events:document]]></property>
+				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+				<property name="lecm-arm:search-query"><![CDATA[]]></property>
+				<items>
+					<item name="cm:Мои мероприятия" type="lecm-arm:node">
+						<property name="cm:name"><![CDATA[Мои мероприятия]]></property>
+						<property name="lecm-arm:order"><![CDATA[0]]></property>
+						<property name="lecm-arm:search-type"><![CDATA[]]></property>
+						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+						<property name="lecm-arm:types"><![CDATA[]]></property>
+						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+						<property name="lecm-arm:search-query">
+							<![CDATA[{{CURRENT_USER_RESOURCES({fieldName:'lecm-events:temp-resources-assoc-ref'})}} AND @lecm\-events\:removed: false]]></property>
+						<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+					</item>
+					<item name="cm:4b058d5f-332f-4990-b8dd-777e06271a3f" type="lecm-arm:field">
+						<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+						<property name="cm:name"><![CDATA[f9b42412-5c9a-4911-841e-686ee89bb52d]]></property>
+						<property name="lecm-arm:field-name"><![CDATA[lecm-events:title]]></property>
+					</item>
+				</items>
+				<assocs>
+					<assoc type="lecm-arm:fields-assoc"
+						   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Ресурсы/f9b42412-5c9a-4911-841e-686ee89bb52d"/>
+				</assocs>
+			</item>
 		</items>
 	</item>
 </items>

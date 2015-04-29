@@ -336,6 +336,11 @@
                     <show id="lecm-events:description"/>
                 </field-visibility>
             </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-events:title"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 

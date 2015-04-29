@@ -237,4 +237,10 @@
 		<property name="notificationsService" ref="notificationsService"/>
 	</bean>
 
+	<bean id="currentUserResoucesProcessor" class="ru.it.lecm.events.processor.CurrentResourcesProcessor" parent="searchQueryBaseProccesor">
+		<property name="id" value="CURRENT_USER_RESOURCES"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+	</bean>
+
+
 </beans>
