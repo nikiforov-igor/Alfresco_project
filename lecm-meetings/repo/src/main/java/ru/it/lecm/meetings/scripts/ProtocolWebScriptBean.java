@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.it.lecm.meetings.scripts;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +23,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.meetings.beans.ProtocolReportsService;
 import ru.it.lecm.meetings.beans.ProtocolService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -44,6 +40,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 	private DocumentConnectionService documentConnectionService;
 	private DocumentEventService documentEventService;
 	private BusinessJournalService businessJournalService;
+	private ProtocolReportsService protocolReportsService;
 	
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -71,6 +68,10 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 	
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
+	}
+	
+	public void setProtocolReportsService(ProtocolReportsService protocolReportsService) {
+		this.protocolReportsService = protocolReportsService;
 	}
 	
 	/**
@@ -233,5 +234,11 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 			}
 		}
 		return false;
+	}
+	
+	public ScriptNode generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
+		NodeRef reportNodeRef = protocolReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
+
+		return new ScriptNode(reportNodeRef, serviceRegistry, getScope());
 	}
 }

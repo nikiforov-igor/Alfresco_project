@@ -35,6 +35,14 @@ public interface ProtocolService {
 		put(P_STATUSES.EXPIRED_STATUS, "Просрочен");
 	}};
 	
+	public static enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, ORIGINAL, OTHERS };
+	public static final EnumMap<ATTACHMENT_CATEGORIES,String> ATTACHMENT_CATEGORIES_MAP = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
+		put(ATTACHMENT_CATEGORIES.DOCUMENT, "Документ");
+		put(ATTACHMENT_CATEGORIES.APPLICATIONS, "Приложение");
+		put(ATTACHMENT_CATEGORIES.ORIGINAL, "Подлинник");
+		put(ATTACHMENT_CATEGORIES.OTHERS, "Прочее");
+	}};
+	
 	public static final String PROTOCOL_POINT_DICTIONARY_NAME = "Статусы пунктов протокола";
 	
 	public void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);

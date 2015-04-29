@@ -183,7 +183,13 @@
 		  p:documentEventService-ref="documentEventService"
 		  p:documentConnectionService-ref="documentConnectionService"
 		  p:businessJournalService-ref="businessJournalService"
+		  p:protocolReportsService-ref="protocolReportsService"
 		  p:extensionName="protocolService"
 	/>
+	
+	<bean id="protocolReportsService" parent="baseBean"
+		  class="ru.it.lecm.meetings.beans.ProtocolReportsServiceImpl"
+		  p:reportsManager-ref="reportsManager"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
 	
 </beans>
