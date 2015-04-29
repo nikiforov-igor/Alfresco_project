@@ -245,11 +245,19 @@
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:from-date" set="createEventSet">
+                        <control>
+                            <control-param name="defaultValue">now</control-param>
+                            <control-param name="defaultTime">12:00</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:to-date" set="createEventSet">
+                        <control>
+                            <control-param name="defaultValue">now</control-param>
+                            <control-param name="defaultTime">13:00</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
                         </constraint-handlers>
