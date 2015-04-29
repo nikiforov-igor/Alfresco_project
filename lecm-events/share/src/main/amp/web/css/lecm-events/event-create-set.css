@@ -94,4 +94,18 @@
     overflow: hidden;
     padding-right: 20px;
 }
+.create-event-set .event-create-center .control .label-div {
+    width: auto;
+}
+.create-event-set .event-create-center .control.checkbox-control .label-div {
+    display: none;
+}
+.create-event-set .event-create-center .control.checkbox-control .value-div {
+    padding-left: 0;
+}
+.create-event-set .event-create-center .control.checkbox-control .value-div label {
+    float: left;
+    margin-left: 0;
+    margin-right: 10px;
+}
 
