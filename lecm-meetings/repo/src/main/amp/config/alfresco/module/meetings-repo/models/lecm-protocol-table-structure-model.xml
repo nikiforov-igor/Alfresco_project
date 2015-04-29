@@ -75,7 +75,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-protocol-ts:reporter-assoc-text-content">
@@ -91,7 +91,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-protocol-ts:coreporter-assoc-text-content">
@@ -107,7 +107,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-protocol-ts:executor-assoc-text-content">
@@ -123,7 +123,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-protocol-ts:point-status-assoc-text-content">

@@ -60,7 +60,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-protocol:signers-assoc-text-content">
@@ -76,7 +76,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-protocol:meeting-chairman-assoc-text-content">
