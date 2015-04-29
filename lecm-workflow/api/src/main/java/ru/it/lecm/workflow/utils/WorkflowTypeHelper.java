@@ -47,7 +47,7 @@ public final class WorkflowTypeHelper {
 		if (workflowType != null) {
 			return workflowType;
 		} else {
-			throw new IllegalArgumentException(String.format("type '%s' is invalid. Appropriate WorkflowType not found!", type));
+			return getWorkflowTypeByTypeOrDefinition("DEFAULT");
 		}
 	}
 
@@ -56,7 +56,7 @@ public final class WorkflowTypeHelper {
 		if (workflowType != null) {
 			return workflowType;
 		} else {
-			throw new IllegalArgumentException(String.format("workflow definition '%s' is invalid. Appropriate WorkflowType not found!", workflowDefinitionId));
+			return getWorkflowTypeByTypeOrDefinition("lecmDefaultWorkflow");
 		}
 	}
 

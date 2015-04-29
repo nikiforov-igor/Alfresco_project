@@ -17,6 +17,14 @@
 		  p:workflowAssigneesListService-ref="workflowAssigneesListService"
 		  p:personService-ref="personService" p:orgstructureService-ref="serviceOrgstructure"/>
 
+	<util:list id="default.inputVariables">
+	</util:list>
+	<bean id="default.workflowType" class="ru.it.lecm.workflow.beans.DefaultWorkflowRunner$DefaultWorkflowType"/>
+	<bean id="default.workflowRunner" parent="abstract.workflowRunner"
+		  class="ru.it.lecm.workflow.beans.DefaultWorkflowRunner"
+		  p:inputVariables-ref="default.inputVariables"
+		  p:workflowType-ref="default.workflowType"/>
+	
 	<util:list id="approval.inputVariables">
 		<value>documentAttachmentCategoryName</value>
 		<value>workflowRole</value>
@@ -43,6 +51,7 @@
 	<util:list id="workflow.runners">
 		<ref bean="approval.workflowRunner"/>
 		<ref bean="signing.workflowRunner"/>
+		<ref bean="default.workflowRunner"/>
 	</util:list>
 	<bean id="workflowRunnerService" class="ru.it.lecm.workflow.beans.WorkflowRunnerFactory"
 		  p:runners-ref="workflow.runners"/>

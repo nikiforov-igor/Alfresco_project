@@ -53,6 +53,11 @@ public final class RouteAspecsModel {
 	 */
 	public final static QName PROP_SIGNING_WORKFLOW_ID = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "signing-workflow-id");
 
+	/**
+	 * &lt;property name="lecm-document-route:default-workflow-id"&gt;
+	 */
+	public final static QName PROP_DEFAULT_WORKFLOW_ID = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "default-workflow-id");
+	
 	private RouteAspecsModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of RouteAspecsModel class.");
 	}
