@@ -23,6 +23,7 @@
 }
 .control.association-token-control .value-div div.cropped-item .ci-value-div {
     padding: 0;
+    float: left;
 }
 .control.association-token-control .value-div span.person a {
     background: none;
