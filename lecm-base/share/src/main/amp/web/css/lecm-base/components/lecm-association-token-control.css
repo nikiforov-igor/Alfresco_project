@@ -1,4 +1,5 @@
-.control.association-token-control .container.collapse-width {
+.control.association-token-control .container.collapse-width,
+.control.association-token-control .container.collapse-width .value-div {
     float: left;
 }
 .control.association-token-control .value-div .control-selected-values {
