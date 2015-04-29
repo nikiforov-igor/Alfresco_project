@@ -19,6 +19,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	LogicECM.module.Calendar.SearchView = function (htmlId) {
 		this.id = htmlId;
 		LogicECM.module.Calendar.SearchView.superclass.constructor.call(this, htmlId);
+		YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
 
 		return this;
 	};
@@ -28,6 +29,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.SearchView.prototype, {
 
 		searchProperties: [],
+
+		currentForm: null,
+
+		searchFormId: "searchBlock-forms",
 
 		render: function () {
 			this.loadSearchProperties();
@@ -86,7 +91,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Dom.setStyle(toolbarId + "-body", "visibility", "visible");
 
 			Alfresco.util.createYUIButton(this, "toolbar-searchButton", this.onSearchClick);
-			Alfresco.util.createYUIButton(this, "toolbar-extendSearchButton", this.onExSearchClick);
+			Alfresco.util.createYUIButton(this, "toolbar-extendSearchButton", this.onExtSearchClick);
 			Event.on(this.id + "-toolbar-clearSearchInput", "click", this.onClearSearch, null, this);
 			Event.on(this.id + "-toolbar-full-text-search", "keyup", this.checkShowClearSearch, null, this);
 
@@ -113,14 +118,101 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		onSearchClick: function() {
-			var searchTerm = Dom.get(this.id + "-toolbar-full-text-search").value;
-			if (searchTerm.length > 0) {
-				this.getEvents(searchTerm);
+			this.getEvents();
+		},
+
+		onExtSearchClick: function() {
+			var defaultForm = {};
+			defaultForm.id = "search";
+			defaultForm.type = "lecm-events:document";
+
+			if (this.searchDialog == null){
+				// Если SearchBlock уже есть в разметке в body (остался с предыдущей "страницы")
+				// удаляем его
+				// Это актуально для раздела "Администрирование"
+				var searchBlockInBody = Selector.query("body > div > #searchBlock", null, true);
+				if (searchBlockInBody) {
+					searchBlockInBody.parentNode.removeChild(searchBlockInBody);
+				}
+				// создаем диалог
+				this.searchDialog = Alfresco.util.createYUIPanel("searchBlock",
+					{
+						width:"800px"
+					});
+				// создаем кнопки
+				this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this.onExtSearch, {}, Dom.get("searchBlock-search-button"));
+				this.widgets.clearSearchButton = Alfresco.util.createYUIButton(this, "searchBlock-clearSearch-button", this.onClearExtSearch, {}, Dom.get("searchBlock-clearSearch-button"));
+			}
+
+			if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
+				// создаем форму
+				this.renderExtFormTemplate(defaultForm);
+			} else {
+				if (this.searchDialog != null) {
+					this.searchDialog.show();
+				}
 			}
 		},
 
-		onExSearchClick: function() {
-			alert("ext-search");
+		renderExtFormTemplate: function (form, isClearSearch) {
+			if (isClearSearch == undefined) {
+				isClearSearch = false;
+			}
+			// update current form state
+			this.currentForm = form;
+
+			if (this.currentForm != null) {
+				var formDiv = Dom.get(this.searchFormId); // элемент в который будет отрисовываться форма
+				form.htmlid = this.searchFormId + "-" + form.type.split(":").join("_");
+
+				// load the form component for the appropriate type
+				var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
+					{
+						itemId: form.type,
+						formId: form.id
+					});
+				var formData =
+				{
+					htmlid: form.htmlid
+				};
+				Alfresco.util.Ajax.request(
+					{
+						url: formUrl,
+						dataObj: formData,
+						successCallback: {
+							fn: function (response) {
+								formDiv.innerHTML = response.serverResponse.responseText;
+								if (this.searchDialog != null) {
+									if (isClearSearch) {
+
+									} else {
+										this.searchDialog.show();
+									}
+								}
+							},
+							scope: this
+						},
+						failureMessage: "Could not load form component '" + formUrl + "'.",
+						scope: this,
+						execScripts: true
+					});
+			}
+		},
+
+		onBeforeFormRuntimeInit:function (layer, args) {
+			// extract the current form runtime - so we can reference it later
+			if (this.currentForm && args[1].runtime.formId == (this.searchFormId + "-" + this.currentForm.type.split(":").join("_") + "-form")) {
+				this.currentForm.runtime = args[1].runtime;
+			}
+		},
+
+		onExtSearch: function() {
+	   	    this.getEvents();
+			this.searchDialog.hide();
+		},
+
+		onClearExtSearch: function() {
+			this.renderExtFormTemplate(this.currentForm, true);
 		},
 
 		onClearSearch: function Toolbar_onSearch() {
@@ -128,22 +220,31 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.checkShowClearSearch();
 		},
 
-		getEvents : function (searchTerm) {
+		getEvents : function () {
+			var searchTerm = Dom.get(this.id + "-toolbar-full-text-search").value;
 			var searchData = "";
-			for (var column in this.searchProperties) {
-				searchData += column + ":" + decodeURIComponent(searchTerm) + "#";
+			if (searchTerm.length > 0) {
+				for (var column in this.searchProperties) {
+					searchData += column + ":" + decodeURIComponent(searchTerm) + "#";
+				}
+				if (searchData != "") {
+					searchData = searchData.substring(0, (searchData.length) - 1);
+				} else {
+					searchData = "cm:name" + ":" + decodeURIComponent(searchTerm);
+				}
 			}
-			if (searchData != "") {
-				searchData = searchData.substring(0, (searchData.length) - 1);
-			} else {
-				searchData = "cm:name" + ":" + decodeURIComponent(searchTerm);
+
+			var extSearchData = "";
+			if (this.currentForm != null && this.currentForm.runtime != null) {
+				extSearchData = YAHOO.lang.JSON.stringify(this.currentForm.runtime.getFormData());
 			}
 
 			Alfresco.util.Ajax.request(
 				{
 					url: Alfresco.constants.PROXY_URI + "lecm/events/search",
 					dataObj: {
-						searchTerm: searchData
+						searchTerm: searchData,
+						extSearchData: extSearchData
 					},
 					//filter out non relevant events for current view
 					successCallback: {

@@ -349,6 +349,51 @@
                     <show id="lecm-events:title"/>
                 </field-visibility>
             </form>
+            <form id="search">
+                <field-visibility>
+                    <!-- Заголовок -->
+                    <show id="lecm-events:title"/>
+                    <!-- Дата начала мероприятия -->
+                    <show id="lecm-events:from-date"/>
+                    <!-- Дата окончания мероприятия -->
+                    <show id="lecm-events:to-date"/>
+                    <!-- Участники -->
+                    <show id="lecm-events:temp-members-assoc"/>
+                    <!-- Приглашённые -->
+                    <show id="lecm-events:invited-members-assoc"/>
+                    <!-- Место проведения -->
+                    <show id="lecm-events:location-assoc"/>
+                    <!-- Ресурсы -->
+                    <show id="lecm-events:temp-resources-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-events:title">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-events:from-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-events:to-date">
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-events:location-assoc">
+                        <control>
+                            <control-param name="endpointMany">true</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
 
