@@ -322,26 +322,14 @@ public class ActionsScript extends DeclarativeWebScript {
                     actionStruct.put("connectionIsSystem", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION_SYSTEM));
                     actionStruct.put("autoFill", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_AUTO_FILL));
                     actionStruct.put("formFolder", documentService.getDraftRoot().toString());
-                    WorkflowVariables variables = new WorkflowVariables();
-                    List<ChildAssociationRef> vars = nodeService.getChildAssocs(action);
-                    for (ChildAssociationRef var : vars) {
-                        String formInputFromValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_VALUE).toString();
-                        String formInputFromType;
-                        if (!hasStatemachine && "stm_document".equals(formInputFromValue)) {
-                            formInputFromType = WorkflowVariables.Type.VALUE.toString();
-                            formInputFromValue = nodeRef.toString();
-                        } else {
-                            formInputFromType = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_TYPE).toString();
-                        }
-                        String formInputToValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_TO_VALUE).toString();
-                        variables.addInput(formInputFromType, formInputFromValue, WorkflowVariables.Type.VARIABLE.toString(), formInputToValue);
-                    }
-
-                    actionStruct.put("variables", stateMachineService.getInputVariablesMap(statemachineId, nodeRef, variables.getInput()));
+                    Map<String, String> processingVars = processingVariables(nodeRef, action, statemachineId, hasStatemachine);
+                    actionStruct.put("variables", processingVars);
                     actionStruct.put("isForm", false);
                 } else if (type.equals(GroupActionsService.TYPE_GROUP_WORKFLOW_ACTION)) {
                     actionStruct.put("subtype", "workflow");
                     actionStruct.put("workflowType", nodeService.getProperty(action, GroupActionsService.PROP_WORKFLOW));
+                    Map<String, String> processingVars = processingVariables(nodeRef, action, statemachineId, hasStatemachine);
+                    actionStruct.put("variables", processingVars);
                     actionStruct.put("isForm", false);
                 } else {
                     actionStruct.put("subtype", "script");
@@ -354,6 +342,25 @@ public class ActionsScript extends DeclarativeWebScript {
             result.put("actions", actionsList);
         }
         return result;
+    }
+
+    private Map<String, String> processingVariables(NodeRef document, NodeRef action, String statemachineId, boolean hasStatemachine) {
+        NodeService nodeService = serviceRegistry.getNodeService();
+        WorkflowVariables variables = new WorkflowVariables();
+        List<ChildAssociationRef> vars = nodeService.getChildAssocs(action);
+        for (ChildAssociationRef var : vars) {
+            String formInputFromValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_VALUE).toString();
+            String formInputFromType;
+            if (!hasStatemachine && "stm_document".equals(formInputFromValue)) {
+                formInputFromType = WorkflowVariables.Type.VALUE.toString();
+                formInputFromValue = document.toString();
+            } else {
+                formInputFromType = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_TYPE).toString();
+            }
+            String formInputToValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_TO_VALUE).toString();
+            variables.addInput(formInputFromType, formInputFromValue, WorkflowVariables.Type.VARIABLE.toString(), formInputToValue);
+        }
+        return stateMachineService.getInputVariablesMap(statemachineId, document, variables.getInput());
     }
 
     private Map<String, Long> getActionsCounts(NodeRef nodeRef) {

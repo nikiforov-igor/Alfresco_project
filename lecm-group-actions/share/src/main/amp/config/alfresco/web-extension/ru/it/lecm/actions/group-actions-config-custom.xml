@@ -92,6 +92,7 @@
                     <show id="lecm-group-actions:isGroup"/>
                     <show id="lecm-group-actions:order"/>
                     <show id="lecm-group-actions:workflow"/>
+                    <show id="lecm-group-actions:document-form-data"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:title">
@@ -107,6 +108,13 @@
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscript">/lecm/statemachine/editor/workflows</control-param>
                             <control-param name="withEmpty">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-group-actions:document-form-data" label-id="statemachine.editor.form.label.inputFormData">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:inputFormVariable</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
                         </control>
                     </field>
                 </appearance>

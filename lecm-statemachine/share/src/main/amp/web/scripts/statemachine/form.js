@@ -289,7 +289,8 @@ LogicECM.module = LogicECM.module || {};
 						submitType: 'json',
 						formId: 'workflow-form',
 						destination: action.formFolder,
-						showCancelButton: true
+						showCancelButton: true,
+						args: JSON.stringify(action.variables)
 					};
 
 					var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
