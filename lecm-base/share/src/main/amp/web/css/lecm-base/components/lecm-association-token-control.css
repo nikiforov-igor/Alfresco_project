@@ -1,3 +1,6 @@
+.control.association-token-control .container.collapse-width {
+    float: left;
+}
 .control.association-token-control .value-div .control-selected-values {
     border: none !important;
 }

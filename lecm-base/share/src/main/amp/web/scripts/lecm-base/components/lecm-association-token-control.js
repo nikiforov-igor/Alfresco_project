@@ -1999,10 +1999,17 @@ LogicECM.module = LogicECM.module || {};
 				var el;
 				el = Dom.get(this.options.controlId + "-currentValueDisplay");
 				var autocompleteInput = Dom.get(this.options.controlId + "-autocomplete-input");
+				var container = Dom.get(this.options.controlId);
 
 				if (autocompleteInput != null) {
 					autocompleteInput.value = "";
-					Dom.setStyle(autocompleteInput, "display", this.canAutocompleteInputShow() ? "block" : "none");
+                    if (this.canAutocompleteInputShow()) {
+                        Dom.setStyle(autocompleteInput, "display", "block");
+                        Dom.removeClass(container, "collapse-width");
+                    } else {
+                        Dom.setStyle(autocompleteInput, "display", "none");
+                        Dom.addClass(container, "collapse-width");
+                    }
 				}
 				Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
 
