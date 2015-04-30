@@ -34,6 +34,9 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<property name="lecmReview:documentAttachmentCategoryName">
+					<type>d:text</type>
+				</property>
 			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-workflow:assigneesListAspect</aspect>

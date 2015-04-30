@@ -192,4 +192,13 @@
 		  p:reportsManager-ref="reportsManager"
 		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
 	
+	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/actions/review.xml</value>
+			</list>
+		</property>
+	</bean>
+	
 </beans>

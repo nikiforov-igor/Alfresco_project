@@ -39,7 +39,13 @@
 						var assignees = execution.getVariable("lecm-workflow_assigneesListAssoc");
 						var assigneesList = review.createAssigneesList(assignees, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
-						var resultListRef = review.createResultList(bpm_package, documentAttachmentCategoryName, assigneesList);
+						var docAttachNm = null;
+						if (typeof documentAttachmentCategoryName != 'undefined' && documentAttachmentCategoryName != null){
+							docAttachNm = documentAttachmentCategoryName;
+						} else {
+							docAttachNm = lecmReview_documentAttachmentCategoryName;
+						}
+						var resultListRef = review.createResultList(bpm_package, docAttachNm, assigneesList);
 						execution.setVariable("resultListRef", resultListRef);
 					]]></activiti:string>
 				</activiti:field>
