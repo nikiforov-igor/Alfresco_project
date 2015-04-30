@@ -34,11 +34,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		searchFormId: "searchBlock-forms",
 
+		attrSearchApplied: false,
+		fullTextSearchApplied: false,
+
 		render: function () {
 			this.loadSearchProperties();
 			this.initEvents();
 
 			this.initToolbar();
+
+			this.initFiltersToolbar();
 
 			var view = Alfresco.util.getQueryStringParameter('view');
 			this.onUpdateView(view);
@@ -90,9 +95,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var toolbarId = this.id + "-toolbar";
 			Dom.setStyle(toolbarId + "-body", "visibility", "visible");
 
-			Alfresco.util.createYUIButton(this, "toolbar-searchButton", this.onSearchClick);
+			Alfresco.util.createYUIButton(this, "toolbar-searchButton", this.onFullTextSearchClick);
 			Alfresco.util.createYUIButton(this, "toolbar-extendSearchButton", this.onExtSearchClick);
-			Event.on(this.id + "-toolbar-clearSearchInput", "click", this.onClearSearch, null, this);
+			Event.on(this.id + "-toolbar-clearSearchInput", "click", this.onFullTextClearSearch, null, this);
 			Event.on(this.id + "-toolbar-full-text-search", "keyup", this.checkShowClearSearch, null, this);
 
 			new YAHOO.util.KeyListener(Dom.get(this.id + "-toolbar-full-text-search"),
@@ -100,13 +105,21 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					keys: 13
 				},
 				{
-					fn: this.onSearchClick,
+					fn: this.onFullTextSearchClick,
 					scope: this,
 					correctScope: true
 				}, "keydown").enable();
 
 			this.checkShowClearSearch();
 
+		},
+
+		initFiltersToolbar: function() {
+			this.updateCurrentFiltersFormView();
+			var filtersBlockId = this.id + "-filters-toolbar";
+			YAHOO.util.Dom.setStyle(filtersBlockId + "-body", "visibility", "inherit");
+
+			YAHOO.util.Event.on(filtersBlockId + "-delete-all-link", 'click', this.deleteAllFilters, null, this);
 		},
 
 		checkShowClearSearch: function () {
@@ -117,8 +130,17 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
-		onSearchClick: function() {
+		onFullTextSearchClick: function() {
 			this.getEvents();
+			this.fullTextSearchApplied = true;
+			this.updateCurrentFiltersFormView();
+		},
+
+		onFullTextClearSearch: function Toolbar_onSearch() {
+			Dom.get(this.id + "-toolbar-full-text-search").value = "";
+			this.checkShowClearSearch();
+			this.fullTextSearchApplied = false;
+			this.updateCurrentFiltersFormView();
 		},
 
 		onExtSearchClick: function() {
@@ -209,15 +231,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		onExtSearch: function() {
 	   	    this.getEvents();
 			this.searchDialog.hide();
+			this.attrSearchApplied = true;
+			this.updateCurrentFiltersFormView();
 		},
 
 		onClearExtSearch: function() {
 			this.renderExtFormTemplate(this.currentForm, true);
-		},
-
-		onClearSearch: function Toolbar_onSearch() {
-			Dom.get(this.id + "-toolbar-full-text-search").value = "";
-			this.checkShowClearSearch();
+			this.attrSearchApplied = false;
+			this.updateCurrentFiltersFormView();
 		},
 
 		getEvents : function () {
@@ -299,6 +320,58 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		isValidDateForView: function(date) {
 			return true;
+		},
+
+		updateCurrentFiltersFormView: function() {
+			var filtersExist = this.fullTextSearchApplied || this.attrSearchApplied;
+			var filtersBlockId = this.id + "-filters-toolbar";
+			Dom.setStyle(filtersBlockId, "display", filtersExist ? "" : "none");
+
+			if (filtersExist) {
+				var currentFiltersConteiner = Dom.get(filtersBlockId + "-current-filters");
+				if (currentFiltersConteiner != null) {
+					var filtersHTML = "";
+
+					if (this.attrSearchApplied) {
+						filtersHTML += "<span class='arm-filter-item' title='" + Alfresco.util.message('lecm.arm.lbl.by.attrs') + "'>";
+						filtersHTML += Alfresco.util.message('lecm.arm.lbl.by.attrs');
+						filtersHTML += this.getRemoveAttrFilterButton();
+						filtersHTML += "</span>";
+					}
+
+					if (this.fullTextSearchApplied) {
+						filtersHTML += "<span class='arm-filter-item' title='" + Alfresco.util.message('lecm.arm.lbl.by.text') + "'>";
+						filtersHTML += Alfresco.util.message('lecm.arm.lbl.by.text');
+						filtersHTML += this.getRemoveFullTextFilterButton();
+						filtersHTML += "</span>";
+					}
+
+					currentFiltersConteiner.innerHTML = filtersHTML;
+				}
+			}
+		},
+
+		getRemoveAttrFilterButton: function () {
+			var id = Dom.generateId();
+			var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
+			YAHOO.util.Event.onAvailable(id, function () {
+				YAHOO.util.Event.on(id, 'click', this.onClearExtSearch, null, this);
+			}, null, this);
+			return result;
+		},
+
+		getRemoveFullTextFilterButton: function () {
+			var id = Dom.generateId();
+			var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
+			YAHOO.util.Event.onAvailable(id, function () {
+				YAHOO.util.Event.on(id, 'click', this.onFullTextClearSearch, null, this);
+			}, null, this);
+			return result;
+		},
+
+		deleteAllFilters: function() {
+			this.onClearExtSearch();
+			this.onFullTextClearSearch();
 		}
 	}, true);
 })();

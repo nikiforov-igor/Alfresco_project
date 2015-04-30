@@ -23,8 +23,8 @@
 		<!-- agenda -->
 		<div class="agenda-header">
             <h2 id="calTitle">&nbsp;</h2>
-            <div><a href="#" id="${el}_expand_all">Развернуть всё</a></div>
-            <div><a href="#" id="${el}_collapse_all">Свернуть всё</a></div>
+            <div><a href="#" id="${el}_expand_all">${msg("calendar.agenda.expand-all")}</a></div>
+            <div><a href="#" id="${el}_collapse_all">${msg("calendar.agenda.collapse-all")}</a></div>
         </div>
 		<div id="${el}Container" class="alf-calendar agendaview">
 			<div id="${el}View">
