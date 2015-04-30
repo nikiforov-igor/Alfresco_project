@@ -20,7 +20,7 @@
         <#assign el=args.htmlid?html>
         <#assign toolbarId=el + "-toolbar">
         <!-- search -->
-        <div class="agenda-header">
+        <div class="calendar-search-header">
             <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
             <@comp.baseToolbar toolbarId true true true>
                 <div><a href="#" id="${el}_expand_all">Развернуть всё</a></div>

@@ -1952,3 +1952,12 @@ div.agenda-header {
 .alf-calendar .fc-view-agendaWeek .fc-widget-header.non-working {
    color: #cf2700;
 }
+
+.calendar-search-header {
+   border-bottom: 1px #ccc solid;
+}
+
+.calendar-search-header .left div {
+   padding-left: 10px;
+   line-height: 29px;
+}
