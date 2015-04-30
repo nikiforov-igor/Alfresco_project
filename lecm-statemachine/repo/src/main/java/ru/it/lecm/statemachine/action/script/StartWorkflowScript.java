@@ -113,6 +113,9 @@ public class StartWorkflowScript extends DeclarativeWebScript {
                     result.put("redirect", transitionResponse.getRedirect());
                 }
             }
+        } else if ("signal".equals(actionType)) {
+            String executionId = parseExecutionId(persistedResponse);
+            stateMachineHelper.sendSignal(executionId);
         }
 
 		return result;

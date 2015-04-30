@@ -324,10 +324,8 @@ LogicECM.module = LogicECM.module || {};
 						},
 						onSuccess: {
 							scope: this,
-							fn: function() {
-								// document.location.href = document.location.href;
-								// ALF-2803
-								window.location.reload(true);
+							fn: function(response) {
+								this._chooseState("signal", null, response.json.persistedObject, null);
 							}
 						}
 					});
