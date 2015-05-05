@@ -125,8 +125,14 @@
         <script type="text/javascript">//<![CDATA[
         (function () {
             function init() {
-                LogicECM.module.Base.Util.loadScripts([
-                    'scripts/lecm-base/components/lecm-date-picker.js'
+                LogicECM.module.Base.Util.loadResources([
+                    'scripts/lecm-base/components/lecm-date-picker.js',
+                    'scripts/lecm-calendar/schedule/jquery-ui-1.10.3.custom.js',
+                    'scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js',
+                    'scripts/lecm-base/third-party/jquery-ui-sliderAccess.js'
+                ], [
+                    'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
+                    'css/lecm-calendar/jquery-ui-timepicker-addon.css'
                 ], createDatePicker, ["button", "calendar"]);
             }
 
@@ -153,6 +159,29 @@
                 ${messages}
                 );
                 picker.draw();
+            <#if showTime>
+                var zIndex = $('#${controlId}-parent').zIndex(),
+                fieldNode = $('#${controlId}-time');
+                fieldNode.zIndex(zIndex+1);
+
+                fieldNode.timepicker({
+                    timeFormat: '${msg("title.timepicker.timeformat")}',
+                    timeOnlyTitle: '${msg("title.timepicker.select-time")}',
+                    timeText: '${msg("title.timepicker.time")}',
+                    hourText: '${msg("title.timepicker.hours")}',
+                    minuteText: '${msg("title.timepicker.minutes")}',
+                    secondText: '${msg("title.timepicker.seconds")}',
+                    currentText: '${msg("title.timepicker.current")}',
+                    closeText: '${msg("title.timepicker.select")}',
+                    onSelect: function (selectedDateTime) {
+                        YAHOO.Bubbling.fire("handleFieldChange", {
+                            fieldId: "${field.configName}",
+                            formId: "${args.htmlid}"
+                        });
+                        YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
+                    }
+                });
+            </#if>
             }
 
             YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
