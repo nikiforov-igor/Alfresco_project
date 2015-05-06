@@ -15,6 +15,10 @@
 					<show id="lecm-eds-document:summaryContent"/>
 					<!--Председатель совещания-->
 					<show id="lecm-protocol:meeting-chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-protocol:secretary-assoc"/>
+					<!--Присутствовали-->
+					<show id="lecm-protocol:attended-assoc"/>
 					<!--Примечание-->
 					<show id="lecm-eds-document:note"/>
 					<!--Тематика-->
@@ -52,6 +56,8 @@
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
 					<field id="lecm-protocol:meeting-chairman-assoc" set="common"/>
+					<field id="lecm-protocol:secretary-assoc" set="common"/>
+					<field id="lecm-protocol:attended-assoc" set="common"/>
 					<field id="lecm-eds-document:note" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -129,6 +135,10 @@
 					<show id="lecm-protocol:signers-assoc"/>
 					<!--Председатель совещания-->
 					<show id="lecm-protocol:meeting-chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-protocol:secretary-assoc"/>
+					<!--Присутствовали-->
+					<show id="lecm-protocol:attended-assoc"/>
 					<!--Примечание-->
 					<show id="lecm-eds-document:note"/>
 					<!--Тематика-->
@@ -161,6 +171,8 @@
 					</field>
 					<field id="lecm-protocol:signers-assoc"/>
 					<field id="lecm-protocol:meeting-chairman-assoc"/>
+					<field id="lecm-protocol:secretary-assoc"/>
+					<field id="lecm-protocol:attended-assoc"/>
 					<field id="lecm-eds-document:note">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -200,6 +212,10 @@
 					<show id="lecm-contract:approval"/>
 					<!--Автосоздание поручений-->
 					<show id="lecm-protocol:errands-autocreation"/>
+					<!--Секретарь-->
+					<show id="lecm-protocol:secretary-assoc"/>
+					<!--Присутствовали-->
+					<show id="lecm-protocol:attended-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label-id="label.approval"/>
@@ -213,15 +229,16 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
-					<show id="lecm-protocol-ts:point-formulation" force="true"/>
-					<show id="lecm-protocol-ts:reporter-assoc" force="true"/>
-					<show id="lecm-protocol-ts:coreporter-assoc" force="true"/>
-					<show id="lecm-protocol-ts:point-desc" force="true"/>
-					<show id="lecm-protocol-ts:decision" force="true"/>
-					<show id="lecm-protocol-ts:executor-assoc" force="true"/>
-					<show id="lecm-protocol-ts:execution-date" force="true"/>
-					<show id="lecm-protocol-ts:execution-date-real" force="true"/>
-					<show id="lecm-protocol-ts:note" force="true"/>
+					<show id="lecm-protocol-ts:point-formulation"/>
+					<show id="lecm-protocol-ts:reporter-assoc"/>
+					<show id="lecm-protocol-ts:coreporter-assoc"/>
+					<show id="lecm-protocol-ts:point-desc"/>
+					<show id="lecm-protocol-ts:men-spoke"/>
+					<show id="lecm-protocol-ts:decision"/>
+					<show id="lecm-protocol-ts:executor-assoc"/>
+					<show id="lecm-protocol-ts:execution-date"/>
+					<show id="lecm-protocol-ts:execution-date-real"/>
+					<show id="lecm-protocol-ts:note"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:indexTableRow" force="true" />
@@ -230,6 +247,11 @@
 					<field id="lecm-protocol-ts:coreporter-assoc" />
 					<field id="lecm-protocol-ts:point-desc" >
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
+					<field id="lecm-protocol-ts:men-spoke" >
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
 					</field>
 					<field id="lecm-protocol-ts:decision" >
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
@@ -268,16 +290,17 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
-					<show id="lecm-protocol-ts:point-status-assoc" force="true"/>
-					<show id="lecm-protocol-ts:point-formulation" force="true"/>
-					<show id="lecm-protocol-ts:reporter-assoc" force="true"/>
-					<show id="lecm-protocol-ts:coreporter-assoc" force="true"/>
-					<show id="lecm-protocol-ts:point-desc" force="true"/>
-					<show id="lecm-protocol-ts:decision" force="true"/>
-					<show id="lecm-protocol-ts:executor-assoc" force="true"/>
-					<show id="lecm-protocol-ts:execution-date" force="true"/>
-					<show id="lecm-protocol-ts:execution-date-real" force="true"/>
-					<show id="lecm-protocol-ts:note" force="true"/>
+					<show id="lecm-protocol-ts:point-status-assoc"/>
+					<show id="lecm-protocol-ts:point-formulation"/>
+					<show id="lecm-protocol-ts:reporter-assoc"/>
+					<show id="lecm-protocol-ts:coreporter-assoc"/>
+					<show id="lecm-protocol-ts:point-desc"/>
+					<show id="lecm-protocol-ts:men-spoke"/>
+					<show id="lecm-protocol-ts:decision"/>
+					<show id="lecm-protocol-ts:executor-assoc"/>
+					<show id="lecm-protocol-ts:execution-date"/>
+					<show id="lecm-protocol-ts:execution-date-real"/>
+					<show id="lecm-protocol-ts:note"/>
 					<show id="lecm-protocol-ts:errand-assoc"/>
 					<show id="lecm-protocol:executed-button"/>
 				</field-visibility>
@@ -297,6 +320,11 @@
 					<field id="lecm-protocol-ts:coreporter-assoc" set="item1"/>
 					<field id="lecm-protocol-ts:point-desc" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
+					<field id="lecm-protocol-ts:men-spoke" set="item1">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
 					</field>
 					<field id="lecm-protocol-ts:decision" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>

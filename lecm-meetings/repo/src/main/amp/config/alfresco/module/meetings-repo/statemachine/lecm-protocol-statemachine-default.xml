@@ -524,6 +524,36 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/0bf5e36c-9c2b-4af0-903e-41f3ce41e751</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/6c9886b5-f6c3-4bab-a31c-547109e619bc</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -1149,6 +1179,36 @@
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/b1c58592-33e7-47ef-a4ea-957850dd27e1</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/3aa952cf-a951-4963-b271-e77ee692bec1</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1923,6 +1983,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/64f7c144-0ec6-488d-b56f-3d236c1e621b</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/3acae66c-ace0-4330-9f29-ffa52bb4ba16</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -2637,6 +2727,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/e39e796b-6f51-4f2e-b86b-65f502066e57</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/4718aa0f-1fe6-494d-a07f-40d1150c3626</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -3243,6 +3363,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/ff81161f-934c-4165-a28f-d04439def813</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/49c91e6a-7f73-4444-96b9-f2e2f11c7268</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -3861,6 +4011,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecm-protocol_errands-autocreation</name>
 										<nodeRef>workspace://SpacesStore/185651d3-4f3a-4ab4-909c-bd18890c7e09</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/a18da657-1623-4744-9f3f-25fb42a09cd4</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/fcf08869-d0e5-49e7-8b86-d4abc9ca4833</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4583,6 +4763,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/02481f8f-db1e-46cd-a14b-6b6c2ad965f2</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/9611060c-41ad-4899-b5f1-6395760a84b5</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -5234,6 +5444,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/709f8034-a3bc-4cc2-a60c-df94708864b7</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/4c9562bb-71ad-48db-97fc-9c912a3ad39d</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -5548,6 +5788,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/fb0a01c2-5371-4ea6-b9b3-28f0b6779abc</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/6c942ce1-2384-4a32-8ec2-644f66edc63c</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -5777,6 +6047,36 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecm-protocol_errands-autocreation</name>
 										<nodeRef>workspace://SpacesStore/386cea44-fab5-4ebe-a665-657bcfcb0c7c</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/1009877f-a711-4ed9-9f5f-7e38a3923cc0</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-protocol_attended-assoc</name>
+										<nodeRef>workspace://SpacesStore/292e2cf6-0b4f-435d-b403-75ea9adcf55b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>

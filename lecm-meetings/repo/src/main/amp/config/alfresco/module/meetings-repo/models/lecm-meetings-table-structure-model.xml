@@ -95,6 +95,15 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				<!--выступили-->
+                <property name="lecm-meetings-ts:men-spoke">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
             <associations>
 				<!--Докладчик-->

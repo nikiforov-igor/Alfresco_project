@@ -197,8 +197,31 @@
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/actions/review.xml</value>
+				<value>alfresco/module/${artifactId}/actions/create-protocol-content.xml</value>
 			</list>
 		</property>
 	</bean>
+	
+	
+	<bean id="protocol.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/protocol-content.xml</value>
+            </list>
+        </property>
+        <property name="xmlImportListener" ref="protocol.reportsDeployer"/>
+    </bean>
+
+    <bean id="protocol.reportsDeployer" parent="reportsDeployer">
+        <property name="reportsForDeploy">
+            <list>
+                <value>protocol-content</value>
+            </list>
+        </property>
+    </bean>
 	
 </beans>
