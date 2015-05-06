@@ -6,6 +6,10 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 (function() {
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		Util = LogicECM.module.Base.Util,
+		KeyListener = YAHOO.util.KeyListener;
 
 	LogicECM.module.Calendar.Edit = function(htmlId) {
 		LogicECM.module.Calendar.Edit.superclass.constructor.call(this, htmlId);
@@ -15,6 +19,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	YAHOO.extend(LogicECM.module.Calendar.Edit, LogicECM.module.Documents.Edit);
 
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.Edit.prototype, {
+		allAttachments: [],
+		attachmentsRootNode: null,
+
+		onReady: function () {
+			this.loadForm();
+			this.initAttachments();
+		},
+
 		onFormSubmitSuccess: function (response) {
 			var repeatable = Dom.get(this.runtimeForm.formId)["prop_lecm-events_repeatable"];
 			if (repeatable.value == "true") {
@@ -67,6 +79,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var originalSubmitFunction = submitElement.submitForm;
 
 			submitElement.submitForm = this.onSubmit.bind(this, originalSubmitFunction, submitElement);
+
+			var actionSubmit = Dom.get(this.id + "-event-action-save");
+			if (actionSubmit != null) {
+				YAHOO.util.Event.addListener(actionSubmit, "click", this.onSubmit.bind(this, originalSubmitFunction, submitElement));
+			}
+
+			var actionCancel = Dom.get(this.id + "-event-action-cancel");
+			if (actionCancel != null) {
+				YAHOO.util.Event.addListener(actionCancel, "click", this.onCancelButtonClick, null, this);
+			}
 
 			args[1].runtime.setAJAXSubmit(true,
 				{
@@ -172,6 +194,154 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				if (YAHOO.lang.isFunction(fn) && scope) {
 					fn.call(scope);
 				}
+			}
+		},
+
+		initAttachments: function() {
+			this.loadAttachments();
+
+			var uploaderButton = this.id + "-uploader-button";
+			Event.on(uploaderButton, "click", this.showUploader, null, this);
+			new KeyListener(uploaderButton,
+				{
+					keys: KeyListener.KEY.ENTER
+				},
+				{
+					fn: this.showUploader,
+					scope: this,
+					correctScope: true
+				}, KeyListener.KEYDOWN).enable();
+			this.widgets.uploaderButton = uploaderButton;
+		},
+
+		loadAttachments: function() {
+			Alfresco.util.Ajax.request({
+				method: "GET",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get?documentNodeRef=" + this.options.nodeRef,
+				successCallback: {
+					fn: function (response) {
+						var result = response.json;
+						if (result != null) {
+							if (result.items != null && result.items.length > 0) {
+								for (var i = 0; i < result.items.length; i++) {
+									var item = result.items[i];
+									if (item.attachments != null) {
+										for (var j  = 0; j < item.attachments.length; j++) {
+											this.allAttachments.push(item.attachments[j]);
+										}
+									}
+									if (item.category != null && !item.category.isReadOnly) {
+										this.attachmentsRootNode = item.category.nodeRef;
+									}
+								}
+							}
+						}
+
+						this.initDndUploader();
+						this.updateAttachmentsView();
+					},
+					scope: this
+				}
+			});
+		},
+
+		initDndUploader: function() {
+			if (this.attachmentsRootNode != null) {
+				var uploader = new LogicECM.DndUploader(this.id + "-uploader-block");
+				uploader.initUploader({
+					disabled: false,
+					destinationName: this.msg("label.events.attachments"),
+					destination: this.attachmentsRootNode,
+					multipleMode: true,
+					onFileUploadComplete: {
+						fn: this.fileUploadComplete,
+						scope: this
+					}
+				});
+			}
+		},
+
+		updateAttachmentsView: function() {
+			var items = this.allAttachments;
+			var elAttachments = Dom.get(this.id + "-attachments");
+
+			if (elAttachments != null) {
+				elAttachments.innerHTML = '';
+
+				for (var i = 0; i < items.length; i++) {
+					var item = items[i];
+					var fileName = item.name;
+					var nodeRef = item.nodeRef;
+
+					var fileIcon = Alfresco.util.getFileIcon(fileName, "cm:content", 16);
+					var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon + "' width='16' height='16'/>";
+					fileName = "<span>" + fileName + "</span>";
+					var leftPart = fileIconHtml + fileName;
+					leftPart = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + leftPart + "</a>";
+
+					var reghtPart = "";
+					//if (this.options.showUploadNewVersion && (!this.options.checkRights || this.hasNewVersionContentRight)) {
+					//	var iconNewVersionId = "attachment-newVersion-" + nodeRef;
+					//	reghtPart += "<img id='" + iconNewVersionId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+					//	+ "/components/documentlibrary/actions/document-upload-new-version-16.png' class='newVersion-icon'/>";
+					//	Event.onAvailable(iconNewVersionId, this.attachUploadNewVersionClickListener, item, this);
+					//}
+					//
+					//if (!this.options.checkRights || this.hasDeleteContentRight) {
+					//	var iconRemoveId = "attachment-remove-" + nodeRef;
+					//	reghtPart += "<img id='" + iconRemoveId + "' src='" + Alfresco.constants.URL_RESCONTEXT
+					//	+ "components/images/delete-16.png' class='remove-icon'/>";
+					//	Event.onAvailable(iconRemoveId, this.attachRemoveItemClickListener, item, this);
+					//}
+
+					var rowId = "attachment-" + nodeRef.replace(/:|\//g, '_');
+					elAttachments.innerHTML += "<li id='" + rowId + "'>" + Util.getCroppedItem(leftPart, reghtPart) + "</li>";
+					//if (!this.options.disabled && this.options.showUploadNewVersion) {
+					//	Event.onAvailable(rowId, this.attachUploadNewVersionDndListener, item, this);
+					//}
+				}
+			}
+		},
+
+		showUploader: function() {
+			if (this.attachmentsRootNode != null) {
+				if (this.fileUpload == null)
+				{
+					this.fileUpload = Alfresco.getFileUploadInstance();
+				}
+
+				var uploadConfig =
+				{
+					destination: this.attachmentsRootNode,
+					filter: [],
+					mode: this.fileUpload.MODE_MULTI_UPLOAD,
+					thumbnails: "doclib",
+					onFileUploadComplete:
+					{
+						fn: this.fileUploadComplete,
+						scope: this
+					},
+					suppressRefreshEvent: this.options.suppressRefreshEvent
+				};
+				this.fileUpload.show(uploadConfig);
+			}
+		},
+
+		fileUploadComplete: function(obj) {
+			var me = this;
+			if (obj.successful != null && obj.successful.length > 0) {
+				for (var i = 0; i < obj.successful.length; i++) {
+					var fileName = obj.successful[i].fileName;
+					var nodeRef = obj.successful[i].nodeRef;
+
+					this.allAttachments.push({
+						nodeRef: nodeRef,
+						name: fileName,
+						justUpload: true
+					});
+				}
+
+				me.updateAttachmentsView();
 			}
 		}
 	}, true);
