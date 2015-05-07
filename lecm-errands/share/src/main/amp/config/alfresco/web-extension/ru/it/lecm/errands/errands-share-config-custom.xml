@@ -1,14 +1,12 @@
 <alfresco-config>
     <config>
         <forms>
-<!--
             <dependencies>
-                <js src="/scripts/lecm-errands/errands-const.js" />
-	            <js src="/scripts/lecm-errands/constraints/errands-request-cancel-new-executor-validator.js"/>
-	            <js src="/scripts/lecm-errands/constraints/errands-request-change-due-date-validator.js"/>
-	            <js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>
+                <js src="/scripts/lecm-errands/constraints/errands-request-cancel-new-executor-validator.js"/>
+                <js src="/scripts/lecm-errands/constraints/errands-request-change-due-date-validator.js"/>
+                <js src="/scripts/lecm-errands/constraints/errands-limitation-date-validator.js"/>
             </dependencies>
--->
+
            <default-controls>
                 <type name="association:lecm-errands-dic:errand-titles" template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                     <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>

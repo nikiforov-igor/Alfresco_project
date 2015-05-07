@@ -12,18 +12,14 @@ LogicECM.module.Errands.requestCancelTaskNewExecutorValidation =
 			var newExecutor = field.form["assoc_lecmErrandWf_requestCancelTaskNewExecutor"];
 
 			if (newExecutor != null) {
+				var formId = form.formId.replace("-form", "");
 				var isChangeExecutor = false;
+
 				if (result != null && result.value == "CHANGE_EXECUTOR") {
 					isChangeExecutor = true;
-				}
-
-				var newExecutorInput = field.form["assoc_lecmErrandWf_requestCancelTaskNewExecutor-autocomplete-input"];
-				if (newExecutorInput != null) {
-					newExecutorInput.disabled = !isChangeExecutor;
-				}
-				var newExecutorButton = field.form["assoc_lecmErrandWf_requestCancelTaskNewExecutor-tree-picker-button"];
-				if (newExecutorButton != null) {
-					newExecutorButton.disabled = !isChangeExecutor;
+					LogicECM.module.Base.Util.enableControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor");
+				} else {
+					LogicECM.module.Base.Util.disableControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor");
 				}
 
 				return !isChangeExecutor || newExecutor.value.length > 0;
