@@ -53,6 +53,10 @@
                     <show id="lecm-document:creator"/>
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
+                    <!-- Без утверждения инициатором -->
+                    <show id="lecm-errands:without-initiator-approval"/>
+                    <!-- Исполнить точно в срок  -->
+                    <show id="lecm-errands:just-in-time"/>
                     <!-- Разделительная линия -->
                     <show id="lecm-errands:line"/>
                     <!-- Дата исполнения -->
@@ -133,6 +137,8 @@
 	                </field>
                     <field id="lecm-document:creator" set="common"/>
                     <field id="lecm-document:subject-assoc" set="common"/>
+                    <field id="lecm-errands:without-initiator-approval" set="common"/>
+                    <field id="lecm-errands:just-in-time" set="common"/>
                     <field id="lecm-errands:line" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
                     </field>
@@ -637,6 +643,10 @@
                     <show id="lecm-errands:execution-report"/>
                     <!-- Отчеты соисполнителей -->
                     <show id="lecm-errands-ts:coexecutor-reports-assoc"/>
+                    <!-- Без утверждения инициатором -->
+                    <show id="lecm-errands:without-initiator-approval"/>
+                    <!-- Исполнить точно в срок  -->
+                    <show id="lecm-errands:just-in-time"/>
                 </field-visibility>
             </form>
         </forms>
