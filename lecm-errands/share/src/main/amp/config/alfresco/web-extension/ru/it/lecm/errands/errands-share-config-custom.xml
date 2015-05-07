@@ -427,7 +427,9 @@
                         </constraint-handlers>
                     </field>
                     <field id="cm:created">
-                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl">
+                            <control-param name="forceEditable">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-errands:execution-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
