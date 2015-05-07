@@ -19,6 +19,9 @@
 
 <#assign defaultValue=field.value>
 <#if form.mode == "create" && defaultValue?string == "">
+    <#if field.control.params.defaultValue??>
+        <#assign defaultValue=field.control.params.defaultValue>
+    </#if>
     <#if form.arguments[field.name]?has_content>
         <#assign defaultValue=form.arguments[field.name]>
     </#if>

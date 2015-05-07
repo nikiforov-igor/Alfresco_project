@@ -242,5 +242,43 @@
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
+	<bean id="events.ConfigToRepositoryLoader" parent="configsToRepositoryLoader">
+		<property name="configs">
+			<list>
+				<value>alfresco/module/events-repo/reports/configs/events.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="listOfUsedResourceTypes" parent="listOfUsedTypes">
+		<property name="types">
+			<map>
+				<entry key="lecm-events-dic:resources" value="Ресурсы мероприятия"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="events.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+		<property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/reports/use-of-resources.xml</value>
+				<value>alfresco/module/${artifactId}/reports/use-of-locations.xml</value>
+			</list>
+		</property>
+		<property name="xmlImportListener" ref="events.reportsDeployer"/>
+	</bean>
+
+	<bean id="events.reportsDeployer" parent="reportsDeployer">
+		<property name="reportsForDeploy">
+			<list>
+				<value>use-of-resources</value>
+				<value>use-of-locations</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>

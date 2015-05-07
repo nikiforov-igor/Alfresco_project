@@ -4344,6 +4344,12 @@
 						<property name="cm:name"><![CDATA[f9b42412-5c9a-4911-841e-686ee89bb52d]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-events:title]]></property>
 					</item>
+					<item name="cm:Отчеты" type="lecm-arm:reports-node">
+						<property name="cm:name"><![CDATA[Отчеты]]></property>
+						<property name="lecm-arm:order"><![CDATA[50]]></property>
+						<property name="lecm-arm:reportCodes"><![CDATA[use-of-resources,use-of-locations]]></property>
+						<property name="lecm-arm:types"><![CDATA[]]></property>
+					</item>
 				</items>
 				<assocs>
 					<assoc type="lecm-arm:fields-assoc"
