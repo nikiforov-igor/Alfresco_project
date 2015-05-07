@@ -26,6 +26,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -97,7 +98,7 @@ public class ActionsScript extends DeclarativeWebScript {
         /*NEW HELPER*/
         //LifecycleStateMachineHelper helper = new LifecycleStateMachineHelper();
 
-        if (StringUtils.isNotEmpty(taskId) && stateMachineService.getCurrentExecutionId(taskId) == null && !stateMachineService.isFinal(new NodeRef(documentRef))) {
+        if (taskId != null && taskId.startsWith(LifecycleStateMachineHelper.ACTIVITI_PREFIX) && stateMachineService.getCurrentExecutionId(taskId) == null) {
             HashMap<String, Object> actionResult = new HashMap<String, Object>();
             ArrayList<String> errors = new ArrayList<String>();
             errors.add("Статус документа изменился! Обновите страницу документа для получения списка доступных действий.");
