@@ -109,7 +109,7 @@
 									    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
 									    notificationText += " № {lecm-errands:number}";
 									    notificationText += " принят. Поручение отменено";
-									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 
 									    var logText = "Сотрудник #initiator отменил поручение: #mainobject.";
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
