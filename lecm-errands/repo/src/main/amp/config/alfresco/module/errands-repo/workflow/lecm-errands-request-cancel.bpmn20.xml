@@ -123,7 +123,7 @@
 										    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
 										    notificationText += " № {lecm-errands:number}";
 										    notificationText += " принят. Поручению назначен другой Исполнитель";
-										    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+										    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 
 						                    var logObjects = [];
 						                    logObjects.push("" + newExecutor.nodeRef);
