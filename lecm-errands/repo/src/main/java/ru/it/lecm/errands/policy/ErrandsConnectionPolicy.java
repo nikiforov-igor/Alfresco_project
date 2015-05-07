@@ -10,6 +10,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -100,11 +101,15 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
         //	   После рефакторинга транзакций валится добавление участника
         //     т.к. у дочернего поручение в этот момент еще нет папки с участниками
         //     Узнать нужно ли еще это условие в принципе
-        //QName type = nodeService.getType(baseDoc);
-        //if (type.equals(ErrandsService.TYPE_ERRANDS)){
-        //NodeRef initiatorRef = nodeService.getTargetAssocs(baseDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
-        //documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, new HashMap<QName, Serializable>());
-        //}
+        QName type = nodeService.getType(baseDoc);
+        if (type.equals(ErrandsService.TYPE_ERRANDS)){
+            NodeRef initiatorRef = nodeService.getTargetAssocs(baseDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
+            try {
+                documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, new HashMap<QName, Serializable>());
+            } catch (WriteTransactionNeededException ex) {
+                logger.error("Can't add document member.", ex);
+            }
+        }
 
         List<String> regNums = documentService.getRegNumbersValues(baseDoc);
         if (regNums != null && !regNums.isEmpty()) {
