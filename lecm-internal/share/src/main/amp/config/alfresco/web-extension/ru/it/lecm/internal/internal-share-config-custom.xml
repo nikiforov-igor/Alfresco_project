@@ -145,7 +145,7 @@
 
                     <field id="lecm-document-aspects:reg-project-data-number" set="common"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="common"/>
-	                <field id="lecm-document-aspects:is-shared-folder" set="common">
+	                <field id="lecm-document-aspects:is-shared-folder" set="common" label-id="label.isSharedFolder">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 	                </field>
 
