@@ -24,7 +24,7 @@
 				                        var recipients = [];
 				                        recipients.push(executor);
 				                        var notificationText = documentScript.wrapperLink(controller, "{lecm-errands:controller-assoc/lecm-orgstr:employee-short-name}");
-				                        notificationText += documentScript.wrapperTitle(" отменил ", lecmErrandWf_controllerDeclineReason);;
+				                        notificationText += documentScript.wrapperTitle(" отклонил ", lecmErrandWf_controllerDeclineReason);;
 				                        notificationText += "исполнение вам поручения: ";
 				                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
 				                        notificationText += " № {lecm-errands:number}";
