@@ -111,7 +111,12 @@
 				                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 
 				                        var logText = "#initiator утвердил ";
-				                        logText += documentScript.wrapperTitle("перенос", lecmErrandWf_requestDueDateChangeReason);
+										var comment = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskComment");
+										if (comment != null) {
+											logText += documentScript.wrapperTitle("перенос", comment);
+										} else {
+											logText += "перенос";
+										}
 				                        logText += " срока поручения: #mainobject.";
 				                        businessJournal.log(document.nodeRef.toString(), "ERRAND_CHANGE_DUE_DATE", logText, []);
 	                                }
