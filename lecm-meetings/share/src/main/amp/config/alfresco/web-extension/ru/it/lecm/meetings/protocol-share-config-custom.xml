@@ -243,8 +243,54 @@
 				<appearance>
 					<field id="lecm-document:indexTableRow" force="true" />
 					<field id="lecm-protocol-ts:point-formulation" />
-					<field id="lecm-protocol-ts:reporter-assoc" />
-					<field id="lecm-protocol-ts:coreporter-assoc" />
+					<field id="lecm-protocol-ts:reporter-assoc" >
+						<control template="/ru/it/lecm/meetings/components/controls/mix-double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+
+							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol-ts:coreporter-assoc" >
+						<control template="/ru/it/lecm/meetings/components/controls/mix-double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+
+							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
 					<field id="lecm-protocol-ts:point-desc" >
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
@@ -316,8 +362,54 @@
                         </control>
 					</field>
 					<field id="lecm-protocol-ts:point-formulation" set="item1"/>
-					<field id="lecm-protocol-ts:reporter-assoc" set="item1"/>
-					<field id="lecm-protocol-ts:coreporter-assoc" set="item1"/>
+					<field id="lecm-protocol-ts:reporter-assoc" set="item1">
+						<control template="/ru/it/lecm/meetings/components/controls/mix-double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+
+							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol-ts:coreporter-assoc" set="item1">
+						<control template="/ru/it/lecm/meetings/components/controls/mix-double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+
+							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
 					<field id="lecm-protocol-ts:point-desc" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>

@@ -1,0 +1,15 @@
+<webscript>
+  <shortname>Получение описание для списка нодов различных типов</shortname>
+  <description>
+  Возвращает описание списка нодов, принимает json:
+  items,
+  additionalProperties,
+  itemValueType,
+  itemNameSubstituteStringArr,
+  selectedItemsNameSubstituteStringArr
+  </description>
+  <url>/lecm/forms/picker/mix/items</url>
+  <format default="json"/>
+  <authentication>user</authentication>
+  <transaction allow="readonly">required</transaction>
+</webscript>
