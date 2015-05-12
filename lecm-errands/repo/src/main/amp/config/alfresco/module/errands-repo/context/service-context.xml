@@ -122,6 +122,10 @@
         <property name="workCalendar" ref="WorkCalendarService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
 		<property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
+        <property name="threadPoolExecutor" ref="defaultAsyncThreadPool"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
+        <property name="copyService" ref="copyService"/>
 	</bean>
 
     <bean id="errandsStatusesFilter" parent="documentStatusesFilter">

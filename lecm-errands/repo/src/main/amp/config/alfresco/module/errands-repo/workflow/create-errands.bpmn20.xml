@@ -13,73 +13,7 @@
                         <activiti:string>
                             <![CDATA[
 	                        for each (var doc in bpm_package.children) {
-                                var properties = []
-                                <!-- lecmErrandWf:isImportant lecm-errands:is-important -->
-                                var value = lecmErrandWf_isImportant;
-                                if (value != null) {
-                                    properties["lecm-errands:is-important"] = value;
-                                }
-
-                                <!-- lecmErrandWf:title lecm-errands:title -->
-                                value = lecmErrandWf_title;
-                                if (value != null) {
-                                    properties["lecm-errands:title"] = value;
-                                }
-
-                                <!-- lecmErrandWf:content lecm-errands:content -->
-                                value = lecmErrandWf_content;
-                                if (value != null) {
-                                    properties["lecm-errands:content"] = value;
-                                }
-
-                                <!-- lecmErrandWf:limitationDate lecm-errands:limitation-date -->
-                                value = lecmErrandWf_limitationDate;
-                                if (value != null) {
-                                    properties["lecm-errands:limitation-date"] = value;
-                                }
-
-                                <!-- lecmErrandWf:withoutInitiatorApproval lecm-errands:without-initiator-approval -->
-                                value = lecmErrandWf_withoutInitiatorApproval;
-                                if (value != null) {
-                                    properties["lecm-errands:without-initiator-approval"] = value;
-                                }
-
-                                <!-- lecmErrandWf_startDate lecm-errands:start-date -->
-                                value = lecmErrandWf_startDate;
-                                if (value != null) {
-                                    properties["lecm-errands:start-date"] = value;
-                                }
-
-                                <!-- lecmErrandWf_justInTime lecm-errands:just-in-time -->
-                                value = lecmErrandWf_justInTime;
-                                if (value != null) {
-                                    properties["lecm-errands:just-in-time"] = value;
-                                }
-
-                                var errand = documentScript.getDraftRoot("lecm-errands:document").createNode(null, "lecm-errands:document", properties);
-
-                                var currentEmployee = orgstructure.getCurrentEmployee();
-                                errand.createAssociation(currentEmployee, "lecm-errands:initiator-assoc");
-
-                                <!-- lecmErrandWf:executorAssoc lecm-errands:executor-assoc -->
-                                if (typeof lecmErrandWf_executorAssoc != 'undefined' && lecmErrandWf_executorAssoc != null) {
-                                    errand.createAssociation(lecmErrandWf_executorAssoc, "lecm-errands:executor-assoc");
-                                }
-
-                                <!-- lecmErrandWf:coexecutorsAssoc lecm-errands:coexecutors-assoc -->
-                                if (typeof lecmErrandWf_coexecutorsAssoc != 'undefined' && lecmErrandWf_coexecutorsAssoc != null) {
-                                    for each (var assocObj in lecmErrandWf_coexecutorsAssoc.toArray()) {
-	                                   errand.createAssociation(assocObj, "lecm-errands:coexecutors-assoc");
-    	                            }
-                                }
-
-                                <!-- lecmErrandWf:controllerAssoc lecm-errands:controller-assoc -->
-                                if (typeof lecmErrandWf_controllerAssoc != 'undefined' && lecmErrandWf_controllerAssoc != null) {
-                                    errand.createAssociation(lecmErrandWf_controllerAssoc, "lecm-errands:controller-assoc");
-                                }
-
-                                <!-- lecm-errands:additional-document-assoc -->
-                                errand.createAssociation(doc, "lecm-errands:additional-document-assoc");
+                                errands.createErrands(execution.getVariables(), doc);
 	                        }
 	                        ]]>
                         </activiti:string>

@@ -1,19 +1,26 @@
 package ru.it.lecm.errands.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
+import org.alfresco.util.GUID;
 import org.alfresco.util.ParameterCheck;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.NativeJavaObject;
-import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.errands.ErrandsService;
@@ -21,7 +28,9 @@ import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
+import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * User: AIvkin
@@ -29,6 +38,9 @@ import java.util.*;
  * Time: 11:56
  */
 public class ErrandsWebScriptBean extends BaseWebScript {
+
+    final static protected Logger logger = LoggerFactory.getLogger(ErrandsWebScriptBean.class);
+
     public static final String EXECUTION_KEY = "Ожидает исполнения";
     public static final int DEADLINE_DAY_COUNT = 5;
     ErrandsService errandsService;
@@ -39,6 +51,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private NodeService nodeService;
     private DocumentConnectionService documentConnectionService;
 	private LecmTransactionHelper lecmTransactionHelper;
+    private ThreadPoolExecutor threadPoolExecutor;
+    private TransactionService transactionService;
+    private RepositoryStructureHelper repositoryStructureHelper;
+    private CopyService copyService;
 
 	public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
 		this.lecmTransactionHelper = lecmTransactionHelper;
@@ -64,7 +80,23 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		this.documentConnectionService = documentConnectionService;
 	}
 
-	public static enum IssuedByMeEnum {
+    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        this.threadPoolExecutor = threadPoolExecutor;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+        this.repositoryStructureHelper = repositoryStructureHelper;
+    }
+
+    public void setCopyService(CopyService copyService) {
+        this.copyService = copyService;
+    }
+
+    public static enum IssuedByMeEnum {
         ISSUED_ERRANDS_ALL,
         ISSUED_ERRANDS_EXECUTION,
         ISSUED_ERRANDS_EXPIRED,
@@ -569,5 +601,109 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public ScriptNode getDashletSettings() {
         return new ScriptNode(errandsService.getDashletSettingsNode(), serviceRegistry, getScope());
+    }
+
+    public void createErrands(final Map<String, Object> properties, ScriptNode parentErrandNode) {
+        final NodeRef parentErrand = parentErrandNode.getNodeRef();
+        final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                try {
+                    AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
+                        @Override
+                        public Void doWork() throws Exception {
+                            return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                @Override
+                                public Void execute() throws Throwable {
+                                    Map<QName, Serializable> props = new HashMap<>();
+
+                                    Object value = properties.get("lecmErrandWf_isImportant");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_IS_IMPORTANT, (Serializable) value);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_title");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_TITLE, (Serializable) value);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_content");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_CONTENT, (Serializable) value);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_limitationDate");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_LIMITATION_DATE, (Serializable) value);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_withoutInitiatorApproval");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_WITHOUT_INITIATOR_APPROVAL, (Serializable) value);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_startDate");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_START_DATE, (Serializable) value);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_justInTime");
+                                    if (value != null) {
+                                        props.put(ErrandsService.PROP_ERRANDS_JUST_IN_TIME, (Serializable) value);
+                                    }
+
+                                    String name = GUID.generate();
+
+                                    NodeRef draft = repositoryStructureHelper.getDraftsRef(user);
+                                    NodeRef errand = nodeService.createNode(
+                                            draft,
+                                            ContentModel.ASSOC_CONTAINS,
+                                            QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
+                                            ErrandsService.TYPE_ERRANDS,
+                                            props).getChildRef();
+
+                                    NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+                                    nodeService.createAssociation(errand, currentEmployee, ErrandsService.ASSOC_ERRANDS_INITIATOR);
+
+                                    value = properties.get("lecmErrandWf_executorAssoc");
+                                    if (value != null) {
+                                        nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_EXECUTOR);
+                                    }
+
+                                    value = properties.get("lecmErrandWf_coexecutors_assoc");
+                                    if (value != null) {
+                                        if (value instanceof org.mozilla.javascript.NativeArray) {
+                                            final NativeArray nativeArray = (NativeArray) value;
+                                            final Collection<ScriptNode> arrayResult = new ArrayList<>();
+                                            for (int i = 0; i < (int) nativeArray.getLength(); i++) {
+                                                if (nativeArray.get(i, null) instanceof ScriptNode) {
+                                                    arrayResult.add((ScriptNode) nativeArray.get(i, null));
+                                                }
+                                            }
+                                            value = arrayResult;
+                                        }
+                                        Collection<ScriptNode> coexecutors = (Collection<ScriptNode>) value;
+                                        for (ScriptNode coexecutor : coexecutors) {
+                                            nodeService.createAssociation(errand, coexecutor.getNodeRef(), ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS);
+                                        }
+                                    }
+
+                                    value = properties.get("lecmErrandWf_controller_assoc");
+                                    if (value != null) {
+                                        nodeService.createAssociation(errand, ((ScriptNode) value).getNodeRef(), ErrandsService.ASSOC_ERRANDS_CONTROLLER);
+                                    }
+
+                                    nodeService.createAssociation(errand, parentErrand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+                                    return null;
+                                }
+                            }, false, true);
+                        }
+                    }, user);
+                } catch (Exception e) {
+                    logger.error("Error while create errand", e);
+                }
+            }
+        };
+        threadPoolExecutor.execute(runnable);
     }
 }
