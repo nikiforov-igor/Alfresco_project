@@ -116,7 +116,7 @@
              <#assign currentValue = field.control.params.defaultValue!""?js_string>
              <#if currentValue == "now">
                     <#if field.control.params.defaultTime?? >
-                        <#assign currentValue = .now?string("yyyy-MM-dd'T'" + field.control.params.defaultTime + ":00.000Z")>
+                        <#assign currentValue = .now?string("yyyy-MM-dd'T'" + field.control.params.defaultTime + ":00.000")>
                     <#else>
                         <#assign currentValue = .now?string("yyyy-MM-dd")>
                     </#if>
