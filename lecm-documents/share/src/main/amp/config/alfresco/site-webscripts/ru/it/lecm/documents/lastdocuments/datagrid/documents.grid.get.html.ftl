@@ -9,7 +9,7 @@
             <script type="text/javascript">//<![CDATA[
 			(function(){
 	            function createDatagrid() {
-                    var activeNodes = LogicECM.module.Base.Util.getCookie("ru.it.lecm.documents.last." + Alfresco.constants.USERNAME);
+                    var activeNodes = localStorage.getItem("ru.it.lecm.documents.last." + Alfresco.constants.USERNAME);
                     var searchNodes = [];
                     if (activeNodes != null) {
                         searchNodes = JSON.parse(activeNodes);

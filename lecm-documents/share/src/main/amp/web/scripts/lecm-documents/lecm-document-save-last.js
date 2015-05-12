@@ -24,7 +24,7 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
 
             save: function () {
                 var lastDocuments = [];
-                var prefs = LogicECM.module.Base.Util.getCookie(this._buildKey());
+                var prefs = localStorage.getItem(this._buildKey());
                 if (prefs != null) {
                     try {
                         lastDocuments = JSON.parse(prefs);
@@ -46,9 +46,7 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
                     date: new Date()
                 });
 
-                var date = new Date;
-                date.setDate(date.getDate() + 30);
-                LogicECM.module.Base.Util.setCookie(this._buildKey(), YAHOO.lang.JSON.stringify(result), {expires: date});
+                localStorage.setItem(this._buildKey(), YAHOO.lang.JSON.stringify(result));
             },
 
             _buildKey: function () {
