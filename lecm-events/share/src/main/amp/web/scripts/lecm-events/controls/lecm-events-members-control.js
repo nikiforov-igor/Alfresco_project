@@ -24,6 +24,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	YAHOO.extend(LogicECM.module.Calendar.MembersControl, LogicECM.module.AssociationTokenControl, {});
 
 	YAHOO.lang.augmentObject(LogicECM.module.Calendar.MembersControl.prototype, {
+		defaultMandatory: true,
+
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
 			var arrItems = "";
 			if (!this.options.resetValue) {
@@ -249,7 +251,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		getMandatoryCheckboxHTML: function (node, disabled) {
 			var checked = "";
-			if (node.memberMandatory != null && node.memberMandatory) {
+
+			if (node.memberMandatory == null) {
+				node.memberMandatory = this.defaultMandatory;
+			}
+
+			if (node.memberMandatory) {
 				checked = ' checked="checked"';
 			}
 
@@ -288,6 +295,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		mandatoryCheckboxClick: function (event, node) {
+			this.defaultMandatory = event.target.checked;
+
 			this.selectedItems[node.nodeRef].memberMandatory = event.target.checked;
 			this.updateJsonField();
 		},
