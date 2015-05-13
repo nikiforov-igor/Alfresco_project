@@ -27,6 +27,7 @@
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/document-components-panel.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/dashlet-components.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/page-document.css" />
+<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-page.css" />
 
 	<#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
 	<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
@@ -73,7 +74,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
                 <@region id="document-connections" scope="template"/>
 			</div>
 			<div id="main-content" class="main-content">
-				<div id="main-region">
+				<div id="main-region" class="event-page">
 					<@region id="dashlet-panel" scope="template"/>
 	                <@region id="rating" scope="template"/>
 	                <@region id="comments" scope="template"/>
