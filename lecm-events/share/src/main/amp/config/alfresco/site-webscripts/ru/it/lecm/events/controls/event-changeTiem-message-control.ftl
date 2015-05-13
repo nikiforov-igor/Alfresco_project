@@ -41,7 +41,7 @@
 })();
 //]]></script>
 
-<div id="${fieldHtmlId}-parent" class="control date viewmode">
+<div id="${fieldHtmlId}-parent" class="control date viewmode hidden1">
 	<div class="label-div"></div>
 	<div class="container">
 		<div class="value-div">
