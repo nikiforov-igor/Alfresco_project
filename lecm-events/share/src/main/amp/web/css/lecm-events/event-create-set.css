@@ -80,6 +80,7 @@
 }
 .create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li {
     background: none;
+    margin-bottom: 5px;
 }
 .create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .ci-value-div a,
 .create-event-set .event-create-attachments .dnd-uploader-with-preview .container ul li .ci-value-div a:hover {
