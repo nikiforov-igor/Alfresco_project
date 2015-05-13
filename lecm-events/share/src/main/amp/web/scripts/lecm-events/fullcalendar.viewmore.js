@@ -29,7 +29,7 @@
         return this.each(function(){
             var limit = new $.fn.limitEvents.constructor($(this));
 
-            $.extend({ maxEvents: 4 }, opts); //defaults
+            $.extend({ maxEvents: 3 }, opts); //defaults
             $(this).fullCalendar('limitEvents', opts);
         });
     };
@@ -133,7 +133,7 @@
                                 td.find(".fc-day-content").css("height", initialized)
                             }
                         }
-                        td.find('.events-view-more').children('a').children('span').text(Alfresco.util.message('label.events.showAll') + ' ' + + (td.data('appointments').length + 1));
+                        td.find('.events-view-more').children('a').children('span').text(Alfresco.util.message('label.events.showAll') + ' ' + + (td.data('appointments').length));
                         if ($.isFunction(_eventRender)) _eventRender(event, element);
                         return false; //prevents event from being rendered
                     }
