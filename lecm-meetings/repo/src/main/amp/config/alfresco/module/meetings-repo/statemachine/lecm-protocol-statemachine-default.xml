@@ -6,7 +6,7 @@
 		<properties>
 			<property>
 				<name>archiveFolder</name>
-				<value><![CDATA[Протоколы]]></value>
+				<value><![CDATA[/Архив]]></value>
 			</property>
 			<property>
 				<name>simple-document</name>
@@ -14,7 +14,7 @@
 			</property>
 			<property>
 				<name>archiveFolderAdditional</name>
-				<value><![CDATA[]]></value>
+				<value><![CDATA[Протокол]]></value>
 			</property>
 			<property>
 				<name>notArmCreate</name>
@@ -6170,6 +6170,32 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 							<roleAssociation>
 								<type>role-assoc</type>
 								<businessRoleName>BR_INITIATOR</businessRoleName>
+							</roleAssociation>
+						</roleAssociations>
+						<subFolders/>
+					</node>
+					<node>
+						<type>static-role-item</type>
+						<name>ed9e95cd-e6a4-4114-baf2-016c9b284b55</name>
+						<nodeRef>workspace://SpacesStore/e855fced-2cca-407a-9b39-25b688e63369</nodeRef>
+						<properties>
+							<property>
+								<name>static-role-privilege</name>
+								<value><![CDATA[]]></value>
+							</property>
+							<property>
+								<name>isCreator</name>
+								<value><![CDATA[true]]></value>
+							</property>
+						</properties>
+						<aspects>
+							<business-role/>
+						</aspects>
+						<associations/>
+						<roleAssociations>
+							<roleAssociation>
+								<type>role-assoc</type>
+								<businessRoleName>MEETINGS_CREATOR</businessRoleName>
 							</roleAssociation>
 						</roleAssociations>
 						<subFolders/>
