@@ -132,23 +132,27 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
 						typeToTypeDef.put(typeQName, dictionaryService.getType(typeQName));
 					}
 				}
-				for (NodeRef nodeItem : items) {
-					for (Entry<QName, TypeDefinition> typeItem : typeToTypeDef.entrySet()) {
-						QName typeQName = typeItem.getKey();
-						TypeDefinition typeDef = dictionaryService.getType(typeQName);
-                        if (typeDef != null) {
-                            QName itemType = nodeService.getType(nodeItem);
-                            if (itemType.equals(typeQName) || dictionaryService.isSubClass(itemType, typeQName)) {
-                                isRight = true;
-                                break;
-                            }
-                        } else {
-                            if (nodeService.hasAspect(nodeItem, typeQName)) {
-                                isRight = true;
-                                break;
+                if (!typeToTypeDef.isEmpty()) {
+                    for (NodeRef nodeItem : items) {
+                        for (Entry<QName, TypeDefinition> typeItem : typeToTypeDef.entrySet()) {
+                            QName typeQName = typeItem.getKey();
+                            TypeDefinition typeDef = dictionaryService.getType(typeQName);
+                            if (typeDef != null) {
+                                QName itemType = nodeService.getType(nodeItem);
+                                if (itemType.equals(typeQName) || dictionaryService.isSubClass(itemType, typeQName)) {
+                                    isRight = true;
+                                    break;
+                                }
+                            } else {
+                                if (nodeService.hasAspect(nodeItem, typeQName)) {
+                                    isRight = true;
+                                    break;
+                                }
                             }
                         }
                     }
+                } else {
+                    isRight = true;
                 }
             } else {
 				isRight = true;
