@@ -33,8 +33,7 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 		var allDay = field.value == "true";
 
 		if (fromTime != null) {
-			Dom.setStyle(fromTime.id, "display", allDay ? "none" : "block");
-			Dom.setStyle(fromTime.id + "-format", "display", allDay ? "none" : "block");
+			Dom.setStyle(fromTime.id + "-container", "display", allDay ? "none" : "block");
 
 			if (allDay && fromTime.value != "00:01") {
 				LogicECM.module.Events.fromDateValue = fromTime.value;
@@ -71,9 +70,8 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 				});
 			}
 
-			Dom.setStyle(toTime.id, "display", allDay ? "none" : "block");
-			Dom.setStyle(toTime.id + "-format", "display", allDay ? "none" : "block");
-			if (!allDay && toTime.value.length == 0) {
+            Dom.setStyle(toTime.id + "-container", "display", allDay ? "none" : "block");
+            if (!allDay && toTime.value.length == 0) {
 				Dom.addClass(toTime.id, "invalid");
 			}
 		}

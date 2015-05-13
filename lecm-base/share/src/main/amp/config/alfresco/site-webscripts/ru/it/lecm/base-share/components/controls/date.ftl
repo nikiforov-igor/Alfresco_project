@@ -215,7 +215,7 @@
                     </div>
 
                     <#if showTime>
-                        <div class="time-entry-container">
+                        <div id="${controlId}-time-container" class="time-entry-container">
                             <input id="${controlId}-time" name="-" type="text" class="time-entry"
                                    <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
                                    <#else>tabindex="0"</#if> />
