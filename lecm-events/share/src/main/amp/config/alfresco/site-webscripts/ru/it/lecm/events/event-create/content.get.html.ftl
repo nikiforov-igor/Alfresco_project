@@ -23,7 +23,6 @@
 
 <@markup id="css">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" group="document-create"/>
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-create-page.css"/>
 </@>
 
 <@markup id="widgets">

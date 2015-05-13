@@ -1,3 +1,12 @@
+.yui-skin-lecmTheme .event-create .form-container .form-fields {
+    padding-right: 0;
+}
+.yui-skin-lecmTheme .event-create .form-container .form-buttons {
+    padding-left: 0;
+    margin-right: 300px;
+    text-align: center;
+}
+
 .create-event-set {
     width: auto;
     overflow: hidden;
@@ -121,5 +130,17 @@
     float: left;
     padding-right: 5px;
     margin-bottom: 0;
+}
+
+/* Стили для страницы редактирования мероприятия */
+.yui-skin-lecmTheme .event-create > .create-event-set .event-create-right {
+    padding-top: 1em;
+}
+.yui-skin-lecmTheme .event-create > .create-event-set .event-create-right fieldset {
+    margin-bottom: 1em;
+}
+.yui-skin-lecmTheme .event-create > .create-event-set .event-create-center .form-buttons {
+    margin-right: 0;
+    padding-right: 0;
 }
 
