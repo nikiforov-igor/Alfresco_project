@@ -61,8 +61,7 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public boolean isDraft(NodeRef document) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        return false;
     }
 
     @Override
