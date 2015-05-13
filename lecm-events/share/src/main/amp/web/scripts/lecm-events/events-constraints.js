@@ -17,6 +17,9 @@ LogicECM.module.Events.requestNewTimeChangeAllDayValidation =
 		return LogicECM.module.Events.baseChangeAllDayValidation(field, form, "lecmEventsWf:requestNewTimeFromDate", "lecmEventsWf:requestNewTimeToDate");
 	};
 
+LogicECM.module.Events.fromDateValue = null;
+LogicECM.module.Events.toDateValue = null;
+
 LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromDateFieldId, toDateFieldId) {
 	if (field.form != null) {
 		var fromDate = field.form["prop_" + fromDateFieldId.replace(":", "_")];
@@ -34,7 +37,14 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 			Dom.setStyle(fromTime.id + "-format", "display", allDay ? "none" : "block");
 
 			if (allDay && fromTime.value != "00:01") {
+				LogicECM.module.Events.fromDateValue = fromTime.value;
 				fromTime.value = "00:01";
+				YAHOO.Bubbling.fire("handleFieldChange", {
+					formId: formId,
+					fieldId: fromDateFieldId
+				});
+			} else if (!allDay && LogicECM.module.Events.fromDateValue != null && fromTime.value != LogicECM.module.Events.fromDateValue) {
+				fromTime.value = LogicECM.module.Events.fromDateValue;
 				YAHOO.Bubbling.fire("handleFieldChange", {
 					formId: formId,
 					fieldId: fromDateFieldId
@@ -47,7 +57,14 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 		}
 		if (toTime != null) {
 			if (allDay && toTime.value != "23:59") {
+				LogicECM.module.Events.toDateValue = toTime.value;
 				toTime.value = "23:59";
+				YAHOO.Bubbling.fire("handleFieldChange", {
+					formId: formId,
+					fieldId: toDateFieldId
+				});
+			} else if (!allDay && LogicECM.module.Events.toDateValue != null && toTime.value != LogicECM.module.Events.toDateValue) {
+				toTime.value = LogicECM.module.Events.toDateValue;
 				YAHOO.Bubbling.fire("handleFieldChange", {
 					formId: formId,
 					fieldId: toDateFieldId
