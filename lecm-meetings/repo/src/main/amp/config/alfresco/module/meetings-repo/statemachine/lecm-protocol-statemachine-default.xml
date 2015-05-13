@@ -14,7 +14,7 @@
 			</property>
 			<property>
 				<name>archiveFolderAdditional</name>
-				<value><![CDATA[Протокол]]></value>
+				<value><![CDATA[new String('Протокол')]]></value>
 			</property>
 			<property>
 				<name>notArmCreate</name>
