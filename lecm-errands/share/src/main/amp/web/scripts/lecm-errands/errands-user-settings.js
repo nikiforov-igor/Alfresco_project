@@ -90,6 +90,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         {
                             text: Alfresco.util.message("message.save.success")
                         });
+	                window.location.reload();
                 } else {
                     Alfresco.util.PopupManager.displayPrompt(
                         {
