@@ -9,6 +9,10 @@
 				<value><![CDATA[Архив совещаний]]></value>
 			</property>
 			<property>
+				<name>simple-document</name>
+				<value><![CDATA[false]]></value>
+			</property>
+			<property>
 				<name>archiveFolderAdditional</name>
 				<value><![CDATA[]]></value>
 			</property>
@@ -83,7 +87,43 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>e68a81a2-9dc5-4a3e-8172-7e9f987a1310</name>
+														<nodeRef>workspace://SpacesStore/1a795fd8-e830-4238-be9b-b909b1006942</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[true]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value><![CDATA[doc.attr("lecm-events:removed")]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>workspace://SpacesStore/5c7f42bb-d0d2-441e-9719-ae725c78f5ed</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>ScriptAction</type>
@@ -637,6 +677,72 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_subject-assoc</name>
+										<nodeRef>workspace://SpacesStore/58cea764-31bd-4f97-8a6e-3bb254e522b3</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
+								<name>dynamicRoles</name>
+								<nodes>
+									<node>
+										<type>dynamic-role</type>
+										<name>a7e9310d-9d03-415e-82c6-7149f6eb45bc</name>
+										<nodeRef>workspace://SpacesStore/a7e9310d-9d03-415e-82c6-7149f6eb45bc</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>9a653f74-8c5a-4953-b14a-a62479e82c91</name>
+										<nodeRef>workspace://SpacesStore/9a653f74-8c5a-4953-b14a-a62479e82c91</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>BR_MEMBER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -696,7 +802,43 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>8cfc9868-250d-4c76-9c09-4a0461c9503f</name>
+														<nodeRef>workspace://SpacesStore/3af192b3-99f8-4b93-93e1-4452e4a590dd</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[true]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value><![CDATA[doc.attr("lecm-events:removed")]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>workspace://SpacesStore/5c7f42bb-d0d2-441e-9719-ae725c78f5ed</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>ScriptAction</type>
@@ -715,7 +857,52 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>ce15c44c-dd25-4a89-8ee3-72718be6fa39</name>
+														<nodeRef>workspace://SpacesStore/ea6eec11-26bf-4fac-81fc-81c88b056f08</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[(function(){ 
+  var meeting = stm_document;
+  var tableAssocs = meeting.assocs["lecm-meetings-ts:items-assoc"];
+  if (tableAssocs!==null && tableAssocs.length > 0){
+    var table = tableAssocs[0];
+    var  itemAssocs = table.childAssocs["cm:contains"];
+    if (itemAssocs!==null && itemAssocs.length > 0 ){
+      //Проверяем документы
+      for (var i=0; i<itemAssocs.length ;i++ ) {
+		var item = itemAssocs[i];
+        var documents = item.assocs["lecm-meetings-ts:documents-assoc"];
+        if (documents.length!==null && documents.length>0) {
+		for (var j=0; j<documents.length ;j++ ) {
+			var document = documents[i];
+			documentConnection.createConnection(meeting, document, 'forInformation', true );
+		}
+        }
+      }
+    }
+  }
+}());]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Create links]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -1113,6 +1300,72 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_subject-assoc</name>
+										<nodeRef>workspace://SpacesStore/b4fa47ff-04d8-4b68-8190-494a1948b40a</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
+								<name>dynamicRoles</name>
+								<nodes>
+									<node>
+										<type>dynamic-role</type>
+										<name>03e0cdfb-ee9e-412e-9b6a-f0c6ab15df29</name>
+										<nodeRef>workspace://SpacesStore/03e0cdfb-ee9e-412e-9b6a-f0c6ab15df29</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>8cacfb80-9a32-4c28-ad38-890333c7b9ec</name>
+										<nodeRef>workspace://SpacesStore/8cacfb80-9a32-4c28-ad38-890333c7b9ec</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>BR_MEMBER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -1378,6 +1631,56 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_subject-assoc</name>
+										<nodeRef>workspace://SpacesStore/0b89c488-70e2-413c-882f-0e3f55368223</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+						</subFolders>
+					</node>
+					<node>
+						<type>endEvent</type>
+						<name>Удалено</name>
+						<nodeRef>workspace://SpacesStore/5c7f42bb-d0d2-441e-9719-ae725c78f5ed</nodeRef>
+						<properties/>
+						<aspects/>
+						<associations/>
+						<roleAssociations/>
+						<subFolders>
+							<subFolder>
+								<name>actions</name>
+								<nodes>
+									<node>
+										<type>ScriptAction</type>
+										<name>42e6f4eb-0477-4d0b-a19c-7fa116ead8b4</name>
+										<nodeRef>workspace://SpacesStore/42e6f4eb-0477-4d0b-a19c-7fa116ead8b4</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[ScriptAction]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[end]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -1409,6 +1712,40 @@
 							<roleAssociation>
 								<type>role-assoc</type>
 								<businessRoleName>MEETINGS_CREATOR</businessRoleName>
+							</roleAssociation>
+						</roleAssociations>
+						<subFolders/>
+					</node>
+					<node>
+						<type>dynamic-role-item</type>
+						<name>63a8387f-64a9-4b66-a08b-304914dc7694</name>
+						<nodeRef>workspace://SpacesStore/ac4d6c92-d8ee-4f97-b4db-ceaf2d90e72a</nodeRef>
+						<properties/>
+						<aspects>
+							<business-role/>
+						</aspects>
+						<associations/>
+						<roleAssociations>
+							<roleAssociation>
+								<type>role-assoc</type>
+								<businessRoleName>BR_INITIATOR</businessRoleName>
+							</roleAssociation>
+						</roleAssociations>
+						<subFolders/>
+					</node>
+					<node>
+						<type>dynamic-role-item</type>
+						<name>163d43a0-cfda-4480-ab71-c5ed261f7f2a</name>
+						<nodeRef>workspace://SpacesStore/34ad10c8-860d-4505-8848-074d1a4071bf</nodeRef>
+						<properties/>
+						<aspects>
+							<business-role/>
+						</aspects>
+						<associations/>
+						<roleAssociations>
+							<roleAssociation>
+								<type>role-assoc</type>
+								<businessRoleName>BR_MEMBER</businessRoleName>
 							</roleAssociation>
 						</roleAssociations>
 						<subFolders/>
