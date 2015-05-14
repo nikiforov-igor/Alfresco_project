@@ -78,8 +78,8 @@
 
         if (windowResized) fcDayContent.height(1);
 
-        cellHeight = cells.eq(0).height(),
-            fcDayContentHeight = cellHeight - cells.eq(0).find('.fc-day-number').height() - height;
+        cellHeight = cells.eq(0).height();
+        fcDayContentHeight = cellHeight - cells.eq(0).find('.fc-day-number').height() - height;
 
         fcDayContent.height(fcDayContentHeight);
     };
