@@ -280,7 +280,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				title = node.memberDeclineReason;
 			} else if (node.memberStatus == "REQUEST_NEW_TIME") {
 				img = "clock_yellow.jpg";
-				title = node.memberFromDate;
+				title = Alfresco.util.formatDate(new Date(node.memberFromDate), this.msg("lecm.date-format.datetime"));
 			}
 
 			if (img.length > 0) {

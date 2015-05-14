@@ -33,7 +33,7 @@
                 "nodeRef": "${row.item.nodeRef}",
                 "memberStatus": "${row.memberStatus!"EMPTY"}",
                 "memberDeclineReason": "${row.memberDeclineReason!""}",
-                "memberFromDate": <#if row.memberFromDate??>"${row.memberFromDate?string("dd.MM.yyyy HH:mm")}"<#else>""</#if>,
+                "memberFromDate": <#if row.memberFromDate??>${row.memberFromDate?long?c}<#else>""</#if>,
                 "memberMandatory": <#if row.memberMandatory??>${row.memberMandatory?string}<#else>false</#if>
             }<#if row_has_next>,</#if>
             </#list>
