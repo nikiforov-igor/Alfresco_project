@@ -48,10 +48,10 @@
     padding-left: 20px;
 }
 .create-event-set .event-create-right .event-create-actions ul li.event-save {
-    background: url("../../images/lecm-events/event_add.png") no-repeat center left;
+    background: url("../../images/lecm-events/event_save.png") no-repeat center left;
 }
 .create-event-set .event-create-right .event-create-actions ul li.event-cancel {
-    background: url("../../images/lecm-events/event_remove.png") no-repeat center left;
+    background: url("../../images/lecm-events/event_cancelEdit.png") no-repeat center left;
 }
 .create-event-set .event-create-right .event-create-actions ul li a,
 .create-event-set .event-create-right .event-create-actions ul li a:hover {
