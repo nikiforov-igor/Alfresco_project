@@ -419,7 +419,13 @@
                         if (event == undefined || (event.keyCode != KeyListener.KEY.TAB && event.keyCode != KeyListener.KEY.SHIFT)) {
                             // convert to format expected by YUI
                             var parsedDate = Date.parseExact(changedDate, me._msg("lecm.form.control.date-picker.entry.date.format"));
-                            if (parsedDate != null) {
+                            var minLimitDate = null;
+                            if (this.options.minLimit) {
+                                minLimitDate = Alfresco.util.fromISO8601(this.options.minLimit);
+                            }
+
+                            if ((parsedDate != null && minLimitDate == null) ||
+                                (parsedDate != null && minLimitDate != null && parsedDate >= minLimitDate)) {
                                 if (me.options.disabled) {
                                     Dom.removeClass(me.id + "-date", "invalid");
                                 } else {
