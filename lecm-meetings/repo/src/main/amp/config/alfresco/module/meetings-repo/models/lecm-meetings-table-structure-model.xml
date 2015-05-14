@@ -125,7 +125,7 @@
                         <many>true</many>
                     </source>
                     <target>
-                        <class>lecm-orgstr:employee</class>
+                        <class>cm:content</class>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
