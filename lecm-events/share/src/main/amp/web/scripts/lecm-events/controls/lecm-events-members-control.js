@@ -272,14 +272,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var img = "";
 			var title = "";
 			if (node.memberStatus == "EMPTY") {
-				img = "waiting.png";
+				img = "alf_waiting_grey_16.png";
 			} else if (node.memberStatus == "CONFIRMED") {
-				img = "thumb_up.png";
+				img = "alf_thumbUp_green_16.png";
 			} else if (node.memberStatus == "DECLINED") {
-				img = "thumb_down.png";
+				img = "alf_thumbDown_red_16.png";
 				title = node.memberDeclineReason;
 			} else if (node.memberStatus == "REQUEST_NEW_TIME") {
-				img = "clock_yellow.jpg";
+				img = "alf_clock_yellow_16.jpg";
 				title = Alfresco.util.formatDate(new Date(node.memberFromDate), this.msg("lecm.date-format.datetime"));
 			}
 

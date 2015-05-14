@@ -1289,19 +1289,19 @@ tr.early {
 }
 
 #arm-calendar .acceptAction {
-   background-image: url(../../images/lecm-events/event_accept.png);
+   background-image: url(../../images/lecm-events/alf_thumbUp_grey_16.png);
 }
 #arm-calendar .rejectAction {
-   background-image: url(../../images/lecm-events/event_reject.png);
+   background-image: url(../../images/lecm-events/alf_thumbDown_grey_16.png);
 }
 #arm-calendar .infoAction {
-   background-image: url(../../images/lecm-events/event_more.png);
+   background-image: url(../../images/lecm-events/alf_maximize_grey_16.png);
 }
 #arm-calendar .editAction {
-   background-image: url("../../components/calendar/images/editEvent.png");
+   background-image: url("../../images/lecm-events/alf_edit_grey_16.png");
 }
 #arm-calendar .deleteAction {
-   background-image: url("../../components/calendar/images/deleteEvent.png");
+   background-image: url("../../images/lecm-events/alf_remove_grey_16.png");
 }
 
 .previousEvents,
@@ -1663,19 +1663,19 @@ div.fullCalendar th.fc-widget-header
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-accepted div.fc-event-inner,
 .yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-accepted div.fc-event-inner {
-   background-image: url(../../images/lecm-events/thumb_up.png);
+   background-image: url(../../images/lecm-events/alf_thumbUp_green_16.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-rejected div.fc-event-inner,
 .yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-rejected div.fc-event-inner {
-   background-image: url(../../images/lecm-events/thumb_down.png);
+   background-image: url(../../images/lecm-events/alf_thumbDown_red_16.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-another-time div.fc-event-inner,
 .yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-another-time div.fc-event-inner {
-   background-image: url(../../images/lecm-events/clock.png);
+   background-image: url(../../images/lecm-events/alf_clock_blue_16.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event.event-initiator div.fc-event-inner,
 .yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event.event-initiator div.fc-event-inner {
-   background-image: url(../../images/lecm-events/horn.png);
+   background-image: url(../../images/lecm-events/alf_horn_yellow_16.png);
 }
 .yui-skin-lecmTheme .alf-calendar .fc-content a.fc-event div.fc-event-inner span.fc-event-time,
 .yui-skin-lecmTheme .form-bubble .form-bubble-content a.fc-event div.fc-event-inner span.fc-event-time {
@@ -1799,21 +1799,19 @@ div.fullCalendar th.fc-widget-header
    color: #000;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-accept {
-   background: url(../../images/lecm-events/event_accept.png) no-repeat center left;
+   background: url(../../images/lecm-events/alf_thumbUp_grey_16.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-reject {
-   background: url(../../images/lecm-events/event_reject.png) no-repeat center left;
+   background: url(../../images/lecm-events/alf_thumbDown_grey_16.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-more {
-   background: url(../../images/lecm-events/event_more.png) no-repeat center left;
+   background: url(../../images/lecm-events/alf_maximize_grey_16.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-edit {
-   background: url("../../components/calendar/images/editEvent.png") no-repeat center left;
-   /*background: url(../../images/lecm-events/event_edit.png) no-repeat center left;*/
+   background: url(../../images/lecm-events/alf_edit_grey_16.png) no-repeat center left;
 }
 .yui-panel.event-dialog .right-part ul.event-actions li.event-remove {
-   background: url("../../components/calendar/images/deleteEvent.png") no-repeat center left;
-   /*background: url(../../images/lecm-events/event_remove.png) no-repeat center left;*/
+   background: url(../../images/lecm-events/alf_remove_grey_16.png) no-repeat center left;
 }
 .yui-panel.event-dialog .center-part {
    width: auto;
