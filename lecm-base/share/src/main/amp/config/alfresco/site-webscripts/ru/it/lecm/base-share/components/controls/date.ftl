@@ -1,3 +1,6 @@
+<#assign formId = args.htmlid?js_string + "-form">
+<#assign containerId = formId + "-container_c">
+
 <#if field.control.params.showTime?? && field.control.params.showTime == "true"><#assign showTime=true><#else><#assign showTime=false></#if>
 <#if showTime><#assign viewFormat>${msg("form.control.date-picker.view.time.format")}</#assign><#else><#assign viewFormat>${msg("form.control.date-picker.view.date.format")}</#assign></#if>
 
@@ -36,7 +39,7 @@
     <#assign maxLimit = form.arguments[field.control.params.maxLimitArg]!"" />
 </#if>
 
-<#assign controlId = fieldHtmlId + "-cntrl">
+<#assign controlId = fieldHtmlId + "-cntrl-" + .now?long?c>
 
 <#if form.mode == "view">
 <div id="${controlId}-parent" class="control date viewmode">
@@ -127,7 +130,7 @@
             function init() {
                 LogicECM.module.Base.Util.loadResources([
                     'scripts/lecm-base/components/lecm-date-picker.js',
-                    'scripts/lecm-calendar/schedule/jquery-ui-1.10.3.custom.js',
+                    'scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js',
                     'scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js',
                     'scripts/lecm-base/third-party/jquery-ui-sliderAccess.js'
                 ], [
@@ -160,9 +163,11 @@
                 );
                 picker.draw();
             <#if showTime>
-                var zIndex = $('#${controlId}-parent').zIndex(),
+
+                var zIndex = $('#${containerId}').zIndex(),
+                parentNode = $('#${controlId}-parent'),
                 fieldNode = $('#${controlId}-time');
-                fieldNode.zIndex(zIndex+1);
+                parentNode.zIndex(zIndex+1);
 
                 fieldNode.timepicker({
                     timeFormat: '${msg("title.timepicker.timeformat")}',
@@ -184,7 +189,7 @@
             </#if>
             }
 
-            YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
+            YAHOO.util.Event.onAvailable('${fieldHtmlId}', init, this, true);
         })();
         //]]></script>
 
