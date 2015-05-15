@@ -124,7 +124,8 @@
 		  p:personService-ref="personService"
 		  p:stateMachineService-ref="stateMachineHelper"	
 		  p:businessJournalService-ref="businessJournalService"
-		  
+		  p:documentTableService-ref="documentTableService"
+
 	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">

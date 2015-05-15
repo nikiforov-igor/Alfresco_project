@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>meeting-holding-content</shortname>
+    <description>meeting-holding-content</description>
+	<url>/lecm/meeting/holding/content</url>
+	<format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

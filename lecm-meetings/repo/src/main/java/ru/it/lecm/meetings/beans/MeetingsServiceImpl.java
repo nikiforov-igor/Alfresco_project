@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
@@ -18,6 +19,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	private PersonService personService;
 	private StateMachineServiceBean stateMachineService;
 	private BusinessJournalService businessJournalService;
+	private DocumentTableService documentTableService;
 
 	private final static String ACTIVITI_PREFIX = "activiti$";
 	private final static String APPROVEMENT_WORKFLOW_DEFINITION_ID = ACTIVITI_PREFIX + "lecmApprovementWorkflow";
@@ -54,6 +56,10 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		this.workflowService = workflowService;
 	}
 
+	public void setDocumentTableService(DocumentTableService documentTableService) {
+		this.documentTableService = documentTableService;
+	}
+
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(MEETINGS_ROOT_ID);
@@ -63,5 +69,17 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 //	public List<NodeRef> getAttendees(NodeRef document) {
 //		return null;
 //	}
+
+	public NodeRef getHoldingItemsTable(NodeRef meeting) {
+		return documentTableService.getTable(meeting, TYPE_MEETINGS_TS_AGENDA_TABLE);
+	}
+
+	public List<NodeRef> getMeetingHoldingItems(NodeRef meeting) {
+		NodeRef table = getHoldingItemsTable(meeting);
+		if (table != null) {
+			return documentTableService.getTableDataRows(table);
+		}
+		return null;
+	}
 
 }

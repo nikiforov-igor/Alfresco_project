@@ -27,4 +27,6 @@ public interface MeetingsService {
 
 //	public List<NodeRef> getAttendees(NodeRef document);
 
+	List<NodeRef> getMeetingHoldingItems(NodeRef meeting);
+
 }
