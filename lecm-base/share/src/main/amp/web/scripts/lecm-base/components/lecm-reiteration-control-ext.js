@@ -80,6 +80,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             daysFull: Alfresco.util.message('days.long').split(','),
 
             onReady: function () {
+                var first = this.days.shift();
+                this.days.push(first);
+                first = this.daysFull.shift();
+                this.daysFull.push(first);
+
                 var message = this.getSummary(this.getControlValue());
                 var el = Dom.get(this.id + '-displayValue');
                 el.innerHTML = message;
