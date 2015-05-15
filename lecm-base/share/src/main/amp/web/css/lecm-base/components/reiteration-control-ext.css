@@ -9,6 +9,10 @@
     text-align: center;
 }
 
+.reiteration .container .value-div {
+    text-align: left;
+}
+
 .reiteration .container-aligment {
     display: inline-block;
     text-align: left;
