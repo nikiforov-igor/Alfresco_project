@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Ресурс" type="lecm-busjournal:objectType">
+                <property name="cm:name">Ресурс</property>
+                <property name="lecm-busjournal:objectType-code">EVENT_RESOURCE</property>
+                <property name="lecm-busjournal:objectType-class">lecm-events-ts:resources</property>
+                <property name="lecm-busjournal:objectType-template">Ресурс</property>
+                <property name="lecm-busjournal:objectType-list-template">Ресурс</property>
+            </item>
+            <item name="cm:Участник" type="lecm-busjournal:objectType">
+                <property name="cm:name">Участник</property>
+                <property name="lecm-busjournal:objectType-code">EVENT_MEMBER</property>
+                <property name="lecm-busjournal:objectType-class">lecm-events-ts:members</property>
+                <property name="lecm-busjournal:objectType-template">Участник</property>
+                <property name="lecm-busjournal:objectType-list-template">Участник</property>
+            </item>
+        </items>
+    </item>
+</items>

@@ -66,6 +66,7 @@
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-resources-pl.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-br-items.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-connection-types-items.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-business-journal-objectType-items.xml</value>
 			</list>
 		</property>
 	</bean>
