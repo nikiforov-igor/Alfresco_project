@@ -37,6 +37,13 @@
 						<div id="${el}-body"></div>
 						<div><h2>${msg("label.meeting.holding.protocol")}</h2></div>
 						<div id="${el}-items"></div>
+						<div>
+							<span id="${el}-create-new-item-button" class="yui-button yui-push-button search-icon">
+								<span class="first-child">
+									<button type="button">${msg('label.button.meeting.holding.create.item')}</button>
+								</span>
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>

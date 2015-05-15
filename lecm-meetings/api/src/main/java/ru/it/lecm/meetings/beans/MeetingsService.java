@@ -23,10 +23,13 @@ public interface MeetingsService {
 	
 	public static final QName TYPE_MEETINGS_TS_AGENDA_ITEM = QName.createQName(MEETINGS_TS_NAMESPACE, "item");
 	public static final QName TYPE_MEETINGS_TS_AGENDA_TABLE = QName.createQName(MEETINGS_TS_NAMESPACE, "itemsTable");
+	public static final QName TYPE_MEETINGS_TS_ITEM = QName.createQName(MEETINGS_TS_NAMESPACE, "item");
 	public static final QName ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS = QName.createQName(MEETINGS_TS_NAMESPACE, "attachments-assoc");
 
 //	public List<NodeRef> getAttendees(NodeRef document);
 
 	List<NodeRef> getMeetingHoldingItems(NodeRef meeting);
+
+	NodeRef createNewMeetingItem(NodeRef meeting);
 
 }

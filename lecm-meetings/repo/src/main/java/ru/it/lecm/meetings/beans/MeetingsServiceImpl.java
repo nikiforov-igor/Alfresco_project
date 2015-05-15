@@ -4,7 +4,10 @@ import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -14,6 +17,7 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
  * @author vkuprin
  */
 public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
+	private final static Logger logger = LoggerFactory.getLogger(MeetingsServiceImpl.class);
 
 	private WorkflowService workflowService;
 	private PersonService personService;
@@ -82,4 +86,16 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		return null;
 	}
 
+	public NodeRef createNewMeetingItem(NodeRef meeting) {
+		NodeRef table = getHoldingItemsTable(meeting);
+		if (table != null) {
+			try {
+				return createNode(table, TYPE_MEETINGS_TS_ITEM, null, null);
+			} catch (WriteTransactionNeededException ex) {
+				logger.error("Error create new meeting item", ex);
+			}
+
+		}
+		return null;
+	}
 }

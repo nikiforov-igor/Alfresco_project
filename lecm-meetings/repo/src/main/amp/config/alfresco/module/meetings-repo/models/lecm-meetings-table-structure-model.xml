@@ -15,7 +15,7 @@
         <namespace uri="http://www.it.ru/logicECM/meetings/table-structure/1.0" prefix="lecm-meetings-ts"/>
     </namespaces>
 
-    <constraints>
+    <!--<constraints>-->
 <!--        <constraint name="lecm-events-ts:members-status-constraint" type="LIST">
             <parameter name="allowedValues">
                 <list>
@@ -34,7 +34,7 @@
                 </list>
             </parameter>
         </constraint>-->
-    </constraints>
+    <!--</constraints>-->
 
     <types>
         <type name="lecm-meetings-ts:item">
@@ -44,7 +44,7 @@
 				<!--Формулировка-->
                 <property name="lecm-meetings-ts:item-name">
                     <type>d:text</type>
-					<mandatory>true</mandatory>
+					<mandatory>false</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -114,7 +114,7 @@
                     </source>
                     <target>
                         <class>lecm-orgstr:employee</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>

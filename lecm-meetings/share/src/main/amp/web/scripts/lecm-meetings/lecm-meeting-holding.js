@@ -31,6 +31,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 			this.loadForm();
 			this.loadItems();
+
+			Alfresco.util.createYUIButton(this, "create-new-item-button", this.onCreateItem);
 		},
 
 		loadForm: function() {
@@ -84,7 +86,6 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 						scope: this
 					}
 				});
-			//YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
 		},
 
 		onSubmit: function() {
@@ -110,31 +111,52 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 							if (result.items != null && result.items.length > 0) {
 								for (var i = 0; i < result.items.length; i++) {
 									var item = result.items[i];
-
-									Alfresco.util.Ajax.request(
-										{
-											url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-											dataObj: {
-												htmlid: me.id + item.nodeRef.replace(/\//g,"_"),
-												itemKind: "node",
-												itemId: item.nodeRef,
-												mode: "edit",
-												submitType: "json",
-												formId: "holding",
-												showSubmitButton: true,
-												showCancelButton: true
-											},
-											successCallback: {
-												fn: function (response) {
-													var container = Dom.get(me.id + "-items");
-													container.innerHTML += response.serverResponse.responseText;
-												}
-											},
-											failureMessage: "message.failure",
-											execScripts: true
-										});
+									me.loadItem(item.nodeRef);
 								}
 							}
+						}
+					},
+					scope: this
+				}
+			});
+		},
+
+		loadItem: function(nodeRef) {
+			var me = this;
+			Alfresco.util.Ajax.request(
+				{
+					url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+					dataObj: {
+						htmlid: me.id + nodeRef.replace(/\//g,"_"),
+						itemKind: "node",
+						itemId: nodeRef,
+						mode: "edit",
+						submitType: "json",
+						formId: "holding",
+						showSubmitButton: true,
+						showCancelButton: true
+					},
+					successCallback: {
+						fn: function (response) {
+							var container = Dom.get(me.id + "-items");
+							container.innerHTML += response.serverResponse.responseText;
+						}
+					},
+					failureMessage: "message.failure",
+					execScripts: true
+				});
+		},
+
+		onCreateItem: function() {
+			var me = this;
+			Alfresco.util.Ajax.request({
+				method: "GET",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/createNewItem?meetingRef=" + this.options.nodeRef,
+				successCallback: {
+					fn: function (response) {
+						var result = response.json;
+						if (result != null && result.nodeRef != null) {
+							me.loadItem(result.nodeRef);
 						}
 					},
 					scope: this

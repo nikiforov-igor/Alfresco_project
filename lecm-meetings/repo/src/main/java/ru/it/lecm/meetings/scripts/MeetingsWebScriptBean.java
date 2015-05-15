@@ -45,11 +45,17 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
-	
-//	public List<ScriptNode> getAttendees(ScriptNode document) {
-//		
-//		meetingsService.getAttendees(document.getNodeRef());
-//		return null;
-//	}
-	
+
+	public ScriptNode createNewMeetingItem(String meeting) {
+		ParameterCheck.mandatory("meeting", meeting);
+
+		NodeRef meetingRef = new NodeRef(meeting);
+		if (this.nodeService.exists(meetingRef)) {
+			NodeRef item = meetingsService.createNewMeetingItem(meetingRef);
+			if (item != null) {
+				return new ScriptNode(item, serviceRegistry, getScope());
+			}
+		}
+		return null;
+	}
 }

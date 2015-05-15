@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webscript>
+    <shortname>create new item</shortname>
+    <description>create new item</description>
+    <url>/lecm/meeting/createNewItem</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>required</transaction>
+</webscript>
