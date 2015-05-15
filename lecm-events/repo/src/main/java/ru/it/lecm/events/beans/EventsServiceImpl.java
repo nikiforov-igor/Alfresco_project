@@ -647,6 +647,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
         assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
         assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+        assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);
         for (QName assocQName : assocsToCopy) {
             List<NodeRef> targets = findNodesByAssociationRef(event, assocQName, null, ASSOCIATION_TYPE.TARGET);
             nodeService.setAssociations(repeatedEvent, assocQName, targets);
