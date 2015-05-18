@@ -189,6 +189,12 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>-->
+
+                <!--На подтверждение ресурсов-->
+                <property name="lecm-meetings:finished">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
                 
                 <property name="lecm-meetings:chairman-assoc-ref">
                     <type>d:text</type>

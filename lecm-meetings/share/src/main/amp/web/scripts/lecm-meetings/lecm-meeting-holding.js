@@ -101,6 +101,16 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		onSubmit: function() {
+			for (var i = 0; i < this.submitElements.length; i++) {
+				var form = this.submitElements[i].getForm();
+				if (form != null) {
+					var propFinished = form["prop_lecm-meetings_finished"];
+					if (propFinished != null) {
+						propFinished.value = true;
+					}
+				}
+			}
+
 			this.saveForm();
 			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + this.options.nodeRef;
 		},

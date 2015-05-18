@@ -248,6 +248,8 @@
 					<show id="lecm-events:temp-members-assoc"/>
 					<!-- Приглашённые -->
 					<show id="lecm-events:invited-members-assoc"/>
+					<!-- Завершено -->
+					<show id="lecm-meetings:finished"/>
 				</field-visibility>
 				<appearance>
 					<!--Председатель-->
@@ -289,6 +291,9 @@
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 						</control>
+					</field>
+					<field id="lecm-meetings:finished">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 				</appearance>
 			</form>

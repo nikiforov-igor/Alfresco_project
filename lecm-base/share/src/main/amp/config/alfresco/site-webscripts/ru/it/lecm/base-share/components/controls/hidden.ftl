@@ -28,5 +28,5 @@
 
 <#if form.mode == "edit" || form.mode == "create">
 <input type="hidden" name="${field.name}" id="${fieldHtmlId}-added"
-       <#if field.value?is_number>value="${fieldValue?c}"<#else>value="${fieldValue?html}"</#if> />
+       <#if field.value?is_number>value="${fieldValue?c}"<#elseif field.value?is_boolean>value="${fieldValue?string}"<#else>value="${fieldValue?html}"</#if> />
 </#if>
