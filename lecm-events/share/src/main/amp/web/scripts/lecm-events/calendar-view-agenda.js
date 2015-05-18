@@ -280,7 +280,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				template = '<a href="{url}" class="{type}" title="{tooltip}" rel="' + rel + '"><span>{label}</span></a>',
 				write = false,
 				isEdit = false,
-				isDelete = false,
 				me = this;
 
 			// build up cell content
@@ -290,16 +289,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			// NOTE: DOM order (Delete, Edit, Info) is reverse of display order (Info, Edit, Delete), due to right float.
 			if (write) {
-				// Delete
-				if (isDelete) {
-					actions.push(YAHOO.lang.substitute(template,
-						{
-							type:"deleteAction",
-							label: me.msg("agenda.action.delete.label"),
-							tooltip: me.msg("agenda.action.delete.tooltip")
-						}));
-				}
-
 				// Edit
 				if (isEdit) {
 					actions.push(YAHOO.lang.substitute(template,
