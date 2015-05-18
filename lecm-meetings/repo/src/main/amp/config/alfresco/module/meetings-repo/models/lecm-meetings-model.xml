@@ -42,6 +42,14 @@
                 <value>arm?code=SED</value>
             </parameter>
         </constraint>
+        <constraint name="lecm-meetings:document-url-constraint" type="ru.it.lecm.documents.constraints.DocumentUrlConstraint">
+            <parameter name="createUrl">
+                <value>event-create</value>
+            </parameter>
+            <parameter name="viewUrl">
+                <value>event</value>
+            </parameter>
+        </constraint>
     </constraints>
 
     <types>
