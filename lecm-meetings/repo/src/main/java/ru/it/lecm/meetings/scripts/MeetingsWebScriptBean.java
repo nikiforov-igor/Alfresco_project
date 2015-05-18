@@ -58,4 +58,15 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+	public String deleteHoldingItem(String nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.nodeService.exists(ref)) {
+			this.meetingsService.deleteHoldingItem(ref);
+			return "Success delete";
+		}
+		return "Failure: node not found";
+	}
 }

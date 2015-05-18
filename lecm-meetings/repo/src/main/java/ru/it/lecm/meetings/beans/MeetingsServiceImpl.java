@@ -98,4 +98,9 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		}
 		return null;
 	}
+
+	@Override
+	public void deleteHoldingItem(NodeRef nodeRef) {
+		nodeService.deleteNode(nodeRef);
+	}
 }

@@ -687,6 +687,7 @@
 			</form>
 			<form id="holding">
 				<field-visibility>
+					<show id="removeItem" force="true"/>
 					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-meetings-ts:reporter-assoc"/>
 					<show id="lecm-meetings-ts:item-name"/>
@@ -696,8 +697,11 @@
 
 				</field-visibility>
 				<appearance>
-					<set id="parent" appearance="bordered-panel"/>
+					<set id="parent" appearance="" template="/ru/it/lecm/meetings/holding/meeting-holding-set.ftl"/>
 
+					<field id="removeItem" set="parent">
+						<control template="/ru/it/lecm/meetings/holding/meeting-holding-remove-item-control.ftl"/>
+					</field>
 					<field id="lecm-document:indexTableRow" read-only="true" set="parent"/>
 					<field id="lecm-meetings-ts:reporter-assoc" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">

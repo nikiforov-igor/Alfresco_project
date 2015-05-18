@@ -10,6 +10,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 	LogicECM.module.Meetengs.Holding = function(htmlId) {
 		LogicECM.module.Meetengs.Holding.superclass.constructor.call(this, htmlId);
+		YAHOO.Bubbling.on("meetingHoldingRemoveItem", this.onRemoveItem, this);
 		return this;
 	};
 
@@ -171,6 +172,28 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 					scope: this
 				}
 			});
+		},
+
+		onRemoveItem: function(layer, args) {
+			var nodeRef = args[1].nodeRef;
+			if (nodeRef != null) {
+				var me = this;
+				Alfresco.util.Ajax.request({
+					method: "GET",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem?nodeRef=" + nodeRef,
+					successCallback: {
+						fn: function (response) {
+							var itemBlock = Dom.get(me.id + nodeRef.replace(/\//g,"_") + "-form-container");
+							if (itemBlock != null) {
+								itemBlock.parentNode.removeChild(itemBlock);
+							}
+						},
+						scope: this
+					}
+				});
+
+
+			}
 		}
 	}, true);
 })();

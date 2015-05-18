@@ -32,4 +32,5 @@ public interface MeetingsService {
 
 	NodeRef createNewMeetingItem(NodeRef meeting);
 
+	public void deleteHoldingItem(NodeRef nodeRef);
 }
