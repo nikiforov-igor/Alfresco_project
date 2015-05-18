@@ -81,7 +81,7 @@ public class EventNotificationExecutor extends ActionExecuterAbstractBase {
                         helper.setTo(email);
                         helper.setFrom(defaultFromEmail);
                         helper.setSubject("Напоминание о мероприятии");
-                        helper.setText(notificationDescription);
+                        helper.setText("<html><body>" + notificationDescription + "</body></html>", true);
                         mailService.send(message);
                     } catch (Exception e) {
                         logger.error("Error send mail", e);
