@@ -621,4 +621,13 @@ public class DocumentWebScriptBean extends BaseWebScript {
 		}
 		return results;
 	}
+
+    public String getCreateUrl(ScriptNode document) {
+        return documentService.getCreateUrl(document.getQNameType());
+    }
+
+    public String getViewUrl(ScriptNode document) {
+        return documentService.getViewUrl(document.getQNameType());
+    }
+
 }

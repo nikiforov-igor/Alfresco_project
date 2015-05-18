@@ -41,7 +41,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         onActionEdit: function (item){
             window.location.href = window.location.protocol + "//" + window.location.host +
-                Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + item.nodeRef;
+                Alfresco.constants.URL_PAGECONTEXT + item.page + "?nodeRef=" + item.nodeRef;
         },
 
         onActionViewDocument: function (item){
@@ -415,7 +415,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                     }
                                     var firstColumnIndex = scope.options.showCheckboxColumn ? 2 : 1;
                                     if (oColumn.getKeyIndex() == firstColumnIndex) {
-                                        html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
+                                        html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + oRecord.getData("page") + '?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                     } else {
                                         html += columnContent;
                                     }

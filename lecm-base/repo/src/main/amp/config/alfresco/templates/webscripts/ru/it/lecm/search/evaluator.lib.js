@@ -331,6 +331,7 @@ var Evaluator = {
             actionPermissions: permissions,
 	        createdBy: createdBy,
 	        modifiedBy: modifiedBy,
+            page: documentScript.getViewUrl(node)
         });
     }
 };

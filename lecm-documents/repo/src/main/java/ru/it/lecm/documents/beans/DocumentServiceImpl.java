@@ -1,6 +1,7 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
@@ -32,7 +33,9 @@ import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
+import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
+import ru.it.lecm.documents.constraints.DocumentUrlConstraint;
 import ru.it.lecm.documents.expression.Expression;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -885,5 +888,27 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     @Override
     public NodeRef getOrganization(NodeRef document) {
         return orgstructureService.getOrganization(document);
+    }
+
+    @Override
+    public String getCreateUrl(QName type) {
+        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_DOCUMENT_URL));
+        if (constraint != null && (constraint.getConstraint() instanceof DocumentUrlConstraint)) {
+            String value = ((DocumentUrlConstraint) constraint.getConstraint()).getCreateUrl();
+            return value == null ? DEFAULT_CREATE_URL : value;
+        } else {
+            return DEFAULT_CREATE_URL;
+        }
+    }
+
+    @Override
+    public String getViewUrl(QName type) {
+        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_DOCUMENT_URL));
+        if (constraint != null && (constraint.getConstraint() instanceof DocumentUrlConstraint)) {
+            String value = ((DocumentUrlConstraint) constraint.getConstraint()).getViewUrl();
+            return value == null ? DEFAULT_VIEW_URL : value;
+        } else {
+            return DEFAULT_VIEW_URL;
+        }
     }
 }

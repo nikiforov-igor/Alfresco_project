@@ -1,9 +1,7 @@
 package ru.it.lecm.arm.scripts;
 
-import org.alfresco.service.cmr.dictionary.AssociationDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.dictionary.PropertyDefinition;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
+import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -33,6 +31,7 @@ import java.util.*;
  */
 public class ArmTreeMenuScript extends AbstractWebScript {
     final private static Logger logger = LoggerFactory.getLogger(ArmTreeMenuScript.class);
+
 
     public static final String NODE_REF = "nodeRef";
     public static final String NODE_TYPE = "nodeType";
@@ -267,7 +266,9 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 						json.put("type", type);
 						json.put("disabled", !isStarter);
 						json.put("label", typeDefinition.getTitle(dictionaryService));
-						results.add(json);
+                        json.put("page", documentService.getCreateUrl(typeQName));
+
+                        results.add(json);
 					} catch (Exception ex) {
 						logger.error(ex.getMessage(), ex);
 					}
