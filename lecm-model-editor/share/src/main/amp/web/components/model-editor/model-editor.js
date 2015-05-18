@@ -209,6 +209,35 @@ IT.component = IT.component || {};
 									}
 								}
 							}
+							//Document Url
+							if(c[i]._name.indexOf(":document-url-constraint")!==-1) {
+								if(YAHOO.lang.isArray(c[i].parameter)) {
+									for(var p in c[i].parameter) {
+										if(c[i].parameter[p]._name==="createUrl") {
+											if(YAHOO.lang.isString(c[i].parameter[p].value)){
+												this.createUrl = c[i].parameter[p].value;
+											}
+										}
+										if(c[i].parameter[p]._name==="viewUrl") {
+											if(YAHOO.lang.isString(c[i].parameter[p].value)){
+												this.viewUrl = c[i].parameter[p].value;
+											}
+										}
+									}
+								}
+								if(YAHOO.lang.isObject(c[i].parameter)) {
+									if(c[i].parameter._name==="createUrl") {
+										if(YAHOO.lang.isString(c[i].parameter.value)){
+											this.createUrl = c[i].parameter.value;
+										}
+									}
+									if(c[i].parameter._name==="viewUrl") {
+										if(YAHOO.lang.isString(c[i].parameter.value)){
+											this.viewUrl = c[i].parameter.value;
+										}
+									}
+								}
+							}
 							//Автор
 							if(c[i]._name.indexOf(":author-property-constraint")!==-1) {
 								if(YAHOO.lang.isArray(c[i].parameter)) {
@@ -323,6 +352,35 @@ IT.component = IT.component || {};
 							if(c.parameter._name==="armUrl") {
 								if(YAHOO.lang.isString(c.parameter.value)){
 									this.armUrl = c.parameter.value;
+								}
+							}
+						}
+					}
+					//Document Url
+					if(c._name.indexOf(":document-url-constraint")!==-1) {
+						if(YAHOO.lang.isArray(c.parameter)) {
+							for(var p in c.parameter) {
+								if(c.parameter[p]._name==="createUrl") {
+									if(YAHOO.lang.isString(c.parameter[p].value)){
+										this.createUrl = c.parameter[p].value;
+									}
+								}
+								if(c.parameter[p]._name==="viewUrl") {
+									if(YAHOO.lang.isString(c.parameter[p].value)){
+										this.viewUrl = c.parameter[p].value;
+									}
+								}
+							}
+						}
+						if(YAHOO.lang.isObject(c.parameter)) {
+							if(c.parameter._name==="createUrl") {
+								if(YAHOO.lang.isString(c.parameter.value)){
+									this.createUrl = c.parameter.value;
+								}
+							}
+							if(c.parameter._name==="viewUrl") {
+								if(YAHOO.lang.isString(c.parameter.value)){
+									this.viewUrl = c.parameter.value;
 								}
 							}
 						}
@@ -623,6 +681,26 @@ IT.component = IT.component || {};
 							_name:"armUrl",
 							value:args.armUrl
 						}
+					});
+				}
+				if((args.createUrl && args.createUrl.length>0) || (args.viewUrl && args.viewUrl.length>0)) {
+					var parameters = [];
+					if (args.createUrl && args.createUrl.length>0) {
+						parameters.push({
+							_name:"createUrl",
+							value:args.createUrl
+						})
+					}
+					if (args.viewUrl && args.viewUrl.length>0) {
+						parameters.push({
+							_name:"viewUrl",
+							value:args.viewUrl
+						})
+					}
+					args.modelObject.model.constraints.constraint.push({
+						_name:namespace+":document-url-constraint",
+						_type:"ru.it.lecm.documents.constraints.DocumentUrlConstraint",
+						parameter: parameters
 					});
 				}
 				if(args.authorProperty && args.authorProperty.length>0) {
@@ -1044,6 +1122,16 @@ IT.component = IT.component || {};
 			//АРМ
 			var oSpan = document.createElement("span");
 			var input = new IT.widget.Input({ name: "armUrl", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.docs.list.page') + "</b>", value: (this.armUrl||""), help:Alfresco.util.message('lecm.meditor.lbl.docs.list.page') });
+			input.render(oSpan);
+			Dom.get(this.id+"_title").appendChild(oSpan);
+			//Create URL
+			var oSpan = document.createElement("span");
+			var input = new IT.widget.Input({ name: "createUrl", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.docs.create.page') + "</b>", value: (this.createUrl||""), help:Alfresco.util.message('lecm.meditor.lbl.docs.create.page') });
+			input.render(oSpan);
+			Dom.get(this.id+"_title").appendChild(oSpan);
+			//View URL
+			var oSpan = document.createElement("span");
+			var input = new IT.widget.Input({ name: "viewUrl", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.docs.view.page') + "</b>", value: (this.viewUrl||""), help:Alfresco.util.message('lecm.meditor.lbl.docs.view.page') });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Автор
