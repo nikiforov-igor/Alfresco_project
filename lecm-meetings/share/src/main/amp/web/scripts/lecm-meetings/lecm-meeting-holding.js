@@ -33,6 +33,11 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			this.loadItems();
 
 			Alfresco.util.createYUIButton(this, "create-new-item-button", this.onCreateItem);
+
+			var me = this;
+			setInterval(function() {
+				me.saveForm();
+			}, 15000);
 		},
 
 		loadForm: function() {
@@ -88,10 +93,14 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				});
 		},
 
-		onSubmit: function() {
+		saveForm: function() {
 			for (var i = 0; i < this.submitElements.length; i++) {
-		   	    this.submitElements[i].submitForm();
+				this.submitElements[i].submitForm();
 			}
+		},
+
+		onSubmit: function() {
+			this.saveForm();
 			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + this.options.nodeRef;
 		},
 
