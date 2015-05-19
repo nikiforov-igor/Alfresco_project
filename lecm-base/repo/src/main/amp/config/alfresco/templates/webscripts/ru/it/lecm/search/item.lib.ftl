@@ -3,7 +3,7 @@
     <#assign node = item.node>
     "nodeRef": "${node.nodeRef}",
     "type": "${node.typeShort}",
-    "page": "${item.page}",
+    "page": "${item.page!"document"}",
     "createdOn": "${xmldate(node.properties.created)}",
     "createdBy":
     {
