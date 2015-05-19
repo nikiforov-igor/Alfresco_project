@@ -39,7 +39,7 @@
     <#assign maxLimit = form.arguments[field.control.params.maxLimitArg]!"" />
 </#if>
 
-<#assign controlId = fieldHtmlId + "-cntrl-" + .now?long?c>
+<#assign controlId = fieldHtmlId + "-cntrl">
 
 <#if form.mode == "view">
 <div id="${controlId}-parent" class="control date viewmode">
