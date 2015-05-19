@@ -444,7 +444,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
      */
     @SuppressWarnings("unused")
     public String wrapperDocumentLink(ScriptNode node, String description) {
-        return wrapperLink(node.getNodeRef().toString(), description, BaseBean.DOCUMENT_LINK_URL);
+        return wrapperLink(node.getNodeRef().toString(), description, documentService.getDocumentUrl(node.getNodeRef()));
     }
 
     /**

@@ -315,6 +315,7 @@
         <property name="errandsService" ref="errandsService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
     <property name="publicAction" value="false" />
     </bean>
 
@@ -370,6 +371,7 @@
         <property name="errandsService" ref="errandsService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
     <property name="publicAction" value="false" />
     </bean>
 

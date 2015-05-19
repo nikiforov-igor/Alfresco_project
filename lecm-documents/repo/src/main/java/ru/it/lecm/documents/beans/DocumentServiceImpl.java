@@ -1,6 +1,7 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -841,7 +842,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     }
 
     public String wrapAsDocumentLink(NodeRef documentRef) {
-        return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, PROP_EXT_PRESENT_STRING), DOCUMENT_LINK_URL);
+        return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, PROP_EXT_PRESENT_STRING), getDocumentUrl(documentRef));
     }
 
     @Override
@@ -910,5 +911,13 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         } else {
             return DEFAULT_VIEW_URL;
         }
+    }
+
+    @Override
+    public String getDocumentUrl(NodeRef document) {
+        QName type = nodeService.getType(document);
+        SysAdminParams params = serviceRegistry.getSysAdminParams();
+        String context = params.getShareContext();
+        return "/" + context + "/page/" + getViewUrl(type);
     }
 }

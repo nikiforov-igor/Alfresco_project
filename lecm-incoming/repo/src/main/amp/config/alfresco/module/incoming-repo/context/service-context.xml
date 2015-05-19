@@ -146,6 +146,7 @@
         <property name="incomingService" ref="incomingService"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="publicAction" value="false" />
+        <property name="documentService" ref="documentService"/>
     </bean>
 
     <bean id="incoming.executionNotificationSchedule" class="ru.it.lecm.incoming.schedule.ExecutionNotificationSchedule">

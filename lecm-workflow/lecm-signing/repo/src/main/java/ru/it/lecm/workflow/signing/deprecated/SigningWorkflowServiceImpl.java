@@ -79,7 +79,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 		NodeRef initiatorRef = docInfo.getInitiatorRef();
 		List<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(initiatorRef);
@@ -115,7 +115,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
         businessJournalService.log(task.getAssignee(), docInfo.getDocumentRef(), "ACCEPT_DOCUMENT_DECISION", "#initiator принял(а) решение по документу "
                 + wrapperLink(docInfo.getDocumentRef(), documentService.getProjectRegNumber(docInfo.getDocumentRef()) + ":"
-                + getDecision(taskDecision.getDecision()), DOCUMENT_LINK_URL), null);
+                + getDecision(taskDecision.getDecision()), documentService.getDocumentUrl(docInfo.getDocumentRef())), null);
 
 		completeTaskAddMembers(employee, bpmPackage, task);
 
@@ -176,7 +176,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	@Override
 	public void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 
 			WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
 			taskQuery.setProcessId(processInstanceId);
@@ -194,7 +194,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	@Override
 	public void notifyInitiatorDeadline(String processInstanceId, NodeRef bpmPackage, VariableScope variableScope) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 			if (docInfo.getDocumentRef() != null) {
 				Set<NodeRef> recipients = new HashSet<NodeRef>();
 				recipients.add(docInfo.getInitiatorRef());

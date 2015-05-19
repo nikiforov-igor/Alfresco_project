@@ -98,7 +98,7 @@ public class InternalNotificationExecutor implements Job {
                             }
 
                             if (notificationDescription != null) {
-                                notificationDescription += internalService.wrapperLink(internal, nodeService.getProperty(internal, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+                                notificationDescription += internalService.wrapperLink(internal, nodeService.getProperty(internal, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(internal));
                                 Notification notification = new Notification();
                                 notification.setRecipientEmployeeRefs(employeeList);
                                 notification.setAuthor(AuthenticationUtil.getSystemUserName());

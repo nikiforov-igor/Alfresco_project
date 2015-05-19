@@ -18,6 +18,7 @@ import org.springframework.jms.core.MessageCreator;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -55,6 +56,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBusinessJournalService.class);
     private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
+    private DocumentService documentService;
 
     public void dropCache() {
         logSettingsCache.clear();
@@ -167,7 +169,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         }
         String description = isInititator ? getInitiatorDescription(link) : getObjectDescription(link);
         if (link != null) {
-            String linkUrl = isLECMDocument(link) ? DOCUMENT_LINK_URL : (isLECMDocumentAttachment(link) ? DOCUMENT_ATTACHMENT_LINK_URL : LINK_URL);
+            String linkUrl = isLECMDocument(link) ? documentService.getDocumentUrl(link) : (isLECMDocumentAttachment(link) ? DOCUMENT_ATTACHMENT_LINK_URL : LINK_URL);
             return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + link.toString() + "\">" + description + "</a>";
         } else {
             return description;
@@ -520,6 +522,10 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void setStateMachineService(StateMachineServiceBean stateMachineService) {
         this.stateMachineService = stateMachineService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 
     protected static enum WhoseEnum {

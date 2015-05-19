@@ -37,6 +37,7 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
     private OrgstructureBean orgstructureService;
     private AuthorityService authorityService;
     private DictionaryService dictionaryService;
+    private DocumentService documentService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -64,7 +65,7 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
                         notification.setDescription("В хранилище подразделения размещен документ " + orgstructureBeanImpl.wrapperLink(nodeRef, name, BaseBean.DETAILS_LINK_URL));
                     } else {
                         String presentString = (String) nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING);
-                        notification.setDescription("В хранилище подразделения размещен документ " + orgstructureBeanImpl.wrapperLink(nodeRef, presentString, BaseBean.DOCUMENT_LINK_URL));
+                        notification.setDescription("В хранилище подразделения размещен документ " + orgstructureBeanImpl.wrapperLink(nodeRef, presentString, documentService.getDocumentUrl(nodeRef)));
                     }
                     notification.setObjectRef(nodeRef);
                     notificationService.sendNotification(notification);
@@ -169,4 +170,7 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
         }
     }
 
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 }

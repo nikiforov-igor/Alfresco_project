@@ -300,6 +300,7 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="stateMachineService" ref="stateMachineHelper"/>
 		<property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
     </bean>
 
     <bean id="documentDeletePolicy" class="ru.it.lecm.documents.policy.DocumentDeletePolicy" init-method="init">
@@ -392,6 +393,7 @@
 		<property name="templateService" ref="templateService"/>
 		<property name="behaviourFilter" ref="policyBehaviourFilter" />
 		<property name="regNumbersService" ref="regNumbersService" />
+        <property name="documentService" ref="documentService"/>
     </bean>
 
     <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"

@@ -161,7 +161,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	@Override
 	public void notifyAssigneesDeadline(String processInstanceId, NodeRef bpmPackage) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 
 			WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
 			taskQuery.setProcessId(processInstanceId);
@@ -219,7 +219,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	@Override
 	public void notifyInitiatorDeadline(String processInstanceId, NodeRef bpmPackage, VariableScope variableScope) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 			if (docInfo.getDocumentRef() != null) {
 				Set<NodeRef> recipients = new HashSet<NodeRef>();
 				recipients.add(docInfo.getInitiatorRef());

@@ -95,7 +95,7 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             regDateString = dFormat.format(regDate);
         }
 
-        businessJournalService.log(baseDoc, "CREATE_ERRAND_BASED_ON_DOC", "#initiator создал(а) поручение по документу " + wrapperLink(baseDoc, documentService.getDocumentActualNumber(baseDoc) + " от " + regDateString, DOCUMENT_LINK_URL), null);
+        businessJournalService.log(baseDoc, "CREATE_ERRAND_BASED_ON_DOC", "#initiator создал(а) поручение по документу " + wrapperLink(baseDoc, documentService.getDocumentActualNumber(baseDoc) + " от " + regDateString, documentService.getDocumentUrl(baseDoc)), null);
 
         //TODO ALF-2843
         //	   После рефакторинга транзакций валится добавление участника

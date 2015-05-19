@@ -26,6 +26,7 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
     private ErrandsServiceImpl errandsService;
     private NotificationsService notificationsService;
     private NodeService nodeService;
+    private DocumentService documentService;
 
     public void setErrandsService(ErrandsServiceImpl errandsService) {
         this.errandsService = errandsService;
@@ -66,7 +67,7 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
             startDate = calendar.getTime();
             if (startDate.equals(now)) {
                 notificationDescription = "Наступил срок выполнения поручения: " +
-                        errandsService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_TITLE).toString(), BaseBean.DOCUMENT_LINK_URL);
+                        errandsService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_TITLE).toString(), documentService.getDocumentUrl(nodeRef));
                 sendNotification(nodeRef, getEmployeeList(nodeRef), notificationDescription);
             }
         }
@@ -78,14 +79,14 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
         now = calendar.getTime();
         if (limitDate != null && limitDate.before(now)) {
             notificationDescription = "Приближается срок выполнения поручения: " +
-                    errandsService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_TITLE).toString(), BaseBean.DOCUMENT_LINK_URL);
+                    errandsService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, ErrandsService.PROP_ERRANDS_TITLE).toString(), documentService.getDocumentUrl(nodeRef));
             sendNotification(nodeRef, getEmployeeList(nodeRef), notificationDescription);
         }
 
         // Уведомление о направленном поручении
         if (nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATUS).equals("Ожидает исполнения")) {
             notificationDescription = "Вам направлено " +
-                    errandsService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+                    errandsService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(nodeRef));
             sendNotification(nodeRef, getEmployeeList(nodeRef), notificationDescription);
         }
 
@@ -126,5 +127,9 @@ public class EveryDayNotificationExecutor extends ActionExecuterAbstractBase {
         }
 
         return new ArrayList<NodeRef>(employee);
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

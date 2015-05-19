@@ -94,6 +94,7 @@
           p:businessJournalService-ref="businessJournalService"
           p:ndDocumentService-ref="NDDocumentService"
           p:substitudeBean-ref="substitudeService"
+          p:documentService-ref="documentService"/>
     />
 
     <bean id="ndCreatePolicy" class="ru.it.lecm.nd.policy.NDCreatePolicy" init-method="init"

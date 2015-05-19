@@ -105,7 +105,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private String getOrdURL(final ScriptNode ordRef) {
 		NodeRef ordDocumentRef = ordRef.getNodeRef();
 		String presentString = (String) nodeService.getProperty(ordDocumentRef, DocumentService.PROP_PRESENT_STRING);
-		return wrapperLink(ordDocumentRef.toString(), presentString, BaseBean.DOCUMENT_LINK_URL);
+		return wrapperLink(ordDocumentRef.toString(), presentString, documentService.getDocumentUrl(ordDocumentRef));
 	}
 
 	/**

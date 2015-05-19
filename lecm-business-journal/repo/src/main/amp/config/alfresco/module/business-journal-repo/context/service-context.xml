@@ -108,6 +108,7 @@
 		<property name="enableResend" value="#{'${businessjournal.resend.enable}' == '$'+'{businessjournal.resend.enable}' ? false : '${businessjournal.resend.enable}'}"/>
 		<property name="allowedCategories" value="#{'${businessjournal.resend.allowed.categories}' == '$'+'{businessjournal.resend.allowed.categories}' ? null : '${businessjournal.resend.allowed.categories}'.split(';')}"/>
         <property name="logSettingsCache" ref="bj.log.settings.cache" />
+		<property name="documentService" ref="documentService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.nd.NDDocumentServiceImpl;
 import ru.it.lecm.statemachine.StatemachineModel;
 
@@ -31,8 +32,9 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
     private BusinessJournalService businessJournalService;
     private NDDocumentServiceImpl ndDocumentService;
     private SubstitudeBean substitudeBean;
+    private DocumentService documentService;
 
-	public void setNodeService(NodeService nodeService) {
+    public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
 
@@ -42,7 +44,7 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 		nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, "Срок действия окончен");
 
         //логирование
-        String bjMessage = "Документ " + ndDocumentService.wrapperLink(actionedUponNodeRef, "№ {~REGNUM} от {~REGDATE}", NDDocumentServiceImpl.DOCUMENT_LINK_URL)+ " завершил срок действия";
+        String bjMessage = "Документ " + ndDocumentService.wrapperLink(actionedUponNodeRef, "№ {~REGNUM} от {~REGDATE}", documentService.getDocumentUrl(actionedUponNodeRef))+ " завершил срок действия";
         bjMessage = substitudeBean.formatNodeTitle(actionedUponNodeRef, bjMessage);
         businessJournalService.log("System", actionedUponNodeRef, "EXPIRATION_DATE", bjMessage, null);
 	}
@@ -62,5 +64,9 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 
     public void setSubstitudeBean(SubstitudeBean substitudeBean) {
         this.substitudeBean = substitudeBean;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

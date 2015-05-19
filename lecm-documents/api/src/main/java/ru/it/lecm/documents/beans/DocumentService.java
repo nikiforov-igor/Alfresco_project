@@ -364,4 +364,7 @@ public interface DocumentService {
     String getCreateUrl(QName type);
 
     String getViewUrl(QName type);
+
+    String getDocumentUrl(NodeRef document);
+
 }

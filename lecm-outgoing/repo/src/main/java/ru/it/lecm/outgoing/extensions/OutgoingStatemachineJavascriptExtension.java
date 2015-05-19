@@ -55,7 +55,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	private String getOutgoingURL(final ScriptNode outgoingRef) {
 		NodeRef outgoingDocumentRef = outgoingRef.getNodeRef();
 		String presentString = (String) nodeService.getProperty(outgoingDocumentRef, DocumentService.PROP_PRESENT_STRING);
-		return wrapperLink(outgoingDocumentRef.toString(), presentString, BaseBean.DOCUMENT_LINK_URL);
+		return wrapperLink(outgoingDocumentRef.toString(), presentString, documentService.getDocumentUrl(outgoingDocumentRef));
 	}
 
 	/**

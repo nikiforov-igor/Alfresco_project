@@ -28,6 +28,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 	private NodeService nodeService;
 	private WorkflowFoldersServiceImpl workflowFoldersService;
 	private static final String DOCUMENT_DETAILS_URL = "/share/page/document-details";
+	private DocumentService documentService;
 
 	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
@@ -70,7 +71,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 			presentString = "Документ";
 			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, DOCUMENT_DETAILS_URL);
 		} else {
-			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, BaseBean.DOCUMENT_LINK_URL);
+			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, documentService.getDocumentUrl(documentRef));
 		}
 
 		try {
@@ -84,5 +85,9 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 		result.put("result", resultJSON);
 
 		return result;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 }

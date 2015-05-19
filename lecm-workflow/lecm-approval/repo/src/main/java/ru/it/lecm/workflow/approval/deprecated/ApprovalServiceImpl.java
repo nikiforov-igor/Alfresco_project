@@ -142,7 +142,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		}
         businessJournalService.log(taskDecision.getUserName(), documentRef, "ACCEPT_DOCUMENT_DECISION", "#initiator принял(а) решение по документу "
                 + wrapperLink(documentRef, documentService.getProjectRegNumber(documentRef) + ":"
-                + getDecision(taskDecision.getDecision()), DOCUMENT_LINK_URL), null);
+                + getDecision(taskDecision.getDecision()), documentService.getDocumentUrl(documentRef)), null);
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	@Override
 	public void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage) {
 		try {
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 
 			WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
 			taskQuery.setProcessId(processInstanceId);
@@ -208,7 +208,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope) {
 		try {
 			boolean isDocumentApproval = Utils.isDocument(Utils.getDocumentFromBpmPackage(bpmPackage));
-			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 			if (docInfo.getDocumentRef() != null) {
 				Set<NodeRef> recipients = new HashSet<>();
 				recipients.add(docInfo.getInitiatorRef());

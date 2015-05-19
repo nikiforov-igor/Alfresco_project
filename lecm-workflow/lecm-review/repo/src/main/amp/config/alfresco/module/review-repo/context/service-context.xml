@@ -38,5 +38,6 @@
 		  parent="lecmWorkflowService" depends-on="review.model.bootstrap"
 		  p:workCalendarService-ref="WorkCalendarService"
 		  p:assigneesListService-ref="workflowAssigneesListService"
-		  p:resultListService-ref="workflowResultListService" />
+		  p:resultListService-ref="workflowResultListService"
+		  p:documentService-ref="documentService" />
 </beans>

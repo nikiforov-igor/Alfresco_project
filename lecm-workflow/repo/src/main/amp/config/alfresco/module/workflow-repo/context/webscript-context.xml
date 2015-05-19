@@ -8,7 +8,8 @@
 		  class="ru.it.lecm.workflow.webscripts.GetDocumentDataByTaskIdOrNodeRef" parent="webscript"
 		  p:workflowService-ref="WorkflowService"
 		  p:nodeService-ref="nodeService"
-		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap" />
+		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"
+		  p:documentService-ref="documentService" />
 
 	<bean id="webscript.ru.it.lecm.workflow.SetAssigneesListConcurrencyWebscript.post"
 		  class="ru.it.lecm.workflow.webscripts.SetAssigneesListConcurrencyWebscript" parent="webscript"

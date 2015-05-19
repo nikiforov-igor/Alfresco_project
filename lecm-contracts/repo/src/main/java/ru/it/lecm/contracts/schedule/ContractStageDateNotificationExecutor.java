@@ -98,7 +98,7 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
         Object stageEndDate = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_END_DATE);
         Object stageStatus = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_STATUS);
         Integer index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-        String docDesc = contractsService.wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+        String docDesc = contractsService.wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(document));
 
         Date normalStartDate = null;
         if (stageStartDate != null) {

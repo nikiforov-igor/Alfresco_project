@@ -65,7 +65,8 @@
 	<!--service for various document utils-->
 	<bean id="ordDocumentService" parent="baseBean"
 		  class="ru.it.lecm.ord.ORDDocumentServiceImpl"
-		  p:lecmDictionaryService-ref="serviceDictionary"/>
+		  p:lecmDictionaryService-ref="serviceDictionary"
+          p:documentService-ref="documentService"/>
 
 
         <bean id="ordCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">

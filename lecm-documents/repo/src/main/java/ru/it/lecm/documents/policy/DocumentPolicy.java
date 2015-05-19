@@ -76,6 +76,7 @@ public class DocumentPolicy extends BaseBean
 	private TemplateService templateService;
 	private BehaviourFilter behaviourFilter;
 	private RegNumbersService regNumbersService;
+    private DocumentService documentService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -571,7 +572,7 @@ public class DocumentPolicy extends BaseBean
 
                         SysAdminParams params = serviceRegistry.getSysAdminParams();
                         String documentLink = params.getShareProtocol() + "://" + params.getShareHost() + ":" +
-                                params.getSharePort() +	DOCUMENT_LINK_URL + "?nodeRef=" + documentRef.toString();
+                                params.getSharePort() +	documentService.getDocumentUrl(documentRef) + "?nodeRef=" + documentRef.toString();
                         model.put("documentLink", documentLink);
                         model.put("documentName", nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING));
 
@@ -693,5 +694,9 @@ public class DocumentPolicy extends BaseBean
 			};
 
         return AuthenticationUtil.runAsSystem(raw);
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

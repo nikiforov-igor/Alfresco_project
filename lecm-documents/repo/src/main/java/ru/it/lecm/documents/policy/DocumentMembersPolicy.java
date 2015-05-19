@@ -20,6 +20,7 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.DocumentServiceImpl;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -50,12 +51,13 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     private OrgstructureBean orgstructureService;
     private StateMachineServiceBean stateMachineService;
     private NamespaceService namespaceService;
+    private DocumentService documentService;
 
     final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Reader;
+
     private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
 
     private LecmPermissionService lecmPermissionService;
-
     final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES_ON_FINAL_STATE = {ForumModel.PROP_COMMENT_COUNT, DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT};
     final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES_EVER = {DocumentService.PROP_SYS_WORKFLOWS};
 
@@ -192,7 +194,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
                 notification.setRecipientEmployeeRefs(employeeList);
                 notification.setAuthor(authService.getCurrentUserName());
                 notification.setDescription("Вы приглашены как новый участник в документ " +
-                        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
+                        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(docRef)));
                 notification.setObjectRef(docRef);
                 notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
                 notificationService.sendNotification(notification);
@@ -357,5 +359,9 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             pgRevoking = lecmPermissionService.findPermissionGroup(this.getGrantAccess());
         }
         lecmPermissionService.revokeAccess(pgRevoking, docRef, employee);
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

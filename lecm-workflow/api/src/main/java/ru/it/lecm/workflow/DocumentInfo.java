@@ -7,7 +7,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
-import static ru.it.lecm.base.beans.BaseBean.DOCUMENT_LINK_URL;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -22,14 +21,14 @@ public class DocumentInfo extends BaseBean {
 	private String documentLink;
 	private final static Logger logger = LoggerFactory.getLogger(DocumentInfo.class);
 
-	public DocumentInfo(final NodeRef bpmPackage, OrgstructureBean orgstructureService, NodeService nodeService, ServiceRegistry serviceRegistry) {
+	public DocumentInfo(final NodeRef bpmPackage, OrgstructureBean orgstructureService, DocumentService documentService, NodeService nodeService, ServiceRegistry serviceRegistry) {
 		this.nodeService = nodeService;
 		this.serviceRegistry = serviceRegistry;
 		documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		documentLink = "<a href=\"javascript:void(0);\"></a>";
 		if (documentRef != null) {
 			String presentString = (String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING);
-			documentLink = wrapperLink(documentRef, presentString, DOCUMENT_LINK_URL);
+			documentLink = wrapperLink(documentRef, presentString, documentService.getDocumentUrl(documentRef));
 			String creator = (String) nodeService.getProperty(documentRef, ContentModel.PROP_CREATOR);
 			initiatorRef = orgstructureService.getEmployeeByPerson(creator);
 		} else {

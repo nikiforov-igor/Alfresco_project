@@ -33,6 +33,7 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
     private IWorkCalendar calendarBean;
     private IncomingServiceImpl incomingService;
     private OrgstructureBean orgstructureBean;
+    private DocumentService documentService;
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
@@ -84,7 +85,7 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
         }
 
         if (notificationDescription != null) {
-            notificationDescription += incomingService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+            notificationDescription += incomingService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(nodeRef));
             if (nodeService.getProperty(nodeRef, DocumentService.PROP_TITLE) != null) {
                 notificationDescription += ": " + nodeService.getProperty(nodeRef, DocumentService.PROP_TITLE).toString();
             }
@@ -118,5 +119,9 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
 
     public void setIncomingService(IncomingServiceImpl incomingService) {
         this.incomingService = incomingService;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

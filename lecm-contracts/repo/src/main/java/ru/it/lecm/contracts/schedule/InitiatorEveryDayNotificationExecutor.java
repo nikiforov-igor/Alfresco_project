@@ -69,7 +69,7 @@ public class InitiatorEveryDayNotificationExecutor extends ActionExecuterAbstrac
     private String getNotificationDescription(NodeRef document) {
         Date now = new Date();
         Date contractEndDate = (Date) nodeService.getProperty(document, ContractsBeanImpl.PROP_END_DATE);
-        String docDesc = contractsService.wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+        String docDesc = contractsService.wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(document));
         String desc;
         if (contractEndDate != null && now.before(contractEndDate)) {
             desc = "Начинается срок исполнения договора " + docDesc;

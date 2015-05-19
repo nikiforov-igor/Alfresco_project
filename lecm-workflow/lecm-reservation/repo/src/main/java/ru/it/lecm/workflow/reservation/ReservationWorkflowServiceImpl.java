@@ -175,7 +175,7 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 	@Override
 	public Notification prepareNotificationAboutEmptyRegistrars(final NodeRef bpmPackage, final NodeRef reservateInitiator) {
 		String template = "Нет доступных регистраторов для регистрации документа %s";
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 
 		String notificationMessage = String.format(template, docInfo.getDocumentLink());
 

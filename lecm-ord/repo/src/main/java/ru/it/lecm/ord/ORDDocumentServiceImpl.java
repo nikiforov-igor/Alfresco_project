@@ -18,6 +18,7 @@ import ru.it.lecm.ord.api.ORDModel;
 public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentService{
 
 	private DictionaryBean lecmDictionaryService;
+	private DocumentService documentService;
 
 
 	public void setLecmDictionaryService(DictionaryBean lecmDictionaryService) {
@@ -27,7 +28,7 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 	@Override
 	public String getDocumentURL(final NodeRef documentRef) {
 		String presentString = (String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING);
-		return wrapperLink(documentRef, presentString, BaseBean.DOCUMENT_LINK_URL);
+		return wrapperLink(documentRef, presentString, documentService.getDocumentUrl(documentRef));
 	}
 
 	@Override
@@ -77,5 +78,9 @@ public class ORDDocumentServiceImpl extends BaseBean implements ORDDocumentServi
 			}
 		}
 		return false;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 }
