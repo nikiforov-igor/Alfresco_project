@@ -7,6 +7,7 @@ import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
@@ -15,6 +16,7 @@ import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import ru.it.lecm.base.beans.BaseBean;
@@ -26,7 +28,7 @@ import ru.it.lecm.meetings.beans.MeetingsService;
  *
  * @author vkuprin
  */
-public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnUpdatePropertiesPolicy {
+public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUpdatePropertiesPolicy {
 
 	public static final String FILE_PREFIX_STRING = "Пункт_";
 	public static final String FILE_DEFAULT_CATEGORY = "Вложения";
@@ -36,7 +38,16 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnCr
 	private DocumentTableService documentTableService;
 	private PolicyComponent policyComponent;
 	private TransactionListener transactionListener;
+	private BehaviourFilter behaviourFilter;
 
+	public BehaviourFilter getBehaviourFilter() {
+		return behaviourFilter;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
+	}
+	
 	public DocumentAttachmentsService getDocumentAttachmentsService() {
 		return documentAttachmentsService;
 	}
@@ -71,22 +82,54 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnCr
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM,
-				new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				new JavaBehaviour(this, "onCreateAgendaItem", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_DOCUMENT,
+				new JavaBehaviour(this, "onCreateMeeting", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM,
 				new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
-	@Override
-	public void onCreateNode(ChildAssociationRef childAssocRef) {
+	public void onCreateMeeting(ChildAssociationRef childAssocRef) {
+		NodeRef document = childAssocRef.getChildRef();
+		List<AssociationRef> items = nodeService.getTargetAssocs(document, MeetingsService.ASSOC_MEETINGS_TEMP_ITEMS);
+		Integer index = 0;
+		
+		for (AssociationRef itemAssoc : items) {
+			index++;
+			NodeRef item = itemAssoc.getTargetRef();
+			try {
+				behaviourFilter.disableBehaviour(item);
+				NodeRef table = documentTableService.getTable(document, MeetingsService.TYPE_MEETINGS_TS_AGENDA_TABLE);
+				String assocName = nodeService.getProperty(item, ContentModel.PROP_NAME).toString();
+				QName itemAssocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, assocName);
+				nodeService.moveNode(item, table, ContentModel.ASSOC_CONTAINS, itemAssocQName);
+				nodeService.setProperty(item, DocumentTableService.PROP_INDEX_TABLE_ROW, index);
+				//нужно дёрнуть, чтоб создать папки категорий вложений
+				documentAttachmentsService.getCategories(document);
+				moveFiles(document, item);
+			} finally {
+				behaviourFilter.enableBehaviour(item);
+			}
+		}
+		refreshFiles(document);
+	}
+
+	public void onCreateAgendaItem(ChildAssociationRef childAssocRef) {
 		NodeRef row = childAssocRef.getChildRef();
 		NodeRef document = documentTableService.getDocumentByTableDataRow(row);
-		List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
-		for (AssociationRef fileAssoc : files) {
-			NodeRef file = fileAssoc.getTargetRef();
-			documentAttachmentsService.addAttachment(file, documentAttachmentsService.getCategory(FILE_DEFAULT_CATEGORY, document));
-		}
+		moveFiles(document, row);
+	}
 
+	private void moveFiles(NodeRef document, NodeRef row) {
+		if (null != document && null != row) {
+			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
+			for (AssociationRef fileAssoc : files) {
+				NodeRef file = fileAssoc.getTargetRef();
+				documentAttachmentsService.addAttachment(file, documentAttachmentsService.getCategory(FILE_DEFAULT_CATEGORY, document));
+			}
+		}
 	}
 
 	@Override
@@ -96,17 +139,18 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnCr
 		Object afterIndex = after.get(DocumentTableService.PROP_INDEX_TABLE_ROW);
 		if (null != afterIndex && (null == beforeIndex || !beforeIndex.equals(afterIndex))) {
 			NodeRef document = documentTableService.getDocumentByTableDataRow(nodeRef);
+			if (null != document) {
+				AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
-			AlfrescoTransactionSupport.bindListener(this.transactionListener);
+				List<NodeRef> pendingActions = AlfrescoTransactionSupport.getResource(MEETINGS_TRANSACTION_LISTENER);
+				if (pendingActions == null) {
+					pendingActions = new ArrayList<>();
+					AlfrescoTransactionSupport.bindResource(MEETINGS_TRANSACTION_LISTENER, pendingActions);
+				}
 
-			List<NodeRef> pendingActions = AlfrescoTransactionSupport.getResource(MEETINGS_TRANSACTION_LISTENER);
-			if (pendingActions == null) {
-				pendingActions = new ArrayList<>();
-				AlfrescoTransactionSupport.bindResource(MEETINGS_TRANSACTION_LISTENER, pendingActions);
-			}
-
-			if (!pendingActions.contains(document)) {
-				pendingActions.add(document);
+				if (!pendingActions.contains(document)) {
+					pendingActions.add(document);
+				}
 			}
 		}
 
@@ -115,7 +159,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnCr
 	public void refreshFiles(NodeRef document) {
 		NodeRef table = documentTableService.getTable(document, MeetingsService.TYPE_MEETINGS_TS_AGENDA_TABLE);
 		List<NodeRef> rows = documentTableService.getTableDataRows(table);
-		String regexp = "^("+FILE_PREFIX_STRING + "\\d*_)*";
+		String regexp = "^(" + FILE_PREFIX_STRING + "\\d*_)*";
 		for (NodeRef row : rows) {
 			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
 			Object index = nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);

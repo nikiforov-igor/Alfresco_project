@@ -151,6 +151,7 @@
 		  p:documentTableService-ref="documentTableService"
 		  p:documentAttachmentsService-ref="documentAttachmentsService"
 		  p:policyComponent-ref="policyComponent"
+		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  
 	/>
 	

@@ -53,6 +53,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					fn: this.onFormSubmitFailure
 				}
 			});
+			YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
 		},
 
 		onSubmit: function(fn, scope) {
