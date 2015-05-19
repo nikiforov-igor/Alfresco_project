@@ -9,7 +9,8 @@
 					"primaryDocument": {
 						<#if item.assocs["lecm-connect:primary-document-assoc"]??>
 							"nodeRef": "${item.assocs["lecm-connect:primary-document-assoc"][0].nodeRef}",
-							"type": "${item.assocs["lecm-connect:primary-document-assoc"][0].typeShort}",
+	                        "viewUrl": "${documentService.getViewUrl(item.assocs["lecm-connect:primary-document-assoc"][0].nodeRef)}",
+    	                    "type": "${item.assocs["lecm-connect:primary-document-assoc"][0].typeShort}",
 							"name": "${item.assocs["lecm-connect:primary-document-assoc"][0].properties["cm:name"]}",
 							"presentString": "${item.assocs["lecm-connect:primary-document-assoc"][0].properties["lecm-document:present-string"]!''}",
 							"extPresentString": "${item.assocs["lecm-connect:primary-document-assoc"][0].properties["lecm-document:ext-present-string"]!''}",
@@ -19,6 +20,7 @@
 					"connectedDocument": {
 						<#if item.assocs["lecm-connect:connected-document-assoc"]??>
 							"nodeRef": "${item.assocs["lecm-connect:connected-document-assoc"][0].nodeRef}",
+	                        "viewUrl": "${documentService.getViewUrl(item.assocs["lecm-connect:connected-document-assoc"][0].nodeRef)}",
 							"type": "${item.assocs["lecm-connect:connected-document-assoc"][0].typeShort}",
 							"name": "${item.assocs["lecm-connect:connected-document-assoc"][0].properties["cm:name"]}",
 							"presentString": "${item.assocs["lecm-connect:connected-document-assoc"][0].properties["lecm-document:present-string"]!''}",

@@ -20,6 +20,7 @@ function main() {
 	}
 	model.connections = connections;
 	model.connectionsWithDocument = connectionsWithDocument;
+	model.documentService = documentScript;
 }
 
 main();

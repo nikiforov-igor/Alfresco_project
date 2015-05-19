@@ -64,7 +64,7 @@
 							<div class="connection-name">
 								<#if item.connectedDocument??>
 									<div class="document-name">
-										<a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef!""}" class="theme-color-1">
+										<a href="${url.context}/page/${item.connectedDocument.viewUrl!""}?nodeRef=${item.connectedDocument.nodeRef!""}" class="theme-color-1">
 											${item.connectedDocument.extPresentString!""}
 										</a>
 									</div>
@@ -125,7 +125,7 @@
 						<div class="connection-name">
 							<#if item.primaryDocument??>
 								<div class="document-name">
-									<a href="${url.context}/page/document?nodeRef=${item.primaryDocument.nodeRef!""}" class="theme-color-1">
+									<a href="${url.context}/page/${item.primaryDocument.viewUrl!""}?nodeRef=${item.primaryDocument.nodeRef!""}" class="theme-color-1">
 										${item.primaryDocument.extPresentString!""}
 									</a>
 								</div>

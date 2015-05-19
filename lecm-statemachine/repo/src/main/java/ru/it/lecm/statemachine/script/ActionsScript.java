@@ -241,6 +241,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                     resultState.put("isForm", state.isForm());
                                     if (state.isForm()) {
                                         resultState.put("documentType", state.getFormType());
+                                        resultState.put("createUrl", documentService.getCreateUrl(QName.createQName(state.getFormType(), serviceRegistry.getNamespaceService())));
                                         resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
                                         resultState.put("connectionType", state.getFormConnection());
                                         resultState.put("connectionIsSystem", state.isSystemFormConnection());
@@ -319,6 +320,7 @@ public class ActionsScript extends DeclarativeWebScript {
                 if (type.equals(GroupActionsService.TYPE_GROUP_DOCUMENT_ACTION)) {
                     actionStruct.put("subtype", "document");
                     actionStruct.put("documentType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_TYPE));
+                    actionStruct.put("createUrl", documentService.getCreateUrl(QName.createQName(nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_TYPE).toString(), serviceRegistry.getNamespaceService())));
                     actionStruct.put("connectionType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION));
                     actionStruct.put("connectionIsSystem", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION_SYSTEM));
                     actionStruct.put("autoFill", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_AUTO_FILL));

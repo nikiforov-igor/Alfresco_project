@@ -280,7 +280,29 @@ LogicECM.module = LogicECM.module || {};
 				this._createScriptForm(action);
 			} else {
 				if (action.subtype == 'document') {
-					this._createDocument(action);
+					var me = this;
+					me.doubleClickLock = true;
+					Alfresco.util.PopupManager.displayPrompt({
+						title: Alfresco.util.message('title.execute_action'),
+						text: Alfresco.util.message('msg.action_confirm', this.name, action.label ),
+						buttons: [{
+							text: Alfresco.util.message('button.ok'),
+							handler: {
+								fn: function(event, obj) {
+									this.destroy();
+									me._createDocument(action);
+								},
+								obj: this
+							}
+						},{
+							text: Alfresco.util.message('button.cancel'),
+							handler: function(event, obj) {
+								this.destroy();
+								me.doubleClickLock = false;
+							},
+							isDefault: true
+						}]
+					});
 				} else if (action.subtype == 'workflow') {
 					var templateRequestParams = {
 						itemKind: 'workflow',
@@ -507,7 +529,7 @@ LogicECM.module = LogicECM.module || {};
 			}
 		},
 		_redirectToCreateDocument: function _redirectToCreateDocument_function(action, additionalParams) {
-			var url =  Alfresco.constants.URL_PAGECONTEXT + 'document-create?documentType=' + action.documentType;
+			var url =  Alfresco.constants.URL_PAGECONTEXT + action.createUrl + '?documentType=' + action.documentType;
 
 			var params = 'documentType=' + action.documentType;
 			params += '&formId=' + 'workflow-form';

@@ -39,7 +39,7 @@
                                     <#else>
                                         <#assign docname="${item.connectedDocument.name}"/>
                                     </#if>
-                                    <a href="${url.context}/page/document?nodeRef=${item.connectedDocument.nodeRef}" class="text-cropped" title="${docname}">
+                                    <a href="${url.context}/page/${item.connectedDocument.viewUrl}?nodeRef=${item.connectedDocument.nodeRef}" class="text-cropped" title="${docname}">
                                     ${docname}
                                     </a>
                                 </li>

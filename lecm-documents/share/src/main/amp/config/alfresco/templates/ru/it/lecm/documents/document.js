@@ -30,17 +30,6 @@ function main() {
         var metadata = eval('(' + result + ')');
         if (metadata && (metadata.type)) {
             model.documentType = metadata.type;
-
-            if (model.documentType == "{http://www.it.ru/logicECM/events/1.0}document") {
-                var response;
-                var requestContext = context.getRequestContext();
-                if (requestContext.isPassiveMode()) {
-                    response = requestContext.getResponse().getResponse();
-                } else {
-                    response = requestContext.getResponse();
-                }
-                response.sendRedirect(page.url.servletContext + '/event?nodeRef=' +  page.url.args.nodeRef);
-            }
         }
     }
 

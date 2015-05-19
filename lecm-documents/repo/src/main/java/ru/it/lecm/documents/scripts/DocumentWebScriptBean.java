@@ -630,4 +630,9 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return documentService.getViewUrl(document.getQNameType());
     }
 
+    public String getViewUrl(NodeRef document) {
+        QName type = nodeService.getType(document);
+        return documentService.getViewUrl(type);
+    }
+
 }

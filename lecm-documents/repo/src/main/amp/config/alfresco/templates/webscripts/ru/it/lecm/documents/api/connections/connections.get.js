@@ -8,6 +8,7 @@ var items = [];
 var hasNext = false;
 var k = 0;
 
+model.documentService = documentScript;
 if (null != rootFolder){
 	var connections = rootFolder.getChildren();
 	if (connections != null && connections.length > 0) {
