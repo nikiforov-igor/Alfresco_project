@@ -159,7 +159,7 @@
                 });
 
             bubbleObject.mouseout(function(ev) {
-                if (bubbleObject.find(ev.toElement).length == 0 && !bubbleObject.is(ev.toElement)) {
+                if (ev.currentTarget === ev.target || (bubbleObject.find(ev.currentTarget).length == 0 && !bubbleObject.is(ev.currentTarget))) {
                     $.fn.formBubble.close(bubbleObject);
                 }
             });
