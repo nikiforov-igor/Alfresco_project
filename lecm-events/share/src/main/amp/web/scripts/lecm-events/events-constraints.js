@@ -30,6 +30,11 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 		var fromTime = Dom.get(fromDate.id + "-cntrl-time");
 		var toTime = Dom.get(toDate.id + "-cntrl-time");
 
+		Dom.removeClass(fromDate.id+ "-cntrl-date", "invalid");
+		Dom.removeClass(fromTime.id, "invalid");
+		Dom.removeClass(toDate.id + "-cntrl-date", "invalid");
+		Dom.removeClass(toTime.id, "invalid");
+
 		var allDay = field.value == "true";
 
 		if (fromTime != null) {
@@ -74,6 +79,15 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
             if (!allDay && toTime.value.length == 0) {
 				Dom.addClass(toTime.id, "invalid");
 			}
+		}
+
+		var fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
+		var toDateTime = Alfresco.util.fromISO8601(toDate.value);
+		if (toDateTime < fromDateTime) {
+			Dom.addClass(fromDate.id+ "-cntrl-date", "invalid");
+			Dom.addClass(fromTime.id, "invalid");
+			Dom.addClass(toDate.id + "-cntrl-date", "invalid");
+			Dom.addClass(toTime.id, "invalid");
 		}
 	}
 	return true;
