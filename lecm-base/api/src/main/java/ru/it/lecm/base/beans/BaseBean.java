@@ -43,7 +43,6 @@ public abstract class BaseBean implements InitializingBean {
 
     public static final String LINK_URL = "/share/page/view-metadata";
     public static final String DETAILS_LINK_URL = "/share/page/document-details";
-    public static final String DOCUMENT_LINK_URL = "/share/page/document";
     public static final String WORKFLOW_LINK_URL = "/share/page/workflow-details";
     public static final String DOCUMENT_ATTACHMENT_LINK_URL = "/share/page/document-attachment";
 
