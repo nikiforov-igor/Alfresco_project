@@ -107,6 +107,13 @@
             <type>jar</type>
 			<scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.events</groupId>
+            <artifactId>events-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <type>jar</type>
+			<scope>provided</scope>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

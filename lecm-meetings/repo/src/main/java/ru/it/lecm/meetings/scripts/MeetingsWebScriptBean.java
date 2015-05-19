@@ -46,6 +46,16 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	public Scriptable getTechnicalMembers(ScriptNode meeting) {
+		ParameterCheck.mandatory("meeting", meeting);
+
+		List<NodeRef> results = meetingsService.getTechnicalMembers(meeting.getNodeRef());
+		if (results != null) {
+			return createScriptable(results);
+		}
+		return null;
+	}
+
 	public ScriptNode createNewMeetingItem(String meeting) {
 		ParameterCheck.mandatory("meeting", meeting);
 

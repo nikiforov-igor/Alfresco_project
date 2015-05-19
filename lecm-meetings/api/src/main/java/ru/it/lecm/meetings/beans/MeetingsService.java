@@ -32,6 +32,8 @@ public interface MeetingsService {
 
 	List<NodeRef> getMeetingHoldingItems(NodeRef meeting);
 
+	List<NodeRef> getTechnicalMembers(NodeRef meeting);
+
 	NodeRef createNewMeetingItem(NodeRef meeting);
 
 	public void deleteHoldingItem(NodeRef nodeRef);

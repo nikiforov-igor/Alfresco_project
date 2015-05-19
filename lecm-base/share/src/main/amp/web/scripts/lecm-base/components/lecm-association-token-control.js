@@ -210,7 +210,9 @@ LogicECM.module = LogicECM.module || {};
 
 				doNotCheckAccess: false,
 
-				resetValue: false
+				resetValue: false,
+
+				itemId: null
 			},
 
 			onReady: function () {
@@ -1869,7 +1871,7 @@ LogicECM.module = LogicECM.module || {};
 					"&pathNameSubstituteString=" + encodeURIComponent(this.options.treeNodeSubstituteString) +
 					"&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
 					'&doNotCheckAccess=' + encodeURIComponent("" + this.options.doNotCheckAccess) +
-					'&rootNodeRef=' + encodeURIComponent("" + this.options.rootNodeRef);
+					'&rootNodeRef=' + encodeURIComponent("" + this.options.rootNodeRef) + "&itemId=" + this.options.itemId;
 
 				if (forAutocomplete) {
 					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);

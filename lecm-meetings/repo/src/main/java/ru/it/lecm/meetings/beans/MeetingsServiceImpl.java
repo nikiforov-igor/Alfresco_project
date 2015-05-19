@@ -1,5 +1,6 @@
 package ru.it.lecm.meetings.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
@@ -10,6 +11,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
@@ -24,6 +26,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	private StateMachineServiceBean stateMachineService;
 	private BusinessJournalService businessJournalService;
 	private DocumentTableService documentTableService;
+	private EventsService eventsService;
 
 	private final static String ACTIVITI_PREFIX = "activiti$";
 	private final static String APPROVEMENT_WORKFLOW_DEFINITION_ID = ACTIVITI_PREFIX + "lecmApprovementWorkflow";
@@ -64,6 +67,10 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		this.documentTableService = documentTableService;
 	}
 
+	public void setEventsService(EventsService eventsService) {
+		this.eventsService = eventsService;
+	}
+
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(MEETINGS_ROOT_ID);
@@ -85,6 +92,13 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		}
 		return null;
 	}
+
+    public List<NodeRef> getTechnicalMembers(NodeRef meeting) {
+        List<NodeRef> result = new ArrayList<>();
+        result.addAll(eventsService.getEventMembers(meeting));
+        result.addAll(eventsService.getEventInvitedMembers(meeting));
+        return result;
+    }
 
 	public NodeRef createNewMeetingItem(NodeRef meeting) {
 		NodeRef table = getHoldingItemsTable(meeting);
