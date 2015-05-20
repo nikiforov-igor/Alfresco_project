@@ -51,7 +51,7 @@
                                                 var text = "<html><body>Уважаемые коллеги!<br/>" + documentScript.wrapperLink(currentUser,
                                                 currentUser.properties["lecm-orgstr:employee-short-name"]);
                                                 text += " отменил проведение мероприятия ";
-                                                text += documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
+                                                text += documentScript.wrapperDocumentLink(document, document.properties["lecm-document:present-string"]);
                                         	    text += "</body></html>";
                                                 mail.parameters.html = text;
                                                 mail.parameters.send_after_commit = true;
