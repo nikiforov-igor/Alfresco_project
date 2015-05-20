@@ -1,4 +1,5 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
+<#include "/ru/it/lecm/base-share/components/view.lib.ftl"/>
 <@templateHeader>
 	<@script type="text/javascript" src="${url.context}/res/components/documentlibrary/actions.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/yui/resize/resize.js"></@script>
@@ -55,6 +56,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 </@>
 
 <@templateBody>
+<@viewForm />
 <div id="alf-hd">
 	<@region id="html-upload" scope="global" chromeless="true" />
     <@region id="flash-upload" scope="global" chromeless="true" />
