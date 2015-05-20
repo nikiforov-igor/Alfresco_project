@@ -220,7 +220,7 @@
                     </index>
                 </property>
                 <!--Фактическое время начала обсуждения-->
-                <property name="lecm-meetings-ts:holding-start-tine">
+                <property name="lecm-meetings-ts:holding-start-time">
                     <type>d:datetime</type>
                     <index enabled="true">
                         <atomic>true</atomic>

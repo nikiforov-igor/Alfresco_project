@@ -195,6 +195,20 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <!--Совещание стартовало-->
+                <property name="lecm-meetings:holding-started">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <!-- Начало проведения совещания -->
+                <property name="lecm-meetings:holding-start-date">
+                    <type>d:datetime</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
                 
                 <property name="lecm-meetings:chairman-assoc-ref">
                     <type>d:text</type>
@@ -263,6 +277,40 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+
+                <property name="lecm-meetings:holding-members-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-meetings:holding-members-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+
+                <property name="lecm-meetings:holding-invited-members-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-meetings:holding-invited-members-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
 				
             </properties>
             <associations>
@@ -322,6 +370,29 @@
                     </source>
                     <target>
                         <class>lecm-meetings-ts:item</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+
+                <association name="lecm-meetings:holding-members-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <association name="lecm-meetings:holding-invited-members-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-representative:representative-type</class>
                         <mandatory>false</mandatory>
                         <many>true</many>
                     </target>
