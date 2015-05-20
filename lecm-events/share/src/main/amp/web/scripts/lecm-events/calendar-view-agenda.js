@@ -20,8 +20,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		formatDate = Alfresco.util.formatDate,
 		dateFormat = Alfresco.thirdparty.dateFormat,
 		DateMath = YAHOO.widget.DateMath,
-        collapsedClass = "collapsed",
-        expandedClass = "expanded";
+		collapsedClass = "collapsed",
+		expandedClass = "expanded";
 
 	LogicECM.module.Calendar.AgendaView = function (htmlId)
 	{
@@ -87,21 +87,21 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Event.addListener(this.id + "_collapse_all", "click", this.bind(this.collapseAllEvents));
 		},
 
-        collapseAllEvents: function() {
-            var events = Dom.getElementsByClassName("event-name " + expandedClass, "div", this.options.id);
+		collapseAllEvents: function() {
+			var events = Dom.getElementsByClassName("event-name " + expandedClass, "div", this.options.id);
 
-            if (events && events.length > 0) {
-                Dom.replaceClass(events, expandedClass, collapsedClass);
-            }
-        },
+			if (events && events.length > 0) {
+				Dom.replaceClass(events, expandedClass, collapsedClass);
+			}
+		},
 
-        expandAllEvents: function() {
-            var events = Dom.getElementsByClassName("event-name " + collapsedClass, "div", this.options.id);
+		expandAllEvents: function() {
+			var events = Dom.getElementsByClassName("event-name " + collapsedClass, "div", this.options.id);
 
-            if (events && events.length > 0) {
-                Dom.replaceClass(events, collapsedClass, expandedClass);
-            }
-        },
+			if (events && events.length > 0) {
+				Dom.replaceClass(events, collapsedClass, expandedClass);
+			}
+		},
 
 		/**
 		 *  CELL RENDERERS
@@ -168,31 +168,31 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			// build up cell content
 			//html = '<a href="' + $siteURL("event?nodeRef=" + data.nodeRef) + '" rel="'+ rel + '" class="summary">' + data.name + '</a>';
 
-            var nameEl = document.createElement('div');
-            var id = this.options.id + "-event-name-" + data.renderDate + "_" + data.nodeRef;
-            nameEl.id = id;
-            nameEl.innerHTML = data.name;
-            Dom.addClass(nameEl, "event-name " + collapsedClass);
-            YAHOO.util.Event.addListener(id, "click", function() {
-                var nameEl = this;
-                if (Dom.hasClass(nameEl, collapsedClass)) {
-                    Dom.replaceClass(nameEl, collapsedClass, expandedClass);
-                } else {
-                    Dom.replaceClass(nameEl, expandedClass, collapsedClass);
-                }
-            });
+			var nameEl = document.createElement('div');
+			var id = this.options.id + "-event-name-" + data.renderDate + "_" + data.nodeRef;
+			nameEl.id = id;
+			nameEl.innerHTML = data.name;
+			Dom.addClass(nameEl, "event-name " + collapsedClass);
+			YAHOO.util.Event.addListener(id, "click", function() {
+				var nameEl = this;
+				if (Dom.hasClass(nameEl, collapsedClass)) {
+					Dom.replaceClass(nameEl, collapsedClass, expandedClass);
+				} else {
+					Dom.replaceClass(nameEl, expandedClass, collapsedClass);
+				}
+			});
 
-            html += nameEl.outerHTML;
-            html += '<div class="event-info-container">';
+			html += nameEl.outerHTML;
+			html += '<div class="event-info-container">';
 
 			var members = data.members;
 			var membersString = this.msg("label.events.members") + ": ";
 			if (members != null) {
 				for (var i = 0; i < members.length; i++) {
 					var member = members[i];
-					membersString += '<a href="' + $siteURL('view-metadata?nodeRef=' + member.nodeRef) + '">' + member.name + '</a>';
+					membersString += '<a href="' + $siteURL('view-metadata?nodeRef=' + member.nodeRef) + '">' + member.name.trim() + '</a>';
 					if (i < members.length - 1) {
-						membersString += ",";
+						membersString += ", ";
 					}
 				}
 			}
@@ -203,15 +203,18 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (invitedMembers != null) {
 				for (i = 0; i < invitedMembers.length; i++) {
 					var invitedMember = invitedMembers[i];
-					invitedMembersString += '<a href="' + $siteURL('view-metadata?nodeRef=' + invitedMember.nodeRef) + '">' + invitedMember.name + '</a>';
-					if (i < invitedMember.length - 1) {
-						invitedMembersString += ",";
+					invitedMembersString += '<a href="' + $siteURL('view-metadata?nodeRef=' + invitedMember.nodeRef) + '">' + invitedMember.name.trim() + '</a>';
+					if (i < invitedMembers.length - 1) {
+						invitedMembersString += ", ";
 					}
 				}
 			}
-            html += '<div>' + invitedMembersString + "</div>";
-            html += '<div>' + this.msg("label.events.description") + ": " + data.description + "</div>";
-            html += '</div>';
+			html += '<div>' + invitedMembersString + "</div>";
+			if (data.description !== "") {
+				html += '<div>' + this.msg("label.events.description") + ":</div>";
+				html += data.description;
+			}
+			html += '</div>';
 
 			// write to DOM
 			elCell.innerHTML += html;
@@ -591,25 +594,25 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 
 			var containerEl = document.createElement('div'), // the container for each day with title.
-			    parentEl = document.createElement('div'), // the container for each day.
+				parentEl = document.createElement('div'), // the container for each day.
 				titleEl = document.createElement('div'), // the day heading.
 				kids = Dom.getChildren(grandParentEl), // all the elements containing DataTables
 				dateTime = fromISO8601(date).getTime(), // makes date comparisons easier
 				insertBeforeThisEl,
 				today = Alfresco.util.toISO8601(new Date()).split("T")[0];
 
-            containerEl.id = this.options.id + "-cont-" + date;
-            Dom.addClass(containerEl, "dayContainer");
+			containerEl.id = this.options.id + "-cont-" + date;
+			Dom.addClass(containerEl, "dayContainer");
 
-            parentEl.id = this.options.id + "-dt-" + date;
-            Dom.addClass(parentEl, "dayContent");
+			parentEl.id = this.options.id + "-dt-" + date;
+			Dom.addClass(parentEl, "dayContent");
 
-            titleEl.id = this.options.id + "-head-" + date;
+			titleEl.id = this.options.id + "-head-" + date;
 			Dom.addClass(titleEl, "dayTitle");
 			titleEl.innerHTML = Alfresco.util.relativeDate(fromISO8601(date), this.msg("date-format.dayDateMonth"), {limit: true});
 			Dom.setAttribute(titleEl, "title", formatDate(fromISO8601(date), this.msg("date-format.fullDate")));
 
-            // Add highlighting on today's element.
+			// Add highlighting on today's element.
 			if (date === today)
 			{
 				Dom.addClass(containerEl, "is-today");
@@ -628,8 +631,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 			}
 
-            containerEl.appendChild(titleEl);
-            containerEl.appendChild(parentEl);
+			containerEl.appendChild(titleEl);
+			containerEl.appendChild(parentEl);
 
 			if (insertBeforeThisEl) {
 				Dom.insertBefore(containerEl, insertBeforeThisEl);
