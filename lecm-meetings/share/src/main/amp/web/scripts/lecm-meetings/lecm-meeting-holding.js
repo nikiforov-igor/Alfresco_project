@@ -20,14 +20,14 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		submitElements: [],
 
 		onReady: function () {
-			var actionSubmit = Dom.get(this.id + "-event-action-save");
-			if (actionSubmit != null) {
-				YAHOO.util.Event.addListener(actionSubmit, "click", this.onSubmit, null, this);
+			var actionSave = Dom.get(this.id + "-event-action-save");
+			if (actionSave != null) {
+				YAHOO.util.Event.addListener(actionSave, "click", this.saveForm, null, this);
 			}
 
-			var actionCancel = Dom.get(this.id + "-event-action-cancel");
-			if (actionCancel != null) {
-				YAHOO.util.Event.addListener(actionCancel, "click", this.onCancelButtonClick, null, this);
+			var actionFinish = Dom.get(this.id + "-event-action-finish");
+			if (actionFinish != null) {
+				YAHOO.util.Event.addListener(actionFinish, "click", this.onSubmit, null, this);
 			}
 
 			this.loadForm();
