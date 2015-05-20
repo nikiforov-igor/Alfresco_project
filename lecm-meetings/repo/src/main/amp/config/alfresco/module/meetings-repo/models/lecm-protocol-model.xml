@@ -169,6 +169,18 @@
                         <many>true</many>
                     </target>
                 </association>
+				<!--пункты протокола, при создании-->
+				<association name="lecm-protocol:temp-items-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-protocol-ts:point</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
 			</associations>
 			<mandatory-aspects>
                 <aspect>lecm-protocol-ts:points-table-aspect</aspect>

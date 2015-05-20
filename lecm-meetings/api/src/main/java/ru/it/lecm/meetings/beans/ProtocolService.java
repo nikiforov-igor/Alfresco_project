@@ -26,6 +26,7 @@ public interface ProtocolService {
 	public static final QName ASSOC_PROTOCOL_POINT_EXECUTOR = QName.createQName(PROTOCOL_TS_NAMESPACE, "executor-assoc");
 	public static final QName ASSOC_PROTOCOL_POINT_ERRAND = QName.createQName(PROTOCOL_TS_NAMESPACE, "errand-assoc");
 	public static final QName ASSOC_PROTOCOL_POINT_STATUS = QName.createQName(PROTOCOL_TS_NAMESPACE, "point-status-assoc");
+	public static final QName ASSOC_PROTOCOL_TEMP_ITEM = QName.createQName(PROTOCOL_NAMESPACE, "temp-items-assoc");
 	
 	public static enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS };
 	public static final EnumMap<P_STATUSES,String> POINT_STATUSES = new EnumMap<P_STATUSES,String>(P_STATUSES.class){{

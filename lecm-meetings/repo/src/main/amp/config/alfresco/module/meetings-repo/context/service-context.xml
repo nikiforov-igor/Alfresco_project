@@ -156,6 +156,18 @@
 		  
 	/>
 	
+	<bean id="protocolPolicy" class="ru.it.lecm.meetings.policy.ProtocolPolicy" parent="baseBean"
+		  init-method="init" 
+		  depends-on="documents.LogicEcmModelsBootstrap,
+				protocolService,
+				documentTableService,
+				policyComponent"
+		  p:documentTableService-ref="documentTableService"
+		  p:policyComponent-ref="policyComponent"
+		  p:behaviourFilter-ref="policyBehaviourFilter"
+		  
+	/>
+	
 	<bean id="protocol.statemachine.bootstrap" parent="defaultStatemachines"
 		  p:statemachineName="lecm-protocol:document"
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-protocol-statemachine-default.xml"/>
