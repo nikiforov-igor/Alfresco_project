@@ -29,6 +29,7 @@ public interface MeetingsService {
 	public static final QName ASSOC_MEETINGS_TEMP_ITEMS = QName.createQName(MEETINGS_NAMESPACE, "temp-items-assoc");
 
 	public static final QName TYPE_MEETINGS_TS_HOLDING_ITEM = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-item");
+	public static final QName TYPE_MEETINGS_TS_HOLDING_ITEM_START_TIME = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-start-time");
 	public static final QName TYPE_MEETINGS_TS_HOLDING_TABLE = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-items-table");
 
 //	public List<NodeRef> getAttendees(NodeRef document);

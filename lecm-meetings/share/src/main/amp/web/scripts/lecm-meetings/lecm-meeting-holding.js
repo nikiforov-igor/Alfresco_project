@@ -147,7 +147,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				{
 					url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 					dataObj: {
-						htmlid: me.id + nodeRef.replace(/\//g,"_"),
+						htmlid: me.id + nodeRef.replace('workspace://SpacesStore/', '_'),
 						itemKind: "node",
 						itemId: nodeRef,
 						mode: "edit",
@@ -193,7 +193,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem?nodeRef=" + nodeRef,
 					successCallback: {
 						fn: function (response) {
-							var itemBlock = Dom.get(me.id + nodeRef.replace(/\//g,"_") + "-form-container");
+							var itemBlock = Dom.get(me.id + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
 							if (itemBlock != null) {
 								itemBlock.parentNode.removeChild(itemBlock);
 							}

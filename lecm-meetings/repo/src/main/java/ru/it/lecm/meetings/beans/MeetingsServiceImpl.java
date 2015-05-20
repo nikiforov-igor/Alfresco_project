@@ -1,10 +1,12 @@
 package ru.it.lecm.meetings.beans;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -116,7 +118,9 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		NodeRef table = getHoldingItemsTable(meeting);
 		if (table != null) {
 			try {
-				return createNode(table, TYPE_MEETINGS_TS_HOLDING_ITEM, null, null);
+				Map<QName, Serializable> properties = new HashMap<>(1);
+				properties.put(TYPE_MEETINGS_TS_HOLDING_ITEM_START_TIME, new Date());
+				return createNode(table, TYPE_MEETINGS_TS_HOLDING_ITEM, null, properties);
 			} catch (WriteTransactionNeededException ex) {
 				logger.error("Error create new meeting item", ex);
 			}
