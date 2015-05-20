@@ -496,6 +496,9 @@ public class EventsPolicy extends BaseBean {
                         final Date startPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
                         final Date endPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
 
+                        final Date startEventDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+                        final Date endEvenDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_TO_DATE);
+
                         if (ruleContent != null && startPeriod != null && endPeriod != null) {
                             try {
                                 JSONObject rule = new JSONObject(ruleContent);
@@ -531,8 +534,19 @@ public class EventsPolicy extends BaseBean {
 
                                         final Calendar calStart = Calendar.getInstance();
                                         calStart.setTime(startPeriod);
+
+                                        Calendar fromCal = Calendar.getInstance();
+                                        fromCal.setTime(startEventDate);
+                                        calStart.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
+                                        calStart.set(Calendar.MINUTE, fromCal.get(Calendar.HOUR_OF_DAY));
+
                                         Calendar calEnd = Calendar.getInstance();
                                         calEnd.setTime(endPeriod);
+
+                                        Calendar toCal = Calendar.getInstance();
+                                        toCal.setTime(endEvenDate);
+                                        calEnd.set(Calendar.HOUR_OF_DAY, toCal.get(Calendar.HOUR_OF_DAY));
+                                        calEnd.set(Calendar.MINUTE, toCal.get(Calendar.HOUR_OF_DAY));
 
                                         boolean createdEventConnection = false;
 
