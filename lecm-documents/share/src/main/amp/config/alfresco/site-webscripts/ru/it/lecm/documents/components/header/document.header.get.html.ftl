@@ -19,7 +19,7 @@
     <div class="document-header">
         <div class="document-info">
             <h1 class="thin dark">
-                <a id="document-title" class="title hidden1" href="${siteURL("document?nodeRef=" + nodeRef)}">${documentName}</a>
+                <a id="document-title" class="title hidden1" href="${siteURL(viewUrl + "?nodeRef=" + nodeRef)}">${documentName}</a>
                 <span id="document-title-span" class="title">${documentName}</span> <#-- без ссылки -->
                 <span id="document-title-breadcrumb"></span>
             </h1>

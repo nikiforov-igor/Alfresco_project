@@ -5,6 +5,7 @@ function main() {
     AlfrescoUtil.param("nodeRef");
     var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
     var isAdmin = false;
+    model.viewUrl = "document";
     if (nodeDetails) {
         model.item = nodeDetails.item;
 
@@ -40,6 +41,14 @@ function main() {
             var result = eval('(' + isAdminResponse + ')');
             isAdmin = result.isAdmin;
         }
+
+        url = '/lecm/document/api/url/view?nodeRef=' + encodeURI(model.nodeRef);
+        var viewUrl = remote.connect("alfresco").get(url);
+        if (viewUrl.status == 200) {
+            var result = eval('(' + viewUrl + ')');
+            model.viewUrl = result.url;
+        }
+
     } else {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
 		if (accessInfo) {
