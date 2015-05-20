@@ -53,6 +53,7 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 					formId: formId,
 					fieldId: fromDateFieldId
 				});
+				LogicECM.module.Events.fromDateValue = null;
 			}
 
 			if (!allDay && fromTime.value.length == 0) {
@@ -73,6 +74,7 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 					formId: formId,
 					fieldId: toDateFieldId
 				});
+				LogicECM.module.Events.toDateValue = null;
 			}
 
             Dom.setStyle(toTime.id + "-container", "display", allDay ? "none" : "block");
