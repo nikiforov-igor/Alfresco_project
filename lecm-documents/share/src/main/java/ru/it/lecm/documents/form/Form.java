@@ -183,28 +183,30 @@ public class Form extends FormUIGet {
         Map<String, Field> fields = context.getFields();
         for (String prop : fields.keySet()) {
             Field field = fields.get(prop);
-            if (hasStatemachine) {
-                if (editableFields.contains(field.getConfigName().replace(":", "_"))) {
-                    FormField formField = formConfig.getFields().get(field.getConfigName());
-                    boolean allowed = true;
-                    if (formField != null) {
-                        String roles = formField.getAttributes().get("roles");
-                        if (roles != null && !"".equals(roles)) {
-                            allowed = false;
-                            StringTokenizer st = new StringTokenizer(roles, ",");
-                            while (st.hasMoreTokens()) {
-                                String role = st.nextToken().trim();
-                                allowed = allowed || dynamicRoles.contains(role);
+            if (!field.isDisabled()) {
+                if (hasStatemachine) {
+                    if (editableFields.contains(field.getConfigName().replace(":", "_"))) {
+                        FormField formField = formConfig.getFields().get(field.getConfigName());
+                        boolean allowed = true;
+                        if (formField != null) {
+                            String roles = formField.getAttributes().get("roles");
+                            if (roles != null && !"".equals(roles)) {
+                                allowed = false;
+                                StringTokenizer st = new StringTokenizer(roles, ",");
+                                while (st.hasMoreTokens()) {
+                                    String role = st.nextToken().trim();
+                                    allowed = allowed || dynamicRoles.contains(role);
+                                }
                             }
                         }
-                    }
-                    if (allowed) {
-                        field.setDisabled(false);
+                        if (allowed) {
+                            field.setDisabled(false);
+                        } else {
+                            field.setDisabled(true);
+                        }
                     } else {
                         field.setDisabled(true);
                     }
-                } else {
-                    field.setDisabled(true);
                 }
             }
             if (highlightedFields.contains(field.getConfigName())) {
