@@ -744,7 +744,7 @@
 					<field id="removeItem" set="parent">
 						<control template="/ru/it/lecm/meetings/holding/meeting-holding-remove-item-control.ftl"/>
 					</field>
-					<field id="lecm-document:indexTableRow" read-only="true" set="parent"/>
+					<field id="lecm-document:indexTableRow" read-only="true" set="parent" label-id="label.meeting.holding.item.number"/>
 					<field id="lecm-meetings-ts:holding-reporter-assoc" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
