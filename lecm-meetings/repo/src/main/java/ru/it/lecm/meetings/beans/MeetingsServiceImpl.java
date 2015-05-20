@@ -93,6 +93,18 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		return null;
 	}
 
+	public NodeRef getAgendaItemsTable(NodeRef meeting) {
+		return documentTableService.getTable(meeting, TYPE_MEETINGS_TS_AGENDA_TABLE);
+	}
+
+	public List<NodeRef> getMeetingAgendaItems(NodeRef meeting) {
+		NodeRef table = getAgendaItemsTable(meeting);
+		if (table != null) {
+			return documentTableService.getTableDataRows(table);
+		}
+		return null;
+	}
+
     public List<NodeRef> getTechnicalMembers(NodeRef meeting) {
         List<NodeRef> result = new ArrayList<>();
         result.addAll(eventsService.getEventMembers(meeting));

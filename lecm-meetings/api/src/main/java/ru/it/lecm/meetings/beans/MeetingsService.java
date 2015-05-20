@@ -35,6 +35,10 @@ public interface MeetingsService {
 
 	List<NodeRef> getMeetingHoldingItems(NodeRef meeting);
 
+	NodeRef getHoldingItemsTable(NodeRef meeting);
+
+	List<NodeRef> getMeetingAgendaItems(NodeRef meeting);
+
 	List<NodeRef> getTechnicalMembers(NodeRef meeting);
 
 	NodeRef createNewHoldingItem(NodeRef meeting);

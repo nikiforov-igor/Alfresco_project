@@ -10,7 +10,60 @@
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="cm:title"><![CDATA[]]></property>
         <property name="lecm-group-actions:script"><![CDATA[if (document != null) {
-   model.redirect = 'meeting-holding?nodeRef=' + document.nodeRef;
+  if (!document.properties["lecm-meetings:holding-started"]) {
+    document.properties["lecm-meetings:holding-started"] = true;
+    document.properties["lecm-meetings:holding-start-date"] = new Date();
+    document.save();
+
+    var members = events.getEventMembers(document);
+    if (members != null) {
+      for (var i = 0; i < members.length; i++) {
+        document.createAssociation(members[i], "lecm-meetings:holding-members-assoc");
+      }
+    }
+
+    var invitedMembers = events.getEventInvitedMembers(document);
+    if (invitedMembers != null) {
+      for (var i = 0; i < invitedMembers.length; i++) {
+        document.createAssociation(invitedMembers[i], "lecm-meetings:holding-invited-members-assoc");
+      }
+    }
+
+    var agendaItems = meetings.getMeetingAgendaItems(document);
+    if (agendaItems != null && agendaItems.length > 0) {
+      var holdingItemsTable = meetings.getMeetingHoldingItemsTable(document);
+      if (holdingItemsTable != null) {
+        for (var i = 0; i < agendaItems.length; i++) {
+          var item = agendaItems[i];
+          var properties = [];
+          properties["lecm-meetings-ts:holding-item-name"] = item.properties["lecm-meetings-ts:item-name"];
+          properties["lecm-meetings-ts:holding-speak"] = item.properties["lecm-meetings-ts:men-spoke"];
+          properties["lecm-meetings-ts:holding-agreed"] = item.properties["lecm-meetings-ts:decision"];
+          properties["lecm-meetings-ts:holding-start-time"] = new Date();
+          var createdItem = holdingItemsTable.createNode(null, "lecm-meetings-ts:holding-item", properties);
+
+          var reporterAssoc = item.assocs["lecm-meetings-ts:reporter-assoc"];
+          if (reporterAssoc != null && reporterAssoc.length == 1) {
+            createdItem.createAssociation(reporterAssoc[0], "lecm-meetings-ts:holding-reporter-assoc");
+          }
+
+          var coreportersAssocs = item.assocs["lecm-meetings-ts:coreporter-assoc"];
+          if (coreportersAssocs != null) {
+            for (var j = 0; j < coreportersAssocs.length; j++) {
+              createdItem.createAssociation(coreportersAssocs[j], "lecm-meetings-ts:holding-coreporters-assoc");
+            }
+          }
+
+          var themeAssoc = item.assocs["lecm-meetings-ts:theme-assoc"];
+          if (themeAssoc != null && themeAssoc.length == 1) {
+            createdItem.createAssociation(themeAssoc[0], "lecm-meetings-ts:holding-theme-assoc");
+          }
+        }
+      }
+    }
+  }
+
+  model.redirect = 'meeting-holding?nodeRef=' + document.nodeRef;
 }]]></property>
     </item>
 </items>

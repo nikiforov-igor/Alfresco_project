@@ -33,6 +33,16 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		this.meetingsService = meetingsService;
 	}
 
+	public Scriptable getMeetingAgendaItems(ScriptNode meeting) {
+		ParameterCheck.mandatory("meeting", meeting);
+
+		List<NodeRef> results = meetingsService.getMeetingAgendaItems(meeting.getNodeRef());
+		if (results != null) {
+			return createScriptable(results);
+		}
+		return null;
+	}
+
 	public Scriptable getMeetingHoldingItems(String meeting) {
 		ParameterCheck.mandatory("meeting", meeting);
 
@@ -42,6 +52,16 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 			if (results != null) {
 				return createScriptable(results);
 			}
+		}
+		return null;
+	}
+
+	public ScriptNode getMeetingHoldingItemsTable(ScriptNode meeting) {
+		ParameterCheck.mandatory("meeting", meeting);
+
+		NodeRef item = meetingsService.getHoldingItemsTable(meeting.getNodeRef());
+		if (item != null) {
+			return new ScriptNode(item, serviceRegistry, getScope());
 		}
 		return null;
 	}
