@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.SearchQueryProcessor;
 import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -43,6 +44,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     private IWorkCalendar workCalendarService;
     private DocumentTableService documentTableService;
     private NotificationsService notificationsService;
+    private SearchQueryProcessor organizationQueryProcessor;
 
     private TemplateService templateService;
     private JavaMailSender mailService;
@@ -77,6 +79,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
+    }
+
+    public void setOrganizationQueryProcessor(SearchQueryProcessor organizationQueryProcessor) {
+        this.organizationQueryProcessor = organizationQueryProcessor;
     }
 
     @Override
@@ -128,6 +134,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
         String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + toDate + "\"> AND @lecm\\-events\\:to\\-date:<\"" + fromDate + "\" TO MAX] AND @lecm\\-events\\:removed: false " + additionalFilter;
+        query += " AND (" + organizationQueryProcessor.getQuery(null) + ")";
         sp.setQuery(query);
 
         ResultSet searchResult = null;

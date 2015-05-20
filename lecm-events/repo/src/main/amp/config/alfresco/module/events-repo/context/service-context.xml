@@ -91,6 +91,7 @@
 		<property name="templateService" ref="templateService"/>
 		<property name="contentService" ref="ContentService"/>
 		<property name="defaultFromEmail" value="${mail.from.default}"/>
+		<property name="organizationQueryProcessor" ref="inUserOrganizationProcessor"/>
 	</bean>
 
 	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"
