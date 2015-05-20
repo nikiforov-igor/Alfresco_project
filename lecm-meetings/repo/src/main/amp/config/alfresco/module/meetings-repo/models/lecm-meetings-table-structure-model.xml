@@ -8,7 +8,6 @@
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-        <import uri="http://www.it.ru/logicECM/meetings/dictionaries/1.0" prefix="lecm-meetings-dic"/>
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
     </imports>
     <namespaces>
@@ -44,7 +43,7 @@
 				<!--Формулировка-->
                 <property name="lecm-meetings-ts:item-name">
                     <type>d:text</type>
-					<mandatory>false</mandatory>
+					<mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -113,8 +112,8 @@
                         <many>true</many>
                     </source>
                     <target>
-                        <class>cm:content</class>
-                        <mandatory>false</mandatory>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -178,6 +177,109 @@
                 </property>
             </overrides>
         </type>
+
+        <type name="lecm-meetings-ts:holding-item">
+            <title>Holding item</title>
+            <parent>lecm-document:tableDataRow</parent>
+            <properties>
+                <!--Формулировка-->
+                <property name="lecm-meetings-ts:holding-item-name">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Слушали (Рассмотрение пункта)-->
+                <property name="lecm-meetings-ts:holding-listen">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Выступали (Выступили)-->
+                <property name="lecm-meetings-ts:holding-speak">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Постановили (Принятое решение)-->
+                <property name="lecm-meetings-ts:holding-agreed">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Фактическое время начала обсуждения-->
+                <property name="lecm-meetings-ts:holding-start-tine">
+                    <type>d:datetime</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <associations>
+                <!--Докладчик-->
+                <association name="lecm-meetings-ts:holding-reporter-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!--Содокладчики-->
+                <association name="lecm-meetings-ts:holding-coreporters-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <!--Тематика-->
+                <association name="lecm-meetings-ts:holding-theme-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-doc-dic:subjects</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+        <type name="lecm-meetings-ts:holding-items-table">
+            <title>Agenda</title>
+            <parent>lecm-document:tableData</parent>
+            <overrides>
+                <property name="lecm-document:tableDataRowType">
+                    <default>lecm-meetings-ts:holding-item</default>
+                </property>
+                <property name="lecm-document:pageSize">
+                    <default>5</default>
+                </property>
+            </overrides>
+        </type>
     </types> 
     <aspects>
         <aspect name="lecm-meetings-ts:items-table-aspect">
@@ -195,6 +297,27 @@
                     </source>
                     <target>
                         <class>lecm-meetings-ts:itemsTable</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+        <aspect name="lecm-meetings-ts:holding-items-table-aspect">
+            <parent>lecm-document:tableDataAspect</parent>
+            <properties>
+                <property name="lecm-meetings-ts:holding-items-assoc-text-content">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-meetings-ts:holding-items-assoc">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-meetings-ts:holding-items-table</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>

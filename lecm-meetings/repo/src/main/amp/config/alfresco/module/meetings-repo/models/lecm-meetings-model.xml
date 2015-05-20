@@ -190,7 +190,7 @@
                     </index>
                 </property>-->
 
-                <!--На подтверждение ресурсов-->
+                <!--Совещание проведено-->
                 <property name="lecm-meetings:finished">
                     <type>d:boolean</type>
                     <default>false</default>
@@ -330,6 +330,7 @@
             </associations>
             <mandatory-aspects>
                 <aspect>lecm-meetings-ts:items-table-aspect</aspect>
+                <aspect>lecm-meetings-ts:holding-items-table-aspect</aspect>
                 <aspect>lecmApproveAspects:approvalDetailsAspect</aspect>
             </mandatory-aspects>
         </type>

@@ -28,13 +28,16 @@ public interface MeetingsService {
 	public static final QName ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS = QName.createQName(MEETINGS_TS_NAMESPACE, "attachments-assoc");
 	public static final QName ASSOC_MEETINGS_TEMP_ITEMS = QName.createQName(MEETINGS_NAMESPACE, "temp-items-assoc");
 
+	public static final QName TYPE_MEETINGS_TS_HOLDING_ITEM = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-item");
+	public static final QName TYPE_MEETINGS_TS_HOLDING_TABLE = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-items-table");
+
 //	public List<NodeRef> getAttendees(NodeRef document);
 
 	List<NodeRef> getMeetingHoldingItems(NodeRef meeting);
 
 	List<NodeRef> getTechnicalMembers(NodeRef meeting);
 
-	NodeRef createNewMeetingItem(NodeRef meeting);
+	NodeRef createNewHoldingItem(NodeRef meeting);
 
 	public void deleteHoldingItem(NodeRef nodeRef);
 }

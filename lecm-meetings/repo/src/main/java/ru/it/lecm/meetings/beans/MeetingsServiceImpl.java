@@ -82,7 +82,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 //	}
 
 	public NodeRef getHoldingItemsTable(NodeRef meeting) {
-		return documentTableService.getTable(meeting, TYPE_MEETINGS_TS_AGENDA_TABLE);
+		return documentTableService.getTable(meeting, TYPE_MEETINGS_TS_HOLDING_TABLE);
 	}
 
 	public List<NodeRef> getMeetingHoldingItems(NodeRef meeting) {
@@ -100,11 +100,11 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
         return result;
     }
 
-	public NodeRef createNewMeetingItem(NodeRef meeting) {
+	public NodeRef createNewHoldingItem(NodeRef meeting) {
 		NodeRef table = getHoldingItemsTable(meeting);
 		if (table != null) {
 			try {
-				return createNode(table, TYPE_MEETINGS_TS_ITEM, null, null);
+				return createNode(table, TYPE_MEETINGS_TS_HOLDING_ITEM, null, null);
 			} catch (WriteTransactionNeededException ex) {
 				logger.error("Error create new meeting item", ex);
 			}

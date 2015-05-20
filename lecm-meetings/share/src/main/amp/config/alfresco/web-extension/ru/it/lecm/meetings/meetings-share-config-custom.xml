@@ -252,6 +252,7 @@
 					<show id="lecm-meetings:finished"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-events:title" read-only="true"/>
 					<!--Председатель-->
 					<field id="lecm-meetings:chairman-assoc" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
@@ -712,15 +713,21 @@
 					</field>				
 				</appearance>
 			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-meetings-ts:holding-item">
+		<forms>
 			<form id="holding">
 				<field-visibility>
 					<show id="removeItem" force="true"/>
 					<show id="lecm-document:indexTableRow" force="true"/>
-					<show id="lecm-meetings-ts:reporter-assoc"/>
-					<show id="lecm-meetings-ts:item-name"/>
-					<show id="lecm-meetings-ts:men-spoke"/>
-					<show id="lecm-meetings-ts:content"/>
-					<show id="lecm-meetings-ts:note"/>
+					<show id="lecm-meetings-ts:holding-reporter-assoc"/>
+					<show id="lecm-meetings-ts:holding-item-name"/>
+					<show id="lecm-meetings-ts:holding-start-time"/>
+					<show id="lecm-meetings-ts:holding-listen"/>
+					<show id="lecm-meetings-ts:holding-speak"/>
+					<show id="lecm-meetings-ts:holding-agreed"/>
 
 				</field-visibility>
 				<appearance>
@@ -730,7 +737,7 @@
 						<control template="/ru/it/lecm/meetings/holding/meeting-holding-remove-item-control.ftl"/>
 					</field>
 					<field id="lecm-document:indexTableRow" read-only="true" set="parent"/>
-					<field id="lecm-meetings-ts:reporter-assoc" set="parent">
+					<field id="lecm-meetings-ts:holding-reporter-assoc" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM</control-param>
@@ -739,19 +746,18 @@
 							<control-param name="childrenDataSource">lecm/meeting/technicalMembers/picker</control-param>
 						</control>
 					</field>
-					<field id="lecm-meetings-ts:item-name" set="parent"/>
-					<field id="lecm-meetings-ts:men-spoke" set="parent">
-						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-							<control-param name="rows">4</control-param>
-						</control>
-					</field>
-					<field id="lecm-meetings-ts:content" set="parent">
+					<field id="lecm-meetings-ts:holding-item-name" set="parent"/>
+					<field id="lecm-meetings-ts:holding-start-time" set="parent"/>
+					<field id="lecm-meetings-ts:holding-listen" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
-					<field id="lecm-meetings-ts:note" set="parent">
+					<field id="lecm-meetings-ts:holding-speak" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
+					</field>
+					<field id="lecm-meetings-ts:holding-agreed" set="parent">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
 				</appearance>
 			</form>
