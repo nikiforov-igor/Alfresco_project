@@ -28,7 +28,6 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	private StateMachineServiceBean stateMachineService;
 	private BusinessJournalService businessJournalService;
 	private DocumentTableService documentTableService;
-	private EventsService eventsService;
 
 	private final static String ACTIVITI_PREFIX = "activiti$";
 	private final static String APPROVEMENT_WORKFLOW_DEFINITION_ID = ACTIVITI_PREFIX + "lecmApprovementWorkflow";
@@ -69,10 +68,6 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		this.documentTableService = documentTableService;
 	}
 
-	public void setEventsService(EventsService eventsService) {
-		this.eventsService = eventsService;
-	}
-
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(MEETINGS_ROOT_ID);
@@ -107,10 +102,10 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		return null;
 	}
 
-    public List<NodeRef> getTechnicalMembers(NodeRef meeting) {
+    public List<NodeRef> getHoldingTechnicalMembers(NodeRef meeting) {
         List<NodeRef> result = new ArrayList<>();
-        result.addAll(eventsService.getEventMembers(meeting));
-        result.addAll(eventsService.getEventInvitedMembers(meeting));
+        result.addAll(findNodesByAssociationRef(meeting, ASSOC_MEETINGS_HOLDING_MEMBERS, null, ASSOCIATION_TYPE.TARGET));
+        result.addAll(findNodesByAssociationRef(meeting, ASSOC_MEETINGS_HOLDING_INVITED_MEMBERS, null, ASSOCIATION_TYPE.TARGET));
         return result;
     }
 

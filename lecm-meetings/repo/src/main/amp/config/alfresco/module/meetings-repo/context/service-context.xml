@@ -125,8 +125,6 @@
 		  p:stateMachineService-ref="stateMachineHelper"	
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentTableService-ref="documentTableService"
-		  p:eventsService-ref="eventsService"
-
 	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">

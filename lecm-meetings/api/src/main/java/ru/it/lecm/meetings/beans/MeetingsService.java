@@ -32,6 +32,9 @@ public interface MeetingsService {
 	public static final QName TYPE_MEETINGS_TS_HOLDING_ITEM_START_TIME = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-start-time");
 	public static final QName TYPE_MEETINGS_TS_HOLDING_TABLE = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-items-table");
 
+	public static final QName ASSOC_MEETINGS_HOLDING_MEMBERS = QName.createQName(MEETINGS_NAMESPACE, "holding-members-assoc");
+	public static final QName ASSOC_MEETINGS_HOLDING_INVITED_MEMBERS = QName.createQName(MEETINGS_NAMESPACE, "holding-invited-members-assoc");
+
 //	public List<NodeRef> getAttendees(NodeRef document);
 
 	List<NodeRef> getMeetingHoldingItems(NodeRef meeting);
@@ -40,7 +43,7 @@ public interface MeetingsService {
 
 	List<NodeRef> getMeetingAgendaItems(NodeRef meeting);
 
-	List<NodeRef> getTechnicalMembers(NodeRef meeting);
+	List<NodeRef> getHoldingTechnicalMembers(NodeRef meeting);
 
 	NodeRef createNewHoldingItem(NodeRef meeting);
 

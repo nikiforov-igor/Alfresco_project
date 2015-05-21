@@ -11,7 +11,7 @@ function main()
 		 if (meetingHoldingItem != null) {
 			 var meeting = documentTables.getDocumentByTableDataRow(meetingHoldingItem);
 			 if (meeting != null) {
-				 var technicalMembers = meetings.getTechnicalMembers(meeting);
+				 var technicalMembers = meetings.getHoldingTechnicalMembers(meeting);
 				 if (technicalMembers != null) {
 					 var filter = getFilterForAvailableElement(technicalMembers);
 					 data = getPickerChildrenItems(filter);

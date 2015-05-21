@@ -752,7 +752,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name} {lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:middlename}</control-param>
 							<control-param name="useStrictFilterByOrg">false</control-param>
 							<control-param name="checkType">false</control-param>
-							<control-param name="childrenDataSource">lecm/meeting/technicalMembers/picker</control-param>
+							<control-param name="childrenDataSource">lecm/meeting/holdingTechnicalMembers/picker</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:holding-item-name" set="parent"/>
