@@ -535,7 +535,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                     MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
                     helper.setTo(email);
                     helper.setFrom(defaultFromEmail);
-                    helper.setSubject("");
+                    helper.setSubject("Обновление мероприятия");
                     helper.setText(mailText, true);
 
                     List<NodeRef> attachments = new ArrayList<>();

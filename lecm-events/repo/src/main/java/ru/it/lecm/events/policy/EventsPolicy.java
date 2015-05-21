@@ -335,7 +335,7 @@ public class EventsPolicy extends BaseBean {
                     MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
                     helper.setTo(email);
                     helper.setFrom(defaultFromEmail);
-                    helper.setSubject("");
+                    helper.setSubject("Приглашение на мероприятие");
                     helper.setText(mailText, true);
 
                     List<NodeRef> attachments = new ArrayList<>();
