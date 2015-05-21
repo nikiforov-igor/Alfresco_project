@@ -1,3 +1,26 @@
-.meeting-holding-set {
-	border: 1px solid #5D6B71;
+.meeting-holding-items > .form-container .meeting-holding-set {
+    border: 1px solid #ccc;
+    margin: 0 1em;
+    padding: 1em 1em 0;
+}
+.meeting-holding-items > .form-container:nth-of-type(2n) .meeting-holding-set {
+    background: #ecf5f3;
+}
+.meeting-holding-items > .form-container:not(:first-of-type) .meeting-holding-set {
+    border-top: none;
+}
+
+.meeting-holding-items .meeting-holding-set .meeting-items-left {
+    float: left;
+    width: 50%;
+    padding-right: 1em;
+    box-sizing: border-box;
+}
+.meeting-holding-items .meeting-holding-set .meeting-items-right {
+    float: right;
+    width: 50%;
+}
+.meeting-holding-items .meeting-holding-set .meeting-items-bottom {
+    border-top: 1px solid #ccc;
+    padding: 1em 0 0 3em;
 }

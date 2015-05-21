@@ -1,3 +1,37 @@
-.form-buttons {
-	display: none;
+.meeting .event-create-right {
+    padding-right: 1em;
+    box-sizing: border-box;
+}
+
+.meeting .event-create-center .meeting-holding-main .control:first-of-type .value-div input[type="text"] {
+    border: none;
+    box-shadow: none;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-family: Arial, sans-serif !important;
+    font-size: 13px;
+}
+.meeting .event-create-center .meeting-holding-main .form-fields .set {
+    border-top: 1px solid #ccc;
+    margin-top: 2px;
+    padding: 1em 0 1em 1em;
+}
+.meeting .event-create-center .title {
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 0 1em;
+    padding-bottom: 1em;
+}
+
+.meeting .event-create-center .meeting-holding-items {
+    margin-top: 1em;
+}
+.meeting .event-create-center .meeting-holding-items .form-fields {
+    padding-top: 0;
+}
+.meeting .event-create-center .meeting-holding-buttons {
+    margin: 1em 0 1em 2em;
+}
+
+.meeting .form-container .form-buttons {
+    display: none;
 }

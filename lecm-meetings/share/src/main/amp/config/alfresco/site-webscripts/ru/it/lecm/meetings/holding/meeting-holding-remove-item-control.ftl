@@ -1,18 +1,19 @@
-<div id="${fieldHtmlId}-parent" class="control viewmode">
-	<div class="label-div"></div>
-	<div class="container">
-		<div class="value-div">
-			<span id="${fieldHtmlId}-remove-item-button" class="yui-button yui-push-button search-icon">
-                <span class="first-child">
-                    <button type="button">${msg('label.button.meeting.holding.remove.item')}</button>
-                </span>
-            </span>
-		</div>
-	</div>
+<div id="${fieldHtmlId}-parent" class="control meeting-remove-item viewmode">
+    <span id="${fieldHtmlId}-remove-item-button" class="yui-button yui-push-button">
+        <span class="first-child">
+            <button type="button" title="${msg('label.button.meeting.holding.remove.item')}"></button>
+        </span>
+    </span>
 </div>
 
 <script type="text/javascript">
 	(function () {
+        function loadSources() {
+            LogicECM.module.Base.Util.loadResources([], [
+                'css/lecm-meetings/meeting-holding-remove-item-control.css'
+            ], init);
+        }
+
 		function init() {
 			var button = YAHOO.util.Dom.get("${fieldHtmlId}-remove-item-button");
 			if (button != null) {
@@ -27,6 +28,6 @@
 					});
 		}
 
-		YAHOO.util.Event.onAvailable("${fieldHtmlId}-remove-item-button", init);
-	})();
+		YAHOO.util.Event.onAvailable("${fieldHtmlId}-remove-item-button", loadSources);
+    })();
 </script>

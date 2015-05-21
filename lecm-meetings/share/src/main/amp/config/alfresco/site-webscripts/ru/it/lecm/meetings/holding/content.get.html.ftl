@@ -18,7 +18,7 @@
 <@markup id="html">
 	<@uniqueIdDiv>
 		<div class="container">
-			<div class="event-create">
+			<div class="event-create meeting">
 				<div id="${el}_create-event-set" class="create-event-set">
 					<div class="event-create-right">
 						<div class="event-create-actions">
@@ -34,10 +34,10 @@
 						</div>
 					</div>
 					<div class="event-create-center">
-						<div id="${el}-body"></div>
-						<div><h2>${msg("label.meeting.holding.protocol")}</h2></div>
-						<div id="${el}-items"></div>
-						<div>
+						<div id="${el}-body" class="meeting-holding-main"></div>
+						<div class="title">${msg("label.meeting.holding.protocol")}</div>
+						<div id="${el}-items" class="meeting-holding-items"></div>
+						<div class="meeting-holding-buttons">
 							<span id="${el}-create-new-item-button" class="yui-button yui-push-button search-icon">
 								<span class="first-child">
 									<button type="button">${msg('label.button.meeting.holding.create.item')}</button>

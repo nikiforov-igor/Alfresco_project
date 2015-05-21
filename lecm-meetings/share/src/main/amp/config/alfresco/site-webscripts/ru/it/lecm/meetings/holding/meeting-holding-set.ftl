@@ -12,12 +12,22 @@
 <#macro renderSet set>
     <div class="meeting-holding-set">
         <#list set.children as child>
-            <#if child.kind == "set">
-                <@formLib.renderSet set=child />
+            <#if child_index == 1>
+                <div class="meeting-items-left">
+                    <@formLib.renderField field=form.fields[child.id] />
+            <#elseif child_index == 3>
+                </div>
+                <div class="meeting-items-right">
+                    <@formLib.renderField field=form.fields[child.id] />
+                </div>
+            <#elseif child_index == 5>
+                <div class="meeting-items-bottom">
+                    <@formLib.renderField field=form.fields[child.id] />
             <#else>
                 <@formLib.renderField field=form.fields[child.id] />
             </#if>
         </#list>
+        </div>
     </div>
 </#macro>
 

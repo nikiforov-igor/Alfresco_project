@@ -1,0 +1,19 @@
+.control.meeting-remove-item {
+    height: 36px;
+    width: 16px;
+    float: right;
+}
+.control.meeting-remove-item span.yui-button {
+    border: none;
+    margin: 0;
+}
+.control.meeting-remove-item span.yui-button span.first-child {
+    background: url("../../images/lecm-events/alf_remove_grey_16.png") no-repeat 0 0;
+    border: none;
+}
+.control.meeting-remove-item span.yui-button span.first-child button {
+    width: 16px;
+    height: 16px;
+    min-height: 0;
+    padding: 0;
+}
