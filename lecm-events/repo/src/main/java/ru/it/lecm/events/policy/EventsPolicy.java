@@ -662,6 +662,7 @@ public class EventsPolicy extends BaseBean {
             assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
             assocsToCopy.add(EventsService.ASSOC_EVENT_TEMP_MEMBERS);
             assocsToCopy.add(EventsService.ASSOC_EVENT_TEMP_RESOURCES);
+            assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);
 
             for (QName assocQName : assocsToCopy) {
                 List<NodeRef> targets = findNodesByAssociationRef(oldEvent, assocQName, null, ASSOCIATION_TYPE.TARGET);
