@@ -188,7 +188,7 @@
   var route = routesService.createEmptyIteration(protocol);
   var stage = route.createNode(Packages.java.util.UUID.randomUUID().toString(), 'lecmWorkflowRoutes:stage');
   stage.properties["lecmWorkflowRoutes:stageWorkflowType"] = "PARALLEL";
-  stage.properties["lecmWorkflowRoutes:stageWorkflowTerm"] = 1;
+  stage.properties["lecmWorkflowRoutes:stageWorkflowTerm"] = approval.getApprovalTerm();
   stage.properties["cm:title"] = "Этап 1";
   stage.save();
   
