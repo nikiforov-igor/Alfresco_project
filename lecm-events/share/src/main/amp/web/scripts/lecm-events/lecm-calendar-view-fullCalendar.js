@@ -192,7 +192,7 @@
                        titleFormat:
                        {
                           month: me.msg("fullCalendar.titleFormat.month"),
-                          week: me.msg("fullCalendar.titleFormat.week"),
+                          week: me.msg("fullCalendar.titleFormat.week") + " - {" + me.msg("fullCalendar.titleFormat.week") + "}",
                           day: me.msg("fullCalendar.titleFormat.day")
                        },
                        axisFormat: me.msg("fullCalendar.axisFormat"),
@@ -300,8 +300,10 @@
                           if (!notLoad) {
                              YAHOO.Bubbling.fire("calendarReady");
                           }
+                       },
+                       eventRender: function(event, element) {
+                           element.attr('title', event.title);
                        }
-
                     });
 
                 $jCalendar.limitEvents(3);
