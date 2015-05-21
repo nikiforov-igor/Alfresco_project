@@ -676,6 +676,34 @@
                     <show id="lecm-errands-ts:coexecutor-report-text" force="true"/>
                 </field-visibility>
             </form>
+            <form>
+                <field-visibility>
+                    <show id="lecm-errands-ts:coexecutor-assoc" force="true"/>
+                    <show id="lecm-errands-ts:coexecutor-report-text" force="true"/>
+                    <show id="lecm-errands-ts:coexecutor-report-status" force="true"/>
+                    <show id="lecm-errands-ts:coexecutor-report-attachment-assoc" force="true"/>
+                    <show id="cm:created" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-errands-ts:coexecutor-report-attachment-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">Отчёты соисполнителей</control-param>
+                            <control-param name="suppressRefreshEvent">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-errands-ts:coexecutor-reports-table">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 
