@@ -63,7 +63,7 @@
                             <control-param name="rows">4</control-param>
                         </control>
 					</field>
-					<field id="lecm-document:subject-assoc" set="common"/>
+					<field id="lecm-document:subject-assoc" mandatory="true" set="common"/>
 					<field id="lecm-eds-document:file-register-assoc" set="common"/>
 					<field id="lecm-protocol:errands-autocreation" set="common"/>
 					
@@ -180,7 +180,7 @@
                             <control-param name="rows">4</control-param>
                         </control>
 					</field>
-					<field id="lecm-document:subject-assoc"/>
+					<field id="lecm-document:subject-assoc" mandatory="true"/>
 					<field id="lecm-eds-document:file-register-assoc"/>
 					<field id="lecm-protocol:errands-autocreation"/>
 					
@@ -236,6 +236,10 @@
 					<show id="lecm-protocol:secretary-assoc"/>
 					<!--Присутствовали-->
 					<show id="lecm-protocol:attended-assoc"/>
+					<!--Срок исполнения-->
+					<show id="lecm-eds-document:execution-date"/>
+					<!--Председатель совещания-->
+					<show id="lecm-protocol:meeting-chairman-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label-id="label.approval"/>
