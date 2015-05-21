@@ -283,6 +283,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="changeItemsFireAction">meetingHoldingChangeTechnicalMembers</control-param>
 						</control>
 					</field>
 					<!--Приглашенные-->
@@ -292,6 +293,7 @@
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
 							<control-param name="nameSubstituteString">{cm:name}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
+							<control-param name="changeItemsFireAction">meetingHoldingChangeTechnicalMembers</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings:finished">

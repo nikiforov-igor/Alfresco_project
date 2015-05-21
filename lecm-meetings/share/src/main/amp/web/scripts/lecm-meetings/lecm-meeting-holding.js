@@ -11,6 +11,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 	LogicECM.module.Meetengs.Holding = function(htmlId) {
 		LogicECM.module.Meetengs.Holding.superclass.constructor.call(this, htmlId);
 		YAHOO.Bubbling.on("meetingHoldingRemoveItem", this.onRemoveItem, this);
+		YAHOO.Bubbling.on("meetingHoldingChangeTechnicalMembers", this.onChangeTechnicalMembers, this);
 		return this;
 	};
 
@@ -204,6 +205,15 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 
 			}
+		},
+
+		onChangeTechnicalMembers: function () {
+			this.saveForm();
+			for (var i = 0; i < this.submitElements.length; i++) {
+				var formId = this.submitElements[i].getForm().id.replace("-form", "");
+				LogicECM.module.Base.Util.reInitializeControl(formId, "lecm-meetings-ts:holding-reporter-assoc", {});
+			}
+
 		}
 	}, true);
 })();
