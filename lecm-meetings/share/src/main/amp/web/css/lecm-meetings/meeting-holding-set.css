@@ -1,12 +1,12 @@
-.meeting-holding-items > .form-container .meeting-holding-set {
+.meeting-holding-items > div .meeting-holding-set {
     border: 1px solid #ccc;
     margin: 0 1em;
     padding: 1em 1em 0;
 }
-.meeting-holding-items > .form-container:nth-of-type(2n) .meeting-holding-set {
+.meeting-holding-items > div:nth-of-type(2n) .meeting-holding-set {
     background: #ecf5f3;
 }
-.meeting-holding-items > .form-container:not(:first-of-type) .meeting-holding-set {
+.meeting-holding-items > div:not(:first-of-type) .meeting-holding-set {
     border-top: none;
 }
 
