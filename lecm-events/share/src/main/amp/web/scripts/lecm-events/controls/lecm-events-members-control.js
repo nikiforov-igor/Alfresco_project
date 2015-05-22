@@ -265,7 +265,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				disabledStr = ' disabled="disabled"';
 			}
 
-			return '<input type="checkbox" class="members-mandatory"' + checked + disabledStr + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
+			return '<input type="checkbox" class="members-mandatory" title="' + this.msg("label.events.participant.mandatory") + '"' + checked + disabledStr + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
 		},
 
 		getMemberStatusHTML: function (node) {
@@ -273,14 +273,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var title = "";
 			if (node.memberStatus == "EMPTY") {
 				img = "alf_waiting_grey_16.png";
-			} else if (node.memberStatus == "CONFIRMED") {
+                title = this.msg("label.events.participation.not_confirmed_yet");
+            } else if (node.memberStatus == "CONFIRMED") {
 				img = "alf_thumbUp_green_16.png";
-			} else if (node.memberStatus == "DECLINED") {
+                title = this.msg("label.events.participation.confirmed");
+            } else if (node.memberStatus == "DECLINED") {
 				img = "alf_thumbDown_red_16.png";
-				title = node.memberDeclineReason;
+				title = this.msg("label.events.participation.rejected") + ": " + node.memberDeclineReason;
 			} else if (node.memberStatus == "REQUEST_NEW_TIME") {
 				img = "alf_clock_yellow_16.jpg";
-				title = Alfresco.util.formatDate(new Date(node.memberFromDate), this.msg("lecm.date-format.datetime"));
+				title = this.msg("label.events.participation.another_time") + ": " + Alfresco.util.formatDate(new Date(node.memberFromDate), this.msg("lecm.date-format.datetime"));
 			}
 
 			if (img.length > 0) {
