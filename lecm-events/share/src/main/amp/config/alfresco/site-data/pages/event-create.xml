@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-    <title>Страница создания мероприятия</title>
-    <description>Страница создания мероприятия</description>
+    <title>Создание мероприятия</title>
+    <description>Создание мероприятия</description>
     <template-instance>event-create</template-instance>
     <authentication>user</authentication>
 </page>
