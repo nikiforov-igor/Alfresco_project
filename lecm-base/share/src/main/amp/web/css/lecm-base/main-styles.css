@@ -455,11 +455,9 @@ i.icon-building {
     box-sizing: border-box;
 	resize: none;
 }
-.control .container .value-div input.invalid + .mandatory-highlightable {
-    background-color: #faecee;
-}
+.control .container .value-div input.invalid + .mandatory-highlightable,
 .control .container .value-div input.mandatory + .mandatory-highlightable {
-    background-color: #fafae6;
+    background-color: #faecee;
 }
 .control.editmode .container .value-div input[type=text],
 .control.editmode .container .value-div .control-selected-values,
