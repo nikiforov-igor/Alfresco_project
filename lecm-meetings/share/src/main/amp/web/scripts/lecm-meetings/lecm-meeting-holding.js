@@ -97,7 +97,9 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 		saveForm: function() {
 			for (var i = 0; i < this.submitElements.length; i++) {
-				this.submitElements[i].submitForm();
+				if (Dom.get(this.submitElements[i].getForm().id) != null) {
+					this.submitElements[i].submitForm();
+				}
 			}
 		},
 
@@ -148,7 +150,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				{
 					url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 					dataObj: {
-						htmlid: me.id + nodeRef.replace('workspace://SpacesStore/', '_'),
+						htmlid: "mhi-" + nodeRef.replace('workspace://SpacesStore/', '_'),
 						itemKind: "node",
 						itemId: nodeRef,
 						mode: "edit",
@@ -160,7 +162,9 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 					successCallback: {
 						fn: function (response) {
 							var container = Dom.get(me.id + "-items");
-							container.innerHTML += response.serverResponse.responseText;
+							var div = document.createElement('div');
+							div.innerHTML = response.serverResponse.responseText;
+							container.appendChild(div);
 						}
 					},
 					failureMessage: "message.failure",
@@ -194,7 +198,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem?nodeRef=" + nodeRef,
 					successCallback: {
 						fn: function (response) {
-							var itemBlock = Dom.get(me.id + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
+							var itemBlock = Dom.get("mhi-" + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
 							if (itemBlock != null) {
 								itemBlock.parentNode.removeChild(itemBlock);
 							}
