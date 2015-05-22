@@ -539,7 +539,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                     helper.setText(mailText, true);
 
                     List<NodeRef> attachments = new ArrayList<>();
-                    List<AssociationRef> attachmentsAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_TEMP_ATTACHMENTS);
+                    List<AssociationRef> attachmentsAssocs = nodeService.getSourceAssocs(event, DocumentService.ASSOC_PARENT_DOCUMENT);
                     if (attachmentsAssocs != null) {
                         for (AssociationRef attachment : attachmentsAssocs) {
                             attachments.add(attachment.getTargetRef());
