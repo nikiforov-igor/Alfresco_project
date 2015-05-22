@@ -83,7 +83,7 @@
 		<div id="${updateRepeatedFormId}" class="yui-panel hidden1">
 			<div id="${updateRepeatedFormId}-head" class="hd">${msg("logicecm.view")}</div>
 			<div id="${updateRepeatedFormId}-body" class="bd">
-				<div id="${updateRepeatedFormId}-content">
+				<div id="${updateRepeatedFormId}-content" class="update-repeated">
 					<input type="radio" name="events-update-repeated" value="THIS" checked> ${msg("label.events.update.repeated.this")}<br/>
 					<input type="radio" name="events-update-repeated" value="ALL"> ${msg("label.events.update.repeated.all")}<br/>
 					<input type="radio" name="events-update-repeated" value="ALL_NEXT"> ${msg("label.events.update.repeated.all_nex")}<br/>
