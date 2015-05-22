@@ -217,7 +217,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		loadAttachments: function() {
 			Alfresco.util.Ajax.request({
 				method: "GET",
-				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get?documentNodeRef=" + this.options.nodeRef,
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get?documentNodeRef=" + this.options.nodeRef + "&showEmptyCategory=true",
 				successCallback: {
 					fn: function (response) {
 						var result = response.json;
