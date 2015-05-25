@@ -910,7 +910,7 @@
 					<show id="lecmErrandWf:requestDueDateChangeTaskResult"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecmErrandWf:requestDueDateChangeTaskNewDate" mandatory="true">
+					<field id="lecmErrandWf:requestDueDateChangeTaskNewDate" mandatory="true" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
 							<control-param name="minLimitCurrentDate">true</control-param>
 						</control>
