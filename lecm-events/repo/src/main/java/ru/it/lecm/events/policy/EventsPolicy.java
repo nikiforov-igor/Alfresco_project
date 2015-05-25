@@ -37,6 +37,9 @@ import javax.mail.internet.MimeUtility;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.apache.tools.ant.filters.StringInputStream;
+import ru.it.lecm.events.ical.CalendarEvent;
+import ru.it.lecm.events.ical.ICalUtils;
 
 /**
  * User: AIvkin
@@ -366,7 +369,44 @@ public class EventsPolicy extends BaseBean {
                             }
                         });
                     }
+					
+					final CalendarEvent eventNotification = new CalendarEvent();
+					eventNotification.setUid(event.toString());
+					eventNotification.setTitle(mailTemplateModel.get("title").toString());
+					eventNotification.setSummary(mailTemplateModel.get("description").toString());
+					eventNotification.setStartTime(fromDate);
+					eventNotification.setEndTime(toDate);
+					eventNotification.setInitiatorMail(defaultFromEmail);
+					eventNotification.setInitiatorName("");
+					if (location!=null) {
+						eventNotification.setPlace(mailTemplateModel.get("location").toString());
+					}
+					String attachmentName="invite.ics";
+					helper.addAttachment(attachmentName, new DataSource() {
 
+						@Override
+						public InputStream getInputStream() throws IOException {
+							ICalUtils utils = new ICalUtils();
+							return new StringInputStream(utils.formEventPublish(eventNotification));
+						}
+
+						@Override
+						public OutputStream getOutputStream() throws IOException {
+							throw new IOException("Read-only data");
+						}
+
+						@Override
+						public String getContentType() {
+							return "text/calendar";
+						}
+
+						@Override
+						public String getName() {
+							return "invite.ics";
+						}
+					});
+					
+					
                     mailService.send(message);
                 } catch (Exception e) {
                     logger.error("Error send mail", e);

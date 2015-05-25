@@ -70,6 +70,11 @@ public class CalendarEvent {
 	public void setStartTime(Calendar startTime) {
 		this.startTime = startTime;
 	}
+	public void setStartTime(Date startTime) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(startTime);
+		this.startTime = calendar;
+	}
 
 	public Calendar getEndTime() {
 		return endTime;
@@ -77,6 +82,12 @@ public class CalendarEvent {
 
 	public void setEndTime(Calendar endTime) {
 		this.endTime = endTime;
+	}
+	
+	public void setEndTime(Date endTime) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(endTime);
+		this.endTime = calendar;
 	}
 
 	public Boolean isFullDay() {

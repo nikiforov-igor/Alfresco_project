@@ -1,6 +1,7 @@
 package ru.it.lecm.events.ical;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.SocketException;
 import java.net.URI;
@@ -35,6 +36,7 @@ import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
+import org.apache.tools.ant.filters.StringInputStream;
 
 /**
  *
@@ -44,7 +46,7 @@ public class ICalUtils {
 
 	public static final String ProdId = "GetITFromConfig";
 
-	public String formEventNotifications(CalendarEvent event) throws SocketException {
+	public String formEventRequest(CalendarEvent event) throws SocketException {
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 		TimeZone timezone = registry.getTimeZone(event.getStartTime().getTimeZone().getID());
 		VTimeZone tz = timezone.getVTimeZone();
@@ -98,6 +100,45 @@ public class ICalUtils {
 		return iCal.toString();
 	}
 
+	public String formEventPublish(CalendarEvent event) {
+		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
+		TimeZone timezone = registry.getTimeZone(event.getStartTime().getTimeZone().getID());
+		VTimeZone tz = timezone.getVTimeZone();
+
+		VEvent vEvent = new VEvent();
+		PropertyList eventProperties = vEvent.getProperties();
+		if (event.isFullDay()) {
+			Date dtStart = new Date(event.getStartTime().getTime());
+			eventProperties.add(new DtStart(dtStart));
+			Date dtEnd = new Date(event.getEndTime().getTime());
+			eventProperties.add(new DtEnd(dtEnd));
+		} else {
+			DateTime dtStart = new DateTime(event.getStartTime().getTime());
+			eventProperties.add(new DtStart(dtStart));
+			DateTime dtEnd = new DateTime(event.getEndTime().getTime());
+			eventProperties.add(new DtEnd(dtEnd));
+		}
+
+		eventProperties.add(new Summary(event.getTitle()));
+		// add timezone info..
+		eventProperties.add(tz.getTimeZoneId());
+
+		eventProperties.add(new Uid(event.getUid()));
+		eventProperties.add(new Organizer(URI.create("mailto:" + event.getInitiatorMail())));
+		eventProperties.add(new Description(event.getSummary()));
+		eventProperties.add(new Location(event.getPlace()));
+		eventProperties.add(Status.VEVENT_CONFIRMED);
+		Calendar iCal = new Calendar();
+		iCal.getProperties().add(new ProdId(ProdId));
+		iCal.getProperties().add(Version.VERSION_2_0);
+		//TODO I hope we will use only gregorian but remember this place
+		iCal.getProperties().add(CalScale.GREGORIAN);
+		iCal.getProperties().add(Method.PUBLISH);
+
+		iCal.getComponents().add(vEvent);
+		return iCal.toString();
+	}
+	
 	//TODO Будет ли возможность добавлять события по почте?
 	public CalendarReply readReply(String iCal) throws IOException, ParserException {
 

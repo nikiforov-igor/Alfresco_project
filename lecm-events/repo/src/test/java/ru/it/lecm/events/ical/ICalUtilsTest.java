@@ -68,8 +68,13 @@ public class ICalUtilsTest {
 
 		ICalUtils instance = new ICalUtils();
 		String expResult = "";
-		String result = instance.formEventNotifications(event);
+		System.out.println("Form Request");
+		String result = instance.formEventRequest(event);
 		System.out.println(result);
+		
+		System.out.println("Form Publish");
+		System.out.println(instance.formEventPublish(event));
+		
 		assertEquals(expResult, "");
 	}
 
