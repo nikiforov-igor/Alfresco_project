@@ -265,7 +265,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				disabledStr = ' disabled="disabled"';
 			}
 
-			return '<input type="checkbox" class="members-mandatory" title="' + this.msg("label.events.participant.mandatory") + '"' + checked + disabledStr + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
+			return '<input type="checkbox" class="members-mandatory" title="' + (node.memberMandatory ? this.msg("label.events.participant.mandatory") : this.msg("label.events.participant.not_mandatory")) + '"' + checked + disabledStr + ' id="' + this.getMandatoryCheckboxId(node) + '"/>';
 		},
 
 		getMemberStatusHTML: function (node) {
@@ -298,6 +298,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		mandatoryCheckboxClick: function (event, node) {
 			this.defaultMandatory = event.target.checked;
+			event.target.checked ?
+				event.target.title = this.msg("label.events.participant.mandatory") :
+				event.target.title = this.msg("label.events.participant.not_mandatory");
 
 			this.selectedItems[node.nodeRef].memberMandatory = event.target.checked;
 			this.updateJsonField();
