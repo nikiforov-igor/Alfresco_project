@@ -376,7 +376,7 @@ LogicECM.module = LogicECM.module || {};
 												var item = json.forCollection ? json : json.items[0];
 												var message;
 												if (item.redirect) {
-													document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+													LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + item.redirect);
 												} else if (item.openWindow) {
 													window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
 												} else if (!item.withErrors){
@@ -483,7 +483,7 @@ LogicECM.module = LogicECM.module || {};
 						var item = (json.forCollection) ? json : json.items[0];
 						var message;
 						if (item.redirect) {
-							document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+							LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + item.redirect);
 						} else if (item.openWindow) {
 							window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
 						} else if (!item.withErrors){
@@ -560,7 +560,7 @@ LogicECM.module = LogicECM.module || {};
 				}
 			}
 			this.doubleClickLock = false;
-			window.location.href = url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params);
+			LogicECM.module.Base.Util.setPostLocation(url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params));
 		},
 		_chooseState: function(type, taskId, formResponse, actionId) {
 			var template = '{proxyUri}lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}';
@@ -589,7 +589,7 @@ LogicECM.module = LogicECM.module || {};
 						});
 					} else {
 						if (oResults.redirect && oResults.redirect != 'null') {
-							document.location.href = Alfresco.constants.URL_PAGECONTEXT + oResults.redirect;
+							LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + oResults.redirect);
 						} else {
 							// document.location.href = document.location.href;
 							// ALF-2803
@@ -711,7 +711,7 @@ LogicECM.module = LogicECM.module || {};
 					dlg.hide();
 					var url =  Alfresco.constants.URL_PAGECONTEXT + 'document-edit?nodeRef=' + ref;
 					var params = 'highlightedFields=' + JSON.stringify(flds);
-					window.location.href = url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params);
+					LogicECM.module.Base.Util.setPostLocation(url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params));
 				}.bind(button, dialog, nodeRef, fields);
 			}
 		}

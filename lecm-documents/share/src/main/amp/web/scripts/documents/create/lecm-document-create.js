@@ -108,6 +108,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				}
 			};
 			Alfresco.util.Ajax.request({
+				method: 'POST',
 				url: url,
 				dataObj: dataObj,
 				successCallback: successCallback,

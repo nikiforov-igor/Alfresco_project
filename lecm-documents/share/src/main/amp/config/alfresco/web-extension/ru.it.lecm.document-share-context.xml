@@ -25,6 +25,10 @@
         <property name="scriptRemote" ref="webscripts.script.remote" />
     </bean>
 
+	<bean id="webscript.ru.it.lecm.documents.form.form.post" class="ru.it.lecm.documents.form.Form" parent="webscript">
+		<property name="configService" ref="web.config" />
+		<property name="scriptRemote" ref="webscripts.script.remote" />
+	</bean>
 
     <bean id="evaluator.ru.it.lecm.documents.isBase" parent="evaluator.doclib.action.nodeType">
         <property name="types">

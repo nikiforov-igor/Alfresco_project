@@ -51,7 +51,11 @@ function main() {
 				} else if (name == "backUrl") {
 					backUrl = value;
 				} else {
-					urlArgs[name] = value;
+					try {
+						urlArgs[name] = decodeURIComponent(value);
+					} catch (e) {
+						urlArgs[name] = value;
+					}
 				}
 			}
 		}

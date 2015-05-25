@@ -86,7 +86,7 @@
     // Описание
     value = document.properties["lecm-events:description"];
     if (value != null) {
-        params += "&prop_lecm-events_description=" + value;
+        params += "&prop_lecm-events_description=" + encodeURIComponent(value);
     }
 
     // Тематика

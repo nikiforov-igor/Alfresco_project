@@ -729,7 +729,37 @@ LogicECM.module.Base.Util = {
                 Dom.addClass(table, "fixedHeader");
             }
         }
-    }
+    },
+
+	setPostLocation: function setPostLocation_function(url) {
+		var splitUrl = url.split("?");
+		var path = splitUrl[0];
+		var vars = splitUrl[1];
+
+		var form = document.createElement("form");
+		form.setAttribute("method", "POST");
+		form.setAttribute("action", path);
+
+		if (vars != undefined) {
+			var params = [];
+			var splitParams = vars.split('&');
+			for (var key in splitParams) {
+				var value = splitParams[key].split('=');
+				params[value[0]] = value[1];
+			}
+			for (var key in params) {
+				var hiddenField = document.createElement("input");
+				hiddenField.setAttribute("type", "hidden");
+				hiddenField.setAttribute("name", key);
+				hiddenField.setAttribute("value", decodeURIComponent(params[key]));
+
+				form.appendChild(hiddenField);
+			}
+		}
+
+		document.body.appendChild(form);
+		form.submit();
+	}
 
 };
 
