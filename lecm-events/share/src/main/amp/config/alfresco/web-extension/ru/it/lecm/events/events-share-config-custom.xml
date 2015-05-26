@@ -55,7 +55,7 @@
                 <appearance>
                     <field id="lecm-events:title">
                         <control>
-                            <control-param name="maxLength">400</control-param>
+                            <control-param name="maxLength">200</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:all-day">
@@ -168,7 +168,7 @@
                 <appearance>
                     <field id="lecm-events:title">
                         <control>
-                            <control-param name="maxLength">400</control-param>
+                            <control-param name="maxLength">200</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:location-assoc">
@@ -250,7 +250,7 @@
 
                     <field id="lecm-events:title" set="createEventSet">
                         <control>
-                            <control-param name="maxLength">400</control-param>
+                            <control-param name="maxLength">200</control-param>
                         </control>
                     </field>
                     <field id="lecm-events:all-day" set="createEventSet">
