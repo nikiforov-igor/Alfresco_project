@@ -216,8 +216,8 @@
                             <control-param name="showCreateButton">true</control-param>
                             <control-param name="showSearch">false</control-param>
                             <control-param name="showLabel">true</control-param>
-                            <control-param name="newRowTitle">new.item</control-param>
-                            <control-param name="editRowTitle">edit.item</control-param>
+                            <control-param name="newRowDialogTitle">protocol.item.create.form.title</control-param>
+                            <control-param name="editRowDialogTitle">protocol.item.edit.form.title</control-param>
 							<control-param name="datagridFormId">datagrid</control-param>
 						</control>
 					</field>
