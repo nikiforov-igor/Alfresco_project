@@ -52,7 +52,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 				Alfresco.util.Ajax.request(
 					{
-						url: Alfresco.constants.URL_CONTEXT + url,
+						url: Alfresco.constants.URL_CONTEXT + encodeURI(url),
 						dataObj: dataObj,
 						successCallback: {
 							fn:function(response){
