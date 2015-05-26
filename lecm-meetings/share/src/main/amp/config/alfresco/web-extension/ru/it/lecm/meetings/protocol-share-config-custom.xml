@@ -389,7 +389,7 @@
 				    <set id="item0" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 					<set id="item1" parent="common" />
 					
-					<field id="lecm-document:indexTableRow" force="true" set="item0"/>
+					<field id="lecm-document:indexTableRow" read-only="true" help="" force="true" set="item0"/>
 					<field id="lecm-protocol-ts:point-status-assoc" read-only="true" set="item0">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
                             <control-param name="formatString">{lecm-protocol-ts:point-status-assoc/cm:name}</control-param>
