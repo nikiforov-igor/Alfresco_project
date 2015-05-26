@@ -74,6 +74,7 @@ public class EventsWebScriptBean extends BaseWebScript {
                 result.put("where", "");
             }
             result.put("start", formatDate(start, isAllDay));
+            result.put("startDate", start);
             result.put("end", formatDate(end, isAllDay));
             String legacyDateFormat = "yyyy-MM-dd";
             String legacyTimeFormat = "HH:mm";
@@ -108,6 +109,21 @@ public class EventsWebScriptBean extends BaseWebScript {
             // Save this one
             results.add(result);
         }
+        Collections.sort(results, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                Date date1 = (Date) o1.get("startDate");
+                Date date2 = (Date) o2.get("startDate");
+                if (date1.before(date2)) {
+                    return -1;
+                } else if (date1.after(date2)) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+
+            }
+        });
         return results;
     }
 
