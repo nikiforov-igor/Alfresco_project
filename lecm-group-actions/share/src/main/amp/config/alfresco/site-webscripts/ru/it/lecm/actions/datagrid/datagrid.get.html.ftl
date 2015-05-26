@@ -48,14 +48,14 @@
 </div>
 </div>
 
-<div id="${importInfoFormId}" class="yui-panel">
+<div id="${importInfoFormId}" class="yui-panel hidden1">
     <div id="${importInfoFormId}-head" class="hd">${msg("title.import.info")}</div>
     <div id="${importInfoFormId}-body" class="bd">
         <div id="${importInfoFormId}-content" class="import-info-content"></div>
     </div>
 </div>
 
-<div id="${importErrorFormId}" class="yui-panel">
+<div id="${importErrorFormId}" class="yui-panel hidden1">
     <div id="${importErrorFormId}-head" class="hd">${msg("title.import.info")}</div>
     <div id="${importErrorFormId}-body" class="bd">
         <div id="${importErrorFormId}-content" class="import-info-content">
@@ -80,7 +80,7 @@
     </div>
 </div>
 
-<div id="${importFormId}" class="yui-panel">
+<div id="${importFormId}" class="yui-panel hidden1">
     <div id="${importFormId}-head" class="hd">${msg("title.import")}</div>
     <div id="${importFormId}-body" class="bd">
         <div id="${importFormId}-content">
@@ -211,15 +211,21 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                                 width: "50em"
                             });
 
+                    Dom.removeClass(this.id + "-import-info-form", "hidden1");
+
                     this.importErrorDialog = Alfresco.util.createYUIPanel(this.id + "-import-error-form",
                             {
                                 width: "60em"
                             });
 
+                    Dom.removeClass(this.id + "-import-error-form", "hidden1");
+
                     this.importFromDialog = Alfresco.util.createYUIPanel(this.id + "-import-form",
                             {
                                 width: "50em"
                             });
+
+                    Dom.removeClass(this.id + "-import-form", "hidden1");
 
                     var scriptButton = Alfresco.util.createYUIButton(this, "scriptButton", this.showCreateScript, {});
                     var workflowButton = Alfresco.util.createYUIButton(this, "workflowButton", this.showCreateWorkflow, {});
