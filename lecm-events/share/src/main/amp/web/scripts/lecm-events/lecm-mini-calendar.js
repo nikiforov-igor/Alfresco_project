@@ -122,11 +122,14 @@ LogicECM.module = LogicECM.module || {};
 				});
 		},
 
-		loadThisMonthEvent: function() {
+		loadThisMonthEvent: function(dateMonth) {
 			//load events for this month
 			var date = new Date();
 			date.setDate(1);
 			date.setHours(0,0,0);
+			if (dateMonth !== undefined) {
+				date.setMonth(dateMonth.getMonth());
+			}
 			this.loadEvents(null, [null, new Date(date)]);
 		},
 
@@ -245,7 +248,7 @@ LogicECM.module = LogicECM.module || {};
 				// Get the data and refresh the view
 				this.calendar.cfg.setProperty("selected", selectedDates.join(','));
 				this.calendar.render();
-				this.loadThisMonthEvent();
+				this.loadThisMonthEvent(this.calendar.cfg.getConfig().pagedate);
 			}
 		},
 
