@@ -243,7 +243,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
                     }
                     List<NodeRef> existEvents = getEvents(fromDateFinal, toDateFinal, additionalFilter);
                     if (existEvents != null) {
-                        for (NodeRef event: existEvents) {
+                        for (NodeRef event : existEvents) {
                             NodeRef location = getEventLocation(event);
                             if (location != null) {
                                 results.add(location);
@@ -458,8 +458,15 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
     }
 
     public void onAfterUpdate(NodeRef event, String updateRepeated) {
+        onAfterUpdate(event, updateRepeated, false);
+    }
+
+    @Override
+    public void onAfterUpdate(NodeRef event, String updateRepeated, boolean sendToInvitedMembers) {
         updateMembers(event);
-        sendNotificationsToInvitedMembers(event);
+        if (sendToInvitedMembers) {
+            sendNotificationsToInvitedMembers(event);
+        }
 
         Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
         if (repeatable != null && repeatable && updateRepeated != null) {

@@ -115,6 +115,8 @@ public interface EventsService {
 
     void onAfterUpdate(NodeRef event, String updateRepeated);
 
+    void onAfterUpdate(NodeRef event, String updateRepeated, boolean sendToInvitedMembers);
+
     List<NodeRef> getNextRepeatedEvents(NodeRef event);
 
     List<NodeRef> getPrevRepeatedEvents(NodeRef event);

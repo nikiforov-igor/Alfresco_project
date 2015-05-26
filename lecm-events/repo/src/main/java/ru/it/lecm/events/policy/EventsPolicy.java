@@ -462,12 +462,6 @@ public class EventsPolicy extends BaseBean {
             if (table != null) {
                 List<NodeRef> rows = documentTableService.getTableDataRows(table);
                 if (rows != null) {
-                    String author = AuthenticationUtil.getSystemUserName();
-                    NodeRef initiator = eventService.getEventInitiator(nodeRef);
-                    String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-                    Date fromDate = (Date) nodeService.getProperty(nodeRef, EventsService.PROP_EVENT_FROM_DATE);
-                    String text = employeeName + " просит вас согласовать мероприятие " + eventService.wrapAsEventLink(nodeRef) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
-
                     for (NodeRef row: rows) {
                         Map<QName, Serializable> properties = nodeService.getProperties(row);
                         properties.put(EventsService.PROP_EVENT_MEMBERS_STATUS, "EMPTY");
@@ -476,13 +470,6 @@ public class EventsPolicy extends BaseBean {
                         properties.put(EventsService.PROP_EVENT_MEMBERS_TO_DATE, null);
                         properties.put(EventsService.PROP_EVENT_MEMBERS_ALL_DAY, false);
                         nodeService.setProperties(row, properties);
-                        NodeRef employee = findNodeByAssociationRef(row, EventsService.ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
-
-                        if (initiator != null && employee != null) {
-                            List<NodeRef> recipients = new ArrayList<>();
-                            recipients.add(employee);
-                            notificationsService.sendNotification(author, nodeRef, text, recipients, null);
-                        }
                     }
                 }
             }

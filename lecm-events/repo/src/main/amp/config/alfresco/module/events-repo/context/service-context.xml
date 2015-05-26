@@ -131,6 +131,7 @@
 				<value>alfresco/module/${artifactId}/actions/additional-agreement.xml</value>
 				<value>alfresco/module/${artifactId}/actions/ga-remove-event.xml</value>
 				<value>alfresco/module/${artifactId}/actions/ga-remove-repeatable-event.xml</value>
+				<value>alfresco/module/${artifactId}/actions/ga-event-send-notifications.xml</value>
 				<value>alfresco/module/${artifactId}/actions/create-event-by-document.xml</value>
 			</list>
 		</property>
