@@ -17,6 +17,11 @@ LogicECM.module.Events.requestNewTimeChangeAllDayValidation =
 		return LogicECM.module.Events.baseChangeAllDayValidation(field, form, "lecmEventsWf:requestNewTimeFromDate", "lecmEventsWf:requestNewTimeToDate");
 	};
 
+LogicECM.module.Events.repeateDateValidation =
+	function (field, args,  event, form, silent, message) {
+		return LogicECM.module.Events.repeateDateValidationFunction(field, form, "lecm-events:repeatable-start-period", "lecm-events:repeatable-end-period");
+	};
+
 LogicECM.module.Events.fromDateValue = null;
 LogicECM.module.Events.toDateValue = null;
 
@@ -90,6 +95,25 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 			Dom.addClass(fromTime.id, "invalid");
 			Dom.addClass(toDate.id + "-cntrl-date", "invalid");
 			Dom.addClass(toTime.id, "invalid");
+		}
+	}
+	return true;
+};
+
+LogicECM.module.Events.repeateDateValidationFunction = function (field, form, fromDateFieldId, toDateFieldId) {
+	if (field.form != null) {
+		var fromDate = field.form["prop_" + fromDateFieldId.replace(":", "_")];
+		var toDate = field.form["prop_" + toDateFieldId.replace(":", "_")];
+
+		Dom.removeClass(fromDate.id+ "-cntrl-date", "invalid");
+		Dom.removeClass(toDate.id + "-cntrl-date", "invalid");
+
+
+		var fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
+		var toDateTime = Alfresco.util.fromISO8601(toDate.value);
+		if (toDateTime < fromDateTime) {
+			Dom.addClass(fromDate.id+ "-cntrl-date", "invalid");
+			Dom.addClass(toDate.id + "-cntrl-date", "invalid");
 		}
 	}
 	return true;

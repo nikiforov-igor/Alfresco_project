@@ -284,11 +284,13 @@
                     <field id="lecm-events:repeatable-start-period" mandatory="true" set="createEventSet">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:repeatable-end-period" mandatory="true" set="createEventSet">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
                         </constraint-handlers>
                     </field>
                     <field id="lecm-events:repeatable-rule" mandatory="true" set="createEventSet">
