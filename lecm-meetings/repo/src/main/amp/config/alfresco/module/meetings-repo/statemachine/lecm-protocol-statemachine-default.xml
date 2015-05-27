@@ -5367,23 +5367,23 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
         if (tableAssocs!==null && tableAssocs.length > 0){
             var table = tableAssocs[0];
             var  pointAssocs = table.childAssocs["cm:contains"];
-			var length = pointAssocs.length;
-			for (var i = 0; i < length; i++ ){
-				var pointExecutorAssoc = pointAssocs[i].assocs["lecm-protocol-ts:executor-assoc"];
-				if (pointExecutorAssoc.length > 0){
-					var pointExecutor = pointExecutorAssoc[0];
-					statemachine.grandDynamicRoleForEmployee(protocol, pointExecutor, "PROTOCOL_POINT_EXECUTOR", task);
-					
-					var pointNumber = pointAssocs[i].properties["lecm-document:indexTableRow"];
-					
-					var notificationText = "Вы назначены исполнителем по пункту " + pointNumber + " протокола " ;
-					notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-document:present-string}"); 
-					notifications.sendNotification([pointExecutor.nodeRef.toString()], notificationText, protocol);
-				}	
+			if (pointAssocs){
+				var length = pointAssocs.length;
+				for (var i = 0; i < length; i++ ){
+					var pointExecutorAssoc = pointAssocs[i].assocs["lecm-protocol-ts:executor-assoc"];
+					if (pointExecutorAssoc && pointExecutorAssoc.length > 0){
+						var pointExecutor = pointExecutorAssoc[0];
+						statemachine.grandDynamicRoleForEmployee(protocol, pointExecutor, "PROTOCOL_POINT_EXECUTOR", task);
+						
+						var pointNumber = pointAssocs[i].properties["lecm-document:indexTableRow"];
+						
+						var notificationText = "Вы назначены исполнителем по пункту " + pointNumber + " протокола " ;
+						notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-document:present-string}"); 
+						notifications.sendNotification([pointExecutor.nodeRef.toString()], notificationText, protocol);
+					}	
+				}
 			}
-
         }
-
     }
 })();]]></value>
 															</property>
