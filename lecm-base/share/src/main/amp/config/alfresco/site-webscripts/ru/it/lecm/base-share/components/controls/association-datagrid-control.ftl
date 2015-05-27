@@ -126,6 +126,7 @@
             createFormTitleMsg: "${newRowTitle}",
             editFormTitleMsg: "${editRowTitle}",
             formMode: "${form.mode?string}",
+			editForm: "${field.control.params.editFormId!""}",
             actions: [
             <#if allowExpand = "true">
                 {

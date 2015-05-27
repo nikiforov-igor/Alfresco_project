@@ -219,6 +219,7 @@
                             <control-param name="newRowDialogTitle">protocol.item.create.form.title</control-param>
                             <control-param name="editRowDialogTitle">protocol.item.edit.form.title</control-param>
 							<control-param name="datagridFormId">datagrid</control-param>
+							<control-param name="editFormId">protocol-create-view-point</control-param>
 						</control>
 					</field>
 					
@@ -350,16 +351,15 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-protocol-ts:executor-assoc"/>
+					<show id="lecm-protocol-ts:reporter-assoc"/>
 					<show id="lecm-protocol-ts:point-formulation"/>
 				</field-visibility>
 			</form>
 			<form id="points-datagrid">
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
-					<show id="lecm-protocol-ts:executor-assoc"/>
+					<show id="lecm-protocol-ts:reporter-assoc"/>
 					<show id="lecm-protocol-ts:point-formulation"/>
-					<show id="lecm-protocol-ts:point-status-assoc"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -483,13 +483,91 @@
                     </field>
 				</appearance>
 			</form>
-			<form id="points-datagrid">
+			<form id="protocol-create-view-point">
 				<field-visibility>
-					<show id="lecm-document:indexTableRow" force="true"/>
-					<show id="lecm-protocol-ts:executor-assoc"/>
 					<show id="lecm-protocol-ts:point-formulation"/>
-					<show id="lecm-protocol-ts:point-status"/>
+					<show id="lecm-protocol-ts:reporter-assoc"/>
+					<show id="lecm-protocol-ts:coreporter-assoc"/>
+					<show id="lecm-protocol-ts:point-desc"/>
+					<show id="lecm-protocol-ts:men-spoke"/>
+					<show id="lecm-protocol-ts:decision"/>
+					<show id="lecm-protocol-ts:executor-assoc"/>
+					<show id="lecm-protocol-ts:execution-date"/>
+					<show id="lecm-protocol-ts:note"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-protocol-ts:point-formulation"/>
+					<field id="lecm-protocol-ts:reporter-assoc">
+						<control template="/ru/it/lecm/meetings/components/controls/mix-double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+
+							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol-ts:coreporter-assoc">
+						<control template="/ru/it/lecm/meetings/components/controls/mix-double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+
+							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol-ts:point-desc">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
+					<field id="lecm-protocol-ts:men-spoke">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+					</field>
+					<field id="lecm-protocol-ts:decision">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
+					<field id="lecm-protocol-ts:executor-assoc"/>
+					<field id="lecm-protocol-ts:execution-date">
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+					</field>
+					<field id="lecm-protocol-ts:note">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
