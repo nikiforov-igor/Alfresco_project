@@ -21,7 +21,7 @@ public class CalendarEvent {
 	private String place;
 	private Calendar startTime;
 	private Calendar endTime;
-	private Boolean fullDay;
+	private Boolean fullDay = false;
 
 	public String getTitle() {
 		return title;

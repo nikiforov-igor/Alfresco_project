@@ -317,6 +317,7 @@ public class EventsPolicy extends BaseBean {
 
                     Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
                     Date toDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_TO_DATE);
+					Boolean allDay = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_ALL_DAY);
                     if (fromDate != null && toDate != null) {
                         String fromDateString = dateFormat.format(fromDate);
                         String toDateString = dateFormat.format(toDate);
@@ -377,7 +378,8 @@ public class EventsPolicy extends BaseBean {
 					eventNotification.setStartTime(fromDate);
 					eventNotification.setEndTime(toDate);
 					eventNotification.setInitiatorMail(defaultFromEmail);
-					eventNotification.setInitiatorName("");
+					eventNotification.setInitiatorName(mailTemplateModel.get("initiator").toString());
+					eventNotification.setFullDay(allDay);
 					if (location!=null) {
 						eventNotification.setPlace(mailTemplateModel.get("location").toString());
 					}
