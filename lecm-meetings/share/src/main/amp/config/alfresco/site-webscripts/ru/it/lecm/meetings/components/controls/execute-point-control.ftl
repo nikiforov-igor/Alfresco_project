@@ -35,10 +35,7 @@
 				},
                 successCallback: {
                      fn:function(response){
-                         YAHOO.Bubbling.fire("dataItemUpdated",
-                         {
-                            item: response.json,
-                         }); 
+
                      },
                      scope: this
                 },
