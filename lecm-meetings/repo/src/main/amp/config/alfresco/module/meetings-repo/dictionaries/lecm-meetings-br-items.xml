@@ -44,6 +44,12 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Статическая роль. Сотрудник может редактировать и удалять любые совещания</property>
 			</item>
+			<item name="cm:Протокол.Исполнитель пункта" type="lecm-orgstr:business-role">
+				<property name="cm:name">Протокол.Исполнитель пункта</property>
+				<property name="lecm-orgstr:business-role-identifier">PROTOCOL_POINT_EXECUTOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description">Динамическая роль. Сотрудник является исполнителем пункта протокола</property>
+			</item>
 		</items>
 	</item>
 </items>

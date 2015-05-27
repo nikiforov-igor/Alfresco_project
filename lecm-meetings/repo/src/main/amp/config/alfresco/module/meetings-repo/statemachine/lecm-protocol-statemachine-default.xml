@@ -1350,6 +1350,29 @@
 										</roleAssociations>
 										<subFolders/>
 									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>6e49ecac-ef0d-418d-8fda-5aeb3efeb842</name>
+										<nodeRef>workspace://SpacesStore/6e49ecac-ef0d-418d-8fda-5aeb3efeb842</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_None]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -2177,6 +2200,29 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										</roleAssociations>
 										<subFolders/>
 									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>eed2656f-a075-4b82-9316-c624631d5d96</name>
+										<nodeRef>workspace://SpacesStore/eed2656f-a075-4b82-9316-c624631d5d96</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_None]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -2947,6 +2993,29 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<roleAssociation>
 												<type>role-assoc</type>
 												<businessRoleName>DA_REGISTRAR_DYN</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>31f2c092-007b-45d5-9708-1b4f61f2490b</name>
+										<nodeRef>workspace://SpacesStore/31f2c092-007b-45d5-9708-1b4f61f2490b</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_None]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -4660,6 +4729,10 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
+																<name>transition-script</name>
+																<value><![CDATA[]]></value>
+															</property>
+															<property>
 																<name>transitionLabel</name>
 																<value><![CDATA[На исполнение]]></value>
 															</property>
@@ -5050,6 +5123,29 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										</roleAssociations>
 										<subFolders/>
 									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>f167376f-de71-4f61-893b-4f7a0395e57a</name>
+										<nodeRef>workspace://SpacesStore/f167376f-de71-4f61-893b-4f7a0395e57a</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_None]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -5252,7 +5348,58 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>6331fb22-7e5a-49c0-a0ff-f2474c8fd9e5</name>
+														<nodeRef>workspace://SpacesStore/a845d5c6-69bd-47f3-bf6d-cf7de1a3bb85</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[(function(){
+    var protocol = stm_document;
+    var auto = protocol.properties["lecm-protocol:errands-autocreation"];
+    if (!auto) {
+        var tableAssocs = protocol.assocs["lecm-protocol-ts:points-assoc"];
+        if (tableAssocs!==null && tableAssocs.length > 0){
+            var table = tableAssocs[0];
+            var  pointAssocs = table.childAssocs["cm:contains"];
+			var length = pointAssocs.length;
+			for (var i = 0; i < length; i++ ){
+				var pointExecutorAssoc = pointAssocs[i].assocs["lecm-protocol-ts:executor-assoc"];
+				if (pointExecutorAssoc.length > 0){
+					var pointExecutor = pointExecutorAssoc[0];
+					statemachine.grandDynamicRoleForEmployee(protocol, pointExecutor, "PROTOCOL_POINT_EXECUTOR", task);
+					
+					var pointNumber = pointAssocs[i].properties["lecm-document:indexTableRow"];
+					
+					var notificationText = "Вы назначены исполнителем по пункту " + pointNumber + " протокола " ;
+					notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-document:present-string}"); 
+					notifications.sendNotification([pointExecutor.nodeRef.toString()], notificationText, protocol);
+				}	
+			}
+
+        }
+
+    }
+})();]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Уведомить исполнителей пунктов]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -5699,7 +5846,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -5722,7 +5869,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -5757,6 +5904,29 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<roleAssociation>
 												<type>role-assoc</type>
 												<businessRoleName>DA_REGISTRAR_DYN</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>b7a863c8-6569-47ad-8308-88c24b60d3e1</name>
+										<nodeRef>workspace://SpacesStore/b7a863c8-6569-47ad-8308-88c24b60d3e1</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -6469,6 +6639,23 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 							<roleAssociation>
 								<type>role-assoc</type>
 								<businessRoleName>MEETINGS_CREATOR</businessRoleName>
+							</roleAssociation>
+						</roleAssociations>
+						<subFolders/>
+					</node>
+					<node>
+						<type>dynamic-role-item</type>
+						<name>01ccafc5-baca-4aed-96b9-c14ff58c7b12</name>
+						<nodeRef>workspace://SpacesStore/ff83bb18-3c21-42a9-b3c6-9888a11864f2</nodeRef>
+						<properties/>
+						<aspects>
+							<business-role/>
+						</aspects>
+						<associations/>
+						<roleAssociations>
+							<roleAssociation>
+								<type>role-assoc</type>
+								<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
 							</roleAssociation>
 						</roleAssociations>
 						<subFolders/>

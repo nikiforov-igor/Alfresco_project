@@ -55,7 +55,7 @@
 					<field id="lecm-eds-document:summaryContent" set="common">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
-					<field id="lecm-protocol:meeting-chairman-assoc" set="common"/>
+					<field id="lecm-protocol:meeting-chairman-assoc" mandatory="true" set="common"/>
 					<field id="lecm-protocol:secretary-assoc" set="common"/>
 					<field id="lecm-protocol:attended-assoc" set="common"/>
 					<field id="lecm-eds-document:note" set="common">
@@ -184,7 +184,7 @@
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
 						</control>
 					</field>
-					<field id="lecm-protocol:meeting-chairman-assoc"/>
+					<field id="lecm-protocol:meeting-chairman-assoc" mandatory="true"/>
 					<field id="lecm-protocol:secretary-assoc"/>
 					<field id="lecm-protocol:attended-assoc"/>
 					<field id="lecm-eds-document:note">
