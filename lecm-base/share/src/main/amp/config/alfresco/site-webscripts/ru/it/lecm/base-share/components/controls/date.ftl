@@ -181,6 +181,7 @@
                     secondText: '${msg("title.timepicker.seconds")}',
                     currentText: '${msg("title.timepicker.current")}',
                     closeText: '${msg("title.timepicker.select")}',
+                    stepMinute: 15,
                     onSelect: function (selectedDateTime) {
                         YAHOO.Bubbling.fire("handleFieldChange", {
                             fieldId: "${field.configName}",
