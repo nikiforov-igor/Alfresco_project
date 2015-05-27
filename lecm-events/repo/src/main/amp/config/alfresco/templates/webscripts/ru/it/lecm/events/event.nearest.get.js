@@ -1,8 +1,12 @@
 var employee = orgstructure.getCurrentEmployee();
-var maxItems = 5;
+var maxItems = 0;
 try {
     maxItems = parseInt(args['maxItems']);
 } catch (e) {}
+
+if (isNaN(maxItems)) {
+    maxItems = 0;
+}
 var nearestEvents = events.getUserNearestEvents(employee, maxItems);
 
 var result = [];

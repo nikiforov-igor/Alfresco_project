@@ -187,10 +187,18 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
         sp.addSort(EventsService.PROP_EVENT_FROM_DATE.toString(), true);
-        sp.setMaxItems(maxCount);
-
-        String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO MAX> AND @lecm\\-events\\:removed: false " + (additionalFilter == null ? "" : additionalFilter);
-        sp.setQuery(query);
+        String query = "";
+        if (maxCount > 0) {
+            sp.setMaxItems(maxCount);
+            query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO MAX> AND @lecm\\-events\\:removed: false " + (additionalFilter == null ? "" : additionalFilter);
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 23);
+            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.SECOND, 59);
+            query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO \"" + DateFormatISO8601.format(calendar.getTime()) + "\"> AND @lecm\\-events\\:removed: false " + (additionalFilter == null ? "" : additionalFilter);
+        }
+        sp.setQuery(query + " AND (" + organizationQueryProcessor.getQuery(null) + ")");
 
         ResultSet searchResult = null;
         try {
