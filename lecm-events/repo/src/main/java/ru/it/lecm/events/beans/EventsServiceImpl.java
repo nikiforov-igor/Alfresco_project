@@ -212,7 +212,13 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
             }
         }
 
-        return results;
+        List<NodeRef> filteredResults = new ArrayList<>();
+        for (NodeRef result : results) {
+            if (!"DECLINED".equals(getCurrentEmployeeMemberStatus(result))) {
+                filteredResults.add(result);
+            }
+        }
+        return filteredResults;
     }
 
     @Override
