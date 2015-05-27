@@ -265,6 +265,7 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-protocol-ts:point-formulation"/>
 					<show id="lecm-protocol-ts:reporter-assoc"/>
 					<show id="lecm-protocol-ts:coreporter-assoc"/>
@@ -276,6 +277,9 @@
 					<show id="lecm-protocol-ts:note"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-document:indexTableRow" force="true" >
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
+					</field>
 					<field id="lecm-protocol-ts:point-formulation" />
 					<field id="lecm-protocol-ts:reporter-assoc" >
 						<control template="/ru/it/lecm/meetings/components/controls/mix-double-association-tree-picker.ftl">
