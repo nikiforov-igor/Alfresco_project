@@ -79,18 +79,28 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 var maxItems = LogicECM.module.Base.Util.getCookie(this._buildPreferencesKey());
                 if (maxItems !== null) {
                     this.maxItems = maxItems;
+                } else {
+                    this.maxItems = "today";
                 }
 
                 var menuItems = [
-                    { text: "5", value: 5, onclick: { fn: this.onMenuItemClick.bind(this)} },
-                    { text: "10", value: 10, onclick: { fn: this.onMenuItemClick.bind(this)} },
-                    { text: "15", value: 15, onclick: { fn: this.onMenuItemClick.bind(this)} }
+                    { value: "today", text: this.msg("relative.today"), onclick: { fn: this.onMenuItemClick.bind(this)} },
+                    { value: "5", text: this.msg("label.dashlet.next_count") +  " " + 5, onclick: { fn: this.onMenuItemClick.bind(this)} },
+                    { value: "10", text: this.msg("label.dashlet.next_count") +  " " + 10, onclick: { fn: this.onMenuItemClick.bind(this)} }
                 ];
 
+                var label = ""
+                if (this.maxItems === "today") {
+                    label = this.msg("relative.today")
+                } else {
+                    label = this.msg("label.dashlet.next_count") +  " " + this.maxItems
+                }
+
                 this.menuButton = new YAHOO.widget.Button(this.id + '-filters', {type: "menu",
-                    label: this.maxItems,
+                    label: label,
                     menu: menuItems});
-                this.menuButton.set("label", this.maxItems);
+
+                this.menuButton.set("label", label);
                 this.loadItems();
             },
 
@@ -143,7 +153,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                                 date = Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.datetime")) + ' - ' + Alfresco.util.formatDate(new Date(event.toDate), this.msg("lecm.date-format.datetime"));
                             }
                         }
-                        datetime.innerHTML = event.location + ': ' + date;
+                        datetime.innerHTML = event.location + ', ' + date;
                         container.appendChild(datetime);
 
                         var delim = document.createElement('div');
@@ -168,8 +178,8 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                 var date = new Date;
                 date.setDate(date.getDate() + 30);
                 var expiresDate = date;
-                LogicECM.module.Base.Util.setCookie(this._buildPreferencesKey(), sText, {expires: expiresDate});
-                this.maxItems = sText;
+                LogicECM.module.Base.Util.setCookie(this._buildPreferencesKey(), p_oItem.value, {expires: expiresDate});
+                this.maxItems = p_oItem.value;
                 this.loadItems();
             },
 
