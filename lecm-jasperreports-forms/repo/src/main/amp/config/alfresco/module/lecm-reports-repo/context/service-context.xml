@@ -15,6 +15,25 @@
         </property>
     </bean>
 
+    <bean id="reports.LogicEcmDictionariesBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditor.LogicEcmDictionariesBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Справочники"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/lecm-reports-repo/models/sql-provider-bootstrap.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="baseSQLProvider"
+          class="ru.it.lecm.reports.generators.BaseSQLProvider" depends-on="reportsManager" scope="prototype">
+        <property name="jdbcdriver" value="${lecm.reports.db.driver}"/>
+        <property name="username" value="${lecm.reports.db.username}"/>
+        <property name="password" value="${lecm.reports.db.password}"/>
+        <property name="url" value="${lecm.reports.db.url}"/>
+        <property name="basicDataSource" ref="dataSource"/>
+    </bean>
+
     <!-- Бин "часто используемых служб" -->
     <bean id="wksKeeper" class="ru.it.lecm.reports.beans.WKServiceKeeper">
         <property name="serviceRegistry" ref="ServiceRegistry"/>

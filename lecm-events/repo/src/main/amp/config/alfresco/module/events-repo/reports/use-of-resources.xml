@@ -108,7 +108,7 @@
         </items>
         <assocs>
             <assoc type="lecm-rpeditor:reportProviderAssoc"
-                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/SQLProvider"/>
+                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/Reporting SQLProvider"/>
             <assoc type="lecm-rpeditor:reportTemplateAssoc"
                    path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Использование ресурсов/use-of-resources"/>
         </assocs>

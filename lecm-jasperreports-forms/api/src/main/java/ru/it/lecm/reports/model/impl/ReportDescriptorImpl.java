@@ -185,6 +185,6 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
 
     @Override
     public boolean isSQLDataSource() {
-        return getProviderDescriptor() != null && getProviderDescriptor().getMnem().equals("SQL_PROVIDER");
+        return getProviderDescriptor() != null && getProviderDescriptor().getMnem().toLowerCase().startsWith("sql_provider");
     }
 }
