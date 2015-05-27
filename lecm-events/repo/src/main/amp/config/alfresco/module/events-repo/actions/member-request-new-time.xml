@@ -2,13 +2,22 @@
 <items updateMode="CreateOrUpdate">
     <item name="cm:Предложить другое время" type="lecm-group-actions:workflow-action">
         <property name="cm:name"><![CDATA[Предложить другое время]]></property>
-        <property name="cm:title"><![CDATA[Предложить другое время]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[[lecm-events:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
-        <property
-                name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_MEMBER_DYN") AND "EMPTY".equals(@eventsService.getCurrentEmployeeMemberStatus(doc.getNodeRef()))]]></property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_MEMBER_DYN") AND "EMPTY".equals(@eventsService.getCurrentEmployeeMemberStatus(doc.getNodeRef()))]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="cm:title"><![CDATA[Предложить другое время]]></property>
         <property name="lecm-group-actions:workflow"><![CDATA[activiti$eventsRequestNewTime]]></property>
+        <items>
+            <item name="cm:190951df-a57e-4c81-8e23-5e8c84065f3e" type="lecm-stmeditor:inputFormVariable">
+                <property name="cm:name"><![CDATA[190951df-a57e-4c81-8e23-5e8c84065f3e]]></property>
+                <property name="lecm-stmeditor:formInputToValue">
+                    <![CDATA[prop_lecmEventsWf_requestNewTimeFromDate]]></property>
+                <property name="lecm-stmeditor:formInputFromType"><![CDATA[FIELD]]></property>
+                <property name="lecm-stmeditor:formInputFromValue"><![CDATA[lecm-events:from-date]]></property>
+            </item>
+        </items>
     </item>
 </items>
