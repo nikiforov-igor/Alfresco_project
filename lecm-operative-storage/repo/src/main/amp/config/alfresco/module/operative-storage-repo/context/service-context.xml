@@ -36,7 +36,6 @@
 		<value>alfresco/module/${artifactId}/dictionaries/security-classification-dictionary.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/storage-dictionary.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-os-br-items.xml</value>
-		<value>alfresco/module/${artifactId}/dictionaries/urgency-classification-dictionary.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-bj-eventCategory-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/os-objectType-items.xml</value>
 	</util:list>

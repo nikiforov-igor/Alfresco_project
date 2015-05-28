@@ -44,13 +44,6 @@
 				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
 				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
 			</item>
-			<item name="cm:Гриф срочности" type="lecm-busjournal:objectType">
-				<property name="cm:name">Гриф срочности</property>
-				<property name="lecm-busjournal:objectType-code">OS_URGENCY_CLASSIFICATION</property>
-				<property name="lecm-busjournal:objectType-class">lecm-os:urgency-classification</property>
-				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
-				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
-			</item>
 <!--			<item name="cm:Должность" type="lecm-busjournal:objectType">
 				<property name="cm:name">Должность</property>
 				<property name="lecm-busjournal:objectType-code">LECM_FMS_ORGSTR_STAFF_POSITION</property>

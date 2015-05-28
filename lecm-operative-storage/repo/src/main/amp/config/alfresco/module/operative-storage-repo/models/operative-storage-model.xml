@@ -39,14 +39,6 @@
                 </list>
             </parameter>
         </constraint>
-        <constraint name="lecm-os:urgency-classification-urgency-unit-constraint" type="LIST">
-            <parameter name="allowedValues">
-                <list>
-                    <value>DAYS</value>
-                    <value>HOURS</value>
-                </list>
-            </parameter>
-        </constraint>
         <constraint name="lecm-os:nomenclature-unit-section-status-constraint" type="LIST">
             <parameter name="allowedValues">
                 <list>
