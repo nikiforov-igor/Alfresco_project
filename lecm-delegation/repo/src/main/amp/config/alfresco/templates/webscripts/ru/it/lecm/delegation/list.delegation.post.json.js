@@ -58,10 +58,11 @@ if (!isEngineer) {
 	var delegationOpts = [];
 	for (var i = 0; i < employees.length; ++i) {
 		var employeeRef = employees[i].nodeRef;
-		if (!employeeRef) {
+		if (!employeeRef || employees[i].properties["lecm-dic:active"] == false) {
 			logger.log ("ERROR: there is no nodeRef for employee");
-		}
-		delegationOpts.push (delegation.getDelegationOpts (employeeRef));
+		} else {
+            delegationOpts.push (delegation.getDelegationOpts (employeeRef));
+        }
 	}
 	//бежим по model.data.items для каждого элемента проверяем его наличие в employees
 	//если его нет то удаляем его из model.data.items

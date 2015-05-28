@@ -2,6 +2,7 @@ package ru.it.lecm.delegation.policies;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies.OnUpdateNodePolicy;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -9,11 +10,11 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import org.alfresco.repo.policy.Behaviour;
 
 /**
  * Policy которая обеспечивает автоматическое создание параметров делегирования
@@ -57,6 +58,12 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 
         Serializable employeeName = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
         Serializable employeeFirstName = nodeService.getProperty(nodeRef, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
+
+        if (Boolean.FALSE.equals(nodeService.getProperty(nodeRef, BaseBean.IS_ACTIVE))) {
+            if (null != delegationService.getDelegationOpts(nodeRef)) {
+                delegationService.stopDelegation(nodeRef);
+            }
+        }
 
         if (employeeName == null || employeeFirstName == null || employeeName.toString().length() == 0 || employeeFirstName.toString().length() == 0) {
             return;
