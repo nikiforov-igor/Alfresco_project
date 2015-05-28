@@ -439,6 +439,8 @@
                                     Dom.removeClass(me.id + "-date", "invalid");
                                 } else {
                                     me.widgets.calendar.cfg.setProperty("selected", [[parsedDate.getFullYear(), parsedDate.getMonth() + 1, parsedDate.getDate()]])
+                                    var isoValue = Alfresco.util.toISO8601(parsedDate, {"milliseconds": true});
+                                    Dom.get(me.currentValueHtmlId).value = isoValue;
                                     var selectedDates = me.widgets.calendar.getSelectedDates();
                                     if (selectedDates.length > 0) {
                                         Dom.removeClass(me.id + "-date", "invalid");
