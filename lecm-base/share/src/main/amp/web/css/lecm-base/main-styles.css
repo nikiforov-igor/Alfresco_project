@@ -138,6 +138,10 @@ i.icon-building {
     height: 0;
 }
 
+.yui-skin-lecmTheme .form-container .mandatory-indicator {
+    color: red;
+}
+
 /* Common styles - end */
 
 /* Домашняя страница - start */
