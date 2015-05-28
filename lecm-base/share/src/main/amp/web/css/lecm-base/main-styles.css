@@ -455,8 +455,13 @@ i.icon-building {
     box-sizing: border-box;
 	resize: none;
 }
-.control .container .value-div input.invalid + .mandatory-highlightable,
-.control .container .value-div input.mandatory + .mandatory-highlightable {
+.yui-skin-lecmTheme form .mandatory,
+.yui-skin-lecmTheme .form-fields .mandatory,
+.yui-skin-lecmTheme .form-fields input[type=text].mandatory,
+.yui-skin-lecmTheme .form-fields .input.mandatory input[type=text],
+.yui-skin-lecmTheme .form-fields .input .mandatory input[type=text],
+.control .container .value-div input.mandatory + .mandatory-highlightable,
+.control .container .value-div input.invalid + .mandatory-highlightable {
     background-color: #faecee;
 }
 .control.editmode .container .value-div input[type=text],
