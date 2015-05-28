@@ -4,7 +4,9 @@
 	<@script type="text/javascript" src="${url.context}/res/components/documentlibrary/actions.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/yui/resize/resize.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-component-base.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/components/document-details/document-metadata.js"></@script>
+	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-metadata.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/dashlets/lecm-errands-dashlet.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree-control.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree.js"></@script>
@@ -19,6 +21,10 @@
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/documentlibrary/actions.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-documents/graph-view-control.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-metadata.css" />
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" />
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form.css" />
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
+
 <#-- TODO: IMPORTANT for IE ! -->
 <#-- В IE9 следующие файлы подключаются только при использовании тэга <link>,
     при подключении макросом - не работают.
@@ -28,7 +34,7 @@
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/document-components-panel.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/dashlet-components.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/page-document.css" />
-<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-page.css" />
+
 
 	<#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
 	<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
@@ -76,7 +82,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
                 <@region id="document-connections" scope="template"/>
 			</div>
 			<div id="main-content" class="main-content">
-				<div id="main-region" class="event-page">
+				<div id="main-region">
 					<@region id="dashlet-panel" scope="template"/>
 	                <@region id="rating" scope="template"/>
 	                <@region id="comments" scope="template"/>
