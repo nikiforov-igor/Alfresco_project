@@ -26,6 +26,7 @@
     margin: 0 -10px 0 5px;
 }
 .control.association-token-control .value-div div.cropped-item .ci-value-div {
+    max-width: 150px;
     padding: 0;
     float: left;
 }
