@@ -1,26 +1,21 @@
 package ru.it.lecm.statemachine.action;
 
+import org.activiti.bpmn.model.BaseElement;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
 import org.activiti.engine.impl.el.Expression;
-//import org.activiti.engine.impl.util.xml.Element;
-import org.activiti.bpmn.model.BaseElement;
-import org.activiti.bpmn.model.FlowElement;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
@@ -28,7 +23,10 @@ import ru.it.lecm.statemachine.StateField;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
+
+//import org.activiti.engine.impl.util.xml.Element;
 
 /**
  * User: PMelnikov
@@ -50,33 +48,35 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
     private Set<StateField> categories = new HashSet<StateField>();
     private final static Object lock = new Object();
 
+    private final static SimpleDateFormat statusDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     private static final transient Logger logger = LoggerFactory.getLogger(StatusChangeAction.class);
-    
+
     protected Expression draft;
-    
+
     public void setDraft(Expression draft) {
-		this.draft = draft;
-	}
-    
+        this.draft = draft;
+    }
+
     @Override
     public void notify(DelegateTask delegateTask) {
-    	String definition = delegateTask.getProcessDefinitionId();
-    	
-    	forDraft = Boolean.parseBoolean(draft.getExpressionText());
-    	status = delegateTask.getName();
-    	version = definition.substring(definition.indexOf(":")+1, definition.lastIndexOf(":"));
-    	processId = definition.substring(0,definition.indexOf(":"));
-    	
-    	logger.debug("!!!!!!!!!!!! delegateTask id: "+delegateTask.getId()+" ,name: "+ delegateTask.getName()+ " ,"
-    			+ " processDefinitionId: " + delegateTask.getProcessDefinitionId() + " ,"
-    			+ " processInstanceId: " + delegateTask.getProcessInstanceId() + "");
-    	//TODO List<String> vars = com.google.common.collect.Lists.newArrayList(getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStatusVars());
-    	List<String> vars = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStatusVars();
-    	for(String var:vars) {
-    		delegateTask.getExecution().setVariable(var,"");
-    	}
-    	
-    	final NodeRef stm_document = ((ActivitiScriptNode) delegateTask.getExecution().getVariable("stm_document")).getNodeRef();
+        String definition = delegateTask.getProcessDefinitionId();
+
+        forDraft = Boolean.parseBoolean(draft.getExpressionText());
+        status = delegateTask.getName();
+        version = definition.substring(definition.indexOf(":") + 1, definition.lastIndexOf(":"));
+        processId = definition.substring(0, definition.indexOf(":"));
+
+        logger.debug("!!!!!!!!!!!! delegateTask id: " + delegateTask.getId() + " ,name: " + delegateTask.getName() + " ,"
+                + " processDefinitionId: " + delegateTask.getProcessDefinitionId() + " ,"
+                + " processInstanceId: " + delegateTask.getProcessInstanceId() + "");
+        //TODO List<String> vars = com.google.common.collect.Lists.newArrayList(getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStatusVars());
+        List<String> vars = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStatusVars();
+        for (String var : vars) {
+            delegateTask.getExecution().setVariable(var, "");
+        }
+
+        final NodeRef stm_document = ((ActivitiScriptNode) delegateTask.getExecution().getVariable("stm_document")).getNodeRef();
         final NodeService nodeService = getServiceRegistry().getNodeService();
 
         String statusValue = nodeService.getProperty(stm_document, StatemachineModel.PROP_STATUS).toString();
@@ -86,8 +86,8 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
             //запись в БЖ
             try {
                 if (!forDraft) {
-                	String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
-                	List<String> objects = new ArrayList<String>(1);
+                    String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
+                    List<String> objects = new ArrayList<String>(1);
                     objects.add(status);
                     getBusinessJournalService().log(initiator, stm_document,
                             EventCategory.CHANGE_DOCUMENT_STATUS,
@@ -105,83 +105,97 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
         if (!nodeService.hasAspect(stm_document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
             nodeService.addAspect(stm_document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
         }
-        nodeService.setProperty(stm_document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, "activiti$"+delegateTask.getId());
+        nodeService.setProperty(stm_document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, "activiti$" + delegateTask.getId());
         //Устанавливаем флаг черновика
         nodeService.setProperty(stm_document, StatemachineModel.PROP_IS_DRAFT, forDraft);
 
-	    ((ActivitiScriptNode) delegateTask.getExecution().getVariable("stm_document")).reset();
+        ((ActivitiScriptNode) delegateTask.getExecution().getVariable("stm_document")).reset();
         //Если стартовый статус, то ничего никуда не перемещаем
         if (forDraft) return;
 
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
             @Override
             public Void doWork() throws Exception {
-                try {
-                	NodeRef documents = getRepositoryStructureHelper().getDocumentsRef();
-			        //Существует ли папка processId
-			        NodeRef processFolder = null;
-			        if(documents != null && processId != null) {
-			        	processFolder = nodeService.getChildByName(documents, ContentModel.ASSOC_CONTAINS, processId);
-				        if (processFolder == null) {
-				        	processFolder = createFolder(documents, processId);
-				        }
-			        }
-			        NodeRef versionFolder = null;
-			        if (processFolder!=null && version != null) {
-			        	versionFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, version);
-			        	if (versionFolder == null) {
-			        		versionFolder = createFolder(processFolder, version);
-			        	}
-			        }
-			        
-			        if(versionFolder != null && !"UNKNOWN".equals(status)) {
-			        	//Создаем папку статуса
-			        	statusFolder = nodeService.getChildByName(versionFolder, ContentModel.ASSOC_CONTAINS, status);
-			        	if (statusFolder == null) {
-			        		statusFolder = createFolder(versionFolder, status);
-			        		//Установка статических прав на папку статуса
-			        		if (statusFolder != null && processId != null) {
-				        		staticPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStaticRoles();
-				        		//TODO 
-				        		execBuildInTransactStatic(statusFolder, staticPrivileges);
-				        		//Выдача прав Read для System ???
-				        		//getServiceRegistry().getPermissionService().setPermission(statusFolder, AuthenticationUtil.SYSTEM_USER_NAME, "Read", true);
-				        		//Лучше сделать его оунером т.к. сейчас это пользователь который перевел документ в статус
-                                if (!nodeService.hasAspect(statusFolder, ContentModel.ASPECT_OWNABLE)) {
-                                	HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
-                                    properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
-                                	nodeService.addAspect(statusFolder, ContentModel.ASPECT_OWNABLE, properties);
+                getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                    @Override
+                    public Object execute() throws Throwable {
+                        try {
+                            NodeRef documents = getRepositoryStructureHelper().getDocumentsRef();
+                            //Существует ли папка processId
+                            NodeRef processFolder = null;
+                            if (documents != null && processId != null) {
+                                processFolder = nodeService.getChildByName(documents, ContentModel.ASSOC_CONTAINS, processId);
+                                if (processFolder == null) {
+                                    processFolder = getRepositoryStructureHelper().createFolder(documents, processId);
                                 }
-			        		}
-			        	}
-			        }
-			        //Перемещаем в нужную папку
-			        if(statusFolder != null) {
-			        	String name = (String) nodeService.getProperty(stm_document, ContentModel.PROP_NAME);
-			        	nodeService.moveNode(stm_document, statusFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
-			        } else {
-			        	throw new Exception("Папка статуса "+status+" для документа "+stm_document+" не создана");
-			        }
-			    } catch (InvalidNodeRefException ex) {
-					logger.error("Ошибка при изменении изменении статуса", ex);
-					throw ex;
-                } catch (Exception e) {
-                    logger.error("Ошибка при изменении изменении статуса", e);
-                    throw e;
-                }
+                            }
+                            NodeRef versionFolder = null;
+                            if (processFolder != null && version != null) {
+                                versionFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, version);
+                                if (versionFolder == null) {
+                                    versionFolder = getRepositoryStructureHelper().createFolder(processFolder, version);
+                                }
+                            }
+
+                            if (versionFolder != null && !"UNKNOWN".equals(status)) {
+                                //Создаем папку статуса
+                                statusFolder = nodeService.getChildByName(versionFolder, ContentModel.ASSOC_CONTAINS, status);
+                                if (statusFolder == null) {
+                                    statusFolder = getRepositoryStructureHelper().createFolder(versionFolder, status);
+                                    //Установка статических прав на папку статуса
+                                    if (statusFolder != null && processId != null) {
+                                        staticPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStaticRoles();
+                                        //TODO
+                                        execBuildInTransactStatic(statusFolder, staticPrivileges);
+                                        //Выдача прав Read для System ???
+                                        //getServiceRegistry().getPermissionService().setPermission(statusFolder, AuthenticationUtil.SYSTEM_USER_NAME, "Read", true);
+                                        //Лучше сделать его оунером т.к. сейчас это пользователь который перевел документ в статус
+                                        if (!nodeService.hasAspect(statusFolder, ContentModel.ASPECT_OWNABLE)) {
+                                            HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
+                                            properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+                                            nodeService.addAspect(statusFolder, ContentModel.ASPECT_OWNABLE, properties);
+                                        }
+                                    }
+                                }
+                            }
+
+                            String dateStatus = statusDateFormat.format(new Date());
+                            NodeRef storeFolder = nodeService.getChildByName(statusFolder, ContentModel.ASSOC_CONTAINS, dateStatus);
+                            if (storeFolder == null) {
+                                storeFolder = getRepositoryStructureHelper().createFolder(statusFolder, dateStatus);
+                            }
+                            //Перемещаем в нужную папку
+                            if (storeFolder != null) {
+                                String name = (String) nodeService.getProperty(stm_document, ContentModel.PROP_NAME);
+                                nodeService.moveNode(stm_document, storeFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+                            } else {
+                                throw new Exception("Папка статуса " + status + "/" + dateStatus + " для документа " + stm_document + " не создана");
+                            }
+
+                            // Установка динамических ролей для файла
+                            if (processId != null && !"UNKNOWN".equals(status)) {
+                                dynamicPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getDynamicRoles();
+                                //TODO
+                                execBuildInTransactDynamic(stm_document, dynamicPrivileges);
+                            } else {
+                                logger.error("Ошибка установки динамических прав для документа " + stm_document);
+                            }
+                        } catch (InvalidNodeRefException ex) {
+                            logger.error("Ошибка при изменении изменении статуса", ex);
+                            throw ex;
+                        } catch (Exception e) {
+                            logger.error("Ошибка при изменении изменении статуса", e);
+                            throw e;
+                        }
+
+                        return null;
+                    }
+                }, false, false);
                 return null;
             }
         });
-        // Установка динамических ролей для файла
-        if(processId != null && !"UNKNOWN".equals(status) ) {
-	        dynamicPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getDynamicRoles();
-	        //TODO
-	        execBuildInTransactDynamic(stm_document, dynamicPrivileges);
-    	} else {
-    		logger.error("Ошибка установки динамических прав для документа "+stm_document);
-    	}
     }
-    
+
     @Override
     public void init(BaseElement action, String processId) {
 //        this.processId = processId;
@@ -366,35 +380,14 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
 //        }
 //        return permissions;
 //    }
-
-    private void execBuildInTransactStatic(NodeRef node
-            , final Map<String, LecmPermissionGroup> permissions) {
+    private void execBuildInTransactStatic(NodeRef node, final Map<String, LecmPermissionGroup> permissions) {
         final LecmPermissionService permissionsBuilder = getLecmPermissionService();
-        getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
-                new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-                    @Override
-                    public Object execute() throws Throwable {
-                        permissionsBuilder.rebuildStaticACL(statusFolder, permissions);
-                        return null;
-                    }
-                }, false, true);
-        //permissionsBuilder.rebuildStaticACL(folder, permissions);
+        permissionsBuilder.rebuildStaticACL(statusFolder, permissions);
     }
 
-    private void execBuildInTransactDynamic(final NodeRef child
-            , final Map<String, LecmPermissionGroup> permissions) {
+    private void execBuildInTransactDynamic(final NodeRef child, final Map<String, LecmPermissionGroup> permissions) {
         final LecmPermissionService permissionsBuilder = getLecmPermissionService();
-//		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
-//				new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-//					@Override
-//					public Object execute() throws Throwable {
-//						for (ChildAssociationRef child : children) {
-//							permissionsBuilder.rebuildACL(child.getChildRef(), permissions);
-//						}
-//						return null;
-//					}
-//				}, false, true);
-            permissionsBuilder.rebuildACL(child, permissions);
+        permissionsBuilder.rebuildACL(child, permissions);
     }
 
 }
