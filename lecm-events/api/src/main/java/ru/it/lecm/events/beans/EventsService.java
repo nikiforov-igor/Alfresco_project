@@ -123,4 +123,5 @@ public interface EventsService {
 
     List<NodeRef> getAllRepeatedEvents(NodeRef event);
 
+	void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst);
 }
