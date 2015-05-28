@@ -139,7 +139,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 
 				NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);
 
-				// выдадим права контролеру
+				// выдадим права инициатору
 				if (null != errandInitiator){
 					lecmPermissionService.grantDynamicRole("BR_INITIATOR", errand, errandInitiator.getId(), "LECM_BASIC_PG_Initiator");
 				}
@@ -148,8 +148,8 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 				Date limitationDate = (Date) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_EXEC_DATE);
 				nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
 
-				// установим системную связь между Протоколом и созданным поручением
-				documentConnectionService.createConnection(protocol, errand, DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, true, true);
+				//создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически 
+				nodeService.createAssociation(errand, protocol, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
 				// создадим ассоциацию пункта с поручением
 				nodeService.createAssociation(point, errand, ProtocolService.ASSOC_PROTOCOL_POINT_ERRAND);
 				// переведем пункт в статус "на исполнениии"
