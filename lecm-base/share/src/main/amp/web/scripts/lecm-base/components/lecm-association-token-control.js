@@ -709,8 +709,7 @@ LogicECM.module = LogicECM.module || {};
 						Dom.removeClass(me.options.controlId + "-autocomplete-input", "wait-for-load");
 						return res;
 					};
-					oAC.queryDelay = 3
-					;
+					oAC.queryDelay = 0.5;
 					oAC.minQueryLength = 3;
 					oAC.prehighlightClassName = "yui-ac-prehighlight";
 					oAC.useShadow = true;
