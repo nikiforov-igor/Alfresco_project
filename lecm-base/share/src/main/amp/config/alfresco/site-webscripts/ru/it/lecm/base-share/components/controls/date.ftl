@@ -31,7 +31,11 @@
 <#if field.control.params.minLimitArg??>
     <#assign minLimit = form.arguments[field.control.params.minLimitArg]!"" />
 <#elseif field.control.params.minLimitCurrentDate?? && field.control.params.minLimitCurrentDate == "true">
-	<#assign minLimit = .now?string("yyyy-MM-dd")/>
+	<#if showTime>
+        <#assign minLimit = .now?string("yyyy-MM-dd'T'HH:mm:00.000")/>
+    <#else>
+        <#assign minLimit = .now?string("yyyy-MM-dd")/>
+    </#if>
 </#if>
 
 <#assign maxLimit = ""/>
