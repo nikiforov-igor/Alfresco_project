@@ -176,7 +176,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-errands:executor-assoc-text-content">
@@ -192,7 +192,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-errands:controller-assoc-text-content">
@@ -208,7 +208,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-errands:coexecutors-assoc-text-content">
@@ -224,7 +224,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
                 <!-- Номер документа основания - поле для атрибутивного поиска-->

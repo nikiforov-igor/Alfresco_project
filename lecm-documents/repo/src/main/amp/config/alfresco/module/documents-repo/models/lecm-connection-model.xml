@@ -37,7 +37,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-connect:connected-document-assoc-ref">
@@ -47,7 +47,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <!-- в будущем у объекта типа связь будут эти свойства -->

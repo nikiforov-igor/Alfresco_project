@@ -127,7 +127,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:messageTemplate-evCategory-assoc-ref">
@@ -137,7 +137,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
             </properties>
@@ -269,7 +269,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-mainObject-assoc-ref">
@@ -278,7 +278,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-evCategory-assoc-ref">
@@ -287,7 +287,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-objType-assoc-ref">
@@ -296,7 +296,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj1-assoc-ref">
@@ -305,7 +305,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj2-assoc-ref">
@@ -314,7 +314,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj3-assoc-ref">
@@ -323,7 +323,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj4-assoc-ref">
@@ -332,7 +332,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-secondaryObj5-assoc-ref">
@@ -341,7 +341,7 @@
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
-                        <tokenised>both</tokenised>
+                        <tokenised>false</tokenised>
                     </index>
                 </property>
                 <property name="lecm-busjournal:bjRecord-initiator-assoc-text-content">

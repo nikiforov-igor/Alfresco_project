@@ -76,7 +76,7 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         if (currentEmployee != null) {
             if (query.contains(CURRENT_USER)) {
-                query = query.replaceAll(CURRENT_USER, currentEmployee.toString().substring(currentEmployee.toString().lastIndexOf("/")+1));
+            	query = query.replaceAll(CURRENT_USER, orgstructureService.getCurrentEmployee().toString());
             }
         }
         if (query.contains(CURRENT_DATE)) {

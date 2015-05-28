@@ -52,7 +52,7 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         if ( !AuthenticationUtil.isRunAsUserTheSystemUser() && !auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
             organization = orgstructureBean.getUserOrganization(userName);
             if (organization != null) {
-                sbQuery.append("\"").append(organization.toString().substring(organization.toString().lastIndexOf("/")+1)).append("\"~1");
+            	sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
             } else {
                 sbQuery.append("\"NOT_REF\"");
             }

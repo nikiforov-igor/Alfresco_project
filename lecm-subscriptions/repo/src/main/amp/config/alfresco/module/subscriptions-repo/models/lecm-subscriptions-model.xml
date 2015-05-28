@@ -39,10 +39,20 @@
 				<property name="lecm-subscr:notification-type-assoc-ref">
 					<title>Текстовая ссылка на тип доставки (для поиска)</title>
 					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:destination-employee-assoc-ref">
 					<title>Текстовая ссылка на сотрудника (для поиска)</title>
 					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:notification-type-assoc-text-content">
 					<title>Notification types</title>
@@ -100,31 +110,61 @@
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:event-category-assoc-ref">
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:destination-position-assoc-ref">
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:destination-organization-unit-assoc-ref">
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:destination-work-group-assoc-ref">
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:destination-business-role-assoc-ref">
 					<title>Description</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 				<property name="lecm-subscr:destination-position-assoc-text-content">
 					<title>Positions</title>
