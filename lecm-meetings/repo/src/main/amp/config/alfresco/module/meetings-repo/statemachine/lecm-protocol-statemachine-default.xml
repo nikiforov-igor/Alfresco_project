@@ -1797,7 +1797,40 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														</aspects>
 														<associations/>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>9dc7bef3-aab0-4daa-bf3c-c1c4ebaa75d1</name>
+																		<nodeRef>workspace://SpacesStore/ead399b1-a527-45dd-928e-a1354978faa8</nodeRef>
+																		<properties>
+																			<property>
+																				<name>does-not-block</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Действие доступно только инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[user.currentUser().getEmployee().toString() == doc.attr("lecm-document:author-assoc-ref")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 													<node>
 														<type>userTransition</type>
@@ -1825,7 +1858,40 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														</aspects>
 														<associations/>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>07f58b20-62ad-4576-9762-75f23f4935fe</name>
+																		<nodeRef>workspace://SpacesStore/df0d519f-677b-4720-8bf9-20f0f474e710</nodeRef>
+																		<properties>
+																			<property>
+																				<name>does-not-block</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Действие доступно только инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[user.currentUser().getEmployee().toString() == doc.attr("lecm-document:author-assoc-ref")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
@@ -2138,7 +2204,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -2161,7 +2227,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Employee]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -2870,7 +2936,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2885,7 +2951,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2900,7 +2966,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -2915,7 +2981,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
