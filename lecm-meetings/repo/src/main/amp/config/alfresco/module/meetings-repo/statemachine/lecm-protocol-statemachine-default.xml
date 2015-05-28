@@ -1223,7 +1223,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1238,7 +1238,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1253,7 +1253,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -1268,7 +1268,7 @@
 										<properties>
 											<property>
 												<name>editableField</name>
-												<value><![CDATA[false]]></value>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
