@@ -23,6 +23,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -44,7 +45,6 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * User: dbashmakov
@@ -266,7 +266,8 @@ public class DocumentPolicy extends BaseBean
 				} else {
 					// выясняем, откуда взялся регистрационный номер
 					String oldRegNumber = (String) before.get(DocumentService.PROP_DOCUMENT_REGNUM);
-					QName regNumberProp;
+					QName regNumberProp = null;
+					if(oldRegNumber!=null) {
 					if (oldRegNumber.equalsIgnoreCase(documentRegNumber)) {
 						regNumberProp = DocumentService.PROP_REG_DATA_DOC_NUMBER;
 					} else if (oldRegNumber.equalsIgnoreCase(projectRegNumber)) {
@@ -274,6 +275,9 @@ public class DocumentPolicy extends BaseBean
 					} else {
 						// что-то пошло не так
 						throw new IllegalStateException(String.format("Error persisting regnumber %s", documentRegNumber));
+					}
+					} else {
+						regNumberProp = DocumentService.PROP_REG_DATA_DOC_NUMBER;
 					}
 					final String newRegNumberTrimmedUpper = StringUtils.trim(newRegNumber).toUpperCase();
 					setPropertyAsSystem(nodeRef, regNumberProp, newRegNumberTrimmedUpper);
@@ -454,12 +458,15 @@ public class DocumentPolicy extends BaseBean
 
         properties.put(DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(author));
         properties.put(DocumentService.PROP_DOCUMENT_CREATOR_REF, author.toString());
+        if(properties.get(DocumentService.PROP_DOCUMENT_DATE)==null){
         properties.put(DocumentService.PROP_DOCUMENT_DATE, new Date());
         properties.put(DocumentService.PROP_DOCUMENT_REGNUM, DocumentService.DEFAULT_REG_NUM);
-        nodeService.setProperties(childAssocRef.getChildRef(), properties);
-
+            nodeService.setProperties(childAssocRef.getChildRef(), properties); // нельзя вызывать после createAssociation
         //DONE
         nodeService.createAssociation(childAssocRef.getChildRef(), author, DocumentService.ASSOC_AUTHOR);
+        } else {
+            nodeService.setProperties(childAssocRef.getChildRef(), properties); // нельзя вызывать после createAssociation
+        }
 
         // Приписывание документа к организации
         NodeRef contractor = orgstructureService.getEmployeeOrganization(author);
