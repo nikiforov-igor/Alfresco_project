@@ -111,6 +111,9 @@
                 <property name="lecm-errands-ts:coexecutor-reports-assoc-text-content">
                     <type>d:text</type>
                 </property>
+                <property name="lecm-errands-ts:coexecutor-reports-assoc-ref">
+                    <type>d:text</type>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-errands-ts:coexecutor-reports-assoc">

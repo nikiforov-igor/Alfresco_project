@@ -12,6 +12,8 @@
 <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 <#include "/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-container.ftl">
 <#include "/org/alfresco/components/form/controls/common/editorparams.inc.ftl" />
+<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign id = args.htmlid?js_string>
 <#assign controlId = id + "-cntrl">
@@ -492,6 +494,67 @@
 			</#if>
         </div>
         <div class="line"></div>
+
+        <#-- Отчеты соисполнителей -->
+        <#assign fieldHtmlId = containerId + "-coexecutors-reports">
+        <#assign controlId = fieldHtmlId + "-cntrl">
+        <#assign containerId = fieldHtmlId + "-container-" + .now?iso_utc>
+
+        <div id="${id}-coexecutors-reports" class="block">
+            <div class="title">${msg("message.errand.coexecutorReports")}</div>
+            <script type="text/javascript">//<![CDATA[
+            (function() {
+                function drawForm(){
+                    var control = new LogicECM.errands.CoexecutorsReportsTS("${fieldHtmlId}").setMessages(${messages});
+                    control.setOptions(
+                            {
+                                currentValue: "${node.properties["lecm-errands-ts:coexecutor-reports-assoc-ref"]!""}",
+                                messages: ${messages},
+                                bubblingLabel: "${containerId}-bubbling",
+                                containerId: "${containerId}",
+                                datagridFormId: "coexecutors-reports-datagrid",
+                                attributeForShow: "",
+                                mode: "view",
+                                disabled: false,
+                                isTableSortable: false,
+                                externalCreateId: "",
+                                refreshAfterCreate: false,
+                                expandable: true,
+                                expandDataSource: "components/form?formId=table-structure-expand",
+                                documentNodeRef: "${node.nodeRef!""}",
+                                showActions: true
+
+                            });
+                }
+                function init() {
+                    LogicECM.module.Base.Util.loadResources([
+                                'scripts/lecm-base/components/advsearch.js',
+                                'scripts/lecm-base/components/lecm-datagrid.js',
+                                'scripts/documents/tables/lecm-document-table.js',
+                                'scripts/lecm-errands/coexecutors-reports-table-control.js'
+                            ],
+                            [
+                                'css/lecm-errands/coexecutors-reports-table-control.css'
+                            ], drawForm);
+                }
+                YAHOO.util.Event.onDOMReady(init);
+            })();
+            //]]></script>
+
+            <div class="form-field with-grid coexecutors-report" id="${controlId}">
+                <div class="show-declined-block">
+                    <input type="checkbox" id="${controlId}-show-declined">
+                    <label for="${controlId}-show-declined">${msg("errands.label.showDeclined")}</label>
+                </div>
+                <@grid.datagrid containerId false/>
+                <div id="${controlId}-container">
+                    <input type="hidden" id="${fieldHtmlId}" name="${fieldHtmlId}" value="${node.properties["lecm-errands-ts:coexecutor-reports-assoc-ref"]!""}"/>
+                </div>
+            </div>
+        </div>
+        <div class="line"></div>
+
+
     </div>
 </div>
 </#if>
