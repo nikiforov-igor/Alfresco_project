@@ -1,5 +1,13 @@
 .dashlet.my-events .header {
+    margin: 5px 10px;
+}
+
+.dashlet.my-events .location {
     margin: 0 10px;
+}
+
+.dashlet.my-events .default-text {
+    margin: 5px 10px;
 }
 
 .dashlet.my-events .location {

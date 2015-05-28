@@ -143,7 +143,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         datetime.className = 'location';
                         var date = "";
                         if (event.allDay) {
-                            date = this.msg("label.all-day");
+                            date = Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.defaultDateOnly")) + " " + this.msg("label.all-day");
                         } else {
                             var fromDay = Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.defaultDateOnly"));
                             var toDay = Alfresco.util.formatDate(new Date(event.toDate), this.msg("lecm.date-format.defaultDateOnly"));
@@ -163,7 +163,7 @@ LogicECM.dashlet = LogicECM.dashlet || {};
 
                     }.bind(this));
                 } else {
-                    container.innerHTML = this.msg("label.not-record");
+                    container.innerHTML = "<div class='default-text'>" + this.msg("label.not-record") + "</div>";
                 }
             },
 
