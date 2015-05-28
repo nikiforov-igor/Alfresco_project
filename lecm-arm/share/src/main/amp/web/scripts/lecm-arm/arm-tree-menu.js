@@ -404,7 +404,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                 if (node.data.nodeType == "lecm-dic:dictionary") {
                     node.data.nodeType = "lecm-arm:html-node";
-                    node.data.htmlUrl = "page/dictionary?dic=" + encodeURI(node.label);
+                    node.data.htmlUrl = "page/dictionary?dic=" + node.label;
                 }
 
                 var isReportNode = node.data.nodeType == "lecm-arm:reports-node";
