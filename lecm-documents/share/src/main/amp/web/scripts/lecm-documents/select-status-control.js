@@ -44,7 +44,7 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
                                 var option = document.createElement("option");
                                 option.value = oResults[i].id;
                                 option.innerHTML = oResults[i].id;
-                                if (oResults[i].value == this.options.selectedValue) {
+                                if (option.value == this.options.selectedValue) {
                                     option.selected = true;
                                 }
                                 select.appendChild(option);

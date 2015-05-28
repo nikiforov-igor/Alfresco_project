@@ -43,6 +43,12 @@
             <artifactId>alfresco-web-framework-commons</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>ru.it.lecm.base</groupId>
+            <artifactId>base-share-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 

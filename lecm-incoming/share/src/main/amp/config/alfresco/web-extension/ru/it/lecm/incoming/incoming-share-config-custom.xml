@@ -420,6 +420,26 @@
                 <show id="lecm-document:regnum"/>
                 </field-visibility>
             </form>
+			<form id="searchQueryGrid">
+				<field-visibility>
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-document-aspects:reg-data-number"/>
+					<show id="lecm-document-aspects:reg-data-date"/>
+					<show id="lecm-eds-document:summaryContent"/>
+					<show id="lecm-statemachine:status" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="search-editor-fields">
+				<field-visibility>
+					<show id="lecm-document:regnum"/>
+					<show id="lecm-document:doc-date"/>
+					<show id="lecm-eds-document:summaryContent"/>
+					<show id="lecm-eds-document:note"/>
+					<show id="lecm-document-aspects:is-on-control"/>
+					<show id="lecm-incoming:outgoing-number"/>
+					<show id="lecm-document:subject-assoc"/>
+				</field-visibility>
+			</form>
         </forms>
     </config>
 

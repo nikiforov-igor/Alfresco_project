@@ -151,4 +151,27 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="model-type" condition="lecm-eds-document:base">
+		<forms>
+			<form id="searchQueryGrid">
+				<field-visibility>
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-eds-document:summaryContent"/>
+					<show id="lecm-document-aspects:reg-data-number"/>
+					<show id="lecm-document-aspects:reg-data-date"/>
+					<show id="lecm-statemachine:status" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="search-editor-fields">
+				<field-visibility>
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-eds-document:summaryContent"/>
+					<show id="lecm-document-aspects:reg-data-number"/>
+					<show id="lecm-document-aspects:reg-data-date"/>
+					<show id="lecm-statemachine:status" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

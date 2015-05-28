@@ -403,6 +403,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.search-editor</groupId>
+			<artifactId>search-editor-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -803,6 +810,11 @@
 							<artifactId>meetings-repo</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.search-editor</groupId>
+							<artifactId>search-editor-repo</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -1166,6 +1178,11 @@
 		                            <artifactId>lecm-user-profile-repo</artifactId>
 		                            <type>amp</type>
 	                            </overlay>
+								<overlay>
+									<groupId>ru.it.lecm.search-editor</groupId>
+									<artifactId>search-editor-repo</artifactId>
+									<type>amp</type>
+								</overlay>
 
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>
@@ -1522,6 +1539,11 @@
                                     <artifactId>operative-storage-repo</artifactId>
                                     <type>amp</type>
                                 </overlay>
+								<overlay>
+									<groupId>ru.it.lecm.search-editor</groupId>
+									<artifactId>search-editor-repo</artifactId>
+									<type>amp</type>
+								</overlay>
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>
                                     <groupId>ru.it.lecm.internal</groupId>

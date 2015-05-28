@@ -402,6 +402,31 @@
 					</field>
                 </appearance>
 			</form>
+            <form id="searchQueryGrid">
+                <field-visibility>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:totalAmount"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search-editor-fields">
+                <field-visibility>
+                    <show id="lecm-contract:regNumSystem"/>
+                    <show id="lecm-contract:regNumProject"/>
+                    <show id="lecm-contract:regNumContractor"/>
+                    <show id="lecm-contract:partner-assoc"/>
+                    <show id="lecm-contract:typeContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-contract:dateConclusionContracts"/>
+                    <show id="lecm-contract:totalAmount"/>
+                </field-visibility>
+            </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-contract:regNumProject"/>

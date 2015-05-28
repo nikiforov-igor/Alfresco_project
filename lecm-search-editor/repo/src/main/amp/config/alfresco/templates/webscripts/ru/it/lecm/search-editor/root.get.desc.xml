@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Search Queries Settings Root</shortname>
+	<description>Search Queries Settings Root</description>
+	<url>/lecm/search-queries/getRoot</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+	<transaction>none</transaction>
+</webscript>

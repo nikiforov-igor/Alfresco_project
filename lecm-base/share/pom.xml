@@ -38,6 +38,10 @@
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-web-framework-commons</artifactId>
+        </dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 

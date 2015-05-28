@@ -218,7 +218,7 @@
                 </#if>
                 <div class="value-div">
                     <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${defaultValue?html}"/>
-                    <div class="date-entry-container">
+                    <div class="date-entry-container <#if !showTime>only-date</#if>">
                         <input id="${controlId}-date" name="-" type="text" class="date-entry mandatory-highlightable"
                                <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
                                <#else>tabindex="0"</#if> />

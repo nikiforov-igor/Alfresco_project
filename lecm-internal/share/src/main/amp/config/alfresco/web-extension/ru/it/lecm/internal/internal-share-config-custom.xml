@@ -563,6 +563,27 @@
 					<field id="lecm-contract:approval" label="Согласование"/>
 				</appearance>
             </form>
+            <form id="searchQueryGrid">
+                <field-visibility>
+                    <show id="lecm-internal:doc-type-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-number"/>
+                    <show id="lecm-document-aspects:reg-data-date"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search-editor-fields">
+                <field-visibility>
+                    <show id="lecm-internal:doc-type-assoc"/>
+                    <show id="lecm-document:title"/>
+                    <show id="cm:created"/>
+                    <show id="lecm-document:doc-date"/>
+                    <show id="lecm-document-aspects:reg-data-number"/>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-eds-document:recipients-assoc"/>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 

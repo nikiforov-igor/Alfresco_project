@@ -56,9 +56,7 @@
         </label>
     </div>
     <div class="container">
-        <div class="buttons-div">
-            <@formLib.renderFieldHelp field=field />
-        </div>
+        <div class="buttons-div"><@formLib.renderFieldHelp field=field /></div>
         <div class="value-div">
             <select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
                     <#if field.description??>title="${field.description}"</#if>

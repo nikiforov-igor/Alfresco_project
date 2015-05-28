@@ -1,7 +1,6 @@
 package ru.it.lecm.reports.editor.form;
 
 import org.alfresco.web.config.forms.*;
-import org.alfresco.web.scripts.forms.FormUIGet;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,6 +11,7 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.util.StringUtils;
+import ru.it.lecm.base.forms.LecmFormGet;
 import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -31,7 +31,7 @@ import java.util.*;
  * Date: 03.07.13
  * Time: 15:28
  */
-public class ReportForm extends FormUIGet {
+public class ReportForm extends LecmFormGet {
     public static final String TEMPLATE_CODE = "templateCode";
     public static final String TEMPLATES = "TEMPLATES";
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
@@ -41,27 +41,8 @@ public class ReportForm extends FormUIGet {
 
     private final static Log logger = LogFactory.getLog(ReportForm.class);
 
-    private enum CustomTypes {
-        STATUS,
-        TEMPLATES
-    }
-
-    private enum RangeableTypes {
-        d_int,
-        d_float,
-        d_long,
-        d_date,
-        d_datetime,
-        d_double
-    }
-
     public void setReportManager(ReportManagerApi reportManager) {
         this.reportManager = reportManager;
-    }
-
-    @Override
-    protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
-        return super.executeImpl(req, status, cache);
     }
 
     @Override
@@ -125,6 +106,34 @@ public class ReportForm extends FormUIGet {
                     try {
                         constraint = generateConstraintModel(field, CONSTRAINT_MANDATORY);
                         if (constraint != null) {
+                            constraints.add(constraint);
+                        }
+                    } catch (JSONException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                Map<String, String> parameters = field.getControl().getParams();
+                if (parameters.containsKey("constraintLENGTH")) {
+                    int minLength = -1;
+                    int maxLength = -1;
+                    try {
+                        if (parameters.containsKey("constraintLENGTH_minLength")) {
+                            minLength = Integer.valueOf(parameters.get("constraintLENGTH_minLength"));
+                        }
+                        if (parameters.containsKey("constraintLENGTH_maxLength")) {
+                            maxLength = Integer.valueOf(parameters.get("constraintLENGTH_maxLength"));
+                        }
+                    } catch (Exception ex) {
+                        logger.error( ex.getMessage(), ex);
+                    }
+                    Constraint constraint;
+                    try {
+                        constraint = generateConstraintModel(field, CONSTRAINT_LENGTH);
+                        if (constraint != null) {
+                            Map<String, String> m = new HashMap<>();
+                            m.put("minLength", "" + minLength);
+                            m.put("maxLength", "" + maxLength);
+                            constraint.setJSONParams(new JSONObject(m));
                             constraints.add(constraint);
                         }
                     } catch (JSONException e) {
@@ -357,409 +366,6 @@ public class ReportForm extends FormUIGet {
             return DSXMLProducer.parseDSXML(xmlStream, reportCode);
         } finally {
             IOUtils.closeQuietly(xmlStream);
-        }
-    }
-
-    private boolean isNotAssoc(String typeKey) {
-        return typeKey != null &&
-                (typeKey.startsWith("d:") ||
-                        enumHasValue(CustomTypes.class, typeKey));
-    }
-
-    private boolean enumHasValue(Class enumClass, String name) {
-        boolean inEnum = true;
-        try {
-            Enum.valueOf(enumClass, name);
-        } catch (Exception ignored) {
-            inEnum = false;
-        }
-        return inEnum;
-    }
-
-    private String nonBlank(String s, String sDefault) {
-        return (s != null && s.trim().length() > 0) ? s : sDefault;
-    }
-
-    public class Field extends Element {
-        protected String name;
-        protected String configName;
-        protected String label;
-        protected String description;
-        protected String help;
-        protected FieldControl control;
-        protected String dataKeyName;
-        protected String dataType;
-        protected String type;
-        protected String content;
-        protected String endpointDirection;
-        protected Object value;
-        protected boolean disabled = false;
-        protected boolean mandatory = false;
-        protected boolean transitory = false;
-        protected boolean repeating = false;
-
-        Field() {
-            this.kind = FIELD;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getConfigName() {
-            return this.configName;
-        }
-
-        public void setConfigName(String configName) {
-            this.configName = configName;
-        }
-
-        public FieldControl getControl() {
-            return this.control;
-        }
-
-        public void setControl(FieldControl control) {
-            this.control = control;
-        }
-
-        public String getDataKeyName() {
-            return this.dataKeyName;
-        }
-
-        public void setDataKeyName(String dataKeyName) {
-            this.dataKeyName = dataKeyName;
-        }
-
-        public String getDataType() {
-            return this.dataType;
-        }
-
-        public void setDataType(String dataType) {
-            this.dataType = dataType;
-        }
-
-        public String getDescription() {
-            return this.description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public boolean isDisabled() {
-            return this.disabled;
-        }
-
-        public void setDisabled(boolean disabled) {
-            this.disabled = disabled;
-        }
-
-        public String getLabel() {
-            return this.label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
-
-        public boolean isMandatory() {
-            return this.mandatory;
-        }
-
-        public void setMandatory(boolean mandatory) {
-            this.mandatory = mandatory;
-        }
-
-        public boolean isTransitory() {
-            return this.transitory;
-        }
-
-        public void setTransitory(boolean transitory) {
-            this.transitory = transitory;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public boolean isRepeating() {
-            return this.repeating;
-        }
-
-        public void setRepeating(boolean repeating) {
-            this.repeating = repeating;
-        }
-
-        public String getType() {
-            return this.type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-
-        public Object getValue() {
-            return this.value;
-        }
-
-        public void setValue(Object value) {
-            this.value = value;
-        }
-
-        public String getContent() {
-            return this.content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public String getHelp() {
-            return this.help;
-        }
-
-        public void setHelp(String help) {
-            this.help = help;
-        }
-
-        public String getEndpointDirection() {
-            return this.endpointDirection;
-        }
-
-        public void setEndpointDirection(String endpointDirection) {
-            this.endpointDirection = endpointDirection;
-        }
-
-        public String getEndpointType() {
-            return getDataType();
-        }
-
-        public boolean isEndpointMandatory() {
-            return this.mandatory;
-        }
-
-        public boolean isEndpointMany() {
-            return this.repeating;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder buffer = new StringBuilder();
-            buffer.append(this.kind);
-            buffer.append("(id=").append(this.id);
-            buffer.append(" name=").append(this.name);
-            buffer.append(" configName=").append(this.configName);
-            buffer.append(" type=").append(this.type);
-            buffer.append(" value=").append(this.value);
-            buffer.append(" label=").append(this.label);
-            buffer.append(" description=").append(this.description);
-            buffer.append(" help=").append(this.help);
-            buffer.append(" dataKeyName=").append(this.dataKeyName);
-            buffer.append(" dataType=").append(this.dataType);
-            buffer.append(" endpointDirection=").append(this.endpointDirection);
-            buffer.append(" disabled=").append(this.disabled);
-            buffer.append(" mandatory=").append(this.mandatory);
-            buffer.append(" repeating=").append(this.repeating);
-            buffer.append(" transitory=").append(this.transitory);
-            buffer.append(" ").append(this.control);
-            buffer.append(")");
-            return buffer.toString();
-        }
-    }
-
-    /**
-     * Represents the control used by a form field.
-     */
-    public class FieldControl {
-        protected String template;
-        protected Map<String, String> params;
-
-        protected FieldControl(String template) {
-            this.template = template;
-            this.params = new HashMap<String, String>(4);
-        }
-
-        public String getTemplate() {
-            return this.template;
-        }
-
-        public void setTemplate(String template) {
-            this.template = template;
-        }
-
-        public Map<String, String> getParams() {
-            return this.params;
-        }
-
-        @Override
-        public String toString() {
-            return "control(template=" + this.template + " params=" + this.params + ")";
-        }
-    }
-
-    /**
-     * Represents a field constraint.
-     */
-    public class Constraint {
-        private String fieldId;
-        private String id;
-        private String validationHandler;
-        private JSONObject params;
-        private String message;
-        private String event;
-
-        protected Constraint(String fieldId, String id, String handler, JSONObject params) {
-            this.fieldId = fieldId;
-            this.id = id;
-            this.validationHandler = handler;
-            this.params = params;
-        }
-
-        public String getFieldId() {
-            return this.fieldId;
-        }
-
-        public String getId() {
-            return this.id;
-        }
-
-        public String getValidationHandler() {
-            return this.validationHandler;
-        }
-
-        public void setValidationHandler(String validationHandler) {
-            this.validationHandler = validationHandler;
-        }
-
-        /**
-         * Returns the parameters formatted as a JSON string.
-         *
-         * @return
-         */
-        public String getParams() {
-            if (this.params == null) {
-                this.params = new JSONObject();
-            }
-
-            return this.params.toString();
-        }
-
-        public JSONObject getJSONParams() {
-            return this.params;
-        }
-
-        public void setJSONParams(JSONObject params) {
-            this.params = params;
-        }
-
-        public String getMessage() {
-            return this.message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public String getEvent() {
-            return this.event;
-        }
-
-        public void setEvent(String event) {
-            this.event = event;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder buffer = new StringBuilder();
-            buffer.append("constraint(fieldId=").append(this.fieldId);
-            buffer.append(" id=").append(this.id);
-            buffer.append(" validationHandler=").append(this.validationHandler);
-            buffer.append(" event=").append(this.event);
-            buffer.append(" message=").append(this.message);
-            buffer.append(")");
-            return buffer.toString();
-        }
-    }
-
-    /**
-     * Represents a pointer to a field, used in the form UI model.
-     */
-    public class FieldPointer extends Element {
-        protected FieldPointer(String id) {
-            this.kind = FIELD;
-            this.id = id;
-        }
-    }
-
-    /**
-     * Represents a set of fields and/or nested sets.
-     */
-    public class Set extends Element {
-        protected String appearance;
-        protected String template;
-        protected String label;
-        protected List<Element> children;
-
-        protected Set(FormSet setConfig) {
-            this.kind = SET;
-            this.id = setConfig.getSetId();
-            this.appearance = setConfig.getAppearance();
-            this.template = setConfig.getTemplate();
-            this.label = discoverSetLabel(setConfig);
-            this.children = new ArrayList<Element>(4);
-        }
-
-        protected Set(String id, String label) {
-            this.kind = SET;
-            this.id = id;
-            this.label = label;
-            this.children = new ArrayList<Element>(1);
-        }
-
-        public void addChild(Element child) {
-            this.children.add(child);
-        }
-
-        public String getAppearance() {
-            return this.appearance;
-        }
-
-        public String getTemplate() {
-            return this.template;
-        }
-
-        public String getLabel() {
-            return this.label;
-        }
-
-        public List<Element> getChildren() {
-            return this.children;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder buffer = new StringBuilder();
-            buffer.append(this.kind);
-            buffer.append("(id=").append(this.id);
-            buffer.append(" appearance=").append(this.appearance);
-            buffer.append(" label=").append(this.label);
-            buffer.append(" template=").append(this.template);
-            buffer.append(" children=[");
-            boolean first = true;
-            for (Element child : this.children) {
-                if (first)
-                    first = false;
-                else
-                    buffer.append(", ");
-
-                buffer.append(child);
-            }
-            buffer.append("])");
-            return buffer.toString();
         }
     }
 }

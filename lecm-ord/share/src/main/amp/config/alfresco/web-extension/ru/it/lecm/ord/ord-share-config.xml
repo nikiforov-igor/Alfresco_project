@@ -171,6 +171,27 @@
                     <field id="lecm-ord:signers-assoc" set="ord-document-search-common-set" />
                 </appearance>
             </form>
+
+            <form id="searchQueryGrid">
+                <field-visibility>
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-number"/>
+                    <show id="lecm-document-aspects:reg-data-date"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="search-editor-fields">
+                <field-visibility>
+                    <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
+                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
+                    <show id="cm:created"/>																				<!-- Дата создания -->
+                    <show id="lecm-document-aspects:reg-project-data-date"/>											<!-- Дата регистрации -->
+                    <show id="lecm-document-aspects:reg-project-data-number"/>											<!-- Номер проекта -->
+                    <show id="lecm-document:author-assoc"/>																<!-- Автор -->
+                    <show id="lecm-ord:signers-assoc"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
     <config evaluator="node-type" condition="lecm-ord:document">

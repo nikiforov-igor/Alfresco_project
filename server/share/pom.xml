@@ -340,6 +340,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.search-editor</groupId>
+			<artifactId>search-editor-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<!--<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -681,6 +688,11 @@
 							<artifactId>meetings-share</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.search-editor</groupId>
+							<artifactId>search-editor-share</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -952,6 +964,11 @@
                                 <overlay>
                                     <groupId>ru.it.lecm.eds-documents</groupId>
                                     <artifactId>eds-documents-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+								<overlay>
+                                    <groupId>ru.it.lecm.search-editor</groupId>
+                                    <artifactId>search-editor-share</artifactId>
                                     <type>amp</type>
                                 </overlay>
 

@@ -472,4 +472,10 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="webscript.ru.it.lecm.types.typeFields.get"
+		  class="ru.it.lecm.base.scripts.GetTypeFields" parent="webscript">
+		<property name="dictionaryService" ref="dictionaryService" />
+		<property name="namespaceService" ref="namespaceService"/>
+	</bean>
 </beans>

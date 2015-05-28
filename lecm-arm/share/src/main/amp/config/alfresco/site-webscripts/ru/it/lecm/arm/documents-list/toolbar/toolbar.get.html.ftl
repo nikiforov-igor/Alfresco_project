@@ -10,7 +10,7 @@
 (function(){
     function init() {
         new LogicECM.module.ARM.DocumentsToolbar("${id}").setMessages(${messages}).setOptions({
-            bubblingLabel: "documents-arm"
+            bubblingLabel: "${bubblingLabel!'documents-arm'}"
         });
     }
 
@@ -19,33 +19,39 @@
 //<![CDATA[
 //]]></script>
 
+<#assign showSearch=true/>
+<#if showSearchBlock??>
+	<#assign showSearch = showSearchBlock/>
+</#if>
+
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
-<@comp.baseToolbar id true true true>
-<div class="filters-block">
-	<div id="${id}-filters-button-container" class="filters">
-	    <span id="${id}-filtersButton" class="yui-button yui-push-button yui-menu-button">
-	       <span class="first-child">
-	          <button type="button" title="${msg("btn.filters")}">${msg("btn.filters")}</button>
-	       </span>
-	    </span>
-	</div>
-	<div id="${id}-filters-dialog" class="yui-panel filters-dialog">
-		<div id="${id}-filters-dialog" class="bd">
-			<div id="${id}-filters-dialog-content" class="filters-dialog-content"></div>
-			<div class="bdft">
-	            <span id="${id}-filters-apply-button" class="yui-button yui-push-button filters-icon">
-	                <span class="first-child">
-	                    <button type="button" tabindex="0">${msg("filter.button.ok")}</button>
-	                </span>
-	            </span>
-				<span id="${id}-filters-cancel-button" class="yui-button yui-push-button filters-icon">
-	                <span class="first-child">
-	                    <button type="button" tabindex="0">${msg("filter.button.cancel")}</button>
-	                </span>
-	            </span>
-			</div>
-		</div>
-	</div>
+<@comp.baseToolbar id true showSearch showSearch>
+
+<div class="filters-block <#if !showFiltersBtn?? || !showFiltersBtn>hidden1</#if>">
+    <div id="${id}-filters-button-container" class="filters">
+	<span id="${id}-filtersButton" class="yui-button yui-push-button yui-menu-button">
+	   <span class="first-child">
+		  <button type="button" title="${msg("btn.filters")}">${msg("btn.filters")}</button>
+	   </span>
+	</span>
+    </div>
+    <div id="${id}-filters-dialog" class="yui-panel filters-dialog">
+        <div id="${id}-filters-dialog" class="bd">
+            <div id="${id}-filters-dialog-content" class="filters-dialog-content"></div>
+            <div class="bdft">
+			<span id="${id}-filters-apply-button" class="yui-button yui-push-button filters-icon">
+				<span class="first-child">
+					<button type="button" tabindex="0">${msg("filter.button.ok")}</button>
+				</span>
+			</span>
+			<span id="${id}-filters-cancel-button" class="yui-button yui-push-button filters-icon">
+				<span class="first-child">
+					<button type="button" tabindex="0">${msg("filter.button.cancel")}</button>
+				</span>
+			</span>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="group-actions">
     <div class="actions">
@@ -56,31 +62,31 @@
         </span>
     </div>
 </div>
-<div class="filters-block">
-    <div id="${id}-columns-button-container" class="columns">
-	    <span id="${id}-columnsButton" class="yui-button yui-push-button yui-menu-button">
-	       <span class="first-child">
-	          <button type="button" title="${msg("btn.columns")}">${msg("btn.columns")}</button>
-	       </span>
-	    </span>
-    </div>
-    <div id="${id}-columns-dialog" class="yui-panel filters-dialog">
-        <div id="${id}-columns-dialog" class="bd">
-            <div id="${id}-columns-dialog-content" class="filters-dialog-content"></div>
-            <div class="bdft">
-	            <span id="${id}-columns-apply-button" class="yui-button yui-push-button filters-icon">
-	                <span class="first-child">
-	                    <button type="button" tabindex="0">${msg("columns.button.ok")}</button>
-	                </span>
-	            </span>
+<div class="filters-block <#if !showColumnsBtn?? || !showColumnsBtn>hidden1</#if>">
+	<div id="${id}-columns-button-container" class="columns">
+		<span id="${id}-columnsButton" class="yui-button yui-push-button yui-menu-button">
+		   <span class="first-child">
+			  <button type="button" title="${msg("btn.columns")}">${msg("btn.columns")}</button>
+		   </span>
+		</span>
+	</div>
+	<div id="${id}-columns-dialog" class="yui-panel filters-dialog">
+		<div id="${id}-columns-dialog" class="bd">
+			<div id="${id}-columns-dialog-content" class="filters-dialog-content"></div>
+			<div class="bdft">
+				<span id="${id}-columns-apply-button" class="yui-button yui-push-button filters-icon">
+					<span class="first-child">
+						<button type="button" tabindex="0">${msg("columns.button.ok")}</button>
+					</span>
+				</span>
 				<span id="${id}-columns-cancel-button" class="yui-button yui-push-button filters-icon">
-	                <span class="first-child">
-	                    <button type="button" tabindex="0">${msg("columns.button.cancel")}</button>
-	                </span>
-	            </span>
-            </div>
-        </div>
-    </div>
+					<span class="first-child">
+						<button type="button" tabindex="0">${msg("columns.button.cancel")}</button>
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="group-actions">
     <div class="actions">

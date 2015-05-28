@@ -19,10 +19,11 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
             var paramsField = newDocument.createElement("input");
             paramsField.type = "hidden";
             paramsField.name = "json_form_parameters";
+            params.rprtTimeStamp = new Date().getTime();
             paramsField.value = params != null ? JSON.stringify(params) : "";
             newform.appendChild(paramsField);
             newform.submit();
-        }
+        };
 
         if (newWindow.addEventListener) {
             newWindow.addEventListener("load", loadReport, false);

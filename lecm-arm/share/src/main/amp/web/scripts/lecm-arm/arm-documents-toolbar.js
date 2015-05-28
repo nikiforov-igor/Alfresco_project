@@ -690,9 +690,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             onToolbarUpdate: function() {
                 if (this.modules.dataGrid != null) {
                     if (this.modules.dataGrid.search != null) {
+                        var searchInput = Dom.get(this.id + "-full-text-search");
+                        if (searchInput != null) {
                         Dom.get(this.id + "-full-text-search").value = "";
                         YAHOO.Bubbling.fire("hideFullTextSearchLabel");
                         this.checkShowClearSearch();
+                    }
                     }
                     this.onCheckDocument();
                 }

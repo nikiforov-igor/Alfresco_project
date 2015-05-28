@@ -21,7 +21,6 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.documents.beans.*;
@@ -635,4 +634,58 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return documentService.getViewUrl(type);
     }
 
+
+    /**
+     * Получение списка зарегистрированных типов документов в виде древовидной структуры
+     * @return список зарегистрированных типов документов м
+     */
+    @SuppressWarnings("unused")
+    public List<Map.Entry> getRegisteredTypesTree() {
+        List<Map.Entry> results = new ArrayList<>();
+
+        TypeDefinition typeDef = dictionaryService.getType(DocumentService.TYPE_BASE_DOCUMENT);
+        Map<String, String> base = new HashMap<>();
+        base.put(DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService), typeDef.getTitle(dictionaryService));
+        for (Map.Entry<String, String> stringEntry : base.entrySet()) {
+            results.add(stringEntry);
+        }
+
+        results.addAll(getSubtypesInternal(DocumentService.TYPE_BASE_DOCUMENT, 1).entrySet());
+        return results;
+    }
+
+    private Map<String, String> getSubtypesInternal(QName parentType, int level) {
+        Map<String, String> results = new LinkedHashMap<>();
+        Collection<QName> types = dictionaryService.getSubTypes(parentType, false);
+        Collection<QName> typesList = new ArrayList<>();
+        if (types != null) {
+            typesList.addAll(types);
+            String indent = "";
+            for (int i = 0; i < level; i++) {
+                indent += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+            level++;
+            Collections.sort((List<QName>) typesList, new Comparator<QName>() {
+                @Override
+                public int compare(QName o1, QName o2) {
+                    try {
+                        TypeDefinition typeDef1 = dictionaryService.getType(o1);
+                        TypeDefinition typeDef2 = dictionaryService.getType(o2);
+                        return typeDef1.getTitle(dictionaryService).toUpperCase().compareTo(typeDef2.getTitle(dictionaryService).toUpperCase());
+
+                    } catch (Exception ignored) {
+
+                    }
+                    return 0;
+                }
+            });
+
+            for (QName type : typesList) {
+                TypeDefinition typeDef = dictionaryService.getType(type);
+                results.put(type.toPrefixString(namespaceService), indent + "&nbsp;" + typeDef.getTitle(dictionaryService));
+                results.putAll(getSubtypesInternal(type, level));
+            }
+        }
+        return results;
+    }
 }

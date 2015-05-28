@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Действия</shortname>
+    <description>Действия</description>
+    <url>/lecm/search-queries/actions</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>
