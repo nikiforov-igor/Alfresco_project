@@ -9,11 +9,11 @@
 
 .create-event-set {
     width: auto;
-    overflow: hidden;
 }
 .create-event-set .event-create-right {
     width: 300px;
-    float: right;
+    position: absolute;
+    right: 0;
     word-wrap: break-word;
     /*border: 1px solid #aaaaaa;*/
     /*border-right: 0;*/
@@ -100,9 +100,9 @@
 }
 
 .create-event-set .event-create-center {
-    width: auto;
-    overflow: hidden;
-    padding-right: 20px;
+    width: 100%;
+    padding-right: 320px;
+    box-sizing: border-box;
 }
 .create-event-set .event-create-center .control .label-div {
     width: auto;
