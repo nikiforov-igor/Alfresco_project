@@ -13,5 +13,6 @@
 		  p:stateMachineService-ref="stateMachineHelper"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentAttachmentsService-ref="documentAttachmentsService"
+		  p:serviceRegistry-ref="ServiceRegistry"
 		  p:orgstructureService-ref="serviceOrgstructure"/>
 </beans>

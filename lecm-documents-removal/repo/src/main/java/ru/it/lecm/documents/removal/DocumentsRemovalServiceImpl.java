@@ -4,6 +4,7 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -53,8 +54,13 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 	private DocumentAttachmentsService documentAttachmentsService;
 	private OrgstructureBean orgstructureService;
 	private BusinessJournalService businessJournalService;
+    private ServiceRegistry serviceRegistry;
 
-	public void setDictionaryService(final DictionaryService dictionaryService) {
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
+
+    public void setDictionaryService(final DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
 	}
 
@@ -181,7 +187,8 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		logger.debug("Members {} are deleted and access is revoked for document {}", users, documentRef);
 
 		//останавливаем все workflow в которых участвует этот документ
-		List<WorkflowInstance> workflows = stateMachineService.getDocumentWorkflows(documentRef, true);
+//		List<WorkflowInstance> workflows = stateMachineService.getDocumentWorkflows(documentRef, true);
+		List<WorkflowInstance> workflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(documentRef, true);
 		for (WorkflowInstance workflow : workflows) {
 			try {
 				stateMachineService.terminateProcess(workflow.getId().replace("activiti$", ""));
