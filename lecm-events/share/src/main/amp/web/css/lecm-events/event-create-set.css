@@ -131,6 +131,10 @@
     padding-right: 5px;
     margin-bottom: 0;
 }
+.create-event-set .event-create-center .control.date div.date-entry-container .date-format,
+.create-event-set .event-create-center .control.date div.time-entry-container .time-format {
+    display: none;
+}
 
 /* Стили для страницы редактирования мероприятия */
 .yui-skin-lecmTheme .event-create > .create-event-set .event-create-right {
