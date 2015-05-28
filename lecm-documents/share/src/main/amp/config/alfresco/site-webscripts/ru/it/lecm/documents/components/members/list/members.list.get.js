@@ -7,7 +7,8 @@ function main() {
     if (members != null) {
         model.members = members;
     }
-    model.mayAdd = hasPermission(model.nodeRef, PERM_MEMBERS_ADD);
+    model.mayAdd = hasPermission(model.nodeRef, PERM_MEMBERS_ADD) && hasBusinessRole();
+
     model.hasStatemachine = hasStatemachine(model.nodeRef);
 
     model.mayDelete = user.isAdmin;
@@ -22,4 +23,13 @@ function getMembers(nodeRef) {
     return eval('(' + result + ')');
 }
 
+function hasBusinessRole() {
+    var url = '/lecm/orgstructure/isCurrentEmployeeHasBusinessRole?roleId=BR_ADD_MEMBERS';
+    var result = remote.connect("alfresco").get(url);
+    if (result.status != 200) {
+        return false;
+    }
+    var res = eval('(' + result + ')');
+    return (("" + res) ==  "true");
+}
 main();
