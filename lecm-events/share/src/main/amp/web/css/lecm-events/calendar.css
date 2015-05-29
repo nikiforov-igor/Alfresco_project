@@ -1639,6 +1639,7 @@ div.fullCalendar th.fc-widget-header
    background: none;
 }
 .yui-skin-lecmTheme .fc-content .fc-cell-overlay {
+   display: none !important;
    background: none;
    border: 1px solid #333;
 }
