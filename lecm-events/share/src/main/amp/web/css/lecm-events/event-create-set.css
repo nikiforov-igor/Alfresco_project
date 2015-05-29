@@ -124,6 +124,9 @@
 .create-event-set .event-create-center .control.date .value-div {
     float: left;
 }
+.create-event-set .event-create-center .control.date .buttons-div {
+    display: none;
+}
 .create-event-set .event-create-center .control.date .value-div div.date-entry-container,
 .create-event-set .event-create-center .control.date .value-div div.time-entry-container {
     width: 150px;

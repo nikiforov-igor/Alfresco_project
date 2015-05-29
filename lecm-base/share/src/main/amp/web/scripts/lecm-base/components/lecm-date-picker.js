@@ -225,7 +225,7 @@
 
                     // construct the picker
                     if (!me.options.disabled) {
-                        me.widgets.calendar = new YAHOO.widget.Calendar(me.id, me.id, {title: me._msg("form.control.date-picker.choose"), close: true, navigator: true});
+                        me.widgets.calendar = new YAHOO.widget.Calendar(me.id, {title: me._msg("form.control.date-picker.choose"), close: true, navigator: true});
                         me.widgets.calendar.cfg.setProperty("pagedate", page);
                         me.widgets.calendar.cfg.setProperty("selected", selected);
 
@@ -249,7 +249,7 @@
                         me.widgets.calendar.selectEvent.subscribe(me._handlePickerChange, me, true);
                         me.widgets.calendar.hideEvent.subscribe(function() {
                             // Focus icon after calendar is closed
-                            Dom.get(me.id + "-icon").focus();
+                            Dom.get(me.id + "-date").focus();
                         }, me, true);
 
                         // если в body уже есть календарь(и) с таким id, нужно удалить
@@ -268,11 +268,28 @@
                     Event.addListener(me.id + "-date", "keyup", me._handleFieldChange, me, true);
                     Event.addListener(me.id + "-time", "keyup", me._handleFieldChange, me, true);
 
+                    Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
+                    Event.addListener(me.id + "-date", "blur", function(event, datePicker) {
+                        if (event) {
+                            var relatedTarget = event.relatedTarget;
+
+                            if (relatedTarget) {
+                                var parentDatePicker = Dom.getAncestorByClassName(relatedTarget, "datepicker");
+
+                                if (!parentDatePicker) {
+                                    me._hidePicker();
+                                }
+                            } else {
+                                me._hidePicker();
+                            }
+                        }
+                    }, me, true);
+
                     var iconEl = Dom.get(me.id + "-icon");
                     if (iconEl) {
                         // setup keyboard enter events on the image instead of the link to get focus outline displayed
                         Alfresco.util.useAsButton(iconEl, me._showPicker, null, me);
-                        Event.addListener(me.id + "-icon", "click", me._showPicker, me, true);
+                        //Event.addListener(me.id + "-icon", "click", me._showPicker, me, true);
                     }
 
                     // register a validation handler for the date entry field so that the submit
@@ -314,29 +331,40 @@
                 _showPicker: function DatePicker__showPicker(event) {
 	                if (!this.tempDisabled) {
 		                var me = this;
-		                var element = Dom.get(me.id);
-		                var parent = element.parentNode;
-		                var icon = Dom.get(me.id + "-icon");
-		                var d = 10;                                                         // величина наложения календаря на кнопку
+		                var picker = Dom.get(me.id);
+		                var parent = picker.parentNode;
+		                var clicked = event.target || Dom.get(me.id + "-date");
+		                var d = 10;                                                         // величина отступа
 
 		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
 			                var body = Selector.query('body')[0];
-			                body.appendChild(element);
+			                body.appendChild(picker);
 		                }
+                        me.widgets.calendar.show();                                         // сначала сделать видимым, потом позиционировать, иначе позиционирование не отрабатывает
 
-		                Dom.setX(element, Dom.getX(icon) - element.offsetWidth + d);       // смещаем влево от кнопки на ширину календаря
+                        Dom.setX(picker, (Dom.getX(clicked) + clicked.offsetWidth) - picker.offsetWidth - d);       // смещаем влево от кликнутого элемента на ширину календаря
 
-		                var y = Dom.getY(icon) + d;                                        // смещаем немного вниз относительно кнопки
-		                var height = element.offsetHeight;
+		                var y = Dom.getY(clicked) + clicked.offsetHeight - d;                                        // смещаем немного вниз относительно кликнутого элемента
+		                var height = picker.offsetHeight;
 
 		                if (y + height > Dom.getViewportHeight()) {                        // если календарь не помещается до низа окна
 			                y -= height;                                                   // откроем его вверх
 		                }
-		                Dom.setY(element, y);
-
-		                // show the popup calendar widget
-		                me.widgets.calendar.show();
+		                Dom.setY(picker, y);
 	                }
+                },
+                /**
+                 * Handles the date picker hiding.
+                 *
+                 * @method _hidePicker
+                 * @private
+                 * Hide calendar if the calendar was open (Unfortunately there is no proper yui api method for me)
+                 */
+                _hidePicker: function() {
+                    if (this.widgets.calendar && this.widgets.calendar.oDomContainer &&
+                            Dom.getStyle(this.widgets.calendar.oDomContainer, "display") != "none") {
+                        this.widgets.calendar.hide();
+                    }
                 },
                 /**
                  * Handles the date being changed in the date picker YUI control.
@@ -398,11 +426,7 @@
                         }
                     }
 
-                    // Hide calendar if the calendar was open (Unfortunately there is no proper yui api method for me)
-                    if (me.widgets.calendar && me.widgets.calendar.oDomContainer &&
-                        Dom.getStyle(me.widgets.calendar.oDomContainer, "display") != "none") {
-                        me.widgets.calendar.hide();
-                    }
+                    me._hidePicker();
                 },
                 /**
                  * Handles the date or time being changed in either input field.
