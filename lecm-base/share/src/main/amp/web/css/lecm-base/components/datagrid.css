@@ -153,3 +153,7 @@
     text-align: center;
     overflow: auto;
 }
+
+.boolean-true {
+    background: url("/share/res/components/images/complete-16.png") no-repeat center;
+}
