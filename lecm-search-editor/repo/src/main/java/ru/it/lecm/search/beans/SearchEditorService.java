@@ -38,7 +38,7 @@ public class SearchEditorService extends BaseBean {
     final static String DATE_FMT_YMD_HM = "yyyy-MM-dd HH:mm";
     final static public SimpleDateFormat DateFormatYMD_HM = new SimpleDateFormat(DATE_FMT_YMD_HM);
 
-    final static String DATE_FMT_YMD_HMS = "yyyy-MM-dd HH:mm:ss";
+    final static String DATE_FMT_YMD_HMS = "yyyy-MM-dd'T'HH:mm:ss";
     final static public SimpleDateFormat DateFormat_YMD_HMS = new SimpleDateFormat(DATE_FMT_YMD_HMS);
 
     final static String DATE_FMT_YMD = "yyyy-MM-dd";
