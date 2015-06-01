@@ -370,9 +370,6 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
         },
 
         sendRequestToUpdateGrid: function () {
-            this.search.loadAfterSearch = this.datagridMeta.loadAfterSearch;
-            this.search.markAsSearchPerformed(false);
-
             //обновить данные в гриде! перестраивать саму таблицу не нужно
             this._setDefaultDataTableErrors(this.widgets.dataTable);
 

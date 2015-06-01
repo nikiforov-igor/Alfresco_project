@@ -55,7 +55,8 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                 "float" : ['EQL', 'BEQL', 'LEQL'],
                 "double" : ['EQL', 'BEQL', 'LEQL'],
                 "text" : ['EQL', 'BEGN', 'ENDS', "CONT"],
-                "lecm" : ['EQL_ASSOC', 'NEQL_ASSOC']
+                "lecm" : ['EQL_ASSOC', 'NEQL_ASSOC'],
+                "boolean" : ['EQL', 'NEQL']
             } ,
 
             preferencesDialog: null,
