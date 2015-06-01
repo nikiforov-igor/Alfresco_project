@@ -174,23 +174,37 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
             return columnDefinitions;
         },
 
-        onCellMouseover: function (oArgs) {
+        onCellMouseover: function(oArgs) {
             var td = oArgs.target;
-            if (td && Dom.hasClass(td, "yui-dt-col-prop_lecm-eds-document_summaryContent")) {
+            if (td) {
                 var tooltip = Selector.query(".yui-dt-liner .tt", td, true);
                 if (tooltip) {
                     var windowHeight = window.innerHeight;
+                    var windowWidth = window.innerWidth;
                     var eventY = oArgs.event.clientY;
+                    var eventX = oArgs.event.clientX;
                     var d = 30; // отступ
+                    var x = 30; // отступ
                     if (eventY > windowHeight / 2) {
                         var ttHeight = parseInt(Dom.getStyle(tooltip, "height"));
                         Dom.setStyle(tooltip, "margin-top", (-ttHeight + d) + "px");
                     } else {
                         Dom.setStyle(tooltip, "margin-top", d + "px");
                     }
+
+                    var ttWidth = parseInt(Dom.getStyle(tooltip, "width"));
+                    var ttOffSet = tooltip.offsetLeft;
+                    var tdOffSet = td.offsetLeft;
+                    var offset = ttOffSet - tdOffSet;
+                    if (eventX > (windowWidth / 2) && tdOffSet > (windowWidth / 2) ) {
+                        Dom.setStyle(tooltip, "margin-left", (-offset-ttWidth + x) + "px");
+                    } else {
+                        Dom.setStyle(tooltip, "margin-left", x + "px");
+                    }
                 }
             }
         },
+
         getCellFormatter: function DataGrid_getCellFormatter() {
             var scope = this;
             return function DataGrid_renderCellDataType(elCell, oRecord, oColumn, oData) {
@@ -273,28 +287,32 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                             }
                                             break;
                                     }
-                                    var tooltip = null;
-                                    if (columnContent.length > scope.MAX_CONTENT_SIZE) {
-                                        tooltip = columnContent;
-                                        columnContent = columnContent.substring(0, scope.MAX_CONTENT_SIZE) + "...";
-                                    }
 
                                     if (datalistColumn.name.toLowerCase().indexOf("cm:nowrap") == 0) {
                                         columnContent = "<div style='white-space: nowrap'>" + data.displayValue + "</div>";
-                                    }
-
-                                    var firstColumnIndex = scope.options.showCheckboxColumn ? 1 : 0;
-                                    if (oColumn.getKeyIndex() == firstColumnIndex) {
-                                        columnContent = "<a target='_blank' href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
-                                    }
-                                    if (tooltip) {
-                                        columnContent = '<div class="tt">' + tooltip + '</div>' + columnContent;
                                     }
 
                                     html += columnContent;
 
                                     if (i < ii - 1) {
                                         html += "<br />";
+                                    }
+                                }
+
+                                var firstColumnIndex = scope.options.showCheckboxColumn ? 2 : 1;
+
+                                var stripedTooltip = html.replace(/<\/?[^>]+>/g,'');
+                                if (stripedTooltip.length > scope.MAX_CONTENT_SIZE) {
+                                    var content = stripedTooltip.substring(0, scope.MAX_CONTENT_SIZE) + "...";
+
+                                    if (oColumn.getKeyIndex() == firstColumnIndex) {
+                                        content = "<a target='_blank' href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + content + "</a>";
+                                    }
+
+                                    html = '<div class="tt">' + html + '</div>' + content;
+                                } else {
+                                    if (oColumn.getKeyIndex() == firstColumnIndex) {
+                                        html = "<a target='_blank' href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + html + "</a>";
                                     }
                                 }
                             }

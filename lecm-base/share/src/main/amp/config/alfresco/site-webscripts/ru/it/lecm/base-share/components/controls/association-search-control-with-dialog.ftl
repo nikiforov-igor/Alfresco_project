@@ -17,6 +17,11 @@
 	<#assign showSelectedItems = true>
 </#if>
 
+<#assign endpointMany = field.endpointMany>
+<#if field.control.params.endpointMany??>
+	<#assign endpointMany = (field.control.params.endpointMany == "true")>
+</#if>
+
 <#assign defaultValue=field.control.params.defaultValue!"">
 <#if form.arguments[field.name]?has_content>
 	<#assign defaultValue=form.arguments[field.name]>
@@ -117,7 +122,7 @@
 				<#elseif field.endpointMandatory??>
 					mandatory: ${field.endpointMandatory?string},
 				</#if>
-					multipleSelectMode: ${field.endpointMany?string},
+                	multipleSelectMode: ${endpointMany?string},
 
 				<#if field.control.params.nameSubstituteString??>
 					nameSubstituteString: "${field.control.params.nameSubstituteString}",
