@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.axiom.om.util.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.export.ExportNamespace;
@@ -22,7 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * User: AZinovin
@@ -72,7 +72,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
         private InputStream inputStream;
 	    protected XMLImporterInfo importInfo;
 
-	    protected HashMap<NodeRef, Map<String, List<String>>> assocs;
+	    protected Set<AssociationInfo> assocs;
 
         /**
          * Конструктор загрузчика XML
@@ -80,7 +80,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
          */
         protected XMLImporterImpl(InputStream inputStream) {
             this.inputStream = inputStream;
-	        this.assocs = new HashMap<NodeRef, Map<String, List<String>>>();
+	        this.assocs = new HashSet<>();
         }
 
         /**
@@ -117,7 +117,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 if (str.equals(ExportNamespace.TAG_ITEMS)) {
                     readItems(xmlr, parentNodeRef, updateMode);
                 }
-	            createAssocs(updateMode);
+	            createAssocs();
             } finally {
                 xmlr.close();
             }
@@ -189,7 +189,9 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 properties.put(ContentModel.PROP_NAME, itemName.getLocalName());
             }
             properties.putAll(getProperties(xmlr));
+            int createdElementsCount = this.importInfo.getCreatedElementsCount();
             NodeRef current = createItem(parent, itemName, itemType, properties, updateMode);
+            boolean isNewNode = this.importInfo.getCreatedElementsCount() != createdElementsCount;  //отслеживаем факт создания новой ноды
             if (updateMode.isRewriteChildren()) {
                 List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(current);
                 for (ChildAssociationRef childAssoc : childAssocs) {
@@ -199,12 +201,12 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 }
             }
             readItems(xmlr, current, updateMode);
-            readAssocs(xmlr, current);
+            readAssocs(xmlr, current, isNewNode ? UpdateMode.CREATE_OR_UPDATE : updateMode);    //для новых элементов всегда заполняем оссоциации
             xmlr.nextTag();//выходим из </item>
             return true;
         }
 
-        private boolean readAssocs(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
+        private boolean readAssocs(XMLStreamReader xmlr, NodeRef parent, UpdateMode updateMode) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_ASSOCS))) {
                 return false;
@@ -212,7 +214,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
             xmlr.nextTag();//входим в <assocs>
             try {
                 while (true) {
-                    if (!(readAssoc(xmlr, parent))) break;
+                    if (!(readAssoc(xmlr, parent, updateMode))) break;
                 }
                 xmlr.nextTag();//выходим из </assocs>
             } catch (XMLStreamException e) {
@@ -221,7 +223,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
             return true;
         }
 
-        protected boolean readAssoc(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
+        protected boolean readAssoc(XMLStreamReader xmlr, NodeRef parent, UpdateMode updateMode) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_ASSOC))) {
                 return false;
@@ -229,28 +231,16 @@ public class XMLImportBeanImpl implements XMLImportBean {
             String assocTypeAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_TYPE);
             String assocPathAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_PATH);
 
-	        Map<String, List<String>> assocMap = this.assocs.get(parent);
-	        if (assocMap == null) {
-		        assocMap = new HashMap<String, List<String>>();
-		        this.assocs.put(parent, assocMap);
-	        }
-	        if (assocMap.get(assocTypeAttr) == null) {
-		        assocMap.put(assocTypeAttr, new ArrayList<String>());
-	        }
-	        assocMap.get(assocTypeAttr).add(assocPathAttr);
+            this.assocs.add(new AssociationInfo(parent, assocTypeAttr, assocPathAttr, updateMode));
 
             xmlr.nextTag();//выходим из </assoc>
             xmlr.nextTag();//выходим из </assoc>
             return true;
         }
 
-	    protected void createAssocs(UpdateMode updateMode) {
-		    for (NodeRef nodeRef: this.assocs.keySet()) {
-			    for (String assocType: this.assocs.get(nodeRef).keySet()) {
-				    for (String assocPath: this.assocs.get(nodeRef).get(assocType)) {
-					    createAssoc(nodeRef, assocType, assocPath, updateMode);
-				    }
-			    }
+	    protected void createAssocs() {
+		    for (AssociationInfo associationInfo: this.assocs) {
+                createAssoc(associationInfo.getParentRef(), associationInfo.getAssocType(), associationInfo.getAssocPath(), associationInfo.getUpdateMode());
 		    }
 	    }
 
@@ -260,27 +250,19 @@ public class XMLImportBeanImpl implements XMLImportBean {
 		    if (targetRef != null) {
 			    AssociationDefinition associationDefinition = dictionaryService.getAssociation(assocType);
 			    List<AssociationRef> existingAssocs = nodeService.getTargetAssocs(parent, assocType);
-			    boolean create = true;
+			    boolean create = false;
 			    if (updateMode.isUpdateProperties()) {
+                    create = true;
 				    for (AssociationRef existingAssoc : existingAssocs) {
 					    if (existingAssoc.getTargetRef().equals(targetRef)) {
 						    create = false;
 						    break;
 					    }
 					    if (!associationDefinition.isTargetMany()) {
-						    create = false;
+                            //очищаем только если есть изменения и ассоциация не множественная
+                            nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
 						    break;
 					    }
-				    }
-			    } else if (!associationDefinition.isTargetMany()) {
-				    for (AssociationRef existingAssoc : existingAssocs) {
-                        if (!targetRef.equals(existingAssoc.getTargetRef())) {
-                            //очищаем только если есть изменения
-                            nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
-                        } else {
-                            //иначе оставляем имеющуюся ассоциацию
-                            create = false;
-                        }
 				    }
 			    }
 			    if (create) {
@@ -422,6 +404,39 @@ public class XMLImportBeanImpl implements XMLImportBean {
 	            xmlr.nextTag();//пропускаем закрывающий тэг
             }
             return properties;
+        }
+    }
+
+    /**
+     * Вспомогательный клас для запоминания ассоциаций, которые необходимо создать
+     */
+    protected class AssociationInfo {
+        private NodeRef parentRef;
+        private String assocType;
+        private String assocPath;
+        private UpdateMode updateMode;
+
+        public AssociationInfo(NodeRef parentRef, String assocType, String assocPath, UpdateMode updateMode) {
+            this.parentRef = parentRef;
+            this.assocType = assocType;
+            this.assocPath = assocPath;
+            this.updateMode = updateMode;
+        }
+
+        public NodeRef getParentRef() {
+            return parentRef;
+        }
+
+        public String getAssocType() {
+            return assocType;
+        }
+
+        public String getAssocPath() {
+            return assocPath;
+        }
+
+        public UpdateMode getUpdateMode() {
+            return updateMode;
         }
     }
 }
