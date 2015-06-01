@@ -953,7 +953,7 @@
 															</property>
 															<property>
 																<name>workflowLabel</name>
-																<value><![CDATA[Направить на подписание]]></value>
+																<value><![CDATA[Направить на согласование]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -975,12 +975,12 @@
 																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Невозможно запустить подписание требуется новый заполненный список подписания]]></value>
-																			</property>
-																			<property>
 																				<name>hideAction</name>
 																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Невозможно запустить согласование требуется новый заполненный список согласования]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -1379,7 +1379,7 @@
 					</node>
 					<node>
 						<type>taskStatus</type>
-						<name>На подписании</name>
+						<name>На согласовании</name>
 						<nodeRef>workspace://SpacesStore/313eb385-8d77-43a1-bc20-123b75db5ea8</nodeRef>
 						<properties>
 							<property>
@@ -1781,14 +1781,14 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Отозвать с согласования]]></value>
+															</property>
+															<property>
 																<name>transition-script</name>
 																<value><![CDATA[(function() {
     statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'REJECTED_FORCED');
 })();]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Отозвать с подписания]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -1842,14 +1842,14 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Принудительно согласовать]]></value>
+															</property>
+															<property>
 																<name>transition-script</name>
 																<value><![CDATA[(function() {
     statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'APPROVED_FORCED');
 })();]]></value>
-															</property>
-															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Принудительно подписать]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -2666,7 +2666,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 															</property>
 															<property>
 																<name>workflowLabel</name>
-																<value><![CDATA[Направить на подписание]]></value>
+																<value><![CDATA[Направить на согласование]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -2688,12 +2688,12 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Невозможно запустить подписание: требуется новый заполненный список подписания]]></value>
-																			</property>
-																			<property>
 																				<name>hideAction</name>
 																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3092,7 +3092,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					</node>
 					<node>
 						<type>taskStatus</type>
-						<name>Подписан</name>
+						<name>Согласован</name>
 						<nodeRef>workspace://SpacesStore/cf9f8075-ad19-47fa-a685-e47121f253df</nodeRef>
 						<properties>
 							<property>
@@ -3755,6 +3755,29 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<roleAssociation>
 												<type>role-assoc</type>
 												<businessRoleName>DA_REGISTRAR_DYN</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>94b091fc-1919-448c-b43b-6b48123dbe6e</name>
+										<nodeRef>workspace://SpacesStore/94b091fc-1919-448c-b43b-6b48123dbe6e</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_None]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -4437,6 +4460,29 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<roleAssociation>
 												<type>role-assoc</type>
 												<businessRoleName>DA_REGISTRAR_DYN</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>c380eef4-6791-4d52-a896-ff24cc5f5d2c</name>
+										<nodeRef>workspace://SpacesStore/c380eef4-6791-4d52-a896-ff24cc5f5d2c</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_None]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>PROTOCOL_POINT_EXECUTOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
