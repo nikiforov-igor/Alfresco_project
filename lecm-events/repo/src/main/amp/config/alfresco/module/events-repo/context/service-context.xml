@@ -71,6 +71,18 @@
 		</property>
 	</bean>
 
+	<bean id="lecm.events.thread.pool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
+		  <property name="poolName">
+			  <value>barcodeServiceThreadPool</value>
+		  </property>
+		  <property name="corePoolSize">
+			  <value>3</value>
+		  </property>
+		  <property name="maximumPoolSize">
+			  <value>30</value>
+		  </property>
+	</bean>
+
 	<util:constant id="EVENTS_ROOT_ID" static-field="ru.it.lecm.events.beans.EventsService.EVENTS_ROOT_ID"/>
 
 	<bean id="eventsService" class="ru.it.lecm.events.beans.EventsServiceImpl" parent="baseBean"
@@ -92,6 +104,7 @@
 		<property name="contentService" ref="ContentService"/>
 		<property name="defaultFromEmail" value="${mail.from.default}"/>
 		<property name="organizationQueryProcessor" ref="inUserOrganizationProcessor"/>
+		<property name="threadPoolExecutor" ref="lecm.events.thread.pool"/>
 	</bean>
 
 	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"

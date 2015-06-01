@@ -285,6 +285,12 @@ public class EventsWebScriptBean extends BaseWebScript {
             eventService.onAfterUpdate(event.getNodeRef(), updateRepeated, sendToInvitedMembers);
         }
     }
+	
+	public void notifyInvitedMembers(ScriptNode event, boolean firstTime) {
+		ParameterCheck.mandatory("event", event);
+		ParameterCheck.mandatory("firstTime", firstTime);
+		eventService.sendNotificationsToInvitedMembers(event.getNodeRef(), firstTime);
+	}
 
 
     public Scriptable getRepetableEvents(ScriptNode event, String filterType) {

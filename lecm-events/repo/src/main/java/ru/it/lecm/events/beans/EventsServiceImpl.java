@@ -29,6 +29,7 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 import org.apache.tools.ant.filters.StringInputStream;
 import ru.it.lecm.events.ical.CalendarEvent;
 import ru.it.lecm.events.ical.ICalUtils;
@@ -50,6 +51,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private NotificationsService notificationsService;
 	private SearchQueryProcessor organizationQueryProcessor;
 
+	private ThreadPoolExecutor threadPoolExecutor;
+	
 	private TemplateService templateService;
 	private JavaMailSender mailService;
 	private ContentService contentService;
@@ -64,6 +67,14 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
+	}
+
+	public ThreadPoolExecutor getThreadPoolExecutor() {
+		return threadPoolExecutor;
+	}
+
+	public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+		this.threadPoolExecutor = threadPoolExecutor;
 	}
 
 	public void setNotificationsService(NotificationsService notificationsService) {
@@ -654,7 +665,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					for (DataSource attachment : attachments) {
 						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
 					}
-					mailService.send(message);
+					Runnable mailSender = new RawMailSender(message, mailService);
+					threadPoolExecutor.execute(mailSender);
 				} catch (Exception e) {
 					logger.error("Error send mail", e);
 				}

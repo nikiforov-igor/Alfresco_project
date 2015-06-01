@@ -19,27 +19,18 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
-import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
-import javax.activation.DataSource;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import org.apache.tools.ant.filters.StringInputStream;
-import ru.it.lecm.events.ical.CalendarEvent;
-import ru.it.lecm.events.ical.ICalUtils;
 
 /**
  * User: AIvkin
@@ -61,7 +52,7 @@ public class EventsPolicy extends BaseBean {
     private ContentService contentService;
     private String defaultFromEmail;
     private TransactionListener transactionListener;
-
+	
     private static final String EVENTS_TRANSACTION_LISTENER = "events_transaction_listaner";
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -505,7 +496,8 @@ public class EventsPolicy extends BaseBean {
                         }
                     }
 					//Рассылка уведомлений
-					if (isRepeated == null || !isRepeated) {
+					
+					if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT) && (isRepeated == null || !isRepeated)) {
 						eventService.sendNotificationsToInvitedMembers(event, Boolean.TRUE);
 					}
                 }
