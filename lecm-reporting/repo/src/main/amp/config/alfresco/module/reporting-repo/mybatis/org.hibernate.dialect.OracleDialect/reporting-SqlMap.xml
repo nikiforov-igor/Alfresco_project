@@ -60,6 +60,17 @@
     (tablename,typename) VALUES (#{tablename},#{typename})
 </insert>
 
+	<insert id="associations-create-empty-table" flushCache="true">
+		create table IF NOT EXISTS associations (
+		source_ref VARCHAR(60),
+		target_ref VARCHAR(60),
+		assocName VARCHAR(100),
+		constraint PK_assocs primary key (source_ref, target_ref, assocName));
+	</insert>
+	<insert id="assocs-insertValue" parameterType="AssocDefinition" flushCache="true">
+		INSERT INTO associations (source_ref, target_ref, assocName) VALUES (#{sourceRef},#{targetRef},#{assocName})
+	</insert>
+
 <select id="type-tables-types-per-table" parameterType="TypeTableDefinition" resultType="HashMap">
     select DISTINCT typename
     from type_tables
@@ -115,6 +126,12 @@
 		WHERE table_name LIKE #{tablename}
 </update>
 
+<update id="lastrun-updateLastRunDateAndTimestampForTable" parameterType="LastRunDefinition"  flushCache="true">
+	UPDATE lastsuccessfulrun
+	SET lastrun = #{lastrun},
+	status = #{status}
+	WHERE tablename LIKE #{tablename}
+</update>
 
 <update id="lastrun-cleanTimestampTablename"  parameterType="LastRunDefinition"  flushCache="true">
 	UPDATE lastsuccessfulrun

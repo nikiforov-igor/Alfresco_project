@@ -216,7 +216,7 @@
     </bean>
 
 	
-	<bean id="ReportingHelper" class="ru.it.lecm.reporting.ReportingHelper" init-method="init">
+	<bean id="ReportingHelper" class="ru.it.lecm.reporting.ReportingHelper">
 		<property name="nodeService">
 			<ref bean="NodeService" />
 		</property>
@@ -232,9 +232,9 @@
 		<property name="properties">
 			<ref bean="global-properties" />
 		</property>
-        <property name="httpClientFactory" ref="solrClientFactory"/>
         <property name="reportsService" ref="repositoryReportContentBean"/>
         <property name="contentService" ref="ContentService"/>
+		<property name="alfrescoDataSource" ref="dataSource"/>
 	</bean>
 
     <bean id="solrClientFactory" class="org.alfresco.httpclient.HttpClientFactory" init-method="init">

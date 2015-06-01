@@ -83,7 +83,7 @@ public class HarvestingJob implements Job, InitializingBean {
          } finally {
             running.set(false);
             this.jobLockService.releaseLock(lockToken, this.getLockKey());
-            logger.debug("Released the lock");
+            logger.info("Released the lock");
          }
 
       }

@@ -68,7 +68,10 @@ public class DatabaseHelperBean {
 
         for (Object aTableList : tableList) {
             String tablename = (String) aTableList;
-            if (tablename != null && !"lastsuccessfulrun".equalsIgnoreCase(tablename) && !"type_tables".equalsIgnoreCase(tablename)) {
+            if (tablename != null &&
+                    !"associations".equalsIgnoreCase(tablename) &&
+                    !"lastsuccessfulrun".equalsIgnoreCase(tablename) &&
+                    !"type_tables".equalsIgnoreCase(tablename)) {
                 tablename = tablename.trim();
                 String status = this.reportingDAO.reportingSelectStatusFromLastsuccessfulrun(tablename);
                 String timestamp = this.getLastTimestamp(tablename);
@@ -180,6 +183,7 @@ public class DatabaseHelperBean {
 
                                 logger.debug("setting isWorkspace=" + isWorkSpace + " isArchive=" + isArchive);
                             } catch (Exception ignored) {
+                                logger.error(ignored.getMessage(), ignored);
                             }
                         }
                     } catch (Exception var24) {
@@ -571,5 +575,22 @@ public class DatabaseHelperBean {
     public void dropLastTimestampTable() {
         logger.debug("enter dropLastTimestampTable table=lastsuccessfulrun");
         this.reportingDAO.dropTable("lastsuccessfulrun");
+    }
+
+    public void setLastTimestampAndStatus(String tableName, String status, String timestamp) {
+        tableName = this.fixTableColumnName(tableName).toLowerCase();
+        logger.debug("enter setLastTimestamp for table " + tableName + " timestamp=" + timestamp);
+        this.reportingDAO.updateLastSuccessfulRunStatusAndDateForTable(tableName, status, timestamp);
+    }
+
+    public void createEmptyAssocsTable() throws Exception {
+        logger.debug("Starting createEmptyAssocsTable");
+
+        try {
+            this.reportingDAO.createAssocsTable();
+        } catch (Exception var6) {
+            logger.fatal("Exception createEmptyAssocsTable: " + var6.getMessage());
+            throw new Exception(var6);
+        }
     }
 }

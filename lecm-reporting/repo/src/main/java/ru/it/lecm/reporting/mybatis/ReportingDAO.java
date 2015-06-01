@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Properties;
 
 public interface ReportingDAO {
+    public static  final String ASSOCS = "associations";
 
     void init();
 
@@ -23,7 +24,7 @@ public interface ReportingDAO {
 
     String getLastSuccessfulRunDateForTable(String var1);
 
-    String getLastSuccessfulRunStatusForTable(String var1);
+    void updateLastSuccessfulRunStatusAndDateForTable(String var1, String var2, String var3);
 
     int getNumberOfRowsForTable(String var1);
 
@@ -34,8 +35,6 @@ public interface ReportingDAO {
     void createLastTimestampTableRow(String var1);
 
     void createTypeTablesRow(String var1, String var2);
-
-    String selectLastRunForTable(String var1);
 
     void setAllStatusesDoneForTable();
 
@@ -76,6 +75,10 @@ public interface ReportingDAO {
     List reportingSelectTypesPerTable(String tablename);
 
     List reportingSelectTablesPerType(String typename);
+
+    void createAssocsTable();
+
+    int deleteFromAssocsTable(AssocDefinition definition);
 
     Connection getConnection();
 }

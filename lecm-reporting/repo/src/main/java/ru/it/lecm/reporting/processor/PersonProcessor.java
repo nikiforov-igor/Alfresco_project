@@ -64,12 +64,12 @@ public class PersonProcessor extends PropertyProcessor {
             String account_expirydate;
             String account_locked;
             String enabled;
-            String username = (String) this.getNodeService().getProperty(e, ContentModel.PROP_USERNAME);
-            account_expires = (String) this.getNodeService().getProperty(e, ContentModel.PROP_ACCOUNT_EXPIRES);
-            account_expirydate = (String) this.getNodeService().getProperty(e, ContentModel.PROP_ACCOUNT_EXPIRY_DATE);
-            account_locked = (String) this.getNodeService().getProperty(e, ContentModel.PROP_ACCOUNT_LOCKED);
+            String username = (String)this.getNodeService().getProperty(e, ContentModel.PROP_USERNAME);
+            account_expires = (String)this.getNodeService().getProperty(e, ContentModel.PROP_ACCOUNT_EXPIRES);
+            account_expirydate = (String)this.getNodeService().getProperty(e, ContentModel.PROP_ACCOUNT_EXPIRY_DATE);
+            account_locked = (String)this.getNodeService().getProperty(e, ContentModel.PROP_ACCOUNT_LOCKED);
             Set zones = this.getAuthorityService().getAuthorityZones(username);
-            if (this.getAuthenticationService().getAuthenticationEnabled(username)) {
+            if(this.getAuthenticationService().getAuthenticationEnabled(username)) {
                 enabled = "true";
             } else {
                 enabled = "false";
@@ -98,8 +98,7 @@ public class PersonProcessor extends PropertyProcessor {
         this.dbhb.fixTableColumnName(table);
     }
 
-    void havestNodes(NodeRef harvestDefinition) {
-    }
+    void havestNodes(NodeRef harvestDefinition) {}
 
     public void processPersons(String tableName) throws Exception {
         logger.debug("Enter processPerson");
@@ -113,15 +112,15 @@ public class PersonProcessor extends PropertyProcessor {
             boolean continueSearchCycle = true;
             ResultSet rs = null;
 
-            while (continueSearchCycle) {
+            while(continueSearchCycle) {
                 try {
-                    if (logger.isDebugEnabled()) {
+                    if(logger.isDebugEnabled()) {
                         logger.debug("processPerson: classToColumnType=" + this.getClassToColumnType());
                     }
 
                     SearchParameters sp = new SearchParameters();
                     String fullQuery = "TYPE:\"cm:person\" AND @sys\\:node\\-dbid:[" + highestDbId + " TO MAX]";
-                    if (logger.isDebugEnabled()) {
+                    if(logger.isDebugEnabled()) {
                         logger.debug("processPerson: query=" + fullQuery);
                     }
 
@@ -129,18 +128,18 @@ public class PersonProcessor extends PropertyProcessor {
                     sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
                     sp.addSort("@{http://www.alfresco.org/model/system/1.0}node-dbid", true);
                     sp.setQuery(fullQuery);
-                    if (logger.isDebugEnabled()) {
+                    if(logger.isDebugEnabled()) {
                         logger.debug("processPerson: Before searchService");
                     }
 
                     rs = this.getSearchService().query(sp);
-                    if (logger.isDebugEnabled()) {
+                    if(logger.isDebugEnabled()) {
                         logger.debug("processPerson: Found results=" + rs.length());
                     }
 
-                    if (rs.length() == 0) {
+                    if(rs.length() == 0) {
                         continueSearchCycle = false;
-                        if (logger.isDebugEnabled()) {
+                        if(logger.isDebugEnabled()) {
                             logger.debug("processPerson: Break fired!");
                         }
                         break;
@@ -149,8 +148,8 @@ public class PersonProcessor extends PropertyProcessor {
                     Iterator rsi = rs.iterator();
 
                     ResultSetRow rsr;
-                    while (rsi.hasNext()) {
-                        rsr = (ResultSetRow) rsi.next();
+                    while(rsi.hasNext()) {
+                        rsr = (ResultSetRow)rsi.next();
                         definition = this.processPropertyDefinitions(definition, rsr.getNodeRef(), ",cm_homeFolder,cm_homeFolderProvider" + this.getBlacklist());
                         definition.setProperty("noderef", this.getClassToColumnType().getProperty("noderef", "-"));
                         definition.setProperty("account_enabled", this.getClassToColumnType().getProperty("boolean", "-"));
@@ -158,28 +157,28 @@ public class PersonProcessor extends PropertyProcessor {
                         definition.setProperty("account_expirydate", this.getClassToColumnType().getProperty("datetime", "-"));
                         definition.setProperty("account_locked", this.getClassToColumnType().getProperty("boolean", "-"));
                         definition.setProperty("zones", this.getClassToColumnType().getProperty("zones", "-"));
-                        if (logger.isDebugEnabled()) {
+                        if(logger.isDebugEnabled()) {
                             logger.debug("Processing person with dbid=" + this.getNodeService().getProperty(rsr.getNodeRef(), ReportingModel.PROP_SYSTEM_NODE_DBID));
                         }
 
                         highestDbId = (Long) this.getNodeService().getProperty(rsr.getNodeRef(), ReportingModel.PROP_SYSTEM_NODE_DBID) + 1L;
-                        if (logger.isDebugEnabled()) {
+                        if(logger.isDebugEnabled()) {
                             logger.debug("## Table def = " + definition);
                         }
                     }
 
-                    if (logger.isDebugEnabled()) {
+                    if(logger.isDebugEnabled()) {
                         logger.debug("processPerson: Before setTableDefinition size=" + definition.size());
                     }
 
                     this.setTableDefinition(tableName, definition);
                     rsi = rs.iterator();
 
-                    while (rsi.hasNext()) {
-                        rsr = (ResultSetRow) rsi.next();
+                    while(rsi.hasNext()) {
+                        rsr = (ResultSetRow)rsi.next();
                         e.reset();
                         e = this.processNodeToMap(rsr.getNodeRef().toString(), tableName, e);
-                        if (this.dbhb.rowExists(e)) {
+                        if(this.dbhb.rowExists(e)) {
                             this.dbhb.updateIntoTable(e);
                         } else {
                             this.dbhb.insertIntoTable(e);
@@ -188,7 +187,7 @@ public class PersonProcessor extends PropertyProcessor {
                 } catch (Exception var25) {
                     var25.printStackTrace();
                 } finally {
-                    if (rs != null) {
+                    if(rs != null) {
                         rs.close();
                     }
 
@@ -199,14 +198,14 @@ public class PersonProcessor extends PropertyProcessor {
             throw new Exception(var27);
         }
 
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("Exit processPerson");
         }
 
     }
 
     public Properties processPropertyDefinitions(Properties definition, NodeRef nodeRef, String defBacklist) {
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter processPropertyDefinitions def  : " + definition);
             logger.debug("enter processPropertyDefinitions node : " + nodeRef);
             logger.debug("enter processPropertyDefinitions black: " + defBacklist);
@@ -218,18 +217,18 @@ public class PersonProcessor extends PropertyProcessor {
             Properties classToColumnType = this.getClassToColumnType();
             Properties replacementDataType = this.getReplacementDataType();
 
-            while (keys.hasNext()) {
+            while(keys.hasNext()) {
                 String key = "";
                 String type = "";
 
                 try {
-                    QName e1 = (QName) keys.next();
-                    if (e1 != null) {
+                    QName e1 = (QName)keys.next();
+                    if(e1 != null) {
                         key = e1.toString();
-                        key = this.replaceNameSpaces(key);
-                        if (!key.startsWith("{urn:schemas_microsoft_com:}") && !definition.containsKey(key)) {
+                        key = this.replaceNameSpaces(e1);
+                        if(!key.startsWith("{urn:schemas_microsoft_com:}") && !definition.containsKey(key)) {
                             type = "";
-                            if (replacementDataType.containsKey(key)) {
+                            if(replacementDataType.containsKey(key)) {
                                 type = replacementDataType.getProperty(key, "-").trim();
                             } else {
                                 type = "-";
@@ -242,7 +241,7 @@ public class PersonProcessor extends PropertyProcessor {
                                 }
                             }
 
-                            if (type != null && !type.equals("-") && !type.equals("") && !key.equals("") && !defBacklist.contains("," + key + ",")) {
+                            if(type != null && !type.equals("-") && !type.equals("") && !key.equals("") && !defBacklist.contains("," + key + ",")) {
                                 definition.setProperty(key, type);
                             }
                         }
@@ -261,9 +260,9 @@ public class PersonProcessor extends PropertyProcessor {
     }
 
     public ReportLine processPropertyValues(ReportLine rl, NodeRef nodeRef, String blacklist) {
-        Map<QName, Serializable> map = this.getNodeService().getProperties(nodeRef);
+        Map<QName, Serializable> propertiesMap = this.getNodeService().getProperties(nodeRef);
 
-        for (QName propName : map.keySet()) {
+        for (QName propName : propertiesMap.keySet()) {
             String key = "";
             String dtype = "";
 
@@ -275,7 +274,7 @@ public class PersonProcessor extends PropertyProcessor {
                 }
 
                 if (!key.startsWith("{urn:schemas_microsoft_com:}")) {
-                    key = this.replaceNameSpaces(key);
+                    key = this.replaceNameSpaces(propName);
                     if (logger.isDebugEnabled()) {
                         logger.debug("processPropertyValues: na: KEY=" + key);
                     }
@@ -300,7 +299,7 @@ public class PersonProcessor extends PropertyProcessor {
                         String value = "";
 
                         try {
-                            value = this.getPropertyValue(map.get(propName), dtype, multiValued);
+                            value = this.getPropertyValue(nodeRef, propName, dtype, multiValued, propertiesMap.get(propName));
                             if (value != null) {
                                 rl.setLine(key, type, value, this.getReplacementDataType());
                             }

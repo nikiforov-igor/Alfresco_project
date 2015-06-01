@@ -1,5 +1,11 @@
 package ru.it.lecm.reporting.mybatis.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.apache.commons.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -7,13 +13,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import ru.it.lecm.reporting.Constants;
 import ru.it.lecm.reporting.mybatis.*;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 public class ReportingDAOImpl implements ReportingDAO {
     private static Log logger = org.apache.commons.logging.LogFactory.getLog(ReportingDAOImpl.class);
@@ -29,13 +28,13 @@ public class ReportingDAOImpl implements ReportingDAO {
     }
 
     public void openConnection() throws SQLException {
-        if (this.template.getConnection().isClosed()) {
+        if(this.template.getConnection().isClosed()) {
             this.template.getConnection().getTransactionIsolation();
         }
+
     }
 
-    public void closeConnection() throws SQLException {
-    }
+    public void closeConnection() throws SQLException {}
 
     public void createLastTimestampTable() {
         try {
@@ -44,7 +43,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             String url = this.template.getConnection().getMetaData().getURL();
             String database = url.substring(url.lastIndexOf("/") + 1, url.length());
             eee.setDatabase(database);
-            if ((Integer) this.template.selectOne("table-exists", eee) == 0) {
+            if((Integer) this.template.selectOne("table-exists", eee) == 0) {
                 this.template.insert("lastrun-create-empty-table");
             }
         } catch (Exception var4) {
@@ -61,7 +60,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             String url = this.template.getConnection().getMetaData().getURL();
             String database = url.substring(url.lastIndexOf("/") + 1, url.length());
             eee.setDatabase(database);
-            if ((Integer) this.template.selectOne("table-exists", eee) == 0) {
+            if((Integer) this.template.selectOne("table-exists", eee) == 0) {
                 this.template.insert("type-tables-create-empty-table");
             }
         } catch (Exception var4) {
@@ -69,8 +68,24 @@ public class ReportingDAOImpl implements ReportingDAO {
         }
     }
 
+    @Override
+    public void createAssocsTable() {
+        try {
+            this.template.getConnection().setAutoCommit(true);
+            SelectFromWhere eee = new SelectFromWhere(null, ASSOCS.toLowerCase(), null);
+            String url = this.template.getConnection().getMetaData().getURL();
+            String database = url.substring(url.lastIndexOf("/") + 1, url.length());
+            eee.setDatabase(database);
+            if((Integer) this.template.selectOne("table-exists", eee) == 0) {
+                this.template.insert("associations-create-empty-table");
+            }
+        } catch (Exception var4) {
+            logger.fatal("@@@@ createAssocsTable Exception!: " + var4.getMessage());
+        }
+    }
+
     public void createLastTimestampTableRow(String tablename) {
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter createLastTimestampTableRow: " + tablename.toLowerCase());
         }
 
@@ -93,8 +108,31 @@ public class ReportingDAOImpl implements ReportingDAO {
     }
 
     @Override
+    public int deleteFromAssocsTable(AssocDefinition definition) {
+        UpdateWhere updateWhere = null;
+        if (definition.getSourceRef() != null) {
+            updateWhere = new UpdateWhere(ASSOCS, "", "source_ref = \'" + definition.getSourceRef() + "\'");
+        } else if (definition.getTargetRef() != null) {
+            updateWhere = new UpdateWhere(ASSOCS, "", "target_ref = \'" + definition.getTargetRef() + "\'");
+        }
+
+        int i = 0;
+        if (updateWhere == null) {
+            return -1;
+        }
+        try {
+            this.template.getConnection().setAutoCommit(true);
+            i = this.template.delete("reporting-delete-from-table", updateWhere);
+        } catch (Exception var4) {
+            logger.fatal("@@@@ deleteFromAssocsTable Exception!: " + var4.getMessage());
+        }
+
+        return i;
+    }
+
+    @Override
     public void createTypeTablesRow(String tablename, String typename) {
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter createTypeTablesRow: " + tablename.toLowerCase() + "," + typename);
         }
 
@@ -115,6 +153,7 @@ public class ReportingDAOImpl implements ReportingDAO {
         }
     }
 
+
     public void clearLastRunTimestamp(String tablename) {
         if (logger.isDebugEnabled()) {
             logger.debug("enter clearLastRunTimestamp: " + tablename.toLowerCase());
@@ -133,7 +172,7 @@ public class ReportingDAOImpl implements ReportingDAO {
     }
 
     public int getNumberOfRowsForTable(String tablename) {
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter getNumberOfRowsForTable: " + tablename.toLowerCase());
         }
 
@@ -146,31 +185,15 @@ public class ReportingDAOImpl implements ReportingDAO {
             logger.fatal("@@@@ getNumberOfRowsForTable Exception!: " + var4.getMessage());
         }
 
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("exit getNumberOfRowsForTable: " + returnInt);
         }
 
         return returnInt;
     }
 
-    public String selectLastRunForTable(String tablename) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("enter selectLastRunForTable: " + tablename.toLowerCase());
-        }
-
-        String returnString = "";
-
-        try {
-            returnString = (String) this.template.selectOne("lastrun-selectLastRunForTable", tablename.toLowerCase());
-        } catch (Exception var4) {
-            logger.fatal("@@@@ selectLastRunForTable Exception!: " + var4.getMessage());
-        }
-
-        return returnString;
-    }
-
     public boolean lastRunTableIsRunning() {
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter lastRunTableIsRunning");
         }
 
@@ -190,7 +213,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             }
         }
 
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("lastRunTableIsRunning returning: " + returnBoolean);
         }
 
@@ -200,7 +223,7 @@ public class ReportingDAOImpl implements ReportingDAO {
     public void updateLastSuccessfulRunDateForTable(String tableName, String status, String timestamp) {
         LastRunDefinition lrd = new LastRunDefinition(tableName.toLowerCase(), status, timestamp);
         Integer returnInt;
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("updateLastSuccessfulRunDateForTable enter; table=" + lrd.getTablename() + ", time: " + lrd.getLastrun() + ", status: " + lrd.getStatus());
         }
 
@@ -208,7 +231,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             this.template.getConnection().setAutoCommit(true);
             returnInt = this.template.update("lastrun-updateLastSuccessfulRunDateForTable", lrd);
             logger.debug("updateLastSuccessfulRunDateForTable ### updated rows: " + returnInt);
-            if (returnInt != 1) {
+            if(returnInt != 1) {
                 throw new AlfrescoRuntimeException("There were no rows updated, try an Insert statement instead!");
             }
 
@@ -228,7 +251,7 @@ public class ReportingDAOImpl implements ReportingDAO {
     public void updateLastSuccessfulRunStatusForTable(String tableName, String status) {
         LastRunDefinition lrd = new LastRunDefinition(tableName.toLowerCase(), status, null);
         Integer returnInt;
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("updateLastSuccessfulRunStatusForTable enter");
         }
 
@@ -236,7 +259,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             this.template.getConnection().setAutoCommit(true);
             returnInt = this.template.update("lastrun-updateLastSuccessfulRunStatusForTable", lrd);
             logger.debug("updateLastSuccessfulRunStatusForTable ### number of updated rows: " + returnInt);
-            if (returnInt == 0) {
+            if(returnInt == 0) {
                 throw new AlfrescoRuntimeException("There were no rows updated, try an Insert statement instead!");
             }
 
@@ -253,9 +276,37 @@ public class ReportingDAOImpl implements ReportingDAO {
 
     }
 
+    public void updateLastSuccessfulRunStatusAndDateForTable(String tableName, String status, String timestamp) {
+        LastRunDefinition lrd = new LastRunDefinition(tableName.toLowerCase(), status, timestamp);
+        Integer returnInt;
+        if(logger.isDebugEnabled()) {
+            logger.debug("lastrun-updateLastRunDateAndTimestampForTable enter");
+        }
+
+        try {
+            this.template.getConnection().setAutoCommit(true);
+            returnInt = this.template.update("lastrun-updateLastRunDateAndTimestampForTable", lrd);
+            logger.debug("lastrun-updateLastRunDateAndTimestampForTable ### number of updated rows: " + returnInt);
+            if(returnInt == 0) {
+                throw new AlfrescoRuntimeException("There were no rows updated, try an Insert statement instead!");
+            }
+
+            logger.debug("lastrun-updateLastRunDateAndTimestampForTable updated " + lrd.getTablename() + " the status to " + lrd.getStatus());
+        } catch (Exception var8) {
+            try {
+                this.createLastTimestampTableRow(lrd.getTablename());
+                this.template.update("lastrun-updateLastSuccessfulRunStatusForTable", lrd);
+                logger.debug("updateLastSuccessfulRunStatusForTable created the row, AND updated " + lrd.getTablename() + " the status to " + lrd.getStatus());
+            } catch (Exception var7) {
+                logger.fatal("@@@@ updateLastSuccessfulRunStatusForTable Exception!: " + var7.getMessage());
+            }
+        }
+
+    }
+
     public String getLastSuccessfulRunDateForTable(String tablename) {
         String table = tablename.toLowerCase();
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("getLastSuccessfulRunDateForTable enter for table " + table);
         }
 
@@ -263,8 +314,8 @@ public class ReportingDAOImpl implements ReportingDAO {
         String theDate = "";
 
         try {
-            theDate = (String) this.template.selectOne("lastrun-getLastSuccessfulRunDateForTable", lrd);
-            if (theDate == null) {
+            theDate = (String)this.template.selectOne("lastrun-getLastSuccessfulRunDateForTable", lrd);
+            if(theDate == null) {
                 theDate = "";
             }
 
@@ -280,35 +331,6 @@ public class ReportingDAOImpl implements ReportingDAO {
         }
 
         return theDate;
-    }
-
-    public String getLastSuccessfulRunStatusForTable(String tablename) {
-        String table = tablename.toLowerCase();
-        if (logger.isDebugEnabled()) {
-            logger.debug("getLastSuccessfulRunStateForTable enter for table " + table);
-        }
-
-        LastRunDefinition lrd = new LastRunDefinition(table, null, null);
-        String status = "";
-
-        try {
-            status = (String) this.template.selectOne("lastrun-getLastSuccessfulRunStatusForTable", lrd);
-            if (status == null) {
-                status = "";
-            }
-
-            logger.debug("getLastSuccessfulRunStateForTable got the lastRunStatus: " + status);
-        } catch (Exception var8) {
-            try {
-                this.createLastTimestampTableRow(lrd.getTablename());
-                status = "";
-                logger.debug("getLastSuccessfulRunStateForTable added the TableRow, ADN got empty string");
-            } catch (Exception var7) {
-                logger.fatal("@@@@ getLastSuccessfulRunStateForTable Exception!: " + var7.getMessage());
-            }
-        }
-
-        return status;
     }
 
     public void setAllStatusesDoneForTable() {
@@ -327,7 +349,7 @@ public class ReportingDAOImpl implements ReportingDAO {
 
     public void createEmtpyTable(String tablename) {
         String from = tablename.toLowerCase();
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter createEmtpyTable: " + from);
         }
 
@@ -340,11 +362,11 @@ public class ReportingDAOImpl implements ReportingDAO {
             String database = e.substring(e.lastIndexOf("/") + 1, e.length());
             sfw.setDatabase(database);
             this.template.getConnection().setAutoCommit(true);
-            if (logger.isDebugEnabled()) {
+            if(logger.isDebugEnabled()) {
                 logger.debug("enter createEmtpyTable: checking if table already exists...");
             }
 
-            if ((Integer) this.template.selectOne("table-exists", sfw) == 0) {
+            if((Integer) this.template.selectOne("table-exists", sfw) == 0) {
                 this.template.insert("reporting-create-empty-table", sfw);
             }
 
@@ -357,12 +379,12 @@ public class ReportingDAOImpl implements ReportingDAO {
     }
 
     public List getShowTables() {
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter getShowTables");
         }
 
         List results = this.template.selectList("show-tables");
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             for (Object result : results) {
                 logger.debug(" +" + result);
             }
@@ -381,21 +403,22 @@ public class ReportingDAOImpl implements ReportingDAO {
         try {
             String eee = this.template.getConnection().getMetaData().getURL();
             String database = eee.substring(eee.lastIndexOf("/") + 1, eee.length());
-            if (logger.isDebugEnabled()) {
+            if(logger.isDebugEnabled()) {
                 logger.debug("$$$ getDescTable: Database appears to be: " + database);
             }
 
             sfw.setDatabase(database);
-            if (logger.isDebugEnabled()) {
+            if(logger.isDebugEnabled()) {
                 logger.debug("getDescTable: before selectList");
             }
 
             List myList = this.template.selectList("describe-table", sfw);
-            if (logger.isDebugEnabled()) {
+            if(logger.isDebugEnabled()) {
                 logger.debug("getDescTable after selectList");
             }
 
             String key;
+
             for (Object aMyList : myList) {
                 Map map = (Map) aMyList;
                 if (logger.isDebugEnabled()) {
@@ -439,7 +462,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             logger.fatal("@@@@ getDescTable Exception!: " + var14.getMessage());
         }
 
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("exit getDescTable returning " + props);
         }
 
@@ -447,7 +470,7 @@ public class ReportingDAOImpl implements ReportingDAO {
     }
 
     public void extendTableDefinition(ReportingColumnDefinition rcd) {
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter extendTableDefinition");
         }
 
@@ -460,7 +483,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             logger.fatal("@@@@ extendTableDefinition Exception!: " + var3.getMessage());
         }
 
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("enter extendTableDefinition");
         }
 
@@ -486,7 +509,7 @@ public class ReportingDAOImpl implements ReportingDAO {
 
     public int reportingInsertIntoTable(InsertInto insertInto) {
         insertInto.setTablename(insertInto.getTablename().toLowerCase());
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug("insert into : " + insertInto.getTablename());
             logger.debug("insert keys : " + insertInto.getKeys());
             logger.debug("insert value: " + insertInto.getValues());
@@ -509,7 +532,7 @@ public class ReportingDAOImpl implements ReportingDAO {
 
         try {
             updateWhere.setTablename(updateWhere.getTablename().toLowerCase());
-            if (logger.isDebugEnabled()) {
+            if(logger.isDebugEnabled()) {
                 logger.debug("update into   : " + updateWhere.getTablename());
                 logger.debug("update update : " + updateWhere.getUpdateClause());
                 logger.debug("update where  : " + updateWhere.getWhereClause());
@@ -526,7 +549,7 @@ public class ReportingDAOImpl implements ReportingDAO {
 
     public int reportingUpdateVersionedIntoTable(UpdateWhere updateWhere) {
         updateWhere.setTablename(updateWhere.getTablename().toLowerCase());
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug(" update into   : " + updateWhere.getTablename());
             logger.debug(" update update : " + updateWhere.getUpdateClause());
             logger.debug(" update where  : " + updateWhere.getWhereClause());
@@ -547,7 +570,7 @@ public class ReportingDAOImpl implements ReportingDAO {
     @Override
     public int deleteFromTable(UpdateWhere updateWhere) {
         updateWhere.setTablename(updateWhere.getTablename().toLowerCase());
-        if (logger.isDebugEnabled()) {
+        if(logger.isDebugEnabled()) {
             logger.debug(" update into   : " + updateWhere.getTablename());
             logger.debug(" update update : " + updateWhere.getUpdateClause());
             logger.debug(" update where  : " + updateWhere.getWhereClause());
@@ -596,8 +619,7 @@ public class ReportingDAOImpl implements ReportingDAO {
             String url = this.template.getConnection().getMetaData().getURL();
             String database = url.substring(url.lastIndexOf("/") + 1, url.length());
             e.setDatabase(database);
-            int tableCols = (Integer) this.template.selectOne("table-exists", e);
-            return tableCols > 0 ? (String) this.template.selectOne("reporting-select-from-where", e) : null;
+            return (Integer) this.template.selectOne("table-exists", e) > 0?(String)this.template.selectOne("reporting-select-from-where", e):null;
         } catch (SQLException var9) {
             logger.fatal("@@@@ reportingSelectFromWhere Exception!: " + var9.getMessage());
             return null;
@@ -608,7 +630,7 @@ public class ReportingDAOImpl implements ReportingDAO {
         String from = tablename.toLowerCase();
         String status;
         SelectFromWhere sfw = new SelectFromWhere(null, from, null);
-        status = (String) this.template.selectOne("lastrun-select-status-for-table", sfw);
+        status = (String)this.template.selectOne("lastrun-select-status-for-table", sfw);
         return status;
     }
 
@@ -629,9 +651,10 @@ public class ReportingDAOImpl implements ReportingDAO {
             String database = url.substring(url.lastIndexOf("/") + 1, url.length());
             sfw.setDatabase(database);
             int numberOfColumns = (Integer) this.template.selectOne("table-exists", sfw);
-            if (numberOfColumns > 0) {
+            if(numberOfColumns > 0) {
                 this.template.delete("dropTable", sfw);
             }
+
         } catch (Exception var9) {
             logger.fatal("@@@@ dropTable Exception!: " + var9.getMessage());
         }
@@ -639,5 +662,9 @@ public class ReportingDAOImpl implements ReportingDAO {
 
     public void setReportingTemplate(SqlSessionTemplate template) {
         this.template = template;
+    }
+
+    public SqlSession getTemplate() {
+        return template;
     }
 }

@@ -20,6 +20,7 @@ public class ReportLine {
     public ReportLine(String table, ReportingHelper reportingHelper) {
         this.reportingHelper = reportingHelper;
         this.vendor = reportingHelper.getDatabaseProvider();
+        this.reportingHelper = reportingHelper;
         this.sdf = reportingHelper.getSimpleDateFormat();
         this.setTable(table);
     }
@@ -251,5 +252,13 @@ public class ReportLine {
         }
 
         return returnString;
+    }
+
+    public Properties getTypes() {
+        return types;
+    }
+
+    public Properties getValues() {
+        return values;
     }
 }

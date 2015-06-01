@@ -9,7 +9,7 @@
 <!-- column_name is important. data_type is not. Actually I think it could be anything -->
 <!-- but name it COLUMN_NAME and COLUMN_TYPE!! -->
 <select id="describe-table"  parameterType="SelectFromWhere"  resultType="HashMap">
-	select DISTINCT COLUMN_NAME as COLUMN_NAME, COLUMN_TYPE as COLUMN_TYPE 
+	select DISTINCT COLUMN_NAME as COLUMN_NAME, COLUMN_TYPE as COLUMN_TYPE
 	from INFORMATION_SCHEMA.COLUMNS
 	where TABLE_NAME = #{from}
 	and TABLE_SCHEMA = #{database}
@@ -20,29 +20,29 @@
 </insert>
 
 <select id="table-exists" parameterType="SelectFromWhere" resultType="int">
-	SELECT count(*) 
+	SELECT count(*)
 		FROM  INFORMATION_SCHEMA.COLUMNS
 		where TABLE_NAME = #{from}
 		and TABLE_SCHEMA = #{database}
 </select>
 
-<insert id="reporting-create-empty-table" parameterType="SelectFromWhere"  flushCache="true"> 
+<insert id="reporting-create-empty-table" parameterType="SelectFromWhere"  flushCache="true">
 
-		CREATE TABLE IF NOT EXISTS ${from} ( 
+		CREATE TABLE IF NOT EXISTS ${from} (
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			sys_node_uuid VARCHAR(100),
 			isLatest TINYINT(1) DEFAULT 1,
-			validFrom DATETIME, 
+			validFrom DATETIME,
 			validUntil DATETIME,
 			PRIMARY KEY(id) )
 		ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	
+
 </insert>
 
 
-<insert id="lastrun-create-empty-table"  flushCache="true"> 
+<insert id="lastrun-create-empty-table"  flushCache="true">
 
-	CREATE TABLE IF NOT EXISTS lastsuccessfulrun ( 
+	CREATE TABLE IF NOT EXISTS lastsuccessfulrun (
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			isLatest TINYINT(1) DEFAULT 1,
 			tablename VARCHAR(50),
@@ -51,7 +51,7 @@
 			PRIMARY KEY(id),
 			UNIQUE(tablename))
 			ENGINE=InnoDB DEFAULT CHARSET=utf8
-			 
+
 </insert >
 
 <insert id="type-tables-create-empty-table"  flushCache="true">
@@ -65,6 +65,18 @@
     INSERT INTO type_tables
     (tablename,typename) VALUES (#{tablename},#{typename})
 </insert>
+
+	<insert id="associations-create-empty-table" flushCache="true">
+		create table IF NOT EXISTS associations (
+		source_ref VARCHAR(60),
+		target_ref VARCHAR(60),
+		assocName VARCHAR(100),
+		constraint PK_assocs primary key (source_ref, target_ref, assocName));
+	</insert>
+
+	<insert id="assocs-insertValue" parameterType="AssocDefinition" flushCache="true">
+		INSERT INTO associations (source_ref, target_ref, assocName) VALUES (#{sourceRef},#{targetRef},#{assocName})
+	</insert>
 
 <select id="type-tables-types-per-table" parameterType="TypeTableDefinition" resultType="HashMap">
     select DISTINCT typename
@@ -80,7 +92,7 @@
 
 <select id="lastrun-table-is-running"  resultType="int">
 
-	SELECT count(*) 
+	SELECT count(*)
 		FROM lastsuccessfulrun
 		WHERE status = 'Running'
 
@@ -93,18 +105,23 @@
 
 
 <select id="lastrun-getLastSuccessfulRunDateForTable" parameterType="LastRunDefinition" resultType="String">
-	SELECT lastrun 
+	SELECT lastrun
 		FROM lastsuccessfulrun
 		WHERE tablename LIKE #{tablename}
 </select>
 
 <select id="lastrun-getLastSuccessfulRunStatusForTable" parameterType="LastRunDefinition" resultType="String">
-	SELECT status 
+	SELECT status
 		FROM lastsuccessfulrun
 		WHERE tablename LIKE #{tablename}
 </select>
 
-
+<update id="lastrun-updateLastRunDateAndTimestampForTable" parameterType="LastRunDefinition"  flushCache="true">
+	UPDATE lastsuccessfulrun
+	SET lastrun = #{lastrun},
+	status = #{status}
+	WHERE tablename LIKE #{tablename}
+</update>
 
 <update id="lastrun-updateLastSuccessfulRunDateForTable" parameterType="LastRunDefinition"  flushCache="true">
 	UPDATE lastsuccessfulrun

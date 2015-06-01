@@ -9,40 +9,60 @@ import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.repository.Path.ChildAssocElement;
 import org.alfresco.service.cmr.repository.Path.Element;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.session.ExecutorType;
+import org.apache.ibatis.session.SqlSession;
 import org.json.JSONObject;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.jms.core.JmsTemplate;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.reporting.Constants;
 import ru.it.lecm.reporting.ReportLine;
 import ru.it.lecm.reporting.ReportingHelper;
+import ru.it.lecm.reporting.mybatis.AssocDefinition;
+import ru.it.lecm.reporting.mybatis.InsertInto;
 import ru.it.lecm.reporting.mybatis.UpdateWhere;
+import ru.it.lecm.reporting.mybatis.impl.ReportingDAOImpl;
 
 import javax.jms.*;
 import javax.jms.Queue;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
-    private String COLUMN_SIZE = "";
     private static Log logger = LogFactory.getLog(NodeRefBasedPropertyProcessor.class);
-
+    private String COLUMN_SIZE = "";
     private ActiveMQConnectionFactory connectionFactory;
     private JmsTemplate templateProducer;
+    private Integer batchSize = 100;
 
-    private Map<QName, Properties> typePropsDefinitions = new HashMap<>();
-    private Map<QName, Properties> typeAssocsDefinitions = new HashMap<>();
+    private Map<QName, Set<String>> typeAssocsDefinitions = new HashMap<>();
+
+    public void setConnectionFactory(ActiveMQConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
+
+    public void setTemplateProducer(JmsTemplate templateProducer) {
+        this.templateProducer = templateProducer;
+    }
 
     public NodeRefBasedPropertyProcessor(ServiceRegistry serviceRegistry, ReportingHelper helper) throws Exception {
-        this.setNodeService(serviceRegistry.getNodeService());
+        this.setNodeService(helper.getNodeService());
         this.setNamespaceService(serviceRegistry.getNamespaceService());
         this.setDictionaryService(serviceRegistry.getDictionaryService());
         this.setFileFolderService(serviceRegistry.getFileFolderService());
@@ -64,489 +84,486 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         }
     }
 
-    public void setConnectionFactory(ActiveMQConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
-
-    public void setTemplateProducer(JmsTemplate templateProducer) {
-        this.templateProducer = templateProducer;
-    }
-
-    private String toDisplayPath(Path path) {
-        StringBuilder displayPath = new StringBuilder();
-        if (path.size() == 1) {
-            displayPath.append("/");
-        } else {
-            for (int i = 1; i < path.size(); ++i) {
-                Element element = path.get(i);
-                if (element instanceof ChildAssocElement) {
-                    ChildAssociationRef assocRef = ((ChildAssocElement) element).getRef();
-                    NodeRef node = assocRef.getChildRef();
-                    displayPath.append("/");
-                    displayPath.append(this.getNodeService().getProperty(node, ContentModel.PROP_NAME));
-                }
-            }
-        }
-
-        return displayPath.toString();
-    }
-
-    private Properties processAssociationDefinitions(Properties definition, NodeRef nodeRef, QName objectType) throws Exception {
-        String blockNameSpaces;
+    public void havestNodes(NodeRef harvestDefinition) {
         try {
-            List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
-            if (childAssocs.size() > 0) {
-                blockNameSpaces = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
-                if (this.getReplacementDataType().containsKey(Constants.COLUMN_CHILD_NODEREF)) {
-                    blockNameSpaces = this.getReplacementDataType().getProperty(Constants.COLUMN_CHILD_NODEREF, "-").trim();
+            HashMap<String, HashSet<String>> tableDefinitions = new HashMap<>();
+            typeAssocsDefinitions = new HashMap<>();
+
+            Properties queries = this.getReportingHelper().getTableQueries();
+            Enumeration keys = queries.keys();
+
+            this.getDbhb().createEmptyTypeTablesTable();
+            this.getDbhb().createEmptyAssocsTable();
+
+            List<Message> messagesAboutDelete = getMessagesAboutDelete();
+
+            while (keys.hasMoreElements()) {
+                String tableName = (String) keys.nextElement();
+                String query = (String) queries.get(tableName);
+                logger.info("Harvesting table '" + tableName + "' with query: " + query);
+                tableName = this.dbhb.fixTableColumnName(tableName);
+                Pattern pattern = Pattern.compile("TYPE: *\"(.*?)\".*?");
+                Matcher matcher = pattern.matcher(query);
+                QName type;
+                Collection<QName> types;
+                if (matcher.find()) {
+                    String typeStr = matcher.group(1);
+                    type = QName.createQName(typeStr, namespaceService);
+                    types = dictionaryService.getSubTypes(type, true);
+                    types.add(type);
+                } else {
+                    throw new RuntimeException("Unknown type for query " + query);
                 }
+                String sTypes = null;
+                ResultSet res = null;
+                PreparedStatement stmt = null;
+                java.sql.Connection conn = null;
+                try {
+                    String typesQuery = "SELECT " +
+                            "  alf_qname.id " +
+                            "FROM " +
+                            "  alf_qname, " +
+                            "  alf_namespace " +
+                            "WHERE " +
+                            "  alf_qname.ns_id = alf_namespace.id AND (";
 
-                definition.setProperty(Constants.COLUMN_CHILD_NODEREF, blockNameSpaces);
-            }
-        } catch (Exception var19) {
-            logger.error("processAssociationDefinitions: child_noderef ERROR! " + var19.getMessage());
-        }
-
-        try {
-            ChildAssociationRef parentRef = this.getNodeService().getPrimaryParent(nodeRef);
-            if (parentRef != null) {
-                blockNameSpaces = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-");
-                if (this.getReplacementDataType().containsKey(Constants.COLUMN_PARENT_NODEREF)) {
-                    blockNameSpaces = this.getReplacementDataType().getProperty(Constants.COLUMN_PARENT_NODEREF, "-").trim();
-                }
-
-                definition.setProperty(Constants.COLUMN_PARENT_NODEREF, blockNameSpaces);
-            }
-        } catch (Exception var18) {
-            logger.error("processAssociationDefinitions: parent_noderef ERROR!");
-        }
-
-        TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
-        blockNameSpaces = this.globalProperties.getProperty("reporting.harvest.blockNameSpaces", "");
-        String[] startValues = blockNameSpaces.split(",");
-
-        if (typeAssocsDefinitions.containsKey(objectType)) {
-            definition.putAll(typeAssocsDefinitions.get(objectType));
-        } else {
-            Properties assocsFromDefinition = new Properties();
-            try {
-                if (typeDef != null) {
-                    Map<QName,AssociationDefinition> associations = new HashMap<>();
-                    associations.putAll(typeDef.getAssociations());
-
-                    List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
-                    for (AspectDefinition defaultAspect : defaultAspects) {
-                        associations.putAll(defaultAspect.getAssociations());
-                    }
-
-                    boolean stop;
-                    String assocValue;
-
-                    for (QName assocName : associations.keySet()) {
-                        String shortName = this.replaceNameSpaces(assocName.toString());
-                        if (definition.getProperty(shortName) == null) {
-                            for (String startValue : startValues) {
-                                stop = shortName.startsWith(startValue.trim());
-                                if (stop) {
-                                    break;
-                                }
-                            }
-                            if (!this.getBlacklist().toLowerCase().contains("," + shortName.toLowerCase() + ",") && !shortName.equals("-")) {
-                                assocValue = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
-                                if (this.getReplacementDataType().containsKey(shortName)) {
-                                    assocValue = this.getReplacementDataType().getProperty(shortName, "-").trim();
-                                }
-
-                                if (logger.isDebugEnabled()) {
-                                    logger.debug("Target: Setting " + shortName + "=" + assocValue);
-                                }
-
-                                assocsFromDefinition.setProperty(shortName, assocValue);
-                                definition.setProperty(shortName, assocValue);
-                            }
+                    boolean first = true;
+                    for (QName t : types) {
+                        if (!first) {
+                            typesQuery += " OR ";
                         }
+                        typesQuery += "(alf_namespace.uri = '" + t.getNamespaceURI() + "' AND alf_qname.local_name = '" + t.getLocalName() + "')";
+                        first = false;
+                    }
+
+                    typesQuery += ");";
+
+                    conn = getReportingHelper().getAlfrescoDataSource().getConnection();
+                    stmt = conn.prepareStatement(typesQuery);
+                    res = stmt.executeQuery();
+                    List<Long> lTypes = new ArrayList<>();
+                    while (res.next()) {
+                        lTypes.add(res.getLong(1));
+                    }
+                    sTypes = StringUtils.join(lTypes, ',');
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Type IDs: " + sTypes);
+                    }
+                } finally {
+                    if (res != null && !res.isClosed()) {
+                        res.close();
+                    }
+                    if (stmt != null && !stmt.isClosed()) {
+                        stmt.close();
+                    }
+                    if (conn != null && !conn.isClosed()) {
+                        conn.close();
                     }
                 }
-            } catch (Exception var20) {
-                logger.warn("processAssociationDefinitions: source-target ERROR!");
-                var20.printStackTrace();
-            }
-            typeAssocsDefinitions.put(objectType, assocsFromDefinition);
-        }
 
-        if (typeDef != null) {
-            try {
-                List<AssociationRef> sourceAssocs = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-                processAssocs(definition, startValues, sourceAssocs);
-            } catch (Exception var16) {
-                logger.error("processAssociationDefinitions: Source_Association ERROR!");
-            }
-        }
+                if (!this.dbhb.tableIsRunning(tableName)) {
+                    this.dbhb.createEmptyTables(tableName);
 
-        return definition;
-    }
+                    // метка о запуске для таблицы
+                    this.dbhb.setLastTimestampStatusRunning(tableName);
 
-   private void processAssocs(Properties definition, String[] startValues, List<AssociationRef> assocsList) {
-        boolean stop;
-        String assocValue;
-        for (AssociationRef targetAssoc : assocsList) {
-            String shortName = this.replaceNameSpaces(targetAssoc.getTypeQName().toString());
-            if (definition.getProperty(shortName) == null) {
-                for (String startValue : startValues) {
-                    stop = shortName.startsWith(startValue.trim());
-                    if (stop) {
-                        break;
-                    }
-                }
-                if (!this.getBlacklist().toLowerCase().contains("," + shortName.toLowerCase() + ",") && !shortName.equals("-")) {
-                    assocValue = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
-                    if (this.getReplacementDataType().containsKey(shortName)) {
-                        assocValue = this.getReplacementDataType().getProperty(shortName, "-").trim();
-                    }
+                    final Properties tableColumns = this.dbhb.getTableDescription(tableName);
 
+                    long txnFrom = 0;
+                    long nodeFrom = 0;
+
+                    final StoreRef storeRef = StoreRef.STORE_REF_WORKSPACE_SPACESSTORE;
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Target: Setting " + shortName + "=" + assocValue);
+                        logger.debug("harvest: StoreRef=" + storeRef.getProtocol());
                     }
 
-                    definition.setProperty(shortName, assocValue);
-                }
-            }
-        }
-    }
+                    long startDbId = 0L;
+                    long loopcount = 0L;
+                    boolean letsContinue = true;
+                    try {
+                        while (letsContinue) {
+                            //Получаем дату последней синхронизации
+                            String timestampStart = this.dbhb.getLastTimestamp(tableName);
 
-    private ReportLine processAssociationValues(ReportLine rl, NodeRef nodeRef) throws Exception {
-        try {
-            List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
-            long min = (long) Math.min(childAssocs.size(),
-                    Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
-            long shortName = childAssocs.size();
-            if (shortName > 0L && shortName <= min) {
-                String maxChildCount = "";
+                            String[] lastSyncDate = null;
+                            if (timestampStart != null) {
+                                lastSyncDate = timestampStart.split("-");
+                            }
+                            if (lastSyncDate == null || lastSyncDate.length != 2) {
+                                lastSyncDate = new String[]{"0", "0"};
+                            }
 
-                ChildAssociationRef numberOfChildCars;
-                for (Iterator iterator = childAssocs.iterator(); iterator.hasNext(); maxChildCount = maxChildCount + numberOfChildCars.getChildRef()) {
-                    numberOfChildCars = (ChildAssociationRef) iterator.next();
-                    if (maxChildCount.length() > 0) {
-                        maxChildCount = maxChildCount + ",";
-                    }
-                }
+                            txnFrom = Long.parseLong(lastSyncDate[0]);
+                            nodeFrom = Long.parseLong(lastSyncDate[1]);
 
-                rl.setLine(Constants.COLUMN_CHILD_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), maxChildCount, this.getReplacementDataType());
-            }
-        } catch (Exception var19) {
-            logger.warn("Error in processing processAssociationValues");
-            var19.printStackTrace();
-        }
+                            Properties configs;
 
-        try {
-            ChildAssociationRef primaryParent = this.getNodeService().getPrimaryParent(nodeRef);
-            if (primaryParent != null) {
-                String parentRef = primaryParent.getParentRef().toString();
-                rl.setLine(Constants.COLUMN_PARENT_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"), parentRef, this.getReplacementDataType());
-            }
-        } catch (Exception var16) {
-            logger.warn("Exception in getting primary Parent noderef: " + var16.getMessage());
-        }
+                            while (letsContinue) { // цикл по нодам в выбранном диапозоне
+                                // выход из цикла - если это указано в конфиге
+                                configs = this.getReportingConfigs();
+                                if (isReportingDisabled(configs) || isReportingMustStop(configs)) {
+                                    logger.info("Check config file. Reporting stopped!");
+                                    this.dbhb.setLastTimestampAndStatus(tableName, "Done", "" + txnFrom + "-" + nodeFrom);
+                                    return;
+                                } else {
+                                    this.dbhb.setLastTimestampAndStatus(tableName, "Running", "" + txnFrom + "-" + nodeFrom);
+                                }
 
-        QName objectType = getNodeService().getType(nodeRef);
-        TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
+                                ++loopcount;
 
-        if (typeDef != null) {
-            Map<QName, AssociationDefinition> associations = new HashMap<>();
-            associations.putAll(typeDef.getAssociations());
+                                letsContinue = false;
 
-            List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
-            for (AspectDefinition defaultAspect : defaultAspects) {
-                associations.putAll(defaultAspect.getAssociations());
-            }
+                                java.sql.ResultSet results = null;
+                                java.sql.Connection connection = null;
+                                PreparedStatement preparedStatement = null;
+                                try {
+                                    String fullQuery = "SELECT node.uuid, node.transaction_id, node.id FROM alf_node node " +
+                                            "INNER JOIN alf_store store ON store.id = node.store_id " +
+                                            "WHERE " +
+                                            "store.protocol = ? AND " +
+                                            "store.identifier = ? AND " +
+                                            "node.type_qname_id IN (" + sTypes + ") " +
+                                            "AND (node.transaction_id > ? " +
+                                            "OR (node.transaction_id = ? " +
+                                            "AND node.id > ?))" +
+                                            "ORDER BY node.transaction_id, node.id LIMIT 500";
 
-            int maxAssocsCount = Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.sourcetarget.assocs", "20"));
-            List<AssociationRef> assocValues;
-            String key;
-            String value;
-            Iterator it;
-            AssociationRef ar;
-            long maxChildCount;
-            long numberOfChildCars;
 
-            for (QName assocQName : associations.keySet()) {
-                if (!associations.get(assocQName).isChild()) {
-                    String assocShortName = this.replaceNameSpaces(assocQName.toString());
-                    if (!assocShortName.startsWith("trx")
-                            && !assocShortName.startsWith("act")
-                            && !assocShortName.startsWith("wca")) {
-                        try {
-                            assocValues = this.getNodeService().getTargetAssocs(nodeRef, assocQName);
-                            maxChildCount = Math.min(assocValues.size(), maxAssocsCount);
-                            numberOfChildCars = assocValues.size();
-                            if (numberOfChildCars <= maxChildCount) {
-                                key = this.replaceNameSpaces(assocQName.toString());
-                                if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
-                                    value = "";
+                                    connection = getReportingHelper().getAlfrescoDataSource().getConnection();
+                                    preparedStatement = connection.prepareStatement(fullQuery);
+                                    preparedStatement.setString(1, storeRef.getProtocol());
+                                    preparedStatement.setString(2, storeRef.getIdentifier());
+                                    preparedStatement.setLong(3, txnFrom);
+                                    preparedStatement.setLong(4, txnFrom);
+                                    preparedStatement.setLong(5, nodeFrom);
 
-                                    for (it = assocValues.iterator(); it.hasNext(); value = value + ar.getTargetRef().toString()) {
-                                        ar = (AssociationRef) it.next();
-                                        if (value.length() > 0) {
-                                            value = value + ",";
+                                    if (logger.isInfoEnabled()) {
+                                        logger.info("harvest: StoreProtocol = " + storeRef.getProtocol() + " fullQuery = " + preparedStatement);
+                                    }
+
+                                    results = preparedStatement.executeQuery();
+
+                                    while (results.next()) {
+                                        letsContinue = true;
+                                        NodeRef e1 = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, results.getString(1));
+                                        logger.debug("harvest nodeRef " + e1);
+                                        if (!e1.toString().startsWith("version")) {
+                                            if (logger.isDebugEnabled()) {
+                                                logger.debug("harvest:  adding NodeRef " + e1);
+                                            }
+                                            this.addToQueue(e1);
+                                            txnFrom = results.getLong(2);
+                                            nodeFrom = results.getLong(3);
+                                        }
+                                    }
+                                } catch (SQLException e1) {
+                                    logger.error("Error while database request processed for type " + type + "\r\n" + preparedStatement + "\r\n" + e1.getMessage());
+                                } finally {
+                                    if (results != null && !results.isClosed()) {
+                                        results.close();
+                                    }
+                                    if (preparedStatement != null && !preparedStatement.isClosed()) {
+                                        preparedStatement.close();
+                                    }
+                                    if (connection != null && !connection.isClosed()) {
+                                        connection.close();
+                                    }
+                                }
+                                if (logger.isInfoEnabled()) {
+                                    logger.info("harvest: loopCount = " + loopcount + " letsContinue = " + letsContinue);
+                                }
+
+                                if (letsContinue) { // нашли - обрабатываем
+                                    HashMap<String, String> definitions = new HashMap<>();
+                                    List<ReportLine> lines = new ArrayList<>();
+                                    for (Object node : this.queue) {
+                                        NodeRef nodeRef = (NodeRef) node;
+                                        ReportLine rl = new ReportLine(tableName, this.reportingHelper);
+                                        ReportLine line =
+                                                this.processNodeToMap(nodeRef, tableName, rl, tableColumns);
+                                        if (line.getValue("sys_node_uuid") != null && line.getValue("sys_node_uuid").length() > 0) {
+                                            lines.add(line);
+                                            Properties p = line.getTypes();
+                                            for (Object key : p.keySet()) {
+                                                definitions.put((String) key, p.getProperty((String) key));
+                                            }
                                         }
                                     }
 
-                                    rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
+                                    HashSet<String> tableDefinition = tableDefinitions.get(tableName);
+                                    boolean doNotCheck = tableDefinition != null;
+                                    if (tableDefinition != null) {
+                                        for (String fieldName : definitions.keySet()) {
+                                            doNotCheck &= tableDefinition.contains(fieldName);
+                                        }
+                                    }
+
+                                    if (!doNotCheck) {
+                                        this.setTableDefinition(tableName, definitions);
+                                        if (tableDefinition == null) {
+                                            tableDefinition = new HashSet<>();
+                                            tableDefinitions.put(tableName, tableDefinition);
+                                        }
+                                        tableDefinition.addAll(definitions.keySet());
+                                        if (logger.isInfoEnabled()) {
+                                            logger.info("harvest: tableDef done. Processing queue Values");
+                                        }
+                                    }
+
+                                    this.processQueueValues(tableName, lines);
+                                    this.resetQueue();
+                                    if (logger.isDebugEnabled()) {
+                                        logger.debug("harvest: StoreProtocol = " + storeRef.getProtocol());
+                                        logger.debug("harvest: New start DBID=" + startDbId);
+                                    }
                                 }
                             }
-                        } catch (Exception ex) {
-                            //if (logger.isDebugEnabled()) {
-                            logger.error(ex.getMessage(), ex);
-                            //}
+
                         }
+                        this.dbhb.setLastTimestampAndStatus(tableName, "Done", "" + txnFrom + "-" + nodeFrom);
+                    } catch (Exception ex) {
+                        logger.error("Error while harvest", ex);
                     }
                 }
             }
 
-            try {
-                assocValues = this.getNodeService().getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-                Map<String, String> sourceValues = new HashMap<>();
-                for (AssociationRef assocValue : assocValues) {
-                    key = assocValue.getTypeQName().toString();
-                    key = this.replaceNameSpaces(key);
-                    if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
-                        value = sourceValues.get(key);
-                        if (value == null) {
-                            value = "";
+            if (!this.dbhb.tableIsRunning("refresh_deleted_rows")) {
+                Map<String, Set> typeTablesMap = new HashMap<>();
+                List<String> processedMessages = new ArrayList<>();
+                for (Message deleteMessage : messagesAboutDelete) {
+                    if (deleteMessage instanceof TextMessage) {
+                        String messageText = ((TextMessage) deleteMessage).getText();
+                        if (messageText != null) {
+                            JSONObject messagesObject = new JSONObject(messageText);
+                            String mainObjectRef = messagesObject.getString("mainObject");
+                            if (NodeRef.isNodeRef(mainObjectRef)) {
+                                NodeRef mainObject = new NodeRef(mainObjectRef);
+                                String shortTypeName;
+                                String objectType = messagesObject.getString("objectType");
+                                if (NodeRef.isNodeRef(objectType)) {
+                                    NodeRef type = new NodeRef(objectType);
+                                    shortTypeName = (String) nodeService.getProperty(type, BusinessJournalService.PROP_OBJ_TYPE_CLASS);
+
+                                    Set<String> tables;
+                                    if (typeTablesMap.containsKey(shortTypeName)) {
+                                        tables = typeTablesMap.get(shortTypeName);
+                                    } else {
+                                        tables = getTablesPerType(shortTypeName);
+                                        typeTablesMap.put(shortTypeName, tables);
+                                    }
+                                    for (String table : tables) {
+                                        UpdateWhere updateWhere =
+                                                new UpdateWhere(table,
+                                                        "",
+                                                        "sys_node_uuid LIKE \'" + mainObject.getId() + "\'");
+
+                                        getDbhb().getReportingDAO().deleteFromTable(updateWhere);
+                                    }
+                                    this.getDbhb().getReportingDAO().deleteFromAssocsTable(new AssocDefinition(mainObject.toString(),  null, null));
+                                    this.getDbhb().getReportingDAO().deleteFromAssocsTable(new AssocDefinition(null, mainObject.toString(), null));
+
+                                    processedMessages.add(deleteMessage.getJMSMessageID());
+                                } else {
+                                    logger.error("Message has no type!!! Message:" + messageText + "\n");
+                                    processedMessages.add(deleteMessage.getJMSMessageID());
+                                }
+                            }
                         }
-                        NodeRef sourceValue = assocValue.getSourceRef();
-                        if (value.length() > 0) {
-                            value = value + ",";
-                        }
-                       sourceValues.put(key, value + sourceValue.toString());
                     }
                 }
-                for (String sourceKey : sourceValues.keySet()) {
-                    rl.setLine(sourceKey, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"),
-                            sourceValues.get(sourceKey), this.getReplacementDataType());
+                this.consumeMessagesAboutDelete(processedMessages);
+            }
+        } catch (Exception var36) {
+            logger.error("Fatality: " + var36.getMessage());
+        }
+    }
+
+    protected ReportLine processNodeToMap(NodeRef nodeRef, String table, ReportLine rl, Properties tableColumns) throws Exception {
+        this.dbhb.fixTableColumnName(table);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Enter processNodeToMap nodeRef=" + nodeRef);
+        }
+
+        boolean isIncludeMetadata = isIncludeMetadata();
+
+        try {
+            rl = this.processPropertyValues(rl, nodeRef, isIncludeMetadata);
+
+            rl = this.processAssociationValues(rl, nodeRef, tableColumns);
+
+            String objectType = this.nodeService.getType(nodeRef).toPrefixString(namespaceService);
+            rl.setLine(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, ""), objectType, this.getReplacementDataType());
+
+            rl.setLine(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
+
+            if (isIncludeMetadata) {
+                String displayPath;
+
+                try {
+                    Path path1 = this.getNodeService().getPath(nodeRef);
+                    displayPath = this.toDisplayPath(path1);
+                    rl.setLine(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH), displayPath, this.getReplacementDataType());
+                } catch (Exception var24) {
+                    logger.error(var24.getMessage(), var24);
                 }
-            } catch (Exception ignored) {
-                if (logger.isDebugEnabled()) {
-                    logger.error(ignored.getMessage(), ignored);
+
+                QName myType = this.getNodeService().getType(nodeRef);
+                if (this.getDictionaryService().isSubClass(myType, ContentModel.TYPE_FOLDER)) {
+                    NodeRef size = null;
+
+                    try {
+                        if (nodeRef.toString().startsWith("archive")) {
+                            ChildAssociationRef e = (ChildAssociationRef) this.nodeService.getProperty(nodeRef, QName.createQName("http://www.alfresco.org/model/system/1.0", "archivedOriginalParentAssoc"));
+                            logger.debug("ORIGIN: child:" + e.getChildRef() + " parent: " + e.getParentRef());
+                            size = e.getChildRef();
+                        }
+                    } catch (Exception var22) {
+                        logger.fatal("Exception getting orig_noderef" + Arrays.toString(var22.getStackTrace()));
+                    }
+
+                    if (size != null) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Setting Ref from archive to orig_noderef!!!");
+                        }
+
+                        rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), size.toString(), this.getReplacementDataType());
+                    } else {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Setting currentRef to orig_noderef!!!");
+                        }
+
+                        rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
+                    }
+                }
+
+                if (!this.getDictionaryService().isSubClass(myType, ContentModel.TYPE_CONTENT) && !this.getDictionaryService().getType(myType).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(myType.toString() + " is no content subclass!");
+                    }
+                } else {
+                    long size1;
+                    String sizeString;
+
+                    try {
+                        size1 = this.getFileFolderService().getFileInfo(nodeRef).getContentData().getSize();
+                        if (size1 == 0L) {
+                            sizeString = "0";
+                        } else {
+                            sizeString = Long.toString(size1);
+                        }
+
+                        rl.setLine(this.COLUMN_SIZE, this.getClassToColumnType().getProperty(this.COLUMN_SIZE), sizeString, this.getReplacementDataType());
+                    } catch (Exception var21) {
+                        logger.info("processNodeToMap: Huh, no size?");
+                    }
+
+                    boolean versioned;
+
+                    try {
+                        versioned = this.getNodeService().hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE);
+                        rl.setLine("versioned", this.getClassToColumnType().getProperty("boolean"), String.valueOf(versioned), this.getReplacementDataType());
+                    } catch (Exception var20) {
+                        logger.info("processNodeToMap: Huh, no versioned info?");
+                    }
+
+                    try {
+                        String origNodeRef = this.getFileFolderService().getFileInfo(nodeRef).getContentData().getMimetype();
+                        if (origNodeRef == null) {
+                            origNodeRef = "NULL";
+                        }
+
+                        rl.setLine(Constants.COLUMN_MIMETYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_MIMETYPE), origNodeRef, this.getReplacementDataType());
+                    } catch (Exception var19) {
+                        logger.info("processNodeToMap: Huh, no mimetype?");
+                    }
+
+                    NodeRef origNodeRef1 = null;
+
+                    try {
+                        if (nodeRef.toString().startsWith("archive")) {
+                            ChildAssociationRef e1 = (ChildAssociationRef) this.nodeService.getProperty(nodeRef, QName.createQName("http://www.alfresco.org/model/system/1.0", "archivedOriginalParentAssoc"));
+                            logger.debug("ORIGIN: child:" + e1.getChildRef() + " parent: " + e1.getParentRef());
+                            origNodeRef1 = e1.getChildRef();
+                        }
+                    } catch (Exception var18) {
+                        logger.warn("Exception getting orig_noderef" + var18.getStackTrace());
+                    }
+
+                    try {
+                        if (nodeRef.toString().startsWith("version")) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Setting nodeRef to orig_noderef - VERSION!!!");
+                            }
+
+                            rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), null, this.getReplacementDataType());
+                        } else if (origNodeRef1 != null) {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Setting Ref from archive to orig_noderef!!!");
+                            }
+
+                            rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), origNodeRef1.toString(), this.getReplacementDataType());
+                        } else {
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("Setting currentRef to orig_noderef!!!");
+                            }
+
+                            rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
+                        }
+                    } catch (Exception ignored) {
+                        if (logger.isDebugEnabled()) {
+                            logger.error(ignored.getMessage(), ignored);
+                        }
+                    }
                 }
             }
+        } catch (DataIntegrityViolationException ex) {
+            logger.error(ex.getMessage(), ex);
         }
 
         return rl;
     }
 
-    protected ReportLine processNodeToMap(String identifier, String table, ReportLine rl) {
-        this.dbhb.fixTableColumnName(table);
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("Enter processNodeToMap nodeRef=" + identifier);
-        }
-
-        NodeRef nodeRef = new NodeRef(identifier);
-
-        try {
-            rl = this.processPropertyValues(rl, nodeRef);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
-        try {
-            rl = this.processAssociationValues(rl, nodeRef);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
-        try {
-            rl.setLine(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
-        String valueString;
-        try {
-            valueString = this.nodeService.getType(nodeRef).toPrefixString(namespaceService);
-            rl.setLine(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, ""), valueString, this.getReplacementDataType());
-        } catch (Exception ex) {
-            logger.debug("EXCEPTION: // it does not have a Type. Bad luck. Don\'t crash (versionStore?!)");
-        }
-
-        valueString = "";
-
-        try {
-            Set<QName> path = this.nodeService.getAspects(nodeRef);
-
-            QName site;
-            for (Iterator displayPath = path.iterator(); displayPath.hasNext(); valueString = valueString + site.getLocalName()) {
-                site = (QName) displayPath.next();
-                if (valueString.length() > 0) {
-                    valueString = valueString + ",";
-                }
-            }
-
-            rl.setLine(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, ""), valueString, this.getReplacementDataType());
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
-        String displayPath1;
-
-        try {
-            Path path1 = this.getNodeService().getPath(nodeRef);
-            displayPath1 = this.toDisplayPath(path1);
-            rl.setLine(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH), displayPath1, this.getReplacementDataType());
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-
-        QName myType = this.getNodeService().getType(nodeRef);
-        if (this.getDictionaryService().isSubClass(myType, ContentModel.TYPE_FOLDER)) {
-            NodeRef size = null;
-
-            try {
-                if (nodeRef.toString().startsWith("archive")) {
-                    ChildAssociationRef e = (ChildAssociationRef) this.nodeService.getProperty(nodeRef, QName.createQName("http://www.alfresco.org/model/system/1.0", "archivedOriginalParentAssoc"));
-                    logger.debug("ORIGIN: child:" + e.getChildRef() + " parent: " + e.getParentRef());
-                    size = e.getChildRef();
-                }
-            } catch (Exception ex) {
-                logger.fatal("Exception getting orig_noderef" + ex.getMessage());
-            }
-
-            if (size != null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Setting Ref from archive to orig_noderef!!!");
-                }
-
-                rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), size.toString(), this.getReplacementDataType());
-            } else {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Setting currentRef to orig_noderef!!!");
-                }
-
-                rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
-            }
-        }
-
-        if (!this.getDictionaryService().isSubClass(myType, ContentModel.TYPE_CONTENT) && !this.getDictionaryService().getType(myType).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(myType.toString() + " is no content subclass!");
-            }
-        } else {
-            long size1;
-            String sizeString;
-
-            try {
-                size1 = this.getFileFolderService().getFileInfo(nodeRef).getContentData().getSize();
-                if (size1 == 0L) {
-                    sizeString = "0";
-                } else {
-                    sizeString = Long.toString(size1);
-                }
-
-                rl.setLine(this.COLUMN_SIZE, this.getClassToColumnType().getProperty(this.COLUMN_SIZE), sizeString, this.getReplacementDataType());
-            } catch (Exception var21) {
-                logger.info("processNodeToMap: Huh, no size?");
-            }
-
-            boolean versioned;
-
-            try {
-                versioned = this.getNodeService().hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE);
-                rl.setLine("versioned", this.getClassToColumnType().getProperty("boolean"), String.valueOf(versioned), this.getReplacementDataType());
-            } catch (Exception var20) {
-                logger.info("processNodeToMap: Huh, no versioned info?");
-            }
-
-            try {
-                String origNodeRef = this.getFileFolderService().getFileInfo(nodeRef).getContentData().getMimetype();
-                if (origNodeRef == null) {
-                    origNodeRef = "NULL";
-                }
-
-                rl.setLine("mimetype", this.getClassToColumnType().getProperty("mimetype"), origNodeRef, this.getReplacementDataType());
-            } catch (Exception var19) {
-                logger.info("processNodeToMap: Huh, no mimetype?");
-            }
-
-            NodeRef origNodeRef1 = null;
-
-            try {
-                if (nodeRef.toString().startsWith("archive")) {
-                    ChildAssociationRef e1 = (ChildAssociationRef) this.nodeService.getProperty(nodeRef, QName.createQName("http://www.alfresco.org/model/system/1.0", "archivedOriginalParentAssoc"));
-                    logger.debug("ORIGIN: child:" + e1.getChildRef() + " parent: " + e1.getParentRef());
-                    origNodeRef1 = e1.getChildRef();
-                }
-            } catch (Exception var18) {
-                logger.warn("Exception getting orig_noderef" + Arrays.toString(var18.getStackTrace()));
-            }
-
-            try {
-                if (nodeRef.toString().startsWith("version")) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Setting nodeRef to orig_noderef - VERSION!!!");
-                        //logger.debug("Master says: " + (masterRef != null ? masterRef.toString() : null));
-                    }
-
-                    //rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), masterRef != null ? masterRef.toString() : null, this.getReplacementDataType());
-                } else if (origNodeRef1 != null) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Setting Ref from archive to orig_noderef!!!");
-                    }
-
-                    rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), origNodeRef1.toString(), this.getReplacementDataType());
-                } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Setting currentRef to orig_noderef!!!");
-                    }
-
-                    rl.setLine(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF), nodeRef.toString(), this.getReplacementDataType());
-                }
-            } catch (Exception ignored) {
-                if (logger.isDebugEnabled()) {
-                    logger.error(ignored.getMessage(), ignored);
-                }
-            }
-        }
-
-        return rl;
+    @Override
+    protected ReportLine processNodeToMap(String var1, String var2, ReportLine var3) {
+        return null;
     }
 
     public Properties processQueueDefinition(String table) {
         Properties definition = new Properties();
+        boolean isIncludeMeta = isIncludeMetadata();
+
         for (Object aQueue : this.queue) {
             NodeRef nodeRef = new NodeRef(aQueue.toString().split(",")[0]);
-            QName objectType = this.getNodeService().getType(nodeRef);
-            if (typePropsDefinitions.containsKey(objectType)) {
-                definition = typePropsDefinitions.get(objectType);
-            } else {
-                try {
-                    definition = this.processPropertyDefinitions(definition, objectType);
-                    definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                } catch (Exception var9) {
-                    logger.warn("processQueueDefinition: ERROR: versionNodes.containsKey or before " + var9.getMessage());
-                    var9.printStackTrace();
+
+            try {
+                definition = this.processPropertyDefinitions(definition, nodeRef);
+            } catch (Exception var9) {
+                logger.warn("processQueueDefinition: ERROR: versionNodes.containsKey or before " + var9.getMessage());
+                var9.printStackTrace();
+            }
+
+            try {
+                definition.setProperty("noderef", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
+                definition.setProperty(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty("object_type", "-"));
+
+                QName type = this.getNodeService().getType(nodeRef);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("processQueueDefinition: qname=" + type);
                 }
 
-                try {
+                if (isIncludeMeta) {
                     definition.setProperty(Constants.COLUMN_ORIG_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
                     definition.setProperty(Constants.COLUMN_PATH, this.getClassToColumnType().getProperty(Constants.COLUMN_PATH, "-"));
-                    definition.setProperty(Constants.COLUMN_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
-                    definition.setProperty(Constants.COLUMN_OBJECT_TYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_OBJECT_TYPE, "-"));
-                    definition.setProperty(Constants.COLUMN_ASPECTS, this.getClassToColumnType().getProperty(Constants.COLUMN_ASPECTS, "-"));
 
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("processQueueDefinition: qname=" + objectType);
-                    }
-
-                    if (!this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_CONTENT)
-                            && !this.getDictionaryService().getType(objectType).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
+                    if (!this.getDictionaryService().isSubClass(type, ContentModel.TYPE_CONTENT) && !this.getDictionaryService().getType(type).toString().equalsIgnoreCase(ContentModel.TYPE_CONTENT.toString())) {
                         logger.debug("processQueueDefinition: NOOOOO! We are NOT a subtype of Content!");
                     } else {
                         if (logger.isDebugEnabled()) {
                             logger.debug("processQueueDefinition: YEAH! We are a subtype of Content! " + ContentModel.TYPE_CONTENT);
                         }
 
-                        definition.setProperty("mimetype", this.getClassToColumnType().getProperty("mimetype", "-"));
+                        definition.setProperty(Constants.COLUMN_MIMETYPE, this.getClassToColumnType().getProperty(Constants.COLUMN_MIMETYPE, "-"));
                         definition.setProperty(this.COLUMN_SIZE, this.getClassToColumnType().getProperty(this.COLUMN_SIZE, "-"));
                         definition.setProperty("cm_workingCopyLlink", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
                         definition.setProperty("cm_lockOwner", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
@@ -558,39 +575,32 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                         definition.setProperty("versioned", this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"));
                     }
 
-                    if (this.getDictionaryService().isSubClass(objectType, ContentModel.TYPE_PERSON)) {
+                    if (this.getDictionaryService().isSubClass(type, ContentModel.TYPE_PERSON)) {
                         definition.setProperty("enabled", this.getClassToColumnType().getProperty("boolean", "-"));
                     }
-                } catch (Exception var10) {
-                    logger.info("unexpeted error in node " + nodeRef.toString());
-                    logger.info("unexpeted error in node " + var10.getMessage());
-                }
 
-                typePropsDefinitions.put(objectType, definition);
-            }
+                    if (this.getNodeService().hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
+                        String typeStr = this.getClassToColumnType().getProperty("text", "-");
+                        if (this.getReplacementDataType().containsKey("cm_versionLabel")) {
+                            typeStr = this.getReplacementDataType().getProperty("cm_versionLabel", "-").trim();
+                        }
 
-            try {
-                if (this.getNodeService().hasAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE)) {
-                    String type = this.getClassToColumnType().getProperty("text", "-");
-                    if (this.getReplacementDataType().containsKey("cm_versionLabel")) {
-                        type = this.getReplacementDataType().getProperty("cm_versionLabel", "-").trim();
+                        definition.setProperty("cm_versionLabel", typeStr);
+                        typeStr = this.getClassToColumnType().getProperty("text", "-");
+                        if (this.getReplacementDataType().containsKey("cm_versionType")) {
+                            typeStr = this.getReplacementDataType().getProperty("cm_versionType", "-").trim();
+                        }
+
+                        definition.setProperty("cm_versionType", typeStr);
                     }
-
-                    definition.setProperty("cm_versionLabel", type);
-                    type = this.getClassToColumnType().getProperty("text", "-");
-                    if (this.getReplacementDataType().containsKey("cm_versionType")) {
-                        type = this.getReplacementDataType().getProperty("cm_versionType", "-").trim();
-                    }
-
-                    definition.setProperty("cm_versionType", type);
                 }
-            } catch (Exception ex) {
+            } catch (Exception var10) {
                 logger.info("unexpeted error in node " + nodeRef.toString());
-                logger.info("unexpeted error in node " + ex.getMessage());
+                logger.info("unexpeted error in node " + var10.getMessage());
             }
 
             try {
-                definition = this.processAssociationDefinitions(definition, nodeRef, objectType);
+                definition = this.processAssociationDefinitions(definition, nodeRef);
             } catch (Exception var8) {
                 logger.warn("Error getting assoc definitions" + var8.getMessage());
                 var8.printStackTrace();
@@ -600,7 +610,12 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return definition;
     }
 
-    public void processQueueValues(String table) throws Exception {
+    @Override
+    void processQueueValues(String var1) throws Exception {
+
+    }
+
+    public void processQueueValues(String table, List<ReportLine> lines) throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("Enter processQueueValues table=" + table);
         }
@@ -609,25 +624,22 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             logger.debug("************ Found " + this.queue.size() + " entries in " + table + " **************** " + this.method);
         }
 
-        ReportLine rl = new ReportLine(table, this.reportingHelper);
         int queuesize = this.queue.size();
 
         Set<String> types = getTypesPerTable(table);
 
-        for (int q = 0; q < this.queue.size(); ++q) {
-            String identifier = this.queue.get(q).toString();
+        ArrayList<InsertInto> inserts = new ArrayList<>();
+        ArrayList<UpdateWhere> updates = new ArrayList<>();
 
+        for (ReportLine rl : lines) {
             try {
-                NodeRef nodeRef = new NodeRef(identifier.split(",")[0]);
-
                 if (logger.isDebugEnabled()) {
-                    String numberOfRows = (String) this.getNodeService().getProperty(nodeRef, ContentModel.PROP_NAME);
-                    logger.debug("processQueueValues: " + q + "/" + queuesize + ": " + numberOfRows);
+                    String numberOfRows = (String) this.getNodeService().getProperty(new NodeRef(rl.getValue(Constants.COLUMN_NODEREF)), ContentModel.PROP_NAME);
+                    logger.debug("processQueueValues: " + rl.getValue(Constants.COLUMN_NODEREF) + "/" + queuesize + ": " + numberOfRows);
                 }
 
-                rl = this.processNodeToMap(nodeRef.toString(), table, rl);
-
                 String shortTypeName = rl.getValue(Constants.COLUMN_OBJECT_TYPE).toLowerCase();
+
                 if (!types.contains(shortTypeName)) {
                     this.dbhb.createLastTypesTableRow(table, shortTypeName);
                     types.add(shortTypeName);
@@ -639,14 +651,14 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 try {
                     if (rl.size() > 0) {
                         if (this.method.equals("INSERT_ONLY")) {
-                            this.dbhb.insertIntoTable(rl);
+                            inserts.add(insertIntoTableRecord(rl));
                         }
 
                         if (this.method.equals("SINGLE_INSTANCE")) {
                             if (this.dbhb.rowExists(rl)) {
-                                this.dbhb.updateIntoTable(rl);
+                                updates.add(updateIntoTableRecord(rl));
                             } else {
-                                this.dbhb.insertIntoTable(rl);
+                                inserts.add(insertIntoTableRecord(rl));
                             }
                         }
 
@@ -669,10 +681,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                                         logger.debug("## Values " + rl.getInsertListOfValues());
                                     }
 
-                                    var23 = this.dbhb.insertIntoTable(rl);
-                                    if (logger.isDebugEnabled()) {
-                                        logger.debug(var23 + " rows inserted");
-                                    }
+                                    inserts.add(insertIntoTableRecord(rl));
                                 }
                             } catch (RecoverableDataAccessException var16) {
                                 throw new AlfrescoRuntimeException("processQueueValues1: " + var16.getMessage());
@@ -681,19 +690,82 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                                 logger.fatal("processQueueValues Exception1: " + var17.getMessage());
                             }
                         }
+                        this.getDbhb().getReportingDAO().deleteFromAssocsTable(new AssocDefinition(rl.getValue(Constants.COLUMN_NODEREF), null, null));
                     }
                 } catch (RecoverableDataAccessException var18) {
                     throw new AlfrescoRuntimeException("processQueueValues2: " + var18.getMessage());
                 } catch (Exception var19) {
-                    logger.error("processQueueValues Exception2: " + Arrays.toString(var19.getStackTrace()));
+                    logger.fatal("processQueueValues Exception2: " + Arrays.toString(var19.getStackTrace()));
                 } finally {
                     rl.reset();
                 }
             } catch (Exception var21) {
-                logger.info("Bad node detected; ignoring... " + identifier);
+                logger.info("Bad node detected; ignoring... " + rl.getValue(Constants.COLUMN_NODEREF));
             }
         }
 
+        String size = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.batch.size", batchSize.toString());
+        Integer batchSize = Integer.valueOf(size);
+
+        SqlSession sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+        sqlSession.getConnection().setAutoCommit(false);
+        try {
+            int count = 0;
+            for (final InsertInto record : inserts) {
+                count++;
+                sqlSession.insert("reporting-insert-into-table", record);
+                if (count % batchSize == 0) {
+                    sqlSession.commit();
+                    sqlSession.close();
+                    sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+                    sqlSession.getConnection().setAutoCommit(false);
+                }
+            }
+            sqlSession.commit();
+        } finally {
+            sqlSession.close();
+        }
+
+        sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+        sqlSession.getConnection().setAutoCommit(false);
+        try {
+            int count = 0;
+            for (final UpdateWhere record : updates) {
+                count++;
+                record.setTablename(record.getTablename().toLowerCase());
+                sqlSession.update("reporting-update-into-table", record);
+                if (count % batchSize == 0) {
+                    sqlSession.commit();
+                    sqlSession.close();
+                    sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+                    sqlSession.getConnection().setAutoCommit(false);
+                }
+            }
+            sqlSession.commit();
+
+        } finally {
+            sqlSession.close();
+        }
+
+        sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+        sqlSession.getConnection().setAutoCommit(false);
+        try {
+            int count = 0;
+            for (AssocDefinition definition: this.getAssocs()) {
+                count++;
+
+                sqlSession.insert("assocs-insertValue", definition);
+                if (count % batchSize == 0) {
+                    sqlSession.commit();
+                    sqlSession.close();
+                    sqlSession = ((SqlSessionTemplate) ((ReportingDAOImpl) this.dbhb.getReportingDAO()).getTemplate()).getSqlSessionFactory().openSession(ExecutorType.BATCH, false);
+                    sqlSession.getConnection().setAutoCommit(false);
+                }
+            }
+            sqlSession.commit();
+        } finally {
+            sqlSession.close();
+        }
         if (logger.isDebugEnabled()) {
             logger.debug("Exit processQueueValues");
         }
@@ -729,7 +801,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
             columnIterator = row.keySet().iterator();
             while (columnIterator.hasNext()) {
                 String keyString = (String) columnIterator.next();
-                if ("tablename".equals(keyString)) {
+                if (Constants.COLUMN_TABLENAME.equals(keyString)) {
                     tablesSet.add(row.get(keyString).toString());
                 }
             }
@@ -738,210 +810,72 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
         return tablesSet;
     }
 
-    public void havestNodes(NodeRef harvestDefinition) {
+    private boolean isReportingDisabled(Properties configs) {
+        boolean result = false;
+        if (configs.containsKey("reporting.disable")) {
+            String disabled = configs.getProperty("reporting.disable");
+            if ("true".equalsIgnoreCase(disabled)) {
+                logger.info("Reporting is disabled!");
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    private boolean isReportingMustStop(Properties configs) {
+        if (configs.containsKey("reporting.startHour") && configs.containsKey("reporting.endHour")) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            try {
+                String start = configs.getProperty("reporting.startHour");
+                String end = configs.getProperty("reporting.endHour");
+                if (start.length() > 0 && end.length() > 0) {
+                    int startHour = Integer.valueOf(start);
+                    int endHour = Integer.valueOf(end);
+
+                    boolean isMidnight = endHour < startHour;
+
+                    if (isMidnight) {
+                        return !(startHour <= hour || hour <= endHour);
+                    } else {
+                        return !(startHour <= hour && hour <= endHour);
+                    }
+                }
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+        }
+        return false;
+    }
+
+    private Boolean isIncludeMetadata() {
+        String include = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.include.metadata", "false");
+        return Boolean.parseBoolean(include);
+    }
+
+    private Properties getReportingConfigs() {
+        final Properties p = new Properties();
+        if (logger.isDebugEnabled()) {
+            logger.debug("getReportingConfigs");
+        }
+        FileInputStream fis = null;
         try {
-            List<StoreRef> stores = this.getStoreRefList();
-
-            Properties queries = this.getReportingHelper().getTableQueries();
-            Enumeration keys = queries.keys();
-
-            long shiftFromDB = getTimestampFromDBShift() * 60000;
-
-            this.dbhb.createEmptyTypeTablesTable();
-
-            Date lastSolrIndexDate = null;
-            long solrTimestamp = this.reportingHelper.getSolrLastTimestamp();
-            if (solrTimestamp > 0) {
-                long solrShift = getSolrTimestampShift() * 60000;
-                lastSolrIndexDate = new Date(solrTimestamp - solrShift);
-            }
-
-            List<Message> messagesAboutDelete = getMessagesAboutDelete();//получим до старта синхронизации
-
-            while (keys.hasMoreElements()) {
-                String tableName = (String) keys.nextElement();
-                String query = (String) queries.get(tableName);
-                tableName = this.dbhb.fixTableColumnName(tableName);
-                Iterator storeIterator = stores.iterator();
-                if (!this.dbhb.tableIsRunning(tableName)) {
-                    this.dbhb.createEmptyTables(tableName);
-
-                    Date theDate = new Date();
-                    String nowFormattedDate = this.reportingHelper.getSimpleDateFormat().format(theDate);
-
-                    String timestampStart = this.dbhb.getLastTimestamp(tableName);
-                    Date lastSyncDate = this.reportingHelper.getSimpleDateFormat().parse(timestampStart.replace("T", " "));
-                    lastSyncDate = new Date(lastSyncDate.getTime() - shiftFromDB);
-
-                    if (lastSolrIndexDate != null) {
-                        if (lastSolrIndexDate.before(lastSyncDate)) {
-                            lastSyncDate = lastSolrIndexDate;
-                        }
-                    }
-                    timestampStart = this.reportingHelper.getSimpleDateFormat().format(lastSyncDate);
-
-                    this.dbhb.setLastTimestampStatusRunning(tableName);
-                    while (storeIterator.hasNext()) {
-                        StoreRef storeRef = (StoreRef) storeIterator.next();
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("harvest: StoreRef=" + storeRef.getProtocol());
-                        }
-
-                        long startDbId = 0L;
-                        long loopcount = 0L;
-                        boolean letsContinue = true;
-
-                        while (letsContinue) {
-                            ++loopcount;
-                            String fullQuery = query + this.queryClauseTimestamp(timestampStart, storeRef.getProtocol())
-                                    + this.queryClauseOrderBy(startDbId);
-                            if (logger.isInfoEnabled()) {
-                                logger.info("harvest: StoreProtocol = " + storeRef.getProtocol() + " fullQuery = " + fullQuery);
-                            }
-
-                            SearchParameters sp = new SearchParameters();
-                            sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-                            sp.addStore(storeRef);
-                            sp.setQuery(fullQuery);
-                            sp.addSort("@{http://www.alfresco.org/model/system/1.0}node-dbid", true);
-                            ResultSet results = this.getSearchService().query(sp);
-                            letsContinue = results.length() > 0;
-                            logger.info("harvest: loopCount = " + loopcount + " letsContinue = " + letsContinue);
-                            if (letsContinue) {
-                                for (ResultSetRow result : results) {
-                                    try {
-                                        NodeRef e1 = result.getNodeRef();
-                                        logger.debug("harvest nodeRef " + e1);
-                                        if (!e1.toString().startsWith("version")) {
-                                            if (logger.isInfoEnabled()) {
-                                                logger.info("harvest:  adding NodeRef " + e1);
-                                            }
-
-                                            this.addToQueue(e1);
-                                        }
-                                    } catch (Exception var35) {
-                                        logger.info("NodeRef appears broken: " + var35.getMessage());
-                                        logger.info("   " + Arrays.toString(var35.getStackTrace()));
-                                    }
-                                }
-
-                                try {
-                                    Properties var38 = this.processQueueDefinition(tableName);
-                                    if (logger.isInfoEnabled()) {
-                                        logger.info("harvest: queueDef done, setting tableDefinition");
-                                    }
-
-                                    this.setTableDefinition(tableName, var38);
-                                    if (logger.isInfoEnabled()) {
-                                        logger.info("harvest: tableDef done. Processing queue Values");
-                                    }
-
-                                    this.processQueueValues(tableName);
-                                    this.resetQueue();
-                                    startDbId = Long.parseLong(String.valueOf(this.getNodeService().getProperty(results.getNodeRef(results.length() - 1), ContentModel.PROP_NODE_DBID)));
-                                    if (logger.isDebugEnabled()) {
-                                        logger.debug("harvest: StoreProtocol = " + storeRef.getProtocol());
-                                        logger.debug("harvest: New start DBID=" + startDbId);
-                                    }
-                                } catch (Exception var34) {
-                                    logger.info("harvest: something wrong with the noderef, skipping");
-                                }
-                            }
-                        }
-                    }
-                    this.dbhb.setLastTimestampAndStatusDone(tableName, nowFormattedDate);
-
+            String filePath = getGlobalProperties().getProperty("reporting.harvest.configFile.path", "-");
+            if (!filePath.equals("-")) {
+                File configFile = new File(filePath);
+                if (configFile.exists() && configFile.length() > 0) {
+                    fis = new FileInputStream(configFile);
+                    p.load(fis);
                 }
             }
-            if (!this.dbhb.tableIsRunning("refresh_deleted_rows")) {
-                Map<String, Set> typeTablesMap = new HashMap<>();
-                List<String> processedMessages = new ArrayList<>();
-                for (Message deleteMessage : messagesAboutDelete) {
-                    if (deleteMessage instanceof TextMessage) {
-                        String messageText = ((TextMessage) deleteMessage).getText();
-                        if (messageText != null) {
-                            JSONObject messagesObject = new JSONObject(messageText);
-                            String mainObjectRef = messagesObject.getString("mainObject");
-                            if (NodeRef.isNodeRef(mainObjectRef)) {
-                                NodeRef mainObject = new NodeRef(mainObjectRef);
-                                String shortTypeName;
-                                String objectType = messagesObject.getString("objectType");
-                                if (NodeRef.isNodeRef(objectType)) {
-                                    NodeRef type = new NodeRef(objectType);
-                                    shortTypeName = (String) nodeService.getProperty(type, BusinessJournalService.PROP_OBJ_TYPE_CLASS);
-
-                                    Set<String> tables;
-                                    if (typeTablesMap.containsKey(shortTypeName)) {
-                                        tables = typeTablesMap.get(shortTypeName);
-                                    } else {
-                                        tables = getTablesPerType(shortTypeName);
-                                        typeTablesMap.put(shortTypeName, tables);
-                                    }
-                                    for (String table : tables) {
-                                        UpdateWhere updateWhere =
-                                                new UpdateWhere(table,
-                                                        "",
-                                                        "sys_node_uuid LIKE \'" + mainObject.getId() + "\'");
-                                        dbhb.getReportingDAO().deleteFromTable(updateWhere);
-                                    }
-                                    processedMessages.add(deleteMessage.getJMSMessageID());
-                                } else {
-                                    logger.error("Message has no type!!! Message:" + messageText + "\n");
-                                    processedMessages.add(deleteMessage.getJMSMessageID());
-                                }
-                            }
-                        }
-                    }
-                }
-                this.consumeMessagesAboutDelete(processedMessages);
-            }
-        } catch (Exception var36) {
-            logger.info("Fatality: " + var36.getMessage());
-        }
-    }
-
-    private Integer getTimestampFromDBShift() {
-        String shift = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.timestamp.fromDB.shift", "30");
-        return Integer.parseInt(shift);
-    }
-
-    private Integer getSolrTimestampShift() {
-        String shift = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.timestamp.solr.shift", "10");
-        return Integer.parseInt(shift);
-    }
-
-    private List<StoreRef> getStoreRefList() {
-        String[] stores = this.reportingHelper.getGlobalProperties().getProperty("reporting.harvest.stores", "").split(",");
-        List<StoreRef> storeRefArray = new ArrayList<>();
-
-        for (String store : stores) {
-            logger.debug("Adding store: " + store);
-            StoreRef s = new StoreRef(store);
-            storeRefArray.add(s);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        } finally {
+            IOUtils.closeQuietly(fis);
         }
 
-        return storeRefArray;
-    }
-
-    private String queryClauseTimestamp(String timestamp1, String protocol) {
-        String dateQuery = " ";
-        String myTimestamp1 = timestamp1.replaceAll(" ", "T");
-        if (protocol.equalsIgnoreCase("workspace")) {
-            dateQuery = dateQuery + "AND @cm\\:modified:['" + myTimestamp1 + "' TO NOW]";
-        } else if (protocol.equalsIgnoreCase("archive")) {
-            dateQuery = dateQuery + "AND @sys\\:archivedDate:['" + myTimestamp1 + "' TO NOW]";
-        }
-
-        return dateQuery;
-    }
-
-    private String queryClauseOrderBy(long dbid) {
-        String orderBy = "";
-        if (dbid > 0L) {
-            orderBy = "AND @sys\\:node\\-dbid:[" + (dbid + 1L) + " TO MAX]";
-        }
-
-        return orderBy;
+        return p;
     }
 
     protected List<Message> getMessagesAboutDelete() throws JMSException {
@@ -1032,5 +966,267 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 connection.close();
             }
         }
+    }
+
+    private InsertInto insertIntoTableRecord(ReportLine rl) throws Exception {
+        logger.debug("enter insertIntoTable");
+        try {
+            logger.debug("### sys_store_protocol=" + rl.getValue("sys_store_protocol"));
+            Properties e = this.getReportingHelper().getClassToColumnType();
+            Properties replacementTypes = this.getReportingHelper().getReplacementDataType();
+            String insertInto;
+            String validUntil;
+            if ("archive".equals(rl.getValue("sys_store_protocol"))) {
+                insertInto = rl.getValue("cm_created");
+                validUntil = rl.getValue("sys_archiveddate");
+                rl.setLine("isLatest", e.getProperty("boolean", "-"), "false", replacementTypes);
+                rl.setLine("validFrom", e.getProperty("datetime", "-"), insertInto, replacementTypes);
+                rl.setLine("validUntil", e.getProperty("datetime", "-"), validUntil, replacementTypes);
+            } else if (rl.getValue(Constants.COLUMN_NODEREF) != null && rl.getValue(Constants.COLUMN_NODEREF).startsWith("version")) {
+                insertInto = rl.getValue("cm_created");
+                validUntil = rl.getValue("cm_modified");
+                rl.setLine("isLatest", e.getProperty("boolean", "-"), "false", replacementTypes);
+                rl.setLine("validFrom", e.getProperty("datetime", "-"), insertInto, replacementTypes);
+                rl.setLine("validUntil", e.getProperty("datetime", "-"), validUntil, replacementTypes);
+            } else {
+                insertInto = rl.getValue("cm_modified");
+                rl.setLine("validFrom", e.getProperty("datetime", "-"), insertInto, replacementTypes);
+            }
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("insertIntoTable table=" + rl.getTable());
+                logger.debug("insertIntoTable keys=" + rl.getInsertListOfKeys());
+                logger.debug("insertIntoTable values=" + rl.getInsertListOfValues());
+            }
+
+            return new InsertInto(rl.getTable(), rl.getInsertListOfKeys(), rl.getInsertListOfValues());
+        } catch (Exception var7) {
+            logger.fatal("Exception insertIntoTable: " + var7.getMessage());
+            throw new Exception(var7);
+        }
+    }
+
+    private UpdateWhere updateIntoTableRecord(ReportLine rl) throws Exception {
+        logger.debug("enter updateIntoTable");
+        try {
+            return new UpdateWhere(rl.getTable(), rl.getUpdateSet(),
+                    "sys_node_uuid=\'" + rl.getValue("sys_node_uuid") + "\' OR noderef=\'" + rl.getValue(Constants.COLUMN_NODEREF) + "\'");
+        } catch (Exception var4) {
+            logger.fatal("Exception updateIntoTable: " + var4.getMessage());
+            throw new Exception(var4);
+        }
+    }
+
+    private String toDisplayPath(Path path) {
+        StringBuilder displayPath = new StringBuilder();
+        if (path.size() == 1) {
+            displayPath.append("/");
+        } else {
+            for (int i = 1; i < path.size(); ++i) {
+                Element element = path.get(i);
+                if (element instanceof ChildAssocElement) {
+                    ChildAssociationRef assocRef = ((ChildAssocElement) element).getRef();
+                    NodeRef node = assocRef.getChildRef();
+                    displayPath.append("/");
+                    displayPath.append(this.getNodeService().getProperty(node, ContentModel.PROP_NAME));
+                }
+            }
+        }
+
+        return displayPath.toString();
+    }
+
+
+    private Properties processAssociationDefinitions(Properties definition, NodeRef nodeRef) throws Exception {
+        String blockNameSpaces;
+        try {
+            List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
+            if (childAssocs.size() > 0) {
+                blockNameSpaces = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
+                if (this.getReplacementDataType().containsKey(Constants.COLUMN_CHILD_NODEREF)) {
+                    blockNameSpaces = this.getReplacementDataType().getProperty(Constants.COLUMN_CHILD_NODEREF, "-").trim();
+                }
+
+                definition.setProperty(Constants.COLUMN_CHILD_NODEREF, blockNameSpaces);
+            }
+        } catch (Exception var19) {
+            logger.error("processAssociationDefinitions: child_noderef ERROR! " + var19.getMessage());
+        }
+
+        try {
+            ChildAssociationRef parentRef = this.getNodeService().getPrimaryParent(nodeRef);
+            if (parentRef != null) {
+                blockNameSpaces = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
+                if (this.getReplacementDataType().containsKey(Constants.COLUMN_PARENT_NODEREF)) {
+                    blockNameSpaces = this.getReplacementDataType().getProperty(Constants.COLUMN_PARENT_NODEREF, "-").trim();
+                }
+
+                definition.setProperty(Constants.COLUMN_PARENT_NODEREF, blockNameSpaces);
+            }
+        } catch (Exception var18) {
+            logger.error("processAssociationDefinitions: parent_noderef ERROR!");
+        }
+
+        try {
+            Collection<QName> allAssocs = this.getDictionaryService().getAllAssociations();
+            blockNameSpaces = this.globalProperties.getProperty("reporting.harvest.blockNameSpaces", "");
+            String[] startValues = blockNameSpaces.split(",");
+
+            for (QName type : allAssocs) {
+                String key = "";
+                String shortName = this.replaceNameSpaces(type);
+                boolean stop = nodeRef.toString().startsWith("versionStore") || nodeRef.toString().startsWith("archive");
+
+                for (String startValue : startValues) {
+                    stop = shortName.startsWith(startValue.trim());
+                    if (stop) {
+                        break;
+                    }
+                }
+
+                if (!stop) {
+                    List var23;
+                    String var24;
+                    try {
+                        var23 = this.getNodeService().getTargetAssocs(nodeRef, type);
+                        if (var23.size() > 0) {
+                            key = this.replaceNameSpaces(type);
+                            if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-")) {
+                                var24 = this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-");
+                                if (this.getReplacementDataType().containsKey(key)) {
+                                    var24 = this.getReplacementDataType().getProperty(key, "-").trim();
+                                }
+
+                                if (logger.isDebugEnabled()) {
+                                    logger.debug("Target: Setting " + key + "=" + var24);
+                                }
+
+                                definition.setProperty(key, var24);
+                            }
+                        }
+                    } catch (Exception var17) {
+                        logger.error("processAssociationDefinitions: Target_Association ERROR! key=" + key);
+                    }
+                }
+            }
+        } catch (Exception var20) {
+            logger.error("processAssociationDefinitions: source-target ERROR!");
+        }
+
+        return definition;
+    }
+
+    private ReportLine processAssociationValues(ReportLine rl, NodeRef nodeRef, Properties tableColumns)  throws Exception {
+        try {
+            List childAssocs = this.getNodeService().getChildAssocs(nodeRef);
+            long min = (long) Math.min(childAssocs.size(),
+                    Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
+            long shortName = childAssocs.size();
+            if (shortName > 0L && shortName <= min) {
+                String maxChildCount = "";
+
+                ChildAssociationRef numberOfChildCars;
+                for (Iterator iterator = childAssocs.iterator(); iterator.hasNext(); maxChildCount = maxChildCount + numberOfChildCars.getChildRef()) {
+                    numberOfChildCars = (ChildAssociationRef) iterator.next();
+                    if (maxChildCount.length() > 0) {
+                        maxChildCount = maxChildCount + ",";
+                    }
+                }
+
+                rl.setLine(Constants.COLUMN_CHILD_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), maxChildCount, this.getReplacementDataType());
+            } else if (shortName > 0L) { // достигли лимита - сообщение
+                logger.warn("Max limit reached for node:" + nodeRef + " ," +
+                        "reporting.harvest.treshold.child.assocs = " + min + ", number assocs=" + shortName);
+            }
+        } catch (Exception var19) {
+            logger.warn("Error in processing processAssociationValues");
+        }
+
+        try {
+            ChildAssociationRef primaryParent = this.getNodeService().getPrimaryParent(nodeRef);
+            if (primaryParent != null) {
+                String parentRef = primaryParent.getParentRef().toString();
+                rl.setLine(Constants.COLUMN_PARENT_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREF, "-"), parentRef, this.getReplacementDataType());
+            }
+        } catch (Exception var16) {
+            logger.warn("Exception in getting primary Parent noderef: " + var16.getMessage());
+        }
+
+        List<AssociationRef> targets = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+        HashMap<QName, List<NodeRef>> targetsByQName = new HashMap<>();
+        for (AssociationRef assoc : targets) {
+            List<NodeRef> list = targetsByQName.get(assoc.getTypeQName());
+            if (list == null) {
+                list = new ArrayList<>();
+                targetsByQName.put(assoc.getTypeQName(), list);
+            }
+            list.add(assoc.getTargetRef());
+        }
+
+        for (QName type : targetsByQName.keySet()) {
+            String key;
+            String value;
+            long maxChildCount1;
+            long numberOfChildCars1;
+            try {
+                List<NodeRef> e = targetsByQName.get(type);
+                maxChildCount1 = (long) Math.min(e.size(), Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.sourcetarget.assocs", "20")));
+                numberOfChildCars1 = (long) e.size();
+                if (numberOfChildCars1 > 0L && numberOfChildCars1 <= maxChildCount1) {
+                    key = this.replaceNameSpaces(type);
+                    if (key.length() > 60) {
+                        key = key.substring(0, 60);
+                    }
+                    if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-") && e.size() > 0) {
+                        value = "";
+                        for (NodeRef node : e) {
+                            value += node.toString() + ",";
+                            AssocDefinition definition = new AssocDefinition(nodeRef.toString(), node.toString(), key);
+                            this.getAssocs().add(definition);
+                        }
+                        value = value.substring(0, value.length() - 1);
+                        rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
+                    }
+                } else if (numberOfChildCars1 > 0L) { //достигли лимита - сообщение
+                    logger.warn("Max limit reached for node:" + nodeRef + " ,reporting.harvest.treshold.sourcetarget.assocs=" + maxChildCount1 + ", number assocs=" + numberOfChildCars1);
+                }
+            } catch (Exception ignored) {
+                if (logger.isDebugEnabled()) {
+                    logger.error(ignored.getMessage(), ignored);
+                }
+            }
+        }
+
+        QName objectType = nodeService.getType(nodeRef);
+        Set<String> typeAssocs = null;
+        if (typeAssocsDefinitions.containsKey(objectType)) {
+            typeAssocs = typeAssocsDefinitions.get(objectType);
+        } else {
+            TypeDefinition typeDef = this.getDictionaryService().getType(objectType);
+            if (typeDef != null) {
+                typeAssocs = new HashSet<>();
+                Map<QName, AssociationDefinition> associations = new HashMap<>();
+                associations.putAll(typeDef.getAssociations());
+
+                List<AspectDefinition> defaultAspects = typeDef.getDefaultAspects(true);
+                for (AspectDefinition defaultAspect : defaultAspects) {
+                    associations.putAll(defaultAspect.getAssociations());
+                }
+
+                for (QName assocName : associations.keySet()) {
+                    String shortName = this.replaceNameSpaces(assocName);
+                    typeAssocs.add(shortName);
+                }
+                typeAssocsDefinitions.put(objectType, typeAssocs);
+            }
+        }
+        if (typeAssocs != null && tableColumns != null) {
+            for (String typeAssoc : typeAssocs) {
+                if (rl.getType(typeAssoc) == null && tableColumns.containsKey(typeAssoc)) {
+                    rl.setLine(typeAssoc, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), "", this.getReplacementDataType());
+                }
+            }
+        }
+        return rl;
     }
 }

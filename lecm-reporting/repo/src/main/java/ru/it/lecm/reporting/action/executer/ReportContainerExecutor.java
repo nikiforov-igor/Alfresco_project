@@ -165,7 +165,7 @@ public class ReportContainerExecutor extends ActionExecuterAbstractBase {
                         }
 
                         key = targetQueries.getProperty(newTarget);
-                        value = this.reportingHelper.getSearchLanguage(reportingRoot.getRootQueryLanguage());
+                        value = this.reportingHelper.getSearchLanguage();
                         if(logger.isDebugEnabled()) {
                             logger.debug("processReport: query2=" + key + "(" + value + ")");
                         }
