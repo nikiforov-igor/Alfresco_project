@@ -306,7 +306,7 @@
         </#if>
         <div id="${id}-links" class="data-list-block">
             <span class="heading">${msg("label.links.head")}<span class="count" id="${id}-links-count"> (${links.links?size})</span></span>
-            <#if roles.isInitiator && hasAttrEditPerm && isEditableLinks>
+            <#if hasAttrEditPerm && isEditableLinks>
 		        <span id="${id}-links-add" class="yui-button yui-push-button">
 	                <span class="first-child">
 	                    <button type="button">${msg("label.links.button")}</button>
