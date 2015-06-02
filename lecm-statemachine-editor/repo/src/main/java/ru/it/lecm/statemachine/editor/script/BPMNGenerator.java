@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.quartz.CronExpression;
 
 /**
@@ -37,6 +38,8 @@ import org.quartz.CronExpression;
  */
 public class BPMNGenerator {
 	private static final transient Logger logger = LoggerFactory.getLogger(BPMNGenerator.class);
+
+	private final static String DUMMY_SCRIPT = "(function() { /*empty script*/ })();";
 
 	private String statemachineNodeRef;
 	private NodeService nodeService;
@@ -94,7 +97,7 @@ public class BPMNGenerator {
 
 			NodeRef rolesRef = nodeService.getChildByName(stateMachine, ContentModel.ASSOC_CONTAINS, "roles-list");
 //			List<ChildAssociationRef> roles = nodeService.getChildAssocs(rolesRef);
-//			
+//
 //            Element extention = null;
 //			TODO: Добарить список ролей запускающих процесс в potentialStarter
 //			if (roles.size() > 0) {
@@ -170,16 +173,16 @@ public class BPMNGenerator {
                     }
                 }
             }//alfernatives.size > 0
-            
+
 			List<ChildAssociationRef> statuses = nodeService.getChildAssocs(statusesRef);//Содержимое каталога statuses
 			//Получаем версию машины состояний
             NodeRef statemachines = nodeService.getPrimaryParent(stateMachine).getParentRef();//Каталог с машинами состояний
             NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, "versions");//Каталог версий
             NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, processId);//Каталог типа документа
             Long versionValue = (Long) nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);//Свойство с номером последней версии
-            
+
             String version = "" + (++versionValue);
-            //Цикл по статусам для создания userTask или 
+            //Цикл по статусам для создания userTask или
 			for (ChildAssociationRef status : statuses) {
 				String statusName = (String) nodeService.getProperty(status.getChildRef(), ContentModel.PROP_NAME);
 				String statusVar = "id" + status.getChildRef().getId().replace("-", "");
@@ -222,10 +225,10 @@ public class BPMNGenerator {
 
 		Element taskListener = doc.createElement("activiti:taskListener");
 		extentionElements.appendChild(taskListener);
-		
+
 		taskListener.setAttribute("event", "create");
 		taskListener.setAttribute("class", "ru.it.lecm.statemachine.action.StatusChangeAction");
-		
+
 		Element field = doc.createElement("activiti:field");
 		taskListener.appendChild(field);
 		field.setAttribute("name", "draft");
@@ -346,7 +349,7 @@ public class BPMNGenerator {
 //		attribute.setAttribute("value", version);
 //		setStatusAction.appendChild(attribute);
 //		start.appendChild(setStatusAction);
-		
+
 //		attribute = doc.createElement("lecm:attribute");
 //		attribute.setAttribute("name", "forDraft");
 //		if (forDraft != null) {
@@ -547,17 +550,17 @@ public class BPMNGenerator {
 //        eventElement.appendChild(actionElement);
 //
         List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
-        
+
         for (ChildAssociationRef expression : expressions) {
         	String variableName = "id" + expression.getChildRef().getId().replace("-","");
         	List<AssociationRef> statuses = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
         	Object script = nodeService.getProperty(expression.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_DOCUMENT_CHANGE_SCRIPT);
-        	
+
 			Element boundaryEvent = doc.createElement("boundaryEvent");
 			boundaryEvent.setAttribute("id", variableName);
 			boundaryEvent.setAttribute("attachedToRef", statusVar);
 			boundaryEvent.setAttribute("cancelActivity", String.valueOf(statuses.size()>0));
-			
+
 			Element boundaryEventDefinition = doc.createElement("timerEventDefinition");
 			Element timeDescription;
 			if (timerDuration.startsWith("R") || CronExpression.isValidExpression(timerDuration)) {
@@ -565,13 +568,13 @@ public class BPMNGenerator {
 			} else {
 				timeDescription = doc.createElement("timeDuration");
 			}
-			
+
 			timeDescription.setTextContent(timerDuration);
 			boundaryEventDefinition.appendChild(timeDescription);
 			boundaryEvent.appendChild(boundaryEventDefinition);
-			
+
 			parentElement.appendChild(boundaryEvent);
-			
+
 			Element serviceTask = doc.createElement("serviceTask");
 			serviceTask.setAttribute("id", variableName+"_service");
 			serviceTask.setAttribute("activiti:class", "org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate");
@@ -586,14 +589,14 @@ public class BPMNGenerator {
 			CDATASection cdata = doc.createCDATASection(script.toString());
 			string.appendChild(cdata);
 			parentElement.appendChild(createSequenceFlow(variableName, variableName+"_service"));
-			
+
 			if(statuses.size()>0) {
 				AssociationRef statusRef = statuses.get(0);
 				String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
 				parentElement.appendChild(createSequenceFlow(variableName+"_service", target));
 			}
         }
-        
+
 //
 //        Element attribute = doc.createElement("lecm:attribute");
 //        attribute.setAttribute("name", StatemachineActionConstants.PROP_TIMER_DURATION);
@@ -680,23 +683,23 @@ public class BPMNGenerator {
 //			eventElement.appendChild(actionElement);
 //
 			String variableName = "id" + expression.getChildRef().getId().replace("-","");
-			
+
 			Element boundaryEvent = doc.createElement("boundaryEvent");
 			boundaryEvent.setAttribute("id", variableName);
 			boundaryEvent.setAttribute("attachedToRef", statusVar);
 			boundaryEvent.setAttribute("cancelActivity", "true");
-			
+
 			Element boundaryEventDefinition = doc.createElement("messageEventDefinition");
 			boundaryEventDefinition.setAttribute("messageRef",variableName+"_msg");
 			boundaryEvent.appendChild(boundaryEventDefinition);
-			
+
 			parentElement.appendChild(boundaryEvent);
-			
+
 			Element boundaryEventMessage = doc.createElement("message");
 			boundaryEventMessage.setAttribute("id", variableName+"_msg");
 			boundaryEventMessage.setAttribute("name", variableName+"_msg");
 			parentElement.getParentNode().insertBefore(boundaryEventMessage,parentElement);
-			
+
 //			String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_EXPRESSION);
 //
 //			Element attribute = doc.createElement("lecm:attribute");
@@ -733,23 +736,23 @@ public class BPMNGenerator {
 		List<ChildAssociationRef> expressions = nodeService.getChildAssocs(action.getChildRef());
 		for (ChildAssociationRef expression : expressions) {
 			String variableName = "id" + expression.getChildRef().getId().replace("-","");
-			
+
 			Element boundaryEvent = doc.createElement("boundaryEvent");
 			boundaryEvent.setAttribute("id", variableName);
 			boundaryEvent.setAttribute("attachedToRef", statusVar);
 			boundaryEvent.setAttribute("cancelActivity", "true");
-			
+
 			Element boundaryEventDefinition = doc.createElement("messageEventDefinition");
 			boundaryEventDefinition.setAttribute("messageRef",variableName+"_msg");
 			boundaryEvent.appendChild(boundaryEventDefinition);
-			
+
 			parentElement.appendChild(boundaryEvent);
-			
+
 			Element boundaryEventMessage = doc.createElement("message");
 			boundaryEventMessage.setAttribute("id", variableName+"_msg");
 			boundaryEventMessage.setAttribute("name", variableName+"_msg");
 			parentElement.getParentNode().insertBefore(boundaryEventMessage,parentElement);
-			
+
 			List<AssociationRef> l = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
 			if(l.size()>0){
 				AssociationRef statusRef = l.get(0);
@@ -829,7 +832,7 @@ public class BPMNGenerator {
 //		actionElement.setAttribute("type", StatemachineEditorModel.ACTION_FINISH_STATE_WITH_TRANSITION);
 //		actionElement.setAttribute("variable", "var" + actionVar);
 //		take.appendChild(actionElement);
-		
+
 		List<ChildAssociationRef> transitions = nodeService.getChildAssocs(action.getChildRef());
 		for (ChildAssociationRef transition : transitions) {
 //			Element actionElement = doc.createElement("activiti:taskListener");
@@ -840,7 +843,7 @@ public class BPMNGenerator {
 //			variable.setAttribute("name", "variable");
 //			variable.setAttribute("stringValue", "var" + actionVar);
 //			actionElement.appendChild(variable);
-//			
+//
 //			QName type = nodeService.getType(transition.getChildRef());
 //			/*
 //				<lecm:attribute name="signing">
@@ -888,7 +891,7 @@ public class BPMNGenerator {
 //            	formFolderEl.setAttribute("stringValue", formFolder.toString());//parameter.setAttribute("value", formFolder.toString());
 //            	actionElement.appendChild(formFolderEl);//attribute.appendChild(parameter);
 //            }
-//            
+//
 //            Object formConnection = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_FORM_CONNECTION);
 //            if (formConnection != null) {
 //            	Element formConnectionEl = doc.createElement("activiti:field");//parameter = doc.createElement("lecm:parameter");
@@ -1050,14 +1053,17 @@ public class BPMNGenerator {
 			if("start".equals(event))actionElement.setAttribute("event", "create");
 			else if("end".equals(event))actionElement.setAttribute("event", endTask?"end":"complete");
 			extensions.appendChild(actionElement);
-			
+
 			String data = (String) nodeService.getProperty(script.getChildRef(), StatemachineEditorModel.PROP_ACTION_SCRIPT);
+			if (StringUtils.trimToEmpty(data).isEmpty()) {
+				data = DUMMY_SCRIPT;
+			}
 			CDATASection cdata = doc.createCDATASection(data);
-			
+
 			Element transitionScriptEl = doc.createElement("activiti:field");
 			transitionScriptEl.setAttribute("name", "script");
         	Element transitionScriptStringEl = doc.createElement("activiti:string");
-            
+
             transitionScriptStringEl.appendChild(cdata);
             transitionScriptEl.appendChild(transitionScriptStringEl);
             actionElement.appendChild(transitionScriptEl);//attribute.appendChild(parameter);
