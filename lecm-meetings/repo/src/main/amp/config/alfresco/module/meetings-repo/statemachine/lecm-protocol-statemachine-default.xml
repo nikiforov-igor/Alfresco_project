@@ -193,12 +193,18 @@
   stage.save();
   
   var assocTypeQName = 'lecmWorkflowRoutes:stageItemEmployeeAssoc';
-  var signersAssocs = protocol.assocs["lecm-protocol:signers-assoc"];
-  if (signersAssocs) {
-	var signersCount = signersAssocs.length;
-	for(i = 0; i < signersCount; ++i) {
-		stageItem = stage.createNode(Packages.java.util.UUID.randomUUID().toString(), 'lecmWorkflowRoutes:stageItem');
-		stageItem.createAssociation(signersAssocs[i], assocTypeQName);
+  var signersRefsString = protocol.properties["lecm-protocol:signers-assoc-ref"];
+  if (signersRefsString) {
+	var signersRefs = signersRefsString.split(";");   
+	if (signersRefs){  
+		var signersCount = signersRefs.length;
+		for(i = 0; i < signersCount; ++i) {
+			var signer = search.findNode(signersRefs[i]);
+			if (signer){
+				stageItem = stage.createNode(Packages.java.util.UUID.randomUUID().toString(), 'lecmWorkflowRoutes:stageItem');
+				stageItem.createAssociation(signer, assocTypeQName);
+			}
+		}
 	}
   }
 
@@ -975,12 +981,12 @@
 																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Невозможно запустить согласование требуется новый заполненный список согласования]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -1781,14 +1787,14 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Отозвать с согласования]]></value>
-															</property>
-															<property>
 																<name>transition-script</name>
 																<value><![CDATA[(function() {
     statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'REJECTED_FORCED');
 })();]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Отозвать с согласования]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -1842,14 +1848,14 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Принудительно согласовать]]></value>
-															</property>
-															<property>
 																<name>transition-script</name>
 																<value><![CDATA[(function() {
     statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'APPROVED_FORCED');
 })();]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Принудительно согласовать]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -2688,12 +2694,12 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
