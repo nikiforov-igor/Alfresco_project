@@ -78,7 +78,7 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 
 			getItemsView: function(stage) {
 				var resultsText = "";
-				resultsText += '<div id="approval-stage-items-' + stage.nodeRef.replace(/:|\//g, '_') + '">';
+				resultsText += '<div id="approval-stage-items-' + stage.nodeRef.replace(/:|\//g, '_') + '" class="stages-items">';
 				for (var i = 0; i < stage.items.length; i++) {
 					var item = stage.items[i];
 

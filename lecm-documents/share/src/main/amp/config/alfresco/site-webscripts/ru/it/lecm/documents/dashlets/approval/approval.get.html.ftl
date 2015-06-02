@@ -15,20 +15,7 @@
 	        </select>
 	    </span>
     </div>
-    <div class="body scrollableList dashlet-body" id="${id}_results">
-        <#--<#if approval?? && approval.stages??>-->
-            <#--<#list approval.stages as stage>-->
-                <#--<div>${stage.title}, ${stage.term}, ${stage.decision}, ${stage.type}</div>-->
-                <#--<#if stage.items??>-->
-                    <#--<div>-->
-                    <#--<#list stage.items as item>-->
-	                    <#--<div>${item.employee}, ${item.dueDate}, ${item.state}</div>-->
-                    <#--</#list>-->
-                    <#--</div>-->
-                <#--</#if>-->
-            <#--</#list>-->
-        <#--</#if>-->
-    </div>
+    <div class="body scrollableList dashlet-body" id="${id}_results"></div>
 </div>
 
 <script type="text/javascript">//<![CDATA[
@@ -37,7 +24,9 @@
             LogicECM.module.Base.Util.loadResources([
                         'scripts/dashlets/lecm-approval-dashlet.js'
                     ],
-                    [], createControl);
+                    [
+                        'css/lecm-documents/lecm-approval-dashlet.css'
+                    ], createControl);
         }
         function createControl() {
             var control = new LogicECM.module.Documents.Approval.Dashlet("${id}").setMessages(${messages});
