@@ -269,21 +269,6 @@
                     Event.addListener(me.id + "-time", "keyup", me._handleFieldChange, me, true);
 
                     Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
-                    Event.addListener(me.id + "-date", "blur", function(event, datePicker) {
-                        if (event) {
-                            var relatedTarget = event.relatedTarget;
-
-                            if (relatedTarget) {
-                                var parentDatePicker = Dom.getAncestorByClassName(relatedTarget, "datepicker");
-
-                                if (!parentDatePicker) {
-                                    me._hidePicker();
-                                }
-                            } else {
-                                me._hidePicker();
-                            }
-                        }
-                    }, me, true);
 
                     var iconEl = Dom.get(me.id + "-icon");
                     if (iconEl) {
