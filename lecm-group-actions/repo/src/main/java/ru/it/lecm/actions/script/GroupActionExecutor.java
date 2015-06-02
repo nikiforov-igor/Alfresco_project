@@ -134,7 +134,8 @@ public class GroupActionExecutor extends DeclarativeWebScript {
 						for (NodeRef item : items) {
 							scriptModel.put("document", item);
 							HashMap<String, Object> itemResult = new HashMap<String, Object>();
-							itemResult.put("message", ((String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING)).replace("\"", "\\\""));
+                            String message = ((String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING));
+							itemResult.put("message", message == null ? message : message.replace("\"", "\\\""));
 							itemResult.put("withErrors", false);
                             try {
                                 scriptProcessor.executeScript(scriptContent, scriptModel);
