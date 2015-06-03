@@ -26,6 +26,8 @@ import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author dbashmakov
@@ -43,6 +45,10 @@ public class BaseWebScriptBean extends BaseWebScript {
 	final int REQUEST_MAX = 1000;
 
     private List<TypeMapper> registeredTypes = new ArrayList<TypeMapper>();
+
+	private final ConcurrentMap<QName, String> qNameStringMap = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, QName> stringQNameMap = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, Boolean> isQNameAspectCache = new ConcurrentHashMap<>();
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
@@ -319,5 +325,33 @@ public class BaseWebScriptBean extends BaseWebScript {
 			}
 		}
 		return null;
+	}
+
+	public QName prefixedToQName(String prefixedQName) {
+		QName qName = stringQNameMap.get(prefixedQName);
+		if (qName == null) {
+			qName = QName.resolveToQName(namespaceService, prefixedQName);
+			stringQNameMap.putIfAbsent(prefixedQName, qName);
+}
+		return qName;
+	}
+
+	public String qNameToPrefixString(QName qName) {
+		String prefixString = qNameStringMap.get(qName);
+		if (prefixString == null) {
+			prefixString = qName.toPrefixString(namespaceService);
+			qNameStringMap.putIfAbsent(qName, prefixString);
+		}
+		return prefixString;
+	}
+
+	public boolean isAspect(String prefixedType) {
+		Boolean result = isQNameAspectCache.get(prefixedType);
+		if (result == null) {
+			QName typeQName = QName.createQName(prefixedType, namespaceService);
+			result = dictionaryService.getAspect(typeQName) != null;
+			isQNameAspectCache.putIfAbsent(prefixedType, result);
+		}
+		return result;
 	}
 }

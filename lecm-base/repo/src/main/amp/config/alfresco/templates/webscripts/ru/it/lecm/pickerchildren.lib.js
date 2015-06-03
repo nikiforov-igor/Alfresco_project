@@ -87,7 +87,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 			skipCount = parseInt(argsSkipCount, 10) || skipCount;
 		}
 		// default to max of 100 results
-		var maxResults = 100;
+		var maxResults = 20;
 		if (argsMaxResults != null)
 		{
 			// force the argsMaxResults var to be treated as a number
@@ -153,7 +153,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                 //параметры метода - родитель, тип элементов, игнорируемые типы, макс число результатов, сдвиг, поле для сортировки, направление сортировка, только активные, проверять ли доступ по организации
                 childNodes = base.getChilds(parent, childType, ignoreTypes, maxResults, skipCount, sortProp, true, true, doNotCheck, useOnlyInSameOrg).page;
 			} else {
-				var parentXPath = null;
+				var parentXPath = null, query;
 				if (parent != null) {
 					parentXPath = parent.getQnamePath();
 				} else if (argsXPath != null) {
@@ -165,12 +165,10 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					return null;
 				}
 
-				var query = getFilterParams(argsSearchTerm, parentXPath);
+				query = getFilterParams(argsSearchTerm, parentXPath);
 
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
-                    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-
-                    var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders, ctx);
+                    var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders);
                     if (selectableQuery !== "") {
                         query = (query !== "" ? (query + ' AND (') : '(') + selectableQuery + ')';
                     }
@@ -185,7 +183,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					query = addAdditionalFilter(query, "{{IN_SAME_ORGANIZATION({strict:" + useOnlyInSameOrg + "})}}");
 				}
 
-                query = (query !== "" ? (query + ' AND ') : '') + "NOT @lecm-dic\\:active:false";
+                query = (query !== "" ? (query + ' AND ') : '') + "NOT @lecm\\-dic\\:active:false";
 
 				// Query the nodes - passing in default sort and result limit parameters
 				if (query !== "")
@@ -208,7 +206,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 							page:
 							{
 								skipCount: skipCount,
-								maxItems: (argsMaxResults ? argsMaxResults : 1000)
+								maxItems: maxResults
 							},
 							sort: sort
 						});
@@ -371,28 +369,26 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 	}
 }
 
-function getItemSelectableQuery(selectableType, showFolders, ctx) {
-    var selectable = '';
+function getItemSelectableQuery(selectableType, showFolders) {
+	var selectable = '', types, typesLength, type;
 
-    var dictionaryService = ctx.getBean("dictionaryService");
-    var namespaceService = ctx.getBean("namespaceService");
-
-    if (selectableType !== null && selectableType !== "") {
-        var types = selectableType.split(",");
-        for (var i = 0; i < types.length; i++) {
-            if (types[i].length > 0) {
-                var typeQName = Packages.org.alfresco.service.namespace.QName.createQName(types[i], namespaceService);
-                var isAspect = (dictionaryService.getAspect(typeQName) != null);
-                selectable = (selectable !== "" ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + "\"" + selectableType + "\"";
+	if (selectableType) {
+		types = selectableType.split(",");
+		typesLength = types.length;
+		for (var i = 0; i < typesLength; i++) {
+			type = types[i];
+			if (type.length > 0) {
+				var isAspect = base.isAspect(type);
+				selectable = (selectable ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + '"' + selectableType + '"';
             }
         }
-        if (selectable !== "") {
+		if (selectable) {
             selectable = "(" + selectable + ")";
         }
     }
 
-    selectable = selectable + (selectable !== "" ? " OR (" : "(")
-        + ("((TYPE:\"cm:folder\" OR TYPE:\"app:folderlink\") AND NOT TYPE:\"cm:systemfolder\") AND " + (showFolders == "true" ? "ISNOTNULL:\"cm:name\"" : "ISNULL:\"cm:name\"")) + ")";
+	//selectable = selectable + (selectable ? " OR (" : "(")
+	//	+ ('((TYPE:"cm:folder" OR TYPE:"app:folderlink") AND NOT TYPE:"cm:systemfolder") AND ' + (showFolders == "true" ? 'ISNOTNULL:"cm:name"' : 'ISNULL:"cm:name"')) + ')';
     return selectable;
 }
 
@@ -767,10 +763,10 @@ function checkDocType(item, docType) {
 }
 
 function getFilterForAvailableElement(availableElements) {
-	var filter = "ID:\"NOT_REF\"";
+	var filter = "=@sys\\:node-uuid:\"NOT_REF\"";
 	if (availableElements != null && availableElements.length > 0) {
 		for (var i = 0; i < availableElements.length; i++) {
-			filter += " OR ID:\"" + availableElements[i].nodeRef + "\"";
+			filter += " OR =@sys\\:node-uuid:\"" + availableElements[i].nodeRef.getId() + "\"";
 		}
 	}
 	return filter;
