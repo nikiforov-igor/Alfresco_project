@@ -8,7 +8,7 @@
 	if (wCalendarNonWorkingDays != null) {
 		for (var i = 0; i < wCalendarNonWorkingDays.length(); i++) {
 			var date = wCalendarNonWorkingDays.get(i);
-			nonWorkingDays.push(new Date(date));
+			nonWorkingDays.push(new Date(date.getTime()));
 		}
 	}
 	model.nonWorkingDays = nonWorkingDays;
