@@ -21,6 +21,23 @@
 					},
 					failureMessage: "message.failure"
 				});
+
+        Alfresco.util.Ajax.request(
+                {
+                    method: "GET",
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/url/view",
+                    dataObj: {
+                        nodeRef: "${nodeRef}"
+                    },
+                    successCallback: {
+                        fn:function(response){
+                            YAHOO.util.Dom.get("${fieldHtmlId}-value-link").href = response.json.url + "?nodeRef=${nodeRef}";
+                        },
+                        scope: this
+                    },
+                    failureMessage: "message.failure"
+                });
+
 	</#if>
 })();
 //]]></script>
