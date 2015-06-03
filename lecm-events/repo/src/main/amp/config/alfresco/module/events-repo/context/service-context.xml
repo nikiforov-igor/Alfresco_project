@@ -117,6 +117,7 @@
 		<property name="eventService" ref="eventsService"/>
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
+        <property name="actionsService" ref="groupActionsService"/>
 	</bean>
 
 	<bean id="eventsPolicy" class="ru.it.lecm.events.policy.EventsPolicy" parent="baseBean"

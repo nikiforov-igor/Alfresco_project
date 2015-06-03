@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: pmelnikov
@@ -44,6 +45,8 @@ public interface GroupActionsService {
      * @return
      */
     List<NodeRef> getActiveGroupActions(List<NodeRef> forItems, boolean group);
+
+    Map<NodeRef, List<NodeRef>> getActiveActionsMap(List<NodeRef> items);
 
     /**
      * Вывод не груповвых действий для документа

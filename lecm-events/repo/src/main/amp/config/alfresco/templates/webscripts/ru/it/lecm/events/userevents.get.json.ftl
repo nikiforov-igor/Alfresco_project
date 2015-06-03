@@ -41,6 +41,19 @@
                     </#list>
                 ],
 
+				"actions": [
+                    <#list event.actions as action>
+                        {
+                            "id": "${action.properties["cm:name"]}",
+                            "title": "${action.properties["cm:title"]!action.properties["cm:name"]!""}",
+                            "wide": false,
+                            "type": "${action.getTypeShort()}",
+                            "withForm": ${((action.children?size) != 0)?string},
+                            "workflowId": "${action.properties["lecm-group-actions:workflow"]!""}"
+                        }<#if action_has_next>,</#if>
+                    </#list>
+                ],
+
 				"permissions": {
 					"isEdit": ${event.canEdit?string},
 					"isDelete": ${event.canDelete?string}

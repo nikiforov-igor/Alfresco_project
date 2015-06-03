@@ -80,6 +80,16 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         return getActiveActions(forItems, group);
     }
 
+    @Override
+    public Map<NodeRef, List<NodeRef>> getActiveActionsMap(List<NodeRef> items) {
+        List<NodeRef> actions = getAllActions(false);
+        Map<NodeRef, List<NodeRef>> actionsMap = new HashMap<>();
+        for (NodeRef item : items) {
+            actionsMap.put(item, filterAndSortActions(actions, Collections.singletonList(item)));
+        }
+        return actionsMap;
+    }
+
     public List<NodeRef> getActiveActions(NodeRef item) {
         List<NodeRef> forItems = new ArrayList<NodeRef>();
         forItems.add(item);
@@ -88,8 +98,29 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
 
     private List<NodeRef> getActiveActions(List<NodeRef> forItems, boolean group) {
         if (forItems.size() == 0) return new ArrayList<NodeRef>();
-        List<ChildAssociationRef> children = nodeService.getChildAssocs(getHomeRef());
+        List<NodeRef> actions = getAllActions(group);
+        actions = filterAndSortActions(actions, forItems);
+        return actions;
+    }
+
+    private List<NodeRef> filterAndSortActions( List<NodeRef> actions, List<NodeRef> forItems) {
+        actions = filterByType(actions, forItems);
+        actions = filterByStatuses(actions, forItems);
+        actions = filterByExpression(actions, forItems);
+        Collections.sort(actions, new Comparator<NodeRef>() {
+            @Override
+            public int compare(NodeRef o1, NodeRef o2) {
+                Long order1 = (Long) nodeService.getProperty(o1, GroupActionsService.PROP_ORDER);
+                Long order2 = (Long) nodeService.getProperty(o2, GroupActionsService.PROP_ORDER);
+                return order1.compareTo(order2);
+            }
+        });
+        return actions;
+    }
+
+    private List<NodeRef> getAllActions(boolean group) {
         List<NodeRef> actions = new ArrayList<NodeRef>();
+        List<ChildAssociationRef> children = nodeService.getChildAssocs(getHomeRef());
         for (ChildAssociationRef child : children) {
             QName type = nodeService.getType(child.getChildRef());
             if (dictionaryService.isSubClass(type, TYPE_GROUP_ACTION)) {
@@ -104,17 +135,6 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
                 }
             }
         }
-        actions = filterByType(actions, forItems);
-        actions = filterByStatuses(actions, forItems);
-        actions = filterByExpression(actions, forItems);
-        Collections.sort(actions, new Comparator<NodeRef>() {
-            @Override
-            public int compare(NodeRef o1, NodeRef o2) {
-                Long order1 = (Long) nodeService.getProperty(o1, GroupActionsService.PROP_ORDER);
-                Long order2 = (Long) nodeService.getProperty(o2, GroupActionsService.PROP_ORDER);
-                return order1.compareTo(order2);
-            }
-        });
         return actions;
     }
 

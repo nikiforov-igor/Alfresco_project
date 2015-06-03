@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -27,6 +28,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     private EventsService eventService;
     private OrgstructureBean orgstructureBean;
     private DictionaryService dictionaryService;
+    private GroupActionsService actionsService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -44,13 +46,25 @@ public class EventsWebScriptBean extends BaseWebScript {
         this.dictionaryService = dictionaryService;
     }
 
-    public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
-        List<NodeRef> events = eventService.getEvents(fromDate, toDate);
-        return processEvents(events);
+    public void setActionsService(GroupActionsService actionsService) {
+        this.actionsService = actionsService;
     }
 
-    private List<Map<String, Object>> processEvents( List<NodeRef> events) {
+    public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
+        return getUserEvents(fromDate, toDate, false);
+    }
+
+    public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions) {
+        List<NodeRef> events = eventService.getEvents(fromDate, toDate);
+        return processEvents(events, loadActions);
+    }
+
+    private List<Map<String, Object>> processEvents( List<NodeRef> events, boolean loadActions) {
         List<Map<String, Object>> results = new ArrayList<>();
+        Map<NodeRef, List<NodeRef>> actionsMap = null;
+        if (loadActions) {
+            actionsMap = actionsService.getActiveActionsMap(events);
+        }
         for (NodeRef entry : events) {
             // Build the object
             Map<String, Object> result = new HashMap<>();
@@ -66,6 +80,7 @@ public class EventsWebScriptBean extends BaseWebScript {
 
             result.put("members", eventService.getEventMembers(entry));
             result.put("invitedMembers", eventService.getEventInvitedMembers(entry));
+            result.put("actions", actionsMap != null ? actionsMap.get(entry) : Collections.emptyList());
 
             NodeRef location = eventService.getEventLocation(entry);
             if (location != null) {
@@ -129,7 +144,7 @@ public class EventsWebScriptBean extends BaseWebScript {
 
     public List<Map<String, Object>> searchUserEvents(String filter) {
         List<NodeRef> events = eventService.searchEvents(filter);
-        return processEvents(events);
+        return processEvents(events, false);
     }
 
     public Scriptable getUserNearestEvents(ScriptNode currentEmployee, int maxItems) {

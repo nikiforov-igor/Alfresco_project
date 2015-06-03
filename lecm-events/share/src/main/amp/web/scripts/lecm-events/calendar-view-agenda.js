@@ -39,6 +39,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		initEndDate: null,
 
 		render: function () {
+            this.options.loadActions = true;
 			this.initEvents();
 
 			this.initStartDate = this.options.startDate;
@@ -319,101 +320,89 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			// write to DOM
 			elCell.innerHTML = html;
-			this.renderCellActionsExt(data.nodeRef, elCell, actions)
+			this.renderCellActionsExt(data, elCell, actions)
 		},
 
-		renderCellActionsExt: function renderCellActionsExt(nodeRef, cell, cellActions) {
+		renderCellActionsExt: function renderCellActionsExt(eventObj, cell, cellActions) {
 			var template = '<a id="{id}" href="#" class="{type}" title="{tooltip}"><span>{label}</span></a>';
 
 			var me = this;
-			var items = [];
-			items.push(nodeRef);
-			Alfresco.util.Ajax.jsonRequest({
-				method: "POST",
-				url: Alfresco.constants.PROXY_URI + "lecm/groupActions/list",
-				dataObj: {
-					items: JSON.stringify(items),
-					group: false
-				},
-				successCallback: {
-					fn: function (response) {
-						var actions = response.json;
-						var armToolbar = Alfresco.util.ComponentManager.findFirst("LogicECM.module.ARM.DocumentsToolbar");
-						var acceptId = null;
-						var acceptActionObject = null;
-						var rejectId = null;
-						var rejectActionObject = null;
-						var deleteId = null;
-						var deleteActionObject = null;
-						if (armToolbar) {
-							actions.forEach(function (action) {
-								var actionObj = {
-									actionId: action.id,
-									type: action.type,
-									withForm: action.withForm,
-									items: items,
-									workflowId: action.workflowId,
-									label: action.title
-								};
+            var items = [];
+            items.push(eventObj.nodeRef);
 
-								if (actionObj.actionId === "Принять приглашение") {
-									acceptId = Alfresco.util.generateDomId();
-									cellActions.push(YAHOO.lang.substitute(template,
-										{
-											id: acceptId,
-											type: "acceptAction",
-											label: me.msg("agenda.action.accept.label"),
-											tooltip: me.msg("agenda.action.accept.tooltip")
-										}));
-									acceptActionObject = actionObj;
-								} else if (actionObj.actionId === "Отклонить приглашение") {
-									rejectId = Alfresco.util.generateDomId();
-									cellActions.push(YAHOO.lang.substitute(template,
-										{
-											id: rejectId,
-											type: "rejectAction",
-											label: me.msg("agenda.action.reject.label"),
-											tooltip: me.msg("agenda.action.reject.tooltip")
-										}));
-									rejectActionObject = actionObj;
-								} else if (actionObj.label === "Удалить") {
-									deleteId = Alfresco.util.generateDomId();
-									cellActions.push(YAHOO.lang.substitute(template,
-										{
-											id: deleteId,
-											type: "deleteAction",
-											label: me.msg("agenda.action.delete.label"),
-											tooltip: me.msg("agenda.action.delete.tooltip")
-										}));
-									deleteActionObject = actionObj;
-								}
-							});
+            var actions = eventObj.actions;
+            var armToolbar = Alfresco.util.ComponentManager.findFirst("LogicECM.module.ARM.DocumentsToolbar");
+            var acceptId = null;
+            var acceptActionObject = null;
+            var rejectId = null;
+            var rejectActionObject = null;
+            var deleteId = null;
+            var deleteActionObject = null;
+            if (armToolbar) {
+                actions.forEach(function (action) {
+                    var actionObj = {
+                        actionId: action.id,
+                        type: action.type,
+                        withForm: action.withForm,
+                        items: items,
+                        workflowId: action.workflowId,
+                        label: action.title
+                    };
 
-							if (acceptId != null) {
-								YAHOO.util.Event.addListener(acceptId, "click", function() {
-									armToolbar.onGroupActionsClick(null, null, acceptActionObject);
-								});
-							}
-							if (rejectId != null) {
-								YAHOO.util.Event.addListener(rejectId, "click", function() {
-									armToolbar.onGroupActionsClick(null, null, rejectActionObject);
-								});
-							}
-							if (deleteId != null) {
-								YAHOO.util.Event.addListener(deleteId, "click", function() {
-									armToolbar.onGroupActionsClick(null, null, deleteActionObject);
-								});
-							}
-							if (acceptId != null || rejectId != null || deleteId != null) {
-								var html = cellActions.join(" ");
-								cell.innerHTML = html;
-							}
-						}
-					}
-				},
-				failureMessage:"message.failure",
-				execScripts:true
-			});			// Accept/reject actions
+                    if (actionObj.actionId === "Принять приглашение") {
+                        acceptId = Alfresco.util.generateDomId();
+                        cellActions.push(YAHOO.lang.substitute(template,
+                            {
+                                id: acceptId,
+                                type: "acceptAction",
+                                label: me.msg("agenda.action.accept.label"),
+                                tooltip: me.msg("agenda.action.accept.tooltip")
+                            }));
+                        acceptActionObject = actionObj;
+                    } else if (actionObj.actionId === "Отклонить приглашение") {
+                        rejectId = Alfresco.util.generateDomId();
+                        cellActions.push(YAHOO.lang.substitute(template,
+                            {
+                                id: rejectId,
+                                type: "rejectAction",
+                                label: me.msg("agenda.action.reject.label"),
+                                tooltip: me.msg("agenda.action.reject.tooltip")
+                            }));
+                        rejectActionObject = actionObj;
+                    } else if (actionObj.label === "Удалить") {
+                        deleteId = Alfresco.util.generateDomId();
+                        cellActions.push(YAHOO.lang.substitute(template,
+                            {
+                                id: deleteId,
+                                type: "deleteAction",
+                                label: me.msg("agenda.action.delete.label"),
+                                tooltip: me.msg("agenda.action.delete.tooltip")
+                            }));
+                        deleteActionObject = actionObj;
+                    }
+                });
+
+                if (acceptId != null) {
+                    YAHOO.util.Event.addListener(acceptId, "click", function () {
+                        armToolbar.onGroupActionsClick(null, null, acceptActionObject);
+                    });
+                }
+                if (rejectId != null) {
+                    YAHOO.util.Event.addListener(rejectId, "click", function () {
+                        armToolbar.onGroupActionsClick(null, null, rejectActionObject);
+                    });
+                }
+                if (deleteId != null) {
+                    YAHOO.util.Event.addListener(deleteId, "click", function () {
+                        armToolbar.onGroupActionsClick(null, null, deleteActionObject);
+                    });
+                }
+                if (acceptId != null || rejectId != null || deleteId != null) {
+                    var html = cellActions.join(" ");
+                    cell.innerHTML = html;
+                }
+            }
+
 		},
 
 		/**
