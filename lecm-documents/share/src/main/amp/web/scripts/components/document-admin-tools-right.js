@@ -76,8 +76,16 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                                 }
                             },
                             {
-                                text: this.msg("menu.button.delete.document"),
+                                text: this.msg("menu.button.dynamic.roles"),
                                 value: 3,
+                                onclick: {
+                                    fn: this.managementDynamicRoles,
+                                    scope: this
+                                }
+                            },
+                            {
+                                text: this.msg("menu.button.delete.document"),
+                                value: 4,
                                 onclick: {
                                     fn: this.deleteDocument,
                                     scope: this
@@ -95,6 +103,19 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 				Alfresco.util.PopupManager.displayWebscript(
 					{
 						title: this.msg("title.service.information"),
+						method: "GET",
+						url: templateUrl,
+						properties: {}
+					}
+				);
+
+			},
+
+            managementDynamicRoles: function() {
+				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/document/admin/managementDynamicRoles?nodeRef="+this.options.documentRef;
+				Alfresco.util.PopupManager.displayWebscript(
+					{
+						title: this.msg("title.service.dynamic.roles"),
 						method: "GET",
 						url: templateUrl,
 						properties: {}

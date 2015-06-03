@@ -308,6 +308,20 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 	}
 
 	/**
+	 * Получение списка динамических ролей для документа
+	 *
+	 * @param document документ
+	 * @return список динамических ролей
+	 */
+	public String[] getDynamicRoles(ScriptNode document) {
+		Set<String> results = new HashSet<>();
+		if (document != null) {
+			results.addAll(stateMachineHelper.getAllDynamicRoles(document.getNodeRef()));
+		}
+		return results.toArray(new String[results.size()]);
+	}
+
+	/**
 	 * Получение папкок с архивными документами
 	 *
 	 * @param documentType

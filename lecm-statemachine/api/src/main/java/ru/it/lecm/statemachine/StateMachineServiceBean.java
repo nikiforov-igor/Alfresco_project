@@ -74,6 +74,13 @@ public interface StateMachineServiceBean {
 	 */
 	List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal);
 
+	/**
+	 * Получение всех динамических ролей по документу
+	 * @param document документ
+	 * @return список динамических ролей
+	 */
+	List<String> getAllDynamicRoles(NodeRef document);
+
 	boolean isFinal(NodeRef document);
 
 	/**

@@ -218,6 +218,23 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         return statusesList;
     }
 
+    @Override
+    public List<String> getAllDynamicRoles(NodeRef document) {
+        String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        if (executionId != null) {
+            TaskService taskService = activitiProcessEngineConfiguration.getTaskService();
+            TaskQuery taskQuery = taskService.createTaskQuery();
+            Task task = taskQuery.processInstanceId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
+            if (task != null) {
+                String smName = task.getProcessDefinitionId();
+                String version = smName.substring(smName.indexOf(":") + 1, smName.lastIndexOf(":"));
+                smName = smName.substring(0, smName.indexOf(":"));
+                return getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getDinamicRoles();
+            }
+        }
+        return new ArrayList<>();
+    }
+
     /*
      * Возвращает бизнес-роли которые могут создавать документ определенного типа
      * @param type - тип документа

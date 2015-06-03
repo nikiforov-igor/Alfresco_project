@@ -117,6 +117,11 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public List<String> getAllDynamicRoles(NodeRef document) {
+        return null;
+    }
+
+    @Override
     public boolean isFinal(NodeRef document) {
         return true;
     }

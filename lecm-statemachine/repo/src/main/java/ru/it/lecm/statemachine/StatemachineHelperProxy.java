@@ -97,6 +97,11 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     }
 
     @Override
+    public List<String> getAllDynamicRoles(NodeRef document) {
+        return lifecycleStateMachineHelper.getAllDynamicRoles(document);
+    }
+
+    @Override
     public boolean isFinal(NodeRef document) {
         return getHelper(document).isFinal(document);
     }
