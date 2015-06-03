@@ -4,9 +4,7 @@
 (function () {
 	function createObject() {
 		new LogicECM.module.DocumentAdmin.DynamicRoles("${el}-body").setOptions({
-        <#if dynamicRoles??>
-			roles: eval('(${dynamicRoles?js_string})')
-        </#if>
+			documentNodeRef: "${nodeRef}"
 		}).setMessages(${messages});
 	}
 

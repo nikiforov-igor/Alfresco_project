@@ -1198,6 +1198,25 @@
 					<!--<show id="lecm-orgstr:business-role-is-dynamic"/>-->
 				</field-visibility>
 			</form>
+            <form id="addEmployeeToDynamicRole">
+                <field-visibility>
+                    <show id="lecm-orgstr:business-role-employee-assoc"/>
+                    <show id="roleId"/>
+                    <show id="document"/>
+                </field-visibility>
+                <appearance>
+                    <field id="roleId">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-arguments-hidden-control.ftl">
+                            <control-param name="argName">roleId</control-param>
+                        </control>
+                    </field>
+                    <field id="document">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-arguments-hidden-control.ftl">
+                            <control-param name="argName">document</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
 		</forms>
 	</config>
 	<config evaluator="node-type" condition="lecm-orgstr:business-role">

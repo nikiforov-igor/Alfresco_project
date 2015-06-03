@@ -28,21 +28,40 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 
 	YAHOO.extend(LogicECM.module.DocumentAdmin.DynamicRoles, Alfresco.component.Base, {
 		options: {
-			roles: null
+			documentNodeRef: null
 		},
+
+		roles: null,
 
 		onReady: function () {
-			this.drawRoles()
+			this.loadRoles();
 		},
 
-		drawRoles: function() {
-			var container = Dom.get(this.id);
+		loadRoles: function() {
+			var me = this;
+			Alfresco.util.Ajax.jsonGet({
+					url: Alfresco.constants.PROXY_URI + "lecm/statemachine/getDynamicRoles?nodeRef=" + encodeURIComponent(this.options.documentNodeRef),
+					successCallback: {
+						fn: function (response) {
+							var oResults = response.json;
+							if (oResults != null) {
+								me.drawRoles(oResults);
+							}
+						},
+						scope: this
+					}
+				});
+		},
 
-			if (this.options.roles != null && container != null) {
-				for (var i = 0; i < this.options.roles.length; i++) {
-					container.innerHTML += this.getRoleView(this.options.roles[i]);
+		drawRoles: function(roles) {
+			var container = Dom.get(this.id);
+			var results = "";
+			if (roles != null && container != null) {
+				for (var i = 0; i < roles.length; i++) {
+					results += this.getRoleView(roles[i]);
 				}
 			}
+			container.innerHTML = results
 		},
 
 		getRoleView: function(role) {
@@ -87,7 +106,41 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 		},
 
 		addEmployee: function (event, role) {
-			alert("add employee to " + role.id);
+			var me = this;
+			new Alfresco.module.SimpleDialog("add-employee-to-dynamic-role" + Alfresco.util.generateDomId()).setOptions({
+				width: "50em",
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+				templateRequestParams: {
+					submissionUrl: "/lecm/document/action/addEmployeesToDynamicRole",
+					itemKind: "type",
+					itemId: "lecm-orgstr:business-role",
+					formId: "addEmployeeToDynamicRole",
+					mode: "create",
+					submitType: "json",
+					showCancelButton: true,
+					roleId: role.id,
+					document: me.options.documentNodeRef
+				},
+				actionUrl: null,
+				destroyOnHide: true,
+				doBeforeDialogShow: {
+					fn: function (p_form, p_dialog) {
+						var contId = p_dialog.id + "-form-container";
+						var dialogName = me.msg("title.documents.admin.roles.dynamic.employee.add");
+						Alfresco.util.populateHTML(
+							[contId + "_h", dialogName]
+						);
+
+						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+					}
+				},
+				onSuccess: {
+					fn: function (response) {
+						me.loadRoles();
+					},
+					scope: this
+				}
+			}).show();
 		},
 
 		removeEmployee: function (event, params) {

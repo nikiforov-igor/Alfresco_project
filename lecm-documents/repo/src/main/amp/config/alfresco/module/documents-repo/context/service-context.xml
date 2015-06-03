@@ -685,4 +685,11 @@
             </list>
         </property>
     </bean>
+
+    <bean id="webscript.ru.it.lecm.documents.addEmployeesToDynamicRole.post"
+          class="ru.it.lecm.documents.scripts.AddEmployeesToDynamicRole"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+    </bean>
 </beans>
