@@ -83,22 +83,19 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                     this.maxItems = "today";
                 }
 
-                var menuItems = [
-                    { value: "today", text: this.msg("relative.today"), onclick: { fn: this.onMenuItemClick.bind(this)} },
-                    { value: "5", text: this.msg("label.dashlet.next_count") +  " " + 5, onclick: { fn: this.onMenuItemClick.bind(this)} },
-                    { value: "10", text: this.msg("label.dashlet.next_count") +  " " + 10, onclick: { fn: this.onMenuItemClick.bind(this)} }
-                ];
-
-                var label = ""
+                var label = "";
                 if (this.maxItems === "today") {
-                    label = this.msg("relative.today")
+                    label = this.msg("relative.today");
                 } else {
-                    label = this.msg("label.dashlet.next_count") +  " " + this.maxItems
+                    label = this.msg("label.dashlet.next_count") +  " " + this.maxItems;
                 }
 
-                this.menuButton = new YAHOO.widget.Button(this.id + '-filters', {type: "menu",
-                    label: label,
-                    menu: menuItems});
+                this.menuButton = Alfresco.util.createYUIButton(this, "filters", this.onMenuItemClick.bind(this),
+                    {
+                        type: "menu",
+                        menu: "filters-menu",
+                        lazyloadmenu: false
+                    });
 
                 this.menuButton.set("label", label);
                 this.loadItems();
@@ -173,13 +170,14 @@ LogicECM.dashlet = LogicECM.dashlet || {};
             },
 
             onMenuItemClick: function onMenuItemClick_function(p_sType, p_aArgs, p_oItem) {
-                var sText = p_oItem.cfg.getProperty("text");
+                var item = p_aArgs[1];
+                var sText = item.cfg.getProperty("text");
                 this.menuButton.set("label", sText);
                 var date = new Date;
                 date.setDate(date.getDate() + 30);
                 var expiresDate = date;
-                LogicECM.module.Base.Util.setCookie(this._buildPreferencesKey(), p_oItem.value, {expires: expiresDate});
-                this.maxItems = p_oItem.value;
+                LogicECM.module.Base.Util.setCookie(this._buildPreferencesKey(), item.value, {expires: expiresDate});
+                this.maxItems = item.value;
                 this.loadItems();
             },
 

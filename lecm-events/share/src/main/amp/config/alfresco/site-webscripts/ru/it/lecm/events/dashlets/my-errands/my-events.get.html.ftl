@@ -46,11 +46,16 @@
 <div class="dashlet my-events">
     <div class="title">${msg("label.title")}</div>
     <div class="toolbar flat-button">
-         <span class="yui-button yui-push-button" id="${id}-filters">
+         <span class="align-left yui-button yui-menu-button" id="${id}-filters">
             <span class="first-child">
                <button type="button" tabindex="0"></button>
             </span>
          </span>
+        <select id="${id}-filters-menu" class="hidden1">
+            <option value="today">${msg("relative.today")}</option>
+            <option value="5">${msg("label.dashlet.next_count") + " " + 5}</option>
+            <option value="10">${msg("label.dashlet.next_count") + " " + 10}</option>
+        </select>
         <div class="clear"></div>
     </div>
     <div class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>
