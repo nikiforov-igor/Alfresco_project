@@ -20,6 +20,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import javax.activation.DataSource;
@@ -50,6 +51,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private DocumentTableService documentTableService;
 	private NotificationsService notificationsService;
 	private SearchQueryProcessor organizationQueryProcessor;
+	private LecmPermissionService lecmPermissionService;
 
 	private ThreadPoolExecutor threadPoolExecutor;
 	
@@ -99,6 +101,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	public void setOrganizationQueryProcessor(SearchQueryProcessor organizationQueryProcessor) {
 		this.organizationQueryProcessor = organizationQueryProcessor;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
 	}
 
 	@Override
@@ -450,7 +456,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public NodeRef getMemberTable(NodeRef event) {
-		return documentTableService.getTable(event, TYPE_EVENT_MEMBERS_TABLE);
+		if (lecmPermissionService.hasPermission(LecmPermissionService.PERM_CONTENT_LIST, event)) {
+			return documentTableService.getTable(event, TYPE_EVENT_MEMBERS_TABLE);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
