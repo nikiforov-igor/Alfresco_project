@@ -145,18 +145,38 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 
 		removeEmployee: function (event, params) {
 			var me = this;
-			Alfresco.util.Ajax.jsonGet({
-				url: Alfresco.constants.PROXY_URI + "lecm/security/api/revokeDynamicBusinessRole?documentNodeRef=" +
-						encodeURIComponent(this.options.documentNodeRef) +
-						"&employeeNodeRef=" + encodeURIComponent(params.employee.nodeRef) +
-						"&roleId=" + encodeURIComponent(params.role.id),
-				successCallback: {
-					fn: function (response) {
-						me.loadRoles();
-					},
-					scope: this
-				}
-			});
+			Alfresco.util.PopupManager.displayPrompt(
+				{
+					title: this.msg("message.documents.admin.roles.dynamic.employee.delete.confirm.title"),
+					text: this.msg("message.documents.admin.roles.dynamic.employee.delete.confirm.description", params.employee.name, params.role.name),
+					buttons:[
+						{
+							text:this.msg("button.yes"),
+							handler:function DataGridActions__onActionDelete_delete() {
+								this.destroy();
+								Alfresco.util.Ajax.jsonGet({
+									url: Alfresco.constants.PROXY_URI + "lecm/security/api/revokeDynamicBusinessRole?documentNodeRef=" +
+									encodeURIComponent(me.options.documentNodeRef) +
+									"&employeeNodeRef=" + encodeURIComponent(params.employee.nodeRef) +
+									"&roleId=" + encodeURIComponent(params.role.id),
+									successCallback: {
+										fn: function (response) {
+											me.loadRoles();
+										},
+										scope: this
+									}
+								});
+							}
+						},
+						{
+							text:this.msg("button.cancel"),
+							handler:function DataGridActions__onActionDelete_cancel() {
+								this.destroy();
+							},
+							isDefault:true
+						}
+					]
+				});
 		}
 	});
 })();
