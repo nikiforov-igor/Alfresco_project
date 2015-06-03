@@ -9,6 +9,8 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event;
+    var collapsedClass = "collapsed";
+    var expandedClass = "expanded";
 
 	LogicECM.module.Documents.Approval.Dashlet = function (htmlId) {
 		LogicECM.module.Documents.Approval.Dashlet.superclass.constructor.call(this, "LogicECM.module.Documents.Approval.Dashlet", htmlId, ["button", "container"]);
@@ -54,8 +56,31 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 
 			getStageView: function (status, stage) {
 				var resultsText = "";
+                var btnEl = document.createElement('div');
+                var id = "approval-stage-btn_" + stage.nodeRef;
 
-				resultsText += "<div>";
+                btnEl.id = id;
+                Dom.addClass(btnEl, "approval-stage-btn " + collapsedClass);
+                YAHOO.util.Event.addListener(id, "click", function() {
+                    var btnEl = this;
+                    if (Dom.hasClass(btnEl, collapsedClass)) {
+                        Dom.replaceClass(btnEl, collapsedClass, expandedClass);
+                    } else {
+                        Dom.replaceClass(btnEl, expandedClass, collapsedClass);
+                    }
+                });
+
+				resultsText += "<div class='approval-stage-container'>";
+                resultsText += btnEl.outerHTML;
+				resultsText += "<div class='approval-stage ";
+
+                if (stage.type == "PARALLEL") {
+                    resultsText += "stage-parallel";
+                } else {
+                    resultsText += "stage-sequential";
+                }
+
+                resultsText += "'>";
 				resultsText += this.msg("label.approval.dashlet.stage.title") + ": ";
 				resultsText += stage.title;
 				resultsText += ", " + this.msg("label.approval.dashlet.stage.term") + " ";
@@ -64,16 +89,12 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 					resultsText += ", " + this.msg("label.approval.dashlet.stage.status") + " ";
 					resultsText += stage.decision.displayValue;
 				}
-				if (stage.type == "PARALLEL") {
-					resultsText += " ||";
-				} else {
-					resultsText += " >>";
-				}
 				resultsText += "</div>";
 
 				resultsText += this.getItemsView(stage);
+                resultsText += "</div>";
 
-				return resultsText;
+                return resultsText;
 			},
 
 			getItemsView: function(stage) {

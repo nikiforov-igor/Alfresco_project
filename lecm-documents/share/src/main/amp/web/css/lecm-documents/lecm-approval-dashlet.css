@@ -1,3 +1,44 @@
-.stages-items {
-	padding-left: 10px;
+.dashlet.approval .dashlet-body {
+    padding: 8px 1em;
+    box-sizing: border-box;
 }
+.dashlet.approval .approval-stage-container .approval-stage-btn {
+    float: left;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+.dashlet.approval .approval-stage-container .approval-stage-btn.collapsed {
+    background: url("../../images/lecm-documents/approval/alf_plus_grey_16.png") left top no-repeat;
+}
+.dashlet.approval .approval-stage-container .approval-stage-btn.expanded {
+    background: url("../../images/lecm-documents/approval/alf_minus_grey_16.png") left top no-repeat;
+}
+.dashlet.approval .approval-stage-container div.approval-stage {
+    padding-right: 20px;
+    padding-left: 25px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+.dashlet.approval div.approval-stage.stage-parallel {
+    background: url("../../images/lecm-documents/approval/alf_parallel_grey_16.png") right top no-repeat;
+}
+.dashlet.approval div.approval-stage.stage-sequential {
+    background: url("../../images/lecm-documents/approval/alf_sequential_grey_16.png") right top no-repeat;
+}
+.dashlet.approval .approval-stage-container div.stages-items {
+    padding-left: 5em;
+    font-size: 12px;
+    height: 0;
+    overflow-y: hidden;
+}
+.dashlet.approval .approval-stage-container div.stages-items > div {
+    margin: 3px 0;
+}
+.dashlet.approval .approval-stage-container .approval-stage-btn.collapsed ~ div.stages-items {
+    height: 0;
+}
+.dashlet.approval .approval-stage-container .approval-stage-btn.expanded ~ div.stages-items {
+    height: auto;
+}
+
