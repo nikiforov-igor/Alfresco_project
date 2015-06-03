@@ -157,3 +157,7 @@
 .exec-block {
     text-align: right;
 }
+
+.control-of-execution {
+    min-height: 120px;
+}

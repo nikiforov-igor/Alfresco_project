@@ -351,7 +351,7 @@
         <div class="line"></div>
         <#-- РАБОТА НАД ПОРУЧЕНИЕМ -->
         <div id="${id}-exec" class="block">
-	        <#if hasAddAttachmentPerm && hasStatemachine>
+	        <#if props["lecm-statemachine:status"] == "В работе" && hasAddAttachmentPerm && hasStatemachine>
 		        <div id="${id}-dnd" class="dnd-uploader"></div>
 	        </#if>
             <div class="title">${msg("message.eddand.work")}</div>
@@ -469,7 +469,10 @@
         </div>
         <div class="line"></div>
         <#-- КОНТРОЛЬ ИСПОЛНЕНИЯ -->
-        <div id="${id}-contr" class="block">
+        <div id="${id}-contr" class="block control-of-execution">
+            <#if props["lecm-statemachine:status"] == "На утверждении контролером" && hasAddAttachmentPerm && hasStatemachine>
+                <div id="${id}-dnd" class="dnd-uploader"></div>
+            </#if>
             <div class="title">${msg("message.eddand.executionControl")}</div>
 			<#if hasViewContentListPerm>
 	            <div id="${id}-contr-attachments" class="data-list-block">
