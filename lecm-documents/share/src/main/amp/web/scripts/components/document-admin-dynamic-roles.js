@@ -18,10 +18,10 @@ LogicECM.module = LogicECM.module || {};
 
 LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 
-(function() {
+(function () {
 	var Dom = YAHOO.util.Dom;
 
-	LogicECM.module.DocumentAdmin.DynamicRoles = function(htmlId) {
+	LogicECM.module.DocumentAdmin.DynamicRoles = function (htmlId) {
 		LogicECM.module.DocumentAdmin.DynamicRoles.superclass.constructor.call(this, 'LogicECM.module.DocumentAdmin.DynamicRoles', htmlId, ['container', 'json']);
 		return this;
 	};
@@ -37,23 +37,23 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 			this.loadRoles();
 		},
 
-		loadRoles: function() {
+		loadRoles: function () {
 			var me = this;
 			Alfresco.util.Ajax.jsonGet({
-					url: Alfresco.constants.PROXY_URI + "lecm/statemachine/getDynamicRoles?nodeRef=" + encodeURIComponent(this.options.documentNodeRef),
-					successCallback: {
-						fn: function (response) {
-							var oResults = response.json;
-							if (oResults != null) {
-								me.drawRoles(oResults);
-							}
-						},
-						scope: this
-					}
-				});
+				url: Alfresco.constants.PROXY_URI + "lecm/statemachine/getDynamicRoles?nodeRef=" + encodeURIComponent(this.options.documentNodeRef),
+				successCallback: {
+					fn: function (response) {
+						var oResults = response.json;
+						if (oResults != null) {
+							me.drawRoles(oResults);
+						}
+					},
+					scope: this
+				}
+			});
 		},
 
-		drawRoles: function(roles) {
+		drawRoles: function (roles) {
 			var container = Dom.get(this.id);
 			var results = "";
 			if (roles != null && container != null) {
@@ -64,7 +64,7 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 			container.innerHTML = results
 		},
 
-		getRoleView: function(role) {
+		getRoleView: function (role) {
 			var result = "<div>";
 			result += role.name;
 			var addEmployeeId = "dynamic-role-add-employee-" + role.id;
@@ -84,7 +84,7 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 			return result;
 		},
 
-		getEmployeeView: function(role, employee) {
+		getEmployeeView: function (role, employee) {
 			var result = "<div>";
 			result += LogicECM.module.Base.Util.getControlEmployeeView(employee.nodeRef, employee.name, true);
 			var removeEmployeeId = "dynamic-role-remove-employee-" + employee.nodeRef.replace(/:|\//g, '_') + "_" + role.id;
@@ -92,7 +92,7 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 			YAHOO.util.Event.onAvailable(removeEmployeeId, this.attachRemoveEmployeeClickListener, {
 				role: role,
 				employee: employee
-			} , this);
+			}, this);
 			result += "</div>";
 			return result;
 		},
@@ -144,7 +144,19 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 		},
 
 		removeEmployee: function (event, params) {
-			alert("remove employee " + params.employee.name + " to role" + params.role.id);
+			var me = this;
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI + "lecm/security/api/revokeDynamicBusinessRole?documentNodeRef=" +
+						encodeURIComponent(this.options.documentNodeRef) +
+						"&employeeNodeRef=" + encodeURIComponent(params.employee.nodeRef) +
+						"&roleId=" + encodeURIComponent(params.role.id),
+				successCallback: {
+					fn: function (response) {
+						me.loadRoles();
+					},
+					scope: this
+				}
+			});
 		}
 	});
 })();
