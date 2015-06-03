@@ -137,6 +137,8 @@
     <bean id="dictionary.exportSettings" class="ru.it.lecm.dictionary.beans.ExportSettingsHolder">
         <property name="namespaceService" ref="namespaceService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="dictionaryBean" ref="serviceDictionary"/>
+        <property name="fileFolderService" ref="fileFolderService"/>
     </bean>
 
     <bean id="dictionary.exportSettingsInitializer" abstract="true" class="ru.it.lecm.dictionary.ExportSettingsInitializer" init-method="init">

@@ -119,7 +119,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
                 xmlw.writeAttribute(ExportNamespace.ATTR_NAME, name);
                 String typeAttr = typeQName.toPrefixString(namespaceService);
                 xmlw.writeAttribute(ExportNamespace.ATTR_TYPE, typeAttr);
-                List<String> fieldsForType = exportSettings.getFieldsForType(typeAttr);
+                List<String> fieldsForType = getFieldsForType(typeAttr);
                 writeProperties(childRef, fieldsForType);
 	            if (typeQName.equals(ContentModel.TYPE_CONTENT)) {
 		            writeContent(childRef);
@@ -247,6 +247,16 @@ public class XMLExportBeanImpl implements XMLExportBean {
 		        Boolean isActive = (Boolean) nodeService.getProperty(ref, QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active"));
 		        return isActive != null && !isActive;
 	        }
+        }
+
+        //локальное кэширование списка выгружаемых атрибутов для текущей сессии экспорта
+        private Map<String, List<String>> localFieldsForTypeCache = new HashMap<>();
+
+        private List<String> getFieldsForType(String typeName) {
+            if (!localFieldsForTypeCache.containsKey(typeName)) {
+                localFieldsForTypeCache.put(typeName, exportSettings.getFieldsForType(typeName));
+            }
+            return localFieldsForTypeCache.get(typeName);
         }
 
     }
