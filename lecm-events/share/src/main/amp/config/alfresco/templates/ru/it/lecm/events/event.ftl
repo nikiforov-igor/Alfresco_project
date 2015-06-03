@@ -4,9 +4,7 @@
 	<@script type="text/javascript" src="${url.context}/res/components/documentlibrary/actions.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/yui/resize/resize.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-component-base.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/components/document-details/document-metadata.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-metadata.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/dashlets/lecm-errands-dashlet.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree-control.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree.js"></@script>
@@ -21,10 +19,6 @@
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/documentlibrary/actions.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-documents/graph-view-control.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-metadata.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
-
 <#-- TODO: IMPORTANT for IE ! -->
 <#-- В IE9 следующие файлы подключаются только при использовании тэга <link>,
     при подключении макросом - не работают.
@@ -34,35 +28,35 @@
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/document-components-panel.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/dashlet-components.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/page-document.css" />
-
+<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-page.css" />
 
 	<#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
-	<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
+    <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
 	</#if>
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-form.css" />
 
 	<@templateHtmlEditorAssets />
 <script type="text/javascript">//<![CDATA[
 if (typeof LogicECM == "undefined" || !LogicECM) {
-	LogicECM = {};
+    LogicECM = {};
 }
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Documents = LogicECM.module.Documents|| {};
 (function() {
-	LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings}<#else>{}</#if>;
+    LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings}<#else>{}</#if>;
 
-	var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
-		nodeRef: "${page.url.args.nodeRef}"
-	});
+    var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
+        nodeRef: "${page.url.args.nodeRef}"
+    });
 
-	viewHistory.save();
+    viewHistory.save();
 
 })();
 //]]></script>
 </@>
 
 <@templateBody>
-<@viewForm />
+	<@viewForm />
 <div id="alf-hd">
 	<@region id="html-upload" scope="global" chromeless="true" />
     <@region id="flash-upload" scope="global" chromeless="true" />
@@ -75,21 +69,21 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 	<#if hasPermission>
 		<@region id="actions-common" scope="template"/>
 		<@region id="actions" scope="template"/>
-		<div class="yui-gc">
-			<div class="bordered-panel doc-right-part">
+        <div class="yui-gc">
+            <div class="bordered-panel doc-right-part">
 				<@region id="document-actions" scope="template"/>
                 <@region id="document-attachments" scope="template"/>
                 <@region id="document-connections" scope="template"/>
-			</div>
-			<div id="main-content" class="main-content">
-				<div id="main-region">
+            </div>
+            <div id="main-content" class="main-content">
+                <div id="main-region" class="event-page">
 					<@region id="dashlet-panel" scope="template"/>
 	                <@region id="rating" scope="template"/>
 	                <@region id="comments" scope="template"/>
-				</div>
-				<div id="custom-region" class="hidden1"></div>
-			</div>
-		</div>
+                </div>
+                <div id="custom-region" class="hidden1"></div>
+            </div>
+        </div>
 	</#if>
 
 	<@region id="html-upload" scope="template"/>
@@ -105,14 +99,14 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 
 <script type="text/javascript"> //<![CDATA[
 (function() {
-	var Event = YAHOO.util.Event;
+    var Event = YAHOO.util.Event;
 
-	Event.on(window, "resize", function(e) {
-		LogicECM.module.Base.Util.setDocPageHeight();
-	}, this, true);
+    Event.on(window, "resize", function(e) {
+        LogicECM.module.Base.Util.setDocPageHeight();
+    }, this, true);
 
-	Event.onDOMReady(function() {
-		LogicECM.module.Base.Util.setDocPageHeight();
-	});
+    Event.onDOMReady(function() {
+        LogicECM.module.Base.Util.setDocPageHeight();
+    });
 })();
 //]]></script>
