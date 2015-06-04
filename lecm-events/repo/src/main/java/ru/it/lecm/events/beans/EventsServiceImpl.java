@@ -4,7 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
@@ -174,10 +173,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 		ResultSet searchResult = null;
 		try {
-			searchResult = searchService.query(sp);
-			for (ResultSetRow row : searchResult) {
-				results.add(row.getNodeRef());
-			}
+            searchResult = searchService.query(sp);
+            results = searchResult.getNodeRefs();
 		} finally {
 			if (searchResult != null) {
 				searchResult.close();
@@ -205,9 +202,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		ResultSet searchResult = null;
 		try {
 			searchResult = searchService.query(sp);
-			for (ResultSetRow row : searchResult) {
-				results.add(row.getNodeRef());
-			}
+			results = searchResult.getNodeRefs();
 		} finally {
 			if (searchResult != null) {
 				searchResult.close();
@@ -241,9 +236,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		ResultSet searchResult = null;
 		try {
 			searchResult = searchService.query(sp);
-			for (ResultSetRow row : searchResult) {
-				results.add(row.getNodeRef());
-			}
+            results = searchResult.getNodeRefs();
 		} finally {
 			if (searchResult != null) {
 				searchResult.close();
