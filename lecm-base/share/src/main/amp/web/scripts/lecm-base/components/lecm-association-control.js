@@ -1916,7 +1916,11 @@ LogicECM.module = LogicECM.module || {};
 
 				for (var i in items) {
 					if (typeof(items[i]) != "function") {
-						var displayName = items[i].selectedName;
+						if (this.options.plane || !this.options.showPath) {
+							var displayName = items[i].selectedName;
+						} else {
+							displayName = items[i].simplePath + items[i].selectedName;
+						}
 
 						if (this.options.itemType == "lecm-orgstr:employee") {
 							var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
@@ -1932,7 +1936,11 @@ LogicECM.module = LogicECM.module || {};
 
 			updateAddedSelectedItem: function(item) {
 				var fieldId = this.options.pickerId + "-selected-elements";
-				var displayName = item.selectedName;
+				if (this.options.plane || !this.options.showPath) {
+					var displayName = item.selectedName;
+				} else {
+					displayName =item.simplePath + item.selectedName;
+				}
 
 				if (this.options.itemType == "lecm-orgstr:employee") {
 					var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
@@ -2011,7 +2019,11 @@ LogicECM.module = LogicECM.module || {};
 						el.innerHTML = '';
 					}
 					for (var i in this.selectedItems) {
-						var displayName = this.selectedItems[i].selectedName;
+						if (this.options.plane || !this.options.showPath) {
+							var displayName = this.selectedItems[i].selectedName;
+						} else {
+							displayName = this.selectedItems[i].simplePath + this.selectedItems[i].selectedName;
+						}
 
 						if(this.options.disabled) {
 							if (this.options.itemType == "lecm-orgstr:employee") {
