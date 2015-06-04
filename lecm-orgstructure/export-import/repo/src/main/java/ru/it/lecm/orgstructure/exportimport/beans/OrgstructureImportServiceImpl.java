@@ -1,6 +1,7 @@
 package ru.it.lecm.orgstructure.exportimport.beans;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,6 +32,7 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.POSITIONS_DICTIONARY_NAME;
 import ru.it.lecm.orgstructure.exportimport.ExportImportHelper;
+import ru.it.lecm.orgstructure.exportimport.ExportImportModel;
 import ru.it.lecm.orgstructure.exportimport.entity.BusinessRole;
 import ru.it.lecm.orgstructure.exportimport.entity.BusinessRoles;
 import ru.it.lecm.orgstructure.exportimport.entity.CreatedItems;
@@ -119,7 +121,8 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		return null;
 	}
 
-	private Object parseXML(InputStream input, Class clazz) {
+	@SuppressWarnings("unchecked")
+	private <T> T parseXML(InputStream input, Class<T> clazz) {
 		Object result;
 
 		try {
@@ -130,32 +133,32 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 			throw new RuntimeException(ex);
 		}
 
-		return result;
+		return (T)result;
 	}
 
 	@Override
 	public Departments parseDepartmentsXML(InputStream input) {
-		return (Departments) parseXML(input, Departments.class);
+		return parseXML(input, Departments.class);
 	}
 
 	@Override
 	public Employees parseEmployeesXML(InputStream input) {
-		return (Employees) parseXML(input, Employees.class);
+		return parseXML(input, Employees.class);
 	}
 
 	@Override
 	public Positions parsePositionsXML(InputStream input) {
-		return (Positions) parseXML(input, Positions.class);
+		return parseXML(input, Positions.class);
 	}
 
 	@Override
 	public StaffList parseStaffXML(InputStream input) {
-		return (StaffList) parseXML(input, StaffList.class);
+		return parseXML(input, StaffList.class);
 	}
 
 	@Override
 	public BusinessRoles parseBusinessRolesXML(InputStream input) {
-		return (BusinessRoles) parseXML(input, BusinessRoles.class);
+		return parseXML(input, BusinessRoles.class);
 	}
 
 	@Override
@@ -192,23 +195,17 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							return false;
 						}
 
-						NodeRef existingPosition = getValueFromTwoMaps(id, newlyCreatedPositions, existingItems);
-						if (existingPosition != null) {
-							if (isArchive(existingPosition)) {
-								nodeService.setProperty(existingPosition, IS_ACTIVE, true);
-								logger.info("Существующая должность {} активирована", existingPosition);
-								return true;
+						NodeRef positionNode = getValueFromTwoMaps(id, newlyCreatedPositions, existingItems);
+						if (positionNode != null) {
+							positionNode = updatePosition(positionNode, position);
+						} else {
+							positionNode = nodeService.getChildByName(positionsRoot, ContentModel.ASSOC_CONTAINS, positionName);
+							if (positionNode == null) {
+								positionNode = createPosition(id, position);
 							} else {
-								logger.error("Невозможно выполнить импорт должности {}: должность с таким ID уже существует", position);
+								logger.error("Невозможно выполнить импорт должности {}: в системе уже существует должность {} с именем {}",new Object[] { position, positionNode, positionName });
 								return false;
 							}
-						}
-
-						NodeRef positionNode = nodeService.getChildByName(positionsRoot, ContentModel.ASSOC_CONTAINS, positionName);
-						if (positionNode == null) {
-							positionNode = createPosition(id, positionName, StringUtils.trim(position.getNameDative()), StringUtils.trim(position.getNameGenitive()), StringUtils.trim(position.getCode()));
-						} else {
-							helper.addID(positionNode, id);
 						}
 
 						newlyCreatedPositions.put(id, positionNode);
@@ -233,18 +230,32 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		logger.info("Закончен импорт справочника должностей");
 	}
 
-	private NodeRef createPosition(String id, String positionName, String nameDative, String nameGenitive, String code) {
+	private NodeRef createPosition(String id, Position position) {
 		PropertyMap props = new PropertyMap();
-		props.put(ContentModel.PROP_NAME, positionName);
-		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_D, nameDative);
-		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_G, nameGenitive);
-		props.put(OrgstructureBean.PROP_STAFF_POSITION_CODE, code);
+		props.put(ContentModel.PROP_NAME, StringUtils.trim(position.getName()));
+		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_D, StringUtils.trim(position.getNameDative()));
+		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_G, StringUtils.trim(position.getNameGenitive()));
+		props.put(OrgstructureBean.PROP_STAFF_POSITION_CODE, StringUtils.trim(position.getCode()));
 
 		NodeRef createdStaffPosition = nodeService.createNode(positionsRoot, ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_STAFF_POSITION, props).getChildRef();
 
 		helper.addID(createdStaffPosition, id);
 
 		return createdStaffPosition;
+	}
+
+	private NodeRef updatePosition(NodeRef positionNode, Position position) {
+		Map<QName, Serializable> props = nodeService.getProperties(positionNode);
+		props.put(ExportImportModel.PROP_ID, position.getId());
+		props.put(ContentModel.PROP_NAME, StringUtils.trim(position.getName()));
+		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_D, StringUtils.trim(position.getNameDative()));
+		props.put(OrgstructureBean.PROP_STAFF_POSITION_NAME_G, StringUtils.trim(position.getNameGenitive()));
+		props.put(OrgstructureBean.PROP_STAFF_POSITION_CODE, StringUtils.trim(position.getCode()));
+		props.put(IS_ACTIVE, true);
+		nodeService.setProperties(positionNode, props);
+
+		logger.info("Должность с ID {} уже существует. Существующая должность {} обновлена и активирована.", position, positionNode);
+		return positionNode;
 	}
 
 	@Override
@@ -274,11 +285,6 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							return false;
 						}
 
-						if (existingItems.containsKey(id) || newlyCreatedEmployees.containsKey(id)) {
-							logger.error("Невозможно выполнить импорт сотрудника {}: сотрудник с таким ID уже существует", employee);
-							return false;
-						}
-
 						String firstName = StringUtils.trimToNull(employee.getFirstname());
 						if (firstName == null) {
 							logger.error("Невозможно выполнить импорт сотрудника {}: имя не указано", employee);
@@ -303,24 +309,12 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							return false;
 						}
 
-						String employeeLogin = StringUtils.trimToNull(employee.getLogin());
-						NodeRef personNode = null;
-
-						if (employeeLogin != null) {
-							int loginCounter = 0;
-							while (personService.personExists(employeeLogin)) {
-								logger.warn("Логин {} уже занят. Перебираю незанятые.", employeeLogin);
-								employeeLogin = employee.getLogin() + ++loginCounter;
-							}
-
-							personNode = createPerson(employeeLogin, email, firstName, lastName);
+						NodeRef employeeNode = getValueFromTwoMaps(id, newlyCreatedEmployees, existingItems);
+						if (employeeNode != null) {
+							employeeNode = updateEmployee(employeeNode, employee);
 						} else {
-							logger.error("У сотрудника {} не указан логин", employee);
+							employeeNode = createEmployee(id, employee);
 						}
-
-						NodeRef employeeNode = createEmployee(id, personNode, email, firstName, middleName, lastName,
-								StringUtils.trim(employee.getNameDative()), StringUtils.trim(employee.getNameGenitive()),
-								StringUtils.trim(employee.getNumber()), StringUtils.trim(employee.getPhone()), employee.getSex());
 
 						newlyCreatedEmployees.put(id, employeeNode);
 
@@ -365,24 +359,41 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		return personNode;
 	}
 
-	private NodeRef createEmployee(String id, NodeRef personNode, String email, String firstName, String middleName, String lastName,
-			String nameDative, String nameGenitive, String number, String phone, String sex) {
+	private NodeRef createEmployee(String id, Employee employee) {
+		String email = StringUtils.trim(employee.getEmail());
+		String firstName = StringUtils.trim(employee.getFirstname());
+		String lastName = StringUtils.trim(employee.getLastname());
 
 		PropertyMap props = new PropertyMap();
 		props.put(OrgstructureBean.PROP_EMPLOYEE_EMAIL, email);
 		props.put(OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME, firstName);
-		props.put(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME, middleName);
 		props.put(OrgstructureBean.PROP_EMPLOYEE_LAST_NAME, lastName);
-		props.put(OrgstructureBean.PROP_EMPLOYEE_FIO_D, nameDative);
-		props.put(OrgstructureBean.PROP_EMPLOYEE_FIO_G, nameGenitive);
-		props.put(OrgstructureBean.PROP_EMPLOYEE_NUMBER, number);
-		props.put(OrgstructureBean.PROP_EMPLOYEE_PHONE, phone);
-		props.put(OrgstructureBean.PROP_EMPLOYEE_SEX, sex);
+		props.put(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME, StringUtils.trim(employee.getMiddlename()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_FIO_D, StringUtils.trim(employee.getNameDative()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_FIO_G, StringUtils.trim(employee.getNameGenitive()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_NUMBER, StringUtils.trim(employee.getNumber()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_PHONE, StringUtils.trim(employee.getPhone()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_SEX, StringUtils.trim(employee.getSex()));
 
 		NodeRef employeeNode = nodeService.createNode(orgstructureService.getEmployeesDirectory(), ContentModel.ASSOC_CONTAINS,
 				generateRandomQName(), OrgstructureBean.TYPE_EMPLOYEE, props).getChildRef();
 
 		helper.addID(employeeNode, id);
+
+		String employeeLogin = StringUtils.trimToNull(employee.getLogin());
+		NodeRef personNode = null;
+
+		if (employeeLogin != null) {
+			int loginCounter = 0;
+			while (personService.personExists(employeeLogin)) {
+				logger.warn("Логин {} уже занят. Перебираю незанятые.", employeeLogin);
+				employeeLogin = employee.getLogin() + ++loginCounter;
+			}
+
+			personNode = createPerson(employeeLogin, email, firstName, lastName);
+		} else {
+			logger.error("У сотрудника {} не указан логин", employee);
+		}
 
 		if (personNode != null) {
 			nodeService.createAssociation(employeeNode, personNode, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
@@ -391,11 +402,30 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		return employeeNode;
 	}
 
+	private NodeRef updateEmployee(NodeRef employeeNode, Employee employee) {
+		Map<QName, Serializable> props = nodeService.getProperties(employeeNode);
+		props.put(ExportImportModel.PROP_ID, employee.getId());
+		props.put(OrgstructureBean.PROP_EMPLOYEE_EMAIL, StringUtils.trim(employee.getEmail()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME, StringUtils.trim(employee.getFirstname()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_LAST_NAME, StringUtils.trim(employee.getLastname()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME, StringUtils.trim(employee.getMiddlename()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_FIO_D, StringUtils.trim(employee.getNameDative()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_FIO_G, StringUtils.trim(employee.getNameGenitive()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_NUMBER, StringUtils.trim(employee.getNumber()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_PHONE, StringUtils.trim(employee.getPhone()));
+		props.put(OrgstructureBean.PROP_EMPLOYEE_SEX, StringUtils.trim(employee.getSex()));
+		props.put(IS_ACTIVE, true);
+		nodeService.setProperties(employeeNode, props);
+
+		logger.info("Сотрудник с ID {} уже существует. Существующий сотрудник {} обновлен и активирован.", employee, employeeNode);
+		return employeeNode;
+	}
+
 	@Override
 	public void importDepartments(Departments departments, CreatedItems createdItems) {
 		logger.info("Начат импорт списка подразделений");
 
-		final Map<String, NodeRef> existingItems = helper.getNodeRefsIDs(helper.getAllOrgUnits());
+		final Map<String, NodeRef> existingItems = helper.getNodeRefsIDs(helper.getAllOrgUnits(false));
 		final Map<String, NodeRef> newlyCreatedDepartments = createdItems.getDepartments();
 
 		List<Department> departmentList = departments.getDepartment();
@@ -420,11 +450,6 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						String id = depart.getId();
 						if (id == null) {
 							logger.error("Невозможно выполнить импорт департамента {}: ID не указан", depart);
-							return false;
-						}
-
-						if (existingItems.containsKey(id) || newlyCreatedDepartments.containsKey(id)) {
-							logger.error("Невозможно выполнить импорт департамента {}: подразделение с таким ID ({}) уже существует", id, depart);
 							return false;
 						}
 
@@ -462,7 +487,18 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							parentNode = getValueFromTwoMaps(parentID, newlyCreatedDepartments, existingItems);
 						}
 
-						departNode = createDepartment(id, parentNode, nameFull, nameShort, code, depart.getType());
+						departNode = getValueFromTwoMaps(id, newlyCreatedDepartments, existingItems);
+						if (departNode != null) {
+							departNode = updateDepartment(departNode, depart);
+						} else {
+							departNode = nodeService.getChildByName(parentNode, ContentModel.ASSOC_CONTAINS, nameShort);
+							if (departNode == null) {
+								departNode = createDepartment(id, parentNode, depart);
+							} else {
+								logger.error("Невозможно выполнить импорт подразделения {}: в системе уже существует подразделение {} с именем {}",new Object[] { depart, departNode, nameShort });
+								return false;
+							}
+						}
 
 						newlyCreatedDepartments.put(id, departNode);
 
@@ -487,20 +523,36 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		logger.info("Закончен импорт списка подразделений");
 	}
 
-	private NodeRef createDepartment(String id, NodeRef parentNode, String nameFull, String nameShort, String code, String type) {
+	private NodeRef createDepartment(String id, NodeRef parentNode, Department department) {
 		PropertyMap props = new PropertyMap();
 
-		props.put(ContentModel.PROP_NAME, nameShort);
-		props.put(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME, nameShort);
-		props.put(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME, nameFull);
-		props.put(OrgstructureBean.PROP_UNIT_CODE, code);
-		props.put(OrgstructureBean.PROP_UNIT_TYPE, type);
+		props.put(ContentModel.PROP_NAME, StringUtils.trim(department.getNameShort()));
+		props.put(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME, StringUtils.trim(department.getNameShort()));
+		props.put(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME, StringUtils.trim(department.getNameFull()));
+		props.put(OrgstructureBean.PROP_UNIT_CODE, StringUtils.trim(department.getCode()));
+		props.put(OrgstructureBean.PROP_UNIT_TYPE, StringUtils.trim(department.getType()));
 
 		NodeRef departNode = nodeService.createNode(parentNode, ContentModel.ASSOC_CONTAINS, generateRandomQName(), OrgstructureBean.TYPE_ORGANIZATION_UNIT, props).getChildRef();
 
 		helper.addID(departNode, id);
 
 		return departNode;
+	}
+
+	private NodeRef updateDepartment(NodeRef departmentNode, Department department) {
+		Map<QName, Serializable> props = nodeService.getProperties(departmentNode);
+
+		props.put(ExportImportModel.PROP_ID, department.getId());
+		props.put(ContentModel.PROP_NAME, StringUtils.trim(department.getNameShort()));
+		props.put(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME, StringUtils.trim(department.getNameShort()));
+		props.put(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME, StringUtils.trim(department.getNameFull()));
+		props.put(OrgstructureBean.PROP_UNIT_CODE, StringUtils.trim(department.getCode()));
+		props.put(OrgstructureBean.PROP_UNIT_TYPE, StringUtils.trim(department.getType()));
+		props.put(IS_ACTIVE, true);
+		nodeService.setProperties(departmentNode, props);
+
+		logger.info("Подразделение с ID {} уже существует. Существующее подразделение {} обновлено и активировано.", department, departmentNode);
+		return departmentNode;
 	}
 
 	/**
@@ -546,13 +598,13 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 	public void importStaff(StaffList staffList, CreatedItems createdItems) {
 		logger.info("Начат импорт штатных расписаний");
 
-		final Map<String, NodeRef> existingStaff = helper.getNodeRefsIDs(helper.getAllStaff());
+		final Map<String, NodeRef> existingStaff = helper.getNodeRefsIDs(helper.getAllStaff(false));
 		final Map<String, NodeRef> newlyCreatedStaff = createdItems.getStaff();
 
-		final Map<String, NodeRef> existingDepartments = helper.getNodeRefsIDs(helper.getAllOrgUnits());
+		final Map<String, NodeRef> existingDepartments = helper.getNodeRefsIDs(helper.getAllOrgUnits(true));
 		final Map<String, NodeRef> newlyCreatedDepartments = createdItems.getDepartments();
 
-		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees(false));
+		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees(true));
 		final Map<String, NodeRef> newlyCreatedEmployees = createdItems.getEmployees();
 
 		final Map<String, NodeRef> existingPositions = helper.getNodeRefsIDs(orgstructureService.getStaffPositions(true));
@@ -578,11 +630,6 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						String id = staff.getId();
 						if (id == null) {
 							logger.error("Невозможно выполнить импорт штатного расписания {}: ID не указан", staff);
-							return false;
-						}
-
-						if (getValueFromTwoMaps(id, newlyCreatedStaff, existingStaff) != null) {
-							logger.error("Невозможно выполнить импорт штатного расписания {}: штатное расписание с таким ID уже существует", staff);
 							return false;
 						}
 
@@ -619,7 +666,12 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							return false;
 						}
 
-						NodeRef staffNode = createStaff(id, departmentNode, positionNode, employeeNode, staff.getDescription(), staff.isPrimary());
+						NodeRef staffNode = getValueFromTwoMaps(id, newlyCreatedStaff, existingStaff);
+						if (staffNode != null) {
+							staffNode = updateStaff(staffNode, staff, employeeNode);
+						} else {
+							staffNode = createStaff(staff, departmentNode, positionNode, employeeNode);
+						}
 
 						newlyCreatedStaff.put(id, staffNode);
 
@@ -643,19 +695,35 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		logger.info("Закончен импорт штатных расписаний");
 	}
 
-	private NodeRef createStaff(String id, NodeRef departmentNode, NodeRef positionNode, NodeRef employeeNode, String description, boolean primary) {
+	private NodeRef createStaff(Staff staff, NodeRef departmentNode, NodeRef positionNode, NodeRef employeeNode) {
 		NodeRef staffNode = orgstructureService.createStaff(departmentNode, positionNode);
 
 		if (employeeNode != null) {
-			orgstructureService.includeEmployeeIntoStaff(employeeNode, staffNode, primary);
+			orgstructureService.includeEmployeeIntoStaff(employeeNode, staffNode, staff.isPrimary());
 		}
 
-		if (description != null) {
-			nodeService.setProperty(staffNode, OrgstructureBean.PROP_STAFF_LIST_DESCRIPTION, description);
+		if (staff.getDescription() != null) {
+			nodeService.setProperty(staffNode, OrgstructureBean.PROP_STAFF_LIST_DESCRIPTION, staff.getDescription());
 		}
 
-		helper.addID(staffNode, id);
+		helper.addID(staffNode, staff.getId());
 
+		return staffNode;
+	}
+
+	private NodeRef updateStaff(NodeRef staffNode, Staff staff, NodeRef employeeNode) {
+
+		if (employeeNode != null) {
+			orgstructureService.excludeEmployeeFromStaff(staffNode);
+			orgstructureService.includeEmployeeIntoStaff(employeeNode, staffNode, staff.isPrimary());
+		}
+
+		if (staff.getDescription() != null) {
+			nodeService.setProperty(staffNode, OrgstructureBean.PROP_STAFF_LIST_DESCRIPTION, staff.getDescription());
+		}
+		nodeService.setProperty(staffNode, IS_ACTIVE, true);
+		nodeService.setProperty(staffNode, ExportImportModel.PROP_ID, staff.getId());
+		logger.info("Штатное расписание с ID {} уже существует. Существующее штатное расписание {} обновлено и активировано.", staff, staffNode);
 		return staffNode;
 	}
 
@@ -663,16 +731,16 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 	public void importBusinessRoles(BusinessRoles businessRoles, CreatedItems createdItems) {
 		logger.info("Начат импорт бизнес-ролей");
 
-		final Map<String, NodeRef> existingBusinessRoles = helper.getBusinessRolesIDs(orgstructureService.getBusinesRoles(true));
+		final Map<String, NodeRef> existingBusinessRoles = helper.getBusinessRolesIDs(orgstructureService.getBusinesRoles(false));
 		final Map<String, NodeRef> newlyCreatedBusinessRoles = createdItems.getBusinessRoles();
 
-		final Map<String, NodeRef> existingStaff = helper.getNodeRefsIDs(helper.getAllStaff());
+		final Map<String, NodeRef> existingStaff = helper.getNodeRefsIDs(helper.getAllStaff(true));
 		final Map<String, NodeRef> newlyCreatedStaff = createdItems.getStaff();
 
-		final Map<String, NodeRef> existingDepartments = helper.getNodeRefsIDs(helper.getAllOrgUnits());
+		final Map<String, NodeRef> existingDepartments = helper.getNodeRefsIDs(helper.getAllOrgUnits(true));
 		final Map<String, NodeRef> newlyCreatedDepartments = createdItems.getDepartments();
 
-		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees(false));
+		final Map<String, NodeRef> existingEmployees = helper.getNodeRefsIDs(helper.getAllEmployees(true));
 		final Map<String, NodeRef> newlyCreatedEmployees = createdItems.getEmployees();
 
 		List<BusinessRole> businessRolesList = businessRoles.getBusinessRole();
@@ -732,15 +800,11 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 
 						NodeRef existingBusinessRole = getValueFromTwoMaps(id, newlyCreatedBusinessRoles, existingBusinessRoles);
 						if (existingBusinessRole != null) {
-							logger.info("Обновляется бизнес-роль {}", existingBusinessRole);
-
-							updateBusinessRole(existingBusinessRole, employeeNodes, departmentNodes, staffNodes);
+							updateBusinessRole(existingBusinessRole, businessRole, employeeNodes, departmentNodes, staffNodes);
 						} else {
 							logger.info("Создается новая бизнес-роль");
 
-							NodeRef businessRoleNode = createBusinessRole(id, StringUtils.trim(businessRole.getName()),
-									StringUtils.trim(businessRole.getDescription()), businessRole.isDynamic(),
-									employeeNodes, departmentNodes, staffNodes);
+							NodeRef businessRoleNode = createBusinessRole(businessRole, employeeNodes, departmentNodes, staffNodes);
 							newlyCreatedBusinessRoles.put(id, businessRoleNode);
 						}
 
@@ -765,81 +829,92 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		logger.info("Закончен импорт бизнес-ролей");
 	}
 
-	private void updateBusinessRole(NodeRef businessRole, List<NodeRef> employeeNodes, List<NodeRef> departmentNodes, List<NodeRef> staffNodes) {
-		final List<NodeRef> existingEmployees = orgstructureService.getEmployeesByBusinessRole(businessRole);
+	private NodeRef updateBusinessRole(NodeRef businessRoleNode, BusinessRole businessRole, List<NodeRef> employeeNodes, List<NodeRef> departmentNodes, List<NodeRef> staffNodes) {
+		final List<NodeRef> existingEmployees = orgstructureService.getEmployeesByBusinessRole(businessRoleNode);
 
 		final ArrayList<NodeRef> addedEmployees = new ArrayList<>(employeeNodes);
 		addedEmployees.removeAll(existingEmployees);
 
 		for (NodeRef addedEmployee : addedEmployees) {
-			orgstructureService.includeEmployeeIntoBusinessRole(businessRole, addedEmployee);
+			orgstructureService.includeEmployeeIntoBusinessRole(businessRoleNode, addedEmployee);
 		}
 
 		final ArrayList<NodeRef> removedEmployees = new ArrayList<>(existingEmployees);
 		removedEmployees.removeAll(employeeNodes);
 
 		for (NodeRef removedEmployee : removedEmployees) {
-			orgstructureService.excludeEmployeeFromBusinessRole(businessRole, removedEmployee);
+			orgstructureService.excludeEmployeeFromBusinessRole(businessRoleNode, removedEmployee);
 		}
 
-		final List<NodeRef> existingDepartments = orgstructureService.getOrganizationElementsByBusinessRole(businessRole, false);
+		final List<NodeRef> existingDepartments = orgstructureService.getOrganizationElementsByBusinessRole(businessRoleNode, false);
 
 		final ArrayList<NodeRef> addedDepartments = new ArrayList<>(departmentNodes);
 		addedDepartments.removeAll(existingDepartments);
 
 		for (NodeRef addedDepartment : addedDepartments) {
-			orgstructureService.includeOrgElementIntoBusinessRole(businessRole, addedDepartment);
+			orgstructureService.includeOrgElementIntoBusinessRole(businessRoleNode, addedDepartment);
 		}
 
 		final ArrayList<NodeRef> removedDepartments = new ArrayList<>(existingDepartments);
 		removedDepartments.removeAll(departmentNodes);
 
 		for (NodeRef removedDepartment : removedDepartments) {
-			orgstructureService.excludeOrgElementFromBusinessRole(businessRole, removedDepartment);
+			orgstructureService.excludeOrgElementFromBusinessRole(businessRoleNode, removedDepartment);
 		}
 
-		final List<NodeRef> existingStaff = orgstructureService.getOrganizationElementMembersByBusinessRole(businessRole);
+		final List<NodeRef> existingStaff = orgstructureService.getOrganizationElementMembersByBusinessRole(businessRoleNode);
 
 		final ArrayList<NodeRef> addedStaffs = new ArrayList<>(staffNodes);
 		addedStaffs.removeAll(existingStaff);
 
 		for (NodeRef addedStaff : addedStaffs) {
-			orgstructureService.includeOrgElementMemberIntoBusinessRole(businessRole, addedStaff);
+			orgstructureService.includeOrgElementMemberIntoBusinessRole(businessRoleNode, addedStaff);
 		}
 
 		final ArrayList<NodeRef> removedStaffs = new ArrayList<>(existingStaff);
 		removedStaffs.removeAll(staffNodes);
 
 		for (NodeRef removedStaff : removedStaffs) {
-			orgstructureService.excludeOrgElementMemberFromBusinesssRole(businessRole, removedStaff);
+			orgstructureService.excludeOrgElementMemberFromBusinesssRole(businessRoleNode, removedStaff);
 		}
 
+		Map<QName, Serializable> props = nodeService.getProperties(businessRoleNode);
+		props.put(ContentModel.PROP_NAME, StringUtils.trim(businessRole.getName()));
+		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER, StringUtils.trim(businessRole.getId()));
+		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_DESCRIPTION, StringUtils.trim(businessRole.getDescription()));
+		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, businessRole.isDynamic());
+		props.put(IS_ACTIVE, true);
+		nodeService.setProperties(businessRoleNode, props);
+
+		logger.info("Бизнес роль с ID {} уже существует. Существующая бизнес роль {} обновлена и активирована.", businessRole, businessRoleNode);
+		return businessRoleNode;
 	}
 
-	private NodeRef createBusinessRole(String id, String name, String description, boolean dynamic, List<NodeRef> employeeNodes, List<NodeRef> departmentNodes, List<NodeRef> staffNodes) {
+	private NodeRef createBusinessRole(BusinessRole businessRole, List<NodeRef> employeeNodes, List<NodeRef> departmentNodes, List<NodeRef> staffNodes) {
+		String name = StringUtils.trim(businessRole.getName());
 		PropertyMap props = new PropertyMap();
 		props.put(ContentModel.PROP_NAME, name);
-		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER, id);
-		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_DESCRIPTION, description);
-		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, dynamic);
+		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER, StringUtils.trim(businessRole.getId()));
+		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_DESCRIPTION, StringUtils.trim(businessRole.getDescription()));
+		props.put(OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, businessRole.isDynamic());
 
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
 
-		NodeRef businessRole = nodeService.createNode(businessRolesRoot, ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
+		NodeRef businessRoleNode = nodeService.createNode(businessRolesRoot, ContentModel.ASSOC_CONTAINS, assocQName, OrgstructureBean.TYPE_BUSINESS_ROLE, props).getChildRef();
 
 		for (NodeRef employee : employeeNodes) {
-			orgstructureService.includeEmployeeIntoBusinessRole(businessRole, employee);
+			orgstructureService.includeEmployeeIntoBusinessRole(businessRoleNode, employee);
 		}
 
 		for (NodeRef department : departmentNodes) {
-			orgstructureService.includeOrgElementIntoBusinessRole(businessRole, department);
+			orgstructureService.includeOrgElementIntoBusinessRole(businessRoleNode, department);
 		}
 
 		for (NodeRef staff : staffNodes) {
-			orgstructureService.includeOrgElementMemberIntoBusinessRole(businessRole, staff);
+			orgstructureService.includeOrgElementMemberIntoBusinessRole(businessRoleNode, staff);
 		}
 
-		return businessRole;
+		return businessRoleNode;
 	}
 
 	private NodeRef getValueFromTwoMaps(String key, Map<String, NodeRef> firstMap, Map<String, NodeRef> secondMap) {

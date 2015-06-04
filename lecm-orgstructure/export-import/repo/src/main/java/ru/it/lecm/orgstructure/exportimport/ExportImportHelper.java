@@ -45,7 +45,7 @@ public class ExportImportHelper {
 		nodeService.addAspect(node, ExportImportModel.ASPECT_ID, props);
 	}
 
-	public List<NodeRef> getAllNodesByType(NodeRef rootNode, QName nodeType) {
+	public List<NodeRef> getAllNodesByType(NodeRef rootNode, QName nodeType, boolean activeOnly) {
 		final List<NodeRef> result = new ArrayList<>();
 
 		if (rootNode == null) {
@@ -55,7 +55,10 @@ public class ExportImportHelper {
 		final SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		final String searchQuery = String.format("+PATH:\"%s//*\" AND TYPE:\"%s\" AND NOT @lecm-dic\\:active:false", nodeService.getPath(rootNode).toPrefixString(namespaceService), nodeType.toPrefixString(namespaceService));
+		final String path = nodeService.getPath(rootNode).toPrefixString(namespaceService);
+		final String type = nodeType.toPrefixString(namespaceService);
+		final String activeFilter = activeOnly ? " AND NOT @lecm\\-dic\\:active:false" : "";
+		final String searchQuery = String.format("+PATH:\"%s//*\" AND TYPE:\"%s\"%s", path, type, activeFilter);
 		sp.setQuery(searchQuery);
 		ResultSet results = null;
 
@@ -92,12 +95,12 @@ public class ExportImportHelper {
 		return id;
 	}
 
-	public List<NodeRef> getAllStaff() {
-		return getAllNodesByType(orgstructureService.getRootUnit(), OrgstructureBean.TYPE_STAFF_LIST);
+	public List<NodeRef> getAllStaff(boolean activeOnly) {
+		return getAllNodesByType(orgstructureService.getRootUnit(), OrgstructureBean.TYPE_STAFF_LIST, activeOnly);
 	}
 
-	public List<NodeRef> getAllOrgUnits() {
-		return getAllNodesByType(orgstructureService.getRootUnit(), OrgstructureBean.TYPE_ORGANIZATION_UNIT);
+	public List<NodeRef> getAllOrgUnits(boolean activeOnly) {
+		return getAllNodesByType(orgstructureService.getRootUnit(), OrgstructureBean.TYPE_ORGANIZATION_UNIT, activeOnly);
 	}
 
 	public Map<String, NodeRef> getNodeRefsIDs(List<NodeRef> nodeList) {

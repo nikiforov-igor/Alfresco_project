@@ -131,7 +131,7 @@ public class OrgstructureExportServiceImpl extends BaseBean implements Orgstruct
 		List<Department> departmentList = departments.getDepartment();
 		NodeRef rootUnit = orgstructureService.getRootUnit();
 
-		for (NodeRef departmentNode : helper.getAllOrgUnits()) {
+		for (NodeRef departmentNode : helper.getAllOrgUnits(true)) {
 			if (departmentNode.equals(rootUnit)) {
 				// нам попался корневой элемент оргструкттуры
 				continue;
@@ -168,7 +168,7 @@ public class OrgstructureExportServiceImpl extends BaseBean implements Orgstruct
 
 		List<Staff> staffs = staffList.getStaff();
 
-		for (NodeRef staffNode : helper.getAllStaff()) {
+		for (NodeRef staffNode : helper.getAllStaff(true)) {
 			Staff staff = new Staff();
 
 			NodeRef departmentNode = orgstructureService.getUnitByStaff(staffNode);
