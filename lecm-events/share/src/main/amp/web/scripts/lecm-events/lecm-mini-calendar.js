@@ -96,7 +96,6 @@ LogicECM.module = LogicECM.module || {};
 			this.calendar.changePageEvent.subscribe(this.loadEvents, this, true);
 
 			// Register for changes to the calendar data
-			YAHOO.Bubbling.on("eventDataLoad", this.onEventDataLoad, this);
 			YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
 
 			this.loadThisMonthEvent();

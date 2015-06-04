@@ -318,7 +318,7 @@
           },
 
           updateNonWorkingDays: function() {
-             var nonWorkingElements = Dom.getElementsByClassName("non-working");
+             var nonWorkingElements = Dom.getElementsByClassName("non-working", "td", this.id);
              if (nonWorkingElements != null) {
                 for (var i = 0; i < nonWorkingElements.length; i++) {
                    Dom.removeClass(nonWorkingElements[i], "non-working");
