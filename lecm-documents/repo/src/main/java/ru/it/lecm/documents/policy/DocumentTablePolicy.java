@@ -205,6 +205,8 @@ public class DocumentTablePolicy extends BaseBean {
 			objects.add(tableRow.toString());
 			objects.add(tableData.toString());
 			businessJournalService.log(document, EventCategory.ADD, "#initiator добавил запись #object1 в таблицу #object2 документа #mainobject", objects);
+			String transactionId = AlfrescoTransactionSupport.getTransactionId();
+			this.lastTransactionId = transactionId;
 		}
 	}
 

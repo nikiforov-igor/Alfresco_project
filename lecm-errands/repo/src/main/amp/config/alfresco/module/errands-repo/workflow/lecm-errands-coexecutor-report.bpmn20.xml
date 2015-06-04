@@ -16,11 +16,11 @@
 	                        if (document != null && lecmErrandWf_coexecutorReportText != null && currentUser != null) {
 		                        var table = document.assocs["lecm-errands-ts:coexecutor-reports-assoc"][0];
 		                        if (table != null) {
-		                            var report = table.createNode(null, "lecm-errands-ts:coexecutor-report");
 
-		                            report.properties["lecm-errands-ts:coexecutor-report-text"] = lecmErrandWf_coexecutorReportText;
-	                                report.properties["lecm-errands-ts:coexecutor-report-status"] = "ONCONTROL";
-	                                report.save();
+		                        	var props = [];
+		                        	props["lecm-errands-ts:coexecutor-report-text"] = lecmErrandWf_coexecutorReportText;
+	                                props["lecm-errands-ts:coexecutor-report-status"] = "ONCONTROL";
+		                            var report = table.createNode(null, "lecm-errands-ts:coexecutor-report", props);
 
 	                                report.createAssociation(currentUser, "lecm-errands-ts:coexecutor-assoc");
 	                                var attachment = execution.getVariable("lecmErrandWf_coexecutorReportAttachment")
