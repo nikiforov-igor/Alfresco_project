@@ -556,7 +556,6 @@
 					<show id="lecm-meetings-ts:reporter-assoc"/>
 					<show id="lecm-meetings-ts:coreporter-assoc"/>
 					<show id="lecm-meetings-ts:item-name"/>
-					<show id="lecm-meetings-ts:men-spoke"/>
 					<show id="lecm-meetings-ts:content"/>
 					<show id="lecm-meetings-ts:note"/>
 					<show id="lecm-meetings-ts:theme-assoc"/>
@@ -599,11 +598,6 @@
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:item-name"/>
-					<field id="lecm-meetings-ts:men-spoke" >
-						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-							<control-param name="rows">4</control-param>
-						</control>
-					</field>
 					<field id="lecm-meetings-ts:content">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
@@ -660,12 +654,10 @@
 					<show id="lecm-meetings-ts:reporter-assoc"/>
 					<show id="lecm-meetings-ts:coreporter-assoc"/>
 					<show id="lecm-meetings-ts:item-name"/>
-					<show id="lecm-meetings-ts:men-spoke"/>
 					<show id="lecm-meetings-ts:content"/>
 					<show id="lecm-meetings-ts:note"/>
 					<show id="lecm-meetings-ts:theme-assoc"/>
 					<show id="lecm-meetings-ts:documents-assoc"/>
-
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:indexTableRow" force="true"/>
@@ -703,11 +695,6 @@
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:item-name"/>
-					<field id="lecm-meetings-ts:men-spoke" >
-						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-							<control-param name="rows">4</control-param>
-						</control>
-					</field>
 					<field id="lecm-meetings-ts:content">
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
