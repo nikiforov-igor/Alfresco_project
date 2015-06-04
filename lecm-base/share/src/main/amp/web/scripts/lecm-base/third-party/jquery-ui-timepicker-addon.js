@@ -90,6 +90,7 @@
 			minDateTime: null,
 			maxDateTime: null,
 			onSelect: null,
+			onBeforeClose: null,
 			hourGrid: 0,
 			minuteGrid: 0,
 			secondGrid: 0,
@@ -199,6 +200,11 @@
 		            if (tp_inst.timeDefined === true && $input.val() !== '') {
 		                tp_inst._updateDateTime(dp_inst);
 		            }
+					var onBeforeClose = tp_inst._defaults.onBeforeClose || tp_inst.inst.settings.onBeforeClose;
+					var inputEl = tp_inst.$input ? tp_inst.$input[0] : null;
+					if (onBeforeClose && inputEl) {
+						onBeforeClose.apply(inputEl, [tp_inst.formattedDateTime, this]);
+					}
 		            if ($.isFunction(tp_inst._defaults.evnts.onClose)) {
 		                tp_inst._defaults.evnts.onClose.call($input[0], dateText, dp_inst, tp_inst);
 		            }
@@ -1670,6 +1676,7 @@
 			var min = null,
 				max = null,
 				onselect = null,
+				onbeforeclose = null,
 				overrides = tp_inst._defaults.evnts,
 				fns = {},
 				prop;
@@ -1679,8 +1686,10 @@
 		        } else if (name === 'maxDate' || name === 'maxDateTime') {
 		            max = value;
 		        } else if (name === 'onSelect') {
-		            onselect = value;
-		        } else if (overrides.hasOwnProperty(name)) {
+					onselect = value;
+				} else if (name === 'onBeforeClose') {
+					onbeforeclose = value;
+				} else if (overrides.hasOwnProperty(name)) {
 		            if (typeof (value) === 'undefined') {
 		                return overrides[name];
 		            }
@@ -1728,8 +1737,10 @@
 		        tp_inst._defaults.maxDate = max;
 		        tp_inst._defaults.maxDateTime = max;
 		    } else if (onselect) {
-		        tp_inst._defaults.onSelect = onselect;
-		    }
+				tp_inst._defaults.onSelect = onselect;
+			}else if (onbeforeclose) {
+				tp_inst._defaults.onBeforeClose = onbeforeclose;
+			}
 		}
 		if (value === undefined) {
 			return this._base_optionDatepicker.call($.datepicker, target, name);

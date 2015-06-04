@@ -192,6 +192,13 @@
                             formId: "${args.htmlid}"
                         });
                         YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
+                    },
+                    onBeforeClose: function (selectedDateTime) {
+                        YAHOO.Bubbling.fire("handleFieldChange", {
+                            fieldId: "${field.configName}",
+                            formId: "${args.htmlid}"
+                        });
+                        YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
                     }
                 });
             </#if>
