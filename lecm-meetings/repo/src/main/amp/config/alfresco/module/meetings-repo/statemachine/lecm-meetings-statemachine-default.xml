@@ -166,7 +166,7 @@
 							stage.properties['lecmWorkflowRoutes:stageWorkflowType'] = "PARALLEL";
 							stage.properties['lecmWorkflowRoutes:stageWorkflowTerm'] = 2;
 							var today = new Date();
-							stage.properties['cm:title'] = "Согласование повестки от "+today.getDate()+"."+(today.getMonth()>9?today.getMonth():("0"+today.getMonth()))+"."+today.getYear();
+							stage.properties['cm:title'] = "Согласование повестки от "+today.getDate()+"."+(today.getMonth()>9?today.getMonth():("0"+today.getMonth()))+"."+today.getFullYear();
 							stage.save();							
 							stage.removeAspect('sys:temporary');
 							for (i = 0, size = approvals.length; i < size; ++i) {
