@@ -55,7 +55,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions) {
-        List<NodeRef> events = eventService.getEvents(fromDate, toDate);
+        List<NodeRef> events = eventService.getEvents(fromDate, toDate, "", true);
         return processEvents(events, loadActions);
     }
 

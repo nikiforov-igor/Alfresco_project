@@ -2,9 +2,7 @@ package ru.it.lecm.events.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.base.beans.BaseBean;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,6 +74,8 @@ public interface EventsService {
     List<NodeRef> getEvents(String fromDate, String toDate);
 
     public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter);
+
+    List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined);
 
     public List<NodeRef> searchEvents(String filter);
 

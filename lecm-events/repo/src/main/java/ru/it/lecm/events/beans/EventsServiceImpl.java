@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
+import org.apache.tools.ant.filters.StringInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,6 +19,8 @@ import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.events.ical.CalendarEvent;
+import ru.it.lecm.events.ical.ICalUtils;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -26,14 +29,14 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import javax.activation.DataSource;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
-import org.apache.tools.ant.filters.StringInputStream;
-import ru.it.lecm.events.ical.CalendarEvent;
-import ru.it.lecm.events.ical.ICalUtils;
 
 /**
  * User: AIvkin
@@ -155,6 +158,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter) {
+        return getEvents(fromDate, toDate, additionalFilter, false);
+    }
+
+	@Override
+	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined) {
 		List<NodeRef> results = new ArrayList<>();
 
 		SearchParameters sp = new SearchParameters();
@@ -175,7 +183,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				searchResult.close();
 			}
 		}
-
+        if (excludeDeclined) {
+            results = filterDeclinedEvents(results);
+        }
 		return results;
 	}
 
@@ -240,16 +250,20 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			}
 		}
 
-		List<NodeRef> filteredResults = new ArrayList<>();
-		for (NodeRef result : results) {
-			if (!"DECLINED".equals(getCurrentEmployeeMemberStatus(result))) {
-				filteredResults.add(result);
-			}
-		}
-		return filteredResults;
+        return filterDeclinedEvents(results);
 	}
 
-	@Override
+    List<NodeRef> filterDeclinedEvents(List<NodeRef> events) {
+        List<NodeRef> filteredResults = new ArrayList<>();
+        for (NodeRef result : events) {
+            if (!"DECLINED".equals(getCurrentEmployeeMemberStatus(result))) {
+                filteredResults.add(result);
+            }
+        }
+        return filteredResults;
+    }
+
+    @Override
 	public List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode) {
 		List<NodeRef> results = new ArrayList<>();
 		NodeRef locationsDic = dictionaryBean.getDictionaryByName("Места проведения мероприятий");
