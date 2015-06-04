@@ -61,6 +61,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 			this.toolbarButtons["defaultActive"].groupActionsButton.set("label", this.msg("button.group-actions"));
 			this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
+			this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onRootActionClick.bind(this));
 			this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
 			this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", this.options.isRoot);
 
@@ -80,7 +81,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			var templateRequestParams = {
 				selectableType: "lecm-os:nomenclature-case",
 				additionalFilter: "@lecm-os\\:nomenclature-case-status:\"MARK_TO_DESTROY\" OR @lecm-os\\:nomenclature-case-status:\"CLOSED\"",
-				searchTerm: ""
+				searchTerm: "",
+				nameSubstituteString: "{lecm-os:nomenclature-case-index} - {cm:title}"
 			};
 
 			Alfresco.util.Ajax.jsonRequest({
@@ -110,7 +112,8 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			var items = this.modules.dataGrid.getSelectedItems();
 
 			if (items.length == 0) {
-				button.set("disabled", true);
+				// button.set("disabled", true);
+				buttonName = 'Действия на текущем узле';
 			} else {
 				button.set("disabled", false);
 				buttonName += "<span class=\"group-actions-counter\">";
@@ -179,6 +182,84 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				}).show();
 		},
 
+		onRootActionClick: function() {
+			console.log('Im in!');
+
+			var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+			var menu = button.getMenu();
+
+			Alfresco.util.Ajax.jsonRequest({
+                method: "GET",
+                url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/getCasesForRootAction?nodeRef=' + this.node.nodeRef,
+                successCallback: {
+                    fn: function (oResponse) {
+						var actionItems = [];
+                        var forArchive = oResponse.json.forArchive;
+                        var forDestroy = oResponse.json.forDestroy;
+
+						if(forArchive != null && forArchive.length > 0) {
+							actionItems.push({
+								text: 'Передача номенклатурного дела в архив',
+								value: 'Передача номенклатурного дела в архив',
+								onclick: {
+									fn: this.onGroupActionsClickProxy,
+									obj: {
+										actionId: 'Передача номенклатурного дела в архив',
+										type: 'lecm-group-actions:script-action',
+										withForm: false,
+										items: forArchive,
+										label: 'Передача номенклатурного дела в архив'
+									},
+									scope: this
+								}
+							});
+						}
+
+						if(forDestroy != null && forDestroy.length > 0) {
+							actionItems.push({
+								text: 'Уничтожение номенклатурного дела',
+								value: 'Уничтожение номенклатурного дела',
+								onclick: {
+									fn: this.onGroupActionsClickProxy,
+									obj: {
+										actionId: 'Уничтожение номенклатурного дела',
+										type: 'lecm-group-actions:script-action',
+										withForm: false,
+										items: forDestroy,
+										label: 'Уничтожение номенклатурного дела'
+									},
+									scope: this
+								}
+							});
+						}
+
+						if (actionItems.length == 0) {
+							actionItems.push({
+								text: Alfresco.util.message('lecm.os.msg.no.operations'),
+								disabled: true
+							});
+						}
+
+						if (YAHOO.util.Dom.inDocument(menu.element)) {
+							menu.clearContent();
+							menu.addItems(actionItems);
+							menu.render();
+						} else {
+							menu.addItems(actionItems);
+						}
+
+                    },
+                    scope: this
+                },
+                failureCallback: {
+                    fn: function () {
+                    }
+                },
+                scope: this,
+                execScripts: true
+            });
+		},
+
 		onCheckDocumentFinished: function(){
 			var button = this.toolbarButtons["defaultActive"].groupActionsButton;
 			var menu = button.getMenu();
@@ -188,9 +269,9 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				items.push(el.nodeRef);
 			});
 			if(itemsData.length == 0) {
-				this.nodeChildren.forEach(function(el) {
-					items.push(el.nodeRef);
-				});
+
+				// Элементы не выбраны, но событие по клику пришло -> действие на узле
+				return;
 			}
 			var loadItem = [];
 			loadItem.push({
@@ -217,9 +298,6 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 						var actionItems = [];
 						var wideActionItems = [];
 						for (var i in json) {
-							if(me.allowedNodeChildrenActions.indexOf(json[i].id) < 0) {
-								continue;
-							}
 							if (!json[i].wide) {
 								actionItems.push({
 									text: json[i].title,
@@ -237,34 +315,15 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 										scope: me
 									}
 								});
-							} else {
-								wideActionItems.push({
-									text: json[i].title,
-									value: json[i].id,
-									onclick: {
-										fn: me.onGroupActionsClickProxy,
-										obj: {
-											actionId: json[i].id,
-											type: json[i].type,
-											withForm: json[i].withForm,
-											items: items,
-											workflowId: json[i].workflowId,
-											label: json[i].title
-										},
-										scope: me
-									}
-								});
 							}
 						}
-						if (actionItems.length == 0 && wideActionItems.length == 0) {
+						if (actionItems.length == 0) {
 							actionItems.push({
 								text: Alfresco.util.message('lecm.os.msg.no.operations'),
 								disabled: true
 							});
 						}
-						if (actionItems.length != 0 && wideActionItems.length != 0) {
-							wideActionItems[0].classname = "toplineditem";
-						}
+
 						if (YAHOO.util.Dom.inDocument(menu.element)) {
 							menu.clearContent();
 							menu.addItems(actionItems);
@@ -315,9 +374,15 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 			var html = '<p>';
 			var itemsData = this.modules.dataGrid.getSelectedItems();
+			if(itemsData.length == 0) {
+				this.nodeChildren.forEach(function(el){
+					var msg = el.name + '<br>';
+					html += "<div class=\"noerror-item\">" + msg + "</div>";
+				});
+			}
 
 			itemsData.forEach(function(el) {
-				var msg = el.itemData['prop_cm_title'].displayValue+ ' ' + el.itemData['prop_lecm-os_fake-index'].displayValue + '<br>';
+				var msg = el.itemData['prop_lecm-os_fake-index'].displayValue+ ' - ' + el.itemData['prop_cm_title'].displayValue + '<br>';
 				html += "<div class=\"noerror-item\">" + msg + "</div>";
 			});
 
@@ -647,6 +712,9 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		onItemCreated: function(layer, args) {
+			if(LogicECM.Nomenclature.isCentralized) {
+				return;
+			}
 			var object = args[1];
 			var nodeRef = object.nodeRef;
 			if(object.itemType == 'lecm-os:nomenclature-year-section') {
@@ -786,7 +854,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 							switch(type){
 								case "lecm-os:nomenclature-year-section":
-									status = props["{lecm-os:nomenclature-year-section-status"];
+									status = props["lecm-os:nomenclature-year-section-status"];
 									break;
 
 								case "lecm-os:nomenclature-unit-section":

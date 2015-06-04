@@ -20,7 +20,7 @@
             <![CDATA[doc.attr("lecm-os:nomenclature-case-status") == "CLOSED"]]>
         </property>
         <property name="lecm-group-actions:isGroup">
-            <![CDATA[false]]>
+            <![CDATA[true]]>
         </property>
         <property name="lecm-group-actions:forCollection">
             <![CDATA[false]]>

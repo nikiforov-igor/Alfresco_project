@@ -105,13 +105,17 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 			return html ? html : null;
 		},
 
-		_actionResponse: function(actionString){
+		_actionResponse: function(response){
 
-			Bubbling.fire("datagridRefresh");
+			var message = response.config.dataObj.actionId;
+
+			Bubbling.fire("datagridRefresh", {
+				bubblingLabel: this.options.bubblingLabel
+			});
             Bubbling.fire("armRefreshSelectedTreeNode"); // обновить ветку в дереве
 
             Alfresco.util.PopupManager.displayMessage({
-					text: Alfresco.util.message('lecm.os.msg.action') + ' "' + actionString + '" ' + Alfresco.util.message('lecm.os.msg.completed')
+					text: Alfresco.util.message('lecm.os.msg.action') + ' "' + message + '" ' + Alfresco.util.message('lecm.os.msg.completed')
 				});
 
 		},
@@ -375,7 +379,8 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 						actionId: actionId
 					},
 					successCallback: {
-						fn: this._actionResponse.call(this, actionId)
+						scope: this,
+						fn: this._actionResponse
 					},
 					failureCallback: {
 						fn: function () {
@@ -427,7 +432,22 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 						if(response.json.length) {
 							Alfresco.util.PopupManager.displayPrompt({
 								title:Alfresco.util.message('lecm.os.lbl.remove.nomen'),
-								text: Alfresco.util.message('lecm.os.msg.not.empty.nomen')
+								text: Alfresco.util.message('lecm.os.msg.not.empty.nomen'),
+								buttons:[{
+									text: 'Ок',
+									handler: {
+										obj: {
+											context: this,
+											fn: execFunction
+										},
+										fn: deleteAnyway
+									}
+								}, {
+									text: 'Отмена',
+									handler: {
+										fn: cancel
+									}
+								}]
 							});
 						} else {
 							execFunction.call(this);
@@ -437,6 +457,16 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				failureMessage: this.msg('message.failure'),
 				scope: this
 			});
+
+			function cancel(event, obj) {
+				this.destroy();
+			}
+
+			function deleteAnyway(event, obj) {
+				this.destroy();
+				obj.fn.call(obj.context);
+			}
+
 		},
 
 		closeYearSection_Prompt_sync: function(execFunction, item) {
@@ -653,7 +683,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				yearStatus = rowData.itemData["prop_lecm-os_nomenclature-year-section-status-fake"],
 				statuses = ["CLOSED", "PROJECT"];
 
-			return ("lecm-os:nomenclature-case" == type) && (statuses.indexOf(status.value) >= 0) && (yearStatus.value == "APPROVED");
+			return ("lecm-os:nomenclature-case" == type) && (statuses.indexOf(status.value) >= 0) && (yearStatus.value == "Утверждена");
 		},
 
 		closeNDEvaluator: function(rowData) {

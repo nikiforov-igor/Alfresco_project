@@ -7,7 +7,7 @@
 		<property name="lecm-group-actions:type"><![CDATA[lecm-os:nomenclature-year-section]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
 		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-os:nomenclature-year-section-status") == "APPROVED"]]></property>
-		<property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
+		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:script"><![CDATA[(function() {//Закрыть номенклатуру дел
     function closeCases(cases) {

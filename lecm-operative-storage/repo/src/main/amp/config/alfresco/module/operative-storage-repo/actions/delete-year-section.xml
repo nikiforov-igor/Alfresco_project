@@ -6,18 +6,11 @@
 		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
 		<property name="lecm-group-actions:type"><![CDATA[lecm-os:nomenclature-year-section]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
-		<property name="lecm-group-actions:expression"><![CDATA[(doc.attr("lecm-os:nomenclature-year-section-status") == "PROJECT" or doc.attr("lecm-os:nomenclature-year-section-status") == "APPROVED" or doc.attr("lecm-os:nomenclature-year-section-status") == "CLOSED")]]></property>
-		<property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-os:nomenclature-year-section-status") == "PROJECT"]]></property>
+		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:script"><![CDATA[(function() {//Удалить номенклатуру дел
-    var children = dictionary.getChildren(document.nodeRef);
-    if (children != null && children.length > 0) {
-        logger.warn('Номенклатура дел не пустая. Необходимо сначала удалить все папки и документы, находящиеся в ней');
-    } else {
-        document.properties["lecm-dic:active"] = false;
-        document.properties['lecm-os:nomenclature-year-section-status'] = 'DELETED';
-        document.save();
-    }
+    document.remove();
 })();]]></property>
 	</item>
 </items>
