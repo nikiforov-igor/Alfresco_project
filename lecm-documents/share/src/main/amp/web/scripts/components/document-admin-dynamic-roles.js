@@ -61,16 +61,18 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 					results += this.getRoleView(roles[i]);
 				}
 			}
-			container.innerHTML = results
+			container.innerHTML = results;
 		},
 
 		getRoleView: function (role) {
-			var result = "<div>";
+			var result = "<div class='dynamic-role'>";
 			result += role.name;
 			var addEmployeeId = "dynamic-role-add-employee-" + role.id;
 
-			result += '<a href="javascript:void(0);" class="dynamic-role-add-employee" id="' + addEmployeeId + '">add</a>';
-			if (role.emloyees != null) {
+			result += '<span href="javascript:void(0);" class="dynamic-role-add-employee" id="' + addEmployeeId + '" title="'
+             + this.msg("title.documents.admin.roles.dynamic.employee.to-add", role.name) + '"></span>';
+
+            if (role.emloyees != null) {
 				result += "<div class='dynamic-role-employees'>";
 				for (var i = 0; i < role.emloyees.length; i++) {
 					result += this.getEmployeeView(role, role.emloyees[i]);
@@ -88,7 +90,10 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 			var result = "<div>";
 			result += LogicECM.module.Base.Util.getControlEmployeeView(employee.nodeRef, employee.name, true);
 			var removeEmployeeId = "dynamic-role-remove-employee-" + employee.nodeRef.replace(/:|\//g, '_') + "_" + role.id;
-			result += '<a href="javascript:void(0);" class="dynamic-role-remove-employee" id="' + removeEmployeeId + '">del</a>';
+
+			result += '<span href="javascript:void(0);" class="dynamic-role-remove-employee" id="' + removeEmployeeId + '" title="'
+             + this.msg("title.documents.admin.roles.dynamic.employee.to-delete",employee.name, role.name) + '"></span>';
+
 			YAHOO.util.Event.onAvailable(removeEmployeeId, this.attachRemoveEmployeeClickListener, {
 				role: role,
 				employee: employee
