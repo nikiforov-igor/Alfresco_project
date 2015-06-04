@@ -954,7 +954,7 @@
       for (var i=0; i<itemAssocs.length ;i++ ) {
 		var item = itemAssocs[i];
         var documents = item.assocs["lecm-meetings-ts:documents-assoc"];
-        if (documents.length!==null && documents.length>0) {
+        if (documents!==null && documents.length>0) {
 		for (var j=0; j<documents.length ;j++ ) {
 			var document = documents[i];
 			documentConnection.createConnection(meeting, document, 'forInformation', true );
