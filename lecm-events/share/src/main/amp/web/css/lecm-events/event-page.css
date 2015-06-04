@@ -2,3 +2,7 @@
     width: auto;
     max-width: 300px;
 }
+.yui-skin-lecmTheme .event-page .form-fields .lecm-dashlet-actions {
+    padding-right: 0;
+    margin: 10px 3px 0;
+}
