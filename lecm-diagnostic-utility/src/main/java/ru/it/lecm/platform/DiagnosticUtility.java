@@ -541,8 +541,6 @@ public class DiagnosticUtility {
             }
             out = new ZipOutputStream(new FileOutputStream(zipFile));
             out.setLevel(Deflater.DEFAULT_COMPRESSION);
-            out.putNextEntry(new ZipEntry(""));
-            out.closeEntry();
             while (!queue.isEmpty()) {
                 File compressedFile = queue.pop();
 
