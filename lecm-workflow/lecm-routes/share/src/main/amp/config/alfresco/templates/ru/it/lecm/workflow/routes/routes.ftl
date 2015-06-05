@@ -11,5 +11,9 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <@bpage.basePageSimple>
-	<@region id="routes-grid" scope="template"/>
+	<#if allowEdit>
+		<@region id="routes-grid" scope="template"/>
+	<#else>
+		<@region id="forbidden" scope="template"/>
+	</#if>
 </@bpage.basePageSimple>

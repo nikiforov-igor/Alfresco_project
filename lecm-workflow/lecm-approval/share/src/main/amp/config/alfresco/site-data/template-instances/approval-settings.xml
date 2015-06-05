@@ -19,5 +19,9 @@
 			<region-id>approval-settings</region-id>
 			<url>/ru/it/lecm/workflow/approval/approval-settings</url>
 		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
 	</components>
 </template-instance>

@@ -1,0 +1,1 @@
+model.allowEdit = user.isAdmin
