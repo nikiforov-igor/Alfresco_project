@@ -15,9 +15,13 @@ import ru.it.lecm.reports.utils.Utils;
 import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * User: AZinovin
@@ -58,7 +62,7 @@ public class ReportMainProducer extends AbstractWebScript {
      * @return  Map
      */
     public static Map<String, String> getRequestParameters(WebScriptRequest webScriptRequest) {
-        final Map<String, String> result = new HashMap<String, String>();
+        final Map<String, String> result = new TreeMap<String, String>();
         //Get json params
         String json = webScriptRequest.getParameter(JSON_PARAMETERS_KEY);
         if (json != null) {
@@ -86,7 +90,7 @@ public class ReportMainProducer extends AbstractWebScript {
     }
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
+    public void execute(WebScriptRequest webScriptRequest, final WebScriptResponse webScriptResponse) throws IOException {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
         PropertyCheck.mandatory(this, "reportGenerators", getReportsManager().getReportGenerators());
 
@@ -94,20 +98,51 @@ public class ReportMainProducer extends AbstractWebScript {
         final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
         final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
         final String templateCode = requestParameters.get("templateCode");
+        String reportKey = reportName;
+        for (Map.Entry<String, String> entry : requestParameters.entrySet()) {
+            reportKey += entry.getKey() + entry.getValue();
+        }
+        WebScriptResponse old;
+        try {
+            lock.lock();
+            old = reportMap.put(reportKey, webScriptResponse);
+        } finally {
+            lock.unlock();
+        }
+        if (old == null) {
+            try {
 
-        final ReportFileData result = getReportsManager().generateReport(reportName, templateCode, requestParameters);
-
-        if (result != null) {
-            webScriptResponse.setContentType(result.getMimeType());
-            webScriptResponse.setContentEncoding(result.getEncoding());
-            webScriptResponse.addHeader("Content-Disposition", "filename=\"" + MimeUtility.encodeWord(result.getFilename(), "utf-8", "Q") + "\"");
-
-            if (result.getData() != null) {
-                final OutputStream out = webScriptResponse.getOutputStream();
-                out.write(result.getData());
-                out.flush();
-                out.close();
+                final ReportFileData result = getReportsManager().generateReport(reportName, templateCode, requestParameters);
+                if (result != null) {
+                    try {
+                        lock.lock();
+                        WebScriptResponse lastWebScriptResponse = reportMap.remove(reportKey);
+                        lastWebScriptResponse.reset();
+                        lastWebScriptResponse.setContentType(result.getMimeType());
+                        lastWebScriptResponse.setContentEncoding(result.getEncoding());
+                        lastWebScriptResponse.addHeader("Content-Disposition", "filename=\"" + MimeUtility.encodeWord(result.getFilename(), "utf-8", "Q") + "\"");
+                        if (result.getData() != null) {
+                            final OutputStream out = lastWebScriptResponse.getOutputStream();
+                            out.write(result.getData());
+                            out.flush();
+                            out.close();
+                        }
+                    } finally {
+                        lock.unlock();
+                    }
+                }
+            } finally {
+                reportMap.remove(reportKey);
+            }
+        } else {
+            try {
+                Thread.sleep(150000);
+            } catch (InterruptedException ignored) {
             }
         }
     }
+
+
+    private static final ConcurrentMap<String, WebScriptResponse> reportMap = new ConcurrentHashMap<>();
+    private static final Lock lock = new ReentrantLock();
 }
