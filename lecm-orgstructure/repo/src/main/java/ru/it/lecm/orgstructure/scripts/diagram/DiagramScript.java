@@ -30,7 +30,7 @@ public class DiagramScript extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
-        res.setContentType("image/png");
+        res.setContentType("image/svg+xml");
         // Create an XML stream writer
         OutputStream output = res.getOutputStream();
         InputStream is = new DiagramGenerator().generate(orgstructureBean, nodeService);

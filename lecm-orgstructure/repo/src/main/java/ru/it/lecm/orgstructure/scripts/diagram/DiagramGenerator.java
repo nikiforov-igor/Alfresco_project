@@ -2,11 +2,14 @@ package ru.it.lecm.orgstructure.scripts.diagram;
 
 import com.mxgraph.canvas.mxICanvas;
 import com.mxgraph.canvas.mxImageCanvas;
+import com.mxgraph.canvas.mxSvgCanvas;
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.util.mxCellRenderer;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import org.alfresco.model.ContentModel;
@@ -14,10 +17,18 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -25,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: pmelnikov
@@ -52,16 +64,11 @@ public class DiagramGenerator{
 
                 // Indirection for wrapped swing canvas inside image canvas (used for creating
                 // the preview image when cells are dragged)
-                if (getModel().isVertex(state.getCell())
-                        && canvas instanceof mxImageCanvas
-                        && ((mxImageCanvas) canvas).getGraphicsCanvas() instanceof OrgstructureSwingCanvas) {
-                    ((OrgstructureSwingCanvas) ((mxImageCanvas) canvas).getGraphicsCanvas())
-                            .drawVertex(state, unit);
-                }
-                // Redirection of drawing vertices in SwingCanvas
-                else if (getModel().isVertex(state.getCell())
-                        && canvas instanceof OrgstructureSwingCanvas) {
-                    ((OrgstructureSwingCanvas) canvas).drawVertex(state, unit);
+                if (unit != null && getModel().isVertex(state.getCell())
+                        && canvas instanceof mxSvgCanvas) {
+                    mxSvgCanvas svgCanvas = (mxSvgCanvas) canvas;
+                    unit.draw(state, svgCanvas);
+
                 } else {
                     super.drawState(canvas, state, drawLabel);
                 }
@@ -77,7 +84,10 @@ public class DiagramGenerator{
             NodeRef organization = service.getOrganization();
             Object orgName = nodeService.getProperty(organization, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
             if (orgName == null) {
-                orgName = nodeService.getProperty(organization, ContentModel.PROP_NAME);
+                orgName = nodeService.getProperty(organization, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME);
+                if (orgName == null) {
+                    orgName = nodeService.getProperty(organization, ContentModel.PROP_NAME);
+                }
             }
             Object orgObject = graph.insertVertex(parent, null, new OrgstructureUnit(orgName.toString()), 10, 10, 10, 10);
 
@@ -107,12 +117,30 @@ public class DiagramGenerator{
                 }
             };
             layout.setHorizontal(false);
+            layout.setLevelDistance(120);
             layout.execute(parent);
             graph.getModel().endUpdate();
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 1, Color.WHITE, true, null, new OrgstructureSwingCanvas());
+        //BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 0.05, Color.WHITE, false, null, new OrgstructureSwingCanvas());
+        Document document = mxCellRenderer.createSvgDocument(graph, null, 1, Color.WHITE, null);
+        try {
+            DOMSource domSource = new DOMSource(document);
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            StreamResult sr = new StreamResult(baos);
+            transformer.transform(domSource, sr);
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+        return new ByteArrayInputStream(baos.toByteArray());
+
+/*
         BufferedImage result = new BufferedImage(image.getWidth() + 10, image.getHeight() + 10, BufferedImage.TYPE_INT_RGB);
         Graphics g = result.getGraphics();
         g.setColor(Color.WHITE);
@@ -124,12 +152,19 @@ public class DiagramGenerator{
 	        logger.error(e.getMessage(), e);
         }
         return new ByteArrayInputStream(baos.toByteArray());
+*/
 
     }
 
     private void createStructure(mxGraph graph, Object parent, NodeRef structure) {
-        String title = nodeService.getProperty(structure, ContentModel.PROP_NAME).toString();
-        OrgstructureUnit unit = new OrgstructureUnit(title);
+        Object orgName = nodeService.getProperty(structure, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
+        if (orgName == null) {
+            orgName = nodeService.getProperty(structure, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME);
+            if (orgName == null) {
+                orgName = nodeService.getProperty(structure, ContentModel.PROP_NAME);
+            }
+        }
+        OrgstructureUnit unit = new OrgstructureUnit(orgName.toString());
 
         List<NodeRef> positions = service.getUnitStaffLists(structure);
         for (NodeRef position : positions) {
@@ -161,40 +196,6 @@ public class DiagramGenerator{
                 createStructure(graph, unitObject, child);
             }
         }
-    }
-
-    public class OrgstructureSwingCanvas extends mxInteractiveCanvas {
-        protected CellRendererPane rendererPane = new CellRendererPane();
-
-        protected JLabel vertexRenderer = new JLabel();
-
-        protected JScrollPane graphComponent = new JScrollPane();
-
-        public OrgstructureSwingCanvas() {
-            graphComponent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            vertexRenderer.setBorder(BorderFactory
-                    .createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-            vertexRenderer.setHorizontalAlignment(JLabel.LEFT);
-            vertexRenderer.setVerticalAlignment(JLabel.TOP);
-            vertexRenderer.setBackground(graphComponent.getBackground()
-                    .brighter());
-            vertexRenderer.setOpaque(true);
-
-            vertexRenderer.setFont(OrgstructureUnit.FONT);
-        }
-
-        public void drawVertex(mxCellState state, OrgstructureUnit unit) {
-            if (unit == null) return;
-            vertexRenderer.setText(unit.getHtml());
-
-            // TODO: Configure other properties...
-
-            rendererPane.paintComponent(g, vertexRenderer, graphComponent,
-                    (int) state.getX() + translate.x, (int) state.getY()
-                    + translate.y, (int) state.getWidth(),
-                    (int) state.getHeight(), true);
-        }
-
     }
 
 }

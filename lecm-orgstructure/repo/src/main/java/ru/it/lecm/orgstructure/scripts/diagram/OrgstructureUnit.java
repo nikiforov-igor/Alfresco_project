@@ -1,10 +1,15 @@
 package ru.it.lecm.orgstructure.scripts.diagram;
 
+import com.mxgraph.canvas.mxSvgCanvas;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxPoint;
+import com.mxgraph.util.mxRectangle;
+import com.mxgraph.view.mxCellState;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.List;
 
 /**
  * User: pmelnikov
@@ -34,27 +39,78 @@ public class OrgstructureUnit {
     }
 
 
-    public String getHtml() {
+    public void draw(mxCellState state, mxSvgCanvas canvas) {
+        mxRectangle bounds = state.getPerimeterBounds();
+        Point translate = canvas.getTranslate();
+        int x = (int)bounds.getX() + translate.x;
+        int y = (int)bounds.getY() + translate.y;
+        int w = (int) bounds.getWidth();
+        int h = (int) bounds.getHeight();
 
-        String result = "<html><div width=\"246px\">";
-        result += "<font size=+1>" + title + "</font>";
-        result += "<hr>";
+        Map style = state.getStyle();
+        style.put(mxConstants.STYLE_FILLCOLOR, "#FFFFFF");
+        style.put(mxConstants.STYLE_STROKECOLOR, "#000000");
+        canvas.drawShape(x, y, w, h, style);
+
+        x += 6;
+        y += 6;
+
+        Font font = FONT;
+        Font fontInc = new Font(FONT.getFamily(), FONT.getStyle(), FONT.getSize() + 6);
+        Font fontBoss = new Font(FONT.getFamily(), Font.BOLD, FONT.getSize());
+
+        y += drawText(title, canvas, x, y, fontInc);
+
+        if (boss != null || employees.size() > 0) {
+            y += 6;
+            List<mxPoint> points = new ArrayList<>();
+            points.add(new mxPoint(x, y));
+            points.add(new mxPoint(x + MAX_WIDTH, y));
+            canvas.drawLine(points, style);
+            y += 6;
+        }
+
         if (boss != null) {
-            result += "<b>"+ boss +"</b>";
+            y += drawText(boss, canvas, x, y, fontBoss);
         }
+        for (String employee : employees) {
+            y += drawText(employee, canvas, x, y, font);
+        }
+    }
 
-        Iterator<String> it = employees.iterator();
-        if (it.hasNext() && boss != null) {
-            result += "<br>";
-        }
-        while (it.hasNext()) {
-            result += it.next();
-            if (it.hasNext()) {
-                result += "<br>";
+    private int drawText(String word, mxSvgCanvas canvas, int x, int y, Font font) {
+        BufferedImage bi = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
+        FontMetrics fm = bi.getGraphics().getFontMetrics(font);
+
+        Map<String, Object> style = new HashMap<>();
+        style.put(mxConstants.STYLE_FONTFAMILY, font.getFamily());
+        style.put(mxConstants.STYLE_FONTSIZE, font.getSize());
+        style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
+        style.put(mxConstants.STYLE_FONTSTYLE, font.getStyle());
+        int height = 0;
+        if (fm.stringWidth(word) > MAX_WIDTH) {
+            StringTokenizer st = new StringTokenizer(word, " -", true);
+            String text = "";
+            while (st.hasMoreTokens()) {
+                String token = st.nextToken();
+                int width = fm.stringWidth(text + token);
+                if (width > MAX_WIDTH) {
+                    canvas.drawText(text, x, y, MAX_WIDTH, fm.getHeight(), style);
+                    height += fm.getHeight();
+                    y += fm.getHeight();
+                    text = "";
+                }
+                text += token;
             }
+            if (!text.equals("")) {
+                canvas.drawText(text, x, y, MAX_WIDTH, fm.getHeight(), style);
+                height += fm.getHeight();
+            }
+        } else {
+            canvas.drawText(word, x, y, MAX_WIDTH, fm.getHeight(), style);
+            height += fm.getHeight();
         }
-        result += "</div></html>";
-        return result;
+        return height;
     }
 
     public double getWidth() {
@@ -63,15 +119,17 @@ public class OrgstructureUnit {
 
     public double getHeight() {
         Font font = FONT;
-        Font fontInc = new Font(font.getFamily(), font.getStyle(), font.getSize() + 6);
-        Font fontBoss = new Font(font.getFamily(), Font.BOLD, font.getSize());
+        Font fontInc = new Font(FONT.getFamily(), FONT.getStyle(), FONT.getSize() + 6);
+        Font fontBoss = new Font(FONT.getFamily(), Font.BOLD, FONT.getSize());
         BufferedImage bi = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
 
         FontMetrics fm = bi.getGraphics().getFontMetrics(fontInc);
         int result = calculateHeight(title, MAX_WIDTH, fm);
 
-        fm = bi.getGraphics().getFontMetrics(font);
-        result += calculateHeight("a", MAX_WIDTH, fm) / 2;
+        if (boss != null || employees.size() > 0) {
+            fm = bi.getGraphics().getFontMetrics(font);
+            result += calculateHeight("a", MAX_WIDTH, fm) / 2;
+        }
 
         if (boss != null) {
             fm = bi.getGraphics().getFontMetrics(fontBoss);
