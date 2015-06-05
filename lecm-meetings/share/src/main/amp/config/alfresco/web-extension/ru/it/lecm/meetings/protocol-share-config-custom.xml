@@ -258,6 +258,70 @@
 					<field id="lecm-contract:approval" label-id="label.approval"/>
 				</appearance>
 			</form>
+			<form id="search-editor-fields">
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-document:title"/>
+					<!--Вид документа-->
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<!--Срок исполнения-->
+					<show id="lecm-eds-document:execution-date"/>
+					<!--Содержание-->
+					<show id="lecm-eds-document:summaryContent"/>
+					<!--Подписанты-->
+					<show id="lecm-protocol:signers-assoc"/>
+					<!--Председатель совещания-->
+					<show id="lecm-protocol:meeting-chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-protocol:secretary-assoc"/>
+					<!--Присутствовали-->
+					<show id="lecm-protocol:attended-assoc"/>
+					<!--Примечание-->
+					<show id="lecm-eds-document:note"/>
+					<!--Тематика-->
+					<show id="lecm-document:subject-assoc"/>
+					<!--Дело-->
+					<show id="lecm-eds-document:file-register-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-eds-document:document-type-assoc">
+						<control>
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+						</control>
+					</field>
+					<field id="lecm-protocol:signers-assoc">
+						<control>
+							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="searchQueryGrid">
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-document:title"/>
+					<!--Вид документа-->
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<!--Срок исполнения-->
+					<show id="lecm-eds-document:execution-date"/>
+					<!--Содержание-->
+					<show id="lecm-eds-document:summaryContent"/>
+					<!--Подписанты-->
+					<show id="lecm-protocol:signers-assoc"/>
+					<!--Председатель совещания-->
+					<show id="lecm-protocol:meeting-chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-protocol:secretary-assoc"/>
+					<!--Присутствовали-->
+					<show id="lecm-protocol:attended-assoc"/>
+					<!--Примечание-->
+					<show id="lecm-eds-document:note"/>
+					<!--Тематика-->
+					<show id="lecm-document:subject-assoc"/>
+					<!--Дело-->
+					<show id="lecm-eds-document:file-register-assoc"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>	
 	

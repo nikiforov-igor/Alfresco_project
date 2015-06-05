@@ -545,6 +545,77 @@
 					<show id="lecm-meetings:holding-invited-members-assoc"/>
 				</field-visibility>
 			</form>
+			<form id="search-editor-fields">
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-events:title"/>
+					<!-- Дата начала мероприятия -->
+					<show id="lecm-events:from-date"/>
+					<!-- Дата окончания мероприятия -->
+					<show id="lecm-events:to-date"/>
+					<!-- Повторное -->
+					<show id="lecm-events:repeatable"/>
+					<!-- Дата начала периода -->
+					<show id="lecm-events:repeatable-start-period"/>
+					<!-- Дата окончания периода -->
+					<show id="lecm-events:repeatable-end-period"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-meetings:secretary-assoc"/>
+					<!-- Участники -->
+					<show id="lecm-events:temp-members-assoc"/>
+					<!-- Приглашённые -->
+					<show id="lecm-events:invited-members-assoc"/>
+					<!-- Место проведения -->
+					<show id="lecm-events:location-assoc"/>
+					<!-- Инициатор -->
+					<show id="lecm-events:initiator-assoc"/>
+					<!-- Описание -->
+					<show id="lecm-events:description"/>
+					<!-- Тематика -->
+					<show id="lecm-events:subject-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-events:location-assoc">
+						<control>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Места_x0020_проведения_x0020_мероприятий</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="childrenDataSource">lecm/events/locations/picker</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:initiator-assoc">
+						<control>
+							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:subject-assoc">
+						<control>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="searchQueryGrid">
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-events:title"/>
+					<!-- Дата начала мероприятия -->
+					<show id="lecm-events:from-date"/>
+					<!-- Дата окончания мероприятия -->
+					<show id="lecm-events:to-date"/>
+					<!-- Инициатор -->
+					<show id="lecm-events:initiator-assoc"/>
+					<!-- Описание -->
+					<show id="lecm-events:description"/>
+					<!-- Тематика -->
+					<show id="lecm-events:subject-assoc"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 	

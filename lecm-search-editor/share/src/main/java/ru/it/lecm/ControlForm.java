@@ -170,7 +170,7 @@ public class ControlForm extends LecmFormGet {
         field.setName(fieldId);
         field.setConfigName(fieldId);
         field.setLabel(labelId != null ? retrieveMessage(labelId) : fieldId);
-        field.setDescription(fieldId);
+        field.setDescription(labelId != null ? retrieveMessage(labelId) : fieldId);
 
         field.setMandatory(false);
         field.setDataKeyName(fieldId);
