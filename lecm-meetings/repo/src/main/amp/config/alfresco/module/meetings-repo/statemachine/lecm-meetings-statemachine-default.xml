@@ -168,17 +168,17 @@
 							var today = new Date();
 							var month = today.getMonth()+1;
 							stage.properties['cm:title'] = "Согласование повестки от "+today.getDate()+"."+(month>9?month:("0"+month))+"."+today.getFullYear();
-							stage.save();							
+							stage.save();
 							stage.removeAspect('sys:temporary');
 							for (i = 0, size = approvals.length; i < size; ++i) {
 								var stageItem = routesService.createNewTemporaryNode(stage.getNodeRef(),"lecmWorkflowRoutes:stageItem");
-								stageItem.save();								
+								stageItem.save();
 								stageItem.createAssociation(approvals[i],  'lecmWorkflowRoutes:stageItemEmployeeAssoc');
 								stageItem.removeAspect('sys:temporary');
-							}	
+							}
                         }
   }
-  
+
 					  })();]]></value>
 															</property>
 															<property>
@@ -951,7 +951,7 @@
     var table = tableAssocs[0];
     var  itemAssocs = table.childAssocs["cm:contains"];
     if (itemAssocs!==null && itemAssocs.length > 0 ){
-      //Проверяем документы
+      /* Проверяем документы */
       for (var i=0; i<itemAssocs.length ;i++ ) {
 		var item = itemAssocs[i];
         var documents = item.assocs["lecm-meetings-ts:documents-assoc"];

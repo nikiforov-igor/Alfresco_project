@@ -184,19 +184,19 @@
 																<name>actionScript</name>
 																<value><![CDATA[(function(){
   var protocol = stm_document;
-  //create approval list
+  /* create approval list */
   var route = routesService.createEmptyIteration(protocol);
   var stage = route.createNode(Packages.java.util.UUID.randomUUID().toString(), 'lecmWorkflowRoutes:stage');
   stage.properties["lecmWorkflowRoutes:stageWorkflowType"] = "PARALLEL";
   stage.properties["lecmWorkflowRoutes:stageWorkflowTerm"] = approval.getApprovalTerm();
   stage.properties["cm:title"] = "Этап 1";
   stage.save();
-  
+
   var assocTypeQName = 'lecmWorkflowRoutes:stageItemEmployeeAssoc';
   var signersRefsString = protocol.properties["lecm-protocol:signers-assoc-ref"];
   if (signersRefsString) {
-	var signersRefs = signersRefsString.split(";");   
-	if (signersRefs){  
+	var signersRefs = signersRefsString.split(";");
+	if (signersRefs){
 		var signersCount = signersRefs.length;
 		for(i = 0; i < signersCount; ++i) {
 			var signer = search.findNode(signersRefs[i]);
@@ -808,7 +808,7 @@
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//Зарегистрировать проект
+																<value><![CDATA[/* Зарегистрировать проект */
 (function(){
     var protocol= stm_document;
     regnumbers.registerProject(protocol, "PROTOCOL_PROJECT_NUMBER");
@@ -2519,9 +2519,9 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 	var authorAssocs = protocol.assocs["lecm-document:author-assoc"];
     if (authorAssocs && authorAssocs.length == 1) {
       author = authorAssocs[0];
-      
+
       var notificationText = "Проект документа ";
-      notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено}"); 
+      notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено}");
       notificationText += " направлен вам на доработку";
 	  notifications.sendNotification([author.nodeRef.toString()], notificationText, protocol);
     }
@@ -3970,21 +3970,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//направить на регистрацию
+																<value><![CDATA[/* направить на регистрацию */
 (function(){
     var i,
         protocol = stm_document,
-        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", protocol),//получение списка регистраторов по документу
+        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", protocol), /* получение списка регистраторов по документу */
         registrarsCount = registrars.length;
 
-    //раздаем права регистраторам
+    /* раздаем права регистраторам */
     for(i = 0; i < registrarsCount; ++i) {
         statemachine.grandDynamicRoleForEmployee(protocol, registrars[i], "DA_REGISTRAR_DYN", task);
     }
 
-    //рассылаем уведомление
+    /* рассылаем уведомление */
     var notificationText = "Документ ";
-    notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-eds-document:document-type-assoc/cm:name}, проект №{~REGNUM|Не присвоено}"); 
+    notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-eds-document:document-type-assoc/cm:name}, проект №{~REGNUM|Не присвоено}");
     notificationText += " поступил на регистрацию";
 	notifications.sendNotification(registrars, notificationText, protocol);
 })();]]></value>
@@ -4741,7 +4741,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
             var table = tableAssocs[0];
             var  pointAssocs = table.childAssocs["cm:contains"];
             if (pointAssocs!==null && pointAssocs.length > 0 ){
-                // формируем поручения
+                /* формируем поручения */
                 protocolService.formErrands(protocol);
             }
         }
@@ -4814,7 +4814,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[(function(){   
+																<value><![CDATA[(function(){
 	var document = stm_document;
     operativeStorage.moveToNomenclatureCase(document);
 })();]]></value>
@@ -5492,13 +5492,13 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 					if (pointExecutorAssoc && pointExecutorAssoc.length > 0){
 						var pointExecutor = pointExecutorAssoc[0];
 						statemachine.grandDynamicRoleForEmployee(protocol, pointExecutor, "PROTOCOL_POINT_EXECUTOR", task);
-						
+
 						var pointNumber = pointAssocs[i].properties["lecm-document:indexTableRow"];
-						
+
 						var notificationText = "Вы назначены исполнителем по пункту " + pointNumber + " протокола " ;
-						notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-document:present-string}"); 
+						notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-document:present-string}");
 						notifications.sendNotification([pointExecutor.nodeRef.toString()], notificationText, protocol);
-					}	
+					}
 				}
 			}
         }
@@ -5570,7 +5570,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[(function(){   
+																<value><![CDATA[(function(){
 	var document = stm_document;
     operativeStorage.moveToNomenclatureCase(document);
 })();]]></value>

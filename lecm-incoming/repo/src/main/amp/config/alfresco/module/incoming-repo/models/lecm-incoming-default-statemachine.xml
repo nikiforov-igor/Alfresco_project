@@ -174,7 +174,7 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[//Добавление динамической роли "СЭД.Инициатор"
+                                                                <value><![CDATA[/* Добавление динамической роли "СЭД.Инициатор" */
 (function(){
     var incoming = stm_document,
         currentEmployee = orgstructure.getCurrentEmployee();

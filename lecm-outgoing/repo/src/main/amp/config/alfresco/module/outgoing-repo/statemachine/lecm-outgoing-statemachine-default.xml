@@ -193,7 +193,7 @@
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[//зарегистрировать проект
+																<value><![CDATA[/* зарегистрировать проект */
 (function(){
     var outgoing = stm_document;
     regnumbers.registerProject(outgoing, "OUTGOING_PRJ_NUMBER");
@@ -7970,20 +7970,20 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//направить на регистрацию
+																<value><![CDATA[/* направить на регистрацию */
 (function(){
     var i,
-        outgoing = stm_document, //исходящий документ
-        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", outgoing),//получение списка регистраторов по документу
+        outgoing = stm_document, /* исходящий документ */
+        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", outgoing), /* получение списка регистраторов по документу */
         registrarsCount = registrars.length,
         notification;
-    //раздаем права регистраторам
+    /* раздаем права регистраторам */
     for(i = 0; i < registrarsCount; ++i) {
         statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "DA_REGISTRAR_DYN", task);
     }
-    //подготавливаем уведомление
+    /* подготавливаем уведомление */
     notification = outgoingStatemachine.prepareNotificationAboutRegistration(outgoing, registrars);
-    //рассылаем уведомление
+    /* рассылаем уведомление */
     notifications.sendNotification(notification);
 })();]]></value>
 															</property>
@@ -8079,7 +8079,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[//Зарегистрировать документ
+																<value><![CDATA[/* Зарегистрировать документ */
 (function() {
     var outgoing = stm_document;
     regnumbers.registerDocument(outgoing, "OUTGOING_DOC_NUMBER");
@@ -8848,7 +8848,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[//уведомить об отправке
+																<value><![CDATA[/* уведомить об отправке */
 (function() {
     var outgoing = stm_document,
         notification = outgoingStatemachine.prepareNotificationAboutSending(outgoing);
@@ -9799,7 +9799,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															<property>
 																<name>actionScript</name>
 																<value>
-																	<![CDATA[//проставить исходящему ассоциацию на подразделение для финализации]]></value>
+																	<![CDATA[/* проставить исходящему ассоциацию на подразделение для финализации */]]></value>
 															</property>
 															<property>
 																<name>scriptLabel</name>

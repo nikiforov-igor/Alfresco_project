@@ -953,7 +953,7 @@
     var controllerAssoc = ord.assocs["lecm-ord:controller-assoc"];
     if (controllerAssoc!=null && controllerAssoc.length > 0) {
         var controller = controllerAssoc[0];
-        // выдадим права контролеру
+        /* выдадим права контролеру */
         statemachine.grandDynamicRoleForEmployee(ord, controller, "DA_CONTROLLER_DYN", task);
     }
 })();]]></value>
@@ -6545,23 +6545,23 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//направить на регистрацию
+																<value><![CDATA[/* направить на регистрацию */
 (function(){
     var i,
-        ord = stm_document, //орд документ
-        registrars = ordStatemachine.getRegistrars("DA_REGISTRARS", ord),//получение списка регистраторов по документу
+        ord = stm_document, /* орд документ */
+        registrars = ordStatemachine.getRegistrars("DA_REGISTRARS", ord), /* получение списка регистраторов по документу */
         registrarsCount = registrars.length,
         notification;
 
-    //раздаем права регистраторам
+    /* раздаем права регистраторам */
     for(i = 0; i < registrarsCount; ++i) {
         statemachine.grandDynamicRoleForEmployee(ord, registrars[i], "DA_REGISTRAR_DYN", task);
     }
 
-    //подготавливаем уведомление
+    /* подготавливаем уведомление */
     notification = ordStatemachine.prepareNotificationAboutRegistration(ord, registrars);
 
-    //рассылаем уведомление
+    /* рассылаем уведомление */
     notifications.sendNotification(notification);
 })();]]></value>
 															</property>
@@ -7448,7 +7448,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//
+																<value><![CDATA[
 (function(){
     var ord = stm_document;
     /*Регистрация*/
@@ -8318,7 +8318,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//
+																<value><![CDATA[
 (function(){
     var ord = stm_document;
     var controllerAssoc = ord.assocs["lecm-ord:controller-assoc"];
@@ -8329,18 +8329,18 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
             var table = tableAssocs[0];
             var  pointAssocs = table.childAssocs["cm:contains"];
             if (pointAssocs!=null && pointAssocs.length > 0 ){
-                // формируем поручения
+                /* формируем поручения */
                 ordStatemachine.formErrands(ord);
             }
         }
 
-        // выдадим права контролеру
+        /* выдадим права контролеру */
         statemachine.grandDynamicRoleForEmployee(ord, controller, "DA_CONTROLLER_DYN", task);
 
-        //подготавливаем уведомление
+        /* подготавливаем уведомление */
         notification = ordStatemachine.prepareNotificationToController(ord, controller);
 
-        //рассылаем уведомление
+        /* рассылаем уведомление */
         notifications.sendNotification(notification);
     }
 })();]]></value>

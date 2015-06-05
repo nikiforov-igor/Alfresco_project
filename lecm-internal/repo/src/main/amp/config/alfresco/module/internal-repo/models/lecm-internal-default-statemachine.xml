@@ -863,7 +863,7 @@
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//Зарегистрировать проект
+																<value><![CDATA[/* Зарегистрировать проект */
 (function(){
     var internal= stm_document;
     regnumbers.registerProject(internal, "INTERNAL_PRJ_NUMBER");
@@ -6307,22 +6307,22 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//направить на регистрацию
+																<value><![CDATA[/* направить на регистрацию */
 (function(){
     var i,
-        internal = stm_document, //исходящий документ
-        registrars = edsGlobalSettings.getRegistrars('DA_REGISTRARS', internal),//получение списка регистраторов по документу
+        internal = stm_document, /* исходящий документ */
+        registrars = edsGlobalSettings.getRegistrars('DA_REGISTRARS', internal), /* получение списка регистраторов по документу */
         registrarsCount = registrars.length,
         recipients = [],
         notificationText = 'Документ ' + documentScript.wrapperDocumentLink(internal, '{lecm-document:present-string}') + ' поступил Вам на регистрацию';
 
-    //раздаем права регистраторам
+    /* раздаем права регистраторам */
     for(i = 0; i < registrarsCount; ++i) {
         statemachine.grandDynamicRoleForEmployee(internal, registrars[i], 'DA_REGISTRAR_DYN', task);
         recipients.push(registrars[i].getNodeRef().toString());
     }
 
-    //уведомление
+    /* уведомление */
     notifications.sendNotificationFromCurrentUser(recipients, notificationText, internal, true);
 })();]]></value>
 															</property>
@@ -6557,7 +6557,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//Логирование перехода
+																<value><![CDATA[/* Логирование перехода */
 (function(){
     var internal= stm_document;
     regnumbers.registerDocument(internal, "INTERNAL_DOC_NUMBER");
@@ -7150,7 +7150,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
-																<value><![CDATA[//
+																<value><![CDATA[
 (function(){
     var senders = documentEvent.getEventSenders(stm_document);
     for each (var sender in senders) {
@@ -7200,7 +7200,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
-																<value><![CDATA[//
+																<value><![CDATA[
 (function(){
 	var units = [];
 
@@ -7219,7 +7219,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 
     operativeStorage.moveToNomenclatureCase(stm_document, units);
 
-    // Выставляем права на ответы
+    /* Выставляем права на ответы */
     var answersTable = stm_document.assocs["lecm-internal-table-structure:answers-assoc"][0];
     var answers = answersTable.getChildren();
     for each (var answer in answers) {
@@ -7281,7 +7281,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//
+																<value><![CDATA[
 (function(){
     if (statemachine.getPreviousStatusName(stm_document) == "Проект") {
         var currentEmployee = orgstructure.getCurrentEmployee();
@@ -7382,7 +7382,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 
     operativeStorage.moveToNomenclatureCase(stm_document, units);
 
-    // Выставляем права на ответы
+    /* Выставляем права на ответы */
     var answersTable = stm_document.assocs["lecm-internal-table-structure:answers-assoc"][0];
     var answers = answersTable.getChildren();
     for each (var answer in answers) {
@@ -7506,7 +7506,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[//отнять права у получателей
+																<value><![CDATA[/* отнять права у получателей */
 (function(){
     var internal = stm_document;
     var recipientsAssoc = internal.assocs["lecm-eds-document:recipients-assoc"];
