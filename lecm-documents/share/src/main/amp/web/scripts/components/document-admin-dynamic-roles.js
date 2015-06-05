@@ -56,9 +56,13 @@ LogicECM.module.DocumentAdmin = LogicECM.module.DocumentAdmin || {};
 		drawRoles: function (roles) {
 			var container = Dom.get(this.id);
 			var results = "";
-			if (roles != null && container != null) {
-				for (var i = 0; i < roles.length; i++) {
-					results += this.getRoleView(roles[i]);
+			if (container != null) {
+				if (roles != null && roles.length > 0) {
+					for (var i = 0; i < roles.length; i++) {
+						results += this.getRoleView(roles[i]);
+					}
+				} else {
+					results += this.msg("title.documents.admin.roles.dynamic.empty");
 				}
 			}
 			container.innerHTML = results;
