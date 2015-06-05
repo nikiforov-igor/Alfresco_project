@@ -55,17 +55,19 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions) {
-        List<NodeRef> events = eventService.getEvents(fromDate, toDate, "", true);
-        return processEvents(events, loadActions);
+        List<NodeRef> events = eventService.getEvents(fromDate, toDate);
+        return processEvents(events, loadActions, true);
     }
 
-    private List<Map<String, Object>> processEvents( List<NodeRef> events, boolean loadActions) {
+    private List<Map<String, Object>> processEvents( List<NodeRef> events, boolean loadActions, boolean excludeDeclined) {
         List<Map<String, Object>> results = new ArrayList<>();
-        Map<NodeRef, List<NodeRef>> actionsMap = null;
-        if (loadActions) {
-            actionsMap = actionsService.getActiveActionsMap(events);
-        }
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+
         for (NodeRef entry : events) {
+            String memberStatus = eventService.getEmployeeMemberStatus(entry, currentEmployee);
+            if (excludeDeclined && "DECLINED".equals(memberStatus)) {
+                continue;
+            }
             // Build the object
             Map<String, Object> result = new HashMap<>();
             boolean isAllDay = (boolean) nodeService.getProperty(entry, EventsService.PROP_EVENT_ALL_DAY);
@@ -80,7 +82,7 @@ public class EventsWebScriptBean extends BaseWebScript {
 
             result.put("members", eventService.getEventMembers(entry));
             result.put("invitedMembers", eventService.getEventInvitedMembers(entry));
-            result.put("actions", actionsMap != null ? actionsMap.get(entry) : Collections.emptyList());
+            result.put("actions", loadActions ? actionsService.getActiveActions(entry) : Collections.EMPTY_LIST);
 
             NodeRef location = eventService.getEventLocation(entry);
             if (location != null) {
@@ -98,8 +100,8 @@ public class EventsWebScriptBean extends BaseWebScript {
             result.put("legacyDateTo", formatDate(end, isAllDay, legacyDateFormat));
             result.put("legacyTimeTo", formatDate(end, isAllDay, legacyTimeFormat));
 
-            result.put("userMemberStatus", eventService.getCurrentEmployeeMemberStatus(entry));
-            result.put("userIsInitiator", eventService.getEventInitiator(entry).equals(orgstructureBean.getCurrentEmployee()));
+            result.put("userMemberStatus", memberStatus);
+            result.put("userIsInitiator", eventService.getEventInitiator(entry).equals(currentEmployee));
 
             String typeTitle = "";
             TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(entry));
@@ -144,7 +146,7 @@ public class EventsWebScriptBean extends BaseWebScript {
 
     public List<Map<String, Object>> searchUserEvents(String filter) {
         List<NodeRef> events = eventService.searchEvents(filter);
-        return processEvents(events, false);
+        return processEvents(events, false, false);
     }
 
     public Scriptable getUserNearestEvents(ScriptNode currentEmployee, int maxItems) {

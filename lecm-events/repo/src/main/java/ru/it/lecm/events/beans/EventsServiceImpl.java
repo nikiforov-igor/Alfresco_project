@@ -248,9 +248,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
     List<NodeRef> filterDeclinedEvents(List<NodeRef> events) {
         List<NodeRef> filteredResults = new ArrayList<>();
-        for (NodeRef result : events) {
-            if (!"DECLINED".equals(getCurrentEmployeeMemberStatus(result))) {
-                filteredResults.add(result);
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        for (NodeRef event : events) {
+            if (!"DECLINED".equals(getEmployeeMemberStatus(event, currentEmployee))) {
+                filteredResults.add(event);
             }
         }
         return filteredResults;
@@ -463,11 +464,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public NodeRef getMemberTable(NodeRef event) {
-		if (lecmPermissionService.hasPermission(LecmPermissionService.PERM_CONTENT_LIST, event)) {
-			return documentTableService.getTable(event, TYPE_EVENT_MEMBERS_TABLE);
-		} else {
-			return null;
-		}
+        List<AssociationRef> membersTable = nodeService.getTargetAssocs(event, EventsService.ASSOC_EVENT_MEMBERS);
+        if (membersTable != null && !membersTable.isEmpty()) {
+            return membersTable.get(0).getTargetRef();
+        }
+        return null;
 	}
 
 	@Override
@@ -507,16 +508,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public String getCurrentEmployeeMemberStatus(NodeRef event) {
 		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-		if (currentEmployee != null) {
-			NodeRef memberTableRow = getMemberTableRow(event, currentEmployee);
-			if (memberTableRow != null) {
-				return (String) nodeService.getProperty(memberTableRow, PROP_EVENT_MEMBERS_STATUS);
-			}
-		}
-		return null;
+        return getEmployeeMemberStatus(event, currentEmployee);
 	}
 
-	@Override
+    @Override
+    public String getEmployeeMemberStatus(NodeRef event, NodeRef employee) {
+        if (employee != null) {
+            NodeRef memberTableRow = getMemberTableRow(event, employee);
+            if (memberTableRow != null) {
+                return (String) nodeService.getProperty(memberTableRow, PROP_EVENT_MEMBERS_STATUS);
+            }
+        }
+        return null;
+    }
+
+    @Override
 	public String wrapAsEventLink(NodeRef documentRef) {
 		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), EVENT_LINK_URL);
 	}
