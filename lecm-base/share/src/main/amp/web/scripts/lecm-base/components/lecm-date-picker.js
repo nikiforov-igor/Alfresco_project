@@ -30,7 +30,8 @@
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector,
-        KeyListener = YAHOO.util.KeyListener;
+        KeyListener = YAHOO.util.KeyListener,
+        Bubbling = YAHOO.Bubbling;
 
     /**
      * Alfresco Slingshot aliases
@@ -61,11 +62,12 @@
         // Initialise prototype properties
         me.widgets = {};
 
-	    YAHOO.Bubbling.on("disableControl", me.onDisableControl, this);
-	    YAHOO.Bubbling.on("enableControl", me.onEnableControl, this);
-        YAHOO.Bubbling.on("hideControl", me.onHideControl, this);
-        YAHOO.Bubbling.on("showControl", me.onShowControl, this);
-	    YAHOO.Bubbling.on("handleFieldChange", me.onHandleFieldChange, this);
+	    Bubbling.on("disableControl", me.onDisableControl, this);
+	    Bubbling.on("enableControl", me.onEnableControl, this);
+        Bubbling.on("hideControl", me.onHideControl, this);
+        Bubbling.on("showControl", me.onShowControl, this);
+	    Bubbling.on("handleFieldChange", me.onHandleFieldChange, this);
+	    Bubbling.on("showDatePicker", me.hidePickerWhenAnotherIsOpening, this);
 
         return me;
     };
@@ -247,10 +249,6 @@
 
                         // setup events
                         me.widgets.calendar.selectEvent.subscribe(me._handlePickerChange, me, true);
-                        me.widgets.calendar.hideEvent.subscribe(function() {
-                            // Focus icon after calendar is closed
-                            Dom.get(me.id + "-date").focus();
-                        }, me, true);
 
                         // если в body уже есть календарь(и) с таким id, нужно удалить
                         var samePickers = Selector.query("body > #" + me.id);
@@ -268,6 +266,17 @@
                     Event.addListener(me.id + "-date", "keyup", me._handleFieldChange, me, true);
                     Event.addListener(me.id + "-time", "keyup", me._handleFieldChange, me, true);
 
+                    // Hide Calendar if we click anywhere in the document other than the calendar
+                    Event.on(document, "click", function(e) {
+                        var inputEl = Dom.get(me.id + "-date");
+                        var el = Event.getTarget(e);
+                        var dialogEl = me.widgets.calendar.oDomContainer;
+
+                        if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != inputEl) {
+                            me._hidePicker();
+                        }
+                    });
+
                     Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
 
                     var iconEl = Dom.get(me.id + "-icon");
@@ -279,7 +288,7 @@
 
                     // register a validation handler for the date entry field so that the submit
                     // button disables when an invalid date is entered
-                    YAHOO.Bubbling.fire("registerValidationHandler",
+                    Bubbling.fire("registerValidationHandler",
                             {
                                 fieldId: me.id + "-date",
                                 handler: Alfresco.forms.validation.validDateTime,
@@ -289,7 +298,7 @@
                     // register a validation handler for the time entry field (if applicable)
                     // so that the submit button disables when an invalid date is entered
                     if (me.options.showTime) {
-                        YAHOO.Bubbling.fire("registerValidationHandler",
+                        Bubbling.fire("registerValidationHandler",
                                 {
                                     fieldId: me.id + "-time",
                                     handler: Alfresco.forms.validation.validDateTime,
@@ -314,6 +323,9 @@
                  * мы выносим его в body и позиционируем по кнопке его вызова
                  */
                 _showPicker: function DatePicker__showPicker(event) {
+                    // При открытии календаря посылаем событие, чтобы закрыть все другие открытые календари
+                    Bubbling.fire("showDatePicker", {datepicker : this});
+
 	                if (!this.tempDisabled) {
 		                var me = this;
 		                var picker = Dom.get(me.id);
@@ -322,21 +334,28 @@
 		                var d = 10;                                                         // величина отступа
 
 		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
-			                var body = Selector.query('body')[0];
+                            var body = Selector.query('body')[0];
+
 			                body.appendChild(picker);
 		                }
                         me.widgets.calendar.show();                                         // сначала сделать видимым, потом позиционировать, иначе позиционирование не отрабатывает
 
-                        Dom.setX(picker, (Dom.getX(clicked) + clicked.offsetWidth) - picker.offsetWidth - d);       // смещаем влево от кликнутого элемента на ширину календаря
+                        var x = (Dom.getX(clicked) + clicked.offsetWidth) - picker.offsetWidth - d;
+                        if (Dom.getX(picker) != x) {
+                            Dom.setX(picker, x);
+                        }
 
-		                var y = Dom.getY(clicked) + clicked.offsetHeight - d;                                        // смещаем немного вниз относительно кликнутого элемента
+                        var y = Dom.getY(clicked) + clicked.offsetHeight - d;
 		                var height = picker.offsetHeight;
 
 		                if (y + height > Dom.getViewportHeight()) {                        // если календарь не помещается до низа окна
 			                y -= height;                                                   // откроем его вверх
 		                }
-		                Dom.setY(picker, y);
-	                }
+                        if (Dom.getY(picker) != y) {
+                            Dom.setY(picker, y);
+                        }
+                        Dom.get(me.id + "-date").focus();
+                    }
                 },
                 /**
                  * Handles the date picker hiding.
@@ -395,10 +414,10 @@
                             Alfresco.logger.debug("Hidden field '" + me.currentValueHtmlId + "' updated to '" + isoValue + "'");
 
                         // always inform the forms runtime that the control value has been updated
-                        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", me);
+                        Bubbling.fire("mandatoryControlValueUpdated", me);
 
                         if (me.options.changeFireAction != null) {
-                            YAHOO.Bubbling.fire(me.options.changeFireAction, {
+                            Bubbling.fire(me.options.changeFireAction, {
                                 date: isoValue
                             });
                         }
@@ -466,7 +485,7 @@
                             else {
                                 Dom.addClass(me.id + "-date", "invalid");
                                 if (YAHOO.env.ua.ie) {
-                                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", me);
+                                    Bubbling.fire("mandatoryControlValueUpdated", me);
                                 }
                             }
                         }
@@ -481,10 +500,24 @@
 
                         // inform the forms runtime that the control value has been updated
                         if (me.options.mandatory || YAHOO.env.ua.ie) {
-                            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", me);
+                            Bubbling.fire("mandatoryControlValueUpdated", me);
                         }
                     }
                 },
+
+                /**
+                 * При открытии календаря посылаем событие, чтобы закрыть все другие календари,
+                 * так как при открытых нескольких календарях поведение некорректно.
+                 * Это метод, который отрабатывает при получении календарем события.
+                 */
+                hidePickerWhenAnotherIsOpening: function(bubblingName, args) {
+                    var openingPicker = args[1].datepicker;
+
+                    if (openingPicker.id != this.id) {
+                         this._hidePicker();
+                    }
+                },
+
                 /**
                  * Gets a custom message
                  *
