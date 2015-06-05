@@ -70,19 +70,19 @@
                         lecmPermission.grantDynamicRole(answer, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
 
                         answer.createAssociation(employee, "lecm-internal-table-structure:employee-assoc");
-                        //Подписываемся на слушание
+                        /* Подписываемся на слушание */
                         documentEvent.subscribe(answer, document);
                         task.setVariableLocal("answer", answer.nodeRef.toString());
                         task.setVariableLocal("initiatorEmployee", initiator.nodeRef.toString());
-                        //Создаем данные для формы
+                        /* Создаем данные для формы */
                         var formData = [];
-                        //Получатель
+                        /* Получатель */
                         formData = "{\"lecm-internal:recipients-assoc\":\"" + document.assocs["lecm-document:author-assoc"][0].nodeRef.toString() + "\",";
-                        //Тематика
+                        /* Тематика */
                         formData += "\"lecm-document:subject-assoc\":\"" + document.assocs["lecm-document:subject-assoc"][0].nodeRef.toString() + "\",";
-                        //Связь
+                        /* Связь */
                         formData += "\"lecm-document-aspects:response-to-assoc\":\"" + document.nodeRef.toString() + "\"}";
-                        //Сохраняем
+                        /* Сохраняем */
                         task.setVariableLocal("internalDirect_formData", formData);
 
                         var curators = [];
@@ -115,14 +115,14 @@
 							var newDocumentRef = task.getVariable("lecmWorkflowDocument_createdNodeRef");
 							if (newDocumentRef != null && newDocumentRef != "") {
                                 var newDocument = search.findNode(newDocumentRef);
-                                //Формируем ответ
+                                /* Формируем ответ */
                                 answerObject.createAssociation(newDocument, "lecm-internal-table-structure:answer-document-assoc");
                                 answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
                                 answerObject.properties["lecm-internal-table-structure:answer-details"] = "Готовится ответ";
                                 answerObject.save();
-                                //Добавляем инициатора процесса в участники нового документа
+                                /* Добавляем инициатора процесса в участники нового документа */
                                 documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader");
-                                //Добавляем слушателя
+                                /* Добавляем слушателя */
                                 documentEvent.subscribe(newDocument, document);
 
                                 var logText = "#initiator создал(а) внутренний документ в ответ на "
@@ -146,17 +146,17 @@
 				                    businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
                                 } else if (answer.type == "answer") {
                                     var answerText = "";
-                                    //Обрабатываем типовой ответ
+                                    /* Обрабатываем типовой ответ */
                                     if (answer.typical != null && answer.typical != "") {
                                         var typical = search.findNode(answer.typical);
                                         answerText = typical.properties["cm:name"];
                                         answerObject.createAssociation(typical, "lecm-internal-table-structure:answer-typical-assoc");
                                     }
-                                    //Обрабатываем комметарий
+                                    /* Обрабатываем комметарий */
                                     if (answer.manual != null && answer.manual != "") {
                                         answerText += (answerText.length > 0 ? ". " : "") + answer.manual;
                                     }
-                                    //Обрабатываем прикремленные файлы
+                                    /* Обрабатываем прикремленные файлы */
                                     if (answer.files != null && answer.files != "") {
                                         var files = answer.files.split(",");
                                         for (var i in files) {
