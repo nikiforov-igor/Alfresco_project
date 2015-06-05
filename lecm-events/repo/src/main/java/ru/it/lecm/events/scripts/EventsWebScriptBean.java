@@ -6,6 +6,8 @@ import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AccessStatus;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
@@ -113,7 +115,7 @@ public class EventsWebScriptBean extends BaseWebScript {
             // Check the permissions the user has on the entry
 //                AccessStatus canEdit = permissionService.hasPermission(entry.getNodeRef(), PermissionService.WRITE);
 //                AccessStatus canDelete = permissionService.hasPermission(entry.getNodeRef(), PermissionService.DELETE);
-            result.put("canEdit", true);
+            result.put("canEdit", serviceRegistry.getPermissionService().hasPermission(entry, PermissionService.WRITE) == AccessStatus.ALLOWED);
             result.put("canDelete", true);
 
             // Replace nulls with blank strings for the JSON

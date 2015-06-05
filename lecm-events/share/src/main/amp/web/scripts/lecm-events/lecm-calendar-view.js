@@ -516,7 +516,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                           }
 
                           Dom.get(viewFormId + "-action-more").href = $siteURL("event?nodeRef=" + event.nodeRef);
-                          Dom.get(viewFormId + "-action-edit").href = $siteURL("event-edit?nodeRef=" + event.nodeRef);
+                          if (event.permissions.isEdit) {
+                             Dom.get(viewFormId + "-action-edit").href = $siteURL("event-edit?nodeRef=" + event.nodeRef);
+                          } else {
+                             Dom.setStyle(viewFormId + "-action-edit-button", "display", "none");
+                          }
 
                           me.loadActions(event);
                           Dom.setStyle(viewFormId, "display", "block");
