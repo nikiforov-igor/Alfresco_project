@@ -5,7 +5,7 @@
         ${msg(accessMsg)}
 	    <#if !hasPerm>
 		    <script type="text/javascript">//<![CDATA[
-		        window.location = Alfresco.util.siteURL("document?nodeRef=${nodeRef}");
+		        window.location = Alfresco.util.siteURL("${viewUrl}?nodeRef=${nodeRef}");
 		    //]]></script>
 	    </#if>
     </div>

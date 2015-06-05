@@ -8,6 +8,13 @@ function main() {
 	var hasPerm = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
 	model.hasPerm = hasPerm;
 
+	url = '/lecm/document/api/url/view?nodeRef=' + encodeURI(model.nodeRef);
+	var viewUrl = remote.connect("alfresco").get(url);
+	if (viewUrl.status == 200) {
+		var result = eval('(' + viewUrl + ')');
+		model.viewUrl = result.url;
+	}
+
     if (!nodeDetails || !hasPerm) {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
 		if (accessInfo) {
