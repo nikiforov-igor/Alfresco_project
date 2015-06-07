@@ -36,7 +36,7 @@
 	document.createAssociation(newYearRef, "lecm-os:nomenclature-case-year-assoc");
 
 	var logText = "Номенклатура дел перемещена";
-	businessJournal.log(document.nodeRef.toString(), "FMS_MOVE", logText, []);
+	businessJournal.log(document.nodeRef.toString(), "OS_MOVE", logText, []);
 
 })();]]>
         </property>

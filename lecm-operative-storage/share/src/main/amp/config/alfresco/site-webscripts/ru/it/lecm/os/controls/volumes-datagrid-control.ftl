@@ -87,6 +87,7 @@
 						var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
 						var templateRequestParams = {
 							itemKind: "node",
+							formId: this.options.editForm,
 							itemId: item.nodeRef,
 							mode: "edit",
 							submitType: "json",
@@ -183,12 +184,6 @@
 					showExtendSearchBlock: false,
 						actions: [
 
-                            {
-                                type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>-custom</#if>",
-                                id: "onActionPrintReport",
-                                permission: "edit",
-                                label: "${msg("actions.printNomenclatureCard")}"
-                            },
 
 							{
 								type: "datagrid-action-link-<#if bubblingId != "">${bubblingId}<#else>-custom</#if>",

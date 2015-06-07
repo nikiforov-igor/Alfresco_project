@@ -14,9 +14,14 @@
                 <entry key="lecm-os:nomenclature-year-section" value="Годовой раздел номенклатуры дел"/>
                 <entry key="lecm-os:nomenclature-unit-section" value="Раздел номенклатуры дел"/>
                 <entry key="lecm-os:nomenclature-case-volume" value="Том номенклатуры"/>
+                <entry key="lecm-os:nomenclature-case" value="Номенклатурное дело"/>
             </map>
         </property>
     </bean>
+
+	<util:list id="operative.storage.reports.config">
+		<value>alfresco/module/${artifactId}/reports/config/operative-storage.properties</value>
+	</util:list>
 
 	<util:list id="operative.storage.models">
 		<value>alfresco/module/${artifactId}/models/os-aspects-model.xml</value>
@@ -76,6 +81,7 @@
 
 	<util:list id="operative.storage.reports">
 		<value>alfresco/module/${artifactId}/reports/organization-nomenclature.xml</value>
+		<value>alfresco/module/${artifactId}/reports/volumes-card.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.arm.os">
@@ -89,6 +95,10 @@
 
 	<util:constant id="OPERATIVE_STORAGE_FOLDER_NAME" static-field="ru.it.lecm.operativestorage.beans.OperativeStorageService.NOMENCLATURE_FOLDER_NAME"/>
 	<util:constant id="OPERATIVE_STORAGE_FOLDER_ID" static-field="ru.it.lecm.operativestorage.beans.OperativeStorageService.OPERATIVE_STORAGE_FOLDER_ID"/>
+
+	<bean id="operative.storage.ConfigToRepositoryLoader" parent="configsToRepositoryLoader"
+		  p:configs-ref="operative.storage.reports.config"
+	/>
 
 	<bean id="operative.storage.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
@@ -161,5 +171,11 @@
 	<bean parent="ServiceFolderPermissionHelper" depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap"
 		  p:serviceBean-ref="lecmOperativeStorageService"
 		  p:permissionsList-ref="operative.storage.dir.permissions"/>
+
+	<bean class="ru.it.lecm.operativestorage.policies.CopyPolicy" init-method="init"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"
+		  p:dictionaryService-ref="dictionaryService"
+	/>
 
 </beans>

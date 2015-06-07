@@ -10,50 +10,10 @@
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[(function() {
-	function createNewYear(currentYear) {
-		var nomenclatureRootFolder = operativeStorage.getNomenclatureFolder();
-		var newProps = [];
-		newProps['lecm-os:nomenclature-year-section-year'] = currentYear.properties['lecm-os:nomenclature-year-section-year'] + 1;
-		newProps['lecm-os:nomenclature-year-section-status'] = 'PROJECT';
-		newProps['lecm-os:nomenclature-year-section-comment'] = 'Создано автоматически на основании номенклатуры предыдущего года';
-		var newYear = nomenclatureRootFolder.createNode(currentYear.properties.name + '_recreate', 'lecm-os:nomenclature-year-section', newProps);
-		var organization = currentYear.assocs["lecm-os:nomenclature-organization-assoc"][0];
-		if(organization) {
-			newYear.createAssociation(organization, "lecm-os:nomenclature-organization-assoc");
-		}
-		return newYear;
-	}
-	function copyAllExceptDocs(src, dest) {
-		var copy = src.copy(dest, false);
-		var childs = src.childAssocs["contains"];
-		if (childs == null) return copy;
-		for (var i = 0; i
-            < childs.length; i++) {
-			var child = childs[i];
-			if (child.isSubType("lecm-document:base")) continue;
-			if ("lecm-os:nomenclature-case" == child.typeShort) {
-				var yearSection = child.assocs["lecm-os:nomenclature-case-year-assoc"][0];
-				child.removeAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
-				var childCopy = copyAllExceptDocs(child, copy);
-				child.createAssociation(newYear, "lecm-os:nomenclature-case-year-assoc");
-			} else {
-				var childCopy = copyAllExceptDocs(child, copy);
-			}
-		}
-		if(copy.typeShort == "lecm-os:nomenclature-case") {
-			copy.properties['lecm-os:nomenclature-unit-section-status'] = 'PROJECT';
-		} else {
-			copy.properties['lecm-os:nomenclature-case-status'] = 'PROJECT';
-		}
-		return copy;
-	}
-	var newYear = createNewYear(document);
-	var children = document.childAssocs["contains"];
-	if (children) {
-		for (var i = 0; i < children.length; i++) {
-			copyAllExceptDocs(children[i], newYear);
-		}
-	}
+
+  var rootFolder = operativeStorage.getNomenclatureFolder();
+  document.copy(rootFolder);
+
 })();]]></property>
         </item>
     </items>

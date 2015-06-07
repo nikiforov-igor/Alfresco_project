@@ -27,31 +27,11 @@
         </property>
         <property name="lecm-group-actions:script">
             <![CDATA[(function() {
-	function copyAllExceptDocs(src, dest) {
-		var copy = src.copy(dest, false);
-		var childs = src.childAssocs["contains"];
-		if (childs == null) return copy;
-		for (var i = 0; i < childs.length; i++) {
-			var child = childs[i];
-			var yearSection;
-			if (child.isSubType("lecm-document:base")) continue;
-			if ("lecm-os:nomenclature-case" == child.typeShort) {
-				var yearSection = child.assocs["lecm-os:nomenclature-case-year-assoc"][0];
-				child.removeAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
-				var childCopy = copyAllExceptDocs(child, copy);
-				child.createAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
-			} else {
-				var childCopy = copyAllExceptDocs(child, copy);
-			}
-		}
-		return copy;
-	}
+    var copy = document.copy(folder);
 
-
-	var copy = copyAllExceptDocs(document, folder);
 	var logText = "Скопирован раздел номенклатуры";
 	var logObjects = ["" + copy.nodeRef.toString()];
-	businessJournal.log(document.nodeRef.toString(), "FMS_COPY", logText, logObjects);
+	businessJournal.log(document.nodeRef.toString(), "OS_COPY", logText, logObjects);
 })();
 ]]>
         </property>

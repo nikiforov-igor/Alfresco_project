@@ -27,29 +27,9 @@
         </property>
         <property name="lecm-group-actions:script">
             <![CDATA[(function (){
-	function copyAllExceptDocs(src, dest) {
-		var copy = src.copy(dest, false);
-		var childs = src.childAssocs["contains"];
-		if(childs == null) return copy;
-		for(var i = 0; i < childs.length; i ++) {
-			var child = childs[i];
-			logger.warn(child.type);
-			logger.warn(child.isSubType("lecm-document:base"));
-			if(child.isSubType("lecm-document:base")) continue;
-			var childCopy = copyAllExceptDocs(child, copy);
-		}
-		return copy;
-	}
 
-	var yearSection = operativeStorage.getYearSection(document);
-	document.removeAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
+	var copied = document.copy(folder);
 
-	var copy = copyAllExceptDocs(document, folder);
-	document.createAssociation(yearSection, "lecm-os:nomenclature-case-year-assoc");
-
-	var logText = "Номенклатура дел скопирована";
-	var logObjects = ["" + copy.nodeRef.toString()];
-	businessJournal.log(document.nodeRef.toString(), "FMS_COPY", logText, logObjects);
 })();]]>
         </property>
         <items>

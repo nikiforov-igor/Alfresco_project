@@ -73,10 +73,14 @@ public class NomenclatureCasePolicy implements NodeServicePolicies.OnCreateNodeP
 				NodeRef yearSection = operativeStorageService.getYearSection(nodeRef);
 				nodeService.createAssociation(nodeRef, yearSection, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_YEAR);
 
-				NodeRef defaultUnit = getDefaultOrgUnit(nodeRef);
-				if(defaultUnit != null) {
-					nodeService.createAssociation(nodeRef, defaultUnit, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
+				List<AssociationRef> unitAssocs = nodeService.getTargetAssocs(nodeRef, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
+				if(unitAssocs == null && unitAssocs.isEmpty()) {
+					NodeRef defaultUnit = getDefaultOrgUnit(nodeRef);
+					if(defaultUnit != null) {
+						nodeService.createAssociation(nodeRef, defaultUnit, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
+					}
 				}
+
 				operativeStorageService.createDocsFolder(nodeRef);
 				operativeStorageService.createReferencesFolder(nodeRef);
 				return null;
@@ -139,11 +143,13 @@ public class NomenclatureCasePolicy implements NodeServicePolicies.OnCreateNodeP
 	@Override
 	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
 		NodeRef caseNodeRef = nodeAssocRef.getSourceRef();
-		boolean isShared = (boolean) nodeService.getProperty(caseNodeRef, operativeStorageService.PROP_NOMENCLATURE_CASE_IS_SHARED);
 
-		if (!nodeService.exists(nodeAssocRef.getSourceRef())) {
+		if (!nodeService.exists(caseNodeRef)) {
             return;
         }
+
+		boolean isShared = (boolean) nodeService.getProperty(caseNodeRef, operativeStorageService.PROP_NOMENCLATURE_CASE_IS_SHARED);
+
 
 		NodeRef docFolderRef = operativeStorageService.getDocuemntsFolder(nodeAssocRef.getSourceRef());
 

@@ -47,15 +47,18 @@ public interface OperativeStorageService {
 	QName PROP_NOMENCLATURE_CASE_IS_SHARED = QName.createQName(OS_NAMESPACE, "shared");
 	QName PROP_NOMENCLATURE_UNIT_SECTION_INDEX = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-index");
 	QName PROP_NOMENCLATURE_UNIT_SECTION_COMMENT = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-comment");
+	QName PROP_NOMENCLATURE_UNIT_SECTION_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-status");
 	QName PROP_NOMENCLATURE_VOLUMES_NUMBER = QName.createQName(OS_NAMESPACE, "nomenclature-case-volumes-number");
 	QName PROP_NOMENCLATURE_YEAR_SECTION_YEAR = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-year");
 	QName PROP_NOMENCLATURE_YEAR_SECTION_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-status");
 	QName PROP_NOMENCLATURE_CASE_YEAR_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-case-year-section-status");
+	QName PROP_NOMENCLATURE_CASE_YEAR_COMMENT = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-comment");
 	QName TYPE_BASE_OS = QName.createQName(OS_NAMESPACE, "base");
 	QName TYPE_NOMENCLATURE_CASE = QName.createQName(OS_NAMESPACE, "nomenclature-case");
 	QName TYPE_NOMENCLATURE_CASE_VOLUME = QName.createQName(OS_NAMESPACE, "nomenclature-case-volume");
 	QName TYPE_NOMENCLATURE_UNIT_SECTION = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section");
 	QName TYPE_NOMENCLATURE_YEAR_SECTION = QName.createQName(OS_NAMESPACE, "nomenclature-year-section");
+	QName TYPE_NOMENCLATURE_VOLUME = QName.createQName(OS_NAMESPACE, "nomenclature-case-volume");
 
 	QName TYPE_OPERATIVE_STORAGE_SETTING = QName.createQName(OS_SETTINGS_NAMESPACE, "settings");
 	QName PROP_OPERATIVE_STORAGE_CENRALIZED = QName.createQName(OS_SETTINGS_NAMESPACE, "centralized");

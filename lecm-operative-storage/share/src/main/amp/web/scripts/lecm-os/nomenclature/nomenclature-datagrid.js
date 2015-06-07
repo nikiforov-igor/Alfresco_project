@@ -702,10 +702,9 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		deleteNomenclatureYearEvaluator: function(rowData) {
 			var type = rowData.type,
-				statues = ['PROJECT', 'APPROVED', 'CLOSED'],
 				status = rowData.itemData['prop_lecm-os_nomenclature-year-section-status'];
 
-			return ('lecm-os:nomenclature-year-section' == type) && (statues.indexOf(status.value) >= 0);
+			return ('lecm-os:nomenclature-year-section' == type) && ('PROJECT' == status.value);
 		},
 
 		archiveNDEvaluator: function(rowData) {
@@ -726,7 +725,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 		deleteNDEvaluator: function(rowData) {
 			var type = rowData.type,
 				status = rowData.itemData["prop_lecm-os_nomenclature-case-status"],
-				statuses = ['PROJECT', 'OPEN', 'CLOSED'];
+				statuses = ['PROJECT', 'CLOSED'];
 
 			return (type == "lecm-os:nomenclature-case") && (statuses.indexOf(status.value) >= 0);
 		},
