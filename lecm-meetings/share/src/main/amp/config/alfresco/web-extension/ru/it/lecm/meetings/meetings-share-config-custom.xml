@@ -34,6 +34,12 @@
 					<show id="lecm-events:to-date"/>
 					<!-- Повторное -->
 					<show id="lecm-events:repeatable"/>
+					<!-- Дата начала периода -->
+					<show id="lecm-events:repeatable-start-period"/>
+					<!-- Дата окончания периода -->
+					<show id="lecm-events:repeatable-end-period"/>
+					<!-- Правила -->
+					<show id="lecm-events:repeatable-rule"/>
 					<!--Председатель-->
 					<show id="lecm-meetings:chairman-assoc"/>
 					<!--Секретарь-->
@@ -78,6 +84,31 @@
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
 						</constraint-handlers>
 					</field>					
+					<!--повторность-->
+					<field id="lecm-events:repeatable">
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-start-period" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-end-period" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-rule" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					
 					<!--Председатель-->
 					<field id="lecm-meetings:chairman-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
@@ -508,7 +539,7 @@
 				<field-visibility>
 					<!-- Заголовок -->
 					<show id="lecm-events:title"/>
-					<!-- Весмь день -->
+					<!-- Весь день -->
 					<show id="lecm-events:all-day"/>
 					<!-- Дата начала мероприятия -->
 					<show id="lecm-events:from-date"/>
@@ -516,8 +547,20 @@
 					<show id="lecm-events:to-date"/>
 					<!-- Повторное -->
 					<show id="lecm-events:repeatable"/>
+					<!-- Дата начала периода -->
+					<show id="lecm-events:repeatable-start-period"/>
+					<!-- Дата окончания периода -->
+					<show id="lecm-events:repeatable-end-period"/>
+					<!-- Правила -->
+					<show id="lecm-events:repeatable-rule"/>
 					<!-- Участники -->
 					<show id="lecm-events-ts:members-assoc"/>
+					<show id="lecm-events:temp-members-assoc"/>
+					<show id="lecm-events:temp-members-assoc-json"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-meetings:secretary-assoc"/>
 					<!-- Приглашённые -->
 					<show id="lecm-events:invited-members-assoc"/>
 					<!-- Место проведения -->
@@ -536,12 +579,11 @@
 					<show id="lecm-meetings:approve-agenda"/>
 					<!--согласование-->
 					<show id="lecm-meetings:approval"/>
-
 					<!--Время начала проведения-->
 					<show id="lecm-meetings:holding-start-date"/>
 					<!--Участники проведения проведения-->
 					<show id="lecm-meetings:holding-members-assoc"/>
-					<!--Приглашённые участники проведения проведения-->
+					<!--Приглашённые участники проведения -->
 					<show id="lecm-meetings:holding-invited-members-assoc"/>
 				</field-visibility>
 			</form>
