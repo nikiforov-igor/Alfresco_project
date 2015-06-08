@@ -20,6 +20,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 	YAHOO.lang.augmentObject(LogicECM.module.Meetengs.Holding.prototype, {
 		submitElements: [],
 
+		finished: false,
+
 		onReady: function () {
 			var actionSave = Dom.get(this.id + "-event-action-save");
 			if (actionSave != null) {
@@ -77,14 +79,24 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		},
 
 		onBeforeFormRuntimeInit: function(layer, args) {
-			//this.runtimeForm = args[1].runtime;
-			this.submitElements.push(args[1].runtime.submitElements[0]);
+			var submitElement = args[1].runtime.submitElements[0];
+
+			this.submitElements.push(submitElement);
+
+			var isMainForm = false;
+			var form = submitElement.getForm();
+			if (form != null) {
+				var propFinished = form["prop_lecm-meetings_finished"];
+				if (propFinished != null) {
+					isMainForm = true;
+				}
+			}
 
 			args[1].runtime.setAJAXSubmit(true,
 				{
 					successCallback:
 					{
-						fn: this.onFormSubmitSuccess,
+						fn: isMainForm ? this.onFormSubmitSuccess : null,
 						scope: this
 					},
 					failureCallback:
@@ -114,12 +126,15 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				}
 			}
 
+			this.finished = true;
+
 			this.saveForm();
-			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + this.options.nodeRef;
 		},
 
 		onFormSubmitSuccess: function (response) {
-
+			if (this.finished) {
+				window.location.href = Alfresco.constants.URL_PAGECONTEXT + "event?nodeRef=" + this.options.nodeRef;
+			}
 		},
 
 		loadItems: function() {
