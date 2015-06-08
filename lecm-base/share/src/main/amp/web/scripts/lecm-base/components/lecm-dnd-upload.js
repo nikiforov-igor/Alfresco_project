@@ -1159,14 +1159,27 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
       _applyConfig: function DNDUpload__applyConfig()
       {
          // Generate the title based on number of files and destination
-	     var i18n = "header.singleUpdate";
-	     if (this.showConfig.updateNodeRef == null) {
-		     i18n = this.showConfig.files.length == 1 ? "header.singleUpload" : "header.multiUpload";
-	     }
+         //var i18n = "header.singleUpdate";
+         //if (this.showConfig.updateNodeRef == null) {
+		  //   i18n = this.showConfig.files.length == 1 ? "header.singleUpload" : "header.multiUpload";
+         //}
+         //
+         //var location = this.showConfig.uploadDirectoryName == "" ? this.msg("label.documents") : this.showConfig.uploadDirectoryName;
+         //
+         //this.titleText.innerHTML = this.msg(i18n, '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/documentlibrary/images/folder-open-16.png" class="title-folder" />' + $html(location));
 
-         var location = this.showConfig.uploadDirectoryName == "" ? this.msg("label.documents") : this.showConfig.uploadDirectoryName;
-
-         this.titleText.innerHTML = this.msg(i18n, $html(location));
+         var i18n;
+         if (this.showConfig.mode === this.MODE_SINGLE_UPLOAD) {
+            i18n = this.msg("header.singleUpload");
+            this.titleText.innerHTML = i18n;
+         } else if (this.showConfig.mode === this.MODE_MULTI_UPLOAD) {
+            i18n = this.showConfig.files.length == 1 ? "header.multiUpload.singleFile" : "header.multiUpload";
+            var location = this.showConfig.uploadDirectoryName == "" ? this.msg("label.documents") : this.showConfig.uploadDirectoryName;
+            this.titleText.innerHTML = this.msg(i18n, '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/documentlibrary/images/folder-open-16.png" class="title-folder" />' + $html(location));
+         } else if (this.showConfig.mode === this.MODE_SINGLE_UPDATE) {
+            i18n = this.msg("header.singleUpdate");
+            this.titleText.innerHTML = i18n;
+         }
 
          if (this.showConfig.mode === this.MODE_SINGLE_UPDATE)
          {

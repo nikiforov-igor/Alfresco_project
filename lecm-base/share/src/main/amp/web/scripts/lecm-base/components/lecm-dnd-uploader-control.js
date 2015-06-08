@@ -364,6 +364,7 @@ LogicECM.control = LogicECM.control || {};
 
 					var uploadConfig =
 					{
+						uploadDirectoryName: this.options.directoryName,
 						destination: this.rootNodeRef,
 						filter: [],
 						mode: this.options.multipleMode ? this.fileUpload.MODE_MULTI_UPLOAD : this.fileUpload.MODE_SINGLE_UPLOAD,

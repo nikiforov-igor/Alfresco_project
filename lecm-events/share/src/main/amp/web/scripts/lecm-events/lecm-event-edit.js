@@ -250,7 +250,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var uploader = new LogicECM.DndUploader(this.id + "-uploader-block");
 				uploader.initUploader({
 					disabled: false,
-					destinationName: this.msg("label.events.attachments"),
+					destinationName: this.msg("title.event.upload.attachments.directoryName"),
 					destination: this.attachmentsRootNode,
 					multipleMode: true,
 					onFileUploadComplete: {
@@ -312,6 +312,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 				var uploadConfig =
 				{
+					uploadDirectoryName: this.msg("title.event.upload.attachments.directoryName"),
 					destination: this.attachmentsRootNode,
 					filter: [],
 					mode: this.fileUpload.MODE_MULTI_UPLOAD,
