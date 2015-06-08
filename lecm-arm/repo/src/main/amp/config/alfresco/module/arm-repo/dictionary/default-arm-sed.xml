@@ -2440,7 +2440,10 @@
                                                   type="lecm-arm:statuses-child-rule">
                                                 <property name="cm:name">
                                                     <![CDATA[3afd6cf0-8875-4f1e-ba4b-3fb711d9abe6]]></property>
-                                                <property name="lecm-arm:statuses-rule"><![CDATA[ALL]]></property>
+                                                <property name="lecm-arm:selected-statuses">
+                                                    <![CDATA[Удален]]></property>
+                                                <property name="lecm-arm:statuses-rule">
+                                                    <![CDATA[EXCEPT_SELECTED]]></property>
                                             </item>
                                         </items>
                                         <assocs>
