@@ -738,7 +738,6 @@ LogicECM.module.Base.Util = {
 
 		var form = document.createElement("form");
 		form.setAttribute("method", "POST");
-		form.setAttribute("action", path);
 
 		if (vars != undefined) {
 			var params = [];
@@ -748,14 +747,20 @@ LogicECM.module.Base.Util = {
 				params[value[0]] = value[1];
 			}
 			for (var key in params) {
-				var hiddenField = document.createElement("input");
-				hiddenField.setAttribute("type", "hidden");
-				hiddenField.setAttribute("name", key);
-				hiddenField.setAttribute("value", decodeURIComponent(params[key]));
+				if (key == "nodeRef") { //todo Костыль - nodeRef всегда передаём в URL
+					path += "?nodeRef=" +params[key];
+				} else {
+					var hiddenField = document.createElement("input");
+					hiddenField.setAttribute("type", "hidden");
+					hiddenField.setAttribute("name", key);
+					hiddenField.setAttribute("value", decodeURIComponent(params[key]));
 
-				form.appendChild(hiddenField);
+					form.appendChild(hiddenField);
+				}
 			}
 		}
+
+		form.setAttribute("action", path);
 
 		document.body.appendChild(form);
 		form.submit();
