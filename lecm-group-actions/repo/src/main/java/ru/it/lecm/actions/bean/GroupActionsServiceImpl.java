@@ -196,7 +196,7 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
                     statuses.add(status.trim());
                 }
                 for (NodeRef item : items) {
-                    String status = nodeService.getProperty(item, StatemachineModel.PROP_STATUS).toString();
+                    String status = (String) nodeService.getProperty(item, StatemachineModel.PROP_STATUS);
                     if (!statuses.contains(status)) {
                         include = false;
                         break;

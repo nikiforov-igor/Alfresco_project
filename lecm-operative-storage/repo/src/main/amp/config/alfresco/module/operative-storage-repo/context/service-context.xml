@@ -89,6 +89,12 @@
 		<value>alfresco/module/${artifactId}/arm/os-arm.xml</value>
 	</util:list>
 
+	<util:list id="operative.storage.group.actions">
+		<value>lecm-os:nomenclature-case</value>
+		<value>lecm-os:nomenclature-year-section</value>
+		<value>lecm-os:nomenclature-unit-section</value>
+	</util:list>
+
 	<util:map id="lecmOperativeStorageFolders">
 		<entry key="#{OPERATIVE_STORAGE_FOLDER_ID}" value="Сервис Оперативное хранение"/>
 	</util:map>
@@ -176,6 +182,11 @@
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
 		  p:dictionaryService-ref="dictionaryService"
+	/>
+
+	<bean id="operativeStorageActionTypes" class="ru.it.lecm.actions.bean.GroupActionsServiceInjector" depends-on="groupActionsService" init-method="init"
+		p:groupActionsService-ref="groupActionsService"
+		p:aspects-ref="operative.storage.group.actions"
 	/>
 
 </beans>
