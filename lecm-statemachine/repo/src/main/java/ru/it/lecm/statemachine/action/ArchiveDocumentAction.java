@@ -260,7 +260,7 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
     }
 
     private NodeRef createAdditionalPath(NodeRef node, NodeRef rootPath) {
-		String path;
+		String path = "";
 		if (archiveFolderPathAdditional.matches(legacyAdditionalPathRegex)) {
 			// fallback to legacy mechanism
 			path = archiveFolderPathAdditional;
@@ -272,7 +272,7 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
 				String value = getServiceRegistry().getNodeService().getProperty(node, attribute).toString();
 				path = path.replace("{" + prefix + ":" + attributeName + "}", value);
 			}
-		} else {
+		} else if(!archiveFolderPathAdditional.isEmpty()) {
 			DocumentService documentService = getDocumentService();
 			path = documentService.execStringExpression(node, archiveFolderPathAdditional);
 		}
