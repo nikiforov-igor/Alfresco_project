@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="mode" type="java.lang.String" -->
 <#if !limit?exists><#assign limit = -1></#if>
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
@@ -6,14 +7,6 @@
         <#list events as event>
             <#if event_index?string == limit?string><#break></#if>
 			{
-				"nodeRef": "${event.nodeRef}",
-				"title": "${event.title}",
-				"description": "${event.description}",
-				"allday": "${event.allday?string}",
-				"where": "${event.where?string}",
-				"typeTitle": "${event.typeTitle?string}",
-				"userMemberStatus": "${event.userMemberStatus}",
-				"userIsInitiator": ${event.userIsInitiator?string},
 				"startAt": {
 					"iso8601": "${event.start}",
 					"legacyTime": "${event.legacyTimeFrom}"
@@ -21,8 +14,15 @@
 				"endAt": {
 					"iso8601": "${event.end}",
 					"legacyTime": "${event.legacyTimeTo}"
-				},
-
+				}<#if (mode!"") != "mini">,
+                "nodeRef": "${event.nodeRef}",
+                "title": "${event.title}",
+                "description": "${event.description}",
+                "allday": "${event.allday?string}",
+                "where": "${event.where?string}",
+                "typeTitle": "${event.typeTitle?string}",
+                "userMemberStatus": "${event.userMemberStatus}",
+                "userIsInitiator": ${event.userIsInitiator?string},
                 "members": [
                     <#list event.members as member>
                         {
@@ -58,6 +58,7 @@
 					"isEdit": ${event.canEdit?string},
 					"isDelete": ${event.canDelete?string}
 				}
+            </#if>
 			}<#if event_has_next>,</#if>
         </#list>
 	],

@@ -144,7 +144,8 @@ LogicECM.module = LogicECM.module || {};
 						dataObj:
 						{
 							from: toISO8601(fromDate).split('T')[0],
-							to: toISO8601(toDate).split('T')[0]
+							to: toISO8601(toDate).split('T')[0],
+                            mode: "mini"
 						},
 						//filter out non relevant events for current view
 						successCallback:

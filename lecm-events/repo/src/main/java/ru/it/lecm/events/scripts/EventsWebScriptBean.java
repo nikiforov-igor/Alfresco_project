@@ -53,18 +53,20 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
-        return getUserEvents(fromDate, toDate, false);
+        return getUserEvents(fromDate, toDate, false, null);
     }
 
-    public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions) {
+    public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode) {
         List<NodeRef> events = eventService.getEvents(fromDate, toDate);
-        return processEvents(events, loadActions, true);
+        return processEvents(events, loadActions, true, mode);
     }
 
-    private List<Map<String, Object>> processEvents( List<NodeRef> events, boolean loadActions, boolean excludeDeclined) {
+    private List<Map<String, Object>> processEvents( List<NodeRef> events, boolean loadActions, boolean excludeDeclined, String mode) {
         List<Map<String, Object>> results = new ArrayList<>();
         NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-
+        String legacyDateFormat = "yyyy-MM-dd";
+        String legacyTimeFormat = "HH:mm";
+        boolean isMini = "mini".equalsIgnoreCase(mode);
         for (NodeRef entry : events) {
             String memberStatus = eventService.getEmployeeMemberStatus(entry, currentEmployee);
             if (excludeDeclined && "DECLINED".equals(memberStatus)) {
@@ -73,51 +75,49 @@ public class EventsWebScriptBean extends BaseWebScript {
             // Build the object
             Map<String, Object> result = new HashMap<>();
             boolean isAllDay = (boolean) nodeService.getProperty(entry, EventsService.PROP_EVENT_ALL_DAY);
-            String title = (String) nodeService.getProperty(entry, EventsService.PROP_EVENT_TITLE);
             Date start = (Date) nodeService.getProperty(entry, EventsService.PROP_EVENT_FROM_DATE);
             Date end = (Date) nodeService.getProperty(entry, EventsService.PROP_EVENT_TO_DATE);
-
-            result.put("nodeRef", entry.toString());
-            result.put("title", title);
-            result.put("description", nodeService.getProperty(entry, EventsService.PROP_EVENT_DESCRIPTION));
-            result.put("allday", isAllDay);
-
-            result.put("members", eventService.getEventMembers(entry));
-            result.put("invitedMembers", eventService.getEventInvitedMembers(entry));
-            result.put("actions", loadActions ? actionsService.getActiveActions(entry) : Collections.EMPTY_LIST);
-
-            NodeRef location = eventService.getEventLocation(entry);
-            if (location != null) {
-                result.put("where", nodeService.getProperty(location, ContentModel.PROP_NAME));
-            } else {
-                result.put("where", "");
-            }
             result.put("start", formatDate(start, isAllDay));
             result.put("startDate", start);
             result.put("end", formatDate(end, isAllDay));
-            String legacyDateFormat = "yyyy-MM-dd";
-            String legacyTimeFormat = "HH:mm";
             result.put("legacyDateFrom", formatDate(start, isAllDay, legacyDateFormat));
             result.put("legacyTimeFrom", formatDate(start, isAllDay, legacyTimeFormat));
             result.put("legacyDateTo", formatDate(end, isAllDay, legacyDateFormat));
             result.put("legacyTimeTo", formatDate(end, isAllDay, legacyTimeFormat));
+            if (!isMini) {
+                String title = (String) nodeService.getProperty(entry, EventsService.PROP_EVENT_TITLE);
+                result.put("nodeRef", entry.toString());
+                result.put("title", title);
+                result.put("description", nodeService.getProperty(entry, EventsService.PROP_EVENT_DESCRIPTION));
+                result.put("allday", isAllDay);
 
-            result.put("userMemberStatus", memberStatus);
-            result.put("userIsInitiator", eventService.getEventInitiator(entry).equals(currentEmployee));
+                result.put("members", eventService.getEventMembers(entry));
+                result.put("invitedMembers", eventService.getEventInvitedMembers(entry));
+                result.put("actions", loadActions ? actionsService.getActiveActions(entry) : Collections.EMPTY_LIST);
 
-            String typeTitle = "";
-            TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(entry));
-            if (typeDef != null) {
-                typeTitle = typeDef.getTitle(dictionaryService);
-            }
-            result.put("typeTitle", typeTitle);
+                NodeRef location = eventService.getEventLocation(entry);
+                if (location != null) {
+                    result.put("where", nodeService.getProperty(location, ContentModel.PROP_NAME));
+                } else {
+                    result.put("where", "");
+                }
 
-            // Check the permissions the user has on the entry
+                result.put("userMemberStatus", memberStatus);
+                result.put("userIsInitiator", eventService.getEventInitiator(entry).equals(currentEmployee));
+
+                String typeTitle = "";
+                TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(entry));
+                if (typeDef != null) {
+                    typeTitle = typeDef.getTitle(dictionaryService);
+                }
+                result.put("typeTitle", typeTitle);
+
+                // Check the permissions the user has on the entry
 //                AccessStatus canEdit = permissionService.hasPermission(entry.getNodeRef(), PermissionService.WRITE);
 //                AccessStatus canDelete = permissionService.hasPermission(entry.getNodeRef(), PermissionService.DELETE);
-            result.put("canEdit", serviceRegistry.getPermissionService().hasPermission(entry, PermissionService.WRITE) == AccessStatus.ALLOWED);
-            result.put("canDelete", true);
-
+                result.put("canEdit", serviceRegistry.getPermissionService().hasPermission(entry, PermissionService.WRITE) == AccessStatus.ALLOWED);
+                result.put("canDelete", true);
+            }
             // Replace nulls with blank strings for the JSON
             for (String key : result.keySet()) {
                 if (result.get(key) == null) {
@@ -148,7 +148,7 @@ public class EventsWebScriptBean extends BaseWebScript {
 
     public List<Map<String, Object>> searchUserEvents(String filter) {
         List<NodeRef> events = eventService.searchEvents(filter);
-        return processEvents(events, false, false);
+        return processEvents(events, false, false, null);
     }
 
     public Scriptable getUserNearestEvents(ScriptNode currentEmployee, int maxItems) {
