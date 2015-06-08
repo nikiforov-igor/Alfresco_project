@@ -652,7 +652,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		List<AssociationRef> attachmentsAssocs = nodeService.getSourceAssocs(event, DocumentService.ASSOC_PARENT_DOCUMENT);
 		if (attachmentsAssocs != null) {
 			for (AssociationRef attachment : attachmentsAssocs) {
-				attachments.add(attachment.getTargetRef());
+				attachments.add(attachment.getSourceRef());
 			}
 		}
 		for (final NodeRef attachment : attachments) {
@@ -709,7 +709,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					for (DataSource attachment : attachments) {
 						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
 					}
-					Runnable mailSender = new RawMailSender(message, mailService);
+					Runnable mailSender = new RawMailSender(message, mailService, transactionService);
 					threadPoolExecutor.execute(mailSender);
 				} catch (Exception e) {
 					logger.error("Error send mail", e);
@@ -774,7 +774,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					for (DataSource attachment : attachments) {
 						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
 					}
-					Runnable mailSender = new RawMailSender(message, mailService);
+					Runnable mailSender = new RawMailSender(message, mailService, transactionService);
 					threadPoolExecutor.execute(mailSender);
 				} catch (Exception e) {
 					logger.error("Error send mail", e);
@@ -834,7 +834,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					for (DataSource attachment : attachments) {
 						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
 					}
-					Runnable mailSender = new RawMailSender(message, mailService);
+					Runnable mailSender = new RawMailSender(message, mailService, transactionService);
 					threadPoolExecutor.execute(mailSender);
 				} catch (Exception e) {
 					logger.error("Error send mail", e);
