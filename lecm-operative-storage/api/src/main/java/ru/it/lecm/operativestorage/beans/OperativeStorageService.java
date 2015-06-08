@@ -17,6 +17,7 @@ public interface OperativeStorageService {
 
 	String OS_NAMESPACE = "http://www.it.ru/logicECM/operative-storage/1.0";
 	String OS_SETTINGS_NAMESPACE = "http://www.it.ru/logicECM/model/os/global-settings/1.0";
+	String OS_ASPECTS_NAMESPACE = "http://www.it.ru/logicECM/model/os/aspects/1.0";
 
 	QName ASSOC_NOMENCLATURE_CASE = QName.createQName(OS_NAMESPACE, "nomenclature-case-assoc");
 	QName ASSOC_NOMENCLATURE_CASE_ROOT = QName.createQName(OS_NAMESPACE, "nomenclature-case-root-assoc");
@@ -63,6 +64,7 @@ public interface OperativeStorageService {
 	QName TYPE_OPERATIVE_STORAGE_SETTING = QName.createQName(OS_SETTINGS_NAMESPACE, "settings");
 	QName PROP_OPERATIVE_STORAGE_CENRALIZED = QName.createQName(OS_SETTINGS_NAMESPACE, "centralized");
 
+	QName ASPECT_MOVE_TO_CASE = QName.createQName(OS_ASPECTS_NAMESPACE, "move-to-case");
 
 
 	void cleanVisibilityList(NodeRef nodeRef);
@@ -122,5 +124,7 @@ public interface OperativeStorageService {
 	void createTreeByOrgUnits(NodeRef yearSectionRef);
 
 	public void createSectionByUnit(NodeRef unitRef, NodeRef root, boolean fuckingDeepCopy);
+
+	public void grantPermissionToArchivist(NodeRef docNodeRef);
 
 }

@@ -274,7 +274,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 			nodeService.createAssociation(docNodeRef, caseRef, ASSOC_NOMENCLATURE_CASE);
 
 			nodeService.addAspect(docNodeRef, DocumentService.ASPECT_DONT_MOVE_TO_ARCHIVE_FOLDER, null);
-		}
+		} 
 	}
 
 	@Override
@@ -478,6 +478,14 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 
 
+	}
+
+	public void grantPermissionToArchivist(NodeRef docNodeRef) {
+		final Types.SGPosition sgBusinessRole = Types.SGKind.SG_BR.getSGPos(BR_ARCHIVIST);
+		String shortName = sgBusinessRole.getAlfrescoSuffix();
+
+		String authority = authorityService.getName(AuthorityType.GROUP, shortName);
+		permissionService.setPermission(docNodeRef, authority, "LECM_BASIC_PG_Reader", true);
 	}
 
 	@Override

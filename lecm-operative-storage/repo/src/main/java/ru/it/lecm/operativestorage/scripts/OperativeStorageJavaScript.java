@@ -27,6 +27,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.removal.DocumentsRemovalService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.operativestorage.beans.OperativeStorageService;
+import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASPECT_MOVE_TO_CASE;
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -133,9 +134,11 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 						operativeStorageService.createDocsFolder(caseRef);
 					}
 
-					behaviourFilter.disableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
+//					behaviourFilter.disableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
 					operativeStorageService.moveDocToNomenclatureCase(docNodeRef, caseRef);
-					behaviourFilter.enableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
+//					behaviourFilter.enableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
+				} else {
+					nodeService.addAspect(docNodeRef, ASPECT_MOVE_TO_CASE, null);
 				}
 
 				return null;

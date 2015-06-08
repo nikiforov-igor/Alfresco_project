@@ -9,7 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.node.NodeServicePolicies.OnAddAspectPolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateNodePolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnDeleteAssociationPolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnUpdatePropertiesPolicy;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -29,7 +33,8 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *
  * @author ikhalikov
  */
-public class NomenclatureCasePolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteAssociationPolicy, NodeServicePolicies.OnUpdatePropertiesPolicy {
+public class NomenclatureCasePolicy implements OnCreateNodePolicy,
+		OnCreateAssociationPolicy, OnDeleteAssociationPolicy, OnUpdatePropertiesPolicy , OnAddAspectPolicy {
 
 	private final static Logger logger = LoggerFactory.getLogger(NomenclatureCasePolicy.class);
 
@@ -56,10 +61,21 @@ public class NomenclatureCasePolicy implements NodeServicePolicies.OnCreateNodeP
 
 	public void init() {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
+				new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindClassBehaviour(OnUpdatePropertiesPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
+				new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
+				new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
+				new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindClassBehaviour(OnAddAspectPolicy.QNAME, OperativeStorageService.ASPECT_MOVE_TO_CASE,
+				new JavaBehaviour(this, "onAddAspect", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
@@ -199,6 +215,11 @@ public class NomenclatureCasePolicy implements NodeServicePolicies.OnCreateNodeP
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
+		operativeStorageService.grantPermissionToArchivist(nodeRef);
 	}
 
 }

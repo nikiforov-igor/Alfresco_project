@@ -31,5 +31,8 @@
 			</properties>
 		</aspect>
 
+		<!-- Аспект для нарезки прав архивариусам -->
+		<aspect name="os-aspects:move-to-case"/>
+
 	</aspects>
 </model>
