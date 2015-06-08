@@ -37,6 +37,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		initStartDate: null,
 		initEndDate: null,
+        initialLoading: true,
 
 		render: function () {
             this.options.loadActions = true;
@@ -45,7 +46,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.initStartDate = this.options.startDate;
 			this.initEndDate = this.options.endDate;
 
-			this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
+            this.initialLoading = true;
 
 			var hash = window.location.hash;
 			var view = hash.substring(hash.indexOf("view=") + 5).split("&")[0] || Alfresco.util.getQueryStringParameter('view') || this.options.view;
@@ -60,6 +61,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		onUpdateView: function(view) {
 			if (view === LogicECM.module.Calendar.View.VIEWTYPE_AGENDA) {
 				Dom.setStyle(this.id, "display", "block");
+                if (this.initialLoading) {
+                    this.initialLoading = false;
+                    this.getEvents(dateFormat(this.options.startDate, 'yyyy-mm-dd'));
+                }
 			} else {
 				Dom.setStyle(this.id, "display", "none");
 			}
