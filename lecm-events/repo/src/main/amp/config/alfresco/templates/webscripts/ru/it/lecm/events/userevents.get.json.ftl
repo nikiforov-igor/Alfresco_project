@@ -23,6 +23,11 @@
                 "typeTitle": "${event.typeTitle?string}",
                 "userMemberStatus": "${event.userMemberStatus}",
                 "userIsInitiator": ${event.userIsInitiator?string},
+
+                "permissions": {
+                    "isEdit": ${event.canEdit?string},
+                    "isDelete": ${event.canDelete?string}
+                }<#if (mode!"") != "full">,
                 "members": [
                     <#list event.members as member>
                         {
@@ -52,12 +57,8 @@
                             "workflowId": "${action.properties["lecm-group-actions:workflow"]!""}"
                         }<#if action_has_next>,</#if>
                     </#list>
-                ],
-
-				"permissions": {
-					"isEdit": ${event.canEdit?string},
-					"isDelete": ${event.canDelete?string}
-				}
+                ]
+            </#if>
             </#if>
 			}<#if event_has_next>,</#if>
         </#list>

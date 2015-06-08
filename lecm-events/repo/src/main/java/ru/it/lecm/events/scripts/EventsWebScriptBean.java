@@ -67,6 +67,7 @@ public class EventsWebScriptBean extends BaseWebScript {
         String legacyDateFormat = "yyyy-MM-dd";
         String legacyTimeFormat = "HH:mm";
         boolean isMini = "mini".equalsIgnoreCase(mode);
+        boolean isFull = "full".equalsIgnoreCase(mode);
         for (NodeRef entry : events) {
             String memberStatus = eventService.getEmployeeMemberStatus(entry, currentEmployee);
             if (excludeDeclined && "DECLINED".equals(memberStatus)) {
@@ -91,10 +92,6 @@ public class EventsWebScriptBean extends BaseWebScript {
                 result.put("description", nodeService.getProperty(entry, EventsService.PROP_EVENT_DESCRIPTION));
                 result.put("allday", isAllDay);
 
-                result.put("members", eventService.getEventMembers(entry));
-                result.put("invitedMembers", eventService.getEventInvitedMembers(entry));
-                result.put("actions", loadActions ? actionsService.getActiveActions(entry) : Collections.EMPTY_LIST);
-
                 NodeRef location = eventService.getEventLocation(entry);
                 if (location != null) {
                     result.put("where", nodeService.getProperty(location, ContentModel.PROP_NAME));
@@ -117,6 +114,11 @@ public class EventsWebScriptBean extends BaseWebScript {
 //                AccessStatus canDelete = permissionService.hasPermission(entry.getNodeRef(), PermissionService.DELETE);
                 result.put("canEdit", serviceRegistry.getPermissionService().hasPermission(entry, PermissionService.WRITE) == AccessStatus.ALLOWED);
                 result.put("canDelete", true);
+                if (!isFull) {
+                    result.put("members", eventService.getEventMembers(entry));
+                    result.put("invitedMembers", eventService.getEventInvitedMembers(entry));
+                    result.put("actions", loadActions ? actionsService.getActiveActions(entry) : Collections.EMPTY_LIST);
+                }
             }
             // Replace nulls with blank strings for the JSON
             for (String key : result.keySet()) {

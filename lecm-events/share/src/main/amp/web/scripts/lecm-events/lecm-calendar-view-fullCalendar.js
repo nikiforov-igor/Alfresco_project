@@ -212,7 +212,7 @@
                        eventSources:
                            [
                               {
-                                 url: Alfresco.constants.PROXY_URI + "lecm/events/user?repeating=all",
+                                 url: Alfresco.constants.PROXY_URI + "lecm/events/user?repeating=all&mode=full",
                                  startParam: "from",
                                  startParamFn: function(rangeStart)
                                  {
