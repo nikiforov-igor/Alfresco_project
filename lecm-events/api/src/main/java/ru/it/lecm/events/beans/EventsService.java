@@ -127,4 +127,8 @@ public interface EventsService {
     List<NodeRef> getAllRepeatedEvents(NodeRef event);
 
 	void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst);
+	
+	void sendCancelNotifications(NodeRef event);
+
+	void sendIcalNotificationsToInvitedMembers(NodeRef event, boolean firstTime);
 }

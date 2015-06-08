@@ -14,13 +14,13 @@ public class RawMailSender implements Runnable {
 	private final static Logger logger = LoggerFactory.getLogger(RawMailSender.class);
 	private final MimeMessage rawMessage;
 	private final JavaMailSender mailService;
-	
+
 	
 	public RawMailSender(MimeMessage rawMessage, JavaMailSender mailSender) {
 		this.rawMessage = rawMessage;
 		this.mailService = mailSender;
 	}
-	
+
 	@Override
 	public void run() {
 		try {
@@ -29,6 +29,6 @@ public class RawMailSender implements Runnable {
 			logger.error("Error send mail", e);
 		}
 	}
-	
+
 	
 }

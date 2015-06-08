@@ -102,8 +102,8 @@ public class CalendarEvent {
 		return Collections.unmodifiableMap(attendees);
 	}
 
-	public void addAttendee(String name, String mail) {
-		attendees.put(name, mail);
+	public void addAttendee(String mail, String name) {
+		attendees.put(mail,name);
 	}
 
 	public void removeAttendee(String name) {
@@ -117,6 +117,12 @@ public class CalendarEvent {
 
 	public void setUid(String uid) {
 		this.uid = uid;
+	}
+
+	public void addAttendees(Map<String, String> attendees) {
+		if (attendees!=null) {
+			this.attendees.putAll(attendees);
+		}
 	}
 	
 }

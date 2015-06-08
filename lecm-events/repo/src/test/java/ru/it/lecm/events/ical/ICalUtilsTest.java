@@ -63,8 +63,8 @@ public class ICalUtilsTest {
 		event.setEndTime(endTime);
 		Uid uid = new Uid("20150330T045040Z-uidGen@fe80:0:0:0:4e72:b9ff:fe27:d19%2");
 		event.setUid(uid.getValue());
-		event.addAttendee("Valentin Kuprin", "kuprinvp@gmail.com");
-		event.addAttendee("Валентин", "test@test.ru");
+		event.addAttendee("kuprinvp@gmail.com","Valentin Kuprin");
+		event.addAttendee("test@test.ru","Валентин");
 
 		ICalUtils instance = new ICalUtils();
 		String expResult = "";
