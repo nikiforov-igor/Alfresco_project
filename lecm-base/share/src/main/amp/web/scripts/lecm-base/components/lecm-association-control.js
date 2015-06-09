@@ -48,6 +48,7 @@ LogicECM.module = LogicECM.module || {};
 		this.isSearch = false;
 		this.allowedNodes = null;
 		this.allowedNodesScript = null;
+		this.controlAutoComplete = null;
 		return this;
 	};
 
@@ -86,6 +87,8 @@ LogicECM.module = LogicECM.module || {};
 			cancelSingleSelectedItem: null,
 
 			tempDisabled: false,
+
+			controlAutoComplete: null,
 
 			options:
 			{
@@ -651,7 +654,7 @@ LogicECM.module = LogicECM.module || {};
 			makeAutocomplete: function () {
 				var oDS;
 				this.byEnter = false;
-				if (!this.options.lazyLoading) {
+				if (!this.options.lazyLoading && this.controlAutoComplete == null) {
 					var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node/children";
 					oDS = new YAHOO.util.XHRDataSource(url);
 					oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
@@ -744,6 +747,7 @@ LogicECM.module = LogicECM.module || {};
 					}.bind(this);
 					oAC.itemSelectEvent.subscribe(selectItemHandler);
 
+					this.controlAutoComplete = oAC;
 					// Register the "enter" event on the autocomplete text field
 					var input = Dom.get(this.options.controlId + "-autocomplete-input");
 					new KeyListener(input,
