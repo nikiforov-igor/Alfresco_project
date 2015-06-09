@@ -38,6 +38,10 @@ LogicECM.module.Deputy = LogicECM.module.Deputy || {};
 				disabler.classList.add('hidden');
 			}
 		},
+		onDataGridColumns: function (response) {
+			LogicECM.module.Deputy.RecomendGrid.superclass.onDataGridColumns.call(this, response);
+			LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
+		},
 		draw: function() {
 			if(!this.options.useCurrentUser) {
 				YAHOO.Bubbling.on(this.options.targetEvent, this.onEmployeeSelected.bind(this));
@@ -74,7 +78,7 @@ LogicECM.module.Deputy = LogicECM.module.Deputy || {};
 
 		},
 		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
-			LogicECM.module.Base.Util.createComponentReadyElementId(grid.id, grid.options.formId, grid.options.fieldId);
+
 			if(grid.totalRecords == 0) {
 				return;
 			}
