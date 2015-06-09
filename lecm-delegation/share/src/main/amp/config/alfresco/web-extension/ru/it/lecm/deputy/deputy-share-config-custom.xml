@@ -84,11 +84,14 @@
 							<control-param name="useDeferedReinit">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-deputy:subject-assoc">
+					<field id="lecm-deputy:subject-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">false</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />
+						</constraint-handlers>
 					</field>
 					<field id="change-subject-type-script">
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
@@ -119,11 +122,14 @@
 							<control-param name="useDeferedReinit">true</control-param>
 						</control>
 					</field>
-					<field id="lecm-deputy:subject-assoc">
+					<field id="lecm-deputy:subject-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">true</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />
+						</constraint-handlers>
 					</field>
 					<field id="change-subject-type-script">
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
@@ -169,11 +175,14 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-deputy:employee-assoc" read-only="true"/>
-					<field id="lecm-deputy:subject-assoc">
+					<field id="lecm-deputy:subject-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">false</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />
+						</constraint-handlers>
 					</field>
 					<field id="change-subject-type-script">
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
@@ -190,11 +199,14 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-deputy:employee-assoc" read-only="true"/>
-					<field id="lecm-deputy:subject-assoc">
+					<field id="lecm-deputy:subject-assoc" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">true</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />
+						</constraint-handlers>
 					</field>
 					<field id="change-subject-type-script">
 						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
