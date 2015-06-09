@@ -55,7 +55,7 @@ public interface IOrgStructureNotifiers {
 
 
 	/**
-	 * Проверить является ли одна группа внутри другой 
+	 * Проверить является ли одна группа внутри другой
 	 * @param child
 	 * @param parent
 	 * @return true, если child находится внутри parent
@@ -95,4 +95,9 @@ public interface IOrgStructureNotifiers {
 	 * @param obj id и тип узла объекта орг-штатки
 	 */
 	void orgBRRemoved(String broleCode, Types.SGPosition obj);
+
+	void ensureParent(String sgItemFullName, String sgParentFullName);
+	void ensureUserParent(String sgItemFullName, String sgParentFullName);
+	void removeParent(String sgFullItemName, String sgParentFullName);
+	void removeUserParent(String sgFullItemName, String sgParentFullName);
 }

@@ -71,7 +71,25 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             return result;
         }
     };
-
+    private Comparator<NodeRef> comparatorByName = new Comparator<NodeRef>() {
+        @Override
+        public int compare(NodeRef o1, NodeRef o2) {
+            String order1 = (String) getCachedProperties(o1).get(ContentModel.PROP_NAME);
+            String order2 = (String) getCachedProperties(o2).get(ContentModel.PROP_NAME);
+            int result = 0;
+            if (order1 == null && order2 != null) {
+                return -1;
+            } else if (order1 != null && order2 == null) {
+                return 1;
+            } else if (order1 != null) {
+                result = order1.compareTo(order2);
+            }
+/*            if (result == 0 && o1 != null && o2 != null) {
+                result = o1.getId().compareTo(o2.getId());  //позволяет иметь ноды с одинаковым порядком
+            }*/
+            return result;
+        }
+    };
     private StateMachineServiceBean stateMachineService;
 
     public void setColumnsCache(SimpleCache<String, List<ArmColumn>> columnsCache) {
@@ -137,6 +155,11 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	}
 
 	@Override
+    public boolean isRunAsArmAccordion(NodeRef ref) {
+        return isProperType(ref, TYPE_ARM_ACCORDION_RUN_AS);
+    }
+
+	@Override
 	public boolean isArmNode(NodeRef ref) {
 		return isProperType(ref, TYPE_ARM_NODE);
 	}
@@ -148,7 +171,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public boolean isArmElement(NodeRef ref) {
-		return isProperType(ref, TYPE_ARM_ACCORDION, TYPE_ARM_NODE, TYPE_ARM_REPORTS_NODE, TYPE_ARM_HTML_NODE);
+		return isProperType(ref, TYPE_ARM_ACCORDION, TYPE_ARM_ACCORDION_RUN_AS, TYPE_ARM_NODE, TYPE_ARM_REPORTS_NODE, TYPE_ARM_HTML_NODE);
 	}
 
 	public NodeRef getDictionaryArmSettings() {
@@ -179,8 +202,28 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         if (!accordionsCache.contains(arm)) {
             Set<QName> typeSet = new HashSet<>(1);
             Map<NodeRef, Set<String>> accordions = new TreeMap<>(comparator);
-            typeSet.add(TYPE_ARM_ACCORDION);
+            Map<NodeRef, Set<String>> accordionsRunAs = new TreeMap<>(comparatorByName);
+            LinkedHashMap<NodeRef, Set<String>> allAccordions = new LinkedHashMap<>();
+
+            typeSet.add(TYPE_ARM_ACCORDION_RUN_AS);
             List<ChildAssociationRef> accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
+            if (accordionsAssocs != null) {
+                for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
+                    NodeRef accordionRef = accordionAssoc.getChildRef();
+                    Set<String> roles = new HashSet<>();
+                    List<AssociationRef> associationRefs = nodeService.getTargetAssocs(accordionRef, ArmService.ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE);
+                    for (AssociationRef associationRef : associationRefs) {
+                        NodeRef employee = associationRef.getTargetRef();
+                        String roleCode = getAutorityForSecretary(employee);
+                        roles.add(roleCode);
+                    }
+                    accordionsRunAs.put(accordionRef, roles.isEmpty() ? null : roles);
+                }
+                allAccordions.putAll(accordionsRunAs);
+            }
+            typeSet.clear();
+            typeSet.add(TYPE_ARM_ACCORDION);
+            accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
             if (accordionsAssocs != null) {
                 for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
                     NodeRef accordionRef = accordionAssoc.getChildRef();
@@ -193,8 +236,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                     }
                     accordions.put(accordionRef, roles.isEmpty() ? null : roles);
                 }
+                allAccordions.putAll(accordions);
             }
-            accordionsCache.put(arm, accordions);
+            accordionsCache.put(arm, allAccordions);
         }
         Map<NodeRef, Set<String>> armAccordions = accordionsCache.get(arm);
         Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
@@ -216,6 +260,13 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private String getAutorityByBusinessRole(NodeRef businessRole) {
         String roleIdentifier = (String) getCachedProperties(businessRole).get(OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
         String roleName = Types.SGKind.SG_BR.getSGPos(roleIdentifier).getAlfrescoSuffix();
+        return authorityService.getName(AuthorityType.GROUP, roleName);
+    }
+
+    private String getAutorityForSecretary(NodeRef chief) {
+        String chiefLogin = orgstructureBean.getEmployeeLogin(chief);
+        Types.SGSecretaryOfUser sgSecretary = Types.SGKind.getSGSecretaryOfUser(chief.getId(), chiefLogin);
+        String roleName = sgSecretary.getAlfrescoSuffix();
         return authorityService.getName(AuthorityType.GROUP, roleName);
     }
 
@@ -609,6 +660,24 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             columnsCache.remove(removeKey);
         }
         logger.info("Arm cache cleared for '{}'!!!", user);
+    }
+
+    @Override
+    public void createRunAsAccordion(NodeRef employee, String armNodeName, String armPath, String armCode) {
+        NodeRef arm = getArmByCode(armCode);
+        if (arm != null) {
+            Map<QName, Serializable> props = new HashMap<>();
+            props.put(PROP_ARM_ACCORDION_RUN_AS_PATH, armPath);
+            props.put(PROP_ARM_ORDER, -1);
+
+            NodeRef newAccordion;
+            try {
+                newAccordion = createNode(arm, TYPE_ARM_ACCORDION_RUN_AS, armNodeName, props);
+                nodeService.createAssociation(newAccordion, employee, ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE);
+            } catch (WriteTransactionNeededException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
     }
 
     public Map<QName, Serializable> getCachedProperties(NodeRef nodeRef) {

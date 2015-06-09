@@ -20,8 +20,9 @@ public class OrgstructurePrimaryPositionPolicy
 		extends SecurityNotificationsPolicyBase
 		implements NodeServicePolicies.OnCreateAssociationPolicy
 {
+	@Override
 	public final void init() {
-		super.init( CHKNAME_POLICY_COMPONENT, CHKNAME_NODE_SERVICE, CHKNAME_ORGSTRUC_SERVICE);
+		super.init();
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE_LINK, OrgstructureBean.ASSOC_EMPLOYEE_LINK_EMPLOYEE,

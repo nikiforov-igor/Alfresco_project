@@ -21,5 +21,7 @@
 <beans>
 
 	<import resource="classpath:alfresco/module/${artifactId}/context/service-context.xml" />
+	<import resource="classpath:alfresco/module/${artifactId}/context/deputy-service-context.xml" />
+	<import resource="classpath:alfresco/module/${artifactId}/context/secretary-service-context.xml" />
 
 </beans>

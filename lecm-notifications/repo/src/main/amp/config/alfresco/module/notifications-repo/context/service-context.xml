@@ -84,11 +84,11 @@
 	<bean id="notificationsService" init-method="init" class="ru.it.lecm.notifications.beans.NotificationsServiceImpl" parent="baseBean"
                 depends-on="ServiceRegistry,
                             repositoryHelper,
-                            serviceOrgstructure, 
+                            serviceOrgstructure,
                             substitudeService,
-                            nodeService, 
-                            transactionService, 
-                            lecmPermissionServiceBean, 
+                            nodeService,
+                            transactionService,
+                            lecmPermissionServiceBean,
                             serviceDictionary,
                             ${groupId}.${artifactId}.notificationsSettingsBootstrap"
         >
@@ -97,6 +97,7 @@
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="substituteService" ref="substitudeService"/>
 		<property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
+		<property name="secretaryService" ref="secretaryService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

@@ -75,6 +75,11 @@ public class Notification {
 
 	private List<NodeRef> delegateBusinessRoleRefs;
 
+	/**
+	 * включать в список рассылки секретарей получателей
+	 */
+	private boolean includeSeretaries = true;
+
     public Notification() {
 	}
 
@@ -184,5 +189,13 @@ public class Notification {
 
 	public void setDelegateBusinessRoleRefs(List<NodeRef> delegateBusinessRoleRefs) {
 		this.delegateBusinessRoleRefs = delegateBusinessRoleRefs;
+	}
+
+	public boolean isIncludeSeretaries() {
+		return includeSeretaries;
+	}
+
+	public void setIncludeSeretaries(boolean includeSeretaries) {
+		this.includeSeretaries = includeSeretaries;
 	}
 }

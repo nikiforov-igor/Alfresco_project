@@ -208,6 +208,8 @@ LogicECM.module = LogicECM.module || {};
 
 				formId: false,
 
+				useDeferedReinit: false,
+
 				doNotCheckAccess: false,
 
 				resetValue: false
@@ -217,6 +219,15 @@ LogicECM.module = LogicECM.module || {};
 				if (!this.options.initialized) {
 					this.options.initialized = true;
 					this.eventGroup = (this.options.prefixPickerId == null ?  this.id + '-cntrl' : this.options.prefixPickerId) + Dom.generateId();
+
+					if(this.options.useDeferedReinit) {
+						this.reinitDeferedList = new Alfresco.util.Deferred(["eventRecieved", "rootNodeLoaded"],
+							{
+								fn: this.deferredReinit,
+								scope: this
+							});
+					}
+
 					this.init();
 				}
 			},
@@ -329,18 +340,18 @@ LogicECM.module = LogicECM.module || {};
 					this.defaultValue = this.options.defaultValue;
 					this.updateViewForm();
 				} else if (this.options.defaultValueDataSource != null) {
-					var me = this;
 
 					Alfresco.util.Ajax.request(
 						{
 							url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
 							successCallback: {
+								scope: this,
 								fn: function (response) {
 									var oResults = eval("(" + response.serverResponse.responseText + ")");
 									if (oResults != null && oResults.nodeRef != null ) {
-										me.defaultValue = oResults.nodeRef;
+										this.defaultValue = oResults.nodeRef;
 									}
-									me.updateViewForm();
+									this.updateViewForm();
 								}
 							},
 							failureMessage: "message.failure"
@@ -592,7 +603,6 @@ LogicECM.module = LogicECM.module || {};
 			createPickerDialog: function()
 			{
 				if (!this.widgets.dialog) {
-					var me = this;
 
 					this.widgets.ok = new YAHOO.widget.Button(this.options.prefixPickerId + "-ok",
 						{ onclick: { fn: this.onOk, obj: null, scope: this } });
@@ -623,7 +633,7 @@ LogicECM.module = LogicECM.module || {};
 								keys: 13
 							},
 							{
-								fn: me.onSearch,
+								fn: this.onSearch,
 								scope: this,
 								correctScope: true
 							}, "keydown").enable();
@@ -639,9 +649,8 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			makeAutocomplete: function () {
-				var me = this;
 				var oDS;
-				me.byEnter = false;
+				this.byEnter = false;
 				if (!this.options.lazyLoading) {
 					var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node/children";
 					oDS = new YAHOO.util.XHRDataSource(url);
@@ -650,15 +659,15 @@ LogicECM.module = LogicECM.module || {};
 						resultsList: "items",
 						fields: ["name", "selectedName", "nodeRef", "path", "simplePath"]
 					};
-					oDS.doBeforeParseData = this._doBeforeParseAutocompleteData();
+					oDS.doBeforeParseData = this._doBeforeParseAutocompleteData.bind(this);
 
 					var oAC = new YAHOO.widget.AutoComplete(this.options.controlId + "-autocomplete-input", this.options.controlId + "-autocomplete-container", oDS);
 					oAC.generateRequest = function (sQuery) {
 						var searchData = "";
 
-						Dom.addClass(me.options.controlId + "-autocomplete-input", "wait-for-load");
+						Dom.addClass(this.options.controlId + "-autocomplete-input", "wait-for-load");
 
-						for (var column in me.searchProperties) {
+						for (var column in this.searchProperties) {
 							searchData += column + ":" + decodeURIComponent(sQuery) + "#";
 						}
 						if (searchData != "") {
@@ -667,24 +676,24 @@ LogicECM.module = LogicECM.module || {};
 							searchData = "cm:name" + ":" + decodeURIComponent(sQuery);
 						}
 
-						return me._generateChildrenUrlParams(searchData, true);
-					};
+						return this._generateChildrenUrlParams(searchData, true);
+					}.bind(this);
 					oAC.formatResult = function(oResultData, sQuery, sResultMatch) {
-						if (!me.options.plane) {
+						if (!this.options.plane) {
 							var name = sResultMatch;
 							var path = oResultData[3] + sResultMatch;
 							return "<div title='" + path + "'>" + name + "</div>";
 						} else {
 							return sResultMatch;
 						}
-					};
+					}.bind(this);
 					oAC.doBeforeLoadData = function(sQuery , oResponse , oPayload) {
 						var results = oResponse.results;
 
 						// Если после нажатия enter возращается только один результат, то он сразу подставляется в поле
 						var res;
-						if (me.byEnter && results && results.length == 1) {
-							me.byEnter = false;
+						if (this.byEnter && results && results.length == 1) {
+							this.byEnter = false;
 							var result = results[0];
 							var node = {
 								name: result.name,
@@ -694,19 +703,19 @@ LogicECM.module = LogicECM.module || {};
 								simplePath: result.simplePath
 							};
 
-							me.selectedItems[node.nodeRef] = node;
-							me.singleSelectedItem = node;
+                            this.selectedItems[node.nodeRef] = node;
+                            this.singleSelectedItem = node;
 
-							me.updateFormFields();
-							me.updateSelectedItems();
-							me.updateAddButtons();
+                            this.updateFormFields();
+                            this.updateSelectedItems();
+                            this.updateAddButtons();
 							res = false;
 						} else {
 							res = true;
 						}
-						Dom.removeClass(me.options.controlId + "-autocomplete-input", "wait-for-load");
+						Dom.removeClass(this.options.controlId + "-autocomplete-input", "wait-for-load");
 						return res;
-					};
+                    }.bind(this);
 					oAC.queryDelay = 3
 					;
 					oAC.minQueryLength = 3;
@@ -747,7 +756,7 @@ LogicECM.module = LogicECM.module || {};
 								var text = input.value;
 
 								if (text && text != "") {
-									me.byEnter = true;
+									this.byEnter = true;
 									clearTimeout(oAC._nDelayID);
 									oAC.sendQuery(text);
 								}
@@ -759,44 +768,34 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
-			_doBeforeParseAutocompleteData: function() {
-				var me = this;
-
-				return function (oRequest, oFullResponse) {
+			_doBeforeParseAutocompleteData: function (oRequest, oFullResponse) {
 					var updatedResponse = oFullResponse;
 
-					if (oFullResponse)
-					{
+				if (oFullResponse) {
 						var items = oFullResponse.data.items;
 
-						if (me.options.maxSearchAutocompleteResults > -1 && items.length > me.options.maxSearchAutocompleteResults)
-						{
-							items = items.slice(0, me.options.maxSearchAutocompleteResults-1);
+					if (this.options.maxSearchAutocompleteResults > -1 && items.length > this.options.maxSearchAutocompleteResults) {
+						items = items.slice(0, this.options.maxSearchAutocompleteResults - 1);
 						}
 
 						var index, item;
-						for (index in items)
-						{
-							if (items.hasOwnProperty(index))
-							{
+					for (index in items) {
+						if (items.hasOwnProperty(index)) {
 								item = items[index];
-								if (item.type == "cm:category" && item.displayPath.indexOf("/categories/Tags") !== -1)
-								{
+							if (item.type == "cm:category" && item.displayPath.indexOf("/categories/Tags") !== -1) {
 									item.type = "tag";
 									oFullResponse.data.parent.type = "tag";
 								}
 							}
 						}
 
-						updatedResponse =
-						{
+					updatedResponse = {
 							parent: oFullResponse.data.parent,
 							items: items
 						};
 					}
 
 					return updatedResponse;
-				};
 			},
 
 			onOk: function(e, p_obj)
@@ -971,7 +970,6 @@ LogicECM.module = LogicECM.module || {};
 				this.activeClass = "active";
 				this.firstTabbed = null;
 
-				var me = this;
 				var dialog = Dom.get(this.widgets.dialog.id);
 
 				if (dialog && dialog.offsetHeight > 0) {
@@ -996,13 +994,13 @@ LogicECM.module = LogicECM.module || {};
 							// Приходя в дерево клавиатурой с предыдущего или следущего элемента, выставляем фокус
 							new KeyListener(tree, {keys: KeyListener.KEY.TAB},
 								{
-									fn: me.focusToTheTree,
+									fn: this.focusToTheTree,
 									scope: this,
 									correctScope: true
 								}, KeyListener.KEYUP).enable();
 							new KeyListener(tree, {shift: true, keys: KeyListener.KEY.TAB},
 								{
-									fn: me.focusToTheTree,
+									fn: this.focusToTheTree,
 									scope: this,
 									correctScope: true
 								}, KeyListener.KEYUP).enable();
@@ -1012,7 +1010,7 @@ LogicECM.module = LogicECM.module || {};
 							this.tree.subscribe('focusChanged', function (args) {
 								var newNode = args.newNode;
 								if (newNode) {
-									me.selectedTreeNode = newNode;
+									this.selectedTreeNode = newNode;
 								}
 								return false;
 							}.bind(this));
@@ -1054,11 +1052,11 @@ LogicECM.module = LogicECM.module || {};
 						}
 
 						Event.on(table, "focusout", function(e) {
-							var activeEl = me.activeElement;
+							var activeEl = this.activeElement;
 							if (activeEl) {
-								Dom.removeClass(activeEl, me.activeClass);
+								Dom.removeClass(activeEl, this.activeClass);
 							}
-						});
+						}, null, this);
 
 						new KeyListener(table, {keys: KeyListener.KEY.DOWN},
 							{
@@ -1078,11 +1076,11 @@ LogicECM.module = LogicECM.module || {};
 							Event.on(table, "focusin", function (e) {
 								var rows = Selector.query("tbody tr.yui-dt-rec", e.target);
 								if (rows && rows.length > 0) {
-									Dom.addClass(rows[0], me.activeClass);
-									me.activeElement = rows[0];
+									Dom.addClass(rows[0], this.activeClass);
+									this.activeElement = rows[0];
 									e.target.scrollTop = 0;
 								}
-							});
+							}, null, this);
 
 							new KeyListener(table, {keys: KeyListener.KEY.ENTER},
 								{
@@ -1103,11 +1101,11 @@ LogicECM.module = LogicECM.module || {};
 							Event.on(table, "focusin", function (e) {
 								var rows = Selector.query("div.cropped-item", e.target);
 								if (rows && rows.length > 0) {
-									Dom.addClass(rows[0], me.activeClass);
-									me.activeElement = rows[0];
+									Dom.addClass(rows[0], this.activeClass);
+									this.activeElement = rows[0];
 									e.target.scrollTop = 0;
 								}
-							});
+							}, null, this);
 
 							new KeyListener(table, {keys: KeyListener.KEY.ENTER},
 								{
@@ -1122,8 +1120,8 @@ LogicECM.module = LogicECM.module || {};
 												var rows = Selector.query("div.cropped-item", selectedElsTable);
 												if (rows && rows.length > 0) {
 													selectedElsTable.focus();
-													Dom.addClass(rows[0], me.activeClass);
-													me.activeElement = rows[0];
+													Dom.addClass(rows[0], this.activeClass);
+													this.activeElement = rows[0];
 												} else {
 													Selector.query("div.picker-items", dialog, true).focus();
 												}
@@ -1145,8 +1143,8 @@ LogicECM.module = LogicECM.module || {};
 						new KeyListener(btns[btns.length - 1], {keys: KeyListener.KEY.TAB},
 							{
 								fn: function() {
-									if (me.firstTabbed) {
-										Dom.get(me.firstTabbed).focus();
+									if (this.firstTabbed) {
+										Dom.get(this.firstTabbed).focus();
 									}
 								},
 								scope: this,
@@ -1164,13 +1162,12 @@ LogicECM.module = LogicECM.module || {};
 			// либо ранее выбранный элемент, если он был,
 			// либо первый - корневой - элемент
 			focusToTheTree: function (a, args) {
-				var me = this;
 				var e = args[1];
-				var node = me.selectedTreeNode ? me.selectedTreeNode : me.rootNode;
+				var node = this.selectedTreeNode ? this.selectedTreeNode : this.rootNode;
 
 				node.focus();
-				me.treeViewClicked(node);
-				me.tree.onEventToggleHighlight(node);
+				this.treeViewClicked(node);
+				this.tree.onEventToggleHighlight(node);
 				Event.stopPropagation(e);
 			},
 
@@ -1249,6 +1246,11 @@ LogicECM.module = LogicECM.module || {};
 						successCallback:
 						{
 							fn: function (response) {
+
+								if(this.options.useDeferedReinit) {
+									this.reinitDeferedList.fulfil("rootNodeLoaded");
+								}
+
 								var oResults = response.json;
 								if (oResults != null) {
 									if (!this.options.plane) {
@@ -1409,8 +1411,6 @@ LogicECM.module = LogicECM.module || {};
 
 			_createSelectedControls: function ()
 			{
-				var me = this;
-
 				// DataSource definition
 				var pickerChildrenUrl = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node";
 				this.widgets.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
@@ -1436,13 +1436,13 @@ LogicECM.module = LogicECM.module || {};
 						var items = oFullResponse.data.items;
 
 						// Crop item list to max length if required
-						if (me.options.maxSearchResults > -1 && items.length > me.options.maxSearchResults)
+						if (this.options.maxSearchResults > -1 && items.length > this.options.maxSearchResults)
 						{
-							items = items.slice(0, me.options.maxSearchResults-1);
+							items = items.slice(0, this.options.maxSearchResults-1);
 						}
 
 						// Add the special "Create new" record if required
-						if (me.options.showCreateNewLink && me.currentNode != null && me.currentNode.data.isContainer && me.currentNode.data.hasPermAddChildren && (!me.isSearch || me.options.plane) && !me.alreadyShowCreateNewLink)
+						if (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink)
 						{
 							items = [{ type: IDENT_CREATE_NEW }].concat(items);
 						}
@@ -1463,8 +1463,8 @@ LogicECM.module = LogicECM.module || {};
 							}
 						}
 
-						if (me.options.employeeAbsenceMarker) {
-							me.getEmployeesAbsenceInformation(items);
+						if (this.options.employeeAbsenceMarker) {
+							this.getEmployeesAbsenceInformation(items);
 						}
 
 						// we need to wrap the array inside a JSON object so the DataTable is happy
@@ -1476,7 +1476,7 @@ LogicECM.module = LogicECM.module || {};
 					}
 
 					return updatedResponse;
-				};
+				}.bind(this);
 
 				// DataTable column defintions
 				var columnDefinitions =
@@ -1504,11 +1504,11 @@ LogicECM.module = LogicECM.module || {};
 
 						target = args[1].target;
 						rowId = target.offsetParent;
-						record = me.widgets.dataTable.getRecord(rowId);
+						record = this.widgets.dataTable.getRecord(rowId);
 						if (record)
 						{
 							var recordData = record.getData();
-							me.selectedItemAdded(recordData);
+							this.selectedItemAdded(recordData);
 //                          IE fix - start : Снять фокус, чтоб убрать рамку-выделение в ИЕ (ALF-3802)
 							if (navigator.userAgent.search(/MSIE/) > -1) {
 								var liner = Dom.getAncestorByClassName(target, "yui-dt-liner");
@@ -1517,8 +1517,8 @@ LogicECM.module = LogicECM.module || {};
 								}
 							}
 //                          IE fix - end
-							if (me.options.fireAction.addItem != null) {
-								var fireName = me.options.fireAction.addItem.split(",");
+							if (this.options.fireAction.addItem != null) {
+								var fireName = this.options.fireAction.addItem.split(",");
 								for (var i in fireName){
 									YAHOO.Bubbling.fire(fireName[i],
 										{
@@ -1526,13 +1526,13 @@ LogicECM.module = LogicECM.module || {};
 										});
 								}
 							}
-							if (me.options.employeeAbsenceMarker && recordData.type === "lecm-orgstr:employee") {
-								me.showEmployeeAutoAnswerPromt(recordData);
+							if (this.options.employeeAbsenceMarker && recordData.type === "lecm-orgstr:employee") {
+								this.showEmployeeAutoAnswerPromt(recordData);
 							}
 						}
 					}
 					return true;
-				};
+				}.bind(this);
 				YAHOO.Bubbling.addDefaultAction("add-" + this.eventGroup, fnAddItemHandler, true);
 
 				// Hook create new item action click events (for Compact mode)
@@ -1540,36 +1540,36 @@ LogicECM.module = LogicECM.module || {};
 				{
 					if (this.doubleClickLock) return;
 					this.doubleClickLock = true;
-					var templateRequestParams = me.generateCreateNewParams(me.currentNode.data.nodeRef, me.options.itemType);
-					templateRequestParams["createNewMessage"] = me.options.createNewMessage;
+					var templateRequestParams = this.generateCreateNewParams(this.currentNode.data.nodeRef, this.options.itemType);
+					templateRequestParams["createNewMessage"] = this.options.createNewMessage;
 
-					new Alfresco.module.SimpleDialog("create-form-dialog-" + me.eventGroup).setOptions({
+					new Alfresco.module.SimpleDialog("create-form-dialog-" + this.eventGroup).setOptions({
 						width:"50em",
 						templateUrl: "lecm/components/form",
 						templateRequestParams: templateRequestParams,
 						actionUrl:null,
 						destroyOnHide:true,
 						doBeforeDialogShow:{
-							fn: me.doBeforeDialogShow,
-							scope: me
+							fn: this.doBeforeDialogShow,
+							scope: this
 						},
 						onSuccess:{
 							fn:function (response) {
-								me.addSelectedItem(response.json.persistedObject);
-								me._updateItems(me.currentNode.data.nodeRef, "");
-								me.doubleClickLock = false;
+								this.addSelectedItem(response.json.persistedObject);
+								this._updateItems(this.currentNode.data.nodeRef, "");
+								this.doubleClickLock = false;
 							},
 							scope:this
 						},
 						onFailure: {
 							fn:function (response) {
-								me.doubleClickLock = false;
+								this.doubleClickLock = false;
 							},
 							scope:this
 						}
 					}).show();
 					return true;
-				};
+				}.bind(this);
 				YAHOO.Bubbling.addDefaultAction("create-new-item-" + this.eventGroup, fnCreateNewItemHandler, true);
 			},
 
@@ -1680,8 +1680,6 @@ LogicECM.module = LogicECM.module || {};
 
 			renderItem: function (item, template)
 			{
-				var me = this;
-
 				var renderHelper = function (p_key, p_value, p_metadata)
 				{
 					return $html(p_value);
@@ -2291,7 +2289,6 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 			showEmployeeAutoAnswerPromt: function (item) {
-				var me = this;
 				var nodeRef = item.nodeRef;
 				var autoAnswerText = this.employeesAvailabilityInformation[nodeRef].answerExtended;
 				if (autoAnswerText) {
@@ -2311,15 +2308,20 @@ LogicECM.module = LogicECM.module || {};
 							},
 							{
 								text: this.msg("button.cancel"),
-								handler: function () {
-									this.destroy();
-									me.removeNode(null, {
+								handler: {
+									obj: {
+										context: this,
+										params: {
 										node: item,
 										updateForms: true
-									});
+								}
+									},
+									fn: function(event, obj) {
+										obj.context.removeNode(null, obj.params);
+										this.destroy();
+							}
 								}
 							}
-
 						]
 					});
 				}
@@ -2387,6 +2389,15 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
+			deferredReinit: function() {
+				this.init()
+				this.reinitDeferedList = new Alfresco.util.Deferred(["eventRecieved", "rootNodeLoaded"],
+					{
+						fn: this.deferredReinit,
+						scope: this
+					});
+			},
+
 			onReInitializeControl: function (layer, args) {
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 					var options = args[1].options;
@@ -2404,7 +2415,11 @@ LogicECM.module = LogicECM.module || {};
 					this.allowedNodes = null;
 					this.allowedNodesScript = null;
 
+					if(this.options.useDeferedReinit) {
+						this.reinitDeferedList.fulfil("eventRecieved");
+					} else {
 					this.init();
+				}
 				}
 			},
 

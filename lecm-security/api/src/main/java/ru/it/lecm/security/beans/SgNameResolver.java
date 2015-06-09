@@ -101,8 +101,8 @@ public class SgNameResolver {
 		if (hasAuth(simpleName)) {
 			sgFullName = this.authorityService.getName(AuthorityType.GROUP, simpleName);
 			// пропишем human-oriented данные, если они имеются
-			if (details != null)
-				this.authorityService.setAuthorityDisplayName( sgFullName, details);
+			/* if (details != null)
+				this.authorityService.setAuthorityDisplayName( sgFullName, details); */
 			logger.info(String.format("Alfresco security-group '%s' already exists for object '%s'", sgFullName, simpleName));
 		} else {
 			// sgFullName = this.authorityService.createAuthority(AuthorityType.GROUP, simpleName, details, null);

@@ -281,10 +281,11 @@
 	                <show id="lecm-errands:child-errands"/>
 	                <!-- Ссылки исполнения  -->
 	                <show id="lecm-errands:execution-links-assoc"/>
+                    <show id="change-executors-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="collapsable" appearance="" template="/ru/it/lecm/base-share/components/collapsable-set.ftl" />
-                    <set id="exist-bussines-role" parent="collapsable" appearance="ERRANDS_CHOOSING_INITIATOR" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
+                    <set id="exist-bussines-role" parent="collapsable" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
 	                <set id="collapsable-inner" parent="collapsable" appearance=""/>
 
                     <field id="lecm-errands:executor-assoc">
@@ -341,6 +342,12 @@
                             <control-param name="employeeAbsenceMarker">true</control-param>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
 	                        <control-param name="useStrictFilterByOrg">true</control-param>
+                            <control-param name="changeItemsFireAction">initiatorChanged</control-param>
+                        </control>
+                    </field>
+                    <field id="change-executors-script" set="exist-bussines-role">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:without-initiator-approval" set="collapsable-inner">

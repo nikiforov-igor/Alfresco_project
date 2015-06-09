@@ -51,4 +51,5 @@ public interface ArmWrapperService {
     public String getNodeSearchQuery(NodeRef nodeRef);
 
     public boolean isAccordion(NodeRef node);
+    public boolean isRunAsAccordion(NodeRef node);
 }

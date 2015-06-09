@@ -1,9 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.it.lecm.orgstructure.policies;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -14,19 +13,17 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
+import ru.it.lecm.secretary.SecretarySecurityService;
+import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.security.Types.SGPosition;
 
 /**
  * Базовый класс для политик, исопльзующих помимо прочего SG-нотификацию.
  */
-public abstract class SecurityNotificationsPolicyBase
-		extends BaseBean
-{
+public abstract class SecurityNotificationsPolicyBase extends BaseBean {
 	final protected Logger logger = LoggerFactory.getLogger (this.getClass());
 
-	final static protected String CHKNAME_POLICY_COMPONENT = "policyComponent";
-	final static protected String CHKNAME_ORGSTRUC_SERVICE =  "orgstructureService";
-	final static protected String CHKNAME_NODE_SERVICE = "nodeService";
+	private final static String[] CHEKING_PROPERTY_NAMES = {"policyComponent", "orgstructureService", "orgSGNotifier", "secretaryService", "secretarySecurityService"};
 
 	// final static protected String CHKNAME_SG_NOTIFIER = "sgNotifier";
 	// final static protected String CHKNAME_AUTH_SERVICE = "authService";
@@ -35,7 +32,8 @@ public abstract class SecurityNotificationsPolicyBase
 	protected PolicyComponent policyComponent;
 	protected OrgstructureBean orgstructureService;
 	protected OrgstructureSGNotifierBean orgSGNotifier;
-
+	private SecretaryService secretaryService;
+	private SecretarySecurityService secretarySecurityService;
 
 	public PolicyComponent getPolicyComponent() {
 		return policyComponent;
@@ -61,6 +59,22 @@ public abstract class SecurityNotificationsPolicyBase
 		this.orgSGNotifier = value;
 	}
 
+	public SecretaryService getSecretaryService() {
+		return secretaryService;
+	}
+
+		public void setSecretaryService(SecretaryService secretaryService) {
+		this.secretaryService = secretaryService;
+	}
+
+	public SecretarySecurityService getSecretarySecurityService() {
+		return secretarySecurityService;
+	}
+
+		public void setSecretarySecurityService(SecretarySecurityService secretarySecurityService) {
+		this.secretarySecurityService = secretarySecurityService;
+	}
+
 	/**
 	 * Инициализация и проверка заполнения указанных свойств
 	 * @param checkingPropertyNames
@@ -69,10 +83,12 @@ public abstract class SecurityNotificationsPolicyBase
 		for (final String name: checkingPropertyNames) {
 			try {
 				PropertyCheck.mandatory(this, name, PropertyUtils.getProperty(this, name));
-			} catch (Throwable ex) {
+			} catch(AlfrescoRuntimeException ex) {
+				throw ex;
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
 				final String info = String.format( "Problem accessing property '%s'", name);
 				logger.error( info, ex);
-				throw new RuntimeException( info, ex);
+				throw new AlfrescoRuntimeException(info, ex);
 			}
 		}
 	}
@@ -82,7 +98,7 @@ public abstract class SecurityNotificationsPolicyBase
 	 * (!) authService здесь не проверяется.
 	 */
 	public void init() {
-		init( CHKNAME_POLICY_COMPONENT, CHKNAME_ORGSTRUC_SERVICE, CHKNAME_NODE_SERVICE, CHKNAME_ORGSG_NOTIFIER);
+		init(CHEKING_PROPERTY_NAMES);
 	}
 
 	/**
@@ -263,5 +279,57 @@ public abstract class SecurityNotificationsPolicyBase
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
+	}
+
+	/**
+	 * оповещение об изменении позиции "руководителя"
+	 * @param employee сотрудник являющийся руководителем
+	 * @param unit подразделение в котором сотрудник занимает некую должность
+	 * @param isBoss является ли она на текущий момент руководящей
+	 */
+	protected void notifyChiefChangeDP(final NodeRef employee, final NodeRef unit, final boolean isBoss) {
+		if (secretaryService.isChief(employee)) {
+			secretarySecurityService.makeChiefBossOrEmployee(employee, unit, isBoss);
+			//проверить что employee больше не босс
+			if (!isBoss && !orgstructureService.isBoss(employee)) {
+				notifyChiefDown(employee);
+			}
+		}
+	}
+
+	/**
+	 * оповещение об изменнии позиции секретаря
+	 * @param employee сотрудник являющийся секретарем
+	 * @param isBoss является ли она на текущий момент руководящей
+	 */
+	protected void notifySecretaryChangeDP(final NodeRef employee, final boolean isBoss) {
+		if (secretaryService.isSecretary(employee)) {
+			secretarySecurityService.makeSecretaryBossOrEmployee(employee, isBoss);
+			if (isBoss) {
+				notifySecretaryDown(employee);
+			}
+		}
+	}
+
+	protected void notifyChiefDown(final NodeRef employee) {
+		boolean isChief = secretaryService.isChief(employee);
+		if (isChief) {
+			//удалить всех его секретарей
+			secretaryService.removeSecretaries(employee);
+			//удалить его группу SG_SECRETARY
+			secretarySecurityService.purgeSGSecretary(employee);
+		}
+	}
+
+	protected void notifySecretaryDown(final NodeRef employee) {
+		boolean isSecretary = secretaryService.isChief(employee);
+		if (isSecretary) {
+			//получить всех "руководителей" секретаря
+			List<NodeRef> allChiefs = secretaryService.getPrimaryChiefs(employee);
+			//удалить этого секретаря от каждого руководителя
+			for (NodeRef chief : allChiefs) {
+				secretaryService.removeSecretary(chief, employee);
+			}
+		}
 	}
 }

@@ -28,6 +28,7 @@ public class ArmNode {
 	private List<String> createTypes;
 	private String htmlUrl;
 	private String reportCodes;
+    private NodeRef runAsEmployee;
 
     private ArmBaseChildRule nodeQuery;
 
@@ -165,4 +166,12 @@ public class ArmNode {
 	public void setSearchType(String searchType) {
 		this.searchType = searchType;
 	}
+
+    public NodeRef getRunAsEmployee() {
+        return runAsEmployee;
+    }
+
+    public void setRunAsEmployee(NodeRef runAsEmployee) {
+        this.runAsEmployee = runAsEmployee;
+    }
 }

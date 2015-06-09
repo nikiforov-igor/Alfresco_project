@@ -157,6 +157,10 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
                 final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
                 if (changed) { // произошло переключение активности -> отработать ...
                     notifyEmploeeTie(nodeRef, nowActive);
+					if (!nowActive) { //если сотрудник стал неактивен, то лишишь секретарей прав
+						notifyChiefDown(nodeRef);
+						notifySecretaryDown(nodeRef);
+					}
                 }
 
                 //если сотрудник удаляется
@@ -274,6 +278,10 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
     public void onDeleteEmployeePersonAssociation(AssociationRef nodeAssocRef) {
         final NodeRef employee = nodeAssocRef.getSourceRef();
         final NodeRef person = nodeAssocRef.getTargetRef();
+		//если сотрудник стал неактивен, то лишишь секретарей прав
+		notifyChiefDown(employee);
+		notifySecretaryDown(employee);
+
         //Убираем логин пользователя
         nodeService.setProperty(employee, OrgstructureBean.PROP_EMPLOYEE_PERSON_LOGIN, "");
         // оповестить SG о том, что сотрудника оторвали от пользователя

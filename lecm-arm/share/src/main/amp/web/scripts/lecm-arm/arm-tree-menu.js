@@ -251,6 +251,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             root.data.createTypes  = node.createTypes;
             root.data.searchQuery  = node.searchQuery;
             root.data.searchType  = node.searchType;
+	        root.data.runAs  = node.runAs;
             root.id  = node.id;
             this._loadTree(root);
 
@@ -266,6 +267,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
                 if (node.data.armNodeRef != null) {
                     sUrl += "&armNodeRef=" + encodeURI(node.data.armNodeRef);
+                }
+                if (node.data.runAs != null) {
+                    sUrl += "&runAs=" + encodeURI(node.data.runAs);
                 }
             }
             var otree = this;
@@ -292,7 +296,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 counterDesc: oResults[nodeIndex].counterDesc,
                                 htmlUrl: oResults[nodeIndex].htmlUrl,
                                 reportCodes: oResults[nodeIndex].reportCodes,
-                                searchType: oResults[nodeIndex].searchType,
+	                            searchType: oResults[nodeIndex].searchType,
+                                runAs:oResults[nodeIndex].runAs,
                                 isAggregate: oResults[nodeIndex].isAggregate
                             };
 

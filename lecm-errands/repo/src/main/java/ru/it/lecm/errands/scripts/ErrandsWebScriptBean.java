@@ -163,6 +163,27 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     }
 
 	/**
+	 * Получение списка сотрудников, доступных данному пользователю для выбора
+	 * исполнителя и соисполнителей
+	 * @return список доступных исполнителей (сотрудников)
+	 */
+    public Scriptable getAvailableExecutors(ScriptNode employeeRef) {
+        List<NodeRef> results = errandsService.getAvailableExecutors(employeeRef.getNodeRef());
+        if (results != null) {
+            return createScriptable(results);
+        }
+        return null;
+    }
+
+	public Scriptable getAvailableExecutors(String employeeRef) {
+        List<NodeRef> results = errandsService.getAvailableExecutors(new NodeRef(employeeRef));
+        if (results != null) {
+            return createScriptable(results);
+        }
+        return null;
+    }
+
+	/**
 	 * Проверяет личные настройки "Без утверждения Инициатором"
 	 * @return true - если в личных настройках выбрано "Без утверждения
 	 * Инициатором"

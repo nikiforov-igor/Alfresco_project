@@ -113,7 +113,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
             }
         });
     }
-     
+
     @Override
     public NodeRef getServiceRootFolder() {
 	return getFolder(ERRANDS_ROOT_ID);
@@ -238,7 +238,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         }
         return settingsRef;
     }
-    
+
     @Override
     public boolean isDefaultWithoutInitiatorApproval() {
 		NodeRef settings = getCurrentUserSettingsNode();
@@ -277,14 +277,19 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     @Override
     public List<NodeRef> getAvailableExecutors() {
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+		return getAvailableExecutors(currentEmployee);
+    }
+
+	@Override
+    public List<NodeRef> getAvailableExecutors(NodeRef employeeRef) {
         if (getModeChoosingExecutors() == ModeChoosingExecutors.ORGANIZATION) {
             return null;
         } else {
-            NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-            List<NodeRef> subordinates = orgstructureService.getBossSubordinate(currentEmployee, true);
-
+            List<NodeRef> subordinates = orgstructureService.getBossSubordinate(employeeRef, true);
             List<NodeRef> result = new ArrayList<NodeRef>();
-            result.add(currentEmployee);
+
+            result.add(employeeRef);
             result.addAll(subordinates);
 
             return result;

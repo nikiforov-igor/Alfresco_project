@@ -64,6 +64,7 @@
 		<property name="documentMembersService" ref="documentMembersService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="dictionaryServiceAlfresco" ref="dictionaryService"/>
+		<property name="secretarySecurityService" ref="secretarySecurityService"/>
 	</bean>
 
     <!-- Настройки прав доступа на каталоги в рамках сервиса -->
@@ -106,6 +107,7 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/delegation-settings-arm.xml</value>
+                <value>alfresco/module/${artifactId}/arm/deputy-settings-arm.xml</value>
             </list>
         </property>
     </bean>
@@ -119,6 +121,4 @@
             </list>
         </property>
     </bean>
-
-
 </beans>

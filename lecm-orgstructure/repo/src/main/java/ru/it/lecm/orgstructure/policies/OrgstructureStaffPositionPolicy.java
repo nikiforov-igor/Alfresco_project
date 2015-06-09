@@ -3,7 +3,6 @@ package ru.it.lecm.orgstructure.policies;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
-import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -11,7 +10,6 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -28,18 +26,11 @@ public class OrgstructureStaffPositionPolicy
 {
     private LecmBasePropertiesService propertiesService;
 
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-		this.businessJournalService = businessJournalService;
-	}
-
-	public void setPolicyComponent(PolicyComponent policyComponent) {
-		this.policyComponent = policyComponent;
-	}
-
     public void setPropertiesService(LecmBasePropertiesService propertiesService) {
         this.propertiesService = propertiesService;
     }
 
+	@Override
 	public final void init() {
 		super.init();
 

@@ -110,6 +110,11 @@
 	<#assign endpointMany = (field.control.params.endpointMany == "true")>
 </#if>
 
+<#assign hideLabel = false/>
+<#if field.control.params.hideLabel?? && field.control.params.hideLabel == "true">
+	<#assign hideLabel = true/>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function() {
     LogicECM.CurrentModules = LogicECM.CurrentModules || {};
@@ -260,7 +265,7 @@
 
 <#if disabled>
 <div class="control association-autocomplete viewmode">
-    <div class="label-div">
+    <div class="label-div<#if hideLabel> hidden</#if>">
         <#if showViewIncompleteWarning && isFieldMandatory && !(fieldValue?is_number) && fieldValue?string == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
         </#if>
@@ -275,7 +280,7 @@
 </div>
 <#else>
 <div class="control association-autocomplete editmode">
-    <div class="label-div">
+    <div class="label-div<#if hideLabel> hidden</#if>">
         <label for="${controlId}-autocomplete-input">
             ${field.label?html}:
             <#if isFieldMandatory && showMandatoryIndicator><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>

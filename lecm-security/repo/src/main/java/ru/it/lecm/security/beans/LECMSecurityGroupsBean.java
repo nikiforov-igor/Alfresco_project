@@ -168,11 +168,13 @@ public class LECMSecurityGroupsBean
 		}
 	}
 
-	void ensureParent(String sgItemFullName, String sgParentFullName) {
+	@Override
+	public void ensureParent(String sgItemFullName, String sgParentFullName) {
 		ensureParentEx(sgItemFullName, sgParentFullName, AuthorityType.GROUP);
 	}
 
-	void ensureUserParent(String sgItemFullName, String sgParentFullName) {
+	@Override
+	public void ensureUserParent(String sgItemFullName, String sgParentFullName) {
 		ensureParentEx(sgItemFullName, sgParentFullName, AuthorityType.USER);
 	}
 
@@ -185,11 +187,13 @@ public class LECMSecurityGroupsBean
 		}
 	}
 
-	void removeParent(String sgFullItemName, String sgParentFullName) {
+	@Override
+	public void removeParent(String sgFullItemName, String sgParentFullName) {
 		removeParentEx(sgFullItemName, sgParentFullName, AuthorityType.GROUP);
 	}
 
-	void removeUserParent(String sgFullItemName, String sgParentFullName) {
+	@Override
+	public void removeUserParent(String sgFullItemName, String sgParentFullName) {
 		removeParentEx(sgFullItemName, sgParentFullName, AuthorityType.USER);
 	}
 

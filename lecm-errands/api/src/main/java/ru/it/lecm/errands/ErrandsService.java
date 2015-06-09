@@ -111,6 +111,14 @@ public interface ErrandsService {
     public List<NodeRef> getAvailableExecutors();
 
     /**
+     * Получение списка сотрудников, доступных данному пользователю для выбора
+     * исполнителя и соисполнителей
+     *
+     * @return список сотрудников
+     */
+    public List<NodeRef> getAvailableExecutors(NodeRef employeeRef);
+
+    /**
      * Проверяет личные настройки "Без утверждения Инициатором"
      *
      * @return true - если в личных настройках выбрано "Без утверждения

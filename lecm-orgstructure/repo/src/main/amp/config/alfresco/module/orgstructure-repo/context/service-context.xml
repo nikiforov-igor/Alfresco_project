@@ -116,54 +116,35 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 	</bean>
 
-	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy"
-		  init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent"/>
+	<bean id="securityNotificationsPolicyBase" class="ru.it.lecm.orgstructure.policies.SecurityNotificationsPolicyBase" init-method="init" abstract="true" parent="baseBean">
+		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="secretarySecurityService" ref="secretarySecurityService"/>
+		<property name="secretaryService" ref="secretaryService"/>
 	</bean>
 
-	<bean id="orgstructureBusinessRolePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBusinessRolePolicy"
-		  init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
-        <property name="propertiesService" ref="propertiesService"/>
-	</bean>
-
-	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePrimaryPositionPolicy"
-		  init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<!-- <property name="orgSGNotifier" ref="orgstructureSGNotifierBean" /> -->
-	</bean>
-
-	<bean id="orgstucturePersonEmployeeRelationsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePersonEmployeeRelationsPolicy"
-		  init-method="init" parent="baseBean" depends-on="serviceOrgstructure">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+	<bean id="securityJournalizedPolicyBase" class="ru.it.lecm.orgstructure.policies.SecurityJournalizedPolicyBase" parent="securityNotificationsPolicyBase" abstract="true">
 		<property name="businessJournalService" ref="businessJournalService"/>
+	</bean>
+
+	<bean id="orgstructureBossPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBossPolicy" parent="securityNotificationsPolicyBase"/>
+
+	<bean id="orgstructureBusinessRolePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureBusinessRolePolicy" parent="securityNotificationsPolicyBase">
+		<property name="propertiesService" ref="propertiesService"/>
+	</bean>
+
+	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePrimaryPositionPolicy" parent="securityNotificationsPolicyBase"/>
+
+	<bean id="orgstucturePersonEmployeeRelationsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePersonEmployeeRelationsPolicy" parent="securityJournalizedPolicyBase">
 		<property name="behaviourFilter" ref="policyBehaviourFilter" />
 		<property name="scheduleService" ref="ScheduleService"/>
 		<property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
-	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
-		  init-method="init" parent="baseBean" depends-on="lecmSecurityGroupsBean">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
-		<property name="businessJournalService" ref="businessJournalService"/>
-	</bean>
+	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy" parent="securityJournalizedPolicyBase"/>
 
-
-	<bean id="orgstructureUnitPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureUnitPolicy"
-		  init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+	<bean id="orgstructureUnitPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureUnitPolicy" parent="securityJournalizedPolicyBase">
 		<property name="scheduleService" ref="ScheduleService"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="permissionService" ref="permissionService"/>
@@ -171,12 +152,7 @@
         <property name="dictionaryBean" ref="serviceDictionary"/>
     </bean>
 
-	<bean id="orgstructureStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListPolicy"
-		  init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
-		<property name="businessJournalService" ref="businessJournalService"/>
+	<bean id="orgstructureStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListPolicy" init-method="init" parent="securityJournalizedPolicyBase">
 		<property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
@@ -186,31 +162,15 @@
 		<property name="businessJournalService" ref="businessJournalService" />
 	</bean>
 
-	<bean id="orgstructureStaffPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPositionPolicy"
-		init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent" />
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
-		<property name="businessJournalService" ref="businessJournalService"/>
+	<bean id="orgstructureStaffPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffPositionPolicy" parent="securityJournalizedPolicyBase">
 		<property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
-	<bean id="orgstructureWorkGroupPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkGroupPolicy"
-		init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent" />
-		<property name="orgstructureService" ref="serviceOrgstructure" />
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
-		<property name="businessJournalService" ref="businessJournalService" />
+	<bean id="orgstructureWorkGroupPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkGroupPolicy" parent="securityJournalizedPolicyBase">
 		<property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
-	<bean id="orgstructureWorkForcePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkForcePolicy"
-		init-method="init" parent="baseBean">
-		<property name="policyComponent" ref="policyComponent" />
-		<property name="orgstructureService" ref="serviceOrgstructure" />
-		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
-		<property name="businessJournalService" ref="businessJournalService" />
-	</bean>
+	<bean id="orgstructureWorkForcePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkForcePolicy" parent="securityJournalizedPolicyBase"/>
 
     <bean id="orgstructureGenerateNamePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureGenerateNamesPolicy"
           init-method="init" parent="baseBean">
@@ -364,13 +324,7 @@
         </property>
     </bean>
 
-    <bean id="orgstructureEmployeeOrganizationPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeOrganizationPolicy"
-          init-method="init" parent="baseBean" depends-on="lecmSecurityGroupsBean">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
-        <property name="businessJournalService" ref="businessJournalService"/>
-    </bean>
+    <bean id="orgstructureEmployeeOrganizationPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeOrganizationPolicy" parent="securityJournalizedPolicyBase"/>
 
     <bean id="inUserOrganizationProcessor" class="ru.it.lecm.orgstructure.processors.InSameOrganizationProcessor" parent="searchQueryBaseProccesor">
         <property name="id" value="IN_SAME_ORGANIZATION"/>

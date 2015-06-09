@@ -7,6 +7,8 @@
 		<property name="configs">
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/delegation/delegation-share-config-custom.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/secretary/secretary-share-config-custom.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/deputy/deputy-share-config-custom.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -15,6 +17,8 @@
 		<property name="resourceBundles">
 			<list>
 				<value>alfresco.web-extension.ru.it.lecm.delegation.form</value>
+				<value>alfresco.web-extension.ru.it.lecm.secretary.form</value>
+				<value>alfresco.web-extension.ru.it.lecm.deputy.form</value>
 			</list>
 		</property>
 	</bean>

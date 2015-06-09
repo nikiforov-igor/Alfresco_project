@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_BUSINESS_ROLE;
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_EMPLOYEE;
+import ru.it.lecm.secretary.SecretaryService;
 
 /**
  * User: AIvkin Date: 10.01.13 Time: 16:53
@@ -43,6 +44,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private OrgstructureBean orgstructureService;
     private DictionaryBean dictionaryService;
     private SubstitudeBean substituteService;
+	private SecretaryService secretaryService;
 
 	private Map<NodeRef, NotificationChannelBeanBase> channels;
 	private Map<String, NodeRef> channelsNodeRefs;
@@ -75,6 +77,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
         this.threadPoolExecutor = threadPoolExecutor;
     }
+
+	public void setSecretaryService(SecretaryService secretaryService) {
+		this.secretaryService = secretaryService;
+	}
 
     public Map<NodeRef, NotificationChannelBeanBase> getChannels() {
         if (this.channels == null) {
@@ -274,8 +280,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
             Set<NodeRef> tmpEmployeeRefs = new HashSet<>(employeeRefs);
             for (NodeRef employee : tmpEmployeeRefs) {
                 NodeRef delegationOpts = findNodeByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+                Boolean active = false;
                 if (delegationOpts != null) {
-                    Boolean active = (Boolean) nodeService.getProperty(delegationOpts, IS_ACTIVE);
+                    active = Boolean.TRUE.equals(nodeService.getProperty(delegationOpts, IS_ACTIVE));
                     if (active) {
                         NodeRef trustee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
                         if (trustee != null) {
@@ -304,6 +311,33 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 						}
                     }
                 }
+				//если активирован флаг "включать секретарей", а также делегирования или нет совсем, или оно не активно
+				//то для каждого сотрудника из списка рассылки мы получаем секретарей
+				// и формируем для них особый текст уведомления
+				if (generalizedNotification.isIncludeSeretaries() && (delegationOpts == null || !active)) {
+					NodeRef tasksSecretary = secretaryService.getTasksSecretary(employee);
+					if (tasksSecretary != null) {
+						List<NodeRef> typeRefs = generalizedNotification.getTypeRefs();
+						if (typeRefs == null || typeRefs.isEmpty()) {
+							typeRefs = getEmployeeDefaultNotificationTypes(tasksSecretary);
+            }
+						String description = String.format("Уведомление для %s: %s",
+								nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME),
+								generalizedNotification.getDescription());
+						for (NodeRef typeRef : typeRefs) {
+							NotificationUnit newNotificationUnit = new NotificationUnit();
+							newNotificationUnit.setAutor(generalizedNotification.getAuthor());
+							newNotificationUnit.setDescription(description);
+							newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
+							newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
+
+							newNotificationUnit.setTypeRef(typeRef);
+							newNotificationUnit.setRecipientRef(tasksSecretary);
+							result.add(newNotificationUnit);
+						}
+					}
+					logger.trace("Secretaties added. Current size: {}", employeeRefs.size());
+				}
             }
             logger.trace("Delegates added. Current size: {}", employeeRefs.size());
             result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));

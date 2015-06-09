@@ -54,6 +54,8 @@ public final class Types {
 	final static public String SFX_BRME = "$BRME" + SFX_DELIM;   // by id user & id role
 	final static public String SFX_SPEC = "$SPEC" + SFX_DELIM;   // by id user & low-level permission group name
 
+	final static public String SFX_SECRETARY = "$SECRETARY" + SFX_DELIM; //by id user
+
 	final static public String SFX_PRIV4USER = SFX_DELIM+ "PRIV4USER"; // окончание для индикации личной security-группы пользователя
 
 
@@ -95,8 +97,10 @@ public final class Types {
 	 *    06	GROUP_LECM$BRME-nnn-mmm		личная sec-группа пользователя id=mmm для Бизнес Роли nnn
 	 *    		(?) или GROUP_LECM$BR-nnn$U-mmm
 	 * Дополнительно можно иметь:
-	 *    	07	GROUP_LECM$BR-nnn$OU-mmm		sec-группа Бизнес Роли nnn, выданной Подразделению mmm
-	 *    	08	GROUP_LECM$BR-nnn$DP-mmm		sec-группа Бизнес Роли nnn, выданной на Должностную Позицию mmm
+	 *    07	GROUP_LECM$BR-nnn$OU-mmm		sec-группа Бизнес Роли nnn, выданной Подразделению mmm
+	 *    08	GROUP_LECM$BR-nnn$DP-mmm		sec-группа Бизнес Роли nnn, выданной на Должностную Позицию mmm
+	 * security-группа для пользователей являющихся секретарями
+	 *    09	GROUP_LECM$SECRETARY-nnn	личная sec-группа "руководителя" у которого есть секретари с id=nnn
 	 *
 	 * @author rabdullin
 	 */
@@ -112,6 +116,7 @@ public final class Types {
 		, SG_BRME(SFX_BRME, "Private User Business Role Point")	// личная группа Сотрудника-пользователя для конкретной бизнес-роли
 
 		, SG_SPEC(SFX_SPEC, "Individual user access for node") // индивидуальный доступ Сотрудника на конкретный узел
+		, SG_SECRETARY(SFX_SECRETARY, "Secretary point") //личная группа "руководителя" для его секретарей
 		;
 
 		final private String suffix;
@@ -155,7 +160,7 @@ public final class Types {
 		 * @return
 		 */
 		public SGPosition getSGPos(String objId, String displayName) {
-			if (this == SG_ME) { 
+			if (this == SG_ME) {
 				logger.warn( "use special method getSGMeOfUser() instead getSGPos() ...");
 				return new SGPrivateMeOfUser(objId, null, displayName); // (!) use getSGMeOfUser(...)
 			}
@@ -171,6 +176,10 @@ public final class Types {
 				return new SGBusinessRole(objId, displayName);
 			if (this == SG_SPEC)
 				return new SGSpecialCustom(objId, displayName);
+			if (this == SG_SECRETARY) {
+				logger.warn("use special method getSGSecretaryOfUser() instead of getSGPos() ...");
+				return new SGSecretaryOfUser(objId, null, displayName); // (!) use getSGSecretaryOfUser(...)
+			}
 
 			// if (this == SG_BRME) return new SGPrivateBusinessRole(objId, moreId);
 			throw new RuntimeException( String.format("Cannot create simple locate descriptor for sg-enum %s", this));
@@ -216,6 +225,14 @@ public final class Types {
 
 		public static SGPrivateMeOfUser getSGMeOfUser(String userId, String login) {
 			return new SGPrivateMeOfUser(userId, login, null);
+		}
+
+		public static SGSecretaryOfUser getSGSecretaryOfUser(String employeeId, String userLogin, String displayInfo) {
+			return new SGSecretaryOfUser(employeeId, userLogin, displayInfo);
+		}
+
+		public static SGSecretaryOfUser getSGSecretaryOfUser(String employeeId, String userLogin) {
+			return getSGSecretaryOfUser(employeeId, userLogin, null);
 		}
 	}
 
@@ -305,7 +322,7 @@ public final class Types {
 		}
 
 		/**
-		 * Ясный синоним getId() 
+		 * Ясный синоним getId()
 		 * @return uuid Сотрудника
 		 */
 		public String getEmployeeId() {
@@ -391,7 +408,7 @@ public final class Types {
 		 */
 		@Override
 		public String getAlfrescoSuffix() {
-			// не подвязываемся на userId, т.к. оно может быть NULL, в то же время 
+			// не подвязываемся на userId, т.к. оно может быть NULL, в то же время
 			// в качестве Id для this будет уникальное значение и его будет
 			// вполне достаточно для уникальности security-группы
 			return super.getAlfrescoSuffix() + SFX_PRIV4USER; // "-" + this.getUserId();
@@ -442,12 +459,12 @@ public final class Types {
 	/**
 	 * Индикатор Индивидуальной роли Сотрудника в документе.
 	 */
-	public static class SGSpecialUserRole extends SGPositionWithUser 
+	public static class SGSpecialUserRole extends SGPositionWithUser
 	{
 		public SGSpecialUserRole(String employeeId, NodeRef nodeRef,
 				LecmPermissionGroup permissionGroup, String userLogin) {
 			super( SGKind.SG_SPEC, permissionGroup.getName()
-					, /*displayInfo*/ String.format("user <%s> individual access <%s>", userLogin, permissionGroup.getName())// по-идее главное тут пользователь и группа, а сам узел nodeRef.getId() не важен 
+					, /*displayInfo*/ String.format("user <%s> individual access <%s>", userLogin, permissionGroup.getName())// по-идее главное тут пользователь и группа, а сам узел nodeRef.getId() не важен
 					, employeeId, userLogin);
 		}
 
@@ -471,10 +488,10 @@ public final class Types {
 	}
 
 	/**
-	 * Индикатор некоторой/специальной группы, определяемой заданным уникальным 
+	 * Индикатор некоторой/специальной группы, определяемой заданным уникальным
 	 * названияем (Ключом).
 	 *    Предполагается для использования в динамике activity-процессов.
-	 *    Например, в имя группы ввести id задачи (TASK_NNNNNNN), затем этой 
+	 *    Например, в имя группы ввести id задачи (TASK_NNNNNNN), затем этой
 	 * группе выдать права на документ (LecmPermissionService.grantAccessByPosition),
 	 * и включить в этй группу нужных Сотрудников (IOrgStructureNotifiers.sgInclude):
 	 *
@@ -487,7 +504,7 @@ public final class Types {
 	 *  lecmSecurityGroupsBean.sgInclude( posUsr1, posGrp);
 	 *  lecmSecurityGroupsBean.sgInclude( posUsr2, posGrp);
 	 *  lecmSecurityGroupsBean.sgInclude( SGKind.SG_ME.getSGMeOfUser( userId3, login3), posGrp); // вполне себе читабельно и без промежутоных объектов posXXX )
-	 *  
+	 *
 	 *  // выдача прав "ответственный сотрудник" группе posGrp на документ node ...
 	 *  LecmPermissionGroup perms = lecmPermissionServiceBean.findPermissionGroup("LECM_BASIC_PG_ResponsibleEmployee");
 	 *  lecmPermissionServiceBean.grantAccessByPosition( perms, node, posGrp);
@@ -548,7 +565,7 @@ public final class Types {
         }
 
     }
-	
+
 	/**
      * Индикатор рабочей группы.
      * название или Id объекта Альфреско можно использовать как super.id
@@ -640,4 +657,39 @@ public final class Types {
 		}
 	}
 
+	public static class SGSecretaryOfUser extends SGPosition {
+
+		private String userLogin;
+
+		public SGSecretaryOfUser(String employeeId) {
+			super(SGKind.SG_SECRETARY, employeeId);
+		}
+
+		public SGSecretaryOfUser(String employeeId, String userLogin, String displayInfo) {
+			super(SGKind.SG_SECRETARY, employeeId, displayInfo);
+			this.userLogin = userLogin;
+		}
+
+		public String getUserLogin() {
+			return userLogin;
+		}
+
+		public void setUserLogin(String userLogin) {
+			this.userLogin = userLogin;
+		}
+
+		public String getEmployeeId() {
+			return getId();
+		}
+
+		public void setEmployeeId(String employeeId) {
+			setId(employeeId);
+		}
+
+		@Override
+		public String getDisplayInfo() {
+			final String info = super.getDisplayInfo();
+			return (info != null) ? info : String.format("Secretary group for user <%s> of employee <%s>", this.userLogin, this.getId());
+		}
+	}
 }

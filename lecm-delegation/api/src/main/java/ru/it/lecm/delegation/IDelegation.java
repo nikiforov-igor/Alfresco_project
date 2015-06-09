@@ -105,6 +105,7 @@ public interface IDelegation {
 	QName PROP_CREATE_DOCUMENT_DELEGATION_SETTING = QName.createQName(DELEGATION_NAMESPACE, "create-document-delegation-setting");
 	String DELEGATION_SETTINGS_NODE_NAME = "Settings";
 
+
 	/**
 	 * получение ссылки на папку сервиса делегирования
 	 * если папка отсутствует она будет создана

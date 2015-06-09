@@ -22,8 +22,8 @@ public abstract class SecurityJournalizedPolicyBase
 
 	@Override
 	public void init() {
-		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 		super.init();
+		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
 	}
 
 }

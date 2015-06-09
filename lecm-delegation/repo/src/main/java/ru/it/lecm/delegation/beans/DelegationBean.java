@@ -42,6 +42,7 @@ import ru.it.lecm.wcalendar.absence.IAbsence;
 
 import java.io.Serializable;
 import java.util.*;
+import ru.it.lecm.secretary.SecretarySecurityService;
 
 public class DelegationBean extends BaseBean implements IDelegation, IDelegationDescriptor {
 
@@ -65,6 +66,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	private NotificationsService notificationsService;
 	private DocumentMembersService documentMembersService;
 	private LecmPermissionService lecmPermissionService;
+	private SecretarySecurityService secretarySecurityService;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -110,6 +112,10 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		this.documentMembersService = documentMembersService;
 	}
 
+	public void setSecretarySecurityService(SecretarySecurityService secretarySecurityService) {
+		this.secretarySecurityService = secretarySecurityService;
+	}
+
 	public final void init() {
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
@@ -124,6 +130,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		PropertyCheck.mandatory(this, "dictionaryService", dictionaryServiceAlfresco);
 		PropertyCheck.mandatory(this, "documentMembersService", documentMembersService);
 		PropertyCheck.mandatory(this, "lecmPermissionService", lecmPermissionService);
+		PropertyCheck.mandatory(this, "secretarySecurityService", secretarySecurityService);
 
 		//создание контейнера для хранения параметров делегирования
 		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
@@ -531,12 +538,14 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			}
 		}
 
-		//заместитель
+		//полный делегат
 		NodeRef bossAssistant = findNodeByAssociationRef(delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 
 		if (bossAssistant != null) {
 			if (orgstructureService.isBoss(sourceEmployee, false)) { // Если делегирующий Начальник, то включаем делегируемого в SV
 				sgNotifierService.notifyBossDelegationChanged(sourceEmployee, bossAssistant, created);
+				//группу SG_SECRETARY пользователя bossAssistant надо включить в SG_SV группы пользователя sourceEmployee
+				secretarySecurityService.notifyChiefDelegationChanged(sourceEmployee, bossAssistant, created);
 			}
 			final List<NodeRef> businessRolesBySourceEmployee = this.getUniqueBusinessRolesByEmployee(sourceEmployee, true);
 			for (NodeRef sourceEmployeeBusinessRole : businessRolesBySourceEmployee) {

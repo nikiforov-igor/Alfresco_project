@@ -535,7 +535,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             showDialog: function ADVSearch_showDialog(metaData) {
                 var defaultForm = new Object();
-                defaultForm.id = "search";
+                defaultForm.id = this.dataGrid.options.searchForm ? this.dataGrid.options.searchForm : "search";
                 defaultForm.type = metaData.itemType;
 
                 if (this.options.showExtendSearchBlock) { // если заданы соответствующая опция

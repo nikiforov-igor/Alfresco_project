@@ -8,7 +8,6 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -22,10 +21,6 @@ public class OrgstructureWorkForcePolicy
 		implements NodeServicePolicies.OnCreateNodePolicy
 					, NodeServicePolicies.BeforeDeleteNodePolicy
 {
-
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-		this.businessJournalService = businessJournalService;
-	}
 
 	@Override
 	public void init() {

@@ -9,7 +9,6 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -32,10 +31,6 @@ public class OrgstructureStaffListPolicy
 
     private LecmBasePropertiesService propertiesService;
 
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
-		this.businessJournalService = businessJournalService;
-	}
-
     public void setPropertiesService(LecmBasePropertiesService propertiesService) {
         this.propertiesService = propertiesService;
     }
@@ -54,7 +49,8 @@ public class OrgstructureStaffListPolicy
     public void onDeleteStaffListLog(NodeRef staff) {
         final NodeRef unit = orgstructureService.getUnitByStaff(staff);
 		final NodeRef positionRef = orgstructureService.getPositionByStaff(staff);
-        List<String> objects = Arrays.asList(positionRef.toString());
+		final NodeRef employee = orgstructureService.getEmployeeByPosition(staff);
+		List<String> objects = Arrays.asList(positionRef.toString());
         businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "#initiator внес(ла) сведения об исключении должности #object1 из подразделения #mainobject", objects);
         objects = new ArrayList<>();
         objects.add(positionRef.toString());
@@ -64,6 +60,10 @@ public class OrgstructureStaffListPolicy
         // исключение штаной SG_DP ...
         final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staff, nodeService, orgstructureService, logger);
         this.orgSGNotifier.notifyNodeDeactivated(sgDP);
+		if (employee != null) {
+			notifyChiefChangeDP(employee, unit, false);
+			notifySecretaryChangeDP(employee, false);
+		}
     }
 
 	public void onCreateStaffListLog(ChildAssociationRef childAssocRef) {
@@ -115,6 +115,8 @@ public class OrgstructureStaffListPolicy
 						defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
 						category = EventCategory.RELEASE_BOSS_POSITION;
 					}
+					notifyChiefChangeDP(employee, unit, curPrimary);
+					notifySecretaryChangeDP(employee, curPrimary);
 					final List<String> objects = Arrays.asList(unit.toString());
 					businessJournalService.log(employee, category, defaultDescription, objects);
 				}

@@ -54,6 +54,11 @@
     <#assign endpointMany = (field.control.params.endpointMany == "true")>
 </#if>
 
+<#assign useDeferedReinit = false>
+<#if params.useDeferedReinit?? && params.useDeferedReinit == "true">
+    <#assign useDeferedReinit = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -229,6 +234,7 @@
 				additionalFilter: "${params.additionalFilter!''}",
 				showAssocViewForm: ${showAssocViewForm?string},
 				checkType: ${checkType?string},
+				useDeferedReinit: ${useDeferedReinit?string},
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}"
 			}).setMessages( ${messages} );

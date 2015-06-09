@@ -54,6 +54,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 	public static final String HTML_URL = "htmlUrl";
 	public static final String REPORT_CODES = "reportCodes";
 
+    public static final String RUN_AS = "runAs";
+
     private ArmWrapperServiceImpl service;
 	private DictionaryService dictionaryService;
 	private NamespaceService namespaceService;
@@ -102,19 +104,20 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         String nodeRef = req.getParameter(NODE_REF);
         String armNodeRef = req.getParameter(ARM_NODE_REF);
         String armCode = req.getParameter(ARM_CODE);
+        String runAs = req.getParameter(RUN_AS);
 
         if (nodeRef == null) { // получаем список корневых узлов - аккордеонов для заданного АРМ
             List<ArmNode> accordions = service.getAccordionsByArmCode(armCode);
 	        Map<String, Boolean> isStarterHash = new HashMap<String, Boolean>();
             for (ArmNode accordion : accordions) {
-                nodes.add(toJSON(accordion, true, isStarterHash));
+                nodes.add(toJSON(accordion, true, isStarterHash, runAs));
             }
         } else {
             // получение списка дочерних элементов
             if (NodeRef.isNodeRef(nodeRef)) {
                 List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef));
                 for (ArmNode child : childs) {
-                    nodes.add(toJSON(child, false, null));
+                    nodes.add(toJSON(child, false, null, runAs));
                 }
             }
         }
@@ -127,14 +130,20 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         }
     }
 
-    private JSONObject toJSON(ArmNode node, boolean isAccordionNode, Map<String, Boolean> isStarterHash) {
+    private JSONObject toJSON(ArmNode node, boolean isAccordionNode, Map<String, Boolean> isStarterHash, String runAs) {
         JSONObject result = new JSONObject();
         try {
-            result.put(ID, node.getNodeRef() != null ?
+            String nodeId = (node.getNodeRef() != null ?
                     node.getNodeRef().getId() :
                     (node.getArmNodeRef() != null ?
                             node.getArmNodeRef().getId() + "-" + node.getTitle():
                             node.getTitle()));
+            if (node.getRunAsEmployee() == null && runAs == null) {
+                result.put(ID, nodeId);
+            } else {
+                String employeeId = node.getRunAsEmployee()!= null ? node.getRunAsEmployee().toString()  : runAs;
+                result.put(ID, nodeId + "-" + employeeId);
+            }
             result.put(NODE_REF, node.getNodeRef() != null ? node.getNodeRef().toString() : null);
 	        result.put(NODE_TYPE, node.getNodeType() != null ? node.getNodeType() : null);
 
@@ -159,7 +168,13 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(FILTER, getFiltersJSON(node.getAvaiableFilters()));
 
             if (node.getSearchQuery() != null) {
-                result.put(SEARCH_QUERY, node.getSearchQuery());
+                String query = node.getSearchQuery();
+                if (runAs != null && !runAs.isEmpty()) {
+                    if (query.contains("#current-user")) {
+                        query = query.replaceAll("#current-user", runAs);
+            }
+                }
+                result.put(SEARCH_QUERY, query);
             }
 
             if (node.getCounter() != null) {
@@ -173,6 +188,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 	        result.put(HTML_URL,node.getHtmlUrl());
 	        result.put(REPORT_CODES,node.getReportCodes());
 	        result.put(SEARCH_TYPE,node.getSearchType());
+
+            result.put(RUN_AS, node.getRunAsEmployee() != null ? node.getRunAsEmployee().toString() : runAs);
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }

@@ -179,6 +179,31 @@
 		</forms>
 	</config>
 
+	<config evaluator="model-type" condition="lecm-arm:accordion-runAs">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-arm:path-to-node"/>
+					<show id="lecm-arm:path-to-node"/>
+					<show id="lecm-arm:runAs-employee"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-arm:accordion-runAs">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-arm:path-to-node"/>
+					<show id="lecm-arm:path-to-node"/>
+					<show id="lecm-arm:runAs-employee"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-arm:node">
 		<forms>
 			<form>
