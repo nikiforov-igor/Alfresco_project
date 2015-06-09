@@ -590,6 +590,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		if (initiator != null) {
 			mailTemplateModel.put("initiator", nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
 			mailTemplateModel.put("initiatorMail", nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_EMAIL));
+
+			NodeRef organization = orgstructureBean.getEmployeeOrganization(initiator);
+			if (organization != null) {
+				mailTemplateModel.put("organization", nodeService.getProperty(organization, Contractors.PROP_CONTRACTOR_FULLNAME));
+			}
 		}
 
 		Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
