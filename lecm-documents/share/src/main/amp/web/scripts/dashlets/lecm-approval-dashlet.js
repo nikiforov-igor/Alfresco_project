@@ -57,7 +57,7 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 			getStageView: function (status, stage) {
 				var resultsText = "";
                 var btnEl = document.createElement('div');
-                var id = "approval-stage-btn_" + stage.nodeRef;
+                var id = "approval-stage-btn_" + stage.nodeRef + "_" + Alfresco.util.generateDomId();
 
                 btnEl.id = id;
                 Dom.addClass(btnEl, "approval-stage-btn " + collapsedClass);
