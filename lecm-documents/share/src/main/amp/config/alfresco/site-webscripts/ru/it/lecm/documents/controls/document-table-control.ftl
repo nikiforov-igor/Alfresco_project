@@ -24,6 +24,10 @@
     <#assign showSearch = params.showSearch=="true"/>
 </#if>
 
+<#assign showLabel = false>
+<#if field.control.params.showLabel?? &&  field.control.params.showLabel == "true">
+    <#assign showLabel = true>
+</#if>
 
 <#assign expandDataSource=""/>
 <#if params.expandDataSource?has_content>
@@ -149,6 +153,14 @@
 //]]></script>
 
 <div class="control document-table-control with-grid">
+	<div class="label-div">
+		<#if showLabel>
+			<label for="${fieldHtmlId}">
+			${field.label?html}:
+				<#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
+			</label>
+		</#if>
+	</div>
     <div class="container">
         <div class="value-div">
         <#if toolbar == "true" && form.mode?string=="edit">
