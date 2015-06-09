@@ -80,7 +80,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
          */
         protected XMLImporterImpl(InputStream inputStream) {
             this.inputStream = inputStream;
-	        this.assocs = new HashSet<>();
+	        this.assocs = new LinkedHashSet<>();
         }
 
         /**

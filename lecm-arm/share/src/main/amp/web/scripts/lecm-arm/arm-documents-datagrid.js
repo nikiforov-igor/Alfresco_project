@@ -9,6 +9,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 (function () {
 	var $combine = Alfresco.util.combinePaths;
 
+    var css = ['css/lecm-arm/arm-documents-datagrid.css'];
+    LogicECM.module.Base.Util.loadResources([], css);
+
     LogicECM.module.ARM.DataGrid = function (containerId) {
         LogicECM.module.ARM.DataGrid.superclass.constructor.call(this, containerId)
 
@@ -416,7 +419,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                     var tooltip = null;
                                     switch (datalistColumn.name.toLowerCase()) { //  меняем отрисовку для конкретных колонок
                                         case "lecm-events:title":
-                                        //case "lecm-eds-document:summarycontent":
+                                        case "lecm-document:title":
                                             if (columnContent.length > 150) {
                                                 tooltip = columnContent;
                                                 columnContent = columnContent.substring(0, 150) + "...";
@@ -435,7 +438,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                     }
 
                                     if (tooltip) {
-                                        columnContent = '<div title="' + tooltip + '">' + columnContent + '</div>';
+                                        columnContent = '<div class="tt">' + tooltip + '</div>' + columnContent;
                                     }
 
                                     html += columnContent;
