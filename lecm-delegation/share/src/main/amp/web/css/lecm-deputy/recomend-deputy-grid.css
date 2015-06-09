@@ -2,7 +2,7 @@
     visibility: hidden;
 }
 
-.hover-select:hover .centered {
+tr:hover .hover-select .centered {
 	visibility: visible;
 }
 
@@ -40,4 +40,8 @@ tr.highlight {
     height: 100%;
     position: absolute;
     background: rgba(128, 128, 128, 0.55);
+}
+
+.association-autocomplete .value-div input:disabled {
+    background-color: rgba(128, 128, 128, 0.25) !important;
 }
