@@ -648,6 +648,16 @@
         </forms>
     </config>
 
+	<config evaluator="node-type" condition=" lecm-events-ts:membersTable">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	
     <config evaluator="node-type" condition="lecm-events-ts:members">
         <forms>
             <form>
