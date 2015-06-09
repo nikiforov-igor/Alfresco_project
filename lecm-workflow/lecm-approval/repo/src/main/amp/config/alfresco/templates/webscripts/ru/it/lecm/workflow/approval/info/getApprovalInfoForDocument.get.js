@@ -16,6 +16,11 @@
 				var decisionPropDefinition = getFieldDefinition("lecmApproveAspects:approvalDecision", dictionaryService, namespaceService);
 				var statePropDefinition = getFieldDefinition("lecmApproveAspects:approvalState", dictionaryService, namespaceService);
 
+				children.sort(function(a, b)
+				{
+					return (a.properties["cm:created"] < b.properties["cm:created"]) ? -1 : (a.properties["cm:created"] > b.properties["cm:created"]) ? 1 : 0;
+				});
+
 				for (var i = 0; i < children.length; i++) {
 					var stage = children[i];
 					if (stage.typeShort == "lecmWorkflowRoutes:stage" && !stage.hasAspect("sys:temporary") && !stage.hasAspect("lecm-workflow:temp")) {
