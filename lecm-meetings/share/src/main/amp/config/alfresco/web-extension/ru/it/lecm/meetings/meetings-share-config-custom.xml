@@ -18,6 +18,26 @@
 			</dependencies>
 		</forms>
 	</config>
+	<config evaluator="node-type" condition="lecm-meetings-dic:agenda-point-states">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-meetings-dic:agenda-point-state-code"/>
+					<show id="cm:name"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="model-type" condition="lecm-meetings-dic:agenda-point-states">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-meetings-dic:agenda-point-state-code"/>
+					<show id="cm:name"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 	<config evaluator="node-type" condition="lecm-meetings:document">
 		<forms>
 			<form>
