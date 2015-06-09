@@ -413,12 +413,32 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                             }
                                             break;
                                     }
+                                    var tooltip = null;
+                                    switch (datalistColumn.name.toLowerCase()) { //  меняем отрисовку для конкретных колонок
+                                        case "lecm-events:title":
+                                        //case "lecm-eds-document:summarycontent":
+                                            if (columnContent.length > 150) {
+                                                tooltip = columnContent;
+                                                columnContent = columnContent.substring(0, 150) + "...";
+                                            }
+                                            break;
+                                        default:
+                                            if (datalistColumn.name.toLowerCase().indexOf("cm:nowrap") == 0) {
+                                                columnContent = "<div style='white-space: nowrap'>" + data.displayValue + "</div>";
+                                            }
+                                            break;
+                                    }
+
                                     var firstColumnIndex = scope.options.showCheckboxColumn ? 2 : 1;
                                     if (oColumn.getKeyIndex() == firstColumnIndex) {
-                                        html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + oRecord.getData("page") + '?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
-                                    } else {
-                                        html += columnContent;
+                                        columnContent = "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + oRecord.getData("page") + '?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                     }
+
+                                    if (tooltip) {
+                                        columnContent = '<div title="' + tooltip + '">' + columnContent + '</div>';
+                                    }
+
+                                    html += columnContent;
 
                                     if (i < ii - 1) {
                                         html += "<br />";
