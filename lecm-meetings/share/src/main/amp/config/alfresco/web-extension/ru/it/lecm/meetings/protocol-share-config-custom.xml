@@ -364,7 +364,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
@@ -388,7 +388,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
@@ -483,7 +483,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
@@ -507,7 +507,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
@@ -584,7 +584,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
@@ -608,7 +608,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">protocol.point.choose.addresser</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>

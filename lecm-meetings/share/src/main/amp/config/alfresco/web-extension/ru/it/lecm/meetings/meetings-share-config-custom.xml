@@ -188,12 +188,13 @@
 					</field>
 					<field id="lecm-meetings:approve-agenda"/>
 					<!--"Повестка"-->
-					<field id="lecm-meetings-ts:items-assoc">
+					<field id="lecm-meetings-ts:items-assoc" label-id="label.items">
 						<control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
 							<control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
 							<control-param name="datagridFormId">items-datagrid</control-param>
 							<control-param name="expandable">false</control-param>
 							<control-param name="usePagination">false</control-param>
+							<control-param name="showLabel">true</control-param>
 							<!--<control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
 							<control-param name="isTableSortable">false</control-param>
 							<control-param name="refreshAfterCreate">true</control-param>
@@ -523,13 +524,14 @@
                             <control-param name="allowExpand">false</control-param>
                             <control-param name="showActions">true</control-param>
                             <control-param name="fullDelete">true</control-param>
+                            <control-param name="isTableSortable">false</control-param>
                             <control-param name="height">100</control-param>
                             <control-param name="rootNode">{usertemp}</control-param>
                             <control-param name="showCreateButton">true</control-param>
                             <control-param name="showSearch">false</control-param>
                             <control-param name="showLabel">true</control-param>
-                            <control-param name="newRowTitle">new.item</control-param>
-                            <control-param name="editRowTitle">edit.item</control-param>
+                            <control-param name="newRowDialogTitle">meeting.item.create.form.title</control-param>
+                            <control-param name="editRowDialogTitle">meeting.item.edit.form.title</control-param>
 							<control-param name="datagridFormId">datagrid</control-param>
 						</control>
 					</field>
@@ -676,7 +678,7 @@
 					<show id="lecm-meetings-ts:attachments-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" force="true"/>
+					<field id="lecm-document:indexTableRow" read-only="true"/>
 					<field id="lecm-meetings-ts:reporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
@@ -705,7 +707,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
@@ -773,7 +775,7 @@
 					<show id="lecm-meetings-ts:documents-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" force="true"/>
+					<field id="lecm-document:indexTableRow" read-only="true"/>
 					<field id="lecm-meetings-ts:reporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
@@ -802,7 +804,7 @@
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
