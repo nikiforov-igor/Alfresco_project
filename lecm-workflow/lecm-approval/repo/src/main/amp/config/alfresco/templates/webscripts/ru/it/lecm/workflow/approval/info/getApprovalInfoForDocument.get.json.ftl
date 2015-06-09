@@ -16,7 +16,14 @@
                     {
                         "employee": "${item.employee}",
                         "dueDate": "<#if item.dueDate??>${item.dueDate?string("dd.MM.yyy")}</#if>",
-                        "state": "${item.state}"
+                        "decision": {
+                            "value": "${item.decision.value}",
+                            "displayValue": "${item.decision.displayValue}"
+                        },
+                        "state": {
+                            "value": "${item.state.value}",
+                            "displayValue": "${item.state.displayValue}"
+                        },
                     }<#if item_has_next>,</#if>
                     </#list>
                 ]

@@ -108,7 +108,11 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 					resultsText += ", " + this.msg("label.approval.dashlet.stage.term") + " ";
 					resultsText += item.dueDate;
 					resultsText += ", ";
-					resultsText += item.state;
+					if (item.decision.value === 'NO_DECISION') {
+						resultsText += item.state.displayValue;
+					} else {
+						resultsText += item.decision.displayValue;
+					}
 					resultsText += "</div>";
 				}
 

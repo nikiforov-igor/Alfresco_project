@@ -14,6 +14,7 @@
 				var namespaceService = ctx.getBean("namespaceService");
 
 				var decisionPropDefinition = getFieldDefinition("lecmApproveAspects:approvalDecision", dictionaryService, namespaceService);
+				var statePropDefinition = getFieldDefinition("lecmApproveAspects:approvalState", dictionaryService, namespaceService);
 
 				for (var i = 0; i < children.length; i++) {
 					var stage = children[i];
@@ -33,7 +34,14 @@
 									items.push({
 										employee: employeeName,
 										dueDate: item.properties["lecmWorkflowRoutes:stageItemDueDate"],
-										state: Evaluator.translateField(decisionPropDefinition, item.properties["lecmApproveAspects:approvalDecision"], dictionaryService)
+										decision: {
+											value: item.properties["lecmApproveAspects:approvalDecision"],
+											displayValue: Evaluator.translateField(decisionPropDefinition, item.properties["lecmApproveAspects:approvalDecision"], dictionaryService)
+										},
+										state: {
+											value: item.properties["lecmApproveAspects:approvalState"],
+											displayValue: Evaluator.translateField(statePropDefinition, item.properties["lecmApproveAspects:approvalState"], dictionaryService)
+										}
 									});
 								}
 							}
