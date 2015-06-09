@@ -54,10 +54,43 @@ public class DeputyServiceJavascriptExtesion extends BaseWebScript {
 		return new ScriptNode(deputyService.createDeputy(chiefRef.getNodeRef(), deputyEmployeeRef.getNodeRef(), subjects), serviceRegistry, getScope());
 	}
 
+	private List<NodeRef> getUnitBosses(NodeRef unitRef) {
+		List<NodeRef> result = new ArrayList<>();
+		NodeRef bossStaff = orgstructureService.getBossStaff(unitRef);
+		NodeRef bossEmployee = orgstructureService.getEmployeeByPosition(bossStaff);
+		if(bossEmployee != null) {
+			result.add(bossEmployee);
+		}
+
+		NodeRef parentUnit;
+
+		while((parentUnit = orgstructureService.getParentUnit(unitRef)) != null) {
+			bossStaff = orgstructureService.getBossStaff(parentUnit);
+			bossEmployee = orgstructureService.getEmployeeByPosition(bossStaff);
+			if(bossEmployee != null) {
+				result.add(bossEmployee);
+			}
+			unitRef = parentUnit;
+		}
+
+		return result;
+	}
+
+	private List<NodeRef> getAllBosses(NodeRef employee) {
+		List<NodeRef> employeeUnits = orgstructureService.getEmployeeUnits(employee, false);
+		List<NodeRef> result = new ArrayList<>();
+		for (NodeRef employeeUnit : employeeUnits) {
+			result.addAll(getUnitBosses(employeeUnit));
+		}
+
+		return result;
+	}
+
 	public String getIgnoredString(ScriptNode employee) {
 		NodeRef employeeNodeRef = employee.getNodeRef();
 		List<NodeRef> ignoredList = deputyService.getAllChiefs(employeeNodeRef);
 		ignoredList.add(employeeNodeRef);
+		ignoredList.addAll(getAllBosses(employeeNodeRef));
 
 		return Joiner.on(",").join(ignoredList);
 	}
