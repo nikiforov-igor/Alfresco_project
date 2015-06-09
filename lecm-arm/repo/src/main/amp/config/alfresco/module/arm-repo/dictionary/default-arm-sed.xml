@@ -252,8 +252,8 @@
                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                        <property name="lecm-arm:search-query">
-                            <![CDATA[(ISNOTNULL:"lecm-errands:limitation-date" AND @lecm\-errands\:limitation\-date:[MIN TO "#current-date"] AND (((@lecm\-statemachine\:status:'Ожидает исполнения' OR @lecm\-statemachine\:status:'В работе') AND @lecm\-errands\:executor\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении контролером' AND @lecm\-errands\:controller\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении инициатором' AND @lecm\-errands\:initiator\-assoc\-ref:"#current-user"))) OR (({{ACTIVE_TASKS_ONLY({tasks:['lecmReview:reviewTask']})}} OR (TYPE:"lecm-incoming:document" AND @lecm\-statemachine\:status:'На рассмотрении' AND @lecm\-eds\-document\:reviewers\-assoc\-ref:"*#current-user*")  OR {{ACTIVE_TASKS_ONLY({tasks:['lecmApprove3:approveTask']})}} OR {{ACTIVE_TASKS_ONLY({tasks:['lecmSign2:signTask']})}} OR (+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-internal:document" AND (@lecm\-statemachine\:status:'Направлен' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-ord:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-ord\:controller\-assoc\-ref:"*#current-user*"))) AND (ISNOTNULL:"lecm-eds-document:execution-date" AND @lecm\-eds\-document\:execution\-date:[MIN TO "#current-date"]))]]></property>
+                        <property
+                                name="lecm-arm:search-query"><![CDATA[(ISNOTNULL:"lecm-errands:limitation-date" AND @lecm\-errands\:limitation\-date:[MIN TO "#current-date"] AND (((@lecm\-statemachine\:status:'Ожидает исполнения' OR @lecm\-statemachine\:status:'В работе') AND @lecm\-errands\:executor\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении контролером' AND @lecm\-errands\:controller\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении инициатором' AND @lecm\-errands\:initiator\-assoc\-ref:"#current-user") OR ((@lecm\-statemachine\:status:'В работе' OR  @lecm\-statemachine\:status:'На доработке') AND @lecm\-errands\:coexecutors\-assoc\-ref:"#current-user"))) OR (({{ACTIVE_TASKS_ONLY({tasks:['lecmReview:reviewTask']})}} OR (TYPE:"lecm-incoming:document" AND @lecm\-statemachine\:status:'На рассмотрении' AND @lecm\-eds\-document\:reviewers\-assoc\-ref:"*#current-user*")  OR {{ACTIVE_TASKS_ONLY({tasks:['lecmApprove3:approveTask']})}} OR {{ACTIVE_TASKS_ONLY({tasks:['lecmSign2:signTask']})}} OR (+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-internal:document" AND (@lecm\-statemachine\:status:'Направлен' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-ord:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-ord\:controller\-assoc\-ref:"*#current-user*"))) AND (ISNOTNULL:"lecm-eds-document:execution-date" AND @lecm\-eds\-document\:execution\-date:[MIN TO "#current-date"]))]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:Поручения" type="lecm-arm:node">
@@ -265,20 +265,21 @@
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query">
-                                    <![CDATA[ISNOTNULL:"lecm-errands:limitation-date" AND @lecm\-errands\:limitation\-date:[MIN TO "#current-date"] AND (((@lecm\-statemachine\:status:'Ожидает исполнения' OR @lecm\-statemachine\:status:'В работе') AND @lecm\-errands\:executor\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении контролером' AND @lecm\-errands\:controller\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении инициатором' AND @lecm\-errands\:initiator\-assoc\-ref:"#current-user"))]]></property>
+                                <property
+                                        name="lecm-arm:search-query"><![CDATA[ISNOTNULL:"lecm-errands:limitation-date" AND @lecm\-errands\:limitation\-date:[MIN TO "#current-date"] AND (((@lecm\-statemachine\:status:'Ожидает исполнения' OR @lecm\-statemachine\:status:'В работе') AND @lecm\-errands\:executor\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении контролером' AND @lecm\-errands\:controller\-assoc\-ref:"#current-user") OR (@lecm\-statemachine\:status:'На утверждении инициатором' AND @lecm\-errands\:initiator\-assoc\-ref:"#current-user") OR ((@lecm\-statemachine\:status:'В работе' OR  @lecm\-statemachine\:status:'На доработке') AND @lecm\-errands\:coexecutors\-assoc\-ref:"#current-user"))]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <items>
                                     <item name="cm:Исполняемые мной" type="lecm-arm:node">
                                         <property name="cm:name"><![CDATA[Исполняемые мной]]></property>
                                         <property name="lecm-arm:order"><![CDATA[10]]></property>
                                         <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                                        <property name="lecm-arm:search-query">
-                                            <![CDATA[(@lecm\-errands\:executor\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)]]></property>
+                                        <property
+                                                name="lecm-arm:search-query"><![CDATA[((@lecm\-errands\:executor\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)) OR (@lecm\-errands\:coexecutors\-assoc\-ref:"#current-user" AND (@lecm\-statemachine\:status:'В работе' OR  @lecm\-statemachine\:status:'На доработке'))]]></property>
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                     </item>
                                     <item name="cm:Контролируемые мной" type="lecm-arm:node">
@@ -759,8 +760,8 @@
                         <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                        <property name="lecm-arm:search-query">
-                            <![CDATA[((@lecm\-errands\:initiator\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)) OR ((@lecm\-errands\:executor\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)) OR ((@lecm\-errands\:controller\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true))]]></property>
+                        <property
+                                name="lecm-arm:search-query"><![CDATA[((@lecm\-errands\:initiator\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)) OR (((@lecm\-errands\:executor\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)) OR (@lecm\-errands\:coexecutors\-assoc\-ref:"#current-user" AND (@lecm\-statemachine\:status:'В работе' OR  @lecm\-statemachine\:status:'На доработке'))) OR ((@lecm\-errands\:controller\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true))]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:Выданные мной" type="lecm-arm:node">
@@ -779,12 +780,13 @@
                                 <property name="cm:name"><![CDATA[Исполняемые мной]]></property>
                                 <property name="lecm-arm:order"><![CDATA[20]]></property>
                                 <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                                <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                                 <property name="lecm-arm:types"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-description"><![CDATA[]]></property>
                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
-                                <property name="lecm-arm:search-query">
-                                    <![CDATA[(@lecm\-errands\:executor\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)]]></property>
+                                <property
+                                        name="lecm-arm:search-query"><![CDATA[((@lecm\-errands\:executor\-assoc\-ref:"#current-user") AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)) OR (@lecm\-errands\:coexecutors\-assoc\-ref:"#current-user" AND (@lecm\-statemachine\:status:'В работе' OR  @lecm\-statemachine\:status:'На доработке'))]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                             </item>
                             <item name="cm:Контролируемые мной" type="lecm-arm:node">
