@@ -16,6 +16,18 @@
 		showActionColumn: false
 	});
 
+	YAHOO.Bubbling.on('dataItemsDeleted', checkForDestroy.bind(deputyDatagrid));
+
+	function checkForDestroy(layer, args) {
+		var items = args[1].items;
+
+		items.forEach(function(el) {
+			if(this.datagridMeta.nodeRef == el.nodeRef) {
+				this.destroy();
+			}
+		}, this);
+	}
+
 	YAHOO.util.Event.onContentReady('${datagridId}', function() {
 		YAHOO.Bubbling.fire('activeGridChanged', {
 			datagridMeta: {

@@ -191,8 +191,17 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 			function removeAssociations(event, obj) {
 				this.destroy();
 				var grid = obj.context;
+
+
 				var items = obj.items;
 				//TODO: Предполагается, что удаляем по одному, если что - переделать
+				var records = grid.widgets.dataTable.getRecordSet().getRecords();
+				records.forEach(function(el) {
+					if(el.getData('nodeRef') == items[0].nodeRef) {
+						grid.onCollapse(el);
+					}
+				});
+
 				var deputyNodeRef = items[0].nodeRef;
 				$.ajax({
 					url: Alfresco.constants.PROXY_URI + 'lecm/deputy/delete?nodeRef=' + deputyNodeRef,
@@ -210,6 +219,6 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 
 
 
-		}
+				}
 	}, true);
 })();
