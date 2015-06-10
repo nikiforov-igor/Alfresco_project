@@ -20,7 +20,6 @@
             datagrid.setOptions({
                 bubblingLabel: "chief-secretary-list-datagrid",
                 usePagination:true,
-                disableDynamicPagination: true,
                 showExtendSearchBlock:true,
                 showCheckboxColumn: false,
                 attributeForShow: 'lecm-orgstr:employee-last-name',
