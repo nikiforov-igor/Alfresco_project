@@ -36,6 +36,7 @@
         for (var i = 0; i < agendaItems.length; i++) {
           var item = agendaItems[i];
           var properties = [];
+          properties["lecm-document:indexTableRow"] = item.properties["lecm-document:indexTableRow"];
           properties["lecm-meetings-ts:holding-item-name"] = item.properties["lecm-meetings-ts:item-name"];
           properties["lecm-meetings-ts:holding-speak"] = item.properties["lecm-meetings-ts:men-spoke"];
           properties["lecm-meetings-ts:holding-agreed"] = item.properties["lecm-meetings-ts:decision"];
