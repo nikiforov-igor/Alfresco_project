@@ -174,8 +174,17 @@
             eventElement = event.element;
 
         $(dateRange).each(function(i){
-            var td = getCellFromDate($.fullCalendar.formatDate(dateRange[i],'MM/dd/yy'), calInstance),
-                currentCount = (td.data('apptCount') || 0) + 1;
+            var td = getCellFromDate($.fullCalendar.formatDate(dateRange[i],'MM/dd/yy'), calInstance);
+            if (td != null && td.data().appointments != null) {
+                for (var i = 0; i < td.data().appointments.length; i++) {
+                    if (td.data().appointments[i].nodeRef == event.nodeRef) {
+                        resetEventsRangeCounts();
+                        break;
+                    }
+                }
+            }
+
+            var currentCount = (td.data('apptCount') || 0) + 1;
 
             td.data('apptCount', currentCount);
 
