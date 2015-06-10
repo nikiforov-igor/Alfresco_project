@@ -23,6 +23,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.meetings.beans.MeetingsService;
+import ru.it.lecm.security.LecmPermissionService;
 
 /**
  *
@@ -39,7 +40,16 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	private PolicyComponent policyComponent;
 	private TransactionListener transactionListener;
 	private BehaviourFilter behaviourFilter;
+	private LecmPermissionService lecmPermissionService;
 
+	public LecmPermissionService getLecmPermissionService() {
+		return lecmPermissionService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
+	
 	public BehaviourFilter getBehaviourFilter() {
 		return behaviourFilter;
 	}
@@ -89,6 +99,46 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM,
 				new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_CHAIRMAN, 
+				new JavaBehaviour(this, "onChairmanAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_CHAIRMAN, 
+				new JavaBehaviour(this, "onChairmanRemoved", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_SECRETARY, 
+				new JavaBehaviour(this, "onSecretaryAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_SECRETARY, 
+				new JavaBehaviour(this, "onSecretaryRemoved", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+	}
+
+	public void onChairmanAdded(AssociationRef nodeAssocRef) {
+		NodeRef event = nodeAssocRef.getSourceRef();
+		NodeRef chairman = nodeAssocRef.getTargetRef();
+		//TODO Тут нужно поменять роль на Мероприятия. Инициатор. когда появится.
+		lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, chairman.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
+	}
+	
+	public void onChairmanRemoved(AssociationRef nodeAssocRef) {
+		NodeRef event = nodeAssocRef.getSourceRef();
+		NodeRef chairman = nodeAssocRef.getTargetRef();
+		lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, chairman.getId());
+		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, chairman);
+	}
+	
+	public void onSecretaryAdded(AssociationRef nodeAssocRef) {
+		NodeRef event = nodeAssocRef.getSourceRef();
+		NodeRef secretary = nodeAssocRef.getTargetRef();
+		//TODO Тут нужно поменять роль на Мероприятия. Инициатор. когда появится.
+		lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
+	}
+	
+	public void onSecretaryRemoved(AssociationRef nodeAssocRef) {
+		NodeRef event = nodeAssocRef.getSourceRef();
+		NodeRef secretary = nodeAssocRef.getTargetRef();
+		lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, secretary.getId());
+		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, secretary);
 	}
 
 	public void onCreateMeeting(ChildAssociationRef childAssocRef) {
