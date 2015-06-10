@@ -44,14 +44,21 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 					var stage = stages[i];
 					var decision = stage.decision.value;
 
-					if ((status == "current" && decision == "NO_DECISION") ||
-							(status == "finished" && decision != "NO_DECISION") ||
+					if ((status == "current" && !this.stageIsFinished(stage)) ||
+							(status == "finished" && this.stageIsFinished(stage)) ||
 							status == "all") {
 						resultsText += this.getStageView(status, stage);
 					}
 				}
 
 				return resultsText;
+			},
+
+			stageIsFinished: function (stage) {
+				var decision = stage.decision.value;
+				var state = stage.state.value;
+
+				return decision != "NO_DECISION" || state == "CANCELLED";
 			},
 
 			getStageView: function (status, stage) {
