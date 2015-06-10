@@ -219,6 +219,7 @@
     function viewMore(day, calInstance){
         var appointments = day.data('appointments'),
             elemWidth = day.outerWidth() + 1,
+            elemHeight = day.outerHeight() + 1,
             self = this;
 
         day.formBubble({
@@ -227,8 +228,8 @@
                 pointer: false
             },
             offset: {
-                x: -elemWidth,
-                y: 0
+                x: -elemWidth / 2,
+                y: -elemHeight / 2
             },
             animation: {
                 slide: false,
