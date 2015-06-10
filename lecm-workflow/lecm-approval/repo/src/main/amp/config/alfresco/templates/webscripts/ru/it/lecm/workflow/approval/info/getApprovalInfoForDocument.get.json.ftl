@@ -10,6 +10,10 @@
                     "value": "${stage.node.decision.value}",
                     "displayValue": "${stage.node.decision.displayValue}"
                 },
+                "state": {
+                    "value": "${stage.node.state.value}",
+                    "displayValue": "${stage.node.state.displayValue}"
+                },
                 "term": "${stage.node.term}",
                 "items": [
                     <#list stage.items as item>

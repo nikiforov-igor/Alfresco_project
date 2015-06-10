@@ -60,6 +60,10 @@
 									value: stage.properties["lecmApproveAspects:approvalDecision"],
 									displayValue: Evaluator.translateField(decisionPropDefinition, stage.properties["lecmApproveAspects:approvalDecision"], dictionaryService)
 								},
+								state: {
+									value: stage.properties["lecmApproveAspects:approvalState"],
+									displayValue: Evaluator.translateField(statePropDefinition, stage.properties["lecmApproveAspects:approvalState"], dictionaryService)
+								},
 								term: stage.properties["lecmWorkflowRoutes:stageWorkflowTerm"]
 							},
 							items: items

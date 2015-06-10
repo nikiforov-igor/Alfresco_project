@@ -87,7 +87,7 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 				resultsText += stage.term;
 				if (status != "current") {
 					resultsText += ", " + this.msg("label.approval.dashlet.stage.status") + " ";
-					resultsText += stage.decision.displayValue;
+					resultsText += stage.state.displayValue;
 				}
 				resultsText += "</div>";
 
