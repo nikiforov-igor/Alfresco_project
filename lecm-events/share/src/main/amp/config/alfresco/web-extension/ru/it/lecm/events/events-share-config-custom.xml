@@ -648,7 +648,7 @@
         </forms>
     </config>
 
-	<config evaluator="node-type" condition=" lecm-events-ts:membersTable">
+	<config evaluator="node-type" condition="lecm-events-ts:membersTable">
 		<forms>
 			<form>
 				<field-visibility>
