@@ -181,7 +181,11 @@
         <#if field.control.params.fixedHeader??>
             fixedHeader: ${field.control.params.fixedHeader},
         </#if>
-            showActionColumn: ${showActions?string},
+		<#if field.control.params.isTableSortable?has_content>
+			overrideSortingWith: ${field.control.params.isTableSortable?string},
+		</#if>
+
+		    showActionColumn: ${showActions?string},
             showCheckboxColumn: false,
             attributeForShow: "${attributeForShow?string}",
             repeating: ${field.repeating?string}
