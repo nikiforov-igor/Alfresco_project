@@ -6,7 +6,7 @@
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[100]]></property>
-        <property name="lecm-group-actions:expression"><![CDATA[]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-statemachine:status") != null]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[documentScript.addToFavourites(document);]]></property>
@@ -17,7 +17,7 @@
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[110]]></property>
-        <property name="lecm-group-actions:expression"><![CDATA[]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-statemachine:status") != null]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="lecm-group-actions:script"><![CDATA[documentScript.removeFromFavourites(document);]]></property>

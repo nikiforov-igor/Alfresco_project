@@ -7,7 +7,7 @@
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression">
-            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR")]]></property>
+            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") and doc.attr("lecm-statemachine:status") != null]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
         <property name="lecm-group-actions:workflow"><![CDATA[activiti$createErrands]]></property>
     </item>
