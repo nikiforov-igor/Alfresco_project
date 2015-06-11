@@ -43,6 +43,11 @@ public class ExpressionDocument {
 		return nodeRef;
 	}
 
+    //Значение аттрибута
+    public String type() {
+        return serviceRegistry.getNodeService().getType(nodeRef).toPrefixString(serviceRegistry.getNamespaceService());
+    }
+
 	//Значение аттрибута
 	public Object attr(String attributeName) {
 		QName attribute = QName.createQName(attributeName,serviceRegistry.getNamespaceService());
