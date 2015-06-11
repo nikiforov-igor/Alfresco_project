@@ -5480,7 +5480,7 @@
                         <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
                         <property name="lecm-arm:types"><![CDATA[lecm-meetings:document]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[ISNOTNULL:"cm:name" AND NOT (@lecm\-statemachine\:status:'Удалено')]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:Новое" type="lecm-arm:node">
