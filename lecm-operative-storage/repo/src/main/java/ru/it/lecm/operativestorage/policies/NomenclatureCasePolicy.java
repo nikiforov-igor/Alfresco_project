@@ -90,7 +90,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 				nodeService.createAssociation(nodeRef, yearSection, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_YEAR);
 
 				List<AssociationRef> unitAssocs = nodeService.getTargetAssocs(nodeRef, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
-				if(unitAssocs == null && unitAssocs.isEmpty()) {
+				if(unitAssocs == null || unitAssocs.isEmpty()) {
 					NodeRef defaultUnit = getDefaultOrgUnit(nodeRef);
 					if(defaultUnit != null) {
 						nodeService.createAssociation(nodeRef, defaultUnit, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
