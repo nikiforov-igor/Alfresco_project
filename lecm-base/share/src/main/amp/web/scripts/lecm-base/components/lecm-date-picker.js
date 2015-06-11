@@ -269,10 +269,11 @@
                     // Hide Calendar if we click anywhere in the document other than the calendar
                     Event.on(document, "click", function(e) {
                         var inputEl = Dom.get(me.id + "-date");
+                        var iconEl = Dom.get(me.id + "-icon");
                         var el = Event.getTarget(e);
                         var dialogEl = me.widgets.calendar.oDomContainer;
 
-                        if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != inputEl) {
+                        if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != inputEl && el != iconEl) {
                             me._hidePicker();
                         }
                     });
@@ -330,7 +331,7 @@
 		                var me = this;
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
-		                var clicked = event.target || Dom.get(me.id + "-date");
+		                var clicked = Event.getTarget(event) || Dom.get(me.id + "-date");
 		                var d = 10;                                                         // величина отступа
 
 		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
