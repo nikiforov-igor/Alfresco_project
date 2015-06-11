@@ -486,7 +486,7 @@
                     </source>
                     <target>
                         <class>lecm-os:store-term</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
