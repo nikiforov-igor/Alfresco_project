@@ -21,6 +21,7 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -241,12 +242,17 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		if(!isCentralized) {
 			List<NodeRef> yearNodeRefList = operativeStorageService.getOrganizationsYearSections(new NodeRef(orgNodeRef));
 			for (NodeRef yearNodeRef : yearNodeRefList) {
-				yearsList.add((Integer) nodeService.getProperty(yearNodeRef, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+				if(Boolean.TRUE.equals(nodeService.getProperty(yearNodeRef, BaseBean.IS_ACTIVE))) {
+					yearsList.add((Integer) nodeService.getProperty(yearNodeRef, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+				}
 			}
 		} else {
 			List<ChildAssociationRef> assocs = nodeService.getChildAssocs(operativeStorageService.getNomenclatureFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 			for (ChildAssociationRef assoc : assocs) {
-				yearsList.add((Integer) nodeService.getProperty(assoc.getChildRef(), OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+				NodeRef child = assoc.getChildRef();
+				if(Boolean.TRUE.equals(nodeService.getProperty(child, BaseBean.IS_ACTIVE))) {
+					yearsList.add((Integer) nodeService.getProperty(child, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+				}
 			}
 		}
 
