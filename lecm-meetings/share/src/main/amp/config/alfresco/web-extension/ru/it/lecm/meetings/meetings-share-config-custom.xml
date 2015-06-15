@@ -680,6 +680,52 @@
 					<show id="lecm-events:subject-assoc"/>
 				</field-visibility>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<!-- Заголовок -->
+					<show id="lecm-events:title"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<!-- Дата начала мероприятия -->
+					<show id="lecm-events:from-date"/>
+					<!-- Дата окончания мероприятия -->
+					<show id="lecm-events:to-date"/>
+					<!-- Место проведения -->
+					<show id="lecm-events:location-assoc"/>
+					<!-- Тематика -->
+					<show id="lecm-events:subject-assoc"/>
+					<!--Формулировка пункта-->
+					<show id="lecm-meetings:items-assoc-item-name"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-events:title">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:from-date">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:to-date">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:location-assoc">
+						<control>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-meetings:items-assoc-item-name" label-id="label.meeting.item.name"/>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 	

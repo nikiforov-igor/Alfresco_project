@@ -165,6 +165,8 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 				//нужно дёрнуть, чтоб создать папки категорий вложений
 				documentAttachmentsService.getCategories(document);
 				moveFiles(document, item);
+
+				documentTableService.recalculateSearchDescription(table);
 			} finally {
 				behaviourFilter.enableBehaviour(item);
 			}

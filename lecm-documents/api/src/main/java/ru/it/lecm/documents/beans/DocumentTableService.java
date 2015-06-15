@@ -173,4 +173,5 @@ public interface DocumentTableService {
 
 	public NodeRef getTable(NodeRef document, QName tableType);
 
+	public void recalculateSearchDescription(NodeRef tableData);
 }
