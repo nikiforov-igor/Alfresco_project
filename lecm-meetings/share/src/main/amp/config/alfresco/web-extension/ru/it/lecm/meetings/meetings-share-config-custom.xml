@@ -793,6 +793,7 @@
 					<show id="lecm-meetings-ts:note"/>
 					<show id="lecm-meetings-ts:theme-assoc"/>
 					<show id="lecm-meetings-ts:documents-assoc"/>
+					<show id="lecm-meetings-ts:attachments-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:indexTableRow" read-only="true"/>
@@ -851,6 +852,14 @@
 							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
 							<control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
 							<!--<control-param name="additionalFilter">(TYPE:\"\" AND NOT @lecm-statemachine\\:status:\"Черновик\") </control-param>-->
+						</control>
+					</field>
+					
+					<field id="lecm-meetings-ts:attachments-assoc" label-id="attachments.label">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
+							<control-param name="directoryName">Вложения</control-param>
+							<control-param name="suppressRefreshEvent">true</control-param>
 						</control>
 					</field>				
 				</appearance>

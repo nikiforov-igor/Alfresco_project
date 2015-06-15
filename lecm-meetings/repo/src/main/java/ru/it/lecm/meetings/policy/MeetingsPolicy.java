@@ -111,6 +111,12 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_SECRETARY, 
 				new JavaBehaviour(this, "onSecretaryRemoved", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS, 
+				new JavaBehaviour(this, "onAgendaItemAttachmentAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS, 
+				new JavaBehaviour(this, "onAgendaItemAttachmentDeleted", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	public void onChairmanAdded(AssociationRef nodeAssocRef) {
@@ -181,7 +187,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 			}
 		}
 	}
-
+	
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 
@@ -265,6 +271,26 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 
 		}
 
+	}
+	
+	public void onAgendaItemAttachmentAdded(AssociationRef nodeAssocRef) {
+		NodeRef item = nodeAssocRef.getSourceRef();
+		NodeRef attachment = nodeAssocRef.getSourceRef();
+		NodeRef document = documentTableService.getDocumentByTableDataRow(item);
+		if (null != document && !documentAttachmentsService.isDocumentAttachment(attachment)){
+			moveFiles(document, item);
+			refreshFiles(document);
+		}
+	}
+	
+	public void onAgendaItemAttachmentDeleted(AssociationRef nodeAssocRef) {
+		NodeRef item = nodeAssocRef.getSourceRef();
+		NodeRef attachment = nodeAssocRef.getTargetRef();
+		NodeRef document = documentTableService.getDocumentByTableDataRow(item);
+		if (null != document && null != attachment && documentAttachmentsService.isDocumentAttachment(attachment)){
+			documentAttachmentsService.deleteAttachment(attachment);
+			refreshFiles(document);
+		}
 	}
 
 }
