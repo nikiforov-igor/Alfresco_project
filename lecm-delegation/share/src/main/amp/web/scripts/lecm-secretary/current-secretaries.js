@@ -18,10 +18,17 @@
 							if(secEl) {
 								curValue = secEl.value.replace(/;/g, ',');
 							}
+							
+							var ignore = oResults.ignoredString.split(",");
+							var filter = '@lecm-orgstr-aspects\\:linked-organization-assoc-ref:\"' + oResults.organization + '\"';
+
+							ignore.forEach(function(el) {
+								filter += ' AND NOT ID:\"' + el + '\"'
+							});
+
 							LogicECM.module.Base.Util.reInitializeControl(obj.eventGroup.options.formId, obj.eventGroup.options.fieldId, {
-								ignoreNodes: oResults.ignoredString.split(","),
 								currentValue: curValue,
-								additionalFilter: '@lecm-orgstr-aspects\\:linked-organization-assoc-ref:\"' + oResults.organization + '\"'
+								additionalFilter: filter
 							});
 						}
 					}

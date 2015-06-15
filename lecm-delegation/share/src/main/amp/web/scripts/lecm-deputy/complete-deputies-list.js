@@ -21,12 +21,17 @@
 						YAHOO.Bubbling.unsubscribe('formValueChanged', onFormValueChanged);
 						var oResults = JSON.parse(response.serverResponse.responseText);
 						if (oResults) {
+							var ignore = oResults.ignoredString.split(",");
+							var filter = '@lecm-orgstr-aspects\\:linked-organization-assoc-ref:\"' + oResults.organization + '\"';
+
+							ignore.forEach(function(el) {
+								filter += ' AND NOT ID:\"' + el + '\"';
+							});
+
 							var refsString = oResults.nodes.join(',');
-							var userOrg = oResults.organization;
 							LogicECM.module.Base.Util.reInitializeControl(obj.eventGroup.options.formId, obj.eventGroup.options.fieldId, {
-								ignoreNodes: oResults.ignoredString.split(","),
 								currentValue: insertValues ? refsString : "",
-								additionalFilter: '@lecm-orgstr-aspects\\:linked-organization-assoc-ref:\"' + userOrg + '\"'
+								additionalFilter: filter
 							});
 						}
 					}
