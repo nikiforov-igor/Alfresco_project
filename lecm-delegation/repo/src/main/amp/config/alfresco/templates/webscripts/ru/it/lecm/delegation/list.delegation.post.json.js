@@ -45,7 +45,6 @@
 
 	//по этой бизнес роли находим всех сотрудников которые там есть
 	employees = orgstructure.getEmployeesByBusinessRole(brEngineer.nodeRef, true);
-
 	//среди них ищем нашего текущего сотрудника
 	var isEngineer = false;
 	for (var i = 0; i < employees.length; ++i) {
@@ -58,37 +57,50 @@
 	var employees = [];
 	var totalCount = 0;
 
-	if(!isEngineer) {
-		// Теперь не технолог не имеет доступа
-
-		return;
-
-	} else {
-		// Иначе просто выполним запрос для сотрудников
-		params.itemType = 'lecm-orgstr:employee';
-		params.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();
-
+	if(params.searchConfig && params.searchConfig.contains('fullTextSearch') && isEngineer) {
 		model.data = getSearchResults(params);
-		var result = model.data.items;
+	} else {
 
-		for each(item in result) {
-			employees.push(item.node);
+		if(isEngineer) {
+
+			var tmpParams = {};
+			tmpParams.fields = "lecm-orgstr_employee-last-name,lecm-orgstr_employee-first-name,lecm-orgstr_employee-middle-name";
+			tmpParams.itemType = 'lecm-orgstr:employee';
+			tmpParams.maxResults = params.maxResults;
+			tmpParams.nameSubstituteStrings = ",,,{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name},{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"
+			tmpParams.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();
+			tmpParams.searchConfig = params.searchConfig;
+			tmpParams.searchNodes = null;
+			tmpParams.showInactive = false;
+			tmpParams.sort = 'lecm-orgstr:employee-last-name|true';
+			tmpParams.startIndex = params.startIndex;
+			tmpParams.useChildQuery = false;
+			tmpParams.useFilterByOrg = false;
+			tmpParams.useOnlyInSameOrg = false;
+			tmpParams.filter = [];
+
+			model.data = getSearchResults(tmpParams);
+			var result = model.data.items;
+
+			for each(item in result) {
+				employees.push(item.node);
+			}
+
+			totalCount = model.data.paging.totalRecords;
 		}
 
-		totalCount = model.data.paging.totalRecords;
-	}
+		var delegationOpts = [];
 
-	var delegationOpts = [];
-
-	for each(employee in employees) {
-		var employeeRef = employee.nodeRef;
-		var opts = delegation.getDelegationOpts(employeeRef);
-		if(opts) {
-			delegationOpts.push(opts);
+		for each(employee in employees) {
+			var employeeRef = employee.nodeRef;
+			var opts = delegation.getDelegationOpts(employeeRef);
+			if(opts) {
+				delegationOpts.push(opts);
+			}
 		}
-	}
 
-	model.data = processResults(delegationOpts, params.fields, params.nameSubstituteStrings, params.startIndex, params.total);
-	model.data.paging.totalRecords = totalCount;
+		model.data = processResults(delegationOpts, params.fields, params.nameSubstituteStrings, params.startIndex, totalCount);
+		model.data.paging.totalRecords = totalCount;
+	}
 
 })();
