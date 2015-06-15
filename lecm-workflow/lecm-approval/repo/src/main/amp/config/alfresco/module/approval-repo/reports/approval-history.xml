@@ -11,7 +11,8 @@ TYPE:"lecm-internal:document" OR
 TYPE:"lecm-nd:document" OR
 TYPE:"lecm-ord:document" OR
 TYPE:"lecm-outgoing:document"  OR
-TYPE:"lecm-protocol:document"]]></property>
+TYPE:"lecm-protocol:document" OR
+TYPE:"lecm-meetings:document"]]></property>
 		<property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
 		<property name="lecm-rpeditor:reportCode"><![CDATA[lecm-approval-history]]></property>
 		<property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
