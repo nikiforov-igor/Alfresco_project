@@ -207,8 +207,8 @@
                             <control-param name="scripts">scripts/lecm-os/controls/organization-disable.js</control-param>
                         </control>
                     </field>
-                    <field id="lecm-os:nomenclature-year-section-status">
-                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    <field id="lecm-os:nomenclature-year-section-status" read-only="true" label-id="lecm.os.lbl.status">
+                        <control template="/ru/it/lecm/os/controls/custom-status.ftl"/>
                     </field>
                 </appearance>
             </form>
