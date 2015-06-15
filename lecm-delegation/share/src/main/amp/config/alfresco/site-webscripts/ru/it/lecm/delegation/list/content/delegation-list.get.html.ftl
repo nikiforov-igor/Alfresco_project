@@ -12,7 +12,6 @@
             datagrid.setOptions({
                 bubblingLabel: "delegation-list-datagrid",
                 usePagination:true,
-                disableDynamicPagination: true,
                 showExtendSearchBlock:true,
                 showCheckboxColumn: false,
                 searchShowInactive: true,
