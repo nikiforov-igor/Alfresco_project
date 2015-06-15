@@ -322,6 +322,25 @@
 					<show id="lecm-eds-document:file-register-assoc"/>
 				</field-visibility>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="lecm-document:regnum"/>
+					<show id="lecm-document:doc-date"/>
+					<!-- Заголовок -->
+					<show id="lecm-document:title"/>
+					<!--Председатель совещания-->
+					<show id="lecm-protocol:meeting-chairman-assoc"/>
+					<!--Вид документа-->
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<!--Подписанты-->
+					<show id="lecm-protocol:signers-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-document:doc-date">
+						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
 		</forms>
 	</config>	
 	
