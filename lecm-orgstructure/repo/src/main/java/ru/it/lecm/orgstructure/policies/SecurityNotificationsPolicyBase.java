@@ -322,7 +322,7 @@ public abstract class SecurityNotificationsPolicyBase extends BaseBean {
 	}
 
 	protected void notifySecretaryDown(final NodeRef employee) {
-		boolean isSecretary = secretaryService.isChief(employee);
+		boolean isSecretary = secretaryService.isSecretary(employee);
 		if (isSecretary) {
 			//получить всех "руководителей" секретаря
 			List<NodeRef> allChiefs = secretaryService.getPrimaryChiefs(employee);
