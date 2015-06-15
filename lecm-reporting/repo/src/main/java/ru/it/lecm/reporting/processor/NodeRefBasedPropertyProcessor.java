@@ -145,6 +145,9 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     while (res.next()) {
                         lTypes.add(res.getLong(1));
                     }
+                    if (lTypes.isEmpty()){
+                        lTypes.add((long) -1);
+                    }
                     sTypes = StringUtils.join(lTypes, ',');
                     if (logger.isInfoEnabled()) {
                         logger.info("Type IDs: " + sTypes);

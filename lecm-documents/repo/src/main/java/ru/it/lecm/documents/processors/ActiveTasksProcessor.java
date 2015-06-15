@@ -66,7 +66,11 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
                 }
             }
         }
-
+        Object userFilter = params != null ? params.get("user") : null;
+        String login = null;
+        if (userFilter != null && NodeRef.isNodeRef((String) userFilter)) {
+            login = orgstructureBean.getEmployeeLogin(new NodeRef((String) userFilter));
+        }
 	    boolean onlyUrgentAndOverdue = false;
 	    if (params != null && params.get("onlyUrgentAndOverdue") != null) {
 		    onlyUrgentAndOverdue = (boolean) params.get("onlyUrgentAndOverdue");
@@ -79,7 +83,7 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
 			remainingDays = (Integer) params.get("remainingDays");
 	    }
 
-        List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(AuthenticationUtil.getFullyAuthenticatedUser(), filterTasks, remainingDays);
+        List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(login != null ? login : AuthenticationUtil.getFullyAuthenticatedUser(), filterTasks, remainingDays);
         for (NodeRef document : documents) {
             sbQuery.append("ID:\"").append(document.toString()).append("\" OR ");
         }

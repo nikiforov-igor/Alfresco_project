@@ -194,6 +194,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                     if (armNode != null) {
                         node.setArmNodeRef(armNode); // подмена на реальный объект
                         nodeRef = armNode;
+                        properties = service.getCachedProperties(armNode);
                     }
                 }
             }
