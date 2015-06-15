@@ -285,6 +285,15 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+				
+                <property name="lecm-events:send-notifications">
+                    <type>d:boolean</type>
+					<default>true</default>
+                </property>
+                <property name="lecm-events:show-in-calendar">
+                    <type>d:boolean</type>
+					<default>true</default>
+                </property>
             </properties>
             <associations>
                 <!--Место проведения-->

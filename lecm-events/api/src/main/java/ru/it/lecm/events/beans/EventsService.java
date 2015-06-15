@@ -30,6 +30,8 @@ public interface EventsService {
     public static final QName PROP_EVENT_REPEATABLE_END_PERIOD = QName.createQName(EVENTS_NAMESPACE_URI, "repeatable-end-period");
     public static final QName PROP_EVENT_IS_REPEATED = QName.createQName(EVENTS_NAMESPACE_URI, "is-repeated");
     public static final QName PROP_EVENT_MEMBERS_MANDATORY_JSON = QName.createQName(EVENTS_NAMESPACE_URI, "temp-members-assoc-json");
+    public static final QName PROP_EVENT_SEND_NOTIFICATIONS = QName.createQName(EVENTS_NAMESPACE_URI, "send-notifications");
+    public static final QName PROP_EVENT_SHOW_IN_CALENDAR= QName.createQName(EVENTS_NAMESPACE_URI, "show-in-calendar");
 
     public static final QName ASSOC_EVENT_LOCATION = QName.createQName(EVENTS_NAMESPACE_URI, "location-assoc");
     public static final QName ASSOC_EVENT_INITIATOR = QName.createQName(EVENTS_NAMESPACE_URI, "initiator-assoc");

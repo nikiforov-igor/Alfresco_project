@@ -164,8 +164,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter) {
-        return getEvents(fromDate, toDate, additionalFilter, false);
-    }
+		return getEvents(fromDate, toDate, additionalFilter, false);
+	}
 
 	@Override
 	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined) {
@@ -174,22 +174,22 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + toDate + "\"> AND @lecm\\-events\\:to\\-date:<\"" + fromDate + "\" TO MAX] AND @lecm\\-events\\:removed: false " + additionalFilter;
+		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + toDate + "\"> AND @lecm\\-events\\:to\\-date:<\"" + fromDate + "\" TO MAX] AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter;
 		query += " AND (" + organizationQueryProcessor.getQuery(null) + ")";
 		sp.setQuery(query);
 
 		ResultSet searchResult = null;
 		try {
-            searchResult = searchService.query(sp);
-            results = searchResult.getNodeRefs();
+			searchResult = searchService.query(sp);
+			results = searchResult.getNodeRefs();
 		} finally {
 			if (searchResult != null) {
 				searchResult.close();
 			}
 		}
-        if (excludeDeclined) {
-            results = filterDeclinedEvents(results);
-        }
+		if (excludeDeclined) {
+			results = filterDeclinedEvents(results);
+		}
 		return results;
 	}
 
@@ -200,7 +200,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:removed: false";
+		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:removed: false  AND @lecm\\-events\\:show\\-in\\-calendar: true";
 		if (filter != null && filter.length() > 0) {
 			query += " AND " + filter;
 		}
@@ -230,41 +230,41 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		String query = "";
 		if (maxCount > 0) {
 			sp.setMaxItems(maxCount);
-			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO MAX> AND @lecm\\-events\\:removed: false " + (additionalFilter == null ? "" : additionalFilter);
+			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO MAX> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
 		} else {
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(Calendar.HOUR_OF_DAY, 23);
 			calendar.set(Calendar.MINUTE, 59);
 			calendar.set(Calendar.SECOND, 59);
-			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO \"" + DateFormatISO8601.format(calendar.getTime()) + "\"> AND @lecm\\-events\\:removed: false " + (additionalFilter == null ? "" : additionalFilter);
+			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO \"" + DateFormatISO8601.format(calendar.getTime()) + "\"> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
 		}
 		sp.setQuery(query + " AND (" + organizationQueryProcessor.getQuery(null) + ")");
 
 		ResultSet searchResult = null;
 		try {
 			searchResult = searchService.query(sp);
-            results = searchResult.getNodeRefs();
+			results = searchResult.getNodeRefs();
 		} finally {
 			if (searchResult != null) {
 				searchResult.close();
 			}
 		}
 
-        return filterDeclinedEvents(results);
+		return filterDeclinedEvents(results);
 	}
 
-    List<NodeRef> filterDeclinedEvents(List<NodeRef> events) {
-        List<NodeRef> filteredResults = new ArrayList<>();
-        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-        for (NodeRef event : events) {
-            if (!"DECLINED".equals(getEmployeeMemberStatus(event, currentEmployee))) {
-                filteredResults.add(event);
-            }
-        }
-        return filteredResults;
-    }
+	List<NodeRef> filterDeclinedEvents(List<NodeRef> events) {
+		List<NodeRef> filteredResults = new ArrayList<>();
+		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+		for (NodeRef event : events) {
+			if (!"DECLINED".equals(getEmployeeMemberStatus(event, currentEmployee))) {
+				filteredResults.add(event);
+			}
+		}
+		return filteredResults;
+	}
 
-    @Override
+	@Override
 	public List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode) {
 		List<NodeRef> results = new ArrayList<>();
 		NodeRef locationsDic = dictionaryBean.getDictionaryByName("Места проведения мероприятий");
@@ -471,11 +471,11 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public NodeRef getMemberTable(NodeRef event) {
-        List<AssociationRef> membersTable = nodeService.getTargetAssocs(event, EventsService.ASSOC_EVENT_MEMBERS);
-        if (membersTable != null && !membersTable.isEmpty()) {
-            return membersTable.get(0).getTargetRef();
-        }
-        return null;
+		List<AssociationRef> membersTable = nodeService.getTargetAssocs(event, EventsService.ASSOC_EVENT_MEMBERS);
+		if (membersTable != null && !membersTable.isEmpty()) {
+			return membersTable.get(0).getTargetRef();
+		}
+		return null;
 	}
 
 	@Override
@@ -515,21 +515,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public String getCurrentEmployeeMemberStatus(NodeRef event) {
 		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-        return getEmployeeMemberStatus(event, currentEmployee);
+		return getEmployeeMemberStatus(event, currentEmployee);
 	}
 
-    @Override
-    public String getEmployeeMemberStatus(NodeRef event, NodeRef employee) {
-        if (employee != null) {
-            NodeRef memberTableRow = getMemberTableRow(event, employee);
-            if (memberTableRow != null) {
-                return (String) nodeService.getProperty(memberTableRow, PROP_EVENT_MEMBERS_STATUS);
-            }
-        }
-        return null;
-    }
+	@Override
+	public String getEmployeeMemberStatus(NodeRef event, NodeRef employee) {
+		if (employee != null) {
+			NodeRef memberTableRow = getMemberTableRow(event, employee);
+			if (memberTableRow != null) {
+				return (String) nodeService.getProperty(memberTableRow, PROP_EVENT_MEMBERS_STATUS);
+			}
+		}
+		return null;
+	}
 
-    @Override
+	@Override
 	public String wrapAsEventLink(NodeRef documentRef) {
 		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, DocumentService.PROP_EXT_PRESENT_STRING), EVENT_LINK_URL);
 	}
@@ -542,7 +542,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public void onAfterUpdate(NodeRef event, String updateRepeated, boolean sendToInvitedMembers) {
 		updateMembers(event);
-		if (sendToInvitedMembers) {
+		Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		send_notifications = null == send_notifications ? false : send_notifications;
+		if (sendToInvitedMembers && send_notifications) {
 			sendUpdateNotificationsToInvitedMembers(event);
 		}
 
@@ -563,17 +565,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			}
 		}
 
-		NodeRef initiator = getEventInitiator(event);
-		Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-		if (initiator != null && fromDate != null) {
-			String author = AuthenticationUtil.getSystemUserName();
-			String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+		Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		send_notifications = null == send_notifications ? false : send_notifications;
+		if (send_notifications) {
+			NodeRef initiator = getEventInitiator(event);
+			Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+			if (initiator != null && fromDate != null) {
+				String author = AuthenticationUtil.getSystemUserName();
+				String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
 
-			for (NodeRef member : oldAndNewMembers) {
-				String text = employeeName + " обновил информацию по мероприятию " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
-				List<NodeRef> recipients = new ArrayList<>();
-				recipients.add(member);
-				notificationsService.sendNotification(author, event, text, recipients, null);
+				for (NodeRef member : oldAndNewMembers) {
+					String text = employeeName + " обновил информацию по мероприятию " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+					List<NodeRef> recipients = new ArrayList<>();
+					recipients.add(member);
+					notificationsService.sendNotification(author, event, text, recipients, null);
+				}
 			}
 		}
 
@@ -851,24 +857,28 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public List<NodeRef> getNextRepeatedEvents(NodeRef event) {
 		List<NodeRef> results = new ArrayList<>();
-		NodeRef nextEvent = findNodeByAssociationRef(event, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.TARGET);
+		QName eventType = nodeService.getType(event);
+		NodeRef nextEvent = findNodeByAssociationRef(event, ASSOC_NEXT_REPEATED_EVENT, eventType, ASSOCIATION_TYPE.TARGET);
 		while (nextEvent != null && !nextEvent.equals(event)) {
 			results.add(nextEvent);
-			nextEvent = findNodeByAssociationRef(nextEvent, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.TARGET);
+			nextEvent = findNodeByAssociationRef(nextEvent, ASSOC_NEXT_REPEATED_EVENT, eventType, ASSOCIATION_TYPE.TARGET);
 		}
 		return results;
 	}
 
+	@Override
 	public List<NodeRef> getPrevRepeatedEvents(NodeRef event) {
 		List<NodeRef> results = new ArrayList<>();
-		NodeRef nextEvent = findNodeByAssociationRef(event, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.SOURCE);
+		QName eventType = nodeService.getType(event);
+		NodeRef nextEvent = findNodeByAssociationRef(event, ASSOC_NEXT_REPEATED_EVENT, eventType, ASSOCIATION_TYPE.SOURCE);
 		while (nextEvent != null && !nextEvent.equals(event)) {
 			results.add(nextEvent);
-			nextEvent = findNodeByAssociationRef(nextEvent, ASSOC_NEXT_REPEATED_EVENT, TYPE_EVENT, ASSOCIATION_TYPE.SOURCE);
+			nextEvent = findNodeByAssociationRef(nextEvent, ASSOC_NEXT_REPEATED_EVENT, eventType, ASSOCIATION_TYPE.SOURCE);
 		}
 		return results;
 	}
 
+	@Override
 	public List<NodeRef> getAllRepeatedEvents(NodeRef event) {
 		List<NodeRef> results = new ArrayList<>();
 		results.addAll(getNextRepeatedEvents(event));
