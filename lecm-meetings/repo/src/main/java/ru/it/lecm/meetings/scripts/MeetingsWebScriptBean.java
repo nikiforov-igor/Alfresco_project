@@ -99,4 +99,10 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		}
 		return "Failure: node not found";
 	}
+	
+	public void createRepetedMeetings(ScriptNode nodeRef) {
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef meeting = nodeRef.getNodeRef();
+		meetingsService.createRepetedMeetings(meeting);
+	}
 }

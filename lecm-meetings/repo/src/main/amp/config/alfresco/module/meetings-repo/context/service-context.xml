@@ -98,6 +98,8 @@
 		  p:stateMachineService-ref="stateMachineHelper"	
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentTableService-ref="documentTableService"
+		  p:documentService-ref="documentService"
+		  p:documentConnectionService-ref="documentConnectionService"
 	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">

@@ -153,8 +153,9 @@
 														<properties>
 															<property>
 																<name>actionScript</name>
-																<value><![CDATA[(function(){ /*создание листа подписания, запуск стандартного подписания*/
+																<value><![CDATA[(function(){ /*создание листа подписания, обновление статуса участников для повторных */
   var document = stm_document;
+  var isRepeated = stm_document.properties["lecm-events:is-repeated"];
   if(!routesService.hasEmployeesInRoute(document)){
   						var approvals = events.getEventMembers(document.nodeRef.toString());
 						if (approvals && approvals.length>0) {
@@ -173,6 +174,11 @@
 							stage.save();
 							stage.removeAspect('sys:temporary');
 							for (i = 0, size = approvals.length; i < size; ++i) {
+								if (isRepeated==true) {
+								  var row = events.getEmployeeEventMemberRow(stm_document.nodeRef.toString(), approvals[i].nodeRef.toString());
+								  row.properties["lecm-events-ts:members-status"]="CONFIRMED";
+								  row.save();
+								}
 								var stageItem = routesService.createNewTemporaryNode(stage.getNodeRef(),"lecmWorkflowRoutes:stageItem");
 								stageItem.save();
 								stageItem.createAssociation(approvals[i],  'lecmWorkflowRoutes:stageItemEmployeeAssoc');
@@ -180,8 +186,9 @@
 							}
                         }
   }
+  
 
-					  })();]]></value>
+})();]]></value>
 															</property>
 															<property>
 																<name>scriptLabel</name>
@@ -386,12 +393,12 @@
 																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -867,6 +874,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_temp-resources-assoc</name>
+										<nodeRef>workspace://SpacesStore/50964f35-fd21-4c4e-a215-a25896cc3df0</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -1121,6 +1143,9 @@
 																<name>actionScript</name>
 																<value><![CDATA[(function(){
   var meeting = stm_document;
+  meeting.properties["lecm-events:show-in-calendar"]=true;
+  meeting.properties["lecm-events:send-notifications"]=true;
+  meeting.save();
   var tableAssocs = meeting.assocs["lecm-meetings-ts:items-assoc"];
   if (tableAssocs!==null && tableAssocs.length > 0){
     var table = tableAssocs[0];
@@ -1139,12 +1164,30 @@
       }
     }
   }
+  /*Notify members*/
+  var members=events.getEventMembers(meeting);
+  var text = "{lecm-events:initiator-assoc/lecm-orgstr:employee-short-name} приглашает на мероприятие {!lecm-document:present-string}. Начало: {lecm-events:from-date?dd.MM.yyyy}, в {lecm-events:from-date?HH:mm}";
+  notifications.sendNotification(members, text, meeting);
+  /*Notify responsible for resources*/
+  var resources = events.getEventResources(meeting);
+  if (resources !== null && resources.length>0) {
+    for (var k=0; k<resources.length ;k++ ) {
+      var responsible = events.getResourceResponsible(resources[k]);
+      if (responsible!==null) {
+		text = "Запланированное мероприятие {!lecm-document:present-string} требует привлечения ресурсов за которые вы ответственны.  Начало: {lecm-events:from-date?dd.MM.yyyy}, в {lecm-events:from-date?HH:mm}";
+		notifications.sendNotification(members, text, meeting);
+      }
+    }
+  }
+  
   events.notifyInvitedMembers(stm_document, true);
+  /*create repeated*/
+  meetings.createRepetedMeetings(stm_document);
 }());]]></value>
 															</property>
 															<property>
 																<name>scriptLabel</name>
-																<value><![CDATA[Create links]]></value>
+																<value><![CDATA[Process approvement]]></value>
 															</property>
 														</properties>
 														<aspects/>
@@ -1669,6 +1712,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_temp-resources-assoc</name>
+										<nodeRef>workspace://SpacesStore/2d3f5eaa-befa-4c07-9af4-2e2a54d674f0</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -2181,6 +2239,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_temp-resources-assoc</name>
+										<nodeRef>workspace://SpacesStore/c4d7bf51-afcc-4794-9ba2-323f29c76661</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -2585,6 +2658,21 @@
 										<type>documentField</type>
 										<name>lecm-meetings_holding-invited-members-assoc</name>
 										<nodeRef>workspace://SpacesStore/afa8098a-5280-4963-9683-979aa0ee5fa4</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_temp-resources-assoc</name>
+										<nodeRef>workspace://SpacesStore/1cd98c71-7853-4dbf-b0d1-afc073bf3a54</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>

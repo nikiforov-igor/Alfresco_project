@@ -589,6 +589,7 @@
 					<show id="lecm-events:location-assoc"/>
 					<!-- Ресурсы -->
 					<show id="lecm-events-ts:resources-assoc"/>
+					<show id="lecm-events:temp-resources-assoc"/>
 					<!-- Инициатор -->
 					<show id="lecm-events:initiator-assoc"/>
 					<!-- Описание -->

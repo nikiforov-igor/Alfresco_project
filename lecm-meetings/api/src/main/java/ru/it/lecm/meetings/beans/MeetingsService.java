@@ -29,6 +29,7 @@ public interface MeetingsService {
 	public static final QName ASSOC_MEETINGS_TEMP_ITEMS = QName.createQName(MEETINGS_NAMESPACE, "temp-items-assoc");
 	public static final QName ASSOC_MEETINGS_CHAIRMAN = QName.createQName(MEETINGS_NAMESPACE, "chairman-assoc");
 	public static final QName ASSOC_MEETINGS_SECRETARY = QName.createQName(MEETINGS_NAMESPACE, "secretary-assoc");
+	public static final QName PROP_MEETINGS_APPROVE_AGENDA = QName.createQName(MEETINGS_NAMESPACE, "approve-agenda");
 
 	public static final QName TYPE_MEETINGS_TS_HOLDING_ITEM = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-item");
 	public static final QName TYPE_MEETINGS_TS_HOLDING_ITEM_START_TIME = QName.createQName(MEETINGS_TS_NAMESPACE, "holding-start-time");
@@ -50,4 +51,5 @@ public interface MeetingsService {
 	NodeRef createNewHoldingItem(NodeRef meeting);
 
 	public void deleteHoldingItem(NodeRef nodeRef);
+	public void createRepetedMeetings(NodeRef meeting);
 }
