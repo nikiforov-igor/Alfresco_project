@@ -56,35 +56,12 @@
 	}
 
 	var employees = [];
+	var totalCount = 0;
 
 	if(!isEngineer) {
-		// если чувак не технолог, то получаем список его подчиненных.
-		// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
+		// Теперь не технолог не имеет доступа
 
-		var employeeUnits = orgstructure.getEmployeeUnits(currentEmployee.nodeRef.toString(), true);
-
-		params.itemType = 'lecm-orgstr:staff-list';
-		var items = [];
-		for each(employeeUnit in employeeUnits) {
-			params.parent = employeeUnit.nodeRef.toString();
-			var tmp = getSearchResults(params);
-			items = items.concat(tmp.items);
-		}
-
-
-		// Assuming we have staff-list, get employees
-		for each(item in items) {
-			var node = item.node;
-			var employee = orgstructure.getEmployeeByPosition(node);
-			var employeeLinkAssocs = node.assocs['lecm-orgstr:element-member-employee-assoc'];
-			if(employee && employeeLinkAssocs && employeeLinkAssocs.length) {
-				var employeeLink = employeeLinkAssocs[0];
-				var isPrimary = employeeLink.properties['lecm-orgstr:employee-link-is-primary'];
-				if(isPrimary) {
-					employees.push(employee);
-				}
-			}
-		}
+		return;
 
 	} else {
 		// Иначе просто выполним запрос для сотрудников
@@ -97,6 +74,8 @@
 		for each(item in result) {
 			employees.push(item.node);
 		}
+
+		totalCount = model.data.paging.totalRecords;
 	}
 
 	var delegationOpts = [];
@@ -110,6 +89,6 @@
 	}
 
 	model.data = processResults(delegationOpts, params.fields, params.nameSubstituteStrings, params.startIndex, params.total);
-	model.data.paging.totalRecords = delegationOpts.length;
+	model.data.paging.totalRecords = totalCount;
 
 })();

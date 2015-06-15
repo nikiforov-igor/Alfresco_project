@@ -31,7 +31,7 @@ LogicECM.module.Delegation.Const = LogicECM.module.Delegation.Const || {
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<#assign showContent = nativeObject.isEngineer || nativeObject.isBoss/>
+<#assign showContent = nativeObject.isEngineer/>
 
 <@bpage.basePageSimple>
 	<#if showContent>
