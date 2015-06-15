@@ -16,6 +16,12 @@
 		function createControl() {
 			var control = new LogicECM.module.OS.OrgUnitValidator("${fieldHtmlId}");
 			control.setOptions({
+				<#if form.arguments.itemId??>
+				nodeRef: '${form.arguments.itemId}',
+				</#if>
+				<#if field.value??>
+				currentValue: '${field.value}',
+				</#if>
 				errorContainer: '${dialogId}_assoc_lecm-os_nomenclature-unit-section-unit-assoc-cntrl-autocomplete-input'
 			});
 

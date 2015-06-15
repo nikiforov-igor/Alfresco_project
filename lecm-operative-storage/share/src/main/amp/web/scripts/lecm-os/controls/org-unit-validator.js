@@ -22,7 +22,8 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 		balloon: null,
 
 		options: {
-			errorContainer: null
+			errorContainer: null,
+			currentValue: null
 		},
 
 		createBalloon: function() {
@@ -42,10 +43,14 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 			function validationHandler(field, args, event, form, silent, message) {
 				this.balloon.html(message);
 				var valid = false;
-				var destination = form.getFormData().alf_destination;
+				var destination = form.getFormData().alf_destination || this.options.nodeRef;
 				var orgUnit = form.getFormData()['assoc_lecm-os_nomenclature-unit-section-unit-assoc'];
+
+				if(!orgUnit || orgUnit == this.options.currentValue) {
+					return true;
+				}
 				
-				if(!orgUnit) {
+				if(!destination || !orgUnit) {
 					return true;
 				}
 
