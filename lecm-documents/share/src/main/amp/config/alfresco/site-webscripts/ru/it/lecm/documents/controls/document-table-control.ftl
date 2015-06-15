@@ -135,7 +135,7 @@
 			});
 	}
 	function init() {
-        LogicECM.module.Base.Util.loadScripts([
+        LogicECM.module.Base.Util.loadResources([
 	        'scripts/lecm-base/components/advsearch.js',
             'modules/simple-dialog.js',
 	        'scripts/lecm-base/components/lecm-datagrid.js',
@@ -146,7 +146,10 @@
 			        '${js}',
 		        </#list>
 	        </#if>
-		], drawForm);
+		],
+		[
+            'css/components/document-table-control.css'
+        ], drawForm);
     }
 	YAHOO.util.Event.onDOMReady(init);
 })();
@@ -161,7 +164,7 @@
 			</label>
 		</#if>
 	</div>
-    <div class="container">
+    <div class="container document-table-width">
         <div class="value-div">
         <#if toolbar == "true" && form.mode?string=="edit">
             <div id="${toolbarId}">
