@@ -54,21 +54,26 @@
 			break;
 		}
 	}
-	
+
 	var employees = [];
 
 	if(!isEngineer) {
 		// если чувак не технолог, то получаем список его подчиненных.
 		// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
 
-		params.itemType = 'lecm-orgstr:staff-list';
-		params.parent = orgstructure.getPrimaryOrgUnit(currentEmployee).nodeRef.toString();
+		var employeeUnits = orgstructure.getEmployeeUnits(currentEmployee.nodeRef.toString(), true);
 
-		model.data = getSearchResults(params);
-		var result = model.data.items;
+		params.itemType = 'lecm-orgstr:staff-list';
+		var items = [];
+		for each(employeeUnit in employeeUnits) {
+			params.parent = employeeUnit.nodeRef.toString();
+			var tmp = getSearchResults(params);
+			items = items.concat(tmp.items);
+		}
+
 
 		// Assuming we have staff-list, get employees
-		for each(item in result) {
+		for each(item in items) {
 			var node = item.node;
 			var employee = orgstructure.getEmployeeByPosition(node);
 			var employeeLinkAssocs = node.assocs['lecm-orgstr:element-member-employee-assoc'];
