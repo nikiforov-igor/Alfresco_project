@@ -49,6 +49,35 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	private DocumentService documentService;
 	private DocumentConnectionService documentConnectionService;
 	private final TransactionListener transactionListener = new MeetingsServiceTransactionListener();
+	private EventsService eventsService;
+
+	public EventsService getEventsService() {
+		return eventsService;
+	}
+
+	public void setEventsService(EventsService eventsService) {
+		this.eventsService = eventsService;
+	}
+
+	public void init() {
+		List<QName> propertiesToCopy = new ArrayList<>();
+		propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
+		propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+		propertiesToCopy.add(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
+		propertiesToCopy.add(EventsService.PROP_EVENT_ALL_DAY);
+		propertiesToCopy.add(PROP_MEETINGS_APPROVE_AGENDA);
+
+		List<QName> assocsToCopy = new ArrayList<>();
+		assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
+		assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
+		assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+		assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);
+		assocsToCopy.add(ASSOC_MEETINGS_CHAIRMAN);
+		assocsToCopy.add(ASSOC_MEETINGS_SECRETARY);
+
+		eventsService.addUpdateType(TYPE_MEETINGS_DOCUMENT, propertiesToCopy, assocsToCopy);
+		
+	}
 
 	public DocumentService getDocumentService() {
 		return documentService;

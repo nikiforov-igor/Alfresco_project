@@ -86,7 +86,8 @@
 	<util:constant id="EVENTS_ROOT_ID" static-field="ru.it.lecm.events.beans.EventsService.EVENTS_ROOT_ID"/>
 
 	<bean id="eventsService" class="ru.it.lecm.events.beans.EventsServiceImpl" parent="baseBean"
-	      depends-on="events.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService">
+	      depends-on="events.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService"
+			init-method="init">
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

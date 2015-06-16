@@ -76,6 +76,33 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private static final String CONTENT_TYPE_ALTERNATIVE = "multipart/alternative";
 	private static final String CONTENT_SUBTYPE_HTML = "html";
 
+	private final Map<QName, List<QName>> assocsToUpdateMap = new HashMap<>();
+	private final Map<QName, List<QName>> propsToUpdateMap = new HashMap<>();
+
+	public void init() {
+		List<QName> propertiesToCopy = new ArrayList<>();
+		propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
+		propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+		propertiesToCopy.add(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
+		propertiesToCopy.add(PROP_EVENT_ALL_DAY);
+		
+		List<QName> assocsToCopy = new ArrayList<>();
+		assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
+		assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
+		assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+		assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);		
+		
+		addUpdateType(TYPE_EVENT, propertiesToCopy, assocsToCopy);
+	}
+
+	@Override
+	public void addUpdateType(QName type, List<QName> properties, List<QName> assocs) {
+		if (null != type) {
+			assocsToUpdateMap.put(type, assocs);
+			propsToUpdateMap.put(type, properties);
+		}
+	}
+	
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
 	}
@@ -904,13 +931,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		// копируем свойства
 		Map<QName, Serializable> oldProperties = nodeService.getProperties(event);
 		Map<QName, Serializable> newProperties = nodeService.getProperties(repeatedEvent);
-		List<QName> propertiesToCopy = new ArrayList<>();
-
-		propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
-		propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
-		propertiesToCopy.add(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
-
-		propertiesToCopy.add(PROP_EVENT_ALL_DAY);
+		QName eventType = nodeService.getType(event);
+		
+		List<QName> propertiesToCopy = propsToUpdateMap.get(eventType);
 
 		Calendar calOldFrom = Calendar.getInstance();
 		calOldFrom.setTime((Date) oldProperties.get(PROP_EVENT_FROM_DATE));
@@ -934,11 +957,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		nodeService.setProperties(repeatedEvent, newProperties);
 
 		//Копируем ассоциации
-		List<QName> assocsToCopy = new ArrayList<>();
-		assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
-		assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
-		assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
-		assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);
+		List<QName> assocsToCopy = assocsToUpdateMap.get(eventType);
 		for (QName assocQName : assocsToCopy) {
 			List<NodeRef> targets = findNodesByAssociationRef(event, assocQName, null, ASSOCIATION_TYPE.TARGET);
 			nodeService.setAssociations(repeatedEvent, assocQName, targets);

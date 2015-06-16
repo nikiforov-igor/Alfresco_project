@@ -93,6 +93,7 @@
 
 	<bean id="meetingsService" class="ru.it.lecm.meetings.beans.MeetingsServiceImpl" parent="baseBean"
 		  depends-on="meetings.ModelsBootstrap, ServiceRegistry, nodeService, transactionService, businessJournalService, WorkflowService, personService, stateMachineHelper"
+		  init-method="init"
 		  p:workflowService-ref="WorkflowService"
 		  p:personService-ref="personService"
 		  p:stateMachineService-ref="stateMachineHelper"	
@@ -100,6 +101,7 @@
 		  p:documentTableService-ref="documentTableService"
 		  p:documentService-ref="documentService"
 		  p:documentConnectionService-ref="documentConnectionService"
+		  p:eventsService-ref="eventsService"
 	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
