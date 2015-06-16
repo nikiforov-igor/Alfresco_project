@@ -5,17 +5,11 @@
  */
 package ru.it.lecm.operativestorage.scripts;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.mozilla.javascript.Scriptable;
@@ -24,13 +18,17 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
-import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.removal.DocumentsRemovalService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.operativestorage.beans.OperativeStorageService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASPECT_MOVE_TO_CASE;
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  *
@@ -157,8 +155,12 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		if(assocList!= null && !assocList.isEmpty()) {
 			caseRef = assocList.get(0).getTargetRef();
 			for (NodeRef unit : unitsList) {
-				nodeService.createAssociation(caseRef, unit, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
-			}
+                try {
+                    nodeService.createAssociation(caseRef, unit, OperativeStorageService.ASSOC_NOMENCLATURE_CASE_VISIBILITY_UNIT);
+                } catch (AssociationExistsException ignored) {
+                    //игнорируем ошибку при повторном создании ассоциации
+                }
+            }
 		}
 
 
