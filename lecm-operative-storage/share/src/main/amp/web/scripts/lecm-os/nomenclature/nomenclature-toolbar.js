@@ -156,6 +156,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					templateUrl: templateUrl,
 					templateRequestParams: templateRequestParams,
 					actionUrl: null,
+					selectedItems: item.items,
 					destroyOnHide: true,
 					doBeforeDialogShow: {
 						fn: doBeforeDialogShow,
@@ -166,9 +167,9 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 							if (cbObj && YAHOO.lang.isFunction(cbObj.fn)) {
 								cbObj.fn.call(this, '', cbObj);
 							} else {
-								this._actionResponse(actionId);
+								this._actionResponse(item.actionId);
 							}
-							me._actionResponse(item.actionId, response);
+							this._actionResponse(item.actionId, response);
 						},
 						scope: this
 					},

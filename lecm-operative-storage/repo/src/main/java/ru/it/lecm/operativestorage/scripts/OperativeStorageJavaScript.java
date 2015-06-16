@@ -24,6 +24,7 @@ import ru.it.lecm.operativestorage.beans.OperativeStorageService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -314,6 +315,17 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 
 	public boolean caseHasDocsOrVolumes(String caseNodeRefString) {
 		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString));
+	}
+
+	public boolean canCopyUnits(String unitsString, String destNodeRef) {
+		List<String> nodesStr = Arrays.asList(unitsString.split(","));
+		List<NodeRef> units = new ArrayList<>();
+
+		for (String node : nodesStr) {
+			units.add(new NodeRef(node));
+		}
+
+		return operativeStorageService.canCopyUnits(units, new NodeRef(destNodeRef));
 	}
 
 }

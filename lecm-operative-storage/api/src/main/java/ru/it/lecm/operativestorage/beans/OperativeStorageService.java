@@ -129,4 +129,6 @@ public interface OperativeStorageService {
 
 	public boolean caseHasDocumentsVolumes(NodeRef caseRef);
 
+	public boolean canCopyUnits(List<NodeRef> units, NodeRef dest);
+
 }

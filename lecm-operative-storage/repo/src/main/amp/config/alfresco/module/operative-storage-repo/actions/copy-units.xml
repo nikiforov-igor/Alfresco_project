@@ -37,22 +37,21 @@
         </property>
         <items>
             <item name="cm:folder" type="lecm-group-actions:form-field">
-                <property name="cm:name">
-                    <![CDATA[Раздел]]>
-                </property>
-                <property name="lecm-group-actions:field-default-value">
-                    <![CDATA[]]>
-                </property>
-                <property name="lecm-group-actions:field-id">
-                    <![CDATA[folder]]>
-                </property>
-                <property name="lecm-group-actions:field-type">
-                    <![CDATA[lecm-os:base]]>
-                </property>
-                <property name="lecm-group-actions:field-priority">
-                    <![CDATA[0]]>
-                </property>
-            </item>
+				<property name="cm:name"><![CDATA[Раздел]]></property>
+				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+				<property name="lecm-group-actions:field-id"><![CDATA[folder]]></property>
+				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
+				<property name="lecm-group-actions:field-type"><![CDATA[lecm-os:base_copy_action]]></property>
+				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+			</item>
+			<item name="cm:Script" type="lecm-group-actions:form-field">
+				<property name="cm:name"><![CDATA[Script]]></property>
+				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+				<property name="lecm-group-actions:field-id"><![CDATA[Script]]></property>
+				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
+				<property name="lecm-group-actions:field-type"><![CDATA[lecm-os:copy-unit-validate-script]]></property>
+				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+			</item>
         </items>
     </item>
 </items>

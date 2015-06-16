@@ -509,4 +509,41 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	}
 
+	private List<NodeRef> getAllOrgUnitsAssocs(NodeRef sectionNodeRef) {
+		List<NodeRef> results = new ArrayList<>();
+
+		List<AssociationRef> orgUnitAssocs = nodeService.getTargetAssocs(sectionNodeRef, ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT);
+		if(orgUnitAssocs != null && orgUnitAssocs.size() > 0) {
+			NodeRef unit = orgUnitAssocs.get(0).getTargetRef();
+			if(Boolean.TRUE.equals(nodeService.getProperty(unit, IS_ACTIVE))) {
+				results.add(orgUnitAssocs.get(0).getTargetRef());
+			}
+		}
+
+		List<ChildAssociationRef> sections = nodeService.getChildAssocs(sectionNodeRef, new HashSet<>(Arrays.asList(TYPE_NOMENCLATURE_UNIT_SECTION)));
+		for (ChildAssociationRef section : sections) {
+			NodeRef sectionNode = section.getChildRef();
+			results.addAll(getAllOrgUnitsAssocs(sectionNode));
+		}
+
+		return results;
+	}
+
+	@Override
+	public boolean canCopyUnits(List<NodeRef> units, NodeRef dest) {
+		List<NodeRef> orgUnits = getAllOrgUnitsAssocs(dest);
+
+		for (NodeRef unit : units) {
+			List<AssociationRef> orgUnitsAssocs = nodeService.getTargetAssocs(unit, ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT);
+			if(orgUnitsAssocs != null && orgUnitsAssocs.size() > 0) {
+				NodeRef orgUnit = orgUnitsAssocs.get(0).getTargetRef();
+				if(orgUnits.contains(orgUnit)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 }

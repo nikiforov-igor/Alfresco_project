@@ -161,6 +161,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 					templateUrl: templateUrl,
 					templateRequestParams: templateRequestParams,
 					actionUrl: null,
+					selectedItems: item.items,
 					destroyOnHide: true,
 					doBeforeDialogShow: {
 						fn: doBeforeDialogShow,
@@ -171,7 +172,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 							if (YAHOO.lang.isFunction(callback)) {
 								callback.call(this);
 							} else {
-								this._actionResponse(actionId);
+								this._actionResponse(response);
 							}
 						},
 						scope: this
