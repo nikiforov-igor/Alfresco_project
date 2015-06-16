@@ -133,4 +133,6 @@ public interface EventsService {
 	void sendCancelNotifications(NodeRef event);
 
 	void sendIcalNotificationsToInvitedMembers(NodeRef event, boolean firstTime);
+
+	void addUpdateType(QName TYPE_MEETINGS_DOCUMENT, List<QName> propertiesToCopy, List<QName> assocsToCopy);
 }
