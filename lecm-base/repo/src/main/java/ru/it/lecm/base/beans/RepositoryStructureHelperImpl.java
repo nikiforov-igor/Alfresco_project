@@ -7,6 +7,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -184,8 +185,16 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
         QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folder);
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         properties.put(ContentModel.PROP_NAME, folder);
-        ChildAssociationRef childAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
-        return childAssoc.getChildRef();
+        ChildAssociationRef childAssoc = null;
+        NodeRef childRef;
+        try {
+            childAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+            childRef = childAssoc.getChildRef();
+        } catch (DuplicateChildNodeNameException e) {
+            //есть вероятность, что папка уже существует или создана другим потоком/транзакцией
+            childRef = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, folder);
+        }
+        return childRef;
     }
 
     /**
