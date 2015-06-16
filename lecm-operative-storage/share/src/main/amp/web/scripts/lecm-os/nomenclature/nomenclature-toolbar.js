@@ -124,8 +124,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			button.set("label", buttonName);
 		},
 
-		_createScriptForm: function _createScriptFormFunction(item) {
-			var me = this;
+		_createScriptForm: function _createScriptFormFunction(item, cbObj) {
 			var doBeforeDialogShow = function (p_form, p_dialog) {
 				var contId = p_dialog.id + "-form-container";
 				Alfresco.util.populateHTML(
@@ -164,6 +163,11 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 					},
 					onSuccess: {
 						fn: function DataGrid_onActionCreate_success(response) {
+							if (cbObj && YAHOO.lang.isFunction(cbObj.fn)) {
+								cbObj.fn.call(this, '', cbObj);
+							} else {
+								this._actionResponse(actionId);
+							}
 							me._actionResponse(item.actionId, response);
 						},
 						scope: this
@@ -183,7 +187,12 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		onRootActionClick: function() {
-			console.log('Im in!');
+
+			var itemsData = this.modules.dataGrid.getSelectedItems();
+			if(itemsData && itemsData.length) {
+				// Есть выбранные элементы -> действия именно над ними, не будем мешаться
+				return;
+			}
 
 			var button = this.toolbarButtons["defaultActive"].groupActionsButton;
 			var menu = button.getMenu();
@@ -467,11 +476,84 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			}
 		},
 
+		closeYearSectionPrompt: function(p_sType, p_aArgs, p_oItem) {
+			var nodeRef = p_oItem.items[0];
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'GET',
+				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/getOpenTransientCases?nodeRef=' + nodeRef,
+				successCallback: {
+					scope: this,
+					fn: function(response) {
+						var items = response.json.items;
+						if (items && items.length) {
+							Alfresco.util.PopupManager.displayPrompt({
+								title:Alfresco.util.message('lecm.os.lbl.close.nomen'),
+								text: Alfresco.util.message('lecm.os.msg.nomen.not.closed.docs'),
+								buttons:[{
+									text: Alfresco.util.message('lecm.os.msg.all.docs.close'),
+									handler: {
+										obj: {
+											context: this,
+											p_sType: p_sType,
+											p_aArgs: p_aArgs,
+											p_oItem: p_oItem
+										},
+										fn: closeAllCases
+									}
+								}, {
+									text: Alfresco.util.message('lecm.os.msg.move.passing.docs'),
+									handler: {
+										obj: {
+											context: this,
+											p_sType: p_sType,
+											p_aArgs: p_aArgs,
+											p_oItem: p_oItem,
+											cases: items,
+											fn: closeAllCases
+										},
+										fn: moveOpenTransientCases
+									}
+								}, {
+									text: Alfresco.util.message('lecm.os.btn.cancel'),
+									handler: {
+										fn: cancel
+									}
+								}]
+							});
+						} else {
+							this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
+						}
+					}
+				},
+				failureMessage: this.msg('message.failure'),
+				scope: this
+			});
+
+			function closeAllCases(event, obj) {
+				obj.context.onGroupActionsClick(obj.p_sType, obj.p_aArgs, obj.p_oItem);
+				this.destroy();
+			}
+
+			function moveOpenTransientCases(event, obj) {
+				var newParams = {};
+				newParams.actionId = 'Перемещение номенклатурного дела';
+				newParams.items = obj.cases;
+				obj.context._createScriptForm(newParams, obj);
+				this.destroy();
+			}
+
+			function cancel() {
+				this.destroy();
+			}
+		},
+
 		onGroupActionsClickProxy: function onGroupActionsClickProxy(p_sType, p_aArgs, p_oItem){
 			 if ("Удаление номенклатурного дела" == p_oItem.actionId) {
-			 	this.deleteND_Propmt.call(this, p_sType, p_aArgs, p_oItem)
+			 	this.deleteND_Propmt.call(this, p_sType, p_aArgs, p_oItem);
 			 } else if ("Уничтожение номенклатурного дела" == p_oItem.actionId) {
-			 	this.destroyND_Propmt.call(this, p_sType, p_aArgs, p_oItem)
+			 	this.destroyND_Propmt.call(this, p_sType, p_aArgs, p_oItem);
+			 } else if ('Закрытие номенклатуры дел' == p_oItem.actionId) {
+				 this.closeYearSectionPrompt(p_sType, p_aArgs, p_oItem);
 			 } else {
 			 	this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
 			 }
@@ -954,6 +1036,6 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			};
 			this.hideImportDialog();
 			YAHOO.util.Connect.asyncRequest(Alfresco.util.Ajax.POST, url, callback);
-		}
+									}
 	}, true);
 })();
