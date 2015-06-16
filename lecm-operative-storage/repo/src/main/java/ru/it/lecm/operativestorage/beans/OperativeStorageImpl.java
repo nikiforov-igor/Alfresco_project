@@ -7,18 +7,18 @@ package ru.it.lecm.operativestorage.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.Path;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
@@ -274,7 +274,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 			nodeService.createAssociation(docNodeRef, caseRef, ASSOC_NOMENCLATURE_CASE);
 
 			nodeService.addAspect(docNodeRef, DocumentService.ASPECT_DONT_MOVE_TO_ARCHIVE_FOLDER, null);
-		} 
+		}
 	}
 
 	@Override
@@ -496,6 +496,17 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 
 		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
+	@Override
+	public boolean caseHasDocumentsVolumes(NodeRef caseRef) {
+		NodeRef docFolder = getDocuemntsFolder(caseRef);
+		List<ChildAssociationRef> docs = nodeService.getChildAssocs(docFolder);
+
+		List<ChildAssociationRef> volumes = nodeService.getChildAssocs(caseRef, new HashSet<>(Arrays.asList(TYPE_NOMENCLATURE_VOLUME)));
+
+		return (docs != null && docs.size() > 0) || (volumes != null && volumes.size() > 0);
+
 	}
 
 }

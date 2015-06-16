@@ -127,4 +127,6 @@ public interface OperativeStorageService {
 
 	public void grantPermissionToArchivist(NodeRef docNodeRef);
 
+	public boolean caseHasDocumentsVolumes(NodeRef caseRef);
+
 }

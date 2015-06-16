@@ -581,14 +581,17 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 		},
 
 		deleteND_Propmt: function(execFunction, item) {
-			var nodeRef = new Alfresco.util.NodeRef(item.nodeRef);
+
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'GET',
-				url: Alfresco.constants.PROXY_URI + 'lecm/forms/picker/node/' + nodeRef.uri + '/children',
+				dataObj: {
+					selectableType: 'lecm-document:base,lecm-os:nomenclature-case-volume'
+				},
+				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes?nodeRef=' + item.nodeRef,
 				successCallback: {
 					scope: this,
 					fn: function(response) {
-						if(response.json.data.items.length) {
+						if(response.json.notEmpty) {
 							Alfresco.util.PopupManager.displayPrompt({
 								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
 								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),
@@ -596,8 +599,11 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 									{
 										text:Alfresco.util.message('lecm.os.btn.ok'),
 										handler: {
-											obj: this,
-											fn: destroyND
+											obj: {
+												context: this,
+												deleteFn: destroyND
+											},
+											fn: areYouReallyShurePrompt
 										}
 									},
 									{
@@ -616,6 +622,29 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				failureMessage: this.msg('message.failure'),
 				scope: this
 			});
+
+			function areYouReallyShurePrompt(event, obj) {
+				Alfresco.util.PopupManager.displayPrompt({
+					title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
+					text: Alfresco.util.message('lecm.os.msg.confirm'),
+					buttons:[
+						{
+							text:Alfresco.util.message('lecm.os.btn.ok'),
+							handler: {
+								obj: obj.context,
+								fn: obj.deleteFn
+							}
+						},
+						{
+							text:Alfresco.util.message('lecm.os.btn.cancel'),
+							handler:function DataGridActions__onActionDelete_cancel() {
+								this.destroy();
+							}
+						}
+					]
+				});
+				this.destroy();
+			}
 
 			function destroyND(event, obj) {
 				execFunction.call(obj);

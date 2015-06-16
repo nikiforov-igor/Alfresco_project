@@ -308,4 +308,12 @@ public class OperativeStorageJavaScript extends BaseWebScript{
         });
     }
 
+	public boolean caseHasDocsOrVolumes(ScriptNode caseNodeRef) {
+		return operativeStorageService.caseHasDocumentsVolumes(caseNodeRef.getNodeRef());
+	}
+
+	public boolean caseHasDocsOrVolumes(String caseNodeRefString) {
+		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString));
+	}
+
 }
