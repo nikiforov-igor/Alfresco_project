@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="cm:Создать протокол" type="lecm-group-actions:script-action">
+        <property name="cm:name"><![CDATA[Создать протокол]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[Проведено]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-meetings:document]]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[user.currentUser().getEmployee().toString().equals(doc.attr("lecm-meetings:secretary-assoc-ref"))]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="cm:title"><![CDATA[]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[var draftRootFolder = protocolService.getDraftRoot();
+if (draftRootFolder != null) {
+  var props = [];
+  props['lecm-document:title'] = document.properties["lecm-events:title"];
+  props['lecm-eds-document:summaryContent'] = document.properties["lecm-events:description"];
+  var protocol = draftRootFolder.createNode(null, "lecm-protocol:document", props);
+
+  var holdingMembersAssoc = document.assocs["lecm-meetings:holding-members-assoc"];
+  if (holdingMembersAssoc != null) {
+    for (var i = 0; i < holdingMembersAssoc.length; i++) {
+      protocol.createAssociation(holdingMembersAssoc[i], "lecm-protocol:signers-assoc");
+      protocol.createAssociation(holdingMembersAssoc[i], "lecm-protocol:attended-assoc");
+    }
+  }
+
+  var chairmanAssoc = document.assocs["lecm-meetings:chairman-assoc"];
+  if (chairmanAssoc != null) {
+    for (var i = 0; i < chairmanAssoc.length; i++) {
+      protocol.createAssociation(chairmanAssoc[i], "lecm-protocol:meeting-chairman-assoc");
+    }
+  }
+
+  var secretaryAssoc = document.assocs["lecm-meetings:secretary-assoc"];
+  if (secretaryAssoc != null) {
+    for (var i = 0; i < secretaryAssoc.length; i++) {
+      protocol.createAssociation(secretaryAssoc[i], "lecm-protocol:secretary-assoc");
+    }
+  }
+
+  var holdingItems = meetings.getMeetingHoldingItems(document.nodeRef.toString());
+  if (holdingItems != null && holdingItems.length > 0) {
+    var pointsRootFolder = businessPlatform.getUserTemp();
+
+    for (var i = 0; i < holdingItems.length; i++) {
+      var item = holdingItems[i];
+      var properties = [];
+      properties["lecm-document:indexTableRow"] = item.properties["lecm-document:indexTableRow"];
+      properties["lecm-protocol-ts:point-formulation"] = item.properties["lecm-meetings-ts:holding-item-name"];
+      properties["lecm-protocol-ts:point-desc"] = item.properties["lecm-meetings-ts:holding-listen"];
+      properties["lecm-protocol-ts:men-spoke"] = item.properties["lecm-meetings-ts:holding-speak"];
+      properties["lecm-protocol-ts:decision"] = item.properties["lecm-meetings-ts:holding-agreed"];
+      var createdPoint = pointsRootFolder.createNode(null, "lecm-protocol-ts:point", properties);
+
+      var reporterAssoc = item.assocs["lecm-meetings-ts:holding-reporter-assoc"];
+      if (reporterAssoc != null && reporterAssoc.length == 1) {
+        createdPoint.createAssociation(reporterAssoc[0], "lecm-protocol-ts:reporter-assoc");
+      }
+
+      protocol.createAssociation(createdPoint, "lecm-protocol:temp-items-assoc");
+    }
+  }
+
+  model.redirect = 'document?nodeRef=' + protocol.nodeRef;
+}]]></property>
+    </item>
+</items>

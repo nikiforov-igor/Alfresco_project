@@ -73,7 +73,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 	public void setProtocolReportsService(ProtocolReportsService protocolReportsService) {
 		this.protocolReportsService = protocolReportsService;
 	}
-	
+
 	/**
 	 * Сформировать поручения по пунктам Протокола
 	 *
@@ -240,5 +240,15 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 		NodeRef reportNodeRef = protocolReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
 
 		return new ScriptNode(reportNodeRef, serviceRegistry, getScope());
+	}
+
+	public ScriptNode getDraftRoot() {
+		NodeRef draftRoot = documentService.getDraftRootByType(ProtocolService.TYPE_PROTOCOL);
+
+		if (draftRoot != null) {
+			return new ScriptNode(draftRoot, serviceRegistry, getScope());
+		} else {
+			return null;
+		}
 	}
 }

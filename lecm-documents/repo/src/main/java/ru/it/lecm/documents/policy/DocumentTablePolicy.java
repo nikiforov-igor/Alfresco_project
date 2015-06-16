@@ -161,52 +161,54 @@ public class DocumentTablePolicy extends BaseBean {
 		NodeRef tableData = childAssocRef.getParentRef();
 		NodeRef tableRow = childAssocRef.getChildRef();
 
-		//Пересчёт результирующей строки
-		documentTableService.recalculateTotalRows(tableData);
-		Integer index;
-		List<NodeRef> tableRowList;
+		if (documentTableService.isDocumentTableData(tableData)) {
+			//Пересчёт результирующей строки
+			documentTableService.recalculateTotalRows(tableData);
+			Integer index;
+			List<NodeRef> tableRowList;
 
-		//Пересчет индекса строки
-		index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-        // олучение максимального индекса
-        tableRowList = documentTableService.getTableDataRows(tableData);
-        int maxIndex = 1;
-        if (tableRowList != null) {
-            maxIndex = tableRowList.size();
-        }
-		if (index != null && index < maxIndex) { //индекс не может быть больше максимального - чтобы не было разрывов
-			// Пересчет индекса с текущей строки
-			tableRowList = documentTableService.getTableDataRows(tableData, index);
+			//Пересчет индекса строки
+			index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
+			// олучение максимального индекса
+			tableRowList = documentTableService.getTableDataRows(tableData);
+			int maxIndex = 1;
 			if (tableRowList != null) {
-				//переприсвоение индексов
-				for (NodeRef row : tableRowList) {
-					if (!tableRow.equals(row)) {
-						index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        try {
-                            behaviourFilter.disableBehaviour(row);//блокируем повторный вызов
-                            nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
-                        } finally {
-                            behaviourFilter.enableBehaviour(row);
-                        }
+				maxIndex = tableRowList.size();
+			}
+			if (index != null && index < maxIndex) { //индекс не может быть больше максимального - чтобы не было разрывов
+				// Пересчет индекса с текущей строки
+				tableRowList = documentTableService.getTableDataRows(tableData, index);
+				if (tableRowList != null) {
+					//переприсвоение индексов
+					for (NodeRef row : tableRowList) {
+						if (!tableRow.equals(row)) {
+							index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+							try {
+								behaviourFilter.disableBehaviour(row);//блокируем повторный вызов
+								nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
+							} finally {
+								behaviourFilter.enableBehaviour(row);
+							}
+						}
 					}
 				}
+			} else {
+				nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex);
 			}
-		} else {
-			nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, maxIndex);
-		}
 
-		//Обновление данных для поиска
-		documentTableService.recalculateSearchDescription(tableData);
+			//Обновление данных для поиска
+			documentTableService.recalculateSearchDescription(tableData);
 
-		//Логгирование в бизнес-журнал
-		NodeRef document = documentTableService.getDocumentByTableData(tableData);
-		if (document != null) {
-			List<String> objects = new ArrayList<String>();
-			objects.add(tableRow.toString());
-			objects.add(tableData.toString());
-			businessJournalService.log(document, EventCategory.ADD, "#initiator добавил запись #object1 в таблицу #object2 документа #mainobject", objects);
-			String transactionId = AlfrescoTransactionSupport.getTransactionId();
-			this.lastTransactionId = transactionId;
+			//Логгирование в бизнес-журнал
+			NodeRef document = documentTableService.getDocumentByTableData(tableData);
+			if (document != null) {
+				List<String> objects = new ArrayList<String>();
+				objects.add(tableRow.toString());
+				objects.add(tableData.toString());
+				businessJournalService.log(document, EventCategory.ADD, "#initiator добавил запись #object1 в таблицу #object2 документа #mainobject", objects);
+				String transactionId = AlfrescoTransactionSupport.getTransactionId();
+				this.lastTransactionId = transactionId;
+			}
 		}
 	}
 
