@@ -17,7 +17,7 @@
             <![CDATA[0]]>
         </property>
         <property name="lecm-group-actions:expression">
-            <![CDATA[nodeService.getProperty(lecmOperativeStorageService.getYearSection(doc), QName.createQName("lecm-os:nomenclature-year-section-status",serviceRegistry.getNamespaceService())) == "APPROVED" AND doc.attr("lecm-os:nomenclature-case-status") == "PROJECT" OR doc.attr("lecm-os:nomenclature-case-status") == "CLOSED"]]>
+            <![CDATA[@nodeService.getProperty(@lecmOperativeStorageService.getYearSection(doc.getNodeRef()), T(org.alfresco.service.namespace.QName).createQName("http://www.it.ru/logicECM/operative-storage/1.0", "nomenclature-year-section-status")) == "APPROVED" AND doc.attr("lecm-os:nomenclature-case-status") == "PROJECT" OR doc.attr("lecm-os:nomenclature-case-status") == "CLOSED"]]>
         </property>
         <property name="lecm-group-actions:isGroup">
             <![CDATA[false]]>
