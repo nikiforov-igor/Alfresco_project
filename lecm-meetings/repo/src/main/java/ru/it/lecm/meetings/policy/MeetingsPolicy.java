@@ -122,13 +122,13 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef chairman = nodeAssocRef.getTargetRef();
 		//TODO Тут нужно поменять роль на Мероприятия. Инициатор. когда появится.
-		lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, chairman.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
+		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, chairman.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 	}
 	
 	public void onChairmanRemoved(AssociationRef nodeAssocRef) {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef chairman = nodeAssocRef.getTargetRef();
-		lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, chairman.getId());
+		lecmPermissionService.revokeDynamicRole("EVENTS_INITIATOR_DYN", event, chairman.getId());
 		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, chairman);
 	}
 	
@@ -136,13 +136,13 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef secretary = nodeAssocRef.getTargetRef();
 		//TODO Тут нужно поменять роль на Мероприятия. Инициатор. когда появится.
-		lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
+		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 	}
 	
 	public void onSecretaryRemoved(AssociationRef nodeAssocRef) {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef secretary = nodeAssocRef.getTargetRef();
-		lecmPermissionService.revokeDynamicRole("EVENTS_MEMBER_DYN", event, secretary.getId());
+		lecmPermissionService.revokeDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId());
 		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, secretary);
 	}
 
