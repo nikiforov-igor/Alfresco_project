@@ -20,6 +20,10 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 
 	YAHOO.extend(LogicECM.module.OS.YearSectionControl, Alfresco.component.Base, {
 
+		options: {
+			currentValue: null
+		},
+
 		controlId: null,
 
 		registerValidator: function() {
@@ -39,6 +43,10 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 			function validationHandler(field, args, event, form, silent, message) {
 				var valid = false;
 				var orgValue = form.getFormData()['assoc_lecm-os_nomenclature-organization-assoc_added'];
+
+				if(this.options.currentValue && field.value == this.options.currentValue) {
+					return true;
+				}
 
 				if(field.value.length != 4 || (!orgValue && !LogicECM.Nomenclature.isCentralized)) {
 					return false;
@@ -63,7 +71,7 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 			YAHOO.Bubbling.fire('registerValidationHandler', {
 				message: messageHandler,
 				fieldId: this.controlId,
-				handler: validationHandler,
+				handler: validationHandler.bind(this),
 				when: 'keyup'
 			});
 		}

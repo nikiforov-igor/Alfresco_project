@@ -15,6 +15,11 @@
 
 		function createControl() {
 			var control = new LogicECM.module.OS.YearSectionControl("${fieldHtmlId}");
+			control.setOptions({
+				<#if field.value?? && field.value?is_number>
+				currentValue: '${field.value?c}'
+				</#if>
+			});
 
 			control.registerValidator();
 		}
