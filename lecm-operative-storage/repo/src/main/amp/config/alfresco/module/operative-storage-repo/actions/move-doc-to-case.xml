@@ -19,7 +19,7 @@
                 <property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
                 <property name="lecm-group-actions:field-id"><![CDATA[ndCase]]></property>
                 <property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
-                <property name="lecm-group-actions:field-type"><![CDATA[]]></property>
+                <property name="lecm-group-actions:field-type"><![CDATA[lecm-os:nomenclature-case]]></property>
                 <property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
             </item>
         </items>
