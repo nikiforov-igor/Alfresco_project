@@ -35,6 +35,7 @@
 			<#list field.control.params.options?split("#alf#") as nameValue>
 			<#assign choice=nameValue?split("|")>
 			<#if choice[0] == fieldValue?string || (fieldValue?is_number && fieldValue?c == choice[0])>
+				<input type="hidden" name="${field.name}" value="${choice[0]}"/>
 				${msgValue(choice[1])?html}
 			</#if>
 			</#list>
