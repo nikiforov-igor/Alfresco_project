@@ -27,22 +27,22 @@
         </property>
         <property name="lecm-group-actions:script">
             <![CDATA[if(!document.properties["lecm-os:nomenclature-case-no-permissions-change-on-archivation"]){
-	operativeStorage.cleanVisibilityList(document.nodeRef);
+	document.properties["lecm-os:shared"] = true;
+  	operativeStorage.cleanVisibilityList(document.nodeRef);
 	operativeStorage.grantAll(document.nodeRef);
 }
 
 document.properties["lecm-os:nomenclature-case-status"] = "ARCHIVE";
 
-var childs = document.getChildAssocs();
-for(var i = 0; i < childs.length; i++) {
-	var child = childs[i];
-	if(child && child.hasOwnProperty("lecm-statemachine:status")){
-		child.properties["lecm-statemachine:status"] = "В архиве";
-	}
+var caseDocuments = document.childrenByXPath("*//.[subtypeOf('lecm-document:base')]");
+
+for(var i = 0; i < caseDocuments.length; i++) {
+  var doc = caseDocuments[i];
+  doc.properties["lecm-statemachine:status"] = "В архиве";
+  doc.save();
 }
 
 operativeStorage.grantAccessToAllArchivhists(document.nodeRef);
-
 document.save();]]>
         </property>
     </item>
