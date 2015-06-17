@@ -220,7 +220,12 @@
         var appointments = day.data('appointments'),
             elemWidth = day.outerWidth() + 1,
             elemHeight = day.outerHeight() + 1,
-            self = this;
+            self = this,
+            x = -elemWidth / 2;
+
+        if (day.hasClass('fc-last')) {
+            x *= 3;
+        }
 
         day.formBubble({
             graphics: {
@@ -228,7 +233,7 @@
                 pointer: false
             },
             offset: {
-                x: -elemWidth / 2,
+                x: x,
                 y: -elemHeight / 2
             },
             animation: {
@@ -238,7 +243,7 @@
             callbacks: {
                 onOpen: function(){
                     var bubble = $.fn.formBubble.bubbleObject;
-                    var content = bubble.find(".form-bubble-content")
+                    var content = bubble.find(".form-bubble-content");
 
                     var startDate =  getDateFromCell(day, calInstance),
                         startDateLabel = startDate.toLocaleDateString(),
@@ -267,6 +272,7 @@
 
                     eventList.appendTo(content);
 
+                    bubble.css('max-width', elemWidth + 20);
                     bubble.addClass('overlay');
                 },
                 onClose: function(){
