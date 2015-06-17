@@ -146,7 +146,7 @@ function getExtSearchQuery(formJson) {
 						if (!firstAssoc) {
 							formQuery += " OR ";    //ищем по "или"
 						}
-						formQuery += escapeQName(assocName) + ':"' + assocValue + '"';
+						formQuery += escapeQName(assocName) + ':"*' + assocValue + '*"';
 						firstAssoc = false;
 					}
 					formQuery += ") ";
