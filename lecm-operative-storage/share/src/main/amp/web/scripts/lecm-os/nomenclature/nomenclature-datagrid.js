@@ -775,7 +775,17 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		editEvaluator: function(rowData) {
 			return LogicECM.Nomenclature.isArchivist;
-		}
+		},
+
+		onRenderEvent: function () {
+			Alfresco.logger.debug("DataTable renderEvent");
+			Bubbling.fire("GridRendered", this);
+			for (var i = 0, j = this.afterDataGridUpdate.length; i < j; i++) {
+				this.afterDataGridUpdate[i].call(this);
+			}
+			this.afterDataGridUpdate = [];
+			this.fixHeader();
+		},
 
 	}, true);
 

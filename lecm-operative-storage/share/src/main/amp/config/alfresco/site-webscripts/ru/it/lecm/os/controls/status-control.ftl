@@ -1,4 +1,4 @@
-<div class="set-bordered-panel">
+<div class="set-bordered-panel actions-panel">
 	<div class="set-bordered-panel-heading">Доступные действия</div>
 	<div class="set-bordered-panel-body">
 		<div class="control status editmode">
@@ -30,10 +30,13 @@
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}",
 				value: "${field.value}",
-				itemId: "${form.arguments.itemId}"
+				itemId: "${form.arguments.itemId}",
+				excludeActions: [
+					"onActionEdit"
+				]
 			});
 
-			control.setActions();
+			control.updateActions();
 			control.updateArchiveCheckBox();
 		}
 

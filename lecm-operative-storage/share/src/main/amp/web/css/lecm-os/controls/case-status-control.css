@@ -1,3 +1,20 @@
+.nomenclature-view-set .control {
+    float: none;
+    word-wrap: break-word;
+}
+
+.nomenclature-view-set .actions-panel {
+    position:relative;
+    z-index:10000;
+    float: right;
+    width: 50%;
+    margin-left: 10px;
+}
+
+.nomenclature-view-set .clear {
+    clear: none;
+}
+
 .case-status-buttons button {
-	min-width: 350px;
+    min-width:270px;
 }

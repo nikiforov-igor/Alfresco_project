@@ -496,6 +496,7 @@
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
+                    <show id="lecm-os:nomenclature-case-status"/>
                     <show id="cm:title"/>
                     <show id="lecm-os:nomenclature-case-index"/>
                     <show id="lecm-os:nomenclature-case-store-term-assoc"/>
@@ -519,7 +520,6 @@
                     <show id="lecm-os:nomenclature-case-visibility-employee-assoc"/>
                     <show id="lecm-os:nomenclature-case-visibility-comment"/>
 
-                    <show id="lecm-os:nomenclature-case-status"/>
 					<show id="lecm-os:shared"/>
 
                     <show id="os-aspects:sort-value"/>
@@ -527,7 +527,7 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" label-id="label.common"/>
-                    <set id="set1" parent="common"/>
+                    <set id="set1" parent="common" template="/ru/it/lecm/os/controls/nomenclature-custom-set.ftl"/>
 					<set id="dates" parent="common" appearance="" template="/ru/it/lecm/os/controls/daterange-augmented.ftl" />
                     <set id="set3" parent="common"/>
                     <set id="volumes" label-id="label.volumes"/>
@@ -538,6 +538,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
                     </field>
 
+					 <field id="lecm-os:nomenclature-case-status" set="set1">
+                        <control template="/ru/it/lecm/os/controls/status-control.ftl" />
+                    </field>
 
                     <field id="lecm-os:nomenclature-case-index" set="set1"/>
                     <field id="lecm-os:nomenclature-case-store-term-assoc" set="set1">
@@ -581,9 +584,6 @@
                     </field>
                     <field id="lecm-os:nomenclature-case-no-permissions-change-on-archivation" set="set3" />
 
-                    <field id="lecm-os:nomenclature-case-status" set="set3">
-                        <control template="/ru/it/lecm/os/controls/status-control.ftl" />
-                    </field>
 
                     <field id="lecm-os:nomenclature-case-volume-child-assoc" set="volumes" >
                         <control template="/ru/it/lecm/os/controls/volumes-datagrid-control.ftl">
