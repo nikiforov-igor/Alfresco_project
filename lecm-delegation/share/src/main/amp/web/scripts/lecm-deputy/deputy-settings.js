@@ -72,10 +72,12 @@ LogicECM.module.Deputy = LogicECM.module.Deputy || {};
 			YAHOO.Bubbling.fire('formSubmit', this);
 
 			if (response && response.json) {
-				window.location.reload(true);
+				Alfresco.util.PopupManager.displayMessage({
+						text: Alfresco.util.message("message.save.success")
+					});
 			} else {
 				Alfresco.util.PopupManager.displayPrompt({
-					text: Alfresco.util.message('message.failure')
+					text: Alfresco.util.message("message.failure")
 				});
 			}
 		}
