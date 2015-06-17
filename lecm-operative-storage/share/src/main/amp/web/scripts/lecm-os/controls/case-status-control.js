@@ -13,7 +13,7 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 		this.controlId = htmlId;
 
 		this.grid = Alfresco.util.ComponentManager.find({name: "LogicECM.module.Base.DataGrid_nomenclature"})[0];
-		YAHOO.Bubbling.on('datagridVisible', this.updateActions.bind(this));
+		YAHOO.Bubbling.on('renderedWithRecords', this.updateActions.bind(this));
 		return this;
 	}
 
@@ -41,6 +41,7 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 					return;
 				}
 			}
+
 
 			if(this.buttons) {
 				this.buttons.forEach(function(el) {
