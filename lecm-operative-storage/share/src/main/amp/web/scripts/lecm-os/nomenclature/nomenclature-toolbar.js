@@ -354,29 +354,40 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			});
 		},
 
-		canDeleteUnit: function(unit, execFunction) {
+		canDeleteUnit: function(p_sType, p_aArgs, p_oItem) {
+			var nodeRef = new Alfresco.util.NodeRef(p_oItem.items[0]);
+
+
 			Alfresco.util.Ajax.jsonRequest({
-				method: "GET",
-				url: Alfresco.constants.PROXY_URI + "lecm/dictionary/api/getChildrenItems.json?nodeRef=" + unit,
+				method: 'GET',
+				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/unitHaveChildren?nodeRef=' + nodeRef,
 				successCallback: {
-					fn: function (oResponse) {
-						if(oResponse.json.length == 0) {
-							Alfresco.util.PopupManager.displayMessage(
+					scope: this,
+					fn: function(response) {
+						if (response.json.notEmpty) {
+							Alfresco.util.PopupManager.displayPrompt({
+								title:Alfresco.util.message('lecm.os.lbl.remove.section'),
+								text: Alfresco.util.message('lecm.os.msg.not.empty.sections'),
+								buttons:[
 								{
-									text: ""
-								});
+									text: Alfresco.util.message('lecm.os.btn.ok'),
+									handler: {
+										fn: cancel
+									}
+								}]
+							});
 						} else {
-							execFunction();
+							this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
 						}
 					}
 				},
-				failureCallback: {
-					fn: function () {
-					}
-				},
-				scope: me,
-				execScripts: true
+				failureMessage: this.msg('message.failure'),
+				scope: this
 			});
+
+			function cancel() {
+				this.destroy();
+			}
 		},
 
 		destroyND_Propmt: function(p_sType, p_aArgs, p_oItem) {
@@ -549,15 +560,22 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		onGroupActionsClickProxy: function onGroupActionsClickProxy(p_sType, p_aArgs, p_oItem){
-			 if ("Удаление номенклатурного дела" == p_oItem.actionId) {
-			 	this.deleteND_Propmt.call(this, p_sType, p_aArgs, p_oItem);
-			 } else if ("Уничтожение номенклатурного дела" == p_oItem.actionId) {
-			 	this.destroyND_Propmt.call(this, p_sType, p_aArgs, p_oItem);
-			 } else if ('Закрытие номенклатуры дел' == p_oItem.actionId) {
-				 this.closeYearSectionPrompt(p_sType, p_aArgs, p_oItem);
-			 } else {
-			 	this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
-			 }
+			switch (p_oItem.actionId) {
+				case 'Удаление номенклатурного дела':
+					this.deleteND_Propmt.call(this, p_sType, p_aArgs, p_oItem);
+					break;
+				case 'Уничтожение номенклатурного дела':
+					this.destroyND_Propmt.call(this, p_sType, p_aArgs, p_oItem);
+					break;
+				case 'Закрытие номенклатуры дел':
+					this.closeYearSectionPrompt(p_sType, p_aArgs, p_oItem);
+					break;
+				case 'Удаление раздела номенклатуры дел':
+					this.canDeleteUnit(p_sType, p_aArgs, p_oItem);
+					break;
+				default:
+					this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
+			}
 		},
 
 		onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {

@@ -403,11 +403,11 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 			Alfresco.util.Ajax.jsonRequest({
 				method: "GET",
-				url: Alfresco.constants.PROXY_URI + "lecm/dictionary/api/getChildrenItems.json?nodeRef=" + item.nodeRef,
+				url: Alfresco.constants.PROXY_URI + "lecm/os/nomenclature/unitHaveChildren?nodeRef=" + item.nodeRef,
 				successCallback: {
 					scope: this,
 					fn: function (oResponse) {
-						if(oResponse.json.length) {
+						if(oResponse.json.notEmpty) {
 							Alfresco.util.PopupManager.displayPrompt({
 								title:Alfresco.util.message('lecm.os.lbl.remove.section'),
 								text: Alfresco.util.message('lecm.os.msg.not.empty.sections')
