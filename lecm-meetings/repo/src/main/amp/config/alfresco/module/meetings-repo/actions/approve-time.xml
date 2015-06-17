@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?><items>
+	<item name="cm:Согласовать время совещания" type="lecm-group-actions:script-action">
+		<property name="cm:name"><![CDATA[Согласовать время совещания]]></property>
+		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+		<property name="lecm-group-actions:type"><![CDATA[[lecm-meetings:document]]]></property>
+		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")]]></property>
+		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+		<property name="cm:title"><![CDATA[Согласовать время совещания]]></property>
+		<property name="lecm-group-actions:script"><![CDATA[var meeting = document;
+if (meeting !== null){
+  var members = events.getEventMembers(meeting);
+  /*сбросить имеющиеся ответы*/
+  for(var i = 0; i < members.length; i++) {
+    var row = events.getEmployeeEventMemberRow(meeting.nodeRef.toString(), members[i].nodeRef.toString());
+    row.properties["lecm-events-ts:members-status"]="EMPTY";
+    row.save();
+  }
+  /*разослать уведомления*/
+  var text = "Необходимо согласовать время проведения мероприятия "+ events.wrapperEventLink(meeting, meeting.properties["lecm-document:present-string"]) +", председатель: {lecm-meetings:chairman-assoc/lecm-orgstr:employee-short-name}, время: {lecm-events:from-date?dd.MM.yyyy} - {lecm-events:from-date?HH:mm}";
+  notifications.sendNotification(members, text, meeting);
+}]]></property>
+	</item>
+</items>

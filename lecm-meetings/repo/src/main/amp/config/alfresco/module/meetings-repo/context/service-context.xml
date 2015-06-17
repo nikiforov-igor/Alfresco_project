@@ -193,6 +193,7 @@
 				<value>alfresco/module/${artifactId}/actions/create-protocol-content.xml</value>
 				<value>alfresco/module/${artifactId}/actions/holding-meeting.xml</value>
 				<value>alfresco/module/${artifactId}/actions/create-protocol.xml</value>
+				<value>alfresco/module/${artifactId}/actions/approve-time.xml</value>
 			</list>
 		</property>
 	</bean>
