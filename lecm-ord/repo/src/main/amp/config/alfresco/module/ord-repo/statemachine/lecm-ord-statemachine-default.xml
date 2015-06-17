@@ -7564,6 +7564,13 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
 																<value><![CDATA[true]]></value>
 															</property>
 															<property>
+																<name>transition-script</name>
+																<value><![CDATA[(function() {
+	var document = bpm_package.children[0];
+    operativeStorage.moveToNomenclatureCase(document);
+})();]]></value>
+															</property>
+															<property>
 																<name>transitionLabel</name>
 																<value><![CDATA[Исполнить]]></value>
 															</property>
