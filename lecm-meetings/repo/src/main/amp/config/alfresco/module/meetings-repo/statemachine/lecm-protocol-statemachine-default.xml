@@ -1826,7 +1826,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[user.currentUser().getEmployee().toString() == doc.attr("lecm-document:author-assoc-ref")]]></value>
+																				<value><![CDATA[user.currentUser().getEmployee().toString().equals(doc.attr("lecm-document:author-assoc-ref"))]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1887,7 +1887,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[user.currentUser().getEmployee().toString() == doc.attr("lecm-document:author-assoc-ref")]]></value>
+																				<value><![CDATA[user.currentUser().getEmployee().toString().equals(doc.attr("lecm-document:author-assoc-ref"))]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
