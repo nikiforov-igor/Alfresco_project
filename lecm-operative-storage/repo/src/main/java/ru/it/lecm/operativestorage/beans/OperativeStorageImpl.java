@@ -417,9 +417,12 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		List<AssociationRef> assocList = nodeService.getSourceAssocs(orgUnitRef, ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT);
 
 		for (AssociationRef assoc : assocList) {
-			NodeRef assocYearSection = getYearSection(assoc.getSourceRef());
-			if (assocYearSection.equals(yearSection)) {
-				return true;
+			NodeRef nomenclatureUnit = assoc.getSourceRef();
+			if(Boolean.TRUE.equals(nodeService.getProperty(nomenclatureUnit, IS_ACTIVE))) {
+				NodeRef assocYearSection = getYearSection(assoc.getSourceRef());
+				if (assocYearSection.equals(yearSection)) {
+					return true;
+				}
 			}
 		}
 
