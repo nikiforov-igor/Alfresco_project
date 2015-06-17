@@ -255,18 +255,7 @@
 															</property>
 															<property>
 																<name>transition-script</name>
-																<value><![CDATA[var document = bpm_package.children[0];
-if (document != null) {
-  var chairmanAssoc = document.assocs["lecm-meetings:chairman-assoc"];
-  if (chairmanAssoc != null && chairmanAssoc.length == 1) {
-    documentMembers.addMemberWithoutCheckPermission(document, chairmanAssoc[0], "LECM_BASIC_PG_Reader");
-  }
-  
-  var secretaryAssoc = document.assocs["lecm-meetings:secretary-assoc"];
-  if (secretaryAssoc != null && secretaryAssoc.length == 1) {
-    documentMembers.addMemberWithoutCheckPermission(document, secretaryAssoc[0], "LECM_BASIC_PG_Reader");
-  }
-}]]></value>
+																<value><![CDATA[]]></value>
 															</property>
 															<property>
 																<name>transitionLabel</name>
