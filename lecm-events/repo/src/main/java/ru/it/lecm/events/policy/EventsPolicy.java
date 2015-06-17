@@ -144,9 +144,9 @@ public class EventsPolicy extends BaseBean {
 		lecmPermissionService.grantDynamicRole("EVENTS_MEMBER_DYN", event, member.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_ActionPerformer"));
 		//Отправка уведомления
 		Boolean isRepeated = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_IS_REPEATED);
-		Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
-		send_notifications = null == send_notifications ? false : send_notifications;
-		if (send_notifications && (isRepeated == null || !isRepeated)) {
+		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		sendNotifications = null == sendNotifications ? false : sendNotifications;
+		if (sendNotifications && (isRepeated == null || !isRepeated)) {
 			NodeRef initiator = eventService.getEventInitiator(event);
 			if (initiator != null) {
 				String author = AuthenticationUtil.getSystemUserName();
@@ -195,9 +195,9 @@ public class EventsPolicy extends BaseBean {
 			nodeService.removeChild(nodeService.getPrimaryParent(tableRow).getParentRef(), tableRow);
 		}
 
-		Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
-		send_notifications = null == send_notifications ? false : send_notifications;
-		if (send_notifications) {
+		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		sendNotifications = null == sendNotifications ? false : sendNotifications;
+		if (sendNotifications) {
 			String text = "Вам не требуется присутствовать на мероприятии " + eventService.wrapAsEventLink(event);
 			List<NodeRef> recipients = new ArrayList<>();
 			recipients.add(member);
@@ -246,9 +246,9 @@ public class EventsPolicy extends BaseBean {
 				lecmPermissionService.grantDynamicRole("EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN", event, employee.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader));
 
 				Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-				Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
-				send_notifications = null == send_notifications ? false : send_notifications;
-				if (send_notifications) {
+				Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+				sendNotifications = null == sendNotifications ? false : sendNotifications;
+				if (sendNotifications) {
 					//Отправка уведомления
 					String author = AuthenticationUtil.getSystemUserName();
 					String text = "Запланированное " + eventService.wrapAsEventLink(event) + " требует привлечения ресурсов за которые вы ответственны. Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
@@ -384,9 +384,9 @@ public class EventsPolicy extends BaseBean {
 					//Создание повторных
 					Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
 					Boolean isRepeated = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_IS_REPEATED);
-					Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
-					send_notifications = null == send_notifications ? false : send_notifications;
-					if (send_notifications) {
+					Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+					sendNotifications = null == sendNotifications ? false : sendNotifications;
+					if (sendNotifications) {
 						//Рассылка уведомлений
 						eventService.sendNotificationsToInvitedMembers(event, Boolean.TRUE);
 					}

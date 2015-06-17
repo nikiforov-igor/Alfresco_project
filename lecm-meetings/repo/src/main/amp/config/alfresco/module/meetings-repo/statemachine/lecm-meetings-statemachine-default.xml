@@ -254,12 +254,12 @@
 																<value><![CDATA[true]]></value>
 															</property>
 															<property>
-																<name>transition-script</name>
-																<value><![CDATA[]]></value>
-															</property>
-															<property>
 																<name>transitionLabel</name>
 																<value><![CDATA[Утвердить]]></value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value><![CDATA[]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -287,12 +287,12 @@
 																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Действие доступно только инициатору совещания]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -393,12 +393,12 @@
 																				<value><![CDATA[false]]></value>
 																			</property>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -1903,7 +1903,38 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>993d1e67-2eac-43c2-acd8-0d2f9d8f796f</name>
+														<nodeRef>workspace://SpacesStore/fc018809-39fb-43b3-8844-b177e636cc31</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[var document = stm_document;
+if (document !== null) {
+  var members = events.getEventMembers(document);
+  for (var i = 0; i<members.length; i++) {
+    documentMembers.addMemberWithoutCheckPermission(document, members[i], "LECM_BASIC_PG_Reader");
+  }
+}]]></value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Добавить участниов]]></value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 								</nodes>
 							</subFolder>

@@ -19,7 +19,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.meetings.beans.MeetingsService;
 import ru.it.lecm.security.LecmPermissionService;
@@ -36,10 +38,19 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 
 	private DocumentAttachmentsService documentAttachmentsService;
 	private DocumentTableService documentTableService;
+	private DocumentMembersService documentMembersService;
 	private PolicyComponent policyComponent;
 	private TransactionListener transactionListener;
 	private BehaviourFilter behaviourFilter;
 	private LecmPermissionService lecmPermissionService;
+
+	public DocumentMembersService getDocumentMembersService() {
+		return documentMembersService;
+	}
+
+	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+		this.documentMembersService = documentMembersService;
+	}
 
 	public LecmPermissionService getLecmPermissionService() {
 		return lecmPermissionService;
@@ -118,10 +129,10 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 				new JavaBehaviour(this, "onAgendaItemAttachmentDeleted", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
-	public void onChairmanAdded(AssociationRef nodeAssocRef) {
+	public void onChairmanAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef chairman = nodeAssocRef.getTargetRef();
-		//TODO Тут нужно поменять роль на Мероприятия. Инициатор. когда появится.
+	    documentMembersService.addMemberWithoutCheckPermission(event, chairman, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
 		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, chairman.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 	}
 	
@@ -132,10 +143,10 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, chairman);
 	}
 	
-	public void onSecretaryAdded(AssociationRef nodeAssocRef) {
+	public void onSecretaryAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef secretary = nodeAssocRef.getTargetRef();
-		//TODO Тут нужно поменять роль на Мероприятия. Инициатор. когда появится.
+	    documentMembersService.addMemberWithoutCheckPermission(event, secretary, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
 		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 	}
 	
