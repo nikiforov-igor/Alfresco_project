@@ -42,7 +42,7 @@
 					<control-param name="changeItemsFireAction">osUnitCopyItemChanged</control-param>
 				</type>
 				<type name="association:lecm-os:copy-unit-validate-script" template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                    <control-param name="scripts">scripts/lecm-os/copy-unit-validation.js</control-param>
+                    <control-param name="scripts">scripts/lecm-os/nomenclature/copy-unit-validation.js</control-param>
                 </type>
 				<type name="association:lecm-os:nomenclature-year-section" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
