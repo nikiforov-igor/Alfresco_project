@@ -212,6 +212,9 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 							items: items,
 							bubblingLabel: grid.options.bubblingLabel
 						});
+						YAHOO.Bubbling.fire("datagridRefresh", {
+							bubblingLabel: grid.options.bubblingLabel
+						});
 					}
 				});
 
