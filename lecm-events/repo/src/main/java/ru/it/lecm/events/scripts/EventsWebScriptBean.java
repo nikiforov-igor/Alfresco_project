@@ -15,6 +15,7 @@ import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +32,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     private OrgstructureBean orgstructureBean;
     private DictionaryService dictionaryService;
     private GroupActionsService actionsService;
+    private LecmPermissionService lecmPermissionService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -50,6 +52,10 @@ public class EventsWebScriptBean extends BaseWebScript {
 
     public void setActionsService(GroupActionsService actionsService) {
         this.actionsService = actionsService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
@@ -112,7 +118,7 @@ public class EventsWebScriptBean extends BaseWebScript {
                 // Check the permissions the user has on the entry
 //                AccessStatus canEdit = permissionService.hasPermission(entry.getNodeRef(), PermissionService.WRITE);
 //                AccessStatus canDelete = permissionService.hasPermission(entry.getNodeRef(), PermissionService.DELETE);
-                result.put("canEdit", serviceRegistry.getPermissionService().hasPermission(entry, PermissionService.WRITE) == AccessStatus.ALLOWED);
+                result.put("canEdit", lecmPermissionService.hasPermission(LecmPermissionService.PERM_ATTR_EDIT, entry));
                 result.put("canDelete", true);
                 if (!isFull) {
                     result.put("members", eventService.getEventMembers(entry));
