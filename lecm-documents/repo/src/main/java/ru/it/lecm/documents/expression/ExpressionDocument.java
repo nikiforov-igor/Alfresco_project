@@ -68,6 +68,24 @@ public class ExpressionDocument {
         return null;
     }
 
+    public Boolean attrContains(String attributeName, String... attrValues) {
+        QName attribute = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
+        Object attributeValue = serviceRegistry.getNodeService().getProperty(nodeRef, attribute);
+        if (attributeValue != null) {
+            String strAttrValue = (String) attributeValue;
+            if (attrValues != null) {
+                for (String value: attrValues) {
+                    if (value.length() == 0 || strAttrValue.indexOf(value) > 0) {
+                        return true;
+                    }
+                }
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Возвращает тип объекта, на который указывает ассоциация
      * @param assocName имя ассоциации
