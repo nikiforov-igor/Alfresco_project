@@ -4,7 +4,7 @@
         <property name="cm:name"><![CDATA[Списать в дело]]></property>
         <property name="cm:title"><![CDATA[Списать в дело]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
-        <property name="lecm-group-actions:type"><![CDATA[]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[[lecm-eds-document:base]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression"><![CDATA[]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
