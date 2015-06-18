@@ -30,6 +30,9 @@
 
 	var copied = document.copy(folder);
 
+    var logText = "Копирование номенклатурного дела";
+	businessJournal.log(document.nodeRef.toString(), "OS_COPY", logText, [copied.nodeRef.toString()]);
+
 })();]]>
         </property>
         <items>
