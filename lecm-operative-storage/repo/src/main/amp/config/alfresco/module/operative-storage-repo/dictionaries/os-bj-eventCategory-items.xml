@@ -10,6 +10,10 @@
 				<property name="cm:name">Перемещение</property>
 				<property name="lecm-busjournal:eventCategory-code">OS_MOVE</property>
 			</item>
+			<item name="cm:Утверждение" type="lecm-busjournal:eventCategory">
+				<property name="cm:name">Утверждение</property>
+				<property name="lecm-busjournal:eventCategory-code">OS_APPROVE</property>
+			</item>
 		</items>
 	</item>
 </items>
