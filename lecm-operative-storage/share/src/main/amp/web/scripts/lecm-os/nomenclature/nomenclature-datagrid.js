@@ -775,13 +775,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		editEvaluator: function(rowData) {
 			return LogicECM.Nomenclature.isArchivist;
-		},
-
-		onRenderEvent: function () {
-			if(this.widgets.dataTable.getRecordSet().getRecords()) {
-				YAHOO.Bubbling.fire('renderedWithRecords', this);
-			}
-		},
+		}
 
 	}, true);
 

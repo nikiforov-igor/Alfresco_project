@@ -13,7 +13,6 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 		this.controlId = htmlId;
 
 		this.grid = Alfresco.util.ComponentManager.find({name: "LogicECM.module.Base.DataGrid_nomenclature"})[0];
-		YAHOO.Bubbling.on('renderedWithRecords', this.updateActions.bind(this));
 		return this;
 	}
 
@@ -33,45 +32,40 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 				LogicECM.module.Base.Util.disableControl(this.options.formId, "lecm-os:nomenclature-case-to-archive");
 			}
 		},
-		updateActions: function (layer, args) {
+		prepare: function() {
+			this.updateActions.call(this.grid, this);
+		},
+		updateActions: function (srcContext) {
 
-			if(args) {
-				var gridId = args[1].id;
-				if(gridId != this.grid.id) {
-					return;
-				}
-			}
-
-
-			if(this.buttons) {
-				this.buttons.forEach(function(el) {
+			if(srcContext.buttons) {
+				srcContext.buttons.forEach(function(el) {
 					el.destroy();
 				});
 			}
 
-			this.buttons = [];
+			srcContext.buttons = [];
 
-			if (this.grid.options.actions != null) {
+			if (this.options.actions != null) {
 
 				var oData;
-				this.grid.widgets.dataTable.getRecordSet().getRecords().some(function (el)
+				this.widgets.dataTable.getRecordSet().getRecords().some(function (el)
 				{
-					if (this.options.itemId == el.getData().nodeRef) {
+					if (srcContext.options.itemId == el.getData().nodeRef) {
 						oData = el.getData();
 						return true;
 					}
 				}, this);
 
-				for (var i = 0; i < this.grid.options.actions.length; i++) {
+				for (var i = 0; i < this.options.actions.length; i++) {
 					var showAction = true; // по умолчанию - показывать
-					var action = this.grid.options.actions[i];
+					var action = this.options.actions[i];
 					var actionId = action.id;
 
-					if (this.options.excludeActions.indexOf(actionId) < 0) {
+					if (srcContext.options.excludeActions.indexOf(actionId) < 0) {
 
 						var evaluator = action.evaluator;
 						if (evaluator != null && typeof evaluator == "function") {
-							showAction = evaluator.call(this.grid, oData);
+							showAction = evaluator.call(this, oData);
 						}
 
 						var fakeOwner = {};
@@ -82,29 +76,32 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 								var fakeOwner = obj.fakeOwner;
 								var oData = obj.oData;
 								var grid = obj.grid;
+								var control = obj.srcContex;
 								if (typeof grid[fakeOwner.className] == "function") {
 									var confirmFunction = obj.confirmFn;
 									grid[fakeOwner.className].call(grid, oData, fakeOwner, grid.datagridMeta.actionsConfig, confirmFunction);
 								}
+								grid.afterDataGridUpdate.push(control.updateActions.bind(grid, control));
 								return true;
 							};
 
 							var btn = new YAHOO.widget.Button({
 								label: action.label,
 								id: action.id,
-								container: this.controlId + "-actions-container",
+								container: srcContext.controlId + "-actions-container",
 								onclick: {
 									fn: fnActionHandler,
 									obj: {
 										confirmFn: action.confirmFunction,
-										grid: this.grid,
+										grid: this,
+										srcContex: srcContext,
 										fakeOwner: fakeOwner,
 										oData: oData
 									}
 								}
 							});
 
-							this.buttons.push(btn);
+							srcContext.buttons.push(btn);
 
 						}
 					}

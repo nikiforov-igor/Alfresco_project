@@ -36,7 +36,7 @@
 				]
 			});
 
-			control.updateActions();
+			control.prepare();
 			control.updateArchiveCheckBox();
 		}
 
