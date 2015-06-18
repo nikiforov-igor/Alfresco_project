@@ -90,6 +90,8 @@ LogicECM.module = LogicECM.module || {};
 
 			controlAutoComplete: null,
 
+			itemsLoading: false,
+
 			options:
 			{
 				// скрывать ли игнорируемые ноды в дереве
@@ -138,9 +140,9 @@ LogicECM.module = LogicECM.module || {};
 
 				treeItemType: null,
 
-				maxSearchResults: 20,
+				maxSearchResults: 10,
 
-				maxSearchResultsWithSearch: 20,
+				maxSearchResultsWithSearch: 10,
 
 				maxSearchAutocompleteResults: 10,
 
@@ -1741,70 +1743,78 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			_loadItems: function(nodeRef, searchTerm, clearList) {
-				if (clearList) {
-					this.skipItemsCount = 0;
-					Dom.get(this.options.pickerId + "-picker-items").scrollTop = 0;
-					this.alreadyShowCreateNewLink = false;
-				}
+				if (!this.itemsLoading) {
+					this.itemsLoading = true;
 
-				var successHandler = function (sRequest, oResponse, oPayload)
-				{
-					this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
-					this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
-
-					this.skipItemsCount += oResponse.results.length;
-					Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
-
-					if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink))
-					{
-						this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-					}
-					else
-					{
-						this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
+					if (clearList) {
+						this.skipItemsCount = 0;
+						Dom.get(this.options.pickerId + "-picker-items").scrollTop = 0;
+						this.alreadyShowCreateNewLink = false;
 					}
 
-					this.alreadyShowCreateNewLink = true;
-				};
+					var successHandler = function (sRequest, oResponse, oPayload)
+					{
+						this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
+						this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
 
-				var failureHandler = function (sRequest, oResponse)
-				{
-					if (oResponse.status == 401)
-					{
-						// Our session has likely timed-out, so refresh to offer the login page
-						window.location.reload();
-					}
-					else
-					{
-						try
+						this.skipItemsCount += oResponse.results.length;
+						Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
+
+						if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink))
 						{
-							var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-							this.widgets.dataTable.set("MSG_ERROR", response.message);
-							this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+							this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
 						}
-						catch(e)
+						else
 						{
+							this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
 						}
-					}
-				};
 
-				// build the url to call the pickerchildren data webscript
-				var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
+						this.alreadyShowCreateNewLink = true;
 
-				if (Alfresco.logger.isDebugEnabled())
-				{
-					Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
-				}
+						this.itemsLoading = false;
+					};
 
-				// call the pickerchildren data webscript
-				//if widget is active and not destroyed!!!
-				if (this.widgets.dataSource) {
-					this.widgets.dataSource.sendRequest(url,
+					var failureHandler = function (sRequest, oResponse)
+					{
+						if (oResponse.status == 401)
 						{
-							success: successHandler,
-							failure: failureHandler,
-							scope: this
-						});
+							// Our session has likely timed-out, so refresh to offer the login page
+							window.location.reload();
+						}
+						else
+						{
+							try
+							{
+								var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+								this.widgets.dataTable.set("MSG_ERROR", response.message);
+								this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+							}
+							catch(e)
+							{
+							}
+						}
+
+						this.itemsLoading = false;
+					};
+
+					// build the url to call the pickerchildren data webscript
+					var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
+
+					if (Alfresco.logger.isDebugEnabled())
+					{
+						Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
+					}
+
+					// call the pickerchildren data webscript
+					//if widget is active and not destroyed!!!
+					if (this.widgets.dataSource) {
+						this.widgets.dataSource.sendRequest(url,
+							{
+								success: successHandler,
+								failure: failureHandler,
+								scope: this
+							});
+					}
 				}
 			},
 
