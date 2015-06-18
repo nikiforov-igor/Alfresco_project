@@ -16,12 +16,10 @@
                 showCheckboxColumn: false,
                 searchShowInactive: true,
                 attributeForShow: 'lecm-d8n:delegation-opts-owner-assoc',
-                dataSource: 'lecm/delegation/list',
                 expandable: true,
                 expandDataSource: 'lecm/delegation/procuraciesDatagrid',
                 datagridMeta:{
                     useFilterByOrg: false,
-                    useChildQuery: true,
                     itemType: LogicECM.module.Delegation.Const.itemType,
                     nodeRef: LogicECM.module.Delegation.Const.nodeRef
                 },
