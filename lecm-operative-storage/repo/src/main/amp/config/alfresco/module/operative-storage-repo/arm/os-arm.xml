@@ -43,6 +43,7 @@
 								<property name="lecm-arm:field-title"><![CDATA[Содержание]]></property>
 								<property name="cm:name"><![CDATA[5bb6aeb4-cb99-40cd-b11e-4e911770a6b3]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:summaryContent]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[!html {lecm-eds-document:summaryContent}]]></property>
 							</item>
 						</items>
 						<assocs>
@@ -127,6 +128,7 @@
 						<property name="lecm-arm:field-title"><![CDATA[Содержание]]></property>
 						<property name="cm:name"><![CDATA[de662da4-308e-4968-91e0-54c0bf7dc1d6]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-eds-document:summaryContent]]></property>
+						<property name="lecm-arm:field-format-string"><![CDATA[!html {lecm-eds-document:summaryContent}]]></property>
 					</item>
 					<item name="cm:c391d4db-39b2-47da-91b6-51cae04389e5" type="lecm-arm:field">
 						<property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
