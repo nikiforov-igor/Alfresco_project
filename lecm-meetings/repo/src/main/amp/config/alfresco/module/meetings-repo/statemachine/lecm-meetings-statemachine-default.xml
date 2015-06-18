@@ -1197,8 +1197,8 @@
     for (var k=0; k<resources.length ;k++ ) {
       var responsible = events.getResourceResponsible(resources[k]);
       if (responsible!==null) {
-		text = "Запланированное мероприятие " + events.wrapperEventLink(meeting, meeting.properties["lecm-document:present-string"]) + "требует привлечения ресурсов за которые вы ответственны.  Начало: {lecm-events:from-date?dd.MM.yyyy}, в {lecm-events:from-date?HH:mm}";
-		notifications.sendNotification(members, text, meeting);
+		text = "Запланированное мероприятие " + events.wrapperEventLink(meeting, meeting.properties["lecm-document:present-string"]) + " требует привлечения ресурсов за которые вы ответственны.  Начало: {lecm-events:from-date?dd.MM.yyyy}, в {lecm-events:from-date?HH:mm}";
+		notifications.sendNotification(responsible, text, meeting);
       }
     }
   }
