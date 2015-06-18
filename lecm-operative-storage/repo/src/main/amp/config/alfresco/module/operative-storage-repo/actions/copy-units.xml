@@ -29,6 +29,9 @@
             <![CDATA[(function() {
     var copy = document.copy(folder);
 
+    copy.properties['cm:name'] = 'Copy_' + copy.properties['cm:name'];
+    copy.save();
+
 	var logText = "Скопирован раздел номенклатуры";
 	var logObjects = ["" + copy.nodeRef.toString()];
 	businessJournal.log(document.nodeRef.toString(), "OS_COPY", logText, logObjects);
