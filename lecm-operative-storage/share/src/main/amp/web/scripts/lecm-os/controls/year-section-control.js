@@ -95,7 +95,7 @@ LogicECM.module.OS = LogicECM.module.OS || {};
 
 			if(!LogicECM.Nomenclature.isCentralized) {
 				YAHOO.Bubbling.fire('registerValidationHandler', {
-				message: 'Необходимо выбрать раздел',
+				message: 'Необходимо выбрать организацию',
 				fieldId: this.options.formId + '_' + this.options.orgFieldId,
 				handler: Alfresco.forms.validation.mandatory,
 				when: 'keyup'
