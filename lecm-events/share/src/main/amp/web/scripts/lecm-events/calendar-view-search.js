@@ -372,6 +372,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		deleteAllFilters: function() {
 			this.onClearExtSearch();
 			this.onFullTextClearSearch();
+
+			//this.renderEvents([]);
+
+			var grandParentEl = this.getCalendarContainer();
+			if (grandParentEl != null) {
+				grandParentEl.innerHTML = '<div id="' + this.options.id + '-noEvent"  class="noEvent"><p id="' + this.options.id + '-defaultText" class="instructionTitle">' + this.msg("search.initial-text") + '</p></div>';
+			}
 		}
 	}, true);
 })();
