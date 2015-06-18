@@ -176,7 +176,9 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-os:nomenclature-year-section-year">
-						<control template="/ru/it/lecm/os/controls/os-year-control.ftl"/>
+						<control template="/ru/it/lecm/os/controls/os-year-control.ftl">
+							<control-param name="orgFieldId">assoc:lecm-os:nomenclature-organization-assoc</control-param>
+						</control>
                     </field>
                     <field id="lecm-os:nomenclature-year-section-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
@@ -213,11 +215,17 @@
                     <show id="lecm-os:nomenclature-year-section-year"/>
                     <show id="lecm-os:nomenclature-year-section-comment"/>
                     <show id="lecm-os:nomenclature-year-section-status" />
+					<show id="lecm-os:nomenclature-organization-assoc" />
                 </field-visibility>
                 <appearance>
 					<field id="lecm-os:nomenclature-year-section-year">
-						<control template="/ru/it/lecm/os/controls/os-year-control.ftl"/>
-					</field>
+						<control template="/ru/it/lecm/os/controls/os-year-control.ftl">
+							<control-param name="orgFieldId">assoc:lecm-os:nomenclature-organization-assoc</control-param>
+						</control>
+                    </field>
+					<field id="lecm-os:nomenclature-organization-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
                     <field id="lecm-os:nomenclature-year-section-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
