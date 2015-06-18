@@ -338,6 +338,17 @@
                             var body = Selector.query('body')[0];
 
 			                body.appendChild(picker);
+
+                            // Если поле, вызывающее календарь, находится в диалоговом окне,
+                            // при клике в календарь фокус постоянно уходит на кнопку закрытия диалога
+                            // поэтому удаляем атрибут href из кнопки закрытия
+                            var dialog = Dom.getAncestorByClassName(clicked, "yui-panel");
+                            if (dialog) {
+                                var closeLink = Dom.getFirstChild(dialog);
+                                if (closeLink && Dom.hasClass(closeLink, "container-close")) {
+                                    closeLink.removeAttribute("href");
+                                }
+                            }
 		                }
                         me.widgets.calendar.show();                                         // сначала сделать видимым, потом позиционировать, иначе позиционирование не отрабатывает
 
