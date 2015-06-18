@@ -12,7 +12,9 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 (function () {
 	"use strict";
 	LogicECM.module.Deputy.SubjectsGrid = function (containerId) {
-		return LogicECM.module.Deputy.SubjectsGrid.superclass.constructor.call(this, containerId);
+		var grid = LogicECM.module.Deputy.SubjectsGrid.superclass.constructor.call(this, containerId);
+		YAHOO.Bubbling.on('dataItemCreated', grid.rebuildExpandedRows.bind(grid));
+		return grid;
 	};
 
 	/**
@@ -222,6 +224,26 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 
 
 
+		},
+
+		rebuildExpandedRows: function(layer, args) {
+			var label = args[1].bubblingLabel;
+
+			if(label && label == this.options.bubblingLabel) {
+
+				var upFn = function updateHanlder() {
+					var records = this.widgets.dataTable.getRecordSet().getRecords()
+					records.forEach(function(el){
+						var recordEl = document.getElementById(el.getId());
+						var expandedEl = document.getElementById(el.getId() + '-expanded');
+						YAHOO.util.Dom.insertAfter(expandedEl, recordEl);
+					});
 				}
+
+				this.afterDataGridUpdate.push(upFn);
+
+
+			}
+		}
 	}, true);
 })();
