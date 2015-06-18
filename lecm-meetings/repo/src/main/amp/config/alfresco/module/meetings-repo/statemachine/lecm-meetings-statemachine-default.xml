@@ -402,7 +402,7 @@
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")) AND (@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
+																				<value><![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")) AND (@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
