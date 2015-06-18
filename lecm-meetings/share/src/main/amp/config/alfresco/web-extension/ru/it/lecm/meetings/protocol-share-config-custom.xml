@@ -339,6 +339,15 @@
 					<field id="lecm-document:doc-date">
 						<control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
 					</field>
+					<field id="lecm-eds-document:document-type-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_протокола</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"> </control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
