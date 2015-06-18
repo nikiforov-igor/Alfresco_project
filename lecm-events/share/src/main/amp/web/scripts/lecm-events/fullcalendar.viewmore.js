@@ -224,7 +224,7 @@
             x = -elemWidth / 2;
 
         if (day.hasClass('fc-last')) {
-            x *= 3;
+            x = x * 2 - 10;
         }
 
         day.formBubble({
