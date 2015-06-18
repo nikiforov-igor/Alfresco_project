@@ -59,7 +59,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
                                 me.viewDialog.destroy();
                             }
 							Alfresco.util.PopupManager.displayMessage ({
-								text: Alfresco.util.msg("msg.data_refreshed")
+								text: Alfresco.util.message("msg.data_refreshed")
 							});
                             if (!me.options.myProfile) {
                                 YAHOO.Bubbling.fire("datagridRefresh", {
