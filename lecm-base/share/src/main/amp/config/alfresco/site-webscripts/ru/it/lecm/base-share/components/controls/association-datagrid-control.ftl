@@ -276,13 +276,16 @@
         }
     }
     function init() {
-        LogicECM.module.Base.Util.loadScripts([
+        LogicECM.module.Base.Util.loadResources([
             'scripts/lecm-base/components/advsearch.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
             'modules/simple-dialog.js',
             'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-association-datagrid-control.js'
-        ], loadRootNode);
+        ],
+        [
+            'css/lecm-base/components/association-datagrid-control.css'
+        ],loadRootNode);
     }
 
     YAHOO.util.Event.onDOMReady(init);

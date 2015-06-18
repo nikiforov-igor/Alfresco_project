@@ -1,3 +1,10 @@
-.control .label-div ~ .document-table-width {
+.control.document-table-control .label-div ~ .document-table-width {
 	width: 100%;
+}
+.control.document-table-control .value-div .datagrid .grid.yui-dt .yui-dt-data td {
+	vertical-align: top;
+}
+.control.document-table-control .value-div .datagrid .grid.yui-dt .yui-dt-data td > div {
+	word-break: break-all;
+	word-break: break-word;
 }

@@ -1,0 +1,7 @@
+.control.association-datagrid .value-div .datagrid .grid.yui-dt .yui-dt-data td {
+    vertical-align: top;
+}
+.control.association-datagrid .value-div .datagrid .grid.yui-dt .yui-dt-data td > div {
+    word-break: break-all;
+    word-break: break-word;
+}
