@@ -140,9 +140,9 @@ LogicECM.module = LogicECM.module || {};
 
 				treeItemType: null,
 
-				maxSearchResults: 10,
+				maxSearchResults: 20,
 
-				maxSearchResultsWithSearch: 10,
+				maxSearchResultsWithSearch: 20,
 
 				maxSearchAutocompleteResults: 10,
 
