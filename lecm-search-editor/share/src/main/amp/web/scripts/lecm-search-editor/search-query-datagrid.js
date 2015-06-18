@@ -171,6 +171,12 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                     });
                 }
             }
+            if (this.options.showActionColumn){
+                // Add actions as last column
+                columnDefinitions.push(
+                    { key:"actions", label:this.msg("label.column.actions"), sortable:false, formatter:this.fnRenderCellActions(), width: Math.round(26.7 * this.showActionsCount) }
+                );
+            }
             return columnDefinitions;
         },
 
@@ -299,7 +305,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                     }
                                 }
 
-                                var firstColumnIndex = scope.options.showCheckboxColumn ? 2 : 1;
+                                var firstColumnIndex = scope.options.showCheckboxColumn ? 1 : 0;
 
                                 var stripedTooltip = html.replace(/<\/?[^>]+>/g,'');
                                 if (stripedTooltip.length > scope.MAX_CONTENT_SIZE) {
@@ -493,6 +499,15 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                 return this.PREFERENCE_KEY + "columnPref." + Alfresco.constants.USERNAME + "." + id;
             }
             return null;
+        },
+
+        onActionEdit: function (item){
+            window.location.href = window.location.protocol + "//" + window.location.host +
+                Alfresco.constants.URL_PAGECONTEXT + item.page + "?nodeRef=" + item.nodeRef;
+        },
+
+        onActionViewDocument: function (item){
+            this.onActionEdit(item);
         }
     }, true);
 })();

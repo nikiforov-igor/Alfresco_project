@@ -1,7 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
-<div class="grid-vis-hdr">
+<div id="${id}" class="grid-vis-hdr">
 <@grid.datagrid id=id showViewForm=false showArchiveCheckBox=false>
     <script type="text/javascript">//<![CDATA[
     (function(){
@@ -11,7 +11,15 @@
                         bubblingLabel: "query-search-results",
                         usePagination: true,
                         showExtendSearchBlock: false,
-                        showActionColumn: false,
+	                    actions: [
+		                    {
+			                    type: "datagrid-action-link-query-search-results",
+			                    id: "onActionViewDocument",
+			                    permission: "",
+			                    label: "${msg("actions.edit")}"
+		                    }
+	                    ],
+                        showActionColumn: true,
                         expandable: false,
                         showCheckboxColumn: false,
                         datagridFormId: "searchQueryGrid"
