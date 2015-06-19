@@ -471,7 +471,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				toDate = toDateCal.getTime();
 			}
 
-			String additionalFilter = " AND @lecm\\-events\\:temp\\-members\\-assoc\\-ref:\"" + member.toString() + "\"";
+			String additionalFilter = " AND @lecm\\-events\\:temp\\-members\\-assoc\\-ref:\"*" + member.toString() + "*\"";
 			if (ignoreNode != null) {
 				additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
 			}
