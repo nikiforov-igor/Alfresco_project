@@ -16,6 +16,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentEventService;
@@ -244,6 +245,14 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 
 	public ScriptNode getDraftRoot() {
 		NodeRef draftRoot = documentService.getDraftRootByType(ProtocolService.TYPE_PROTOCOL);
+
+		if (draftRoot == null) {
+			try {
+				draftRoot = documentService.createDraftRoot(ProtocolService.TYPE_PROTOCOL);
+			} catch (WriteTransactionNeededException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
 
 		if (draftRoot != null) {
 			return new ScriptNode(draftRoot, serviceRegistry, getScope());
