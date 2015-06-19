@@ -12,7 +12,7 @@ public interface Contractors {
     public static final String CONTRACTOR_NAMESPACE = "http://www.it.ru/lecm/contractors/model/contractor/1.0";
     public static final String REPRESENTATIVE_NAMESPACE = "http://www.it.ru/lecm/contractors/model/representative/1.0";
     public static final QName TYPE_CONTRACTOR = QName.createQName(CONTRACTOR_NAMESPACE, "contractor-type");
-    public static final QName TYPE_REPRESENTATIVE = QName.createQName(CONTRACTOR_NAMESPACE, "representative-type");
+    public static final QName TYPE_REPRESENTATIVE = QName.createQName(REPRESENTATIVE_NAMESPACE, "representative-type");
     public static final QName TYPE_REPRESENTATIVE_AND_CONTRACTOR = QName.createQName(CONTRACTOR_NAMESPACE, "link-representative-and-contractor");
     public static final QName PROP_CONTRACTOR_SHORTNAME = QName.createQName(CONTRACTOR_NAMESPACE, "shortname");
     public static final QName PROP_CONTRACTOR_FULLNAME = QName.createQName(CONTRACTOR_NAMESPACE, "fullname");
