@@ -63,7 +63,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode) {
-        List<NodeRef> events = eventService.getEvents(fromDate, toDate);
+        List<NodeRef> events = eventService.getEvents(fromDate, toDate, eventService.getAdditionalFilterForCalendarShow());
         return processEvents(events, loadActions, true, mode);
     }
 
@@ -155,13 +155,12 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> searchUserEvents(String filter) {
-        List<NodeRef> events = eventService.searchEvents(filter);
+        List<NodeRef> events = eventService.searchEvents(filter + eventService.getAdditionalFilterForCalendarShow());
         return processEvents(events, false, false, null);
     }
 
-    public Scriptable getUserNearestEvents(ScriptNode currentEmployee, int maxItems) {
-        String additionalFilter = " AND (@lecm\\-events\\:temp\\-members\\-assoc\\-ref: \"*" + currentEmployee.getNodeRef() + "*\" OR @lecm\\-events\\:initiator\\-assoc\\-ref: \"" + currentEmployee.getNodeRef() + "\")";
-        return createScriptable(eventService.getNearestEvents(formatDate(new Date(), false), maxItems, additionalFilter));
+    public Scriptable getUserNearestEvents(int maxItems) {
+        return createScriptable(eventService.getNearestEvents(formatDate(new Date(), false), maxItems, eventService.getAdditionalFilterForCalendarShow()));
     }
 
     private String formatDate(Date date, Boolean isAllDay) {

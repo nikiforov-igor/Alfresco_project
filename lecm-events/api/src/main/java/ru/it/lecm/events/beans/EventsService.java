@@ -74,6 +74,8 @@ public interface EventsService {
 
     public static final String EVENT_LINK_URL = "/share/page/event";
 
+    public static final String EVENTS_ENGINEER_ROLE = "EVENTS_ENGINEER";
+
     List<NodeRef> getEvents(String fromDate, String toDate);
 
     public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter);
@@ -135,4 +137,6 @@ public interface EventsService {
 	void sendIcalNotificationsToInvitedMembers(NodeRef event, boolean firstTime);
 
 	void addUpdateType(QName TYPE_MEETINGS_DOCUMENT, List<QName> propertiesToCopy, List<QName> assocsToCopy);
+
+    public String getAdditionalFilterForCalendarShow();
 }

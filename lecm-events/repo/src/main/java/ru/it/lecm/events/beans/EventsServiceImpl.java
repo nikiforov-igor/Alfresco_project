@@ -79,19 +79,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private final Map<QName, List<QName>> assocsToUpdateMap = new HashMap<>();
 	private final Map<QName, List<QName>> propsToUpdateMap = new HashMap<>();
 
+	private List<String> propsForFilterShowIncalendar = new ArrayList<>();
+
 	public void init() {
 		List<QName> propertiesToCopy = new ArrayList<>();
 		propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
 		propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
 		propertiesToCopy.add(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
 		propertiesToCopy.add(PROP_EVENT_ALL_DAY);
-		
+
 		List<QName> assocsToCopy = new ArrayList<>();
 		assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
 		assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
 		assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
-		assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);		
-		
+		assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);
+
 		addUpdateType(TYPE_EVENT, propertiesToCopy, assocsToCopy);
 	}
 
@@ -102,7 +104,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			propsToUpdateMap.put(type, properties);
 		}
 	}
-	
+
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
 	}
@@ -182,6 +184,10 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
+	}
+
+	public void setPropsForFilterShowIncalendar(List<String> propsForFilterShowIncalendar) {
+		this.propsForFilterShowIncalendar = propsForFilterShowIncalendar;
 	}
 
 	@Override
@@ -800,14 +806,14 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					htmlTextPart.setText(mailText, null, CONTENT_SUBTYPE_HTML);
 					messageBody.addBodyPart(htmlTextPart);
 					//Устанавливаем calendar
-					// Create the calendar part 
+					// Create the calendar part
 					BodyPart calendarBodyPart = new MimeBodyPart();
-					// Fill the message 
+					// Fill the message
 					//calendarBodyPart.setHeader("Content-Class", "urn:content-classes:calendarmessage");
 					//calendarBodyPart.setHeader("Content-ID", "calendar_message");
 					calendarBodyPart.setDataHandler(new DataHandler(
 							new ByteArrayDataSource(iCalString, "text/calendar; charset=UTF-8; method=CANCEL")));
-					// Add part one 
+					// Add part one
 					messageBody.addBodyPart(calendarBodyPart);
 					for (DataSource attachment : attachments) {
 						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
@@ -860,14 +866,14 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					htmlTextPart.setText(mailText, null, CONTENT_SUBTYPE_HTML);
 					messageBody.addBodyPart(htmlTextPart);
 					//Устанавливаем calendar
-					// Create the calendar part 
+					// Create the calendar part
 					BodyPart calendarBodyPart = new MimeBodyPart();
-					// Fill the message 
+					// Fill the message
 					//calendarBodyPart.setHeader("Content-Class", "urn:content-classes:calendarmessage");
 					//calendarBodyPart.setHeader("Content-ID", "calendar_message");
 					calendarBodyPart.setDataHandler(new DataHandler(
 							new ByteArrayDataSource(iCalString, "text/calendar; charset=UTF-8; method=REQUEST")));
-					// Add part one 
+					// Add part one
 					messageBody.addBodyPart(calendarBodyPart);
 					for (DataSource attachment : attachments) {
 						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
@@ -932,7 +938,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		Map<QName, Serializable> oldProperties = nodeService.getProperties(event);
 		Map<QName, Serializable> newProperties = nodeService.getProperties(repeatedEvent);
 		QName eventType = nodeService.getType(event);
-		
+
 		List<QName> propertiesToCopy = propsToUpdateMap.get(eventType);
 
 		Calendar calOldFrom = Calendar.getInstance();
@@ -993,6 +999,25 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 		onAfterUpdate(repeatedEvent, null);
 	}
+
+    public String getAdditionalFilterForCalendarShow() {
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        String result = "";
+        if (currentEmployee != null && !orgstructureBean.isEmployeeHasBusinessRole(currentEmployee, EVENTS_ENGINEER_ROLE) &&
+                this.propsForFilterShowIncalendar != null && this.propsForFilterShowIncalendar.size() > 0) {
+            result += " AND (";
+            int i = 0;
+            for (String prop : this.propsForFilterShowIncalendar) {
+                if (i > 0) {
+                    result += " OR ";
+                }
+                result += "@" + prop.replaceAll("-", "\\\\-").replaceAll(":", "\\\\:") + ": \"*" + currentEmployee + "*\"";
+                i++;
+            }
+            result += ")";
+        }
+        return result;
+    }
 
 	class IcalDS implements DataSource {
 

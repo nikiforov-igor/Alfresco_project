@@ -107,6 +107,14 @@
 		<property name="organizationQueryProcessor" ref="inUserOrganizationProcessor"/>
 		<property name="threadPoolExecutor" ref="lecm.events.thread.pool"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+		<property name="propsForFilterShowIncalendar">
+			<list>
+				<value>lecm-events:initiator-assoc-ref</value>
+				<value>lecm-events:temp-members-assoc-ref</value>
+				<value>lecm-meetings:chairman-assoc-ref</value>
+				<value>lecm-meetings:secretary-assoc-ref</value>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="eventsScript" parent="baseScript" class="ru.it.lecm.events.scripts.EventsWebScriptBean"
