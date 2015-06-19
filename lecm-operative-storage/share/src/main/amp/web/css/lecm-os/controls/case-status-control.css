@@ -1,20 +1,34 @@
+.nomenclature-view-set {
+    position: relative;
+    padding-right: 220px;
+}
+.nomenclature-view-set .actions-panel {
+    width: 200px;
+    position: absolute;
+    right: 0;
+    z-index: 10000;
+}
+.nomenclature-view-set .actions-panel .set-bordered-panel-heading {
+    text-align: center;
+}
+.nomenclature-view-set .actions-panel .set-bordered-panel-body {
+    padding: 10px;
+}
+.nomenclature-view-set .actions-panel .set-bordered-panel-body .control {
+    margin-bottom: 0;
+}
+.nomenclature-view-set .actions-panel .case-status-buttons span.yui-button,
+.nomenclature-view-set .actions-panel .case-status-buttons span.yui-button button {
+    width: 100%;
+    margin: 0;
+}
 .nomenclature-view-set .control {
     float: none;
     word-wrap: break-word;
 }
-
-.nomenclature-view-set .actions-panel {
-    position:relative;
-    z-index:10000;
-    float: right;
-    width: 50%;
-    margin-left: 10px;
+.nomenclature-view-set .control .label-div ~ .container {
+    min-width: 0;
 }
-
 .nomenclature-view-set .clear {
     clear: none;
-}
-
-.case-status-buttons button {
-    min-width:270px;
 }
