@@ -66,7 +66,7 @@
         });
 
         self.calendar.delegate('.fc-button-prev, .fc-button-next', 'click', function(){
-            resetEventsRangeCounts();
+            resetEventsRangeCounts(self.calendar);
         });
     };
 
@@ -79,7 +79,7 @@
         if (windowResized) fcDayContent.height(1);
 
         cellHeight = cells.eq(0).height();
-        fcDayContentHeight = cellHeight - cells.eq(0).find('.fc-day-number').height() - height;
+        fcDayContentHeight = cellHeight - cells.eq(0).find('.fc-day-number').height() + height;
 
         fcDayContent.height(fcDayContentHeight);
     };
@@ -92,8 +92,7 @@
             _eventResize = opt.eventResize,
             _viewDisplay = opt.viewDisplay,
             _events = opt.events,
-            _windowResize = opt.windowResize,
-            initialized = null;
+            _windowResize = opt.windowResize;
 
         $.extend(opt, {
             eventRender: function(event, element){
@@ -126,11 +125,11 @@
 
                                     return false;
                                 });
-                            if (initialized == null) {
+                            if (self.calendar.data("initializedHeight") == null) {
                                 self.increaseHeight(20, false, td);
-                                initialized = td.find(".fc-day-content").css("height");
+                                self.calendar.data("initializedHeight", td.find(".fc-day-content").css("height"));
                             } else {
-                                td.find(".fc-day-content").css("height", initialized)
+                                td.find(".fc-day-content").css("height", self.calendar.data("initializedHeight"));
                             }
                         }
                         td.find('.events-view-more').children('a').children('span').text(Alfresco.util.message('label.events.showAll') + ' ' + + (td.data('appointments').length));
@@ -142,26 +141,26 @@
                 return true; //renders event
             },
             eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
-                resetEventsRangeCounts();
+                resetEventsRangeCounts(self.calendar);
                 if ($.isFunction(_eventDrop)) _eventDrop(event, dayDelta, minuteDelta, allDay, revertFunc);
             },
             eventResize: function(event){
-                resetEventsRangeCounts();
+                resetEventsRangeCounts(self.calendar);
                 if ($.isFunction(_eventResize)) _eventResize(event);
             },
             viewDisplay: function(view){
                 $.fn.formBubble.close();
-                resetEventsRangeCounts();
+                resetEventsRangeCounts(self.calendar);
                 if ($.isFunction(_viewDisplay)) _viewDisplay(view);
             },
             events: function(start, end, callback) {
-                resetEventsRangeCounts();
+                resetEventsRangeCounts(self.calendar);
                 if ($.isFunction(_events)) _events(start, end, callback);
             },
             windowResize: function(view){ //fired AFTER events are rendered
                 if ($.isFunction(_windowResize)) _windowResize(view);
                 self.increaseHeight(25, true);
-                resetEventsRangeCounts();
+                resetEventsRangeCounts(self.calendar);
                 self.calendar.fullCalendar('render'); //manually render to avoid layout bug
             }
         });
@@ -178,7 +177,7 @@
             if (td != null && td.data().appointments != null) {
                 for (var i = 0; i < td.data().appointments.length; i++) {
                     if (td.data().appointments[i].nodeRef == event.nodeRef) {
-                        resetEventsRangeCounts();
+                        resetEventsRangeCounts(calInstance);
                         break;
                     }
                 }
@@ -208,12 +207,16 @@
         return values;
     }
 
-    function resetEventsRangeCounts(){
+    function resetEventsRangeCounts(calendar){
         $('.fc-view-month td').each(function(i){
             $(this).find('.events-view-more').remove();
             $.removeData(this, "apptCount");
             $.removeData(this, "appointments");
+            $(this).find('.fc-day-content').height("auto");
         });
+        if (calendar && calendar.get(0)) {
+            $.removeData(calendar.get(0), "initializedHeight");
+        }
     }
 
     function viewMore(day, calInstance){
