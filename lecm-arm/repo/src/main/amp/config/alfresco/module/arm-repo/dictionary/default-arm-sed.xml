@@ -2453,7 +2453,81 @@
                                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/Статусы/3afd6cf0-8875-4f1e-ba4b-3fb711d9abe6"/>
                                         </assocs>
                                     </item>
+                                    <item name="cm:0265c2e1-c6f2-43ec-9199-f12335b90b81" type="lecm-arm:field">
+                                        <property
+                                                name="cm:name"><![CDATA[3121f3b1-ea6c-4718-9a2f-b03e26661f88]]></property>
+                                        <property
+                                                name="lecm-arm:field-title"><![CDATA[Регистрационный номер]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                    </item>
+                                    <item name="cm:07ac263f-232c-43c7-9384-34c0cafd2390" type="lecm-arm:field">
+                                        <property
+                                                name="cm:name"><![CDATA[b4508159-e190-4356-abae-fddcca88903f]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
+                                        <property
+                                                name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                    </item>
+                                    <item name="cm:7bcb624e-77ad-48bc-8a64-3049fbaef06d" type="lecm-arm:field">
+                                        <property
+                                                name="cm:name"><![CDATA[3e804289-5e2d-4689-b0bc-833f1e0f16d5]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+                                        <property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                    </item>
+                                    <item name="cm:29931919-1bd5-4684-87b4-bd2ba81b906b" type="lecm-arm:field">
+                                        <property
+                                                name="cm:name"><![CDATA[9fb65b56-54ad-44f2-9b2f-7a92e10149c6]]></property>
+                                        <property
+                                                name="lecm-arm:field-title"><![CDATA[Председатель совещания]]></property>
+                                        <property
+                                                name="lecm-arm:field-name"><![CDATA[lecm-protocol:meeting-chairman-assoc]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                    </item>
+                                    <item name="cm:9c291f78-5374-4c1e-a6a0-75624d1d2eee" type="lecm-arm:field">
+                                        <property
+                                                name="cm:name"><![CDATA[49a8a45f-b43c-4612-b8cf-7877c505999e]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Вид протокола]]></property>
+                                        <property
+                                                name="lecm-arm:field-name"><![CDATA[lecm-eds-document:document-type-assoc]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+                                    </item>
+                                    <item name="cm:c023cca1-6962-4ad3-8650-a3f16a1e6951" type="lecm-arm:field">
+                                        <property
+                                                name="cm:name"><![CDATA[c023cca1-6962-4ad3-8650-a3f16a1e6951]]></property>
+                                        <property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
+                                        <property
+                                                name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                                    </item>
                                 </items>
+                                <assocs>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/3121f3b1-ea6c-4718-9a2f-b03e26661f88"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/b4508159-e190-4356-abae-fddcca88903f"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/3e804289-5e2d-4689-b0bc-833f1e0f16d5"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/9fb65b56-54ad-44f2-9b2f-7a92e10149c6"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/49a8a45f-b43c-4612-b8cf-7877c505999e"/>
+                                    <assoc type="lecm-arm:fields-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По типам документов/Протоколы/c023cca1-6962-4ad3-8650-a3f16a1e6951"/>
+                                </assocs>
                             </item>
                         </items>
                         <assocs>
