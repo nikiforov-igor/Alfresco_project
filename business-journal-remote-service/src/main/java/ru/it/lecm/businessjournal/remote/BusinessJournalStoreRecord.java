@@ -47,6 +47,7 @@ public class BusinessJournalStoreRecord implements Serializable {
 	private String initiatorText;
 	@Index
 	private String mainObject;
+	@Column(length=10485760)
 	private String mainObjectDescription;
 	@Index
 	private String objectType;
