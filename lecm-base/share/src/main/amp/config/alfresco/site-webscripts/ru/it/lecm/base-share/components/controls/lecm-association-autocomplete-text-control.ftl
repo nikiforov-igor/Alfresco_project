@@ -38,6 +38,17 @@
 	<#assign useDynamicLoading = false>
 </#if>
 
+<#assign isFieldMandatory = false>
+<#if field.control.params.mandatory??>
+	<#if field.control.params.mandatory == "true">
+		<#assign isFieldMandatory = true>
+	</#if>
+<#elseif field.mandatory??>
+	<#assign isFieldMandatory = field.mandatory>
+<#elseif field.endpointMandatory??>
+	<#assign isFieldMandatory = field.endpointMandatory>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
