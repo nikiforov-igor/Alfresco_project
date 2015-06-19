@@ -14,6 +14,14 @@
 				<property name="cm:name">Утверждение</property>
 				<property name="lecm-busjournal:eventCategory-code">OS_APPROVE</property>
 			</item>
+			<item name="cm:Добавление тома" type="lecm-busjournal:eventCategory">
+				<property name="cm:name">Добавление тома</property>
+				<property name="lecm-busjournal:eventCategory-code">OS_ADD_VOLUME</property>
+			</item>
+			<item name="cm:Удаление тома" type="lecm-busjournal:eventCategory">
+				<property name="cm:name">Удаление тома</property>
+				<property name="lecm-busjournal:eventCategory-code">OS_REMOVE_VOLUME</property>
+			</item>
 		</items>
 	</item>
 </items>

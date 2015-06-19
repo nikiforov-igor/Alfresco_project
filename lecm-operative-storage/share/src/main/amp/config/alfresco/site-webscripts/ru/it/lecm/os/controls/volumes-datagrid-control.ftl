@@ -148,13 +148,13 @@
 							}).show();
 					},
 
-					createBJRecord: function(nodeRef, desc) {
+					createBJRecord: function(nodeRef, desc, category) {
 						Alfresco.util.Ajax.jsonRequest({
 							method: 'POST',
 							url: Alfresco.constants.PROXY_URI + 'lecm/business-journal/api/record/create',
 							dataObj: {
 								mainObject: "${form.arguments.itemId}",
-								category: 'EDIT',
+								category: category || 'EDIT',
 								description: desc,
 								objects: [nodeRef]
 							},
@@ -165,13 +165,13 @@
 					onCreated: function(layer, args) {
 						var obj = args[1];
 						var logText = '#initiator добавил том номенклатурного дела.'
-						this.createBJRecord(obj.nodeRef, logText);
+						this.createBJRecord(obj.nodeRef, logText, 'OS_ADD_VOLUME');
 					},
 
 					onDeleted: function(layer, args) {
 						var obj = args[1];
 						var logText = '#initiator удалил том номенклатурного дела.'
-						this.createBJRecord(obj.items[0], logText);
+						this.createBJRecord(obj.items[0].nodeRef, logText, 'OS_REMOVE_VOLUME');
 					}
 
 				}, true);
