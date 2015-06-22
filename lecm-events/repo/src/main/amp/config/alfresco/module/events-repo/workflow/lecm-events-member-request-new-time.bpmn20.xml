@@ -34,9 +34,18 @@
 
                                 var currentEmployee = orgstructure.getCurrentEmployee();
                                 var initiator = document.assocs["lecm-events:initiator-assoc"][0];
+								var type = document.getTypeShort();
+								var objectType="";		
+								if (type == "lecm-events:document") {
+									objectType +=  "мероприятия";
+								} else if (type == "lecm-meetings:document") {
+									objectType +=  "совещания";
+								}
                                 if (currentEmployee != null && initiator != null) {
                                     var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
-                                    notificationText += " предложил новое время проведения мероприятия: ";
+                                    notificationText += " предложил новое время проведения ";
+                                    notificationText += objectType;
+                                    notificationText += ": ";
                                     notificationText += events.wrapperEventLink(document, "{lecm-events:title}");
 
                                     var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");

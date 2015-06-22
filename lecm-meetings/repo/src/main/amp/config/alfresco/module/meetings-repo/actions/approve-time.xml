@@ -18,7 +18,7 @@ if (meeting !== null){
     row.save();
   }
   /*разослать уведомления*/
-  var text = "Необходимо согласовать время проведения мероприятия "+ events.wrapperEventLink(meeting, meeting.properties["lecm-document:present-string"]) +", председатель: {lecm-meetings:chairman-assoc/lecm-orgstr:employee-short-name}, время: {lecm-events:from-date?dd.MM.yyyy} - {lecm-events:from-date?HH:mm}";
+  var text = "Необходимо согласовать время проведения совещания "+ events.wrapperEventLink(meeting, meeting.properties["lecm-document:present-string"]) +", председатель: {lecm-meetings:chairman-assoc/lecm-orgstr:employee-short-name}, время: {lecm-events:from-date?dd.MM.yyyy} - {lecm-events:from-date?HH:mm}";
   notifications.sendNotification(members, text, meeting);
 }]]></property>
 	</item>

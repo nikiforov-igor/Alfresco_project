@@ -152,7 +152,13 @@ public class EventsPolicy extends BaseBean {
 				String author = AuthenticationUtil.getSystemUserName();
 				String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
 				Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-				String text = employeeName + " приглашает на мероприятие " + eventService.wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
+				String objectType;
+				if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+					objectType = "мероприятие ";
+				} else {
+					objectType = "совещание ";
+				}
+				String text = employeeName + " приглашает на " + objectType + eventService.wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
 				List<NodeRef> recipients = new ArrayList<>();
 				recipients.add(member);
 				notificationsService.sendNotification(author, event, text, recipients, null);
@@ -198,7 +204,13 @@ public class EventsPolicy extends BaseBean {
 		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
 		sendNotifications = null == sendNotifications ? false : sendNotifications;
 		if (sendNotifications) {
-			String text = "Вам не требуется присутствовать на мероприятии " + eventService.wrapAsEventLink(event);
+			String objectType;
+			if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+				objectType = "мероприятии ";
+			} else {
+				objectType = "совещании ";
+			}
+			String text = "Вам не требуется присутствовать на "+ objectType + eventService.wrapAsEventLink(event);
 			List<NodeRef> recipients = new ArrayList<>();
 			recipients.add(member);
 			notificationsService.sendNotification(AuthenticationUtil.getSystemUserName(), event, text, recipients, null, true);

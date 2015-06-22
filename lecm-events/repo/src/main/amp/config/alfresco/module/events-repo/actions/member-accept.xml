@@ -28,10 +28,18 @@ if (memberRow != null) {
 
 	var currentEmployee = orgstructure.getCurrentEmployee();
 	var initiator = document.assocs["lecm-events:initiator-assoc"][0];
+	var type = document.getTypeShort();
+	var objectType="";		
+	if (type == "lecm-events:document") {
+		objectType +=  "мероприятии ";
+	} else if (type == "lecm-meetings:document") {
+		objectType +=  "совещании ";
+	}
 	if (currentEmployee != null && initiator != null) {
 		var notificationText = "Сотрудник ";
 		notificationText += documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
-		notificationText += " подтвердил свое участие в мероприятии ";
+		notificationText += " подтвердил свое участие в ";
+		notificationText += objectType;
 		notificationText += events.wrapperEventLink(document, "{lecm-events:title}");
 
 		var fromDate = document.properties["lecm-events:from-date"];

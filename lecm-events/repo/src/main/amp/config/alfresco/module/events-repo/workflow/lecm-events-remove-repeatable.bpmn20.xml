@@ -26,13 +26,20 @@
                                 var toDate = event.properties["lecm-events:to-date"]
                                 event.properties["lecm-events:removed"] = true;
                                 event.save();
-
+								var type = event.getTypeShort();
+								var objectType="";		
+								if (type == "lecm-events:document") {
+									objectType +=  "мероприятия ";
+								} else if (type == "lecm-meetings:document") {
+									objectType +=  "совещания ";
+								}
                                 if (toDate.getTime() >= new Date().getTime()) {
                                     var currentUser = orgstructure.getCurrentEmployee();
                                     var members = events.getEventMembers(document);
                                     var notificationText = documentScript.wrapperLink(currentUser,
                                     currentUser.properties["lecm-orgstr:employee-short-name"]);
-                                    notificationText += " отменил проведение мероприятия ";
+                                    notificationText += " отменил проведение ";
+                                    notificationText += objectType;
                                     notificationText += documentScript.wrapperDocumentLink(document,
                                     "{lecm-document:present-string}");
                                     notifications.sendNotificationFromCurrentUser(members, notificationText, document, true);
@@ -45,12 +52,14 @@
                                             if (email != null && email != "") {
                                                 var mail = actions.create("mail");
                                                 mail.parameters.to = email;
-                                                var subjectText = "Отмена проведения мероприятия";
+                                                var subjectText = "Отмена проведения ";
+                                                subjectText += objectType;
                                                 mail.parameters.subject = subjectText;
                                                 mail.parameters.from = from;
                                                 var text = "<html><body>Уважаемые коллеги!<br/>" + documentScript.wrapperLink(currentUser,
                                                 currentUser.properties["lecm-orgstr:employee-short-name"]);
-                                                text += " отменил проведение мероприятия ";
+                                                text += " отменил проведение ";
+                                                text += objectType;
                                                 text += documentScript.wrapperDocumentLink(document, document.properties["lecm-document:present-string"]);
                                         	    text += "</body></html>";
                                                 mail.parameters.html = text;
