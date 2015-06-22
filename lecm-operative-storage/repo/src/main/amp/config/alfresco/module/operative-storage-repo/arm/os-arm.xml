@@ -213,6 +213,7 @@
 					</item>
 				</items>
 				<assocs>
+					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
 					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/7cca2794-fcc8-4867-ba3e-c62d17755123"/>
 					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/de662da4-308e-4968-91e0-54c0bf7dc1d6"/>
 					<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/На указание дела/1c3624d8-5c8b-41bb-a3cd-45a2984133ac"/>
@@ -235,6 +236,9 @@
 						<property name="lecm-arm:types"><![CDATA[]]></property>
 					</item>
 				</items>
+				<assocs>
+					<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/СЭД. Архивариус"/>
+				</assocs>
 			</item>
 		</items>
 	</item>
