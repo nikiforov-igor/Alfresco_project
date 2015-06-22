@@ -189,4 +189,12 @@
 		p:aspects-ref="operative.storage.group.actions"
 	/>
 
+	<bean id="operativeStorageYearAssocPolicy" class="ru.it.lecm.operativestorage.policies.YearSectionPolicy" init-method="init" parent="logicEcmAssociationPolicy"/>
+
+	<bean id="filterYearsProcessoc" class="ru.it.lecm.operativestorage.processors.FilterYearSectionsProcessor" parent="searchQueryBaseProccesor"
+		p:id="FILTER_YEARS_BY_ORG"
+		p:operativeStorageService-ref="lecmOperativeStorageService"
+		p:orgstructureService-ref="serviceOrgstructure"
+	/>
+	
 </beans>

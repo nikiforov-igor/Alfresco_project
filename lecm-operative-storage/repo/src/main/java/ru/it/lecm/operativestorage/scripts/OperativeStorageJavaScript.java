@@ -25,7 +25,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASPECT_MOVE_TO_CASE;
@@ -137,9 +139,8 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 //					behaviourFilter.disableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
 					operativeStorageService.moveDocToNomenclatureCase(docNodeRef, caseRef);
 //					behaviourFilter.enableBehaviour(DocumentService.TYPE_BASE_DOCUMENT);
-				} else {
-					nodeService.addAspect(docNodeRef, ASPECT_MOVE_TO_CASE, null);
 				}
+				nodeService.addAspect(docNodeRef, ASPECT_MOVE_TO_CASE, null);
 
 				return null;
 			}
@@ -239,28 +240,44 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 	}
 
 	public boolean isYearUniq(String year, String orgNodeRef) {
+		Integer yearInt = Integer.parseInt(year);
 		boolean isCentralized = (boolean) nodeService.getProperty(operativeStorageService.getSettings(), OperativeStorageService.PROP_OPERATIVE_STORAGE_CENRALIZED);
-		List<Integer> yearsList = new ArrayList<>();
+		Map<Integer, List<NodeRef>> yearsMap = new HashMap<>();
 
-		if(!isCentralized) {
-			List<NodeRef> yearNodeRefList = operativeStorageService.getOrganizationsYearSections(new NodeRef(orgNodeRef));
-			for (NodeRef yearNodeRef : yearNodeRefList) {
-				if(Boolean.TRUE.equals(nodeService.getProperty(yearNodeRef, BaseBean.IS_ACTIVE))) {
-					yearsList.add((Integer) nodeService.getProperty(yearNodeRef, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+		List<ChildAssociationRef> assocs = nodeService.getChildAssocs(operativeStorageService.getNomenclatureFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+		for (ChildAssociationRef assoc : assocs) {
+			NodeRef childYear = assoc.getChildRef();
+			if(Boolean.TRUE.equals(nodeService.getProperty(childYear, BaseBean.IS_ACTIVE))) {
+				List<NodeRef> childYearOrgs = new ArrayList<>();
+				List<AssociationRef> childYearOrgAssocs = nodeService.getTargetAssocs(childYear, OperativeStorageService.ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION);
+
+				for (AssociationRef childYearOrgAssoc : childYearOrgAssocs) {
+					childYearOrgs.add(childYearOrgAssoc.getTargetRef());
 				}
-			}
-		} else {
-			List<ChildAssociationRef> assocs = nodeService.getChildAssocs(operativeStorageService.getNomenclatureFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
-			for (ChildAssociationRef assoc : assocs) {
-				NodeRef child = assoc.getChildRef();
-				if(Boolean.TRUE.equals(nodeService.getProperty(child, BaseBean.IS_ACTIVE))) {
-					yearsList.add((Integer) nodeService.getProperty(child, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR));
+
+				Integer yearKey = (Integer) nodeService.getProperty(childYear, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR);
+
+				List<NodeRef> yearOrgs = yearsMap.get(yearKey);
+				if(yearOrgs != null) {
+					yearOrgs.addAll(childYearOrgs);
+				} else {
+					yearsMap.put(yearKey, childYearOrgs);
 				}
 			}
 		}
 
-		return !yearsList.contains(Integer.parseInt(year));
+		boolean yearContains = yearsMap.containsKey(yearInt);
 
+		if(isCentralized) {
+			return !yearContains;
+		} else {
+			List<NodeRef> orgs = yearsMap.get(yearInt);
+			if(orgs != null && !orgs.isEmpty()) {
+				return !orgs.contains(new NodeRef(orgNodeRef));
+			}
+
+			return true;
+		}
 	}
 
 	public void createSectionByUnit(String yearRef) {

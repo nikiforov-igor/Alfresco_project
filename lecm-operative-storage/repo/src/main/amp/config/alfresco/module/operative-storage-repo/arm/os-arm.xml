@@ -59,6 +59,7 @@
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/7bfe007d-308c-485a-8e30-2488b8712908"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/716868d8-1bcc-4437-b111-867b51c01cbb"/>
 							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/5bb6aeb4-cb99-40cd-b11e-4e911770a6b3"/>
+							<assoc type="lecm-arm:fields-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ Архивариуса/Номенклатурные дела/Узлы/bf0475a6-52bc-48c4-96b5-dfd4296a1aa0"/>
 						</assocs>
 					</item>
 				</items>

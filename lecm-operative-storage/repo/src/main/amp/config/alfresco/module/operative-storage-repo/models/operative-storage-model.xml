@@ -94,6 +94,24 @@
                         <constraint ref="lecm-os:nomenclature-year-section-status-constraint"/>
                     </constraints>
                 </property>
+				<property name="lecm-os:nomenclature-organization-assoc-ref">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="lecm-os:nomenclature-organization-assoc-text-content">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
             </properties>
             <associations>
                 <association name="lecm-os:nomenclature-organization-assoc">

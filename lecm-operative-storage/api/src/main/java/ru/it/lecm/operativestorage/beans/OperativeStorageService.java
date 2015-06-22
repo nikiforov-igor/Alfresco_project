@@ -131,4 +131,6 @@ public interface OperativeStorageService {
 
 	public boolean canCopyUnits(List<NodeRef> units, NodeRef dest);
 
+	public boolean isCetralized();
+
 }

@@ -553,4 +553,15 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		return true;
 	}
 
+	@Override
+	public boolean isCetralized() {
+		NodeRef settings = getSettings();
+
+		if(settings != null) {
+			return Boolean.TRUE.equals(nodeService.getProperty(settings, PROP_OPERATIVE_STORAGE_CENRALIZED));
+		}
+
+		return true;
+	}
+
 }
