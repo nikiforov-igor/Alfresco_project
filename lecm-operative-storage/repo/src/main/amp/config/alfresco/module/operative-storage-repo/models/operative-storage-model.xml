@@ -124,6 +124,11 @@
                     <title>Индекс</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+					<index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-os:nomenclature-unit-section-comment">
                     <title>Примечание</title>
