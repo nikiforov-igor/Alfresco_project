@@ -129,7 +129,7 @@
                 </association>
                 <!--Номенклатура -->
                 <association name="lecm-eds-document:file-register-assoc">
-                    <title>Номенклатура дел</title>
+                    <title>Номер дела</title>
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>
