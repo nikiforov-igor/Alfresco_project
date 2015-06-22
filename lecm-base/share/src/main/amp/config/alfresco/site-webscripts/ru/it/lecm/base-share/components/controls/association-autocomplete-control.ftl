@@ -153,7 +153,11 @@
         allowedNodesScript: "${allowedScript}",
     </#if>
         multipleSelectMode: ${endpointMany?string},
-        itemType: "${field.control.params.itemType!field.endpointType}",
+        <#if field.control.params.itemType??>
+	        itemType: "${field.control.params.itemType}",
+        <#elseif field.endpointType??>
+	        itemType: "${field.endpointType!""}",
+        </#if>
         currentValue: "${field.value!''}",
         itemFamily: "node",
     <#if field.control.params.maxSearchResults??>
@@ -252,7 +256,11 @@
         selectedValue: "${fieldValue!''}",
         currentValue: "${field.value!''}",
         checkType: ${checkType?string},
-        itemType:"${field.control.params.itemType!field.endpointType}",
+        <#if field.control.params.itemType??>
+            itemType: "${field.control.params.itemType}",
+        <#elseif field.endpointType??>
+            itemType: "${field.endpointType!""}",
+        </#if>
         additionalFilter: "${field.control.params.additionalFilter!''}",
 	    fieldId: "${field.configName}",
 	    formId: "${args.htmlid}"

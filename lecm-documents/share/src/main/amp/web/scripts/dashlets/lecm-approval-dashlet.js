@@ -87,6 +87,12 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
                     resultsText += "stage-sequential";
                 }
 
+                resultsText += "' title='";
+				if (stage.type == "PARALLEL") {
+					resultsText += this.msg("label.approval.dashlet.stage.parallel");
+				} else {
+					resultsText += this.msg("label.approval.dashlet.stage.sequential");
+				}
                 resultsText += "'>";
 				resultsText += this.msg("label.approval.dashlet.stage.title") + ": ";
 				resultsText += stage.title;
