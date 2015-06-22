@@ -40,12 +40,12 @@
             ]);
         })();
         LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-base/components/lecm-datarange.js',
+            'scripts/lecm-os/controls/daterange-augmented.js',
 		    'scripts/lecm-base/components/lecm-date-picker.js'
 		], createDateRange, ["button", "calendar"]);
 	}
 	function createDateRange(){
-		new LogicECM.DateRange("${htmlid}").setOptions({
+		new LogicECM.DateRangeAugmented("${htmlid}").setOptions({
 			startDateHtmlId: "${startDateHtmlId}",
 			endDateHtmlId: "${endDateHtmlId}",
 			unlimitedHtmlId: "${unlimitHtmlId}"
