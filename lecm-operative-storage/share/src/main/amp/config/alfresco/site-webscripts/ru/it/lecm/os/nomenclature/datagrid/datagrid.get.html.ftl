@@ -40,14 +40,14 @@
 					allowCreate: false,
 					showActionColumn: true,
 					dataSource: "/lecm/os/nomenclature/datasource/ndList",
+					overrideSortingWith: true,
 					sort: 'os-aspects:sort-value',
 					excludeColumns: [
 						"lecm-os:nomenclature-unit-section-status",
 						"lecm-os:nomenclature-case-status",
 						"lecm-os:nomenclature-year-section-status",
 						"lecm-os:nomenclature-case-to-archive",
-						"lecm-os:nomenclature-year-section-status-fake",
-						"os-aspects:sort-value"
+						"lecm-os:nomenclature-year-section-status-fake"
 					],
 					actions: [
 						{

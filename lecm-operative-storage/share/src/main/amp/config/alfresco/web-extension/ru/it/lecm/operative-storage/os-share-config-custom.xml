@@ -655,9 +655,9 @@
 			<form id="datagrid">
     			<field-visibility>
                     <show id="cm:title"/>
-                    <show id="lecm-os:fake-index" force="true"/>
+                    <!--<show id="lecm-os:fake-index" force="true"/>-->
 					<show id="lecm-os:fake-type" force="true"/>
-                    <show id="os-aspects:sort-value"/>
+                    <show id="os-aspects:sort-value" force="true"/>
 					<show id="lecm-os:nomenclature-unit-section-status"/>
                     <show id="lecm-os:nomenclature-case-status"/>
 					<show id="lecm-os:nomenclature-year-section-status-fake"/>
@@ -665,11 +665,10 @@
                     <show id="lecm-os:nomenclature-case-to-archive" />
                 </field-visibility>
                 <appearance>
-                	<field id="lecm-os:fake-index" substituteString="{lecm-os:nomenclature-unit-section-index}{lecm-os:nomenclature-case-index}" label-id="lecm.os.lbl.index"/>
                 	<field id="lecm-os:fake-type" label-id="lecm.os.lbl.type" substituteString=" "/>
                     <field id="lecm-os:nomenclature-year-section-status-fake" substituteString="{lecm-os:nomenclature-case-year-assoc/lecm-os:nomenclature-year-section-status}"/>
 					<!--<field id="lecm-os:nomenclature-case-year-section-status"/>-->
-					<field id="os-aspects:sort-value"/>
+					<field id="os-aspects:sort-value" substituteString="{lecm-os:nomenclature-unit-section-index}{lecm-os:nomenclature-case-index}" label-id="lecm.os.lbl.index"/>
                 </appearance>
     		</form>
     	</forms>
