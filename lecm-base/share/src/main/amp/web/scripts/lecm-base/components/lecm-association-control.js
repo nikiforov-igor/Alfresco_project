@@ -1841,31 +1841,21 @@ LogicECM.module = LogicECM.module || {};
 						allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
 					}
 
-					if (additionalFilter != null && additionalFilter.length > 0) {
-						var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
-						var singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
-
-						additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
+					if (additionalFilter) {
+						additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
 					} else {
 						additionalFilter = allowedNodesFilter;
 					}
 				}
 
 				if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
-					var ignoreNodesFilter = "";
+					var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";
 					for (var i = 0; i < this.options.ignoreNodes.length; i++) {
-						if (ignoreNodesFilter !== "") {
-							ignoreNodesFilter += " AND ";
-						}
-						ignoreNodesFilter += "NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
+						ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
 					}
 
-					var addBrackets = this.options.ignoreNodes.length > 1;
 					if (additionalFilter != null && additionalFilter.length > 0) {
-						var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
-						var singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
-
-						additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND " + (addBrackets ? "(" : "") + ignoreNodesFilter + (addBrackets ? ")" : "");
+						additionalFilter = "(" + additionalFilter + ") AND (" + ignoreNodesFilter + ")";
 					} else {
 						additionalFilter = ignoreNodesFilter;
 					}
