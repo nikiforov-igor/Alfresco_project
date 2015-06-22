@@ -13,6 +13,7 @@ import ru.it.lecm.arm.beans.node.ArmNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
 /**
  * User: AIvkin
@@ -22,6 +23,9 @@ import java.util.List;
 public class ArmXPathChildRule extends ArmBaseChildRule {
 	private String rootXPath;
 	private List<String> types;
+	private String filter;
+	private SearchQueryProcessorService processorService;
+
 	protected NodeService nodeService;
 	private SearchService searchService;
 
@@ -49,6 +53,18 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 		this.types = types;
 	}
 
+	public void setProcessorService(SearchQueryProcessorService processorService) {
+		this.processorService = processorService;
+	}
+
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
+
 	@Override
 	public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
 		List<ArmNode> nodes = new ArrayList<>();
@@ -70,7 +86,13 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				query += ")";
 			}
 
-			sp.setQuery(query);
+			if(filter != null && !filter.isEmpty()) {
+				query += " AND (" + filter + ")";
+			}
+
+			String processedQuery = processorService.processQuery(query);
+
+			sp.setQuery(processedQuery);
 			sp.addSort("@" + ContentModel.PROP_NAME, true);
 
 			ResultSet results = null;
@@ -111,7 +133,13 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 				query += ")";
 			}
 
-			sp.setQuery(query);
+			if(filter != null && !filter.isEmpty()) {
+				query += " AND (" + filter + ")";
+			}
+
+			String processedQuery = processorService.processQuery(query);
+
+			sp.setQuery(processedQuery);
 			sp.addSort("@" + ContentModel.PROP_NAME, true);
 
 			ResultSet results = null;

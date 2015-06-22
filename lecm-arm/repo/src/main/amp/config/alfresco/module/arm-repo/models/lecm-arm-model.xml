@@ -428,6 +428,15 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-arm:xpath-child-rule-filter">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 		</type>
 

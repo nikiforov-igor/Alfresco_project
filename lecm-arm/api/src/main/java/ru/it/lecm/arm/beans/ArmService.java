@@ -64,6 +64,7 @@ public interface ArmService {
 	public static final QName TYPE_XPATH_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "xpath-child-rule");
 	public static final QName PROP_ROOT_XPATH= QName.createQName(ARM_NAMESPACE_URI, "xpath-child-rule-root-xpath");
 	public static final QName PROP_XPATH_TYPES = QName.createQName(ARM_NAMESPACE_URI, "xpath-child-rule-types");
+	public static final QName PROP_XPATH_FILTER = QName.createQName(ARM_NAMESPACE_URI, "xpath-child-rule-filter");
 
 	public static final QName ASPECT_ARM_ORDERED = QName.createQName(ARM_NAMESPACE_URI, "ordered");
 	public static final QName PROP_ARM_ORDER = QName.createQName(ARM_NAMESPACE_URI, "order");

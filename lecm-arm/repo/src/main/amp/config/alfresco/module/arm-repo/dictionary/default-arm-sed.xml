@@ -3592,29 +3592,36 @@
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:Номенклатура дел" type="lecm-arm:node">
-                                <property name="cm:name"><![CDATA[Номенклатура дел]]></property>
-                                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                <property name="lecm-arm:types"><![CDATA[]]></property>
-                                <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-                                <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-eds\-document\:file\-register\-assoc\-ref:"#value-ref"]]></property>
-                                <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
-                                <items>
-                                    <item name="cm:10eb27e8-b719-42f6-a785-3dc18e2e2a6c"
-                                          type="lecm-arm:dictionary-child-rule">
-                                        <property name="cm:name">
-                                            <![CDATA[10eb27e8-b719-42f6-a785-3dc18e2e2a6c]]></property>
-                                        <assocs>
-                                            <assoc type="lecm-arm:child-rule-dictionary-assoc"
-                                                   path="/Business platform/LECM/Сервис Справочники/Номенклатура дел"/>
-                                        </assocs>
-                                    </item>
-                                </items>
-                                <assocs>
-                                    <assoc type="lecm-arm:node-child-rule-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По номенклатуре/Номенклатура дел/10eb27e8-b719-42f6-a785-3dc18e2e2a6c"/>
-                                </assocs>
-                            </item>
+								<property name="cm:name"><![CDATA[Номенклатура дел]]></property>
+								<property name="lecm-arm:order"><![CDATA[0]]></property>
+								<property name="lecm-arm:search-type"><![CDATA[]]></property>
+								<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[@lecm\-os\:nomenclature\-case\-assoc\-ref:"#value-ref"]]></property>
+								<property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+								<items>
+									<item name="cm:ca01307f-51d5-449d-a6f6-f1a2bdcab87a" type="lecm-arm:xpath-child-rule">
+										<property name="cm:name"><![CDATA[ca01307f-51d5-449d-a6f6-f1a2bdcab87a]]></property>
+										<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
+										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
+									</item>
+									<item name="cm:e571a6d8-0fda-4b66-8298-259ed855e34d" type="lecm-arm:xpath-child-rule">
+										<property name="cm:name"><![CDATA[e571a6d8-0fda-4b66-8298-259ed855e34d]]></property>
+										<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
+										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
+									</item>
+									<item name="cm:10eb27e8-b719-42f6-a785-3dc18e2e2a6c" type="lecm-arm:dictionary-child-rule">
+										<property name="cm:name"><![CDATA[10eb27e8-b719-42f6-a785-3dc18e2e2a6c]]></property>
+										<assocs>
+											<assoc type="lecm-arm:child-rule-dictionary-assoc" path="/Business platform/LECM/Сервис Справочники/Номенклатура дел"/>
+										</assocs>
+									</item>
+								</items>
+								<assocs>
+									<assoc type="lecm-arm:node-child-rule-assoc" path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По номенклатуре/Номенклатура дел/e571a6d8-0fda-4b66-8298-259ed855e34d"/>
+								</assocs>
+							</item>
                             <item name="cm:96ae11ca-a84e-4104-a999-01895d7b2e3f" type="lecm-arm:field">
                                 <property name="lecm-arm:field-title"><![CDATA[Тип]]></property>
                                 <property name="cm:name"><![CDATA[581b38c7-4878-4a3d-8014-abe5af39cfe5]]></property>

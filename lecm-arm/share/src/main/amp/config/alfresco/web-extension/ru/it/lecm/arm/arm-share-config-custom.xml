@@ -522,6 +522,7 @@
 				<field-visibility>
 					<show id="lecm-arm:xpath-child-rule-root-xpath" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-types" force="true"/>
+					<show id="lecm-arm:xpath-child-rule-filter" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -533,6 +534,7 @@
 				<field-visibility>
 					<show id="lecm-arm:xpath-child-rule-root-xpath" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-types" force="true"/>
+					<show id="lecm-arm:xpath-child-rule-filter" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>

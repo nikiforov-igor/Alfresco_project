@@ -558,8 +558,13 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                         if (types != null && types.length() > 0) {
                             ((ArmXPathChildRule) result).setTypes(Arrays.asList(types.split(",")));
                         }
+						String filter = (String) props.get(PROP_XPATH_FILTER);
+						if(filter != null && !filter.isEmpty()) {
+							((ArmXPathChildRule) result).setFilter(filter);
+						}
                         ((ArmXPathChildRule) result).setSearchService(searchService);
                         ((ArmXPathChildRule) result).setNodeService(nodeService);
+						((ArmXPathChildRule) result).setProcessorService(processorService);
                     }
                 }
                 childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
