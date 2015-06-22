@@ -48,6 +48,13 @@
 		            <title>Срок исполнения</title>
 		            <type>d:date</type>
 	            </property>
+                <!--Количество листов документа-->
+                <property name="lecm-eds-document:sheets-number">
+                    <title>Количество листов</title>
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                </property>
+
                 <property name="lecm-eds-document:document-type-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">

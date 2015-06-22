@@ -26,6 +26,7 @@
 	                <show id="lecm-eds-document:execution-date"/>
 	                <show id="lecm-document-aspects:is-on-control"/>
 	                <show id="lecm-eds-document:file-register-assoc"/>
+					<show id="lecm-eds-document:sheets-number"/>
 	                <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-not-registered"/>
@@ -245,7 +246,8 @@
 	                <show id="lecm-incoming:outgoing-date"/>
 	                <show id="lecm-incoming:outgoing-date"/>
 	                <show id="lecm-eds-document:summaryContent"/>
-	                <show id="lecm-document:subject-assoc"/>
+					<show id="lecm-eds-document:sheets-number"/>
+					<show id="lecm-document:subject-assoc"/>
 	                <show id="lecm-eds-document:file-register-assoc"/>
 	                <show id="lecm-eds-document:note"/>
 	                <show id="lecm-eds-document:execution-date"/>
@@ -409,6 +411,7 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-incoming:recipient-assoc"/>
                     <show id="lecm-incoming:delivery-method-assoc"/>

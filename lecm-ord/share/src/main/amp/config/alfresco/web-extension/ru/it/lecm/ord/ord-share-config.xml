@@ -10,6 +10,7 @@
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-ord:controller-assoc"/>
                     <show id="lecm-eds-document:note"/>
+                    <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-ord:canceled-assoc"/>
@@ -107,6 +108,7 @@
                 <field-visibility>
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
                     <show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
+                    <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
                     <show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
@@ -208,6 +210,7 @@
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-ord:controller-assoc"/>
                     <show id="lecm-eds-document:note"/>
+                    <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-ord:canceled-assoc"/>
@@ -262,6 +265,7 @@
                         </control>
                     </field>
 
+                    <field id="lecm-eds-document:sheets-number" set="ord-document-form-common-set"/>
                     <field id="lecm-document:subject-assoc" set="ord-document-form-common-set"/>
                     <field id="lecm-eds-document:file-register-assoc" mandatory="true" set="ord-document-form-common-set"/>
 

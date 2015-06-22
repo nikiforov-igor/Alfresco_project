@@ -21,6 +21,8 @@
 					<show id="lecm-protocol:attended-assoc"/>
 					<!--Примечание-->
 					<show id="lecm-eds-document:note"/>
+					<!-- Количество листов -->
+					<show id="lecm-eds-document:sheets-number"/>
 					<!--Тематика-->
 					<show id="lecm-document:subject-assoc"/>
 					<!--Дело-->
@@ -63,6 +65,7 @@
                             <control-param name="rows">4</control-param>
                         </control>
 					</field>
+					<field id="lecm-eds-document:sheets-number" set="common"/>
 					<field id="lecm-document:subject-assoc" mandatory="true" set="common"/>
 					<field id="lecm-eds-document:file-register-assoc" set="common"/>
 					<field id="lecm-protocol:errands-autocreation" set="common"/>
@@ -141,6 +144,8 @@
 					<show id="lecm-protocol:attended-assoc"/>
 					<!--Примечание-->
 					<show id="lecm-eds-document:note"/>
+					<!-- Количество листов -->
+					<show id="lecm-eds-document:sheets-number"/>
 					<!--Тематика-->
 					<show id="lecm-document:subject-assoc"/>
 					<!--Дело-->
@@ -231,6 +236,8 @@
 					<show id="lecm-document:title"/>
 					<!--Вид документа-->
 					<show id="lecm-eds-document:document-type-assoc"/>
+					<!-- Количество листов -->
+					<show id="lecm-eds-document:sheets-number"/>
 					<!--Тематика-->
 					<show id="lecm-document:subject-assoc"/>
 					<!--Дело-->

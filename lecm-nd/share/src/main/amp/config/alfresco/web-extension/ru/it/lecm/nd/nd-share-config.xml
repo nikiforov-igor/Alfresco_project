@@ -16,6 +16,7 @@
                     <show id="lecm-eds-document:summaryContent"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-eds-document:note"/>
+                    <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
                     <show id="lecm-nd:begin-date" mandatory="true"/>
@@ -106,7 +107,9 @@
                     <show id="lecm-eds-document:regdate"/>
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                    <show id="lecm-eds-document:document-type-assoc"/>                                                                <!-- Вид документа НД -->
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <!-- Вид документа НД -->
+                    <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
                     <show id="lecm-document-aspects:registrator-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc"/>
@@ -210,6 +213,7 @@
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
+                    <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
 					<show id="lecm-contract:approval" force="true"/>
                     <show id="lecm-nd:begin-date"/>
@@ -270,6 +274,7 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
+                    <field id="lecm-eds-document:sheets-number" set="common"/>
                     <field id="lecm-document:subject-assoc" label="Тематика" set="common"/>
                     <field id="lecm-eds-document:file-register-assoc" label="Номенклатура" set="common"/>
 	                <field id="lecm-nd:begin-date"  label="Период действия" set="dates"/>

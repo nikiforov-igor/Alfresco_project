@@ -14,6 +14,7 @@
 					<show id="lecm-outgoing:contractor-assoc" force="true"/>											<!-- Организация-получатель -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
+					<show id="lecm-eds-document:sheets-number"/>
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
@@ -81,6 +82,7 @@
 						</control>
 					</field>
 
+					<field id="lecm-eds-document:sheets-number" set="common"/>
 					<field id="lecm-document:subject-assoc" set="common"/>
 
 					<field id="lecm-eds-document:note" set="common">
@@ -177,6 +179,7 @@
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
+					<show id="lecm-eds-document:sheets-number"/>
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
@@ -346,6 +349,7 @@
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Контрагент -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
+					<show id="lecm-eds-document:sheets-number"/>
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-document-aspects:registrator-assoc"/>												<!-- Регистратор -->
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
