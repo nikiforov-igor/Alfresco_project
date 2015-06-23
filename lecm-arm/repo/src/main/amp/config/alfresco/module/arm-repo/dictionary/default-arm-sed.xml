@@ -5773,6 +5773,12 @@
                     </item>
                 </items>
             </item>
+			<item name="cm:Работа руководителя для секретарей" type="lecm-arm:accordion-runAs">
+				<property name="cm:name"><![CDATA[Работа руководителя для секретарей]]></property>
+				<property name="lecm-arm:order"><![CDATA[-1]]></property>
+				<property name="lecm-arm:path-to-node"><![CDATA[Моя работа]]></property>
+				<property name="lecm-arm:name-format-string"><![CDATA[Работа %s]]></property>
+			</item>
         </items>
     </item>
 </items>

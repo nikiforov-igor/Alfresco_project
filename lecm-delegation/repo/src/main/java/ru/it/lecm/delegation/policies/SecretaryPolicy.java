@@ -5,8 +5,6 @@
  */
 package ru.it.lecm.delegation.policies;
 
-import java.util.List;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -20,6 +18,8 @@ import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.secretary.SecretaryService;
 
+import java.util.List;
+
 /**
  *
  * @author ikhalikov
@@ -30,7 +30,7 @@ public class SecretaryPolicy implements NodeServicePolicies.OnCreateAssociationP
 	protected NodeService nodeService;
 	private ArmService armService;
 
-	private final String SECRETARY_ARM_NODE_NAME = "Работа %s";
+	private final String SECRETARY_ARM_NODE_NAME = "Работа руководителя для секретарей";
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -53,15 +53,11 @@ public class SecretaryPolicy implements NodeServicePolicies.OnCreateAssociationP
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		updateTextContent(nodeAssocRef);
 
-		NodeRef chiefEmployee = nodeAssocRef.getTargetRef();
-		String employeeName = getEmployeeShortName(chiefEmployee);
-		String addedArmName = String.format(SECRETARY_ARM_NODE_NAME, employeeName.substring(0, employeeName.length() - 1));
 		NodeRef arm = armService.getArmByCode("SED");
 		if (arm != null) {
-			NodeRef accordion = nodeService.getChildByName(arm, ContentModel.ASSOC_CONTAINS, addedArmName);
+			NodeRef accordion = nodeService.getChildByName(arm, ContentModel.ASSOC_CONTAINS, SECRETARY_ARM_NODE_NAME);
 			if (accordion == null) {
-				armService.createRunAsAccordion(nodeAssocRef.getTargetRef(), addedArmName, "Моя работа", "SED");
-				armService.invalidateCache();
+				armService.createRunAsAccordion(null, SECRETARY_ARM_NODE_NAME, "Работа %s", "Моя работа", "SED");
 			}
 		}
 	}
@@ -69,21 +65,6 @@ public class SecretaryPolicy implements NodeServicePolicies.OnCreateAssociationP
 	@Override
 	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
 		updateTextContent(nodeAssocRef);
-
-		NodeRef chiefEmployee = nodeAssocRef.getTargetRef();
-		String employeeName = getEmployeeShortName(chiefEmployee);
-		String deletedArmName = String.format(SECRETARY_ARM_NODE_NAME, employeeName.substring(0, employeeName.length() - 1));
-		NodeRef arm = armService.getArmByCode("SED");
-
-		List<AssociationRef> targetAssocs = nodeService.getSourceAssocs(chiefEmployee, SecretaryService.ASSOC_CHIEF_ASSOC);
-		if (targetAssocs.isEmpty()) {
-			if (arm != null) {
-				NodeRef accordion = nodeService.getChildByName(arm, ContentModel.ASSOC_CONTAINS, deletedArmName);
-				if (accordion != null) {
-					nodeService.deleteNode(accordion);
-				}
-			}
-		}
 	}
 
 	protected void updateTextContent(AssociationRef nodeAssocRef) {

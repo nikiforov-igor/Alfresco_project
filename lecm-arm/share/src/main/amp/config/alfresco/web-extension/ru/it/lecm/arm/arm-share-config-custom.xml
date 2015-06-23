@@ -185,7 +185,7 @@
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-arm:path-to-node"/>
-					<show id="lecm-arm:runAs-employee"/>
+					<show id="lecm-arm:name-format-string"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -196,15 +196,8 @@
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-arm:path-to-node"/>
-					<show id="lecm-arm:runAs-employee"/>
+					<show id="lecm-arm:name-format-string"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-arm:runAs-employee">
-						<control>
-							<control-param name="endpointMany">false</control-param>
-						</control>
-					</field>
-				</appearance>
 			</form>
 		</forms>
 	</config>

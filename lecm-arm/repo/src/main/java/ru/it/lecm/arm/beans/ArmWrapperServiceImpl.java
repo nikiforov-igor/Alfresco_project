@@ -11,6 +11,7 @@ import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,6 +62,10 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         NodeRef arm = service.getArmByCode(armCode);
         if (arm != null) {
+            List<NodeRef> runAsAccords = service.getArmRunAsAccordions(arm);
+            for (NodeRef accord : runAsAccords) {
+                result.add(wrapArmNodeAsObject(accord, true, onlyMeta));
+            }
             List<NodeRef> accords = service.getArmAccordions(arm);
             for (NodeRef accord : accords) {
                 result.add(wrapArmNodeAsObject(accord, true, onlyMeta));
@@ -173,8 +178,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     @Override
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion, boolean onlyMeta) {
         ArmNode node = new ArmNode();
-        Map<QName, Serializable> properties = service.getCachedProperties(nodeRef);
-        node.setTitle((String) properties.get(ContentModel.PROP_NAME));
+        Map<QName, Serializable> properties = null;
+
+        if (!isAccordion || !isRunAsAccordion(nodeRef)) {
+            properties = service.getCachedProperties(nodeRef);
+            node.setTitle((String) properties.get(ContentModel.PROP_NAME));
+        }
 
         if (!isAccordion) {
             node.setArmNodeRef(service.getCachedParent(nodeRef)); // для узла Арм - данное поле дублируется. как так узел Арм - реален
@@ -182,19 +191,25 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             if (!isRunAsAccordion(nodeRef)) {
                 node.setArmNodeRef(nodeRef);
             } else { // если специальный аккордеон - подменяем
-                List<AssociationRef> assoc = nodeService.getTargetAssocs(nodeRef, ArmService.ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE);
-                if (assoc.size() > 0) {
-                    node.setRunAsEmployee(assoc.get(0).getTargetRef());
-                }
+                String[] refs = nodeRef.getId().split("_");
+                NodeRef employeeRunAs = new NodeRef(nodeRef.getStoreRef(), refs[1]);
+
+                NodeRef armAccordionRunAs = new NodeRef(nodeRef.getStoreRef(), refs[0]);
+                properties = service.getCachedProperties(armAccordionRunAs);
+
+                String armTitle = (String) properties.get(ContentModel.PROP_NAME);
+                node.setRunAsEmployee(employeeRunAs);
+
+                node.setTitle(armTitle + " " + service.getCachedProperties(employeeRunAs).get(OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
 
                 String pathToNode = (String) properties.get(ArmService.PROP_ARM_ACCORDION_RUN_AS_PATH);
                 if (pathToNode != null && pathToNode.length() > 0) {
-                    NodeRef arm = service.getCachedParent(nodeRef);
+                    NodeRef arm = service.getCachedParent(armAccordionRunAs);
                     NodeRef armNode = getArmNodeByPath(arm, pathToNode);
                     if (armNode != null) {
                         node.setArmNodeRef(armNode); // подмена на реальный объект
-                        nodeRef = armNode;
                         properties = service.getCachedProperties(armNode);
+                        nodeRef = armNode;
                     }
                 }
             }

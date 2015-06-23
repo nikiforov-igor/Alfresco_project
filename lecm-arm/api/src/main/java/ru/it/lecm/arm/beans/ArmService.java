@@ -81,6 +81,7 @@ public interface ArmService {
 
 	public static final QName TYPE_ARM_ACCORDION_RUN_AS = QName.createQName(ARM_NAMESPACE_URI, "accordion-runAs");
 	public static final QName PROP_ARM_ACCORDION_RUN_AS_PATH = QName.createQName(ARM_NAMESPACE_URI, "path-to-node");
+	public static final QName PROP_ARM_ACCORDION_NAME_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "name-format-string");
 	public static final QName ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE = QName.createQName(ARM_NAMESPACE_URI, "runAs-employee");
 	/**
 	 * проверяет что объект является аккордионом
@@ -213,5 +214,5 @@ public interface ArmService {
 	 * Создание персонального узла для сотрудника
 	 * @param employee сотрудник
 	 */
-	void createRunAsAccordion(NodeRef employee, String armNodeName, String armPath, String armCode);
+	void createRunAsAccordion(NodeRef employee, String armNodeName, String formatName, String armPath, String armCode);
 }

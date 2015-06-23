@@ -94,6 +94,11 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 				</property>
+				<!--Названия узла-->
+				<property name="lecm-arm:name-format-string">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+				</property>
 			</properties>
 			<associations>
 				<!-- Сотрудник-->
@@ -104,7 +109,7 @@
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>
 				</association>

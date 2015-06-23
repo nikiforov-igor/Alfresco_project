@@ -20,6 +20,7 @@ import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
@@ -40,6 +41,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private OrgstructureBean orgstructureBean;
     private AuthorityService authorityService;
     private SearchQueryProcessorService processorService;
+    private SecretaryService secretaryService;
 
     private SimpleCache<String, List<ArmColumn>> columnsCache;
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
@@ -74,9 +76,12 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private Comparator<NodeRef> comparatorByName = new Comparator<NodeRef>() {
         @Override
         public int compare(NodeRef o1, NodeRef o2) {
-            String order1 = (String) getCachedProperties(o1).get(ContentModel.PROP_NAME);
-            String order2 = (String) getCachedProperties(o2).get(ContentModel.PROP_NAME);
             int result = 0;
+            try {
+                NodeRef o1Ref = new NodeRef(o1.getStoreRef(), o1.getId().split("_")[1]);
+                NodeRef o2Ref = new NodeRef(o2.getStoreRef(), o2.getId().split("_")[1]);
+                String order1 = (String) nodeService.getProperty(o1Ref, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                String order2 = (String) nodeService.getProperty(o2Ref, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
             if (order1 == null && order2 != null) {
                 return -1;
             } else if (order1 != null && order2 == null) {
@@ -84,9 +89,12 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             } else if (order1 != null) {
                 result = order1.compareTo(order2);
             }
-/*            if (result == 0 && o1 != null && o2 != null) {
+                if (result == 0) {
                 result = o1.getId().compareTo(o2.getId());  //позволяет иметь ноды с одинаковым порядком
-            }*/
+                }
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
             return result;
         }
     };
@@ -156,7 +164,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
     public boolean isRunAsArmAccordion(NodeRef ref) {
-        return isProperType(ref, TYPE_ARM_ACCORDION_RUN_AS);
+        return ref.getId().contains("_") && isProperType(new NodeRef(ref.getStoreRef(), ref.getId().split("_")[0]), TYPE_ARM_ACCORDION_RUN_AS);
     }
 
 	@Override
@@ -202,26 +210,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         if (!accordionsCache.contains(arm)) {
             Set<QName> typeSet = new HashSet<>(1);
             Map<NodeRef, Set<String>> accordions = new TreeMap<>(comparator);
-            Map<NodeRef, Set<String>> accordionsRunAs = new TreeMap<>(comparatorByName);
             LinkedHashMap<NodeRef, Set<String>> allAccordions = new LinkedHashMap<>();
 
-            typeSet.add(TYPE_ARM_ACCORDION_RUN_AS);
-            List<ChildAssociationRef> accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
-            if (accordionsAssocs != null) {
-                for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
-                    NodeRef accordionRef = accordionAssoc.getChildRef();
-                    Set<String> roles = new HashSet<>();
-                    List<AssociationRef> associationRefs = nodeService.getTargetAssocs(accordionRef, ArmService.ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE);
-                    for (AssociationRef associationRef : associationRefs) {
-                        NodeRef employee = associationRef.getTargetRef();
-                        String roleCode = getAutorityForSecretary(employee);
-                        roles.add(roleCode);
-                    }
-                    accordionsRunAs.put(accordionRef, roles.isEmpty() ? null : roles);
-                }
-                allAccordions.putAll(accordionsRunAs);
-            }
-            typeSet.clear();
+            List<ChildAssociationRef> accordionsAssocs;
             typeSet.add(TYPE_ARM_ACCORDION);
             accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
             if (accordionsAssocs != null) {
@@ -251,6 +242,43 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                         result.add(accEntry.getKey());
                         break;
                     }
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<NodeRef> getArmRunAsAccordions(NodeRef arm) {
+        List<NodeRef> result = new ArrayList<>();
+        Set<QName> typeSet = new HashSet<>(1);
+
+        Map<NodeRef, Set<String>> accordionsRunAs = new TreeMap<>(comparatorByName);
+        List<ChildAssociationRef> accordionsAssocs;
+
+        typeSet.add(TYPE_ARM_ACCORDION_RUN_AS);
+        accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
+
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        if (currentEmployee != null) {
+            List<NodeRef> chiefsList = secretaryService.getChiefs(currentEmployee);
+
+            for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
+                NodeRef accordionRef = accordionAssoc.getChildRef();
+                for (NodeRef chief : chiefsList) {
+                    Set<String> roles = new HashSet<>();
+                    String roleCode = getAutorityForSecretary(chief);
+                    roles.add(roleCode);
+                    accordionsRunAs.put(new NodeRef(accordionRef.getStoreRef(), accordionRef.getId() + "_" + chief.getId()), roles);
+                }
+            }
+        }
+
+        Set<String> auth = authorityService.getAuthoritiesForUser(orgstructureBean.getEmployeeLogin(currentEmployee));
+        for (Map.Entry<NodeRef, Set<String>> accEntry : accordionsRunAs.entrySet()) {
+            for (String accRole : accEntry.getValue()) {
+                if (auth.contains(accRole)) {
+                    result.add(accEntry.getKey());
+                    break;
                 }
             }
         }
@@ -668,17 +696,19 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     }
 
     @Override
-    public void createRunAsAccordion(NodeRef employee, String armNodeName, String armPath, String armCode) {
+    public void createRunAsAccordion(NodeRef employee, String armNodeName, String formatName, String armPath, String armCode) {
         NodeRef arm = getArmByCode(armCode);
         if (arm != null) {
             Map<QName, Serializable> props = new HashMap<>();
             props.put(PROP_ARM_ACCORDION_RUN_AS_PATH, armPath);
             props.put(PROP_ARM_ORDER, -1);
-
+            props.put(PROP_ARM_ACCORDION_NAME_FORMAT_STRING, formatName != null ? formatName : armNodeName);
             NodeRef newAccordion;
             try {
                 newAccordion = createNode(arm, TYPE_ARM_ACCORDION_RUN_AS, armNodeName, props);
+                if (employee != null) {
                 nodeService.createAssociation(newAccordion, employee, ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE);
+                }
             } catch (WriteTransactionNeededException e) {
                 logger.error(e.getMessage(), e);
             }
@@ -743,4 +773,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     public void setStateMachineService(StateMachineServiceBean stateMachineService) {
         this.stateMachineService = stateMachineService;
     }
+    public void setSecretaryService(SecretaryService secretaryService) {
+        this.secretaryService = secretaryService;
+}
+
 }

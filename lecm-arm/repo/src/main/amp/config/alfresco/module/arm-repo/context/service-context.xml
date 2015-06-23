@@ -70,6 +70,7 @@
         <property name="armsCache" ref="arm.arms.cache"/>
         <property name="typesCache" ref="arm.types.cache"/>
         <property name="childRulesCache" ref="arm.rules.cache"/>
+        <property name="secretaryService" ref="secretaryService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -190,6 +191,7 @@
                         <value>lecm-arm:is-aggregation-node</value>
                         <value>lecm-arm:path-to-node</value>
                         <value>lecm-arm:runAs-employee</value>
+                        <value>lecm-arm:name-format-string</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:node">
