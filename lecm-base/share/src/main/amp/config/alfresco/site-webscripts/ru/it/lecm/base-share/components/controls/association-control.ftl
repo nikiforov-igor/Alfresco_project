@@ -216,6 +216,9 @@
 			<#if params.childrenDataSource??>
 				childrenDataSource: "${params.childrenDataSource}",
 			</#if>
+			<#if params.treeBranchesDatasource??>
+				treeBranchesDatasource: "${params.treeBranchesDatasource}",
+			</#if>
 			<#if defaultValue?has_content>
 				defaultValue: "${defaultValue?string}",
 			</#if>
