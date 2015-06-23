@@ -1180,7 +1180,7 @@
         var documents = item.assocs["lecm-meetings-ts:documents-assoc"];
         if (documents!==null && documents.length>0) {
 		for (var j=0; j<documents.length ;j++ ) {
-			var document = documents[i];
+			var document = documents[j];
 			documentConnection.createConnection(meeting, document, 'forInformation', true );
 		}
         }
