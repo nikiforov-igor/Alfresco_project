@@ -30,16 +30,19 @@ const DEFAULT_INDEX = 0;
         };
     }
 
-    var settings = operativeStorage.getSettings();
-    var centralized = settings.properties['lecm-os-global-settings:centralized'];
+    var tmp = [
+        {
+            query: '{{FILTER_YEARS_BY_ORG({})}}'
+        }
+    ];
 
-    if(!centralized) {
-        var currentUser = orgstructure.getCurrentEmployee();
-        var currentUserOrg = orgstructure.getEmployeeOrganization(currentUser);
-        var currentUserOrgUnit = orgstructure.getUnitByOrganization(currentUserOrg);
-
-        params.filter = '[{query: "@lecm\\\\-os\\\\:nomenclature\\\\-organization\\\\-assoc\\\\-ref:\\"' + currentUserOrgUnit.nodeRef.toString() + '\\" OR ISNULL:\\"lecm-os:nomenclature-organization-assoc-ref\\""}]';
-
+    params.filter = jsonUtils.toJSONString(tmp);
+    if(!params.searchConfig || params.searchConfig.length == 0) {
+        logger.warn(params.searchConfig);
+        tmp = {
+            formData: {}
+        };
+        params.searchConfig = jsonUtils.toJSONString(tmp);
     }
 
     model.data = getSearchResults(params);
