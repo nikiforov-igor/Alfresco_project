@@ -30,6 +30,8 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
 
         MAX_CONTENT_SIZE: 200,
 
+        tooltipPosition: null,
+
         setQueryConfig: function (config) {
             this.queryConfig = config;
         },
@@ -188,9 +190,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                     var windowHeight = window.innerHeight;
                     var windowWidth = window.innerWidth;
                     var eventY = oArgs.event.clientY;
-                    var eventX = oArgs.event.clientX;
                     var d = 30; // отступ
-                    var x = 30; // отступ
                     if (eventY > windowHeight / 2) {
                         var ttHeight = parseInt(Dom.getStyle(tooltip, "height"));
                         Dom.setStyle(tooltip, "margin-top", (-ttHeight + d) + "px");
@@ -198,14 +198,26 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                         Dom.setStyle(tooltip, "margin-top", d + "px");
                     }
 
-                    var ttWidth = parseInt(Dom.getStyle(tooltip, "width"));
-                    var ttOffSet = tooltip.offsetLeft;
-                    var tdOffSet = td.offsetLeft;
-                    var offset = ttOffSet - tdOffSet;
-                    if (eventX > (windowWidth / 2) && tdOffSet > (windowWidth / 2) ) {
-                        Dom.setStyle(tooltip, "margin-left", (-offset-ttWidth + x) + "px");
+                    var xy = YAHOO.util.Dom.getXY(td);
+                    this.tooltipPosition = YAHOO.util.Dom.getXY(tooltip);
+                    xy[1] = xy[1] + 10;
+                    if (windowWidth - (xy[0] + 10) < tooltip.offsetWidth) {
+                        xy[0] = windowWidth - tooltip.offsetWidth;
                     } else {
-                        Dom.setStyle(tooltip, "margin-left", x + "px");
+                        xy[0] = xy[0] + 10;
+                    }
+                    YAHOO.util.Dom.setXY(tooltip, xy);
+                }
+            }
+        },
+        onCellMouseout: function(oArgs) {
+            var td = oArgs.target;
+            if (td) {
+                var tooltip = Selector.query(".yui-dt-liner .tt", td, true);
+                if (tooltip) {
+                    if (this.tooltipPosition != null) {
+                        YAHOO.util.Dom.setXY(tooltip, this.tooltipPosition);
+                        this.tooltipPosition = null;
                     }
                 }
             }
@@ -447,6 +459,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                 this.datatableHideTableMessage = this.widgets.dataTable.hideTableMessage;
                 this.widgets.dataTable.hideTableMessage = this._hideMessageOnPaginationLoading.bind(this);
                 this.widgets.dataTable.subscribe("cellMouseoverEvent", this.onCellMouseover, this, true);
+                this.widgets.dataTable.subscribe("cellMouseoutEvent", this.onCellMouseout, this, true);
                 if (!this.search) {
                     // initialize Search
                     this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
