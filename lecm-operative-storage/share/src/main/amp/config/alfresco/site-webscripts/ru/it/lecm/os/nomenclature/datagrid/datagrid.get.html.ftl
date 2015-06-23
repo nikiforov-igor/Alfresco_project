@@ -98,7 +98,8 @@
 							id:"onActionDestroyNomenclatureCase",
 							permission:"edit",
 							label:"${msg("actions.destroy")}",
-							evaluator: datagrid.destroyEvaluator
+							evaluator: datagrid.destroyEvaluator,
+							confirmFunction: datagrid.destroyND_Prompt
 						},
 						{
 							type:"datagrid-action-link-${bubblingId}",

@@ -399,6 +399,37 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 			}
 		},
 
+		destroyND_Prompt: function(execFunction, item) {
+			Alfresco.util.PopupManager.displayPrompt({
+				title: Alfresco.util.message('lecm.os.lbl.nomen.doc.destr'),
+				text: Alfresco.util.message('lecm.os.ttl.confirm.action'),
+				buttons:[{
+					text: 'Ок',
+					handler: {
+						obj: {
+							context: this,
+							fn: execFunction
+						},
+						fn: destroy
+					}
+				}, {
+					text: 'Отмена',
+					handler: {
+						fn: cancel
+					}
+				}]
+			});
+
+			function destroy(event, obj) {
+				this.destroy();
+				obj.fn.call(obj.context);
+			}
+
+			function cancel(event, obj) {
+				this.destroy();
+			}
+		},
+
 		deleteNDSection_Promt: function(execFunction, item) {
 
 			Alfresco.util.Ajax.jsonRequest({
