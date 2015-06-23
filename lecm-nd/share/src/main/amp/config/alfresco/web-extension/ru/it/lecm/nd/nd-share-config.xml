@@ -276,7 +276,7 @@
                     </field>
                     <field id="lecm-eds-document:sheets-number" set="common"/>
                     <field id="lecm-document:subject-assoc" label="Тематика" set="common"/>
-                    <field id="lecm-eds-document:file-register-assoc" label="Номенклатура" set="common"/>
+                    <field id="lecm-eds-document:file-register-assoc" set="common"/>
 	                <field id="lecm-nd:begin-date"  label="Период действия" set="dates"/>
 	                <field id="lecm-nd:end-date" label="" set="dates"/>
 	                <field id="lecm-nd:unlimited" set="dates"/>
