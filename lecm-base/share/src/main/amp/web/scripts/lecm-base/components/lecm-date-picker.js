@@ -310,6 +310,7 @@
                     // If value was set in visible fields, make sure they are validated and put in the hidden field as well
                     if (me.options.currentValue !== "") {
                         me._handleFieldChange(null);
+                        Bubbling.fire("mandatoryControlValueUpdated", me);
                     }
 
 	                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
