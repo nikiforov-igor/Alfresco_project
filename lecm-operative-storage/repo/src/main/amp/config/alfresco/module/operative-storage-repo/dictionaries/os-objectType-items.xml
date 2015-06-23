@@ -16,8 +16,8 @@
 				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
 				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
 			</item>
-			<item name="cm:Номенклатура дел" type="lecm-busjournal:objectType">
-				<property name="cm:name">Номенклатура дел</property>
+			<item name="cm:Номенклатурное дело" type="lecm-busjournal:objectType">
+				<property name="cm:name">Номенклатурное дело</property>
 				<property name="lecm-busjournal:objectType-code">OS_NOMENCLATURE_CASE</property>
 				<property name="lecm-busjournal:objectType-class">lecm-os:nomenclature-case</property>
 				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
@@ -30,13 +30,6 @@
 				<property name="lecm-busjournal:objectType-template">№ {lecm-os:nomenclature-case-volume-number}</property>
 				<property name="lecm-busjournal:objectType-list-template">№ {lecm-os:nomenclature-case-volume-number}</property>
 			</item>
-<!--			<item name="cm:Раздел перечня ТУД" type="lecm-busjournal:objectType">
-				<property name="cm:name">Раздел перечня ТУД</property>
-				<property name="lecm-busjournal:objectType-code">LECM_FMS_OS_TUD_ENTRY</property>
-				<property name="lecm-busjournal:objectType-class">lecm-fms-os:tud-entry</property>
-				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
-				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
-			</item>-->
 			<item name="cm:Гриф секретности" type="lecm-busjournal:objectType">
 				<property name="cm:name">Гриф секретности</property>
 				<property name="lecm-busjournal:objectType-code">OS_SECURITY_CLASSIFICATION</property>
@@ -44,13 +37,6 @@
 				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
 				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
 			</item>
-<!--			<item name="cm:Должность" type="lecm-busjournal:objectType">
-				<property name="cm:name">Должность</property>
-				<property name="lecm-busjournal:objectType-code">LECM_FMS_ORGSTR_STAFF_POSITION</property>
-				<property name="lecm-busjournal:objectType-class">lecm-orgstr:staffPosition</property>
-				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
-				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
-			</item>-->
             <item name="cm:Перечень статей" type="lecm-busjournal:objectType">
 				<property name="cm:name">Перечень статей</property>
 				<property name="lecm-busjournal:objectType-code">OS_STORE_ENTRY</property>
