@@ -185,7 +185,7 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
         QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folder);
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         properties.put(ContentModel.PROP_NAME, folder);
-        ChildAssociationRef childAssoc = null;
+        ChildAssociationRef childAssoc;
         NodeRef childRef;
         try {
             childAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
@@ -193,6 +193,7 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
         } catch (DuplicateChildNodeNameException e) {
             //есть вероятность, что папка уже существует или создана другим потоком/транзакцией
             childRef = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, folder);
+            logger.debug("!!!!!!!!!!! Получил директорию без создания " + folder, e);
         }
         return childRef;
     }
