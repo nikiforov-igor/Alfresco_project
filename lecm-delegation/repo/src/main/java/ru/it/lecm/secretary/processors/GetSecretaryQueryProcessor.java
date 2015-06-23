@@ -45,13 +45,13 @@ public class GetSecretaryQueryProcessor extends SearchQueryProcessor {
         if (employee != null) {
             List<NodeRef> secretaries = secretaryService.getSecretaries(employee);
             if (secretaries.isEmpty()) {
-                sbQuery.append(asList? "''" : "'*'");
+                sbQuery.append(asList? "''" : "'NOT_REF'");
             }
             for (NodeRef secretary : secretaries) {
                 if (sbQuery.length() > 0) {
                     sbQuery.append(asList ? "," : " OR ");
                 }
-                sbQuery.append("'").append(secretary.toString()).append("'");
+                sbQuery.append(!asList ? "'*" : "").append(secretary.toString()).append(!asList ? "*'" : "");
             }
         }
 

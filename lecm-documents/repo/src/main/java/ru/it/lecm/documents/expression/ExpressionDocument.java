@@ -74,8 +74,11 @@ public class ExpressionDocument {
         if (attributeValue != null) {
             String strAttrValue = (String) attributeValue;
             if (attrValues != null) {
+                if (attrValues.length == 1 && attrValues[0].startsWith("(")) {
+                    attrValues = attrValues[0].substring(1, attrValues[0].length() - 1).split(",");
+                }
                 for (String value: attrValues) {
-                    if (value.length() == 0 || strAttrValue.indexOf(value) > 0) {
+                    if (value.length() == 0 || strAttrValue.contains(value)) {
                         return true;
                     }
                 }
