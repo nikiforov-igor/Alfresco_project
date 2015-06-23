@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Simple FTS branches for OS</shortname>
+	<description>Simple FTS branches for OS</description>
+	<url>/lecm/nomenclature/tree/{store_type}/{store_id}/{id}/items</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+</webscript>

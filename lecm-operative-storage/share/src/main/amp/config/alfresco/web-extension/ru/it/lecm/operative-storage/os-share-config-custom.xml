@@ -76,7 +76,7 @@
                     <control-param name="endpointType">lecm-os:nomenclature-case</control-param>
                     <control-param name="childrenDataSource">lecm/os/nomenclature/datasource/avaliableUnits</control-param>
 					<control-param name="additionalFilter">@lecm-os\\:nomenclature-case-status:\"OPEN\"</control-param>
-                    <control-param name="treeIgnoreNodesScript">lecm/os/nomenclature/getIgnoredYears</control-param>
+                    <control-param name="treeBranchesDatasource">lecm/nomenclature/tree</control-param>
                 </type>
                 <type name="association:lecm-os:nomenclature-case-volume" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
                     <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел</control-param>
