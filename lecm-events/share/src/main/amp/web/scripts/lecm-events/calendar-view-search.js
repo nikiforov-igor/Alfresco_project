@@ -141,6 +141,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.checkShowClearSearch();
 			this.fullTextSearchApplied = false;
 			this.updateCurrentFiltersFormView();
+			this.getEvents();
 		},
 
 		onExtSearchClick: function() {
@@ -206,7 +207,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 								formDiv.innerHTML = response.serverResponse.responseText;
 								if (this.searchDialog != null) {
 									if (isClearSearch) {
-
+										this.getEvents();
 									} else {
 										this.searchDialog.show();
 									}

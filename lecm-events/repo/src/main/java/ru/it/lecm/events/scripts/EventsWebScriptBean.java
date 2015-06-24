@@ -155,7 +155,13 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> searchUserEvents(String filter) {
-        List<NodeRef> events = eventService.searchEvents(filter + eventService.getAdditionalFilterForCalendarShow());
+        List<NodeRef> events;
+        if (filter.length() > 0) {
+            events = eventService.searchEvents(filter + eventService.getAdditionalFilterForCalendarShow());
+        } else {
+            events = new ArrayList<>();
+        }
+
         return processEvents(events, false, false, null);
     }
 
