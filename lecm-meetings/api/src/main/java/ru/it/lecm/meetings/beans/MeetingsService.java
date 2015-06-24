@@ -26,6 +26,8 @@ public interface MeetingsService {
 	public static final QName TYPE_MEETINGS_TS_AGENDA_TABLE = QName.createQName(MEETINGS_TS_NAMESPACE, "itemsTable");
 	public static final QName TYPE_MEETINGS_TS_ITEM = QName.createQName(MEETINGS_TS_NAMESPACE, "item");
 	public static final QName ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS = QName.createQName(MEETINGS_TS_NAMESPACE, "attachments-assoc");
+	public static final QName ASSOC_MEETINGS_TS_ITEM_REPORTER = QName.createQName(MEETINGS_TS_NAMESPACE, "reporter-assoc");
+	public static final QName ASSOC_MEETINGS_TS_ITEM_COREPORTER = QName.createQName(MEETINGS_TS_NAMESPACE, "coreporter-assoc");
 	public static final QName ASSOC_MEETINGS_TEMP_ITEMS = QName.createQName(MEETINGS_NAMESPACE, "temp-items-assoc");
 	public static final QName ASSOC_MEETINGS_CHAIRMAN = QName.createQName(MEETINGS_NAMESPACE, "chairman-assoc");
 	public static final QName ASSOC_MEETINGS_SECRETARY = QName.createQName(MEETINGS_NAMESPACE, "secretary-assoc");

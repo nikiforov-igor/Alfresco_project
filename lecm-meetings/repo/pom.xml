@@ -65,6 +65,18 @@
             <version>${project.version}</version>
 			<scope>provided</scope>
         </dependency>
+		<dependency>
+            <groupId>ru.it.lecm.orgstructure</groupId>
+            <artifactId>orgstructure-repo-api</artifactId>
+            <version>${project.version}</version>
+			<scope>provided</scope>
+        </dependency>
+		<dependency>
+            <groupId>ru.it.lecm.contractors</groupId>
+            <artifactId>lecm-contractors-api</artifactId>
+            <version>${project.version}</version>
+			<scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>ru.it.lecm.security</groupId>
             <artifactId>lecm-security-api</artifactId>

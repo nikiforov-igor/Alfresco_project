@@ -20,10 +20,13 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.meetings.beans.MeetingsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 /**
@@ -59,7 +62,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
-	
+
 	public BehaviourFilter getBehaviourFilter() {
 		return behaviourFilter;
 	}
@@ -67,7 +70,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
 	}
-	
+
 	public DocumentAttachmentsService getDocumentAttachmentsService() {
 		return documentAttachmentsService;
 	}
@@ -101,67 +104,109 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		transactionListener = new MeetingsPolicyTransactionListener();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM,
-				new JavaBehaviour(this, "onCreateAgendaItem", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				MeetingsService.TYPE_MEETINGS_DOCUMENT,
 				new JavaBehaviour(this, "onCreateMeeting", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM,
 				new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_CHAIRMAN, 
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_CHAIRMAN,
 				new JavaBehaviour(this, "onChairmanAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_CHAIRMAN, 
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_CHAIRMAN,
 				new JavaBehaviour(this, "onChairmanRemoved", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_SECRETARY, 
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_SECRETARY,
 				new JavaBehaviour(this, "onSecretaryAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_SECRETARY, 
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, MeetingsService.ASSOC_MEETINGS_SECRETARY,
 				new JavaBehaviour(this, "onSecretaryRemoved", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS, 
+				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS,
 				new JavaBehaviour(this, "onAgendaItemAttachmentAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS, 
+				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS,
 				new JavaBehaviour(this, "onAgendaItemAttachmentDeleted", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateChildAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_TS_AGENDA_TABLE, ContentModel.ASSOC_CONTAINS,
+				new JavaBehaviour(this, "onAgendaItemAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_REPORTER,
+				new JavaBehaviour(this, "onAgendaItemReporterAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_COREPORTER,
+				new JavaBehaviour(this, "onAgendaItemReporterAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+	}
+
+	public void onAgendaItemReporterAdded(AssociationRef nodeAssocRef) {
+		NodeRef document = documentTableService.getDocumentByTableDataRow(nodeAssocRef.getSourceRef());
+		updateAgendaItemMembers(document);
+	}
+
+	public void updateAgendaItemMembers(NodeRef document) {
+		if (null != document) {
+			List<NodeRef> items = documentTableService.getTableDataRows(documentTableService.getTable(document, MeetingsService.TYPE_MEETINGS_TS_AGENDA_TABLE));
+			NodeRef secretary = findNodeByAssociationRef(document, MeetingsService.ASSOC_MEETINGS_SECRETARY, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			NodeRef chairman = findNodeByAssociationRef(document, MeetingsService.ASSOC_MEETINGS_CHAIRMAN, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			List<NodeRef> members = findNodesByAssociationRef(document, EventsService.ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+			List<NodeRef> invitedMembers = findNodesByAssociationRef(document, EventsService.ASSOC_EVENT_INVITED_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+
+			for (NodeRef item : items) {
+				List<NodeRef> persons = findNodesByAssociationRef(item, MeetingsService.ASSOC_MEETINGS_TS_ITEM_COREPORTER, null, ASSOCIATION_TYPE.TARGET);
+				persons.add(findNodeByAssociationRef(item, MeetingsService.ASSOC_MEETINGS_TS_ITEM_REPORTER, null, ASSOCIATION_TYPE.TARGET));
+				for (NodeRef person : persons) {
+					QName type = nodeService.getType(person);
+					if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(type)) {
+						if (!person.equals(secretary) && !person.equals(chairman) && !members.contains(person)) {
+							nodeService.createAssociation(document, person, EventsService.ASSOC_EVENT_TEMP_MEMBERS);
+						}
+					} else if (Contractors.TYPE_REPRESENTATIVE.isMatch(type)) {
+						if (!invitedMembers.contains(person)) {
+							nodeService.createAssociation(document, person, EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void onChairmanAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef chairman = nodeAssocRef.getTargetRef();
-	    documentMembersService.addMemberWithoutCheckPermission(event, chairman, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
+		documentMembersService.addMemberWithoutCheckPermission(event, chairman, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
 		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, chairman.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 	}
-	
+
 	public void onChairmanRemoved(AssociationRef nodeAssocRef) {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef chairman = nodeAssocRef.getTargetRef();
 		lecmPermissionService.revokeDynamicRole("EVENTS_INITIATOR_DYN", event, chairman.getId());
 		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, chairman);
+		//если старый председатель являлся докладчиком по одному из пунктов повестки, то он добавится в участники
+		updateAgendaItemMembers(event);
 	}
-	
+
 	public void onSecretaryAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef secretary = nodeAssocRef.getTargetRef();
-	    documentMembersService.addMemberWithoutCheckPermission(event, secretary, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
+		documentMembersService.addMemberWithoutCheckPermission(event, secretary, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
 		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
 	}
-	
+
 	public void onSecretaryRemoved(AssociationRef nodeAssocRef) {
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef secretary = nodeAssocRef.getTargetRef();
 		lecmPermissionService.revokeDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId());
 		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, secretary);
+		//если старый секретарь являлся докладчиком по одному из пунктов повестки, то он добавится в участники
+		updateAgendaItemMembers(event);
 	}
 
 	public void onCreateMeeting(ChildAssociationRef childAssocRef) {
 		NodeRef document = childAssocRef.getChildRef();
 		List<AssociationRef> items = nodeService.getTargetAssocs(document, MeetingsService.ASSOC_MEETINGS_TEMP_ITEMS);
 		Integer index = 0;
-		
+
 		for (AssociationRef itemAssoc : items) {
 			index++;
 			NodeRef item = itemAssoc.getTargetRef();
@@ -175,7 +220,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 				//нужно дёрнуть, чтоб создать папки категорий вложений
 				documentAttachmentsService.getCategories(document);
 				moveFiles(document, item);
-
+				
 				documentTableService.recalculateSearchDescription(table);
 			} finally {
 				behaviourFilter.enableBehaviour(item);
@@ -184,12 +229,13 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		refreshFiles(document);
 	}
 
-	public void onCreateAgendaItem(ChildAssociationRef childAssocRef) {
+	public void onAgendaItemAdded(ChildAssociationRef childAssocRef, boolean isNewNode ) {
 		NodeRef row = childAssocRef.getChildRef();
 		NodeRef document = documentTableService.getDocumentByTableDataRow(row);
 		moveFiles(document, row);
+		updateAgendaItemMembers(document);
 	}
-
+	
 	private void moveFiles(NodeRef document, NodeRef row) {
 		if (null != document && null != row) {
 			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
@@ -199,7 +245,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 			}
 		}
 	}
-	
+
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 
@@ -228,18 +274,19 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		NodeRef table = documentTableService.getTable(document, MeetingsService.TYPE_MEETINGS_TS_AGENDA_TABLE);
 		List<NodeRef> rows = documentTableService.getTableDataRows(table);
 		String regexp = "^(" + FILE_PREFIX_STRING + "\\d*_)*";
-		for (NodeRef row : rows) {
-			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
-			Object index = nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-			String newPrefix = FILE_PREFIX_STRING + index.toString() + "_";
-			for (AssociationRef fileAssoc : files) {
-				NodeRef file = fileAssoc.getTargetRef();
-				String currentName = nodeService.getProperty(file, ContentModel.PROP_NAME).toString();
-				String fileName = currentName.replaceFirst(regexp, newPrefix);
-				nodeService.setProperty(file, ContentModel.PROP_NAME, fileName);
+		if (null != rows) {
+			for (NodeRef row : rows) {
+				List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);
+				Object index = nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+				String newPrefix = FILE_PREFIX_STRING + index.toString() + "_";
+				for (AssociationRef fileAssoc : files) {
+					NodeRef file = fileAssoc.getTargetRef();
+					String currentName = nodeService.getProperty(file, ContentModel.PROP_NAME).toString();
+					String fileName = currentName.replaceFirst(regexp, newPrefix);
+					nodeService.setProperty(file, ContentModel.PROP_NAME, fileName);
+				}
 			}
 		}
-
 	}
 
 	private class MeetingsPolicyTransactionListener implements TransactionListener {
@@ -284,22 +331,22 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		}
 
 	}
-	
+
 	public void onAgendaItemAttachmentAdded(AssociationRef nodeAssocRef) {
 		NodeRef item = nodeAssocRef.getSourceRef();
 		NodeRef attachment = nodeAssocRef.getSourceRef();
 		NodeRef document = documentTableService.getDocumentByTableDataRow(item);
-		if (null != document && !documentAttachmentsService.isDocumentAttachment(attachment)){
+		if (null != document && !documentAttachmentsService.isDocumentAttachment(attachment)) {
 			moveFiles(document, item);
 			refreshFiles(document);
 		}
 	}
-	
+
 	public void onAgendaItemAttachmentDeleted(AssociationRef nodeAssocRef) {
 		NodeRef item = nodeAssocRef.getSourceRef();
 		NodeRef attachment = nodeAssocRef.getTargetRef();
 		NodeRef document = documentTableService.getDocumentByTableDataRow(item);
-		if (null != document && null != attachment && documentAttachmentsService.isDocumentAttachment(attachment)){
+		if (null != document && null != attachment && documentAttachmentsService.isDocumentAttachment(attachment)) {
 			documentAttachmentsService.deleteAttachment(attachment);
 			refreshFiles(document);
 		}
