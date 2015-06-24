@@ -217,7 +217,9 @@ LogicECM.module = LogicECM.module || {};
 
 				doNotCheckAccess: false,
 
-				resetValue: false
+				resetValue: false,
+
+				useObjectDescription: false
 			},
 
 			onReady: function () {
@@ -504,7 +506,8 @@ LogicECM.module = LogicECM.module || {};
 								sortProp: this.options.sortProp,
 								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
 								pathRoot: this.options.rootLocation,
-								pathNameSubstituteString: this.options.treeNodeSubstituteString
+								pathNameSubstituteString: this.options.treeNodeSubstituteString,
+								useObjectDescription: this.options.useObjectDescription
 							},
 							successCallback:
 							{
@@ -589,7 +592,8 @@ LogicECM.module = LogicECM.module || {};
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
 								sortProp: this.options.sortProp,
-								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
+								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
+								useObjectDescription: this.oprtions.useObjectDescription
 							},
 							successCallback:
 							{
@@ -1871,6 +1875,7 @@ LogicECM.module = LogicECM.module || {};
 					"&pathNameSubstituteString=" + encodeURIComponent(this.options.treeNodeSubstituteString) +
 					"&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
 					'&doNotCheckAccess=' + encodeURIComponent("" + this.options.doNotCheckAccess) +
+					'&useObjectDescription=' + encodeURIComponent("" + this.options.useObjectDescription) +
 					'&rootNodeRef=' + encodeURIComponent("" + this.options.rootNodeRef);
 
 				if (forAutocomplete) {
@@ -2463,7 +2468,8 @@ LogicECM.module = LogicECM.module || {};
 									itemNameSubstituteString: this.options.nameSubstituteString,
 									selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
 									pathRoot: this.options.rootLocation,
-									pathNameSubstituteString: this.options.treeNodeSubstituteString
+									pathNameSubstituteString: this.options.treeNodeSubstituteString,
+									useObjectDescription: this.options.useObjectDescription
 								},
 								successCallback: {
 									fn: onSuccess,

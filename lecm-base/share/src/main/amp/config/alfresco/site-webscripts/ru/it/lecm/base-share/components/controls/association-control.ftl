@@ -219,6 +219,9 @@
 			<#if params.treeBranchesDatasource??>
 				treeBranchesDatasource: "${params.treeBranchesDatasource}",
 			</#if>
+			<#if params.useObjectDescription??>
+				useObjectDescription: "${params.useObjectDescription}",
+			</#if>
 			<#if defaultValue?has_content>
 				defaultValue: "${defaultValue?string}",
 			</#if>

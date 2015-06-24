@@ -27,7 +27,8 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
 		additionalProperties = args['additionalProperties'],
 		argsPathRoot = args['pathRoot'],
-		argsPathNameSubstituteString = args['pathNameSubstituteString'];
+		argsPathNameSubstituteString = args['pathNameSubstituteString'],
+		argsUseObjectDescription = args['useObjectDescription'];
 	if (additionalProperties != null) {
 		additionalProperties = additionalProperties.split(',');
 	}
@@ -245,9 +246,15 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                     }
                 }
 
-                resultObj.visibleName = substitude.formatNodeTitle(result, argsNameSubstituteString);
-				resultObj.titleVisibleName = substitude.formatNodeTitle(result, argsTitleNameSubstituteString);
-                resultObj.selectedVisibleName = substitude.formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
+				if (argsUseObjectDescription) {
+					resultObj.visibleName = substitude.getObjectDescription(result);
+					resultObj.titleVisibleName = substitude.formatNodeTitle(result, argsTitleNameSubstituteString);
+					resultObj.selectedVisibleName = resultObj.visibleName;
+				} else {
+					resultObj.visibleName = substitude.formatNodeTitle(result, argsNameSubstituteString);
+					resultObj.titleVisibleName = substitude.formatNodeTitle(result, argsTitleNameSubstituteString);
+					resultObj.selectedVisibleName = substitude.formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
+				}
 
 				var path = "/";
 				var simplePath = "/";

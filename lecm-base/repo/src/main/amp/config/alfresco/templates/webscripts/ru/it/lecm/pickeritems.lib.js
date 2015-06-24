@@ -22,6 +22,7 @@ function getPickerItems() {
 		additionalProperties = json.has('additionalProperties') ? json.get('additionalProperties') : null,
 		argsPathRoot = json.has('pathRoot') ? json.get('pathRoot') : null,
 		argsPathNameSubstituteString = json.has('pathNameSubstituteString') ? json.get('pathNameSubstituteString') : null,
+		argsUseObjectDescription = json.has('useObjectDescription') ? json.get('useObjectDescription') : false,
 	item, result;
 
 	if (additionalProperties != null && additionalProperties != "none") {
@@ -94,11 +95,20 @@ function getPickerItems() {
 					}
 				}
 
+				var visibleName, selectedVisibleName;
+				if (argsUseObjectDescription) {
+					visibleName = substitude.getObjectDescription(substituteParent != "none" ? substituteParent : result.nodeRef.toString());
+					selectedVisibleName = visibleName;
+				} else {
+					visibleName = substitude.formatNodeTitle(substituteParent != "none" ? substituteParent : result.nodeRef.toString(), ("" + itemNameSubstituteString));
+					selectedVisibleName = substitude.formatNodeTitle(substituteParent != "none" ? substituteParent : result.nodeRef.toString(), ("" + selectedItemsNameSubstituteString));
+				}
+
 				results.push(
 					{
 						item: result,
-						visibleName: substitude.formatNodeTitle(substituteParent != "none" ? substituteParent : result.nodeRef.toString(), ("" + itemNameSubstituteString)),
-						selectedVisibleName: substitude.formatNodeTitle(substituteParent != "none" ? substituteParent : result.nodeRef.toString(), ("" + selectedItemsNameSubstituteString)),
+						visibleName: visibleName,
+						selectedVisibleName: selectedVisibleName,
 						path: path,
 						simplePath: simplePath
 					});
