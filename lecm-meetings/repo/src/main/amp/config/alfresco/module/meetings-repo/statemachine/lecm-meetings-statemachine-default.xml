@@ -156,6 +156,7 @@
 																<value><![CDATA[(function(){ /*создание листа подписания, обновление статуса участников для повторных */
   var document = stm_document;
   var isRepeated = stm_document.properties["lecm-events:is-repeated"];
+  var DEFAULT_APPROVAL_TERM = 2;
   if(!routesService.hasEmployeesInRoute(document)){
   						var approvals = events.getEventMembers(document.nodeRef.toString());
 						if (approvals && approvals.length>0) {
@@ -165,12 +166,21 @@
 							iteration.save();
 							var stage = routesService.createNewTemporaryNode(iteration.getNodeRef(),"lecmWorkflowRoutes:stage");
 							stage.properties['lecmWorkflowRoutes:stageWorkflowType'] = "PARALLEL";
-							stage.properties['lecmWorkflowRoutes:stageWorkflowTerm'] = 2;
-							var today = new Date();
-							var day = today.getDate();
-                            day = day<10?("0"+day):(""+day);																	
-							var month = today.getMonth()+1;
-							stage.properties['cm:title'] = "Согласование повестки от "+day+"."+(month>9?month:("0"+month))+"."+today.getFullYear();
+							stage.properties['lecmWorkflowRoutes:stageWorkflowTerm'] = DEFAULT_APPROVAL_TERM;
+							var  day, month, year,
+							approveDate = new Date();
+							if (isRepeated==true) {
+							  /*т.к. в properties лежит java.util.Date */
+							  var documentDate = document.properties['lecm-events:from-date'];
+							  approveDate.setDate(documentDate.getDate()-DEFAULT_APPROVAL_TERM);
+							  approveDate.setMonth(documentDate.getMonth());
+							  approveDate.setFullYear(documentDate.getYear()+1900);
+							} 
+							day = approveDate.getDate();
+							day = day<10?("0"+day):(""+day);																	
+							month = approveDate.getMonth()+1;  
+							year = approveDate.getFullYear();
+							stage.properties['cm:title'] = "Согласование повестки от "+day+"."+(month>9?month:("0"+month))+"."+year;
 							stage.save();
 							stage.removeAspect('sys:temporary');
 							for (i = 0, size = approvals.length; i < size; ++i) {
