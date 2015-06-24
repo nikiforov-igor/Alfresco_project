@@ -358,7 +358,11 @@ LogicECM.module.Base.Util = {
 
 		for (event in bubble) {
 			if (bubble.hasOwnProperty(event)) {
-				bubble[event].subscribers.forEach(function(s) {
+				// Лучше бежать по копии, т.к unsubscribe выпиливает элемент из
+				// bubble[event].subscribers, что может привести к некорректной работе
+				// в случае наличия нескольких подписчиков с одного модуля
+				var subscribers = Alfresco.util.deepCopy(bubble[event].subscribers);
+				subscribers.forEach(function(s) {
 					if (s.obj === obj) {
 						YAHOO.Bubbling.unsubscribe(event, s.fn, s.obj);
 					}

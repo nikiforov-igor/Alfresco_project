@@ -64,12 +64,7 @@
 			YAHOO.util.Event.onDOMReady(init);
 			function createDatagrid() {
 				LogicECM.module.Base.DataGridControl_${objectId} = function(htmlId) {
-					var module = LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
-
-					YAHOO.Bubbling.on("nodeCreated", this.onCreated, this);
-					YAHOO.Bubbling.on("dataItemsDeleted", this.onDeleted, this);
-
-					return module;
+					return LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
 				};
 
 				YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.DataGrid, {
@@ -238,6 +233,12 @@
 							,fixedHeader: ${field.control.params.fixedHeader}
 						</#if>
 					}).setMessages(${messages});
+
+				<#if form.mode == "edit">
+					YAHOO.Bubbling.on("nodeCreated", datagrid.onCreated, datagrid);
+					YAHOO.Bubbling.on("dataItemsDeleted", datagrid.onDeleted, datagrid);
+				</#if>
+
 				datagrid.draw();
 			}
 		})();
