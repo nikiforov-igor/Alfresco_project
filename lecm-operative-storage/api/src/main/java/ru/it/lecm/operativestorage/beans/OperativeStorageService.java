@@ -133,4 +133,10 @@ public interface OperativeStorageService {
 
 	public boolean isCetralized();
 
+	public void removeYearSection(NodeRef yearSection);
+
+	public void removeUnitSection(NodeRef unitSection);
+
+	public void removeCase(NodeRef caseRef);
+
 }

@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import org.alfresco.service.namespace.QName;
 
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASPECT_MOVE_TO_CASE;
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION;
@@ -343,6 +344,39 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		}
 
 		return operativeStorageService.canCopyUnits(units, new NodeRef(destNodeRef));
+	}
+
+	public void removeYearSection(final ScriptNode yearSection) {
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+
+			@Override
+			public Void doWork() throws Exception {
+				operativeStorageService.removeYearSection(yearSection.getNodeRef());
+				return null;
+			}
+		});
+	}
+
+	public void removeUnitSection(final ScriptNode unitSection) {
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+
+			@Override
+			public Void doWork() throws Exception {
+				operativeStorageService.removeUnitSection(unitSection.getNodeRef());
+				return null;
+			}
+		});
+	}
+
+	public void removeCase(final ScriptNode caseRef) {
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+
+			@Override
+			public Void doWork() throws Exception {
+				operativeStorageService.removeCase(caseRef.getNodeRef());
+				return null;
+			}
+		});
 	}
 
 }

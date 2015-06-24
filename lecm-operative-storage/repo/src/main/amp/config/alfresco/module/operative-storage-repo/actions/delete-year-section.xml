@@ -9,11 +9,8 @@
 		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-os:nomenclature-year-section-status") == "PROJECT"]]></property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
-		<property name="lecm-group-actions:script"><![CDATA[(function() {//Удалить номенклатуру дел
-    document.properties['lecm-dic:active'] = false;
-    document.properties['lecm-os:nomenclature-year-section-status'] = "DELETED";
-    document.save();
-
+		<property name="lecm-group-actions:script"><![CDATA[(function() {
+	operativeStorage.removeYearSection(document);
     var logText = "Удаление номенклатуры дел";
 	businessJournal.log(document.nodeRef.toString(), "DELETE", logText, []);
 })();]]></property>

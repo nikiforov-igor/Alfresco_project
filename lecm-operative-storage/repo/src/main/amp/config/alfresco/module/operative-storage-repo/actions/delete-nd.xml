@@ -27,17 +27,7 @@
         </property>
         <property name="lecm-group-actions:script">
             <![CDATA[(function() {
-	var ContextLoader = Packages.org.springframework.web.context.ContextLoader;
-	var context = ContextLoader.getCurrentWebApplicationContext();
-	var behaviourFilter = context.getBean('policyBehaviourFilter');
-
-  	var caseDocuments = document.childrenByXPath("*//.[subtypeOf('lecm-document:base')]");
-    for each(doc in caseDocuments) {
-      behaviourFilter.disableBehaviour(doc.nodeRef);
-    }
-
-    document.remove();
-
+	operativeStorage.removeCase(document);
 })();]]>
         </property>
     </item>

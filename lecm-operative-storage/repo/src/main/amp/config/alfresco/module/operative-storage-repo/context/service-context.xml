@@ -146,6 +146,9 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:permissionService-ref="permissionService"
 		  p:authorityService-ref="authorityService"
+		  p:behaviourFilter-ref="policyBehaviourFilter"
+		  p:documentMembersService-ref="documentMembersService"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"
 	/>
 
 	<bean id="lecmOperativeStorageExtension" parent="baseScript" class="ru.it.lecm.operativestorage.scripts.OperativeStorageJavaScript"
@@ -196,5 +199,5 @@
 		p:operativeStorageService-ref="lecmOperativeStorageService"
 		p:orgstructureService-ref="serviceOrgstructure"
 	/>
-	
+
 </beans>

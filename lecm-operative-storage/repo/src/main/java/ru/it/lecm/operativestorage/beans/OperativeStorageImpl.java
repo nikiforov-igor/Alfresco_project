@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -30,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -48,6 +51,21 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	private OrgstructureBean orgstructureService;
 	private PermissionService permissionService;
 	private AuthorityService authorityService;
+	private BehaviourFilter behaviourFilter;
+	private DocumentMembersService documentMembersService;
+	private DocumentAttachmentsService documentAttachmentsService;
+
+	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+		this.documentAttachmentsService = documentAttachmentsService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
+	}
+
+	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+		this.documentMembersService = documentMembersService;
+	}
 
 
 	public void setAuthorityService(AuthorityService authorityService) {
@@ -562,6 +580,131 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		}
 
 		return true;
+	}
+
+	/*
+		Лайт-версия метода удаления из RemovalService
+		Т.к документ находится в деле, то можно ограничиться удалением участников,
+		чисткой пермиссий, и удалением связей. Всё остальное удалиться само
+	*/
+
+	private void clearDir(NodeRef dirNode) {
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(dirNode);
+		for (ChildAssociationRef childAssoc : childAssocs) {
+			NodeRef parentRef = childAssoc.getParentRef(),
+					childRef = childAssoc.getChildRef();
+			if (!nodeService.getChildAssocs(childRef).isEmpty()) {
+				clearDir(childRef);
+			}
+			behaviourFilter.disableBehaviour(parentRef);
+			cruellyDeleteNode(childRef);
+		}
+	}
+
+	private void cruellyDeleteNode(NodeRef node) {
+		behaviourFilter.disableBehaviour(node);
+		nodeService.addAspect(node, ContentModel.ASPECT_TEMPORARY, null);
+		nodeService.deleteNode(node);
+	}
+
+	private void removeDocument(NodeRef docNodeRef) {
+		// Проверим, находится ли документ в деле
+		logger.info("Going to delete document " + docNodeRef);
+
+		ChildAssociationRef potentialDocsFolder = nodeService.getPrimaryParent(docNodeRef);
+		if(potentialDocsFolder != null) {
+			ChildAssociationRef potentialCaseRef = nodeService.getPrimaryParent(potentialDocsFolder.getParentRef());
+			if(potentialCaseRef != null) {
+				if(!OperativeStorageService.TYPE_NOMENCLATURE_CASE.equals(nodeService.getType(potentialCaseRef.getParentRef()))) {
+					logger.warn("Document " + docNodeRef + " isn't child of nomenclature case, aborting delete!");
+					return;
+				}
+			}
+		}
+
+		behaviourFilter.disableBehaviour(docNodeRef);
+		logger.debug("All policies for document {} are deactivated!", docNodeRef);
+
+		//лишаем участников документа всех прав связанных с этим документом
+		List<NodeRef> members = documentMembersService.getDocumentMembers(docNodeRef);
+		List<String> users = new ArrayList<>();
+		for (NodeRef member : members) {
+			behaviourFilter.disableBehaviour(member);
+			List<AssociationRef> assocs = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
+			NodeRef employeeRef = assocs.get(0).getTargetRef();
+			String login = orgstructureService.getEmployeeLogin(employeeRef);
+			String shortName = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+			users.add(String.format("%s(%s)", shortName, login));
+			LecmPermissionService.LecmPermissionGroup permissionGroup = documentMembersService.getMemberPermissionGroup(docNodeRef);
+			lecmPermissionService.revokeAccess(permissionGroup, docNodeRef, employeeRef);
+			List<String> roles = lecmPermissionService.getEmployeeRoles(docNodeRef, employeeRef);
+			for (String role : roles) {
+				lecmPermissionService.revokeDynamicRole(role, docNodeRef, employeeRef.getId());
+			}
+			documentMembersService.deleteMember(docNodeRef, employeeRef);
+		}
+
+		try {
+			//получаем все вложения отключаем их policy и удаляем
+			List<NodeRef> categories = documentAttachmentsService.getCategories(docNodeRef);
+			for (NodeRef categoryRef : categories) {
+                List<ChildAssociationRef> attachments = nodeService.getChildAssocs(categoryRef);
+                for (ChildAssociationRef attachRef : attachments) {
+                    cruellyDeleteNode(attachRef.getChildRef());
+                }
+			}
+		} catch (Exception ex) {
+			// что-то сломалось при попытке получить категории вложений. это не повод прекращать удаление документа
+			String msg = "Error during deleting document %s";
+			logger.warn(String.format(msg, docNodeRef), ex);
+		}
+
+		clearDir(docNodeRef);
+
+		logger.debug("Members {} are deleted and access is revoked for document {}", users, docNodeRef);
+	}
+
+	@Override
+	public void removeYearSection(NodeRef yearSection) {
+		List<ChildAssociationRef> units = nodeService.getChildAssocs(yearSection, new HashSet<>(Arrays.asList(OperativeStorageService.TYPE_NOMENCLATURE_UNIT_SECTION)));
+		for (ChildAssociationRef unit : units) {
+			removeUnitSection(unit.getChildRef());
+		}
+
+		nodeService.deleteNode(yearSection);
+	}
+
+	@Override
+	public void removeUnitSection(NodeRef unitSection) {
+		List<ChildAssociationRef> cases = nodeService.getChildAssocs(unitSection, new HashSet<>(Arrays.asList(OperativeStorageService.TYPE_NOMENCLATURE_CASE)));
+		List<ChildAssociationRef> units = nodeService.getChildAssocs(unitSection, new HashSet<>(Arrays.asList(OperativeStorageService.TYPE_NOMENCLATURE_UNIT_SECTION)));
+
+		for (ChildAssociationRef caseAssoc : cases) {
+			NodeRef caseRef = caseAssoc.getChildRef();
+			removeCase(caseRef);
+		}
+
+		for (ChildAssociationRef unit : units) {
+			removeUnitSection(unit.getChildRef());
+		}
+
+		nodeService.deleteNode(unitSection);
+	}
+
+	@Override
+	public void removeCase(NodeRef caseRef) {
+		NodeRef documentsFolder = getDocuemntsFolder(caseRef);
+		if(documentsFolder != null) {
+			List<ChildAssociationRef> documents = nodeService.getChildAssocs(documentsFolder);
+			if(documents != null && !documents.isEmpty()) {
+				for (ChildAssociationRef document : documents) {
+					removeDocument(document.getChildRef());
+
+				}
+			}
+		}
+
+		nodeService.deleteNode(caseRef);
 	}
 
 }
