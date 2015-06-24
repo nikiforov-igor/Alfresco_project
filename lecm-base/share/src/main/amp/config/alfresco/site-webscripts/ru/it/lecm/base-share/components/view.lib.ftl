@@ -57,7 +57,7 @@
 	function createDialog() {
 		viewDialog = Alfresco.util.createYUIPanel("${formId}",
 				{
-					width: "50em"
+					width: "60em"
 				});
 		YAHOO.Bubbling.on("hidePanel", hideViewDialog);
 	}
