@@ -5,7 +5,7 @@
 <#else>
     <#assign thisSet = set />
 </#if>
-<div class="nomenclature-view-set">
+<div class="<#if form.mode == "view">nomenclature-view-set</#if>">
 <#list thisSet.children as item>
     <@formLib.renderField field=form.fields[item.id] />
 </#list>
