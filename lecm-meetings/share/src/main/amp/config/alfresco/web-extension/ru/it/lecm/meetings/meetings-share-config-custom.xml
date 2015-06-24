@@ -83,6 +83,7 @@
 					<show id="lecm-meetings:approve-agenda"/>
 					<!--Повестка-->
 					<show id="lecm-meetings-ts:items-assoc"/>
+					<show id="approve-agenda-label" force="true"/>
 					<show id="lecm-meetings:approval"/>
 				</field-visibility>
 				<appearance>
@@ -224,8 +225,15 @@
 							<control-param name="viewFormTitleMsg">meeting.item.view.form.title</control-param>
 						</control>
 					</field>
+					<field id="approve-agenda-label">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">label.approve.agenda</control-param>
+						</control>
+					</field>
 					<field id="lecm-meetings:approval">
-						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
+							
+						</control>
 					</field>
 				</appearance>
 			</form>
