@@ -4,6 +4,7 @@
 <#assign startDateHtmlId = ""/>
 <#assign endDateHtmlId = ""/>
 <#assign unlimitHtmlId = ""/>
+<#assign controlId = fieldHtmlId + "-cntrl">
 <@renderDateRange set=set />
 
 <#macro renderDateRange set>
@@ -45,7 +46,7 @@
 		], createDateRange, ["button", "calendar"]);
 	}
 	function createDateRange(){
-		new LogicECM.DateRangeAugmented("${htmlid}").setOptions({
+		new LogicECM.DateRangeAugmented("${controlId}").setOptions({
 			startDateHtmlId: "${startDateHtmlId}",
 			endDateHtmlId: "${endDateHtmlId}",
 			unlimitedHtmlId: "${unlimitHtmlId}"
