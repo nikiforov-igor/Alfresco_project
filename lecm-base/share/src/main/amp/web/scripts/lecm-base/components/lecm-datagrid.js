@@ -1416,6 +1416,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         "MSG_EMPTY": this.msg("message.empty"),
                         "MSG_ERROR": this.msg("message.error"),
                         "MSG_LOADING" : this.msg("message.loading"),
+                        MSG_SORTASC: this.msg("message.sortasc"),
+                        MSG_SORTDESC: this.msg("message.sortdesc"),
                         paginator: this.widgets.paginator,
 	                    sortedBy: this.getDatableSortBy(columnDefinitions),
 	                    formatRow: this.getRowFormater()
