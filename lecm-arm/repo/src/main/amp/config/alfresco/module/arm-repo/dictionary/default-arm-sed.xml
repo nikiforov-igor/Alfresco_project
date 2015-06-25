@@ -3673,7 +3673,7 @@
 									<item name="cm:8466b59a-ea99-45cd-9a1f-6a67e643f32c" type="lecm-arm:xpath-child-rule">
 										<property name="cm:name"><![CDATA[8466b59a-ea99-45cd-9a1f-6a67e643f32c]]></property>
 										<property name="lecm-arm:xpath-child-rule-root-xpath"><![CDATA[/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Оперативное_x0020_хранение/lecm-dic:Номенклатура_x0020_дел/*]]></property>
-										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section]]></property>
+										<property name="lecm-arm:xpath-child-rule-types"><![CDATA[lecm-os:nomenclature-year-section, lecm-os:nomenclature-unit-section, lecm-os:nomenclature-case]]></property>
 										<property name="lecm-arm:xpath-child-rule-filter"><![CDATA[{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}]]></property>
 									</item>
 								</items>
