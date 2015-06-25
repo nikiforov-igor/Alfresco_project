@@ -289,6 +289,12 @@
 					<show id="lecm-document:subject-assoc"/>
 					<!--Дело-->
 					<show id="lecm-eds-document:file-register-assoc"/>
+					<!-- Количество листов -->
+					<show id="lecm-eds-document:sheets-number"/>
+
+					<show id="cm:created"/>
+					<show id="lecm-statemachine:status" force="true"/>
+					<show id="lecm-document:present-string"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-document:document-type-assoc">
@@ -301,6 +307,7 @@
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
 						</control>
 					</field>
+					<field id="lecm-document:present-string" label="Название"/>
 				</appearance>
 			</form>
 			<form id="searchQueryGrid">

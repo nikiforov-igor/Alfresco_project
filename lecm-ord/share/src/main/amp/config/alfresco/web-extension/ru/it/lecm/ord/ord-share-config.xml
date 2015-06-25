@@ -185,14 +185,42 @@
             </form>
             <form id="search-editor-fields">
                 <field-visibility>
-                    <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
-                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                    <show id="cm:created"/>																				<!-- Дата создания -->
-                    <show id="lecm-document-aspects:reg-project-data-date"/>											<!-- Дата регистрации -->
-                    <show id="lecm-document-aspects:reg-project-data-number"/>											<!-- Номер проекта -->
-                    <show id="lecm-document:author-assoc"/>																<!-- Автор -->
-                    <show id="lecm-ord:signers-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-number"/>																	<!-- Рег. номер -->
+                    <show id="lecm-document-aspects:reg-data-date"/>
+                    <show id="lecm-document:title"/>
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-eds-document:execution-date"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-ord:controller-assoc"/>
+                    <show id="lecm-eds-document:note"/>
+                    <show id="lecm-eds-document:sheets-number"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-eds-document:file-register-assoc"/>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
+                    <show id="lecmSignAspects:isSigned"/>
+                    <show id="lecmSignAspects:signingDate"/>
+
+                    <show id="cm:created"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-document-aspects:reg-data-is-registered"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document-aspects:registrator-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-eds-document:document-type-assoc">
+                        <control>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
+                        </control>
+                    </field>
+                    <field id="lecmSignAspects:signingDate">
+                        <control>
+                            <control-param name="showTime">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document:present-string" label="Название"/>
+                </appearance>
             </form>
         </forms>
     </config>

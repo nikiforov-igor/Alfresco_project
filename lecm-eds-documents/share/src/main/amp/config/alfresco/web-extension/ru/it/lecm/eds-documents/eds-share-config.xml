@@ -165,12 +165,28 @@
 			</form>
 			<form id="search-editor-fields">
 				<field-visibility>
-					<show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-eds-document:note"/>
 					<show id="lecm-eds-document:summaryContent"/>
 					<show id="lecm-document-aspects:reg-data-number"/>
 					<show id="lecm-document-aspects:reg-data-date"/>
+					<show id="lecm-eds-document:sheets-number"/>
+					<show id="lecm-eds-document:document-type-assoc"/>
+					<show id="lecm-eds-document:file-register-assoc"/>
+					<show id="lecm-document-aspects:reg-data-is-registered"/>
+					<show id="lecm-document-aspects:reg-project-data-number"/>
+					<show id="lecm-document-aspects:reg-project-data-date"/>
+					<show id="lecm-document:doc-type"/>
+					<show id="lecm-document:title"/>
+					<show id="lecm-document:regnum"/>
+					<show id="lecm-document:present-string"/>
+					<show id="lecm-document:doc-date"/>
 					<show id="lecm-statemachine:status" force="true"/>
+					<show id="lecm-document:subject-assoc"/>
+					<show id="lecm-document:author-assoc"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-document:present-string" label="Название"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>

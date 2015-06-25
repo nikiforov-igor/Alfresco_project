@@ -648,6 +648,9 @@
 					<show id="lecm-events:description"/>
 					<!-- Тематика -->
 					<show id="lecm-events:subject-assoc"/>
+
+					<show id="lecm-events:all-day"/>
+
 				</field-visibility>
 				<appearance>
 					<field id="lecm-events:location-assoc">
@@ -669,6 +672,17 @@
 					<field id="lecm-events:subject-assoc">
 						<control>
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:temp-members-assoc">
+						<control>
+							<control-param name="plane">true</control-param>
+							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:invited-members-assoc">
+						<control>
+							<control-param name="itemType">lecm-representative:representative-type</control-param>
 						</control>
 					</field>
 				</appearance>

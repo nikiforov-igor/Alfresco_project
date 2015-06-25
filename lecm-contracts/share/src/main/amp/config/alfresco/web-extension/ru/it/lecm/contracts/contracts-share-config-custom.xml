@@ -422,10 +422,27 @@
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:currency-assoc"/>
+                    <show id="lecm-contract:dateRegContracts"/>
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:totalAmount"/>
+                    <show id="lecm-contract:signedCounterparty"/>
+                    <show id="lecm-contract:signatoryCounterparty"/>
+                    <show id="lecm-contract:unlimited"/>
+                    <show id="lecm-contract:startDate"/>
+                    <show id="lecm-contract:endDate"/>
+                    <show id="lecm-contract:summaryContent"/>
+                    <show id="lecm-contract:locationRegistration"/>
+                    <show id="lecm-contract:locationContract"/>
+                    <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-document:author-assoc"/>
+
+                    <show id="cm:created"/>
+                    <show id="lecm-document:present-string"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document:present-string" label="Наименование"/>
+                </appearance>
             </form>
             <form id="datagrid">
                 <field-visibility>
@@ -1394,7 +1411,15 @@
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
                     <show id="lecmSignAspects:signerEmployeeAssoc"/>
+
+                    <show id="lecm-document:author-assoc"/>
+
+                    <show id="cm:created"/>
+                    <show id="lecm-document:present-string"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document:present-string" label="Наименование"/>
+                </appearance>
             </form>
             <form id="searchQueryGrid">
                 <field-visibility>

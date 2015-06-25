@@ -912,9 +912,15 @@
                     <show id="lecm-document:doc-type"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-document:regnum"/>
+                    <show id="lecm-document:present-string"/>
                     <show id="lecm-document:doc-date"/>
                     <show id="lecm-statemachine:status" force="true"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document:author-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document:present-string" label="Название"/>
+                </appearance>
             </form>
         </forms>
     </config>
