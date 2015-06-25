@@ -97,7 +97,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 			Alfresco.util.createYUIButton(this, "toolbar-searchButton", this.onFullTextSearchClick);
 			Alfresco.util.createYUIButton(this, "toolbar-extendSearchButton", this.onExtSearchClick);
-			Event.on(this.id + "-toolbar-clearSearchInput", "click", this.onFullTextClearSearch, null, this);
+			Event.on(this.id + "-toolbar-clearSearchInput", "click", this.onFullTextClearSearch, true, this);
 			Event.on(this.id + "-toolbar-full-text-search", "keyup", this.checkShowClearSearch, null, this);
 
 			new YAHOO.util.KeyListener(Dom.get(this.id + "-toolbar-full-text-search"),
@@ -136,12 +136,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.updateCurrentFiltersFormView();
 		},
 
-		onFullTextClearSearch: function Toolbar_onSearch() {
+		onFullTextClearSearch: function (loadEvents) {
 			Dom.get(this.id + "-toolbar-full-text-search").value = "";
 			this.checkShowClearSearch();
 			this.fullTextSearchApplied = false;
 			this.updateCurrentFiltersFormView();
-			this.getEvents();
+			if (loadEvents) {
+				this.getEvents();
+			}
 		},
 
 		onExtSearchClick: function() {
@@ -164,7 +166,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					});
 				// создаем кнопки
 				this.widgets.searchButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this.onExtSearch, {}, Dom.get("searchBlock-search-button"));
-				this.widgets.clearSearchButton = Alfresco.util.createYUIButton(this, "searchBlock-clearSearch-button", this.onClearExtSearch, {}, Dom.get("searchBlock-clearSearch-button"));
+				this.widgets.clearSearchButton = Alfresco.util.createYUIButton(this, "searchBlock-clearSearch-button", this.onClearExtSearch, true, Dom.get("searchBlock-clearSearch-button"));
 			}
 
 			if(!this.currentForm || !this.currentForm.htmlid) { // форма ещё создана или не проинициализирована
@@ -177,7 +179,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
-		renderExtFormTemplate: function (form, isClearSearch) {
+		renderExtFormTemplate: function (form, isClearSearch, loadEvent) {
 			if (isClearSearch == undefined) {
 				isClearSearch = false;
 			}
@@ -207,7 +209,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 								formDiv.innerHTML = response.serverResponse.responseText;
 								if (this.searchDialog != null) {
 									if (isClearSearch) {
-										this.getEvents();
+										if (loadEvent) {
+											this.getEvents();
+										}
 									} else {
 										this.searchDialog.show();
 									}
@@ -236,8 +240,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.updateCurrentFiltersFormView();
 		},
 
-		onClearExtSearch: function() {
-			this.renderExtFormTemplate(this.currentForm, true);
+		onClearExtSearch: function(loadEvent) {
+			this.renderExtFormTemplate(this.currentForm, true, loadEvent);
 			this.attrSearchApplied = false;
 			this.updateCurrentFiltersFormView();
 		},
@@ -356,7 +360,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var id = Dom.generateId();
 			var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
 			YAHOO.util.Event.onAvailable(id, function () {
-				YAHOO.util.Event.on(id, 'click', this.onClearExtSearch, null, this);
+				YAHOO.util.Event.on(id, 'click', this.onClearExtSearch, true, this);
 			}, null, this);
 			return result;
 		},
@@ -365,21 +369,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var id = Dom.generateId();
 			var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
 			YAHOO.util.Event.onAvailable(id, function () {
-				YAHOO.util.Event.on(id, 'click', this.onFullTextClearSearch, null, this);
+				YAHOO.util.Event.on(id, 'click', this.onFullTextClearSearch, true, this);
 			}, null, this);
 			return result;
 		},
 
 		deleteAllFilters: function() {
-			this.onClearExtSearch();
-			this.onFullTextClearSearch();
+			this.onClearExtSearch(false);
+			this.onFullTextClearSearch(false);
 
-			//this.renderEvents([]);
-
-			var grandParentEl = this.getCalendarContainer();
-			if (grandParentEl != null) {
-				grandParentEl.innerHTML = '<div id="' + this.options.id + '-noEvent"  class="noEvent"><p id="' + this.options.id + '-defaultText" class="instructionTitle">' + this.msg("search.initial-text") + '</p></div>';
-			}
+			this.renderEvents([]);
 		}
 	}, true);
 })();
