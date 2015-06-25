@@ -1124,7 +1124,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
      * @param login логин пользователя
      */
     public ScriptNode getEmployeeByLogin(String login) {
-        return  new ScriptNode(orgstructureService.getEmployeeByPerson(login), serviceRegistry, getScope());
+        NodeRef employeeByPerson = orgstructureService.getEmployeeByPerson(login);
+        return employeeByPerson != null ? new ScriptNode(employeeByPerson, serviceRegistry, getScope()) : null;
     }
 
     /**
@@ -1172,11 +1173,13 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode getEmployeeOrganization(ScriptNode employee) {
-        return new ScriptNode(orgstructureService.getEmployeeOrganization(employee.getNodeRef()), serviceRegistry, getScope());
+        NodeRef employeeOrganization = orgstructureService.getEmployeeOrganization(employee.getNodeRef());
+        return employeeOrganization != null ? new ScriptNode(employeeOrganization, serviceRegistry, getScope()) : null;
     }
 
     public ScriptNode getUnitByOrganization(ScriptNode organization) {
-        return new ScriptNode(orgstructureService.getUnitByOrganization(organization.getNodeRef()), serviceRegistry, getScope());
+        NodeRef unitByOrganization = orgstructureService.getUnitByOrganization(organization.getNodeRef());
+        return unitByOrganization != null ? new ScriptNode(unitByOrganization, serviceRegistry, getScope()) : null;
     }
 
 	public ScriptNode getBusinessRoleByIdentifier(String roleId) {
