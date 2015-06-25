@@ -355,12 +355,13 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		canDeleteUnit: function(p_sType, p_aArgs, p_oItem) {
-			var nodeRef = new Alfresco.util.NodeRef(p_oItem.items[0]);
-
 
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'GET',
-				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/unitHaveChildren?nodeRef=' + nodeRef,
+				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/unitHaveChildren',
+				dataObj: {
+					items: p_oItem.items
+				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
@@ -441,14 +442,17 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		},
 
 		deleteND_Propmt: function(p_sType, p_aArgs, p_oItem) {
-			var nodeRef = new Alfresco.util.NodeRef(p_oItem.items[0]);
+
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'GET',
-				url: Alfresco.constants.PROXY_URI + 'lecm/forms/picker/node/' + nodeRef.uri + '/children',
+				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes',
+				dataObj: {
+					items: p_oItem.items
+				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
-						if(response.json.data.items.length) {
+						if(response.json.notEmpty) {
 							Alfresco.util.PopupManager.displayPrompt({
 								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
 								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),

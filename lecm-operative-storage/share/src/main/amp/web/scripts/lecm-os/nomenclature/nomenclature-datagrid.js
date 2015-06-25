@@ -434,7 +434,10 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 			Alfresco.util.Ajax.jsonRequest({
 				method: "GET",
-				url: Alfresco.constants.PROXY_URI + "lecm/os/nomenclature/unitHaveChildren?nodeRef=" + item.nodeRef,
+				url: Alfresco.constants.PROXY_URI + "lecm/os/nomenclature/unitHaveChildren",
+				dataObj: {
+					items: item.nodeRef
+				},
 				successCallback: {
 					scope: this,
 					fn: function (oResponse) {
@@ -619,7 +622,10 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				dataObj: {
 					selectableType: 'lecm-document:base,lecm-os:nomenclature-case-volume'
 				},
-				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes?nodeRef=' + item.nodeRef,
+				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes',
+				dataObj: {
+					items: item.nodeRef
+				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
