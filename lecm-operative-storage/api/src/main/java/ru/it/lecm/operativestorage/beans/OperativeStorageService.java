@@ -54,6 +54,7 @@ public interface OperativeStorageService {
 	QName PROP_NOMENCLATURE_YEAR_SECTION_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-status");
 	QName PROP_NOMENCLATURE_CASE_YEAR_STATUS = QName.createQName(OS_NAMESPACE, "nomenclature-case-year-section-status");
 	QName PROP_NOMENCLATURE_CASE_YEAR_COMMENT = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-comment");
+	QName PROP_NO_PERM_CHANGE = QName.createQName(OS_NAMESPACE, "nomenclature-case-no-permissions-change-on-archivation");
 	QName TYPE_BASE_OS = QName.createQName(OS_NAMESPACE, "base");
 	QName TYPE_NOMENCLATURE_CASE = QName.createQName(OS_NAMESPACE, "nomenclature-case");
 	QName TYPE_NOMENCLATURE_CASE_VOLUME = QName.createQName(OS_NAMESPACE, "nomenclature-case-volume");
@@ -138,5 +139,7 @@ public interface OperativeStorageService {
 	public void removeUnitSection(NodeRef unitSection);
 
 	public void removeCase(NodeRef caseRef);
+
+	public void sendToArchiveAction(NodeRef caseRef);
 
 }

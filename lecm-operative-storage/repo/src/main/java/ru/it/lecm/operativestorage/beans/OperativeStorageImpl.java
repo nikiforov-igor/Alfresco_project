@@ -38,6 +38,7 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 /**
  *
@@ -705,6 +706,33 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		}
 
 		nodeService.deleteNode(caseRef);
+	}
+
+	@Override
+	public void sendToArchiveAction(NodeRef caseRef) {
+		boolean noPermChange = Boolean.TRUE.equals(nodeService.getProperty(caseRef, PROP_NO_PERM_CHANGE));
+		List<NodeRef> docs = new ArrayList<>();
+
+		NodeRef documentsFolder = getDocuemntsFolder(caseRef);
+		if(documentsFolder != null) {
+			List<ChildAssociationRef> documents = nodeService.getChildAssocs(documentsFolder);
+			if(documents != null && !documents.isEmpty()) {
+				for (ChildAssociationRef document : documents) {
+					nodeService.setProperty(document.getChildRef(), StatemachineModel.PROP_STATUS, "В архиве");
+				}
+			}
+		}
+
+		if(!noPermChange) {
+			nodeService.setProperty(caseRef, PROP_NOMENCLATURE_CASE_IS_SHARED, true);
+			cleanVisibilityList(caseRef);
+			grantAll(caseRef);
+		}
+
+		nodeService.setProperty(caseRef, PROP_NOMENCLATURE_CASE_STATUS, "ARCHIVE");
+		grantPermissionsToAllArchivists(caseRef);
+
+
 	}
 
 }

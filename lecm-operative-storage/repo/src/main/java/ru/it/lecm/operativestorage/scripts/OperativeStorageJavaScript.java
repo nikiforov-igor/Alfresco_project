@@ -379,4 +379,15 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		});
 	}
 
+	public void sendToArchive(final ScriptNode caseRef) {
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+
+			@Override
+			public Void doWork() throws Exception {
+				operativeStorageService.sendToArchiveAction(caseRef.getNodeRef());
+				return null;
+			}
+		});
+	}
+
 }
