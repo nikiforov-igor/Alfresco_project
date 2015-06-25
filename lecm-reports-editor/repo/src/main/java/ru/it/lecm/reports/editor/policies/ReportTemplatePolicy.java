@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.editor.ReportsEditorModel;
+import ru.it.lecm.reports.editor.ReportsEditorService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -113,35 +114,35 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
     public void onCreateAssociation(AssociationRef nodeAssocRef) {
         NodeRef targetFile = nodeAssocRef.getTargetRef();
         NodeRef template = nodeAssocRef.getSourceRef();
+        NodeRef report = nodeService.getPrimaryParent(nodeAssocRef.getSourceRef()).getParentRef();
 
         if (nodeService.exists(targetFile)) {
             NodeRef parent = nodeService.getPrimaryParent(targetFile).getParentRef();
             QName parentType = nodeService.getType(parent);
             if (!parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) && !parentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
-                // 2 случая: загружаем новый и берем из temp, берем из готовых шаблонов
-                NodeRef report = nodeService.getPrimaryParent(template).getParentRef();
+                // 2 случая: загружаем новый и берем из temp или берем из готовых шаблонов
                 QName templateParentType = nodeService.getType(report);
                 if (templateParentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) ||
                         templateParentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
                     // подчистить директорию с отчетом
-                    String newFileName = (String) nodeService.getProperty(targetFile, ContentModel.PROP_NAME);
                     List<ChildAssociationRef> childs = nodeService.getChildAssocs(report);
                     for (ChildAssociationRef child : childs) {
                         QName childType = nodeService.getType(child.getChildRef());
-                        if (childType.equals(ContentModel.TYPE_CONTENT) &&
-                                newFileName.equals(nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME))) {
+                    if (childType.equals(ContentModel.TYPE_CONTENT)) {
+                        if (nodeService.getSourceAssocs(child.getChildRef(), ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).isEmpty()) {
                             nodeService.addAspect(child.getChildRef(), ContentModel.ASPECT_TEMPORARY, null);
                             nodeService.deleteNode(child.getChildRef());
                         }
                     }
-                    // так как родитель - не шаблон, переносим файл и удаляем из прежнего места
+                }
+                // так как родитель - не шаблон, переносим файл и удаляем. если файл был взят не из шаблонов!
                     NodeRef copiedFile = copyService.copyAndRename(targetFile, report, ContentModel.ASSOC_CONTAINS, null, false);
                     if (copiedFile != null) {
                         List<AssociationRef> oldFiles = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
                         for (AssociationRef oldFile : oldFiles) { // oldTemplate и targetFile
                             NodeRef oldFileRef = oldFile.getTargetRef();
                             if (nodeService.exists(oldFileRef)
-                                    && !targetFile.equals(oldFileRef)
+                                    && !nodeService.getProperty(parent, ContentModel.PROP_NAME).equals(ReportsEditorService.RE_TEMPLATES_ROOT_NAME)
                                     && !nodeService.hasAspect(oldFileRef, ContentModel.ASPECT_PENDING_DELETE)) {
                                 nodeService.addAspect(oldFileRef, ContentModel.ASPECT_TEMPORARY, null);
                                 nodeService.deleteNode(oldFileRef);
