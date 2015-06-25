@@ -13,6 +13,7 @@
                 <entry key="lecm-os:security-classification" value="Гриф секретности"/>
                 <entry key="lecm-os:nomenclature-year-section" value="Годовой раздел номенклатуры дел"/>
                 <entry key="lecm-os:nomenclature-unit-section" value="Раздел номенклатуры дел"/>
+                <entry key="lecm-os:nomenclature-base-section" value="Годовой раздел или просто раздел номенклатуры дел"/>
                 <entry key="lecm-os:nomenclature-case-volume" value="Том номенклатуры"/>
                 <entry key="lecm-os:nomenclature-case" value="Номенклатурное дело"/>
             </map>
@@ -82,6 +83,7 @@
 	<util:list id="operative.storage.reports">
 		<value>alfresco/module/${artifactId}/reports/organization-nomenclature.xml</value>
 		<value>alfresco/module/${artifactId}/reports/volumes-card.xml</value>
+		<value>alfresco/module/${artifactId}/reports/destroy-act.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.arm.os">
