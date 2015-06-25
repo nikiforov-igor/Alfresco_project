@@ -1,8 +1,9 @@
-var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + "/" + url.templateArgs.id;
-var nodeSubstituteString = args['nodeSubstituteString'];
-var nodeTitleSubstituteString = args['nodeTitleSubstituteString'];
-var selectableType = args['selectableType'];
-var useOnlyInSameOrg = args['onlyInSameOrg'];
+var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + "/" + url.templateArgs.id,
+	nodeSubstituteString = args['nodeSubstituteString'],
+	nodeTitleSubstituteString = args['nodeTitleSubstituteString'],
+	selectableType = args['selectableType'],
+	useOnlyInSameOrg = args['onlyInSameOrg'],
+	statusFilter = url.templateArgs.filterStatus;
 
 var parentNode = search.findNode(nodeRef);
 var branch = [];
@@ -12,7 +13,16 @@ var useStrictFilterByOrg = (useOnlyInSameOrg != null && ("" + useOnlyInSameOrg) 
 
 if (parentNode != null) {
 
-	var query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({})}} AND (@lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"APPROVED\" OR ISNULL:\"lecm-os:nomenclature-year-section-status\")';
+	var	query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}}';
+
+	switch(statusFilter) {
+		case 'ApprovedOnly':
+			query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND (@lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"APPROVED\" OR ISNULL:\"lecm-os:nomenclature-year-section-status\")';
+			break;
+		case 'notClosed':
+			query = 'PARENT:"' + nodeRef + '" AND {{FILTER_YEARS_BY_ORG({allowAdmin: true})}} AND (ISNULL:\"lecm-os:nomenclature-year-section-status\" OR NOT @lecm\\-os\\:nomenclature\\-year\\-section\\-status:\"CLOSED\")';
+			break;
+	}
 
 	var values = search.query(
 		{

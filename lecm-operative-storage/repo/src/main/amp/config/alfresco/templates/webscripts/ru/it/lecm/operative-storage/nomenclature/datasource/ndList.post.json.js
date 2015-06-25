@@ -32,7 +32,7 @@ const DEFAULT_INDEX = 0;
 
     var tmp = [
         {
-            query: '{{FILTER_YEARS_BY_ORG({})}}'
+            query: '{{FILTER_YEARS_BY_ORG({allowAdmin: true})}}'
         }
     ];
 
