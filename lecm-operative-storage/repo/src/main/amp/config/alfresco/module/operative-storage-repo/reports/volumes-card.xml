@@ -19,7 +19,7 @@
 				<items>
 					<item name="cm:Номенклатурное дело" type="lecm-rpeditor:reportDataColumn">
 						<property name="cm:name"><![CDATA[Номенклатурное дело]]></property>
-						<property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-os:nomenclature-case]]></property>
+						<property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-os:nomenclature-case-for-reports]]></property>
 						<property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{ID}]]></property>
 						<property name="lecm-rpeditor:dataColumnCode"><![CDATA[case_ref]]></property>
 						<property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>

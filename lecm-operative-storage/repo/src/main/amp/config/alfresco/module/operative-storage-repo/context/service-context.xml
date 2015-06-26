@@ -16,6 +16,7 @@
                 <entry key="lecm-os:nomenclature-base-section" value="Годовой раздел или просто раздел номенклатуры дел"/>
                 <entry key="lecm-os:nomenclature-case-volume" value="Том номенклатуры"/>
                 <entry key="lecm-os:nomenclature-case" value="Номенклатурное дело"/>
+                <entry key="lecm-os:nomenclature-case-for-reports" value="Номенклатурное дело (для отчётов)"/>
             </map>
         </property>
     </bean>
