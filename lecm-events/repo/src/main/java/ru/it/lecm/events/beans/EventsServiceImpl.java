@@ -1,6 +1,5 @@
 package ru.it.lecm.events.beans;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -10,10 +9,8 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
-import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
@@ -22,24 +19,11 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
-import javax.activation.DataSource;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
-import javax.activation.DataHandler;
-import javax.mail.BodyPart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
-import org.apache.tools.ant.filters.StringInputStream;
-import ru.it.lecm.events.ical.CalendarEvent;
-import ru.it.lecm.events.ical.ICalUtils;
+import org.alfresco.service.namespace.NamespaceService;
 
 /**
  * User: AIvkin Date: 25.03.2015 Time: 14:44
@@ -56,9 +40,12 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private NotificationsService notificationsService;
 	private SearchQueryProcessor organizationQueryProcessor;
 	private LecmPermissionService lecmPermissionService;
-
+	private NamespaceService namespaceService;
+	
 	private ThreadPoolExecutor threadPoolExecutor;
 
+	private EventsNotificationsService eventsNotificationsService;
+	
 	private TemplateService templateService;
 	private JavaMailSender mailService;
 	private ContentService contentService;
@@ -69,18 +56,38 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 	final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-	private static final String INVITED_MEMBERS_UPDATE_EVENT_MESSAGE_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/events/invited-members-update-event-message-content.ftl";
-	private static final String INVITED_MEMBERS_MESSAGE_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/events/invited-members-message-content.ftl";
-
-	private static final String MULTIPART_SUBTYPE_ALTERNATIVE = "alternative";
-	private static final String CONTENT_TYPE_ALTERNATIVE = "multipart/alternative";
-	private static final String CONTENT_SUBTYPE_HTML = "html";
-
 	private final Map<QName, List<QName>> assocsToUpdateMap = new HashMap<>();
 	private final Map<QName, List<QName>> propsToUpdateMap = new HashMap<>();
 
 	private List<String> propsForFilterShowIncalendar = new ArrayList<>();
 
+	public EventsNotificationsService getEventsNotificationsService() {
+		return eventsNotificationsService;
+	}
+
+	public void setEventsNotificationsService(EventsNotificationsService eventsNotificationsService) {
+		this.eventsNotificationsService = eventsNotificationsService;
+	}
+
+	@Override
+	public Boolean getSendIcalToInvitedMembers() {
+		return eventsNotificationsService.getSendIcalToInvitedMembers();
+	}
+	
+	@Override
+	public Boolean getSendIcalToMembers() {
+		return eventsNotificationsService.getSendIcalToMembers();
+	}
+
+
+	public NamespaceService getNamespaceService() {
+		return namespaceService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+	
 	public void init() {
 		List<QName> propertiesToCopy = new ArrayList<>();
 		propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
@@ -260,7 +267,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 		sp.addSort(EventsService.PROP_EVENT_FROM_DATE.toString(), true);
-		String query = "";
+		String query;
 		if (maxCount > 0) {
 			sp.setMaxItems(maxCount);
 			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO MAX> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
@@ -445,7 +452,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 		List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
 
-		return events == null || events.size() == 0;
+		return events == null || events.isEmpty();
 	}
 
 	@Override
@@ -456,7 +463,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public boolean checkMemberAvailable(NodeRef member, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay) {
 		List<Date> employeeWorkindDays = workCalendarService.getEmployeeWorkindDays(member, fromDate, toDate);
-		if (employeeWorkindDays.size() == 0) {
+		if (employeeWorkindDays.isEmpty()) {
 			return false;
 		} else {
 			if (allDay) {
@@ -484,7 +491,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 			List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
 
-			return events == null || events.size() == 0;
+			return events == null || events.isEmpty();
 		}
 	}
 
@@ -578,7 +585,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
 		send_notifications = null == send_notifications ? false : send_notifications;
 		if (sendToInvitedMembers && send_notifications) {
-			sendUpdateNotificationsToInvitedMembers(event);
+			sendNotificationsToInvitedMembers(event, false);
 		}
 
 		Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
@@ -604,287 +611,64 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			NodeRef initiator = getEventInitiator(event);
 			Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
 			if (initiator != null && fromDate != null) {
-				String author = AuthenticationUtil.getSystemUserName();
-				String employeeName = (String) nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-
-				for (NodeRef member : oldAndNewMembers) {
-					String text = employeeName + " обновил информацию по мероприятию " + wrapAsEventLink(event) + ". Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
-					List<NodeRef> recipients = new ArrayList<>();
-					recipients.add(member);
-					notificationsService.sendNotification(author, event, text, recipients, null);
-				}
+				sendNotificationsToMembers(event, false, oldAndNewMembers);
 			}
 		}
-
 		nodeService.setAssociations(event, EventsService.ASSOC_EVENT_OLD_MEMBERS, getEventMembers(event));
-	}
-
-	private Map<String, Object> getEventTemplateModel(NodeRef event) {
-		Map<String, Object> mailTemplateModel = new HashMap<>();
-
-		mailTemplateModel.put("uid", event.getId());
-		mailTemplateModel.put("title", nodeService.getProperty(event, EventsService.PROP_EVENT_TITLE));
-		mailTemplateModel.put("description", nodeService.getProperty(event, EventsService.PROP_EVENT_DESCRIPTION));
-		NodeRef initiator = getEventInitiator(event);
-		if (initiator != null) {
-			mailTemplateModel.put("initiator", nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
-			mailTemplateModel.put("initiatorMail", nodeService.getProperty(initiator, OrgstructureBean.PROP_EMPLOYEE_EMAIL));
-
-			NodeRef organization = orgstructureBean.getEmployeeOrganization(initiator);
-			if (organization != null) {
-				mailTemplateModel.put("organization", nodeService.getProperty(organization, Contractors.PROP_CONTRACTOR_FULLNAME));
-			}
-		}
-
-		Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-		Date toDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_TO_DATE);
-		Boolean allDay = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_ALL_DAY);
-		mailTemplateModel.put("fromDate", fromDate);
-		mailTemplateModel.put("toDate", toDate);
-		mailTemplateModel.put("allDay", null == allDay ? false : allDay);
-		if (fromDate != null && toDate != null) {
-			String fromDateString = dateFormat.format(fromDate);
-			String toDateString = dateFormat.format(toDate);
-			if (fromDateString.equals(toDateString)) {
-				mailTemplateModel.put("date", fromDateString);
-			} else {
-				mailTemplateModel.put("date", " с " + fromDateString + " по " + toDateString);
-			}
-		}
-		NodeRef location = getEventLocation(event);
-		if (location != null) {
-			mailTemplateModel.put("location", nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS));
-		}
-
-		List<NodeRef> attendeesRefs = getEventInvitedMembers(event);
-		Map<String, String> attendeesMap = new HashMap<>(attendeesRefs.size());
-		for (NodeRef attendee : attendeesRefs) {
-			String email = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_EMAIL);
-			String surname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_SURNAME);
-			String firstname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_FIRSTNAME);
-			String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
-			if (email != null && !email.isEmpty()) {
-				attendeesMap.put(email, name == null ? "" : name);
-			}
-		}
-		mailTemplateModel.put("attendees", attendeesMap);
-		return Collections.unmodifiableMap(mailTemplateModel);
-	}
-
-	private CalendarEvent getCalEvent(Map<String, Object> mailTemplateModel) {
-		CalendarEvent eventNotification = new CalendarEvent();
-		eventNotification.setUid(mailTemplateModel.get("uid").toString());
-		eventNotification.setTitle(mailTemplateModel.get("title").toString());
-		eventNotification.setSummary(mailTemplateModel.get("description").toString());
-		eventNotification.setStartTime((Date) mailTemplateModel.get("fromDate"));
-		eventNotification.setEndTime((Date) mailTemplateModel.get("toDate"));
-		eventNotification.setInitiatorName(mailTemplateModel.get("initiator").toString());
-		eventNotification.setInitiatorMail(mailTemplateModel.get("initiatorMail").toString());
-		eventNotification.setFullDay((Boolean) mailTemplateModel.get("allDay"));
-		eventNotification.setPlace(mailTemplateModel.get("location").toString());
-		Map<String, String> attendees = (Map) mailTemplateModel.get("attendees");
-		if (attendees != null) {
-			eventNotification.addAttendees(attendees);
-		}
-		//return utils.formEventRequest(eventNotification);
-		return eventNotification;
-	}
-
-	private List<DataSource> getEventAttachments(NodeRef event) {
-		List<DataSource> attachmentDS = new ArrayList<>();
-		List<NodeRef> attachments = new ArrayList<>();
-		List<AssociationRef> attachmentsAssocs = nodeService.getSourceAssocs(event, DocumentService.ASSOC_PARENT_DOCUMENT);
-		if (attachmentsAssocs != null) {
-			for (AssociationRef attachment : attachmentsAssocs) {
-				attachments.add(attachment.getSourceRef());
-			}
-		}
-		for (final NodeRef attachment : attachments) {
-			attachmentDS.add(new DataSource() {
-
-				@Override
-				public InputStream getInputStream() throws IOException {
-					ContentReader reader = contentService.getReader(attachment, ContentModel.PROP_CONTENT);
-					return reader.getContentInputStream();
-				}
-
-				@Override
-				public OutputStream getOutputStream() throws IOException {
-					throw new IOException("Read-only data");
-				}
-
-				@Override
-				public String getContentType() {
-					return contentService.getReader(attachment, ContentModel.PROP_CONTENT).getMimetype();
-				}
-
-				@Override
-				public String getName() {
-					return nodeService.getProperty(attachment, ContentModel.PROP_NAME).toString();
-				}
-			});
-
-		}
-		return Collections.unmodifiableList(attachmentDS);
-	}
-
-	private void sendUpdateNotificationsToInvitedMembers(NodeRef event) {
-		sendNotificationsToInvitedMembers(event, false);
 	}
 
 	@Override
 	public void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst) {
-		List<NodeRef> invitedMembers = getEventInvitedMembers(event);
-		Map<String, Object> eventTemplateModel = getEventTemplateModel(event);
-		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
-		for (NodeRef representative : invitedMembers) {
-			String email = (String) nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_EMAIL);
-			if (email != null && email.length() > 0) {
-				try {
-					String mailText = templateService.processTemplate(isFirst ? INVITED_MEMBERS_MESSAGE_TEMPLATE : INVITED_MEMBERS_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
-
-					MimeMessage message = mailService.createMimeMessage();
-					MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-					helper.setTo(email);
-					helper.setFrom(defaultFromEmail);
-					//TODO internationalize
-					helper.setSubject(isFirst ? "Приглашение на мероприятие" : "Обновление мероприятия");
-					helper.setText(mailText, true);
-					for (DataSource attachment : attachments) {
-						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
-					}
-					Runnable mailSender = new RawMailSender(message, mailService, transactionService);
-					threadPoolExecutor.execute(mailSender);
-				} catch (Exception e) {
-					logger.error("Error send mail", e);
-				}
-			}
-		}
+		sendNotificationsToInvitedMembers(event, isFirst, null);
 	}
 
 	@Override
-	public void sendCancelNotifications(NodeRef event) {
+	public void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients) {
 		List<NodeRef> invitedMembers = getEventInvitedMembers(event);
-		Map<String, Object> eventTemplateModel = getEventTemplateModel(event);
-		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
-		ICalUtils iCalUtils = new ICalUtils();
-		String iCalString = iCalUtils.formEventCancel(getCalEvent(eventTemplateModel));
-		attachments.add(new IcalDS(iCalString, "application/ics", "cancel.ics"));
-		for (NodeRef representative : invitedMembers) {
-			String email = (String) nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_EMAIL);
-			if (email != null && email.length() > 0) {
-				try {
-
-					String mailText = "<html><body>Уважаемые коллеги!<br/>"
-							+ "Мероприятие "
-							+ ((String) eventTemplateModel.get("title"))
-							+ " отменено";
-
-					MimeMessage message = mailService.createMimeMessage();
-					MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED, "UTF-8");
-					helper.setTo(email);
-					helper.setFrom(defaultFromEmail);
-					//TODO internationalize
-					helper.setSubject("Отмена проведения мероприятия");
-
-					//Создаём alternative
-					MimeMultipart root = helper.getRootMimeMultipart();
-					BodyPart messageBodyPart = new MimeBodyPart();
-					root.addBodyPart(messageBodyPart);
-					MimeMultipart messageBody = new MimeMultipart(MULTIPART_SUBTYPE_ALTERNATIVE);
-					messageBodyPart.setContent(messageBody, CONTENT_TYPE_ALTERNATIVE);
-					//Устанавливаем plain
-					// Create the plain text part of the message.
-					//TODO сформировать сообщение в плйн текст
-					String plainText = "";
-					MimeBodyPart plainTextPart = new MimeBodyPart();
-					plainTextPart.setText(plainText);
-					messageBody.addBodyPart(plainTextPart);
-					//Устанавливаем html
-					// Create the HTML text part of the message.
-					MimeBodyPart htmlTextPart = new MimeBodyPart();
-					htmlTextPart.setText(mailText, null, CONTENT_SUBTYPE_HTML);
-					messageBody.addBodyPart(htmlTextPart);
-					//Устанавливаем calendar
-					// Create the calendar part
-					BodyPart calendarBodyPart = new MimeBodyPart();
-					// Fill the message
-					//calendarBodyPart.setHeader("Content-Class", "urn:content-classes:calendarmessage");
-					//calendarBodyPart.setHeader("Content-ID", "calendar_message");
-					calendarBodyPart.setDataHandler(new DataHandler(
-							new ByteArrayDataSource(iCalString, "text/calendar; charset=UTF-8; method=CANCEL")));
-					// Add part one
-					messageBody.addBodyPart(calendarBodyPart);
-					for (DataSource attachment : attachments) {
-						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
-					}
-					Runnable mailSender = new RawMailSender(message, mailService, transactionService);
-					threadPoolExecutor.execute(mailSender);
-				} catch (Exception e) {
-					logger.error("Error send mail", e);
-				}
-			}
+		if (null == recipients || recipients.isEmpty()) {
+			recipients = invitedMembers;
+		} else {
+			recipients.retainAll(invitedMembers);
 		}
+		
+		eventsNotificationsService.notifyEvent(event, isFirst ,recipients);
 	}
 
 	@Override
-	public void sendIcalNotificationsToInvitedMembers(NodeRef event, boolean isFirst) {
-		List<NodeRef> invitedMembers = getEventInvitedMembers(event);
-		Map<String, Object> eventTemplateModel = getEventTemplateModel(event);
-		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
-		ICalUtils iCalUtils = new ICalUtils();
-		String iCalString = iCalUtils.formEventPublish(getCalEvent(eventTemplateModel));
-		attachments.add(new IcalDS(iCalString, "application/ics", "invite.ics"));
-		for (NodeRef representative : invitedMembers) {
-			String email = (String) nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_EMAIL);
-			if (email != null && email.length() > 0) {
-				try {
-					String mailText = templateService.processTemplate(isFirst ? INVITED_MEMBERS_MESSAGE_TEMPLATE : INVITED_MEMBERS_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+	public void sendNotificationsToMembers(NodeRef event, Boolean isFirst) {
+		sendNotificationsToMembers(event, isFirst, null);
+	}
 
-					MimeMessage message = mailService.createMimeMessage();
-					MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED, "UTF-8");
-					helper.setTo(email);
-					helper.setFrom(defaultFromEmail);
-					//TODO internationalize
-					helper.setSubject(isFirst ? "Приглашение на мероприятие" : "Обновление мероприятия");
-					//Создаём alternative
-					MimeMultipart root = helper.getRootMimeMultipart();
-					BodyPart messageBodyPart = new MimeBodyPart();
-					root.addBodyPart(messageBodyPart);
-					MimeMultipart messageBody = new MimeMultipart(MULTIPART_SUBTYPE_ALTERNATIVE);
-					messageBodyPart.setContent(messageBody, CONTENT_TYPE_ALTERNATIVE);
-					//Устанавливаем plain
-					// Create the plain text part of the message.
-					//TODO сформировать сообщение в плйн текст
-					String plainText = "";
-					MimeBodyPart plainTextPart = new MimeBodyPart();
-					plainTextPart.setText(plainText);
-					messageBody.addBodyPart(plainTextPart);
-					//Устанавливаем html
-					// Create the HTML text part of the message.
-					MimeBodyPart htmlTextPart = new MimeBodyPart();
-					htmlTextPart.setText(mailText, null, CONTENT_SUBTYPE_HTML);
-					messageBody.addBodyPart(htmlTextPart);
-					//Устанавливаем calendar
-					// Create the calendar part
-					BodyPart calendarBodyPart = new MimeBodyPart();
-					// Fill the message
-					//calendarBodyPart.setHeader("Content-Class", "urn:content-classes:calendarmessage");
-					//calendarBodyPart.setHeader("Content-ID", "calendar_message");
-					calendarBodyPart.setDataHandler(new DataHandler(
-							new ByteArrayDataSource(iCalString, "text/calendar; charset=UTF-8; method=REQUEST")));
-					// Add part one
-					messageBody.addBodyPart(calendarBodyPart);
-					for (DataSource attachment : attachments) {
-						helper.addAttachment(MimeUtility.encodeText(attachment.getName(), "UTF-8", null), attachment);
-					}
-					Runnable mailSender = new RawMailSender(message, mailService, transactionService);
-					threadPoolExecutor.execute(mailSender);
-				} catch (Exception e) {
-					logger.error("Error send mail", e);
-				}
-			}
+	/**
+	 *
+	 * @param event
+	 * @param recipients if null - send to all members
+	 * @param isFirst
+	 */
+	@Override
+	public void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients) {
+		List<NodeRef> members = getEventMembers(event);
+		if (null == recipients || recipients.isEmpty()) {
+			recipients = members;
+		} else {
+			recipients.retainAll(members);
 		}
+		eventsNotificationsService.notifyEvent(event, isFirst, recipients);
+	}
+
+	@Override
+	public void notifyAttendeeRemoved(NodeRef event, NodeRef attendee) {
+		eventsNotificationsService.notifyAttendeeRemoved(event, attendee);
+	}
+
+	@Override
+	public void notifyRemovedMember(NodeRef event, NodeRef recipient) {
+		eventsNotificationsService.notifyAttendeeRemoved(event, recipient);
+	}
+
+	@Override
+	public void notifyEventCncelled(NodeRef event) {
+		eventsNotificationsService.notifyEventCancelled(event);
 	}
 
 	@Override
@@ -1000,56 +784,25 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		onAfterUpdate(repeatedEvent, null);
 	}
 
-    public String getAdditionalFilterForCalendarShow() {
-        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-        String result = "";
-        if (currentEmployee != null && !orgstructureBean.isEmployeeHasBusinessRole(currentEmployee, EVENTS_ENGINEER_ROLE) &&
-                this.propsForFilterShowIncalendar != null && this.propsForFilterShowIncalendar.size() > 0) {
-            result += " AND (";
-            int i = 0;
-            for (String prop : this.propsForFilterShowIncalendar) {
-                if (i > 0) {
-                    result += " OR ";
-                }
-                result += "@" + prop.replaceAll("-", "\\\\-").replaceAll(":", "\\\\:") + ": \"*" + currentEmployee + "*\"";
-                i++;
-            }
-            result += ")";
-        }
-        return result;
-    }
-
-	class IcalDS implements DataSource {
-
-		final String iCalContent;
-		final String contentType;
-		final String fileName;
-
-		public IcalDS(String iCalContent, String contentType, String fileName) {
-			this.iCalContent = iCalContent;
-			this.contentType = contentType;
-			this.fileName = fileName;
+	@Override
+	public String getAdditionalFilterForCalendarShow() {
+		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+		String result = "";
+		if (currentEmployee != null && !orgstructureBean.isEmployeeHasBusinessRole(currentEmployee, EVENTS_ENGINEER_ROLE)
+				&& this.propsForFilterShowIncalendar != null && this.propsForFilterShowIncalendar.size() > 0) {
+			result += " AND (";
+			int i = 0;
+			for (String prop : this.propsForFilterShowIncalendar) {
+				if (i > 0) {
+					result += " OR ";
+				}
+				result += "@" + prop.replaceAll("-", "\\\\-").replaceAll(":", "\\\\:") + ": \"*" + currentEmployee + "*\"";
+				i++;
+			}
+			result += ")";
 		}
+		return result;
 
-		@Override
-		public InputStream getInputStream() throws IOException {
-			return new StringInputStream(iCalContent);
-		}
-
-		@Override
-		public OutputStream getOutputStream() {
-			throw new UnsupportedOperationException("Read-only javax.activation.DataSource");
-		}
-
-		@Override
-		public String getContentType() {
-			return contentType;
-		}
-
-		@Override
-		public String getName() {
-			return fileName;
-		}
 	}
-
+	
 }

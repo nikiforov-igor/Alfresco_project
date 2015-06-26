@@ -329,14 +329,9 @@ public class EventsWebScriptBean extends BaseWebScript {
 	
 	public void sendCancelNotifications(ScriptNode event) {
 		ParameterCheck.mandatory("event", event);
-		eventService.sendCancelNotifications(event.getNodeRef());
+		eventService.notifyEventCncelled(event.getNodeRef());
 	}
 
-	public void sendIcalNotifications(ScriptNode event, boolean firstTime) {
-		ParameterCheck.mandatory("event", event);
-		ParameterCheck.mandatory("firstTime", firstTime);
-		eventService.sendIcalNotificationsToInvitedMembers(event.getNodeRef(), firstTime);
-	}
 
     public Scriptable getRepetableEvents(ScriptNode event, String filterType) {
         List<NodeRef> repeatableEvents = new ArrayList<>();

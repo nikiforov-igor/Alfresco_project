@@ -15,7 +15,8 @@ document.properties["lecm-events:removed"] = true;
 document.save();
 
 if (toDate.getTime() >= new Date().getTime()) {
-	var currentUser = orgstructure.getCurrentEmployee();
+			events.sendCancelNotifications(document);
+/*	var currentUser = orgstructure.getCurrentEmployee();
     var members = events.getEventMembers(document);
 	var type = document.getTypeShort();
 	var objectType="";		
@@ -54,8 +55,8 @@ if (toDate.getTime() >= new Date().getTime()) {
           } catch(e) {}
         }
       }
-    }
-
+    }*/
+	
 }]]></property>
     </item>
 </items>

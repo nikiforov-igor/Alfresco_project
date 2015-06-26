@@ -85,6 +85,22 @@
 
 	<util:constant id="EVENTS_ROOT_ID" static-field="ru.it.lecm.events.beans.EventsService.EVENTS_ROOT_ID"/>
 
+	<bean id="eventsNotificationsService" class="ru.it.lecm.events.beans.EventsNotificationsService" parent="baseBean"
+	      depends-on="events.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService"> 
+		  
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="mailService" ref="mailService"/>
+		<property name="templateService" ref="templateService"/>
+		<property name="contentService" ref="ContentService"/>
+		<property name="defaultFromEmail" value="${mail.from.default}"/>
+		<property name="threadPoolExecutor" ref="lecm.events.thread.pool"/>
+		<property name="namespaceService" ref="namespaceService" />
+		<property name="sendIcalToMembers" value="${lecm.events.sendIcalToMembers}" />		<!--default=false-->
+		<property name="sendIcalToInvitedMembers" value="${lecm.events.sendIcalToInvitedMembers}" />	<!--default=true-->
+		<property name="eventsService" ref="eventsService"/>
+	</bean>
+	
 	<bean id="eventsService" class="ru.it.lecm.events.beans.EventsServiceImpl" parent="baseBean"
 	      depends-on="events.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService"
 			init-method="init">
@@ -107,6 +123,8 @@
 		<property name="organizationQueryProcessor" ref="inUserOrganizationProcessor"/>
 		<property name="threadPoolExecutor" ref="lecm.events.thread.pool"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+		<property name="namespaceService" ref="namespaceService" />
+		<property name="eventsNotificationsService" ref="eventsNotificationsService" />
 		<property name="propsForFilterShowIncalendar">
 			<list>
 				<value>lecm-events:initiator-assoc-ref</value>
