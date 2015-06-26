@@ -9,8 +9,8 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event;
-    var collapsedClass = "collapsed";
-    var expandedClass = "expanded";
+    var collapsedClass = "alfresco-twister-closed";
+    var expandedClass = "alfresco-twister-open";
 
 	LogicECM.module.Documents.Approval.Dashlet = function (htmlId) {
 		LogicECM.module.Documents.Approval.Dashlet.superclass.constructor.call(this, "LogicECM.module.Documents.Approval.Dashlet", htmlId, ["button", "container"]);
@@ -62,12 +62,12 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 			},
 
 			getStageView: function (status, stage) {
-				var resultsText = "";
-                var btnEl = document.createElement('div');
-                var id = "approval-stage-btn_" + stage.nodeRef + "_" + Alfresco.util.generateDomId();
+				var resultsText = "<div class='approval-stage-container'>";
+				var stageEl = document.createElement('div');
+                var id = "approval-stage_" + stage.nodeRef + "_" + Alfresco.util.generateDomId();
 
-                btnEl.id = id;
-                Dom.addClass(btnEl, "approval-stage-btn " + collapsedClass);
+                stageEl.id = id;
+                Dom.addClass(stageEl, "approval-stage alfresco-twister " + collapsedClass);
                 YAHOO.util.Event.addListener(id, "click", function() {
                     var btnEl = this;
                     if (Dom.hasClass(btnEl, collapsedClass)) {
@@ -77,33 +77,24 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
                     }
                 });
 
-				resultsText += "<div class='approval-stage-container'>";
-                resultsText += btnEl.outerHTML;
-				resultsText += "<div class='approval-stage ";
-
-                if (stage.type == "PARALLEL") {
-                    resultsText += "stage-parallel";
-                } else {
-                    resultsText += "stage-sequential";
-                }
-
-                resultsText += "' title='";
-				if (stage.type == "PARALLEL") {
-					resultsText += this.msg("label.approval.dashlet.stage.parallel");
-				} else {
-					resultsText += this.msg("label.approval.dashlet.stage.sequential");
-				}
-                resultsText += "'>";
-				resultsText += this.msg("label.approval.dashlet.stage.title") + ": ";
-				resultsText += stage.title;
-				resultsText += ", " + this.msg("label.approval.dashlet.stage.term") + " ";
-				resultsText += stage.term;
+				var text = this.msg("label.approval.dashlet.stage.title") + ": " + stage.title;
+				text += ", " + this.msg("label.approval.dashlet.stage.term") + " " + stage.term;
 				if (status != "current") {
-					resultsText += ", " + this.msg("label.approval.dashlet.stage.status") + " ";
-					resultsText += stage.state.displayValue;
+					text += ", " + this.msg("label.approval.dashlet.stage.status") + " " + stage.state.displayValue;
 				}
-				resultsText += "</div>";
 
+				var stageTypeEl = document.createElement('div');
+				if (stage.type == "PARALLEL") {
+					Dom.addClass(stageTypeEl, "stage-parallel");
+					stageTypeEl.title = this.msg("label.approval.dashlet.stage.parallel");
+				} else {
+					Dom.addClass(stageTypeEl, "stage-sequential");
+					stageTypeEl.title = this.msg("label.approval.dashlet.stage.sequential");
+				}
+
+				stageEl.innerHTML = text + stageTypeEl.outerHTML;
+
+                resultsText += stageEl.outerHTML;
 				resultsText += this.getItemsView(stage);
                 resultsText += "</div>";
 

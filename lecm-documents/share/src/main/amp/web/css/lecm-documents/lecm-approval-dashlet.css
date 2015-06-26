@@ -2,29 +2,28 @@
     padding: 8px 1em;
     box-sizing: border-box;
 }
-.dashlet.approval .approval-stage-container .approval-stage-btn {
-    float: left;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-}
-.dashlet.approval .approval-stage-container .approval-stage-btn.collapsed {
-    background: url("../../images/lecm-documents/approval/alf_plus_grey_16.png") left top no-repeat;
-}
-.dashlet.approval .approval-stage-container .approval-stage-btn.expanded {
-    background: url("../../images/lecm-documents/approval/alf_minus_grey_16.png") left top no-repeat;
+.dashlet.approval .approval-stage-container {
+    border-bottom: 1px solid #888;
+    margin: 0 -3px;
+    padding: 0 3px;
 }
 .dashlet.approval .approval-stage-container div.approval-stage {
-    padding-right: 20px;
-    padding-left: 25px;
     margin: 5px 0;
     box-sizing: border-box;
+    background-position-y: 30% !important;
 }
-.dashlet.approval div.approval-stage.stage-parallel {
-    background: url("../../images/lecm-documents/approval/alf_parallel_grey_16.png") right top no-repeat;
+.dashlet.approval div.approval-stage div {
+    width: 16px;
+    height: 16px;
+    float: right;
+    opacity: .9;
+    cursor: default;
 }
-.dashlet.approval div.approval-stage.stage-sequential {
-    background: url("../../images/lecm-documents/approval/alf_sequential_grey_16.png") right top no-repeat;
+.dashlet.approval div.approval-stage div.stage-parallel {
+    background: url("../../images/lecm-documents/approval/alf_parallel_lightgrey_16.png") center center no-repeat;
+}
+.dashlet.approval div.approval-stage div.stage-sequential {
+    background: url("../../images/lecm-documents/approval/alf_sequential_lightgrey_16.png") center center no-repeat;
 }
 .dashlet.approval .approval-stage-container div.stages-items {
     padding-left: 5em;
@@ -35,10 +34,10 @@
 .dashlet.approval .approval-stage-container div.stages-items > div {
     margin: 3px 0;
 }
-.dashlet.approval .approval-stage-container .approval-stage-btn.collapsed ~ div.stages-items {
+.dashlet.approval .approval-stage-container .approval-stage.alfresco-twister-closed ~ div.stages-items {
     height: 0;
 }
-.dashlet.approval .approval-stage-container .approval-stage-btn.expanded ~ div.stages-items {
+.dashlet.approval .approval-stage-container .approval-stage.alfresco-twister-open ~ div.stages-items {
     height: auto;
 }
 
