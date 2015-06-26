@@ -84,6 +84,7 @@
 		<value>alfresco/module/${artifactId}/reports/organization-nomenclature.xml</value>
 		<value>alfresco/module/${artifactId}/reports/volumes-card.xml</value>
 		<value>alfresco/module/${artifactId}/reports/destroy-act.xml</value>
+		<value>alfresco/module/${artifactId}/reports/case-inventory.xml</value>
 	</util:list>
 
 	<util:list id="operative.storage.arm.os">
