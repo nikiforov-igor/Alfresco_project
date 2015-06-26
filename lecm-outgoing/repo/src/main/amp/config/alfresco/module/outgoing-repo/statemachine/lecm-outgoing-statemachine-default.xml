@@ -669,6 +669,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/4d3ec71d-61de-4342-9202-cf423ffca1bf</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -1875,6 +1890,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/81f35bdb-4da8-4d78-b949-5aa8aaed1247</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -2381,6 +2411,21 @@
 										<type>documentField</type>
 										<name>lecmSignAspects_signerEmployeeAssoc</name>
 										<nodeRef>workspace://SpacesStore/1012c288-59d0-41f1-bfc5-2695be872146</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/6fa1cc98-2185-46ff-bf04-026e2898593f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3478,6 +3523,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecmSignAspects_signerEmployeeAssoc</name>
 										<nodeRef>workspace://SpacesStore/d0355966-895d-41ee-9b43-2248769463e2</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/0b128f02-fab6-4d35-8445-f6830a0ac7fd</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4621,6 +4681,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecmSignAspects_signerEmployeeAssoc</name>
 										<nodeRef>workspace://SpacesStore/b5034922-2dc6-45d5-9b91-21aa7f8189c3</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/58a86e26-31d4-4cfe-ab06-2c8d8c76c061</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5963,6 +6038,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/577e5dae-0d4d-48b2-abfc-ccd9a288e567</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -6955,6 +7045,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/0ba7eaa1-7b0e-4fbf-a82e-3c4dbd7daba5</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -7712,6 +7817,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/750c722a-baf4-4976-8496-9f260f3b5035</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -8555,6 +8675,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/6958d412-ebab-4683-93ee-08f188cb4899</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -9321,6 +9456,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/a6b66c29-070d-4927-83d5-64c72bd301bb</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -10185,6 +10335,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/c9d6194e-9d81-4107-a01d-83767c052599</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -10702,6 +10867,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/e6474fcc-af31-40c1-ad5e-3876af6f19c6</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -11111,6 +11291,21 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 										<type>documentField</type>
 										<name>lecmSignAspects_signerEmployeeAssoc</name>
 										<nodeRef>workspace://SpacesStore/36c684d7-24c1-4691-ae79-1082e7b005ce</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/8bbf1103-707d-4ec2-8739-19f7caf34fdd</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>

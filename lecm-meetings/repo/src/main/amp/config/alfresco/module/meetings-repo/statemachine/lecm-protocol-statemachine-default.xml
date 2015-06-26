@@ -590,6 +590,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/16821e8f-3a34-4247-a5c8-44775f6aac87</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -1271,6 +1286,21 @@
 										<type>documentField</type>
 										<name>lecm-protocol_meeting-chairman-assoc</name>
 										<nodeRef>workspace://SpacesStore/361b76dd-4702-4a8a-b624-51e4f8ed0f2a</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/fb6b864e-79dc-4ce5-90ea-321b46fad379</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2198,6 +2228,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/c38edf5c-e6c6-45a0-beee-992f46e5a5cd</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -2995,6 +3040,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/ecaed1fa-015f-4302-b06b-72cc6ff555b3</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -3684,6 +3744,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/04d2e4a6-110d-43fe-b8a2-d5341436809a</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -4389,6 +4464,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/bec84555-380e-4c22-aeee-199e48f38d49</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -5160,6 +5250,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/7d4b1b91-0338-4964-8d4f-33f3f6f496f3</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -5952,6 +6057,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/925da948-ed28-4445-b957-0254ebdb3065</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -6349,6 +6469,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/de7d3243-cc33-40ab-ab5e-6203aaa87a1b</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -6638,6 +6773,21 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecm-protocol_meeting-chairman-assoc</name>
 										<nodeRef>workspace://SpacesStore/e496cb96-ef86-49d5-acd2-8880db92166e</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-eds-document_sheets-number</name>
+										<nodeRef>workspace://SpacesStore/9a46d63e-9e47-4f24-92bf-dd1bd667751c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>

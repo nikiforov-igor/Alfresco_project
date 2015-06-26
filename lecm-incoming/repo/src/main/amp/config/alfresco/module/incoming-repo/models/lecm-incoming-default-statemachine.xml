@@ -743,6 +743,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/2ca6aa99-c106-4ac3-88fd-a5c72162fb0a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -1602,6 +1617,21 @@
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/166ef9d6-0dcf-4c49-845f-d458c3795498</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
@@ -2516,6 +2546,21 @@
                                         <type>documentField</type>
                                         <name>lecm-document_regnum</name>
                                         <nodeRef>workspace://SpacesStore/b7f2c0a9-605d-4129-89c1-9f68a547181f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/a2069b4b-e1ae-44a8-94e7-2d33eb05dd04</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3693,6 +3738,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/7fd25c42-9e12-434a-9e69-c2961516f965</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -4790,6 +4850,21 @@
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/d6ccc4dc-e648-4f74-a4d6-9815aff60111</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -5814,6 +5889,21 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/73d64219-f24e-42ce-aeb3-d69b08f9a536</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -6733,6 +6823,21 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/df71c0cc-cf9b-454f-a62a-3055c4b4c565</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7618,6 +7723,21 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/2fb61c46-d9e7-4d4b-bd96-26a0bb2f1aa3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -8029,6 +8149,21 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/4a5db381-083b-4585-8bdb-ff039860ad13</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -8378,6 +8513,21 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                         <type>documentField</type>
                                         <name>lecm-document_regnum</name>
                                         <nodeRef>workspace://SpacesStore/3786a5d8-ded5-40ae-9a52-46679dcdee2f</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/2753a711-667b-47d1-a6d7-b8dfa0c6bf8b</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -8749,6 +8899,21 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/bd42475b-491c-48ee-a4fd-c0dac616842e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -9098,6 +9263,21 @@ execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]
                                         <type>documentField</type>
                                         <name>lecm-document_regnum</name>
                                         <nodeRef>workspace://SpacesStore/2bc177ee-97be-45d2-878b-0d384b1b329a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+									<node>
+                                        <type>documentField</type>
+                                        <name>lecm-eds-document_sheets-number</name>
+                                        <nodeRef>workspace://SpacesStore/41d071cc-9f30-41c4-88f2-87a5c449a914</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
