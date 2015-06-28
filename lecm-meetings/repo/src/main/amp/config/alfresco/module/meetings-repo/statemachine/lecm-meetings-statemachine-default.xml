@@ -1197,10 +1197,6 @@
       }
     }
   }
-  /*Notify members*/
-  var members=events.getEventMembers(meeting);
-  var text = "{lecm-events:initiator-assoc/lecm-orgstr:employee-short-name} приглашает на совещание " + events.wrapperEventLink(meeting, meeting.properties["lecm-document:present-string"]) + ". Начало: {lecm-events:from-date?dd.MM.yyyy}, в {lecm-events:from-date?HH:mm}";
-  notifications.sendNotification(members, text, meeting);
   /*Notify responsible for resources*/
   var resources = events.getEventResources(meeting);
   if (resources !== null && resources.length>0) {
@@ -1212,8 +1208,7 @@
       }
     }
   }
-  
-  events.notifyInvitedMembers(stm_document, true);
+  events.notifyMeeteengCreated(stm_document);
   /*create repeated*/
   meetings.createRepetedMeetings(stm_document);
 }());]]></value>
