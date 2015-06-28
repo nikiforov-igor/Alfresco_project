@@ -236,8 +236,13 @@ public class EventsNotificationsService extends BaseBean {
 			//Возможно, тоже нужно будет сделать персонализированую
 			String text = templateService.processTemplate(MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 			notificationsService.sendNotification(author, event, text, members, null);
-			String subject = "Мероприятие "
-					+ eventTemplateModel.get("title")
+			String subject;
+			if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+				subject = "Мероприятие ";
+			} else {
+				subject = "Совещание ";
+			}
+			subject += eventTemplateModel.get("title")
 					+ " отменено.";
 			//теперь рассылаем письма участникам
 			if (sendIcalToMembers) {
@@ -299,7 +304,12 @@ public class EventsNotificationsService extends BaseBean {
 					String plainText = templateService.processTemplate(isNew ? MEMBERS_PLAIN_TEXT_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_PLAIN_TEXT_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 					String htmlText = templateService.processTemplate(isNew ? MEMBERS_HTML_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_HTML_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 					//TODO internationalize
-					String subject = isNew ? "Приглашение на мероприятие ":"Обновление мероприятия ";
+					String subject;
+					if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+						subject = isNew ? "Приглашение на мероприятие " : "Обновление мероприятия ";
+					} else {
+						subject = isNew ? "Приглашение на совещание " : "Обновление совещания ";
+					}
 					subject += eventTemplateModel.get("title");
 
 					VEvent vEvent = formInviteEvent(eventTemplateModel, formBasicEvent(eventTemplateModel));
@@ -321,7 +331,12 @@ public class EventsNotificationsService extends BaseBean {
 				String plainText = templateService.processTemplate(isNew ? INVITED_MEMBERS_PLAIN_TEXT_NEW_EVENT_MESSAGE_TEMPLATE : INVITED_MEMBERS_PLAIN_TEXT_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 				String htmlText = templateService.processTemplate(isNew ? INVITED_MEMBERS_HTML_NEW_EVENT_MESSAGE_TEMPLATE : INVITED_MEMBERS_HTML_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 				//TODO internationalize
-				String subject = isNew ? "Приглашение на мероприятие ":"Обновление мероприятия ";
+				String subject;
+				if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+					subject = isNew ? "Приглашение на мероприятие " : "Обновление мероприятия ";
+				} else {
+					subject = isNew ? "Приглашение на совещание " : "Обновление совещания ";
+				}
 				subject += eventTemplateModel.get("title");
 
 				Calendar calendar = null;
@@ -363,8 +378,13 @@ public class EventsNotificationsService extends BaseBean {
 				String plainText = templateService.processTemplate(MEMBERS_PLAIN_TEXT_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 				String htmlText = templateService.processTemplate(MEMBERS_HTML_CANCEL_EVENT_TEMPLATE, eventTemplateModel);
 				//TODO internationalize
-				String subject = "Мероприятие "
-						+ eventTemplateModel.get("title")
+				String subject;
+				if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+					subject = "Мероприятие ";
+				} else {
+					subject = "Совещание ";
+				}
+				subject += eventTemplateModel.get("title")
 						+ " отменено.";
 				VEvent vEvent = formRemoveAttendeeEvent(eventTemplateModel, formBasicEvent(eventTemplateModel), attendeeMail);
 				Calendar calendar = envelopEvent(vEvent, Method.CANCEL);
@@ -377,8 +397,13 @@ public class EventsNotificationsService extends BaseBean {
 			String plainText = templateService.processTemplate(INVITED_MEMBERS_PLAIN_TEXT_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 			String htmlText = templateService.processTemplate(INVITED_MEMBERS_HTML_CANCEL_EVENT_TEMPLATE, eventTemplateModel);
 			//TODO internationalize
-			String subject = "Мероприятие "
-					+ eventTemplateModel.get("title")
+			String subject;
+			if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+				subject = "Мероприятие ";
+			} else {
+				subject = "Совещание ";
+			}
+			subject += eventTemplateModel.get("title")
 					+ " отменено.";
 			Calendar calendar = null;
 			if (sendIcalToInvitedMembers) {
@@ -541,19 +566,22 @@ public class EventsNotificationsService extends BaseBean {
 				attendee.getParameters().add(Role.CHAIR);
 				attendee.getParameters().add(PartStat.ACCEPTED);
 				attendee.getParameters().add(Rsvp.FALSE);
-			} else if (mandatory) {
-				attendee.getParameters().add(Role.REQ_PARTICIPANT);
-				attendee.getParameters().add(Rsvp.TRUE);
 			} else {
-				attendee.getParameters().add(Role.OPT_PARTICIPANT);
-				attendee.getParameters().add(Rsvp.TRUE);
-			}
-			if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(decision)) {
-				attendee.getParameters().add(PartStat.ACCEPTED);
-			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(decision)) {
-				attendee.getParameters().add(PartStat.DECLINED);
-			} else {
-				attendee.getParameters().add(PartStat.NEEDS_ACTION);
+				if (mandatory) {
+					attendee.getParameters().add(Role.REQ_PARTICIPANT);
+				} else {
+					attendee.getParameters().add(Role.OPT_PARTICIPANT);
+				}
+				if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(decision)) {
+					attendee.getParameters().add(PartStat.ACCEPTED);
+					attendee.getParameters().add(Rsvp.FALSE);
+				} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(decision)) {
+					attendee.getParameters().add(PartStat.DECLINED);
+					attendee.getParameters().add(Rsvp.FALSE);
+				} else {
+					attendee.getParameters().add(PartStat.NEEDS_ACTION);
+					attendee.getParameters().add(Rsvp.TRUE);
+				}
 			}
 			vEventProperties.add(attendee);
 		}
@@ -707,7 +735,7 @@ public class EventsNotificationsService extends BaseBean {
 					}
 					//добавляем хтмл
 					if (null != htmlText) {
-						description.getParameters().add(new AltRep("CID:"+contentId));
+						description.getParameters().add(new AltRep("CID:" + contentId));
 					}
 					calendar.getComponent(VEvent.VEVENT).getProperties().add(description);
 					//Устанавливаем calendar

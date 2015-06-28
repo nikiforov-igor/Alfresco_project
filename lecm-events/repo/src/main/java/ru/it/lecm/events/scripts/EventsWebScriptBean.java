@@ -321,10 +321,11 @@ public class EventsWebScriptBean extends BaseWebScript {
         }
     }
 	
-	public void notifyInvitedMembers(ScriptNode event, boolean firstTime) {
+	public void notifyMeeteengCreated(ScriptNode event) {
 		ParameterCheck.mandatory("event", event);
-		ParameterCheck.mandatory("firstTime", firstTime);
-		eventService.sendNotificationsToInvitedMembers(event.getNodeRef(), firstTime);
+		ParameterCheck.mandatory("firstTime", true);
+		eventService.sendNotificationsToInvitedMembers(event.getNodeRef(), true);
+		eventService.sendNotificationsToMembers(event.getNodeRef(), true);
 	}
 	
 	public void sendCancelNotifications(ScriptNode event) {
