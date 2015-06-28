@@ -12,11 +12,9 @@
 	<#else>
 	<p>Уважаемые коллеги!</p>
 	</#if>
-	<br/>
+	<br>
 	<p>Компания ${organization!""} приглашает вас на ${typeText} ${title!""}, которое состоится ${date!""} по адресу ${location!""}.</p>
-	<br/>
 	<p>${description!""}</p>
-	<br/>
 	<p>${initiator!""}</p>
 </body>
 </html>

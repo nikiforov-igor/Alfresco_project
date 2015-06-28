@@ -13,21 +13,18 @@
 	<#else>
 	<p>Уважаемые коллеги!</p>
 	</#if>
-	<br/>
+	<br>
 	<p>${link!""} отменено, либо Вы больше не являетесь его участником.</p>
-	<br/>
 	<p>
-	Информация об отмененном ${typeText}и:<br/>
+	Информация об отмененном ${typeText}и:<br>
 	Время проведения: 
 		<#if allDay>
 			${fromDate?date?string("dd.MM.yyyy")}
 		<#else>
 			с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm")}
 		</#if>
-	<br/>
-
-
-	Место проведения: ${location!""}<br/>
+	<br>
+	Место проведения: ${location!""}<br>
 	</p>	
 </body>
 </html>

@@ -12,7 +12,7 @@
 	<#else>
 	<p>Уважаемые коллеги!</p>
 	</#if>
-	<br/>
+	<br>
 	<p>${initiator!""}  отменил проведение ${typeText} ${title!""}.</p>
 </body>
 </html>

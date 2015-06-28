@@ -13,9 +13,8 @@
 	<#else>
 	<p>Уважаемые коллеги!</p>
 	</#if>
-	<br/>
+	<br>
 	<p>${initiator!""} приглашает вас на ${link!""}.</p> 
-	<br/>
 	<p>
 		Время проведения: 	
 		<#if allDay>
@@ -23,14 +22,14 @@
 		<#else>
 			с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm")}
 		</#if>
-		<br/>
-		Место проведения: ${location!""}<br/>
-		Инициатор: ${initiator!""}<br/>
+		<br>
+		Место проведения: ${location!""}<br>
+		Инициатор: ${initiator!""}<br>
 		Участники: 
 			<#list attendees?keys as mail> 
 				${attendees[mail]["name"]}<#if mail_has_next>, </#if>
 			</#list>
-		<br/>
+		<br>
 		<#if personal>
 		Участие для Вас является  
 		<#if attendees[recipientMail]["mandatory"]>
@@ -38,7 +37,6 @@
 		<#else>
 			необязательным
 		</#if>
-		<br/>
 		</#if>
 	</p>
 </body>

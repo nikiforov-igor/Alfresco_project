@@ -12,12 +12,10 @@
 	<#else>
 	<p>Уважаемые коллеги!</p>
 	</#if>
-<br/>
+<br>
 <p>Обратите внимание, обновилась информация по ${typeText}ю ${title!""}.</p>
 <p>${typeText?capitalize}е состоится  ${date!""} по адресу ${location!""}.</p>
-<br/>
 <p>${description!""}</p>
-<br/>
 <p>${initiator!""}</p>
 </body>
 </html>

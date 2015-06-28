@@ -226,6 +226,7 @@ public class EventsNotificationsService extends BaseBean {
 
 	public void notifyEventCancelled(NodeRef event) {
 		if (null != event && Boolean.TRUE.equals(nodeService.getProperty(event, EventsService.PROP_EVENT_REMOVED))) {
+			nodeService.setProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE, (Integer) nodeService.getProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE) + 1);
 			Map<String, Object> eventTemplateModel = new HashMap<>(getEventTemplateModel(event));
 			List<NodeRef> members = eventsService.getEventMembers(event);
 			//сначала шлём участникам, т.к. у них ещё стандартные уведомления
@@ -279,6 +280,7 @@ public class EventsNotificationsService extends BaseBean {
 		List<NodeRef> members = eventsService.getEventMembers(event);
 		List<NodeRef> sendTo = new ArrayList<>(recipients);
 		Map<String, Object> eventTemplateModel = new HashMap<>(getEventTemplateModel(event));
+		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
 		if (null != recipients && !recipients.isEmpty()) {
 			sendTo.retainAll(members);
 		}
@@ -290,7 +292,6 @@ public class EventsNotificationsService extends BaseBean {
 		notificationsService.sendNotification(author, event, text, sendTo, null);
 		//теперь рассылаем письма участникам
 		if (sendIcalToMembers) {
-			List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
 			for (NodeRef recipient : sendTo) {
 				String email = (String) nodeService.getProperty(recipient, OrgstructureBean.PROP_EMPLOYEE_EMAIL);
 				if (email != null && email.length() > 0) {
@@ -313,7 +314,6 @@ public class EventsNotificationsService extends BaseBean {
 		if (null != recipients && !recipients.isEmpty()) {
 			sendTo.retainAll(invitedMembers);
 		}
-		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
 		for (NodeRef recipient : sendTo) {
 			String email = (String) nodeService.getProperty(recipient, OrgstructureBean.PROP_EMPLOYEE_EMAIL);
 			if (email != null && email.length() > 0) {
@@ -343,6 +343,7 @@ public class EventsNotificationsService extends BaseBean {
 		if (null == attendee || null == event) {
 			return;
 		}
+		nodeService.setProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE, (Integer) nodeService.getProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE) + 1);
 		QName attendeeType = nodeService.getType(attendee);
 		List<NodeRef> sendTo = new ArrayList();
 		sendTo.add(attendee);
@@ -386,7 +387,6 @@ public class EventsNotificationsService extends BaseBean {
 			}
 			sendMail(attendeeMail, subject, plainText, htmlText, attachments, calendar);
 		}
-		nodeService.setProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE, (Integer) eventTemplateModel.get("sequence") + 1);
 	}
 
 	private Map<String, Object> getEventTemplateModel(NodeRef event) {
@@ -695,15 +695,17 @@ public class EventsNotificationsService extends BaseBean {
 					// Create the HTML text part of the message.
 					MimeBodyPart htmlTextPart = new MimeBodyPart();
 					htmlTextPart.setText(htmlText, null, CONTENT_SUBTYPE_HTML);
-					htmlTextPart.setContentID(contentId);
+					//htmlTextPart.setContentID(contentId);
 					messageBody.addBodyPart(htmlTextPart);
 
 				}
 				if (null != calendar) {
+					//Создаём описание с плейнтекст
 					Description description = new Description();
 					if (null != plainText) {
 						description.setValue(plainText);
 					}
+					//добавляем хтмл
 					if (null != htmlText) {
 						description.getParameters().add(new AltRep("CID:"+contentId));
 					}
@@ -714,21 +716,22 @@ public class EventsNotificationsService extends BaseBean {
 					// Fill the message
 					//calendarBodyPart.setHeader("Content-Class", "urn:content-classes:calendarmessage");
 					//calendarBodyPart.setHeader("Content-ID", "calendar_message");
-					final String method = calendar.getMethod().getValue();
-					final String calendarString = calendar.toString();
+					String method = calendar.getMethod().getValue();
 					calendarBodyPart.setDataHandler(new DataHandler(
-							new ByteArrayDataSource(calendarString, "text/calendar; charset=UTF-8; method=" + method)));
+							new ByteArrayDataSource(calendar.toString(), "text/calendar; charset=UTF-8; method=" + method)));
 					messageBody.addBodyPart(calendarBodyPart);
 
-					//if (null != htmlText) {
-					//	helper.addInline(contentId, new ByteArrayDataSource(htmlText, "text/html"));
-					//}
+					//htmlpart на который ссылается description
+					if (null != htmlText) {
+						helper.addInline(contentId, new ByteArrayDataSource(htmlText, "text/html"));
+					}
 
 					String fileName = "invite.ics";
 					if (Method.CANCEL.equals(calendar.getMethod())) {
 						fileName = "cancel.ics";
 					}
-					helper.addAttachment(MimeUtility.encodeText(fileName), new ByteArrayDataSource(calendarString, "application/ics"));
+					DataSource ds = new ByteArrayDataSource(calendar.toString(), "application/ics");
+					helper.addAttachment(MimeUtility.encodeText(fileName), ds);
 				}
 				if (null != attachments) {
 					for (DataSource attachment : attachments) {
