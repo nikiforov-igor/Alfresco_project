@@ -82,7 +82,9 @@
                         /* Тематика */
                         formData += "\"lecm-document:subject-assoc\":\"" + document.assocs["lecm-document:subject-assoc"][0].nodeRef.toString() + "\",";
                         /* Связь */
-                        formData += "\"lecm-document-aspects:response-to-assoc\":\"" + document.nodeRef.toString() + "\"}";
+                        formData += "\"lecm-document-aspects:response-to-assoc\":\"" + document.nodeRef.toString() + "\",";
+                        /* Инициатора добавляем в участники */
+                        formData += "\"assoc_lecm-internal_temp-members-assoc\":\"" + initiator.nodeRef.toString() + "\"}";
                         /* Сохраняем */
                         task.setVariableLocal("internalDirect_formData", formData);
 
@@ -122,7 +124,7 @@
                                 answerObject.properties["lecm-internal-table-structure:answer-details"] = "Готовится ответ";
                                 answerObject.save();
                                 /* Добавляем инициатора процесса в участники нового документа */
-                                documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader");
+                                /* documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader"); */
                                 /* Добавляем слушателя */
                                 documentEvent.subscribe(newDocument, document);
 
