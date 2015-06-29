@@ -283,6 +283,9 @@ public class EventsNotificationsService extends BaseBean {
 
 	public void notifyEvent(NodeRef event, boolean isNew, List<NodeRef> recipients) {
 		List<NodeRef> members = eventsService.getEventMembers(event);
+//		if (!members.contains(eventsService.getEventInitiator(event))) {
+//			members.add(eventsService.getEventInitiator(event));
+//		}
 		List<NodeRef> sendTo = new ArrayList<>(recipients);
 		Map<String, Object> eventTemplateModel = new HashMap<>(getEventTemplateModel(event));
 		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
@@ -453,11 +456,19 @@ public class EventsNotificationsService extends BaseBean {
 		}
 		NodeRef location = eventsService.getEventLocation(event);
 		if (location != null) {
-			mailTemplateModel.put("location", nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS));
+			String locationString = (String)nodeService.getProperty(location, ContentModel.PROP_NAME);
+			String locationAddress = (String)nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS);
+			if (null != locationAddress && !locationAddress.isEmpty()) {
+				locationString = locationString+"("+locationAddress+")";
+			}
+			mailTemplateModel.put("location", locationString);
 		}
 
 		List<NodeRef> invitedMembersRefs = eventsService.getEventInvitedMembers(event);
 		List<NodeRef> membersRefs = eventsService.getEventMembers(event);
+//		if (!membersRefs.contains(initiator)) {
+//			membersRefs.add(initiator);
+//		}
 		Map<String, Map<String, Serializable>> attendees = new HashMap<>();
 		for (NodeRef attendee : membersRefs) {
 			Map<String, Serializable> attendeeMap = new HashMap<>();
@@ -490,7 +501,6 @@ public class EventsNotificationsService extends BaseBean {
 			String surname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_SURNAME);
 			String firstname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_FIRSTNAME);
 			String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
-			NodeRef attendeeRow = eventsService.getMemberTableRow(event, attendee);
 			Boolean mandatory = false;
 			String decision = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY;
 			attendeeMap.put("mandatory", mandatory);
@@ -517,8 +527,6 @@ public class EventsNotificationsService extends BaseBean {
 		for (String personMail : attendees.keySet()) {
 			Map person = attendees.get(personMail);
 			String personName = person.get("name").toString();
-			Boolean mandatory = (Boolean) person.get("mandatory");
-			String decision = person.get("decision").toString();
 			personName = null == personName ? "" : personName;
 			Attendee attendee = new Attendee(URI.create("mailto:" + personMail));
 			attendee.getParameters().add(new Cn(personName));
@@ -593,25 +601,34 @@ public class EventsNotificationsService extends BaseBean {
 
 		VEvent vEvent = new VEvent();
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-		TimeZone timezone = registry.getTimeZone(java.util.Calendar.getInstance().getTimeZone().getID());
+		TimeZone timezone = registry.getTimeZone("GMT");
 		VTimeZone tz = timezone.getVTimeZone();
 		PropertyList vEventProperties = vEvent.getProperties();
 		vEventProperties.add(tz.getTimeZoneId());
-
+		Organizer organizer; 
+		//if (mailTemplateModel.get("initiatorMail").equals(mailTemplateModel.get("recipientMail"))) {
+//			organizer = new Organizer(URI.create("mailto:"+defaultFromEmail));
+//			organizer.getParameters().add(Role.NON_PARTICIPANT);
+		//} else {
+//			organizer= new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail")));
+//			organizer.getParameters().add(new SentBy(URI.create("mailto:"+defaultFromEmail)));
+		//}
+		//vEventProperties.add(organizer);
+		
 		vEventProperties.add(new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail"))));
 		Integer sequence = (Integer) mailTemplateModel.get("sequence");
 		vEventProperties.add(new Sequence(sequence));
 		vEventProperties.add(new Uid(mailTemplateModel.get("uid").toString()));
 
 		if ((Boolean) mailTemplateModel.get("allDay")) {
-			net.fortuna.ical4j.model.Date dtStart = new net.fortuna.ical4j.model.Date(((Date) mailTemplateModel.get("fromDate")).getTime());
+			net.fortuna.ical4j.model.Date dtStart = new net.fortuna.ical4j.model.Date(((Date) mailTemplateModel.get("fromDate")));
 			vEventProperties.add(new DtStart(dtStart));
-			net.fortuna.ical4j.model.Date dtEnd = new net.fortuna.ical4j.model.Date(((Date) mailTemplateModel.get("toDate")).getTime());
+			net.fortuna.ical4j.model.Date dtEnd = new net.fortuna.ical4j.model.Date(((Date) mailTemplateModel.get("toDate")));
 			vEventProperties.add(new DtEnd(dtEnd));
 		} else {
-			DateTime dtStart = new DateTime(((Date) mailTemplateModel.get("fromDate")).getTime());
+			DateTime dtStart = new DateTime(((Date) mailTemplateModel.get("fromDate")));
 			vEventProperties.add(new DtStart(dtStart));
-			DateTime dtEnd = new DateTime(((Date) mailTemplateModel.get("toDate")).getTime());
+			DateTime dtEnd = new DateTime(((Date) mailTemplateModel.get("toDate")));
 			vEventProperties.add(new DtEnd(dtEnd));
 		}
 
