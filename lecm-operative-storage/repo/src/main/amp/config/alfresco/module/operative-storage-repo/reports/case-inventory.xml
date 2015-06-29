@@ -19,7 +19,7 @@
 				<items>
 					<item name="cm:Дело" type="lecm-rpeditor:reportDataColumn">
 						<property name="cm:name"><![CDATA[Дело]]></property>
-						<property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-os:nomenclature-case]]></property>
+						<property name="lecm-rpeditor:dataColumnClass"><![CDATA[lecm-os:nomenclature-case-for-reports]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[]]></property>
 						<property name="lecm-rpeditor:dataColumnCode"><![CDATA[ID]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
 						<property name="lecm-rpeditor:dataColumnControlParams"><![CDATA[]]></property>
 						<property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[true]]></property>
