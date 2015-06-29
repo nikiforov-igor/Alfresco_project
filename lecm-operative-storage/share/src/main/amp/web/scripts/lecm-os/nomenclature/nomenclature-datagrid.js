@@ -368,6 +368,14 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 				}).show();
 		},
 
+		onPrintInventory: function(p_items, owner, actionsConfig, fnPrompt) {
+			LogicECM.module.Base.Util.printReport(p_items.nodeRef, 'case-inventory');
+		},
+
+		onPrintVolumes: function(p_items, owner, actionsConfig, fnPrompt) {
+			LogicECM.module.Base.Util.printReport(p_items.nodeRef, 'volumes-card');
+		},
+
 
 		ActionsClickAdapter: function(item, actionId, actionsConfig, fnPrompt) {
 
@@ -812,6 +820,10 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		editEvaluator: function(rowData) {
 			return LogicECM.Nomenclature.isArchivist;
+		},
+
+		caseOnlyEvaluator: function(rowData) {
+			return rowData.type == "lecm-os:nomenclature-case"
 		}
 
 	}, true);

@@ -166,6 +166,20 @@
 							label:"${msg("actions.onReCreateNomenclature")}",
 							evaluator: datagrid.reCreateNomenclatureEvaluator,
 							confirmFunction: datagrid.reCreateNomenclature_Prompt
+						},
+						{
+							type:"datagrid-action-link-${bubblingId}",
+							id:"onPrintVolumes",
+							permission:"edit",
+							label:"${msg("actions.onPrintVolumes")}",
+							evaluator: datagrid.caseOnlyEvaluator
+						},
+						{
+							type:"datagrid-action-link-${bubblingId}",
+							id:"onPrintInventory",
+							permission:"edit",
+							label:"${msg("actions.onPrintInventory")}",
+							evaluator: datagrid.caseOnlyEvaluator
 						}
 					]
 				});
