@@ -38,6 +38,11 @@ if (draftRootFolder != null) {
     }
   }
 
+  var subjectAssoc = document.assocs["lecm-events:subject-assoc"];
+  if (subjectAssoc != null && subjectAssoc.length > 0) {
+    protocol.createAssociation(subjectAssoc[0], "lecm-document:subject-assoc");
+  }
+
   var holdingItems = meetings.getMeetingHoldingItems(document.nodeRef.toString());
   if (holdingItems != null && holdingItems.length > 0) {
     var pointsRootFolder = businessPlatform.getUserTemp();
