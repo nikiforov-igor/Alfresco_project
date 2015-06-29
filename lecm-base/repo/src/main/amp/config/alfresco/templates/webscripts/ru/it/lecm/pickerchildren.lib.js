@@ -28,7 +28,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		additionalProperties = args['additionalProperties'],
 		argsPathRoot = args['pathRoot'],
 		argsPathNameSubstituteString = args['pathNameSubstituteString'],
-		argsUseObjectDescription = args['useObjectDescription'];
+		argsUseObjectDescription = ("true" == args['useObjectDescription']);
 	if (additionalProperties != null) {
 		additionalProperties = additionalProperties.split(',');
 	}

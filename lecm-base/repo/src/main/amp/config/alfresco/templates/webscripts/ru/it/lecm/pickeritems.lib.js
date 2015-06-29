@@ -22,7 +22,7 @@ function getPickerItems() {
 		additionalProperties = json.has('additionalProperties') ? json.get('additionalProperties') : null,
 		argsPathRoot = json.has('pathRoot') ? json.get('pathRoot') : null,
 		argsPathNameSubstituteString = json.has('pathNameSubstituteString') ? json.get('pathNameSubstituteString') : null,
-		argsUseObjectDescription = json.has('useObjectDescription') ? json.get('useObjectDescription') : false,
+		argsUseObjectDescription = json.has('useObjectDescription') ? ("true" == json.get('useObjectDescription')) : false,
 	item, result;
 
 	if (additionalProperties != null && additionalProperties != "none") {
