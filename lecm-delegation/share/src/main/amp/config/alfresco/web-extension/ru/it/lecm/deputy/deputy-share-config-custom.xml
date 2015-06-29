@@ -66,6 +66,9 @@
 				<field-visibility>
 					<show id="cm:name"/>
 				</field-visibility>
+				<appearance>
+					<field id="cm:name" substituteString="{}"/>
+				</appearance>
 			</form>
 			<form id="tree-create-deputy">
 				<field-visibility>
@@ -167,6 +170,9 @@
 				<field-visibility>
 					<show id="cm:name"/>
 				</field-visibility>
+				<appearance>
+					<field id="cm:name" substituteString="{}"/>
+				</appearance>
 			</form>
 			<form id="tree-edit-deputy">
 				<field-visibility>
@@ -224,6 +230,9 @@
 			<form id="subjects-nested-datagrid">
 				<show id="cm:name"/>
 			</form>
+			<appearance>
+				<field id="cm:name" substituteString="{}"/>
+			</appearance>
 		</forms>
 	</config>
 
