@@ -586,16 +586,21 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                         }
                     }
                     var isAssocType = this.casesMap[record.getData().type] == null;
+
+                    var dataObj = {
+                        fieldId: args[1].fieldId.split(':').join('_'),
+                        labelId: args[1].fieldId.split(':').join('_'),
+                        type: isAssocType ? record.getData().type : ("d:" + record.getData().type),
+                        params: YAHOO.lang.JSON.stringify(params),
+                        htmlid: this.id + '-' + record.getId() + '-ctrl'
+                    };
+                    if (fieldObj.control != null && fieldObj.control.template != null) {
+                        dataObj.template = fieldObj.control.template;
+                    }
                     Alfresco.util.Ajax.request(
                         {
                             url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/control",
-                            dataObj: {
-                                fieldId: args[1].fieldId.split(':').join('_'),
-                                labelId: args[1].fieldId.split(':').join('_'),
-                                type: isAssocType ? record.getData().type : ("d:" + record.getData().type),
-                                params: YAHOO.lang.JSON.stringify(params),
-                                htmlid: this.id + '-' + record.getId() + '-ctrl'
-                            },
+                            dataObj: dataObj,
                             successCallback: {
                                 fn: function (response) {
                                     var container = Dom.get(record.getId() + '-control');
