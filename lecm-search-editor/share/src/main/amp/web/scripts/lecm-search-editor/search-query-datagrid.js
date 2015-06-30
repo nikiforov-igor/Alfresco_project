@@ -279,7 +279,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                             if (hexColorPattern.test(data.displayValue)) {
                                                 columnContent += $links(data.displayValue + '<div class="color-block" style="background-color: ' + data.displayValue + ';">&nbsp</div>');
                                             } else {
-                                                columnContent += $links($html(data.displayValue));
+                                                columnContent += $links(data.displayValue);
                                             }
                                             break;
 
