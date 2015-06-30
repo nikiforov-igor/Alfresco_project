@@ -46,6 +46,15 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	private TransactionListener transactionListener;
 	private BehaviourFilter behaviourFilter;
 	private LecmPermissionService lecmPermissionService;
+	private MeetingsService meetingsService;
+
+	public MeetingsService getMeetingsService() {
+		return meetingsService;
+	}
+
+	public void setMeetingsService(MeetingsService meetingsService) {
+		this.meetingsService = meetingsService;
+	}
 
 	public DocumentMembersService getDocumentMembersService() {
 		return documentMembersService;
@@ -136,38 +145,23 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM, MeetingsService.ASSOC_MEETINGS_TS_ITEM_COREPORTER,
 				new JavaBehaviour(this, "onAgendaItemReporterAdded", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, EventsService.ASSOC_EVENT_TEMP_MEMBERS,
+				new JavaBehaviour(this, "onMemberRemoved", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				MeetingsService.TYPE_MEETINGS_DOCUMENT, EventsService.ASSOC_EVENT_INVITED_MEMBERS,
+				new JavaBehaviour(this, "onMemberRemoved", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+	}
+
+	public void onMemberRemoved(AssociationRef nodeAssocRef) {
+		meetingsService.updateAgendaItemMembers(nodeAssocRef.getSourceRef());
 	}
 
 	public void onAgendaItemReporterAdded(AssociationRef nodeAssocRef) {
 		NodeRef document = documentTableService.getDocumentByTableDataRow(nodeAssocRef.getSourceRef());
-		updateAgendaItemMembers(document);
-	}
-
-	public void updateAgendaItemMembers(NodeRef document) {
-		if (null != document) {
-			List<NodeRef> items = documentTableService.getTableDataRows(documentTableService.getTable(document, MeetingsService.TYPE_MEETINGS_TS_AGENDA_TABLE));
-			NodeRef secretary = findNodeByAssociationRef(document, MeetingsService.ASSOC_MEETINGS_SECRETARY, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			NodeRef chairman = findNodeByAssociationRef(document, MeetingsService.ASSOC_MEETINGS_CHAIRMAN, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			List<NodeRef> members = findNodesByAssociationRef(document, EventsService.ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
-			List<NodeRef> invitedMembers = findNodesByAssociationRef(document, EventsService.ASSOC_EVENT_INVITED_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
-
-			for (NodeRef item : items) {
-				List<NodeRef> persons = findNodesByAssociationRef(item, MeetingsService.ASSOC_MEETINGS_TS_ITEM_COREPORTER, null, ASSOCIATION_TYPE.TARGET);
-				persons.add(findNodeByAssociationRef(item, MeetingsService.ASSOC_MEETINGS_TS_ITEM_REPORTER, null, ASSOCIATION_TYPE.TARGET));
-				for (NodeRef person : persons) {
-					QName type = nodeService.getType(person);
-					if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(type)) {
-						if (!person.equals(secretary) && !person.equals(chairman) && !members.contains(person)) {
-							nodeService.createAssociation(document, person, EventsService.ASSOC_EVENT_TEMP_MEMBERS);
-						}
-					} else if (Contractors.TYPE_REPRESENTATIVE.isMatch(type)) {
-						if (!invitedMembers.contains(person)) {
-							nodeService.createAssociation(document, person, EventsService.ASSOC_EVENT_INVITED_MEMBERS);
-						}
-					}
-				}
-			}
-		}
+		meetingsService.updateAgendaItemMembers(document);
 	}
 
 	public void onChairmanAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
@@ -183,7 +177,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		lecmPermissionService.revokeDynamicRole("EVENTS_INITIATOR_DYN", event, chairman.getId());
 		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, chairman);
 		//если старый председатель являлся докладчиком по одному из пунктов повестки, то он добавится в участники
-		updateAgendaItemMembers(event);
+		meetingsService.updateAgendaItemMembers(event);
 	}
 
 	public void onSecretaryAdded(AssociationRef nodeAssocRef) throws WriteTransactionNeededException {
@@ -199,7 +193,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		lecmPermissionService.revokeDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId());
 		lecmPermissionService.grantAccess(lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader), event, secretary);
 		//если старый секретарь являлся докладчиком по одному из пунктов повестки, то он добавится в участники
-		updateAgendaItemMembers(event);
+		meetingsService.updateAgendaItemMembers(event);
 	}
 
 	public void onCreateMeeting(ChildAssociationRef childAssocRef) {
@@ -220,7 +214,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 				//нужно дёрнуть, чтоб создать папки категорий вложений
 				documentAttachmentsService.getCategories(document);
 				moveFiles(document, item);
-				
+
 				documentTableService.recalculateSearchDescription(table);
 			} finally {
 				behaviourFilter.enableBehaviour(item);
@@ -229,13 +223,13 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		refreshFiles(document);
 	}
 
-	public void onAgendaItemAdded(ChildAssociationRef childAssocRef, boolean isNewNode ) {
+	public void onAgendaItemAdded(ChildAssociationRef childAssocRef, boolean isNewNode) {
 		NodeRef row = childAssocRef.getChildRef();
 		NodeRef document = documentTableService.getDocumentByTableDataRow(row);
 		moveFiles(document, row);
-		updateAgendaItemMembers(document);
+		meetingsService.updateAgendaItemMembers(document);
 	}
-	
+
 	private void moveFiles(NodeRef document, NodeRef row) {
 		if (null != document && null != row) {
 			List<AssociationRef> files = nodeService.getTargetAssocs(row, MeetingsService.ASSOC_MEETINGS_TS_ITEM_ATTACHMENTS);

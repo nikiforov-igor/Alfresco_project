@@ -131,6 +131,7 @@
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
 		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:documentMembersService-ref="documentMembersService"
+		  p:meetingsService-ref="meetingsService"
 		  
 	/>
 	

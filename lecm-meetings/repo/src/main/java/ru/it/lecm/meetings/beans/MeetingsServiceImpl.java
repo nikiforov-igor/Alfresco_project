@@ -22,10 +22,12 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
@@ -76,7 +78,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		assocsToCopy.add(ASSOC_MEETINGS_SECRETARY);
 
 		eventsService.addUpdateType(TYPE_MEETINGS_DOCUMENT, propertiesToCopy, assocsToCopy);
-		
+
 	}
 
 	public DocumentService getDocumentService() {
@@ -268,6 +270,34 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 
 		}
 		return null;
+	}
+
+	@Override
+	public void updateAgendaItemMembers(NodeRef document) {
+		if (null != document) {
+			List<NodeRef> items = documentTableService.getTableDataRows(documentTableService.getTable(document, MeetingsService.TYPE_MEETINGS_TS_AGENDA_TABLE));
+			NodeRef secretary = findNodeByAssociationRef(document, MeetingsService.ASSOC_MEETINGS_SECRETARY, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			NodeRef chairman = findNodeByAssociationRef(document, MeetingsService.ASSOC_MEETINGS_CHAIRMAN, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			List<NodeRef> members = findNodesByAssociationRef(document, EventsService.ASSOC_EVENT_TEMP_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+			List<NodeRef> invitedMembers = findNodesByAssociationRef(document, EventsService.ASSOC_EVENT_INVITED_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
+
+			for (NodeRef item : items) {
+				List<NodeRef> persons = findNodesByAssociationRef(item, MeetingsService.ASSOC_MEETINGS_TS_ITEM_COREPORTER, null, ASSOCIATION_TYPE.TARGET);
+				persons.add(findNodeByAssociationRef(item, MeetingsService.ASSOC_MEETINGS_TS_ITEM_REPORTER, null, ASSOCIATION_TYPE.TARGET));
+				for (NodeRef person : persons) {
+					QName type = nodeService.getType(person);
+					if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(type)) {
+						if (!person.equals(secretary) && !person.equals(chairman) && !members.contains(person)) {
+							nodeService.createAssociation(document, person, EventsService.ASSOC_EVENT_TEMP_MEMBERS);
+						}
+					} else if (Contractors.TYPE_REPRESENTATIVE.isMatch(type)) {
+						if (!invitedMembers.contains(person)) {
+							nodeService.createAssociation(document, person, EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override

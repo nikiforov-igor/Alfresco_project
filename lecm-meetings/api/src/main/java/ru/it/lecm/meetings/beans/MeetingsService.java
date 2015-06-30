@@ -50,6 +50,7 @@ public interface MeetingsService {
 
 	NodeRef createNewHoldingItem(NodeRef meeting);
 
-	public void deleteHoldingItem(NodeRef nodeRef);
-	public void createRepetedMeetings(NodeRef meeting);
+	void deleteHoldingItem(NodeRef nodeRef);
+	void createRepetedMeetings(NodeRef meeting);
+	void updateAgendaItemMembers(NodeRef document);
 }
