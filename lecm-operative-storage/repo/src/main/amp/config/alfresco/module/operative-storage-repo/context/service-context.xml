@@ -153,6 +153,7 @@
 		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:documentMembersService-ref="documentMembersService"
 		  p:documentAttachmentsService-ref="documentAttachmentsService"
+		  p:businessJournalService-ref="businessJournalService"
 	/>
 
 	<bean id="lecmOperativeStorageExtension" parent="baseScript" class="ru.it.lecm.operativestorage.scripts.OperativeStorageJavaScript"

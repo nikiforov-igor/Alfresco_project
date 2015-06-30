@@ -31,6 +31,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -55,6 +58,17 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	private BehaviourFilter behaviourFilter;
 	private DocumentMembersService documentMembersService;
 	private DocumentAttachmentsService documentAttachmentsService;
+	private BusinessJournalService businessJournalService;
+
+
+	private final static String DOCUMENT_TEMPLATE = "Документ #mainobject полностью удален из системы";
+	private final static String CASE_TEMPLATE = "Номенклатурное дело #mainobject полностью удалено из системы";
+	private final static String OS_UNIT_TEMPLATE = "Раздел номенклатуры #mainobject полностью удален из системы";
+	private final static String OS_YEAR_TEMPLATE = "Номенклатура дел #mainobject полностью удалена из системы";
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
+	}
 
 	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
 		this.documentAttachmentsService = documentAttachmentsService;
@@ -660,9 +674,18 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 			logger.warn(String.format(msg, docNodeRef), ex);
 		}
 
-		clearDir(docNodeRef);
-
 		logger.debug("Members {} are deleted and access is revoked for document {}", users, docNodeRef);
+
+		String user = AuthenticationUtil.getFullyAuthenticatedUser();
+
+		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, docNodeRef, EventCategory.DELETE, DOCUMENT_TEMPLATE);
+		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, docNodeRef, EventCategory.REMOVE_FROM_REPORTING, DOCUMENT_TEMPLATE);
+
+		cruellyDeleteNode(docNodeRef);
+
+		businessJournalService.sendRecord(deleteRecord);
+		businessJournalService.sendRecord(reportingRecord);
+
 	}
 
 	@Override
@@ -672,7 +695,15 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 			removeUnitSection(unit.getChildRef());
 		}
 
-		nodeService.deleteNode(yearSection);
+		String user = AuthenticationUtil.getFullyAuthenticatedUser();
+
+		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, yearSection, EventCategory.DELETE, OS_YEAR_TEMPLATE);
+		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, yearSection, EventCategory.REMOVE_FROM_REPORTING, OS_YEAR_TEMPLATE);
+
+		cruellyDeleteNode(yearSection);
+
+		businessJournalService.sendRecord(deleteRecord);
+		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
@@ -689,7 +720,15 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 			removeUnitSection(unit.getChildRef());
 		}
 
-		nodeService.deleteNode(unitSection);
+		String user = AuthenticationUtil.getFullyAuthenticatedUser();
+
+		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, unitSection, EventCategory.DELETE, OS_UNIT_TEMPLATE);
+		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, unitSection, EventCategory.REMOVE_FROM_REPORTING, OS_UNIT_TEMPLATE);
+
+		cruellyDeleteNode(unitSection);
+
+		businessJournalService.sendRecord(deleteRecord);
+		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
@@ -705,7 +744,15 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 			}
 		}
 
-		nodeService.deleteNode(caseRef);
+		String user = AuthenticationUtil.getFullyAuthenticatedUser();
+
+		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, caseRef, EventCategory.DELETE, CASE_TEMPLATE);
+		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, caseRef, EventCategory.REMOVE_FROM_REPORTING, CASE_TEMPLATE);
+
+		cruellyDeleteNode(caseRef);
+
+		businessJournalService.sendRecord(deleteRecord);
+		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
