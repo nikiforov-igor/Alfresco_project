@@ -11,7 +11,7 @@
 ${typeText?capitalize}е ${title!""} отменено, либо Вы больше не являетесь его участником.
 
 Информация об отмененном ${typeText}и:
-Время проведения: <#if allDay>${fromDate?date?string("dd.MM.yyyy")}<#else>с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm")}</#if>
+Время проведения: <#if allDay>${fromDate?date?string("dd.MM.yyyy")}<#else>с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm (z)")}</#if>
 Место проведения: ${location!""}
 
 

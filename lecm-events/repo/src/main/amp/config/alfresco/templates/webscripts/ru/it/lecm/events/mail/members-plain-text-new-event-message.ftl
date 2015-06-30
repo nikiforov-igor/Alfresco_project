@@ -11,7 +11,7 @@
 
 ${initiator!""} приглашает вас на ${typeText} ${title!""}.
 
-Время проведения: <#if allDay>${fromDate?date?string("dd.MM.yyyy")}<#else>с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm")}</#if>
+Время проведения: <#if allDay>${fromDate?date?string("dd.MM.yyyy")}<#else>с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm (z)")}</#if>
 Место проведения: ${location!""}
 Инициатор: ${initiator!""}
 Участники: <#list attendees?keys as mail>${attendees[mail]["name"]}<#if mail_has_next>, </#if></#list>

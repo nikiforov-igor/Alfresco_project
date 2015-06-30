@@ -35,6 +35,7 @@ import net.fortuna.ical4j.model.parameter.CuType;
 import net.fortuna.ical4j.model.parameter.PartStat;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
+import net.fortuna.ical4j.model.parameter.SentBy;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Description;
@@ -601,7 +602,7 @@ public class EventsNotificationsService extends BaseBean {
 
 		VEvent vEvent = new VEvent();
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-		TimeZone timezone = registry.getTimeZone("GMT");
+		TimeZone timezone = registry.getTimeZone(java.util.Calendar.getInstance().getTimeZone().getID());
 		VTimeZone tz = timezone.getVTimeZone();
 		PropertyList vEventProperties = vEvent.getProperties();
 		vEventProperties.add(tz.getTimeZoneId());
@@ -610,12 +611,12 @@ public class EventsNotificationsService extends BaseBean {
 //			organizer = new Organizer(URI.create("mailto:"+defaultFromEmail));
 //			organizer.getParameters().add(Role.NON_PARTICIPANT);
 		//} else {
-//			organizer= new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail")));
-//			organizer.getParameters().add(new SentBy(URI.create("mailto:"+defaultFromEmail)));
+			organizer= new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail")));
+			organizer.getParameters().add(new SentBy(URI.create("mailto:"+defaultFromEmail)));
 		//}
 		//vEventProperties.add(organizer);
 		
-		vEventProperties.add(new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail"))));
+		vEventProperties.add(organizer);
 		Integer sequence = (Integer) mailTemplateModel.get("sequence");
 		vEventProperties.add(new Sequence(sequence));
 		vEventProperties.add(new Uid(mailTemplateModel.get("uid").toString()));
@@ -626,9 +627,14 @@ public class EventsNotificationsService extends BaseBean {
 			net.fortuna.ical4j.model.Date dtEnd = new net.fortuna.ical4j.model.Date(((Date) mailTemplateModel.get("toDate")));
 			vEventProperties.add(new DtEnd(dtEnd));
 		} else {
-			DateTime dtStart = new DateTime(((Date) mailTemplateModel.get("fromDate")));
+			DateTime dtStart = new DateTime();
+			dtStart.setUtc(true);
+			dtStart.setTime(((Date) mailTemplateModel.get("fromDate")).getTime());
 			vEventProperties.add(new DtStart(dtStart));
-			DateTime dtEnd = new DateTime(((Date) mailTemplateModel.get("toDate")));
+			
+			DateTime dtEnd = new DateTime();
+			dtEnd.setUtc(true);
+			dtEnd.setTime(((Date) mailTemplateModel.get("toDate")).getTime());
 			vEventProperties.add(new DtEnd(dtEnd));
 		}
 

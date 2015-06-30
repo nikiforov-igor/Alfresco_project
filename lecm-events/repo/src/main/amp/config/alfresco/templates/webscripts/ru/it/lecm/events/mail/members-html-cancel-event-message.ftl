@@ -21,7 +21,7 @@
 		<#if allDay>
 			${fromDate?date?string("dd.MM.yyyy")}
 		<#else>
-			с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm")}
+			с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm (z)")}
 		</#if>
 	<br>
 	Место проведения: ${location!""}<br>
