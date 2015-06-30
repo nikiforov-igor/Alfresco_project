@@ -534,6 +534,7 @@
                     <show id="lecmIncomingWf:recipient" />
 					<show id="select-from-deputies" force="true"/>
 					<show id="deputies-grid" force="true" />
+					<show id="radio-button-disable" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
@@ -575,6 +576,11 @@
 							<control-param name="hideLabel">true</control-param>
 						</control>
                     </field>
+					<field id="radio-button-disable">
+						<control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+							<control-param name="scripts">scripts/lecm-deputy/disable-radio-button.js</control-param>
+						</control>
+					</field>
                 </appearance>
             </form>
         </forms>

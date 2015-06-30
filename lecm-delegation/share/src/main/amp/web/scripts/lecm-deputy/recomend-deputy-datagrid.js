@@ -43,6 +43,12 @@ LogicECM.module.Deputy = LogicECM.module.Deputy || {};
 			LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
 		},
 		draw: function() {
+
+			YAHOO.Bubbling.fire('gotDeputyItems', {
+				formId: this.options.formId,
+				hasDeputies: (this.totalRecords && this.totalRecords != 0)
+			});
+
 			if(!this.options.useCurrentUser) {
 				YAHOO.Bubbling.on(this.options.targetEvent, this.onEmployeeSelected.bind(this));
 			}
@@ -78,6 +84,11 @@ LogicECM.module.Deputy = LogicECM.module.Deputy || {};
 
 		},
 		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
+
+			YAHOO.Bubbling.fire('gotDeputyItems', {
+				formId: grid.options.formId,
+				hasDeputies: (grid.totalRecords && grid.totalRecords != 0)
+			});
 
 			if(grid.totalRecords == 0) {
 				return;
