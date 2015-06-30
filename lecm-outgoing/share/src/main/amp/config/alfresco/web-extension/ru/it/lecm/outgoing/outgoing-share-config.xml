@@ -82,7 +82,11 @@
 						</control>
 					</field>
 
-					<field id="lecm-eds-document:sheets-number" set="common"/>
+					<field id="lecm-eds-document:sheets-number" set="common">
+						<control template="/ru/it/lecm/base-share/components/controls/number.ftl">
+							<control-param name="maxLength">9</control-param>
+						</control>
+					</field>
 					<field id="lecm-document:subject-assoc" set="common"/>
 
 					<field id="lecm-eds-document:note" set="common">
@@ -266,6 +270,13 @@
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
 					</field>
+
+					<field id="lecm-eds-document:sheets-number">
+						<control template="/ru/it/lecm/base-share/components/controls/number.ftl">
+							<control-param name="maxLength">9</control-param>
+						</control>
+					</field>
+
 				</appearance>
 			</form>
 
