@@ -13,6 +13,6 @@
 	<p>Уважаемые коллеги!</p>
 	</#if>
 	<br>
-	<p>${initiator!""}  отменил проведение ${typeText} ${title!""}.</p>
+	<p>${initiator!""} отменил проведение ${typeText} ${title!""}.</p>
 </body>
 </html>

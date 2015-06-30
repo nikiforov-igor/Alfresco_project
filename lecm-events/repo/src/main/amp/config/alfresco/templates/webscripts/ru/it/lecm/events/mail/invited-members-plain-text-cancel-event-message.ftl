@@ -7,4 +7,4 @@
 <#else>
 Уважаемые коллеги!
 </#if>
-${initiator!""}  отменил проведение ${typeText} ${title!""}.
+${initiator!""} отменил проведение ${typeText} ${title!""}.
