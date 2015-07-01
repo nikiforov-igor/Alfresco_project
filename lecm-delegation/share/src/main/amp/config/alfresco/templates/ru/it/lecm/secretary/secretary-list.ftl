@@ -28,6 +28,7 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 	LogicECM.module.Deputy.Const.plane = deputySettings.plane;
 	LogicECM.module.Deputy.Const.path = deputySettings.path;
 	LogicECM.module.Deputy.Const.itemType = deputySettings.itemsType;
+	LogicECM.module.Deputy.Const.dictionaryDesc = deputySettings.dictionaryDesc;
 
 })();
 //]]>

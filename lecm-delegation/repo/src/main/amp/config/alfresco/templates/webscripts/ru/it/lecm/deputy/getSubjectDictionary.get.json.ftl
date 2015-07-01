@@ -3,6 +3,7 @@
 	"nodeRef": "${nodeRef}",
 	"plane": ${plane?string},
 	"path": "${path}",
-	"itemsType": "${itemsType}"
+	"itemsType": "${itemsType}",
+	"dictionaryDesc": "${dictionaryDesc}"
 }
 </#escape>

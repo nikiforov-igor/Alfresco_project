@@ -4,7 +4,17 @@
 
 	function onFormValueChanged(layer, args) {
 		var obj = args[1];
+
+		if('lecm-deputy:subject-assoc' == obj.eventGroup.options.fieldId) {
+			var labels = YAHOO.util.Selector.query('label[for=' + obj.eventGroup.id + '-cntrl]');
+			if(labels && labels.length) {
+				labels[0].innerHTML = "Критерий: " + LogicECM.module.Deputy.Const.dictionaryDesc;
+			}
+		}
+
 		if (avaliableAssocs.indexOf(obj.eventGroup.options.fieldId) > -1) {
+
+
 			var insertValues = 'lecm-deputy:complete-deputy-assoc' == obj.eventGroup.options.fieldId;
 			var simpleDialog = Alfresco.util.ComponentManager.find({id:obj.eventGroup.options.formId})[0];
 			var nodeRef;

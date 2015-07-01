@@ -5,4 +5,5 @@
 	model.path = dictionaryNodeRef.qnamePath;
 	model.itemsType = dictionaryNodeRef.properties['lecm-dic:type'];
 	model.nodeRef = dictionaryNodeRef.nodeRef.toString();
+	model.dictionaryDesc = substitude.getObjectDescription(dictionaryNodeRef);
 })();
