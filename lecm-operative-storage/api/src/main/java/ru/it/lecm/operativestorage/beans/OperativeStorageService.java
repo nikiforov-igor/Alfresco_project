@@ -61,6 +61,7 @@ public interface OperativeStorageService {
 	QName TYPE_NOMENCLATURE_UNIT_SECTION = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section");
 	QName TYPE_NOMENCLATURE_YEAR_SECTION = QName.createQName(OS_NAMESPACE, "nomenclature-year-section");
 	QName TYPE_NOMENCLATURE_VOLUME = QName.createQName(OS_NAMESPACE, "nomenclature-case-volume");
+	QName PROP_NOMENCLATURE_COMMON_INDEX = QName.createQName(OS_ASPECTS_NAMESPACE, "common-index");
 
 	QName TYPE_OPERATIVE_STORAGE_SETTING = QName.createQName(OS_SETTINGS_NAMESPACE, "settings");
 	QName PROP_OPERATIVE_STORAGE_CENRALIZED = QName.createQName(OS_SETTINGS_NAMESPACE, "centralized");

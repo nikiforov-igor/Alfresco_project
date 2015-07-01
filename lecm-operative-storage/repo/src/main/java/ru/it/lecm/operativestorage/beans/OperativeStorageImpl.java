@@ -495,6 +495,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 		props.put(ContentModel.PROP_TITLE, unitProps.get(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME));
 		props.put(PROP_NOMENCLATURE_UNIT_SECTION_INDEX, unitProps.get(OrgstructureBean.PROP_UNIT_CODE));
+		props.put(PROP_NOMENCLATURE_COMMON_INDEX, unitProps.get(OrgstructureBean.PROP_UNIT_CODE));
 		props.put(PROP_NOMENCLATURE_UNIT_SECTION_COMMENT, "Создано автоматически");
 
 		NodeRef newUnit;

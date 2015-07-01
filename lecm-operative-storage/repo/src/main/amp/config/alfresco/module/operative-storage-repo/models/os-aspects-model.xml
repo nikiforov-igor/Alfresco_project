@@ -28,6 +28,20 @@
 					<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!--
+					ALF-4566 Внезапно (!) понадобилась человеческая сортировка по индексу
+					Изначально типы дел и разделов имеют разные проперти для индекса
+					Чтобы не переделывать формы/отчёты и прочие костыли, которыми так богат этот модуль,
+					просто добивлся пропертя, которая будет хранить обычное значение индекса
+				-->
+				<property name="os-aspects:common-index">
+					<type>d:text</type>
+					<index enabled="true">
+					<atomic>true</atomic>
+					<stored>false</stored>
+					<tokenised>false</tokenised>
+					</index>
+				</property>
 			</properties>
 		</aspect>
 

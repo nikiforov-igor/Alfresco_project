@@ -286,6 +286,7 @@
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="os-aspects:sort-value"/>
+                    <show id="os-aspects:common-index"/>
                     <show id="lecm-os:nomenclature-unit-section-comment"/>
                 </field-visibility>
                 <appearance>
@@ -304,6 +305,9 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="os-aspects:sort-value">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
+                    <field id="os-aspects:common-index">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                 </appearance>
@@ -327,6 +331,7 @@
                     <show id="lecm-os:nomenclature-unit-section-unit-assoc"/>
                     <show id="lecm-os:nomenclature-unit-section-index"/>
                     <show id="os-aspects:sort-value"/>
+                    <show id="os-aspects:common-index"/>
                     <show id="lecm-os:nomenclature-unit-section-comment"/>
                 </field-visibility>
                 <appearance>
@@ -354,6 +359,9 @@
                     <field id="os-aspects:sort-value" set="set1">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
+                    <field id="os-aspects:common-index" set="set1">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -377,6 +385,7 @@
                     <show id="cm:description"/>
                     <show id="lecm-os:nomenclature-case-no-permissions-change-on-archivation"/>
                     <show id="os-aspects:sort-value"/>
+                    <show id="os-aspects:common-index"/>
                 </field-visibility>
                 <appearance>
                     <set id="set1"/>
@@ -420,6 +429,9 @@
                     <field id="os-aspects:sort-value" set="set3">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
+                    <field id="os-aspects:common-index" set="set3">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -458,6 +470,7 @@
 					<show id="lecm-os:shared"/>
 
                     <show id="os-aspects:sort-value"/>
+                    <show id="os-aspects:common-index"/>
                     <show id="actions-fake-field" force="true" />
                     <!-- <show id="nomenclature-case-references"/> -->
                 </field-visibility>
@@ -537,6 +550,9 @@
                     <field id="os-aspects:sort-value" set="common">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
+                    <field id="os-aspects:common-index" set="common">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
 
 
                 </appearance>
@@ -571,6 +587,7 @@
 					<show id="lecm-os:shared"/>
 
                     <show id="os-aspects:sort-value"/>
+                    <show id="os-aspects:common-index"/>
 
                 </field-visibility>
                 <appearance>
@@ -654,6 +671,9 @@
                     <field id="os-aspects:sort-value" set="common">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
+                    <field id="os-aspects:common-index" set="common">
+                        <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
+                    </field>
 
                     <!-- <field id="nomenclature-case-references" set="references">
                         <control template="/ru/it/lecm/os/nomenclature/controls/case-references-control.ftl"/>
@@ -685,8 +705,8 @@
     			<field-visibility>
                     <show id="cm:title"/>
                     <!--<show id="lecm-os:fake-index" force="true"/>-->
-					<show id="lecm-os:fake-type" force="true"/>
-                    <show id="os-aspects:sort-value" force="true"/>
+					<show id="os-aspects:sort-value" force="true"/>
+                    <show id="os-aspects:common-index" force="true"/>
 					<show id="lecm-os:nomenclature-unit-section-status"/>
                     <show id="lecm-os:nomenclature-case-status"/>
 					<show id="lecm-os:nomenclature-year-section-status-fake"/>
@@ -694,10 +714,10 @@
                     <show id="lecm-os:nomenclature-case-to-archive" />
                 </field-visibility>
                 <appearance>
-                	<field id="lecm-os:fake-type" label-id="lecm.os.lbl.type" substituteString=" "/>
+                	<field id="os-aspects:sort-value" label-id="lecm.os.lbl.type" substituteString=" "/>
                     <field id="lecm-os:nomenclature-year-section-status-fake" substituteString="{lecm-os:nomenclature-case-year-assoc/lecm-os:nomenclature-year-section-status}"/>
 					<!--<field id="lecm-os:nomenclature-case-year-section-status"/>-->
-					<field id="os-aspects:sort-value" substituteString="{lecm-os:nomenclature-unit-section-index}{lecm-os:nomenclature-case-index}" label-id="lecm.os.lbl.index"/>
+					<field id="os-aspects:common-index" label-id="lecm.os.lbl.index"/>
                 </appearance>
     		</form>
     	</forms>

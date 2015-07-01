@@ -68,7 +68,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 							data = oData[i];
 
 							var columnContent = "";
-							if(datalistColumn.name == "lecm-os:fake-type") {
+							if(datalistColumn.name == "os-aspects:sort-value") {
 								var type = oRecord.getData().type;
 								if(type == "lecm-os:nomenclature-unit-section") {
 									columnContent += Alfresco.util.message('lecm.os.lbl.section');
@@ -314,6 +314,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 								var status = document.getElementsByName('prop_lecm-os_nomenclature-year-section-status')[0];
 								var sortField = document.getElementsByName('prop_os-aspects_sort-value')[0];
+								var commonIndexField = document.getElementsByName('prop_os-aspects_common-index')[0];
 								var unitIndexField = document.getElementsByName('prop_lecm-os_nomenclature-unit-section-index');
 								var caseIndexField = document.getElementsByName('prop_lecm-os_nomenclature-case-index');
 
@@ -330,11 +331,13 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 								if(unitIndexField && unitIndexField.length) {
 									sortField.value = 'a' + unitIndexField[0].value;
+									commonIndexField.value = unitIndexField[0].value;
 									return;
 								}
 
 								if(caseIndexField && caseIndexField.length) {
 									sortField.value = 'b' + caseIndexField[0].value;
+									commonIndexField.value = caseIndexField[0].value;
 									return;
 								}
 
