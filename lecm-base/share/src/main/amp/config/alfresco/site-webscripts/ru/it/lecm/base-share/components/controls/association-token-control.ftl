@@ -54,19 +54,26 @@
     <#assign endpointMany = (field.control.params.endpointMany == "true")>
 </#if>
 
+<#assign fieldValue=field.value!"">
+
+<#assign fieldKey=field.name?replace("assoc_", "prop_") + "-ref">
+<#if form.fields[fieldKey]?has_content>
+    <#assign fieldValue=form.fields[fieldKey].value?replace(";", ",")>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
 <div id="${controlId}" class="control association-token-control viewmode">
 	<div class="label-div">
-        <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
+        <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && fieldValue == "">
 		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
         </#if>
 		<label>${field.label?html}:</label>
 	</div>
 	<div class="container">
 		<div class="value-div">
-			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${fieldValue?html}" />
 			<span id="${controlId}-currentValueDisplay" class="mandatory-highlightable"></span>
 		</div>
 	</div>
@@ -100,7 +107,7 @@
         </#if>
 
 		<div class="value-div">
-			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${fieldValue?html}" />
             <#if showAutocomplete>
 				<input id="${controlId}-autocomplete-input" type="text" class="mandatory-highlightable"/>
             </#if>
@@ -199,7 +206,7 @@
 				plane: ${plane?string},
 				showPath: ${showPath?string},
 				showAutocomplete: ${showAutocomplete?string},
-				currentValue: "${field.value!''}",
+				currentValue: "${fieldValue!''}",
             <#if params.defaultValueDataSource??>
 				defaultValueDataSource: "${params.defaultValueDataSource}",
             </#if>
