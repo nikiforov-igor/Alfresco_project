@@ -17,7 +17,12 @@
 	}
 
 	var userOrg = orgstructure.getEmployeeOrganization(employeeNodeRef);
-	model.userOrg = userOrg.nodeRef.toString();
+
+	if(!userOrg) {
+		model.userOrg = 'NOT_REF'
+	} else {
+		model.userOrg = userOrg.nodeRef.toString();
+	}
 
 	model.ignoredString = deputyService.getIgnoredString(employeeNodeRef);
 	model.path = orgUnit.qnamePath;
