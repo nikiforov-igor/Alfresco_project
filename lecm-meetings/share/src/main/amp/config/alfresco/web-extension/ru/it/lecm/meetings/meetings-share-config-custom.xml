@@ -79,6 +79,7 @@
 					<show id="lecm-events:description"/>
 					<!-- Тематика -->
 					<show id="lecm-events:subject-assoc"/>
+					<show id="lecm-events:subject-assoc-ref"/>
 					<!--Требование согласовать повестку-->
 					<show id="lecm-meetings:approve-agenda"/>
 					<!--Повестка-->
@@ -202,6 +203,9 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 						</control>
+					</field>
+					<field id="lecm-events:subject-assoc-ref">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<!-- Описание -->
 					<field id="lecm-events:description" >
@@ -405,6 +409,7 @@
 					<show id="lecm-events:description"/>
 					<!-- Тематика -->
 					<show id="lecm-events:subject-assoc"/>
+					<show id="lecm-events:subject-assoc-ref"/>
 					<!--Согласовать повестку-->
 					<show id="lecm-meetings:approve-agenda"/>
 					<!-- Повестка -->
@@ -543,6 +548,9 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
 						</control>
+					</field>
+					<field id="lecm-events:subject-assoc-ref" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
 					<field id="lecm-meetings:approve-agenda" set="createEventSet"/>
 					<field id="lecm-meetings:temp-items-assoc" label-id="label.items" set="createEventSet">

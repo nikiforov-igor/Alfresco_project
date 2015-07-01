@@ -51,6 +51,7 @@
                     <show id="lecm-events:description"/>
                     <!-- Тематика -->
                     <show id="lecm-events:subject-assoc"/>
+                    <show id="lecm-events:subject-assoc-ref"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-events:title">
@@ -141,6 +142,9 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                         </control>
                     </field>
+                    <field id="lecm-events:subject-assoc-ref">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
                     <field id="lecm-events:description">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
@@ -236,6 +240,7 @@
                     <show id="lecm-events:description"/>
                     <!-- Тематика -->
                     <show id="lecm-events:subject-assoc"/>
+                    <show id="lecm-events:subject-assoc-ref"/>
                 </field-visibility>
                 <appearance>
                     <set id="createEventSet" appearance="" template="/ru/it/lecm/events/event-create/event-create-set.ftl" />
@@ -349,6 +354,9 @@
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                         </control>
                     </field>
+					<field id="lecm-events:subject-assoc-ref" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
                 </appearance>
             </form>
             <form id="searchColumns">
