@@ -86,7 +86,18 @@ public class SearchEditorService extends BaseBean {
             public String getFTSPreparedValue(String value) {
                 Date valueDate = tryMakeDate(value);
                 if (valueDate != null) {
-                    return value != null ? ("'" + DateFormat_YMD_HMS.format(valueDate) + "'") : "*";
+                    if (value != null) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(valueDate);
+
+                        if (cal.get(Calendar.HOUR) == 0 && cal.get(Calendar.MINUTE) == 0) {
+                            return ("'" + DateFormat_YMD.format(valueDate) + "'");
+                        } else {
+                            return ("'" + DateFormatISO8601.format(valueDate) + "'");
+                        }
+                    } else {
+                        return "*";
+                    }
                 }
                 return "''";
             }
