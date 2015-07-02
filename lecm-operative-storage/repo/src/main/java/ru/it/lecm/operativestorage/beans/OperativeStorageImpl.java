@@ -476,7 +476,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		}
 
 		for (NodeRef organization : organizations) {
-			List<AssociationRef> assocList = nodeService.getSourceAssocs(organization, ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION);
+			List<AssociationRef> assocList = nodeService.getSourceAssocs(organization, ASSOC_NOMENCLATURE_LINKED_ORG);
 
 			for (AssociationRef assoc : assocList) {
 				result.add(assoc.getSourceRef());
@@ -528,7 +528,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	@Override
 	public void createTreeByOrgUnits(NodeRef yearSectionRef) {
 
-		NodeRef organizationRef = nodeService.getTargetAssocs(yearSectionRef, ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION).get(0).getTargetRef();
+		NodeRef organizationRef = nodeService.getTargetAssocs(yearSectionRef, ASSOC_NOMENCLATURE_LINKED_ORG).get(0).getTargetRef();
 
 
 

@@ -703,7 +703,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		reCreateNomenclature_Prompt: function(execFunction, item) {
 			var yearRef = item.itemData['prop_lecm-os_nomenclature-year-section-year'].value + 1;
-			var orgRef = item.itemData['assoc_lecm-os_nomenclature-organization-assoc'].value;
+			var orgRef = item.itemData['assoc_os-aspects_nomenclature-organization-assoc'].value;
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'GET',
 				url: Alfresco.constants.PROXY_URI + "lecm/os/nomenclature/isYearUniq?year=" + yearRef + "&orgNodeRef=" + orgRef,

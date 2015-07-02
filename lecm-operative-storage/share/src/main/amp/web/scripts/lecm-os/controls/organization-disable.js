@@ -6,7 +6,7 @@
 		if(!subscribed) {
 			var fieldId = args[1].eventGroup.options.fieldId;
 			var formId = args[1].eventGroup.options.formId;
-			if(fieldId == 'lecm-os:nomenclature-organization-assoc') {
+			if(fieldId == 'os-aspects:nomenclature-organization-assoc') {
 				if(!LogicECM.Nomenclature.isCentralized) {
 					Alfresco.util.Ajax.jsonGet(
 					{
@@ -29,5 +29,5 @@
 			subscribed = true;
 		}
 	});
-		
+
 })();

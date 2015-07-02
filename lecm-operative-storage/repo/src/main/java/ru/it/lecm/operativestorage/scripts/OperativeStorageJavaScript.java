@@ -32,7 +32,6 @@ import java.util.StringTokenizer;
 import org.alfresco.service.namespace.QName;
 
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASPECT_MOVE_TO_CASE;
-import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION;
 
 /**
  *
@@ -250,7 +249,7 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 			NodeRef childYear = assoc.getChildRef();
 			if(Boolean.TRUE.equals(nodeService.getProperty(childYear, BaseBean.IS_ACTIVE))) {
 				List<NodeRef> childYearOrgs = new ArrayList<>();
-				List<AssociationRef> childYearOrgAssocs = nodeService.getTargetAssocs(childYear, OperativeStorageService.ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION);
+				List<AssociationRef> childYearOrgAssocs = nodeService.getTargetAssocs(childYear, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG);
 
 				for (AssociationRef childYearOrgAssoc : childYearOrgAssocs) {
 					childYearOrgs.add(childYearOrgAssoc.getTargetRef());
@@ -283,7 +282,7 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 
 	public void createSectionByUnit(String yearRef) {
 		NodeRef yearNodeRef = new NodeRef(yearRef);
-		NodeRef organizationRef = nodeService.getTargetAssocs(yearNodeRef, ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION).get(0).getTargetRef();
+		NodeRef organizationRef = nodeService.getTargetAssocs(yearNodeRef, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG).get(0).getTargetRef();
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(organizationRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		if(children != null) {
 			for (ChildAssociationRef child : children) {

@@ -28,7 +28,6 @@ public interface OperativeStorageService {
 	QName ASSOC_NOMENCLATURE_CASE_VOLUME = QName.createQName(OS_NAMESPACE, "nomenclature-case-volume-child-assoc");
 	QName ASSOC_NOMENCLATURE_CASE_YEAR = QName.createQName(OS_NAMESPACE, "nomenclature-case-year-assoc");
 	QName ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT = QName.createQName(OS_NAMESPACE, "nomenclature-unit-section-unit-assoc");
-	QName ASSOC_NOMENCLATURE_YEAR_SECTION_TO_ORGANIZATION = QName.createQName(OS_NAMESPACE, "nomenclature-organization-assoc");
 
 
 	String BR_ARCHIVIST = "DA_ARCHIVISTS";
@@ -68,6 +67,7 @@ public interface OperativeStorageService {
 
 	QName ASPECT_MOVE_TO_CASE = QName.createQName(OS_ASPECTS_NAMESPACE, "move-to-case");
 
+	QName ASSOC_NOMENCLATURE_LINKED_ORG = QName.createQName(OS_ASPECTS_NAMESPACE, "nomenclature-organization-assoc");
 
 	void cleanVisibilityList(NodeRef nodeRef);
 

@@ -23,5 +23,17 @@ public class YearSectionPolicy extends LogicECMAssociationPolicy {
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				OperativeStorageService.TYPE_NOMENCLATURE_YEAR_SECTION, new JavaBehaviour(this, "onCreateAssociation"));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				OperativeStorageService.TYPE_NOMENCLATURE_UNIT_SECTION, new JavaBehaviour(this, "onDeleteAssociation"));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				OperativeStorageService.TYPE_NOMENCLATURE_UNIT_SECTION, new JavaBehaviour(this, "onCreateAssociation"));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				OperativeStorageService.TYPE_NOMENCLATURE_CASE, new JavaBehaviour(this, "onDeleteAssociation"));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				OperativeStorageService.TYPE_NOMENCLATURE_CASE, new JavaBehaviour(this, "onCreateAssociation"));
 	}
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies.OnAddAspectPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateChildAssociationPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateNodePolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnDeleteAssociationPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnUpdatePropertiesPolicy;
@@ -34,7 +35,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  * @author ikhalikov
  */
 public class NomenclatureCasePolicy implements OnCreateNodePolicy,
-		OnCreateAssociationPolicy, OnDeleteAssociationPolicy, OnUpdatePropertiesPolicy , OnAddAspectPolicy {
+		OnCreateAssociationPolicy, OnDeleteAssociationPolicy, OnUpdatePropertiesPolicy , OnAddAspectPolicy, OnCreateChildAssociationPolicy {
 
 	private final static Logger logger = LoggerFactory.getLogger(NomenclatureCasePolicy.class);
 
@@ -76,6 +77,12 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 
 		policyComponent.bindClassBehaviour(OnAddAspectPolicy.QNAME, OperativeStorageService.ASPECT_MOVE_TO_CASE,
 				new JavaBehaviour(this, "onAddAspect", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(OnCreateChildAssociationPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_YEAR_SECTION,
+				new JavaBehaviour(this, "onCreateChildAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(OnCreateChildAssociationPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_UNIT_SECTION,
+				new JavaBehaviour(this, "onCreateChildAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
@@ -220,6 +227,18 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 	@Override
 	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
 		operativeStorageService.grantPermissionToArchivist(nodeRef);
+	}
+
+	@Override
+	public void onCreateChildAssociation(ChildAssociationRef childAssocRef, boolean isNewNode) {
+		NodeRef parent = childAssocRef.getParentRef();
+		NodeRef child = childAssocRef.getChildRef();
+
+		List<AssociationRef> orgAssocs = nodeService.getTargetAssocs(parent, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG);
+		if(orgAssocs != null && !orgAssocs.isEmpty()) {
+			NodeRef organization = orgAssocs.get(0).getTargetRef();
+			nodeService.createAssociation(child, organization, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG);
+		}
 	}
 
 }

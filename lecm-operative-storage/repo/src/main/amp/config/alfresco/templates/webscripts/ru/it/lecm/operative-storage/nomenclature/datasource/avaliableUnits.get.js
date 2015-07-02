@@ -1,13 +1,19 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/pickerchildren.lib.js">
 
 (function() {
-
+	// Переопределяем поведение построения фильтра - получаем только непосредственно дочерние результаты
 	getFilterParams = function getFilterParams(filterData, parentXPath)
 	{
 		var query = " +PATH:\"" + parentXPath + "/*\"";
 		var columns = [];
 		if (filterData !== "") {
-			columns = filterData.split('#');
+			var keyWord = filterData.match(/.*:(.*)$/)[1];
+
+			if(keyWord) {
+				columns.push('lecm-os:nomenclature-year-section-year:' + keyWord);
+				columns.push('lecm-os:nomenclature-unit-section-index:' + keyWord);
+				columns.push('cm:title:' + keyWord);
+			}
 		}
 
 		var params = "",
@@ -24,7 +30,8 @@
 			var searchArray = searchTerm.split(" ");
 			var filter = "";
 			for (var j = 0; j < searchArray.length; j++) {
-				filter += '"*' + searchArray[j] + '*"';
+				var asterisk = namespace[1] == 'nomenclature-year-section-year' ? '' : '*'
+				filter += '"' + asterisk + searchArray[j] + asterisk + '"';
 				if (j < searchArray.length - 1) {
 					filter += " OR ";
 				}
@@ -33,7 +40,8 @@
 			params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '(' + filter + ')' + or;
 		}
 		if (params !== "") {
-			query += " AND " + "(" + params + " )";
+			//если явный поиск - то ищем неограниченно глубоко
+			query = " +PATH:\"" + parentXPath + "//*\" AND " + "(" + params + " )";
 		}
 		return query;
 	}

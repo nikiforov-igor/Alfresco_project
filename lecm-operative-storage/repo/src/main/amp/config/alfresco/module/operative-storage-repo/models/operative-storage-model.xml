@@ -114,6 +114,7 @@
 				</property>
             </properties>
             <associations>
+				<!-- Более не используется! Перенесено в аспект -->
                 <association name="lecm-os:nomenclature-organization-assoc">
                     <title>Организация</title>
                     <source>
@@ -132,6 +133,9 @@
                     <default>lecm-os:nomenclature-unit-section</default>
                 </property>
             </overrides>
+			<mandatory-aspects>
+                <aspect>os-aspects:linked-organization-aspect</aspect>
+            </mandatory-aspects>
         </type>
 
         <type name="lecm-os:nomenclature-unit-section">

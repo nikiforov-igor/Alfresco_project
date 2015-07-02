@@ -24,7 +24,7 @@ public class FilterYearSectionsProcessor extends SearchQueryProcessor {
 	OperativeStorageService operativeStorageService;
 	OrgstructureBean orgstructureService;
 
-	private final String DEFAULT_QUERY = "@lecm\\-os\\:nomenclature\\-organization\\-assoc\\-ref:\"*\" OR ISNULL:\"lecm-os:nomenclature-organization-assoc-ref\"";
+	private final String DEFAULT_QUERY = "@os\\-aspects\\:nomenclature\\-organization\\-assoc\\-ref:\"*\" OR ISNULL:\"os-aspects:nomenclature-organization-assoc-ref\"";
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -57,7 +57,7 @@ public class FilterYearSectionsProcessor extends SearchQueryProcessor {
 		NodeRef currentEmployeeOrg = orgstructureService.getEmployeeOrganization(currentEmployee);
 		NodeRef currentEmployeeOrgUnit = orgstructureService.getUnitByOrganization(currentEmployeeOrg);
 
-		sbQuery.append("@lecm\\-os\\:nomenclature\\-organization\\-assoc\\-ref:\"" + currentEmployeeOrgUnit + "\" OR ISNULL:\"lecm-os:nomenclature-organization-assoc-ref\"");
+		sbQuery.append("@os\\-aspects\\:nomenclature\\-organization\\-assoc\\-ref:\"" + currentEmployeeOrgUnit + "\" OR ISNULL:\"os-aspects:nomenclature-organization-assoc-ref\"");
 
 		return sbQuery.toString();
 	}
