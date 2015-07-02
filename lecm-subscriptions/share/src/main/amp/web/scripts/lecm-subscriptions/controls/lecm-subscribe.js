@@ -44,7 +44,9 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 			options: {
 				objectNodeRef: null,
 
-				objectDescription: null
+				objectDescription: null,
+
+				availableRoles: null
 			},
 
 			id: null,
@@ -63,8 +65,34 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 
             doubleClickLock: false,
 
-			onReady: function()
-			{
+			onReady: function() {
+				if (this.options.availableRoles != null) {
+					var me = this;
+					Alfresco.util.Ajax.request(
+						{
+							url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessOneRole",
+							dataObj: {
+								rolesId: this.options.availableRoles
+							},
+							successCallback: {
+								fn: function (response) {
+									if (response.json) {
+										me.init();
+									}
+								}
+							},
+							failureMessage: {
+								fn: function (response) {
+									alert(response.responseText);
+								}
+							}
+						});
+				} else {
+					this.init();
+				}
+			},
+
+			init: function() {
 				this.loadSubscriptionsRoot();
 				this.loadObjectDescription();
 				this.loadCurrentEmployee();

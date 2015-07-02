@@ -14,6 +14,9 @@
 	function createControl () {
 		var control = new LogicECM.module.Subscriptions.SubscribeControl("${fieldHtmlId}").setMessages(${messages});
 		control.setOptions({
+			<#if field.control.params.availableRoles??>
+				availableRoles: "${field.control.params.availableRoles}",
+			</#if>
 			objectNodeRef: "${form.arguments.itemId}"
 		});
 	}

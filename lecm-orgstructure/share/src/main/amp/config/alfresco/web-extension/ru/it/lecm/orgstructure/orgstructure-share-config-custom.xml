@@ -79,7 +79,9 @@
                     </field>
                     <field id="lecm-subscr-aspects" set="commonOther"/>
                     <field id="lecm-subscr-aspects" set="commonOther">
-                        <control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>
+                        <control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl">
+                            <control-param name="availableRoles">BR_SUBSCRIPTIONS_ENGINEER,BR_SUBSCRIBE_TO_USERS_ACTIONS</control-param>
+                        </control>
                     </field>
                     <field id="lecm-orgstr:employee-person-data-assoc" set="personalInner">
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
