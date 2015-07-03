@@ -47,11 +47,13 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-events-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-events-settings-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/lecm-events-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-events-settings-model</value>
 			</list>
 		</property>
 	</bean>
@@ -146,6 +148,7 @@
 		<property name="dictionaryService" ref="dictionaryService"/>
         <property name="actionsService" ref="groupActionsService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
 	</bean>
 
 	<bean id="eventsPolicy" class="ru.it.lecm.events.policy.EventsPolicy" parent="baseBean"
@@ -326,4 +329,13 @@
 		</property>
 	</bean>
 
+	<bean id="events.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+	      depends-on="userProfile.arm.LogicEcmBootstrap">
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>
+			</list>
+		</property>
+	</bean>
 </beans>

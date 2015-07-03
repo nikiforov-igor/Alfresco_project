@@ -725,6 +725,26 @@
         </forms>
     </config>
 
+    <config evaluator="node-type" condition="lecm-events-settings:user-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-events-settings:show-declined"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-events-settings:user-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-events-settings:show-declined"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="string-compare" condition="activiti$eventsMemberDecline">
         <forms>
             <form>

@@ -1,5 +1,6 @@
 package ru.it.lecm.events.beans;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
+import ru.it.lecm.base.beans.TransactionNeededException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
@@ -294,14 +297,18 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	List<NodeRef> filterDeclinedEvents(List<NodeRef> events) {
-		List<NodeRef> filteredResults = new ArrayList<>();
-		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-		for (NodeRef event : events) {
-			if (!"DECLINED".equals(getEmployeeMemberStatus(event, currentEmployee))) {
-				filteredResults.add(event);
+		if (!isShowDeclined()) {
+			List<NodeRef> filteredResults = new ArrayList<>();
+			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+			for (NodeRef event : events) {
+				if (!"DECLINED".equals(getEmployeeMemberStatus(event, currentEmployee))) {
+					filteredResults.add(event);
+				}
 			}
+			return filteredResults;
+		} else {
+			return events;
 		}
-		return filteredResults;
 	}
 
 	@Override
@@ -631,7 +638,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			recipients.retainAll(invitedMembers);
 		}
 		
-		eventsNotificationsService.notifyEvent(event, isFirst ,recipients);
+		eventsNotificationsService.notifyEvent(event, isFirst, recipients);
 	}
 
 	@Override
@@ -804,5 +811,46 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		return result;
 
 	}
-	
+
+	@Override
+	public NodeRef getCurrentUserSettingsNode() {
+		final NodeRef rootFolder = this.getServiceRootFolder();
+		final String settingsObjectName = authService.getCurrentUserName() + "_" + EVENTS_SETTINGS_NODE_NAME;
+
+		return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+	}
+
+	@Override
+	public NodeRef createCurrentUserSettingsNode() throws WriteTransactionNeededException {
+		try {
+			lecmTransactionHelper.checkTransaction();
+		} catch (TransactionNeededException ex) {
+			throw new WriteTransactionNeededException("Can't create settings node");
+		}
+
+		final NodeRef rootFolder = this.getServiceRootFolder();
+		final String settingsObjectName = authService.getCurrentUserName() + "_" + EVENTS_SETTINGS_NODE_NAME;
+
+		NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+		if (settingsRef == null) {
+			QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+			QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
+			QName nodeTypeQName = TYPE_EVENTS_USER_SETTINGS;
+
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+			properties.put(ContentModel.PROP_NAME, settingsObjectName);
+			ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+			settingsRef = associationRef.getChildRef();
+		}
+		return settingsRef;
+	}
+
+	@Override
+	public boolean isShowDeclined() {
+		NodeRef settings = getCurrentUserSettingsNode();
+		if (settings != null) {
+			return (Boolean) nodeService.getProperty(settings, USER_SETTINGS_PROP_SHOW_DECLINED);
+		}
+		return false;
+	}
 }

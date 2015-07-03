@@ -2,6 +2,7 @@ package ru.it.lecm.events.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,9 @@ public interface EventsService {
 	public static final String EVENTS_NAMESPACE_URI = "http://www.it.ru/logicECM/events/1.0";
 	public static final String EVENTS_DIC_NAMESPACE_URI = "http://www.it.ru/logicECM/events/dictionaries/1.0";
 	public static final String EVENTS_TS_NAMESPACE_URI = "http://www.it.ru/logicECM/events/table-structure/1.0";
+	public static final String EVENTS_SETTINGS_NAMESPACE_URI = "http://www.it.ru/logicECM/events/settings/1.0";
+
+	public static final String EVENTS_SETTINGS_NODE_NAME = "Settings";
 
 	public static final QName TYPE_EVENT = QName.createQName(EVENTS_NAMESPACE_URI, "document");
 	public static final QName PROP_EVENT_TITLE = QName.createQName(EVENTS_NAMESPACE_URI, "title");
@@ -79,6 +83,9 @@ public interface EventsService {
 	public static final QName ASSOC_EVENT_MEMBERS_TABLE_EMPLOYEE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-employee-assoc");
 	public static final QName ASSOC_EVENT_RESOURCES_TABLE_RESOURCE = QName.createQName(EVENTS_TS_NAMESPACE_URI, "resources-data-assoc");
 	public static final QName ASSOC_EVENT_MEMBERS = QName.createQName(EVENTS_TS_NAMESPACE_URI, "members-assoc");
+
+	public static final QName TYPE_EVENTS_USER_SETTINGS = QName.createQName(EVENTS_SETTINGS_NAMESPACE_URI, "user-settings");
+	public static final QName USER_SETTINGS_PROP_SHOW_DECLINED = QName.createQName(EVENTS_SETTINGS_NAMESPACE_URI, "show-declined");
 
 	public static final String EVENT_LINK_URL = "/share/page/event";
 
@@ -162,4 +169,9 @@ public interface EventsService {
 
 	Boolean getSendIcalToInvitedMembers();
 
+	NodeRef getCurrentUserSettingsNode();
+
+	NodeRef createCurrentUserSettingsNode() throws WriteTransactionNeededException;
+
+	boolean isShowDeclined();
 }

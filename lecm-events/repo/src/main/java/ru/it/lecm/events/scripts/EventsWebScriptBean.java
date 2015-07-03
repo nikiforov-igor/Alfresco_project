@@ -2,6 +2,7 @@ package ru.it.lecm.events.scripts;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -13,6 +14,7 @@ import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -33,6 +35,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     private DictionaryService dictionaryService;
     private GroupActionsService actionsService;
     private LecmPermissionService lecmPermissionService;
+    private LecmTransactionHelper lecmTransactionHelper;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -58,6 +61,10 @@ public class EventsWebScriptBean extends BaseWebScript {
         this.lecmPermissionService = lecmPermissionService;
     }
 
+    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+        this.lecmTransactionHelper = lecmTransactionHelper;
+    }
+
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate) {
         return getUserEvents(fromDate, toDate, false, null);
     }
@@ -74,9 +81,10 @@ public class EventsWebScriptBean extends BaseWebScript {
         String legacyTimeFormat = "HH:mm";
         boolean isMini = "mini".equalsIgnoreCase(mode);
         boolean isFull = "full".equalsIgnoreCase(mode);
+        boolean showDeclined = eventService.isShowDeclined();
         for (NodeRef entry : events) {
             String memberStatus = eventService.getEmployeeMemberStatus(entry, currentEmployee);
-            if (excludeDeclined && "DECLINED".equals(memberStatus)) {
+            if (excludeDeclined && "DECLINED".equals(memberStatus) && !showDeclined) {
                 continue;
             }
             // Build the object
@@ -344,5 +352,24 @@ public class EventsWebScriptBean extends BaseWebScript {
             repeatableEvents = eventService.getPrevRepeatedEvents(event.getNodeRef());
         }
         return createScriptable(repeatableEvents);
+    }
+
+    /**
+     * Получение узла с настройка для поручений текущего пользователя
+     * @return узел с настройками поручений для текущего пользователя
+     */
+    public ScriptNode getCurrentUserSettingsNode() {
+        NodeRef settings = eventService.getCurrentUserSettingsNode();
+        if(settings == null) {
+            RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+
+                @Override
+                public NodeRef execute() throws Throwable {
+                    return eventService.createCurrentUserSettingsNode();
+                }
+            };
+            settings = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
+        }
+        return new ScriptNode(settings, serviceRegistry, getScope());
     }
 }

@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Events Module User Settings Node</shortname>
+	<description>Events Module User Settings Node</description>
+	<url>/lecm/events/getUserSettings</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>
