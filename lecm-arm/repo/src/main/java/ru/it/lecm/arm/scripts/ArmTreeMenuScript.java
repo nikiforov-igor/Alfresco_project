@@ -1,7 +1,9 @@
 package ru.it.lecm.arm.scripts;
 
-import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
-import org.alfresco.service.cmr.dictionary.*;
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -104,20 +106,20 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         String nodeRef = req.getParameter(NODE_REF);
         String armNodeRef = req.getParameter(ARM_NODE_REF);
         String armCode = req.getParameter(ARM_CODE);
-        String runAs = req.getParameter(RUN_AS);
+        String runAsBoss = req.getParameter(RUN_AS);
 
         if (nodeRef == null) { // получаем список корневых узлов - аккордеонов для заданного АРМ
             List<ArmNode> accordions = service.getAccordionsByArmCode(armCode);
 	        Map<String, Boolean> isStarterHash = new HashMap<String, Boolean>();
             for (ArmNode accordion : accordions) {
-                nodes.add(toJSON(accordion, true, isStarterHash, runAs));
+                nodes.add(toJSON(accordion, true, isStarterHash, null));
             }
         } else {
             // получение списка дочерних элементов
             if (NodeRef.isNodeRef(nodeRef)) {
                 List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef));
                 for (ArmNode child : childs) {
-                    nodes.add(toJSON(child, false, null, runAs));
+                    nodes.add(toJSON(child, false, null, runAsBoss));
                 }
             }
         }
@@ -138,10 +140,13 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                     (node.getArmNodeRef() != null ?
                             node.getArmNodeRef().getId() + "-" + node.getTitle():
                             node.getTitle()));
-            if (node.getRunAsEmployee() == null && runAs == null) {
+            if (node.getRunAsEmployee() == null && (runAs == null || runAs.isEmpty())) {
                 result.put(ID, nodeId);
             } else {
-                String employeeId = node.getRunAsEmployee()!= null ? node.getRunAsEmployee().toString()  : runAs;
+                String employeeId =
+                        node.getRunAsEmployee()!= null ?
+                                node.getRunAsEmployee().getId()  :
+                                (NodeRef.isNodeRef(runAs) ? new NodeRef(runAs).getId() : runAs);
                 result.put(ID, nodeId + "-" + employeeId);
             }
             result.put(NODE_REF, node.getNodeRef() != null ? node.getNodeRef().toString() : null);
@@ -169,10 +174,11 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
             if (node.getSearchQuery() != null) {
                 String query = node.getSearchQuery();
-                if (runAs != null && !runAs.isEmpty()) {
-                    if (query.contains("#current-user")) {
-                        query = query.replaceAll("#current-user", runAs);
-            }
+                if (node.getRunAsEmployee()!= null || (runAs != null && !runAs.isEmpty())) {
+                    String employeeRef = node.getRunAsEmployee()!= null ? node.getRunAsEmployee().toString()  : runAs;
+                    if (query.contains("#boss-ref")) {
+                        query = query.replaceAll("#boss-ref", employeeRef);
+                    }
                 }
                 result.put(SEARCH_QUERY, query);
             }

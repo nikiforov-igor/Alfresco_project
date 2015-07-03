@@ -43,6 +43,7 @@ public interface ArmService {
 	public static final QName PROP_ACTIVE_TASKS_FILTER = QName.createQName(ARM_NAMESPACE_URI, "activeTasks-filter");
 	public static final QName ASSOC_ACCORDION_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "business-roles-assoc");
 	public static final QName PROP_IS_AGGREGATION_NODE = QName.createQName(ARM_NAMESPACE_URI, "is-aggregation-node");
+	public static final QName PROP_IS_FOR_SECRETARIES = QName.createQName(ARM_NAMESPACE_URI, "is-for-secretaries");
 
 	public static final QName TYPE_ARM_COLUMN = QName.createQName(ARM_NAMESPACE_URI, "field");
 	public static final QName PROP_COLUMN_TITLE = QName.createQName(ARM_NAMESPACE_URI, "field-title");
@@ -209,10 +210,4 @@ public interface ArmService {
     void invalidateCache();
 
     void invalidateCurrentUserCache();
-
-	/**
-	 * Создание персонального узла для сотрудника
-	 * @param employee сотрудник
-	 */
-	void createRunAsAccordion(NodeRef employee, String armNodeName, String formatName, String armPath, String armCode);
 }

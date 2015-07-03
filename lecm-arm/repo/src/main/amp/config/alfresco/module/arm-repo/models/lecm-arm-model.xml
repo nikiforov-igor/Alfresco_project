@@ -59,6 +59,14 @@
 
 		<type name="lecm-arm:accordion">
 			<parent>lecm-arm:base-node</parent>
+			<properties>
+				<!--Для работы секретаря с документами руководителей-->
+				<property name="lecm-arm:is-for-secretaries">
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<default>false</default>
+				</property>
+			</properties>
 			<associations>
 				<!-- Бизнес роли -->
 				<association name="lecm-arm:business-roles-assoc">
@@ -86,6 +94,7 @@
             </mandatory-aspects>
 		</type>
 
+		<!--Deprecated! Do not use!-->
 		<type name="lecm-arm:accordion-runAs">
 			<parent>lecm-arm:accordion</parent>
 			<properties>

@@ -62,13 +62,18 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         NodeRef arm = service.getArmByCode(armCode);
         if (arm != null) {
-            List<NodeRef> runAsAccords = service.getArmRunAsAccordions(arm);
-            for (NodeRef accord : runAsAccords) {
-                result.add(wrapArmNodeAsObject(accord, true, onlyMeta));
-            }
             List<NodeRef> accords = service.getArmAccordions(arm);
             for (NodeRef accord : accords) {
-                result.add(wrapArmNodeAsObject(accord, true, onlyMeta));
+                Map<QName, Serializable> properties =  service.getCachedProperties(accord);
+                Boolean isForSecretaries = (Boolean) properties.get(ArmService.PROP_IS_FOR_SECRETARIES);
+                if (isForSecretaries == null || !isForSecretaries) {
+                    result.add(wrapArmNodeAsObject(accord, true, onlyMeta));
+                } else {
+                    List<NodeRef> bossAccords = service.getArmRunAsBossAccordions(accord);
+                    for (NodeRef bossAccord : bossAccords) {
+                        result.add(wrapArmNodeAsObject(bossAccord, true, onlyMeta));
+                    }
+                }
             }
         }
         return result;
@@ -178,45 +183,34 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     @Override
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion, boolean onlyMeta) {
         ArmNode node = new ArmNode();
-        Map<QName, Serializable> properties = null;
 
-        if (!isAccordion || !isRunAsAccordion(nodeRef)) {
+        Map<QName, Serializable> properties;
+
+        if (!isRunAsAccordion(nodeRef)) {
             properties = service.getCachedProperties(nodeRef);
             node.setTitle((String) properties.get(ContentModel.PROP_NAME));
-        }
-
-        if (!isAccordion) {
-            node.setArmNodeRef(service.getCachedParent(nodeRef)); // для узла Арм - данное поле дублируется. как так узел Арм - реален
         } else {
-            if (!isRunAsAccordion(nodeRef)) {
-                node.setArmNodeRef(nodeRef);
-            } else { // если специальный аккордеон - подменяем
-                String[] refs = nodeRef.getId().split("_");
-                NodeRef employeeRunAs = new NodeRef(nodeRef.getStoreRef(), refs[1]);
+            String[] refs = nodeRef.getId().split("_");
+            NodeRef employeeRunAs = new NodeRef(nodeRef.getStoreRef(), refs[1]);
+            NodeRef armAccordionRunAs = new NodeRef(nodeRef.getStoreRef(), refs[0]);
 
-                NodeRef armAccordionRunAs = new NodeRef(nodeRef.getStoreRef(), refs[0]);
-                properties = service.getCachedProperties(armAccordionRunAs);
+            properties = service.getCachedProperties(armAccordionRunAs);
 
-                String armTitle = (String) properties.get(ContentModel.PROP_NAME);
-                node.setRunAsEmployee(employeeRunAs);
+            String armTitle = (String) properties.get(ContentModel.PROP_NAME);
+            node.setRunAsEmployee(employeeRunAs);
 
-                node.setTitle(armTitle + " " + service.getCachedProperties(employeeRunAs).get(OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
+            node.setTitle(armTitle + " " + service.getCachedProperties(employeeRunAs).get(OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME));
 
-                String pathToNode = (String) properties.get(ArmService.PROP_ARM_ACCORDION_RUN_AS_PATH);
-                if (pathToNode != null && pathToNode.length() > 0) {
-                    NodeRef arm = service.getCachedParent(armAccordionRunAs);
-                    NodeRef armNode = getArmNodeByPath(arm, pathToNode);
-                    if (armNode != null) {
-                        node.setArmNodeRef(armNode); // подмена на реальный объект
-                        properties = service.getCachedProperties(armNode);
-                        nodeRef = armNode;
-                    }
-                }
-            }
+            nodeRef = armAccordionRunAs;
         }
 
         node.setNodeRef(nodeRef);
         node.setNodeType(service.getCachedType(nodeRef).toPrefixString(namespaceService));
+        if (!isAccordion) {
+            node.setArmNodeRef(service.getCachedParent(nodeRef)); // для узла Арм - данное поле дублируется. как так узел Арм - реален
+        } else {
+            node.setArmNodeRef(nodeRef);
+        }
 
         node.setNodeQuery(!isAccordion ? service.getNodeChildRule(nodeRef) : null);
         node.setTypes(getNodeTypes(nodeRef));
@@ -225,7 +219,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (searchQuery != null) {
             node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
-	    node.setHtmlUrl((String) properties.get(ArmService.PROP_HTML_URL));
+        node.setHtmlUrl((String) properties.get(ArmService.PROP_HTML_URL));
         node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
         node.setSearchType((String) properties.get(ArmService.PROP_SEARCH_TYPE));
 
@@ -235,48 +229,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             node.setAvaiableFilters(getNodeFilters(nodeRef));
             node.setCreateTypes(getNodeCreateTypes(nodeRef));
         }
-
         return node;
-    }
-
-    private NodeRef getArmNodeByPath(NodeRef arm, String pathToNode) {
-        if (pathToNode == null || pathToNode.isEmpty()) {
-            return null;
-        }
-
-        String[] splitPath = pathToNode.split("/");
-        List<NodeRef> accordions = service.getArmAccordions(arm);
-        NodeRef accordion = null;
-        if (splitPath.length > 0) {
-            for (NodeRef accordionItem : accordions) {
-                String name = service.getCachedProperties(accordionItem).get(ContentModel.PROP_NAME).toString();
-                if (name.equals(splitPath[0])) {
-                    accordion = accordionItem;
-                    break;
-                }
-            }
-        }
-        if (accordion != null) {
-            NodeRef prevNode = accordion;
-            NodeRef parentNode = arm;
-            for (int i = 1; i < splitPath.length; i++) {
-                boolean isFind = false;
-                List<ArmNode> nodes =  getChildNodes(prevNode, parentNode, true);
-                for (ArmNode node : nodes) {
-                    if (!node.getNodeType().equals("lecm-arm:accordion") && node.getTitle().equals(splitPath[i])) {
-                        isFind = true;
-                        parentNode = prevNode;
-                        prevNode = node.getNodeRef();
-                        break;
-                    }
-                }
-                if (!isFind) {
-                    break;
-                }
-            }
-            return prevNode;
-        }
-        return null;
     }
 
     @Override

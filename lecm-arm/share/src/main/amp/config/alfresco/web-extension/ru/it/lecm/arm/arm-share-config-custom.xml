@@ -74,6 +74,7 @@
 					<show id="lecm-arm:counter-description" force="true"/>
 					<show id="lecm-arm:business-roles-assoc" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
+					<show id="lecm-arm:is-for-secretaries"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:search-query">
@@ -137,6 +138,7 @@
 					<show id="lecm-arm:counter-description" force="true"/>
 					<show id="lecm-arm:business-roles-assoc" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
+					<show id="lecm-arm:is-for-secretaries"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:search-query">
@@ -175,29 +177,6 @@
 						</control>
 					</field>
 				</appearance>
-			</form>
-		</forms>
-	</config>
-
-	<config evaluator="model-type" condition="lecm-arm:accordion-runAs">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name"/>
-					<show id="lecm-arm:path-to-node"/>
-					<show id="lecm-arm:name-format-string"/>
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
-	<config evaluator="node-type" condition="lecm-arm:accordion-runAs">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name"/>
-					<show id="lecm-arm:path-to-node"/>
-					<show id="lecm-arm:name-format-string"/>
-				</field-visibility>
 			</form>
 		</forms>
 	</config>

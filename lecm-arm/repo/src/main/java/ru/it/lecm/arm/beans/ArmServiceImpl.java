@@ -164,7 +164,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
     public boolean isRunAsArmAccordion(NodeRef ref) {
-        return ref.getId().contains("_") && isProperType(new NodeRef(ref.getStoreRef(), ref.getId().split("_")[0]), TYPE_ARM_ACCORDION_RUN_AS);
+        return ref.getId().contains("_") && isProperType(new NodeRef(ref.getStoreRef(), ref.getId().split("_")[0]), TYPE_ARM_ACCORDION);
     }
 
 	@Override
@@ -179,7 +179,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public boolean isArmElement(NodeRef ref) {
-		return isProperType(ref, TYPE_ARM_ACCORDION, TYPE_ARM_ACCORDION_RUN_AS, TYPE_ARM_NODE, TYPE_ARM_REPORTS_NODE, TYPE_ARM_HTML_NODE);
+		return isProperType(ref, TYPE_ARM_ACCORDION, TYPE_ARM_NODE, TYPE_ARM_REPORTS_NODE, TYPE_ARM_HTML_NODE);
 	}
 
 	public NodeRef getDictionaryArmSettings() {
@@ -248,32 +248,25 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         return result;
     }
 
-    public List<NodeRef> getArmRunAsAccordions(NodeRef arm) {
+    public List<NodeRef> getArmRunAsBossAccordions(NodeRef accordion) {
         List<NodeRef> result = new ArrayList<>();
-        Set<QName> typeSet = new HashSet<>(1);
 
         Map<NodeRef, Set<String>> accordionsRunAs = new TreeMap<>(comparatorByName);
-        List<ChildAssociationRef> accordionsAssocs;
 
-        typeSet.add(TYPE_ARM_ACCORDION_RUN_AS);
-        accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
+        String userName = AuthenticationUtil.getFullyAuthenticatedUser();
+        NodeRef currentEmployee = orgstructureBean.getEmployeeByPerson(userName);
 
-        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
         if (currentEmployee != null) {
             List<NodeRef> chiefsList = secretaryService.getChiefs(currentEmployee);
-
-            for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
-                NodeRef accordionRef = accordionAssoc.getChildRef();
-                for (NodeRef chief : chiefsList) {
-                    Set<String> roles = new HashSet<>();
-                    String roleCode = getAutorityForSecretary(chief);
-                    roles.add(roleCode);
-                    accordionsRunAs.put(new NodeRef(accordionRef.getStoreRef(), accordionRef.getId() + "_" + chief.getId()), roles);
-                }
+            for (NodeRef chief : chiefsList) {
+                Set<String> roles = new HashSet<>();
+                String roleCode = getAutorityForSecretary(chief);
+                roles.add(roleCode);
+                accordionsRunAs.put(new NodeRef(accordion.getStoreRef(), accordion.getId() + "_" + chief.getId()), roles);
             }
         }
-
-        Set<String> auth = authorityService.getAuthoritiesForUser(orgstructureBean.getEmployeeLogin(currentEmployee));
+        //Дополнительная проверка на тот случай, если сотрудник назначен секретарем, но реальных прав нет (не выдались из-за ошибки и т.д)
+        Set<String> auth = authorityService.getAuthoritiesForUser(userName);
         for (Map.Entry<NodeRef, Set<String>> accEntry : accordionsRunAs.entrySet()) {
             for (String accRole : accEntry.getValue()) {
                 if (auth.contains(accRole)) {
@@ -693,26 +686,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             columnsCache.remove(removeKey);
         }
         logger.info("Arm cache cleared for '{}'!!!", user);
-    }
-
-    @Override
-    public void createRunAsAccordion(NodeRef employee, String armNodeName, String formatName, String armPath, String armCode) {
-        NodeRef arm = getArmByCode(armCode);
-        if (arm != null) {
-            Map<QName, Serializable> props = new HashMap<>();
-            props.put(PROP_ARM_ACCORDION_RUN_AS_PATH, armPath);
-            props.put(PROP_ARM_ORDER, -1);
-            props.put(PROP_ARM_ACCORDION_NAME_FORMAT_STRING, formatName != null ? formatName : armNodeName);
-            NodeRef newAccordion;
-            try {
-                newAccordion = createNode(arm, TYPE_ARM_ACCORDION_RUN_AS, armNodeName, props);
-                if (employee != null) {
-                nodeService.createAssociation(newAccordion, employee, ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE);
-                }
-            } catch (WriteTransactionNeededException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
     }
 
     public Map<QName, Serializable> getCachedProperties(NodeRef nodeRef) {

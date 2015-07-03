@@ -173,9 +173,10 @@
                         <value>lecm-arm:filters-assoc</value>
                         <value>lecm-arm:search-type</value>
 	                    <value>lecm-arm:is-aggregation-node</value>
+	                    <value>lecm-arm:is-for-secretaries</value>
                     </list>
                 </entry>
-                <entry key="lecm-arm:accordion-runAs">
+<!--                <entry key="lecm-arm:accordion-runAs">
                     <list>
                         <value>cm:name</value>
                         <value>lecm-arm:order</value>
@@ -193,7 +194,7 @@
                         <value>lecm-arm:runAs-employee</value>
                         <value>lecm-arm:name-format-string</value>
                     </list>
-                </entry>
+                </entry>-->
                 <entry key="lecm-arm:node">
                     <list>
                         <value>cm:name</value>

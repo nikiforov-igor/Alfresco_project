@@ -308,7 +308,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     if (!parentId) {
                         parentId = node.id;
                     }
-                    if ((parentId == node.id || (parentId + '-' + node.data.runAs) == node.id) && include) {
+                    if ((parentId == node.id
+                        || (parentId + '-' + (node.data.runAs ? new Alfresco.util.NodeRef(node.data.runAs).id : "")) == node.id) && include) {
                         buffer.push(query);
                     }
                 }

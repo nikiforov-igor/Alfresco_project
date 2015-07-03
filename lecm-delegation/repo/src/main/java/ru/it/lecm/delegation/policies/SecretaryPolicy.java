@@ -5,7 +5,6 @@
  */
 package ru.it.lecm.delegation.policies;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -14,7 +13,6 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
-import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.secretary.SecretaryService;
 
@@ -28,9 +26,6 @@ public class SecretaryPolicy implements NodeServicePolicies.OnCreateAssociationP
 
 	protected PolicyComponent policyComponent;
 	protected NodeService nodeService;
-	private ArmService armService;
-
-	private final String SECRETARY_ARM_NODE_NAME = "Работа руководителя для секретарей";
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -52,14 +47,6 @@ public class SecretaryPolicy implements NodeServicePolicies.OnCreateAssociationP
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		updateTextContent(nodeAssocRef);
-
-		NodeRef arm = armService.getArmByCode("SED");
-		if (arm != null) {
-			NodeRef accordion = nodeService.getChildByName(arm, ContentModel.ASSOC_CONTAINS, SECRETARY_ARM_NODE_NAME);
-			if (accordion == null) {
-				armService.createRunAsAccordion(null, SECRETARY_ARM_NODE_NAME, "Работа %s", "Моя работа", "SED");
-			}
-		}
 	}
 
 	@Override
@@ -120,9 +107,5 @@ public class SecretaryPolicy implements NodeServicePolicies.OnCreateAssociationP
 
 	private String getEmployeeShortName(NodeRef nodeRef) {
 		return (String) nodeService.getProperty(nodeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-	}
-
-	public void setArmService(ArmService armService) {
-		this.armService = armService;
 	}
 }
