@@ -1,0 +1,19 @@
+.pdf-markup {
+	border: 1px solid red;
+	position: absolute;
+	z-index: 10000000;
+	opacity: 0.2;
+	background-color: red;
+}
+
+.pdf-markup-selected {
+	border: 1px solid blue;
+	position: absolute;
+	z-index: 10000000;
+	opacity: 0.2;
+	background-color: blue;
+}
+
+.pdf-markup-canvas {
+	cursor: crosshair;
+}

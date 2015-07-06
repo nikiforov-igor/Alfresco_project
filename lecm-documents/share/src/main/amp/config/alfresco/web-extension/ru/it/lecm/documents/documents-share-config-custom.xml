@@ -1229,4 +1229,136 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="model-type" condition="lecm-document-stamp:stamp">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-document-stamp:title"/>
+                    <show id="lecm-document-stamp:code"/>
+                    <show id="lecm-document-stamp:width"/>
+                    <show id="lecm-document-stamp:height"/>
+                    <show id="lecm-document-stamp:image-size"/>
+                    <show id="lecm-document-stamp:substitude-string"/>
+                    <show id="lecm-document-stamp:font-size"/>
+                    <show id="lecm-document-stamp:horizontal-align"/>
+                    <show id="lecm-document-stamp:vertical-align"/>
+                    <show id="lecm-document-stamp:image-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-stamp:horizontal-align">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-document-stamp:vertical-align">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-document-stamp:image-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="showUploadNewVersion">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document-stamp:image-size">
+                        <control template="/ru/it/lecm/documents/controls/document-pdf-stamp-size-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="lecm-document-stamp:title"/>
+                    <show id="lecm-document-stamp:code"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-stamp:title" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-document-stamp:code" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
+
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-document-stamp:title"/>
+                    <show id="lecm-document-stamp:code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-document-stamp:stamp">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-document-stamp:title"/>
+                    <show id="lecm-document-stamp:code"/>
+                    <show id="lecm-document-stamp:width"/>
+                    <show id="lecm-document-stamp:height"/>
+                    <show id="lecm-document-stamp:image-size"/>
+                    <show id="lecm-document-stamp:substitude-string"/>
+                    <show id="lecm-document-stamp:font-size"/>
+                    <show id="lecm-document-stamp:horizontal-align"/>
+                    <show id="lecm-document-stamp:vertical-align"/>
+                    <show id="lecm-document-stamp:image-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document-stamp:horizontal-align">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-document-stamp:vertical-align">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+                    <field id="lecm-document-stamp:image-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="showUploadNewVersion">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-document-stamp:image-size">
+                        <control template="/ru/it/lecm/documents/controls/document-pdf-stamp-size-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$documentStamp">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="lecmWorkflowDocument:documentStampSettings"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecmWorkflowDocument:documentStampSettings">
+                        <control template="/ru/it/lecm/documents/controls/document-pdf-stamp-control.ftl">
+                            <control-param name="code">DEFAULT</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="Workflow">
+        <hidden-workflows>
+            <workflow name="activiti$eventsMemberDecline"/>
+            <workflow name="activiti$eventsRequestNewTime"/>
+            <workflow name="activiti$removeRepeatable"/>
+        </hidden-workflows>
+    </config>
+
+
 </alfresco-config>

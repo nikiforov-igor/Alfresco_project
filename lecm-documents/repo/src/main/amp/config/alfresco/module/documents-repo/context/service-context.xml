@@ -29,6 +29,7 @@
                         ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap,
                         documents.LogicEcmModelsConnectionAspectBootstrap,
                         documents-members.LogicEcmModelsBootstrap,
+                        statemachine.aspects.LogicEcmModelsBootstrap,
                         ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
                         ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
@@ -43,6 +44,22 @@
                 <value>alfresco/module/documents-repo/messages/lecm-document-workflow-model</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="documentsWorkflowBootstrap" parent="workflowDeployer"
+          depends-on="documents.LogicEcmModelsBootstrap, statemachine.aspects.LogicEcmModelsBootstrap,
+				     ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-document-default-stamp.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+            </list>
+        </property>
+        <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
 
     <bean id="documents-members.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
@@ -153,6 +170,21 @@
 		</property>
     </bean>
 
+    <bean id="documents.LogicEcmModelsStampsBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary, documents.LogicEcmModelsConnectionTypesBootstrap, documents.LogicEcmModelsBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/documents-repo/models/lecm-document-stamps-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/documents-repo/messages/lecm-document-stamps-model</value>
+            </list>
+        </property>
+    </bean>
+
+
     <bean id="documents.LogicEcmModelsConnectionTypesBootstrap" parent="dictionaryModelBootstrap"
           depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
@@ -183,6 +215,7 @@
 
     <bean id="documents.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="documents.LogicEcmModelsConnectionTypesBootstrap,
+                        documents.LogicEcmModelsStampsBootstrap,
                         documents.dictionaries.LogicEcmModelsBootstrap,
                         ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                         businessJournalLogEventsPolicy">
@@ -199,6 +232,7 @@
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-type-items.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-delivery-method-items.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-objectType-items.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-document-stamps.xml</value>
                 <value>alfresco/module/documents-repo/models/lecm-document-br-items.xml</value>
 		    </list>
 	    </property>
@@ -218,6 +252,26 @@
         <property name="namespaceService" ref="namespaceService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
+    </bean>
+
+    <bean id="documentStampService" class="ru.it.lecm.documents.beans.DocumentStampServiceImpl" parent="baseBean">
+        <property name="dictionaryService" ref="serviceDictionary"/>
+        <property name="contentService" ref="ContentService"/>
+        <property name="substitudeService" ref="substitudeService"/>
+    </bean>
+
+    <bean id="documentStampWebscriptBean" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentStampWebScriptBean"
+          depends-on="documentStampService">
+        <property name="extensionName">
+            <value>documentStamp</value>
+        </property>
+        <property name="documentStampService" ref="documentStampService"/>
+    </bean>
+
+    <bean  id="documentStampPolicy" class="ru.it.lecm.documents.policy.DocumentStampPolicy" parent="baseBean"
+           init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="contentService" ref="ContentService"/>
     </bean>
 
     <bean id="documentConnectionScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentConnectionWebScriptBean"

@@ -6,10 +6,25 @@
     <imports>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-    </imports>
+        <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+        <import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>    </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/document/workflow/1.0" prefix="lecmWorkflowDocument"/>
     </namespaces>
+    <types>
+        <type name="lecmWorkflowDocument:documentStamp">
+            <parent>bpm:startTask</parent>
+            <properties>
+                <property name="lecmWorkflowDocument:documentStampSettings">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
+        </type>
+    </types>
     <aspects>
         <aspect name="lecmWorkflowDocument:createdNodeRefAspect">
             <properties>
