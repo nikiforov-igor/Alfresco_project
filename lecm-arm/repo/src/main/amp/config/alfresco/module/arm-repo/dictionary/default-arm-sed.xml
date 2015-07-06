@@ -5727,6 +5727,8 @@
                     </item>
                 </items>
                 <assocs>
+                    <assoc type="lecm-arm:business-roles-assoc"
+                           path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Ответственные за ресурсы"/>
                     <assoc type="lecm-arm:fields-assoc"
                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Ресурсы/f9b42412-5c9a-4911-841e-686ee89bb52d"/>
                 </assocs>

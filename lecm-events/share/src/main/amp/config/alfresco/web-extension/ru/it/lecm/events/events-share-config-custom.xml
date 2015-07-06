@@ -527,6 +527,11 @@
                     <show id="lecm-events-dic:resources-code"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-events-dic:resources-responsible-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/EVENTS_RESPONSIBLE_FOR_RESOURCES/picker</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-events-dic:resources-organization-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
@@ -558,6 +563,11 @@
                     <show id="lecm-events-dic:resources-code"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-events-dic:resources-responsible-assoc">
+                        <control>
+                            <control-param name="childrenDataSource">lecm/employees/EVENTS_RESPONSIBLE_FOR_RESOURCES/picker</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-events-dic:resources-organization-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
