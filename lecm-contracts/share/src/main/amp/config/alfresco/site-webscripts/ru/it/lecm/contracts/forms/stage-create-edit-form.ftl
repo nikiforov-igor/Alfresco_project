@@ -135,7 +135,11 @@
 		function init() {
 			YAHOO.Bubbling.unsubscribe("afterFormRuntimeInit", init);
 
-			addCustomButtons();
+            LogicECM.module.Base.Util.loadCSS([
+                'css/lecm-contracts/contracts-stages.css'
+            ]);
+
+            addCustomButtons();
 			updateButtonStyles();
 			addSubmitElements();
 			reverseSubscribers();
@@ -157,8 +161,10 @@
 		</#if>
 		<#if !inViewMode>
 		function initJs() {
-            LogicECM.module.Base.Util.loadScripts([
+            LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-base/components/lecm-datarange.js'
+			], [
+				'css/lecm-contracts/contracts-stages.css'
 			], createDateRange);
 		}
 		function createDateRange() {
