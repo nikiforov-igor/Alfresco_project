@@ -289,6 +289,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 					if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(type)) {
 						if (!person.equals(secretary) && !person.equals(chairman) && !members.contains(person)) {
 							nodeService.createAssociation(document, person, EventsService.ASSOC_EVENT_TEMP_MEMBERS);
+							members.add(person);
 						}
 					} else if (Contractors.TYPE_REPRESENTATIVE.isMatch(type)) {
 						if (!invitedMembers.contains(person)) {
