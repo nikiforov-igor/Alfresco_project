@@ -34,3 +34,7 @@
     background: none;
     padding-left: 0;
 }
+
+.control.association-token-control .label-div ~ .container {
+    min-width: 0;
+}
