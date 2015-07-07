@@ -179,15 +179,29 @@ public class DocumentTablePolicy extends BaseBean {
 				// Пересчет индекса с текущей строки
 				tableRowList = documentTableService.getTableDataRows(tableData, index);
 				if (tableRowList != null) {
-					//переприсвоение индексов
+					//Проверка, что уже была строка с таким номером
+					boolean hasRowWithSomeIndex = false;
 					for (NodeRef row : tableRowList) {
 						if (!tableRow.equals(row)) {
-							index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-							try {
-								behaviourFilter.disableBehaviour(row);//блокируем повторный вызов
-								nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
-							} finally {
-								behaviourFilter.enableBehaviour(row);
+							int rowIndex = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+							if (index ==rowIndex) {
+								hasRowWithSomeIndex = true;
+								break;
+							}
+						}
+					}
+
+					//переприсвоение индексов, если нужно
+					if (hasRowWithSomeIndex) {
+						for (NodeRef row : tableRowList) {
+							if (!tableRow.equals(row)) {
+								index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
+								try {
+									behaviourFilter.disableBehaviour(row);//блокируем повторный вызов
+									nodeService.setProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW, index + 1);
+								} finally {
+									behaviourFilter.enableBehaviour(row);
+								}
 							}
 						}
 					}
