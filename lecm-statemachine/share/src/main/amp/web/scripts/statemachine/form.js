@@ -673,53 +673,66 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.extend(LogicECM.module.EditFieldsConfirm, Alfresco.component.Base, {
 		show: function showEditFieldsConfirm(nodeRef, label, errors, fields) {
-			var containerDiv = document.createElement('div');
-			var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
-					'<div id="confirm-edit-fields-head" class="hd" title="'+Alfresco.util.message('title.action_failed')+' &quot;' + label + '&quot;">'+Alfresco.util.message('title.action_failed')+'"' + label + '"</div>' +
-					'<div id="confirm-edit-fields-body" class="bd">' +
-					'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields">'+Alfresco.util.message('msg.action_failed')+'<br/>';
-			for (var i = 0; i < errors.length; i++) {
-				form += errors[i];
-				form += '<br/>';
-			}
+			Alfresco.util.Ajax.jsonGet(
+				{
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermission?nodeRef=" + encodeURIComponent(nodeRef) + "&permission=" + encodeURIComponent("_lecmPerm_AttrEdit"),
+					successCallback: {
+						fn: function (response) {
+							var containerDiv = document.createElement('div');
+							var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
+								'<div id="confirm-edit-fields-head" class="hd" title="'+Alfresco.util.message('title.action_failed')+' &quot;' + label + '&quot;">'+Alfresco.util.message('title.action_failed')+'"' + label + '"</div>' +
+								'<div id="confirm-edit-fields-body" class="bd">' +
+								'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields">'+Alfresco.util.message('msg.action_failed')+'<br/>';
+							for (var i = 0; i < errors.length; i++) {
+								form += errors[i];
+								form += '<br/>';
+							}
 
-			form += '</div></div>' +
-					'<div class="bdft">';
-			if (fields.length > 0) {
-				form += '<span id="confirm-edit-fields-edit" class="yui-button yui-push-button">' +
-						'<span class="first-child">' +
-						'<button id="confirm-edit-fields-edit-button" type="button" tabindex="0">'+Alfresco.util.message('btn.edit')+'</button>' +
-						'</span>' +
-						'</span>';
+							form += '</div></div>' +
+								'<div class="bdft">';
+							if (fields.length > 0 && response.json == true) {
+								form += '<span id="confirm-edit-fields-edit" class="yui-button yui-push-button">' +
+									'<span class="first-child">' +
+									'<button id="confirm-edit-fields-edit-button" type="button" tabindex="0">'+Alfresco.util.message('btn.edit')+'</button>' +
+									'</span>' +
+									'</span>';
 
-			}
-			form += '<span id="confirm-edit-fields-cancel" class="yui-button yui-push-button">' +
-					'<span class="first-child">' +
-					'<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">'+Alfresco.util.message('button.cancel')+'</button>' +
-					'</span>' +
-					'</span>' +
-					'</div>' +
-					'</div>' +
-					'</div>';
-			containerDiv.innerHTML = form;
-			var dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv), {
-				width: '35em'
-			});
-			Dom.setStyle('confirm-edit-fields-form-container', 'display', 'block');
-			dialog.show();
-			var button = document.getElementById('confirm-edit-fields-cancel-button');
-			if (button) {
-				button.onclick = dialog.hide.bind(dialog);
-			}
-			button = document.getElementById('confirm-edit-fields-edit-button');
-			if (button) {
-				button.onclick = function(dlg, ref, flds) {
-					dlg.hide();
-					var url =  Alfresco.constants.URL_PAGECONTEXT + 'document-edit?nodeRef=' + ref;
-					var params = 'highlightedFields=' + JSON.stringify(flds);
-					LogicECM.module.Base.Util.setPostLocation(url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params));
-				}.bind(button, dialog, nodeRef, fields);
-			}
+							}
+							form += '<span id="confirm-edit-fields-cancel" class="yui-button yui-push-button">' +
+								'<span class="first-child">' +
+								'<button id="confirm-edit-fields-cancel-button" type="button" tabindex="0">'+Alfresco.util.message('button.cancel')+'</button>' +
+								'</span>' +
+								'</span>' +
+								'</div>' +
+								'</div>' +
+								'</div>';
+							containerDiv.innerHTML = form;
+							var dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv), {
+								width: '35em'
+							});
+							Dom.setStyle('confirm-edit-fields-form-container', 'display', 'block');
+							dialog.show();
+							var button = document.getElementById('confirm-edit-fields-cancel-button');
+							if (button) {
+								button.onclick = dialog.hide.bind(dialog);
+							}
+							button = document.getElementById('confirm-edit-fields-edit-button');
+							if (button) {
+								button.onclick = function(dlg, ref, flds) {
+									dlg.hide();
+									var url =  Alfresco.constants.URL_PAGECONTEXT + 'document-edit?nodeRef=' + ref;
+									var params = 'highlightedFields=' + JSON.stringify(flds);
+									LogicECM.module.Base.Util.setPostLocation(url + '&' + LogicECM.module.Base.Util.encodeUrlParams(params));
+								}.bind(button, dialog, nodeRef, fields);
+							}
+						}
+					},
+					failureMessage: {
+						fn: function (response) {
+							alert(response.responseText);
+						}
+					}
+				});
 		}
 	});
 })();
