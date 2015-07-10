@@ -170,7 +170,7 @@ public class EventsWebScriptBean extends BaseWebScript {
             events = new ArrayList<>();
         }
 
-        return processEvents(events, false, false, null);
+        return processEvents(events, false, true, null);
     }
 
     public Scriptable getUserNearestEvents(int maxItems) {
