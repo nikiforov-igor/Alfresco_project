@@ -1227,6 +1227,7 @@ tr.early {
 #arm-calendar .yui-dt-col-name
 {
    width: 23%;
+   word-break: break-all;
 }
 
 #arm-calendar .yui-dt-col-where
