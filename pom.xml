@@ -124,6 +124,7 @@
 		<module>lecm-events</module>
 		<module>lecm-meetings</module>
         <module>lecm-search-editor</module>
+        <!--<module>lecm-mobile</module>-->
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

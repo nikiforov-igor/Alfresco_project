@@ -410,6 +410,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+<!--		<dependency>
+			<groupId>ru.it.lecm.mobile</groupId>
+			<artifactId>mobile-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>-->
 	</dependencies>
 
 	<build>
@@ -815,6 +822,11 @@
 							<artifactId>search-editor-repo</artifactId>
 							<type>amp</type>
 						</overlay>
+						<!--<overlay>
+							<groupId>ru.it.lecm.mobile</groupId>
+							<artifactId>mobile-repo</artifactId>
+							<type>amp</type>
+						</overlay>-->
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -1183,6 +1195,11 @@
 									<artifactId>search-editor-repo</artifactId>
 									<type>amp</type>
 								</overlay>
+								<!--<overlay>
+									<groupId>ru.it.lecm.mobile</groupId>
+									<artifactId>mobile-repo</artifactId>
+									<type>amp</type>
+								</overlay>-->
 
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>
@@ -1544,6 +1561,11 @@
 									<artifactId>search-editor-repo</artifactId>
 									<type>amp</type>
 								</overlay>
+								<!--<overlay>
+									<groupId>ru.it.lecm.mobile</groupId>
+									<artifactId>mobile-repo</artifactId>
+									<type>amp</type>
+								</overlay>-->
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>
                                     <groupId>ru.it.lecm.internal</groupId>
