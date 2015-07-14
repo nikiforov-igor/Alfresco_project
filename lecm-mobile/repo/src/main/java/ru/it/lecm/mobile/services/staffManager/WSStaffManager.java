@@ -1,6 +1,8 @@
 
 package ru.it.lecm.mobile.services.staffManager;
 
+import ru.it.lecm.mobile.objects.*;
+
 import java.math.BigInteger;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

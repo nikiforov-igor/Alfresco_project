@@ -17,7 +17,7 @@
         <property name="documentService" ref="documentService"/>-->
     </bean>
 
-    <bean id="objectFactory" class="ru.it.lecm.mobile.services.staffManager.ObjectFactory">
+    <bean id="objectFactory" class="ru.it.lecm.mobile.objects.ObjectFactory">
        <property name="nodeService" ref="nodeService"/>
         <property name="authService" ref="authenticationService"/>
         <property name="orgstructureService" ref="serviceOrgstructure" />
