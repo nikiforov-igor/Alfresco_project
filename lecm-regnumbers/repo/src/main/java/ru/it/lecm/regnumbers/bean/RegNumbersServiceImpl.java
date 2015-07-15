@@ -1,6 +1,7 @@
 package ru.it.lecm.regnumbers.bean;
 
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -9,7 +10,9 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -33,9 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
 
 /**
  *
@@ -128,7 +128,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	public boolean isNumberUnique(String number, QName documentType, Date regDate) {
 		String query;
 		boolean isUnique;
-		String numberTransformed = StringUtils.trim(number).toUpperCase();
+        String numberTransformed = StringUtils.trim(number).toUpperCase().replace("\"", "\\\"");
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
