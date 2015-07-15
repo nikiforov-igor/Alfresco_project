@@ -17,6 +17,30 @@
         <property name="documentService" ref="documentService"/>-->
     </bean>
 
+    <jaxws:endpoint address="/WSBR_DocumentManager" implementor="#wsDocumentService"
+                    implementorClass="ru.it.lecm.mobile.services.documentManager.WSDocumentManagerPort">
+    </jaxws:endpoint>
+
+    <bean id="wsDocumentService" class="ru.it.lecm.mobile.services.documentManager.WSDocumentManagerPort">
+        <property name="objectFactory" ref="objectFactory"/>
+        <!--        <property name="nodeService" ref="nodeService"/>
+                <property name="personService" ref="personService"/>
+                <property name="orgstructureService" ref="serviceOrgstructure" />
+                <property name="documentService" ref="documentService"/>-->
+    </bean>
+
+    <jaxws:endpoint address="/WSBR_taskManager" implementor="#wsTaskService"
+                    implementorClass="ru.it.lecm.mobile.services.taskManager.WSTaskManagerPort">
+    </jaxws:endpoint>
+
+    <bean id="wsTaskService" class="ru.it.lecm.mobile.services.taskManager.WSTaskManagerPort">
+        <property name="objectFactory" ref="objectFactory"/>
+        <!--        <property name="nodeService" ref="nodeService"/>
+                <property name="personService" ref="personService"/>
+                <property name="orgstructureService" ref="serviceOrgstructure" />
+                <property name="documentService" ref="documentService"/>-->
+    </bean>
+
     <bean id="objectFactory" class="ru.it.lecm.mobile.objects.ObjectFactory">
        <property name="nodeService" ref="nodeService"/>
         <property name="authService" ref="authenticationService"/>
