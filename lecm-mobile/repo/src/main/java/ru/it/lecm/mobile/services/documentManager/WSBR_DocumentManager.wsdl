@@ -33,7 +33,7 @@
             <complexType name="WSO_COLLECTION">
                 <sequence>
                     <element name="COUNT" type="xsd:short"/>
-                    <element name="DATA" nillable="true" type="impl:ArrayOf_xsd_anyType"/>
+                    <element name="DATA" type="xsd:anyType" minOccurs="0" maxOccurs="unbounded"/>
                 </sequence>
             </complexType>
             <complexType name="WSOBJECT">
@@ -596,110 +596,110 @@
             <wsdlsoap:operation soapAction=""/>
             <input name="GETFAKESIGNRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETFAKESIGNResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="GETDISCUSSIONLIST">
             <wsdlsoap:operation soapAction=""/>
             <input name="GETDISCUSSIONLISTRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETDISCUSSIONLISTResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="GETROUTES">
             <wsdlsoap:operation soapAction=""/>
             <input name="GETROUTESRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETROUTESResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="CREATEDOCUMENT">
             <wsdlsoap:operation soapAction=""/>
             <input name="CREATEDOCUMENTRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="CREATEDOCUMENTResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="GETKILLDOCS">
             <wsdlsoap:operation soapAction=""/>
             <input name="GETKILLDOCSRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETKILLDOCSResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="GETDOCUMENT">
             <wsdlsoap:operation soapAction=""/>
             <input name="GETDOCUMENTRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETDOCUMENTResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="GETDOCUMENTSEX">
             <wsdlsoap:operation soapAction=""/>
             <input name="GETDOCUMENTSEXRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETDOCUMENTSEXResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="GETDOCUMENTS">
             <wsdlsoap:operation soapAction=""/>
             <input name="GETDOCUMENTSRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETDOCUMENTSResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="DELEGATEDOC">
             <wsdlsoap:operation soapAction=""/>
             <input name="DELEGATEDOCRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="DELEGATEDOCResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
         <operation name="GETITEM">
             <wsdlsoap:operation soapAction=""/>
             <input name="GETITEMRequest">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </input>
             <output name="GETITEMResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                               namespace="urn:DefaultNamespace" use="encoded"/>
+                               namespace="urn:DefaultNamespace"/>
             </output>
         </operation>
     </binding>

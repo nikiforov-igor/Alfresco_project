@@ -33,6 +33,7 @@ import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
+import ru.it.lecm.statemachine.bean.ActionsScriptBean;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.io.Serializable;
@@ -44,7 +45,7 @@ import java.util.*;
  * Date: 17.10.12
  * Time: 16:49
  */
-public class ActionsScript extends DeclarativeWebScript {
+public class ActionsScript extends DeclarativeWebScript implements ActionsScriptBean {
 
     private static ServiceRegistry serviceRegistry;
     private static DocumentFrequencyAnalysisService frequencyAnalysisService;
@@ -147,7 +148,8 @@ public class ActionsScript extends DeclarativeWebScript {
         }
     }
 
-    private HashMap<String, Object> getActions(final NodeRef nodeRef) {
+    @Override
+    public HashMap<String, Object> getActions(final NodeRef nodeRef) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         ArrayList<HashMap<String, Object>> actionsList = new ArrayList<HashMap<String, Object>>();
         NodeService nodeService = serviceRegistry.getNodeService();

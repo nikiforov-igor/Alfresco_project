@@ -1,6 +1,8 @@
 
 package ru.it.lecm.mobile.objects;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -8,13 +10,18 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StatemachineModel;
+import ru.it.lecm.statemachine.bean.ActionsScriptBean;
 
 import javax.xml.bind.annotation.XmlRegistry;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import java.io.Serializable;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -41,6 +48,7 @@ public class ObjectFactory {
     private NamespaceService namespaceService;
     private ContentService contentService;
     private TransactionService transactionService;
+    private ActionsScriptBean actionsService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -431,6 +439,64 @@ public class ObjectFactory {
         return new WSODOCUMENT();
     }
 
+    public WSODOCUMENT createWSODOCUMENT(NodeRef documentRef) {
+        WSODOCUMENT doc = createWSODOCUMENT();
+        doc.setID(documentRef.toString());
+        doc.setTITLE((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+        doc.setSUBJECT((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+        QName type = nodeService.getType(documentRef);
+        String typePrefixString = type.toPrefixString(namespaceService);
+        doc.setTYPE(typePrefixString);
+        WSODOCUMENTCOMMONPROPERTIES properties = createWSODOCUMENTCOMMONPROPERTIES();
+        properties.setDOCTYPE(typePrefixString);
+
+        //Attach
+        WSOCOLLECTION attachments = createWSOCOLLECTION();
+        List<AssociationRef> attachmentRefs = nodeService.getSourceAssocs(documentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
+        for (AssociationRef attach : attachmentRefs) {
+            WSOURLFILE file = createWSOURLFILE();
+            file.setID(attach.getSourceRef().toString());
+            file.setNAME(nodeService.getProperty(attach.getSourceRef(), ContentModel.PROP_NAME).toString());
+            WSOURL url = createWSOURL();
+            url.setURL("/alfresco/service/api/node/content/workspace/SpacesStore/" + attach.getSourceRef().getId());
+            file.setREFERENCE(url);
+            attachments.getDATA().add(file);
+        }
+
+        attachments.setCOUNT((short) attachments.getDATA().size());
+        properties.setATTACHMENTS(attachments);
+
+        doc.setCOMMONPROPS(properties);
+
+        String number = documentService.getDocumentRegNumber(documentRef);
+        if (number != null) {
+            doc.setREGNUM(number);
+        }
+
+        try {
+            Date regDate = (Date) nodeService.getProperty(documentRef, ContentModel.PROP_CREATED);
+            GregorianCalendar gc = (GregorianCalendar) GregorianCalendar.getInstance();
+            gc.setTime(regDate);
+            doc.setREGDATE(DatatypeFactory.newInstance().newXMLGregorianCalendar(gc));
+        } catch (DatatypeConfigurationException ignored) {
+        }
+
+        doc.setSTATUSNAME((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
+
+        final String actions = getActionExtension(documentRef);
+        WSOCOLLECTION extension = createWSOCOLLECTION();
+        WSOITEM item = createWSOITEM();
+        item.setID("actions");
+        WSOCOLLECTION itemValue = createWSOCOLLECTION();
+        itemValue.getDATA().add(actions);
+        itemValue.setCOUNT((short) 1);
+        item.setVALUES(itemValue);
+        extension.getDATA().add(item);
+        extension.setCOUNT((short) extension.getDATA().size());
+        doc.setEXTENSION(extension);
+        return doc;
+    }
+
     /**
      * Create an instance of {@link WSOMDOCUMENTIN }
      * 
@@ -477,5 +543,30 @@ public class ObjectFactory {
 
     private String getNotNullStringValue(Object value) {
         return value != null ? (String) value : "";
+    }
+
+    private String getActionExtension(NodeRef nodeRef) {
+        HashMap<String, Object> actions =  actionsService.getActions(nodeRef);
+        String result = "";
+        ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String,Object>>) actions.get("actions");
+        if (list != null) {
+            for (HashMap<String, Object> action : list) {
+                String type = (String) action.get("type");
+                if ("trans".equals(type)) {
+                    ArrayList errors = (ArrayList) action.get("errors");
+                    String workflow = (String) action.get("workflowId");
+                    Boolean isForm = (Boolean) action.get("isForm");
+                    Boolean doesNotBlock = (Boolean) action.get("doesNotBlock");
+                    if ((errors.size() == 0 || doesNotBlock) && StringUtils.isEmpty(workflow) && !isForm) {
+                        result += "{" + action.get("label") + "}";
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public void setActionsService(ActionsScriptBean actionsService) {
+        this.actionsService = actionsService;
     }
 }

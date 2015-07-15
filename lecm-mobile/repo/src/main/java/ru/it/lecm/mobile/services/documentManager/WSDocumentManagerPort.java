@@ -1,11 +1,18 @@
 
 package ru.it.lecm.mobile.services.documentManager;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.mobile.objects.*;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.ws.handler.MessageContext;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,6 +30,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public class WSDocumentManagerPort implements WSDocumentManager {
 
     private ObjectFactory objectFactory;
+    private DocumentService documentService;
 
     public WSOEDS getfakesign() {
         return null;
@@ -49,7 +57,32 @@ public class WSDocumentManagerPort implements WSDocumentManager {
     }
 
     public WSOCOLLECTION getdocumentsex(String deltaunid, WSOCOLLECTION typestatuspairs, boolean ismobject, boolean includeattachments, WSOCONTEXT context) {
-        return null;
+        final AuthenticationUtil.RunAsWork<WSOCOLLECTION> runner = new AuthenticationUtil.RunAsWork<WSOCOLLECTION>() {
+            @Override
+            public WSOCOLLECTION doWork() throws Exception {
+                List<QName> types = new ArrayList<QName>(1);
+                QName baseDocument = DocumentService.TYPE_BASE_DOCUMENT;
+                types.add(baseDocument);
+
+                WSOCOLLECTION data = objectFactory.createWSOCOLLECTION();
+                List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, null, null, null);
+                int maxItem = 3;
+                int itemNum = 0;
+                for (NodeRef document : documents) {
+                    data.getDATA().add(objectFactory.createWSODOCUMENT(document));
+                    itemNum++;
+                    if (itemNum >= maxItem) {
+                        break;
+                    }
+                }
+                data.setCOUNT((short) data.getDATA().size());
+                return data;
+            }
+        };
+
+        return AuthenticationUtil.runAs(runner,
+                context.getUSERID()
+        );
     }
 
     public WSOCOLLECTION getdocuments(String deltaunid, boolean ismobject, boolean includeattachments, WSOCONTEXT context) {
@@ -68,4 +101,7 @@ public class WSDocumentManagerPort implements WSDocumentManager {
         this.objectFactory = objectFactory;
     }
 
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 }
