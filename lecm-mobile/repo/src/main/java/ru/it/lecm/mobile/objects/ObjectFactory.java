@@ -2,15 +2,16 @@
 package ru.it.lecm.mobile.objects;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -20,6 +21,9 @@ import ru.it.lecm.statemachine.bean.ActionsScriptBean;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -40,6 +44,7 @@ import java.util.*;
  */
 @XmlRegistry
 public class ObjectFactory {
+    private static final transient Logger log = LoggerFactory.getLogger(ObjectFactory.class);
 
     private DocumentService documentService;
     private NodeService nodeService;
@@ -104,6 +109,62 @@ public class ObjectFactory {
      */
     public WSOGROUP createWSOGROUP() {
         return new WSOGROUP();
+    }
+
+    public WSOGROUP createWSOGROUP(String nodeRef) {
+        if (NodeRef.isNodeRef(nodeRef)){
+            return createWSOGROUP(new NodeRef(nodeRef));
+        }
+        return new WSOGROUP();
+    }
+
+    public WSOGROUP createWSOGROUP(NodeRef groupRef) {
+        return createWSOGROUP(groupRef, true, true);
+    }
+    /**
+     * Create an instance of {@link WSOGROUP }
+     *
+     */
+    public WSOGROUP createWSOGROUP(NodeRef groupRef, boolean includeParent, boolean includeChilds) {
+        WSOGROUP group = createWSOGROUP();
+        group.setID(groupRef.toString());
+        group.setTYPE(nodeService.getType(groupRef).toPrefixString(namespaceService).toUpperCase());
+        group.setTITLE(getNotNullStringValue(nodeService.getProperty(groupRef, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME)));
+
+        if (includeParent) {
+            NodeRef parent = orgstructureService.getParentUnit(groupRef);
+            WSOCOLLECTION parentsCollection = createWSOCOLLECTION();
+            if (parent != null) {
+                parentsCollection.getDATA().add(createWSOGROUP(parent, false, false));
+            }
+            parentsCollection.setCOUNT((short) parentsCollection.getDATA().size());
+            group.setPARENTS(parentsCollection);
+        }
+        if (includeChilds) {
+            WSOCOLLECTION childsData = createWSOCOLLECTION();
+            // сотрудники
+            List<NodeRef> employees = orgstructureService.getUnitEmployees(groupRef);
+            for (NodeRef employee : employees) {
+                NodeRef primaryUnit = orgstructureService.getPrimaryOrgUnit(employee);
+                if (primaryUnit != null && primaryUnit.equals(groupRef)) {
+                    childsData.getDATA().add(createWSOPERSON(employee));
+                }
+            }
+            // подразделения
+            List<NodeRef> childs = orgstructureService.getSubUnits(groupRef, true, false);
+            for (NodeRef child : childs) {
+                childsData.getDATA().add(createWSOGROUP(child));
+            }
+            childsData.setCOUNT((short) childs.size());
+            group.setCHILDS(childsData);
+        }
+
+        NodeRef boss = orgstructureService.getUnitBoss(groupRef);
+        if (boss != null) {
+            group.setLEADER(createWSOPERSON(boss));
+        }
+
+        return group;
     }
 
     /**
@@ -254,12 +315,12 @@ public class ObjectFactory {
         person.setMIDDLENAME(getNotNullStringValue(props.get(OrgstructureBean.PROP_EMPLOYEE_MIDDLE_NAME)));
         person.setLASTNAME(getNotNullStringValue(props.get(OrgstructureBean.PROP_EMPLOYEE_LAST_NAME)));
 
-/*        NodeRef photo = orgstructureService.getEmployeePhoto(personRef);
-        WSOFILE wsoPhoto = createWSOFILE(photo);
+        NodeRef photo = orgstructureService.getEmployeePhoto(personRef);
+        if (photo != null ){
+            WSOFILE wsoPhoto = createWSOFILE(photo);
+            person.setPHOTO(wsoPhoto);
+        }
 
-        WSOCOLLECTION.DATA data = createWSOCOLLECTIONDATA();
-        data.getItem().add(wsoPhoto);
-        person.setPHOTO(createWSOCOLLECTION(data));*/
         return person;
     }
 
@@ -405,6 +466,46 @@ public class ObjectFactory {
      */
     public WSOFILE createWSOFILE() {
         return new WSOFILE();
+    }
+
+    /**
+     * Create an instance of {@link WSOFILE }
+     *
+     */
+    public WSOFILE createWSOFILE(final NodeRef fileRef) {
+        final WSOFILE file = createWSOFILE();
+        file.setNAME(getNotNullStringValue(nodeService.getProperty(fileRef, ContentModel.PROP_NAME)));
+        transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+            @Override
+            public Void execute() throws Throwable {
+                ByteArrayOutputStream os = null;
+                InputStream is = null;
+                try {
+                    ContentReader reader = contentService.getReader(fileRef, ContentModel.PROP_CONTENT);
+                    is = reader.getContentInputStream();
+                    os = new ByteArrayOutputStream();
+
+                    final int BUF_SIZE = 1 << 8;
+                    byte[] buffer = new byte[BUF_SIZE];
+                    int bytesRead;
+
+                    while ((bytesRead = is.read(buffer)) > -1) {
+                        os.write(buffer, 0, bytesRead);
+                    }
+
+                    byte[] binaryData = os.toByteArray();
+                    file.setBODY(binaryData);
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                } finally {
+                    IOUtils.closeQuietly(is);
+                    IOUtils.closeQuietly(os);
+                }
+                return null;
+            }
+        });
+
+        return file;
     }
 
     /**

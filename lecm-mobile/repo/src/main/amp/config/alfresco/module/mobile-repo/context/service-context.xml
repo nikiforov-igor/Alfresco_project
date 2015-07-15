@@ -11,10 +11,9 @@
 
     <bean id="staffService" class="ru.it.lecm.mobile.services.staffManager.WSStaffManagerPort">
         <property name="objectFactory" ref="objectFactory"/>
-<!--        <property name="nodeService" ref="nodeService"/>
+        <property name="nodeService" ref="nodeService"/>
         <property name="personService" ref="personService"/>
         <property name="orgstructureService" ref="serviceOrgstructure" />
-        <property name="documentService" ref="documentService"/>-->
     </bean>
 
     <jaxws:endpoint address="/WSBR_DocumentManager" implementor="#wsDocumentService"
