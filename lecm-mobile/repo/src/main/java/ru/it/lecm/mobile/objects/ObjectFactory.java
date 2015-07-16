@@ -599,18 +599,36 @@ public class ObjectFactory {
         doc.setSTATUSNAME((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
         doc.setSTATUSMOBILE((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
 
-        final String actions = getActionExtension(documentRef);
+        //Расширение
         WSOCOLLECTION extension = createWSOCOLLECTION();
-        WSOITEM item = createWSOITEM();
-        item.setID("actions");
-        WSOCOLLECTION itemValue = createWSOCOLLECTION();
-        itemValue.getDATA().add(actions);
-        itemValue.setCOUNT((short) 1);
-        item.setVALUES(itemValue);
+
+        //Действия
+        final String actions = getActionExtension(documentRef);
+        WSOITEM item = createExtentionItem("actions", actions);
         extension.getDATA().add(item);
+
+        //Свойства
+        Map<QName, Serializable> props = nodeService.getProperties(documentRef);
+        for(Map.Entry<QName, Serializable> property : props.entrySet()) {
+            if (!(property.getValue() instanceof Locale)) {
+                item = createExtentionItem(property.getKey().toPrefixString(namespaceService), property.getValue());
+                extension.getDATA().add(item);
+            }
+        }
+
         extension.setCOUNT((short) extension.getDATA().size());
         doc.setEXTENSION(extension);
         return doc;
+    }
+
+    private WSOITEM createExtentionItem(String id, Object value) {
+        WSOITEM item = createWSOITEM();
+        item.setID(id);
+        WSOCOLLECTION itemValue = createWSOCOLLECTION();
+        itemValue.getDATA().add(value);
+        itemValue.setCOUNT((short) 1);
+        item.setVALUES(itemValue);
+        return item;
     }
 
     /**
