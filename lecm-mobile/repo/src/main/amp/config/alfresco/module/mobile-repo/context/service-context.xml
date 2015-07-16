@@ -23,6 +23,7 @@
     <bean id="wsDocumentService" class="ru.it.lecm.mobile.services.documentManager.WSDocumentManagerPort">
         <property name="objectFactory" ref="objectFactory"/>
         <property name="documentService" ref="documentService"/>
+        <property name="namespaceService" ref="namespaceService"/>
         <!--        <property name="nodeService" ref="nodeService"/>
                 <property name="personService" ref="personService"/>
                 <property name="orgstructureService" ref="serviceOrgstructure" />
@@ -50,6 +51,8 @@
         <property name="contentService" ref="contentService"/>
         <property name="transactionService" ref="transactionService"/>
         <property name="actionsService" ref="webscript.ru.it.lecm.statemachine.actions.get"/>
+        <property name="sysAdminParams" ref="sysAdminParams"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
     </bean>
 
 

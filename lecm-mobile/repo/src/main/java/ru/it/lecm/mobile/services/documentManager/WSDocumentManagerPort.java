@@ -1,8 +1,11 @@
 
 package ru.it.lecm.mobile.services.documentManager;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.mobile.objects.*;
@@ -31,6 +34,7 @@ public class WSDocumentManagerPort implements WSDocumentManager {
 
     private ObjectFactory objectFactory;
     private DocumentService documentService;
+    private NamespaceService namespaceService;
 
     public WSOEDS getfakesign() {
         return null;
@@ -57,22 +61,34 @@ public class WSDocumentManagerPort implements WSDocumentManager {
     }
 
     public WSOCOLLECTION getdocumentsex(String deltaunid, WSOCOLLECTION typestatuspairs, boolean ismobject, boolean includeattachments, WSOCONTEXT context) {
+        final List<Object> documentTypes = typestatuspairs.getDATA();
         final AuthenticationUtil.RunAsWork<WSOCOLLECTION> runner = new AuthenticationUtil.RunAsWork<WSOCOLLECTION>() {
             @Override
             public WSOCOLLECTION doWork() throws Exception {
-                List<QName> types = new ArrayList<QName>(1);
-                QName baseDocument = DocumentService.TYPE_BASE_DOCUMENT;
-                types.add(baseDocument);
-
                 WSOCOLLECTION data = objectFactory.createWSOCOLLECTION();
-                List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, null, null, null);
-                int maxItem = 3;
-                int itemNum = 0;
-                for (NodeRef document : documents) {
-                    data.getDATA().add(objectFactory.createWSODOCUMENT(document));
-                    itemNum++;
-                    if (itemNum >= maxItem) {
-                        break;
+                for (Object typeObject : documentTypes) {
+                    String[] typeStruct = ((String) typeObject).split("\\|");
+                    List<QName> types = new ArrayList<>(1);
+                    types.add(QName.createQName(typeStruct[2], namespaceService));
+
+                    List<String> statuses = new ArrayList<>(1);
+                    statuses.add(typeStruct[1]);
+
+                    List<SearchParameters.SortDefinition> sort = new ArrayList<>(1);
+                    sort.add(new SearchParameters.SortDefinition(SearchParameters.SortDefinition.SortType.FIELD, "@" + ContentModel.PROP_MODIFIED.toString(), false));
+                    List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, statuses, null, sort);
+/*
+                    int maxItem = 3;
+                    int itemNum = 0;
+*/
+                    for (NodeRef document : documents) {
+                        data.getDATA().add(objectFactory.createWSODOCUMENT(document));
+/*
+                        itemNum++;
+                        if (itemNum >= maxItem) {
+                            break;
+                        }
+*/
                     }
                 }
                 data.setCOUNT((short) data.getDATA().size());
@@ -103,5 +119,9 @@ public class WSDocumentManagerPort implements WSDocumentManager {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 }

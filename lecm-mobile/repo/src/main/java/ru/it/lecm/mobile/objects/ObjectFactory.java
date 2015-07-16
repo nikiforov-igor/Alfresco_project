@@ -2,7 +2,10 @@
 package ru.it.lecm.mobile.objects;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -54,6 +57,8 @@ public class ObjectFactory {
     private ContentService contentService;
     private TransactionService transactionService;
     private ActionsScriptBean actionsService;
+    private SysAdminParams sysAdminParams;
+    private DictionaryService dictionaryService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -79,6 +84,13 @@ public class ObjectFactory {
         this.contentService = contentService;
     }
 
+    public void setSysAdminParams(SysAdminParams sysAdminParams) {
+        this.sysAdminParams = sysAdminParams;
+    }
+
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.it.lecm.mobile.services.staffManager
@@ -549,9 +561,11 @@ public class ObjectFactory {
         String typePrefixString = type.toPrefixString(namespaceService);
         doc.setTYPE(typePrefixString);
         WSODOCUMENTCOMMONPROPERTIES properties = createWSODOCUMENTCOMMONPROPERTIES();
-        properties.setDOCTYPE(typePrefixString);
+        TypeDefinition definition = dictionaryService.getType(type);
+        properties.setDOCTYPE(definition.getTitle(dictionaryService));
 
         //Attach
+        String context = sysAdminParams.getAlfrescoContext();
         WSOCOLLECTION attachments = createWSOCOLLECTION();
         List<AssociationRef> attachmentRefs = nodeService.getSourceAssocs(documentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
         for (AssociationRef attach : attachmentRefs) {
@@ -559,7 +573,7 @@ public class ObjectFactory {
             file.setID(attach.getSourceRef().toString());
             file.setNAME(nodeService.getProperty(attach.getSourceRef(), ContentModel.PROP_NAME).toString());
             WSOURL url = createWSOURL();
-            url.setURL("/alfresco/service/api/node/content/workspace/SpacesStore/" + attach.getSourceRef().getId());
+            url.setURL(context + "/service/api/node/content/workspace/SpacesStore/" + attach.getSourceRef().getId());
             file.setREFERENCE(url);
             attachments.getDATA().add(file);
         }
@@ -583,6 +597,7 @@ public class ObjectFactory {
         }
 
         doc.setSTATUSNAME((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
+        doc.setSTATUSMOBILE((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
 
         final String actions = getActionExtension(documentRef);
         WSOCOLLECTION extension = createWSOCOLLECTION();
