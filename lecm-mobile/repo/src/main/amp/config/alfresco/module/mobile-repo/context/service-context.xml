@@ -42,6 +42,14 @@
                 <property name="documentService" ref="documentService"/>-->
     </bean>
 
+    <jaxws:endpoint address="/WS_ActionExecutor" implementor="#wsActionExecutorService"
+                    implementorClass="ru.it.lecm.mobile.services.formExecutor.WSActionExecutorPort">
+    </jaxws:endpoint>
+
+    <bean id="wsActionExecutorService" class="ru.it.lecm.mobile.services.formExecutor.WSActionExecutorPort">
+        <property name="objectFactory" ref="objectFactory"/>
+    </bean>
+
     <bean id="objectFactory" class="ru.it.lecm.mobile.objects.ObjectFactory">
        <property name="nodeService" ref="nodeService"/>
         <property name="authService" ref="authenticationService"/>
