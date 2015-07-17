@@ -42,7 +42,7 @@
                 <property name="documentService" ref="documentService"/>-->
     </bean>
 
-    <jaxws:endpoint address="/WS_FormActionExecutor" implementor="#wsActionExecutorService"
+    <jaxws:endpoint address="/WSBR_FormActionExecutor" implementor="#wsActionExecutorService"
                     implementorClass="ru.it.lecm.mobile.services.formExecutor.WSActionExecutorPort">
     </jaxws:endpoint>
 

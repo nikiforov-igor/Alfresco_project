@@ -45,11 +45,36 @@ public class WSActionExecutorPort implements WSActionExecutor {
 
     @Override
     public boolean execute(WSOBJECT object, WSOFORMACTION action, WSOCONTEXT context) {
+        if (!NodeRef.isNodeRef(object.getID())) return false;
 
-        /*
-        WorkflowTask task = workflowService.getTaskById(taskId);
-        Map<QName, Serializable> properties = new HashMap<>();
+        final NodeRef nodeRef = new NodeRef(object.getID());
+        final String actionId = action.getID();
+        final WSOCOLLECTION params = action.getEXTENSION();
+        final AuthenticationUtil.RunAsWork<Boolean> runner = new AuthenticationUtil.RunAsWork<Boolean>() {
+            @Override
+            public Boolean doWork() throws Exception {
+                if ("SIGNING".equals(actionId)) {
+                    return signing(nodeRef, params);
+                } else if ("APPROVAL".equals(actionId)) {
+                    return approval(nodeRef, params);
+                } else if ("REVIEW".equals(actionId)) {
+                    return review(nodeRef, params);
+                }
+                return false;
+            }
+        };
 
+        return AuthenticationUtil.runAs(runner,
+                context.getUSERID()
+        );
+    }
+
+    @Override
+    public WSOITEM getitem() {
+        return objectFactory.createWSOITEM();
+    }
+
+    private boolean signing(NodeRef nodeRef, WSOCOLLECTION params) {
         /*
         Подписание "Подписать документ"
             {http://www.it.ru/logicECM/model/signing/workflow/2.0}decision
@@ -57,7 +82,10 @@ public class WSActionExecutorPort implements WSActionExecutor {
             REJECTED
             WorkflowModel.PROP_COMMENT
        */
+        return true;
+    }
 
+    private boolean approval(NodeRef nodeRef, WSOCOLLECTION params) {
         /*
         Согласование "Cогласовать документ"
             {http://www.it.ru/logicECM/model/approval/workflow/3.0}decision
@@ -66,33 +94,22 @@ public class WSActionExecutorPort implements WSActionExecutor {
             APPROVED_WITH_REMARK
             WorkflowModel.PROP_COMMENT
         */
+        return true;
+    }
 
+    private boolean review(NodeRef nodeRef, WSOCOLLECTION params) {
         /*
         Ознакомление "Ознакомление"
         {http://www.it.ru/logicECM/model/review/wokflow/1.0}reviewTaskResult
-        REVIEWED
+        REVIEWED*/
+        return true;
+    }
 
-        WorkflowTask result = workflowService.updateTask(taskId, properties, new HashMap<QName, List<NodeRef>>(), new HashMap<QName, List<NodeRef>>());
+    private void execTask(String taskId, Map<QName, Serializable> params) {
+        WorkflowTask task = workflowService.getTaskById(taskId);
+        Map<QName, Serializable> properties = new HashMap<>();
+        workflowService.updateTask(taskId, properties, new HashMap<QName, List<NodeRef>>(), new HashMap<QName, List<NodeRef>>());
         workflowService.endTask(taskId, "Next");
-        */
-
-/*
-        final AuthenticationUtil.RunAsWork<Boolean> runner = new AuthenticationUtil.RunAsWork<Boolean>() {
-            @Override
-            public Boolean doWork() throws Exception {
-                return false;
-            }
-        };
-
-        return AuthenticationUtil.runAs(runner,
-                context.getUSERID()
-        );
-*/
-        return false;
     }
 
-    @Override
-    public WSOITEM getitem() {
-        return objectFactory.createWSOITEM();
-    }
 }
