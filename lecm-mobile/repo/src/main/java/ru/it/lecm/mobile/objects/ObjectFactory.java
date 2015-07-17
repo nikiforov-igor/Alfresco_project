@@ -688,7 +688,7 @@ public class ObjectFactory {
         this.transactionService = transactionService;
     }
 
-    public String getActionExtension(NodeRef nodeRef) {
+    private String getActionExtension(NodeRef nodeRef) {
         HashMap<String, Object> actions =  actionsService.getActions(nodeRef);
         String result = "";
         ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String,Object>>) actions.get("actions");

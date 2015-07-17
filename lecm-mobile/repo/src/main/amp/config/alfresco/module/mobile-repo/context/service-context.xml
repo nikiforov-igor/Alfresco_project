@@ -49,6 +49,8 @@
     <bean id="wsActionExecutorService" class="ru.it.lecm.mobile.services.formExecutor.WSActionExecutorPort">
         <property name="objectFactory" ref="objectFactory"/>
         <property name="workflowService" ref="workflowServiceImpl"/>
+        <property name="actionsService" ref="webscript.ru.it.lecm.statemachine.actions.get"/>
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
     <bean id="objectFactory" class="ru.it.lecm.mobile.objects.ObjectFactory">

@@ -57,7 +57,7 @@ public class WSDocumentManagerPort implements WSDocumentManager {
     }
 
     public WSOCOLLECTION getkilldocs(WSOCOLLECTION clientdocs, WSOCONTEXT context) {
-        return null;
+        return objectFactory.createWSOCOLLECTION();
     }
 
     public WSOMDOCUMENT getdocument(String id, boolean includeattachments, WSOCONTEXT context) {
