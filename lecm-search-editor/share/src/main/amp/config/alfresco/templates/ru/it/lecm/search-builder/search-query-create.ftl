@@ -13,7 +13,7 @@
 })();
 //]]></script>
 
-<div id="no_menu_page" class="sticky-wrapper">
+<div id="no_menu_page">
 <@bpage.basePageSimple showToolbar=false>
     <div id="query-bd" class="query-page">
             <div class="yui-gc">
