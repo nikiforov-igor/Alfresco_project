@@ -30,7 +30,7 @@
         -->
     </bean>
 
-    <jaxws:endpoint address="/WSBR_taskManager" implementor="#wsTaskService"
+    <jaxws:endpoint address="/WSBR_TaskManager" implementor="#wsTaskService"
                     implementorClass="ru.it.lecm.mobile.services.taskManager.WSTaskManagerPort">
     </jaxws:endpoint>
 
@@ -42,12 +42,13 @@
                 <property name="documentService" ref="documentService"/>-->
     </bean>
 
-    <jaxws:endpoint address="/WS_ActionExecutor" implementor="#wsActionExecutorService"
+    <jaxws:endpoint address="/WS_FormActionExecutor" implementor="#wsActionExecutorService"
                     implementorClass="ru.it.lecm.mobile.services.formExecutor.WSActionExecutorPort">
     </jaxws:endpoint>
 
     <bean id="wsActionExecutorService" class="ru.it.lecm.mobile.services.formExecutor.WSActionExecutorPort">
         <property name="objectFactory" ref="objectFactory"/>
+        <property name="workflowService" ref="workflowServiceImpl"/>
     </bean>
 
     <bean id="objectFactory" class="ru.it.lecm.mobile.objects.ObjectFactory">

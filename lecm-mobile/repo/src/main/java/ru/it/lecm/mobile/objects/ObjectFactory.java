@@ -456,6 +456,17 @@ public class ObjectFactory {
         return new WSOROUTE();
     }
 
+    public WSOROUTE createWSOROUTE(QName type) {
+        WSOROUTE route = createWSOROUTE();
+        WSODOCUMENT document = createWSODOCUMENT();
+        WSODOCUMENTCOMMONPROPERTIES properties = createWSODOCUMENTCOMMONPROPERTIES();
+        TypeDefinition definition = dictionaryService.getType(type);
+        properties.setDOCTYPE(definition.getTitle(dictionaryService));
+        document.setCOMMONPROPS(properties);
+        route.setSETUPDOC(document);
+        return route;
+    }
+
     /**
      * Create an instance of {@link WSOGLOSSARYENTRY }
      * 
@@ -469,7 +480,9 @@ public class ObjectFactory {
      * 
      */
     public WSOCOLLECTION createWSOCOLLECTION() {
-        return new WSOCOLLECTION();
+        WSOCOLLECTION wsocollection = new WSOCOLLECTION();
+        wsocollection.setCOUNT((short)0);
+        return wsocollection;
     }
 
     /**
@@ -675,29 +688,23 @@ public class ObjectFactory {
         this.transactionService = transactionService;
     }
 
-    private String getNotNullStringValue(Object value) {
-        return value != null ? (String) value : "";
-    }
-
-    private String getActionExtension(NodeRef nodeRef) {
+    public String getActionExtension(NodeRef nodeRef) {
         HashMap<String, Object> actions =  actionsService.getActions(nodeRef);
         String result = "";
         ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String,Object>>) actions.get("actions");
         if (list != null) {
             for (HashMap<String, Object> action : list) {
                 String type = (String) action.get("type");
-                if ("trans".equals(type)) {
-                    ArrayList errors = (ArrayList) action.get("errors");
-                    String workflow = (String) action.get("workflowId");
-                    Boolean isForm = (Boolean) action.get("isForm");
-                    Boolean doesNotBlock = (Boolean) action.get("doesNotBlock");
-                    if ((errors.size() == 0 || doesNotBlock) && StringUtils.isEmpty(workflow) && !isForm) {
-                        result += "{" + action.get("label") + "}";
-                    }
+                if ("task".equals(type)) {
+                    result += "{" + action.get("label") + "}";
                 }
             }
         }
         return result;
+    }
+
+    private String getNotNullStringValue(Object value) {
+        return value != null ? (String) value : "";
     }
 
     public void setActionsService(ActionsScriptBean actionsService) {

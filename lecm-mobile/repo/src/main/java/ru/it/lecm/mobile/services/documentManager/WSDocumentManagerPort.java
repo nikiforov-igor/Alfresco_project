@@ -45,6 +45,10 @@ public class WSDocumentManagerPort implements WSDocumentManager {
     }
 
     public WSOCOLLECTION getroutes(WSOCONTEXT context) {
+/*        WSOCOLLECTION routes = objectFactory.createWSOCOLLECTION();
+        routes.getDATA().add(objectFactory.createWSOROUTE(QName.createQName("lecm-errands:document", namespaceService)));
+        routes.setCOUNT((short) routes.getDATA().size());
+        return routes;*/
         return null;
     }
 

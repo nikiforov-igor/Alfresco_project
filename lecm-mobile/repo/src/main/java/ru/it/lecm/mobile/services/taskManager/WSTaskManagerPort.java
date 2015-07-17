@@ -53,7 +53,7 @@ public class WSTaskManagerPort implements WSTaskManager {
 
     @Override
     public WSOCOLLECTION getresolutions(String docid, boolean ismobject, boolean includeattachments, WSOCONTEXT context) {
-        return null;
+        return objectFactory.createWSOCOLLECTION();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class WSTaskManagerPort implements WSTaskManager {
 
     @Override
     public WSOCOLLECTION getrestemplates(String doctypename, WSOCONTEXT context) {
-        return null;
+        return objectFactory.createWSOCOLLECTION();
     }
 
     @Override
