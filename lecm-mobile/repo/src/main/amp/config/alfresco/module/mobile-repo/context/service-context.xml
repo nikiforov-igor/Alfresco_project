@@ -67,6 +67,7 @@
         <property name="actionsService" ref="webscript.ru.it.lecm.statemachine.actions.get"/>
         <property name="sysAdminParams" ref="sysAdminParams"/>
         <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="secretaryService" ref="secretaryService"/>
     </bean>
 
 

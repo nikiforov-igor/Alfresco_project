@@ -12,12 +12,12 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.bean.ActionsScriptBean;
 
@@ -59,6 +59,7 @@ public class ObjectFactory {
     private ActionsScriptBean actionsService;
     private SysAdminParams sysAdminParams;
     private DictionaryService dictionaryService;
+    private SecretaryService secretaryService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -173,7 +174,7 @@ public class ObjectFactory {
 
         NodeRef boss = orgstructureService.getUnitBoss(groupRef);
         if (boss != null) {
-            group.setLEADER(createWSOPERSON(boss));
+            group.setLEADER(createWSOMPERSON(boss));
         }
 
         return group;
@@ -333,6 +334,30 @@ public class ObjectFactory {
             person.setPHOTO(wsoPhoto);
         }
 
+        WSOCOLLECTION secretaries = new WSOCOLLECTION();
+        List<NodeRef> secretatiesList = secretaryService.getSecretaries(personRef);
+        for (NodeRef nodeRef : secretatiesList) {
+            secretaries.getDATA().add(createWSOPERSON(nodeRef));
+        }
+        secretaries.setCOUNT((short) secretaries.getDATA().size());
+
+        person.setTRUSTERS(secretaries);
+
+        NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(personRef);
+        if (primaryStaff != null) {
+            NodeRef position = orgstructureService.getPositionByStaff(primaryStaff);
+            NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+            if (position != null && unit != null) {
+                String positionName = (String) nodeService.getProperty(position, ContentModel.PROP_NAME);
+                String unitName = (String) nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME);
+                WSOCOLLECTION postCollection = new WSOCOLLECTION();
+
+                postCollection.getDATA().add(positionName + " " + unitName);
+                postCollection.setCOUNT((short) postCollection.getDATA().size());
+
+                person.setPOST(postCollection);
+            }
+        }
         return person;
     }
 
@@ -382,6 +407,19 @@ public class ObjectFactory {
      */
     public WSOMPERSON createWSOMPERSON() {
         return new WSOMPERSON();
+    }
+
+    public WSOMPERSON createWSOMPERSON(NodeRef personRef) {
+        Map<QName, Serializable> props = nodeService.getProperties(personRef);
+
+        WSOMPERSON person = createWSOMPERSON();
+        person.setID(personRef.toString());
+        person.setTYPE(OrgstructureBean.TYPE_EMPLOYEE.toPrefixString(namespaceService).toUpperCase());
+        person.setTITLE(getNotNullStringValue(props.get(OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME)));
+        Object active = props.get(BaseBean.IS_ACTIVE);
+        person.setISACTIVE(active != null ? (Boolean) active : true);
+
+        return person;
     }
 
     /**
@@ -709,5 +747,9 @@ public class ObjectFactory {
 
     public void setActionsService(ActionsScriptBean actionsService) {
         this.actionsService = actionsService;
+    }
+
+    public void setSecretaryService(SecretaryService secretaryService) {
+        this.secretaryService = secretaryService;
     }
 }

@@ -81,6 +81,11 @@
             <artifactId>errands-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.delegation</groupId>
+            <artifactId>lecm-delegation-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <scm>
