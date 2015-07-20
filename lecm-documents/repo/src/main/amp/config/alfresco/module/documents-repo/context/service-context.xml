@@ -257,6 +257,7 @@
     <bean id="documentStampService" class="ru.it.lecm.documents.beans.DocumentStampServiceImpl" parent="baseBean">
         <property name="dictionaryService" ref="serviceDictionary"/>
         <property name="contentService" ref="ContentService"/>
+        <property name="versionService" ref="versionService"/>
         <property name="substitudeService" ref="substitudeService"/>
     </bean>
 

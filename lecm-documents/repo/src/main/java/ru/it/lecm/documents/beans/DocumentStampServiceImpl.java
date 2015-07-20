@@ -2,6 +2,7 @@ package ru.it.lecm.documents.beans;
 
 import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
+import com.lowagie.text.Utilities;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfReader;
@@ -11,6 +12,7 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.version.VersionService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,7 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
 
     private DictionaryBean dictionaryService;
     private ContentService contentService;
+    private VersionService versionService;
     private SubstitudeBean substitudeService;
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
@@ -44,6 +47,10 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
+    }
+
+    public void setVersionService(VersionService versionService) {
+        this.versionService = versionService;
     }
 
     public void setSubstitudeService(SubstitudeBean substitudeService) {
@@ -65,8 +72,8 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
         HashMap<String, Object> result = new HashMap<>();
         int stampWidth = (Integer) nodeService.getProperty(stamp, PROP_WIDTH);
         int stampHeight = (Integer) nodeService.getProperty(stamp, PROP_HEIGHT);
-        float stampWidthPoints = mmToPoints(stampWidth);
-        float stampHeightPoints = mmToPoints(stampHeight);
+        float stampWidthPoints = Utilities.millimetersToPoints(stampWidth);
+        float stampHeightPoints = Utilities.millimetersToPoints(stampHeight);
         float pageWidth = 0;
         float pageHeight = 0;
 
@@ -74,7 +81,7 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
         ContentReader reader = contentService.getReader(document, ContentModel.PROP_CONTENT);
         try (InputStream contentIS = reader.getContentInputStream()){
             pdfReader = new PdfReader(contentIS);
-            Rectangle rect = pdfReader.getPageSize(1);
+            Rectangle rect = pdfReader.getPageSizeWithRotation(1);
             pageWidth = rect.getWidth();
             pageHeight = rect.getHeight();
         } catch (IOException e) {
@@ -101,17 +108,18 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
         ContentReader documentReader = contentService.getReader(attach, ContentModel.PROP_CONTENT);
         ContentReader stampReader = contentService.getReader(stamp, ContentModel.PROP_CONTENT);
         ContentWriter documentWriter = contentService.getWriter(attach, ContentModel.PROP_CONTENT, true);
-
+        versionService.ensureVersioningEnabled(attach, null);
+        versionService.createVersion(attach, null);
         PdfStamper pdfStamper = null;
         try (InputStream docIs = documentReader.getContentInputStream(); InputStream stampIs = stampReader.getContentInputStream(); OutputStream docOs = documentWriter.getContentOutputStream()) {
             PdfReader pdfReader = new PdfReader(docIs);
             pdfStamper = new PdfStamper(pdfReader, docOs);
-            Rectangle pageRect = pdfReader.getPageSize(page);
+            Rectangle pageRect = pdfReader.getPageSizeWithRotation(page);
 
             int mmStampWidth = (Integer) nodeService.getProperty(stamp, PROP_WIDTH);
             int mmStampHeight = (Integer) nodeService.getProperty(stamp, PROP_HEIGHT);
-            float stampWidth = mmToPoints(mmStampWidth);
-            float stampHeight = mmToPoints(mmStampHeight);
+            float stampWidth = Utilities.millimetersToPoints(mmStampWidth);
+            float stampHeight = Utilities.millimetersToPoints(mmStampHeight);
             float pageWidth = pageRect.getWidth();
             float pageHeight = pageRect.getHeight();
             float scale = pageWidth / width;
@@ -196,10 +204,6 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
                 }
             }
         }
-    }
-
-    private float mmToPoints(int stampWidth) {
-        return (72 * stampWidth) / 25.4f;
     }
 
 }
