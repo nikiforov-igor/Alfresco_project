@@ -36,10 +36,13 @@
 
     <bean id="wsTaskService" class="ru.it.lecm.mobile.services.taskManager.WSTaskManagerPort">
         <property name="objectFactory" ref="objectFactory"/>
-        <!--        <property name="nodeService" ref="nodeService"/>
-                <property name="personService" ref="personService"/>
-                <property name="orgstructureService" ref="serviceOrgstructure" />
-                <property name="documentService" ref="documentService"/>-->
+        <property name="transactionService" ref="transactionService" />
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure" />
+        <property name="threadPoolExecutor" ref="defaultAsyncThreadPool"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="contentService" ref="contentService"/>
     </bean>
 
     <jaxws:endpoint address="/WSBR_FormActionExecutor" implementor="#wsActionExecutorService"

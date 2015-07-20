@@ -76,6 +76,11 @@
             <artifactId>statemachine-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.errands</groupId>
+            <artifactId>errands-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <scm>
