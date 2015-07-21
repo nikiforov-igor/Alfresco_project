@@ -1,1 +1,1 @@
-model.result = contractorsRootObject.getBusyRepresentatives();
+model.result = contractorsRootObject.getRepresentatives(args["nodeRef"]);

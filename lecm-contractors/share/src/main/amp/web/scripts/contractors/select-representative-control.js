@@ -218,6 +218,9 @@ LogicECM.module = LogicECM.module || {};
                 method: "GET",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/busy",
                 responseContentType: "application/json",
+                dataObj: {
+                    nodeRef: this.globCurrentContractor
+                },
                 successCallback: {
                     fn: this._showAddRepresentativeDialog,
                     scope: this

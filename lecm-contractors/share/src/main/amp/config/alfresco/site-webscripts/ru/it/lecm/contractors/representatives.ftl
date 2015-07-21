@@ -193,6 +193,9 @@
             method: "GET",
             url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/busy",
             responseContentType: "application/json",
+            dataObj: {
+                nodeRef: "${contractorRef}"
+            },
             successCallback: {
                 fn: _showAddRepresentativeDialog,
                 scope: this

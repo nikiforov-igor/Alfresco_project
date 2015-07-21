@@ -253,7 +253,7 @@
                 <association name="lecm-contractor:link-to-representative-association">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>lecm-representative:representative-type</class>
