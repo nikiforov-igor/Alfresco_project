@@ -361,7 +361,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 					if (null != rows) {
 						result.put("size", rows.size());
 						Boolean approveAgenda = (Boolean)nodeService.getProperty(meeting, PROP_MEETINGS_APPROVE_AGENDA);
-						if (!approveAgenda) {
+						if (approveAgenda) {
 							result.put("status", "approvement_not_needed");
 						} else {
 							result.put("status", routesService.getApprovalState(meeting));
