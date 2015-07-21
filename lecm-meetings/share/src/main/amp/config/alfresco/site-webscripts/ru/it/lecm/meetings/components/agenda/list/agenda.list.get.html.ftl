@@ -31,19 +31,24 @@
         var container;
 
         function drawForm(nodeRef, htmlId, formId){
-            Alfresco.util.Ajax.request(
-                    {
-                        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-                        dataObj:{
-                            htmlid: htmlId + nodeRef,
+			
+			var url = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+			var dataObj = {
+                            htmlid: htmlId + nodeRef.replace(/\//g,"_"),
                             itemKind: "node",
                             itemId: nodeRef,
                             formId: "agenda",
 							mayAdd: ${mayAdd?string!"false"},
 							mayView: ${hasPermission?string!"false"},
 							hasStatemachine: ${hasStatemachine?string!"false"},
-                            mode:"edit"
-                        },
+                            mode:"edit",
+							showCancelButton: true
+                        };
+
+            Alfresco.util.Ajax.request(
+                    {
+                        url: url,
+                        dataObj: dataObj,
                         successCallback:{
                             fn:function(response){
                                 if (container != null) {

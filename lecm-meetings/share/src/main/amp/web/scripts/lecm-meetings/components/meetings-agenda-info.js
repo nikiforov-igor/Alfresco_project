@@ -70,7 +70,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/meetings/agenda-list",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            htmlid: this.id + Alfresco.util.generateDomId()
+                            htmlid: (this.id + Alfresco.util.generateDomId()).replace(/\//g,"_")
                         },
                         successCallback: {
                             fn:function(response){
