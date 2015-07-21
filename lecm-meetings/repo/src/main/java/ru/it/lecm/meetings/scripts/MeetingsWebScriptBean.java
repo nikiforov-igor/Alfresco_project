@@ -114,4 +114,19 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		}
 		
 	}
+	
+	public String getAgendaInfo(String nodeRef)	{
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		NodeRef meeting = new NodeRef(nodeRef);
+		return meetingsService.getAgendaInfo(meeting);
+	}
+	
+	public void setApproovementRequired(String nodeRef, String value)	{
+		ParameterCheck.mandatory("nodeRef", nodeRef);
+		ParameterCheck.mandatory("value", value );
+		NodeRef meeting = new NodeRef(nodeRef);
+		if (MeetingsService.TYPE_MEETINGS_DOCUMENT.isMatch(nodeService.getType(meeting))) {
+			nodeService.setProperty(meeting, MeetingsService.PROP_MEETINGS_APPROVE_AGENDA, Boolean.parseBoolean(value));
+		}
+	}
 }

@@ -50,5 +50,5 @@ public interface ProtocolService {
 	public NodeRef getErrandLinkedPoint(NodeRef errand);
 	public Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
 	public String getPointStatus(NodeRef point);
-
+	public void formErrands(final NodeRef protocol);
 }

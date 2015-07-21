@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>meeting-agenda</shortname>
+  <description>Meeting Agenda Component</description>
+  <format default="json"/>
+  <url>/lecm/meetings/setApproovementRequired</url>
+</webscript>

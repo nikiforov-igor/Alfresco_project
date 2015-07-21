@@ -106,6 +106,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 		this.renewDatagrid();
 
+		YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
+		YAHOO.Bubbling.on("showControl", this.onShowControl, this);
+		
+		
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
 		YAHOO.Bubbling.on('stageItemDeleted', function () {
 			this.getApprovalData(this.fillCurrentApprovalState);
@@ -337,8 +341,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				onSuccess: {
 					fn: function (r) {
 						var scriptErrors = r.json.scriptErrors,
-							i, scriptErrorsLength = scriptErrors.length,
-							macrosName, macrosScript, messageSplittedArr, message;
+								i, scriptErrorsLength = scriptErrors.length,
+								macrosName, macrosScript, messageSplittedArr, message;
 
 						for (i = 0; i < scriptErrorsLength; i++) {
 							messageSplittedArr = scriptErrors[i].split(' | ');
@@ -427,7 +431,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		},
 		_showEditIterationDialog: function () {
 			var formId = 'editIterationProperties',
-				editIterationForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+					editIterationForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 
 			this.editItreationFormOpened = true;
 
@@ -580,6 +584,16 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				failureMessage: Alfresco.util.message('message.failure')
 			});
 		},
+		onHideControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				Dom.setStyle(this.id, "display", "none");
+			}
+		},
+		onShowControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				Dom.setStyle(this.id, "display", "block");
+			}
+		},
 		onShowHistoryButton: function () {
 			var formId = 'showApprovalHistoryForm';
 			var showApprovalHistoryForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
@@ -640,8 +654,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 	LogicECM.module.Approval.StageExpanded.getCustomCellFormatter = function (grid, elCell, oRecord, oColumn, oData) {
 		function formatState(nodeRef, decisionData, hasComment) {
 			var result,
-				commentIcon = '<img alt="' + Alfresco.util.message('label.comment') + '" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
-				messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewApprovalResult\')">{value} {icon}</a>';
+					commentIcon = '<img alt="' + Alfresco.util.message('label.comment') + '" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
+					messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewApprovalResult\')">{value} {icon}</a>';
 
 			if (decisionData.value === 'NO_DECISION') {
 				return null;

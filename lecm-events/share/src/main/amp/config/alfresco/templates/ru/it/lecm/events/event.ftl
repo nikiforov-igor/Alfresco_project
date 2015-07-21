@@ -29,6 +29,7 @@
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/dashlet-components.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/page-document.css" />
 <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/event-page.css" />
+<link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-events/agenda-list.css" />
 
 	<#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
     <link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-metadata.css" />
@@ -72,6 +73,9 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
         <div class="yui-gc">
             <div class="bordered-panel doc-right-part">
 				<@region id="document-actions" scope="template"/>
+				<#if documentType?? && documentType == "{http://www.it.ru/logicECM/meetings/1.0}document">
+				<@region id="meeting-agenda" scope="template"/>
+				</#if>
                 <@region id="document-attachments" scope="template"/>
                 <@region id="document-connections" scope="template"/>
             </div>

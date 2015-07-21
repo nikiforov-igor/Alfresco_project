@@ -655,6 +655,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients) {
 		List<NodeRef> members = getEventMembers(event);
+//		if (!members.contains(getEventInitiator(event))) {
+//			members.add(getEventInitiator(event)));
+//		}
 		if (null == recipients || recipients.isEmpty()) {
 			recipients = members;
 		} else {

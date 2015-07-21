@@ -22,7 +22,9 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.TimeZoneRegistry;
@@ -607,14 +609,13 @@ public class EventsNotificationsService extends BaseBean {
 		PropertyList vEventProperties = vEvent.getProperties();
 		vEventProperties.add(tz.getTimeZoneId());
 		Organizer organizer; 
-		//if (mailTemplateModel.get("initiatorMail").equals(mailTemplateModel.get("recipientMail"))) {
-//			organizer = new Organizer(URI.create("mailto:"+defaultFromEmail));
-//			organizer.getParameters().add(Role.NON_PARTICIPANT);
-		//} else {
+		if (mailTemplateModel.get("initiatorMail").equals(mailTemplateModel.get("recipientMail"))) {
+			organizer = new Organizer(URI.create("mailto:"+defaultFromEmail));
+			organizer.getParameters().add(Role.NON_PARTICIPANT);
+		} else {
 			organizer= new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail")));
 			organizer.getParameters().add(new SentBy(URI.create("mailto:"+defaultFromEmail)));
-		//}
-		//vEventProperties.add(organizer);
+		}
 		
 		vEventProperties.add(organizer);
 		Integer sequence = (Integer) mailTemplateModel.get("sequence");

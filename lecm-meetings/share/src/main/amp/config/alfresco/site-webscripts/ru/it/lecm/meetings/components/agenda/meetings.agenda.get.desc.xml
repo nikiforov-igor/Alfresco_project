@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>meeting-agenda</shortname>
+  <description>Meeting Agenda Component</description>
+  <url>/lecm/components/meetings/meeting-agenda</url>
+</webscript>

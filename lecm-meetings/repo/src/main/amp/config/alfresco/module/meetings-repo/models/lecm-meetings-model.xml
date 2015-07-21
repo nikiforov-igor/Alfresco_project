@@ -61,6 +61,7 @@
 				<property name="lecm-meetings:approve-agenda">
 					<type>d:boolean</type>
 					<mandatory>false</mandatory>
+					<default>true</default>
 				</property>
 				
 				<!--Совещание проведено-->

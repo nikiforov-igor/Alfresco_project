@@ -3,6 +3,7 @@ package ru.it.lecm.meetings.beans;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -22,6 +23,7 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.apache.poi.hslf.record.RecordTypes;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -45,6 +47,7 @@ import ru.it.lecm.meetings.utils.Translit;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.workflow.routes.api.RoutesService;
 
 /**
  *
@@ -68,11 +71,20 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	private DocumentConnectionService documentConnectionService;
 	private final TransactionListener transactionListener = new MeetingsServiceTransactionListener();
 	private EventsService eventsService;
+	private RoutesService routesService;
+
+	public RoutesService getRoutesService() {
+		return routesService;
+	}
 	private SiteService siteService;
 	private AuthorityService authorityService;
 	private OrgstructureBean orgstructureService;
 	private NotificationsService notificationsService;
 
+	public void setRoutesService(RoutesService routesService) {
+		this.routesService = routesService;
+	}
+	
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
 	}
@@ -335,6 +347,32 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getAgendaInfo(NodeRef meeting) {
+		
+		JSONObject result = new JSONObject();
+		try {
+			if (nodeService.getType(meeting).isMatch(TYPE_MEETINGS_DOCUMENT)) {
+				NodeRef table = documentTableService.getTable(meeting, TYPE_MEETINGS_TS_AGENDA_TABLE);
+				if (null != table) {
+					List<NodeRef> rows = documentTableService.getTableDataRows(table);
+					if (null != rows) {
+						result.put("size", rows.size());
+						Boolean approveAgenda = (Boolean)nodeService.getProperty(meeting, PROP_MEETINGS_APPROVE_AGENDA);
+						if (!approveAgenda) {
+							result.put("status", "approvement_not_needed");
+						} else {
+							result.put("status", routesService.getApprovalState(meeting));
+						}
+					}
+				}
+			}
+		} catch (JSONException ex) {
+			java.util.logging.Logger.getLogger(MeetingsServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return result.toString();
 	}
 
 	@Override

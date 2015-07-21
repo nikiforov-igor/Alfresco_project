@@ -70,6 +70,8 @@
 		LogicECM.CurrentModules[controlId].setMessages(${messages});
 		LogicECM.CurrentModules[controlId].setOptions({
 			reportId: '${reportId}',
+			formId: "${args.htmlid}",
+			fieldId: "${field.configName}",
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
@@ -117,6 +119,7 @@
 				evaluator: LogicECM.module.Routes.Evaluators.iterationDelete
 			}]
 		});
+		LogicECM.module.Base.Util.createComponentReadyElementId("${controlId}", "${args.htmlid}", "${field.configName}");
 	}
 
 	YAHOO.util.Event.onDOMReady(function() {

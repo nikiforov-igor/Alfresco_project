@@ -385,7 +385,7 @@
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[doc.attr('lecm-meetings:approve-agenda')==true]]></value>
+																				<value><![CDATA[doc.attr('lecm-meetings:approve-agenda')!=true]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

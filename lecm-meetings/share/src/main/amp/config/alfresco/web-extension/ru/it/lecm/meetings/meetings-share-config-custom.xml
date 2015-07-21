@@ -39,6 +39,7 @@
 			</form>
 		</forms>
 	</config>
+	
 	<config evaluator="node-type" condition="lecm-meetings:document">
 		<forms>
 			<form>
@@ -81,12 +82,6 @@
 					<!-- Тематика -->
 					<show id="lecm-events:subject-assoc"/>
 					<show id="lecm-events:subject-assoc-ref"/>
-					<!--Требование согласовать повестку-->
-					<show id="lecm-meetings:approve-agenda"/>
-					<!--Повестка-->
-					<show id="lecm-meetings-ts:items-assoc"/>
-					<show id="approve-agenda-label" force="true"/>
-					<show id="lecm-meetings:approval"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-events:title"/>
@@ -212,7 +207,25 @@
 					<field id="lecm-events:description" >
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
-					<field id="lecm-meetings:approve-agenda"/>
+					
+				</appearance>
+			</form>
+			<form id="agenda">
+				<field-visibility>
+					<!--Повестка-->
+					<show id="lecm-meetings-ts:items-assoc-label"/>
+					<show id="lecm-meetings-ts:items-assoc"/>
+					<show id="approve-agenda-label" force="true"/>
+					<!--Требование согласовать повестку-->
+					<show id="lecm-meetings:approve-agenda"/>
+					<show id="lecm-meetings:approval"/>				
+				</field-visibility>
+				<appearance>
+					<field id="lecm-meetings-ts:items-assoc-label">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">label.items</control-param>
+						</control>
+					</field>
 					<!--"Повестка"-->
 					<field id="lecm-meetings-ts:items-assoc" label-id="label.items">
 						<control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
@@ -220,7 +233,7 @@
 							<control-param name="datagridFormId">items-datagrid</control-param>
 							<control-param name="expandable">false</control-param>
 							<control-param name="usePagination">false</control-param>
-							<control-param name="showLabel">true</control-param>
+							<control-param name="showLabel">false</control-param>
 							<!--<control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
 							<control-param name="isTableSortable">false</control-param>
 							<control-param name="refreshAfterCreate">true</control-param>
@@ -235,6 +248,11 @@
 							<control-param name="msg">label.approve.agenda</control-param>
 						</control>
 					</field>
+					<field id="lecm-meetings:approve-agenda">
+						<control template="/ru/it/lecm/meetings/components/controls/checkbox-control.ftl">
+							<control-param name="hideFieldsIfSelect">lecm-meetings:approval</control-param>
+						</control>
+					</field>
 					<field id="lecm-meetings:approval">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
 							
@@ -242,6 +260,7 @@
 					</field>
 				</appearance>
 			</form>
+			
 			<form id="popup-form">
 				<field-visibility>
 					<!-- Заголовок -->
@@ -557,18 +576,18 @@
 					<field id="lecm-meetings:temp-items-assoc" label-id="label.items" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
 							<control-param name="itemType">lecm-meetings-ts:item</control-param>
-                            <control-param name="allowCreate">true</control-param>
-                            <control-param name="allowExpand">false</control-param>
-                            <control-param name="showActions">true</control-param>
-                            <control-param name="fullDelete">true</control-param>
-                            <control-param name="isTableSortable">false</control-param>
-                            <control-param name="height">100</control-param>
-                            <control-param name="rootNode">{usertemp}</control-param>
-                            <control-param name="showCreateButton">true</control-param>
-                            <control-param name="showSearch">false</control-param>
-                            <control-param name="showLabel">true</control-param>
-                            <control-param name="newRowDialogTitle">meeting.item.create.form.title</control-param>
-                            <control-param name="editRowDialogTitle">meeting.item.edit.form.title</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="allowExpand">false</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="isTableSortable">false</control-param>
+							<control-param name="height">100</control-param>
+							<control-param name="rootNode">{usertemp}</control-param>
+							<control-param name="showCreateButton">true</control-param>
+							<control-param name="showSearch">false</control-param>
+							<control-param name="showLabel">true</control-param>
+							<control-param name="newRowDialogTitle">meeting.item.create.form.title</control-param>
+							<control-param name="editRowDialogTitle">meeting.item.edit.form.title</control-param>
 							<control-param name="datagridFormId">datagrid</control-param>
 						</control>
 					</field>

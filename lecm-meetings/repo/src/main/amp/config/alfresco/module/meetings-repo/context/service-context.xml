@@ -106,6 +106,7 @@
 		  p:authorityService-ref="authorityService"
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:notificationsService-ref="notificationsService"
+		  p:routesService-ref="routesService"
 	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
@@ -170,7 +171,12 @@
 	<bean id="protocolService" class="ru.it.lecm.meetings.beans.ProtocolServiceImpl" parent="baseBean"
 		  depends-on="protocol.ModelsBootstrap,
                       ServiceRegistry, nodeService, transactionService"
-		  p:lecmDictionaryService-ref="serviceDictionary"/>
+		  p:lecmDictionaryService-ref="serviceDictionary"
+		  p:documentService-ref="documentService"
+		  p:documentEventService-ref="documentEventService"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+		  p:orgstructureService-ref="serviceOrgstructure"
+	/>
 	
 	<bean id="protocolScript" parent="baseScript" class="ru.it.lecm.meetings.scripts.ProtocolWebScriptBean"
 		  depends-on="nodeService, protocolService"
