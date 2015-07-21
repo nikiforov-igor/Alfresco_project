@@ -166,7 +166,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 						</control>
 					</field>
@@ -375,7 +375,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 							<control-param name="changeItemsFireAction">meetingHoldingChangeTechnicalMembers</control-param>
 						</control>
@@ -534,7 +534,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 						</control>
 					</field>
@@ -818,15 +818,15 @@
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
-							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
-							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondNameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
-							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:item-name"/>
@@ -916,15 +916,15 @@
 
 							<control-param name="secondItemType">lecm-representative:representative-type</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
-							<control-param name="secondTreeNodeSubstituteString">{cm:name}</control-param>
-							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondNameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
 							
-							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{cm:name};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:item-name"/>

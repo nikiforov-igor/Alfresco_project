@@ -112,7 +112,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
                             <control-param name="plane">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
                         </control>
                     </field>
@@ -320,7 +320,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
                             <control-param name="plane">true</control-param>
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
                         </control>
                     </field>

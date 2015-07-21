@@ -256,7 +256,7 @@
 					<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</param>
 					<param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
 					<param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
-					<param id="nameSubstituteString">{cm:name}</param>
+					<param id="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</param>
 					<param id="itemType">lecm-representative:representative-type</param>
 				</control>
 			</field-type>

@@ -32,7 +32,7 @@
                     <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
-                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                     <control-param name="itemType">lecm-representative:representative-type</control-param>
                 </type>
             </default-controls>
@@ -599,7 +599,7 @@
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
                             <control-param name="showCreateNewLink">true</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
                         </control>
                     </field>
                 </appearance>

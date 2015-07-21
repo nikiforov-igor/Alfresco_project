@@ -40,7 +40,7 @@ LogicECM.module = LogicECM.module || {};
             representativesType: "lecm-representative:representative-type",
 
             employeesNameSubstitute: "{lecm-orgstr:employee-short-name}",
-            representativesSubstitute: "{cm:name}",
+            representativesSubstitute: "{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}",
 
             employeesLocation: null,
             representativesLocation: null,
