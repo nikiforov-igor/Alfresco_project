@@ -432,6 +432,12 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 								case "cm:cmobject":
 									columnContent = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + data.value + "\', null, \'" + "logicecm.view" + "\')\">" + data.displayValue + "</a>";
 									break;
+								case "st:site":
+									var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "st:sites", 16);
+									var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"' width='16' height='16'/>";
+							
+									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"site/"+ data.displayValue + "/dashboard" +"' title='" + data.displayValue + "'>" + fileIconHtml + " " +data.displayValue + "</a>";
+									break;	
 								default:
 									break;
 							}
@@ -1172,33 +1178,9 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 								
 								var newWorkspace = response.config.dataObj["lecm-meetings-ts_new-workspace"];
 								
-								/*Alfresco.util.Ajax.jsonRequest(
-								{
-									url: Alfresco.constants.URL_SERVICECONTEXT + "modules/create-site",
-									method: "POST",
-									dataObj:
-									{
-										visibility: "PUBLIC",
-										title: "test",
-										shortName: "test",
-										description: "Testing",
-										sitePreset : "site-dashboard"
-									},
-									successCallback:
-									{
-										fn: function(){},
-										scope: this
-									},
-									failureCallback:
-									{
-										fn: function(){},
-										scope: this
-									}
-								}); */
-								
 								Alfresco.util.Ajax.jsonRequest(
 								{
-									url: Alfresco.constants.PROXY_URI + "/lecm/meetings/workspace/check",
+									url: Alfresco.constants.URL_SERVICECONTEXT + "/lecm/meetings/create-site",
 									method: "POST",
 									dataObj:
 									{
@@ -1207,7 +1189,12 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 									},
 									successCallback:
 									{
-										fn: function(){},
+										fn: function(){
+											Bubbling.fire("datagridRefresh",
+											{
+												bubblingLabel:me.options.bubblingLabel
+											});
+										},
 										scope: this
 									},
 									failureCallback:

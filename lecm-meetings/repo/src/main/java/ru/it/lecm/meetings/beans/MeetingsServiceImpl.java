@@ -564,7 +564,9 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 				SiteInfo siteInfo = siteService.createSite("site-dashboard", siteShortName, siteName, "", SiteVisibility.PUBLIC);
 				site = siteInfo.getNodeRef();
 				//свяжем сайт с пунктом повестки
-				nodeService.createAssociation(agendaItem, site, MeetingsService.ASSOC_MEETINGS_TS_ITEM_SITE);
+				List<NodeRef> targetList = new ArrayList<NodeRef>();
+				targetList.add(site);
+				nodeService.setAssociations(agendaItem, MeetingsService.ASSOC_MEETINGS_TS_ITEM_SITE, targetList);
 			}
 			
 			if (!newWorkspace){

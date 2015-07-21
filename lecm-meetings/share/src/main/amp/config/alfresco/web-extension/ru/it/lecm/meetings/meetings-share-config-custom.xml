@@ -873,6 +873,7 @@
 					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-meetings-ts:reporter-assoc"/>
 					<show id="lecm-meetings-ts:item-name"/>
+					<show id="lecm-meetings-ts:site-assoc"/>
 				</field-visibility>
 			</form>
 		</forms>
