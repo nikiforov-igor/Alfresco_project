@@ -228,7 +228,7 @@
 					</field>
 					<!--"Повестка"-->
 					<field id="lecm-meetings-ts:items-assoc" label-id="label.items">
-						<control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+						<control template="/ru/it/lecm/meetings/components/controls/meetings-document-table-control.ftl">
 							<control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
 							<control-param name="datagridFormId">items-datagrid</control-param>
 							<control-param name="expandable">false</control-param>
