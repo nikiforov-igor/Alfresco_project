@@ -176,6 +176,8 @@
                 <#if field.control.params.useStrictFilterByOrg??>
                     useStrictFilterByOrg: "${field.control.params.useStrictFilterByOrg?string}",
                 </#if>
+				fieldId: "${field.configName}",
+				formId: "${args.htmlid}",
 				showSelectedItems: ${showSelectedItems?string},
 				<#if field.control.params.itemType??>
 					itemType: "${field.control.params.itemType}"

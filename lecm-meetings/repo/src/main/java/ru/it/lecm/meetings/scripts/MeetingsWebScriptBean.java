@@ -105,4 +105,13 @@ public class MeetingsWebScriptBean extends BaseWebScript {
 		NodeRef meeting = nodeRef.getNodeRef();
 		meetingsService.createRepetedMeetings(meeting);
 	}
+	
+	public void editAgendaItemWorkspace(String agendaItemStr, Boolean newWorkspace){
+		ParameterCheck.mandatory("nodeRef", agendaItemStr);
+		NodeRef agendaItem = new NodeRef(agendaItemStr);
+		if (nodeService.exists(agendaItem) && MeetingsService.TYPE_MEETINGS_TS_AGENDA_ITEM.equals(nodeService.getType(agendaItem))){
+			meetingsService.editAgendaItemWorkspace(agendaItem, newWorkspace);
+		}
+		
+	}
 }

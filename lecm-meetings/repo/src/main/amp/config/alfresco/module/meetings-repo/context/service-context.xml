@@ -102,6 +102,10 @@
 		  p:documentService-ref="documentService"
 		  p:documentConnectionService-ref="documentConnectionService"
 		  p:eventsService-ref="eventsService"
+		  p:siteService-ref="siteService"
+		  p:authorityService-ref="authorityService"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:notificationsService-ref="notificationsService"
 	>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">

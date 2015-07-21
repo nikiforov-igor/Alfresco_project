@@ -1,19 +1,33 @@
 package ru.it.lecm.meetings.beans;
 
+
 import java.io.Serializable;
 import java.util.*;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.site.SiteModel;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.site.SiteInfo;
+import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.cmr.site.SiteVisibility;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +41,8 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
+import ru.it.lecm.meetings.utils.Translit;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
@@ -52,7 +68,27 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	private DocumentConnectionService documentConnectionService;
 	private final TransactionListener transactionListener = new MeetingsServiceTransactionListener();
 	private EventsService eventsService;
+	private SiteService siteService;
+	private AuthorityService authorityService;
+	private OrgstructureBean orgstructureService;
+	private NotificationsService notificationsService;
 
+	public void setNotificationsService(NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
+	}
+	
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
+	
+	public void setAuthorityService(AuthorityService authorityService){
+		this.authorityService = authorityService;
+	}
+	
+	public void setSiteService(SiteService siteService){
+		this.siteService = siteService;
+	}
+	
 	public EventsService getEventsService() {
 		return eventsService;
 	}
@@ -463,5 +499,109 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		}
 
 	}
+	
+	@Override
+	public void editAgendaItemWorkspace(NodeRef agendaItem, boolean newWorkspace){
+		//получим совещание
+		NodeRef meeting = agendaItem;
+		for (int i = 0; i <= 2; i++){
+			meeting = nodeService.getPrimaryParent(meeting).getParentRef();
+		}
+		
+		if (MeetingsService.TYPE_MEETINGS_DOCUMENT.equals(nodeService.getType(meeting))){
+			NodeRef site = null;
+			if (newWorkspace){
+				String meetingTitle = (String) nodeService.getProperty(meeting, EventsService.PROP_EVENT_TITLE);
+				String agendaItemName = (String) nodeService.getProperty(agendaItem, MeetingsService.PROP_MEETINGS_TS_ITEM_NAME);
+				String siteName = meetingTitle + ", пункт " + agendaItemName;
+				Integer agendaItemNumber = (Integer) nodeService.getProperty(agendaItem, DocumentTableService.PROP_INDEX_TABLE_ROW);
+				String siteShortName = Translit.toTranslit(siteName);
+				siteShortName = delNoDigOrLet(siteShortName);
+				siteShortName += "-" + agendaItemNumber.toString();
+				if (siteService.hasSite(siteShortName)){
+					Integer i = 1;
+					while (true){
+						String newSiteShortName = siteShortName + "-" + i.toString();
+						if (!siteService.hasSite(newSiteShortName)){
+							siteShortName = newSiteShortName;
+							break;
+						}
+						i++;
+					}
+				}
+				//создадим сайт
+				SiteInfo siteInfo = siteService.createSite("site-dashboard", siteShortName, siteName, "", SiteVisibility.PUBLIC);
+				site = siteInfo.getNodeRef();
+			}
+			
+			if (!newWorkspace){
+				List<NodeRef> siteList = new ArrayList<>();
+				siteList.addAll(findNodesByAssociationRef(agendaItem, ASSOC_MEETINGS_TS_ITEM_SITE, null, ASSOCIATION_TYPE.TARGET));
+				if (!siteList.isEmpty()){
+					site = siteList.get(0);
+				}
+			}
 
+			if (null != site){
+				//выдадим права секретарю и инициатору
+				List<NodeRef> secretaryAndInitiatorList = new ArrayList<>();
+				secretaryAndInitiatorList.addAll(findNodesByAssociationRef(meeting, ASSOC_MEETINGS_SECRETARY, null, ASSOCIATION_TYPE.TARGET));
+				secretaryAndInitiatorList.addAll(findNodesByAssociationRef(meeting, EventsService.ASSOC_EVENT_INITIATOR, null, ASSOCIATION_TYPE.TARGET));
+
+				String siteShortName = siteService.getSiteShortName(site);
+
+				for (NodeRef si : secretaryAndInitiatorList){
+					addAuthorityToSite(siteShortName, SiteModel.SITE_MANAGER, si);
+				}
+
+				//выдадим права докладчику и содокладчикам
+				List<NodeRef> reporterAndCoreporterList = new ArrayList<>();
+				reporterAndCoreporterList.addAll(findNodesByAssociationRef(agendaItem, ASSOC_MEETINGS_TS_ITEM_REPORTER, null, ASSOCIATION_TYPE.TARGET));
+				reporterAndCoreporterList.addAll(findNodesByAssociationRef(agendaItem, ASSOC_MEETINGS_TS_ITEM_COREPORTER, null, ASSOCIATION_TYPE.TARGET));
+
+				for (NodeRef reporter : reporterAndCoreporterList){
+					if (orgstructureService.isEmployee(reporter)){
+						if ( addAuthorityToSite(siteShortName, SiteModel.SITE_COLLABORATOR, reporter) ){
+							//Отправка уведомления Содокладчику
+							List<NodeRef> recipients = new ArrayList();
+							recipients.add(reporter);
+							sendNotificationAboutInviteToSite(site, siteShortName, recipients);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void sendNotificationAboutInviteToSite(NodeRef site, String siteShortName, List<NodeRef> recipients){
+		SysAdminParams params = serviceRegistry.getSysAdminParams();
+		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+
+		String author = AuthenticationUtil.getSystemUserName();
+		String employeeName = (String) nodeService.getProperty(orgstructureService.getCurrentEmployee(), OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+		String siteLinkUrl = "<a href=\"" + serverUrl + "/share/page/site/" + siteShortName + "/dashboard" + "\">" + siteShortName + "</a>";
+		String text = employeeName + " пригласил вас на сайт " + siteLinkUrl;
+		notificationsService.sendNotification(author, site, text, recipients, null);
+	}
+	
+	private boolean addAuthorityToSite(String siteShortName, String permissionGroup, NodeRef employee){
+		String authority = orgstructureService.getEmployeeLogin(employee); siteService.setMembership(siteShortName, authority, permissionGroup);
+		if (!siteService.isMember(siteShortName, authority) && siteService.canAddMember(siteShortName, authority, permissionGroup)){
+			siteService.setMembership(siteShortName, authority, permissionGroup);
+			return true;
+		}
+		return false;
+	}
+	
+	private static String delNoDigOrLet (String s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (Character.isLetterOrDigit(s.charAt(i)))
+                sb.append(s.charAt(i));
+        }
+        return sb.toString();
+    }
+	
 }
+
+
