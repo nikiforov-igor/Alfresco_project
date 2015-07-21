@@ -1,0 +1,3 @@
+{
+    "siteShortName" : "${siteShortName}"
+}

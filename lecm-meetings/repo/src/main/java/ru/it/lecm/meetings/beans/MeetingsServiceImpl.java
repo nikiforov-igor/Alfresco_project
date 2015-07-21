@@ -23,13 +23,6 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
-import org.apache.poi.hslf.record.RecordTypes;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -539,15 +532,15 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	}
 	
 	@Override
-	public void editAgendaItemWorkspace(NodeRef agendaItem, boolean newWorkspace){
+	public String editAgendaItemWorkspace(NodeRef agendaItem, boolean newWorkspace){
 		//получим совещание
 		NodeRef meeting = agendaItem;
 		for (int i = 0; i <= 2; i++){
 			meeting = nodeService.getPrimaryParent(meeting).getParentRef();
 		}
 		
+		NodeRef site = null;
 		if (MeetingsService.TYPE_MEETINGS_DOCUMENT.equals(nodeService.getType(meeting))){
-			NodeRef site = null;
 			if (newWorkspace){
 				String meetingTitle = (String) nodeService.getProperty(meeting, EventsService.PROP_EVENT_TITLE);
 				String agendaItemName = (String) nodeService.getProperty(agendaItem, MeetingsService.PROP_MEETINGS_TS_ITEM_NAME);
@@ -570,6 +563,8 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 				//создадим сайт
 				SiteInfo siteInfo = siteService.createSite("site-dashboard", siteShortName, siteName, "", SiteVisibility.PUBLIC);
 				site = siteInfo.getNodeRef();
+				//свяжем сайт с пунктом повестки
+				nodeService.createAssociation(agendaItem, site, MeetingsService.ASSOC_MEETINGS_TS_ITEM_SITE);
 			}
 			
 			if (!newWorkspace){
@@ -608,6 +603,12 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 					}
 				}
 			}
+		}
+		
+		if (newWorkspace){
+			return null != site ? siteService.getSiteShortName(site) : "";
+		} else {
+			return "";
 		}
 	}
 	

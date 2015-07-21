@@ -58,5 +58,5 @@ public interface MeetingsService {
 	void createRepetedMeetings(NodeRef meeting);
 	void updateAgendaItemMembers(NodeRef document);
 	String getAgendaInfo(NodeRef meeting);
-	void editAgendaItemWorkspace(NodeRef agendaItem, boolean newWorkspace);
+	String editAgendaItemWorkspace(NodeRef agendaItem, boolean newWorkspace);
 }
