@@ -81,6 +81,7 @@
         <client.debug>false</client.debug>
         <module.log.level>info</module.log.level>
         <redeploy.process.definitions>false</redeploy.process.definitions>
+        <repo.jscript>warn</repo.jscript>
         <repo.jscript.ScriptLogger>info</repo.jscript.ScriptLogger>
         <apache.cxf.version>2.7.5</apache.cxf.version>
         <jersey.version>1.18.1</jersey.version>
@@ -715,6 +716,7 @@
             <id>logger-all-debug</id>
             <properties>
                 <module.log.level>debug</module.log.level>
+                <repo.jscript>info</repo.jscript>
                 <repo.jscript.ScriptLogger>debug</repo.jscript.ScriptLogger>
             </properties>
         </profile>
