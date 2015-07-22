@@ -307,7 +307,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	            useCookieForSort: true,
 
-	            editFormWidth: "50em",
+	            editFormWidth: "60em",
 
                 refreshAfterCreate: false,
 
@@ -1236,6 +1236,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             key:this.dataResponseFields[i],
                             label:column.label.length > 0 ? column.label : this.msg(column.name.replace(":", "_")),
                             sortable:sortable,
+                            resizeable: column.resizeable === undefined ? false : column.resizeable,
                             sortOptions:{
                                 field:column.formsName,
                                 sortFunction:this.getSortFunction()
