@@ -722,6 +722,7 @@
                             <control-param name="smallItemIcon">components/images/filetypes/generic-site-16.png</control-param>
 	                        <control-param name="showCreateNewLink">false</control-param>
 	                        <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="itemType">lecm-orgstr:workRole</control-param>
                         </control>
                     </field>
                 </appearance>
