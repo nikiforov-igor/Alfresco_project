@@ -533,11 +533,8 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	
 	@Override
 	public String editAgendaItemWorkspace(NodeRef agendaItem, boolean newWorkspace){
-		//получим совещание
-		NodeRef meeting = agendaItem;
-		for (int i = 0; i <= 2; i++){
-			meeting = nodeService.getPrimaryParent(meeting).getParentRef();
-		}
+		//получим совещание  
+		NodeRef meeting = documentTableService.getDocumentByTableDataRow(agendaItem);
 		
 		NodeRef site = null;
 		if (MeetingsService.TYPE_MEETINGS_DOCUMENT.equals(nodeService.getType(meeting))){
@@ -564,7 +561,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 				SiteInfo siteInfo = siteService.createSite("site-dashboard", siteShortName, siteName, "", SiteVisibility.PUBLIC);
 				site = siteInfo.getNodeRef();
 				//свяжем сайт с пунктом повестки
-				List<NodeRef> targetList = new ArrayList<NodeRef>();
+				List<NodeRef> targetList = new ArrayList<>();
 				targetList.add(site);
 				nodeService.setAssociations(agendaItem, MeetingsService.ASSOC_MEETINGS_TS_ITEM_SITE, targetList);
 			}
@@ -625,13 +622,37 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		notificationsService.sendNotification(author, site, text, recipients, null);
 	}
 	
-	private boolean addAuthorityToSite(String siteShortName, String permissionGroup, NodeRef employee){
-		String authority = orgstructureService.getEmployeeLogin(employee); siteService.setMembership(siteShortName, authority, permissionGroup);
-		if (!siteService.isMember(siteShortName, authority) && siteService.canAddMember(siteShortName, authority, permissionGroup)){
-			siteService.setMembership(siteShortName, authority, permissionGroup);
-			return true;
+	private boolean addAuthorityToSite(final String siteShortName, final String permissionGroup, final NodeRef employee){
+		String managerAuthority = null;
+		boolean result = false;
+		Map<String, String> membersList = siteService.listMembers(siteShortName, null, null, 0);
+		Set<String> memberKeys = membersList.keySet();
+		for (String memberKey : memberKeys){
+			if (SiteModel.SITE_MANAGER.equals(membersList.get(memberKey))){
+				managerAuthority = memberKey;
+				break;
+			}
 		}
-		return false;
+		if (null != managerAuthority){
+			final String authority = orgstructureService.getEmployeeLogin(employee);
+			if (!siteService.isMember(siteShortName, authority)){
+				// выдавать права может только менеджер сайта
+				result = AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Boolean>(){
+
+					@Override
+					public Boolean doWork() throws Exception {
+						if (siteService.canAddMember(siteShortName, authority, permissionGroup)){
+							siteService.setMembership(siteShortName, authority, permissionGroup);
+							return true;
+						}
+						return false;
+					}
+
+				},
+				managerAuthority);
+			}
+		}
+		return result;
 	}
 	
 	private static String delNoDigOrLet (String s) {
