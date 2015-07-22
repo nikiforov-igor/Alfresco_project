@@ -2442,3 +2442,7 @@ div.object-finder.inlineable {
 div#lightbox {
     z-index: 100003 !important; /*Спасаем тонущий лайтбокс. Ибо у всяких там диалогов этот z-index Очень уж большой. FIXME*/
 }
+
+.yui-overlay.yuimenu .yuimenuitem .yuimenuitemlabel {
+    font: 13px Open Sans,arial,helvetica,clean,sans-serif;
+}
