@@ -145,6 +145,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="childrenDataSource">lecm/employees/MEETINGS_CREATOR/picker</control-param>
 						</control>
 					</field>
 					<!--участники-->
@@ -357,6 +358,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="childrenDataSource">lecm/employees/MEETINGS_CREATOR/picker</control-param>
 						</control>
 					</field>
 					<!--участники-->
@@ -513,6 +515,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="childrenDataSource">lecm/employees/MEETINGS_CREATOR/picker</control-param>
 						</control>
 					</field>
 					<!--участники-->
