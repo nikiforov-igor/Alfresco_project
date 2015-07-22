@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -27,207 +28,186 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 /**
- *
  * @author snovikov
  */
 public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
 
-	private DictionaryBean lecmDictionaryService;
+    private DictionaryBean lecmDictionaryService;
 
-	private DocumentService documentService;
+    private DocumentService documentService;
 
-	private DocumentEventService documentEventService;
+    private DocumentEventService documentEventService;
 
-	private LecmPermissionService lecmPermissionService;
+    private LecmPermissionService lecmPermissionService;
 
-	private OrgstructureBean orgstructureService;
+    private OrgstructureBean orgstructureService;
 
-	private PersonService personService;
+    private PersonService personService;
 
-	public PersonService getPersonService() {
-		return personService;
-	}
+    public PersonService getPersonService() {
+        return personService;
+    }
 
-	public void setPersonService(PersonService personService) {
-		this.personService = personService;
-	}
+    public void setPersonService(PersonService personService) {
+        this.personService = personService;
+    }
 
-	public OrgstructureBean getOrgstructureService() {
-		return orgstructureService;
-	}
+    public OrgstructureBean getOrgstructureService() {
+        return orgstructureService;
+    }
 
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		this.orgstructureService = orgstructureService;
-	}
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
 
-	public DocumentEventService getDocumentEventService() {
-		return documentEventService;
-	}
+    public DocumentEventService getDocumentEventService() {
+        return documentEventService;
+    }
 
-	public void setDocumentEventService(DocumentEventService documentEventService) {
-		this.documentEventService = documentEventService;
-	}
+    public void setDocumentEventService(DocumentEventService documentEventService) {
+        this.documentEventService = documentEventService;
+    }
 
-	public LecmPermissionService getLecmPermissionService() {
-		return lecmPermissionService;
-	}
+    public LecmPermissionService getLecmPermissionService() {
+        return lecmPermissionService;
+    }
 
-	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-		this.lecmPermissionService = lecmPermissionService;
-	}
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
 
-	public DocumentService getDocumentService() {
-		return documentService;
-	}
+    public DocumentService getDocumentService() {
+        return documentService;
+    }
 
-	public void setDocumentService(DocumentService documentService) {
-		this.documentService = documentService;
-	}
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
-	public void setLecmDictionaryService(DictionaryBean lecmDictionaryService) {
-		this.lecmDictionaryService = lecmDictionaryService;
-	}
+    public void setLecmDictionaryService(DictionaryBean lecmDictionaryService) {
+        this.lecmDictionaryService = lecmDictionaryService;
+    }
 
-	@Override
-	public NodeRef getServiceRootFolder() {
-		return null;
-	}
+    @Override
+    public NodeRef getServiceRootFolder() {
+        return null;
+    }
 
-	@Override
-	public void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
-		String status = ProtocolService.POINT_STATUSES.get(statusKey);
-		if (null != status) {
-			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
-			List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
-			nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
-		}
-	}
+    @Override
+    public void changePointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
+        String status = ProtocolService.POINT_STATUSES.get(statusKey);
+        if (null != status) {
+            NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
+            List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+            nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
+        }
+    }
 
-	@Override
-	public NodeRef getErrandLinkedPoint(NodeRef errand) {
-		List<AssociationRef> pointAssocs = nodeService.getSourceAssocs(errand, ProtocolService.ASSOC_PROTOCOL_POINT_ERRAND);
-		if (pointAssocs.size() > 0) {
-			return pointAssocs.get(0).getSourceRef();
-		}
-		return null;
-	}
+    @Override
+    public NodeRef getErrandLinkedPoint(NodeRef errand) {
+        List<AssociationRef> pointAssocs = nodeService.getSourceAssocs(errand, ProtocolService.ASSOC_PROTOCOL_POINT_ERRAND);
+        if (pointAssocs.size() > 0) {
+            return pointAssocs.get(0).getSourceRef();
+        }
+        return null;
+    }
 
-	@Override
-	public String getPointStatus(NodeRef point) {
-		List<AssociationRef> statusAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS);
-		if (statusAssocs.size() > 0) {
-			NodeRef status = statusAssocs.get(0).getTargetRef();
-			String statusName = (String) nodeService.getProperty(status, ContentModel.PROP_NAME);
-			return statusName;
-		}
-		return null;
-	}
+    @Override
+    public String getPointStatus(NodeRef point) {
+        List<AssociationRef> statusAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS);
+        if (statusAssocs.size() > 0) {
+            NodeRef status = statusAssocs.get(0).getTargetRef();
+            String statusName = (String) nodeService.getProperty(status, ContentModel.PROP_NAME);
+            return statusName;
+        }
+        return null;
+    }
 
-	@Override
-	public Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
-		String status = getPointStatus(point);
-		if (null != status) {
-			if (ProtocolService.POINT_STATUSES.get(statusKey).equals(status)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		return false;
-	}
+    @Override
+    public Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey) {
+        String status = getPointStatus(point);
+        if (null != status) {
+            if (ProtocolService.POINT_STATUSES.get(statusKey).equals(status)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public void formErrands(final NodeRef protocol) {
-		final NodeRef chairman = findNodeByAssociationRef(protocol, ProtocolService.ASSOC_PROTOCOL_MEETING_CHAIRMAN, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-		if (null != chairman) {
-			String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
-			final String userName = orgstructureService.getEmployeeLogin(chairman);
-			AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
-				@Override
-				public Void doWork() throws Exception {
-					//AuthenticationUtil.setFullyAuthenticatedUser(userName);
-					//найдем таблицу с пунктами
-					List<AssociationRef> tableAssocs = nodeService.getTargetAssocs(protocol, ProtocolService.ASSOC_PROTOCOL_POINTS);
-					if (tableAssocs.size() > 0) {
-						NodeRef table = tableAssocs.get(0).getTargetRef();
-						Set<QName> pointType = new HashSet<QName>(Arrays.asList(ProtocolService.TYPE_PROTOCOL_TS_POINT));
-						List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, pointType);
-						for (ChildAssociationRef pointAssoc : pointAssocs) {
-							NodeRef point = pointAssoc.getChildRef();
+    @Override
+    public void formErrands(final NodeRef protocol) {
+        List<AssociationRef> tableAssocs = nodeService.getTargetAssocs(protocol, ProtocolService.ASSOC_PROTOCOL_POINTS);
+        if (tableAssocs.size() > 0) {
+            NodeRef table = tableAssocs.get(0).getTargetRef();
+            Set<QName> pointType = new HashSet<QName>(Arrays.asList(ProtocolService.TYPE_PROTOCOL_TS_POINT));
+            List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, pointType);
+            for (ChildAssociationRef pointAssoc : pointAssocs) {
+                NodeRef point = pointAssoc.getChildRef();
 
-							//свойства поручения
-							Map<String, String> properties = new HashMap<String, String>();
-							//заголовок
-							Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
-							List<AssociationRef> protocolDocTypeAssocs = nodeService.getTargetAssocs(protocol, EDSDocumentService.ASSOC_DOCUMENT_TYPE);
-							String protocolDocType = "";
-							if (protocolDocTypeAssocs.size() > 0) {
-								NodeRef protocolDocTypeRef = protocolDocTypeAssocs.get(0).getTargetRef();
-								protocolDocType = (String) nodeService.getProperty(protocolDocTypeRef, ContentModel.PROP_NAME);
-							}
-							String protocolNumber = (String) nodeService.getProperty(protocol, DocumentService.PROP_REG_DATA_DOC_NUMBER);
-							Date protocolRegDate = (Date) nodeService.getProperty(protocol, DocumentService.PROP_REG_DATA_DOC_DATE);
-							String protocolRegDateStr = new SimpleDateFormat("dd.MM.yyyy").format(protocolRegDate);
+                //свойства поручения
+                Map<String, String> properties = new HashMap<String, String>();
+                //заголовок
+                Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+                List<AssociationRef> protocolDocTypeAssocs = nodeService.getTargetAssocs(protocol, EDSDocumentService.ASSOC_DOCUMENT_TYPE);
+                String protocolDocType = "";
+                if (protocolDocTypeAssocs.size() > 0) {
+                    NodeRef protocolDocTypeRef = protocolDocTypeAssocs.get(0).getTargetRef();
+                    protocolDocType = (String) nodeService.getProperty(protocolDocTypeRef, ContentModel.PROP_NAME);
+                }
+                String protocolNumber = (String) nodeService.getProperty(protocol, DocumentService.PROP_REG_DATA_DOC_NUMBER);
+                Date protocolRegDate = (Date) nodeService.getProperty(protocol, DocumentService.PROP_REG_DATA_DOC_DATE);
+                String protocolRegDateStr = new SimpleDateFormat("dd.MM.yyyy").format(protocolRegDate);
 
-							StringBuilder errandTtitle = new StringBuilder();
-							errandTtitle.append("Пункт № ").append(pointNumber.toString()).append(" документа ").append(protocolDocType);
-							errandTtitle.append(" №").append(protocolNumber).append(" от ").append(protocolRegDateStr);
-							properties.put("lecm-errands:title", errandTtitle.toString());
-							//содержание
-							String content = (String) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_FORMULATION);
-							properties.put("lecm-errands:content", content);
-							//важность
-							properties.put("lecm-errands:is-important", "true");
+                StringBuilder errandTtitle = new StringBuilder();
+                errandTtitle.append("Пункт № ").append(pointNumber.toString()).append(" документа ").append(protocolDocType);
+                errandTtitle.append(" №").append(protocolNumber).append(" от ").append(protocolRegDateStr);
+                properties.put("lecm-errands:title", errandTtitle.toString());
+                //содержание
+                String content = (String) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_FORMULATION);
+                properties.put("lecm-errands:content", content);
+                //важность
+                properties.put("lecm-errands:is-important", "true");
 
-							//ассоциации поручения
-							Map<String, String> associations = new HashMap<String, String>();
-							//инициатор поручения
-							NodeRef errandInitiator = null;
+                //ассоциации поручения
+                Map<String, String> associations = new HashMap<String, String>();
+                //инициатор поручения
+                NodeRef errandInitiator = orgstructureService.getCurrentEmployee();
 
-							if (null != chairman) {
-								errandInitiator = chairman;
-								associations.put("lecm-errands:initiator-assoc", chairman.toString());
-							}
+                //исполнитель
+                List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);
+                if (pointExecutorAssocs.size() > 0) {
+                    NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
+                    associations.put("lecm-errands:executor-assoc", executor.toString());
+                }
+                //тематика поручения
+                List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(protocol, DocumentService.ASSOC_SUBJECT);
+                if (subjectAssocs.size() > 0) {
+                    NodeRef subject = subjectAssocs.get(0).getTargetRef();
+                    associations.put("lecm-document:subject-assoc", subject.toString());
+                }
 
-							//исполнитель
-							List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);
-							if (pointExecutorAssocs.size() > 0) {
-								NodeRef executor = pointExecutorAssocs.get(0).getTargetRef();
-								associations.put("lecm-errands:executor-assoc", executor.toString());
-							}
-							//тематика поручения
-							List<AssociationRef> subjectAssocs = nodeService.getTargetAssocs(protocol, DocumentService.ASSOC_SUBJECT);
-							if (subjectAssocs.size() > 0) {
-								NodeRef subject = subjectAssocs.get(0).getTargetRef();
-								associations.put("lecm-document:subject-assoc", subject.toString());
-							}
+                NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);
 
-							NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);
+                // выдадим права инициатору
+                if (null != errandInitiator) {
+                    lecmPermissionService.grantDynamicRole("BR_INITIATOR", errand, errandInitiator.getId(), "LECM_BASIC_PG_Initiator");
+                }
 
-							// выдадим права инициатору
-							if (null != errandInitiator) {
-								lecmPermissionService.grantDynamicRole("BR_INITIATOR", errand, errandInitiator.getId(), "LECM_BASIC_PG_Initiator");
-							}
+                // срок поручения
+                Date limitationDate = (Date) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_EXEC_DATE);
+                nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
 
-							// срок поручения
-							Date limitationDate = (Date) nodeService.getProperty(point, ProtocolService.PROP_PROTOCOL_POINT_EXEC_DATE);
-							nodeService.setProperty(errand, ErrandsService.PROP_ERRANDS_LIMITATION_DATE, limitationDate);
-
-							//создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически 
-							nodeService.createAssociation(errand, protocol, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
-							// создадим ассоциацию пункта с поручением
-							nodeService.createAssociation(point, errand, ProtocolService.ASSOC_PROTOCOL_POINT_ERRAND);
-							// переведем пункт в статус "на исполнениии"
-							changePointStatus(point, ProtocolService.P_STATUSES.PERFORMANCE_STATUS);
-							//подпишем Протокол в качестве наблюдателя за поручением
-							documentEventService.subscribe(errand, protocol);
-						}
-					}
-					return null;
-				}
-			}, userName);
-			//AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
-		}
-
-	}
+                //создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически
+                nodeService.createAssociation(errand, protocol, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+                // создадим ассоциацию пункта с поручением
+                nodeService.createAssociation(point, errand, ProtocolService.ASSOC_PROTOCOL_POINT_ERRAND);
+                // переведем пункт в статус "на исполнениии"
+                changePointStatus(point, ProtocolService.P_STATUSES.PERFORMANCE_STATUS);
+                //подпишем Протокол в качестве наблюдателя за поручением
+                documentEventService.subscribe(errand, protocol);
+            }
+        }
+    }
 }
