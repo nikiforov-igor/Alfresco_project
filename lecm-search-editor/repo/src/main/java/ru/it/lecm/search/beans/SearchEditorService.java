@@ -176,7 +176,7 @@ public class SearchEditorService extends BaseBean {
             @Override
             public String getFTSQuery(String field, String value, Types type) {
                 StringBuilder query = new StringBuilder();
-                String fieldWithProtect = doCharsProtection(field, ":-");
+                String fieldWithProtect = doCharsProtection(field + "-ref", ":-");
                 if (value != null) {
                     String[] values = value.split(",");
                     for (String val : values) {
