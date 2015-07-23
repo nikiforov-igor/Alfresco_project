@@ -94,6 +94,7 @@ LogicECM.module = LogicECM.module || {};
 			this.calendar.render();
 			this.calendar.selectEvent.subscribe(this.onDateSelected, this, true);
 			this.calendar.changePageEvent.subscribe(this.loadEvents, this, true);
+			this.calendar.cfg.configChangedEvent.subscribe(this.onPagedateChange, this, true);
 
 			// Register for changes to the calendar data
 			YAHOO.Bubbling.on("eventSaved", this.onEventSaved, this);
@@ -134,6 +135,16 @@ LogicECM.module = LogicECM.module || {};
 
 		loadEvents: function (p_type, p_args, p_obj) {
 			var fromDate = p_args[1];
+			this._loadEvents(fromDate);
+		},
+
+		onPagedateChange: function (p_type, p_args, p_obj) {
+			var fromDate = p_args[0][1];
+			if (fromDate instanceof Date) {
+				this._loadEvents(fromDate);
+			}
+		},
+		_loadEvents: function(fromDate) {
 			var toDate = new Date(new Date(fromDate).setMonth(fromDate.getMonth()+1));
 
 			//console.log("loadEvents: from " + fromDate + " to " + toDate);
