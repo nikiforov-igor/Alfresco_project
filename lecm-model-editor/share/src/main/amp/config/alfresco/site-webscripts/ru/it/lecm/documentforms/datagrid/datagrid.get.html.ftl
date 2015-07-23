@@ -33,6 +33,9 @@
 			}
 
 			function createFormsDatagrid() {
+                LogicECM.module.FormsEditor.DataGrid.prototype.onActionExportXML = function (item) {
+					document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export?nodeRef=" + item.nodeRef;
+                };
 				datagrid = new LogicECM.module.FormsEditor.DataGrid('${id}').setOptions(
 						{
 							usePagination: false,
@@ -48,7 +51,13 @@
 									id: "onActionDelete",
 									permission: "delete",
 									label: "${msg("actions.delete-row")}"
-								}
+								},
+                                {
+                                    type:"datagrid-action-link-${bubblingLabel}",
+                                    id:"onActionExportXML",
+                                    permission:"edit",
+                                    label:"${msg("actions.export-xml")}"
+                                }
 							],
 							bubblingLabel: "${bubblingLabel!''}",
 							showCheckboxColumn: false,
