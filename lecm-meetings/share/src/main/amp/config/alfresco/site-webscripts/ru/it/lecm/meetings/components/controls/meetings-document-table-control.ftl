@@ -148,7 +148,8 @@
 	        </#if>
 		],
 		[
-            'css/components/document-table-control.css'
+            'css/components/document-table-control.css',
+			'css/lecm-meetings/meeting-datagrid.css'
         ], drawForm);
     }
 	YAHOO.util.Event.onDOMReady(init);
