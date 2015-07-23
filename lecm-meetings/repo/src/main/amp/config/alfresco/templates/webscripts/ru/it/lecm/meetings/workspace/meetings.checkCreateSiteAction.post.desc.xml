@@ -1,0 +1,10 @@
+<webscript>
+    <shortname>Check create site action</shortname>
+    <description>Check if current employee is initiator or secretary.
+				 Check if agenda is approved.
+	</description>
+    <url>/lecm/meetings/createSiteAction/check</url>
+    <format default="json"/>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

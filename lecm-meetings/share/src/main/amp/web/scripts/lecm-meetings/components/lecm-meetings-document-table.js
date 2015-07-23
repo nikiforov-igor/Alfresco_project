@@ -50,7 +50,8 @@ LogicECM.module = LogicECM.module || {};
 				createFormTitleMsg: "label.create-row.title",
                 viewFormTitleMsg: "logicecm.view",
                 expandable: false,
-                expandDataSource: "components/form"
+                expandDataSource: "components/form",
+				isInitOrSec: false
 			},
 
             datagrid: null,
@@ -92,8 +93,32 @@ LogicECM.module = LogicECM.module || {};
 								fn: function (response) {
 									this.tableData = response.json;
 									this.createToolbar();
-									this.createDataGrid();
-                                    this.externalCreateButton();
+									//узнаем: 
+									//-согласована повестка или нет;
+									//-является ли текущий пользователь Инициатором или Секретарем	
+									Alfresco.util.Ajax.jsonRequest(
+									{
+										url: Alfresco.constants.PROXY_URI + "/lecm/meetings/createSiteAction/check",
+										method: "POST",
+										dataObj:
+										{
+											dataTableRef: this.options.currentValue
+										},
+										successCallback:
+										{
+											fn: function(response){
+												this.isInitOrSec = response.json.isInitOrSec === "true" ? true : false;
+												this.createDataGrid();
+												this.externalCreateButton();
+											},
+											scope: this
+										},
+										failureCallback:
+										{
+											fn: function(){},
+											scope: this
+										}
+									});
 								},
 								scope: this
 							},
@@ -159,12 +184,15 @@ LogicECM.module = LogicECM.module || {};
                             permission: "edit",
                             label: this.msg("action.addRow")
                         });
-						otherActions.push({
-                            type: actionType,
-                            id: "onEditWorkspace",
-                            permission: "edit",
-                            label: this.msg("action.edit.workspace")
-                        });
+					
+						if (this.isInitOrSec){
+							otherActions.push({
+								type: actionType,
+								id: "onEditWorkspace",
+								permission: "edit",
+								label: this.msg("action.edit.workspace")
+							});
+						}
 
                         actions = actions.concat(otherActions);
                         splitActionAt = actions.length;
@@ -175,7 +203,7 @@ LogicECM.module = LogicECM.module || {};
 						showExtendSearchBlock: false,
 						formMode: this.options.mode,
 						actions: actions,
-                        splitActionsAt: splitActionAt,
+                        splitActionsAt: 3,
 						datagridMeta: {
 							useFilterByOrg: false,
 							itemType: this.tableData.rowType,
@@ -234,6 +262,8 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 	 * Augment prototype with main class implementation, ensuring overwrite is enabled
 	 */
 	YAHOO.lang.augmentObject(LogicECM.module.MeetingsDocumentTableDataGrid.prototype, {
+		editWorkspaceDialogOpening: false,
+		
 		tableDataNodeRef: null,
 
 		deleteMessageFunction: null,
@@ -436,7 +466,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 									var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "st:sites", 16);
 									var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"' width='16' height='16'/>";
 							
-									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"site/"+ data.displayValue + "/dashboard" +"' title='" + data.displayValue + "'>" + fileIconHtml + " " +data.displayValue + "</a>";
+									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"site/"+ data.displayValue + "/dashboard" +"' title='" + data.displayValue + "'>" + fileIconHtml + "</a>";
 									break;	
 								default:
 									break;
@@ -672,7 +702,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                         actionA.title = action.label;
 
                         var actionSpan = document.createElement("span");
-//                        actionSpan.innerHTML = action.label;
+                        actionSpan.innerHTML = action.label;
 
                         actionA.appendChild(actionSpan);
                         actionDiv.appendChild(actionA);
@@ -699,7 +729,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
             // elActions is the element id of the active table cell where we'll inject the actions
             var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
 
-            this.onHighlightRowFunction(oArgs, elActions,(this.id + "-actionSet"), (this.id + "-moreActions"));
+            this.onHighlightRowFunction(oArgs, elActions,(this.id + "-actionSet"), (this.id + "-otherMoreActions"));
 
             if (this.showingMoreActions) {
                 this.deferredActionsMenu = elActions;
@@ -1124,11 +1154,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 			return context[func].apply(this, args);
 		},
 		
-		onEditWorkspace: function DataGrid_onEditWorkspace(item) {
-			if (this.editWorkspaceDialogOpening) {
-				return;
-			}
-			this.editWorkspaceDialogOpening = true;
+		showEditWorkspaceDialog: function DataGrid_showEditWorkspaceDialog(item) {
 			var me = this;
 			
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
@@ -1217,6 +1243,62 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                             scope:this
                         }
                     }).show();
+			
+		},
+		
+		onEditWorkspace: function DataGrid_onEditWorkspace(item) {
+			if (this.editWorkspaceDialogOpening) {
+				return;
+			}
+			this.editWorkspaceDialogOpening = true;
+			var me = this;
+			
+			Alfresco.util.Ajax.jsonRequest(
+			{
+				url: Alfresco.constants.PROXY_URI + "/lecm/meetings/createSiteAction/check",
+				method: "POST",
+				dataObj:
+				{
+					itemRef: item.nodeRef
+				},
+				successCallback:
+				{
+					fn: function(response){
+						var isApproved = response.json.isApproved === "true" ? true : false;
+						if (isApproved){
+							this.showEditWorkspaceDialog(item);
+						} else{
+								Alfresco.util.PopupManager.displayPrompt(
+								{
+									title:this.msg("message.confirm.agenda.not.approved.title"),
+									text: this.msg("message.confirm.agenda.not.approved"),
+									buttons:[
+										{
+											text:this.msg("button.ok"),
+											handler:function () {
+												this.destroy();
+												me.showEditWorkspaceDialog(item);
+											}
+										},
+										{
+											text:this.msg("button.cancel"),
+											handler:function () {
+												this.destroy();
+											},
+											isDefault:true
+										}
+									]
+								});							
+						}
+					},
+					scope: this
+				},
+				failureCallback:
+				{
+					fn: function(){},
+					scope: this
+				}
+			});
 			
 			this.editWorkspaceDialogOpening = false;
 		}

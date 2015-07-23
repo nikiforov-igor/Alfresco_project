@@ -149,4 +149,19 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+	
+	/**
+	 * Получения документа для табличных данных
+	 * @param tableData таблица данных
+	 * @return документ
+	 */
+	public ScriptNode getDocumentByTableData(ScriptNode tableData) {
+		org.alfresco.util.ParameterCheck.mandatory("tableData", tableData);
+
+		NodeRef document = this.documentTableService.getDocumentByTableData(tableData.getNodeRef());
+		if (document != null) {
+			return new ScriptNode(document, this.serviceRegistry, getScope());
+		}
+		return null;
+	}
 }
