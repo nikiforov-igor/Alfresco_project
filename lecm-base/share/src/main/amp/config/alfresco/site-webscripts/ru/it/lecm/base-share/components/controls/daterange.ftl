@@ -18,6 +18,7 @@
         <div class="column">
             <div class="daterange-start-date">
                 <#assign start = set.children[0]/>
+                <#assign startReadyId = htmlid + "_" + start.id?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
                	<#assign startDateHtmlId = (htmlid + "_" + start.id)/>
                 <@formLib.renderField field=form.fields[start.id] />
             </div>
@@ -25,6 +26,7 @@
         <div class="column last">
             <div class="daterange-end-date">
                 <#assign end = set.children[1]/>
+                <#assign endReadyId = htmlid + "_" + end.id?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
                 <#assign endDateHtmlId = (htmlid + "_" + end.id)/>
                 <@formLib.renderField field=form.fields[end.id] />
             </div>
@@ -53,6 +55,8 @@
 			unlimitedHtmlId: "${unlimitHtmlId}"
 		}).setMessages(${messages});
 	}
-	YAHOO.util.Event.onDOMReady(init);
+    YAHOO.util.Event.onAvailable('${startReadyId}', function() {
+        YAHOO.util.Event.onAvailable('${endReadyId}', init);
+    });
 })();
 </script>
