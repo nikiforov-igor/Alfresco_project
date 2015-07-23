@@ -39,22 +39,13 @@ var logicECMWidgets = [
 
 var standartWidgets = [
 	{
-	    id: "HOME_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
+	    id: "PEOPLE_MENU_ITEM",
+	    name: "alfresco/menus/AlfMenuItem",
 	    config: {
-	        id: "HOME_MENU_ITEM",
-	        label: msg.get("label.home.page"),
-	        targetUrl: "user/" + encodeURIComponent(user.name) + "/dashboard"
+	       id: "PEOPLE_MENU_ITEM",
+	       label: msg.get("label.people"),
+	       targetUrl: "people-finder"
 	    }
-	},
-	{
-         id: "PEOPLE_MENU_ITEM",
-         name: "alfresco/menus/AlfMenuItem",
-         config: {
-            id: "PEOPLE_MENU_ITEM",
-            label: msg.get("label.people"),
-            targetUrl: "people-finder"
-         }
     }
 ];
 
@@ -254,6 +245,15 @@ var appItems = [
 			id: "SED_MENU_ITEM",
 			label: msg.get("label.sed.menu.item"),
 			targetUrl: "arm?code=SED"
+		}
+	},
+	{
+		id: "HOME_MENU_ITEM",
+		name: "alfresco/menus/AlfMenuBarItem",
+		config: {
+			id: "HOME_MENU_ITEM",
+			label: msg.get("label.home.page"),
+			targetUrl: "user/" + encodeURIComponent(user.name) + "/dashboard"
 		}
 	},
 	{
