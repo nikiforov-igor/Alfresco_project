@@ -119,6 +119,7 @@
 				evaluator: LogicECM.module.Routes.Evaluators.iterationDelete
 			}]
 		});
+		LogicECM.CurrentModules[controlId].renewDatagrid();
 		LogicECM.module.Base.Util.createComponentReadyElementId("${controlId}", "${args.htmlid}", "${field.configName}");
 	}
 

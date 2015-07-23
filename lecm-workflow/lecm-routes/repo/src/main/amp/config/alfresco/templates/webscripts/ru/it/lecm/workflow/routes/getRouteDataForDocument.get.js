@@ -21,7 +21,7 @@
 		currentIterationNodeStr = currentIterationNode.nodeRef.toString();
 		approvalStateProp = currentIterationNode.properties['lecmApproveAspects:approvalState'];
 		if (approvalStateProp) {
-			approvalState = approvalStateProp;
+			approvalState = '' + approvalStateProp;
 		} else if (currentIterationNode) {
 			approvalState = 'NEW';
 		}

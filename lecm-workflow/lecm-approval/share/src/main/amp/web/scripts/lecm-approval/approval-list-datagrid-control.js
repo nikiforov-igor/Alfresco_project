@@ -1,3 +1,5 @@
+/* global YAHOO, Alfresco */
+
 if (typeof LogicECM == 'undefined' || !LogicECM) {
 	LogicECM = {};
 }
@@ -18,6 +20,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.createApprovalListButton = new YAHOO.widget.Button(createApprovalListButtonElement, {
 				type: 'menu',
 				menu: [{
+						url: 'javascript:void(0)',
 						text: Alfresco.util.message('label.button.create.approval.from.route'),
 						value: 'route',
 						disabled: false,
@@ -26,9 +29,20 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							scope: this
 						}
 					}, {
+						url: 'javascript:void(0)',
 						text: Alfresco.util.message('label.button.create.approval.empty'),
 						value: 'empty',
 						disabled: false,
+						onclick: {
+							fn: this.onCreateApprovalListButtonClick,
+							scope: this
+						}
+					}, {
+						url: 'javascript:void(0)',
+						text: 'Предыдущее согласование',
+						value: 'previous',
+						disabled: false,
+						classname: 'hidden',
 						onclick: {
 							fn: this.onCreateApprovalListButtonClick,
 							scope: this
@@ -104,12 +118,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.createApprovalListButton
 		];
 
-		this.renewDatagrid();
-
 		YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
 		YAHOO.Bubbling.on("showControl", this.onShowControl, this);
-		
-		
+
+
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
 		YAHOO.Bubbling.on('stageItemDeleted', function () {
 			this.getApprovalData(this.fillCurrentApprovalState);
@@ -307,6 +319,9 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				case 'empty' :
 					this._createEmptyApprovalLst(this.editIteration);
 					break;
+				case 'previous' :
+					this._createApprovalListFromPrevious();
+					break;
 				default :
 					break;
 			}
@@ -377,6 +392,32 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'POST',
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/createEmptyIteration',
+				dataObj: {
+					documentNodeRef: this.documentNodeRef
+				},
+				successCallback: {
+					scope: this,
+					fn: function (r) {
+						this.getApprovalData(function () {
+							this.fillCurrentApprovalState();
+							this.manageControlsVisibility();
+							this.fireGridChanged(true);
+							if (YAHOO.lang.isFunction(callback)) {
+								callback.apply(this, callbackArgsArr);
+							}
+							YAHOO.Bubbling.fire('redrawDocumentActions');
+						});
+					}
+				},
+				failureMessage: Alfresco.util.message('message.failure'),
+				execScripts: true,
+				scope: this
+			});
+		},
+		_createApprovalListFromPrevious: function (callback, callbackArgsArr) {
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'POST',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/createIterationFromPrevious',
 				dataObj: {
 					documentNodeRef: this.documentNodeRef
 				},
@@ -533,6 +574,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				YAHOO.util.Dom.removeClass(element, 'hidden');
 			}
 
+			function previous(element) {
+				return 'previous' == element.value;
+			}
+
 			if (this.completedApprovalsCount > 0) {
 				reveal(this.showHistoryLink);
 			} else {
@@ -542,6 +587,24 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.approvalStateSettings[this.approvalState].hideElements.forEach(hide);
 			this.approvalStateSettings[this.approvalState].revealElements.forEach(reveal);
 
+			var approvalListButtonMenu = this.createApprovalListButton.getMenu();
+			var items = approvalListButtonMenu.getItems().filter(previous);
+			var itemData = approvalListButtonMenu.itemData.filter(previous);
+			var visible = ('COMPLETE' == this.approvalState) || (this.completedApprovalsCount > 0);
+
+			if (items.length) {
+				if (visible) {
+					reveal(items[0]);
+				} else {
+					hide(items[0]);
+				}
+			} else if (itemData.length) {
+				if (visible) {
+					itemData[0].classname = null;
+				} else {
+					itemData[0].classname = 'hidden';
+				}
+			}
 		},
 		_deleteApprovalList: function (callback, callbackArgsArr) {
 			var nodeRefObj;
@@ -586,12 +649,12 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		},
 		onHideControl: function (layer, args) {
 			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-				Dom.setStyle(this.id, "display", "none");
+				YAHOO.util.Dom.setStyle(this.id, "display", "none");
 			}
 		},
 		onShowControl: function (layer, args) {
 			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
-				Dom.setStyle(this.id, "display", "block");
+				YAHOO.util.Dom.setStyle(this.id, "display", "block");
 			}
 		},
 		onShowHistoryButton: function () {

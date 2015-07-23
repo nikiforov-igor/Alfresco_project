@@ -1,5 +1,6 @@
 package ru.it.lecm.workflow.routes.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -235,7 +236,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 				} else if (isIterationAvailableForArchiving(documentCurrentIteration)) {
 					archiveDocumentCurrentIteration(documentNode);
 				} else {
-					throw new AlfrescoRuntimeException("Iteration {} is not available for archiving");
+					throw new AlfrescoRuntimeException(String.format("Iteration %s is not available for archiving", documentCurrentIteration));
 				}
 			}
 		}
@@ -383,13 +384,98 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 				} else if (isIterationAvailableForArchiving(documentCurrentIteration)) {
 					archiveDocumentCurrentIteration(documentNode);
 				} else {
-					throw new AlfrescoRuntimeException("Iteration {} is not available for archiving");
+					throw new AlfrescoRuntimeException(String.format("Iteration %s is not available for archiving", documentCurrentIteration));
 				}
 			}
 		}
 
 		iterationNode = nodeService.createNode(approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), RoutesModel.TYPE_ROUTE, props).getChildRef();
 
+		return iterationNode;
+	}
+
+	private NodeRef createIterationFromPrevious(NodeRef sourceIterationNode, NodeRef destinationParent) {
+		/* делаем копию текущей итерации */
+		NodeRef iterationNode = copyService.copyAndRename(sourceIterationNode, destinationParent, ContentModel.ASSOC_CONTAINS, getRandomQName(), true);
+		/* сбрасываем статусы, даты, флаги и прочее */
+		Map<QName, Serializable> iterationProps = nodeService.getProperties(iterationNode);
+		iterationProps.put(ContentModel.PROP_NAME, UUID.randomUUID().toString());
+		iterationProps.put(ApprovalAspectsModel.PROP_APPROVAL_STATE, "NEW");
+		iterationProps.put(ApprovalAspectsModel.PROP_APPROVAL_DECISION, "NO_DECISION");
+		iterationProps.remove(ApprovalAspectsModel.PROP_APPROVAL_HAS_COMMENT);
+		iterationProps.remove(RoutesModel.PROP_ROUTE_START_DATE);
+		iterationProps.remove(RoutesModel.PROP_ROUTE_COMPLETE_DATE);
+		nodeService.setProperties(iterationNode, iterationProps);
+		NodeRef initiatorEmployee = findNodeByAssociationRef(iterationNode, RoutesModel.ASSOC_ROUTE_INITIATOR_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		if (initiatorEmployee != null) {
+			nodeService.removeAssociation(iterationNode, initiatorEmployee, RoutesModel.ASSOC_ROUTE_INITIATOR_EMPLOYEE);
+		}
+		List<NodeRef> stages = getAllStagesOfRoute(iterationNode);
+		for (NodeRef stageNode : stages) {
+			Map<QName, Serializable> stageProps = nodeService.getProperties(stageNode);
+			stageProps.put(ApprovalAspectsModel.PROP_APPROVAL_STATE, "NEW");
+			stageProps.put(ApprovalAspectsModel.PROP_APPROVAL_DECISION, "NO_DECISION");
+			stageProps.remove(ApprovalAspectsModel.PROP_APPROVAL_HAS_COMMENT);
+			nodeService.setProperties(stageNode, stageProps);
+			List<NodeRef> items = getAllStageItemsOfStage(stageNode);
+			for (NodeRef itemNode : items) {
+				Map<QName, Serializable> itemProps = nodeService.getProperties(itemNode);
+				itemProps.put(ApprovalAspectsModel.PROP_APPROVAL_STATE, "NEW");
+				itemProps.put(ApprovalAspectsModel.PROP_APPROVAL_DECISION, "NO_DECISION");
+				itemProps.remove(ApprovalAspectsModel.PROP_APPROVAL_HAS_COMMENT);
+				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_START_DATE);
+				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_DUE_DATE);
+				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_COMPLETE_DATE);
+				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_USERNAME);
+				itemProps.remove(RoutesModel.PROP_STAGE_ITEM_COMMENT);
+				nodeService.setProperties(itemNode, itemProps);
+			}
+		}
+		return iterationNode;
+	}
+
+	@Override
+	public NodeRef createIterationFromPrevious(NodeRef documentNode) {
+		NodeRef iterationNode = null, documentCurrentIteration;
+		NodeRef approvalFolder = approvalService.getDocumentApprovalFolder(documentNode);
+		if (approvalFolder != null) {
+			/* находим текущую итерацию */
+			documentCurrentIteration = getDocumentCurrentIteration(documentNode);
+			if (documentCurrentIteration != null) {
+				boolean readyForArchiving = isIterationAvailableForArchiving(documentCurrentIteration);
+				boolean readyForDeleting = isIterationAvailableForDeleting(documentCurrentIteration);
+				if (readyForArchiving) {
+					iterationNode = createIterationFromPrevious(documentCurrentIteration, approvalFolder);
+					archiveDocumentCurrentIteration(documentNode);
+				} else if (readyForDeleting) {
+					deleteDocumentCurrentIteration(documentNode);
+				} else {
+					throw new AlfrescoRuntimeException(String.format("Iteration %s is not available for archiving or deleting", documentCurrentIteration));
+				}
+			}
+			if (iterationNode == null) {
+				NodeRef archiveFolder = approvalService.getDocumentApprovalHistoryFolder(documentNode);
+				if (archiveFolder != null) {
+					/* находим последнюю архивную итерацию */
+					Set<QName> types = new HashSet<>();
+					types.add(RoutesModel.TYPE_ROUTE);
+					List<ChildAssociationRef> children = nodeService.getChildAssocs(archiveFolder, types);
+					if (children.size() > 0) {
+						NodeRef lastArchiveIterationNode = children.get(children.size() - 1).getChildRef();
+						iterationNode = createIterationFromPrevious(lastArchiveIterationNode, approvalFolder);
+					} else {
+						throw new AlfrescoRuntimeException(String.format("Document %s doesn't have any archive iterations", documentNode));
+					}
+				} else {
+					throw new AlfrescoRuntimeException(String.format("Document %s doesn't have archive folder", documentNode));
+				}
+			}
+		} else {
+			throw new AlfrescoRuntimeException(String.format("Document %s doesn't have approval folder", documentNode));
+		}
+		if (iterationNode == null) {
+			throw new AlfrescoRuntimeException(String.format("Failed to copy iteration from previous in document %s", documentNode));
+		}
 		return iterationNode;
 	}
 

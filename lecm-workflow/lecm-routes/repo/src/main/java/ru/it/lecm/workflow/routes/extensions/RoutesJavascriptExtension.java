@@ -78,6 +78,12 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
 	}
 
+	public ScriptNode createIterationFromPrevious(ScriptNode documentNode) {
+		NodeRef iterationNode = routesService.createIterationFromPrevious(documentNode.getNodeRef());
+
+		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
+	}
+
 	public boolean resolveStageItemMacros(ScriptNode stageItem, ScriptNode documentNode) {
 		return routesService.resolveStageItemMacros(stageItem.getNodeRef(), documentNode.getNodeRef());
 	}

@@ -40,9 +40,11 @@ public interface RoutesService {
 
 	List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef, NodeRef documentRef);
 
-	public ConvertRouteToIterationResult convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
+	ConvertRouteToIterationResult convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
 
-	public NodeRef createEmptyIteration(NodeRef documentNode);
+	NodeRef createEmptyIteration(NodeRef documentNode);
+
+	NodeRef createIterationFromPrevious(NodeRef documentNode);
 
 	void deleteDocumentCurrentIteration(final NodeRef documentRef);
 
