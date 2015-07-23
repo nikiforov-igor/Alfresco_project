@@ -1183,7 +1183,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                                 if (item.type && item.type != "") {
                                     Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
                                 }
-								p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
+								p_dialog.dialog.setHeader(this.msg("dialog.title.edit.workspace"));
 								this.editDialogOpening = false;
 
 	                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
