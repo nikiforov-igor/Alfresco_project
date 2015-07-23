@@ -104,6 +104,9 @@
 					</field>					
 					<!--повторность-->
 					<field id="lecm-events:repeatable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="hideFieldsIfNotSelect">lecm-events:repeatable-start-period,lecm-events:repeatable-end-period,lecm-events:repeatable-rule</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
 						</constraint-handlers>
@@ -224,7 +227,7 @@
 				<appearance>
 					<field id="lecm-meetings-ts:items-assoc-label">
 						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
-							<control-param name="msg">label.items</control-param>
+							<control-param name="msg">label.items.bold</control-param>
 						</control>
 					</field>
 					<!--"Повестка"-->
