@@ -10,6 +10,15 @@
 		return constraint.getDisplayLabel(decision, dictionaryService);
 	}
 
+	function getSourceRouteForIteration(currentIteration) {
+		var sourceRoute = routesService.getSourceRouteForIteration(currentIteration);
+		if (sourceRoute) {
+			return getSourceRouteForIteration(sourceRoute);
+		} else {
+			return currentIteration;
+		}
+	}
+
 	var documentNodeRef = args['documentNodeRef'];
 	var documentNode = search.findNode(documentNodeRef);
 	var currentIterationNode = routesService.getDocumentCurrentIteration(documentNode), tempFolder;
@@ -33,9 +42,9 @@
 			approvalResultTitle = getDecisionDisplayValue(approvalResult);
 		}
 
-		sourceRouteNode = routesService.getSourceRouteForIteration(currentIterationNode);
+		sourceRouteNode = getSourceRouteForIteration(currentIterationNode);
 
-		if (sourceRouteNode) {
+		if (sourceRouteNode.parent == routesService.getRoutesFolder()) {
 			sourceRouteInfo = currentIterationNode.properties['cm:title'];
 		}
 
