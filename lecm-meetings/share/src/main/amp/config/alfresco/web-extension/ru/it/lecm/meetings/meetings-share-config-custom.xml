@@ -898,6 +898,7 @@
 					<show id="lecm-meetings-ts:theme-assoc"/>
 					<show id="lecm-meetings-ts:documents-assoc"/>
 					<show id="lecm-meetings-ts:attachments-assoc"/>
+					<show id="lecm-meetings-ts:site-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:indexTableRow" read-only="true"/>
@@ -966,6 +967,14 @@
 							<control-param name="directoryName">Вложения</control-param>
 							<control-param name="suppressRefreshEvent">true</control-param>
 						</control>
+					</field>
+					
+					<field id="lecm-meetings-ts:site-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">
+                                <![CDATA[<a href='/share/page/site/{lecm-meetings-ts:site-assoc/cm:name}/dashboard'>{lecm-meetings-ts:site-assoc/cm:title}</a>]]>
+                            </control-param>
+                        </control>
 					</field>				
 				</appearance>
 			</form>

@@ -1155,8 +1155,6 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 		},
 		
 		showEditWorkspaceDialog: function DataGrid_showEditWorkspaceDialog(item) {
-			var me = this;
-			
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
 			var templateRequestParams = {
 				itemKind: "node",
@@ -1169,7 +1167,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 			templateRequestParams.formId = 'editWorkspace';
 			
 
-			var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
+			var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editWorkspaceDetails");
                 editDetails.setOptions(
                     {
                         width: this.options.editFormWidth,
@@ -1184,23 +1182,18 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                                     Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
                                 }
 								p_dialog.dialog.setHeader(this.msg("dialog.title.edit.workspace"));
-								this.editDialogOpening = false;
+								this.editWorkspaceDialogOpening = false;
 
 	                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                             },
                             scope:this
                         },
                         onSuccess:{
-                            fn:function DataGrid_onActionEdit_success(response) {
-                                // Reload the node's metadata
-	                            Bubbling.fire("datagridRefresh",
-		                            {
-			                            bubblingLabel:me.options.bubblingLabel
-		                            });
+                            fn:function DataGrid_onActionWorkspaceEdit_success(response) {
 								Alfresco.util.PopupManager.displayMessage({
 									text:this.msg("message.details.success")
 								});
-	                            this.editDialogOpening = false;
+	                            this.editWorkspaceDialogOpening = false;
 								
 								var newWorkspace = response.config.dataObj["lecm-meetings-ts_new-workspace"];
 								
@@ -1216,16 +1209,18 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 									successCallback:
 									{
 										fn: function(){
-											Bubbling.fire("datagridRefresh",
-											{
-												bubblingLabel:me.options.bubblingLabel
-											});
+											this._itemUpdate(item.nodeRef);
 										},
 										scope: this
 									},
 									failureCallback:
 									{
-										fn: function(){},
+										fn: function(){
+											Alfresco.util.PopupManager.displayMessage(
+											{
+												text:this.msg("message.edit.workspace.details.failure")
+											});											
+										},
 										scope: this
 									}
 								});
@@ -1233,12 +1228,12 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                             scope:this
                         },
                         onFailure:{
-                            fn:function DataGrid_onActionEdit_failure(response) {
+                            fn:function DataGrid_onActionWorkspaceEdit_failure(response) {
                                 Alfresco.util.PopupManager.displayMessage(
                                     {
-                                        text:this.msg("message.details.failure")
+                                        text:this.msg("message.edit.workspace.details.failure")
                                     });
-	                            this.editDialogOpening = false;
+	                            this.editWorkspaceDialogOpening = false;
                             },
                             scope:this
                         }
@@ -1284,6 +1279,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 											text:this.msg("button.cancel"),
 											handler:function () {
 												this.destroy();
+												me.editWorkspaceDialogOpening = false;
 											},
 											isDefault:true
 										}
@@ -1295,7 +1291,13 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 				},
 				failureCallback:
 				{
-					fn: function(){},
+					fn: function(){
+						Alfresco.util.PopupManager.displayMessage(
+						{
+							text:this.msg("message.edit.workspace.details.failure")
+						});
+						this.editWorkspaceDialogOpening = false;
+					},
 					scope: this
 				}
 			});
