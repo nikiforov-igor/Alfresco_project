@@ -801,7 +801,9 @@
 					<show id="lecm-meetings-ts:attachments-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-document:indexTableRow" read-only="true"/>
+					<field id="lecm-document:indexTableRow">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
+					</field>
 					<field id="lecm-meetings-ts:reporter-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
 							<control-param name="plane">true</control-param>
