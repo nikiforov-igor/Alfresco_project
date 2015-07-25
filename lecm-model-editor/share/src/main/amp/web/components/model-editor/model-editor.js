@@ -470,11 +470,13 @@ IT.component = IT.component || {};
 						if (p instanceof Array) {
 							for ( var i = 0, n = p.length; i < n; i++) {
 								var index = (YAHOO.lang.isObject(p[i].index)?p[i].index._enabled:null);
-								tmpAttributesArray[i] = {"_name":(p[i]._name.substr(p[i]._name.indexOf(":")+1,p[i]._name.length)), "title":p[i].title, "type":p[i].type, "mandatory":p[i].mandatory, "_enabled":index};//,  "validator":p[i].constraints.constraint.ref};
+								var tokenised = (YAHOO.lang.isObject(p[i].index)?p[i].index.tokenised:null);
+								tmpAttributesArray[i] = {"_name":(p[i]._name.substr(p[i]._name.indexOf(":")+1,p[i]._name.length)), "title":p[i].title, "type":p[i].type, "default":p[i]["default"], "mandatory":p[i].mandatory, "_enabled":index, "tokenised":tokenised};//,  "validator":p[i].constraints.constraint.ref};
 							}
 						} else {
 							var index = (YAHOO.lang.isObject(p.index)?p.index._enabled:null);
-							tmpAttributesArray.push({"_name":(p._name.substr(p._name.indexOf(":")+1,p._name.length)), "title":p.title, "type":p.type, "mandatory":p.mandatory, "_enabled":index});
+							var tokenised = (YAHOO.lang.isObject(p.index)?p.index.tokenised:null);
+							tmpAttributesArray.push({"_name":(p._name.substr(p._name.indexOf(":")+1,p._name.length)), "title":p.title, "type":p.type, "default":p["default"], "mandatory":p.mandatory, "_enabled":index, "tokenised":tokenised});
 						}
 					}
 					//associations
@@ -498,11 +500,13 @@ IT.component = IT.component || {};
 						if (p instanceof Array) {
 							for ( var i = 0, n = p.length; i < n; i++) {
 								var index = (YAHOO.lang.isObject(p[i].index)?p[i].index._enabled:null);
-								tmpAttributesArray[i] = {"_name":(p[i]._name.substr(p[i]._name.indexOf(":")+1,p[i]._name.length)), "title":p[i].title, "type":p[i].type, "mandatory":p[i].mandatory, "_enabled":index};//,  "validator":p[i].constraints.constraint.ref};
+								var tokenised = (YAHOO.lang.isObject(p[i].index)?p[i].index.tokenised:null);
+								tmpAttributesArray[i] = {"_name":(p[i]._name.substr(p[i]._name.indexOf(":")+1,p[i]._name.length)), "title":p[i].title, "type":p[i].type, "default":p[i]["default"], "mandatory":p[i].mandatory, "_enabled":index, "tokenised":tokenised};//,  "validator":p[i].constraints.constraint.ref};
 							}
 						} else {
 							var index = (YAHOO.lang.isObject(p.index)?p.index._enabled:null);
-							tmpAttributesArray.push({"_name":(p._name.substr(p._name.indexOf(":")+1,p._name.length)), "title":p.title, "type":p.type, "mandatory":p.mandatory, "_enabled":index});//,  "validator":p[i].constraints.constraint.ref});
+							var tokenised = (YAHOO.lang.isObject(p.index)?p.index.tokenised:null);
+							tmpAttributesArray.push({"_name":(p._name.substr(p._name.indexOf(":")+1,p._name.length)), "title":p.title, "type":p.type, "default":p["default"], "mandatory":p.mandatory, "_enabled":index, "tokenised":tokenised});//,  "validator":p[i].constraints.constraint.ref});
 						}
 					}
 					//associations
@@ -754,12 +758,13 @@ IT.component = IT.component || {};
 						prop.title = (rec.getData("title")||"");
 						prop.type = (rec.getData("type")||"");
 						prop.mandatory = (rec.getData("mandatory")||"false");
+						prop["default"] = (rec.getData("default")||"");
 						if(rec.getData("_enabled")==="true") {
 							prop.index = {
 								"_enabled":rec.getData("_enabled"),
 								"atomic":"true",
 								"stored":"false",
-								"tokenised":"both"
+								"tokenised":(rec.getData("tokenised")||"both")
 							};
 						}
 						properties.push(prop);
@@ -892,6 +897,7 @@ IT.component = IT.component || {};
 				var r = response.json;
 				var dAssociations = [""];
 				var dTypes = ["",{label:Alfresco.util.message('lecm.meditor.lbl.any'),value:"d:any"},{label:Alfresco.util.message('lecm.meditor.lbl.text'),value:"d:text"},{label:Alfresco.util.message('lecm.meditor.lbl.content'),value:"d:content"},{label:Alfresco.util.message('lecm.meditor.lbl.integer'),value:"d:int"},{label:Alfresco.util.message('lecm.meditor.lbl.long'),value:"d:long"},{label:Alfresco.util.message('lecm.meditor.lbl.float'),value:"d:float"},{label:Alfresco.util.message('lecm.meditor.lbl.double'),value:"d:double"},{label:Alfresco.util.message('lecm.meditor.lbl.date'),value:"d:date"},{label:Alfresco.util.message('lecm.meditor.lbl.datetime'),value:"d:datetime"},{label:Alfresco.util.message('lecm.meditor.lbl.boolean'),value:"d:boolean"},{label:Alfresco.util.message('lecm.meditor.lbl.qname'),value:"d:qname"},{label:Alfresco.util.message('lecm.meditor.lbl.noderef'),value:"d:noderef"},{label:Alfresco.util.message('lecm.meditor.lbl.category'),value:"d:category"}];
+				var dTokenised = ["",{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"},{label:Alfresco.util.message('lecm.meditor.lbl.both'),value:"both"}];
 				//Категории
 				this.categoryDialogEl = {"name":{name:"name",label:Alfresco.util.message('lecm.meditor.lbl.category'),type:"input",value:""}};
 				this.categoryColDefs = 	[
@@ -903,21 +909,25 @@ IT.component = IT.component || {};
 				this.attributesDialogEl = {
 									"_name": { name: "_name", label: Alfresco.util.message('lecm.meditor.lbl.name'), type:"input", value: "" },
 									"title": { name: "title", label: Alfresco.util.message('lecm.meditor.lbl.title'), type:"input", value: "" },
+									"default": { name: "default", label: Alfresco.util.message('lecm.meditor.lbl.default'), type:"input", value: "" },
 									"type": { name: "type", label: Alfresco.util.message('lecm.meditor.lbl.type'), type:"select", options: dTypes, showdefault: false },
 									"mandatory": { name: "mandatory", label: Alfresco.util.message('lecm.meditor.lbl.mandatory'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
-									"_enabled": { name: "_enabled", label: Alfresco.util.message('lecm.meditor.lbl.index'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false }
+									"_enabled": { name: "_enabled", label: Alfresco.util.message('lecm.meditor.lbl.index'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
+									"tokenised": { name: "tokenised", label: Alfresco.util.message('lecm.meditor.lbl.tokenised'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.both'),value:"both"},{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "both", showdefault: "false" }
 									//"validator": { name: "validator", label: "Валидатор", type:"select", options: [""], showdefault: false },
 								};
 				this.attributesColumnDefs = [
 		                            { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
 		                            { className: "viewmode-label", key : "title", label : Alfresco.util.message('lecm.meditor.lbl.title'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
+		                            { className: "viewmode-label", key : "default", label : Alfresco.util.message('lecm.meditor.lbl.default'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
 		                            { className: "viewmode-label", key : "type", label : Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dTypes, formatter : "dropdown", width : 100, maxAutoWidth : 100 },
 		                            { className: "viewmode-label", key : "mandatory", label : Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
 		                            { className: "viewmode-label", key : "_enabled", label : Alfresco.util.message('lecm.meditor.lbl.index'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
+		                            { className: "viewmode-label", key : "tokenised", label : Alfresco.util.message('lecm.meditor.lbl.tokenised'), dropdownOptions : dTokenised, formatter : "dropdown", width : 100, maxAutoWidth : 100 },
 		                            //{ key : "validator", label : "Валидатор", width : 70, maxAutoWidth : 70, dropdownOptions: [""], formatter:  "dropdown" },
 		                            { key : "delete", label : "", formatter : this._formatActions, width : 15, maxAutoWidth : 15}
 		                        ];
-				this.attribyteResponseSchema = { fields : [{key : "_id"}, {key : "_name"}, {key : "title"}, {key : "type"}, {key : "mandatory"}, {key : "_enabled"}, {key : "validator"}] };
+				this.attribyteResponseSchema = { fields : [{key : "_id"}, {key : "_name"}, {key : "title"}, {key : "default"}, {key : "type"}, {key : "mandatory"}, {key : "_enabled"}, {key : "tokenised"}, {key : "validator"}] };
 				//Ассоциации
 				this.associationsDialogEl = [
 				                    { name: "_name", label: Alfresco.util.message('lecm.meditor.lbl.name'), type:"input" },
@@ -932,9 +942,9 @@ IT.component = IT.component || {};
 				this.associationsColumnDefs = [
 				                    { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
 		                            { className: "viewmode-label", key:"title", label:Alfresco.util.message('lecm.meditor.lbl.title'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key:"class", label:Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dAssociations, formatter: "dropdown", width : 100, maxAutoWidth : 100 },
+		                            { className: "viewmode-label", key:"class", label:Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dAssociations, formatter: "dropdown", width : 291, maxAutoWidth : 291 },
 		                            { className: "viewmode-label", key:"mandatory", label:Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key:"many", label:Alfresco.util.message('lecm.meditor.lbl.multiple'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 },
+		                            { className: "viewmode-label", key:"many", label:Alfresco.util.message('lecm.meditor.lbl.multiple'), formatter: this._formatBoolean, width : 223, maxAutoWidth : 223 },
 		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 }
 		                        ];
 				this.associationResponseSchema = { fields : [{key : "_name"}, {key : "class"}, {key : "title"}, {key : "mandatory"}, {key : "many"}] };
