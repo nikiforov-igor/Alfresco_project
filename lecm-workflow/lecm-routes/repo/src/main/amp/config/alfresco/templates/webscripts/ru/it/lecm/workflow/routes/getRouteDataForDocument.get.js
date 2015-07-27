@@ -44,7 +44,7 @@
 
 		sourceRouteNode = getSourceRouteForIteration(currentIterationNode);
 
-		if (sourceRouteNode.parent == routesService.getRoutesFolder()) {
+		if (routesService.getRoutesFolder().equals(sourceRouteNode.parent)) {
 			sourceRouteInfo = currentIterationNode.properties['cm:title'];
 		}
 
