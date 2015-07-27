@@ -566,6 +566,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			}) : this.approvalStateSettings[this.approvalState].stateMsg;
 		},
 		manageControlsVisibility: function () {
+			var approvalListButtonMenu, items, itemData, visible;
 			function hide(element) {
 				YAHOO.util.Dom.addClass(element, 'hidden');
 			}
@@ -587,22 +588,24 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.approvalStateSettings[this.approvalState].hideElements.forEach(hide);
 			this.approvalStateSettings[this.approvalState].revealElements.forEach(reveal);
 
-			var approvalListButtonMenu = this.createApprovalListButton.getMenu();
-			var items = approvalListButtonMenu.getItems().filter(previous);
-			var itemData = approvalListButtonMenu.itemData.filter(previous);
-			var visible = ('COMPLETE' == this.approvalState) || (this.completedApprovalsCount > 0);
+			if (this.createApprovalListButton) {
+				approvalListButtonMenu = this.createApprovalListButton.getMenu();
+				items = approvalListButtonMenu.getItems().filter(previous);
+				itemData = approvalListButtonMenu.itemData.filter(previous);
+				visible = ('COMPLETE' == this.approvalState) || (this.completedApprovalsCount > 0);
 
-			if (items.length) {
-				if (visible) {
-					reveal(items[0]);
-				} else {
-					hide(items[0]);
-				}
-			} else if (itemData.length) {
-				if (visible) {
-					itemData[0].classname = null;
-				} else {
-					itemData[0].classname = 'hidden';
+				if (items.length) {
+					if (visible) {
+						reveal(items[0]);
+					} else {
+						hide(items[0]);
+					}
+				} else if (itemData.length) {
+					if (visible) {
+						itemData[0].classname = null;
+					} else {
+						itemData[0].classname = 'hidden';
+					}
 				}
 			}
 		},
