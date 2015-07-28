@@ -535,7 +535,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	public String editAgendaItemWorkspace(NodeRef agendaItem, boolean newWorkspace){
 		//получим совещание  
 		NodeRef meeting = documentTableService.getDocumentByTableDataRow(agendaItem);
-		
+		final int maxSiteShortNameLength = 65;
 		NodeRef site = null;
 		if (MeetingsService.TYPE_MEETINGS_DOCUMENT.equals(nodeService.getType(meeting))){
 			if (newWorkspace){
@@ -543,8 +543,9 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 				String agendaItemName = (String) nodeService.getProperty(agendaItem, MeetingsService.PROP_MEETINGS_TS_ITEM_NAME);
 				String siteName = meetingTitle + ", пункт " + agendaItemName;
 				Integer agendaItemNumber = (Integer) nodeService.getProperty(agendaItem, DocumentTableService.PROP_INDEX_TABLE_ROW);
-				String siteShortName = Translit.toTranslit(siteName);
+				String siteShortName = Translit.toTranslit(meetingTitle);
 				siteShortName = delNoDigOrLet(siteShortName);
+				siteShortName = siteShortName.length() <= maxSiteShortNameLength ? siteShortName : siteShortName.substring(0, maxSiteShortNameLength);
 				siteShortName += "-" + agendaItemNumber.toString();
 				if (siteService.hasSite(siteShortName)){
 					Integer i = 1;
