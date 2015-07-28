@@ -1194,9 +1194,6 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                         },
                         onSuccess:{
                             fn:function DataGrid_onActionWorkspaceEdit_success(response) {
-								Alfresco.util.PopupManager.displayMessage({
-									text:this.msg("message.details.success")
-								});
 	                            this.editWorkspaceDialogOpening = false;
 								
 								var newWorkspace = response.config.dataObj["lecm-meetings-ts_new-workspace"];
@@ -1213,6 +1210,9 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 									successCallback:
 									{
 										fn: function(){
+											Alfresco.util.PopupManager.displayMessage({
+												text:this.msg("message.details.success")
+											});
 											this._itemUpdate(item.nodeRef);
 										},
 										scope: this
