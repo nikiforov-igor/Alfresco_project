@@ -595,7 +595,6 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 				for (NodeRef reporter : reporterAndCoreporterList){
 					if (orgstructureService.isEmployee(reporter)){
 						if ( addAuthorityToSite(siteShortName, SiteModel.SITE_COLLABORATOR, reporter) ){
-							//Отправка уведомления Содокладчику
 							List<NodeRef> recipients = new ArrayList();
 							recipients.add(reporter);
 							sendNotificationAboutInviteToSite(site, siteShortName, recipients);
@@ -618,7 +617,8 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 
 		String author = AuthenticationUtil.getSystemUserName();
 		String employeeName = (String) nodeService.getProperty(orgstructureService.getCurrentEmployee(), OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-		String siteLinkUrl = "<a href=\"" + serverUrl + "/share/page/site/" + siteShortName + "/dashboard" + "\">" + siteShortName + "</a>";
+		String siteTitle = (String) nodeService.getProperty(site, ContentModel.PROP_TITLE);
+		String siteLinkUrl = "<a href=\"" + serverUrl + "/share/page/site/" + siteShortName + "/dashboard" + "\">" + siteTitle + "</a>";
 		String text = employeeName + " пригласил вас на сайт " + siteLinkUrl;
 		notificationsService.sendNotification(author, site, text, recipients, null);
 	}
