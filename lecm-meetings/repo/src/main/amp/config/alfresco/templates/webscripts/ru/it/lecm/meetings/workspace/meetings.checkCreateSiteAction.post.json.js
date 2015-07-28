@@ -36,9 +36,13 @@ function main() {
 	var approveAgenda = meeting.properties["lecm-meetings:approve-agenda"];
 	if (!approveAgenda){
 		var currentIter = routesService.getDocumentCurrentIteration(meeting);
-		var approvalResult = currentIter.properties["lecmApproveAspects:approvalDecision"];	
-		if ("APPROVED".equals(approvalResult) || "APPROVED_WITH_REMARK".equals(approvalResult) || "APPROVED_FORCED".equals(approvalResult)){
-			isApproved = true;
+		if (currentIter){
+			var approvalResult = currentIter.properties["lecmApproveAspects:approvalDecision"];	
+			if (approvalResult){
+				if ("APPROVED".equals(approvalResult) || "APPROVED_WITH_REMARK".equals(approvalResult) || "APPROVED_FORCED".equals(approvalResult)){
+					isApproved = true;
+				}
+			}
 		}
 	} else{
 		isApproved = true;
