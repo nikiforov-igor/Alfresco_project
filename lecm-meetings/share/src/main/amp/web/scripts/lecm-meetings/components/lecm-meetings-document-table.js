@@ -934,8 +934,10 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                                         me.widgets.dataTable.addRow(oDataRecord1.getData(), index-1);
                                     }
 
-                                    me._itemUpdate(response.json.firstNodeRef);
-                                    me._itemUpdate(response.json.secondNodeRef);
+									Bubbling.fire("datagridRefresh",
+		                            {
+			                            bubblingLabel:me.options.bubblingLabel
+		                            });
                                 }
                             }
                         }
@@ -977,8 +979,10 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                                     me.widgets.dataTable.deleteRow(oDataRecord1);
                                     me.widgets.dataTable.addRow(oDataRecord1.getData(), index+1);
 
-                                    me._itemUpdate(response.json.firstNodeRef);
-                                    me._itemUpdate(response.json.secondNodeRef);
+									Bubbling.fire("datagridRefresh",
+		                            {
+			                            bubblingLabel:me.options.bubblingLabel
+		                            });
                                 }
                             }
                         }
