@@ -536,12 +536,14 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 		//получим совещание  
 		NodeRef meeting = documentTableService.getDocumentByTableDataRow(agendaItem);
 		final int maxSiteShortNameLength = 65;
+		final int maxSiteNameLength = 100;
 		NodeRef site = null;
 		if (MeetingsService.TYPE_MEETINGS_DOCUMENT.equals(nodeService.getType(meeting))){
 			if (newWorkspace){
 				String meetingTitle = (String) nodeService.getProperty(meeting, EventsService.PROP_EVENT_TITLE);
 				String agendaItemName = (String) nodeService.getProperty(agendaItem, MeetingsService.PROP_MEETINGS_TS_ITEM_NAME);
 				String siteName = meetingTitle + ", пункт " + agendaItemName;
+				siteName = siteName.length() <= maxSiteNameLength ? siteName : siteName.substring(0, maxSiteNameLength);
 				Integer agendaItemNumber = (Integer) nodeService.getProperty(agendaItem, DocumentTableService.PROP_INDEX_TABLE_ROW);
 				String siteShortName = Translit.toTranslit(meetingTitle);
 				siteShortName = delNoDigOrLet(siteShortName);
