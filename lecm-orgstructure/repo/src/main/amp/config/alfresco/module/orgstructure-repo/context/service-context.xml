@@ -381,5 +381,10 @@
             </list>
         </property>
     </bean>
+	
+	<bean id="orgstructureSitePolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureSitePolicy" init-method="init" parent="baseBean">
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+		<property name="policyComponent" ref="policyComponent"/>
+	</bean>
 
 </beans>

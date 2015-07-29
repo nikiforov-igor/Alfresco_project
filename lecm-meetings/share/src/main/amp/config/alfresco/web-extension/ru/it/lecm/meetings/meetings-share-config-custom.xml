@@ -1078,6 +1078,7 @@
                             <control-param name="itemType">st:site</control-param>
                             <control-param name="nameSubstituteString">{cm:title}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{cm:title}</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
 						<constraint-handlers>
 							<constraint validation-handler="LogicECM.module.Meetings.agendaItemConnectedWorkplaceValidation" event="change"/>

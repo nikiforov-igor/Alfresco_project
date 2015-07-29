@@ -8,6 +8,7 @@ import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
+import org.alfresco.repo.site.SiteModel;
 
 /**
  * User: dbashmakov
@@ -32,6 +33,12 @@ public class OrgstructureOnCreateAssocPolicy extends LogicECMAssociationPolicy {
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 OrgstructureBean.TYPE_ORGANIZATION_ELEMENT, new JavaBehaviour(this, "onCreateAssociation"));
+		
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+                SiteModel.TYPE_SITE, new JavaBehaviour(this, "onDeleteAssociation"));
+				
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                SiteModel.TYPE_SITE, new JavaBehaviour(this, "onCreateAssociation"));
     }
 
     @Override
