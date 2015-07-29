@@ -69,7 +69,19 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			}
 
 			// construct the picker
-			this.widgets.calendar = new YAHOO.widget.Calendar(this.id, this.id, { title:this._msg("form.control.date-picker.choose"), close:true, navigator:true });
+			this.widgets.calendar = new YAHOO.widget.Calendar(this.id, this.id, {
+				title:this._msg("form.control.date-picker.choose"),
+				close:true,
+				navigator: {
+					strings: {
+						month: this._msg("lable.calendar-month-label"),
+						year: this._msg("lable.calendar-year-label"),
+						submit: this._msg("lable.calendar-ok-label"),
+						cancel: this._msg("lable.calendar-cancel-label"),
+						invalidYear: this._msg("lable.calendar-wrongyear-label")
+					}
+				}
+			});
 			this.widgets.calendar.cfg.setProperty("pagedate", page);
 			this.widgets.calendar.cfg.setProperty("selected", selected);
 			Alfresco.util.calI18nParams(this.widgets.calendar);

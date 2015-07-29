@@ -120,7 +120,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.widgets.calendarFrom = new YAHOO.widget.Calendar(this.id + "-from", this.id + "-from", {
                     title: this.msg("form.control.date-picker.choose"),
                     close: true,
-                    navigator: true
+                    navigator: {
+                        strings : {
+                            month: this.msg("lable.calendar-month-label"),
+                            year: this.msg("lable.calendar-year-label"),
+                            submit: this.msg("lable.calendar-ok-label"),
+                            cancel: this.msg("lable.calendar-cancel-label"),
+                            invalidYear: this.msg("lable.calendar-wrongyear-label")
+                        }
+                    }
                 });
 
                 this.widgets.calendarFrom.cfg.setProperty("pagedate", page);
@@ -145,7 +153,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 this.widgets.calendarTo = new YAHOO.widget.Calendar(this.id + "-to", this.id + "-to", {
                     title: this.msg("form.control.date-picker.choose"),
                     close: true,
-                    navigator: true
+                    navigator: {
+                        strings : {
+                            month: this.msg("lable.calendar-month-label"),
+                            year: this.msg("lable.calendar-year-label"),
+                            submit: this.msg("lable.calendar-ok-label"),
+                            cancel: this.msg("lable.calendar-cancel-label"),
+                            invalidYear: this.msg("lable.calendar-wrongyear-label")
+                        }
+                    }
                 });
                 this.widgets.calendarTo.cfg.setProperty("pagedate", page);
                 this.widgets.calendarTo.cfg.setProperty("selected", selected);

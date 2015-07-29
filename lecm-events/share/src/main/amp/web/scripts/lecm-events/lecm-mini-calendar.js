@@ -88,7 +88,17 @@ LogicECM.module = LogicECM.module || {};
 
 			// Separate the (initial) rendering of the calendar from the data loading.
 			// If for some reason the data fails to load, the calendar will still display.
-			this.calendar = new YAHOO.widget.Calendar("calendar", { navigator:true });
+			this.calendar = new YAHOO.widget.Calendar("calendar", {
+				navigator: {
+					strings: {
+						month: this._msg("lable.calendar-month-label"),
+						year: this._msg("lable.calendar-year-label"),
+						submit: this._msg("lable.calendar-ok-label"),
+						cancel: this._msg("lable.calendar-cancel-label"),
+						invalidYear: this._msg("lable.calendar-wrongyear-label")
+					}
+				}
+			});
 			// Set localised properties
 			Alfresco.util.calI18nParams(this.calendar);
 			this.calendar.render();

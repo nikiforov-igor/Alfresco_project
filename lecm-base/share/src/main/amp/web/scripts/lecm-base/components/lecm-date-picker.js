@@ -227,7 +227,19 @@
 
                     // construct the picker
                     if (!me.options.disabled) {
-                        me.widgets.calendar = new YAHOO.widget.Calendar(me.id, {title: me._msg("form.control.date-picker.choose"), close: true, navigator: true});
+                        me.widgets.calendar = new YAHOO.widget.Calendar(me.id, {
+                            title: me._msg("form.control.date-picker.choose"),
+                            close: true,
+                            navigator: {
+                                strings : {
+                                    month: me._msg("lable.calendar-month-label"),
+                                    year: me._msg("lable.calendar-year-label"),
+                                    submit: me._msg("lable.calendar-ok-label"),
+                                    cancel: me._msg("lable.calendar-cancel-label"),
+                                    invalidYear: me._msg("lable.calendar-wrongyear-label")
+                                }
+                            }
+                        });
                         me.widgets.calendar.cfg.setProperty("pagedate", page);
                         me.widgets.calendar.cfg.setProperty("selected", selected);
 
