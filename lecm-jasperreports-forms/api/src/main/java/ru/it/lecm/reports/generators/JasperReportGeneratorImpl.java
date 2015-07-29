@@ -5,9 +5,13 @@ import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import org.alfresco.repo.content.filestore.FileContentReader;
+import org.alfresco.repo.content.filestore.FileContentWriter;
+import org.alfresco.repo.content.transform.ContentTransformer;
+import org.alfresco.repo.content.transform.OpenOfficeContentTransformerWorker;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.IOUtils;
@@ -224,10 +228,18 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
                     exportReportToStream(new JRRtfExporter(), jPrint, outputStream);
                     break;
                 case DOC:
-                    exportReportToStream(new JRDocxExporter(), jPrint, outputStream);
+                    try {
+                        generateWithConversion(outputStream, jPrint, "doc");
+                    } catch (IOException e) {
+                        log.error("Cannot create doc", e);
+                    }
                     break;
                 case DOCX:
-                    exportReportToStream(new JRDocxExporter(), jPrint, outputStream);
+                    try {
+                        generateWithConversion(outputStream, jPrint, "docx");
+                    } catch (IOException e) {
+                        log.error("Cannot create docx", e);
+                    }
                     break;
                 case XLS:
                     exportReportToStream(new JRXlsExporter(), jPrint, outputStream);
@@ -248,6 +260,28 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
             }
         }
         log.info(String.format("Report '%s' as %s generated succefully", report.getName(), target));
+    }
+
+    private void generateWithConversion(OutputStream outputStream, JasperPrint jPrint, String outputExtention) throws IOException, JRException {
+        File odt = File.createTempFile("report", ".odt");
+        FileOutputStream odtOut = new FileOutputStream(odt);
+        exportReportToStream(new JROdtExporter(), jPrint, odtOut);
+        odtOut.flush();
+        odtOut.close();
+        File doc = File.createTempFile("report", "." + outputExtention);
+        String odtMimetype = getServices().getServiceRegistry().getMimetypeService().getMimetype("odt");
+        String docMimetype = getServices().getServiceRegistry().getMimetypeService().getMimetype(outputExtention);
+        ContentTransformer transformer = getServices().getServiceRegistry().getContentService().getTransformer(odtMimetype, docMimetype);
+        FileContentReader reader = new FileContentReader(odt);
+        reader.setMimetype(odtMimetype);
+        FileContentWriter writer =  new FileContentWriter(doc);
+        writer.setMimetype(docMimetype);
+        transformer.transform(reader, writer);
+        odt.delete();
+        FileInputStream docIn = new FileInputStream(doc);
+        IOUtils.copy(docIn, outputStream);
+        docIn.close();
+        doc.delete();
     }
 
     private void exportReportToStream(final JRAbstractExporter exporter, final JasperPrint jPrint, OutputStream outputStream)
