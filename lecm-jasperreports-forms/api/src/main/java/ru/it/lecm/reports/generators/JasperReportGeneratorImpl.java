@@ -282,8 +282,9 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
             IOUtils.copy(docIn, outputStream);
         } catch (IOException e) {
             log.error("Cannot copy streams", e);
+        } finally {
+            doc.delete();
         }
-        doc.delete();
     }
 
     private void exportReportToStream(final JRAbstractExporter exporter, final JasperPrint jPrint, OutputStream outputStream)
