@@ -690,7 +690,7 @@
                     <show id="lecm-representative:contr-name" force="true"/>                                            <!-- Контрагент -->
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-representative:contr-name" label-id="contr-name" substituteString="{..lecm-contractor:link-to-representative-association/..lecm-contractor:contractor-to-link-association/lecm-contractor:shortname}"></field>
+                    <!--<field id="lecm-representative:contr-name" label-id="contr-name" substituteString="{..lecm-contractor:link-to-representative-association/..lecm-contractor:contractor-to-link-association/lecm-contractor:shortname}"></field>-->
                 </appearance>
             </form>
         </forms>

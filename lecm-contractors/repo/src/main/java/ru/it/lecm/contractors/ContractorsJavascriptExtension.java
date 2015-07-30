@@ -2,9 +2,11 @@ package ru.it.lecm.contractors;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.ParameterCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.contractors.api.Contractors;
@@ -56,24 +58,15 @@ public class ContractorsJavascriptExtension extends BaseWebScript {
         return new JSONObject(result);
     }
 
-    public JSONObject getContractorForRepresentative(final JSONObject json) {
-        NodeRef childContractor;
+    public Scriptable getContractorsForRepresentative(String representative) {
+        ParameterCheck.mandatory("representative", representative);
 
-        try {
-            childContractor = new NodeRef(json.getString("childRef"));
-        } catch (JSONException ex) {
-            throw new WebScriptException(ex.getMessage(), ex);
+        NodeRef representativeRef = new NodeRef(representative);
+        List<NodeRef> results = contractors.getContractorsForRepresentative(representativeRef);
+        if (results != null) {
+            return createScriptable(results);
         }
-
-        Map<String, String> result = contractors.getContractorForRepresentative(childContractor);
-
-        if (result.isEmpty()) {
-            result.put("status", "failure");
-        } else {
-            result.put("status", "success");
-        }
-
-        return new JSONObject(result);
+        return null;
     }
 
     public List<Object> getRepresentatives(final JSONObject json) {

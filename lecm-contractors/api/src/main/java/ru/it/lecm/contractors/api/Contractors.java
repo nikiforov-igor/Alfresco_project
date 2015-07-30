@@ -31,7 +31,7 @@ public interface Contractors {
 
     public void assignAsPrimaryRepresentative(NodeRef representativeToAssignAsPrimary);
 
-    public Map<String, String> getContractorForRepresentative(NodeRef childContractor);
+    public List<NodeRef> getContractorsForRepresentative(NodeRef childContractor);
 
     public Map<String, String> getParentContractor(NodeRef childContractor);
 

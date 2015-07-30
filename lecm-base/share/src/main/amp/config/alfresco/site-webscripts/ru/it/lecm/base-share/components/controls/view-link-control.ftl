@@ -23,8 +23,8 @@
 		<label>${labelText}:</label>
 	</div>
 	<div id="${formId}-view-link-field" class="container">
-		<div class="value-div">
-			<a id="${formId}-view-link-ref" href="javascript:void(0);"/></a>
+		<div id="${formId}-view-link-block" class="value-div">
+
 		</div>
 	</div>
 </div>
@@ -50,16 +50,30 @@
             successCallback:{
                 fn: function( response ) {
 
-                    var linkElem;
+                    var blockElem;
 
                     if( response.json.status === "success" ) {
 
-                        linkElem = YAHOO.util.Dom.get( "${formId}-view-link-ref" );
-                        linkElem.innerHTML = response.json.parentName;
+                        if (response.json.parentName != null) {
+	                        blockElem = YAHOO.util.Dom.get( "${formId}-view-link-block" );
+	                        blockElem.innerHTML = '<a id="${formId}-view-link-ref" href="javascript:void(0);"/>' + response.json.parentName + '</a>';
 
-                        YAHOO.util.Event.addListener( linkElem, "click", function() {
-                            LogicECM.CurrentModules.ViewFormModule[ "${viewLinkFormId}" ].view( response.json.parentRef, "${setId}", "${formTitle} " + response.json.childName );
-                        });
+	                        YAHOO.util.Event.addListener("${formId}-view-link-ref", "click", function() {
+		                        LogicECM.CurrentModules.ViewFormModule[ "${viewLinkFormId}" ].view( response.json.parentRef, "${setId}", "${formTitle} " + response.json.childName );
+	                        });
+                        } else if (response.json.parents != null) {
+	                        blockElem = YAHOO.util.Dom.get( "${formId}-view-link-block" );
+
+                            for (var i = 0; i < response.json.parents.length; i++) {
+	                            blockElem.innerHTML += '<a id="${formId}-view-link-ref-' + i + '" href="javascript:void(0);"/>' + response.json.parents[i].name + '</a>&nbsp;';
+
+	                            YAHOO.util.Event.onAvailable("${formId}-view-link-ref-" + i, function (j) {
+                                    YAHOO.util.Event.addListener("${formId}-view-link-ref-" + j, "click", function(e, k) {
+                                        LogicECM.CurrentModules.ViewFormModule[ "${viewLinkFormId}" ].view( response.json.parents[k].nodeRef, "${setId}", "${formTitle} " + response.json.childName );
+                                    }, j);
+	                            }, i);
+                            }
+                        }
                     }
                 }
             },

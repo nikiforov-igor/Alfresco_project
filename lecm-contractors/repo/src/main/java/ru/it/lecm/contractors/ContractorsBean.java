@@ -78,32 +78,15 @@ public class ContractorsBean extends BaseBean implements Contractors {
     }
 
     @Override
-    public Map<String, String> getContractorForRepresentative(NodeRef representative) {
-
-        Map<String, String> result = new HashMap<String, String>();
-
-        List<AssociationRef> representativeSourceAssocs = nodeService.getSourceAssocs(representative, Contractors.ASSOC_LINK_TO_REPRESENTATIVE);
-
-        if(representativeSourceAssocs == null || representativeSourceAssocs.isEmpty()) {
-            return result;
+    public List<NodeRef> getContractorsForRepresentative(NodeRef representative) {
+        List<NodeRef> results = new ArrayList<>();
+        List<NodeRef> links = findNodesByAssociationRef(representative, ASSOC_LINK_TO_REPRESENTATIVE, TYPE_REPRESENTATIVE_AND_CONTRACTOR, ASSOCIATION_TYPE.SOURCE);
+        if (links != null) {
+            for (NodeRef link: links) {
+                results.add(nodeService.getPrimaryParent(link).getParentRef());
+            }
         }
-
-        AssociationRef sourceAssocRefToLink = representativeSourceAssocs.get(0);
-        NodeRef linkRef = sourceAssocRefToLink.getSourceRef();
-        NodeRef contractorRef = nodeService.getPrimaryParent(linkRef).getParentRef();
-
-        if(contractorRef != null && TYPE_CONTRACTOR.isMatch(nodeService.getType(contractorRef))) {
-            result.put("parentRef", contractorRef.toString());
-
-            String parentContractorName = nodeService.getProperty(contractorRef, Contractors.PROP_CONTRACTOR_SHORTNAME).toString();
-            result.put("parentName", parentContractorName);
-
-            String representativeSurname = nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_SURNAME).toString();
-            String representativeFirstName = nodeService.getProperty(representative, Contractors.PROP_REPRESENTATIVE_FIRSTNAME).toString();
-            result.put("childName", String.format("%s %s", representativeSurname, representativeFirstName));
-        }
-
-        return result;
+        return results;
     }
 
     @Override
