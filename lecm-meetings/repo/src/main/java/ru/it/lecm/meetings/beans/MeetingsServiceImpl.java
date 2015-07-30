@@ -357,7 +357,11 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 						if (approveAgenda) {
 							result.put("status", "approvement_not_needed");
 						} else {
-							result.put("status", routesService.getApprovalState(meeting));
+							String approvalState = routesService.getApprovalState(meeting);
+							if (null == approvalState || approvalState.isEmpty() || "UNDEF".equals(approvalState) ){
+								approvalState = "NEW";
+							}
+							result.put("status", approvalState);
 						}
 					}
 				}
