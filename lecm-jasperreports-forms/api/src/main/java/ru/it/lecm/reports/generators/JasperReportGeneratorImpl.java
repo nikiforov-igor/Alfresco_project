@@ -278,9 +278,11 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
         writer.setMimetype(docMimetype);
         transformer.transform(reader, writer);
         odt.delete();
-        FileInputStream docIn = new FileInputStream(doc);
-        IOUtils.copy(docIn, outputStream);
-        docIn.close();
+        try (FileInputStream docIn = new FileInputStream(doc)) {
+            IOUtils.copy(docIn, outputStream);
+        } catch (IOException e) {
+            log.error("Cannot copy streams", e);
+        }
         doc.delete();
     }
 
