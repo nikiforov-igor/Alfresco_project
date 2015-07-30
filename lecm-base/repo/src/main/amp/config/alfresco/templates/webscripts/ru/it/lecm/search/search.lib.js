@@ -251,8 +251,24 @@ function getSearchQuery(params) {
 								formQuery += ") ";
 								first = false;
 							}
+						}  else if (p.indexOf("ID") == 0 && p.lastIndexOf("_added") == p.length - 6) {
+                            //поиск по ассоциациям
+                            var idName = p.substring(0, p.lastIndexOf("_added"));
+                            formQuery += (first ? '(' : ' AND (');
+                            var idValues = propValue.split(",");
+                            var addOR = false;
+                            for (var j = 0; j < idValues.length; j++) {
+                                var idValue = idValues[j];
+                                if (addOR) {
+                                    formQuery += " OR ";
 						}
+                                formQuery += (idName + ':"' + idValue + '"');
+                                addOR = true;
 					}
+                            formQuery += ") ";
+                            first = false;
+				}
+			}
 				}
 			}
 
