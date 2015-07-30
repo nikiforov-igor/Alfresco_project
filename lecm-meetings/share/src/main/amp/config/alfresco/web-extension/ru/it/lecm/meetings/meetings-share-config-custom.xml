@@ -884,6 +884,9 @@
 					<show id="lecm-meetings-ts:item-name"/>
 					<show id="lecm-meetings-ts:site-assoc"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-meetings-ts:site-assoc" substituteString="{cm:name};{cm:title}"/>
+				</appearance>
 			</form>
 		</forms>
 	</config>

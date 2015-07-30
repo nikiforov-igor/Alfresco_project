@@ -466,7 +466,8 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 									var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "st:sites", 16);
 									var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"' width='16' height='16'/>";
 							
-									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"site/"+ data.displayValue + "/dashboard" +"' title='" + data.displayValue + "'>" + fileIconHtml + "</a>";
+									var displayValues = data.displayValue.split(";");
+									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"site/"+ displayValues[0] + "/dashboard" +"' title='" + displayValues[1] + "'>" + fileIconHtml + "</a>";
 									break;	
 								default:
 									break;
