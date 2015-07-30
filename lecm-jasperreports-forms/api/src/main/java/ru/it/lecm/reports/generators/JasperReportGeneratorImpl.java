@@ -264,10 +264,10 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
     private void generateWithConversion(OutputStream outputStream, JasperPrint jPrint, String outputExtention) throws IOException, JRException {
         File odt = File.createTempFile("report", ".odt");
-        FileOutputStream odtOut = new FileOutputStream(odt);
-        exportReportToStream(new JROdtExporter(), jPrint, odtOut);
-        odtOut.flush();
-        odtOut.close();
+        try (FileOutputStream odtOut = new FileOutputStream(odt)) {
+            exportReportToStream(new JROdtExporter(), jPrint, odtOut);
+            odtOut.flush();
+        }
         File doc = File.createTempFile("report", "." + outputExtention);
         String odtMimetype = getServices().getServiceRegistry().getMimetypeService().getMimetype("odt");
         String docMimetype = getServices().getServiceRegistry().getMimetypeService().getMimetype(outputExtention);
