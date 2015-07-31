@@ -1,3 +1,21 @@
 .datagrid .onEditWorkspace a {
     background-image: url("/share/res/components/images/site-16.png");
 }
+
+div.flat-button  div.new-row span.addAgendaItemSpanNewRow{
+	border-color:#ccc;
+}
+
+div.flat-button  div.new-row span.addAgendaItemSpanNewRow span.addAgendaItemSpanFirstChild{
+	border-color:#ccc;
+}
+
+div.flat-button  div.new-row span.addAgendaItemSpanNewRow:hover{
+	border-color:#aaa;
+	background:transparent !important;
+}
+
+div.flat-button  div.new-row span.addAgendaItemSpanNewRow span.addAgendaItemSpanFirstChild:hover{
+	border-color:#aaa;
+	background:transparent !important;
+}

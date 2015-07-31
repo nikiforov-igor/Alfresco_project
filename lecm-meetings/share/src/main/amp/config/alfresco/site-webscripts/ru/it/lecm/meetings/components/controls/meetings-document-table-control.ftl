@@ -172,8 +172,8 @@
                 <@comp.baseToolbar toolbarId true showSearch false>
                     <#if showCreateButton>
                         <div class="new-row">
-                                    <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button">
-                                       <span class="first-child">
+                                    <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button addAgendaItemSpanNewRow">
+                                       <span class="first-child addAgendaItemSpanFirstChild">
                                           <button type="button"
                                                   title="${msg("label.table.row.create.title")}">${msg("label.table.row.create.title")}</button>
                                        </span>
