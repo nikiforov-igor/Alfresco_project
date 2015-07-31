@@ -24,6 +24,10 @@
         <property name="objectFactory" ref="objectFactory"/>
         <property name="documentService" ref="documentService"/>
         <property name="namespaceService" ref="namespaceService"/>
+        <property name="armService" ref="armService" />
+        <property name="nodeService" ref="nodeService"/>
+        <property name="processorService" ref="searchQueryProcessorService"/>
+        <property name="searchService" ref="searchService"/>
         <!--        <property name="nodeService" ref="nodeService"/>
                 <property name="personService" ref="personService"/>
                 <property name="orgstructureService" ref="serviceOrgstructure" />
@@ -54,6 +58,10 @@
         <property name="workflowService" ref="workflowServiceImpl"/>
         <property name="actionsService" ref="webscript.ru.it.lecm.statemachine.actions.get"/>
         <property name="namespaceService" ref="namespaceService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure" />
+        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
     </bean>
 
     <bean id="objectFactory" class="ru.it.lecm.mobile.objects.ObjectFactory">
@@ -119,4 +127,15 @@
     </bean>
 
     <bean id="authenticationLECMClearInterceptor" class="org.alfresco.repo.cmis.ws.AuthenticationClearInterceptor"/>
+
+    <bean id="mobile.arm.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/arm/default-mobile-sed.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

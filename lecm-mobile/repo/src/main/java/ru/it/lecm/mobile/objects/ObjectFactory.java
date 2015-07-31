@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -24,6 +25,7 @@ import ru.it.lecm.statemachine.bean.ActionsScriptBean;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -519,7 +521,7 @@ public class ObjectFactory {
      */
     public WSOCOLLECTION createWSOCOLLECTION() {
         WSOCOLLECTION wsocollection = new WSOCOLLECTION();
-        wsocollection.setCOUNT((short)0);
+        wsocollection.setCOUNT((short) 0);
         return wsocollection;
     }
 
@@ -603,7 +605,7 @@ public class ObjectFactory {
         return new WSODOCUMENT();
     }
 
-    public WSODOCUMENT createWSODOCUMENT(NodeRef documentRef) {
+    public WSODOCUMENT createWSODOCUMENT(NodeRef documentRef, String docType, String status) {
         WSODOCUMENT doc = createWSODOCUMENT();
         doc.setID(documentRef.toString());
         doc.setTITLE((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
@@ -612,24 +614,10 @@ public class ObjectFactory {
         String typePrefixString = type.toPrefixString(namespaceService);
         doc.setTYPE(typePrefixString);
         WSODOCUMENTCOMMONPROPERTIES properties = createWSODOCUMENTCOMMONPROPERTIES();
-        TypeDefinition definition = dictionaryService.getType(type);
-        properties.setDOCTYPE(definition.getTitle(dictionaryService));
+        properties.setDOCTYPE(docType);
 
         //Attach
-        String context = sysAdminParams.getAlfrescoContext();
-        WSOCOLLECTION attachments = createWSOCOLLECTION();
-        List<AssociationRef> attachmentRefs = nodeService.getSourceAssocs(documentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
-        for (AssociationRef attach : attachmentRefs) {
-            WSOURLFILE file = createWSOURLFILE();
-            file.setID(attach.getSourceRef().toString());
-            file.setNAME(nodeService.getProperty(attach.getSourceRef(), ContentModel.PROP_NAME).toString());
-            WSOURL url = createWSOURL();
-            url.setURL(context + "/service/api/node/content/workspace/SpacesStore/" + attach.getSourceRef().getId());
-            file.setREFERENCE(url);
-            attachments.getDATA().add(file);
-        }
-
-        attachments.setCOUNT((short) attachments.getDATA().size());
+        WSOCOLLECTION attachments = getAttachments(documentRef);
         properties.setATTACHMENTS(attachments);
 
         doc.setCOMMONPROPS(properties);
@@ -647,8 +635,8 @@ public class ObjectFactory {
         } catch (DatatypeConfigurationException ignored) {
         }
 
-        doc.setSTATUSNAME((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
-        doc.setSTATUSMOBILE((String) nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS));
+        doc.setSTATUSNAME(status);
+        doc.setSTATUSMOBILE(status);
 
         //Расширение
         WSOCOLLECTION extension = createWSOCOLLECTION();
@@ -722,27 +710,69 @@ public class ObjectFactory {
         return new WSOTASK();
     }
 
-    public void setTransactionService(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
+    public WSOTASK createWSOTASK(NodeRef documentRef, String docType, String status) {
+        WSOTASK doc = createWSOTASK();
+        doc.setID(documentRef.toString());
+        doc.setTITLE((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+        doc.setSUBJECT((String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING));
+        QName type = nodeService.getType(documentRef);
+        String typePrefixString = type.toPrefixString(namespaceService);
+        doc.setTYPE(typePrefixString);
+        WSODOCUMENTCOMMONPROPERTIES properties = createWSODOCUMENTCOMMONPROPERTIES();
+        properties.setDOCTYPE(docType);
+        WSOCOLLECTION attachments = getAttachments(documentRef);
+        doc.setATTACHMENTS(attachments);
 
-    private String getActionExtension(NodeRef nodeRef) {
-        HashMap<String, Object> actions =  actionsService.getActions(nodeRef);
-        String result = "";
-        ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String,Object>>) actions.get("actions");
-        if (list != null) {
-            for (HashMap<String, Object> action : list) {
-                String type = (String) action.get("type");
-                if ("task".equals(type)) {
-                    result += "{" + action.get("label") + "}";
-                }
+        doc.setSTATUSNAME(status);
+        doc.setSTATUSMOBILE(status);
+
+        //Расширение
+        WSOCOLLECTION extension = createWSOCOLLECTION();
+
+        //Действия
+        final String actions = getActionExtension(documentRef);
+        WSOITEM item = createExtentionItem("actions", actions);
+        extension.getDATA().add(item);
+
+        //Свойства
+        Map<QName, Serializable> props = nodeService.getProperties(documentRef);
+
+        doc.setTITLE(props.get(ErrandsService.PROP_ERRANDS_TITLE).toString());
+        List<AssociationRef> assoc = nodeService.getTargetAssocs(documentRef, ErrandsService.ASSOC_ERRANDS_CONTROLLER);
+        if (!assoc.isEmpty()) {
+            doc.setCONTROLLER(createWSOMPERSON(assoc.get(0).getTargetRef()));
+        }
+        assoc = nodeService.getTargetAssocs(documentRef, ErrandsService.ASSOC_ERRANDS_EXECUTOR);
+        if (!assoc.isEmpty()) {
+            WSOCOLLECTION wsocollection = createWSOCOLLECTION();
+            wsocollection.getDATA().add(createWSOMPERSON(assoc.get(0).getTargetRef()));
+            wsocollection.setCOUNT((short)1);
+            doc.setEXECUTORS(wsocollection);
+        }
+
+        /*Date executionDate = (Date) props.get(ErrandsService.PROP_ERRANDS_EXECUTION_DATE);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(executionDate);
+        try {
+            //doc.setDATEPLAN(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar) cal));
+        } catch (DatatypeConfigurationException e) {
+        }
+*/
+        for(Map.Entry<QName, Serializable> property : props.entrySet()) {
+            if (!(property.getValue() instanceof Locale)) {
+                item = createExtentionItem(property.getKey().toPrefixString(namespaceService), property.getValue());
+                extension.getDATA().add(item);
             }
         }
-        return result;
+
+        extension.setCOUNT((short) extension.getDATA().size());
+        doc.setEXTENSION(extension);
+        return doc;
+
     }
 
-    private String getNotNullStringValue(Object value) {
-        return value != null ? (String) value : "";
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     public void setActionsService(ActionsScriptBean actionsService) {
@@ -752,4 +782,40 @@ public class ObjectFactory {
     public void setSecretaryService(SecretaryService secretaryService) {
         this.secretaryService = secretaryService;
     }
+
+    private WSOCOLLECTION getAttachments(NodeRef documentRef) {
+        //Attach
+        String context = sysAdminParams.getAlfrescoContext();
+        WSOCOLLECTION attachments = createWSOCOLLECTION();
+        List<AssociationRef> attachmentRefs = nodeService.getSourceAssocs(documentRef, DocumentService.ASSOC_PARENT_DOCUMENT);
+        for (AssociationRef attach : attachmentRefs) {
+            WSOURLFILE file = createWSOURLFILE();
+            file.setID(attach.getSourceRef().toString());
+            file.setNAME(nodeService.getProperty(attach.getSourceRef(), ContentModel.PROP_NAME).toString());
+            WSOURL url = createWSOURL();
+            url.setURL(context + "/service/api/node/content/workspace/SpacesStore/" + attach.getSourceRef().getId());
+            file.setREFERENCE(url);
+            attachments.getDATA().add(file);
+        }
+
+        attachments.setCOUNT((short) attachments.getDATA().size());
+        return attachments;
+    }
+
+    private String getActionExtension(NodeRef nodeRef) {
+        HashMap<String, Object> actions =  actionsService.getActions(nodeRef);
+        String result = "";
+        ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String,Object>>) actions.get("actions");
+        if (list != null) {
+            for (HashMap<String, Object> action : list) {
+                result += "{" + action.get("label") + "}";
+            }
+        }
+        return result;
+    }
+
+    private String getNotNullStringValue(Object value) {
+        return value != null ? (String) value : "";
+    }
+
 }

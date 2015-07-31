@@ -2012,12 +2012,22 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         }
         return response;
     }
+
     /*
      * Используется в
      * 		- групповых операциях
      */
     @Override
     public void executeTransitionAction(NodeRef document, String actionName) {
+        executeTransitionAction(document, actionName, null);
+    }
+
+    /*
+     * Используется в
+     * 		- групповых операциях и мобильном клиенте
+     */
+    @Override
+    public void executeTransitionAction(NodeRef document, String actionName, String persistedResponse) {
         String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         String taskId = getCurrentTaskId(statemachineId);
         //TODO Сразу передавать нужные параметры
@@ -2034,7 +2044,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
             }
         }
         if (nextState != null) {
-            executeTransitionAction(document, statemachineId, taskId, nextState, null);
+            executeTransitionAction(document, statemachineId, taskId, nextState, persistedResponse);
         }
 
     }

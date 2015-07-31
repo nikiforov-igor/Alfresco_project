@@ -1,18 +1,30 @@
 package ru.it.lecm.mobile.services.formExecutor;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptAction;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.cmr.workflow.WorkflowDefinition;
+import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.util.StrUtils;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.mobile.objects.*;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.bean.ActionsScriptBean;
 
 import java.io.Serializable;
@@ -36,6 +48,10 @@ public class WSActionExecutorPort implements WSActionExecutor {
     private WorkflowService workflowService;
     private ActionsScriptBean actionsService;
     private NamespaceService namespaceService;
+    private NodeService nodeService;
+    private OrgstructureBean orgstructureBean;
+    private StateMachineServiceBean stateMachineHelper;
+    private LecmTransactionHelper lecmTransactionHelper;
 
     public void setObjectFactory(ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
@@ -53,6 +69,22 @@ public class WSActionExecutorPort implements WSActionExecutor {
         this.namespaceService = namespaceService;
     }
 
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureBean = orgstructureService;
+    }
+
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
+
+    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+        this.lecmTransactionHelper = lecmTransactionHelper;
+    }
+
     @Override
     public WSOEDS getfakesign() {
         return new WSOEDS();
@@ -68,14 +100,29 @@ public class WSActionExecutorPort implements WSActionExecutor {
         final AuthenticationUtil.RunAsWork<Boolean> runner = new AuthenticationUtil.RunAsWork<Boolean>() {
             @Override
             public Boolean doWork() throws Exception {
-                if ("SIGNING".equals(actionId)) {
-                    return signing(nodeRef, params);
-                } else if ("APPROVAL".equals(actionId)) {
-                    return approval(nodeRef, params);
-                } else if ("REVIEW".equals(actionId)) {
-                    return review(nodeRef, params);
-                }
-                return false;
+                return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
+                    @Override
+                    public Boolean execute() throws Throwable {
+                        if ("SIGNING".equals(actionId)) {
+                            return signing(nodeRef, params);
+                        } else if ("APPROVAL".equals(actionId)) {
+                            return approval(nodeRef, params);
+                        } else if ("REVIEW".equals(actionId)) {
+                            return review(nodeRef, params);
+                        } else if ("Направить на исполнение".equals(actionId)) {
+                            return directToExecute(nodeRef, params);
+                        } else if ("approveTask".equals(actionId)) {
+                            return approveTask(nodeRef, params);
+                        } else if ("ReturnTask".equals(actionId)) {
+                            return rejectTask(nodeRef, params);
+                        } else if ("Изменить исполнителя".equals(actionId)) {
+                            return changeExecutor(nodeRef, params);
+                        } else if ("CancelTask".equals(actionId)) {
+                            return cancelTask(nodeRef, params);
+                        }
+                        return false;
+                    }
+                });
             }
         };
 
@@ -192,4 +239,88 @@ public class WSActionExecutorPort implements WSActionExecutor {
         }
         return "";
     }
+
+    private boolean approveTask(NodeRef nodeRef, WSOCOLLECTION params) {
+        String workflowId = startWorkflow(nodeRef, "activiti$errandsInitiatorApprove", new HashMap<QName, Serializable>());
+        stateMachineHelper.executeTransitionAction(nodeRef, "Подтвердить исполнение", "=" + workflowId + ",");
+        return true;
+    }
+
+    private boolean rejectTask(NodeRef nodeRef, WSOCOLLECTION params) {
+        QName param = QName.createQName("lecmErrandWf:initiatorDeclineReason", namespaceService);
+        HashMap<QName, Serializable> wParams = new HashMap<>();
+        wParams.put(param, ((WSOITEM) params.getDATA().get(0)).getVALUES().getDATA().get(0).toString());
+        String workflowId = startWorkflow(nodeRef, "activiti$errandsInitiatorDecline", wParams);
+        stateMachineHelper.executeTransitionAction(nodeRef, "Отправить на доработку", "=" + workflowId + ",");
+        return true;
+    }
+
+    private boolean directToExecute(NodeRef nodeRef, WSOCOLLECTION params) {
+        QName param = QName.createQName("lecmIncomingWf:recipient", namespaceService);
+        HashMap<QName, Serializable> wParams = new HashMap<>();
+        NodeRef executor = new NodeRef(((WSOPERSON)((WSOITEM) params.getDATA().get(0)).getVALUES().getDATA().get(0)).getID());
+        wParams.put(param, executor);
+        String workflowId = startWorkflow(nodeRef, "activiti$incomingDirectToExecution", wParams);
+        stateMachineHelper.executeTransitionAction(nodeRef, "Направить на исполнение", "=" + workflowId + ",");
+        return true;
+    }
+
+    private boolean changeExecutor(NodeRef nodeRef, WSOCOLLECTION params) {
+        QName execParam = QName.createQName("lecmErrandWf:changeExecutorNewExecutor", namespaceService);
+        QName commentParam = QName.createQName("lecmErrandWf:changeExecutorReason", namespaceService);
+        HashMap<QName, Serializable> wParams = new HashMap<>();
+        for (Object i : params.getDATA()) {
+            WSOITEM item = (WSOITEM) i;
+            if (item.getID().equals("executor")) {
+                NodeRef executor = new NodeRef(((WSOPERSON) item.getVALUES().getDATA().get(0)).getID());
+                wParams.put(execParam, executor);
+            } else if (item.getID().equals("comment")) {
+                wParams.put(commentParam, item.getVALUES().getDATA().get(0).toString());
+            }
+        }
+        String workflowId = startWorkflow(nodeRef, "activiti$errandsChangeExecutor", wParams);
+        stateMachineHelper.executeTransitionAction(nodeRef, "Сменить исполнителя", "=" + workflowId + ",");
+        return true;
+    }
+
+    private boolean cancelTask(NodeRef nodeRef, WSOCOLLECTION params) {
+        QName param = QName.createQName("lecmErrandWf:cancelReason", namespaceService);
+        HashMap<QName, Serializable> wParams = new HashMap<>();
+        wParams.put(param, ((WSOITEM) params.getDATA().get(0)).getVALUES().getDATA().get(0).toString());
+        String workflowId = startWorkflow(nodeRef, "activiti$errandsCancel", wParams);
+        stateMachineHelper.executeTransitionAction(nodeRef, "Отменить поручение", "=" + workflowId + ",");
+        return true;
+    }
+
+    private boolean changeDate(NodeRef nodeRef, WSOCOLLECTION params) {
+        //Date
+        //((WSOITEM) params.getDATA().get(0)).getVALUES().getDATA().get(0)
+        return true;
+    }
+
+
+    private String startWorkflow(NodeRef nodeRef, String workflowDefId, Map<QName, Serializable> params) {
+        NodeRef assigneeNodeRef = orgstructureBean.getPersonForEmployee(orgstructureBean.getCurrentEmployee());
+
+        Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
+        workflowProps.putAll(params);
+        NodeRef stateProcessPackage = workflowService.createPackage(null);
+        nodeService.addChild(stateProcessPackage, nodeRef, ContentModel.ASSOC_CONTAINS, ErrandsService.TYPE_ERRANDS);
+
+        workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
+        workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);
+
+        //workflowProps.put(QName.createQName("{}stm_document"), docRef);
+
+        // get the moderated workflow
+        WorkflowDefinition wfDefinition = workflowService.getDefinitionByName(workflowDefId);
+        // start the workflow
+        WorkflowPath path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
+        List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
+        for (WorkflowTask task : tasks) {
+            workflowService.endTask(task.getId(), null);
+        }
+        return path.getInstance().getId();
+    }
+
 }

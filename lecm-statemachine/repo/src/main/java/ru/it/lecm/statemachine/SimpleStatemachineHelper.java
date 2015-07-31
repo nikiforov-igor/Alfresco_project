@@ -205,6 +205,12 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public void executeTransitionAction(NodeRef document, String actionName, String persistedResponse) {
+        logger.warn("This method is not implemented yet.");
+        throw new IllegalStateException("This method is not implemented yet.");
+    }
+
+    @Override
     public List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
         logger.warn("This method is not implemented yet.");
         throw new IllegalStateException("This method is not implemented yet.");

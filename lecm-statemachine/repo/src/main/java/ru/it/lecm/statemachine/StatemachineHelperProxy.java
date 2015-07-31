@@ -177,6 +177,11 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     }
 
     @Override
+    public void executeTransitionAction(NodeRef document, String actionName, String persistedResponse) {
+        getHelper(document).executeTransitionAction(document, actionName, persistedResponse);
+    }
+
+    @Override
     public List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
         return lifecycleStateMachineHelper.filterTasksByAssignees(tasks, assigneesEmployees);
     }

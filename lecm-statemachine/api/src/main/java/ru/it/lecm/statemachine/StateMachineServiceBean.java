@@ -165,6 +165,12 @@ public interface StateMachineServiceBean {
 
 	/*
          * Используется в
+         * 		- групповых операциях и мобильном клиенте
+         */
+	void executeTransitionAction(NodeRef document, String actionName, String persistedResponse);
+
+	/*
+         * Используется в
          * 		- StatemachineWebScriptBean - getTasks, getDocumentsTasks
          */
 	List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees);
@@ -228,4 +234,6 @@ public interface StateMachineServiceBean {
 	 * @param processInstanceID идентификатор запущеного процесса
 	 */
 	void disconnectFromStatemachine(final NodeRef documentRef, final String processInstanceID);
+
+
 }

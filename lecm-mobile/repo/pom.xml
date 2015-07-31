@@ -86,6 +86,11 @@
             <artifactId>lecm-delegation-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.arm</groupId>
+            <artifactId>arm-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <scm>
