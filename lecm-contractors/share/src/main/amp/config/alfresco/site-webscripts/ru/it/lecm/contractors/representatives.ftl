@@ -75,7 +75,11 @@
                         type: "datagrid-action-link-representatives-datagrid",
                         id: "onPrimaryChange",
                         permission: "edit",
-                        label: "${msg("action.set_primary")}"//"${msg("actions.edit")}"
+                        label: "${msg("action.set_primary")}",
+	                    evaluator: function (rowData) {
+		                    var itemData = rowData.itemData;
+		                    return !itemData["prop_lecm-contractor_link-to-representative-association-is-primary"].value;
+	                    }
                     },
                     {
                         type: "datagrid-action-link-representatives-datagrid",
