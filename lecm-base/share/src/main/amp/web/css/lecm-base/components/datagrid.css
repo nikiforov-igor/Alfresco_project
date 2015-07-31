@@ -88,6 +88,7 @@
 .datagrid div.simple div.more-actions a.datagrid-action-link span
 {
     display: block;
+	margin-top: 2px;
 }
 
 .datagrid div.action-set div.more-actions {
