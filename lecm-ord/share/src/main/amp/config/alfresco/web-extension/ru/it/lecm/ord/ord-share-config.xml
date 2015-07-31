@@ -146,7 +146,7 @@
                     <show id="lecm-document-aspects:reg-project-data-date"/>											<!-- Дата регистрации -->
                     <show id="lecm-document-aspects:reg-project-data-number"/>											<!-- Номер проекта -->
                     <show id="lecm-document:author-assoc"/>																<!-- Автор -->
-                    <show id="lecm-ord:signers-assoc"/>																	<!-- Подписанты -->
+                    <show id="lecmSignAspects:signerEmployeeAssoc"/>																	<!-- Подписанты -->
                 </field-visibility>
                 <appearance>
                     <set id="ord-document-search-common-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
@@ -177,7 +177,7 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-ord:signers-assoc" set="ord-document-search-common-set" />
+                    <field id="lecmSignAspects:signerEmployeeAssoc" set="ord-document-search-common-set"/>
                 </appearance>
             </form>
 

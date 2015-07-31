@@ -38,6 +38,22 @@
 						</constraint>
 					</constraints>
 				</property>
+				<property name="lecmSignAspects:signerEmployeeAssoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
+				<property name="lecmSignAspects:signerEmployeeAssoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecmSignAspects:signerEmployeeAssoc">
