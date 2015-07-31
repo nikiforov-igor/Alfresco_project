@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:Совещание" type="lecm-busjournal:objectType">
+				<property name="cm:name">Совещание</property>
+				<property name="lecm-busjournal:objectType-code">LECM_MEETING</property>
+				<property name="lecm-busjournal:objectType-class">lecm-meetings:document</property>
+				<property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
+				<property name="lecm-busjournal:objectType-list-template">{lecm-document:present-string}</property>
+			</item>
+			<item name="cm:Пункт повестки совещания" type="lecm-busjournal:objectType">
+				<property name="cm:name">Пункт повестки совещания</property>
+				<property name="lecm-busjournal:objectType-code">LECM_MEETING_ITEM</property>
+				<property name="lecm-busjournal:objectType-class">lecm-meetings-ts:item</property>
+				<property name="lecm-busjournal:objectType-template">Пункт №{lecm-document:indexTableRow}</property>
+				<property name="lecm-busjournal:objectType-list-template">Пункт №{lecm-document:indexTableRow}</property>
+			</item>
+		</items>
+	</item>
+</items>

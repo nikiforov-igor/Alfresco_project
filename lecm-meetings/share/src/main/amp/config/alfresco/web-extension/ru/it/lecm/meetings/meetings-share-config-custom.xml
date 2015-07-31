@@ -1128,4 +1128,15 @@
 			</form>
 		</forms>
 	</config>
+	
+	<config evaluator="node-type" condition="lecm-meetings-ts:itemsTable">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="cm:created"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
