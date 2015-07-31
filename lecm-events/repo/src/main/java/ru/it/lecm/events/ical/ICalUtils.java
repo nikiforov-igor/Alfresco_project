@@ -185,6 +185,7 @@ public class ICalUtils {
 				if (element instanceof VEvent) {
 					VEvent event = (VEvent) element;
 					reply.setUid(event.getUid().getValue());
+					reply.setTimeStamp(new java.util.Date(event.getDateStamp().getDateTime().getTime()));
 					PropertyList attendies = event.getProperties(Attendee.ATTENDEE);
 					if (attendies.size() == 1) {
 						Attendee attendee = ((Attendee) attendies.get(0));

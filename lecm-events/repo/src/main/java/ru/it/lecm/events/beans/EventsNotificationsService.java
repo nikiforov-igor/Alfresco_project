@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Date;
@@ -73,6 +74,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.documents.beans.DocumentService;
+import static ru.it.lecm.events.beans.EventsService.PROP_EVENT_MEMBERS_STATUS;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -103,6 +105,10 @@ public class EventsNotificationsService extends BaseBean {
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_NEW_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-new-event-message.ftl";
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_UPDATE_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-update-event-message.ftl";
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-cancel-event-message.ftl";
+	
+	private static final String MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-accpted-event-message.ftl";
+	private static final String MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-declined-event-message.ftl";
+	private static final String MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-tentative-event-message.ftl";
 
 	private static final String MULTIPART_SUBTYPE_ALTERNATIVE = "alternative";
 	private static final String CONTENT_TYPE_ALTERNATIVE = "multipart/alternative";
@@ -609,13 +615,13 @@ public class EventsNotificationsService extends BaseBean {
 		PropertyList vEventProperties = vEvent.getProperties();
 		vEventProperties.add(tz.getTimeZoneId());
 		Organizer organizer; 
-		if (mailTemplateModel.get("initiatorMail").equals(mailTemplateModel.get("recipientMail"))) {
+		//if (mailTemplateModel.get("initiatorMail").equals(mailTemplateModel.get("recipientMail"))) {
 			organizer = new Organizer(URI.create("mailto:"+defaultFromEmail));
 			organizer.getParameters().add(Role.NON_PARTICIPANT);
-		} else {
-			organizer= new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail")));
-			organizer.getParameters().add(new SentBy(URI.create("mailto:"+defaultFromEmail)));
-		}
+//		} else {
+//			organizer= new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail")));
+//			organizer.getParameters().add(new SentBy(URI.create("mailto:"+defaultFromEmail)));
+//		}
 		
 		vEventProperties.add(organizer);
 		Integer sequence = (Integer) mailTemplateModel.get("sequence");
@@ -799,4 +805,27 @@ public class EventsNotificationsService extends BaseBean {
 		}
 	}
 
+	public void notifyOrganizerMemberStatusChanged(NodeRef event, NodeRef member) {
+		NodeRef tableRow = eventsService.getMemberTableRow(event,member);
+		String status=null;
+		if (null != tableRow) {
+			status = nodeService.getProperty(tableRow, EventsService.PROP_EVENT_MEMBERS_STATUS).toString();
+			Map template = new HashMap(getEventTemplateModel(event));
+			String shortName = (String) nodeService.getProperty(member, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+			template.put("attendeeLink", wrapperLink(member, shortName , BaseBean.LINK_URL));
+			String message = null;
+			if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
+				message = templateService.processTemplate(MEMBER_ACCEPTED_INVITE_TEMPLATE, template);
+			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(status)) {
+				message = templateService.processTemplate(MEMBER_DECLINED_INVITE_TEMPLATE, template);
+			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
+				message = templateService.processTemplate(MEMBER_TENTATIVE_INVITE_TEMPLATE, template);
+			}
+			if ( null != message) {
+				notificationsService.sendNotification(shortName, event, message, Arrays.asList(eventsService.getEventInitiator(event)), member);
+			}
+		}
+		
+	}
+	
 }

@@ -22,6 +22,11 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.events.mail.incoming.MailReciever;
 
 /**
  * User: AIvkin
@@ -29,6 +34,7 @@ import java.util.*;
  * Time: 15:17
  */
 public class EventsWebScriptBean extends BaseWebScript {
+	
     private NodeService nodeService;
     private EventsService eventService;
     private OrgstructureBean orgstructureBean;
@@ -36,7 +42,16 @@ public class EventsWebScriptBean extends BaseWebScript {
     private GroupActionsService actionsService;
     private LecmPermissionService lecmPermissionService;
     private LecmTransactionHelper lecmTransactionHelper;
+	private MailReciever mailReciever;
 
+	public MailReciever getMailReciever() {
+		return mailReciever;
+	}
+
+	public void setMailReciever(MailReciever mailReciever) {
+		this.mailReciever = mailReciever;
+	}
+	
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -372,4 +387,12 @@ public class EventsWebScriptBean extends BaseWebScript {
         }
         return new ScriptNode(settings, serviceRegistry, getScope());
     }
+	
+	public void getMail() {
+		try {
+			mailReciever.recieveMail();
+		} catch (WriteTransactionNeededException ex) {
+			throw new WebScriptException("Mail recieve failed", ex);
+		}
+	}
 }

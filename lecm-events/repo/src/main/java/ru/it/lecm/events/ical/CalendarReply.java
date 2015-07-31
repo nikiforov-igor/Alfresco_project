@@ -1,13 +1,26 @@
 package ru.it.lecm.events.ical;
 
+import java.net.URI;
+import java.net.URL;
+import java.util.Date;
+
 /**
  *
  * @author vkuprin
  */
 public class CalendarReply {
 	private String uid;
-	private String attendeeMail;
+	private URI attendeeMail;
 	private String answer;
+	private Date timeStamp;
+
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Date timeStamp) {
+		this.timeStamp = timeStamp;
+	}
 
 	public String getUid() {
 		return uid;
@@ -18,11 +31,11 @@ public class CalendarReply {
 	}
 
 	public String getAttendeeMail() {
-		return attendeeMail;
+		return attendeeMail.getSchemeSpecificPart();
 	}
 
 	public void setAttendeeMail(String attendeeMail) {
-		this.attendeeMail = attendeeMail;
+		this.attendeeMail = URI.create(attendeeMail);
 	}
 
 	public String getAnswer() {
