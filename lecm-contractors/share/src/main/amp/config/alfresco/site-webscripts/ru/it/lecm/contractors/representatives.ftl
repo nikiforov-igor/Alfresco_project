@@ -92,6 +92,7 @@
 
                 datagridMeta: {
                     useFilterByOrg: false,
+	                useChildQuery: true,
                     itemType: __itemType__,
                     nodeRef: "${contractorRef}",
                     actionsConfig: {
