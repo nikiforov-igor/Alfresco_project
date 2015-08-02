@@ -1,9 +1,11 @@
 package ru.it.lecm.events.schedule;
 
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.List;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.quartz.CronTrigger;
@@ -108,12 +110,20 @@ public class RecieveMailScheduler extends AbstractScheduledAction{
 
 	@Override
 	public List<NodeRef> getNodes() {
-		try {
-			mailReciever.recieveMail();
-		} catch (WriteTransactionNeededException ex) {
-			throw new RuntimeException(ex);
-		}
-		return null;
+		
+			getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+
+				@Override
+				public Void execute() throws Throwable {
+					try {			
+						mailReciever.recieveMail();
+					} catch (WriteTransactionNeededException ex) {
+						throw new RuntimeException(ex);
+					}
+					return null;
+				}
+			}, false, true);
+		return Collections.EMPTY_LIST;
 	}
 
 	@Override

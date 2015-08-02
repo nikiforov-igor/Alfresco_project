@@ -364,7 +364,7 @@
 	</bean>
 	
 	
-<!--	<bean id="events.recieveMailScheduler" class="ru.it.lecm.events.schedule.RecieveMailScheduler"
+	<bean id="events.recieveMailScheduler" class="ru.it.lecm.events.schedule.RecieveMailScheduler"
 	depends-on="events.mail.reciever">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
@@ -373,10 +373,7 @@
 			<value>IGNORE</value>
 		</property>
 		<property name="cronExpression">
-			<value>*/10 * * * * ?</value>
-		</property>
-		<property name="onServerStart">
-			<value>true</value>
+			<value>0 */2 * * * ?</value>
 		</property>
 		<property name="jobName">
 			<value>events-recieve-mail</value>
@@ -405,6 +402,6 @@
 
 		<property name="mailReciever" ref="events.mail.reciever"/>
 		
-	</bean>-->
+	</bean>
 	
 </beans>
