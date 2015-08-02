@@ -14,7 +14,7 @@
 	<p>Уважаемые коллеги!</p>
 	</#if>
 	<br>
-	<p>${typeText?capitalize}е ${title!""} отменено.</p>
+	<p>Вы больше не являетесь участником ${typeText}я ${title!""}.</p>
 	<p>
 	Информация об отмененном ${typeText}и:<br>
 	Время проведения: <#if allDay>${fromDate?date?string("dd.MM.yyyy")}<#else>с ${fromDate?datetime?string("dd.MM.yyyy HH:mm")} по ${toDate?datetime?string("dd.MM.yyyy HH:mm (z)")}</#if>

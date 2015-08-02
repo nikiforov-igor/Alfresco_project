@@ -155,8 +155,6 @@ public interface EventsService {
 
 	void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients);
 
-	void notifyRemovedMember(NodeRef event, NodeRef recipient);
-
 	void notifyEventCncelled(NodeRef event);
 
 	void notifyAttendeeRemoved(NodeRef event, NodeRef attendee);

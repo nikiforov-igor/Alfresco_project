@@ -102,10 +102,15 @@ public class EventsNotificationsService extends BaseBean {
 	private static final String MEMBERS_HTML_UPDATE_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-html-update-event-message.ftl";
 	private static final String MEMBERS_HTML_CANCEL_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-html-cancel-event-message.ftl";
 
+	private static final String MEMBER_REMOVED_HTML_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-removed-html-event-message.ftl";
+	private static final String MEMBER_REMOVED_PLAIN_TEXT_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-removed-plain-text-event-message.ftl";
+	private static final String INVITED_MEMBER_REMOVED_HTML_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-removed-html-event-message.ftl";
+	private static final String INVITED_MEMBER_REMOVED_PLAIN_TEXT_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-removed-plain-text-event-message.ftl";
+
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_NEW_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-new-event-message.ftl";
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_UPDATE_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-update-event-message.ftl";
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-cancel-event-message.ftl";
-	
+
 	private static final String MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-accpted-event-message.ftl";
 	private static final String MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-declined-event-message.ftl";
 	private static final String MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-tentative-event-message.ftl";
@@ -270,7 +275,7 @@ public class EventsNotificationsService extends BaseBean {
 			//теперь рассылка приглашённым
 			List<NodeRef> invitedMembers = eventsService.getEventInvitedMembers(event);
 			for (NodeRef recipient : invitedMembers) {
-				String email = (String) nodeService.getProperty(recipient, OrgstructureBean.PROP_EMPLOYEE_EMAIL);
+				String email = (String) nodeService.getProperty(recipient, Contractors.PROP_REPRESENTATIVE_EMAIL);
 				if (email != null && email.length() > 0) {
 					eventTemplateModel.put("recipientMail", email);
 					String plainText = templateService.processTemplate(INVITED_MEMBERS_PLAIN_TEXT_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
@@ -337,7 +342,7 @@ public class EventsNotificationsService extends BaseBean {
 			sendTo.retainAll(invitedMembers);
 		}
 		for (NodeRef recipient : sendTo) {
-			String email = (String) nodeService.getProperty(recipient, OrgstructureBean.PROP_EMPLOYEE_EMAIL);
+			String email = (String) nodeService.getProperty(recipient, Contractors.PROP_REPRESENTATIVE_EMAIL);
 			if (email != null && email.length() > 0) {
 				eventTemplateModel.put("recipientMail", email);
 				String plainText = templateService.processTemplate(isNew ? INVITED_MEMBERS_PLAIN_TEXT_NEW_EVENT_MESSAGE_TEMPLATE : INVITED_MEMBERS_PLAIN_TEXT_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
@@ -382,13 +387,37 @@ public class EventsNotificationsService extends BaseBean {
 			//Рссылаем стандартные уведомления
 			String author = AuthenticationUtil.getSystemUserName();
 			//отсылка через стандартные уведомления
-			String text = templateService.processTemplate(MEMBERS_PLAIN_TEXT_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+			String text = templateService.processTemplate(MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
 			notificationsService.sendNotification(author, event, text, sendTo, null);
 			if (sendIcalToMembers) {
 				attendeeMail = nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_EMAIL).toString();
+				if (null != attendeeMail && !attendeeMail.isEmpty()) {
+					eventTemplateModel.put("recipientMail", attendeeMail);
+					((Map) eventTemplateModel.get("attendees")).put(attendeeMail, getMemberAttendeeMap(attendee));
+					String plainText = templateService.processTemplate(MEMBER_REMOVED_PLAIN_TEXT_EVENT_TEMPLATE, eventTemplateModel);
+					String htmlText = templateService.processTemplate(MEMBER_REMOVED_HTML_EVENT_TEMPLATE, eventTemplateModel);
+					//TODO internationalize
+					String subject;
+					if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
+						subject = "Мероприятие ";
+					} else {
+						subject = "Совещание ";
+					}
+					subject += eventTemplateModel.get("title")
+							+ " отменено.";
+					VEvent vEvent = formRemoveAttendeeEvent(eventTemplateModel, formBasicEvent(eventTemplateModel), attendeeMail);
+					Calendar calendar = envelopEvent(vEvent, Method.CANCEL);
+					sendMail(attendeeMail, subject, plainText, htmlText, attachments, calendar);
+				}
+			}
+
+		} else if (Contractors.TYPE_REPRESENTATIVE.isMatch(attendeeType)) {
+			attendeeMail = nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_EMAIL).toString();
+			if (null != attendeeMail && !attendeeMail.isEmpty()) {
 				eventTemplateModel.put("recipientMail", attendeeMail);
-				String plainText = templateService.processTemplate(MEMBERS_PLAIN_TEXT_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
-				String htmlText = templateService.processTemplate(MEMBERS_HTML_CANCEL_EVENT_TEMPLATE, eventTemplateModel);
+				((Map) eventTemplateModel.get("attendees")).put(attendeeMail, getInvitedMemberAttendeeMap(attendee));
+				String plainText = templateService.processTemplate(INVITED_MEMBER_REMOVED_PLAIN_TEXT_EVENT_TEMPLATE, eventTemplateModel);
+				String htmlText = templateService.processTemplate(INVITED_MEMBER_REMOVED_HTML_EVENT_TEMPLATE, eventTemplateModel);
 				//TODO internationalize
 				String subject;
 				if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
@@ -398,31 +427,13 @@ public class EventsNotificationsService extends BaseBean {
 				}
 				subject += eventTemplateModel.get("title")
 						+ " отменено.";
-				VEvent vEvent = formRemoveAttendeeEvent(eventTemplateModel, formBasicEvent(eventTemplateModel), attendeeMail);
-				Calendar calendar = envelopEvent(vEvent, Method.CANCEL);
+				Calendar calendar = null;
+				if (sendIcalToInvitedMembers) {
+					VEvent vEvent = formRemoveAttendeeEvent(eventTemplateModel, formBasicEvent(eventTemplateModel), attendeeMail);
+					calendar = envelopEvent(vEvent, Method.CANCEL);
+				}
 				sendMail(attendeeMail, subject, plainText, htmlText, attachments, calendar);
 			}
-
-		} else if (Contractors.TYPE_REPRESENTATIVE.isMatch(attendeeType)) {
-			attendeeMail = nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_EMAIL).toString();
-			eventTemplateModel.put("recipientMail", attendeeMail);
-			String plainText = templateService.processTemplate(INVITED_MEMBERS_PLAIN_TEXT_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
-			String htmlText = templateService.processTemplate(INVITED_MEMBERS_HTML_CANCEL_EVENT_TEMPLATE, eventTemplateModel);
-			//TODO internationalize
-			String subject;
-			if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
-				subject = "Мероприятие ";
-			} else {
-				subject = "Совещание ";
-			}
-			subject += eventTemplateModel.get("title")
-					+ " отменено.";
-			Calendar calendar = null;
-			if (sendIcalToInvitedMembers) {
-				VEvent vEvent = formRemoveAttendeeEvent(eventTemplateModel, formBasicEvent(eventTemplateModel), attendeeMail);
-				calendar = envelopEvent(vEvent, Method.CANCEL);
-			}
-			sendMail(attendeeMail, subject, plainText, htmlText, attachments, calendar);
 		}
 	}
 
@@ -465,10 +476,10 @@ public class EventsNotificationsService extends BaseBean {
 		}
 		NodeRef location = eventsService.getEventLocation(event);
 		if (location != null) {
-			String locationString = (String)nodeService.getProperty(location, ContentModel.PROP_NAME);
-			String locationAddress = (String)nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS);
+			String locationString = (String) nodeService.getProperty(location, ContentModel.PROP_NAME);
+			String locationAddress = (String) nodeService.getProperty(location, EventsService.PROP_EVENT_LOCATION_ADDRESS);
 			if (null != locationAddress && !locationAddress.isEmpty()) {
-				locationString = locationString+"("+locationAddress+")";
+				locationString = locationString + "(" + locationAddress + ")";
 			}
 			mailTemplateModel.put("location", locationString);
 		}
@@ -480,47 +491,64 @@ public class EventsNotificationsService extends BaseBean {
 //		}
 		Map<String, Map<String, Serializable>> attendees = new HashMap<>();
 		for (NodeRef attendee : membersRefs) {
-			Map<String, Serializable> attendeeMap = new HashMap<>();
 			String email = (String) nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_EMAIL);
-			String surname = (String) nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
-			String firstname = (String) nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME);
-			String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
-			NodeRef attendeeRow = eventsService.getMemberTableRow(event, attendee);
-			Boolean mandatory;
-			String decision;
-			if (null == attendeeRow) {
-				mandatory = getMemberMandatory(attendee, properties.get(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON).toString());
-				decision = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY;
-			} else {
-				mandatory = (Boolean) nodeService.getProperty(attendeeRow, EventsService.PROP_EVENT_MEMBERS_PARTICIPATION_REQUIRED);
-				decision = eventsService.getEmployeeMemberStatus(event, attendee);
-				decision = null == decision ? EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY : decision;
-			}
-			attendeeMap.put("mandatory", mandatory);
-			attendeeMap.put("decision", decision);
-			attendeeMap.put("name", name);
 			if (email != null && !email.isEmpty()) {
+				Map<String, Serializable> attendeeMap = getMemberAttendeeMap(attendee);
+
+				NodeRef attendeeRow = eventsService.getMemberTableRow(event, attendee);
+				Boolean mandatory;
+				String decision;
+				if (null == attendeeRow) {
+					mandatory = getMemberMandatory(attendee, properties.get(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON).toString());
+					decision = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY;
+				} else {
+					mandatory = (Boolean) nodeService.getProperty(attendeeRow, EventsService.PROP_EVENT_MEMBERS_PARTICIPATION_REQUIRED);
+					decision = eventsService.getEmployeeMemberStatus(event, attendee);
+					decision = null == decision ? EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY : decision;
+				}
+				attendeeMap.put("mandatory", mandatory);
+				attendeeMap.put("decision", decision);
+
 				attendees.put(email, attendeeMap);
 			}
 		}
 		//приглашённые
 		for (NodeRef attendee : invitedMembersRefs) {
-			Map<String, Serializable> attendeeMap = new HashMap<>();
 			String email = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_EMAIL);
-			String surname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_SURNAME);
-			String firstname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_FIRSTNAME);
-			String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
-			Boolean mandatory = false;
-			String decision = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY;
-			attendeeMap.put("mandatory", mandatory);
-			attendeeMap.put("decision", decision);
-			attendeeMap.put("name", name);
 			if (email != null && !email.isEmpty()) {
+				Map<String, Serializable> attendeeMap = getInvitedMemberAttendeeMap(attendee);
 				attendees.put(email, attendeeMap);
 			}
 		}
 		mailTemplateModel.put("attendees", attendees);
 		return Collections.unmodifiableMap(mailTemplateModel);
+	}
+
+	private Map<String, Serializable> getMemberAttendeeMap(NodeRef attendee) {
+		Map<String, Serializable> attendeeMap = new HashMap<>();
+
+		String surname = (String) nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
+		String firstname = (String) nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME);
+		String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
+
+		attendeeMap.put("mandatory", false);
+		attendeeMap.put("decision", EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY);
+		attendeeMap.put("name", name);
+
+		return attendeeMap;
+	}
+
+	private Map<String, Serializable> getInvitedMemberAttendeeMap(NodeRef attendee) {
+		Map<String, Serializable> attendeeMap = new HashMap<>();
+		String surname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_SURNAME);
+		String firstname = (String) nodeService.getProperty(attendee, Contractors.PROP_REPRESENTATIVE_FIRSTNAME);
+		String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
+		Boolean mandatory = false;
+		String decision = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY;
+		attendeeMap.put("mandatory", mandatory);
+		attendeeMap.put("decision", decision);
+		attendeeMap.put("name", name);
+		return attendeeMap;
 	}
 
 	public String wrapAsEventLink(NodeRef documentRef) {
@@ -614,15 +642,15 @@ public class EventsNotificationsService extends BaseBean {
 		VTimeZone tz = timezone.getVTimeZone();
 		PropertyList vEventProperties = vEvent.getProperties();
 		vEventProperties.add(tz.getTimeZoneId());
-		Organizer organizer; 
+		Organizer organizer;
 		//if (mailTemplateModel.get("initiatorMail").equals(mailTemplateModel.get("recipientMail"))) {
-			organizer = new Organizer(URI.create("mailto:"+defaultFromEmail));
-			organizer.getParameters().add(Role.NON_PARTICIPANT);
+		organizer = new Organizer(URI.create("mailto:" + defaultFromEmail));
+		organizer.getParameters().add(Role.NON_PARTICIPANT);
 //		} else {
 //			organizer= new Organizer(URI.create("mailto:" + mailTemplateModel.get("initiatorMail")));
 //			organizer.getParameters().add(new SentBy(URI.create("mailto:"+defaultFromEmail)));
 //		}
-		
+
 		vEventProperties.add(organizer);
 		Integer sequence = (Integer) mailTemplateModel.get("sequence");
 		vEventProperties.add(new Sequence(sequence));
@@ -638,7 +666,7 @@ public class EventsNotificationsService extends BaseBean {
 			dtStart.setUtc(true);
 			dtStart.setTime(((Date) mailTemplateModel.get("fromDate")).getTime());
 			vEventProperties.add(new DtStart(dtStart));
-			
+
 			DateTime dtEnd = new DateTime();
 			dtEnd.setUtc(true);
 			dtEnd.setTime(((Date) mailTemplateModel.get("toDate")).getTime());
@@ -806,13 +834,13 @@ public class EventsNotificationsService extends BaseBean {
 	}
 
 	public void notifyOrganizerMemberStatusChanged(NodeRef event, NodeRef member) {
-		NodeRef tableRow = eventsService.getMemberTableRow(event,member);
-		String status=null;
+		NodeRef tableRow = eventsService.getMemberTableRow(event, member);
+		String status = null;
 		if (null != tableRow) {
 			status = nodeService.getProperty(tableRow, EventsService.PROP_EVENT_MEMBERS_STATUS).toString();
 			Map template = new HashMap(getEventTemplateModel(event));
 			String shortName = (String) nodeService.getProperty(member, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-			template.put("attendeeLink", wrapperLink(member, shortName , BaseBean.LINK_URL));
+			template.put("attendeeLink", wrapperLink(member, shortName, BaseBean.LINK_URL));
 			String message = null;
 			if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
 				message = templateService.processTemplate(MEMBER_ACCEPTED_INVITE_TEMPLATE, template);
@@ -821,11 +849,11 @@ public class EventsNotificationsService extends BaseBean {
 			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
 				message = templateService.processTemplate(MEMBER_TENTATIVE_INVITE_TEMPLATE, template);
 			}
-			if ( null != message) {
+			if (null != message) {
 				notificationsService.sendNotification(shortName, event, message, Arrays.asList(eventsService.getEventInitiator(event)), member);
 			}
 		}
-		
+
 	}
-	
+
 }

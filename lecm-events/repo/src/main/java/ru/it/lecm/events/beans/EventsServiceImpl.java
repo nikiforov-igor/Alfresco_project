@@ -671,10 +671,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		eventsNotificationsService.notifyAttendeeRemoved(event, attendee);
 	}
 
-	@Override
-	public void notifyRemovedMember(NodeRef event, NodeRef recipient) {
-		eventsNotificationsService.notifyAttendeeRemoved(event, recipient);
-	}
 
 	@Override
 	public void notifyEventCncelled(NodeRef event) {

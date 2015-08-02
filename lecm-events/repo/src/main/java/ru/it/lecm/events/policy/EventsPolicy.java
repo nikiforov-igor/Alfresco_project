@@ -125,6 +125,13 @@ public class EventsPolicy extends BaseBean {
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_TEMP_RESOURCES,
 				new JavaBehaviour(this, "onRemoveResources", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_INVITED_MEMBERS,
+				new JavaBehaviour(this, "onCreateAddInvitedMember", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_INVITED_MEMBERS,
+				new JavaBehaviour(this, "onRemoveInvitedMember", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				EventsService.TYPE_EVENT,
@@ -135,6 +142,40 @@ public class EventsPolicy extends BaseBean {
 				new JavaBehaviour(this, "onUpdateEvent", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
+	
+	
+	public void onCreateAddInvitedMember(AssociationRef nodeAssocRef) {
+		//Мероприятие
+		NodeRef event = nodeAssocRef.getSourceRef();
+		//Участник
+		NodeRef member = nodeAssocRef.getTargetRef();
+		
+		
+		//Отправка уведомления
+		Boolean isRepeated = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_IS_REPEATED);
+		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		sendNotifications = null == sendNotifications ? false : sendNotifications;
+		if (sendNotifications && (isRepeated == null || !isRepeated)) {
+			NodeRef initiator = eventService.getEventInitiator(event);
+			if (initiator != null) {
+				List<NodeRef> recipients = new ArrayList<>();
+				recipients.add(member);
+				//notificationsService.sendNotification(author, event, text, recipients, null);
+				eventService.sendNotificationsToInvitedMembers(event, true, recipients);
+			}
+		}
+	}
+	
+	public void onRemoveInvitedMember(AssociationRef nodeAssocRef) {
+		NodeRef event = nodeAssocRef.getSourceRef();
+		NodeRef member = nodeAssocRef.getTargetRef();
+		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		sendNotifications = null == sendNotifications ? false : sendNotifications;
+		if (sendNotifications) {
+			eventService.notifyAttendeeRemoved(event, member);
+		}
+	}
+	
 	public void onCreateAddMembers(AssociationRef nodeAssocRef) {
 		//Мероприятие
 		NodeRef event = nodeAssocRef.getSourceRef();
