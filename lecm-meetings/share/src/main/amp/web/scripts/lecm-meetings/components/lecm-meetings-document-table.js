@@ -323,14 +323,8 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 		onDataItemCreated:function (layer, args) {
 			var obj = args[1];
             if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
-				YAHOO.Bubbling.fire("formValueChanged", {
-												eventGroup: this,
-												addedItems: [],
-												removedItems: [],
-												selectedItems: [],
-												selectedItemsMetaData: {}
-											});
-                if (!this.options.refreshAfterCreate) {
+				
+				if (!this.options.refreshAfterCreate) {
                     var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
                     // Reload the node's metadata
                     Alfresco.util.Ajax.jsonPost(
@@ -369,6 +363,13 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                 } else {
                     this.onDataGridRefresh(layer, args);
                 }
+				YAHOO.Bubbling.fire("formValueChanged", {
+					eventGroup: this,
+					addedItems: [],
+					removedItems: [],
+					selectedItems: [],
+					selectedItemsMetaData: {}
+				});	
 			}
 		},
 
@@ -382,13 +383,6 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 					{
 						return function DataGrid_onDataItemsDeleted_anim()
 						{
-							YAHOO.Bubbling.fire("formValueChanged", {
-												eventGroup: this,
-												addedItems: [],
-												removedItems: [],
-												selectedItems: [],
-												selectedItemsMetaData: {}
-											});
 							Bubbling.fire("datagridRefresh",
 								{
 									bubblingLabel:this.options.bubblingLabel
@@ -409,6 +403,13 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 							});
 					}
 				}
+				YAHOO.Bubbling.fire("formValueChanged", {
+					eventGroup: this,
+					addedItems: [],
+					removedItems: [],
+					selectedItems: [],
+					selectedItemsMetaData: {}
+				});
 			}
 		},
 
@@ -1074,15 +1075,15 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                         onSuccess:{
                             fn:function DataGrid_onActionCreate_success(response) {
                                 var me = response.config.successCallback.obj.scope.options.onSuccess.scope;
-	                            Bubbling.fire("datagridRefresh",
-		                            {
-			                            bubblingLabel:me.options.bubblingLabel
-		                            });
-                                Alfresco.util.PopupManager.displayMessage(
+								Alfresco.util.PopupManager.displayMessage(
                                     {
                                         text: this.msg("message.save.success")
                                     });
                                 this.doubleClickLock = false;
+								Bubbling.fire("datagridRefresh",
+		                            {
+			                            bubblingLabel:me.options.bubblingLabel
+		                            });
                             },
                             scope:this,
                             rowId: asset.id
@@ -1149,6 +1150,14 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 								this.destroy();
 								me.selectItems("selectNone");
 								fnAfterPrompt.call(me, items);
+												YAHOO.Bubbling.fire("formValueChanged", {
+												eventGroup: this,
+												addedItems: [],
+												removedItems: [],
+												selectedItems: [],
+												selectedItemsMetaData: {}
+											});
+
 							}
 						},
 						{
