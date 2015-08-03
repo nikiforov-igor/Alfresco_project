@@ -1,0 +1,6 @@
+.document-versions span.actions {
+    float: none;
+    display: inline-block;
+    width: 238px;
+    text-align: right;
+}

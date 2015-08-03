@@ -4,6 +4,7 @@
 	<@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-details-panel.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/page-document.css" />
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-details-attachment.css" />
     <link rel="stylesheet" type="text/css" href="${url.context}/res/css/document-components-panel.css" />
 	<@templateHtmlEditorAssets />
 </@>
