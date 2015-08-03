@@ -4,7 +4,7 @@
 
 function main() {
 	AlfrescoUtil.param("nodeRef");
-		var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
+	var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
 		if (nodeDetails) {
 			model.agendaInfo = getAgendaInfo(model.nodeRef);
 		}

@@ -323,6 +323,13 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 		onDataItemCreated:function (layer, args) {
 			var obj = args[1];
             if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.nodeRef !== null)) {
+				YAHOO.Bubbling.fire("formValueChanged", {
+												eventGroup: this,
+												addedItems: [],
+												removedItems: [],
+												selectedItems: [],
+												selectedItemsMetaData: {}
+											});
                 if (!this.options.refreshAfterCreate) {
                     var nodeRef = new Alfresco.util.NodeRef(obj.nodeRef);
                     // Reload the node's metadata
@@ -375,6 +382,13 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 					{
 						return function DataGrid_onDataItemsDeleted_anim()
 						{
+							YAHOO.Bubbling.fire("formValueChanged", {
+												eventGroup: this,
+												addedItems: [],
+												removedItems: [],
+												selectedItems: [],
+												selectedItemsMetaData: {}
+											});
 							Bubbling.fire("datagridRefresh",
 								{
 									bubblingLabel:this.options.bubblingLabel
