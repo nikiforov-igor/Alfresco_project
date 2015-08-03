@@ -3,6 +3,23 @@
 * Style the yui-dt-expandablerow-trigger column
 *
 **/
+.yui-dt-data td {
+    border-bottom: none !important;
+}
+.yui-dt {
+	border-bottom: 1px solid #eee;
+}
+.yui-dt-expandablerow-trigger {
+        width: 10px;
+        padding: 4px;
+        background-color: #FFF;
+}
+.yui-dt-first {
+	background-color: #FFF;
+}
+table thead {
+        display: none;
+}
 .yui-dt-expandablerow-trigger a {
 	display:block;
 	padding:20px 5px 0;
@@ -17,6 +34,9 @@
 .yui-dt-expanded .yui-dt-expandablerow-trigger.spinner a {
 	background:url(/share/res/images/lecm-documents/graph-tree/spinner.gif) 0 4px no-repeat;
 	padding-right: 10px;
+}
+.yui-dt-expandablerow-trigger-inner {
+        width: 7px;
 }
 
 .lecm-dt-liner {
@@ -41,10 +61,10 @@
 
 .item-description .connection-direction,
 .item-description .document-type {
-	height: 32px;
-	width: 32px;
-	display: block;
-	float: left;
+    height: 32px;
+    width: 32px;
+    display: block;
+    float: left;
     margin-top: 8px;
 }
 
@@ -72,8 +92,8 @@
 }
 
 .yui-skin-sam .graph-tree-liner {
-	margin: 0;
-    padding: 4px 0 4px 10px;
+    margin: 0;
+    padding: 0 0 0 10px;
 }
 
 .graph-tree-toolbar {

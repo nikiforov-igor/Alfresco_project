@@ -11,7 +11,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
      * YUI Library aliases
      */
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
+            Event = YAHOO.util.Event;
 
     LogicECM.module.Errands.Lists = function ErrandsTasks_constructor(htmlId) {
         LogicECM.module.Errands.Lists.superclass.constructor.call(this, "LogicECM.module.Errands.Lists", htmlId, ["button", "container"]);
@@ -19,77 +19,77 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
     };
 
     YAHOO.extend(LogicECM.module.Errands.Lists, Alfresco.component.Base,
-        {
-            options: {
-                itemType: "lecm-errands:document",
-                nodeRef: null,
-                containerId: "",
-                errandsUrl: "",
-                anchorId: ""
-            },
-            listContainer: null,
-            selected: null,
-            /**
-             * html элемент в котрый помещаем результат
-             */
-            onReady: function () {
-                this.listContainer = Dom.get(this.options.containerId);
-                this.selected = Dom.get(this.id + "-errands-filter");
-                if (this.selected) {
-                    this.loadMyErrands();
-                }
-                Event.on(this.id + "-errands-filter", "change", this.loadMyErrands, this, true);
+            {
+                options: {
+                    itemType: "lecm-errands:document",
+                    nodeRef: null,
+                    containerId: "",
+                    errandsUrl: "",
+                    anchorId: ""
+                },
+                listContainer: null,
+                selected: null,
+                /**
+                 * html элемент в котрый помещаем результат
+                 */
+                onReady: function () {
+                    this.listContainer = Dom.get(this.options.containerId);
+                    this.selected = Dom.get(this.id + "-errands-filter");
+                    if (this.selected) {
+                        this.loadMyErrands();
+                    }
+                    Event.on(this.id + "-errands-filter", "change", this.loadMyErrands, this, true);
             },
 
-            loadMyErrands: function () {
-                Alfresco.util.Ajax.request({
-                    url: Alfresco.constants.PROXY_URI + this.options.errandsUrl,
-                    dataObj: {
-                        nodeRef: this.options.nodeRef,
-                        filter: (this.selected != null) ? this.selected.value : ""
-                    },
-                    successCallback: {
-                        fn: function (response) {
-                            this.showErrands(response);
+                loadMyErrands: function () {
+                    Alfresco.util.Ajax.request({
+                        url: Alfresco.constants.PROXY_URI + this.options.errandsUrl,
+                        dataObj: {
+                            nodeRef: this.options.nodeRef,
+                            filter: (this.selected != null) ? this.selected.value : ""
                         },
-                        scope: this
-                    },
-                    failureMessage: this.msg("message.failure"),
-                    scope: this,
-                    execScripts: true
-                });
-            },
-
+                        successCallback: {
+                            fn: function (response) {
+                                this.showErrands(response);
+                            },
+                            scope: this
+                        },
+                        failureMessage: this.msg("message.failure"),
+                        scope: this,
+                        execScripts: true
+                    });
+                },
+                    
             showErrands: function(response) {
-                this.listContainer.innerHTML = "";
-                var detail = "";
-                if (response.json.errands.length > 0) {
-                    var results = response.json.errands;
-                    var template = "view-metadata?nodeRef={nodeRef}";
-                    for (var i = 0; i < results.length; i++) {
-                        var errand = results[i];
-                        var status, statusClass;
-                        if (errand.isExpired == "true") {
-                            status = this.msg("errandslist.label.overdue");
-                            statusClass = "errands-overdue";
-                        } else {
-                            var today = new Date();
-                            var endDate = Date.parse(errand.dueDate);
-                            var difference = (endDate.getTime()-today.getTime())/1000/60/24;
-                            if (difference > 5) {
-                                status = this.msg("errandslist.label.new");
-                                statusClass = "errands-new";
+                    this.listContainer.innerHTML = "";
+                    var detail = "";
+                    if (response.json.errands.length > 0) {
+                        var results = response.json.errands;
+                        var template = "view-metadata?nodeRef={nodeRef}";
+                        for (var i = 0; i < results.length; i++) {
+                            var errand = results[i];
+                            var status, statusClass;
+                            if (errand.isExpired == "true") {
+                                status = this.msg("errandslist.label.overdue");
+                                statusClass = "errands-overdue";
                             } else {
-                                status = this.msg("errandslist.label.after");
-                                statusClass = "errands-after";
+                                var today = new Date();
+                                var endDate = Date.parse(errand.dueDate);
+                            var difference = (endDate.getTime()-today.getTime())/1000/60/24;
+                                if (difference > 5) {
+                                    status = this.msg("errandslist.label.new");
+                                    statusClass = "errands-new";
+                                } else {
+                                    status = this.msg("errandslist.label.after");
+                                    statusClass = "errands-after";
+                                }
                             }
-                        }
-                        var isImportant = (errand.isImportant == "false") ? "WORKFLOWTASKPRIORITY_LOW" : "WORKFLOWTASKPRIORITY_HIGH";
-                        var isImportantTitle = (errand.isImportant == "true") ? this.msg("errandslist.label.important") : "";
-                        // Generate the link
-                        var url = "";
+                            var isImportant = (errand.isImportant == "false") ? "WORKFLOWTASKPRIORITY_LOW" : "WORKFLOWTASKPRIORITY_HIGH";
+                            var isImportantTitle = (errand.isImportant == "true") ? this.msg("errandslist.label.important") : "";
+                            // Generate the link
+                            var url = "";
 
-                        detail = "<div class=\"workflow-task-item\">";
+                            detail = "<div class=\"workflow-task-item\">";
                         detail +=   "<div class=\"workflow-task-list-picture " + isImportant + "\" title=\"" + isImportantTitle + "\">&nbsp;</div>";
                         detail +=   "<div style=\"float: left;\">";
                         detail +=       "<div>";
@@ -105,33 +105,33 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.duedate") + ": </span>" + errand.dueDate;
                         detail +=           "</div>";
                         detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.status") + ": </span>" + errand.statusMessage+"<br/>";
-                        url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
-                            {
-                                nodeRef: errand.executor
-                            });
+                            url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
+                                    {
+                                        nodeRef: errand.executor
+                                    });
                         detail +=           "<div class=\"workflow-task-list-left-column\">";
                         detail +=               "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.executor") + ": </span>" + '<a href="' + url + '">' + errand.executorName + '</a>';
                         detail +=           "</div>";
-                        url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
-                            {
-                                nodeRef: errand.initiator
-                            });
+                            url = YAHOO.lang.substitute(Alfresco.constants.URL_PAGECONTEXT + template,
+                                    {
+                                        nodeRef: errand.initiator
+                                    });
                         detail +=           "<span class=\"workflow-task-list-label\">" + this.msg("errandslist.label.initiator") + ": </span>" +  '<a href="' + url + '">' + errand.initiatorName + '</a>';
 
                         detail +=       "</div>";
                         detail +=   "</div>";
                         detail +=   "<div style=\"clear: both;\"></div>";
-                        detail += "</div>";
-                        this.listContainer.innerHTML += detail;
+                            detail += "</div>";
+                            this.listContainer.innerHTML += detail;
+                        }
+                    } else {
+                        detail = "<div class=\"workflow-task-line\">" + this.msg("errandslist.label.no-errands") + "</div>"
+                        this.listContainer.innerHTML += detail
                     }
-                } else {
-                    detail = "<div class=\"workflow-task-line\">" + this.msg("errandslist.label.no-errands") + "</div>"
-                    this.listContainer.innerHTML += detail
+                    if (this.options.anchorId != "") {
+                        Dom.get(this.options.anchorId).scrollIntoView();
+                    }
                 }
-                if (this.options.anchorId != "") {
-                    Dom.get(this.options.anchorId).scrollIntoView();
-                }
-            }
 
-        });
+            });
 })();

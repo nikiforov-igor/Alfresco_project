@@ -3,48 +3,41 @@ var previosDocRef = args['previosDocRef'];
 
 var linkedDocTypes = args['linkedDocTypes'];
 var connectionTypes = args['connectionTypes'];
+var onlyDirect = 'true' == args['onlyDirect'];
+var isErrandCard = 'true' == args['isErrandCard'];
+var isFirstLayer = 'true' == args['isFirstLayer'];
+
 var filters = args['filters'] != null ? args['filters'].split(",") : [];
 var substituteTitle = args['substituteTitle'] != null ? args['substituteTitle'] : "{lecm-document:ext-present-string}";
 
 var items = [];
+if (isFirstLayer) {
+    items = [];
+    var properties = documentScript.getProperties(documentNodeRef);
+    var firstItem = {};
+    var item = search.findNode(documentNodeRef);
+    firstItem.title = item.properties["lecm-document:present-string"];
+    firstItem.nodeRef = documentNodeRef.toString();
+    firstItem.docType = item.properties["lecm-document:doc-type"];
+    firstItem.status = item.properties["lecm-statemachine:status"];
+    firstItem.connectionType = "Корневой элемент";
+    firstItem.direction = '';
 
-var parentConnections = documentConnection.getConnectionsWithDocument(documentNodeRef, false);
-if (parentConnections != null && parentConnections.length > 0) {
-	for (var i = 0; i < parentConnections.length; i++) {
-		var connection = parentConnections[i];
-		if (connection.assocs["lecm-connect:primary-document-assoc"]) {
-			if (!previosDocRef || connection.assocs["lecm-connect:primary-document-assoc"][0].nodeRef != previosDocRef) {
-                if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
-                    && checkConnectionType(connection, connectionTypes)) {
-                    var skipped = false;
-                    for (var j = 0; j < filters.length; j++) {
-                        skipped = !applyFilter(connection.assocs["lecm-connect:connected-document-assoc"][0], filters[j]);
-                        if (skipped) {
-                            break;
-                        }
-                    }
-                    if (!skipped) {
-                        var obj = evaluateItem(connection, substituteTitle, true);
-                        if (obj != null) {
-                            items.push(obj);
-                        }
-                    }
-                }
-			}
-		}
-	}
-}
+    var additionalDocAssocs = item.getSourceAssocs()["lecm-errands:additional-document-assoc"];
+    if (additionalDocAssocs !== null) {
+        firstItem.numberOfChildErrands = additionalDocAssocs.length;
+        items.push(firstItem);
+    }
 
-var rootFolder = documentConnection.getRootFolder(documentNodeRef);
-var childConnections = rootFolder.getChildren();
-if (childConnections != null && childConnections.length > 0) {
-	for (var i = 0; i < childConnections.length; i++) {
-		var connection = childConnections[i];
-		if (connection.assocs["lecm-connect:connected-document-assoc"]) {
-			if (!previosDocRef || connection.assocs["lecm-connect:connected-document-assoc"][0].nodeRef != previosDocRef) {
-                if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
-                    && checkConnectionType(connection, connectionTypes)) {
-                    if (filters != null) {
+} else {
+    var parentConnections = documentConnection.getConnectionsWithDocument(documentNodeRef, false);
+    if (parentConnections != null && parentConnections.length > 0) {
+        for (var i = 0; i < parentConnections.length; i++) {
+            var connection = parentConnections[i];
+            if (connection.assocs["lecm-connect:primary-document-assoc"]) {
+                if (!previosDocRef || connection.assocs["lecm-connect:primary-document-assoc"][0].nodeRef != previosDocRef) {
+                    if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
+                            && checkConnectionType(connection, connectionTypes)) {
                         var skipped = false;
                         for (var j = 0; j < filters.length; j++) {
                             skipped = !applyFilter(connection.assocs["lecm-connect:connected-document-assoc"][0], filters[j]);
@@ -53,16 +46,46 @@ if (childConnections != null && childConnections.length > 0) {
                             }
                         }
                         if (!skipped) {
-                            var obj = evaluateItem(connection, substituteTitle, false);
-                            if (obj != null) {
+                            var obj = evaluateItem(connection, substituteTitle, true);
+                            if (obj != null && (!onlyDirect || (onlyDirect && obj.direction == 'direct'))) {
                                 items.push(obj);
                             }
                         }
                     }
                 }
-			}
-		}
-	}
+            }
+        }
+    }
+
+    var rootFolder = documentConnection.getRootFolder(documentNodeRef);
+    var childConnections = rootFolder.getChildren();
+    if (childConnections != null && childConnections.length > 0) {
+        for (var i = 0; i < childConnections.length; i++) {
+            var connection = childConnections[i];
+            if (connection.assocs["lecm-connect:connected-document-assoc"]) {
+                if (!previosDocRef || connection.assocs["lecm-connect:connected-document-assoc"][0].nodeRef != previosDocRef) {
+                    if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
+                            && checkConnectionType(connection, connectionTypes)) {
+                        if (filters != null) {
+                            var skipped = false;
+                            for (var j = 0; j < filters.length; j++) {
+                                skipped = !applyFilter(connection.assocs["lecm-connect:connected-document-assoc"][0], filters[j]);
+                                if (skipped) {
+                                    break;
+                                }
+                            }
+                            if (!skipped) {
+                                var obj = evaluateItem(connection, substituteTitle, false);
+                                if (obj != null) {
+                                    items.push(obj);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 model.items = items;
@@ -114,12 +137,27 @@ function evaluateItem(item, substituteTitle, isParent) {
             direction = "direct";
         }
         if (document != null) {
+
+            if (isErrandCard) {
+                if (document.typeShort == "lecm-internal:document") {
+                    return null;
+                }
+            }
+
             itemObj.title = substitude.formatNodeTitle(document, substituteTitle);
             itemObj.nodeRef = document.nodeRef.toString();
             itemObj.docType = document.typeShort;
             itemObj.status = document.properties["lecm-statemachine:status"];
             itemObj.connectionType = item.assocs["lecm-connect:connection-type-assoc"][0].properties["cm:name"];
             itemObj.direction = direction;
+
+            var additionalDocAssocs = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+            if (additionalDocAssocs !== null) {
+                itemObj.numberOfChildErrands = additionalDocAssocs.length;
+            } else {
+                itemObj.numberOfChildErrands = 0;
+            }
+
             return itemObj;
         }
     }
