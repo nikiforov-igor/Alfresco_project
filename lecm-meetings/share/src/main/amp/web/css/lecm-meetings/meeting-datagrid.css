@@ -4,6 +4,7 @@
 
 div.flat-button  div.new-row span.addAgendaItemSpanNewRow{
 	border-color:#ccc;
+	margin-bottom:1px;
 }
 
 div.flat-button  div.new-row span.addAgendaItemSpanNewRow span.addAgendaItemSpanFirstChild{
@@ -13,6 +14,7 @@ div.flat-button  div.new-row span.addAgendaItemSpanNewRow span.addAgendaItemSpan
 div.flat-button  div.new-row span.addAgendaItemSpanNewRow:hover{
 	border-color:#aaa;
 	background:transparent !important;
+	margin-bottom:1px;
 }
 
 div.flat-button  div.new-row span.addAgendaItemSpanNewRow span.addAgendaItemSpanFirstChild:hover{
