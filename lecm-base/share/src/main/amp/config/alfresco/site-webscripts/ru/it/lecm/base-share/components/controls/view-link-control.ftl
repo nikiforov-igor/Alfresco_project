@@ -65,7 +65,7 @@
 	                        blockElem = YAHOO.util.Dom.get( "${formId}-view-link-block" );
 
                             for (var i = 0; i < response.json.parents.length; i++) {
-	                            blockElem.innerHTML += '<a id="${formId}-view-link-ref-' + i + '" href="javascript:void(0);"/>' + response.json.parents[i].name + '</a>&nbsp;';
+	                            blockElem.innerHTML += '<a id="${formId}-view-link-ref-' + i + '" href="javascript:void(0);"/>' + response.json.parents[i].name + '</a></br>';
 
 	                            YAHOO.util.Event.onAvailable("${formId}-view-link-ref-" + i, function (j) {
                                     YAHOO.util.Event.addListener("${formId}-view-link-ref-" + j, "click", function(e, k) {
