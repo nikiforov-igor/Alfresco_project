@@ -351,6 +351,13 @@ public class EventsPolicy extends BaseBean {
 		if (!pendingActions.contains(event)) {
 			pendingActions.add(event);
 		}
+		
+		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		sendNotifications = null == sendNotifications ? false : sendNotifications;
+		if (sendNotifications) {
+			eventService.sendNotificationsToMembers(event, true, Arrays.asList(eventService.getEventInitiator(event)) );
+		}
+
 	}
 
 	public void onUpdateEvent(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {

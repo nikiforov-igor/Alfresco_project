@@ -102,6 +102,9 @@ public class EventsNotificationsService extends BaseBean {
 	private static final String MEMBERS_HTML_UPDATE_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-html-update-event-message.ftl";
 	private static final String MEMBERS_HTML_CANCEL_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-html-cancel-event-message.ftl";
 
+	private static final String ORGANIZER_HTML_NEW_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "organizer-html-new-event-message.ftl";
+	private static final String ORGANIZER_PLAIN_TEXT_NEW_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "organizer-plain-text-new-event-message.ftl";
+	
 	private static final String MEMBER_REMOVED_HTML_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-removed-html-event-message.ftl";
 	private static final String MEMBER_REMOVED_PLAIN_TEXT_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-removed-plain-text-event-message.ftl";
 	private static final String INVITED_MEMBER_REMOVED_HTML_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-removed-html-event-message.ftl";
@@ -301,9 +304,9 @@ public class EventsNotificationsService extends BaseBean {
 
 	public void notifyEvent(NodeRef event, boolean isNew, List<NodeRef> recipients) {
 		List<NodeRef> members = eventsService.getEventMembers(event);
-//		if (!members.contains(eventsService.getEventInitiator(event))) {
-//			members.add(eventsService.getEventInitiator(event));
-//		}
+		if (!members.contains(eventsService.getEventInitiator(event))) {
+			members.add(eventsService.getEventInitiator(event));
+		}
 		List<NodeRef> sendTo = new ArrayList<>(recipients);
 		Map<String, Object> eventTemplateModel = new HashMap<>(getEventTemplateModel(event));
 		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
@@ -314,16 +317,27 @@ public class EventsNotificationsService extends BaseBean {
 		String author = AuthenticationUtil.getSystemUserName();
 		//отсылка через стандартные уведомления
 		//Возможно, тоже нужно будет сделать персонализированую
+		
 		String text = templateService.processTemplate(isNew ? MEMBERS_STANDART_NOTIFICATIONS_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_STANDART_NOTIFICATIONS_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
-		notificationsService.sendNotification(author, event, text, sendTo, null);
+		List<NodeRef> notificationsSendTo = new ArrayList<>(sendTo);
+		notificationsSendTo.remove(eventsService.getEventInitiator(event));
+		notificationsService.sendNotification(author, event, text, notificationsSendTo, null);
+		
 		//теперь рассылаем письма участникам
 		if (sendIcalToMembers) {
 			for (NodeRef recipient : sendTo) {
 				String email = (String) nodeService.getProperty(recipient, OrgstructureBean.PROP_EMPLOYEE_EMAIL);
 				if (email != null && email.length() > 0) {
 					eventTemplateModel.put("recipientMail", email);
-					String plainText = templateService.processTemplate(isNew ? MEMBERS_PLAIN_TEXT_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_PLAIN_TEXT_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
-					String htmlText = templateService.processTemplate(isNew ? MEMBERS_HTML_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_HTML_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+					String plainText;
+					String htmlText;
+					if (!email.equals(eventTemplateModel.get("initiatorMail"))) {
+						plainText = templateService.processTemplate(isNew ? MEMBERS_PLAIN_TEXT_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_PLAIN_TEXT_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+						htmlText = templateService.processTemplate(isNew ? MEMBERS_HTML_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_HTML_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+					} else {
+						plainText = templateService.processTemplate(isNew ? ORGANIZER_PLAIN_TEXT_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_PLAIN_TEXT_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+						htmlText = templateService.processTemplate(isNew ? ORGANIZER_HTML_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_HTML_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+					}
 					//TODO internationalize
 					String subject;
 					if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
@@ -616,20 +630,26 @@ public class EventsNotificationsService extends BaseBean {
 				attendee.getParameters().add(PartStat.ACCEPTED);
 				attendee.getParameters().add(Rsvp.FALSE);
 			} else {
-				if (mandatory) {
-					attendee.getParameters().add(Role.REQ_PARTICIPANT);
-				} else {
-					attendee.getParameters().add(Role.OPT_PARTICIPANT);
-				}
-				if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(decision)) {
+				if (personMail.equals(mailTemplateModel.get("initiatorMail"))) {
+					attendee.getParameters().add(Role.CHAIR);
 					attendee.getParameters().add(PartStat.ACCEPTED);
 					attendee.getParameters().add(Rsvp.FALSE);
-				} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(decision)) {
-					attendee.getParameters().add(PartStat.DECLINED);
-					attendee.getParameters().add(Rsvp.FALSE);
 				} else {
-					attendee.getParameters().add(PartStat.NEEDS_ACTION);
-					attendee.getParameters().add(Rsvp.TRUE);
+					if (mandatory) {
+						attendee.getParameters().add(Role.REQ_PARTICIPANT);
+					} else {
+						attendee.getParameters().add(Role.OPT_PARTICIPANT);
+					}
+					if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(decision)) {
+						attendee.getParameters().add(PartStat.ACCEPTED);
+						attendee.getParameters().add(Rsvp.FALSE);
+					} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(decision)) {
+						attendee.getParameters().add(PartStat.DECLINED);
+						attendee.getParameters().add(Rsvp.FALSE);
+					} else {
+						attendee.getParameters().add(PartStat.NEEDS_ACTION);
+						attendee.getParameters().add(Rsvp.TRUE);
+					}
 				}
 			}
 			vEventProperties.add(attendee);
@@ -843,22 +863,22 @@ public class EventsNotificationsService extends BaseBean {
 		String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
 		return name;
 	}
-	
+
 	public void notifyOrganizerInvitedMemberStatusChanged(NodeRef event, NodeRef member, String status) {
-			Map template = new HashMap(getEventTemplateModel(event));
-			String shortName = getRepresentativeShortName(member);
-			template.put("attendeeName", shortName);
-			String message = null;
-			if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
-				message = templateService.processTemplate(INVITED_MEMBER_ACCEPTED_INVITE_TEMPLATE, template);
-			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(status)) {
-				message = templateService.processTemplate(INVITED_MEMBER_DECLINED_INVITE_TEMPLATE, template);
-			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
-				message = templateService.processTemplate(INVITED_MEMBER_TENTATIVE_INVITE_TEMPLATE, template);
-			}
-			if (null != message) {
-				notificationsService.sendNotification(shortName, event, message, Arrays.asList(eventsService.getEventInitiator(event)), member);
-			}
+		Map template = new HashMap(getEventTemplateModel(event));
+		String shortName = getRepresentativeShortName(member);
+		template.put("attendeeName", shortName);
+		String message = null;
+		if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
+			message = templateService.processTemplate(INVITED_MEMBER_ACCEPTED_INVITE_TEMPLATE, template);
+		} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(status)) {
+			message = templateService.processTemplate(INVITED_MEMBER_DECLINED_INVITE_TEMPLATE, template);
+		} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
+			message = templateService.processTemplate(INVITED_MEMBER_TENTATIVE_INVITE_TEMPLATE, template);
+		}
+		if (null != message) {
+			notificationsService.sendNotification(shortName, event, message, Arrays.asList(eventsService.getEventInitiator(event)), member);
+		}
 	}
 
 	public void notifyOrganizerMemberStatusChanged(NodeRef event, NodeRef member) {
