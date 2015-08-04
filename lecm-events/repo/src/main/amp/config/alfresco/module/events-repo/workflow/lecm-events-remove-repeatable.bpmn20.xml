@@ -17,7 +17,14 @@
                                 var type = lecmEventsWf_removeRepeatableType;
                                 var repeatableEvents = events.getRepetableEvents(document, type);
                                 for each(var ev in repeatableEvents) {
-                                    removeEvent(ev);
+									if (ev.typeShort=="lecm-events:document" || !statemachine.isFinal(ev.nodeRef) ) {
+	                                    try {
+											removeEvent(ev);
+											logger.debug("Document "+ev.typeShort+" "+ev.nodeRef+" marked removed.");
+										} catch (e) {
+											logger.log("Can't mark event "+ev.nodeRef+" as removed");
+										}
+									}
                                 }
                                 removeEvent(document);
                             }
