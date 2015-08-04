@@ -115,6 +115,10 @@ public class EventsNotificationsService extends BaseBean {
 	private static final String MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-declined-event-message.ftl";
 	private static final String MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-tentative-event-message.ftl";
 
+	private static final String INVITED_MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-accpted-event-message.ftl";
+	private static final String INVITED_MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-declined-event-message.ftl";
+	private static final String INVITED_MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-tentative-event-message.ftl";
+
 	private static final String MULTIPART_SUBTYPE_ALTERNATIVE = "alternative";
 	private static final String CONTENT_TYPE_ALTERNATIVE = "multipart/alternative";
 	private static final String CONTENT_SUBTYPE_HTML = "html";
@@ -831,6 +835,30 @@ public class EventsNotificationsService extends BaseBean {
 				logger.error("Send mail to " + sendTo + " failed", e);
 			}
 		}
+	}
+
+	private String getRepresentativeShortName(NodeRef nodeRef) {
+		String surname = (String) nodeService.getProperty(nodeRef, Contractors.PROP_REPRESENTATIVE_SURNAME);
+		String firstname = (String) nodeService.getProperty(nodeRef, Contractors.PROP_REPRESENTATIVE_FIRSTNAME);
+		String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
+		return name;
+	}
+	
+	public void notifyOrganizerInvitedMemberStatusChanged(NodeRef event, NodeRef member, String status) {
+			Map template = new HashMap(getEventTemplateModel(event));
+			String shortName = getRepresentativeShortName(member);
+			template.put("attendeeName", shortName);
+			String message = null;
+			if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
+				message = templateService.processTemplate(INVITED_MEMBER_ACCEPTED_INVITE_TEMPLATE, template);
+			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(status)) {
+				message = templateService.processTemplate(INVITED_MEMBER_DECLINED_INVITE_TEMPLATE, template);
+			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
+				message = templateService.processTemplate(INVITED_MEMBER_TENTATIVE_INVITE_TEMPLATE, template);
+			}
+			if (null != message) {
+				notificationsService.sendNotification(shortName, event, message, Arrays.asList(eventsService.getEventInitiator(event)), member);
+			}
 	}
 
 	public void notifyOrganizerMemberStatusChanged(NodeRef event, NodeRef member) {

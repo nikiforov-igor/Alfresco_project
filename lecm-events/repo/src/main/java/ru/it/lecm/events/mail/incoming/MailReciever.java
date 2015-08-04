@@ -25,6 +25,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.events.beans.EventsNotificationsService;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.events.ical.CalendarReply;
@@ -267,6 +268,30 @@ public class MailReciever extends BaseBean {
 						answers.get(meeting).put(memberMail, reply.getTimeStamp());
 					}
 
+				}
+			}
+			List<NodeRef> invitedMembers = eventsService.getEventInvitedMembers(meeting);
+			for (NodeRef member : invitedMembers) {
+				String memberMail = nodeService.getProperty(member, Contractors.PROP_REPRESENTATIVE_EMAIL).toString();
+				if (memberMail.equalsIgnoreCase(mail)) {
+					Date time = null;
+					if (null != answers.get(meeting)) {
+						time = answers.get(meeting).get(mail);
+					} else {
+						answers.put(meeting, new HashMap<String, Date>());
+					}
+					if (null == time || time.before(reply.getTimeStamp())) {
+						String status = null;
+						if (reply.getAnswer().equals(PartStat.ACCEPTED.getValue())) {
+							status = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED;
+						} else if (reply.getAnswer().equals(PartStat.DECLINED.getValue())) {
+							status = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED;
+						} else if (reply.getAnswer().equals(PartStat.TENTATIVE.getValue())) {
+							status = EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY;
+						}
+						eventsNotificationsService.notifyOrganizerInvitedMemberStatusChanged(meeting, member, status);
+						answers.get(meeting).put(memberMail, reply.getTimeStamp());
+					}
 				}
 			}
 
