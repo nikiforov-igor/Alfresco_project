@@ -17,8 +17,8 @@
 .yui-dt-first {
 	background-color: #FFF;
 }
-table thead {
-        display: none;
+div.connections-list div#expandable_table table thead {
+	display: none;
 }
 .yui-dt-expandablerow-trigger a {
 	display:block;
