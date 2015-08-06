@@ -117,16 +117,11 @@
 		<property name="searchService" ref="searchService"/>
 		<property name="workCalendarService" ref="WorkCalendarService"/>
 		<property name="documentTableService" ref="documentTableService"/>
-		<property name="notificationsService" ref="notificationsService"/>
-		<property name="mailService" ref="mailService"/>
-		<property name="templateService" ref="templateService"/>
-		<property name="contentService" ref="ContentService"/>
-		<property name="defaultFromEmail" value="${mail.from.default}"/>
 		<property name="organizationQueryProcessor" ref="inUserOrganizationProcessor"/>
 		<property name="threadPoolExecutor" ref="lecm.events.thread.pool"/>
-		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 		<property name="namespaceService" ref="namespaceService" />
 		<property name="eventsNotificationsService" ref="eventsNotificationsService" />
+		<property name="documentConnectionService" ref="documentConnectionService" />
 		<property name="propsForFilterShowIncalendar">
 			<list>
 				<value>lecm-events:initiator-assoc-ref</value>
@@ -159,12 +154,6 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
 		<property name="eventService" ref="eventsService"/>
 		<property name="notificationsService" ref="notificationsService"/>
-		<property name="documentConnectionService" ref="documentConnectionService"/>
-		<property name="mailService" ref="mailService"/>
-		<property name="templateService" ref="templateService"/>
-		<property name="orgstructureBean" ref="serviceOrgstructure"/>
-		<property name="contentService" ref="ContentService"/>
-		<property name="defaultFromEmail" value="${mail.from.default}"/>
 	</bean>
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">

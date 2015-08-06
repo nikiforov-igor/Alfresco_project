@@ -250,6 +250,10 @@ public class EventsNotificationsService extends BaseBean {
 			nodeService.setProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE, (Integer) nodeService.getProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE) + 1);
 			Map<String, Object> eventTemplateModel = new HashMap<>(getEventTemplateModel(event));
 			List<NodeRef> members = eventsService.getEventMembers(event);
+			NodeRef initiator = eventsService.getEventInitiator(event);
+			if (!members.contains(initiator)) {
+				members.add(initiator);
+			}
 			//сначала шлём участникам, т.к. у них ещё стандартные уведомления
 			//Рссылаем стандартные уведомления
 			String author = AuthenticationUtil.getSystemUserName();
@@ -302,7 +306,7 @@ public class EventsNotificationsService extends BaseBean {
 		notifyEvent(event, true, recipients);
 	}
 
-	public void notifyEvent(NodeRef event, boolean isNew, List<NodeRef> recipients) {
+	private void notifyEvent(NodeRef event, boolean isNew, List<NodeRef> recipients) {
 		List<NodeRef> members = eventsService.getEventMembers(event);
 		if (!members.contains(eventsService.getEventInitiator(event))) {
 			members.add(eventsService.getEventInitiator(event));
@@ -504,9 +508,9 @@ public class EventsNotificationsService extends BaseBean {
 
 		List<NodeRef> invitedMembersRefs = eventsService.getEventInvitedMembers(event);
 		List<NodeRef> membersRefs = eventsService.getEventMembers(event);
-//		if (!membersRefs.contains(initiator)) {
-//			membersRefs.add(initiator);
-//		}
+		if (!membersRefs.contains(initiator)) {
+			membersRefs.add(initiator);
+		}
 		Map<String, Map<String, Serializable>> attendees = new HashMap<>();
 		for (NodeRef attendee : membersRefs) {
 			String email = (String) nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_EMAIL);
@@ -779,6 +783,7 @@ public class EventsNotificationsService extends BaseBean {
 					throw new MailException("Mail text must be not null") {
 					};
 				}
+				logger.error("Send mail to "+sendTo);
 				String contentId = "htmlText";
 				MimeMessage message = mailService.createMimeMessage();
 				MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");

@@ -9,7 +9,6 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.javamail.JavaMailSender;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -17,16 +16,22 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
-import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.util.GUID;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 /**
  * User: AIvkin Date: 25.03.2015 Time: 14:44
@@ -35,24 +40,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	private final static Logger logger = LoggerFactory.getLogger(EventsServiceImpl.class);
 
+	private TransactionListener transactionListener;
+	private static final String EVENTS_TRANSACTION_LISTENER = "events_transaction_listaner";
+
 	private DictionaryBean dictionaryBean;
 	private OrgstructureBean orgstructureBean;
 	private SearchService searchService;
 	private IWorkCalendar workCalendarService;
 	private DocumentTableService documentTableService;
-	private NotificationsService notificationsService;
 	private SearchQueryProcessor organizationQueryProcessor;
-	private LecmPermissionService lecmPermissionService;
 	private NamespaceService namespaceService;
-	
+	private DocumentConnectionService documentConnectionService;
+
 	private ThreadPoolExecutor threadPoolExecutor;
 
 	private EventsNotificationsService eventsNotificationsService;
-	
-	private TemplateService templateService;
-	private JavaMailSender mailService;
-	private ContentService contentService;
-	private String defaultFromEmail;
 
 	//Уже есть в BaseBean
 	//final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -61,6 +63,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	private final Map<QName, List<QName>> assocsToUpdateMap = new HashMap<>();
 	private final Map<QName, List<QName>> propsToUpdateMap = new HashMap<>();
+
+	private final static String WEEK_DAYS = "week-days";
+	private final static String MONTH_DAYS = "month-days";
 
 	private List<String> propsForFilterShowIncalendar = new ArrayList<>();
 
@@ -76,12 +81,19 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	public Boolean getSendIcalToInvitedMembers() {
 		return eventsNotificationsService.getSendIcalToInvitedMembers();
 	}
-	
+
 	@Override
 	public Boolean getSendIcalToMembers() {
 		return eventsNotificationsService.getSendIcalToMembers();
 	}
 
+	public DocumentConnectionService getDocumentConnectionService() {
+		return documentConnectionService;
+	}
+
+	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+		this.documentConnectionService = documentConnectionService;
+	}
 
 	public NamespaceService getNamespaceService() {
 		return namespaceService;
@@ -90,7 +102,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
 	}
-	
+
 	public void init() {
 		List<QName> propertiesToCopy = new ArrayList<>();
 		propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
@@ -105,6 +117,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);
 
 		addUpdateType(TYPE_EVENT, propertiesToCopy, assocsToCopy);
+
+		transactionListener = new EventsTransactionListener();
 	}
 
 	@Override
@@ -127,32 +141,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		this.threadPoolExecutor = threadPoolExecutor;
 	}
 
-	public void setNotificationsService(NotificationsService notificationsService) {
-		this.notificationsService = notificationsService;
-	}
-
-	public void setTemplateService(TemplateService templateService) {
-		this.templateService = templateService;
-	}
-
-	public void setMailService(JavaMailSender mailService) {
-		this.mailService = mailService;
-	}
-
-	public void setDefaultFromEmail(String defaultFromEmail) {
-		this.defaultFromEmail = defaultFromEmail;
-	}
-
-	public void setContentService(ContentService contentService) {
-		this.contentService = contentService;
-	}
-
 	public void setOrganizationQueryProcessor(SearchQueryProcessor organizationQueryProcessor) {
 		this.organizationQueryProcessor = organizationQueryProcessor;
-	}
-
-	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-		this.lecmPermissionService = lecmPermissionService;
 	}
 
 	@Override
@@ -637,8 +627,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		} else {
 			recipients.retainAll(invitedMembers);
 		}
-		
-		eventsNotificationsService.notifyEvent(event, isFirst, recipients);
+
+		sendNotifications(event, isFirst, recipients);
 	}
 
 	@Override
@@ -663,20 +653,66 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		} else {
 			recipients.retainAll(members);
 		}
-		eventsNotificationsService.notifyEvent(event, isFirst, recipients);
+		sendNotifications(event, isFirst, recipients);
+	}
+
+	@Override
+	public void sendNotifications(NodeRef event, Boolean isFirst, List<NodeRef> recipients) {
+		bindTransactionListener();
+		Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+		Action action = pendingActions.get(event);
+		if (null == action) {
+			action = new Action(event);
+			pendingActions.put(event, action);
+		}
+		String actionType = isFirst ? Action.CREATE : Action.UPDATE;
+		for (NodeRef recipient : recipients) {
+			String currentType = action.getRecipients().get(recipient);
+			if (null == currentType || actionType.equals(Action.CREATE)) {
+				action.getRecipients().put(recipient, actionType);
+			}
+		}
+		
+//		eventsNotificationsService.notifyEvent(event, isFirst, recipients);
 	}
 
 	@Override
 	public void notifyAttendeeRemoved(NodeRef event, NodeRef attendee) {
-		eventsNotificationsService.notifyAttendeeRemoved(event, attendee);
+		bindTransactionListener();
+		Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+		Action action = pendingActions.get(event);
+		if (null == action) {
+			action = new Action(event);
+			pendingActions.put(event, action);
+		}
+		action.getRecipients().put(attendee, Action.REMOVE);
+		//eventsNotificationsService.notifyAttendeeRemoved(event, attendee);
 	}
-
 
 	@Override
 	public void notifyEventCncelled(NodeRef event) {
-		eventsNotificationsService.notifyEventCancelled(event);
+		bindTransactionListener();
+		Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+		Action action = pendingActions.get(event);
+		if (null == action) {
+			action = new Action(event);
+			pendingActions.put(event, action);
+		}
+		action.canceled = true;
+		//eventsNotificationsService.notifyEventCancelled(event);
 	}
 
+	public void createRepeated(NodeRef event) {
+		bindTransactionListener();
+		Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+		Action action = pendingActions.get(event);
+		if (null == action) {
+			action = new Action(event);
+			pendingActions.put(event, action);
+		}
+		action.created = true;
+	}
+	
 	@Override
 	public List<NodeRef> getNextRepeatedEvents(NodeRef event) {
 		List<NodeRef> results = new ArrayList<>();
@@ -851,5 +887,333 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			return (Boolean) nodeService.getProperty(settings, USER_SETTINGS_PROP_SHOW_DECLINED);
 		}
 		return false;
+	}
+
+	private void bindTransactionListener() {
+		AlfrescoTransactionSupport.bindListener(this.transactionListener);
+
+		Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+		if (pendingActions == null) {
+			pendingActions = new HashMap<>();
+			AlfrescoTransactionSupport.bindResource(EVENTS_TRANSACTION_LISTENER, pendingActions);
+		}
+	}
+
+	;
+	
+	
+	private class EventsTransactionListener implements TransactionListener {
+
+		@Override
+		public void flush() {
+
+		}
+
+		@Override
+		public void beforeCommit(boolean readOnly) {
+
+		}
+
+		@Override
+		public void beforeCompletion() {
+
+		}
+
+		@Override
+		public void afterCommit() {
+			logger.error("AfterCommit start");
+			HashMap<NodeRef, Action> actions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+			if (actions != null) {
+				List<NodeRef> nodes = new LinkedList(actions.keySet());
+				while (!nodes.isEmpty()) {
+					NodeRef node = nodes.remove(0);
+					final Action action = actions.remove(node);
+					if (action.created) {
+						createRepeated(action.event);
+					}
+					sendNotifications(action);
+				}
+			}
+			logger.error("AfterCommit finished");
+		}
+
+		private void sendNotifications(final Action action) {
+			final NodeRef event = action.getEvent();
+			//Рассылка уведомлений
+			Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+			Boolean deleted = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REMOVED);
+			sendNotifications = null == sendNotifications ? false : sendNotifications;
+			if (sendNotifications && (!deleted || action.canceled)) {
+				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+					@Override
+					public Void execute() throws Throwable {
+						if (action.canceled) {
+							eventsNotificationsService.notifyEventCancelled(event);
+						} else {
+							List<NodeRef> create = new ArrayList<>();
+							List<NodeRef> update = new ArrayList<>();
+							Iterator<NodeRef> iterator = action.recipients.keySet().iterator();
+							while (iterator.hasNext()) {
+								NodeRef recipient = iterator.next();
+								String notifycationType = action.getRecipients().get(recipient);
+								if (notifycationType.equals(Action.CREATE)) {
+									create.add(recipient);
+								} else if (notifycationType.equals(Action.REMOVE)) {
+									eventsNotificationsService.notifyAttendeeRemoved(event, recipient);
+								} else if (notifycationType.equals(Action.UPDATE)) {
+									update.add(event);
+								}
+							}
+							eventsNotificationsService.notifyEventCreated(event, create);
+							eventsNotificationsService.notifyEventUpdated(event, update);
+						}
+						return null;
+					}
+				}, false, true);
+
+			}
+
+		}
+
+		private void createRepeated(final NodeRef event) {
+			//Запись старых участников
+			final List<NodeRef> members = getEventMembers(event);
+			if (members != null) {
+				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+					@Override
+					public Void execute() throws Throwable {
+						for (NodeRef member : members) {
+							nodeService.createAssociation(event, member, EventsService.ASSOC_EVENT_OLD_MEMBERS);
+						}
+						return null;
+					}
+				}, false, true);
+			}
+
+			//Создание повторных
+			Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
+			Boolean isRepeated = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_IS_REPEATED);
+			if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) { //Создание повторных происходит сразу только для мероприятий
+				if (repeatable != null && repeatable && (isRepeated == null || !isRepeated)) {
+					final String ruleContent = (String) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_RULE);
+					final Date startPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
+					final Date endPeriod = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
+
+					final Date startEventDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+					final Date endEvenDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_TO_DATE);
+
+					if (ruleContent != null && startPeriod != null && endPeriod != null) {
+						try {
+							JSONObject rule = new JSONObject(ruleContent);
+							String type = rule.getString("type");
+							JSONArray data = rule.getJSONArray("data");
+
+							List<Integer> weekDays = new ArrayList<>();
+							List<Integer> monthDays = new ArrayList<>();
+
+							if (type.equals(WEEK_DAYS)) {
+								for (int i = 0; i < data.length(); i++) {
+									if (data.getInt(i) == 7) {
+										weekDays.add(Calendar.SUNDAY);
+									} else {
+										weekDays.add(data.getInt(i) + 1);
+									}
+								}
+							} else if (type.equals(MONTH_DAYS)) {
+								for (int i = 0; i < data.length(); i++) {
+									monthDays.add(data.getInt(i));
+								}
+							}
+
+							final List<Integer> weekDaysFinal = weekDays;
+							final List<Integer> monthDaysFinal = monthDays;
+
+							final Date eventFromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+
+							transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+								@Override
+								public Void execute() throws Throwable {
+									NodeRef lastCreatedEvent = null;
+
+									final Calendar calStart = Calendar.getInstance();
+									calStart.setTime(startPeriod);
+
+									Calendar fromCal = Calendar.getInstance();
+									fromCal.setTime(startEventDate);
+									calStart.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
+									calStart.set(Calendar.MINUTE, fromCal.get(Calendar.MINUTE));
+
+									Calendar calEnd = Calendar.getInstance();
+									calEnd.setTime(endPeriod);
+
+									Calendar toCal = Calendar.getInstance();
+									toCal.setTime(endEvenDate);
+									calEnd.set(Calendar.HOUR_OF_DAY, toCal.get(Calendar.HOUR_OF_DAY));
+									calEnd.set(Calendar.MINUTE, toCal.get(Calendar.MINUTE));
+
+									boolean createdEventConnection = false;
+
+									while (calStart.before(calEnd)) {
+										int weekDay = calStart.get(Calendar.DAY_OF_WEEK);
+										int monthDay = calStart.get(Calendar.DAY_OF_MONTH);
+										if (weekDaysFinal.contains(weekDay) || monthDaysFinal.contains(monthDay)) {
+
+											QName docType = nodeService.getType(event);
+											NodeRef parentRef = nodeService.getPrimaryParent(event).getParentRef();
+											QName assocQname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
+											Map<QName, Serializable> properties = copyProperties(event, calStart.getTime());
+
+											if (properties != null) {
+												// создаем ноду
+												ChildAssociationRef createdNodeAssoc = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQname, docType, properties);
+												NodeRef createdEvent = createdNodeAssoc.getChildRef();
+												documentConnectionService.createRootFolder(createdEvent);
+												copyAssocs(event, createdEvent);
+
+												nodeService.createAssociation(event, createdEvent, EventsService.ASSOC_EVENT_REPEATED_EVENTS);
+
+												Date createdFromDate = (Date) nodeService.getProperty(createdEvent, EventsService.PROP_EVENT_FROM_DATE);
+												Date lastCreatedFromDate = null;
+												if (lastCreatedEvent != null) {
+													lastCreatedFromDate = (Date) nodeService.getProperty(lastCreatedEvent, EventsService.PROP_EVENT_FROM_DATE);
+												}
+
+												if ((lastCreatedFromDate == null || lastCreatedFromDate.before(eventFromDate)) && createdFromDate.after(eventFromDate)) {
+													if (lastCreatedEvent != null) {
+														documentConnectionService.createConnection(lastCreatedEvent, event, "hasRepeated", true);
+														nodeService.createAssociation(lastCreatedEvent, event, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+													}
+													documentConnectionService.createConnection(event, createdEvent, "hasRepeated", true);
+													nodeService.createAssociation(event, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+
+													createdEventConnection = true;
+												} else if (lastCreatedEvent != null) {
+													documentConnectionService.createConnection(lastCreatedEvent, createdEvent, "hasRepeated", true);
+													nodeService.createAssociation(lastCreatedEvent, createdEvent, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+												}
+
+												lastCreatedEvent = createdEvent;
+											}
+										}
+
+										calStart.add(Calendar.DAY_OF_YEAR, 1);
+									}
+
+									if (!createdEventConnection && lastCreatedEvent != null) {
+										documentConnectionService.createConnection(lastCreatedEvent, event, "hasRepeated", true);
+										nodeService.createAssociation(lastCreatedEvent, event, EventsService.ASSOC_NEXT_REPEATED_EVENT);
+									}
+
+									return null;
+								}
+							}, false, true);
+
+						} catch (JSONException e) {
+							logger.error("Error parse repeatable rule", e);
+						}
+					}
+				}
+			}
+		}
+
+		public Map<QName, Serializable> copyProperties(NodeRef event, Date newStartDate) {
+			Map<QName, Serializable> oldProperties = nodeService.getProperties(event);
+			Map<QName, Serializable> newProperties = new HashMap<>();
+
+			Date dateFrom = (Date) oldProperties.get(EventsService.PROP_EVENT_FROM_DATE);
+			int dayCount = daysBetween(dateFrom, newStartDate);
+			if (dayCount != 0) {
+				// копируем свойства
+				List<QName> propertiesToCopy = new ArrayList<>();
+				propertiesToCopy.add(EventsService.PROP_EVENT_TITLE);
+				propertiesToCopy.add(EventsService.PROP_EVENT_ALL_DAY);
+				propertiesToCopy.add(EventsService.PROP_EVENT_DESCRIPTION);
+				propertiesToCopy.add(EventsService.PROP_EVENT_MEMBERS_MANDATORY_JSON);
+
+				propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE);
+				propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE_RULE);
+				propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE_START_PERIOD);
+				propertiesToCopy.add(EventsService.PROP_EVENT_REPEATABLE_END_PERIOD);
+
+				for (QName propName : propertiesToCopy) {
+					newProperties.put(propName, oldProperties.get(propName));
+				}
+
+				Calendar calFrom = Calendar.getInstance();
+				calFrom.setTime(dateFrom);
+				calFrom.add(Calendar.DAY_OF_YEAR, dayCount);
+				newProperties.put(EventsService.PROP_EVENT_FROM_DATE, calFrom.getTime());
+
+				Calendar calTo = Calendar.getInstance();
+				calTo.setTime((Date) oldProperties.get(EventsService.PROP_EVENT_TO_DATE));
+				calTo.add(Calendar.DAY_OF_YEAR, dayCount);
+				newProperties.put(EventsService.PROP_EVENT_TO_DATE, calTo.getTime());
+
+				newProperties.put(EventsService.PROP_EVENT_IS_REPEATED, true);
+
+				return newProperties;
+			} else {
+				return null;
+			}
+		}
+
+		public void copyAssocs(NodeRef oldEvent, NodeRef newEvent) {
+			List<QName> assocsToCopy = new ArrayList<>();
+			assocsToCopy.add(EventsService.ASSOC_EVENT_INITIATOR);
+			assocsToCopy.add(EventsService.ASSOC_EVENT_LOCATION);
+			assocsToCopy.add(EventsService.ASSOC_EVENT_INVITED_MEMBERS);
+			assocsToCopy.add(EventsService.ASSOC_EVENT_TEMP_MEMBERS);
+			assocsToCopy.add(EventsService.ASSOC_EVENT_TEMP_RESOURCES);
+			assocsToCopy.add(EventsService.ASSOC_EVENT_SUBJECT);
+
+			for (QName assocQName : assocsToCopy) {
+				List<NodeRef> targets = findNodesByAssociationRef(oldEvent, assocQName, null, ASSOCIATION_TYPE.TARGET);
+				nodeService.setAssociations(newEvent, assocQName, targets);
+			}
+		}
+
+		private int daysBetween(Date d1, Date d2) {
+			return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+		}
+
+		@Override
+		public void afterRollback() {
+
+		}
+	}
+
+	private class Action {
+
+		static final String CREATE = "CREATE";
+		static final String UPDATE = "UPDATE";
+		static final String REMOVE = "REMOVE";
+
+		private NodeRef event;
+		private Boolean created;
+		private Boolean canceled;
+		private final Map<NodeRef, String> recipients = new HashMap<>();
+
+		public Boolean getCreateRepeated() {
+			return created;
+		}
+
+		public void setCreateRepeated(Boolean createRepeated) {
+			this.created = createRepeated;
+		}
+
+		public Map<NodeRef, String> getRecipients() {
+			return recipients;
+		}
+
+		public NodeRef getEvent() {
+			return event;
+		}
+
+		public Action(NodeRef event) {
+			this.event = event;
+			this.created = false;
+			this.canceled = false;
+		}
+
 	}
 }

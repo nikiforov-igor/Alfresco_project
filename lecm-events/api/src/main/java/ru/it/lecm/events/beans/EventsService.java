@@ -155,8 +155,12 @@ public interface EventsService {
 
 	void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients);
 
+	void sendNotifications(NodeRef event, Boolean isFirst, List<NodeRef> recipients);
+	
 	void notifyEventCncelled(NodeRef event);
 
+	void createRepeated(NodeRef event);
+	
 	void notifyAttendeeRemoved(NodeRef event, NodeRef attendee);
 	
 	void addUpdateType(QName TYPE_MEETINGS_DOCUMENT, List<QName> propertiesToCopy, List<QName> assocsToCopy);
