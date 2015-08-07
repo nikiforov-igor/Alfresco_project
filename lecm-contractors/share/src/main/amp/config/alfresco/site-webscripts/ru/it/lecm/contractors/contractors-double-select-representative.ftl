@@ -25,6 +25,8 @@
                 </#if>
                     employeesNameSubstitute: "${params.employeesNameSubstitute!"{lecm-orgstr:employee-short-name}"}",
                     representativesSubstitute: "${params.representativesSubstitute!"{cm:name}"}",
+                    nameSubstituteString: "${params.representativesSubstitute!"{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"}",
+                    selectedItemsNameSubstituteString: "${params.representativesSubstitute!"{lecm-representative:surname}{lecm-orgstr:employee-last-name} {lecm-representative:firstname}{lecm-orgstr:employee-first-name} {lecm-representative:middlename}{lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"}",
                 <#if params.employeesLocation??>
                     employeesLocation: "${params.employeesLocation}",
                 </#if>
