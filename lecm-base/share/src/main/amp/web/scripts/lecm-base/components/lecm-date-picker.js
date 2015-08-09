@@ -283,10 +283,12 @@
                         var inputEl = Dom.get(me.id + "-date");
                         var iconEl = Dom.get(me.id + "-icon");
                         var el = Event.getTarget(e);
-                        var dialogEl = me.widgets.calendar.oDomContainer;
+                        if (me.widgets.calendar) {
+                            var dialogEl = me.widgets.calendar.oDomContainer;
 
-                        if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != inputEl && el != iconEl) {
-                            me._hidePicker();
+                            if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != inputEl && el != iconEl) {
+                                me._hidePicker();
+                            }
                         }
                     });
 
