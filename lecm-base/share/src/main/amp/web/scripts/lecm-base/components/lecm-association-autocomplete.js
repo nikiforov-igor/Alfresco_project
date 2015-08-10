@@ -96,7 +96,9 @@ LogicECM.module = LogicECM.module || {};
 
 	            fieldId: null,
 
-	            formId: false
+	            formId: false,
+
+                loadDefault: true
             },
 
             selectedItems: null,
@@ -129,7 +131,9 @@ LogicECM.module = LogicECM.module || {};
             onReady:function AssociationAutoComplete_onReady() {
                 if (!this.options.disabled && !this.options.lazyLoading) {
                     this.populateDataWithAllowedScript();
-                    this.loadDefaultValue();
+                    if (this.options.loadDefault) {
+                        this.loadDefaultValue();
+                    }
 	                if (this.options.useDynamicLoading) {
 	                    this._loadSearchProperties();
 	                }

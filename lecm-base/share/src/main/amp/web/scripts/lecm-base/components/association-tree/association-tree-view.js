@@ -190,7 +190,9 @@ LogicECM.module = LogicECM.module || {};
 
 			fieldId: null,
 
-			formId: false
+			formId: false,
+
+            loadDefault: true
         },
 
         onReady: function AssociationTreeViewer_onReady() {
@@ -396,7 +398,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 arrItems = this.options.selectedValue;
             }
-            else if (this.options.currentValue != null && this.isNodeRef(this.options.currentValue))
+            else if (this.options.loadDefault && this.options.currentValue != null && this.isNodeRef(this.options.currentValue))
             {
                 arrItems = this.options.currentValue;
             }

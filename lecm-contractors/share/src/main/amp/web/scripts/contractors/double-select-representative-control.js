@@ -87,7 +87,6 @@ LogicECM.module = LogicECM.module || {};
                                 contractor: selectedContractor
                             }),
                         nameSubstituteString: this.options.representativesSubstitute,
-                        currentValue: resetValue ? "" : this.options.currentValue,
                         selectedValueNodeRef:"",
                         lazyLoading: false
                     },
@@ -103,7 +102,6 @@ LogicECM.module = LogicECM.module || {};
                                 contractor: selectedContractor
                             }),
                         nameSubstituteString: this.options.representativesSubstitute,
-                        currentValue: resetValue ? "" : this.options.currentValue,
                         selectedValue:null,
                         initialized:false,
                         lazyLoading: false
@@ -116,7 +114,6 @@ LogicECM.module = LogicECM.module || {};
             var control = LogicECM.CurrentModules[this.options.autoCompleteJsName];
             if (control != null) {
                 if (reset) {
-                    this.options.currentValue = "";
                     control.dataArray = [];
                     control.selectedItems = {};
                     control.defaultValue = null;
@@ -124,9 +121,11 @@ LogicECM.module = LogicECM.module || {};
                     control.updateSelectedItems();
                     control.updateFormFields();
                     control.updateInputUI();
+                    control.setOptions({
+                        loadDefault: false
+                    });
                 }
                 control.setOptions({
-                    currentValue: this.options.currentValue,
                     selectedValueNodeRef: "",
                     lazyLoading: (selectedContractor != null)
                 });
@@ -138,12 +137,13 @@ LogicECM.module = LogicECM.module || {};
             var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
             if (treeControl != null) {
                 if (reset) {
-                    this.options.currentValue = "";
                     treeControl.selectedItems = null;
                     treeControl.defaultValue = null;
+                    treeControl.setOptions({
+                        loadDefault: false
+                    });
                 }
                 treeControl.setOptions({
-                    currentValue: this.options.currentValue,
                     selectedValue: null
                 });
                 if (selectedContractor != null) {
