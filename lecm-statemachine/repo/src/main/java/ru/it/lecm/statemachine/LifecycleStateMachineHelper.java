@@ -40,6 +40,7 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.lang.StringUtils;
@@ -628,21 +629,22 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      * Используется в
      * 		- StartWorkflowAction
      */
-    public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
+    public String startUserWorkflowProcessing(final NodeRef bpm_package, final String workflowId, final String assignee) {
         final String user = AuthenticationUtil.getFullyAuthenticatedUser();
         WorkflowService workflowService = serviceRegistry.getWorkflowService();
-        WorkflowTask task = workflowService.getTaskById(ACTIVITI_PREFIX + taskId);
 
         Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
-        NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
 
         NodeService nodeService = serviceRegistry.getNodeService();
-        List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
+        List<ChildAssociationRef> documents = nodeService.getChildAssocs(bpm_package);
 
         NodeRef subprocessPackage = workflowService.createPackage(null);
         NodeRef documentRef = null;
         for (ChildAssociationRef document : documents) {
-            nodeService.addChild(subprocessPackage, document.getChildRef(), ContentModel.ASSOC_CONTAINS, document.getQName());
+        	String documentName = (String) nodeService.getProperty(document.getChildRef(), ContentModel.PROP_NAME);
+    		QName qname = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, documentName);
+    		
+            nodeService.addChild(subprocessPackage, document.getChildRef(), WorkflowModel.ASSOC_PACKAGE_CONTAINS, qname);
             documentRef = document.getChildRef();
         }
         workflowProps.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);

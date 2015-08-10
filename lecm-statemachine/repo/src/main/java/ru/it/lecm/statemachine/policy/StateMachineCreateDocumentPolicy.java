@@ -224,7 +224,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 final WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
                                                 NodeRef stateProcessPackage = workflowService.createPackage(null);
-                                                nodeService.addChild(stateProcessPackage, docRef, ContentModel.ASSOC_CONTAINS, type);
+                                                nodeService.addChild(stateProcessPackage, docRef, WorkflowModel.ASSOC_PACKAGE_CONTAINS, type);
 
                                                 workflowProps.put(WorkflowModel.ASSOC_PACKAGE, stateProcessPackage);
                                                 workflowProps.put(WorkflowModel.ASSOC_ASSIGNEE, assigneeNodeRef);

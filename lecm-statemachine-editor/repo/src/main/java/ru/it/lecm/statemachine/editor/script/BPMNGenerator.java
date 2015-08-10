@@ -516,7 +516,7 @@ public class BPMNGenerator {
 		if (StatemachineEditorModel.ACTION_FINISH_STATE_WITH_TRANSITION.equals(actionId)) {
 			return createActionFinishStateWithTransition(extensions, /*eventElement, */statusVar, action, actionVar);
 		} else if (StatemachineEditorModel.ACTION_START_WORKFLOW.equals(actionId)) {
-			createStartWorkflowAction(/*eventElement, */action);
+			createStartWorkflowAction(extensions, /*eventElement, */action);
 			return Collections.EMPTY_LIST;
 		} else if (StatemachineEditorModel.ACTION_TRANSITION_ACTION.equals(actionId)) {
 			createTransitionAction(parentElement, statusVar, action);
@@ -781,9 +781,34 @@ public class BPMNGenerator {
 	 * <lecm:attribute name="assignee" value="admin"/>
 	 * </lecm:action>
 	 */
-	private void createStartWorkflowAction(/*Element eventElement, */ChildAssociationRef action) {
+	private void createStartWorkflowAction(Element extensions, /*Element eventElement, */ChildAssociationRef action) {
 		List<ChildAssociationRef> workflows = nodeService.getChildAssocs(action.getChildRef());
-		for (ChildAssociationRef workflow : workflows) {
+	    NodeRef parent = nodeService.getPrimaryParent(action.getParentRef()).getParentRef();
+	        
+	    String event = (String) nodeService.getProperty(action.getChildRef(), StatemachineEditorModel.PROP_ACTION_EXECUTION);
+	    for (ChildAssociationRef workflow : workflows) {
+	        	
+	        Element actionElement = doc.createElement("activiti:taskListener");
+	    	actionElement.setAttribute("class", "ru.it.lecm.statemachine.action.StartWorkflowAction");
+
+			if("start".equals(event))actionElement.setAttribute("event", "create");
+			else if("end".equals(event))actionElement.setAttribute("event", "complete");
+			extensions.appendChild(actionElement);
+
+			String workflowId = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_WORKFLOW_ID);
+	        String assignee = (String) nodeService.getProperty(workflow.getChildRef(), StatemachineEditorModel.PROP_ASSIGNEE);
+
+			Element workflowIdEl = doc.createElement("activiti:field");
+			workflowIdEl.setAttribute("name", "workflowId");
+	        workflowIdEl.setAttribute("stringValue", workflowId);
+
+	        Element assigneeEl = doc.createElement("activiti:field");
+	        assigneeEl.setAttribute("name", "assignee");
+	        assigneeEl.setAttribute("stringValue", assignee);
+
+	        actionElement.appendChild(workflowIdEl);
+	        actionElement.appendChild(assigneeEl);
+	    }
 //			Element attribute;
 //			Element actionElement = doc.createElement("lecm:action");
 //			actionElement.setAttribute("type", StatemachineEditorModel.ACTION_START_WORKFLOW);
@@ -803,7 +828,7 @@ public class BPMNGenerator {
 //			actionElement.appendChild(attribute);
 //			eventElement.appendChild(actionElement);
 //			appendWorkflowVariables(actionElement, workflow.getChildRef());
-		}
+//		}
 	}
 
 	/**
