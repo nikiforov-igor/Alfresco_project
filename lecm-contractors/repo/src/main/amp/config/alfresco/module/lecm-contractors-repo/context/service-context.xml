@@ -26,7 +26,8 @@
                       contractorsPolicy,
                       contractorsSpecializationPolicy,
                       contractorsLegalFormPolicy,
-                      contractorsLinkPolicy" >
+                      contractorsLinkPolicy,
+                      ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap" >
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/dictionaries/contractor-dictionary.xml</value>
@@ -35,6 +36,7 @@
                 <value>alfresco/module/${artifactId}/models/dictionaries/specialization-dictionary.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/legalform-dictionary-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/lecm-contractors-roles-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/dictionaries/lecm-bussiness-journal-objectType-items.xml</value>
             </list>
         </property>
     </bean>
