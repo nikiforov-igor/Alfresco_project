@@ -15,6 +15,8 @@ import ru.it.lecm.reports.utils.Utils;
 import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -67,14 +69,14 @@ public class ReportMainProducer extends AbstractWebScript {
         String json = webScriptRequest.getParameter(JSON_PARAMETERS_KEY);
         if (json != null) {
             try {
-                JSONObject jsonParameters = new JSONObject(json);
+                JSONObject jsonParameters = new JSONObject(URLDecoder.decode(json, "UTF-8"));
                 Iterator<String> keys = jsonParameters.keys();
                 while (keys.hasNext()) {
                     String key = keys.next();
                     String value = jsonParameters.getString(key);
                     result.put(key, value);
                 }
-            } catch (JSONException e) {
+            } catch (JSONException | UnsupportedEncodingException e) {
                 logger.error("Error while parsing JSON parameters", e);
             }
         }
