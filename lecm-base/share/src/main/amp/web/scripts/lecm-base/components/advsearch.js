@@ -525,9 +525,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onBeforeFormRuntimeInit:function ADVSearch_onBeforeFormRuntimeInit(layer, args) {
                 // extract the current form runtime - so we can reference it later
-                var formId = this.options.searchFormId + "-" + this.currentForm.type.split(":").join("_") + "-form";
-                if (this.currentForm && args[1].runtime.formId == formId) {
+                if (this.currentForm && args[1].runtime.formId == (this.options.searchFormId + "-" + this.currentForm.type.split(":").join("_") + "-form")) {
                     this.currentForm.runtime = args[1].runtime;
+                    var formId = this.options.searchFormId + "-" + this.currentForm.type.split(":").join("_") + "-form";
                     var form = Dom.get(formId);
                     form.addEventListener("submit", function(e) {
                         e.preventDefault();
