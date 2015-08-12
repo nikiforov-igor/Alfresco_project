@@ -525,8 +525,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onBeforeFormRuntimeInit:function ADVSearch_onBeforeFormRuntimeInit(layer, args) {
                 // extract the current form runtime - so we can reference it later
-                if (this.currentForm && args[1].runtime.formId == (this.options.searchFormId + "-" + this.currentForm.type.split(":").join("_") + "-form")) {
+                var formId = this.options.searchFormId + "-" + this.currentForm.type.split(":").join("_") + "-form";
+                if (this.currentForm && args[1].runtime.formId == formId) {
                     this.currentForm.runtime = args[1].runtime;
+                    var form = Dom.get(formId);
+                    form.addEventListener("submit", function(e) {
+                        e.preventDefault();
+                        this.onSearchClick();
+                    }.bind(this), false);
                 }
             },
 
