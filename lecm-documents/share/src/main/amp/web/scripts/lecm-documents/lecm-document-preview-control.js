@@ -32,7 +32,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 		{
 			options:{
 				itemId: "",
-				forTask: true
+				forTask: true,
+                                selectedAttachmentNodeRef: ""
 			},
 
 			documentNodeRef: null,
@@ -100,6 +101,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 													if (attachment.nodeRef != null) {
 														var option = document.createElement("option");
 														option.value = attachment.nodeRef;
+                                                                                                                if(attachment.nodeRef == this.options.selectedAttachmentNodeRef)
+                                                                                                                    option.selected = true;
 														if (attachment.name != null) {
 															option.innerHTML = attachment.name;
 														}
@@ -112,6 +115,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 											this.attachmentsSelect.appendChild(optionGroup);
 										}
 									}
+
 
 									this.reloadAttachmentPreview();
 								}
