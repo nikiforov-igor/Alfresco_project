@@ -153,7 +153,9 @@ div[id*="report-settings"] .yui-skin-lecmTheme .yui-panel div.form-field textare
  }
 
 #bd #lecm-content-main #reports-editor-tree {
+    max-height: 80vh;
     margin: 0 5px;
+    overflow: auto;
 }
 
 span.insitu-deploy-report

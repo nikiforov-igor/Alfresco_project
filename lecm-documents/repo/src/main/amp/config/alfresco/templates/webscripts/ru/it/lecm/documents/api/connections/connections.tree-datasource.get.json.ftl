@@ -10,7 +10,8 @@
         "status": "${item.status!''}",
         "connectionType": "${item.connectionType!''}",
         "direction": "${item.direction}",
-        "numberOfChildErrands": ${item.numberOfChildErrands}
+        "numberOfChildErrands": ${item.numberOfChildErrands},
+        "numberOfChildElements": ${item.numberOfChildElements}
         }<#if item_has_next>,</#if>
         </#if>
     </#list>

@@ -524,11 +524,12 @@
 		});
 
 	YAHOO.widget.RowExpansionDataTable.formatRowExpansion = function(el, oRecord, oColumn, oData) {
-            if (oRecord._oData.numberOfChildErrands === 0 && oRecord._oData.docType === "lecm-errands:document") {
-                return;
+            if ((oRecord._oData.numberOfChildErrands > 0 && oRecord._oData.docType === "lecm-errands:document") ||
+                 oRecord._oData.numberOfChildElements > 0 && oRecord._oData.docType !== "lecm-errands:document") {
+                Dom.addClass( el.parentNode, "yui-dt-expandablerow-trigger" );
+                el.innerHTML = '<a class="yui-dt-expandablerow-trigger-inner" href="javascript:void(0);"></a>';
             }
-            Dom.addClass( el.parentNode, "yui-dt-expandablerow-trigger" );
-            el.innerHTML = '<a class="yui-dt-expandablerow-trigger-inner" href="javascript:void(0);"></a>';
+            
 
 	};
 

@@ -23,9 +23,17 @@ if (isFirstLayer) {
     firstItem.connectionType = "Корневой элемент";
     firstItem.direction = '';
 
-    var additionalDocAssocs = item.getSourceAssocs()["lecm-errands:additional-document-assoc"];
-    if (additionalDocAssocs !== null) {
-        firstItem.numberOfChildErrands = additionalDocAssocs.length;
+    var childErrands = item.sourceAssocs["lecm-errands:additional-document-assoc"];
+    var primaryDocAssocs = item.sourceAssocs["lecm-connect:primary-document-assoc"];
+    var connectedDocAssocs = item.sourceAssocs["lecm-connect:connected-document-assoc"];
+
+    var numberOfChildErrands = childErrands === null ? 0 : childErrands.length;
+    var numberOfPrimaryDocAssocs = primaryDocAssocs === null ? 0 : primaryDocAssocs.length;
+    var numberOfConnectedDocAssocs = connectedDocAssocs === null ? 0 : connectedDocAssocs.length;
+
+    firstItem.numberOfChildErrands = numberOfChildErrands;
+    firstItem.numberOfChildElements = numberOfChildErrands  + numberOfPrimaryDocAssocs + numberOfConnectedDocAssocs;
+    if ((isErrandCard && firstItem.numberOfChildErrands > 0) || (!isErrandCard && firstItem.numberOfChildElements > 0)) {
         items.push(firstItem);
     }
 
@@ -139,7 +147,7 @@ function evaluateItem(item, substituteTitle, isParent) {
         if (document != null) {
 
             if (isErrandCard) {
-                if (document.typeShort == "lecm-internal:document") {
+                if (document.typeShort != "lecm-errands:document") {
                     return null;
                 }
             }
@@ -151,12 +159,16 @@ function evaluateItem(item, substituteTitle, isParent) {
             itemObj.connectionType = item.assocs["lecm-connect:connection-type-assoc"][0].properties["cm:name"];
             itemObj.direction = direction;
 
-            var additionalDocAssocs = document.sourceAssocs["lecm-errands:additional-document-assoc"];
-            if (additionalDocAssocs !== null) {
-                itemObj.numberOfChildErrands = additionalDocAssocs.length;
-            } else {
-                itemObj.numberOfChildErrands = 0;
-            }
+            var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
+            var primaryDocAssocs = document.sourceAssocs["lecm-connect:primary-document-assoc"];
+            var connectedDocAssocs = document.sourceAssocs["lecm-connect:connected-document-assoc"];
+            
+            var numberOfChildErrands = childErrands === null ? 0 : childErrands.length;
+            var numberOfPrimaryDocAssocs = primaryDocAssocs === null ? 0 : primaryDocAssocs.length;
+            var numberOfConnectedDocAssocs = connectedDocAssocs === null ? 0 : connectedDocAssocs.length;
+            
+            itemObj.numberOfChildErrands = numberOfChildErrands;
+            itemObj.numberOfChildElements = numberOfChildErrands  + numberOfPrimaryDocAssocs + numberOfConnectedDocAssocs;
 
             return itemObj;
         }

@@ -179,6 +179,29 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     Alfresco.util.useAsButton(iconEl, this._showPicker, null, this);
                     Event.addListener(this.id + "-icon-to", "click", this._showPicker, this, true);
                 }
+
+                // Hide Calendar if we click anywhere in the document other than the calendar
+                Event.on(document, "click", function(e) {
+                    var inputFrom = Dom.get(this.id + "-date-from");
+                    var inputTo = Dom.get(this.id + "-date-to");
+                    var iconFrom = Dom.get(this.id + "-icon-from");
+                    var iconTo = Dom.get(this.id + "-icon-to");
+                    var dialogFrom = this.widgets.calendarFrom.oDomContainer;
+                    var dialogTo = this.widgets.calendarTo.oDomContainer;
+                    var el = Event.getTarget(e);
+
+                    if (el && el != dialogFrom && !Dom.isAncestor(dialogFrom, el) && el != inputFrom && el != iconFrom) {
+                        if (Dom.getStyle(dialogFrom, "display") != "none") {
+                            this.widgets.calendarFrom.hide();
+                        }
+                    }
+                    if (el && el != dialogTo && !Dom.isAncestor(dialogTo, el) && el != inputTo && el != iconTo) {
+                        if (Dom.getStyle(dialogTo, "display") != "none") {
+                            this.widgets.calendarTo.hide();
+                        }
+                    }
+                }, this, true);
+
                 // setup events
                 this.widgets.calendarFrom.selectEvent.subscribe(this._handlePickerChangeFrom, this, true);
                 this.widgets.calendarFrom.selectEvent.subscribe(this.onChangeDates, this, true);

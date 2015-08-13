@@ -252,7 +252,9 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 	public void afterCreateVersion(NodeRef nodeRef, Version version) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
-		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
+		Serializable vr = nodeService.getProperty(nodeRef, ContentModel.PROP_VERSION_LABEL);
+                String versionLabel = (vr != null) ? vr.toString() : "";
+                if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY) && !versionLabel.equals("") && !versionLabel.equals("1.0")) {
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(nodeRef.toString());
 			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT_NEW_VERSION, "#initiator обновил(а) версию вложения #object1 в документе #mainobject", objects);
@@ -313,6 +315,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 	public void beforeDeleteNode(NodeRef nodeRef) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
+           
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
 			onDeleteAttachment(nodeRef, document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
 		}
@@ -334,8 +337,9 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		boolean hasDeletePermission =  this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_CONTENT_DELETE, document);
 		if (!hasDeletePermission) {
 			hasDeletePermission = isOwnNode(attachment) && this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_OWN_CONTENT_DELETE, document);
-		}
+		}                
 
+                
 		if (hasDeletePermission) {
 			this.stateMachineService.checkReadOnlyCategory(document, categoryName);
 		} else {
@@ -359,6 +363,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 		List<String> objects = new ArrayList<String>(1);
 		objects.add(attachment.toString());
-		businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "#initiator удалил(а) вложение #object1 в документе #mainobject", objects);
+                if (nodeService.exists(attachment))
+                    businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "#initiator удалил(а) вложение #object1 в документе #mainobject", objects);
 	}
 }
