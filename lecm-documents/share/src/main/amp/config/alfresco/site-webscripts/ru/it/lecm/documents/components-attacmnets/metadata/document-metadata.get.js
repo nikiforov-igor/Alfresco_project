@@ -1,4 +1,5 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
 	AlfrescoUtil.param('nodeRef');
@@ -9,7 +10,8 @@ function main() {
 		model.document = documentDetails;
 
 		var category = getCategoryByAttachments(model.nodeRef);
-		model.allowMetaDataUpdate = category != null && !category.isReadOnly;
+		var mayEditMetadata = hasPermission(model.nodeRef, PERM_ATTR_EDIT);
+		model.allowMetaDataUpdate = category != null && !category.isReadOnly && mayEditMetadata;
 	}
 }
 
