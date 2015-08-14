@@ -14,7 +14,9 @@
 
 <@markup id="html">
 	<#if document??>
-	<!-- Parameters and libs -->
+		<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
+		<@view.viewForm />
+	    <!-- Parameters and libs -->
 	    <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
 	    <#assign el=args.htmlid/>
 	
