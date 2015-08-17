@@ -494,6 +494,10 @@
             <list>
                 <value>alfresco/module/${artifactId}/reports/contract-dossier.xml</value>
                 <value>alfresco/module/${artifactId}/reports/contract-stages.xml</value>
+                <value>alfresco/module/${artifactId}/reports/contract-delta-by-id.xml</value>
+                <value>alfresco/module/${artifactId}/reports/contract-info.xml</value>
+                <value>alfresco/module/${artifactId}/reports/contract-registry.xml</value>
+                <value>alfresco/module/${artifactId}/reports/docflow-status-timings.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="contracts.reportsDeployer"/>
@@ -504,6 +508,10 @@
             <list>
                 <value>contract-dossier-byid</value>
                 <value>contract-stages</value>
+                <value>contract-delta-by-id</value>
+                <value>contract-info</value>
+                <value>contract-registry</value>
+                <value>docflow-status-timings</value>
             </list>
         </property>
     </bean>
