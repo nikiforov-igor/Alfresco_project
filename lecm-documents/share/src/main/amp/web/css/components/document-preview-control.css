@@ -11,6 +11,7 @@
 }
 .yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview,
 .yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.WebPreviewer .web-preview.real embed,
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.WebPreviewer .web-preview.real object,
 .yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.Embed iframe,
 .yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.Image img {
     height: 500px;
