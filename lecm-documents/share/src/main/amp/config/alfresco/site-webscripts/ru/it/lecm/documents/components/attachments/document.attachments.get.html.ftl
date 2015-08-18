@@ -86,7 +86,7 @@
                     var attachedDocumentsInList = document.getElementsByClassName("text-cropped-listElement");
 
                     for(var i = 0; i < attachedDocumentsInList.length; i++) {
-                        attachedDocumentsInList[i].onclick = showAttachmentsModalForm;
+                        attachedDocumentsInList[i].addEventListener("click", showAttachmentsModalForm);
                     }
                     
                 };
@@ -94,7 +94,7 @@
                 function showAttachmentsModalForm(ev) {
                     var documentRef = "${nodeRef}";
                     var attachmentsModalForm = new Alfresco.module.SimpleDialog("modalWindow");
-                    var selectedAttr = ev.srcElement.children.item(0).value;
+                    var selectedAttr = ev.currentTarget.children.item(0).value;
                     this.getAttribute('refElement');
 
                     attachmentsModalForm.setOptions({
@@ -126,9 +126,6 @@
                             scope: this
                         }
                     });
-
-
-
                     attachmentsModalForm.show();
 		}
 
