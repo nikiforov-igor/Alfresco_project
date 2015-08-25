@@ -21,7 +21,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
                     </field>
                     <field id="lecm-group-actions:type">
-                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
                             <control-param name="dataSource">/lecm/groupActions/types</control-param>
                             <control-param name="singleValue">false</control-param>
                         </control>
@@ -64,7 +64,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
                     </field>
                     <field id="lecm-group-actions:type">
-                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
                             <control-param name="dataSource">/lecm/groupActions/types</control-param>
                             <control-param name="singleValue">false</control-param>
                         </control>
@@ -99,7 +99,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
                     </field>
                     <field id="lecm-group-actions:type">
-                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
                             <control-param name="dataSource">/lecm/groupActions/types</control-param>
                             <control-param name="singleValue">false</control-param>
                         </control>
@@ -141,7 +141,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
                     </field>
                     <field id="lecm-group-actions:type">
-                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
                             <control-param name="dataSource">/lecm/groupActions/types</control-param>
                             <control-param name="singleValue">false</control-param>
                         </control>
@@ -181,7 +181,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
                     </field>
                     <field id="lecm-group-actions:type">
-                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
                             <control-param name="dataSource">/lecm/groupActions/types</control-param>
                             <control-param name="singleValue">false</control-param>
                         </control>
@@ -220,7 +220,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
                     </field>
                     <field id="lecm-group-actions:type">
-                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
                             <control-param name="dataSource">/lecm/groupActions/types</control-param>
                             <control-param name="singleValue">false</control-param>
                         </control>

@@ -81,8 +81,10 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-arm:types">
-						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="multipleSelectMode">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:search-type">
@@ -145,8 +147,10 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-arm:types">
-						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="multipleSelectMode">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:search-type">
@@ -203,8 +207,10 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-arm:types">
-						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="multipleSelectMode">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:search-type">
@@ -262,8 +268,10 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-arm:types">
-						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="multipleSelectMode">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:search-type">
@@ -299,12 +307,14 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:types">
-						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="multipleSelectMode">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:reportCodes">
-						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/reports/rptmanager/allRegisteredReports?forCollection=true</control-param>
 						</control>
 					</field>
@@ -324,12 +334,14 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:types">
-						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="multipleSelectMode">true</control-param>
 						</control>
 					</field>
                     <field id="lecm-arm:reportCodes">
-                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-types-control.ftl">
                             <control-param name="dataSource">lecm/reports/rptmanager/allRegisteredReports?forCollection=true</control-param>
                         </control>
                     </field>

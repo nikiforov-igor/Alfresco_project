@@ -34,7 +34,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 				destination: null,
 
-                singleValue: false,
+                                singleValue: false,
 
 				mandatory:false
 			},
