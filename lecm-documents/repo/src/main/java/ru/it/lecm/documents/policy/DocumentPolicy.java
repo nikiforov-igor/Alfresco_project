@@ -244,6 +244,32 @@ public class DocumentPolicy extends BaseBean
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     @Override
     public void onUpdateProperties(final NodeRef nodeRef, final Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        //изменилась одна из дат регистрации (проекта или документа)
+        if (isChangeProperty(before, after, DocumentService.PROP_REG_DATA_DOC_DATE)
+                || isChangeProperty(before, after, DocumentService.PROP_REG_DATA_PROJECT_DATE)) {
+            Date afterDocDate = (Date) after.get(DocumentService.PROP_REG_DATA_DOC_DATE);
+            Date afterPrjDate = (Date) after.get(DocumentService.PROP_REG_DATA_PROJECT_DATE);
+            if (afterDocDate != null) {
+                setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_DATE, afterDocDate);
+                after.put(DocumentService.PROP_DOCUMENT_DATE, afterDocDate);
+            } else if (afterPrjDate != null) {
+                setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_DATE, afterPrjDate);
+                after.put(DocumentService.PROP_DOCUMENT_DATE, afterPrjDate);
+            }
+        }
+        //изменился один из номеров регистрации (проекта или документа)
+        if (isChangeProperty(before, after, DocumentService.PROP_REG_DATA_DOC_NUMBER)
+                || isChangeProperty(before, after, DocumentService.PROP_REG_DATA_PROJECT_NUMBER)) {
+            String afterDocNumber = (String) after.get(DocumentService.PROP_REG_DATA_DOC_NUMBER);
+            String afterPrjNumber = (String) after.get(DocumentService.PROP_REG_DATA_PROJECT_NUMBER);
+            if (afterDocNumber != null) {
+                setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_REGNUM, afterDocNumber);
+                after.put(DocumentService.PROP_DOCUMENT_REGNUM, afterDocNumber);
+            } else if (afterPrjNumber != null) {
+                setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_REGNUM, afterPrjNumber);
+                after.put(DocumentService.PROP_DOCUMENT_REGNUM, afterPrjNumber);
+            }
+        }
 		/*
 		 изменился регистрационный номер документа
 		 есть вероятность, что его поменяли руками
