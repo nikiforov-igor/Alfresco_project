@@ -292,19 +292,19 @@ public class SearchEditorService extends BaseBean {
         BEGN () {
             @Override
             public String getFTSQuery(String field, String value, Types type) {
-                return "=@" + doCharsProtection(field, ":-") + ":\'" + value + "*\'";
+                return "@" + doCharsProtection(field, ":-") + ":\'" + value + "*\'";
             }
         },
         ENDS () {
             @Override
             public String getFTSQuery(String field, String value, Types type) {
-                return "=@" + doCharsProtection(field, ":-") + ":\'*" + value + "\'";
+                return "@" + doCharsProtection(field, ":-") + ":\'*" + value + "\'";
             }
         },
         CONT() {
             @Override
             public String getFTSQuery(String field, String value, Types type) {
-                return "=@" + doCharsProtection(field, ":-") + ":\'*" + value + "*\'";
+                return "@" + doCharsProtection(field, ":-") + ":\'*" + value + "*\'";
             }
         };
 
