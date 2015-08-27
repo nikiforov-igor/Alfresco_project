@@ -279,6 +279,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 cancelButton.subscribe("click", function()
                 {
                     this.restoreEditForm();
+                    var balloons = Alfresco.util.ComponentManager.find({name: "Alfresco.widget.Balloon"});
+                    for (var i = 0; i < balloons.length; i++) {
+                        if (balloons[i].context != null && balloons[i].context.id == formId) {
+                            if (balloons[i].balloon) {
+                                balloons[i].balloon.hide();
+                            }
+                        }
+                    }
                 }, this, true);
                 cancelButton.set("label", this.msg('button.cancel'));
 

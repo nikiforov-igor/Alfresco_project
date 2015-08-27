@@ -68,11 +68,24 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
        *
        * @method onReady
        */
-      onReady: function NumberRange_onReady()
-      {
-         // Add listener for input fields to keep the generated range value up-to-date
-         Event.addListener(this.id + "-min", "keyup", this._handleFieldChange, this, true);
-         Event.addListener(this.id + "-max", "keyup", this._handleFieldChange, this, true);
+      onReady: function NumberRange_onReady() {
+          // Add listener for input fields to keep the generated range value up-to-date
+          Event.addListener(this.id + "-min", "keyup", this._handleFieldChange, this, true);
+          YAHOO.Bubbling.fire("registerValidationHandler",
+              {
+                  fieldId: this.id + "-min",
+                  handler: this._changeNumber,
+                  when: "keyup"
+              });
+
+          Event.addListener(this.id + "-max", "keyup", this._handleFieldChange, this, true);
+          YAHOO.Bubbling.fire("registerValidationHandler",
+              {
+                  fieldId: this.id + "-max",
+                  handler: this._changeNumber,
+                  when: "keyup"
+              });
+
       },
 
       /**
@@ -97,8 +110,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
           var strMinValue = YAHOO.lang.trim(Dom.get(this.id + "-min").value),
               strMaxValue = YAHOO.lang.trim(Dom.get(this.id + "-max").value);
 
-          var minValue = parseFloat(strMinValue);
-          if (!isNaN(minValue) || strMinValue.length == 0) {
+          if (!isNaN(strMinValue) || strMinValue.length == 0) {
               Dom.removeClass(this.id + "-min", "invalid");
               this.currentMinNumber = strMinValue;
           }
@@ -108,8 +120,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
               }
           }
 
-          var maxValue = parseFloat(strMaxValue);
-          if (!isNaN(maxValue) || strMaxValue.length == 0) {
+          if (!isNaN(strMaxValue) || strMaxValue.length == 0) {
               Dom.removeClass(this.id + "-max", "invalid");
               this.currentMaxNumber = strMaxValue;
           }
@@ -120,6 +131,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
           }
 
           this._updateCurrentValue();
-      }
+          YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+      },
+
+       _changeNumber: function(field) {
+           return !YAHOO.util.Dom.hasClass(field, "invalid");
+       }
    });
 })();

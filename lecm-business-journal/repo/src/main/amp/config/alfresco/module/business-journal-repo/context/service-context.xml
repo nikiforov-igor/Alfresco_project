@@ -131,7 +131,7 @@
 	<amq:broker xmlns="http://activemq.apache.org/schema/core" id="broker" useJmx="false" persistent="true" dataDirectory="${dir.root}/queue">
 		<amq:transportConnectors>
 			<amq:transportConnector uri="vm://localhost" />
-			<amq:transportConnector uri="tcp://localhost:61616" />
+			<amq:transportConnector uri="${businessjournal.brokerURL}"/>
 		</amq:transportConnectors>
 		<persistenceAdapter>
 			<kahaDB directory="${dir.root}/queue/Kaha"/>

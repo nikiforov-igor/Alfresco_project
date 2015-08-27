@@ -32,6 +32,14 @@ import java.util.*;
  * Time: 15:28
  */
 public class ReportForm extends LecmFormGet {
+
+    protected enum NumericTypes {
+        d_int,
+        d_float,
+        d_long,
+        d_double
+    }
+
     public static final String TEMPLATE_CODE = "templateCode";
     public static final String TEMPLATES = "TEMPLATES";
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
@@ -112,6 +120,19 @@ public class ReportForm extends LecmFormGet {
                         logger.error(e.getMessage(), e);
                     }
                 }
+
+                if (!ParameterTypedValue.Type.RANGE.equals(param.getParameterValue().getType()) && isNumber(param.getAlfrescoType())) {
+                    Constraint constraint;
+                    try {
+                        constraint = generateConstraintModel(field, CONSTRAINT_NUMBER);
+                        if (constraint != null) {
+                            constraints.add(constraint);
+                        }
+                    } catch (JSONException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+
                 Map<String, String> parameters = field.getControl().getParams();
                 if (parameters.containsKey("constraintLENGTH")) {
                     int minLength = -1;
@@ -367,5 +388,9 @@ public class ReportForm extends LecmFormGet {
         } finally {
             IOUtils.closeQuietly(xmlStream);
         }
+    }
+
+    private boolean isNumber(String value) {
+        return enumHasValue(NumericTypes.class, value != null ? value.replace("d:", "d_") : "not_number");
     }
 }
