@@ -133,10 +133,10 @@ function main() {
 
             if (colDef == null) {   //поле фиктивное, создаем колонку
                 colDef = {
-                    type: "",
+                    type: "association",
                     name: obj,
                     label: "",
-                    dataType: "",
+                    dataType: "association",
                     sortable: false
                 }
             }

@@ -541,26 +541,24 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                 if (record !== null) {
                     record.getData().type = this._getTypeByFieldId(args[1].fieldId, true);
                     // обновить условие
-                    if (record.getData().type && record.getData().type.length > 0) {
-                        var casesArray = [];
-                        if (this.casesMap[record.getData().type] == null) {
-                            casesArray = this.casesMap["lecm"];
-                        } else {
-                            casesArray = this.casesMap[record.getData().type];
-                        }
+                    var casesArray = [];
+                    if (this.casesMap[record.getData().type] == null) {
+                        casesArray = this.casesMap["lecm"];
+                    } else {
+                        casesArray = this.casesMap[record.getData().type];
+                    }
 
-                        var select = document.getElementById(record.getId() + '-case');
-                        if (select) {
-                            while (select.firstChild) {
-                                select.removeChild(select.firstChild);
-                            }
-                            for (var i = 0; i < casesArray.length; i++) {
-                                var option = document.createElement("option");
-                                option.value = casesArray[i];
-                                option.innerHTML = this.msg("msg.case." + casesArray[i]);
-                                option.selected = (casesArray[i] == record.getData().case);
-                                select.appendChild(option);
-                            }
+                    var select = document.getElementById(record.getId() + '-case');
+                    if (select) {
+                        while (select.firstChild) {
+                            select.removeChild(select.firstChild);
+                        }
+                        for (var i = 0; i < casesArray.length; i++) {
+                            var option = document.createElement("option");
+                            option.value = casesArray[i];
+                            option.innerHTML = this.msg("msg.case." + casesArray[i]);
+                            option.selected = (casesArray[i] == record.getData().case);
+                            select.appendChild(option);
                         }
                     }
 
