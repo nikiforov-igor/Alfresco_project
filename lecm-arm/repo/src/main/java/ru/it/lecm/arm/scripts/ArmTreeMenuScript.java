@@ -34,7 +34,6 @@ import java.util.*;
 public class ArmTreeMenuScript extends AbstractWebScript {
     final private static Logger logger = LoggerFactory.getLogger(ArmTreeMenuScript.class);
 
-
     public static final String NODE_REF = "nodeRef";
     public static final String NODE_TYPE = "nodeType";
     public static final String ARM_NODE_REF = "armNodeRef";
@@ -71,7 +70,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         this.armService = armService;
     }
 
-    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+        public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
             this.lecmTransactionHelper = lecmTransactionHelper;
         }
 
@@ -169,6 +168,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 }
 
                 result.put("isAggregate", isAggregate);
+
             }
             result.put(FILTER, getFiltersJSON(node.getAvaiableFilters()));
 
