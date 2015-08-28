@@ -2483,7 +2483,7 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var additionalDocument = bpm_package.children[0];
-																	regnumbers.setDocumentNumber("CONTRACT_DOCUMENT_PROJECT_REGNUM", additionalDocument, "lecm-additional-document:number");
+regnumbers.registerProject(additionalDocument, "CONTRACT_DOCUMENT_PROJECT_REGNUM");
 
 var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
 if (contractAssocs != null && contractAssocs.length == 1) {
@@ -2494,7 +2494,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
         notificationText += documentScript.wrapperLink(typeAssocs[0], "{lecm-additional-document:additionalDocumentType/cm:name}");
     }
     notificationText += " к договору номер ";
-    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-contract:regNumSystem}");
+    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-document:regnum}");
 
     notificationText += ", вид договора {lecm-additional-document:document-assoc/lecm-contract:typeContract-assoc/cm:name}";
     notificationText += ", тематика {lecm-additional-document:document-assoc/lecm-document:subject-assoc/cm:name}";
@@ -7637,7 +7637,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
     notificationText += "{lecm-additional-document:additionalDocumentType/cm:name}";
 
     notificationText += " к договору номер ";
-    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-contract:regNumSystem}");
+    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-document:regnum}");
 
     notificationText += ", исполнитель ";
     var executor = contract.properties["lecm-document:creator-ref"];
@@ -8720,7 +8720,7 @@ additionalDocument.save();
     notificationText += documentScript.wrapperDocumentLink(additionalDocument, "{lecm-additional-document:additionalDocumentType/cm:name}");
 
     notificationText += " к договору номер ";
-    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-contract:regNumSystem}");
+    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-document:regnum}");
 
     notificationText += " подписан";
 

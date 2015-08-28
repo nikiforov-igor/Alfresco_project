@@ -20,7 +20,7 @@
 	<constraints>
 		<constraint name="lecm-additional-document:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
 			<parameter name="presentString">
-				<value><![CDATA[{lecm-additional-document:additionalDocumentType/cm:name} №{lecm-additional-document:number} от {lecm-additional-document:date?dd.MM.yyyy} с {lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}]]></value>
+				<value><![CDATA[{lecm-additional-document:additionalDocumentType/cm:name} №{lecm-document:regnum} от {lecm-additional-document:date?dd.MM.yyyy} с {lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}]]></value>
 			</parameter>
 		</constraint>
 		<constraint name="lecm-additional-document:attachment-categories" type="LIST">
@@ -39,7 +39,7 @@
 		</constraint>
 		<constraint name="lecm-additional-document:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
 			<parameter name="regNumbersProperties">
-				<value>lecm-additional-document:number</value>
+				<value>lecm-document:regnum</value>
 			</parameter>
 		</constraint>
 		<constraint name="lecm-additional-document:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
@@ -124,6 +124,8 @@
 			<mandatory-aspects>
 				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+                                <aspect>lecm-document-aspects:has-reg-document-data</aspect>
+                                <aspect>lecm-document-aspects:has-reg-project-data</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

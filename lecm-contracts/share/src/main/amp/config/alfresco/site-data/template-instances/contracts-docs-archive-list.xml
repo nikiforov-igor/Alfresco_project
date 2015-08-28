@@ -41,7 +41,7 @@
             <properties>
                 <itemType>lecm-additional-document:additionalDocument</itemType>
                 <bubblingLabel>contracts-documents</bubblingLabel>
-                <attributeForShow>lecm-additional-document:number</attributeForShow>
+                <attributeForShow>lecm-document:regnum</attributeForShow>
                 <excludedColumns>lecm-document:creator-ref</excludedColumns>
                 <filterProperty>lecm-additional-document:additionalDocumentType-text-content</filterProperty>
                 <formId>{formId}</formId>
