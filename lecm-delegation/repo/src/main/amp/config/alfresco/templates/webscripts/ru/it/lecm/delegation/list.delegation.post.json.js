@@ -93,10 +93,14 @@
 
 		for each(employee in employees) {
 			var employeeRef = employee.nodeRef;
-			var opts = delegation.getDelegationOpts(employeeRef);
-			if(opts) {
-				delegationOpts.push(opts);
-			}
+            if (!employeeRef || employees[i].properties["lecm-dic:active"] == false) {
+                logger.log ("ERROR: there is no nodeRef for employee");
+            } else {
+                var opts = delegation.getDelegationOpts(employeeRef);
+                if (opts) {
+                    delegationOpts.push(opts);
+                }
+            }
 		}
 
 		model.data = processResults(delegationOpts, params.fields, params.nameSubstituteStrings, params.startIndex, totalCount);
