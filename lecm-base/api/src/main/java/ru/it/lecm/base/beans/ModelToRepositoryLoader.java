@@ -100,7 +100,7 @@ public class ModelToRepositoryLoader implements DictionaryListener {
 				}, false, true);
             }
         });
-        firstRun = false;
+        //firstRun = false;
     }
 
     @Override
