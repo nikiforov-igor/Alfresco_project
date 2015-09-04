@@ -25,7 +25,7 @@ LogicECM.module = LogicECM.module || {};
 
 		YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemsAdded, this);
 
-		this.selectedItems = {};
+		this.selectedItems = [];
 		return this;
 	};
 
@@ -71,7 +71,12 @@ LogicECM.module = LogicECM.module || {};
 
 				fullDelete: false,
 
-				itemTypes: null
+				itemTypes: null,
+
+				//определяет можно ли будет менять местами поля
+				orderEnabled: false,
+
+				dataSource: "lecm/forms/picker/items"
 			},
 
 			onReady: function () {
@@ -195,13 +200,13 @@ LogicECM.module = LogicECM.module || {};
 				var onSuccess = function (response) {
 					var items = response.json.data.items,
 						item;
-					this.selectedItems = {};
+					this.selectedItems = [];
 
 					this.singleSelectedItem = null;
 					for (var i = 0, il = items.length; i < il; i++) {
 						item = items[i];
 
-						this.selectedItems[item.nodeRef] = item;
+						this.selectedItems.push(item);
 
 						if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
 							this.singleSelectedItem = item;
@@ -218,7 +223,7 @@ LogicECM.module = LogicECM.module || {};
 				if (arrItems !== "") {
 					Alfresco.util.Ajax.jsonRequest(
 						{
-							url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
+							url: Alfresco.constants.PROXY_URI + this.options.dataSource,
 							method: "POST",
 							dataObj: {
 								items: arrItems.split(","),
@@ -239,7 +244,7 @@ LogicECM.module = LogicECM.module || {};
 				}
 				else {
 					// if disabled show the (None) message
-					this.selectedItems = {};
+					this.selectedItems = [];
 					this.singleSelectedItem = null;
 				}
 			},
@@ -270,14 +275,14 @@ LogicECM.module = LogicECM.module || {};
 
 					//this.singleSelectedItem = null;
 					if (!this.options.multipleSelectMode && items[0]) {
-						this.selectedItems = {};
+						this.selectedItems = [];
 						item = items[0];
-						this.selectedItems[item.nodeRef] = item;
+						this.selectedItems.push(item);
 						this.singleSelectedItem = items[0];
 					} else {
 						for (var i = 0, il = items.length; i < il; i++) {
 							item = items[i];
-							this.selectedItems[item.nodeRef] = item;
+							this.selectedItems.push(item);
 						}
 					}
 
@@ -293,7 +298,7 @@ LogicECM.module = LogicECM.module || {};
 
 					Alfresco.util.Ajax.jsonRequest(
 						{
-							url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
+							url: Alfresco.constants.PROXY_URI + this.options.dataSource,
 							method: "POST",
 							dataObj: {
 								items: nodeRefs,
@@ -364,7 +369,13 @@ LogicECM.module = LogicECM.module || {};
 								responseContentType: Alfresco.util.Ajax.JSON,
 								successCallback: {
 									fn: function (response) {
-										delete me.selectedItems[nodeRef];
+
+										for (var i = 0; i < me.selectedItems.length; i++) {
+											if (me.selectedItems[i].nodeRef == nodeRef) {
+												me.selectedItems.splice(i, 1)
+											}
+										};
+
 										me.singleSelectedItem = null;
 										if (params.updateForms) {
 											me.updateFormFields();
@@ -397,6 +408,65 @@ LogicECM.module = LogicECM.module || {};
 								}
 							]
 						});
+				}
+			},
+
+			upNode: function (event, params) {
+				if (params.node != null) {
+					var nr = params.node.nodeRef;
+					for (var i = 0; i < this.selectedItems.length; i++) {
+						if (this.selectedItems[i].nodeRef == nr) {
+							if (i != 0) {
+
+								Alfresco.util.Ajax.jsonPost(
+									{
+										url: Alfresco.constants.PROXY_URI + "/lecm/arm/settings/swapOrders",
+										dataObj: {
+											firstNodeRef: this.selectedItems[i].nodeRef,
+											secondNodeRef: this.selectedItems[i - 1].nodeRef
+										},
+										failureMessage: "message.failure"
+									});
+
+
+
+								var temp = this.selectedItems[i];
+								this.selectedItems[i] = this.selectedItems[i - 1];
+								this.selectedItems[i - 1] = temp;
+							}
+						}
+					};
+
+					this.updateFormFields();
+				}
+			},
+
+			downNode: function (event, params) {
+				if (params.node != null) {
+					var nr = params.node.nodeRef;
+					for (var i = 0; i < this.selectedItems.length; i++) {
+						if (this.selectedItems[i].nodeRef == nr) {
+							if (i != this.selectedItems.length - 1) {
+
+
+								Alfresco.util.Ajax.jsonPost(
+									{
+										url: Alfresco.constants.PROXY_URI + "/lecm/arm/settings/swapOrders",
+										dataObj: {
+											firstNodeRef: this.selectedItems[i].nodeRef,
+											secondNodeRef: this.selectedItems[i + 1].nodeRef
+										},
+										failureMessage: "message.failure"
+									});
+
+								var temp = this.selectedItems[i];
+								this.selectedItems[i] = this.selectedItems[i + 1];
+								this.selectedItems[i + 1] = temp;
+								break;
+							}
+						}
+					};
+					this.updateFormFields();
 				}
 			},
 
@@ -459,8 +529,36 @@ LogicECM.module = LogicECM.module || {};
 				return Util.getControlItemRemoveButtonHTML("t-" + this.options.controlId + node.nodeRef + dopId);
 			},
 
+			getUpButtonHTML: function(node, dopId) {
+				if (!dopId) {
+					dopId = "";
+				}
+				return Util.getControlItemUpButtonHTML("u-" + this.options.controlId + node.nodeRef + dopId);
+			},
+
+			getDownButtonHTML: function(node, dopId) {
+				if (!dopId) {
+					dopId = "";
+				}
+				return Util.getControlItemDownButtonHTML("d-" + this.options.controlId + node.nodeRef + dopId);
+			},
+
+			attachDownClickListener: function (params) {
+				YAHOO.util.Event.on("d-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.downNode, {
+					node: params.node,
+					updateForms: params.updateForms
+				}, this);
+			},
+
 			attachRemoveClickListener: function (params) {
 				YAHOO.util.Event.on("t-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.removeNode, {
+					node: params.node,
+					updateForms: params.updateForms
+				}, this);
+			},
+
+			attachUpClickListener: function (params) {
+				YAHOO.util.Event.on("u-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.upNode, {
 					node: params.node,
 					updateForms: params.updateForms
 				}, this);
@@ -473,12 +571,28 @@ LogicECM.module = LogicECM.module || {};
 				if (el != null) {
 					el.innerHTML = '';
 					var num = 0;
-					for (var i in this.selectedItems) {
+					for (var i = 0; i < this.selectedItems.length; i++) {
 						if (this.options.disabled) {
 							el.innerHTML += Util.getCroppedItem(this.getDefaultView(this.selectedItems[i]));
 						} else {
-							el.innerHTML += Util.getCroppedItem(this.getDefaultView(this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+							var UpDownButtons = "";
+
+							if(this.options.orderEnabled) {
+								if (i != 0)
+									UpDownButtons += this.getUpButtonHTML(this.selectedItems[i], "_c");
+								if (i != this.selectedItems.length - 1)
+								 	UpDownButtons += this.getDownButtonHTML(this.selectedItems[i], "_c");
+							}
+
+							el.innerHTML += Util.getCroppedItem(this.getDefaultView(this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c") + UpDownButtons);
 							YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
+
+							if(this.options.orderEnabled) {
+								if (i != 0)
+									YAHOO.util.Event.onAvailable("u-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachUpClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
+								if (i != this.selectedItems.length - 1)
+									YAHOO.util.Event.onAvailable("d-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachDownClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
+							}
 						}
 					}
 				}
@@ -490,7 +604,7 @@ LogicECM.module = LogicECM.module || {};
 					el = Dom.get(this.options.controlId + "-added");
 					if (el != null) {
 						el.value = '';
-						for (i in addItems) {
+						for (var i = 0; i < addItems.length; i++) {
 							el.value += ( i < addItems.length - 1 ? addItems[i] + ',' : addItems[i] );
 						}
 					}
@@ -501,7 +615,7 @@ LogicECM.module = LogicECM.module || {};
 					el = Dom.get(this.options.controlId + "-removed");
 					if (el != null) {
 						el.value = '';
-						for (i in removedItems) {
+						for (var i = 0; i < removedItems.length; i++) {
 							el.value += (i < removedItems.length - 1 ? removedItems[i] + ',' : removedItems[i]);
 						}
 					}
@@ -512,7 +626,7 @@ LogicECM.module = LogicECM.module || {};
 					el = Dom.get(this.options.controlId + "-selectedItems");
 					if (el != null) {
 						el.value = '';
-						for (i in selectedItems) {
+						for (var i = 0; i < selectedItems.length; i++) {
 							el.value += (i < selectedItems.length - 1 ? selectedItems[i] + ',' : selectedItems[i]);
 						}
 					}
@@ -525,58 +639,77 @@ LogicECM.module = LogicECM.module || {};
 						YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 					}
 
+					var tempSelObject = {};
+
+					for (var i = 0; i < this.selectedItems.length; i++) {
+						tempSelObject[this.selectedItems[i].nodeRef] = this.selectedItems[i];
+					}
+
 					YAHOO.Bubbling.fire("formValueChanged",
 						{
 							eventGroup: this,
 							addedItems: addItems,
 							removedItems: removedItems,
-							selectedItems: selectedItems,
+							selectedItems: tempSelObject,
 							selectedItemsMetaData: Alfresco.util.deepCopy(this.selectedItems)
 						});
 				}
 				if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
 					YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
-						selectedItems: this.selectedItems
+						selectedItems: tempSelObject
 					});
 				}
 			},
 
 			getAddedItems: function () {
 				var addedItems = [],
-					currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
+					currentItems = this.options.currentValue.split(",");
+				var extists = false;
 
-				for (var item in this.selectedItems) {
-					if (this.selectedItems.hasOwnProperty(item)) {
-						if (!(item in currentItems)) {
-							addedItems.push(item);
+				for (var i = 0; i < this.selectedItems.length; i++) {
+					exists = false;
+					for (var j = 0; j < currentItems.length; j++) {
+						if(this.selectedItems[i].nodeRef == currentItems[j])
+						{
+							exists = true;
 						}
 					}
+					if (!exists)
+						addedItems.push(this.selectedItems[i].nodeRef);
 				}
+	
 				return addedItems;
 			},
 
 			getRemovedItems: function () {
 				var removedItems = [],
-					currentItems = Alfresco.util.arrayToObject(this.options.currentValue.split(","));
+					currentItems = this.options.currentValue.split(",");
 
-				for (var item in currentItems) {
-					if (currentItems.hasOwnProperty(item)) {
-						if (!(item in this.selectedItems)) {
-							removedItems.push(item);
+				var extists = false;
+
+				for (var j = 0; j < currentItems.length; j++) {
+					exists = false;
+					for (var i = 0; i < this.selectedItems.length; i++) {
+						if(this.selectedItems[i].nodeRef == currentItems[j])
+						{
+							exists = true;
 						}
 					}
+					if (!exists)
+						removedItems.push(currentItems[j]);
 				}
+
 				return removedItems;
 			},
 
 			getSelectedItems: function () {
 				var selectedItems = [];
 
-				for (var item in this.selectedItems) {
-					if (this.selectedItems.hasOwnProperty(item)) {
-						selectedItems.push(item);
-					}
-				}
+
+				for (var i = 0; i < this.selectedItems.length; i++) {
+					selectedItems.push(this.selectedItems[i].nodeRef);
+				};
+
 				return selectedItems;
 			}
 		});

@@ -337,6 +337,13 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+                <!--Порядковый номер в таблице-->
+				<property name="lecm-arm:field-order-number">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<index enabled="false">
+					</index>
+				</property>
                 <!--Включить сортировку-->
                 <property name="lecm-arm:field-by-default">
                     <type>d:boolean</type>

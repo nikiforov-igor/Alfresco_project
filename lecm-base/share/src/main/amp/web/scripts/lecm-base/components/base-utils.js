@@ -484,6 +484,28 @@ LogicECM.module.Base.Util = {
     getControlItemRemoveButtonHTML: function (id) {
         return '<a href="javascript:void(0);" class="remove-item" id="' + id + '"></a>';
     },
+    getControlItemUpButtonHTML: function (id) {
+        return '<a href="javascript:void(0);" class="up-item" id="' + id + '"></a>';
+    },
+    getControlItemDownButtonHTML: function (id) {
+        return '<a href="javascript:void(0);" class="down-item" id="' + id + '"><span></span></a>';
+    },
+
+ 	getCroppedItemWithTwoButtons: function(leftCroppedPart, firstButton, secondButton) {
+        var firstButtonsHtml = "";
+        var secondButtonsHtml = "";
+
+        if (firstButton) {
+            firstButtonsHtml = '<div class="ci-buttons-div">' + firstButton + '</div>';
+        }
+        if (secondButton) {
+            secondButtonsHtml = '<div class="ci-buttons-div">' + secondButton + '</div>';
+        }    
+
+        return '<div class="cropped-item">' + firstButtonsHtml + secondButtonsHtml + '<div class="ci-value-div"><span>' + leftCroppedPart + '</span></div></div>';
+    },
+
+    
     getCroppedItem: function(leftCroppedPart, rightPart) {
         var buttonsHtml = "";
 

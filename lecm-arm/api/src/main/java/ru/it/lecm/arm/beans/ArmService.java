@@ -50,6 +50,7 @@ public interface ArmService {
 	public static final QName PROP_COLUMN_FIELD_NAME = QName.createQName(ARM_NAMESPACE_URI, "field-name");
 	public static final QName PROP_COLUMN_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "field-format-string");
 	public static final QName PROP_COLUMN_SORTABLE = QName.createQName(ARM_NAMESPACE_URI, "field-sortable");
+        public static final QName PROP_COLUMN_ORDER_NUM = QName.createQName(ARM_NAMESPACE_URI, "field-order-number");
 	public static final QName PROP_COLUMN_BY_DEFAULT = QName.createQName(ARM_NAMESPACE_URI, "field-by-default");
 
 	public static final QName TYPE_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "query-child-rule");

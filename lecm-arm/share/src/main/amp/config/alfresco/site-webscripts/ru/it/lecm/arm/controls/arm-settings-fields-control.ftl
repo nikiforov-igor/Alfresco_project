@@ -137,10 +137,12 @@
 					selectedValue: "${renderPickerJSSelectedValue}",
 				</#if>
 				<#if field.control.params.itemTypes??>
-					itemTypes: "${field.control.params.itemTypes}".split(",")
+					itemTypes: "${field.control.params.itemTypes}".split(","),
 				<#else>
-					itemTypes: ["${field.endpointType}"]
+					itemTypes: ["${field.endpointType}"],
 				</#if>
+				orderEnabled: true,
+				dataSource: "lecm/forms/picker/ordereditems"
 			}).setMessages( ${messages} );
 
 			new LogicECM.module.ARM.SettingsAddFields("${fieldHtmlId}").setOptions({

@@ -4,7 +4,19 @@ var node = search.findNode(parentNodeRef);
 
 var results = [];
 if (node != null) {
+
 	var fields = json.get("fields");
+	var max = 0;
+	var associations = node.assocs['lecm-arm:fields-assoc'];
+
+	if(associations != null) {
+		for(var i = 0; i < associations.length; i++) {
+			var el = associations[i];
+			if ((el.properties["lecm-arm:field-order-number"] != null) && (el.properties["lecm-arm:field-order-number"] >= max))
+				max = el.properties["lecm-arm:field-order-number"] + 1;
+		}
+	}
+	var orderNumber = max;
 
 	if (fields != null) {
 		for (var i = 0; i < fields.length(); i++) {
@@ -14,10 +26,13 @@ if (node != null) {
 				var properties = [];
 				properties["lecm-arm:field-name"] = name;
 				properties["lecm-arm:field-title"] = title;
+				properties["lecm-arm:field-order-number"] = orderNumber++;
 				var createdObject = node.createNode(null, "lecm-arm:field", properties);
 				results.push(createdObject);
 			}
 		}
 	}
+
 }
+
 model.results = results;
