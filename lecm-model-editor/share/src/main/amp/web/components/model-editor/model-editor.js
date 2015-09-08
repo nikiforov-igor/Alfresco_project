@@ -602,7 +602,6 @@ IT.component = IT.component || {};
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/document/1.0","_prefix":"lecm-document"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/eds-document/1.0","_prefix":"lecm-eds-document"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"});
-				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"});
 			}
 			var records = args.widgets.associationsDataTable.getRecordSet().getRecords();
 			for(var i in records) {
@@ -758,7 +757,9 @@ IT.component = IT.component || {};
 						prop.title = (rec.getData("title")||"");
 						prop.type = (rec.getData("type")||"");
 						prop.mandatory = (rec.getData("mandatory")||"false");
-						prop["default"] = (rec.getData("default")||"");
+						//ALF-4784 При сохранении модели значение по умолчанию подставляется если оно не пустое
+						var def = (rec.getData("default")||"");
+						if (def.length > 0) prop["default"] = (rec.getData("default")||"");
 						if(rec.getData("_enabled")==="true") {
 							prop.index = {
 								"_enabled":rec.getData("_enabled"),
@@ -817,6 +818,10 @@ IT.component = IT.component || {};
 			}
 			if(args.signed==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
+					//ALF-4782 При сохранении модели проверяется наличие импорта lecm-signed-docflow, если его нет, то такой импорт добавляется
+					if(!containsUri(args.modelObject.model.imports["import"],{"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"})) {
+						args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"});
+					}
 					if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
 						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-signed-docflow:docflowable");
 					}
