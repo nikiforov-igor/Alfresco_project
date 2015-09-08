@@ -88,7 +88,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		this.substituteService = substitudeService;
 	}
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	// РІ РґР°РЅРЅРѕРј Р±РёРЅРµ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РєР°С‚Р°Р»РѕРі РІ /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
@@ -113,7 +113,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeDeleteNode"));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				DocumentAttachmentsService.TYPE_CATEGORY, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS,
-				new JavaBehaviour(this, "onAddAttachment"));
+				new JavaBehaviour(this, "onAddAttachment", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				DocumentAttachmentsService.TYPE_CATEGORY, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS,
 				new JavaBehaviour(this, "onDeleteAttachmentAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -138,7 +138,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				if (!assocExist) {
 					nodeService.createAssociation(category, attachmentRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 				}
-                //Добавляем аспект с организацией для вложения
+                //Р”РѕР±Р°РІР»СЏРµРј Р°СЃРїРµРєС‚ СЃ РѕСЂРіР°РЅРёР·Р°С†РёРµР№ РґР»СЏ РІР»РѕР¶РµРЅРёСЏ
                 List<AssociationRef> unitRefs = nodeService.getTargetAssocs(document, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                 if (!unitRefs.isEmpty()) {
                     if (!nodeService.hasAspect(attachmentRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
@@ -151,7 +151,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
                     nodeService.createAssociation(attachmentRef, unitRefs.get(0).getTargetRef(), OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                 }
 
-                //Меняем владельца документа на системного пользователя
+                //РњРµРЅСЏРµРј РІР»Р°РґРµР»СЊС†Р° РґРѕРєСѓРјРµРЅС‚Р° РЅР° СЃРёСЃС‚РµРјРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
                 AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                     @Override
                     public Object doWork() throws Exception {
@@ -170,7 +170,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	}
 
 	/**
-	 * добавляет аспект для ссылки на документ из формы document-details
+	 * РґРѕР±Р°РІР»СЏРµС‚ Р°СЃРїРµРєС‚ РґР»СЏ СЃСЃС‹Р»РєРё РЅР° РґРѕРєСѓРјРµРЅС‚ РёР· С„РѕСЂРјС‹ document-details
 	 *
 	 * @param documentRef
 	 * @param attachmentRef
@@ -185,13 +185,13 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		List<QName> changedProps = getAffectedProperties(before, after);
-		if (!changedProps.isEmpty() && document != null) { // обновляем только автора и изменившего ноду
+		if (!changedProps.isEmpty() && document != null) { // РѕР±РЅРѕРІР»СЏРµРј С‚РѕР»СЊРєРѕ Р°РІС‚РѕСЂР° Рё РёР·РјРµРЅРёРІС€РµРіРѕ РЅРѕРґСѓ
 			for (QName changedProp : changedProps) {
 				QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName());
 				QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
 				NodeRef employeeRef = orgstructureService.getCurrentEmployee();
 				if (null != employeeRef) {
-                                    //TODO DONE замена нескольких setProperty на setProperties. 
+                                    //TODO DONE Р·Р°РјРµРЅР° РЅРµСЃРєРѕР»СЊРєРёС… setProperty РЅР° setProperties. 
                                         Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
 					properties.put(propName, substituteService.getObjectDescription(employeeRef));
 					properties.put(propRef, employeeRef.toString());
@@ -206,11 +206,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 			if (commentCountAfter != null && (commentCountBefore == null || !commentCountAfter.equals(commentCountBefore))) {
 				List<String> objects = new ArrayList<String>(1);
 				objects.add(nodeRef.toString());
-				businessJournalService.log(document, EventCategory.COMMENT_DOCUMENT_ATTACHMENT, "#initiator прокомментировал(а) вложение #object1 в документе #mainobject", objects);
+				businessJournalService.log(document, EventCategory.COMMENT_DOCUMENT_ATTACHMENT, "#initiator РїСЂРѕРєРѕРјРјРµРЅС‚РёСЂРѕРІР°Р»(Р°) РІР»РѕР¶РµРЅРёРµ #object1 РІ РґРѕРєСѓРјРµРЅС‚Рµ #mainobject", objects);
 			} else if (before.size() == after.size() && hasChange(before, after)) {
 				List<String> objects = new ArrayList<String>(1);
 				objects.add(nodeRef.toString());
-				businessJournalService.log(document, EventCategory.EDIT_DOCUMENT_ATTACHMENT_PROPERTIES, "#initiator изменил(а) свойства вложения #object1 в документе #mainobject", objects);
+				businessJournalService.log(document, EventCategory.EDIT_DOCUMENT_ATTACHMENT_PROPERTIES, "#initiator РёР·РјРµРЅРёР»(Р°) СЃРІРѕР№СЃС‚РІР° РІР»РѕР¶РµРЅРёСЏ #object1 РІ РґРѕРєСѓРјРµРЅС‚Рµ #mainobject", objects);
 			}
 		}
 	}
@@ -257,7 +257,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
                 if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY) && !versionLabel.equals("") && !versionLabel.equals("1.0")) {
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(nodeRef.toString());
-			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT_NEW_VERSION, "#initiator обновил(а) версию вложения #object1 в документе #mainobject", objects);
+			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT_NEW_VERSION, "#initiator РѕР±РЅРѕРІРёР»(Р°) РІРµСЂСЃРёСЋ РІР»РѕР¶РµРЅРёСЏ #object1 РІ РґРѕРєСѓРјРµРЅС‚Рµ #mainobject", objects);
 		}
 	}
 
@@ -290,11 +290,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
                  AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
                      @Override
                      public NodeRef doWork() throws Exception {
-//                        TODO: Веротянее всего, что уже выполняется в транзакции
+//                        TODO: Р’РµСЂРѕС‚СЏРЅРµРµ РІСЃРµРіРѕ, С‡С‚Рѕ СѓР¶Рµ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РІ С‚СЂР°РЅР·Р°РєС†РёРё
 //                        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-//                         добавим аспект lecm-attachment к файлу вложения
+//                         РґРѕР±Р°РІРёРј Р°СЃРїРµРєС‚ lecm-attachment Рє С„Р°Р№Р»Сѓ РІР»РѕР¶РµРЅРёСЏ
                          nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
-                         // добавляем пользователя добавившего вложение как участника
+                         // РґРѕР±Р°РІР»СЏРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РґРѕР±Р°РІРёРІС€РµРіРѕ РІР»РѕР¶РµРЅРёРµ РєР°Рє СѓС‡Р°СЃС‚РЅРёРєР°
      //                    transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
      //						@Override
      //						public NodeRef execute() throws Throwable {
@@ -308,7 +308,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
                  List<String> objects = new ArrayList<String>(1);
                  objects.add(attachment.toString());
-                 businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
+                 businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator РґРѕР±Р°РІРёР»(Р°) РІР»РѕР¶РµРЅРёРµ #object1 Рє РґРѕРєСѓРјРµРЅС‚Сѓ #mainobject", objects);
 
              }
         }
@@ -346,11 +346,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 			throw new AlfrescoRuntimeException("Does not have permission 'delete' for node " + attachment);
 		}
 
-		// добавляем пользователя удалившего вложения как участника
+		// РґРѕР±Р°РІР»СЏРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ СѓРґР°Р»РёРІС€РµРіРѕ РІР»РѕР¶РµРЅРёСЏ РєР°Рє СѓС‡Р°СЃС‚РЅРёРєР°
 		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
-//				TODO: Вероятнее всего, уже выполняется в транзакции
+//				TODO: Р’РµСЂРѕСЏС‚РЅРµРµ РІСЃРµРіРѕ, СѓР¶Рµ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РІ С‚СЂР°РЅР·Р°РєС†РёРё
 //				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
 //				return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 //					@Override
@@ -364,6 +364,6 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		List<String> objects = new ArrayList<String>(1);
 		objects.add(attachment.toString());
                 if (nodeService.exists(attachment))
-                    businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "#initiator удалил(а) вложение #object1 в документе #mainobject", objects);
+                    businessJournalService.log(document, EventCategory.DELETE_DOCUMENT_ATTACHMENT, "#initiator СѓРґР°Р»РёР»(Р°) РІР»РѕР¶РµРЅРёРµ #object1 РІ РґРѕРєСѓРјРµРЅС‚Рµ #mainobject", objects);
 	}
 }
