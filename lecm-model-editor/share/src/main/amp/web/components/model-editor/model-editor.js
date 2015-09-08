@@ -601,7 +601,6 @@ IT.component = IT.component || {};
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/system/1.0","_prefix":"sys"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/document/1.0","_prefix":"lecm-document"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/eds-document/1.0","_prefix":"lecm-eds-document"});
-				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"});
 			}
 			var records = args.widgets.associationsDataTable.getRecordSet().getRecords();
 			for(var i in records) {
@@ -624,8 +623,10 @@ IT.component = IT.component || {};
 				var NS = clazz.substr(0,clazz.indexOf(":"));
 				//TODO: Как по NS определять его URL?
 				for(var n in args.namespaces) {
-					if(args.namespaces[n].prefix==NS)
-						args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
+					//ALF-4787 Добавил проверку на наличие в инпортах добавляемого namespace-а
+					if(args.namespaces[n].prefix==NS&&!containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
+							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
+					}
 				}
 			}
 			if(!YAHOO.lang.isObject(args.modelObject.model.namespaces)||args.modelObject.model.namespaces.namespace._prefix!=""+namespace) {
@@ -811,6 +812,10 @@ IT.component = IT.component || {};
 			}
 			if(args.rating==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
+					//ALF-4787 Добавил проверку на наличие в инпортах добавляемого namespace-а
+					if(!containsUri(args.modelObject.model.imports["import"],{"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"})) {
+						args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"});
+					}
 					if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-document-aspects:rateable")) {
 						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-document-aspects:rateable");
 					}
