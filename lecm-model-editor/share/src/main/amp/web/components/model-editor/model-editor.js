@@ -820,6 +820,13 @@ IT.component = IT.component || {};
 						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-document-aspects:rateable");
 					}
 				}
+			} else {
+				//ALF-4788 Добавил явное удаление аспекта из списка т.к. аспекты не чистились из-за необходимости сохранить прописанные вне редактора
+				if(contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-document-aspects:rateable")) {
+					for (var i = args.modelObject.model.types.type["mandatory-aspects"].aspect.length - 1; i >= 0; i--) {
+					    if (args.modelObject.model.types.type["mandatory-aspects"].aspect[i] === "lecm-document-aspects:rateable") args.modelObject.model.types.type["mandatory-aspects"].aspect.splice(i, 1);
+					}
+				}
 			}
 			if(args.signed==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
@@ -829,6 +836,13 @@ IT.component = IT.component || {};
 					}
 					if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
 						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-signed-docflow:docflowable");
+					}
+				}
+			} else {
+				//ALF-4788 Добавил явное удаление аспекта из списка т.к. аспекты не чистились из-за необходимости сохранить прописанные вне редактора
+				if(contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
+					for (var i = args.modelObject.model.types.type["mandatory-aspects"].aspect.length - 1; i >= 0; i--) {
+					    if (args.modelObject.model.types.type["mandatory-aspects"].aspect[i] === "lecm-signed-docflow:docflowable") args.modelObject.model.types.type["mandatory-aspects"].aspect.splice(i, 1);
 					}
 				}
 			}
