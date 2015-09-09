@@ -7,6 +7,7 @@ package ru.it.lecm.operativestorage.policies;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies.OnAddAspectPolicy;
@@ -237,7 +238,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 		List<AssociationRef> orgAssocs = nodeService.getTargetAssocs(parent, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG);
 		if(orgAssocs != null && !orgAssocs.isEmpty()) {
 			NodeRef organization = orgAssocs.get(0).getTargetRef();
-			nodeService.createAssociation(child, organization, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG);
+			nodeService.setAssociations(child, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG, Arrays.asList(organization));
 		}
 	}
 
