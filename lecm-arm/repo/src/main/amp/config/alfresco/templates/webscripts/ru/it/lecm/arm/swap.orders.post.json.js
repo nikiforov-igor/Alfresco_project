@@ -3,15 +3,15 @@ var secondNode = search.findNode(json.get("secondNodeRef"));
 
 if ((firstNode != null) && (secondNode != null)) {
 
-	var firstNodeOrder = firstNode.properties["lecm-arm:field-order-number"];
-	var secondNodeOrder = secondNode.properties["lecm-arm:field-order-number"];
+	var firstNodeOrder = firstNode.properties["lecm-arm:order"];
+	var secondNodeOrder = secondNode.properties["lecm-arm:order"];
 
 	if ((firstNodeOrder != null) && (secondNodeOrder != null)) {
-		var temp = firstNode.properties["lecm-arm:field-order-number"];
+		var temp = firstNode.properties["lecm-arm:order"];
 
-		firstNode.properties["lecm-arm:field-order-number"] = secondNode.properties["lecm-arm:field-order-number"];
+		firstNode.properties["lecm-arm:order"] = secondNode.properties["lecm-arm:order"];
 
-		secondNode.properties["lecm-arm:field-order-number"] = temp;
+		secondNode.properties["lecm-arm:order"] = temp;
 
 		firstNode.save();
 		secondNode.save();

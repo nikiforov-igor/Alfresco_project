@@ -12,8 +12,8 @@ if (node != null) {
 	if(associations != null) {
 		for(var i = 0; i < associations.length; i++) {
 			var el = associations[i];
-			if ((el.properties["lecm-arm:field-order-number"] != null) && (el.properties["lecm-arm:field-order-number"] >= max))
-				max = el.properties["lecm-arm:field-order-number"] + 1;
+			if ((el.properties["lecm-arm:order"] != null) && (el.properties["lecm-arm:order"] >= max))
+				max = el.properties["lecm-arm:order"] + 1;
 		}
 	}
 	var orderNumber = max;
@@ -26,7 +26,7 @@ if (node != null) {
 				var properties = [];
 				properties["lecm-arm:field-name"] = name;
 				properties["lecm-arm:field-title"] = title;
-				properties["lecm-arm:field-order-number"] = orderNumber++;
+				properties["lecm-arm:order"] = orderNumber++;
 				var createdObject = node.createNode(null, "lecm-arm:field", properties);
 				results.push(createdObject);
 			}

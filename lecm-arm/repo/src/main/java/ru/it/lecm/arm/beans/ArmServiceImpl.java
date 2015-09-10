@@ -425,21 +425,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             result = new ArrayList<>();     //сбрасываем, чтобы не спутать кэши
             List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
             if (columns != null) {
-                
-                //сортировка элементов по порядку их lecm-arm:field-order-number
-                for(int i = 0; i < columns.size(); i++) {
-                    for(int j = columns.size() - 1; j > i; j--) {
-                        NodeRef jElement = columns.get(j),
-                                jminoneElement = columns.get(j - 1);
-                        Map<QName, Serializable> jElementProperties = getCachedProperties(jElement);
-                        Map<QName, Serializable> jminoneElementProperties = getCachedProperties(jminoneElement);
-                        if((jElementProperties.get(PROP_COLUMN_ORDER_NUM) != null) && (jminoneElementProperties.get(PROP_COLUMN_ORDER_NUM) != null))
-                            if((int)jElementProperties.get(PROP_COLUMN_ORDER_NUM) < (int)jminoneElementProperties.get(PROP_COLUMN_ORDER_NUM)) {
-                                columns.set(j, jminoneElement);
-                                columns.set(j - 1, jElement);
-                            }
-                    }
-                }
+                //сортируем колонки по возрастанию порядкового номера
+                Collections.sort(columns, comparator);
                 
                 for (NodeRef ref : columns) {
                     Map<QName, Serializable> columnProps = getCachedProperties(ref);

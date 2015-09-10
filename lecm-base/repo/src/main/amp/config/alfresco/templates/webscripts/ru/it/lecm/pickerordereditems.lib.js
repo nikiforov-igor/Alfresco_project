@@ -45,6 +45,36 @@ function getPickerItems() {
 		selectedItemsNameSubstituteString = itemNameSubstituteString;
 	}
 
+	//проверяем надо ли переустановить порядок колонок
+	var needReorder = false;
+
+	for (var i = 0; i < numItems; i++) {
+		itemI = jsonItems.get(i);
+
+		if (itemI != "") {
+			resultI = search.findNode(itemI);
+			//если поле null то надо порядок поменять
+			if ((resultI != null) && (resultI.properties["lecm-arm:order"] == null)) {
+				needReorder == true;
+			}
+
+			//если есть поле с таким же номером то надо менять порядок
+			for (var j = 0; j < numItems; j++) {
+				itemJ = jsonItems.get(j);
+				if (itemJ != "") {
+					resultJ = search.findNode(itemJ);
+					if((i != j) && (resultI.properties["lecm-arm:order"] == resultJ.properties["lecm-arm:order"])) {
+						needReorder = true;
+					}
+
+				}
+			}
+
+		}
+
+	}
+
+
 	for (count = 0; count < numItems; count++) {
 		item = jsonItems.get(count);
 		if (item != "") {
@@ -60,6 +90,13 @@ function getPickerItems() {
 			}
 
 			if (result != null) {
+
+				//установили порядок
+				if (needReorder) {
+					result.properties["lecm-arm:order"] = count;
+					result.save();
+				}
+
 				// create a separate object if the node represents a user or group
 				if (result.isSubType("cm:person")) {
 					result = createPersonResult(result);
@@ -116,17 +153,9 @@ function getPickerItems() {
 		}
 	}
 
-
-	for(var i = 0; i < results.length; i++) {
-		for(var j = results.length - 1; j > i; j--) {
-			if(results[j].item.properties["lecm-arm:field-order-number"] < results[j - 1].item.properties["lecm-arm:field-order-number"]) {
-				var temp = results[j];
-				results[j] = results[j - 1];
-				results[j - 1] = temp;
-			}
-
-		}
-	}
+	results.sort(function(a, b) {
+		 	return a.item.properties["lecm-arm:order"] - b.item.properties["lecm-arm:order"];
+		});
 
 
 	if (logger.isLoggingEnabled())

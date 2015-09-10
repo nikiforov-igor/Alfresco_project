@@ -2,7 +2,7 @@
   <shortname>Base: получение описание для списка нодов</shortname>
   <description>
   Возвращает описание списка нодов,
-  отсортированных по полю lecm-arm:field-order-num, принимает json:
+  отсортированных по полю lecm-arm:order, принимает json:
   items,
   additionalProperties,
   itemValueType,
@@ -13,5 +13,4 @@
   <url>/lecm/forms/picker/ordereditems</url>
   <format default="json"/>
   <authentication>user</authentication>
-  <transaction allow="readonly">required</transaction>
 </webscript>
