@@ -1,5 +1,6 @@
 package ru.it.lecm.orgstructure.scripts.diagram;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -7,7 +8,6 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -31,19 +31,17 @@ public class DiagramScript extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         res.setContentType("image/svg+xml");
-        // Create an XML stream writer
-        OutputStream output = res.getOutputStream();
-        InputStream is = new DiagramGenerator().generate(orgstructureBean, nodeService);
-        byte[] buf = new byte[8 * 1024];
-        int c;
-        int len = 0;
-        while ((c = is.read(buf)) != -1) {
-            output.write(buf, 0, c);
-            len += c;
+        String rootStr = req.getParameter("root");
+        NodeRef rootRef = null;
+        if (NodeRef.isNodeRef(rootStr)) {
+            rootRef = new NodeRef(rootStr);
         }
-        res.setHeader("Content-length", "" + len);
-        output.flush();
-        output.close();
-        is.close();
+        // Create an XML stream writer
+        try (OutputStream output = res.getOutputStream()) {
+            new DiagramGenerator().generate(output, orgstructureBean, nodeService, rootRef);
+
+            output.flush();
+            output.close();
+        }
     }
 }

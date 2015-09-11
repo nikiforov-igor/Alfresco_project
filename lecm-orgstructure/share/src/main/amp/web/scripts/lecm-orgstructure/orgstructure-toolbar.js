@@ -121,7 +121,11 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             onStructureClick: function BaseToolbar_onStructureClick() {
-                window.open(Alfresco.constants.PROXY_URI + "/lecm/orgstructure/diagram", Alfresco.util.message('header.orgstructure.label'), "top=0,left=0,height=768,width=1024,resizable=yes,scrollbars=yes");
+                var orgMetadata = this.modules.dataGrid.datagridMeta;
+                if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
+                    var destination = orgMetadata.nodeRef;
+                    window.open(Alfresco.constants.PROXY_URI + "/lecm/orgstructure/diagram?root=" + destination, Alfresco.util.message('header.orgstructure.label'), "top=0,left=0,height=768,width=1024,resizable=yes,scrollbars=yes");
+                }
             },
             onExport: function onExport_function() {
                 var orgMetadata = this.modules.dataGrid.datagridMeta;

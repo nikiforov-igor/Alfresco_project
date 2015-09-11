@@ -1,28 +1,20 @@
 package ru.it.lecm.orgstructure.scripts.diagram;
 
 import com.mxgraph.canvas.mxICanvas;
-import com.mxgraph.canvas.mxImageCanvas;
 import com.mxgraph.canvas.mxSvgCanvas;
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxIGraphModel;
-import com.mxgraph.swing.view.mxInteractiveCanvas;
 import com.mxgraph.util.mxCellRenderer;
-import com.mxgraph.util.mxConstants;
-import com.mxgraph.util.mxRectangle;
 import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -30,13 +22,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: pmelnikov
@@ -44,12 +31,11 @@ import java.util.Map;
  * Time: 13:54
  */
 public class DiagramGenerator{
-	private static final transient Logger logger = LoggerFactory.getLogger(DiagramGenerator.class);
 
     private OrgstructureBean service;
     private NodeService nodeService;
 
-    public InputStream generate(OrgstructureBean service, NodeService nodeService) {
+    public void generate(OutputStream baos, OrgstructureBean service, NodeService nodeService, NodeRef rootRef) {
         this.service = service;
         this.nodeService = nodeService;
 
@@ -80,22 +66,10 @@ public class DiagramGenerator{
 
         graph.getModel().beginUpdate();
         try {
-
-            NodeRef organization = service.getOrganization();
-            Object orgName = nodeService.getProperty(organization, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
-            if (orgName == null) {
-                orgName = nodeService.getProperty(organization, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME);
-                if (orgName == null) {
-                    orgName = nodeService.getProperty(organization, ContentModel.PROP_NAME);
-                }
+            if (rootRef == null) {
+                rootRef = service.getOrganization();
             }
-            Object orgObject = graph.insertVertex(parent, null, new OrgstructureUnit(orgName.toString()), 10, 10, 10, 10);
-
-            List<NodeRef> children = service.getSubUnits(service.getStructureDirectory(), true);
-            for(NodeRef child : children) {
-                createStructure(graph, orgObject, child);
-            }
-
+            createStructure(graph, null, rootRef);
         } finally {
             mxCompactTreeLayout layout = new mxCompactTreeLayout(graph) {
 
@@ -122,8 +96,6 @@ public class DiagramGenerator{
             graph.getModel().endUpdate();
         }
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        //BufferedImage image = mxCellRenderer.createBufferedImage(graph, null, 0.05, Color.WHITE, false, null, new OrgstructureSwingCanvas());
         Document document = mxCellRenderer.createSvgDocument(graph, null, 1, Color.WHITE, null);
         try {
             DOMSource domSource = new DOMSource(document);
@@ -138,38 +110,26 @@ public class DiagramGenerator{
         } catch (TransformerException e) {
             e.printStackTrace();
         }
-        return new ByteArrayInputStream(baos.toByteArray());
-
-/*
-        BufferedImage result = new BufferedImage(image.getWidth() + 10, image.getHeight() + 10, BufferedImage.TYPE_INT_RGB);
-        Graphics g = result.getGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, result.getWidth(), result.getHeight());
-        g.drawImage(image, 5, 5, null);
-        try {
-            ImageIO.write(result, "png", baos);
-        } catch (IOException e) {
-	        logger.error(e.getMessage(), e);
-        }
-        return new ByteArrayInputStream(baos.toByteArray());
-*/
-
     }
 
     private void createStructure(mxGraph graph, Object parent, NodeRef structure) {
-        Object orgName = nodeService.getProperty(structure, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
-        if (orgName == null) {
-            orgName = nodeService.getProperty(structure, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME);
-            if (orgName == null) {
-                orgName = nodeService.getProperty(structure, ContentModel.PROP_NAME);
+        String orgName = (String) nodeService.getProperty(structure, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
+        if (StringUtils.isEmpty(orgName)) {
+            orgName = (String) nodeService.getProperty(structure, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME);
+            if (StringUtils.isEmpty(orgName)) {
+                orgName = (String) nodeService.getProperty(structure, ContentModel.PROP_NAME);
             }
         }
-        OrgstructureUnit unit = new OrgstructureUnit(orgName.toString());
+        OrgstructureUnit unit = new OrgstructureUnit(orgName);
 
         List<NodeRef> positions = service.getUnitStaffLists(structure);
         for (NodeRef position : positions) {
             NodeRef employee = service.getEmployeeByPosition(position);
-            String positionName = nodeService.getProperty(service.getPositionByStaff(position), ContentModel.PROP_NAME).toString();
+            NodeRef positionByStaff = service.getPositionByStaff(position);
+            String positionName = (String) nodeService.getProperty(positionByStaff, ContentModel.PROP_TITLE);
+            if (StringUtils.isEmpty(positionName)) {
+                positionName = (String) nodeService.getProperty(positionByStaff, ContentModel.PROP_NAME);
+            }
             if (employee != null) {
                 Object name = nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
 
@@ -188,7 +148,9 @@ public class DiagramGenerator{
         }
 
         Object unitObject = graph.insertVertex(graph.getDefaultParent(), null, unit, 0, 0, 0, 0);
-        graph.insertEdge(graph.getDefaultParent(), null, "", parent, unitObject);
+        if (parent != null) {
+            graph.insertEdge(graph.getDefaultParent(), null, "", parent, unitObject);
+        }
 
         List<NodeRef> children = service.getSubUnits(structure, true);
         if (children.size() > 0) {
