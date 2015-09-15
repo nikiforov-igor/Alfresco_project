@@ -1,33 +1,21 @@
 package ru.it.lecm.documents.scripts;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.repo.jscript.ValueConverter;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
-import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.ParameterCheck;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.base.beans.LecmTransactionHelper;
-import ru.it.lecm.documents.beans.*;
-import ru.it.lecm.documents.constraints.ArmUrlConstraint;
+import ru.it.lecm.documents.beans.DocumentStampService;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * User: PMelnikov
@@ -70,17 +58,37 @@ public class DocumentStampWebScriptBean extends BaseWebScript {
     }
 
     public void drawStamp(String jsonObject) throws JSONException {
-        JSONObject object = new JSONObject(jsonObject);
-        NodeRef document = new NodeRef(object.getString("document"));
-        NodeRef attach = new NodeRef(object.getString("attach"));
-        NodeRef stamp = new NodeRef(object.getString("stamp"));
-        int x = object.getInt("x");
-        int y = object.getInt("y");
-        int width = object.getInt("width");
-        int height = object.getInt("height");
-        int page = object.getInt("page");
-        documentStampService.drawStamp(document, attach, stamp, x, y, width, height, page);
+        drawStamp(jsonObject, null);
     }
 
+    public void drawStamp(String jsonObject, Scriptable additionalString) throws JSONException {
+        JSONObject object = new JSONObject(jsonObject);
+        final NodeRef document = new NodeRef(object.getString("document"));
+        final NodeRef attach = new NodeRef(object.getString("attach"));
+        final NodeRef stamp = new NodeRef(object.getString("stamp"));
+        final int x = object.getInt("x");
+        final int y = object.getInt("y");
+        final int width = object.getInt("width");
+        final int height = object.getInt("height");
+        final int page = object.getInt("page");
 
+        final List<String> additionalStringList = new ArrayList<>();
+        if (additionalString != null) {
+            ValueConverter converter = new ValueConverter();
+            additionalStringList.addAll((List<String>) converter.convertValueForJava(additionalString));
+
+        }
+        final AuthenticationUtil.RunAsWork<ScriptNode> runAsWork = new AuthenticationUtil.RunAsWork<ScriptNode>() {
+            @Override
+            public ScriptNode doWork() throws Exception {
+                documentStampService.drawStamp(document, attach, stamp, x, y, width, height, page, additionalStringList);
+                return null;
+            }
+        };
+
+        AuthenticationUtil.runAsSystem(runAsWork);
+    }
+    public void clearPreviousStampInfo(ScriptNode document) {
+        documentStampService.clearPreviousStampInfo(document.getNodeRef());
+    }
 }

@@ -3,6 +3,11 @@
     overflow: hidden;
     float: none;
     margin: 18px 5px 0;
+    min-height: 500px;
+}
+
+.query-page .yui-gc .query-content #main-region {
+    margin-bottom: 100px;
 }
 
 .query-page .yui-gc .query-content .select-doc-type-ctrl {
@@ -53,6 +58,7 @@
 
 .control-width-limited {
     max-width: 500px;
+    width:400px;
 }
 
 .query-page .query-content .grid-vis-hdr .grid thead {
@@ -141,3 +147,16 @@
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARhJREFUeNqsU7utwkAQPF8F0IHJkaABJDqghEfk2B0AHTi1I7sEOjiJBngSOXQAHZgZNGutHBAAJ41s7c5+bnYv6/s+jE/TNDk+ayCX6QakoihuY27mEyhwD/wBR+As1xLYAB39PtGQAMEkJaAV6THqaqLkW3YH/3lIoMo0lHC04c0BlwkqdsVOouzM3FowSHtVHKrTxn9xWsWErK5rVr8CU7Yt4g74l5BBV1sAB3As+R2YRZGO7s6VghlwEhayVeriIZHXUaMytc3JpBdgLlwknBeWMXkMX56oJVmOxpVcZeskeWEV85oCyRvnLN2dV4JpUroiXKwUtVWdjYUqU227s9PkIJ+NvWPs14v0m1X+yWP69Dk/BRgAYruwtxyR/i4AAAAASUVORK5CYII=);
 }
 
+.query-page .query-content .datagrid .grid {
+    overflow: visible;
+}
+
+.query-page .query-content .control .yui-ac-content .yui-ac-bd {
+    overflow-y: auto;
+    max-height: 120px;
+}
+
+.query-page .query-content .control .yui-ac-content .yui-ac-bd li{
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}

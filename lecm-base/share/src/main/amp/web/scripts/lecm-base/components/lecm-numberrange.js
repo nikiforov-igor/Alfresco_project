@@ -110,7 +110,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
           var strMinValue = YAHOO.lang.trim(Dom.get(this.id + "-min").value),
               strMaxValue = YAHOO.lang.trim(Dom.get(this.id + "-max").value);
 
-          if (!isNaN(strMinValue) || strMinValue.length == 0) {
+          if (this._isNumber(strMinValue) || strMinValue.length == 0) {
               Dom.removeClass(this.id + "-min", "invalid");
               this.currentMinNumber = strMinValue;
           }
@@ -120,7 +120,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
               }
           }
 
-          if (!isNaN(strMaxValue) || strMaxValue.length == 0) {
+          if (this._isNumber(strMaxValue) || strMaxValue.length == 0) {
               Dom.removeClass(this.id + "-max", "invalid");
               this.currentMaxNumber = strMaxValue;
           }
@@ -136,6 +136,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
        _changeNumber: function(field) {
            return !YAHOO.util.Dom.hasClass(field, "invalid");
+       },
+
+       _isNumber: function (value) {
+           var numberExp = /[-]?\d+(\.\d+|,\d+)?/ig;
+
+           var valid = !isNaN(parseFloat(value)) && isFinite(value);
+           if (valid) {
+               var test = value.match(numberExp);
+               valid = (test != null && test[0] == value);
+           }
+           return valid;
        }
    });
 })();

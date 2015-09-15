@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * User: PMelnikov
@@ -23,8 +24,11 @@ public interface DocumentStampService {
     public static final QName PROP_FONT_SIZE = QName.createQName(DOCUMENT_STAMP_NAMESPACE_URI, "font-size");
     public static final QName PROP_HORIZONTAL_ALIGN = QName.createQName(DOCUMENT_STAMP_NAMESPACE_URI, "horizontal-align");
     public static final QName PROP_VERTICAL_ALIGN = QName.createQName(DOCUMENT_STAMP_NAMESPACE_URI, "vertical-align");
+    public static final QName PROP_PREV_STAMPS = QName.createQName(DOCUMENT_STAMP_NAMESPACE_URI, "previous-stamps");
 
     public static final QName ASSOC_IMAGE = QName.createQName(DOCUMENT_STAMP_NAMESPACE_URI, "image-assoc");
+
+    public static final QName ASPECT_PREV_STAMPS = QName.createQName(DOCUMENT_STAMP_NAMESPACE_URI, "previous-stamps-aspect");
 
     public static final String STRUCT_PROP_PAGE_WIDTH = "pageWidth";
     public static final String STRUCT_PROP_PAGE_HEIGHT = "pageHeight";
@@ -32,6 +36,7 @@ public interface DocumentStampService {
     public static final String STRUCT_PROP_STAMP_HEIGHT = "stampHeight";
     public static final String STRUCT_PROP_DOCUMENT = "document";
     public static final String STRUCT_PROP_STAMP = "stamp";
+    public static final String STRUCT_PROP_PREV_STAMPS = "prevStamps";
 
     public static final String ALIGN_LEFT = "LEFT";
     public static final String ALIGN_CENTER = "CENTER";
@@ -61,5 +66,7 @@ public interface DocumentStampService {
      * @param page высота страницы
      */
     void drawStamp(NodeRef document, NodeRef attach, NodeRef stamp, int x, int y, int width, int height, int page);
+    void drawStamp(NodeRef document, NodeRef attach, NodeRef stamp, int x, int y, int width, int height, int page, List<String> additionalStrings);
 
+    void clearPreviousStampInfo(NodeRef attach);
 }

@@ -233,7 +233,15 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			Alfresco.util.Ajax.jsonGet({
 				url: url,
 				successCallback: successCallback,
-				failureMessage: this.msg('message.failure')
+				failureCallback: {
+					scope: this,
+					fn: function () {
+						this.deferredFormSubmitSuccessRedirect.fulfil(deferredLabel);
+						if (YAHOO.lang.isFunction(callback)) {
+							callback.call(this, callbackParams);
+						}
+					}
+				}
 			});
 		},
 

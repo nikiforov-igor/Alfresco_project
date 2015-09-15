@@ -48,7 +48,9 @@
 			control.setOptions({
 				itemId: "${form.arguments.itemId}",
 				datasource: "${datasource}",
-				code: "${code}"
+				code: "${code}",
+				fieldId:"${field.configName}",
+                formId: "${args.htmlid}"
 			});
 		}
 		
@@ -58,6 +60,7 @@
 
     <div class="doc-preview-container">
         <div id="${fieldHtmlId}-error" class="hidden1">Не удалось загрузить документ</div>
+        <div id="${fieldHtmlId}-error-stamp" class="hidden1">Не удалось найти штамп</div>
         <div id="${fieldHtmlId}-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
 
         <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>

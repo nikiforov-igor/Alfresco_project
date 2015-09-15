@@ -134,6 +134,7 @@
 
 			<constraint-handlers>
 				<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+				<constraint type="LECM_NUMBER" validation-handler="LogicECM.constraints.isNumber" event="keyup" />
 			</constraint-handlers>
 
 		</forms>

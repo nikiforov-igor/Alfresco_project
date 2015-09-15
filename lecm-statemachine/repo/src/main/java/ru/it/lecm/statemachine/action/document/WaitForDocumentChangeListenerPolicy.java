@@ -146,14 +146,17 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 
 		@Override
 		public void beforeCompletion() {
-			logger.debug("МАШИНА СОСТОЯНИЙ. Вызывается метод beforeCompletion");
+            if (!logger.isTraceEnabled()) {
+                return;
+            }
+			logger.trace("МАШИНА СОСТОЯНИЙ. Вызывается метод beforeCompletion");
 			List<NodeRef> docs = AlfrescoTransactionSupport.getResource(WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER);
 			if(docs != null && !docs.isEmpty()) {
 				for(int i = 0; i < docs.size(); i++) {
 					NodeRef nodeRef = docs.get(i);
 					if (nodeRef != null && nodeService.exists(nodeRef)) {
 						Serializable state = nodeService.getProperty(nodeRef, QName.createQName("http://www.it.ru/logicECM/model/signing/aspects/1.0", "signingState"));
-						logger.debug("МАШИНА СОСТОЯНИЙ. state полученный в методе beforeCompletion равен {}", state);
+						logger.trace("МАШИНА СОСТОЯНИЙ. state полученный в методе beforeCompletion равен {}", state);
 					}
 				}
 			}

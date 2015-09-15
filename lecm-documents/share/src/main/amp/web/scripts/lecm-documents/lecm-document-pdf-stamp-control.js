@@ -24,6 +24,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
 	LogicECM.module.Documents.PdfMarkupControl = function (fieldHtmlId) {
 		LogicECM.module.Documents.PdfMarkupControl.superclass.constructor.call(this, "LogicECM.module.Documents.PdfMarkupControl", fieldHtmlId, [ "container"]);
+		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
+		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 
 		return this;
 	};
@@ -33,7 +35,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			options:{
 				itemId: null,
 				datasource: null,
-				code: null
+				code: null,
+				fieldId: null,
+				formId: null
 			},
 
 			markupWidth: 100,
@@ -56,12 +60,56 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
 			scale: 1,
 
+			previousStamps: [],
+
+
 			onReady:function () {
 				YAHOO.Bubbling.fire("stampControlReady",
 					{
 						eventGroup: this
 					});
-				this.loadDocument();
+
+				if (!this.isNodeRef(this.options.itemId)) {
+					Alfresco.util.Ajax.request({
+						method: "GET",
+						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + this.options.itemId,
+						requestContentType: "application/json",
+						responseContentType: "application/json",
+						successCallback: {
+							fn: function (response) {
+								var result = response.json;
+								if (result != null && result.nodeRef != null) {
+									this.options.itemId = result.nodeRef;
+									this.loadDocument();
+								}
+							},
+							scope: this
+						}
+					});
+				} else {
+					this.loadDocument();
+				}
+				LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
+			},
+
+			onDisableControl: function (layer, args) {
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					var input = Dom.get(this.id);
+					if (input != null) {
+						input.disabled = true;
+					}
+				}
+			},
+
+			onEnableControl: function (layer, args) {
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					if (!this.options.disabled) {
+						var input = Dom.get(this.id);
+						if (input != null) {
+							input.disabled = false;
+						}
+					}
+				}
 			},
 
 			loadDocument: function() {
@@ -79,8 +127,16 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 						url: url,
 						successCallback: {
 							fn: function (response) {
-								if (response.json != null && response.json.hasOwnProperty("document")) {
-									this.loadAttachmentPreview(response.json);
+								if (response.json != null) {
+									if (response.json.hasOwnProperty("document")) {
+										this.loadAttachmentPreview(response.json);
+									} else {
+										if (response.json.hasOwnProperty("error") && "STAMP.NULL" == response.json.error) {
+											Dom.get(this.id +"-error-stamp").style.display = "block";
+										} else {
+											Dom.get(this.id +"-error").style.display = "block";
+										}
+									}
 								} else {
 									Dom.get(this.id +"-error").style.display = "block";
 								}
@@ -89,6 +145,16 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 						}
 					});
 				}
+			},
+
+			isNodeRef: function (value)	{
+				var regexNodeRef = new RegExp(/^[^\:^ ]+\:\/\/[^\:^ ]+\/[^ ]+$/);
+				var result = false;
+				try {
+					result = regexNodeRef.test(String(value));
+				}
+				catch (e){}
+				return result;
 			},
 
 			loadAttachmentPreview: function(settings) {
@@ -141,7 +207,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				if (settings.stamp) {
 					this.stampImage = settings.stamp;
 				}
-
+				if (settings.prevStamps) {
+					this.previousStamps = eval("(" + settings.prevStamps + ")");
+				}
 			},
 
 			moveCursor: function moveCursor(ev) {
@@ -149,11 +217,11 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 					var markup = document.createElement("div");
 					Dom.addClass(markup, "pdf-markup");
 					var width = Math.round(this.markupWidth * this.scale);
-					var height = Math.round(this.markupHeight * this.scale)
+					var height = Math.round(this.markupHeight * this.scale);
 					markup.style.width =  width + "px";
 					markup.style.height = height + "px";
 					var page = document.getElementById(ev.currentTarget.id);
-					page.appendChild(markup)
+					page.appendChild(markup);
 					if (this.stampImage != null) {
 						var stamp = document.createElement("img");
 						stamp.width = width;
@@ -163,9 +231,21 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 					}
 					this.markups[ev.currentTarget.id] = markup;
 				}
+
 				this.markups[ev.currentTarget.id].style.display = "block";
-				this.markups[ev.currentTarget.id].style.top = ((Dom.getY(ev.target) - Dom.getY(ev.currentTarget) - Math.round(this.markupHeight * this.scale / 2)) + ev.layerY) + "px";
-				this.markups[ev.currentTarget.id].style.left = ((Dom.getX(ev.target) - Dom.getX(ev.currentTarget) - Math.round(this.markupWidth * this.scale / 2)) + ev.layerX) + "px";
+
+				var x = ((Dom.getX(ev.target) - Dom.getX(ev.currentTarget) - Math.round(this.markupWidth * this.scale / 2)) + ev.layerX);
+				var y = ((Dom.getY(ev.target) - Dom.getY(ev.currentTarget) - Math.round(this.markupHeight * this.scale / 2)) + ev.layerY);
+				var p = parseInt(ev.currentTarget.id.replace(this.id + "-preview-container-viewer-pageContainer-", ""));
+
+				this.markups[ev.currentTarget.id].style.top = y + "px";
+				this.markups[ev.currentTarget.id].style.left = x + "px";
+
+				if (!this.crossWithPrevious(p, x, y)) {
+					Dom.removeClass(this.markups[ev.currentTarget.id], "pdf-error-markup");
+				} else {
+					Dom.addClass(this.markups[ev.currentTarget.id], "pdf-error-markup");
+				}
 			},
 
 			outCursor: function outCursor(ev) {
@@ -188,11 +268,11 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 					var markup = document.createElement("div");
 					Dom.addClass(markup, "pdf-markup-selected");
 					var width = Math.round(this.markupWidth * this.scale);
-					var height = Math.round(this.markupHeight * this.scale)
-					markup.style.width =  width + "px";
+					var height = Math.round(this.markupHeight * this.scale);
+					markup.style.width = width + "px";
 					markup.style.height = height + "px";
 					var page = document.getElementById(ev.currentTarget.id);
-					page.appendChild(markup)
+					page.appendChild(markup);
 					if (this.stampImage != null) {
 						var stamp = document.createElement("img");
 						stamp.width = width;
@@ -206,22 +286,52 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				this.selectedMarkups[ev.currentTarget.id].style.display = "block";
 				var x = ((Dom.getX(ev.target) - Dom.getX(ev.currentTarget) - Math.round(this.markupWidth * this.scale / 2)) + ev.layerX);
 				var y = ((Dom.getY(ev.target) - Dom.getY(ev.currentTarget) - Math.round(this.markupHeight * this.scale / 2)) + ev.layerY);
-				this.selectedMarkups[ev.currentTarget.id].realX = Math.round(x * (1 / this.scale));
-				this.selectedMarkups[ev.currentTarget.id].realY = Math.round(y * (1 / this.scale));
-				this.selectedMarkups[ev.currentTarget.id].style.left = x + "px";
-				this.selectedMarkups[ev.currentTarget.id].style.top =  y + "px";
+				var p = parseInt(ev.currentTarget.id.replace(this.id + "-preview-container-viewer-pageContainer-", ""));
 
-				var result = {
-					page: parseInt(ev.currentTarget.id.replace(this.id + "-preview-container-viewer-pageContainer-", "")),
-					x: x,
-					y: y,
-					width: parseInt(ev.currentTarget.style.width),
-					height: parseInt(ev.currentTarget.style.height),
-					stamp: this.stampNodeRef,
-					attach: this.documentNodeRef,
-					document: this.options.itemId
-				};
-				Dom.get(this.id).value = JSON.stringify(result);
+				if (!this.crossWithPrevious(p, x, y)) {
+					this.selectedMarkups[ev.currentTarget.id].realX = Math.round(x * (1 / this.scale));
+					this.selectedMarkups[ev.currentTarget.id].realY = Math.round(y * (1 / this.scale));
+					this.selectedMarkups[ev.currentTarget.id].style.left = x + "px";
+					this.selectedMarkups[ev.currentTarget.id].style.top = y + "px";
+
+					var result = {
+						page: p,
+						x: x,
+						y: y,
+						width: parseInt(ev.currentTarget.style.width),
+						height: parseInt(ev.currentTarget.style.height),
+						stamp: this.stampNodeRef,
+						attach: this.documentNodeRef,
+						document: this.options.itemId
+					};
+					Dom.get(this.id).value = JSON.stringify(result);
+				} else {
+					var container = Dom.get(this.id + "-preview-container-viewer-pageContainer");
+					Alfresco.util.PopupManager.displayMessage(
+						{
+							text: this.msg("message.stamp.not.allowed")
+						}, container ? container : ev.currentTarget);
+				}
+			},
+
+			crossWithPrevious: function (page, x, y) {
+				var width = Math.round(this.markupWidth * this.scale);
+				var height = Math.round(this.markupHeight * this.scale);
+
+				for (var i = 0; i < this.previousStamps.length; i++) {
+					var prevStamp = this.previousStamps[i];
+					if (prevStamp && prevStamp.p == page) {
+						var x1 = prevStamp.x * this.scale - width;
+						var x2 = (prevStamp.x + prevStamp.width) * this.scale;
+						var y1 = prevStamp.y * this.scale- height;
+						var y2 = (prevStamp.y + prevStamp.height) * this.scale;
+
+						if (x1 < x && x < x2 && y1 < y && y < y2) {
+							return true;
+						}
+					}
+				}
+				return false;
 			},
 
 			onZoom: function setScale(ev) {

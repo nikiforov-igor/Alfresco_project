@@ -116,4 +116,14 @@
 			</mandatory-aspects>
 		</type>
 	</types>
+	<aspects>
+		<aspect name="lecm-document-stamp:previous-stamps-aspect">
+			<properties>
+				<property name="lecm-document-stamp:previous-stamps">
+					<type>d:text</type>
+					<index enabled="false"/>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
 </model>

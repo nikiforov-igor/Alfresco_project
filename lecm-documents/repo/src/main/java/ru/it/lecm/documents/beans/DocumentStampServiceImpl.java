@@ -14,6 +14,8 @@ import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.VersionService;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -24,7 +26,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * User: PMelnikov
@@ -91,6 +95,9 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
                 pdfReader.close();
             }
         }
+
+        String prevStamps = (String) nodeService.getProperty(document, PROP_PREV_STAMPS);
+
         if (reader.getSize() > 0) {
             result.put(STRUCT_PROP_STAMP, stamp.toString());
         }
@@ -100,16 +107,23 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
         result.put(STRUCT_PROP_STAMP_HEIGHT, stampHeightPoints);
         result.put(STRUCT_PROP_DOCUMENT, document.toString());
 
+        result.put(STRUCT_PROP_PREV_STAMPS, prevStamps);
+
         return result;
     }
 
     @Override
     public void drawStamp(NodeRef document, NodeRef attach, NodeRef stamp, int x, int y, int width, int height, int page) {
+        drawStamp(document, attach, stamp, x, y, width, height, page, null);
+    }
+
+    public void drawStamp(NodeRef document, NodeRef attach, NodeRef stamp, int x, int y, int width, int height, int page, List<String> additionalStrings) {
         ContentReader documentReader = contentService.getReader(attach, ContentModel.PROP_CONTENT);
         ContentReader stampReader = contentService.getReader(stamp, ContentModel.PROP_CONTENT);
         ContentWriter documentWriter = contentService.getWriter(attach, ContentModel.PROP_CONTENT, true);
+
         versionService.ensureVersioningEnabled(attach, null);
-        versionService.createVersion(attach, null);
+
         PdfStamper pdfStamper = null;
         try (InputStream docIs = documentReader.getContentInputStream(); InputStream stampIs = stampReader.getContentInputStream(); OutputStream docOs = documentWriter.getContentOutputStream()) {
             PdfReader pdfReader = new PdfReader(docIs);
@@ -158,7 +172,19 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
                 String hAlign = (String) nodeService.getProperty(stamp, DocumentStampService.PROP_HORIZONTAL_ALIGN);
                 String vAlign = (String) nodeService.getProperty(stamp, DocumentStampService.PROP_VERTICAL_ALIGN);
 
-                String text = substitudeService.formatNodeTitle(document, substitudeString);
+                String text = null;
+                if (additionalStrings != null && additionalStrings.size() > 0) {
+                    try {
+                        MessageFormat formatter = new MessageFormat(substitudeString);
+                        text = formatter.format(additionalStrings.toArray());
+                    } catch (Exception ex) {
+                        logger.error("Cannot apply formatter. Redirect to substitute", ex);
+                    }
+                }
+                if (text == null) {
+                    text = substitudeService.formatNodeTitle(document, substitudeString);
+                }
+
                 String[] lines = text.split("<br>");
 
                 for (int i = 0; i < lines.length; i++) {
@@ -193,7 +219,27 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
                     content.endText();
                 }
             }
+            String prevStamps = (String) nodeService.getProperty(attach, PROP_PREV_STAMPS);
+            JSONArray prevStampsArray;
+            if (StringUtils.isNotEmpty(prevStamps)) {
+                prevStampsArray = new JSONArray(prevStamps);
+            } else {
+                prevStampsArray = new JSONArray();
+            }
+            JSONObject stampJson = new JSONObject();
+            stampJson.put("x", x * scale);
+            stampJson.put("y", y * scale);
+            stampJson.put("p", page);
+            stampJson.put("width", stampWidth);
+            stampJson.put("height", stampHeight);
+            stampJson.put("docVersion", versionService.getCurrentVersion(attach).getVersionLabel());
+
+            prevStampsArray.put(stampJson);
+            nodeService.setProperty(attach, PROP_PREV_STAMPS, prevStampsArray.toString());
+
             pdfStamper.close();
+
+            versionService.createVersion(attach, null);
         } catch (Exception e) {
             logger.error("Cannot create stamp", e);
         } finally {
@@ -206,4 +252,10 @@ public class DocumentStampServiceImpl extends BaseBean implements DocumentStampS
         }
     }
 
+    @Override
+    public void clearPreviousStampInfo(NodeRef attach) {
+        if (nodeService.hasAspect(attach, DocumentStampService.ASPECT_PREV_STAMPS)) {
+            nodeService.setProperty(attach, PROP_PREV_STAMPS, "");
+        }
+    }
 }

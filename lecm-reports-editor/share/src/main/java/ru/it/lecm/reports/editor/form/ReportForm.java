@@ -124,7 +124,7 @@ public class ReportForm extends LecmFormGet {
                 if (!ParameterTypedValue.Type.RANGE.equals(param.getParameterValue().getType()) && isNumber(param.getAlfrescoType())) {
                     Constraint constraint;
                     try {
-                        constraint = generateConstraintModel(field, CONSTRAINT_NUMBER);
+                        constraint = generateConstraintModel(field, "LECM_NUMBER");
                         if (constraint != null) {
                             constraints.add(constraint);
                         }
