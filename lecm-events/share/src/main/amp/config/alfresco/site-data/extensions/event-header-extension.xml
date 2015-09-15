@@ -1,7 +1,7 @@
 <extension>
     <modules>
         <module>
-            <id>Document share header</id>
+            <id>Events share header</id>
             <version>1.0</version>
             <auto-deploy>true</auto-deploy>
             <customizations>
