@@ -78,7 +78,10 @@
 	/>
 	
 	<bean id="protocol.meetings.LogicEcmProtocolDictionariesBootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="documents.dictionaries.LogicEcmModelsBootstrap">
+		  depends-on="documents.dictionaries.LogicEcmModelsBootstrap,
+		  regNumbers.regNumbersTemplatesDicBootstrap,
+		  ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap,
+		  ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-doc-types.xml</value>
