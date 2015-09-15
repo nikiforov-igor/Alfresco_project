@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="RewriteChildren">
 	<item name="cm:Обложка дела" type="lecm-rpeditor:reportDescriptor">
 		<property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>
 		<property name="cm:name"><![CDATA[Обложка дела]]></property>

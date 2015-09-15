@@ -88,6 +88,13 @@
 		<value>alfresco/module/${artifactId}/reports/case-inventory.xml</value>
 	</util:list>
 
+    <util:list id="operative.storage.deployer.reportsForDeploy">
+        <value>year-nomenclature</value>
+        <value>volumes-card</value>
+        <value>destroy-act</value>
+        <value>case-inventory</value>
+    </util:list>
+
 	<util:list id="operative.storage.arm.os">
 		<value>alfresco/module/${artifactId}/arm/os-settings-arm.xml</value>
 		<value>alfresco/module/${artifactId}/arm/os-arm.xml</value>
@@ -120,7 +127,11 @@
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
           dataSourcePolicy,reportDescriptorPolicy"
 		  p:rootPath="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"
-		  p:dictionaries-ref="operative.storage.reports"/>
+		  p:dictionaries-ref="operative.storage.reports"
+          p:xmlImportListener-ref="operative.storage.reports.deployer"/>
+
+    <bean id="operative.storage.reports.deployer" parent="reportsDeployer"
+          p:reportsForDeploy-ref="operative.storage.deployer.reportsForDeploy"/>
 
 	<bean id="operative.storage.arm.bootstrap.main" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
