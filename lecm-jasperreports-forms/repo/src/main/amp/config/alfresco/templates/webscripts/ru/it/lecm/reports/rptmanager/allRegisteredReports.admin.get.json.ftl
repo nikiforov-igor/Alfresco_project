@@ -1,5 +1,6 @@
 <#escape x as x!""?js_string>
-[
+{
+"items" : [
 <#if results??>
     <#list results as reportInfo>
         {
@@ -9,4 +10,5 @@
     </#list>
 </#if>
 ]
+}
 </#escape>
