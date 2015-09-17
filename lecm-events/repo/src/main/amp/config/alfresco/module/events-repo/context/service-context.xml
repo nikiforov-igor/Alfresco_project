@@ -336,13 +336,7 @@
 		<property name="eventsService" ref="eventsService"/>
 		<property name="contentService" ref="contentService"/>
 		<property name="eventsNotificationsService" ref="eventsNotificationsService" />
-		
-<!--		<property name="mailHost" value="imap.googlemail.com"/>
-		<property name="mailUsername" value="datateh.alfresco"/>
-		<property name="mailPassword" value="ZSE4zse4"/>
-		<property name="mailProtocol" value="imaps"/>
-		<property name="mailInboxFolder" value="INBOX"/>
-		<property name="mailDestinationFolder" value="icalAnswers"/>-->
+
 		
 		<property name="mailHost" value="${mail.ical.host}"/>
 		<property name="mailUsername" value="${mail.ical.username}"/>
