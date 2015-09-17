@@ -66,7 +66,7 @@
             Dom.setAttribute(editorId + '_ifr', "tabindex", Dom.getAttribute(editorId, "tabindex"));
             Dom.setAttribute(editorId, "tabindex", '0');
         }
-		YAHOO.util.Event.onDOMReady(init);
+        YAHOO.util.Event.onContentReady("${fieldHtmlId}", init, true);
     })();
     //]]></script>
 
