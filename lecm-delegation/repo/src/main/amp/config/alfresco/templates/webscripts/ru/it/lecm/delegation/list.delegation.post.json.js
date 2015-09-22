@@ -69,7 +69,6 @@
 			tmpParams.maxResults = params.maxResults;
 			tmpParams.nameSubstituteStrings = ",,,{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name},{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"
 			tmpParams.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();
-			tmpParams.searchConfig = params.searchConfig;
 			tmpParams.searchNodes = null;
 			tmpParams.showInactive = false;
 			tmpParams.sort = 'lecm-orgstr:employee-last-name|true';

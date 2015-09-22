@@ -16,6 +16,7 @@
                 showCheckboxColumn: false,
                 searchShowInactive: true,
                 attributeForShow: 'lecm-d8n:delegation-opts-owner-assoc',
+                dataSource: 'lecm/delegation/list',
                 expandable: true,
                 expandDataSource: 'lecm/delegation/procuraciesDatagrid',
                 datagridMeta:{
