@@ -1,5 +1,5 @@
 if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
+    LogicECM = {};
 }
 
 LogicECM.constraints = LogicECM.constraints || {};
