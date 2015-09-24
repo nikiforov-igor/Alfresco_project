@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="RewriteChildren">
     <item name="cm:Сроки прохождения маршрута" type="lecm-rpeditor:reportDescriptor">
-        <property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>
+        <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-contract:document]]></property>
         <property name="cm:name"><![CDATA[Сроки прохождения маршрута]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>

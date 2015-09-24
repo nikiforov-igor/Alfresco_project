@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="RewriteChildren">
     <item name="cm:Сводный отчет по договорам" type="lecm-rpeditor:reportDescriptor">
-        <property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>
+        <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-contract:document]]></property>
         <property name="cm:name"><![CDATA[Сводный отчет по договорам]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
