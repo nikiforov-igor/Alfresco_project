@@ -16,7 +16,7 @@ if (draftRootFolder != null) {
   props['lecm-eds-document:summaryContent'] = document.properties["lecm-events:description"];
   var protocol = draftRootFolder.createNode(null, "lecm-protocol:document", props);
 
-  documentConnection.createConnection(document, protocol, "onBasis", true);
+  documentConnection.createConnection(document, protocol, "onBasis", true, true);
 
   var holdingMembersAssoc = document.assocs["lecm-meetings:holding-members-assoc"];
   if (holdingMembersAssoc != null) {
