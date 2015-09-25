@@ -201,12 +201,12 @@ public class ModelsListBeanImpl extends BaseBean {
 				public int compare(JSONObject o1, JSONObject o2) {
 					String title1 = null;
 					String title2 = null;
-					try {
-						title1 = o1.getString("title");
-						title2 = o2.getString("title");
-					} catch (JSONException e) {
-
-					}
+                    try {
+                        title1 = o1.getString("title");
+                    } catch (JSONException ignored) {}
+                    try {
+                        title2 = o2.getString("title");
+                    } catch (JSONException ignored) {}
 
 					if (title1 == null && title2 != null) {
 						return -1;
