@@ -16,6 +16,13 @@
 				<property name="lecm-busjournal:objectType-template">Пункт №{lecm-document:indexTableRow}</property>
 				<property name="lecm-busjournal:objectType-list-template"></property>
 			</item>
+			<item name="cm:Пункт проведения совещания" type="lecm-busjournal:objectType">
+				<property name="cm:name">Пункт проведения совещания</property>
+				<property name="lecm-busjournal:objectType-code">LECM_MEETING_HOLDING_ITEM</property>
+				<property name="lecm-busjournal:objectType-class">lecm-meetings-ts:holding-item</property>
+				<property name="lecm-busjournal:objectType-template">{lecm-meetings-ts:holding-item-name}</property>
+				<property name="lecm-busjournal:objectType-list-template"></property>
+			</item>
 		</items>
 	</item>
 </items>
