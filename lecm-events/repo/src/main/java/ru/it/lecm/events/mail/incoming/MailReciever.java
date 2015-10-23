@@ -1,20 +1,5 @@
 package ru.it.lecm.events.mail.incoming;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.BodyPart;
-import javax.mail.Flags;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import net.fortuna.ical4j.model.parameter.PartStat;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -32,6 +17,18 @@ import ru.it.lecm.events.ical.CalendarReply;
 import ru.it.lecm.events.ical.ICalUtils;
 import ru.it.lecm.events.mail.IMAPClient;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import javax.mail.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -197,7 +194,11 @@ public class MailReciever extends BaseBean {
 	}
 
 	public void recieveMail() throws WriteTransactionNeededException {
-		//Queue<String> icals = new LinkedList<>();
+        //Queue<String> icals = new LinkedList<>();
+        if (mailHost.equals("${mail.ical.host}")) {
+            logger.warn("iCal settings is not set");
+            return;
+        }
 		IMAPClient client = new IMAPClient(mailHost, mailUsername, mailPassword, mailProtocol, mailInboxFolder);
 		Date updateTime = new Date();
 		Date prevCheckTime = getPrevCheckTime();
