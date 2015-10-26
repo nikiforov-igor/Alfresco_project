@@ -87,7 +87,8 @@ LogicECM.module = LogicECM.module || {};
                             }
 						}
 						container.insertBefore(actionsContainer, container.firstChild);
-					} else if (document.getElementById('final-actions-actionSet').innerHTML) {
+					}
+                    if (document.getElementById('final-actions-actionSet').innerHTML) {
                         showBlock = true;
 					}
                     if (showBlock) {
