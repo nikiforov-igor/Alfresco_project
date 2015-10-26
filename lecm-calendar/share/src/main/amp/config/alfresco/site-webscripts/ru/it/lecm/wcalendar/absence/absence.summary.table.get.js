@@ -4,16 +4,16 @@
 	var timeOffset = serverTimeOffset - clientTimeOffset;
 
 	var monthNames = {
-		m0 : msg.get("lecm.calendar.absence.january"),
-		m1 : msg.get("lecm.calendar.absence.february"),
-		m2 : msg.get("lecm.calendar.absence.march"),
-		m3 : msg.get("lecm.calendar.absence.april"),
-		m4 : msg.get("lecm.calendar.absence.may"),
-		m5 : msg.get("lecm.calendar.absence.june"),
-		m6 : msg.get("lecm.calendar.absence.july"),
-		m7 : msg.get("lecm.calendar.absence.august"),
-		m8 : msg.get("lecm.calendar.absence.september"),
-		m9 : msg.get("lecm.calendar.absence.october"),
+		m00 : msg.get("lecm.calendar.absence.january"),
+		m01 : msg.get("lecm.calendar.absence.february"),
+		m02 : msg.get("lecm.calendar.absence.march"),
+		m03 : msg.get("lecm.calendar.absence.april"),
+		m04 : msg.get("lecm.calendar.absence.may"),
+		m05 : msg.get("lecm.calendar.absence.june"),
+		m06 : msg.get("lecm.calendar.absence.july"),
+		m07 : msg.get("lecm.calendar.absence.august"),
+		m08 : msg.get("lecm.calendar.absence.september"),
+		m09 : msg.get("lecm.calendar.absence.october"),
 		m10 : msg.get("lecm.calendar.absence.november"),
 		m11 : msg.get("lecm.calendar.absence.december")
 	};
@@ -89,7 +89,7 @@
 
 		for (i = 0; i < daysAmount; i++) {
 			var month = today.getMonth(),
-				monthStr = "y" + today.getYear().toString() + "m" + month.toString();
+				monthStr = "y" + today.getYear().toString() + (month < 10 ? "m0" : "m") + month.toString();
 			if (!calendarHeader[monthStr]) {
 				calendarHeader[monthStr] = [];
 			}
