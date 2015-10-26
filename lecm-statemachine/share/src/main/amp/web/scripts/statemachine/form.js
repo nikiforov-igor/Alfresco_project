@@ -56,9 +56,8 @@ LogicECM.module = LogicECM.module || {};
 				fn: function(serverResponse) {
 					var oResults = serverResponse.json;
 					var container, actionsContainer, index, action, actionDiv;
+                    var showBlock = false;
 					if (oResults.actions && oResults.actions.length) {
-						Dom.setStyle(this.id, 'display', 'block');
-
 						this.taskId = oResults.taskId;
 
 						container = document.getElementById(this.id + '-formContainer');
@@ -72,22 +71,30 @@ LogicECM.module = LogicECM.module || {};
 
 						for (index in oResults.actions) {
 							action = oResults.actions[index];
-							actionDiv = document.createElement('div');
-							actionDiv.className = 'widget-button-grey text-cropped';
-							actionDiv.innerHTML = action.label;
-							actionDiv.onclick = this.show.bind(this, action);
-							if (action.dueDate) {
-								actionDiv.title = Alfresco.util.message('label.due_date', this.name ,{0:action.dueDate});
-							}
-							if (action.type == 'task') {
-								actionDiv.className += ' task-marker';
-							}
-							actionsContainer.appendChild(actionDiv);
+                            if (!action.hideAction) {
+                                actionDiv = document.createElement('div');
+                                actionDiv.className = 'widget-button-grey text-cropped';
+                                actionDiv.innerHTML = action.label;
+                                actionDiv.onclick = this.show.bind(this, action);
+                                if (action.dueDate) {
+                                    actionDiv.title = Alfresco.util.message('label.due_date', this.name, {0: action.dueDate});
+                                }
+                                if (action.type == 'task') {
+                                    actionDiv.className += ' task-marker';
+                                }
+                                actionsContainer.appendChild(actionDiv);
+                                showBlock = true;
+                            }
 						}
 						container.insertBefore(actionsContainer, container.firstChild);
-					} else if (!document.getElementById('final-actions-actionSet').innerHTML) {
-						Dom.setStyle(this.id, 'display', 'none');
+					} else if (document.getElementById('final-actions-actionSet').innerHTML) {
+                        showBlock = true;
 					}
+                    if (showBlock) {
+                        Dom.setStyle(this.id, 'display', 'block');
+                    } else {
+                        Dom.setStyle(this.id, 'display', 'none');
+                    }
 				}
 			};
 			Alfresco.util.Ajax.jsonGet({

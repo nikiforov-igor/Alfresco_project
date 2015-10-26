@@ -14,7 +14,6 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
@@ -26,7 +25,6 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
@@ -224,35 +222,33 @@ public class ActionsScript extends DeclarativeWebScript implements ActionsScript
 
                                 Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, state.getVariables().getInput());
 
-                                if (!hideAction) {
-                                    Long count = counts.get(state.getActionId());
-                                    if (count == null) {
-                                        count = 0L;
-                                    }
-
-                                    HashMap<String, Object> resultState = new HashMap<String, Object>();
-                                    resultState.put("type", "trans");
-                                    resultState.put("actionId", state.getActionId());
-                                    resultState.put("label", state.getLabel());
-                                    resultState.put("workflowId", state.getWorkflowId());
-                                    resultState.put("errors", messages);
-                                    resultState.put("doesNotBlock", doesNotBlock);
-                                    resultState.put("fields", fields);
-                                    resultState.put("count", count);
-                                    resultState.put("variables", variables);
-                                    resultState.put("isForm", state.isForm());
-                                    if (state.isForm()) {
-                                        resultState.put("documentType", state.getFormType());
-                                        resultState.put("createUrl", documentService.getCreateUrl(QName.createQName(state.getFormType(), serviceRegistry.getNamespaceService())));
-                                        resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
-                                        resultState.put("connectionType", state.getFormConnection());
-                                        resultState.put("connectionIsSystem", state.isSystemFormConnection());
-                                        resultState.put("connectionIsReverse", state.isReverseFormConnection());
-                                        resultState.put("autoFill", state.isAutoFill());
-                                    }
-                                    actionsList.add(resultState);
-
+                                Long count = counts.get(state.getActionId());
+                                if (count == null) {
+                                    count = 0L;
                                 }
+
+                                HashMap<String, Object> resultState = new HashMap<String, Object>();
+                                resultState.put("type", "trans");
+                                resultState.put("actionId", state.getActionId());
+                                resultState.put("label", state.getLabel());
+                                resultState.put("workflowId", state.getWorkflowId());
+                                resultState.put("errors", messages);
+                                resultState.put("doesNotBlock", doesNotBlock);
+                                resultState.put("fields", fields);
+                                resultState.put("count", count);
+                                resultState.put("variables", variables);
+                                resultState.put("isForm", state.isForm());
+                                resultState.put("hideAction", hideAction);
+                                if (state.isForm()) {
+                                    resultState.put("documentType", state.getFormType());
+                                    resultState.put("createUrl", documentService.getCreateUrl(QName.createQName(state.getFormType(), serviceRegistry.getNamespaceService())));
+                                    resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
+                                    resultState.put("connectionType", state.getFormConnection());
+                                    resultState.put("connectionIsSystem", state.isSystemFormConnection());
+                                    resultState.put("connectionIsReverse", state.isReverseFormConnection());
+                                    resultState.put("autoFill", state.isAutoFill());
+                                }
+                                actionsList.add(resultState);
                             }
                         }
 
