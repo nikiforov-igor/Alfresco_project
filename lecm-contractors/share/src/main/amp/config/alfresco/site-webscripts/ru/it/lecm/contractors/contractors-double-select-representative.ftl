@@ -46,7 +46,8 @@
                     representativesDefaultValueDS: "${params.representativesDefaultValueDS}",
                 </#if>
                     employeesType: "${params.employeesType!"lecm-orgstr:employee"}",
-                    representativesType: "${params.representativesType!"lecm-representative:representative-type"}"
+                    representativesType: "${params.representativesType!"lecm-representative:representative-type"}",
+					fieldHtmlId: "${fieldHtmlId}"
                 });
     }
 

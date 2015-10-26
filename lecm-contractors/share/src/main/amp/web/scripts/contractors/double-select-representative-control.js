@@ -22,8 +22,13 @@ LogicECM.module = LogicECM.module || {};
 
         YAHOO.Bubbling.on(contractorSelectEvent, this.onContractorSelect, this);
         YAHOO.Bubbling.on(organizationSelectEvent, this.onOrganizationSelect, this);
+		YAHOO.Bubbling.on('formValueChanged', this.onControlRegistered, this);
 
         this.previousSelected = null;
+		this.controlsDeferred = new Alfresco.util.Deferred(["AssociationTreeViewer"], {
+			fn: this._updateControls.bind(this, true, {}, {}),
+			scope: this
+		});
 
         return this;
     };
@@ -31,6 +36,9 @@ LogicECM.module = LogicECM.module || {};
     YAHOO.extend(LogicECM.module.DoubleSelectRepresentativeForContractor, Alfresco.component.Base, {
         previousSelectedContr: null,
         previousSelectedOrg: null,
+		
+		
+		controlsDeferred: null,
 
         options: {
             employeesByOrgDS: "lecm/employees/byOrg/{organization}/picker",
@@ -53,11 +61,20 @@ LogicECM.module = LogicECM.module || {};
             currentValue: '',
 
             autoCompleteJsName: "select-representative-autoComplete",
-            treeViewJsName:"select-representative-treeView"
+            treeViewJsName:"select-representative-treeView",
+			fieldHtmlId: ""
         },
 
         onReady: function SelectRepresentativeForContractor_onReady() {
         },
+		
+		onControlRegistered: function (layer, args) {
+			var obj = args[1];
+			var control = obj.eventGroup;
+			if (control.id === this.options.fieldHtmlId) {
+				this.controlsDeferred.fulfil(control.name);
+			}
+		},
 
         onContractorSelect: function (layer, args) {
             if (!this.options.disabled) {
@@ -88,7 +105,8 @@ LogicECM.module = LogicECM.module || {};
                             }),
                         nameSubstituteString: this.options.representativesSubstitute,
                         selectedValueNodeRef:"",
-                        lazyLoading: false
+                        lazyLoading: false,
+						disabled: false
                     },
                     {
                         rootLocation: this.options.representativesLocation,
@@ -104,7 +122,8 @@ LogicECM.module = LogicECM.module || {};
                         nameSubstituteString: this.options.representativesSubstitute,
                         selectedValue:null,
                         initialized:false,
-                        lazyLoading: false
+                        lazyLoading: false,
+						disabled: false
                     }
                 );
             }
@@ -122,8 +141,10 @@ LogicECM.module = LogicECM.module || {};
                     control.updateFormFields();
                     control.updateInputUI();
                     control.setOptions({
-                        loadDefault: false
+                        loadDefault: false,
+						disabled: true
                     });
+					control.onReady();
                 }
                 control.setOptions({
                     selectedValueNodeRef: "",
@@ -140,8 +161,10 @@ LogicECM.module = LogicECM.module || {};
                     treeControl.selectedItems = null;
                     treeControl.defaultValue = null;
                     treeControl.setOptions({
-                        loadDefault: false
+                        loadDefault: false,
+						disabled: true
                     });
+					treeControl.init();
                 }
                 treeControl.setOptions({
                     selectedValue: null
@@ -182,7 +205,8 @@ LogicECM.module = LogicECM.module || {};
                                 organization: selectedContractor
                             }) : null,
                         nameSubstituteString: this.options.employeesNameSubstitute,
-                        lazyLoading: false
+                        lazyLoading: false,
+						disabled: false
                     },
                     {
                         rootLocation: this.options.employeesLocation,
@@ -197,7 +221,8 @@ LogicECM.module = LogicECM.module || {};
                             }) : null,
                         nameSubstituteString: this.options.employeesNameSubstitute,
                         initialized: false,
-                        lazyLoading: false
+                        lazyLoading: false,
+						disabled: false
                     }
                 );
             }
