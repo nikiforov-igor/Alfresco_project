@@ -451,7 +451,7 @@
 						</control>
 					</field>
 					<field id="lecm-protocol-ts:point-desc" >
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:men-spoke" >
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -459,7 +459,7 @@
                         </control>
 					</field>
 					<field id="lecm-protocol-ts:decision" >
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date" >
@@ -570,7 +570,7 @@
 						</control>
 					</field>
 					<field id="lecm-protocol-ts:point-desc" set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:men-spoke" set="item1">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -578,7 +578,7 @@
                         </control>
 					</field>
 					<field id="lecm-protocol-ts:decision" set="item1">
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true" set="item1"/>
 					<field id="lecm-protocol-ts:execution-date" set="item1">
@@ -671,7 +671,7 @@
 						</control>
 					</field>
 					<field id="lecm-protocol-ts:point-desc">
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:men-spoke">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -679,7 +679,7 @@
                         </control>
 					</field>
 					<field id="lecm-protocol-ts:decision">
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="lecm-protocol-ts:executor-assoc" mandatory="true"/>
 					<field id="lecm-protocol-ts:execution-date">
