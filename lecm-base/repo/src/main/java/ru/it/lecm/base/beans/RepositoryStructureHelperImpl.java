@@ -442,7 +442,11 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
     public NodeRef getUserTemp(NodeRef person, boolean createIfNotExist) throws WriteTransactionNeededException {
 //		TODO: Метод был типа getOrCreate, надо разделить. Создание вынесено в createUserTemp
         NodeRef userHome = repositoryHelper.getUserHome(person);
-        return getFolder(userHome, this.usertemp);
+        NodeRef userTemp = null;
+        if (userHome != null) {
+            userTemp = getFolder(userHome, this.usertemp);
+    }
+        return userTemp;
     }
 
     @Override

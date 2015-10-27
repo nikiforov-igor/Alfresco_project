@@ -13,13 +13,11 @@ import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.ParseException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -143,7 +141,7 @@ public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
 	*/
 	@Override
 	public List<NodeRef> getNodes() {
-		List<NodeRef> searchFiles = new ArrayList<NodeRef>();
+		List<NodeRef> collectedNodes = new ArrayList<>();
 
 	    Calendar cal = Calendar.getInstance();
 	    cal.add(Calendar.DAY_OF_YEAR, -1);
@@ -151,7 +149,7 @@ public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
 
 		List<NodeRef> allEmployees = this.orgstructureService.getAllEmployees();
 		if (allEmployees != null) {
-			Set<NodeRef> allPersons = new HashSet<NodeRef>(allEmployees.size());
+			Set<NodeRef> allPersons = new HashSet<>(allEmployees.size());
 
 			for (NodeRef employee: allEmployees) {
 				allPersons.add(this.orgstructureService.getPersonForEmployee(employee));
@@ -160,34 +158,47 @@ public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
                 if (person != null) {
 					try {
 						NodeRef tempDirectory = repositoryStructureHelper.getUserTemp(person, false);
-						if (tempDirectory != null) {
-							List<ChildAssociationRef> childs = nodeService.getChildAssocs(tempDirectory);
-							if (childs != null) {
-								for (ChildAssociationRef child : childs) {
-									NodeRef nodeRef = child.getChildRef();
-
-									Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
-									if (createDate != null && createDate.before(beforeFireTime)) {
-										List<AssociationRef> source = nodeService.getSourceAssocs(tempDirectory, RegexQNamePattern.MATCH_ALL);
-										if (source == null || source.size() == 0) {
-											searchFiles.add(nodeRef);
-										}
-									}
-								}
-							}
-						}
-					} catch (WriteTransactionNeededException ex) {
+                        collectNodes(collectedNodes, tempDirectory, beforeFireTime);
+                    } catch (WriteTransactionNeededException ex) {
 						throw new RuntimeException(ex);
 					}
                 }
             }
 		}
-		return searchFiles;
+		return collectedNodes;
 	}
 
-	/* (non-Javadoc)
-	* @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getAction(org.alfresco.service.cmr.repository.NodeRef)
-	*/
+    private boolean collectNodes(final List<NodeRef> collectedNodes, final NodeRef parentDirectory, final Date beforeFireTime) {
+        boolean result = false;
+        if (parentDirectory != null) {
+            List<ChildAssociationRef> childs = nodeService.getChildAssocs(parentDirectory);
+            if (childs != null && !childs.isEmpty()) {
+                result = true;
+                for (ChildAssociationRef child : childs) {
+                    NodeRef nodeRef = child.getChildRef();
+
+                    boolean hasChilds = false;
+                    if (nodeService.getType(nodeRef).equals(ContentModel.TYPE_FOLDER)) {
+                        hasChilds = collectNodes(collectedNodes, nodeRef, beforeFireTime);
+                    }
+                    if (!hasChilds) {  //директории - только пустые, остальные - всегда
+                        Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
+                        if (createDate != null && createDate.before(beforeFireTime)) {
+                            List<AssociationRef> source = nodeService.getSourceAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
+                            if (source == null || source.size() == 0) {
+                                collectedNodes.add(nodeRef);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /* (non-Javadoc)
+    * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getAction(org.alfresco.service.cmr.repository.NodeRef)
+    */
 	@Override
 	public Action getAction(NodeRef nodeRef) {
 		return getActionService().createAction("deleteAction");
