@@ -14,6 +14,11 @@
 <#else>
 	<#assign firstShowSearch = true>
 </#if>
+<#if params.firstShowCreateNewLink?? && params.firstShowCreateNewLink == "true">
+	<#assign firstShowCreateNewLink = true>
+<#else>
+	<#assign firstShowCreateNewLink = false>
+</#if>
 
 <#assign secondControlId = fieldHtmlId + "-second-cntrl">
 <#if params.secondPlane?? && params.secondPlane == "true">
@@ -25,6 +30,11 @@
 	<#assign secondShowSearch = false>
 <#else>
 	<#assign secondShowSearch = true>
+</#if>
+<#if params.secondShowCreateNewLink?? && params.secondShowCreateNewLink == "true">
+    <#assign secondShowCreateNewLink = true>
+<#else>
+    <#assign secondShowCreateNewLink = false>
 </#if>
 
 <#assign endpointMany = field.endpointMany>
@@ -198,7 +208,7 @@
 		    <#else>
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
-		    showCreateNewLink: false,
+		    showCreateNewLink: ${firstShowCreateNewLink?string},
             additionalFilter: "${params.firstAdditionalFilter!''}",
 		    clearFormsOnStart: false
 	    });
@@ -276,7 +286,7 @@
             <#if args.ignoreNodes??>
                 ignoreNodes: "${args.ignoreNodes}".split(","),
             </#if>
-		    showCreateNewLink: false,
+		    showCreateNewLink: ${secondShowCreateNewLink?string},
             additionalFilter: "${params.secondAdditionalFilter!''}",
 		    showSelectedItemsPath: false,
 		    multipleSelectMode: ${endpointMany?string},
