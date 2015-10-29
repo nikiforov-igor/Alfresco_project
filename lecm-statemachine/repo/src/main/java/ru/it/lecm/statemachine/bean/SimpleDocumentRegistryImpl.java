@@ -6,6 +6,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
@@ -21,10 +22,11 @@ import java.util.*;
  */
 public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocumentRegistry {
 
-    private Map<QName, SimpleDocumentRegistryItem> types = new HashMap<>();
+    private Map<String, SimpleDocumentRegistryItem> types = new HashMap<>();
     private Repository repositoryHelper;
     private LecmPermissionService lecmPermissionService;
     private PermissionService permissionService;
+    private NamespaceService namespaceService;
 
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
@@ -38,13 +40,17 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
         this.permissionService = permissionService;
     }
 
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
+
     @Override
     public NodeRef getServiceRootFolder() {
         return null;
     }
 
     @Override
-    public void registerDocument(QName type, final SimpleDocumentRegistryItem item) throws LecmBaseException {
+    public void registerDocument(String type, final SimpleDocumentRegistryItem item) throws LecmBaseException {
         final List<String> path = new ArrayList<>();
         String[] storePath = item.getStorePath().split("/");
         for (String pathItem : storePath) {
@@ -96,11 +102,11 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
 
     @Override
     public boolean isSimpleDocument(QName type) {
-        return types.containsKey(type);
+        return types.containsKey(type.toPrefixString(namespaceService));
     }
 
     public SimpleDocumentRegistryItem getRegistryItem(QName type) {
-        return types.get(type);
+        return types.get(type.toPrefixString(namespaceService));
     }
 
 }

@@ -16,7 +16,7 @@ public interface SimpleDocumentRegistry {
      * @param item - настройки для работы документа
      * @throws LecmBaseException
      */
-    void registerDocument(QName type, SimpleDocumentRegistryItem item) throws LecmBaseException;
+    void registerDocument(String type, SimpleDocumentRegistryItem item) throws LecmBaseException;
 
     /**
      * Проверка типа документа на отстусвие жизненного цикла

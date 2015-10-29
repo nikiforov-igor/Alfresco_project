@@ -121,7 +121,6 @@ public class SimpleDocumentDeployer {
         item.setStarters(starters);
         item.setPermissions(permissions);
         String typeName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME).toString();
-        QName typeQname = QName.createQName(typeName.replace('_', ':'), namespaceService);
-        simpleDocumentRegistry.registerDocument(typeQname, item);
+        simpleDocumentRegistry.registerDocument(typeName.replace("_",":"), item);
     }
 }
