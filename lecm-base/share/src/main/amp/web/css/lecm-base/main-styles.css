@@ -712,8 +712,17 @@ i.icon-building {
 /* Предыдущие версии */
 .yui-panel.historic-properties-viewer .historic-properties-header {
     height: 30px;
-    padding: 0;
+    padding: 0 0 0 35px;
     margin: 0;
+    background-position: 0 -1px;
+}
+.yui-panel.historic-properties-viewer a.historic-properties-nav {
+    text-indent: 0;
+    font-size: 0;
+}
+/* Восстановить версию */
+.yui-panel.revert-version .bd form > div:not(.bdft){
+    padding: 10px;
 }
 
 /* Вложение - скопировать в */
