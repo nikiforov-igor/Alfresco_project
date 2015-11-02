@@ -109,7 +109,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     Dom.setStyle(this.CUSTOM_REGION, "display", "block");
                     // добавляем в header ссылку на главную страницу документа
                     Dom.setStyle(this.TITLE + "-span", "display", "none");
-                    Dom.setStyle(this.TITLE, "display", "inline");
+                    Dom.setStyle(this.TITLE, "display", "inline-block");
                     location.hash = 'expanded';
                 }
 
@@ -135,11 +135,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 // убираем из header'а ссылку на главную страницу документа
                 var titleEl = this.getDocumentTitle();
                 if (titleEl != null) {
-                    titleEl.innerHTML = titleEl.innerHTML.split('::')[0];
+                    titleEl.innerHTML = "";
                 }
                 
                 Dom.setStyle(this.TITLE, "display", "none");
-                Dom.setStyle(this.TITLE + "-span", "display", "inline");
+                Dom.setStyle(this.TITLE + "-span", "display", "inline-block");
             },
 
             /**
