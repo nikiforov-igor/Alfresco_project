@@ -63,9 +63,11 @@
 
 	var obj = new OnElementAvaiable("${controlId}-container");
 	function init() {
-        LogicECM.module.Base.Util.loadScripts([
+        LogicECM.module.Base.Util.loadResources([
             '/yui/resize/resize-min.js',
             'scripts/lecm-base/components/object-finder/lecm-object-finder.js'
+		], [
+            'css/lecm-orgstructure/controls/show.image.ctrl.css'
 		], createPicker);
 	}
 	function createPicker(){
@@ -114,7 +116,7 @@
 })();
 //]]></script>
 
-<div class="yui-dt45-col-thumbnail yui-dt-col-thumbnail">
+<div class="yui-dt45-col-thumbnail yui-dt-col-thumbnail show-image-thumbnail">
     <div class="yui-dt-liner" id="${controlId}-container"></div>
 </div>
 <#if form.mode == "view">
