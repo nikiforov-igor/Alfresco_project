@@ -5,6 +5,7 @@ import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.ISO8601DateFormat;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -184,7 +185,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
             //экспорт свойств справочника
             for (Map.Entry<QName, Serializable> entry : nodeService.getProperties(childRef).entrySet()) {
                 QName qName = entry.getKey().getPrefixedQName(namespaceService);
-                String value = entry.getValue() != null ? entry.getValue().toString() : null;
+                String value = prepareEntryValue(entry);
                 if ((doNotFilterFields && !ignoredNamespaces.contains(qName.getNamespaceURI()))
                         || (!doNotFilterFields && isExportField(fields, qName))) {
                     writeProperty(qName, value);
@@ -259,5 +260,16 @@ public class XMLExportBeanImpl implements XMLExportBean {
             return localFieldsForTypeCache.get(typeName);
         }
 
+        private String prepareEntryValue(Map.Entry<QName, Serializable> entry) {
+            String result = null;
+            if (entry.getValue() != null) {
+                if (entry.getValue() instanceof Date) {
+                    result = ISO8601DateFormat.format((Date)entry.getValue());
+                } else {
+                    result = entry.getValue().toString();
+                }
+            }
+            return result;
+        }
     }
 }
