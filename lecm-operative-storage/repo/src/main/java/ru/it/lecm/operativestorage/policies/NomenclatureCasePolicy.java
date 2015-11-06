@@ -116,7 +116,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 	private NodeRef getDefaultOrgUnit(NodeRef caseNodeRef) {
 		NodeRef sectionRef = nodeService.getPrimaryParent(caseNodeRef).getParentRef();
 		List<AssociationRef> unitList = nodeService.getTargetAssocs(sectionRef, OperativeStorageService.ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT);
-		if(unitList != null) {
+		if(unitList != null && unitList.size() > 0) {
 			return unitList.get(0).getTargetRef();
 		}
 
