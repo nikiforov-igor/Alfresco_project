@@ -216,4 +216,55 @@
 		p:orgstructureService-ref="serviceOrgstructure"
 	/>
 
+	<bean id="operative.storage.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+		<constructor-arg>
+			<map>
+				<entry key="lecm-os:nomenclature-year-section">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-os:nomenclature-year-section-year</value>
+						<value>lecm-os:nomenclature-year-section-status</value>
+						<value>lecm-os:nomenclature-year-section-comment</value>
+						<value>os-aspects:nomenclature-organization-assoc</value>
+					</list>
+				</entry>
+				<entry key="lecm-os:nomenclature-unit-section">
+					<list>
+						<value>cm:name</value>
+						<value>cm:title</value>
+						<value>lecm-os:nomenclature-unit-section-comment</value>
+						<value>lecm-os:nomenclature-unit-section-index</value>
+						<value>lecm-os:nomenclature-unit-section-status</value>
+					</list>
+				</entry>
+				<entry key="lecm-os:nomenclature-case">
+					<list>
+						<value>cm:name</value>
+						<value>cm:title</value>
+						<value>lecm-os:nomenclature-case-index</value>
+						<value>lecm-os:nomenclature-case-status</value>
+						<value>lecm-os:nomenclature-case-valuable</value>
+						<value>lecm-os:nomenclature-case-epk</value>
+						<value>lecm-os:nomenclature-case-transient</value>
+						<value>lecm-os:nomenclature-case-creation-date</value>
+						<value>lecm-os:nomenclature-case-close-date</value>
+						<value>lecm-os:nomenclature-case-volumes-number</value>
+						<value>lecm-os:nomenclature-case-inventory-number</value>
+						<value>lecm-os:nomenclature-case-to-archive</value>
+						<value>lecm-os:nomenclature-case-to-destruction</value>
+						<value>lecm-os:nomenclature-case-comment</value>
+						<value>lecm-os:nomenclature-case-no-permissions-change-on-archivation</value>
+						<value>lecm-os:nomenclature-case-visibility-comment</value>
+						<value>lecm-os:shared</value>
+						<value>lecm-os:nomenclature-case-store-term-assoc</value>
+						<value>lecm-os:nomenclature-case-visibility-unit-assoc</value>
+						<value>lecm-os:nomenclature-case-visibility-workgroup-assoc</value>
+						<value>lecm-os:nomenclature-case-visibility-employee-assoc</value>
+						<value>lecm-os:nomenclature-case-security-classification-assoc</value>
+					</list>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
 </beans>
