@@ -35,6 +35,7 @@
           <property name="cronExpression">
                      <value>${reporting.cron.harvest.moreFrequent}</value>
           </property>
+         <property name="enabled" value="#{'${reporting.db.url}' != '$'+'{reporting.db.url}'}"/>
      </bean>
      
      <!-- LessFrequent Harvesting stuff -->     
@@ -71,6 +72,7 @@
           <property name="cronExpression">
                   <value>${reporting.cron.harvest.lessFrequent}</value>
           </property>
+         <property name="enabled" value="#{'${reporting.db.url}' != '$'+'{reporting.db.url}'}"/>
      </bean>
         
 <!-- Executing all reports -->

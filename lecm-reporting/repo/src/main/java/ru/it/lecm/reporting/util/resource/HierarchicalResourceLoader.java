@@ -1,11 +1,18 @@
 package ru.it.lecm.reporting.util.resource;
 
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 public class HierarchicalResourceLoader extends org.alfresco.util.resource.HierarchicalResourceLoader {
+
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(HierarchicalResourceLoader.class);
+
     private String dialectBaseClass;
     private String dialectClass;
     private DataSource datasource;
@@ -62,24 +69,29 @@ public class HierarchicalResourceLoader extends org.alfresco.util.resource.Hiera
     }
 
     public void afterPropertiesSet() throws Exception {
-        String database = this.datasource.getConnection().getMetaData().getDatabaseProductName();
-        this.setDatabaseVendor(database);
-        if ("PostgreSQL".equalsIgnoreCase(database)) {
-            this.dialectClass = this.postgreSqlClassName;
-        } else if ("MySQL".equalsIgnoreCase(database)) {
-            this.dialectClass = this.mySqlClassName;
-        } else if ("oracle".equalsIgnoreCase(database)) {
-            this.dialectClass = this.oracleClassName;
-        } else if ("sqlserver".equalsIgnoreCase(database)) {
-            this.dialectClass = this.msSqlClassName;
-        }
+        try {
+            String database = this.datasource.getConnection().getMetaData().getDatabaseProductName();
 
-        PropertyCheck.mandatory(super.getClass(), "dialectBaseClass", this.dialectBaseClass);
-        PropertyCheck.mandatory(super.getClass(), "dialectClass", this.dialectClass);
+            this.setDatabaseVendor(database);
+            if ("PostgreSQL".equalsIgnoreCase(database)) {
+                this.dialectClass = this.postgreSqlClassName;
+            } else if ("MySQL".equalsIgnoreCase(database)) {
+                this.dialectClass = this.mySqlClassName;
+            } else if ("oracle".equalsIgnoreCase(database)) {
+                this.dialectClass = this.oracleClassName;
+            } else if ("sqlserver".equalsIgnoreCase(database)) {
+                this.dialectClass = this.msSqlClassName;
+            }
+
+            PropertyCheck.mandatory(super.getClass(), "dialectBaseClass", this.dialectBaseClass);
+            PropertyCheck.mandatory(super.getClass(), "dialectClass", this.dialectClass);
+        } catch (SQLException e) {
+            LOGGER.warn("Reporting DB is not defined properly");
+        }
     }
 
     public Resource getResource(String location) {
-        if (this.dialectClass != null && this.dialectBaseClass != null) {
+        if (!StringUtils.isEmpty(this.dialectClass) && !StringUtils.isEmpty(this.dialectBaseClass)) {
             String dialectBaseClassStr = this.dialectBaseClass;
             String dialectClassStr;
             if (!PropertyCheck.isValidPropertyString(this.dialectBaseClass)) {
@@ -139,7 +151,8 @@ public class HierarchicalResourceLoader extends org.alfresco.util.resource.Hiera
                 return resource;
             }
         } else {
-            return super.getResource(location);
+            String newLocation = location.replaceAll("\\#reporting\\.resource\\.dialect\\#", postgreSqlClassName);
+            return super.getResource(newLocation);
         }
     }
 }
