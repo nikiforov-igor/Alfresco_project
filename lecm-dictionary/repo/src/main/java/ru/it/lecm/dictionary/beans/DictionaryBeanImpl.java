@@ -3,6 +3,8 @@ package ru.it.lecm.dictionary.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -12,20 +14,13 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.alfresco.service.cmr.dictionary.PropertyDefinition;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
-import org.apache.commons.lang.StringUtils;
+import java.util.*;
 
 /**
  * User: ORakovskaya
@@ -121,25 +116,35 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
 	@Override
 	public List<NodeRef> getRecordsByParamValue(String dictionaryName, QName parameter, Serializable value) {
-		List<NodeRef> results = new ArrayList<NodeRef>();
-		NodeRef obTypeDictionary = getDictionaryByName(dictionaryName);
-		if (obTypeDictionary != null && value != null && parameter != null) {
-			List<ChildAssociationRef> dicValues = nodeService.getChildAssocs(obTypeDictionary);
-			for (ChildAssociationRef dicValue : dicValues) {
-				NodeRef record = dicValue.getChildRef();
-				Serializable recordClass = nodeService.getProperty(record, parameter);
-				if (recordClass != null && recordClass.equals(value) && !isArchive(record)) {
-					results.add(record);
-				}
-			}
-		}
-		return results;
+        return getRecordsByParamValueInternal(dictionaryName, parameter, value, false);
 	}
 
-	@Override
+    private List<NodeRef> getRecordsByParamValueInternal(String dictionaryName, QName parameter, Serializable value, boolean returnLastOnly) {
+        List<NodeRef> results = new ArrayList<>();
+        NodeRef obTypeDictionary = getDictionaryByName(dictionaryName);
+        if (obTypeDictionary != null && value != null && parameter != null) {
+            List<ChildAssociationRef> dicValues = nodeService.getChildAssocs(obTypeDictionary);
+            if (returnLastOnly) {
+                Collections.reverse(dicValues);
+            }
+            for (ChildAssociationRef dicValue : dicValues) {
+                NodeRef record = dicValue.getChildRef();
+                Serializable recordClass = nodeService.getProperty(record, parameter);
+                if (recordClass != null && recordClass.equals(value) && !isArchive(record)) {
+                    results.add(record);
+                    if (returnLastOnly) {
+                        break;
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
+    @Override
 	public NodeRef getRecordByParamValue(String dictionaryName, QName parameter, Serializable value) {
 		NodeRef result = null;
-		List<NodeRef> results = getRecordsByParamValue(dictionaryName, parameter, value);
+		List<NodeRef> results = getRecordsByParamValueInternal(dictionaryName, parameter, value, true);
 		if (results.size() > 0) {
 			result = results.get(results.size() - 1);
 		}
