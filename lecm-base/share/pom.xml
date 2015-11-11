@@ -12,6 +12,10 @@
     <packaging>amp</packaging>
     <name>Logic ECM Base Share</name>
 	<description>Logic ECM Base Share</description>
+
+    <properties>
+        <lecm.share.version>${platform.version}</lecm.share.version>
+    </properties>
 	<!--
 		need to list these as a provided so that Maven doesn't download them
 		and include them in the AMP, they are provided by Alfresco

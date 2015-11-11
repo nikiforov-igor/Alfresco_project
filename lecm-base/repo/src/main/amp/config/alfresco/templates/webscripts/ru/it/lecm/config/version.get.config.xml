@@ -1,0 +1,4 @@
+<versionRoot>
+    <repo>${lecm.repo.version}</repo>
+    <buildVersion>${noSnapshotVersion}.${buildNumber}</buildVersion>
+</versionRoot>

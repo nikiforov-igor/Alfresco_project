@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>LECM Share version</shortname>
+    <description>LECM Share version</description>
+    <url>/lecm/version</url>
+    <format default="json">extension</format>
+    <authentication>none</authentication>
+    <transaction>none</transaction>
+</webscript>
