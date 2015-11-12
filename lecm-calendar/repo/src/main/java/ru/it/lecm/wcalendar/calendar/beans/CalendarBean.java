@@ -202,6 +202,37 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 	}
 
 	@Override
+	public Boolean isWorkingDay(Date day, List<NodeRef> allWorkingDaysByYear, List<NodeRef> allNonWorkingDaysByYear) {
+		boolean result;
+		List<NodeRef> daysList;
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(day);
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+
+		if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) {
+			result = false;
+            daysList = allWorkingDaysByYear;
+		} else {
+			result = true;
+            daysList = allNonWorkingDaysByYear;
+		}
+
+		if (daysList != null) {
+			for (NodeRef specialDay : daysList) {
+				Date specialDayDate = getSpecialDayDate(specialDay);
+				if (DateUtils.isSameDay(day, specialDayDate)) {
+					result = !result;
+					break;
+				}
+			}
+		} else {
+			return null;
+		}
+		return result;
+	}
+
+	@Override
 	public NodeRef getCalendarByYear(int year) {
 		NodeRef result = null;
 		int yearProp;

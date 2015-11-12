@@ -15,10 +15,7 @@ import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -93,15 +90,29 @@ public class WorkCalendarBean implements IWorkCalendar {
 		String scheduleType = scheduleService.getScheduleType(schedule);
 
         List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
+
+        Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
+        Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
         if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
             Date curDay = new Date(start.getTime());
             while (!curDay.after(end)) {
-                Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee);
+                int yearByDate = getYearByDate(curDay);
+                List<NodeRef> allWorkingDaysByYear = allWorkingDaysByYearMap.get(yearByDate);
+                if (allWorkingDaysByYear == null) {
+                    allWorkingDaysByYear = WCalendarService.getAllWorkingDaysByYear(yearByDate);
+                    allWorkingDaysByYearMap.put(yearByDate, allWorkingDaysByYear);
+                }
+                List<NodeRef> allNonWorkingDaysByYear = allNonWorkingDaysByYearMap.get(yearByDate);
+                if (allNonWorkingDaysByYear == null) {
+                    allNonWorkingDaysByYear = WCalendarService.getAllNonWorkingDaysByYear(yearByDate);
+                    allNonWorkingDaysByYearMap.put(yearByDate, allNonWorkingDaysByYear);
+                }
+                Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee, allWorkingDaysByYear, allNonWorkingDaysByYear);
 
 				if (isPresent != null && isPresent) {
 					result.add(curDay);
 				} else if (isPresent == null) {
-					logger.warn("No calendar for such year ({})!", getYearByDate(curDay));
+					logger.warn("No calendar for such year ({})!", yearByDate);
 				}
 
 				curDay = DateUtils.addDays(curDay, 1);
@@ -144,13 +155,28 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 		Date curDay = new Date(start.getTime());
         List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
-		while (!curDay.after(end)) {
+        Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
+        Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
+
+        while (!curDay.after(end)) {
 			boolean toBeAdded = true;
 
 			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
-				Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee);
+                int yearByDate = getYearByDate(curDay);
+                List<NodeRef> allWorkingDaysByYear = allWorkingDaysByYearMap.get(yearByDate);
+                if (allWorkingDaysByYear == null) {
+                    allWorkingDaysByYear = WCalendarService.getAllWorkingDaysByYear(yearByDate);
+                    allWorkingDaysByYearMap.put(yearByDate, allWorkingDaysByYear);
+                }
+                List<NodeRef> allNonWorkingDaysByYear = allNonWorkingDaysByYearMap.get(yearByDate);
+                if (allNonWorkingDaysByYear == null) {
+                    allNonWorkingDaysByYear = WCalendarService.getAllNonWorkingDaysByYear(yearByDate);
+                    allNonWorkingDaysByYearMap.put(yearByDate, allNonWorkingDaysByYear);
+                }
+                Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee, allWorkingDaysByYear, allNonWorkingDaysByYear);
 
-				if (isPresent != null && isPresent) {
+
+                if (isPresent != null && isPresent) {
 					toBeAdded = false;
 				} else if (isPresent == null) {
 					logger.warn("No calendar for such year ({})!", getYearByDate(curDay));
@@ -202,11 +228,26 @@ public class WorkCalendarBean implements IWorkCalendar {
 		String scheduleType = scheduleService.getScheduleType(schedule);
 		Date curDay = new Date(start.getTime());
         List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
-		while (i < workingDaysRequired) {
-			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
-				Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee);
+        Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
+        Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
 
-				if (isPresent != null && isPresent) {
+        while (i < workingDaysRequired) {
+			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
+                int yearByDate = getYearByDate(curDay);
+                List<NodeRef> allWorkingDaysByYear = allWorkingDaysByYearMap.get(yearByDate);
+                if (allWorkingDaysByYear == null) {
+                    allWorkingDaysByYear = WCalendarService.getAllWorkingDaysByYear(yearByDate);
+                    allWorkingDaysByYearMap.put(yearByDate, allWorkingDaysByYear);
+                }
+                List<NodeRef> allNonWorkingDaysByYear = allNonWorkingDaysByYearMap.get(yearByDate);
+                if (allNonWorkingDaysByYear == null) {
+                    allNonWorkingDaysByYear = WCalendarService.getAllNonWorkingDaysByYear(yearByDate);
+                    allNonWorkingDaysByYearMap.put(yearByDate, allNonWorkingDaysByYear);
+                }
+                Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee, allWorkingDaysByYear, allNonWorkingDaysByYear);
+
+
+                if (isPresent != null && isPresent) {
 					i++;
 				} else if (isPresent == null) {
 					logger.warn("No calendar for such year ({})!", getYearByDate(curDay));
@@ -395,7 +436,9 @@ public class WorkCalendarBean implements IWorkCalendar {
 	}
 
 	private int getYearByDate(Date date) {
-		return Integer.parseInt(yearParser.format(date));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
 	}
 
 	private NodeRef getScheduleOrParentSchedule(NodeRef node) {
@@ -426,6 +469,22 @@ public class WorkCalendarBean implements IWorkCalendar {
 	private Boolean isEmployeePresent(Date day, List<NodeRef> employeeAbsences) {
 		Boolean result;
 		Boolean isWorking = WCalendarService.isWorkingDay(day);
+
+		if (isWorking == null) {
+			result = null;
+		} else {
+			if (isWorking) {
+				result = !absenceService.isEmployeeAbsent(day, employeeAbsences);
+			} else {
+				result = false;
+			}
+		}
+		return result;
+	}
+
+	private Boolean isEmployeePresent(Date day, List<NodeRef> employeeAbsences, List<NodeRef> allWorkingDaysByYear, List<NodeRef> allNonWorkingDaysByYear) {
+		Boolean result;
+		Boolean isWorking = WCalendarService.isWorkingDay(day, allWorkingDaysByYear, allNonWorkingDaysByYear);
 
 		if (isWorking == null) {
 			result = null;

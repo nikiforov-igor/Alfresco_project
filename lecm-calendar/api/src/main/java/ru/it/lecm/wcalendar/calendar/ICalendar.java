@@ -1,10 +1,11 @@
 package ru.it.lecm.wcalendar.calendar;
 
-import java.util.Date;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -74,7 +75,9 @@ public interface ICalendar extends ICommonWCalendar {
 	 */
 	void addBusinessJournalRecord(NodeRef node, String category);
 
-	/**
+    Boolean isWorkingDay(Date day, List<NodeRef> allWorkingDaysByYear, List<NodeRef> allNonWorkingDaysByYear);
+
+    /**
 	 * Получить NodeRef объекта типа "календарь" по году.
 	 *
 	 * @param year интересующий год
