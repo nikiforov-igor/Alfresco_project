@@ -84,7 +84,7 @@
 									<table cellspacing="0" width="100%">
 										<tr class="diagramm-row">
 										<#list result[employee] as day>
-											<#assign curMonthStr = "y" + curYear + "m" + curMonth?string>
+											<#assign curMonthStr = "y" + curYear + "m" + curMonth?string("00")>
 											<td <#if day>class="colored-td"</#if>>&nbsp;</td>
 											<#if (day_index == (calendarHeader[curMonthStr]?size + prevMonthSize - 1)) >
 												<#assign curMonth = curMonth + 1>
