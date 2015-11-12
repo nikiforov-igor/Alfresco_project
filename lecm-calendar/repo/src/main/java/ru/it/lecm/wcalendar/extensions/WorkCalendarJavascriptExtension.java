@@ -1,17 +1,18 @@
 package ru.it.lecm.wcalendar.extensions;
 
+import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.json.JSONArray;
+import org.mozilla.javascript.Context;
+import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.wcalendar.IWorkCalendar;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
-import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.json.JSONArray;
-import org.springframework.extensions.webscripts.WebScriptException;
-import ru.it.lecm.wcalendar.IWorkCalendar;
-import org.mozilla.javascript.Context;
 
 /**
  * JavaScript root-object под названием "workCalendar". Предоставляет доступ к
@@ -20,7 +21,7 @@ import org.mozilla.javascript.Context;
  * @see ru.it.lecm.wcalendar.IWorkCalendar
  * @author vlevin
  */
-public class WorkCalendarJavascriptExtension extends BaseScopableProcessorExtension {
+public class WorkCalendarJavascriptExtension  extends BaseWebScript {
 
 	private IWorkCalendar workCalendarService;
 	private DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");

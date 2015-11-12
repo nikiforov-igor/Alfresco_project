@@ -1,10 +1,5 @@
 package ru.it.lecm.wcalendar.beans;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
@@ -18,6 +13,12 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -91,10 +92,11 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 
-		if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
-			Date curDay = new Date(start.getTime());
-			while (!curDay.after(end)) {
-				Boolean isPresent = isEmployeePresent(curDay, node);
+        List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
+        if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
+            Date curDay = new Date(start.getTime());
+            while (!curDay.after(end)) {
+                Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee);
 
 				if (isPresent != null && isPresent) {
 					result.add(curDay);
@@ -113,7 +115,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 				Date curElementDay = new Date(elementStart.getTime());
 				while (!curElementDay.after(elementEnd)) {
 					if (!curElementDay.before(start) && !curElementDay.after(end)) {
-						if (!absenceService.isEmployeeAbsent(node, curElementDay)) {
+						if (!absenceService.isEmployeeAbsent(curElementDay, absenceByEmployee)) {
 							result.add(curElementDay);
 						}
 					}
@@ -141,11 +143,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 		List<NodeRef> scheduleElements = scheduleService.getScheduleElements(schedule);
 
 		Date curDay = new Date(start.getTime());
+        List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
 		while (!curDay.after(end)) {
 			boolean toBeAdded = true;
 
 			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
-				Boolean isPresent = isEmployeePresent(curDay, node);
+				Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee);
 
 				if (isPresent != null && isPresent) {
 					toBeAdded = false;
@@ -198,9 +201,10 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 		Date curDay = new Date(start.getTime());
+        List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
 		while (i < workingDaysRequired) {
 			if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
-				Boolean isPresent = isEmployeePresent(curDay, node);
+				Boolean isPresent = isEmployeePresent(curDay, absenceByEmployee);
 
 				if (isPresent != null && isPresent) {
 					i++;
@@ -412,6 +416,22 @@ public class WorkCalendarBean implements IWorkCalendar {
 		} else {
 			if (isWorking) {
 				result = !absenceService.isEmployeeAbsent(node, day);
+			} else {
+				result = false;
+			}
+		}
+		return result;
+	}
+
+	private Boolean isEmployeePresent(Date day, List<NodeRef> employeeAbsences) {
+		Boolean result;
+		Boolean isWorking = WCalendarService.isWorkingDay(day);
+
+		if (isWorking == null) {
+			result = null;
+		} else {
+			if (isWorking) {
+				result = !absenceService.isEmployeeAbsent(day, employeeAbsences);
 			} else {
 				result = false;
 			}

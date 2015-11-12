@@ -1,10 +1,11 @@
 package ru.it.lecm.wcalendar.absence;
 
-import java.util.Date;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -97,7 +98,18 @@ public interface IAbsence extends ICommonWCalendar {
 	 */
 	boolean isEmployeeAbsent(NodeRef node, Date date);
 
-	/**
+    /**
+     * Проверить, отсутствует ли сотрудник в указанный день.
+     * Метод нужен для пакетной обработки данных по сотрудникам
+     *
+     * @param date интересующая нас дата отсутствия
+     * @param employeeAbsences предварительно полученный список отсутствий сотрудника
+     * @return true - сотрудник отсутствует в указанный день. false - сотрудник
+     * не планировал отсутствия.
+     */
+    boolean isEmployeeAbsent(Date date, List<NodeRef> employeeAbsences);
+
+    /**
 	 * Проверить, отсутствует ли сегодня указанный сотрудник.
 	 *
 	 * @param node NodeRef на объект типа employee

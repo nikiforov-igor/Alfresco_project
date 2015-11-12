@@ -1,6 +1,6 @@
 package ru.it.lecm.wcalendar.absence.beans;
 
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
@@ -17,8 +18,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import ru.it.lecm.wcalendar.CalendarCategory;
 
 /**
  *
@@ -123,10 +122,15 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 
 	@Override
 	public boolean isEmployeeAbsent(NodeRef nodeRef, Date date) {
-		boolean result = false;
 		List<NodeRef> employeeAbsence = getAbsenceByEmployee(nodeRef);
-		if (employeeAbsence != null && !employeeAbsence.isEmpty()) {
-			for (NodeRef absence : employeeAbsence) {
+		return isEmployeeAbsent(date, employeeAbsence);
+	}
+
+	@Override
+	public boolean isEmployeeAbsent(Date date, List<NodeRef> employeeAbsences) {
+		boolean result = false;
+		if (employeeAbsences != null && !employeeAbsences.isEmpty()) {
+			for (NodeRef absence : employeeAbsences) {
 				Date absenceBegin = getAbsenceStartDate(absence);
 				Date absenceEnd = getAbsenceEndDate(absence);
 				if (!date.before(absenceBegin) && !date.after(absenceEnd)) {
