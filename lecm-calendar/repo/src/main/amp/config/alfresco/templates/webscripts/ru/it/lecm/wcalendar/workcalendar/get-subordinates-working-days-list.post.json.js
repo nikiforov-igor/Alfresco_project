@@ -34,23 +34,21 @@
 
 function getEmployeesWorkingDaysList(employees, startDate, endDate) {
 	var result = {};
-	for (var i = 0; i < employees.length; i++) {
-		logger.log(employees[i].nodeRef);
+    var workingDaysList;
+    try {
+        workingDaysList = workCalendar.getEmployeesWorkingDaysMap(employees, startDate, endDate);
+    for (var i = 0; i < employees.length; i++) {
 		var employeeName = employees[i].properties["name"];
-		var workingDaysList;
-		try {
-			workingDaysList = workCalendar.getEmployeeWorkindDays(employees[i], startDate, endDate);
-		} catch (err) {
-			logger.log(err);
-			continue;
-		}
 		result[employeeName] = [];
-		for (var j = 0; j < workingDaysList.length(); j++) {
-			logger.log("Date - " + workingDaysList.get(j));
-			logger.log("toISO - " + DateToISO8601(new Date(workingDaysList.get(j).getTime())));
-			result[employeeName].push(DateToISO8601(new Date(workingDaysList.get(j).getTime())));
+        var daysList = workingDaysList.get(employees[i].nodeRef);
+        for (var j = 0; j < daysList.length(); j++) {
+			result[employeeName].push(DateToISO8601(new Date(daysList.get(j).getTime())));
 		}
 	}
+    } catch (err) {
+        logger.log(err);
+    }
+
 	return result;
 }
 

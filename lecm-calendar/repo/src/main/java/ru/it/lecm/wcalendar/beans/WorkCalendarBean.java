@@ -77,6 +77,12 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 	@Override
 	public List<Date> getEmployeeWorkindDays(NodeRef node, Date start, Date end) {
+        Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
+        Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
+        return getEmployeeWorkindDays(node, start, end, allWorkingDaysByYearMap, allNonWorkingDaysByYearMap);
+    }
+
+	private List<Date> getEmployeeWorkindDays(NodeRef node, Date start, Date end, Map<Integer, List<NodeRef>> allWorkingDaysByYearMap, Map<Integer, List<NodeRef>> allNonWorkingDaysByYearMap) {
 		List<Date> result = new ArrayList<Date>();
 
 		if (!orgstructureService.isEmployee(node)) {
@@ -90,9 +96,6 @@ public class WorkCalendarBean implements IWorkCalendar {
 		String scheduleType = scheduleService.getScheduleType(schedule);
 
         List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
-
-        Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
-        Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
         if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
             Date curDay = new Date(start.getTime());
             while (!curDay.after(end)) {
@@ -138,7 +141,18 @@ public class WorkCalendarBean implements IWorkCalendar {
 		return result;
 	}
 
-	@Override
+    @Override
+    public Map<NodeRef, List<Date>> getEmployeesWorkingDaysMap(List<NodeRef> employeesRefs, Date start, Date end) {
+        Map<NodeRef, List<Date>> result = new LinkedHashMap<>(employeesRefs.size());
+        Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
+        Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
+        for (NodeRef employeesRef : employeesRefs) {
+            result.put(employeesRef, getEmployeeWorkindDays(employeesRef, start, end, allWorkingDaysByYearMap, allNonWorkingDaysByYearMap));
+        }
+        return result;
+    }
+
+    @Override
 	public List<Date> getEmployeeNonWorkindDays(NodeRef node, Date start, Date end) {
 		List<Date> result = new ArrayList<Date>();
 

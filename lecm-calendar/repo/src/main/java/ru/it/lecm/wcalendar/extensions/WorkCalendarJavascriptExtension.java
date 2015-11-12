@@ -3,7 +3,10 @@ package ru.it.lecm.wcalendar.extensions;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -13,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * JavaScript root-object под названием "workCalendar". Предоставляет доступ к
@@ -196,6 +200,31 @@ public class WorkCalendarJavascriptExtension  extends BaseWebScript {
 		end = (Date) Context.jsToJava(jsEnd, Date.class);
 
 		return getEmployeeWorkindDays(nodeRef.getNodeRef(), start, end);
+	}
+
+	/**
+	 * Получить список рабочих дней сотрудника в указанный период времени.
+	 *
+	 * @param nodeRef NodeRef на сотрудника.
+	 * @param jsStart начало периода в виде JS-объекта Date.
+	 * @param jsEnd конец периода в виде JS-объекта Date.
+	 * @return JSON-массив дат рабочих дней сотрудника.
+	 * @see ru.it.lecm.wcalendar.IWorkCalendar
+	 */
+	public JSONObject getEmployeesWorkingDaysMap(final Scriptable employeesRefs, final Object jsStart, final Object jsEnd) {
+		Date start, end;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+		end = (Date) Context.jsToJava(jsEnd, Date.class);
+        List<NodeRef> employees = getNodeRefsFromScriptableCollection(employeesRefs);
+        Map<NodeRef, List<Date>> employeesWorkindDaysMap = workCalendarService.getEmployeesWorkingDaysMap(employees, start, end);
+        JSONObject result = new JSONObject();
+        for (Map.Entry<NodeRef, List<Date>> listEntry : employeesWorkindDaysMap.entrySet()) {
+            try {
+                result.put(listEntry.getKey().toString(), listEntry.getValue());
+            } catch (JSONException ignored) {}
+        }
+        return result;
 	}
 
 	private JSONArray getEmployeeWorkindDays(NodeRef node, Date start, Date end) {

@@ -1,8 +1,10 @@
 package ru.it.lecm.wcalendar;
 
+import org.alfresco.service.cmr.repository.NodeRef;
+
 import java.util.Date;
 import java.util.List;
-import org.alfresco.service.cmr.repository.NodeRef;
+import java.util.Map;
 
 /**
  * API для получения информации о рабочих и выходных днях сотрудника.
@@ -53,6 +55,8 @@ public interface IWorkCalendar {
 	 * @return список дат рабочих дней сотрудника.
 	 */
 	List<Date> getEmployeeWorkindDays(NodeRef node, Date start, Date end);
+
+    Map<NodeRef,List<Date>> getEmployeesWorkingDaysMap(List<NodeRef> employeesRefs, Date start, Date end);
 
 	/**
 	 * Получить список выходных дней сотрудника в указанный период времени.
