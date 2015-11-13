@@ -2,6 +2,7 @@ package ru.it.lecm.wcalendar.absence;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 
 import java.util.Date;
@@ -203,7 +204,9 @@ public interface IAbsence extends ICommonWCalendar {
 	 */
 	NodeRef getContainer();
 
-	/**
+    List<Pair<Date, Date>> getAbsencesDatesByEmployee(NodeRef node);
+
+    /**
 	 * Получить дату (и время), на которую назначено начало отсутствия.
 	 *
 	 * @param node NodeRef на объект типа absence.

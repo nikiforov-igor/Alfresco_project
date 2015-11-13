@@ -3,6 +3,7 @@ package ru.it.lecm.wcalendar.absence.beans;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -220,6 +221,17 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 	public NodeRef getContainer() {
 		return this.getWCalendarContainer();
 	}
+
+    @Override
+    public List<Pair<Date, Date>> getAbsencesDatesByEmployee(NodeRef node) {
+        List<NodeRef> absenceByEmployee = getAbsenceByEmployee(node);
+        List<Pair<Date, Date>> result = new ArrayList<>();
+        for (NodeRef absenceRef : absenceByEmployee) {
+            result.add(new Pair<>((Date) nodeService.getProperty(absenceRef, PROP_ABSENCE_BEGIN),
+                    (Date) nodeService.getProperty(absenceRef, PROP_ABSENCE_END)));
+        }
+        return result;
+    }
 
 	@Override
 	public Date getAbsenceStartDate(NodeRef node) {

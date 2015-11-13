@@ -2,6 +2,7 @@ package ru.it.lecm.wcalendar.beans;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.DateTime;
@@ -95,7 +96,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 
-        List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
+        List<Pair<Date, Date>> absenceByEmployee = absenceService.getAbsencesDatesByEmployee(node);
         if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
             Date curDay = new Date(start.getTime());
             while (!curDay.after(end)) {
@@ -129,7 +130,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 				Date curElementDay = new Date(elementStart.getTime());
 				while (!curElementDay.after(elementEnd)) {
 					if (!curElementDay.before(start) && !curElementDay.after(end)) {
-						if (!absenceService.isEmployeeAbsent(curElementDay, absenceByEmployee)) {
+						if (!isEmployeeAbsent(curElementDay, absenceByEmployee)) {
 							result.add(curElementDay);
 						}
 					}
@@ -140,6 +141,8 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 		return result;
 	}
+
+
 
     @Override
     public Map<NodeRef, List<Date>> getEmployeesWorkingDaysMap(List<NodeRef> employeesRefs, Date start, Date end) {
@@ -168,7 +171,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		List<NodeRef> scheduleElements = scheduleService.getScheduleElements(schedule);
 
 		Date curDay = new Date(start.getTime());
-        List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
+        List<Pair<Date, Date>> absenceByEmployee = absenceService.getAbsencesDatesByEmployee(node);
         Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
         Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
 
@@ -241,7 +244,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		}
 		String scheduleType = scheduleService.getScheduleType(schedule);
 		Date curDay = new Date(start.getTime());
-        List<NodeRef> absenceByEmployee = absenceService.getAbsenceByEmployee(node);
+        List<Pair<Date, Date>> absenceByEmployee = absenceService.getAbsencesDatesByEmployee(node);
         Map<Integer, List<NodeRef>> allWorkingDaysByYearMap = new HashMap<>(2);
         Map<Integer, List<NodeRef>>  allNonWorkingDaysByYearMap = new HashMap<>(2);
 
@@ -480,23 +483,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 		return result;
 	}
 
-	private Boolean isEmployeePresent(Date day, List<NodeRef> employeeAbsences) {
-		Boolean result;
-		Boolean isWorking = WCalendarService.isWorkingDay(day);
-
-		if (isWorking == null) {
-			result = null;
-		} else {
-			if (isWorking) {
-				result = !absenceService.isEmployeeAbsent(day, employeeAbsences);
-			} else {
-				result = false;
-			}
-		}
-		return result;
-	}
-
-	private Boolean isEmployeePresent(Date day, List<NodeRef> employeeAbsences, List<NodeRef> allWorkingDaysByYear, List<NodeRef> allNonWorkingDaysByYear) {
+	private Boolean isEmployeePresent(Date day, List<Pair<Date, Date>> employeeAbsences, List<NodeRef> allWorkingDaysByYear, List<NodeRef> allNonWorkingDaysByYear) {
 		Boolean result;
 		Boolean isWorking = WCalendarService.isWorkingDay(day, allWorkingDaysByYear, allNonWorkingDaysByYear);
 
@@ -504,13 +491,26 @@ public class WorkCalendarBean implements IWorkCalendar {
 			result = null;
 		} else {
 			if (isWorking) {
-				result = !absenceService.isEmployeeAbsent(day, employeeAbsences);
+				result = !isEmployeeAbsent(day, employeeAbsences);
 			} else {
 				result = false;
 			}
 		}
 		return result;
 	}
+
+    private boolean isEmployeeAbsent(Date date, List<org.alfresco.util.Pair<Date, Date>> employeeAbsences) {
+        boolean result = false;
+        if (employeeAbsences != null && !employeeAbsences.isEmpty()) {
+            for (org.alfresco.util.Pair<Date, Date> absence : employeeAbsences) {
+                if (!date.before(absence.getFirst()) && !date.after(absence.getSecond())) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 
 	@Override
 	public Date getEmployeeNextWorkingDay(NodeRef node, Date initialDate, int offset) {
