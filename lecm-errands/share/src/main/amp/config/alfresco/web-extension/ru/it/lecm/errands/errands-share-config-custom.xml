@@ -482,6 +482,7 @@
 
                     <field id="lecm-errands:executor-assoc">
                         <control>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="allowedNodesScript">lecm/errands/getAvailableEmployeesForChildErrand?parentDoc={parentDoc}</control-param>
                             <control-param name="param_parentDoc">parentDoc</control-param>
@@ -533,9 +534,12 @@
                     </field>
                     <field id="lecm-errands:controller-assoc" set="collapsable-inner"/>
 	                <field id="lecm-errands:coexecutors-assoc" set="collapsable-inner">
-		                <control>
-			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
-		                </control>
+                        <control>
+                            <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+                            <control-param name="allowedNodesScript">lecm/errands/getAvailableEmployeesForChildErrand?parentDoc={parentDoc}</control-param>
+                            <control-param name="param_parentDoc">parentDoc</control-param>
+                        </control>
 	                </field>
 					<field id="lecm-errands:start-date" set="collapsable-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">

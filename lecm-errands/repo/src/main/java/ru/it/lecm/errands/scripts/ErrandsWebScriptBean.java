@@ -4,7 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -15,7 +14,10 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.alfresco.util.ParameterCheck;
-import org.mozilla.javascript.*;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeArray;
+import org.mozilla.javascript.NativeJavaObject;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -450,6 +452,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getAvailableEmployeesForChildErrand(String parent) {
+        if (errandsService.getModeChoosingExecutors() == ErrandsService.ModeChoosingExecutors.ORGANIZATION) {
+            return getAvailableExecutors();
+        }
         if (NodeRef.isNodeRef(parent)) {
             NodeRef parentRef = new NodeRef(parent);
             QName type = nodeService.getType(parentRef);

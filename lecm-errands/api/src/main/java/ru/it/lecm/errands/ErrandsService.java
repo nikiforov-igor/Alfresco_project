@@ -250,6 +250,8 @@ public interface ErrandsService {
      */
     public void setExecutionReport(NodeRef errandRef, String report);
 
+    ModeChoosingExecutors getModeChoosingExecutors();
+
     /**
      * Получение глобальной настройки "Передавать права на документ-основание"
      *
@@ -260,4 +262,9 @@ public interface ErrandsService {
     public NodeRef getExecutor(NodeRef errand);
 
     public NodeRef getBaseDocument(NodeRef errand);
+
+    enum ModeChoosingExecutors {
+        ORGANIZATION,
+        UNIT
+    }
 }

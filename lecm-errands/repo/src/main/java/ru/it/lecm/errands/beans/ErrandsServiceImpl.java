@@ -41,11 +41,6 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     final protected Logger logger = LoggerFactory.getLogger(ErrandsServiceImpl.class);
 
 
-    private static enum ModeChoosingExecutors {
-        ORGANIZATION,
-        UNIT
-    }
-
     private static enum FilterEnum {
         ALL,
         ACTIVE,
@@ -183,6 +178,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return settingsRef;
     }
 
+    @Override
     public ModeChoosingExecutors getModeChoosingExecutors() {
         NodeRef settings = getSettingsNode();
         if (settings != null) {

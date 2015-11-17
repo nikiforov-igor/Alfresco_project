@@ -59,6 +59,25 @@
     <#assign useDeferedReinit = true>
 </#if>
 
+<#assign allowedScript = ""/>
+<#if (field.control.params.allowedNodesScript?? && field.control.params.allowedNodesScript != "")>
+    <#assign allowedScript = field.control.params.allowedNodesScript/>
+    <#if (allowedScript?index_of("?") > 0)>
+        <#assign res = allowedScript?matches("(\\{\\w+\\})")/>
+        <#list res as m>
+            <#assign paramName = "${m?replace('{','')?replace('}','')}"/>
+            <#if field.control.params["param_" + "${paramName}"]??>
+                <#assign paramCode = field.control.params["param_" + "${paramName}"]/>
+                <#if form.arguments[paramCode]??>
+                    <#assign allowedScript = allowedScript?replace(m, form.arguments[paramCode])/>
+                <#else>
+                    <#assign allowedScript = ""/>
+                </#if>
+            </#if>
+        </#list>
+    </#if>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -192,6 +211,9 @@
 			<#if params.treeIgnoreNodesScript??>
 				treeIgnoreNodesScript: "${params.treeIgnoreNodesScript}",
 			</#if>
+            <#if (allowedScript?? && allowedScript != "")>
+                allowedNodesScript: "${allowedScript}",
+            </#if>
 				showCreateNewLink: ${showCreateNewLink?string},
 				showCreateNewButton: ${showCreateNewButton?string},
 			<#if params.createNewMessage??>
