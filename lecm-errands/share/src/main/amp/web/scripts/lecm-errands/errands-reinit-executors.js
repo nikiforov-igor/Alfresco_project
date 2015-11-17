@@ -19,6 +19,9 @@
 			LogicECM.module.Base.Util.reInitializeControl(obj.formId, 'lecm-errands:executor-assoc', {
 				childrenDataSource: url
 			});
+            LogicECM.module.Base.Util.reInitializeControl(obj.formId, 'lecm-errands:coexecutors-assoc', {
+				childrenDataSource: url
+			});
 		}
 
 	}

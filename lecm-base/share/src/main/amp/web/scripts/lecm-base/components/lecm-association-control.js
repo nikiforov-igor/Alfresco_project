@@ -2413,7 +2413,10 @@ LogicECM.module = LogicECM.module || {};
 					if (options != null) {
 						this.setOptions(options);
 					}
-
+                    if (this.controlAutoComplete) {
+                        var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node/children";
+                        this.controlAutoComplete.dataSource.liveData = url;
+                    }
 					this.selectedItems = {};
 					this.addItemButtons = {};
 					this.searchProperties = {};
