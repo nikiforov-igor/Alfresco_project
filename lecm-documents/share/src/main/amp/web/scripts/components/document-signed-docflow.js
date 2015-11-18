@@ -90,11 +90,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								unauthorized = responses.filter(function(v) { return v.gateResponse.responseType == "UNAUTHORIZED"; });
 
 							function hideAndReload() {
-								loadingPopup.destroy();
+								loadingPopup.destroyWithAnimationsStop();
 								window.location.reload();
 							}
 
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 
 							console.log(">>> Всего отправлено документов: " + responses.length);
 							console.log("Документов, со статусом \"ОК\": " + good.length);
@@ -153,7 +153,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					},
 					failureCallback: {
 						fn: function() {
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 							Alfresco.util.PopupManager.displayMessage({
 								text: this.msg("msg.documents_send_failed")
 							});

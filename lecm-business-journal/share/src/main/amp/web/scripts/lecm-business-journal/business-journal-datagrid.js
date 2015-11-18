@@ -256,7 +256,7 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
                     if (loadingMessage) {
                         if (this.loadingMessageShowing) {
                             // Safe to destroy
-                            loadingMessage.destroy();
+                            loadingMessage.destroyWithAnimationsStop();
                             loadingMessage = null;
                         }
                         else {

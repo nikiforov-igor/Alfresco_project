@@ -588,7 +588,7 @@ function checkForApplet() {
 							var status = response.json.gateResponse.responseType,
 								cb = (options) ? options.successCallback : null;
 
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 
 							if (status === 'OK') {
 
@@ -598,17 +598,17 @@ function checkForApplet() {
 
 							} else {
 								loadingPopup = Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.auth.failed')});
-								YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
+								YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroyWithAnimationsStop);
 							}
 						}
 					},
 					failureCallback: {
 						scope: this,
 						fn: function () {
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 
 							loadingPopup = Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.auth.failed')});
-							YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroy);
+							YAHOO.lang.later(2500, loadingPopup, loadingPopup.destroyWithAnimationsStop);
 						}
 					}
 

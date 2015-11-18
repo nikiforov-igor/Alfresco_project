@@ -731,7 +731,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 		},
 
 		_hideSplash: function() {
-			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroyWithAnimationsStop);
 		}
 
 	});

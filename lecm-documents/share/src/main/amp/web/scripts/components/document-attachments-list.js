@@ -545,7 +545,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         if (this.loadingMessageShowing)
                         {
                             // Safe to destroy
-                            loadingMessage.destroy();
+                            loadingMessage.destroyWithAnimationsStop();
                             loadingMessage = null;
                         }
                         else

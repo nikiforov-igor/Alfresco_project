@@ -210,11 +210,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								unauthorized = responses.filter(function(v) { return v.gateResponse.responseType == "UNAUTHORIZED"; });
 
 							function hideAndReload() {
-								loadingPopup.destroy();
+								loadingPopup.destroyWithAnimationsStop();
 								window.location.reload();
 							}
 
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 
 							console.log(">>> Всего отправлено документов: " + responses.length);
 							console.log("Документов, со статусом \"ОК\": " + good.length);
@@ -273,7 +273,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					},
 					failureCallback: {
 						fn: function() {
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 							Alfresco.util.PopupManager.displayMessage({
 								text: this.msg("msg.documents_send_failed")
 							});
@@ -331,11 +331,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								result = response.json;
 
 							function hideAndReload() {
-								loadingPopup.destroy();
+								loadingPopup.destroyWithAnimationsStop();
 //								window.location.reload();
 							}
 
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 
 							// Выходим, если всё хорошо
 							if(result.gateResponse.responseType == "OK") {
@@ -407,7 +407,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					},
 					failureCallback: {
 						fn: function() {
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 							Alfresco.util.PopupManager.displayMessage({
 								text: this.msg("msg.get_signs_failed")
 							});

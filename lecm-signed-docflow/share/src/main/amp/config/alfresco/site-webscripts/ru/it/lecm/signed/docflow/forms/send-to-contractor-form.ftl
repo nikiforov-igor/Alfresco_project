@@ -93,11 +93,11 @@
 								unauthorized = responses.filter(function(v) { return v.gateResponse.responseType == "UNAUTHORIZED"; });
 
 							function hideAndReload() {
-								loadingPopup.destroy();
+								loadingPopup.destroyWithAnimationsStop();
 								window.location.reload();
 							}
 
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 
 							console.log(">>> ${msg('lecm.signdoc.msg.doc.sent.total')}: " + responses.length);
 							console.log("${msg('lecm.signdoc.msg.docs.with.status')} \"ОК\": " + good.length);
@@ -156,7 +156,7 @@
 					},
 					failureCallback: {
 						fn: function() {
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 							Alfresco.util.PopupManager.displayMessage({
 								text: "${msg('lecm.signdoc.msg.doc.send.failed')}"
 							});

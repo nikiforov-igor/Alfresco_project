@@ -790,7 +790,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             {
                 if (this.busy)
                 {
-                    this.widgets.busyMessage.destroy();
+                    this.widgets.busyMessage.destroyWithAnimationsStop();
                     this.busy = false;
                     return true;
                 }

@@ -649,7 +649,7 @@ LogicECM.module = LogicECM.module || {};
 			});
 		},
 		_hideSplash: function() {
-			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroyWithAnimationsStop);
 		},
 
 		_openMessageWindow: function openMessageWindowFunction(title, message, reload) {

@@ -3314,7 +3314,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                     // Please wait pop-up active?
                     if (obj.popup) {
-                        obj.popup.destroy();
+                        obj.popup.destroyWithAnimationsStop();
                     }
                     // Message?
                     if (obj.message) {

@@ -167,10 +167,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								result = response.json;
 
 							function hideAndReload() {
-								loadingPopup.destroy();
+								loadingPopup.destroyWithAnimationsStop();
 							}
 
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 
 							// Выходим, если всё хорошо
 							if (result.gateResponse.responseType === "OK") {
@@ -245,7 +245,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					},
 					failureCallback: {
 						fn: function() {
-							loadingPopup.destroy();
+							loadingPopup.destroyWithAnimationsStop();
 							Alfresco.util.PopupManager.displayMessage({
 								text: Alfresco.util.message('lecm.signdoc.msg.get.signs.failed')
 							});

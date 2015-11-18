@@ -204,7 +204,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                         if (loadingMessage) {
                             if (this.loadingMessageShowing) {
                                 // Safe to destroy
-                                loadingMessage.destroy();
+                                loadingMessage.destroyWithAnimationsStop();
                                 loadingMessage = null;
                             }
                             else {
