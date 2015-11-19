@@ -147,10 +147,12 @@ public class XMLExportBeanImpl implements XMLExportBean {
         protected void writeAssoc(AssociationRef assoc, List<String> fieldsForType) throws XMLStreamException {
             QName assocTypeQName = assoc.getTypeQName();
             if (!isExportField(fieldsForType, assocTypeQName)) {
+                log.debug("Assoc is not for export: " + assoc.toString());
                 return; //фильтр по имени ассоциации
             }
             NodeRef targetRef = assoc.getTargetRef();
             if (isArchive(targetRef)) {
+                log.debug("Assoc is archive: " + assoc.toString());
                 return; //не экспортировать архивные
             }
             xmlw.writeStartElement(ExportNamespace.TAG_ASSOC);
@@ -167,11 +169,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
             while (iterator.hasNext()) {
                 Path.Element element = iterator.next();
                 ChildAssociationRef elementRef = ((Path.ChildAssocElement)element).getRef();
-                Serializable nameProp = nodeService.getProperty(elementRef.getChildRef(), ContentModel.PROP_NAME);
-                // use the name property if we are allowed access to it
-                String elementString = nameProp.toString();
-//            elementString = elementRef.getQName().getLocalName();
-                strPath.append("/").append(elementString);
+                strPath.append("/").append(prepareAssocName(elementRef));
             }
             xmlw.writeAttribute(ExportNamespace.ATTR_PATH, strPath.toString());
             xmlw.writeEndElement();
@@ -270,6 +268,21 @@ public class XMLExportBeanImpl implements XMLExportBean {
                 }
             }
             return result;
+        }
+
+        private String prepareAssocName(ChildAssociationRef childAssociationRef) {
+            Serializable nameProp = nodeService.getProperty(childAssociationRef.getChildRef(), ContentModel.PROP_NAME);
+            // use the name property if we are allowed access to it
+            String elementString = nameProp.toString();
+//            elementString = childAssociationRef.getQName().getLocalName();
+
+            QName orgElementNameQName = QName.createQName("http://www.it.ru/lecm/org/structure/1.0", "element-full-name");
+            Serializable orgElementNameProp = nodeService.getProperty(childAssociationRef.getChildRef(), orgElementNameQName);
+            if (orgElementNameProp != null) {
+                elementString = orgElementNameProp.toString();
+            }
+
+            return elementString;
         }
     }
 }

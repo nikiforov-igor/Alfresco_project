@@ -288,12 +288,60 @@ public class XMLImportBeanImpl implements XMLImportBean {
                     String name = t.nextToken();
                     try
                     {
+                        List<ChildAssociationRef> assocList = nodeService.getChildAssocs(result);
                         result = nodeService.getChildByName(result, ContentModel.ASSOC_CONTAINS, name);
+                        logger.debug("getChildByName: " + name + ", result: " + result);
+                        result = checkChildSearch(result, assocList, name);
                     }
                     catch (AccessDeniedException ade)
                     {
                         result = null;
                     }
+                }
+            }
+            logger.debug("getNodeByPath: " + path + ", result: " + result);
+            return result;
+        }
+
+        private NodeRef checkChildSearch(NodeRef checkedChildRef, List<ChildAssociationRef> assocList, String name) {
+            NodeRef result = checkedChildRef;
+            boolean needToSearchAgain = (checkedChildRef == null);
+            QName orgElementNameQName = QName.createQName("http://www.it.ru/lecm/org/structure/1.0", "element-full-name");
+            QName orgElementActiveQName = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
+            if (!needToSearchAgain) {
+                Serializable orgElementNameProp = nodeService.getProperty(checkedChildRef, orgElementNameQName);
+                Serializable orgElementActiveProp = nodeService.getProperty(checkedChildRef, orgElementActiveQName);
+                if (orgElementNameProp != null && orgElementActiveProp != null) {
+                    String orgElementName = orgElementNameProp.toString();
+                    String orgElementActive = orgElementNameProp.toString();
+                    if (!name.equals(orgElementName) || !"true".equalsIgnoreCase(orgElementActive)) {
+                        needToSearchAgain = true;
+                        logger.debug("getChildByName: wrong result for orgElement, real name: " + orgElementName);
+                    }
+                }
+            }
+            if (needToSearchAgain) {
+                boolean isResultCorrect = false;
+                for (ChildAssociationRef assocRef : assocList) {
+                    try {
+                        String childName = nodeService.getProperty(assocRef.getChildRef(), orgElementNameQName).toString();
+                        String childActive = nodeService.getProperty(assocRef.getChildRef(), orgElementActiveQName).toString();
+                        if (name.equals(childName) && "true".equalsIgnoreCase(childActive)) {
+                            result = assocRef.getChildRef();
+                            isResultCorrect = true;
+                        }
+                    } catch (Exception ex) {
+                    }
+                }
+                if (isResultCorrect) {
+                    logger.debug("getChildByName: replace result for orgElement name");
+                } else {
+                    logger.debug("getChildByName: left wrong result, cant find child for orgElement");
+                }
+            }
+            if (result == null) {
+                for (ChildAssociationRef assocRef : assocList) {
+                    logger.debug("Existing assoc child: " + assocRef.getQName() + ", nodeRef: " + assocRef.getChildRef() + ", nodeName: " + nodeService.getProperty(assocRef.getChildRef(), ContentModel.PROP_NAME));
                 }
             }
             return result;
