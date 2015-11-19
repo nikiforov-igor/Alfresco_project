@@ -4,7 +4,7 @@
   Lists all of the events for a user, either on one site, or across all the
   sites that they belong to.
   ]]></description>
-  <url>/lecm/events/user?from={from}&amp;to={to?}&amp;repeating={repeating?}</url>
+  <url>/lecm/events/user?from={from}&amp;to={to?}&amp;repeating={repeating?}&amp;timeZoneOffset={timeZoneOffset?}</url>
   <format default="json">argument</format>
   <authentication>user</authentication>
   <transaction allow="readonly">required</transaction>

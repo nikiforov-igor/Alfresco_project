@@ -3,8 +3,12 @@
 	var to = args['to'];
 	var loadActions = args['loadActions'] == "true";
 	var mode = args['mode'];
+	var timeZoneOffset = null;
+    if (args['timeZoneOffset']) {
+        timeZoneOffset = parseInt(args['timeZoneOffset']);
+    }
 
-	model.events = events.getUserEvents(from + "T00:00:00Z", to + "T23:59:59Z", loadActions, mode);
+	model.events = events.getUserEvents(from + "T00:00:00Z", to + "T23:59:59Z", loadActions, mode, timeZoneOffset);
 	var nonWorkingDays = [];
 	var wCalendarNonWorkingDays = workCalendar.getEmployeeNonWorkindDays(orgstructure.getCurrentEmployee(), utils.fromISO8601(from + "T00:00:00Z"), utils.fromISO8601(to + "T23:59:59Z"));
 	if (wCalendarNonWorkingDays != null) {

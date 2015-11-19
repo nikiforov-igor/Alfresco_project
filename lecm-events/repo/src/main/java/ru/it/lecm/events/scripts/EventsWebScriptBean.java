@@ -10,19 +10,19 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
+import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.events.beans.EventsService;
+import ru.it.lecm.events.mail.incoming.MailReciever;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import org.springframework.extensions.webscripts.WebScriptException;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
-import ru.it.lecm.events.mail.incoming.MailReciever;
 
 /**
  * User: AIvkin
@@ -81,11 +81,19 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode) {
-        List<NodeRef> events = eventService.getEvents(fromDate, toDate, eventService.getAdditionalFilterForCalendarShow());
-        return processEvents(events, loadActions, true, mode);
+        return getUserEvents(fromDate, toDate, loadActions, mode, TimeZone.getDefault().getRawOffset());
     }
 
-    private List<Map<String, Object>> processEvents( List<NodeRef> events, boolean loadActions, boolean excludeDeclined, String mode) {
+    public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode, Integer timeZoneOffset) {
+        List<NodeRef> events = eventService.getEvents(fromDate, toDate, eventService.getAdditionalFilterForCalendarShow());
+        return processEvents(events, loadActions, true, mode, timeZoneOffset);
+    }
+
+    private List<Map<String, Object>> processEvents( List<NodeRef> events, boolean loadActions, boolean excludeDeclined, String mode, Integer timeZoneOffset) {
+        int timeZoneDiff = 0;
+        if (timeZoneOffset != null) {
+            timeZoneDiff = (-timeZoneOffset * 60000) - TimeZone.getDefault().getRawOffset();
+        }
         List<Map<String, Object>> results = new ArrayList<>();
         NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
         String legacyDateFormat = "yyyy-MM-dd";
@@ -103,6 +111,10 @@ public class EventsWebScriptBean extends BaseWebScript {
             boolean isAllDay = (boolean) nodeService.getProperty(entry, EventsService.PROP_EVENT_ALL_DAY);
             Date start = (Date) nodeService.getProperty(entry, EventsService.PROP_EVENT_FROM_DATE);
             Date end = (Date) nodeService.getProperty(entry, EventsService.PROP_EVENT_TO_DATE);
+            if (isAllDay && timeZoneDiff != 0) {
+                start = new Date(start.getTime() + timeZoneDiff);
+                end = new Date(end.getTime() + timeZoneDiff);
+            }
             result.put("start", formatDate(start, isAllDay));
             result.put("startDate", start);
             result.put("end", formatDate(end, isAllDay));
@@ -174,6 +186,10 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> searchUserEvents(String filter) {
+        return searchUserEvents(filter, null);
+    }
+
+    public List<Map<String, Object>> searchUserEvents(String filter, Integer timeZoneOffset) {
         List<NodeRef> events;
         if (filter.length() > 0) {
             events = eventService.searchEvents(filter + eventService.getAdditionalFilterForCalendarShow());
@@ -181,7 +197,7 @@ public class EventsWebScriptBean extends BaseWebScript {
             events = new ArrayList<>();
         }
 
-        return processEvents(events, false, true, null);
+        return processEvents(events, false, true, null, timeZoneOffset);
     }
 
     public Scriptable getUserNearestEvents(int maxItems) {

@@ -270,7 +270,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					url: Alfresco.constants.PROXY_URI + "lecm/events/search",
 					dataObj: {
 						searchTerm: searchData,
-						extSearchData: extSearchData
+						extSearchData: extSearchData,
+                        timeZoneOffset: encodeURIComponent(new Date().getTimezoneOffset())
 					},
 					//filter out non relevant events for current view
 					successCallback: {

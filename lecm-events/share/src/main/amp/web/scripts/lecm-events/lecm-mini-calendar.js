@@ -166,7 +166,8 @@ LogicECM.module = LogicECM.module || {};
 						{
 							from: toISO8601(fromDate).split('T')[0],
 							to: toISO8601(toDate).split('T')[0],
-                            mode: "mini"
+                            mode: "mini",
+                            timeZoneOffset: encodeURIComponent(new Date().getTimezoneOffset())
 						},
 						//filter out non relevant events for current view
 						successCallback:

@@ -212,7 +212,7 @@
                        eventSources:
                            [
                               {
-                                 url: Alfresco.constants.PROXY_URI + "lecm/events/user?repeating=all&mode=full",
+                                 url: Alfresco.constants.PROXY_URI + "lecm/events/user?repeating=all&mode=full&timeZoneOffset=" + encodeURIComponent(new Date().getTimezoneOffset()),
                                  startParam: "from",
                                  startParamFn: function(rangeStart)
                                  {

@@ -132,7 +132,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                        from: toISO8601(this.options.startDate).split('T')[0],
                        to: toISO8601(this.options.endDate).split('T')[0],
                        repeating: "all",
-                       loadActions: this.options.loadActions
+                       loadActions: this.options.loadActions,
+                       timeZoneOffset: encodeURIComponent(new Date().getTimezoneOffset())
                     },
                     //filter out non relevant events for current view
                     successCallback:

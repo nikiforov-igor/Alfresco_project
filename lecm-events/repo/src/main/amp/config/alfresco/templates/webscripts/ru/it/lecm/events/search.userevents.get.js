@@ -1,6 +1,10 @@
 (function() {
 	var searchTerm = args['searchTerm'];
 	var extSearchData = args["extSearchData"];
+    var timeZoneOffset = null;
+    if (args['timeZoneOffset']) {
+        timeZoneOffset = parseInt(args['timeZoneOffset']);
+    }
 
 	var query = "";
 	if (searchTerm.length > 0) {
@@ -16,7 +20,7 @@
 		}
 	}
 
-	model.events = events.searchUserEvents(query);
+	model.events = events.searchUserEvents(query, timeZoneOffset);
 }());
 
 function getFilterParams(filterData)
