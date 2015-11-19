@@ -235,6 +235,7 @@
 						<value>lecm-os:nomenclature-unit-section-comment</value>
 						<value>lecm-os:nomenclature-unit-section-index</value>
 						<value>lecm-os:nomenclature-unit-section-status</value>
+						<value>lecm-os:nomenclature-unit-section-unit-assoc</value>
 					</list>
 				</entry>
 				<entry key="lecm-os:nomenclature-case">
