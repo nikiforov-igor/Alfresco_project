@@ -224,7 +224,6 @@
                 <value>alfresco/module/documents-repo/dictionaries/lecm-connection-types.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-connection-available-types.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-subjects.xml</value>
-	            <value>alfresco/module/documents-repo/dictionaries/lecm-file-register.xml</value>
 	            <value>alfresco/module/documents-repo/dictionaries/lecm-delivery-method.xml</value>
 	            <value>alfresco/module/documents-repo/dictionaries/lecm-document-type.xml</value>
 			    <value>alfresco/module/documents-repo/dictionaries/lecm-file-register-objectType-items.xml</value>
