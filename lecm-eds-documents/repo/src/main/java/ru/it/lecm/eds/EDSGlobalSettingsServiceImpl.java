@@ -136,8 +136,9 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 			this.potentialRolesMap.get(businessRoleRef.toString()) :
 			new HashMap<String, NodeRef>();
 
-		if (orgElementRoles.containsKey(orgElementRef.toString())) {
-			updatePotentialRole(orgElementRoles.get(orgElementRef.toString()), employeesRefs);
+        NodeRef potentialRoleRef = orgElementRoles.get(orgElementRef.toString());
+        if (potentialRoleRef != null && nodeService.exists(potentialRoleRef)) {
+            updatePotentialRole(potentialRoleRef, employeesRefs);
 		} else {
 			createPotentialRole(businessRoleRef, orgElementRef, employeesRefs);
 		}
