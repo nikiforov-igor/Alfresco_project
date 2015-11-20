@@ -47,8 +47,7 @@
 		<value>alfresco/module/${artifactId}/dictionaries/os-objectType-items.xml</value>
 	</util:list>
 
-	<util:list id="operative.storeage.groupOperations">
-		<value>alfresco/module/${artifactId}/actions/annul-document.xml</value>
+	<util:list id="operative.storage.groupOperations">
 		<value>alfresco/module/${artifactId}/actions/delete-draft-document.xml</value>
 		<value>alfresco/module/${artifactId}/actions/delete-units.xml</value>
 		<value>alfresco/module/${artifactId}/actions/copy-units.xml</value>
@@ -64,7 +63,6 @@
 		<value>alfresco/module/${artifactId}/actions/archive-nd.xml</value>
 		<value>alfresco/module/${artifactId}/actions/close-year-section.xml</value>
 		<value>alfresco/module/${artifactId}/actions/delete-nd.xml</value>
-		<value>alfresco/module/${artifactId}/actions/refuse-to-registration.xml</value>
 		<value>alfresco/module/${artifactId}/actions/move-doc-to-case.xml</value>
 		<value>alfresco/module/${artifactId}/actions/recreate-nomenclature.xml</value>
 	</util:list>
@@ -191,7 +189,7 @@
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
-		  p:dictionaries-ref="operative.storeage.groupOperations"/>
+		  p:dictionaries-ref="operative.storage.groupOperations"/>
 
 	<bean parent="ServiceFolderPermissionHelper" depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap"
 		  p:serviceBean-ref="lecmOperativeStorageService"
