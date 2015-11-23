@@ -182,14 +182,17 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                     }
 
                     //Удаляем аспект у контрагента при удалении подразделения
-                    if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                    NodeRef parent = nodeService.getPrimaryParent(nodeRef).getParentRef();
+                    if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)
+                            && parent != null
+                            && !nodeService.hasAspect(parent, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
                         NodeRef contractor = orgstructureService.getOrganization(nodeRef);
                         if (contractor != null && nodeService.hasAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
                             nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION);
                         }
                     }
                     // оповещение securityService по Департаменту ...
-                    notifyDeleteOU(nodeRef, nodeService.getPrimaryParent(nodeRef).getParentRef());
+                    notifyDeleteOU(nodeRef, parent);
                 } else {
                     // отслеживаем короткое название для SG-обозначений
                     final Object oldValue = before.get(PolicyUtils.PROP_ORGELEMENT_NAME);
