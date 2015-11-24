@@ -2912,6 +2912,34 @@ if (document != null) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>981e1edc-c0d4-4b3d-a4d9-b18e74c1206f</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/5b5e16ca-e059-46c8-9e4c-b66dbc24bd04
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var initiator = null;
+var initiatorAssoc = stm_document.assocs["lecm-errands:initiator-assoc"];
+if (initiatorAssoc !== null && initiatorAssoc.length == 1) {
+	initiator = initiatorAssoc[0];
+  if (initiator !== null) {
+    lecmPermission.grantDynamicRole(stm_document, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
+  }
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Выдача права инициатору]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
