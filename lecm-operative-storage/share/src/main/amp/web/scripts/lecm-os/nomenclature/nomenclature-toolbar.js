@@ -28,7 +28,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 		importErrorDialog: null,
 		nodeChildren: null,
 		allowedNodeChildrenActions: ['Уничтожение номенклатурного дела', 'Передача номенклатурного дела в архив'],
-
+        serviceRoot: null,
 		options: {
 			armSelectedNodeRef: null,
 			isRoot: false
@@ -45,9 +45,6 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				{
 					disabled: this.options.searchButtonsType != 'defaultActive'
 				});
-			this.importFromSubmitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML, {
-				disabled: true
-			});
 
 			this.toolbarButtons["defaultActive"].groupActionsButton = new YAHOO.widget.Button(
 				this.id + "-groupActionsButton",
@@ -1034,15 +1031,38 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			}
 		},
 		showImportDialog: function() {
+            if (!this.importFromSubmitButton) {
+                this.importFromSubmitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML, {
+                    disabled: true
+                });
+            }
 			Dom.get(this.id + "-import-form-chbx-ignore").checked = false;
 			Dom.get(this.id + "-import-form-import-file").value = "";
 			Dom.removeClass(this.importFromDialog.id, "hidden1");
-			this.importFromDialog.show();
+            if (this.serviceRoot == null) {
+                Alfresco.util.Ajax.request({
+                    url: Alfresco.constants.PROXY_URI + 'lecm/operative-storage/serviceRoot',
+                    successCallback: {
+                        scope: this,
+                        fn: function(response) {
+                            var oResults = JSON.parse(response.serverResponse.responseText);
+
+                            if (oResults && oResults.nodeRef) {
+                                this.serviceRoot = oResults.nodeRef;
+                                this.importFromDialog.show();
+                            }
+                        }
+                    },
+                    failureMessage: 'message.failure'
+                });
+            } else {
+                this.importFromDialog.show();
+            }
 		},
 		onImportXML: function() {
 			var me = this;
 			YAHOO.util.Connect.setForm(this.id + '-import-xml-form', true);
-			var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import?nodeRef=" + this.node.nodeRef;
+			var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import?nodeRef=" + this.serviceRoot;
 			var callback = {
 				upload: function(oResponse) {
 					var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);
