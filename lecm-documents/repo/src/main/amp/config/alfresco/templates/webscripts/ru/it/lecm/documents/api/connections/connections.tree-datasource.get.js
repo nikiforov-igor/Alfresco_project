@@ -10,7 +10,13 @@ var isFirstLayer = 'true' == args['isFirstLayer'];
 var filters = args['filters'] != null ? args['filters'].split(",") : [];
 var substituteTitle = args['substituteTitle'] != null ? args['substituteTitle'] : "{lecm-document:ext-present-string}";
 
+var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : false;
+
 var items = [];
+
+var document = search.findNode(documentNodeRef);
+var excludeErrands = document != null && document.isSubType("lecm-eds-document:base") && exclude;
+
 if (isFirstLayer) {
     items = [];
     var properties = documentScript.getProperties(documentNodeRef);
@@ -45,7 +51,8 @@ if (isFirstLayer) {
             if (connection.assocs["lecm-connect:primary-document-assoc"]) {
                 if (!previosDocRef || connection.assocs["lecm-connect:primary-document-assoc"][0].nodeRef != previosDocRef) {
                     if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
-                            && checkConnectionType(connection, connectionTypes)) {
+                        && checkConnectionType(connection, connectionTypes)
+                        && (!excludeErrands || !connection.assocs["lecm-connect:connected-document-assoc"][0].isSubType("lecm-errands:document"))) {
                         var skipped = false;
                         for (var j = 0; j < filters.length; j++) {
                             skipped = !applyFilter(connection.assocs["lecm-connect:connected-document-assoc"][0], filters[j]);
@@ -73,7 +80,8 @@ if (isFirstLayer) {
             if (connection.assocs["lecm-connect:connected-document-assoc"]) {
                 if (!previosDocRef || connection.assocs["lecm-connect:connected-document-assoc"][0].nodeRef != previosDocRef) {
                     if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
-                            && checkConnectionType(connection, connectionTypes)) {
+                        && checkConnectionType(connection, connectionTypes)
+                        && (!excludeErrands || !connection.assocs["lecm-connect:connected-document-assoc"][0].isSubType("lecm-errands:document"))) {
                         if (filters != null) {
                             var skipped = false;
                             for (var j = 0; j < filters.length; j++) {
@@ -162,11 +170,11 @@ function evaluateItem(item, substituteTitle, isParent) {
             var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
             var primaryDocAssocs = document.sourceAssocs["lecm-connect:primary-document-assoc"];
             var connectedDocAssocs = document.sourceAssocs["lecm-connect:connected-document-assoc"];
-            
+
             var numberOfChildErrands = childErrands === null ? 0 : childErrands.length;
             var numberOfPrimaryDocAssocs = primaryDocAssocs === null ? 0 : primaryDocAssocs.length;
             var numberOfConnectedDocAssocs = connectedDocAssocs === null ? 0 : connectedDocAssocs.length;
-            
+
             itemObj.numberOfChildErrands = numberOfChildErrands;
             itemObj.numberOfChildElements = numberOfChildErrands  + numberOfPrimaryDocAssocs + numberOfConnectedDocAssocs;
 

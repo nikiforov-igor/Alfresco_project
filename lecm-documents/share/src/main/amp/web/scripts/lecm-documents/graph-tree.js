@@ -78,8 +78,9 @@ YAHOO.Bubbling.on("graphContainerReady", function (layer, args) {
                         liner_el.innerHTML = '<div class="yui-inner-div" id="' + t_id + '"></div>';
                         var p_id = 'pag-' + nodeRef;
                         //var pag = Dom.insertAfter('<div id='+p_id+'></div>');
-                        var f_url = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/tree-datasource?documentNodeRef=" + nodeRef + "&isErrandCard=" + args[1].isErrandCard +
-                                ((oData.data._oData.previosDocRef) ? "&previosDocRef=" + oData.data._oData.previosDocRef : "");
+                        var f_url = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/tree-datasource?documentNodeRef=" + nodeRef + "&isErrandCard=" + args[1].isErrandCard
+                            + "&exclErrands=true"
+                            + ((oData.data._oData.previosDocRef) ? "&previosDocRef=" + oData.data._oData.previosDocRef : "");
                         YAHOO.util.Event.onContentReady(t_id, function () {
                             layerbylayer(f_url, t_id, p_id)
                         }, true);
@@ -156,7 +157,7 @@ YAHOO.Bubbling.on("graphContainerReady", function (layer, args) {
     } else {
         foler_url = Alfresco.constants.PROXY_URI + "/lecm/document/connections/api/tree-datasource?documentNodeRef=" + documentRef +
                 "&isErrandCard=" + args[1].isErrandCard +
-                "&isFirstLayer=" + isFirstLayer;
+                "&isFirstLayer=" + isFirstLayer + "&exclErrands=true";
     }
 
 
