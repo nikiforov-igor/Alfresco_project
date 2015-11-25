@@ -49,8 +49,8 @@
 	function drawDatagrid(layer, args) {
 		var bubblingLabel = '${datagridBubblingLabel}';
 		if (bubblingLabel == args[1].datagrid.options.bubblingLabel) {
-			args[1].datagrid.draw();
-			Bubbling.unsubscribe(layer, drawDatagrid);
+            Bubbling.unsubscribe(layer, drawDatagrid);
+            args[1].datagrid.draw();
 		}
 	}
 })();

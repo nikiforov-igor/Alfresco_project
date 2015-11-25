@@ -302,7 +302,6 @@
 			<form-layout localName="В одну колонку" template=""/>
 			<form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
 			<form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-			<form-layout localName="С предпросмотром" template="/ru/it/lecm/base-share/components/form-with-preview.ftl" />
 		</forms-info>
 
 	</config>
