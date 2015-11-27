@@ -133,6 +133,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 		},
 
 		onBeforeFormRuntimeInit: function(layer, args) {
+            YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
 			this.runtimeForm = args[1].runtime;
 			var submitElement = this.runtimeForm.submitElements[0];
 			var originalSubmitFunction = submitElement.submitForm;

@@ -169,7 +169,7 @@ LogicECM.module = LogicECM.module || {};
                 treeControl.setOptions({
                     selectedValue: null
                 });
-                if (selectedContractor != null) {
+                if (selectedContractor != null && treeConf) {
                     treeControl.setOptions(treeConf);
                     treeControl.init();
                 }
