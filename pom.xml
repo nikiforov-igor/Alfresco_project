@@ -537,6 +537,11 @@
                             <nonFilteredFileExtension>xls</nonFilteredFileExtension>
                             <nonFilteredFileExtension>war</nonFilteredFileExtension>
                             <nonFilteredFileExtension>ear</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>otf</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>svg</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>woff</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>
