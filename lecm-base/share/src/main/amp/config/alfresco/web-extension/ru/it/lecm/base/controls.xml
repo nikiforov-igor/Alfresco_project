@@ -36,7 +36,7 @@
 					<param id="selectedItemsNameSubstituteString" visible="true" localName="Шаблон выбраных элементов"></param>
 					<param id="changeItemsFireAction" visible="true" localName="Событие при изменении элемента"></param>
 				</control>
-				<control id="cm:object-assoc-select-one-control" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl" localName="Выбор ассоциаций из ыпадающего списка">
+				<control id="cm:object-assoc-select-one-control" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl" localName="Выбор ассоциаций из выпадающего списка">
 					<param id="startLocation" localName="Начальная директория" mandatory="true" visible="true"></param>
 					<param id="nameSubstituteString" localName="Шаблон имени" mandatory="false" visible="true"></param>
 					<param id="showCreateNewButton" localName="Показывать кнопку создания нового" mandatory="false" visible="true"></param>
