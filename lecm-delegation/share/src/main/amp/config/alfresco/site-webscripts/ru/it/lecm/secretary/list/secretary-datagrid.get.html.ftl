@@ -22,7 +22,15 @@
 				label: '${msg("label.secretary.canReceiveTasks")}',
 				evaluator:function (rowData) {
 					var itemData = rowData.itemData['assoc_lecm-secretary-aspects_can-receive-tasks-from-chiefs'];
-					return !(itemData && itemData.length && itemData[0].value);
+                    var nowCant = true;
+					if (itemData != null) {
+                        for (var i = 0; i < itemData.length; i++) {
+							if ("${nodeRef}" == itemData[i].value) {
+								nowCant = false;
+							}
+                        }
+                    }
+					return nowCant;
 				}
 			}
 		]
@@ -45,14 +53,14 @@
 				if ('assoc_lecm-secretary-aspects_can-receive-tasks-from-chiefs' == oColumn.key && grid.datagridColumns[oColumn.key]) {
 					for (var i = 0, ii = oData.length, data; i < ii; i++) {
 						data = oData[i];
-						if (data.value) {
+                        if (grid.datagridMeta.nodeRef == data.value) {
 							html += '<div class="centered">';
 							html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + Alfresco.util.encodeHTML(data.displayValue) + '" title="' + Alfresco.util.encodeHTML(data.displayValue) + '" />';
 							html += '</div>';
 						}
-						if (i < ii - 1) {
-							html += '<br />';
-						}
+					}
+					if (html.length == 0) {
+                        html += '<br />';
 					}
 				}
 			}
