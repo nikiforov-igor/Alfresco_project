@@ -1114,7 +1114,9 @@
 					<field id="lecm-meetings-ts:holding-item-name" set="parent"/>
 					<field id="lecm-meetings-ts:holding-start-time" set="parent"/>
 					<field id="lecm-meetings-ts:holding-listen" set="parent">
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
 					</field>
 					<field id="lecm-meetings-ts:holding-speak" set="parent">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -1122,7 +1124,9 @@
 						</control>
 					</field>
 					<field id="lecm-meetings-ts:holding-agreed" set="parent">
-						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
 					</field>
 				</appearance>
 			</form>
