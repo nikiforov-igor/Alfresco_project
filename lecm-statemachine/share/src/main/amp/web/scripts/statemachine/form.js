@@ -390,7 +390,11 @@ LogicECM.module = LogicECM.module || {};
 												var item = json.forCollection ? json : json.items[0];
 												var message;
 												if (item.redirect) {
-													LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + item.redirect);
+                                                    if (item.postRedirect) {
+                                                        LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + item.redirect);
+                                                    } else {
+                                                        window.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+                                                    }
 												} else if (item.openWindow) {
 													window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
 												} else if (!item.withErrors){

@@ -69,6 +69,7 @@ if (draftRootFolder != null) {
   }
 
   model.redirect = 'document?nodeRef=' + protocol.nodeRef;
+  model.postRedirect = false;
 }]]></property>
     </item>
 </items>

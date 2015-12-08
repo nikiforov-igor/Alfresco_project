@@ -65,6 +65,7 @@
   }
 
   model.redirect = 'meeting-holding?nodeRef=' + document.nodeRef;
+  model.postRedirect = false;
 }]]></property>
     </item>
 </items>

@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
 import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.actions.bean.GroupActionsServiceImpl;
-import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.ByteArrayInputStream;
@@ -120,6 +119,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                     result.put("withErrors", true);
                 }
                 result.put("redirect", returnModel.get("redirect"));
+                result.put("postRedirect", returnModel.get("postRedirect"));
                 result.put("openWindow", returnModel.get("openWindow"));
             } else {
                 result.put("forCollection", false);
@@ -146,6 +146,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                             }
 
 							itemResult.put("redirect", returnModel.get("redirect"));
+							itemResult.put("postRedirect", returnModel.get("postRedirect"));
 							itemResult.put("openWindow", returnModel.get("openWindow"));
 							itemsResult.add(itemResult);
 						}
