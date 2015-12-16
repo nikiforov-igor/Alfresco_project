@@ -2155,8 +2155,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         List<WorkflowTask> assignedTasks = workflowService.getAssignedTasks(fullyAuthenticatedUser, WorkflowTaskState.IN_PROGRESS);
         result.addAll(assignedTasks);
 
-        List<WorkflowTask> pooledTasks = workflowService.getPooledTasks(fullyAuthenticatedUser);
-        result.addAll(pooledTasks);
+        // ALF-4934, FMSSE-336
+        // List<WorkflowTask> pooledTasks = workflowService.getPooledTasks(fullyAuthenticatedUser);
+        // result.addAll(pooledTasks);
 
         return result;
 	}
