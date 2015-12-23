@@ -41,22 +41,20 @@ public class MultiplySortObject implements Comparable {
                 return (sortDir1 ? 1 : -1);
             }
 
-            int comp;
+            int comp = 0;
             try {
                 comp = value1.compareTo(value2);
             } catch (ClassCastException cEx) {
-                logger.error(cEx.getMessage(), cEx);
-                comp = -1; //TODO
+                logger.debug("ClassCastException: " + cEx.getMessage() + ", value1: " + value1 + ", value2: " + value2);
+                comp = value1.toString().compareTo(value2.toString());
             }
 
-            if (comp == 0) { // первые значения равны - переходим к следующим
-                continue;
-            }
-
-            if (sortDir1) {
-                return comp;
-            } else {
-                return -comp;
+            if (comp != 0) {
+                if (sortDir1) {
+                    return comp;
+                } else {
+                    return -comp;
+                }
             }
         }
         return 0;
@@ -76,27 +74,18 @@ public class MultiplySortObject implements Comparable {
     public boolean equals(Object aThat) {
         if (this == aThat) return true;
         if (!(aThat instanceof MultiplySortObject)) return false;
+        return (compareTo(aThat) == 0);
+    }
 
-        MultiplySortObject that = (MultiplySortObject) aThat;
-
+    @Override
+    public String toString() {
+        String result = super.toString() + ", Values: {";
         for (int i = 0; i < this.columnValues.size(); i++) {
-            Object valueThis = this.columnValues.get(i);
-            //boolean sortDirThis = this.sortDirs.get(i);
-
-            Object valueThat = null;
-            //boolean sortDirThat = false;
-            try {
-                valueThat = that.columnValues.get(i);
-                //sortDirThat = that.sortDirs.get(i);
-            } catch (IndexOutOfBoundsException ignored) {
-            }
-            if (!valueThis.equals(valueThat)) {
-                return false;
-            }
-                /*if (!(sortDirThis == sortDirThat)){
-                    return false;
-                }*/
+            Comparable value1 = this.columnValues.get(i);
+            boolean sortDir1 = this.sortDirs.get(i);
+            result += "{" + value1 + "," + sortDir1 + "}";
         }
-        return true;
+        result += "}";
+        return result;
     }
 }
