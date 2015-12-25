@@ -7,10 +7,12 @@
 		   "fullName": "${authority.fullName}",
 		   "displayName": "${authority.displayName}",
 		   <#if authority.authorityType = "GROUP">
-		   "url": "/api/groups/${authority.shortName?url}"
+           <#--"url": "/api/groups/${authority.shortName?url}"-->
+		   "url": "/api/groups/${authority.shortName?url?replace("%25","%2525")}"
 		   </#if>
 		   <#if authority.authorityType = "USER">
-		   "url": "/api/people/${authority.shortName?url}"
+		   <#--"url": "/api/people/${authority.shortName?url}"-->
+		   "url": "/api/people/${authority.shortName?url?replace("%25","%2525")}"
 		   </#if>
            <#if authority.zones?exists>
            ,"zones":
