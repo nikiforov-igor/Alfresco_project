@@ -42,6 +42,7 @@
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="endpointType">lecm-orgstr:employee</control-param>
 							<control-param name="useDeferedReinit">true</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 						</control>
 					</field>
 					<field id="complete-deputy-values-script">
