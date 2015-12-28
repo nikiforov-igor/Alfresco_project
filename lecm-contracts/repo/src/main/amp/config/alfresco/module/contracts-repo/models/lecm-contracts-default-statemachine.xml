@@ -1696,7 +1696,7 @@ var curators =  orgstructure.getEmployeesByBusinessRoleId("CONTRACT_CURATOR", tr
 var notificationText = "Зарегистрирован проект договора c ";
 var partnerAssocs = contract.assocs["lecm-contract:partner-assoc"];
 if (partnerAssocs != null && partnerAssocs.length == 1) {
-	notificationText += documentScript.wrapperLink(partnerAssocs[0], "{lecm-contract:partner-assoc/cm:name}");
+	notificationText += documentScript.wrapperLink(partnerAssocs[0], "{lecm-contract:partner-assoc/lecm-contractor:shortname}");
 }
 
 notificationText += ", вид договора {lecm-contract:typeContract-assoc/cm:name}";
