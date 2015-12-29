@@ -80,7 +80,11 @@
                         /* Получатель */
                         formData = "{\"lecm-internal:recipients-assoc\":\"" + document.assocs["lecm-document:author-assoc"][0].nodeRef.toString() + "\",";
                         /* Тематика */
-                        formData += "\"lecm-document:subject-assoc\":\"" + document.assocs["lecm-document:subject-assoc"][0].nodeRef.toString() + "\",";
+                        formData += "\"lecm-document:subject-assoc\":\"";
+                        if (document.assocs["lecm-document:subject-assoc"] != null && document.assocs["lecm-document:subject-assoc"].length > 0) {
+                            formData += document.assocs["lecm-document:subject-assoc"][0].nodeRef.toString();
+                        }
+                        formData += "\",";
                         /* Связь */
                         formData += "\"lecm-document-aspects:response-to-assoc\":\"" + document.nodeRef.toString() + "\",";
                         /* Инициатора добавляем в участники */
