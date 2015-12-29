@@ -8,7 +8,7 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
 (function() {
 
     LogicECM.module.Documents.Reports.openReport = function (actionUrl, params) {
-        var newWindow = window.open(Alfresco.constants.URL_PAGECONTEXT + "lecm/arm/blank", "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+        var newWindow = window.open(Alfresco.constants.URL_PAGECONTEXT + "lecm/arm/blank", "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no,resizable=yes");
         var loadReport = function () {
             var newDocument = newWindow.document;
             if (newDocument.URL !== "" && newDocument && newDocument.body) {
