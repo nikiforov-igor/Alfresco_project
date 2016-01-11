@@ -1498,7 +1498,7 @@
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[@lecm\-statemachine\:status:'Закрыт']]></property>
+                                            <![CDATA[@lecm\-statemachine\:status:'Отправлен' OR @lecm\-statemachine\:status:'Не отправлен']]></property>
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                     </item>
                                     <item name="cm:Черновики" type="lecm-arm:node">
@@ -1733,6 +1733,17 @@
                                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                         <property name="lecm-arm:search-query">
                                             <![CDATA[@lecm\-statemachine\:status:'Направлен']]></property>
+                                        <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                                    </item>
+                                    <item name="cm:Работа завершена" type="lecm-arm:node">
+                                        <property name="cm:name"><![CDATA[Работа завершена]]></property>
+                                        <property name="lecm-arm:order"><![CDATA[40]]></property>
+                                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                                        <property name="lecm-arm:counter-description"><![CDATA[]]></property>
+                                        <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+                                        <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+                                        <property name="lecm-arm:search-query">
+                                            <![CDATA[@lecm\-statemachine\:status:'Закрыт']]></property>
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                     </item>
                                     <item name="cm:Корзина" type="lecm-arm:node">
