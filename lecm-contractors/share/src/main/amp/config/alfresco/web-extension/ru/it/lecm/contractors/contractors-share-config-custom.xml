@@ -113,7 +113,7 @@
                     <!-- Факс -->
                     <field id="lecm-contractor:email" set="contacts"/>
                     <!-- E-mail -->
-                    <field id="lecm-contractor:contractor-code" set="contacts" mandatory="true"/>
+                    <field id="lecm-contractor:contractor-code" set="contacts"/>
                     <!-- Код контрагента -->
                     <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
                            mandatory="true">            <!-- FK Специализация -->
@@ -348,7 +348,7 @@
                     <!-- Факс -->
                     <field id="lecm-contractor:email" set="contacts"/>
                     <!-- E-mail -->
-                    <field id="lecm-contractor:contractor-code" set="contacts" mandatory="true"/>
+                    <field id="lecm-contractor:contractor-code" set="contacts"/>
                     <!-- Код контрагента -->
                     <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
                            mandatory="true">
@@ -522,7 +522,7 @@
                     <!-- Факс -->
                     <field id="lecm-contractor:email" set="contacts"/>
                     <!-- E-mail -->
-                    <field id="lecm-contractor:contractor-code" set="contacts" mandatory="true"/>
+                    <field id="lecm-contractor:contractor-code" set="contacts"/>
                     <!-- Код контрагента -->
                     <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
                            mandatory="true">
