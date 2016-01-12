@@ -221,7 +221,7 @@
                     <field id="lecm-document:present-string" label="Название"/>
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                         </control>
                     </field>
                 </appearance>

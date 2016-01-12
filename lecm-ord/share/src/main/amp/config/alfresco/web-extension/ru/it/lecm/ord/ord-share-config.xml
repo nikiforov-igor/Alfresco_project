@@ -218,7 +218,7 @@
                 <appearance>
                     <field id="lecm-eds-document:document-type-assoc">
                         <control>
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
                         </control>
                     </field>
                     <field id="lecmSignAspects:signingDate">
