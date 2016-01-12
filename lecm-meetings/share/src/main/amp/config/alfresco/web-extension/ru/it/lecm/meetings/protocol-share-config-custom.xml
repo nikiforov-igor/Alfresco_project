@@ -70,7 +70,7 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-					<field id="lecm-document:subject-assoc" mandatory="true" set="common"/>
+					<field id="lecm-document:subject-assoc" set="common"/>
 					<field id="lecm-eds-document:file-register-assoc" set="common"/>
 					<field id="lecm-protocol:errands-autocreation" set="common"/>
 
@@ -201,7 +201,7 @@
                             <control-param name="rows">4</control-param>
                         </control>
 					</field>
-					<field id="lecm-document:subject-assoc" mandatory="true"/>
+					<field id="lecm-document:subject-assoc"/>
 					<field id="lecm-eds-document:file-register-assoc"/>
 					<field id="lecm-protocol:errands-autocreation"/>
 

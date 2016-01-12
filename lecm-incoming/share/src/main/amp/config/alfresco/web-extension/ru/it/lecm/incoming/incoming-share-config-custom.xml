@@ -118,7 +118,7 @@
 		            <field id="lecm-document-aspects:is-on-control"/>
 
 		            <field id="lecm-eds-document:file-register-assoc"/>
-		            <field id="lecm-document:subject-assoc" mandatory="true"/>
+		            <field id="lecm-document:subject-assoc"/>
 
 		            <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
@@ -370,7 +370,7 @@
 		            <field id="lecm-eds-document:summaryContent">
 			            <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 		            </field>
-		            <field id="lecm-document:subject-assoc" mandatory="true"/>
+		            <field id="lecm-document:subject-assoc"/>
 		            <field id="lecm-eds-document:file-register-assoc"/>
 		            <field id="lecm-eds-document:note">
 			            <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>

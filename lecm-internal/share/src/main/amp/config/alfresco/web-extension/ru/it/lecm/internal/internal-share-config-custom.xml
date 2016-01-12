@@ -139,7 +139,7 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document:subject-assoc" mandatory="true" set="common"/>
+                    <field id="lecm-document:subject-assoc" set="common"/>
 
                     <field id="lecm-eds-document:file-register-assoc" set="common"/>
 
@@ -460,7 +460,7 @@
                             <control-param name="selectedItemsFormArgs">lecm-document-aspects:response-to-assoc</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc" mandatory="true">
+                    <field id="lecm-document:subject-assoc">
                         <control>
                             <control-param name="selectedItemsFormArgs">lecm-document:subject-assoc</control-param>
                         </control>
