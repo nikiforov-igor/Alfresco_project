@@ -184,20 +184,21 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
-		List<QName> changedProps = getAffectedProperties(before, after);
-		if (!changedProps.isEmpty() && document != null) { // обновляем только автора и изменившего ноду
-			for (QName changedProp : changedProps) {
-				QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName());
-				QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
-				NodeRef employeeRef = orgstructureService.getCurrentEmployee();
-				if (null != employeeRef) {
-                                    //TODO DONE замена нескольких setProperty на setProperties. 
-                                        Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
-					properties.put(propName, substituteService.getObjectDescription(employeeRef));
-					properties.put(propRef, employeeRef.toString());
-                                        nodeService.setProperties(nodeRef, properties);
-				}
+		Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+		boolean hasChanges = false;
+		for (QName changedProp : AFFECTED_PROPERTIES) {
+			QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName());
+			QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
+			NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+			if (null != employeeRef) {
+				properties.put(propName, substituteService.getObjectDescription(employeeRef));
+				properties.put(propRef, employeeRef.toString());
+				hasChanges = true;
 			}
+		}
+		//TODO DONE замена нескольких setProperty на setProperties.
+		if (hasChanges) {
+			nodeService.setProperties(nodeRef, properties);
 		}
 
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
@@ -215,17 +216,17 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		}
 	}
 
-	private List<QName> getAffectedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		List<QName> result = new ArrayList<QName>();
-		for (QName affected : AFFECTED_PROPERTIES) {
-			Object prev = before.get(affected);
-			Object cur = after.get(affected);
-			if (cur != null && !cur.equals(prev)) {
-				result.add(affected);
-			}
-		}
-		return result;
-	}
+//	private List<QName> getAffectedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
+//		List<QName> result = new ArrayList<QName>();
+//		for (QName affected : AFFECTED_PROPERTIES) {
+//			Object prev = before.get(affected);
+//			Object cur = after.get(affected);
+//			if (cur != null && !cur.equals(prev)) {
+//				result.add(affected);
+//			}
+//		}
+//		return result;
+//	}
 
 	private boolean hasChange(Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		if (before.size() != after.size()) {
@@ -315,7 +316,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 	public void beforeDeleteNode(NodeRef nodeRef) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
-           
+
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
 			onDeleteAttachment(nodeRef, document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
 		}
@@ -337,9 +338,9 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		boolean hasDeletePermission =  this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_CONTENT_DELETE, document);
 		if (!hasDeletePermission) {
 			hasDeletePermission = isOwnNode(attachment) && this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_OWN_CONTENT_DELETE, document);
-		}                
+		}
 
-                
+
 		if (hasDeletePermission) {
 			this.stateMachineService.checkReadOnlyCategory(document, categoryName);
 		} else {
