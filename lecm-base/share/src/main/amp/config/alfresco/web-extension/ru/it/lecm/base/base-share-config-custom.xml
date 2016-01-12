@@ -148,32 +148,53 @@
 			<form>
 				<appearance>
 					<field id="cm:name">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
 					</field>
 					<field id="cm:description">
-						<control template="/org/alfresco/components/form/controls/textarea.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
 					</field>
 					<field id="cm:author">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
 					</field>
 					<field id="cm:owner">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
 					</field>
 				</appearance>
 			</form>
+			<!-- Document Library pop-up Edit Metadata form -->
 			<form id="doclib-simple-metadata">
 				<appearance>
 					<field id="cm:name">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
 					</field>
 					<field id="cm:description">
-						<control template="/org/alfresco/components/form/controls/textarea.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
 					</field>
 					<field id="cm:author">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
 					</field>
 					<field id="cm:owner">
-						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+				</appearance>
+			</form>
+			<!-- Document Library Inline Edit form -->
+			<form id="doclib-inline-edit">
+				<appearance>
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
 					</field>
 				</appearance>
 			</form>
@@ -209,8 +230,51 @@
 		</forms>
 	</config>
 
+	<!-- cm:content type (creating nodes) -->
 	<config evaluator="model-type" condition="cm:content">
 		<forms>
+			<!-- Default Create Content form -->
+			<form>
+				<appearance>
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
+					</field>
+				</appearance>
+			</form>
+			 <!-- Document Library Create Google Doc form -->
+			<form id="doclib-create-googledoc">
+				<appearance>
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
+					</field>
+				</appearance>
+			</form>
+			<!-- Search form -->
+			<form id="search">
+				<appearance>
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
+					</field>
+				</appearance>
+			</form>
 			<form id="file-navigator">
 				<field-visibility>
 					<show id="cm:name"/>
@@ -225,4 +289,60 @@
 			</form>
 		</forms>
 	</config>
+
+	<!-- cm:folder type (existing nodes) -->
+	<config evaluator="node-type" condition="cm:folder">
+		<forms>
+			<!-- Default form configuration for the cm:folder type -->
+			<form>
+				<appearance>
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
+					</field>
+				</appearance>
+			</form>
+
+			<!-- Document Library pop-up Edit Metadata form -->
+			<form id="doclib-simple-metadata">
+				<appearance>
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<!-- cm:folder type (creating nodes) -->
+	<config evaluator="model-type" condition="cm:folder">
+		<forms>
+			<!-- Document Library Common form -->
+			<form id="doclib-common">
+				<appearance>
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:title">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl" />
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 </alfresco-config>
