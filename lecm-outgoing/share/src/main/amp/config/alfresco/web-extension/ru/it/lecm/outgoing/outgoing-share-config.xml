@@ -47,6 +47,7 @@
 					<field id="lecm-outgoing:contractor-assoc" set="common"/>
 					<field id="lecm-outgoing:recipient-assoc" set="common">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -140,6 +141,7 @@
                 <appearance>
                     <field id="lecm-outgoing:recipient-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -188,6 +190,7 @@
 					</field>
                     <field id="lecm-outgoing:recipient-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -266,6 +269,7 @@
 					<field id="lecm-outgoing:contractor-assoc"/>
 					<field id="lecm-outgoing:recipient-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -396,6 +400,7 @@
                     </field>
 					<field id="lecm-outgoing:recipient-assoc">
 						<control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+							<control-param name="showAssocViewForm">true</control-param>
 							<control-param name="updateOnContractorSelect">contractor.selected</control-param>
 							<control-param name="updateOnOrganizationSelect">organization.selected</control-param>
 							<!-- autocomplete options-->

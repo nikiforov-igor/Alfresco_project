@@ -641,13 +641,16 @@ LogicECM.module = LogicECM.module || {};
 
                 var num = 0;
                 for (var i in this.selectedItems) {
-	                if (this.options.itemType == "lecm-orgstr:employee") {
-		                el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, this.selectedItems[i].name));
-	                } else {
-		                el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(this.selectedItems[i].name));
-	                }
+                    if (this.options.itemType == "lecm-orgstr:employee") {
+                        el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, this.selectedItems[i].name));
+                    } else {
+                        if (this.options.showAssocViewForm) {
+                            el.innerHTML += Util.getCroppedItem(Util.getControlValueView(this.selectedItems[i].nodeRef, this.selectedItems[i].name, this.selectedItems[i].name));
+                        } else {
+                            el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(this.selectedItems[i].name));
+                        }
+                    }
                 }
-
             },
 
             // Updates all form fields
