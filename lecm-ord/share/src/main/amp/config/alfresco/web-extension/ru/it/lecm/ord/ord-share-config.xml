@@ -431,11 +431,13 @@
                     <field id="lecm-ord-table-structure:execution-date" set="item2">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
-							<control-param name="dateFormatString">lecm.date-format.defaultDateOnly</control-param>
+                            <control-param name="dateFormatString">lecm.date-format.defaultDateOnly</control-param>
                         </control>
                     </field>
-                    <field id="lecm-ord-table-structure:execution-date-real" set="item2">
-                        <control template="/org/alfresco/components/form/controls/info.ftl"/>
+                    <field id="lecm-ord-table-structure:execution-date-real" set="item2" read-only="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="dateFormatString">lecm.date-format.defaultDateOnly</control-param>
+                        </control>
                     </field>
                     <field id="lecm-ord-table-structure:item-comment" set="item3">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
