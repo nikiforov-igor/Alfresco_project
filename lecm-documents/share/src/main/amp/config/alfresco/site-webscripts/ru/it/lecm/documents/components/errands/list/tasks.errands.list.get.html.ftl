@@ -28,10 +28,16 @@
 
 <script>
 (function() {
-   
+
     var Dom = YAHOO.util.Dom;
-    
-    
+
+    function hideButton() {
+        if(location.hash != "#expanded") {
+            YAHOO.util.Dom.setStyle(this, 'display', 'none');
+        }
+    }
+    YAHOO.util.Event.onAvailable("${id}-action-collapse", hideButton);
+
     function init() {
         var viewButtonGroup = new YAHOO.widget.ButtonGroup("${id}_myErrandsList-view-mode-button-group");
         var buttons = viewButtonGroup.getButtons()
@@ -39,11 +45,11 @@
             buttons[i].addListener("click", viewChanged, this, true);
         }
     }
-        
+
     function viewChanged(event) {
         var graphTreeContainer = Dom.get("${id}-errands-graph-tree");
         var errandsContainer = Dom.get("${id}-listContainer");
-            
+
         if (event.currentTarget.id === "${id}-view-mode-radiofield-links") {
             graphTreeContainer.style.display = "none";
             errandsContainer.style.display = "block";
@@ -52,18 +58,14 @@
             graphTreeContainer.style.display = "block";
         }
     }
-        
-    YAHOO.util.Event.onAvailable("${id}_myErrandsList-view-mode-button-group", init);
-    
-})();    
-    
-</script>
 
-<script type="text/javascript">
+    YAHOO.util.Event.onAvailable("${id}_myErrandsList-view-mode-button-group", init);
+
     YAHOO.util.Event.onContentReady("${id}-errands-graph-tree", function() {
         YAHOO.Bubbling.fire("graphContainerReady", {
             isErrandCard: true,
             onlyDirect: true
         });
-});
+    });
+})();
 </script>
