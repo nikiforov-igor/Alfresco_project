@@ -273,6 +273,7 @@
                     <field id="lecm-errands:executor-assoc">
                         <control>
 	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+							<control-param name="showSearch">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important">
