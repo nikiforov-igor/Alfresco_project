@@ -8,8 +8,11 @@ package ru.it.lecm.operativestorage.policies;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.alfresco.repo.node.NodeServicePolicies.OnAddAspectPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateChildAssociationPolicy;
@@ -66,7 +69,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 
 		policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
 				new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
+		
 		policyComponent.bindClassBehaviour(OnUpdatePropertiesPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
 				new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
@@ -84,6 +87,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 
 		policyComponent.bindAssociationBehaviour(OnCreateChildAssociationPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_UNIT_SECTION,
 				new JavaBehaviour(this, "onCreateChildAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		
 	}
 
 	@Override
@@ -105,6 +109,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 					}
 				}
 
+				checkAndActualizeDates(nodeRef, yearSection);
 				operativeStorageService.createDocsFolder(nodeRef);
 				operativeStorageService.createReferencesFolder(nodeRef);
 				return null;
@@ -123,6 +128,23 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 		return null;
 	}
 
+	private void checkAndActualizeDates(NodeRef nodeRef, NodeRef yearSection) {
+		Date nomenclatureCaseCreationDate = (Date) nodeService.getProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CREATION_DATE);
+		int nomenclatureYearSectionYear = (int) nodeService.getProperty(yearSection, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR);
+				
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(nomenclatureCaseCreationDate);
+		int nomenclatureCaseCreationDateYear = cal.get(Calendar.YEAR);
+		
+		if(nomenclatureCaseCreationDateYear != nomenclatureYearSectionYear) {
+			// Set Date to 31.12.{nomenclatureYearSectionYear} 12:00:00
+			cal.set(nomenclatureYearSectionYear, Calendar.DECEMBER, 31, 12, 0, 0);
+			Date theLastDayOfTheYearDate = cal.getTime();
+			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CREATION_DATE, new Date());
+			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CLOSE_DATE, theLastDayOfTheYearDate);
+		}
+	};
+			
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		NodeRef caseNodeRef = nodeAssocRef.getSourceRef();
@@ -241,5 +263,5 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 			nodeService.setAssociations(child, OperativeStorageService.ASSOC_NOMENCLATURE_LINKED_ORG, Arrays.asList(organization));
 		}
 	}
-
+	
 }
