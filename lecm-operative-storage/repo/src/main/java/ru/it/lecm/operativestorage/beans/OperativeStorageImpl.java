@@ -525,14 +525,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		permissionService.setPermission(docNodeRef, authority, "LECM_BASIC_PG_Reader", true);
 	}
 
+	@Deprecated
 	@Override
 	public void createTreeByOrgUnits(NodeRef yearSectionRef) {
-
 		NodeRef organizationRef = nodeService.getTargetAssocs(yearSectionRef, ASSOC_NOMENCLATURE_LINKED_ORG).get(0).getTargetRef();
-
-
-
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override

@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 
 import static ru.it.lecm.operativestorage.beans.OperativeStorageService.ASPECT_MOVE_TO_CASE;
 
@@ -273,7 +273,7 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		} else {
 			List<NodeRef> orgs = yearsMap.get(yearInt);
 			if(orgs != null && !orgs.isEmpty()) {
-				return !orgs.contains(new NodeRef(orgNodeRef));
+				return !StringUtils.join(orgs, ',').contains(orgNodeRef);
 			}
 
 			return true;
