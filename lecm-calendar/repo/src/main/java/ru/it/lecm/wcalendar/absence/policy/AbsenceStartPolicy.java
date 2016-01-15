@@ -3,6 +3,7 @@ package ru.it.lecm.wcalendar.absence.policy;
 import java.util.Calendar;
 import java.util.Date;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
+import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -33,7 +34,7 @@ public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
 		PropertyCheck.mandatory(this, "absenceService", absenceService);
 
 		logger.info("Initializing AbsenceStartPolicy");
-		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, IAbsence.TYPE_ABSENCE, IAbsence.ASSOC_ABSENCE_EMPLOYEE, new JavaBehaviour(this, "onCreateAssociation"));
+		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, IAbsence.TYPE_ABSENCE, IAbsence.ASSOC_ABSENCE_EMPLOYEE, new JavaBehaviour(this, "onCreateAssociation", NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {

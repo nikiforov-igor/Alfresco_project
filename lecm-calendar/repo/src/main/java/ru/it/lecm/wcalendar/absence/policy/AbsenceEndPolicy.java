@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -38,7 +39,7 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 
 		logger.info("Initializing AbsenceEndPolicy");
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME, IAbsence.TYPE_ABSENCE, new JavaBehaviour(this, "onUpdateProperties"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME, IAbsence.TYPE_ABSENCE, new JavaBehaviour(this, "onUpdateProperties", NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
