@@ -172,9 +172,6 @@ span.wrapper-title {
     overflow: hidden;
 }
 
-#alf-filters {
-  margin-left: -5px;
-}
 #alf-filters .filter h2 {
     background-position: 15px 50%;
     padding-left: 30px !important;
@@ -1874,12 +1871,12 @@ a.remove-item {
 }
 
 a.up-item {
-  background-image :url("/share/res/images/lecm-base/components/triangle_up.png"); 
+  background-image :url("/share/res/images/lecm-base/components/triangle_up.png");
   padding-right:16px;
 }
 
 a.down-item {
-  background-image :url("/share/res/images/lecm-base/components/triangle_down.png"); 
+  background-image :url("/share/res/images/lecm-base/components/triangle_down.png");
   padding-right:16px;
 }
 
