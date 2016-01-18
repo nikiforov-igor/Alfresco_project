@@ -692,7 +692,7 @@ LogicECM.module = LogicECM.module || {};
 						fn: function (response) {
 							var containerDiv = document.createElement('div');
 							var form = '<div id="confirm-edit-fields-form-container" class="yui-panel">' +
-								'<div id="confirm-edit-fields-head" class="hd" title="'+Alfresco.util.message('title.action_failed')+' &quot;' + label + '&quot;">'+Alfresco.util.message('title.action_failed')+'"' + label + '"</div>' +
+								'<div id="confirm-edit-fields-head" class="hd" title="'+Alfresco.util.message('title.action_failed')+' &quot;' + label + '&quot;">'+Alfresco.util.message('title.action_failed')+' "' + label + '"</div>' +
 								'<div id="confirm-edit-fields-body" class="bd">' +
 								'<div id="confirm-edit-fields-content" class="form-container"><div class="form-fields">'+Alfresco.util.message('msg.action_failed')+'<br/>';
 							for (var i = 0; i < errors.length; i++) {
