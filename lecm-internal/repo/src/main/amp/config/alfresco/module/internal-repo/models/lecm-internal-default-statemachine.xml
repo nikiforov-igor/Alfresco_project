@@ -1121,7 +1121,7 @@ if (document != null) {
                                                                         <properties>
                                                                             <property>
                                                                                 <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
