@@ -132,10 +132,6 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		taskDecision.setDueDate(dueDate);
 		taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME));
 
-		Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
-		decisionsMap = addDecision(decisionsMap, taskDecision);
-		execution.setVariable("decisionsMap", decisionsMap);
-
 		execution.setVariable("taskDecision", decision);
 		NodeRef resultListRef = resultListService.getResultListRef(task);
 		logDecision(resultListRef, taskDecision, task);
