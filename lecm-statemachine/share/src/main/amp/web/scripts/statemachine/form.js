@@ -188,7 +188,7 @@ LogicECM.module = LogicECM.module || {};
 							}
 						}
 					},{
-						text: Alfresco.util.button('button.cancel'),
+						text: Alfresco.util.message('button.cancel'),
 						handler: function(event, obj) {
 							this.destroy();
 						},
