@@ -40,7 +40,7 @@
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
                     <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
@@ -56,7 +56,7 @@
                     <show id="lecm-contract:unlimited"/>
                     <show id="lecm-contract:summaryContent"/>
                     <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:dateRegContracts"/>
+                    <show id="lecm-document:doc-date"/>
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
@@ -79,7 +79,7 @@
                     <set id="other" appearance="" parent="common" />
 
                     <field id="lecm-document-aspects:reg-project-data-number" set="contract-info"/>
-                    <field id="lecm-contract:dateRegProjectContracts" set="contract-info"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" set="contract-info"/>
                     <field id="lecm-contract:typeContract-assoc" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_договора</control-param>
@@ -151,7 +151,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                     <field id="lecm-document:regnum" set="other"/>
-                    <field id="lecm-contract:dateRegContracts" set="other"/>
+                    <field id="lecm-document:doc-date" set="other"/>
                     <field id="lecm-contract:registrator-assoc" read-only="true" set="registr-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -426,8 +426,8 @@
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:currency-assoc"/>
-                    <show id="lecm-contract:dateRegContracts"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document:doc-date"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:totalAmount"/>
                     <show id="lecm-contract:signedCounterparty"/>
@@ -513,7 +513,7 @@
             <form id="datagrid_Проект_зарегистрирован">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -524,7 +524,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
@@ -535,7 +535,7 @@
             <form id="datagrid_На_согласовании">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -546,7 +546,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
@@ -557,7 +557,7 @@
             <form id="datagrid_Согласован">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -566,7 +566,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
@@ -576,7 +576,7 @@
             <form id="datagrid_На_доработке">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -587,7 +587,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
@@ -598,7 +598,7 @@
             <form id="datagrid_На_подписании">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -609,7 +609,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
@@ -757,7 +757,7 @@
             <form id="datagrid_Проекты">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -769,7 +769,7 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document-aspects:reg-project-data-number" label-id="contract.regProjectNumber"/>
-                    <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
                     <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
@@ -879,7 +879,7 @@
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:currency-assoc"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:totalAmount"/>
                 </field-visibility>
@@ -941,7 +941,7 @@
                             <control-param name="mandatory">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:dateRegProjectContracts">
+                    <field id="lecm-document-aspects:reg-project-data-date">
                         <control template="/ru/it/lecm/base-share/components/controls/daterange-control.ftl"/>
                     </field>
                     <field id="lecm-contract:dateConclusionContracts">
@@ -955,7 +955,7 @@
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
-                    <show id="lecm-contract:dateRegProjectContracts"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
                     <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
@@ -971,7 +971,7 @@
                     <show id="lecm-contract:unlimited"/>
                     <show id="lecm-contract:summaryContent"/>
                     <show id="lecm-document:regnum"/>
-                    <show id="lecm-contract:dateRegContracts"/>
+                    <show id="lecm-document:doc-date"/>
                     <show id="lecm-contract:registrator-assoc"/>
                     <show id="lecm-contract:locationRegistration"/>
                     <show id="lecm-contract:locationContract"/>
