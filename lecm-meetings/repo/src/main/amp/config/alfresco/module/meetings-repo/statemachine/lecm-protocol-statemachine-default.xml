@@ -974,7 +974,7 @@
 															</property>
 															<property>
 																<name>workflowLabel</name>
-																<value><![CDATA[Направить на подписание]]></value>
+																<value><![CDATA[Отправить на согласование]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -2717,7 +2717,7 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 															</property>
 															<property>
 																<name>workflowLabel</name>
-																<value><![CDATA[Направить на подписание]]></value>
+																<value><![CDATA[Отправить на согласование]]></value>
 															</property>
 														</properties>
 														<aspects>
