@@ -7,6 +7,7 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/operative-storage/1.0" prefix="lecm-os"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
@@ -65,7 +66,8 @@
 		</type>
 
 		<type name="lecm-doc-dic-fr:level3">
-			<parent>lecm-dic:plane_dictionary_values</parent>
+			<!-- наследуем от нового типа дела для совместимости моделей -->
+			<parent>lecm-os:nomenclature-case</parent>
 			<properties>
 				<property name="lecm-doc-dic-fr:index">
 					<type>d:text</type>

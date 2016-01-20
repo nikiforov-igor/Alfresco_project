@@ -373,6 +373,8 @@
             <mandatory-aspects>
                 <aspect>cm:titled</aspect>
                 <aspect>os-aspects:sort</aspect>
+				<!-- аспект нужен только для совместимости с lecm-doc-dic-fr:level3 -->
+                <aspect>lecm-dic:aspect_active</aspect>
             </mandatory-aspects>
         </type>
 
