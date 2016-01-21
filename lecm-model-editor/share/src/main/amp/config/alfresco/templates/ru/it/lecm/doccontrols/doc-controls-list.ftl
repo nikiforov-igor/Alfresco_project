@@ -15,8 +15,12 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@bpage.basePage>
-	<@region id="datagrid" scope="template" />
+<@bpage.basePage showToolbar=isAdmin showMenu=isAdmin>
+	<#if isAdmin>
+		<@region id="datagrid" scope="template" />
+	<#else/>
+		<@region id="forbidden" scope="template"/>
+	</#if>
 <#--
 	<@region id="html-upload" scope="template"/>
 	<@region id="flash-upload" scope="template"/>

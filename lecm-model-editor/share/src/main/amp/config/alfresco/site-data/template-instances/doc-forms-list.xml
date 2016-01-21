@@ -45,5 +45,9 @@
 			<region-id>dnd-upload</region-id>
 			<url>/lecm/components/dnd-upload</url>
 		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
 	</components>
 </template-instance>

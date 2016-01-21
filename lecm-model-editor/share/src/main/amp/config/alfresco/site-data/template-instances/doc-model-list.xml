@@ -7,5 +7,9 @@
 			<region-id>datagrid</region-id>
 			<url>/lecm/documentmodel/data-lists/datagrid</url>
 		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
 	</components>
 </template-instance>

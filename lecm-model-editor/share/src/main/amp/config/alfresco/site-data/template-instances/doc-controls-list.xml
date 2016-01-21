@@ -27,6 +27,10 @@
 				<bubblingLabel>controls-editor</bubblingLabel>
 			</properties>
 		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
 
 		<!-- Uploaders -->
 <!--		<component>

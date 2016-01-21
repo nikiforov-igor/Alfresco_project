@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/templates/ru/it/lecm/model-editor/isAdmin.js">
+
 (function() {
 	var doctype = url.args.doctype,
 		getUri = '/lecm/controls-editor/getTypeRoot',

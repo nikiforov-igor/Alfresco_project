@@ -4,9 +4,13 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@bpage.basePage>
-	<div class="share-form">
-		<@region id="create-content-mgr" scope="template" />
-		<@region id="create-content" scope="template" />
-	</div>
+<@bpage.basePage showToolbar=isAdmin showMenu=isAdmin>
+	<#if isAdmin>
+		<div class="share-form">
+			<@region id="create-content-mgr" scope="template" />
+			<@region id="create-content" scope="template" />
+		</div>
+	<#else/>
+		<@region id="forbidden" scope="template"/>
+	</#if>
 </@bpage.basePage>

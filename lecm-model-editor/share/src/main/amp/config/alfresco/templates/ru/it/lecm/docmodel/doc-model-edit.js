@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/templates/ru/it/lecm/model-editor/isAdmin.js">
+
 (function() {
 	// Need to know what type of node this is - document or folder
 	var nodeRef = url.args.nodeRef,

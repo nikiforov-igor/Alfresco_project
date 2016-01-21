@@ -16,7 +16,7 @@
 <#assign showMenu=showContent>
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@bpage.basePage showMenu=showMenu>
+<@bpage.basePage showToolbar=hasRole showMenu=hasRole>
     <#if hasRole>
         <#if showContent>
             <@region id="content" scope="template" />
