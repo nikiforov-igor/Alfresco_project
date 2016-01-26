@@ -257,14 +257,6 @@ var appItems = [
 		}
 	},
 	{
-		id: "NOTIFICATIONS",
-		name: "logic_ecm/notifications/NotificationsPopup",
-		config: {
-			id: "NOTIFICATIONS",
-			label: msg.get("label.notifications.menu-item")
-		}
-	},
-	{
 		id: "HEADER_SITES_MENU",
 		name: "alfresco/header/AlfSitesMenu",
 		config: {
@@ -273,10 +265,17 @@ var appItems = [
 			currentSite: page.url.templateArgs.site,
 			currentUser: user.name
 		}
+	},
+	moreMenu,
+	{
+		id: "NOTIFICATIONS",
+		name: "logic_ecm/notifications/NotificationsPopup",
+		config: {
+			id: "NOTIFICATIONS",
+			label: msg.get("label.notifications.menu-item")
+		}
 	}
 ];
-
-appItems.push(moreMenu);
 
 var menuBar =
     widgetUtils.findObject(model.jsonModel, "id", "HEADER_APP_MENU_BAR");
