@@ -79,6 +79,22 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<property name="lecm-internal:recipients-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+				<property name="lecm-internal:recipients-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
 			</properties>
 			<associations>
 				<!-- Получатель (сотрудник или подразделение) -->
