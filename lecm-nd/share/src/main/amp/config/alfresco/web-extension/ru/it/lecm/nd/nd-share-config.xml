@@ -124,7 +124,6 @@
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
                     <show id="lecm-nd:unlimited"/>
-                    <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 	                <show id="lecm-document:regnum"/>
 					<show id="lecm-contract:approval"/>
@@ -252,7 +251,6 @@
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
-                    <show id="lecm-document-aspects:is-shared-folder"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
 					<show id="lecmSignAspects:signingDate" for-mode="view"/>
@@ -316,9 +314,6 @@
                     <field id="lecm-document:author-assoc" set="afterDates" read-only="true"/>
                     <field id="lecm-document-aspects:reg-project-data-number" set="afterDates"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="afterDates"/>
-                    <field id="lecm-document-aspects:is-shared-folder" set="afterDates">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-                    </field>
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>

@@ -30,7 +30,6 @@
 	                <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-not-registered"/>
-                    <show id="lecm-document-aspects:is-shared-folder"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-document:regnum" mandatory="true">
@@ -127,7 +126,6 @@
 		            </field>
 
 		            <field id="lecm-incoming:is-not-registered"/>
-		            <field id="lecm-document-aspects:is-shared-folder"/>
 
 					<field id="lecm-eds-document:sheets-number">
 						<control template="/ru/it/lecm/base-share/components/controls/number.ftl">
@@ -466,7 +464,6 @@
                     <show id="lecm-eds-document:file-register-assoc"/>
 	                <show id="lecm-incoming:sender-assoc"/>
 	                <show id="lecm-incoming:addressee-assoc"/>
-	                <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-document-aspects:response-to-assoc"/>
                 <show id="lecm-document:regnum"/>
                 </field-visibility>

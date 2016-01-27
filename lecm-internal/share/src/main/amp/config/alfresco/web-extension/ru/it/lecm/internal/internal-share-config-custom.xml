@@ -73,7 +73,6 @@
 	                <show id="lecm-eds-document:note"/>
 	                <show id="lecm-document-aspects:reg-project-data-number"/>
 	                <show id="lecm-document-aspects:reg-project-data-date"/>
-	                <show id="lecm-document-aspects:is-shared-folder"/>
 					<show id="lecm-contract:approval" force="true"/>
                     <show id="lecm-internal-table-structure:answers-assoc"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
@@ -151,9 +150,6 @@
 
                     <field id="lecm-document-aspects:reg-project-data-number" set="common"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="common"/>
-	                <field id="lecm-document-aspects:is-shared-folder" set="common" label-id="label.isSharedFolder">
-		                <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-	                </field>
 
                     <field id="lecm-internal-table-structure:answers-assoc" set="answers">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
@@ -561,7 +557,6 @@
             <!-- Форма с набором полей, редактируемых в машине состояний-->
             <form id="statemachine-editable-fields">
                 <field-visibility>
-                    <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-internal:response-date"/>
                     <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-internal:doc-type-assoc"/>

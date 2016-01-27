@@ -21,7 +21,6 @@
 					<show id="lecm-document:author-assoc"/>																<!-- Автор -->
 					<show id="lecm-document-aspects:reg-project-data-number"/>
 					<show id="lecm-document-aspects:reg-project-data-date"/>
-					<show id="lecm-document-aspects:is-shared-folder"/>
 					<show id="lecm-contract:approval" force="true"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
 					<show id="lecmSignAspects:isSigned" for-mode="view"/>
@@ -103,7 +102,6 @@
 
 					<field id="lecm-document-aspects:reg-project-data-number" set="common"/>
 					<field id="lecm-document-aspects:reg-project-data-date" set="common"/>
-					<field id="lecm-document-aspects:is-shared-folder" set="common"/>
 
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
@@ -446,7 +444,6 @@
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
-					<show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
 					<show id="lecm-document:regnum"/>																	<!-- Регистрационный номер -->
 					<show id="lecm-contract:approval"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>

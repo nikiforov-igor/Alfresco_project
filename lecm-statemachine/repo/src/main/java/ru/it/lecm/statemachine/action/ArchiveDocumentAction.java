@@ -92,7 +92,7 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
                                 throw new InvalidNodeRefException("У документа установлен аспект ASSOC_ORGANIZATION_UNIT_ASSOC, но отсутствуют подразделения", document);
                             }
                             NodeRef unit = units.get(0).getTargetRef();//TODO избавиться от get(0)
-                            boolean isSharedFolder = (Boolean) nodeService.getProperty(document, DocumentService.PROP_IS_SHARED_FOLDER);
+                            boolean isSharedFolder = Boolean.TRUE.equals(nodeService.getProperty(document, DocumentService.PROP_IS_SHARED_FOLDER));
                             List<AssociationRef> folders = nodeService.getTargetAssocs(unit, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
                             ///////////////////////
                             NodeRef folder = null;

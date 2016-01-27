@@ -75,7 +75,6 @@
                 <value>lecm-document:title</value>
                 <value>lecm-eds-document:summaryContent</value>
                 <value>lecm-eds-document:note</value>
-                <value>lecm-document-aspects:is-shared-folder</value>
             </list>
         </property>
         <property name="assocsToCopy">

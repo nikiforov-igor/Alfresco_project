@@ -118,7 +118,6 @@
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
-                    <show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
                     <show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
@@ -257,7 +256,6 @@
                     <show id="lecm-document:author-assoc"/>
 	                <show id="lecm-document-aspects:reg-project-data-number"/>
 	                <show id="lecm-document-aspects:reg-project-data-date"/>
-	                <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-ord-table-structure:items-assoc"/>
 					<show id="lecm-contract:approval" force="true"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
@@ -339,7 +337,6 @@
 	                <field id="lecm-document:author-assoc" set="ord-document-form-common-set" read-only="true"/>
 	                <field id="lecm-document-aspects:reg-project-data-number" set="ord-document-form-common-set"/>
 	                <field id="lecm-document-aspects:reg-project-data-date" set="ord-document-form-common-set"/>
-	                <field id="lecm-document-aspects:is-shared-folder" set="ord-document-form-common-set"/>
 
                     <field id="lecm-ord-table-structure:items-assoc" set="ord-document-items">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">

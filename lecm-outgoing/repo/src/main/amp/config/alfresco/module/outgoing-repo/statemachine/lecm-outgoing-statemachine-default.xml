@@ -596,21 +596,6 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/36771e71-40f4-47a5-b5d0-87d417de4715</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/a5bde7f2-346b-493f-a5aa-26fda6cf36ad</nodeRef>
 										<properties>
@@ -1817,21 +1802,6 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/050af32c-bb01-4261-b400-535a3510b274</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/6c504243-8a42-4c69-a5eb-c53a5dd68a61</nodeRef>
 										<properties>
@@ -2336,21 +2306,6 @@
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/ecfaa49f-3009-4417-b562-8d98b0fe6aab</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[false]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/5a6c507a-7902-4f0e-b521-9fd1ea2b807e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3448,21 +3403,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/164f139a-fcd7-4091-8d57-8d6a02e674db</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/e18cefbb-9d8b-4df3-9892-a74ea7d3a195</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4606,21 +4546,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/e0167031-86a2-4ab0-8c34-c3f707a0f588</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/f2186988-63fb-4dce-a4b6-e39580d20ad6</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -5965,21 +5890,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/88b72be3-6bd6-42ea-b850-48dd9953db3c</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/5ce22bde-f8fb-4af6-89dd-5698c054bee5</nodeRef>
 										<properties>
@@ -6972,21 +6882,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/7839d727-4a17-46ce-9fa5-c31a6534d5fd</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/fd1a2ae9-836a-401e-889a-f4e48319e023</nodeRef>
 										<properties>
@@ -7738,21 +7633,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/8b6d7c06-b44e-47ca-bb20-2be9624efaa1</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/86074a79-7f6f-45cf-ae32-aa431c8f96d8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -8602,21 +8482,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/60df2b57-fed6-45f0-870e-5168023569d4</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/b1c8826c-687c-41ed-be1e-d3a078f9ffd2</nodeRef>
 										<properties>
@@ -9377,21 +9242,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/46714877-7d19-4f6c-a05c-5cbc45901b3a</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/c2c8186d-5aa4-46fc-bce6-c7b150676c85</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -10262,21 +10112,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/cf3e2aba-9f5f-4f15-a108-52f28aff1c58</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[true]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/5e65b143-76ce-4b49-939f-5c9b14586c85</nodeRef>
 										<properties>
@@ -10794,21 +10629,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/d7d15800-aaf0-4d74-9760-0d31da64f60b</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[false]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/70d72ee8-a30e-4a0e-afc4-72679ba902fd</nodeRef>
 										<properties>
@@ -11216,21 +11036,6 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/f560fead-d355-46e2-b4bb-8be2943bab4c</nodeRef>
-										<properties>
-											<property>
-												<name>editableField</name>
-												<value><![CDATA[false]]></value>
-											</property>
-										</properties>
-										<aspects/>
-										<associations/>
-										<roleAssociations/>
-										<subFolders/>
-									</node>
-									<node>
-										<type>documentField</type>
-										<name>lecm-document-aspects_is-shared-folder</name>
-										<nodeRef>workspace://SpacesStore/17cf676c-74c8-4a56-ada4-89f2168f7d80</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
