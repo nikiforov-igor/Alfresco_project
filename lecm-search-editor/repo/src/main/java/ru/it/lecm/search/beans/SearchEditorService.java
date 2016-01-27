@@ -252,7 +252,7 @@ public class SearchEditorService extends BaseBean {
                 } else if (type.equals(Types.DATETIME)) {
                     preparedValue = type.getFTSPreparedValue(value);
                 }
-                return "@" + doCharsProtection(field, ":-")   + ":[MIN TO " +  preparedValue + ">";
+                return "@" + doCharsProtection(field, ":-")   + ":[MIN TO " +  preparedValue + "]";
             }
         },
         AFT () {
@@ -274,7 +274,7 @@ public class SearchEditorService extends BaseBean {
                 if (type.equals(Types.DATETIME)) {
                     preparedValue = type.getFTSPreparedValue(value);
                 }
-                return "@" + doCharsProtection(field, ":-") + ":<" + preparedValue + " TO MAX]";
+                return "@" + doCharsProtection(field, ":-") + ":[" + preparedValue + " TO MAX]";
             }
         },
         BEQL () {
