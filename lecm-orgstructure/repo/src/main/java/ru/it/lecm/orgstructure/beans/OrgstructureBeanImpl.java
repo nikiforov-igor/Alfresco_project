@@ -1451,10 +1451,20 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 //		TODO: Судя по всему, нигде не используется(хотя есть в Integral Test), но транзакцию на всякий случай выпилю.
 		if (isEmployee(employeeRef) && hasAccessToOrgElement(employeeRef) && isStaffList(orgElementMemberRef) && getEmployeeByPosition(orgElementMemberRef) == null) {
 			QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
-			HashMap<QName, Serializable> props = new HashMap<QName, Serializable>();
-			props.put(PROP_EMP_LINK_IS_PRIMARY, isPrimary);
+            HashMap<QName, Serializable> props = new HashMap<>();
 			NodeRef employeeLinkRef = nodeService.createNode(orgElementMemberRef, ASSOC_ELEMENT_MEMBER_EMPLOYEE, assocQName, TYPE_EMPLOYEE_LINK, props).getChildRef();
 			nodeService.createAssociation(employeeLinkRef, employeeRef, ASSOC_EMPLOYEE_LINK_EMPLOYEE);
+            if (isPrimary) {
+                //флаг выставляется уже после создания ассоциации, т.к. на создании ассоциации срабатывает полиси, сбрасывающая флаг
+                List<NodeRef> employeeLinks = getEmployeeLinks(employeeRef);
+                for (NodeRef employeeLink : employeeLinks) {
+                    if (employeeLink.equals(employeeLinkRef)) {
+                        nodeService.setProperty(employeeLink, PROP_EMP_LINK_IS_PRIMARY, true);
+                    } else if (Boolean.TRUE.equals(nodeService.getProperty(employeeLink, PROP_EMP_LINK_IS_PRIMARY))) {
+                        nodeService.setProperty(employeeLink, PROP_EMP_LINK_IS_PRIMARY, false);
+                    }
+                }
+            }
 		}
 	}
 
