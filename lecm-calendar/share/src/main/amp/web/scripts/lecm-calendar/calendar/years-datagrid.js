@@ -114,7 +114,8 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 									fullDelete: false
 								}
 							},
-							bubblingLabel: LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL
+							bubblingLabel: LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL,
+							selectedYear: selectItem.getData().itemData["prop_lecm-cal_year"].value
 						});
 				// Отрисовка датагрида для выходных дней
 				YAHOO.Bubbling.fire("activeGridChanged",
@@ -127,7 +128,8 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 									fullDelete: false
 								}
 							},
-							bubblingLabel: LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL
+							bubblingLabel: LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL,
+							selectedYear: selectItem.getData().itemData["prop_lecm-cal_year"].value
 						});
 				// Активируем кнопку "Новый элемент" в правом TollBar-е
 				YAHOO.Bubbling.fire("enableAddButton", {

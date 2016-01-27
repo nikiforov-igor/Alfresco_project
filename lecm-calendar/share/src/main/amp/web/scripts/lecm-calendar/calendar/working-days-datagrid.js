@@ -61,7 +61,11 @@ LogicECM.module.WCalendar.Calendar.WorkingDays = LogicECM.module.WCalendar.Calen
 											var dateInt = parseInt(data.value);
 											var day = dateInt % 100;
 											var month = (dateInt - dateInt % 100) / 100;
-											var date = new Date(2013, month - 1, day);
+											var year = 2016;
+											if (scope.options.currentYear) {
+												year = scope.options.currentYear;
+											}
+											var date = new Date(year, month - 1, day);
 											content = Alfresco.util.formatDate(date, scope.msg("date-format.longDateNoYear"));
 											html += content;
 										} else {
@@ -98,6 +102,21 @@ LogicECM.module.WCalendar.Calendar.WorkingDays = LogicECM.module.WCalendar.Calen
 				}
 				elCell.innerHTML = html;
 			};
+		},
+		onGridTypeChanged:function DataGrid_onActiveDataListChanged(layer, args) {
+			var obj = args[1];
+			if ((obj !== null) && (obj.datagridMeta !== null)) {
+				// Если метка не задана, или метки совпадают - дергаем метод
+				var label = obj.bubblingLabel;
+				if(this._hasEventInterest(label)){
+					this.datagridMeta = obj.datagridMeta;
+					this.options.currentYear = obj.selectedYear;
+					// Could happen more than once, so check return value of fulfil()
+					if (!this.deferredListPopulation.fulfil("onGridTypeChanged")) {
+						this.populateDataGrid();
+					}
+				}
+			}
 		}
 	}, true);
 
