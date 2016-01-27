@@ -42,6 +42,11 @@
     <#assign endpointMany = (field.control.params.endpointMany == "true")>
 </#if>
 
+<#assign showAssocViewForm = false>
+<#if params.showAssocViewForm?? && params.showAssocViewForm == "true">
+	<#assign showAssocViewForm = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -210,6 +215,7 @@
 		    </#if>
 		    showCreateNewLink: ${firstShowCreateNewLink?string},
             additionalFilter: "${params.firstAdditionalFilter!''}",
+            showAssocViewForm: ${showAssocViewForm?string},
 		    clearFormsOnStart: false
 	    });
 	    fistControl.setMessages(${messages});
