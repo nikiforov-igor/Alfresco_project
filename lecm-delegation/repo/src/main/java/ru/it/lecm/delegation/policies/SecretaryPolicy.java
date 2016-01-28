@@ -46,6 +46,10 @@ public class SecretaryPolicy implements NodeServicePolicies.OnCreateAssociationP
 
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
+		List<AssociationRef> assocs = nodeService.getSourceAssocs(nodeAssocRef.getTargetRef(), nodeAssocRef.getTypeQName());
+		if (assocs.size() == 1) {
+			nodeService.createAssociation(nodeAssocRef.getSourceRef(), nodeAssocRef.getTargetRef(), SecretaryService.ASSOC_CAN_RECEIVE_TASKS_FROM_CHIEFS);
+		}
 		updateTextContent(nodeAssocRef);
 	}
 
