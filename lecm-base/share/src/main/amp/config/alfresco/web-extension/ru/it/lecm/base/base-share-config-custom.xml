@@ -41,6 +41,8 @@
 				<type name="double-range" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl"/>
 				<type name="long-range" template="/ru/it/lecm/base-share/components/controls/numberrange.ftl"/>
 
+				<type name="category" template="/ru/it/lecm/base-share/components/controls/category.ftl" />
+
 				<type name="association" template="/ru/it/lecm/base-share/components/controls/associationControl.ftl" />
 				<type name="association:cm:person" template="/ru/it/lecm/base-share/components/controls/authority.ftl" />
 				<type name="association:cm:authority" template="/ru/it/lecm/base-share/components/controls/authority.ftl" />
