@@ -188,7 +188,7 @@
             <form id="document">
                 <field-visibility>
                     <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-eds-document:recipients-assoc"/>
+                    <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-internal:response-date"/>
                     <show id="lecm-statemachine:status"/>
@@ -198,7 +198,7 @@
             <form id="document-dashlet">
                 <field-visibility>
                     <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-eds-document:recipients-assoc"/>
+                    <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-internal:response-date"/>
                     <show id="lecm-statemachine:status"/>
@@ -521,7 +521,7 @@
                     <show id="lecm-document:doc-date"/>
                     <show id="lecm-document-aspects:reg-data-number"/>
                     <show id="lecm-document:author-assoc"/>
-                    <show id="lecm-eds-document:recipients-assoc"/>
+                    <show id="lecm-internal:recipients-assoc"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                 </field-visibility>
                 <appearance>
