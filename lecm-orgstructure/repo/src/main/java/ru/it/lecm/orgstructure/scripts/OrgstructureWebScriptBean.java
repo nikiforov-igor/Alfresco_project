@@ -86,6 +86,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * Структура директорий
 	 * Организация
 	 * ---Структура
+	 * ------Холдинг
+	 * ---------Орг1
+	 * ---------Орг2
+	 * ---------Орг3
 	 * ---Сотрудники
 	 * ---Персональные данные
 	 *
@@ -93,7 +97,43 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 */
 	public ScriptNode getOrganization() {
 		NodeRef organization = orgstructureService.getOrganization();
-		return new ScriptNode(organization, serviceRegistry, getScope());
+		return organization != null ? new ScriptNode(organization, serviceRegistry, getScope()) : null;
+	}
+
+	/**
+	 * Возвращает ноду Организация/Структура
+	 * Структура директорий
+	 * Организация
+	 * ---Структура
+	 * ------Холдинг
+	 * ---------Орг1
+	 * ---------Орг2
+	 * ---------Орг3
+	 * ---Сотрудники
+	 * ---Персональные данные
+	 * @return
+	 */
+	public ScriptNode getStructure() {
+		NodeRef structureRef = orgstructureService.getStructureDirectory();
+		return structureRef != null ? new ScriptNode(structureRef, serviceRegistry, getScope()) : null;
+	}
+
+	/**
+	 * Возвращает ноду Организация/Структура/Холдинг
+	 * Структура директорий
+	 * Организация
+	 * ---Структура
+	 * ------Холдинг
+	 * ---------Орг1
+	 * ---------Орг2
+	 * ---------Орг3
+	 * ---Сотрудники
+	 * ---Персональные данные
+	 * @return
+	 */
+	public ScriptNode getHolding() {
+		NodeRef holdingRef = orgstructureService.getHolding();
+		return holdingRef != null ? new ScriptNode(holdingRef, serviceRegistry, getScope()) : null;
 	}
 
 	/**

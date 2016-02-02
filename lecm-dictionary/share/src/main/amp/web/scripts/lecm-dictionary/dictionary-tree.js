@@ -301,7 +301,10 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         itemType: node.data.childType,
 	                    currentItemType: node.data.type,
                         recreate: true,
-		                         nodeRef: node.data.nodeRef
+		                         nodeRef: node.data.nodeRef,
+								 searchConfig: ('lecm-contractor:contractor-type' == node.data.childType) ? {
+	 								filter: '-ASPECT:"lecm-orgstr-aspects:is-organization-aspect" and ISNOTNULL:"sys:node-dbid"'
+	 							} : null
                              },
                              scrollTo: true
                          });

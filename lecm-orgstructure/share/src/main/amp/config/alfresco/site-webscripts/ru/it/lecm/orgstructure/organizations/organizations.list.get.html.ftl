@@ -37,7 +37,7 @@
 					useFilterByOrg: false,
 					//				sort: 'cm:created|true',
 					searchConfig: {
-						filter: 'ASPECT:"lecm-orgstr-aspects:is-organization-aspect"'
+						filter: '+ASPECT:"lecm-orgstr-aspects:is-organization-aspect"'
 					},
 					//				actionsConfig: {
 					//					fullDelete: true,

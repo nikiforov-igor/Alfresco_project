@@ -30,6 +30,7 @@
 	            <newRowLabel>button.new-unit</newRowLabel>
                 <showStructure>true</showStructure>
                 <showStructureLabel>button.show_structure</showStructureLabel>
+				<newRowButton>activeOnUnitClick</newRowButton>
             </properties>
         </component>
         <component>

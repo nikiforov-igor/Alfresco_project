@@ -8,7 +8,7 @@
 	<div class='create-row'>
 		<span id='${toolbarId}-newRowButton' class='yui-button yui-push-button'>
 			<span class='first-child'>
-				<button type='button'>${msg('logicecm.dictionary.add-element')}</button>
+				<button type='button'>${msg('logicecm.orgstructure.add-element')}</button>
 			</span>
 		</span>
 	</div>

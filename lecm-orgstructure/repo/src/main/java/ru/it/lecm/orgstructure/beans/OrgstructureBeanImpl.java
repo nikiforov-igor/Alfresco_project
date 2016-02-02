@@ -24,6 +24,7 @@ import ru.it.lecm.orgstructure.policies.PolicyUtils;
 
 import java.io.Serializable;
 import java.util.*;
+import static ru.it.lecm.orgstructure.beans.OrgstructureBean.HOLDING_ROOT_NAME;
 
 /**
  * @author dbashmakov Date: 27.11.12 Time: 17:08
@@ -152,11 +153,25 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 						}
 
 						// Структура
-						if (nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME) == null) {
+						NodeRef structureRef = nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME);
+						if (structureRef == null) {
 							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, STRUCTURE_ROOT_NAME);
 							final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_STRUCTURE);
 							final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(STRUCTURE_ROOT_NAME));
-							logger.info(String.format("OU Structure '%s' created as %s", STRUCTURE_ROOT_NAME, ref.getChildRef()));
+							structureRef = ref.getChildRef();
+							logger.info(String.format("OU Structure '%s' created as %s", STRUCTURE_ROOT_NAME, structureRef));
+						}
+						//Холдинг
+						if (nodeService.getChildByName(structureRef, ContentModel.ASSOC_CONTAINS, HOLDING_ROOT_NAME) == null) {
+							final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, HOLDING_ROOT_NAME);
+							final QName nodeTypeQName = TYPE_ORGANIZATION_UNIT;
+							Map<QName, Serializable> props = getNamedProps(HOLDING_ROOT_NAME);
+							props.put(PROP_ORG_ELEMENT_FULL_NAME, HOLDING_ROOT_NAME);
+							props.put(PROP_ORG_ELEMENT_SHORT_NAME, HOLDING_ROOT_NAME);
+							props.put(PROP_UNIT_CODE, HOLDING_ROOT_NAME);
+							props.put(PROP_UNIT_TYPE, "SEGREGATED");
+							final ChildAssociationRef ref = nodeService.createNode(structureRef, assocTypeQName, assocQName, nodeTypeQName, props);
+							logger.info(String.format("OU Holding '%s' created as %s", HOLDING_ROOT_NAME, ref.getChildRef()));
 						}
 
 						// Сотрудники
@@ -252,6 +267,12 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			structure = nodeService.getChildByName(organization, ContentModel.ASSOC_CONTAINS, STRUCTURE_ROOT_NAME);
 		}
 		return structure;
+	}
+
+	@Override
+	public NodeRef getHolding() {
+		NodeRef structureRef = getStructureDirectory();
+		return (structureRef != null) ? nodeService.getChildByName(structureRef, ContentModel.ASSOC_CONTAINS, HOLDING_ROOT_NAME) : null;
 	}
 
 	@Override

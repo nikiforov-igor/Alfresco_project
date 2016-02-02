@@ -1,3 +1,5 @@
+/* global companyhome, search, model, args, substitude */
+
 /**
  * Получение списка дочерних значений выбранного узла и их свойств
  */
@@ -27,7 +29,7 @@ if (rootNode != null) {
 model.branch = branch;
 
 function addItems(branch, items) {
-	for each(item in items) {
+	for each(var item in items) {
 		if (item.isSubType("lecm-dic:hierarchical_dictionary_values") && item.properties["lecm-dic:active"]) {
 			nodeRef = item.getNodeRef().toString();
 
@@ -42,14 +44,18 @@ function addItems(branch, items) {
 				}
 			}
 
-			branch.push({
-				title: substitude.getObjectDescription(item),
-				type: item.typeShort,
-				childType: getHierarchicalDictionaryChildType(item),
-				nodeRef: nodeRef,
-				isLeaf: "" + isLeaf,
-                node: item
-			});
+			var canPush = 'lecm-contractor:contractor-type' != item.typeShort || !item.hasAspect('lecm-orgstr-aspects:is-organization-aspect');
+
+			if (canPush) {
+				branch.push({
+					title: substitude.getObjectDescription(item),
+					type: item.typeShort,
+					childType: getHierarchicalDictionaryChildType(item),
+					nodeRef: nodeRef,
+					isLeaf: "" + isLeaf,
+					node: item
+				});
+			}
 		}
 	}
 }

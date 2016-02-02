@@ -53,7 +53,10 @@
 	                    datagridMeta: {
                             useFilterByOrg: false,
 	                        itemType: rootNode.itemType,
-	                        nodeRef: rootNode.nodeRef
+	                        nodeRef: rootNode.nodeRef,
+							searchConfig: ('lecm-contractor:contractor-type' == rootNode.itemType) ? {
+								filter: '-ASPECT:"lecm-orgstr-aspects:is-organization-aspect" and ISNOTNULL:"sys:node-dbid"'
+							} : null
 	                    },
 	                    bubblingLabel:"${bubblingLabel}"
 	                });

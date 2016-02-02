@@ -27,6 +27,7 @@ public interface OrgstructureBean {
 	String ORGANIZATION_ROOT_NAME = "Организация";
 	String ORGANIZATION_ROOT_ID = "ORGANIZATION_ROOT_ID";
 	String STRUCTURE_ROOT_NAME = "Структура";
+	String HOLDING_ROOT_NAME = "Холдинг";
 	String EMPLOYEES_ROOT_NAME = "Сотрудники";
 	String PERSONAL_DATA_ROOT_NAME = "Персональные данные";
 	String DICTIONARIES_ROOT_NAME = "Dictionary";
@@ -146,6 +147,12 @@ public interface OrgstructureBean {
 	 * @return NodeRef или NULL
 	 */
 	NodeRef getStructureDirectory();
+
+	/**
+	 * Получение директории с Холдингом
+	 * @return NodeRef или NULL
+	 */
+	NodeRef getHolding();
 
 	/**
 	 * Получение Директории с Сотрудниками
