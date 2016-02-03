@@ -59,7 +59,7 @@
 	</bean>
 
 	<bean id="events.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="events.dictionaries.LogicEcmModelsBootstrap">
+	      depends-on="events.dictionaries.LogicEcmModelsBootstrap,documents.LogicEcmConnectionTypesBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-locations.xml</value>
