@@ -104,13 +104,7 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                 } else {
                     // создаем контрагента - если подразделение 2-го уровня
                     if (parent.equals(orgstructureService.getRootUnit())) {
-                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                            @Override
-                            public Object doWork() throws Exception {
-                                createOrganizationContractor(unit);
-                                return null;
-                            }
-                        });
+						//NOP
                     } else { // для остальных - прописываем ссылку, если есть аспект и организация
                         NodeRef organization = orgstructureService.getOrganization(parent);
                         if (organization != null) {
@@ -241,33 +235,6 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
 
         final String initiator = authService.getCurrentUserName();
         businessJournalService.log(initiator, unit, EventCategory.ADD, "#initiator создал(а) новое подразделение #mainobject в подразделении #object1", objects);
-    }
-
-    private void createOrganizationContractor(NodeRef unit) {
-        NodeRef contractorsDictionary = dictionaryBean.getDictionaryByName("Контрагенты");
-
-        if (contractorsDictionary != null) {
-            String name = FileNameValidator.getValidFileName(nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString());
-            String fullName = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME).toString();
-
-            Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-            //props.put(ContentModel.PROP_NAME, name);
-            props.put(Contractors.PROP_CONTRACTOR_SHORTNAME, name);
-            props.put(Contractors.PROP_CONTRACTOR_FULLNAME, fullName);
-            props.put(Contractors.PROP_CONTRACTOR_CODE, nodeService.getProperty(unit, OrgstructureBean.PROP_UNIT_CODE));
-            props.put(Contractors.PROP_CONTRACTOR_LEGAL_ADDRESS, "Не установлено");
-            props.put(Contractors.PROP_CONTRACTOR_PHISICAL_ADDRESS, "Не установлено");
-            props.put(Contractors.PROP_CONTRACTOR_INTERACTION_TYPE, "EMAIL");
-            props.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
-
-            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
-            NodeRef contractor = nodeService.createNode(contractorsDictionary, ContentModel.ASSOC_CONTAINS, assocQName, Contractors.TYPE_CONTRACTOR, props).getChildRef();
-
-            nodeService.addAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION, null);
-
-            nodeService.addAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
-            nodeService.createAssociation(unit, contractor, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-        }
     }
 
     private void createOrganizationUnitStore(NodeRef unit) {

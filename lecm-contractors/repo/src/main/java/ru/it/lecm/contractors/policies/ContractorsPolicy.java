@@ -15,14 +15,19 @@ import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.util.PropertyMap;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * User: pmelnikov
  * Date: 07.04.14
  * Time: 13:28
  */
-public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy,  NodeServicePolicies.OnUpdateNodePolicy  {
+public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy,  NodeServicePolicies.OnUpdateNodePolicy {
     private LecmBasePropertiesService propertiesService;
     private PolicyComponent policyComponent;
     private NodeService nodeService;
@@ -45,15 +50,13 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
         PropertyCheck.mandatory(this, "propertiesService", propertiesService);
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-                QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-type"),
-                new JavaBehaviour(this, "onCreateNode"));
+                Contractors.TYPE_CONTRACTOR, new JavaBehaviour(this, "onCreateNode", NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdateNodePolicy.QNAME,
-                Contractors.TYPE_CONTRACTOR,
-                new JavaBehaviour(this, "onUpdateNode"));
+                Contractors.TYPE_CONTRACTOR, new JavaBehaviour(this, "onUpdateNode", NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                Contractors.TYPE_CONTRACTOR, new JavaBehaviour(this, "onUpdateContractor"));
+                Contractors.TYPE_CONTRACTOR, new JavaBehaviour(this, "onUpdateContractor", NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     @Override
@@ -126,6 +129,16 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
             throw new IllegalStateException("Cannot read contractor properties");
         }
         if (enabled) {
+			List<AssociationRef> assocs = nodeService.getSourceAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+			if (assocs.size() > 0) {
+				NodeRef orgUnitRef = assocs.get(0).getSourceRef();
+				PropertyMap props = new PropertyMap();
+				props.put(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME, after.get(Contractors.PROP_CONTRACTOR_FULLNAME));
+				props.put(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME, after.get(Contractors.PROP_CONTRACTOR_SHORTNAME));
+				props.put(OrgstructureBean.PROP_UNIT_CODE, after.get(Contractors.PROP_CONTRACTOR_CODE));
+				nodeService.addProperties(orgUnitRef, props);
+			}
+
             final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
             final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
             final boolean changed = !((nowActive == oldActive) || (oldActive != null && oldActive.equals(nowActive)));

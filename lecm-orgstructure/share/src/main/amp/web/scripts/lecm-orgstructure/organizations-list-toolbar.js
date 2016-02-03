@@ -24,6 +24,12 @@ LogicECM.module.OrgStructure.OrganizationsList = LogicECM.module.OrgStructure.Or
 			this.toolbarButtons.defaultActive = Alfresco.util.createYUIButton(this, 'newRowButton', this.onNewRow);
 			this.toolbarButtons.defaultActive.searchButton = Alfresco.util.createYUIButton(this, 'searchButton', this.onSearchClick);
 			this.toolbarButtons.defaultActive.exSearchButton = Alfresco.util.createYUIButton(this, 'extendSearchButton', this.onExSearchClick);
-		}
+		},
+		onNewRow: function (e, p_obj) {
+			var dataGrid = this.modules.dataGrid;
+			if (dataGrid && dataGrid.datagridMeta && dataGrid.datagridMeta.nodeRef.indexOf(":") > 0) {
+				dataGrid.showCreateDialog(dataGrid.datagridMeta);
+			}
+		},
 	}, true);
 })();

@@ -8,6 +8,11 @@
         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
         <property name="lecm-arm:search-query"><![CDATA[]]></property>
         <items>
+            <item name="cm:Организации" type="lecm-arm:html-node">
+                <property name="cm:name"><![CDATA[Организации]]></property>
+                <property name="lecm-arm:order"><![CDATA[5]]></property>
+                <property name="lecm-arm:html-url"><![CDATA[page/organizations]]></property>
+            </item>
             <item name="cm:Сотрудники" type="lecm-arm:html-node">
                 <property name="cm:name"><![CDATA[Сотрудники]]></property>
                 <property name="lecm-arm:order"><![CDATA[10]]></property>
@@ -37,11 +42,6 @@
                 <property name="cm:name"><![CDATA[Роли для рабочих групп]]></property>
                 <property name="lecm-arm:order"><![CDATA[60]]></property>
                 <property name="lecm-arm:html-url"><![CDATA[page/org-roles]]></property>
-            </item>
-            <item name="cm:Профиль" type="lecm-arm:html-node">
-                <property name="cm:name"><![CDATA[Профиль]]></property>
-                <property name="lecm-arm:order"><![CDATA[70]]></property>
-                <property name="lecm-arm:html-url"><![CDATA[page/org-profile]]></property>
             </item>
             <item name="cm:Бизнес роли" type="lecm-arm:html-node">
                 <property name="cm:name"><![CDATA[Бизнес роли]]></property>

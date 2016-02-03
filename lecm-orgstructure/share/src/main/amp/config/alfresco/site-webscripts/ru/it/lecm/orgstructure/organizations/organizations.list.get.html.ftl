@@ -17,6 +17,7 @@
 					showActionColumn: true,
 					expandable: false,
 					bubblingLabel: '${bubblingLabel}',
+					excludeColumns:['deletable'],
 					actions: [{
 						type:'datagrid-action-link-' + '${bubblingLabel}',
 						id:'onActionEdit',
@@ -30,7 +31,7 @@
 					}]
 				}, {
 					datagridFormId: 'organizationsListDatagrid',
-					createFormId: 'createOrganization',
+					createFormId: 'contractorOrg',
 					itemType: '${itemType}',
 					nodeRef: '${nodeRef}',
 					useChildQuery: false,
