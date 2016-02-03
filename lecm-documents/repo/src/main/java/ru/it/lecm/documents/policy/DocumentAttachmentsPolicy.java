@@ -184,21 +184,24 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
-		Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
-		boolean hasChanges = false;
-		for (QName changedProp : AFFECTED_PROPERTIES) {
-			QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName());
-			QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
-			NodeRef employeeRef = orgstructureService.getCurrentEmployee();
-			if (null != employeeRef) {
-				properties.put(propName, substituteService.getObjectDescription(employeeRef));
-				properties.put(propRef, employeeRef.toString());
-				hasChanges = true;
+		// в процессе удаления ноды также сюда попадаем
+		if (nodeService.exists(nodeRef)) {
+			Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+			boolean hasChanges = false;
+			for (QName changedProp : AFFECTED_PROPERTIES) {
+				QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName());
+				QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
+				NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+				if (null != employeeRef) {
+					properties.put(propName, substituteService.getObjectDescription(employeeRef));
+					properties.put(propRef, employeeRef.toString());
+					hasChanges = true;
+				}
 			}
-		}
-		//TODO DONE замена нескольких setProperty на setProperties.
-		if (hasChanges) {
-			nodeService.setProperties(nodeRef, properties);
+			//TODO DONE замена нескольких setProperty на setProperties.
+			if (hasChanges) {
+				nodeService.setProperties(nodeRef, properties);
+			}
 		}
 
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
