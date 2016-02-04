@@ -11,49 +11,51 @@
                 <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                     <activiti:field name="script">
                         <activiti:string>
-	                        <![CDATA[
-	                        var document = bpm_package.children[0];
-	                        if (document != null) {
-		                        var logText = "Сотрудник #initiator отменил поручение: #mainobject.";
-		                        businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
+                            <![CDATA[
+                            var cancelReason = "" + lecmErrandWf_cancelReason;
+                            var comment = (cancelReason && cancelReason != "null") ? cancelReason : "Комментариев нет";
+                            var document = bpm_package.children[0];
+                            if (document != null) {
+                                var logText = "Сотрудник #initiator " + base.wrapperTitle("отменил", comment) + " поручение: #mainobject.";
+                                businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
 
-		                        var initiator = null;
-		                        var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
-		                        if (initiatorAssoc != null && initiatorAssoc.length == 1) {
-		                            initiator = initiatorAssoc[0];
-		                        }
+                                var initiator = null;
+                                var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+                                if (initiatorAssoc != null && initiatorAssoc.length == 1) {
+                                    initiator = initiatorAssoc[0];
+                                }
 
-		                        var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-		                        if (executorAssoc != null && executorAssoc.length == 1 && initiator != null) {
-		                            var executor = executorAssoc[0];
-			                        var recipients = [];
-			                        recipients.push(executor);
+                                var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+                                if (executorAssoc != null && executorAssoc.length == 1 && initiator != null) {
+                                    var executor = executorAssoc[0];
+                                    var recipients = [];
+                                    recipients.push(executor);
 
-			                        var notificationText = "Поручение ";
-			                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-			                        notificationText += " назначенное вам сотрудником ";
-			                        notificationText += documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-	                                notificationText += " ";
-	                                notificationText += documentScript.wrapperTitle("отменено", lecmErrandWf_cancelReason);
+                                    var notificationText = "Поручение ";
+                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
+                                    notificationText += " назначенное вам сотрудником ";
+                                    notificationText += documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
+                                    notificationText += " ";
+                                    notificationText += documentScript.wrapperTitle("отменено", comment);
 
-									var countChildErrands = 0;
-									var connectedDocuments = errands.getChildErrands(document.nodeRef.toString());
-									if (connectedDocuments != null) {
-										countChildErrands = connectedDocuments.length;
-									}
-									notificationText += ". Внимание: На основании этого поручения Вами было создано ";
-									var documentRefLink = document.nodeRef.toString().replace("://", "/");
-									var url = "/share/page/errands-list?query=" + encodeURIComponent("!Отменено, !Удалено, !Исполнено, !Не исполнено");
-									url += "&formId=" + encodeURIComponent("Все");
-									url += "#filter=errandsChildFilter|" + documentRefLink;
-									notificationText += "<a href='" + url + "'>";
-									notificationText += countChildErrands;
-									notificationText += "</a>";
+                                    var countChildErrands = 0;
+                                    var connectedDocuments = errands.getChildErrands(document.nodeRef.toString());
+                                    if (connectedDocuments != null) {
+                                        countChildErrands = connectedDocuments.length;
+                                    }
+                                    notificationText += ". Внимание: На основании этого поручения Вами было создано ";
+                                    var documentRefLink = document.nodeRef.toString().replace("://", "/");
+                                    var url = "/share/page/errands-list?query=" + encodeURIComponent("!Отменено, !Удалено, !Исполнено, !Не исполнено");
+                                    url += "&formId=" + encodeURIComponent("Все");
+                                    url += "#filter=errandsChildFilter|" + documentRefLink;
+                                    notificationText += "<a href='" + url + "'>";
+                                    notificationText += countChildErrands;
+                                    notificationText += "</a>";
 
-			                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
-		                        }
-	                        }
-	                        ]]>
+                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+                                }
+                            }
+                            ]]>
                         </activiti:string>
                     </activiti:field>
                 </activiti:executionListener>
