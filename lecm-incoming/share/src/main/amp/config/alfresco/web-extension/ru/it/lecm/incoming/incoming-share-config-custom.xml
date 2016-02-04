@@ -668,6 +668,7 @@
 					<show id="packageItems"/>
 					<show id="lecmIncomingWf:sendToReviewRecipient"/>
 					<show id="deputies-grid" force="true"/>
+					<show id="bpm:comment"/>
 				</field-visibility>
 				<appearance>
 					<field id="packageItems">
@@ -705,6 +706,9 @@
 							<control-param name="targetField">assoc:lecmIncomingWf:sendToReviewRecipient</control-param>
 						</control>
                     </field>
+					<field id="bpm:comment">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 				</appearance>
 			</form>
 		</forms>

@@ -12,6 +12,9 @@
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							var document = bpm_package.children[0];
+							var currentEmployee = orgstructure.getCurrentEmployee();
+							var comment = "" + bpm_comment;
+							comment = (comment && comment != "null") ? comment : "Комментариев нет";
 							if (document != null) {
 								var existReviewersAssocs = document.assocs["lecm-eds-document:reviewers-assoc"];
 								if (existReviewersAssocs != null) {
@@ -27,15 +30,18 @@
 								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYN");
 								    	document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
 
-								    	var notificationText = "Вам поступил документ на рассмотрение: ";
+								    	var notificationText = currentEmployee.properties['lecm-orgstr:employee-short-name'] + "направил Вам документ ";
 	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
+	                                    notificationText += " на рассмотрение. Комментарий: " + comment;
 	                                    var recipients = [];
 	                                    recipients.push(recipient.nodeRef.toString());
 	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 
 	                                    var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
-				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1";
+				                        logObjects.push(comment);
+				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1.";
+							            logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
                                         logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
 				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
 								    } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
@@ -67,14 +73,17 @@
 								    	        document.createAssociation(employees[i], "lecm-eds-document:reviewers-assoc");
 								    	    }
 
-									        var notificationText = "Поступил документ на рассмотрение ";
-		                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
+											var notificationText = currentEmployee.properties['lecm-orgstr:employee-short-name'] + "направил Вам документ ";
+	                                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
+	                                        notificationText += " на рассмотрение. Комментарий: " + comment;
 		                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 								    	}
 
 								    	var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
-				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1";
+				                        logObjects.push(comment);
+				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1.";
+										logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
                                         logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
 				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
 								    }
@@ -87,17 +96,18 @@
 							                document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
 							            }
 
-								        var notificationText = "Поступил документ на рассмотрение ";
+								    	var notificationText = currentEmployee.properties['lecm-orgstr:employee-short-name'] + "направил Вам документ ";
 	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
+	                                    notificationText += " на рассмотрение. Комментарий: " + comment;
 	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 							        }
 
 			                        var logObjects = [];
-				                    var logText = "#initiator направил(а) документ "
-				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}")
-				                    + " на рассмотрение рассматривающим";
-
-				                    businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), logObjects);
+									logObjects.push(comment);
+				                    var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение рассматривающим.";
+									logText += " " + base.wrapperTitle("Комментарий", "#object1") + ".";
+									logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+				                    businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
 								}
 							}
 						]]></activiti:string>
