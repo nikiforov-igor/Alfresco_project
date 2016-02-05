@@ -68,7 +68,7 @@
 	YAHOO.util.Event.onContentReady('${controlId}', function () {
 		var js = ['scripts/lecm-base/components/lecm-datagrid.js',
 				  'scripts/lecm-approval/approval-history-datagrid-control.js'];
-		var css = ['css/lecm-approval/approval-history-datagrid-control.css'];
+		var css = [];
 		LogicECM.module.Base.Util.loadResources(js, css, createDatagrid);
 	});
 })();

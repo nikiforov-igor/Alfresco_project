@@ -9,7 +9,8 @@
 		"result":"${approvalResult}",
 		"title": "${approvalResultTitle}"
 	},
-	"completedApprovalsCount": ${completedApprovalsCount},
+	"completedCurrentApprovalsCount": ${completedCurrentApprovalsCount},
+	"completedHistoryApprovalsCount": ${completedHistoryApprovalsCount},
 	"sourceRouteInfo": "${sourceRouteInfo}",
 	"approvalIsEditable": ${approvalIsEditable?string},
 	"approvalHistoryFolder": "${approvalHistoryFolder}"

@@ -23,7 +23,7 @@
 	var documentNode = search.findNode(documentNodeRef);
 	var currentIterationNode = routesService.getDocumentCurrentIteration(documentNode), tempFolder;
 	var approvalState, approvalStateProp, currentIterationNodeStr, approvalHistoryFolder, approvalHistoryFolderStr = '';
-	var completedApprovalsCount = 0, sourceRouteInfo = '', sourceRouteNode, approvalIsEditable = true;
+	var completedHistoryApprovalsCount = 0, completedCurrentApprovalsCount = 0, sourceRouteInfo = '', sourceRouteNode, approvalIsEditable = true;
 	var approvalDecisionQName = 'lecmApproveAspects:approvalDecision', approvalResult = '', approvalResultTitle = '';
 
 	if (currentIterationNode) {
@@ -33,6 +33,12 @@
 			approvalState = '' + approvalStateProp;
 		} else if (currentIterationNode) {
 			approvalState = 'NEW';
+		}
+
+		// ALF-4966 если текущая итерация находится в статусе "Завершен", "Пропущен", "Отменен"
+		// ее тоже надо учитывать при подсчете общего числа согласований
+		if (['COMPLETE', 'SKIPPED' , 'CANCELLED'].indexOf(approvalState) >= 0) {
+			completedCurrentApprovalsCount = 1;
 		}
 
 		approvalResult = currentIterationNode.properties[approvalDecisionQName] ?
@@ -65,7 +71,7 @@
 	}
 
 	if (approvalHistoryFolder) {
-		completedApprovalsCount = approvalHistoryFolder.children.length;
+		completedHistoryApprovalsCount = approvalHistoryFolder.children.length;
 		approvalHistoryFolderStr = approvalHistoryFolder.nodeRef.toString();
 	}
 
@@ -76,7 +82,8 @@
 	model.approvalState = approvalState;
 	model.approvalResult = approvalResult;
 	model.approvalResultTitle = approvalResultTitle;
-	model.completedApprovalsCount = completedApprovalsCount;
+	model.completedCurrentApprovalsCount = completedCurrentApprovalsCount;
+	model.completedHistoryApprovalsCount = completedHistoryApprovalsCount;
 	model.sourceRouteInfo = sourceRouteInfo;
 	model.approvalIsEditable = approvalIsEditable;
 	model.approvalHistoryFolder = approvalHistoryFolderStr;

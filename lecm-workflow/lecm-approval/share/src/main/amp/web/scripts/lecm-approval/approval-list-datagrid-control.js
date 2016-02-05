@@ -152,7 +152,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		showHistoryLink: null,
 		sourceRouteInfoContainer: null,
 		currentApprovalInfoContainer: null,
-		completedApprovalsCount: 0,
+		completedCurrentApprovalsCount: 0,
+		completedHistoryApprovalsCount: 0,
 		sourceRouteInfo: null,
 		approvalIsEditable: true,
 		approvalHistoryFolder: null,
@@ -222,7 +223,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							this.currentIterationNode = response.json.currentIterationNode ? response.json.currentIterationNode : null;
 							this.approvalState = response.json.approvalState;
 							this.approvalResult = response.json.approvalResult;
-							this.completedApprovalsCount = response.json.completedApprovalsCount;
+							this.completedCurrentApprovalsCount = response.json.completedCurrentApprovalsCount;
+							this.completedHistoryApprovalsCount = response.json.completedHistoryApprovalsCount;
 							this.sourceRouteInfo = response.json.sourceRouteInfo;
 							this.approvalIsEditable = response.json.approvalIsEditable;
 							this.approvalHistoryFolder = response.json.approvalHistoryFolder;
@@ -331,7 +333,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			var selectRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 			selectRouteForm.setOptions({
 				width: '35em',
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 				actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/convertRouteToIteration',
 				templateRequestParams: {
 					formId: formId,
@@ -478,7 +480,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 			editIterationForm.setOptions({
 				width: '50em',
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 				templateRequestParams: {
 					formId: formId,
 					itemId: this.currentIterationNode,
@@ -555,7 +557,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		},
 		fillCurrentApprovalState: function () {
 			var approvalMsgTemplate = '{msg} ({additionalMsg})';
-			this.completedApprovalsCountContainer.innerHTML = this.completedApprovalsCount;
+			this.completedApprovalsCountContainer.innerHTML = this.completedCurrentApprovalsCount + this.completedHistoryApprovalsCount;
 			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo ? YAHOO.lang.substitute(approvalMsgTemplate, {
 				msg: Alfresco.util.message('label.approval.typical'),
 				additionalMsg: this.sourceRouteInfo
@@ -579,7 +581,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				return 'previous' == element.value;
 			}
 
-			if (this.completedApprovalsCount > 0) {
+			if (this.completedHistoryApprovalsCount > 0) {
 				reveal(this.showHistoryLink);
 			} else {
 				hide(this.showHistoryLink);
@@ -592,7 +594,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				approvalListButtonMenu = this.createApprovalListButton.getMenu();
 				items = approvalListButtonMenu.getItems().filter(previous);
 				itemData = approvalListButtonMenu.itemData.filter(previous);
-				visible = ('COMPLETE' == this.approvalState) || (this.completedApprovalsCount > 0);
+				visible = ('COMPLETE' == this.approvalState) || (this.completedHistoryApprovalsCount > 0);
 
 				if (items.length) {
 					if (visible) {
@@ -665,7 +667,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			var showApprovalHistoryForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 			showApprovalHistoryForm.setOptions({
 				width: '80em',
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 				templateRequestParams: {
 					formId: formId,
 					itemId: this.approvalHistoryFolder,
