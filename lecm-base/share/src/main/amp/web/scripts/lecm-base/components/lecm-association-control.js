@@ -494,13 +494,15 @@ LogicECM.module = LogicECM.module || {};
 
 				if (arrItems !== "")
 				{
+					var items = (arrItems.indexOf(",") > 0) ? arrItems.split(",") : arrItems.split(";");
+					
 					Alfresco.util.Ajax.jsonRequest(
 						{
 							url: Alfresco.constants.PROXY_URI + this.options.pickerItemsScript,
 							method: "POST",
 							dataObj:
 							{
-								items: arrItems.split(","),
+								items: items,
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
 								sortProp: this.options.sortProp,
