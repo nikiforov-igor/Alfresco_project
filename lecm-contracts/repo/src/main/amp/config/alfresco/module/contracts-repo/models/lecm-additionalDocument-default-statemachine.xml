@@ -4052,7 +4052,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
-                                                                                <value><![CDATA[user.currentUser.hasBusinessRole('CONTRACT_CURATOR')]]></value>
+                                                                                <value><![CDATA[user.currentUser().hasBusinessRole('CONTRACT_CURATOR')]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4115,7 +4115,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
-                                                                                <value><![CDATA[user.currentUser.hasBusinessRole('CONTRACT_CURATOR')]]></value>
+                                                                                <value><![CDATA[user.currentUser().hasBusinessRole('CONTRACT_CURATOR')]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>

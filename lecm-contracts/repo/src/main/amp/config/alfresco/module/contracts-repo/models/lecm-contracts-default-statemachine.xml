@@ -3070,7 +3070,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
-                                                                                <value><![CDATA[user.currentUser.hasBusinessRole('CONTRACT_CURATOR')]]></value>
+                                                                                <value><![CDATA[user.currentUser().hasBusinessRole('CONTRACT_CURATOR')]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3131,7 +3131,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
-                                                                                <value><![CDATA[user.currentUser.hasBusinessRole('CONTRACT_CURATOR')]]></value>
+                                                                                <value><![CDATA[user.currentUser().hasBusinessRole('CONTRACT_CURATOR')]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
