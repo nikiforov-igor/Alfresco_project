@@ -207,7 +207,7 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public NodeRef getYearSection(NodeRef nodeRef) {
-		NodeRef parent = nodeService.getParentAssocs(nodeRef).get(0).getParentRef();
+		NodeRef parent = nodeRef;
 		while (parent != null) {
 			if (TYPE_NOMENCLATURE_YEAR_SECTION.equals(nodeService.getType(parent))) {
 				return parent;

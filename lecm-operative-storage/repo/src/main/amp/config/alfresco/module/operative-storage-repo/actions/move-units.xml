@@ -27,10 +27,23 @@
         </property>
         <property name="lecm-group-actions:script">
             <![CDATA[(function() {
-    document.move(folder);
-
-    var logText = "Перемещение раздела номенклатуры дел";
-	businessJournal.log(document.nodeRef.toString(), "OS_MOVE", logText, []);
+           function updateYearSection(obj, newYearRef) {
+                if (obj.typeShort == 'lecm-os:nomenclature-case') {
+                    var oldYearRef = obj.assocs["lecm-os:nomenclature-case-year-assoc"][0];
+                    obj.removeAssociation(oldYearRef, "lecm-os:nomenclature-case-year-assoc");
+                    obj.createAssociation(newYearRef, "lecm-os:nomenclature-case-year-assoc");
+                } else {
+                    var childs = obj.children;
+                    for each (var child in childs) {
+                        updateYearSection(child, newYearRef);
+                    }
+                }
+            }
+            var newYearSection = operativeStorage.getYearSection(folder);
+            document.move(folder);
+            updateYearSection(document, newYearSection);
+            var logText = "Перемещение раздела номенклатуры дел";
+            businessJournal.log(document.nodeRef.toString(), "OS_MOVE", logText, []);
 })();]]>
         </property>
         <items>
