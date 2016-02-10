@@ -130,7 +130,8 @@
                                                 ],
                                                 bubblingLabel: "${bubblingLabel!"orgstructure"}",
                                                 showCheckboxColumn: false,
-                showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
+//                showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
+                showActionColumn: true,
                                                 attributeForShow:"lecm-orgstr:element-short-name"
                                         }).setMessages(${messages});
                 }

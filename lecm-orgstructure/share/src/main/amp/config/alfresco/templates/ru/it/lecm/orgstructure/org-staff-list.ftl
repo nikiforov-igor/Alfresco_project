@@ -7,20 +7,22 @@
 
     var response = ${response};
     LogicECM.module.OrgStructure.STAFF_LIST_SETTINGS = response;
-    LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string};
+<#--     LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string}; -->
 //]]></script>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
-<#assign hasPermission = isOrgEngineer/>
+<#-- <#assign hasPermission = isOrgEngineer/> -->
 <@bpage.basePageSimple showToolbar=hasPermission>
-    <#if hasPermission>
+<#--     <#if hasPermission> -->
     <div class="yui-t1" id="orgstructure-staff-grid-with-tree">
         <@panels.twoPanels leftPanelId="left-panel-staff" rightPanelId="right-panel-staff">
             <@region id="grid" scope="template" />
         </@panels.twoPanels>
     </div>
+<#--
     <#else>
         <@region id="forbidden" scope="template"/>
     </#if>
+-->
 </@bpage.basePageSimple>

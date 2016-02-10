@@ -165,13 +165,13 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                     },
                     bubblingLabel: "workForce"
                 });
-            if (LogicECM.module.OrgStructure.IS_ENGINEER) {
+//            if (LogicECM.module.OrgStructure.IS_ENGINEER) {
                 // Активируем кнопку "Новый элемент" в правом TollBar-е
                 YAHOO.Bubbling.fire("refreshButtonState",{
                     bubblingLabel: "workForce",
                     enabledButtons: ["activeOnParentTableClick"]
                 });
-            }
+//            }
         }
     }, true);
 })();

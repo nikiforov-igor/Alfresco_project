@@ -245,7 +245,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             }
 
             if (node.data.type == "lecm-orgstr:organization-unit") {
-                if (LogicECM.module.OrgStructure.IS_ENGINEER) {
+//                if (LogicECM.module.OrgStructure.IS_ENGINEER) {
                     YAHOO.Bubbling.fire("refreshButtonState",{
                         enabledButtons: [
                             BUTTONS_FLAGS['activeOnUnitClick'],
@@ -253,7 +253,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             BUTTONS_FLAGS['activeOnTreeNodeClick']
                         ]
                     });
-                }
+//                }
             } else {
                 // узел Структура
                 var disabledButtons = null;
@@ -387,7 +387,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 sNode.expanded = true;
                 otree.tree.render();
                 otree.onExpandComplete(null);
-				
+
 				/*
                 if (otree.options.itemType){
                     Bubbling.fire("activeGridChanged",

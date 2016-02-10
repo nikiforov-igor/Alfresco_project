@@ -4,7 +4,7 @@
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
 
 <@bpage.basePageSimple showToolbar=false>
-<#if isEngineer>
+<#-- <#if isEngineer> -->
 <div class="yui-t1" id="lecm-dictionary">
     <#if plane>
         <div id="yui-main-2">
@@ -20,7 +20,9 @@
         </@panels.twoPanels>
     </#if>
 </div>
+<#--
 <#else>
     <@region id="forbidden" scope="template"/>
 </#if>
+-->
 </@bpage.basePageSimple>

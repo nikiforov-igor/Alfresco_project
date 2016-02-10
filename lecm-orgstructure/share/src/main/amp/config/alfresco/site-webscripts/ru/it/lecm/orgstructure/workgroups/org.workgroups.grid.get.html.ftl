@@ -15,7 +15,8 @@
 								bubblingLabel:"${bubblingLabel!"workGroup"}",
 								usePagination:true,
 								showExtendSearchBlock:false,
-	                            showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
+//	                            showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
+	                            showActionColumn: true,
 								actions: [
 									{
 										type:"datagrid-action-link-${bubblingLabel!"workGroup"}",

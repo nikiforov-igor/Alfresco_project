@@ -15,7 +15,8 @@
 	                    usePagination:true,
 	                    showExtendSearchBlock:true,
 	                    showCheckboxColumn: false,
-	                    showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
+//	                    showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
+	                    showActionColumn: true,
 	                    editForm: "configureBusinessRole",
 	                    attributeForShow: "cm:name",
 	                    actions: [{

@@ -7,16 +7,18 @@
     LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     var response = ${response};
     LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS = response;
-    LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string};
+<#--     LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string}; -->
 //]]>
 </script>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-<#assign hasPermission = isOrgEngineer/>
+<#-- <#assign hasPermission = isOrgEngineer/> -->
 <@bpage.basePageSimple showToolbar=hasPermission>
-    <#if hasPermission>
+<#--     <#if hasPermission> -->
         <@region id="employees-grid" scope="template" />
+<#--
     <#else>
         <@region id="forbidden" scope="template"/>
     </#if>
+-->
 </@bpage.basePageSimple>
