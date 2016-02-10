@@ -174,7 +174,12 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 Map<String, String> associations = new HashMap<String, String>();
                 //инициатор поручения
                 NodeRef errandInitiator = orgstructureService.getCurrentEmployee();
-
+                
+                // Назначить инициатора поручения
+                if (null != errandInitiator) {
+                	associations.put("lecm-errands:initiator-assoc", errandInitiator.toString());
+                }
+                
                 //исполнитель
                 List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);
                 if (pointExecutorAssocs.size() > 0) {
