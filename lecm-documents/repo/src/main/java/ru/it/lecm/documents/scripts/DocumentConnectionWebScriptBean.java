@@ -377,4 +377,22 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
         }
         return null;
     }
+    
+    /**
+     * Получение документов связанных с документом
+     * @param document документ
+     * @return массив связанных документов
+     */
+    public Scriptable getConnectedWithDocument(ScriptNode document, String connectionTypeCode, String  sourceDocumentType) {
+        ParameterCheck.mandatory("document", document);
+        ParameterCheck.mandatory("connectionTypeCode", connectionTypeCode);
+        
+        QName documentTypeQName = QName.createQName(sourceDocumentType, serviceRegistry.getNamespaceService());
+
+        List<NodeRef> connectedDocuments = documentConnectionService.getConnectedWithDocument(document.getNodeRef(), connectionTypeCode, documentTypeQName);
+        if (connectedDocuments != null) {
+            return createScriptable(connectedDocuments);
+        }
+        return null;
+    }
 }
