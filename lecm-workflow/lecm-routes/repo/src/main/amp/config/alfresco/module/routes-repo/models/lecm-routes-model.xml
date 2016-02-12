@@ -145,6 +145,10 @@
 			<title>Строка этапа</title>
 			<parent>cm:folder</parent>
 			<properties>
+				<property name="lecmWorkflowRoutes:stageItemOrder">
+					<title>Порядковый номер</title>
+					<type>d:int</type>
+				</property>
 				<property name="lecmWorkflowRoutes:stageItemTerm">
 					<title>Срок (рабочих дней)</title>
 					<type>d:int</type>

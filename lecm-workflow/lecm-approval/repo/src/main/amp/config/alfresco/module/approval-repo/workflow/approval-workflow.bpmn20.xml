@@ -173,6 +173,9 @@
   var stageItems = currentStage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
   var stageItem, i, size, approvalState;
   var employees;
+  stageItems.sort(function (left, right) {
+    return left.properties['lecmWorkflowRoutes:stageItemOrder'] - right.properties['lecmWorkflowRoutes:stageItemOrder'];
+  });
   for (i = 0, size = stageItems.length; i < size; ++i) {
     stageItem = stageItems[i];
     approvalState = stageItem.properties['lecmApproveAspects:approvalState'];
@@ -326,6 +329,9 @@
   var currentStage = execution.getVariable('currentStage');
   var stageItems = currentStage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
   var i, size, approvalState, hasNextStageItem;
+  stageItems.sort(function (left, right) {
+    return left.properties['lecmWorkflowRoutes:stageItemOrder'] - right.properties['lecmWorkflowRoutes:stageItemOrder'];
+  });
   for (i = 0, size = stageItems.length; i < size; ++i) {
     approvalState = stageItems[i].properties['lecmApproveAspects:approvalState'];
     approvalState = (approvalState != null) ? '' + approvalState : null;

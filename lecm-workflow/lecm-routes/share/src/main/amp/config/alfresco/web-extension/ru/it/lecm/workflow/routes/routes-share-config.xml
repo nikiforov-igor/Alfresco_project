@@ -200,6 +200,7 @@
 		<forms>
 			<form id="datagrid">
 				<field-visibility>
+					<show id="lecmWorkflowRoutes:stageItemOrder"/>
 					<show id="lecmWorkflowRoutes:stageItemEmployeeOrMacrosAssocFake" force="true"/>
 					<show id="lecmWorkflowRoutes:stageItemEmployeePositionFake" force="true"/>
 					<show id="lecmWorkflowRoutes:stageItemTerm"/>

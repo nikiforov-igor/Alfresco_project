@@ -25,7 +25,9 @@
 
 	for (i = 0, length = refs.length; i < length; ++i) {
 		targetNode = search.findNode(refs[i]);
-		stageItem = stageNode.createNode(UUID.randomUUID().toString(), 'lecmWorkflowRoutes:stageItem');
+		stageItem = stageNode.createNode(null, 'lecmWorkflowRoutes:stageItem', {
+			'lecmWorkflowRoutes:stageItemOrder': i
+		});
 		stageItem.createAssociation(targetNode, assocTypeQName);
 		if (resolveMacros) {
 			documentNode = routesService.getDocumentByStage(stageNode);
