@@ -47,16 +47,20 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
         return false;
     }
 
+    protected IllegalStateException createNotImplementedException() {
+        IllegalStateException ex = new IllegalStateException("This method is not implemented yet.");
+        logger.error(ex.getMessage(), ex);
+        return ex;
+    }
+
     @Override
     public boolean hasActiveStatemachine(NodeRef document) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public String getCurrentTaskId(String executionId) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -66,15 +70,12 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef, boolean isActive) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public boolean isStarter(String type) {
-        QName typeQName = QName.createQName(type, serviceRegistry.getNamespaceService());
-        SimpleDocumentRegistryItem item = simpleDocumentRegistry.getRegistryItem(typeQName);
-        List<String> accessRoles = item.getStarters();
+        Set<String> accessRoles = getStarterRoles(type);
         NodeRef employee = orgstructureBean.getCurrentEmployee();
         final String employeeLogin = orgstructureBean.getEmployeeLogin(employee);
         @SuppressWarnings("unchecked")
@@ -93,15 +94,22 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public Set<String> getStarterRoles(String documentType) {
+        Set<String> result = new HashSet<>();
+        QName typeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+        SimpleDocumentRegistryItem item = simpleDocumentRegistry.getRegistryItem(typeQName);
+        result.addAll(item.getStarters());
+        return result;
+    }
+
+    @Override
     public NodeRef getTaskDocument(WorkflowTask task, List<String> documentTypes) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public List<WorkflowTask> getDocumentTasks(NodeRef documentRef, boolean activeTasks) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -112,8 +120,7 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -128,26 +135,22 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public String getPreviousStatusName(NodeRef document) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public String getPreviousStatusNameOnTake(NodeRef document) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public List<String> getPreviousStatusesNames(NodeRef document) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -157,14 +160,7 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public Map<String, Object> getVariables(String executionId) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
-    }
-
-    @Override
-    public Set<String> getStarterRoles(String documentType) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -173,8 +169,7 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -184,8 +179,7 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public boolean isEditableField(NodeRef document, String field) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -200,62 +194,52 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public void executeTransitionAction(NodeRef document, String actionName) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public void executeTransitionAction(NodeRef document, String actionName, String persistedResponse) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public List<WorkflowTask> filterTasksByAssignees(List<WorkflowTask> tasks, List<NodeRef> assigneesEmployees) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public List<WorkflowTask> getDocumentsTasks(List<String> documentTypes, String fullyAuthenticatedUser) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public void terminateProcess(String processId) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> workflowIds, Integer remainingDays) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public void sendSignal(String executionId) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public boolean isServiceWorkflow(WorkflowInstance workflow) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName, Task task) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
@@ -265,20 +249,17 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public void resetStateMachene() {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public void connectToStatemachine(NodeRef documentRef, String processInstanceID, String processDefinitionID) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
     @Override
     public void disconnectFromStatemachine(NodeRef documentRef, String processInstanceID) {
-        logger.warn("This method is not implemented yet.");
-        throw new IllegalStateException("This method is not implemented yet.");
+        throw createNotImplementedException();
     }
 
 }
