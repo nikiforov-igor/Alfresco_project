@@ -100,8 +100,15 @@
 			                        } else if (decision == "APPROVED") {
 	                                    var newDueDate = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskNewDate");
 	                                    if (newDueDate != null) {
+                                                            var now = new Date();
+                                                            now.setHours(12);
+                                                            now.setMinutes(0);
+                                                            now.setSeconds(0);
+                                                            now.setMilliseconds(0);
+                                                            var newDueDateJS = new Date(newDueDate.getTime());
 				                            document.properties["lecm-errands:limitation-date"] = newDueDate;
-	                                        document.save();
+				                            document.properties["lecm-errands:is-expired"] = (now > newDueDateJS);
+                                                            document.save();
 				                        }
 
 	                                    var notificationText = documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
