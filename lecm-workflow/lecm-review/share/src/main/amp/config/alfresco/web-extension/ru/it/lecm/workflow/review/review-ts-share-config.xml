@@ -1,0 +1,47 @@
+<alfresco-config>
+    <config evaluator="node-type" condition="lecm-review-ts:review-table-item">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
+                    <show id="lecm-review-ts:reviewer-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:indexTableRow">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
+                    </field>
+                    <field id="lecm-review-ts:reviewer-assoc"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-review-ts:review-table-item">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-document:indexTableRow" force="true"/>
+                    <show id="lecm-review-ts:reviewer-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-document:indexTableRow">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
+                    </field>
+                    <field id="lecm-review-ts:reviewer-assoc"/>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-document:indexTableRow"/>
+                    <show id="lecm-review-ts:reviewer-assoc"/>
+                    <show id="lecm-review-ts:review-item-finished"/>
+                    <show id="lecm-review-ts:review-item-date"/>
+                </field-visibility>
+                <appearance>
+					
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+</alfresco-config>

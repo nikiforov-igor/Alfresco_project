@@ -25,10 +25,12 @@
 	<util:list id="review.models">
 		<value>alfresco/module/${artifactId}/models/lecm-review-workflow-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-result-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-review-ts-model.xml</value>
 	</util:list>
 	<util:list id="review.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-review-workflow</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-review-result</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-review-ts</value>
 	</util:list>
 	<bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, workflow.model.bootstrap"

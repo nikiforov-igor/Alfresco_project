@@ -17,6 +17,7 @@
         <import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
         <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
         <import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
+        <import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/incoming/1.0" prefix="lecm-incoming"/>
@@ -219,6 +220,7 @@
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:response-to-aspect</aspect>
                 <aspect>lecm-document-aspects:on-control-aspect</aspect>
+                <aspect>lecm-review-ts:review-aspect</aspect>
             </mandatory-aspects>
         </type>
     </types>
