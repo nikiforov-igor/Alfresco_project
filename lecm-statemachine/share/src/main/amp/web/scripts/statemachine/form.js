@@ -398,8 +398,7 @@ LogicECM.module = LogicECM.module || {};
 												} else if (item.openWindow) {
 													window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
 												} else if (!item.withErrors){
-													// Reload current page:
-													LogicECM.module.Base.Util.setPostLocation(document.location.pathname + document.location.search);
+													window.location.reload(true);
 												} else {
 													message = '<div class=\'' + (item.withErrors ? 'error-item' : 'noerror-item') + '\'>' + item.message + '</div>';
 													this._openMessageWindow(action.label, message, true);
@@ -455,8 +454,9 @@ LogicECM.module = LogicECM.module || {};
 				onSuccess: {
 					scope: this,
 					fn: function(response) {
-						// Reload current page:
-						LogicECM.module.Base.Util.setPostLocation(document.location.pathname + document.location.search);
+						// document.location.href = document.location.href;
+						// ALF-2803
+						window.location.reload(true);
 					}
 				}
 			});
@@ -609,8 +609,9 @@ LogicECM.module = LogicECM.module || {};
 						if (oResults.redirect && oResults.redirect != 'null') {
 							LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + oResults.redirect);
 						} else {
-							// Reload current page:
-							LogicECM.module.Base.Util.setPostLocation(document.location.pathname + document.location.search);
+							// document.location.href = document.location.href;
+							// ALF-2803
+							window.location.reload(true);
 						}
 					}
 				}
