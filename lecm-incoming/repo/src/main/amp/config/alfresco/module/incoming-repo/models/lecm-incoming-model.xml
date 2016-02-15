@@ -76,7 +76,6 @@
                 </property>
                 <property name="lecm-incoming:auto-transition-from-errand">
                     <type>d:noderef</type>
-                    <default></default>
                     <index enabled="false"/>
                 </property>
                 <property name="lecm-incoming:delivery-method-assoc-ref">
