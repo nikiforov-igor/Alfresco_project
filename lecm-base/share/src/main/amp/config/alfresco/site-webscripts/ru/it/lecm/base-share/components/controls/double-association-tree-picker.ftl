@@ -202,6 +202,9 @@
             <#if args.ignoreNodes??>
                 ignoreNodes: "${args.ignoreNodes}".split(","),
             </#if>
+			<#if params.firstPathNameSubstituteString??>
+				pathNameSubstituteString: "${params.firstPathNameSubstituteString}",
+			</#if>
 		    showSearch: ${firstShowSearch?string},
 	        plane: ${firstPlane?string},
 	        currentValue: "${field.value!''}",

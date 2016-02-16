@@ -16,6 +16,7 @@
 	                <control-param name="firstChangeItemsFireAction">contractor.selected</control-param>
 	                <control-param name="firstAdditionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 	                <control-param name="firstPickerItemsScript">/lecm/contractors/common/picker/items</control-param>
+                    <control-param name="firstPathNameSubstituteString">{lecm-contractor:shortname}</control-param>
 
 	                <control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
 	                <control-param name="secondNameSubstituteString">{lecm-contractor:shortname}</control-param>

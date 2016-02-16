@@ -192,7 +192,9 @@ LogicECM.module = LogicECM.module || {};
 
 			formId: false,
 
-            loadDefault: true
+            loadDefault: true,
+
+            pathNameSubstituteString: null
         },
 
         onReady: function AssociationTreeViewer_onReady() {
@@ -1612,7 +1614,9 @@ LogicECM.module = LogicECM.module || {};
 	            "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 				"&additionalFilter=" + encodeURIComponent(additionalFilter) +
-                "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
+                "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
+                "&pathRoot=" + encodeURIComponent(this.options.rootLocation) +
+                "&pathNameSubstituteString=" + encodeURIComponent(this.options.pathNameSubstituteString);
         },
 
         onSelectedItemAdded: function AssociationTreeViewer_onSelectedItemAdded(layer, args)
@@ -1659,7 +1663,11 @@ LogicECM.module = LogicECM.module || {};
 	            if (typeof(items[i]) != "function") {
 	                if (this.options.plane || !this.options.showSelectedItemsPath) {
 	                    var displayName = items[i].selectedName;
-	                } else {
+	                } else
+                    if (this.options.pathNameSubstituteString) {
+                        displayName = items[i].path.substring(1, items[i].path.length) + items[i].selectedName;
+                    } else
+                    {
 	                    displayName = items[i].displayPath + "/" + items[i].selectedName;
 		                      if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
 	                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
@@ -1686,7 +1694,11 @@ LogicECM.module = LogicECM.module || {};
 			var num = Object.keys(this.selectedItems).length + 1;
 			if (this.options.plane || !this.options.showSelectedItemsPath) {
 				var displayName = item.selectedName;
-			} else {
+			} else
+            if (this.options.pathNameSubstituteString) {
+                displayName = item.path.substring(1, item.path.length) + item.selectedName;
+            } else
+            {
 				displayName = item.displayPath + "/" + item.selectedName;
 				if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
 					var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
@@ -1767,7 +1779,11 @@ LogicECM.module = LogicECM.module || {};
 	            for (var i in this.selectedItems) {
 	                if (this.options.plane || !this.options.showSelectedItemsPath) {
 	                    var displayName = this.selectedItems[i].selectedName;
-	                } else {
+	                } else
+                    if (this.options.pathNameSubstituteString) {
+                        displayName = this.selectedItems[i].path.substring(1, this.selectedItems[i].path.length) + this.selectedItems[i].selectedName;
+                    } else
+                    {
 	                    displayName = this.selectedItems[i].displayPath + "/" + this.selectedItems[i].selectedName;
 	                    if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
 	                        var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
