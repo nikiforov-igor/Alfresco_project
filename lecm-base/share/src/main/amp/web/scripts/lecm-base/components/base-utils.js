@@ -500,12 +500,12 @@ LogicECM.module.Base.Util = {
         }
         if (secondButton) {
             secondButtonsHtml = '<div class="ci-buttons-div">' + secondButton + '</div>';
-        }    
+        }
 
         return '<div class="cropped-item">' + firstButtonsHtml + secondButtonsHtml + '<div class="ci-value-div"><span>' + leftCroppedPart + '</span></div></div>';
     },
 
-    
+
     getCroppedItem: function(leftCroppedPart, rightPart) {
         var buttonsHtml = "";
 
@@ -801,6 +801,12 @@ LogicECM.module.Base.Util = {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector;
+
+	//костыль для инициализации форм, пока живет здесь
+	Alfresco.util.Ajax.jsonGet({
+		url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init",
+		dataObj: { reset: false }
+	});
 
 	// Recalculate the vertical size on a browser window resize event
 	Event.on(window, "resize", function(e) {

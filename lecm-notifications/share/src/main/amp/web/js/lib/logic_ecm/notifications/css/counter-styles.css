@@ -64,14 +64,18 @@ div.bold {
 }
 .notification-row {
     padding: 10px 10px 5px;
-    border-bottom: 1px solid #d7d7d7;
     font-size: 13px;
 }
 div.notification-row span.detail {
     color: #E7E7E7;
+	white-space: normal;
 }
 .notification-row > span:not(.detail) {
     color: #126a8b;
     line-height: 20px;
     cursor: default;
+}
+
+tr.notification-row-delimiter td {
+    border-bottom: 1px solid #d7d7d7 !important;
 }

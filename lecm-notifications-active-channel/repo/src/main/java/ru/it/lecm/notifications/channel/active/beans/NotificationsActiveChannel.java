@@ -20,7 +20,7 @@ import java.util.*;
 
 /**
  * User: AIvkin Date: 17.01.13 Time: 15:19
- * <p/>
+ *
  * Сервис активного канала уведомлений
  */
 public class NotificationsActiveChannel extends NotificationChannelBeanBase {
@@ -78,7 +78,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
      * @return Ссылка на уведомление активного канала
      */
     private NodeRef createNotification(NotificationUnit notification) throws WriteTransactionNeededException {
-        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
+        Map<QName, Serializable> properties = new HashMap<>(3);
         String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
         properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
         properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
@@ -112,7 +112,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
      * канала иначе false
      */
     public boolean isActiveChannelNotification(NodeRef ref) {
-        Set<QName> types = new HashSet<QName>();
+        Set<QName> types = new HashSet<>();
         types.add(TYPE_NOTIFICATION_ACTIVE_CHANNEL);
         return isProperType(ref, types);
     }
@@ -156,6 +156,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
      *
      * @param skipCount количество пропущенных записей
      * @param maxItems максимальное количество возвращаемых элементов
+	 * @param ignoreNotifications
      * @return список ссылок на уведомления
      */
     public List<NodeRef> getNotifications(int skipCount, int maxItems, List<String> ignoreNotifications) {
@@ -172,22 +173,23 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 
     private List<NodeRef> filterNotifications(List<AssociationRef> notifications, List<String> ignoreNotifications, int skipCount, int maxItems) {
         List<NodeRef> result = new ArrayList<>();
-        List<NodeRef> read = new ArrayList<>();
+//        List<NodeRef> read = new ArrayList<>();
         if (notifications != null) {
             for (AssociationRef ref : notifications) {
                 NodeRef notificationRef = ref.getSourceRef();
                 if (isActiveChannelNotification(notificationRef) && !isArchive(notificationRef) && !ignoreNotifications.contains(notificationRef.toString())) {
                     if (!isRead(notificationRef)) {
                         result.add(notificationRef);
-                    } else {
-                        read.add(notificationRef);
                     }
+//                    } else {
+//                        read.add(notificationRef);
+//                    }
                 }
             }
         }
-        if (result.size() < maxItems + skipCount) {
-            result.addAll(read);            //добавляем прочтенные только если нам не хватает непрочтенных, чтоб не замедляли сортировку
-        }
+//        if (result.size() < maxItems + skipCount) {
+//            result.addAll(read);            //добавляем прочтенные только если нам не хватает непрочтенных, чтоб не замедляли сортировку
+//        }
 
         if (skipCount > result.size()) {    //не тратимся на сортировку, если нам больше не требуются
             result.clear();
@@ -195,18 +197,20 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
         }
 
         Collections.sort(result, new Comparator<NodeRef>() {
+            @Override
             public int compare(NodeRef o1, NodeRef o2) {
-                Boolean isRead1 = isRead(o1);
-                Boolean isRead2 = isRead(o2);
-
-                int result = isRead1.compareTo(isRead2);
-                if (result == 0) {
+//                Boolean isRead1 = isRead(o1);
+//                Boolean isRead2 = isRead(o2);
+//
+//                int result = isRead1.compareTo(isRead2);
+//                if (result == 0) {
                     Date formingDate1 = (Date) nodeService.getProperty(o1, NotificationsService.PROP_FORMING_DATE);
                     Date formingDate2 = (Date) nodeService.getProperty(o2, NotificationsService.PROP_FORMING_DATE);
-
-                    result = -formingDate1.compareTo(formingDate2);
-                }
-                return result;
+                    return formingDate2.compareTo(formingDate1);
+//
+//                    result = -formingDate1.compareTo(formingDate2);
+//                }
+//                return result;
             }
         });
 
