@@ -19,9 +19,17 @@
 
 	if (barcodeEnabledObj.isBarcodeEnabled) {
 		var menuBar = widgetUtils.findObject(model.jsonModel, 'id', 'HEADER_APP_MENU_BAR');
+		var argWidgets = menuBar.config.widgets;
 		if (menuBar) {
-			menuBar.config.widgets.push(barcodeSearchWidget);
+			var newWidgets = [];
+			for (var i in argWidgets) {
+				if (argWidgets[i].id == 'LOGIC_ECM_MORE_MENU_BAR') {
+					newWidgets.push(barcodeSearchWidget);
+				}
+				newWidgets.push(argWidgets[i]);
+			}
+			menuBar.config.widgets = newWidgets;
 		}
 	}
-
+	
 })();
