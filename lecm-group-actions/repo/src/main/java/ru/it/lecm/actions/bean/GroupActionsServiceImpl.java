@@ -10,11 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.Map.Entry;
+import org.alfresco.service.namespace.NamespaceException;
 
 /**
  * User: pmelnikov
@@ -23,13 +25,14 @@ import java.util.Map.Entry;
  */
 public class GroupActionsServiceImpl extends BaseBean implements GroupActionsService {
 
-	final protected Logger logger = LoggerFactory.getLogger(GroupActionsServiceImpl.class);
+    final protected Logger logger = LoggerFactory.getLogger(GroupActionsServiceImpl.class);
 
     private DictionaryService dictionaryService;
 //    private StateMachineServiceBean stateMachineService;
     private List<String> aspects;
     private NamespaceService namespaceService;
     private DocumentService documentService;
+    private LecmPermissionService lecmPermissionService;
 
     /**
      * Метод инициализвции сервиса
@@ -62,7 +65,7 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
     }
 
     @Override
-	public List<String> getAspects() {
+    public List<String> getAspects() {
         return aspects;
     }
 
@@ -74,6 +77,9 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         this.documentService = documentService;
     }
 
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
 
     @Override
     public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems, boolean group) {
@@ -90,20 +96,41 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         return actionsMap;
     }
 
+    @Override
     public List<NodeRef> getActiveActions(NodeRef item) {
         List<NodeRef> forItems = new ArrayList<NodeRef>();
         forItems.add(item);
         return getActiveActions(forItems, false);
     }
 
+    @Override
+    public List<NodeRef> getActionsForReader(NodeRef item) {
+        List<NodeRef> forItems = new ArrayList<>();
+        forItems.add(item);
+        return getActiveActions(forItems, false, true);
+    }
+
     private List<NodeRef> getActiveActions(List<NodeRef> forItems, boolean group) {
-        if (forItems.size() == 0) return new ArrayList<NodeRef>();
+        return getActiveActions(forItems, group, false);
+    }
+
+    private List<NodeRef> getActiveActions(List<NodeRef> forItems, boolean group, boolean forReader) {
+        if (forItems.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<NodeRef> actions = getAllActions(group);
-        actions = filterAndSortActions(actions, forItems);
+        actions = filterAndSortActions(actions, forItems, forReader);
         return actions;
     }
 
-    private List<NodeRef> filterAndSortActions( List<NodeRef> actions, List<NodeRef> forItems) {
+    private List<NodeRef> filterAndSortActions(List<NodeRef> actions, List<NodeRef> forItems) {
+        return filterAndSortActions(actions, forItems, false);
+    }
+
+    private List<NodeRef> filterAndSortActions(List<NodeRef> actions, List<NodeRef> forItems, boolean filterForReader) {
+        if (filterForReader) {
+            actions = filterForReader(actions, forItems);
+        }
         actions = filterByType(actions, forItems);
         actions = filterByStatuses(actions, forItems);
         actions = filterByExpression(actions, forItems);
@@ -143,15 +170,19 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         for (NodeRef action : actions) {
             Serializable property = nodeService.getProperty(action, GroupActionsService.PROP_TYPE);
             boolean isRight = false;
-			List<String> typesStr = (List<String>) property;
-			if (typesStr != null && !typesStr.isEmpty()) {
-				Map<QName, TypeDefinition> typeToTypeDef = new HashMap<>();
-				for (String typeStr : typesStr) {
-					if (!typeStr.isEmpty()) {
-						QName typeQName = QName.createQName(typeStr, namespaceService);
-						typeToTypeDef.put(typeQName, dictionaryService.getType(typeQName));
-					}
-				}
+            List<String> typesStr = (List<String>) property;
+            if (typesStr != null && !typesStr.isEmpty()) {
+                Map<QName, TypeDefinition> typeToTypeDef = new HashMap<>();
+                for (String typeStr : typesStr) {
+                    if (!typeStr.isEmpty()) {
+                        try {
+                            QName typeQName = QName.createQName(typeStr, namespaceService);
+                            typeToTypeDef.put(typeQName, dictionaryService.getType(typeQName));
+                        } catch (NamespaceException ex) {
+                            logger.error("Group action " + action.toString() + " registered for not existing type " + typeStr);
+                        }
+                    }
+                }
                 if (!typeToTypeDef.isEmpty()) {
                     for (NodeRef nodeItem : items) {
                         for (Entry<QName, TypeDefinition> typeItem : typeToTypeDef.entrySet()) {
@@ -175,8 +206,8 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
                     isRight = true;
                 }
             } else {
-				isRight = true;
-			}
+                isRight = true;
+            }
             if (isRight) {
                 result.add(action);
             }
@@ -219,6 +250,26 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
                 for (NodeRef item : items) {
                     if (!documentService.execExpression(item, expression)) {
                         include = false;
+                        break;
+                    }
+                }
+            }
+            if (include) {
+                result.add(action);
+            }
+        }
+        return result;
+    }
+
+    private List<NodeRef> filterForReader(List<NodeRef> actions, List<NodeRef> items) {
+        List<NodeRef> result = new ArrayList<>();
+        for (NodeRef action : actions) {
+            boolean include = false;
+            Boolean availableForReader = (Boolean) nodeService.getProperty(action, GroupActionsService.PROP_AVAILABLE_FOR_READER);
+            if (availableForReader != null && availableForReader) {
+                for (NodeRef item : items) {
+                    if (lecmPermissionService.hasReadAccess(item)) {
+                        include = true;
                         break;
                     }
                 }

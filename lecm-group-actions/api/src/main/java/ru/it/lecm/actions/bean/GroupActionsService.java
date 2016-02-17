@@ -27,6 +27,7 @@ public interface GroupActionsService {
     QName PROP_STATUSES = QName.createQName(NAMESPACE_URI, "statuses");
     QName PROP_EXPRESSION = QName.createQName(NAMESPACE_URI, "expression");
     QName PROP_IS_GROUP = QName.createQName(NAMESPACE_URI, "isGroup");
+    QName PROP_AVAILABLE_FOR_READER = QName.createQName(NAMESPACE_URI, "availableForReader");
     QName PROP_FOR_COLLECTION = QName.createQName(NAMESPACE_URI, "forCollection");
     QName PROP_ORDER = QName.createQName(NAMESPACE_URI, "order");
     QName PROP_SCRIPT = QName.createQName(NAMESPACE_URI, "script");
@@ -56,5 +57,7 @@ public interface GroupActionsService {
      */
     List<NodeRef> getActiveActions(NodeRef item);
 
-	List<String> getAspects();
+    List<NodeRef> getActionsForReader(NodeRef item);
+
+    List<String> getAspects();
 }

@@ -38,6 +38,10 @@
                     <mandatory>false</mandatory>
                     <default>0</default>
                 </property>
+                <property name="lecm-group-actions:availableForReader">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
         </type>
 

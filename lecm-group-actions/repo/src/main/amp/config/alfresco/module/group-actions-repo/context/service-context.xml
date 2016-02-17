@@ -29,6 +29,7 @@
         <!--<property name="stateMachineService"  ref="stateMachineHelper"/>-->
         <property name="namespaceService" ref="namespaceService"/>
         <property name="documentService" ref="documentService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <!-- Автоматическое создание каталогов. -->
         <property name="folders">
             <map>
@@ -70,6 +71,7 @@
                         <value>lecm-group-actions:type</value>
                         <value>lecm-group-actions:statuses</value>
                         <value>lecm-group-actions:isGroup</value>
+                        <value>lecm-group-actions:availableForReader</value>
                         <value>lecm-group-actions:forCollection</value>
                         <value>lecm-group-actions:order</value>
                         <value>lecm-group-actions:script</value>
@@ -93,6 +95,7 @@
                         <value>lecm-group-actions:type</value>
                         <value>lecm-group-actions:statuses</value>
                         <value>lecm-group-actions:isGroup</value>
+                        <value>lecm-group-actions:availableForReader</value>
                         <value>lecm-group-actions:order</value>
                         <value>lecm-group-actions:workflow</value>
                     </list>
@@ -105,6 +108,7 @@
                         <value>lecm-group-actions:type</value>
                         <value>lecm-group-actions:statuses</value>
                         <value>lecm-group-actions:order</value>
+                        <value>lecm-group-actions:availableForReader</value>
                         <value>lecm-group-actions:document-type</value>
                         <value>lecm-group-actions:document-connection</value>
                         <value>lecm-group-actions:document-connection-system</value>

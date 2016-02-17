@@ -161,10 +161,12 @@ public class ActionsScript extends DeclarativeWebScript implements ActionsScript
             }
         });
 
-        boolean hasExecutionPermission = stateMachineService.isFinal(nodeRef) || (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", nodeRef, authService.getCurrentUserName())
-                || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", nodeRef, authService.getCurrentUserName()) && stateMachineService.isDraft(nodeRef)));
+        String currentUserName = authService.getCurrentUserName();
+        
+        boolean hasExecutionPermission = stateMachineService.isFinal(nodeRef) || (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", nodeRef, currentUserName)
+                || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", nodeRef, currentUserName) && stateMachineService.isDraft(nodeRef)));
 
-        List<WorkflowTask> userTasks = stateMachineService.getAssignedAndPooledTasks(authService.getCurrentUserName());
+        List<WorkflowTask> userTasks = stateMachineService.getAssignedAndPooledTasks(currentUserName);
         for (WorkflowTask activeTask : activeTasks) {
             for (WorkflowTask userTask : userTasks) {
                 if (activeTask.getId().equals(userTask.getId())) {
@@ -300,8 +302,14 @@ public class ActionsScript extends DeclarativeWebScript implements ActionsScript
             sort(actionsList);
         }
 
+        List<NodeRef> groupActions = null;
         if (hasExecutionPermission) {
-            List<NodeRef> groupActions = groupActionsService.getActiveActions(nodeRef);
+            groupActions = groupActionsService.getActiveActions(nodeRef);
+        } else if (lecmPermissionService.hasReadAccess(nodeRef, currentUserName)) {
+            groupActions = groupActionsService.getActionsForReader(nodeRef);
+        }
+
+        if (groupActions != null) {
             boolean hasStatemachine = stateMachineService.hasActiveStatemachine(nodeRef);
             for (NodeRef action : groupActions) {
                 HashMap<String, Object> actionStruct = new HashMap<String, Object>();
