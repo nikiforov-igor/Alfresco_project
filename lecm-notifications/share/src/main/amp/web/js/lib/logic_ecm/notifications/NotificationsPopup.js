@@ -55,6 +55,10 @@ define(['dojo/_base/declare',
 				}
 			}],
 
+			i18nScope: 'notificationsPopup',
+
+			i18nRequirements: [{i18nFile: './properties/NotificationsPopup.properties'}],
+
 			checkVisibleCounter: function (count) {
 				domStyle.set(this.notificationsCounterId, 'display', count > 0 ? 'inline-block' : 'none');
 				domClass.toggle(this.notificationsCounterId, 'blink', count > 0);
@@ -73,8 +77,9 @@ define(['dojo/_base/declare',
 						}
 					}
 				}), lang.hitch(this, function(failure) {
-					//TODO: dojo i18n
-					Alfresco.util.message('message.failure');
+					Alfresco.util.PopupManager.displayMessage({
+						text: this.message('message.new.notifications.count.load.failure')
+					});
 				}));
 			},
 
@@ -126,8 +131,9 @@ define(['dojo/_base/declare',
 					}, this);
 					this.rootWidget.processWidgets(notificationsConfig, this.rootWidget.domNode);
 				}), lang.hitch(this, function(failure) {
-					//TODO: dojo i18n
-					Alfresco.util.message('message.notifications.load.failure');
+					Alfresco.util.PopupManager.displayMessage({
+						text: this.message('message.notifications.load.failure')
+					});
 				}));
 			},
 

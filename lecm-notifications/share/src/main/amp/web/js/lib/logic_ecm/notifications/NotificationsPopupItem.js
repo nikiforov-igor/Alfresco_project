@@ -34,6 +34,10 @@ define(['dojo/_base/declare',
 
 			cssRequirements: [{cssFile: './css/AlfMenuItem.css'}],
 
+			i18nScope: 'notificationsPopupItem',
+
+			i18nRequirements: [{i18nFile: './properties/NotificationsPopupItem.properties'}],
+
 			_markAsRead: function() {
 				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/active-channel/api/set/read', {
 					handleAs: 'json',
@@ -45,8 +49,9 @@ define(['dojo/_base/declare',
 					domClass.remove(this.notificationNode, 'bold');
 					this.params.notificationsPopup.loadNewNotificationsCount();
 				}), lang.hitch(this, function(failure) {
-					//TODO: dojo i18n
-					Alfresco.util.message('не удалось установить прочитанные уведомления');
+					Alfresco.util.PopupManager.displayMessage({
+						text: this.message('message.notification.item.set.read.failure')
+					});
 				}));
 			},
 
