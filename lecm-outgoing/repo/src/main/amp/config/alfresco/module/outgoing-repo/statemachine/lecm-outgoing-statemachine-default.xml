@@ -7857,7 +7857,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
+																<value><![CDATA[false]]></value>
 															</property>
 															<property>
 																<name>transition-script</name>

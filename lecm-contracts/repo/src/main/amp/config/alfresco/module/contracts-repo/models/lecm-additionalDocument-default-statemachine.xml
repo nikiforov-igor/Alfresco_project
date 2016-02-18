@@ -8888,7 +8888,7 @@ additionalDocument.save();
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -9987,7 +9987,7 @@ additionalDocument.save();
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>

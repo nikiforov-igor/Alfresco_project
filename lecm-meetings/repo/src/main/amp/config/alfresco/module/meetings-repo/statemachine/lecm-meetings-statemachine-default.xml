@@ -98,7 +98,7 @@
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
+																<value><![CDATA[false]]></value>
 															</property>
 															<property>
 																<name>transitionExpression</name>
@@ -263,7 +263,7 @@
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
+																<value><![CDATA[false]]></value>
 															</property>
 															<property>
 																<name>transition-script</name>
@@ -1091,7 +1091,7 @@
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
+																<value><![CDATA[false]]></value>
 															</property>
 															<property>
 																<name>transitionExpression</name>

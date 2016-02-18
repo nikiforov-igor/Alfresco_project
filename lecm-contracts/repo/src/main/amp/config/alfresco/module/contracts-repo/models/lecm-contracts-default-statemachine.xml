@@ -7296,7 +7296,7 @@ notifications.sendNotificationFromCurrentUser(executors,notificationText, contra
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -8333,7 +8333,7 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -9343,7 +9343,7 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -9375,7 +9375,7 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -10311,7 +10311,7 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
