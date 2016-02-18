@@ -8655,7 +8655,7 @@ execution.setVariable("requestCancelResult", "");]]></value>
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>workflowId</name>
