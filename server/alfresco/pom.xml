@@ -410,6 +410,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents-templates</groupId>
+			<artifactId>documents-templates-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 <!--		<dependency>
 			<groupId>ru.it.lecm.mobile</groupId>
 			<artifactId>mobile-repo</artifactId>
@@ -822,6 +829,11 @@
 							<artifactId>search-editor-repo</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.documents-templates</groupId>
+							<artifactId>documents-templates-repo</artifactId>
+							<type>amp</type>
+						</overlay>
 						<!--<overlay>
 							<groupId>ru.it.lecm.mobile</groupId>
 							<artifactId>mobile-repo</artifactId>
@@ -1195,6 +1207,11 @@
 									<artifactId>search-editor-repo</artifactId>
 									<type>amp</type>
 								</overlay>
+								<overlay>
+									<groupId>ru.it.lecm.documents-templates</groupId>
+									<artifactId>documents-templates-repo</artifactId>
+									<type>amp</type>
+								</overlay>
 								<!--<overlay>
 									<groupId>ru.it.lecm.mobile</groupId>
 									<artifactId>mobile-repo</artifactId>
@@ -1559,6 +1576,11 @@
 								<overlay>
 									<groupId>ru.it.lecm.search-editor</groupId>
 									<artifactId>search-editor-repo</artifactId>
+									<type>amp</type>
+								</overlay>
+								<overlay>
+									<groupId>ru.it.lecm.documents-templates</groupId>
+									<artifactId>documents-templates-repo</artifactId>
 									<type>amp</type>
 								</overlay>
 								<!--<overlay>

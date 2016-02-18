@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="documents.templates.model.bootstrap"
+		  parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				 <value>alfresco/module/${artifactId}/models/lecm-document-template-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				 <value>alfresco/module/${artifactId}/messages/lecm-document-template-model</value>
+			</list>
+		</property>
+	</bean>
+
+	<util:constant id="documentTemplateFolderId" static-field="ru.it.lecm.documents.templates.DocumentTemplateServiceImpl.DOCUMENT_TEMPLATE_FOLDER_ID"/>
+	<bean id="documentTemplateService" class="ru.it.lecm.documents.templates.DocumentTemplateServiceImpl"
+		  depends-on="documents.templates.model.bootstrap"
+		  parent="baseBean"
+		  init-method="init">
+		<property name="folders">
+			<map>
+				<entry key="#{documentTemplateFolderId}" value="Сервис шаблоны создания документов"/>
+			</map>
+		</property>
+	</bean>
+</beans>

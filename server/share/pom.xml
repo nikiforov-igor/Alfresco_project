@@ -54,7 +54,6 @@
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>share</artifactId>
-			<version>${alfresco.version}</version>
 			<type>war</type>
 		</dependency>
 
@@ -343,6 +342,13 @@
 		<dependency>
 			<groupId>ru.it.lecm.search-editor</groupId>
 			<artifactId>search-editor-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents-templates</groupId>
+			<artifactId>documents-templates-share</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>
@@ -693,6 +699,11 @@
 							<artifactId>search-editor-share</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.documents-templates</groupId>
+							<artifactId>documents-templates-share</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -971,6 +982,11 @@
                                     <artifactId>search-editor-share</artifactId>
                                     <type>amp</type>
                                 </overlay>
+								<overlay>
+									<groupId>ru.it.lecm.documents-templates</groupId>
+									<artifactId>documents-templates-share</artifactId>
+									<type>amp</type>
+								</overlay>
 
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>
@@ -1277,6 +1293,11 @@
 								<overlay>
 									<groupId>ru.it.lecm.reporting</groupId>
 									<artifactId>reporting-share</artifactId>
+									<type>amp</type>
+								</overlay>
+								<overlay>
+									<groupId>ru.it.lecm.documents-templates</groupId>
+									<artifactId>documents-templates-share</artifactId>
 									<type>amp</type>
 								</overlay>
 

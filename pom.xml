@@ -125,6 +125,7 @@
 		<module>lecm-events</module>
 		<module>lecm-meetings</module>
         <module>lecm-search-editor</module>
+        <module>lecm-documents-templates</module>
         <!--<module>lecm-mobile</module>-->
     </modules>
     <scm>
