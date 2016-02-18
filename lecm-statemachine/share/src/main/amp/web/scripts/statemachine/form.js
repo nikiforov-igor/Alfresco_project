@@ -607,7 +607,8 @@ LogicECM.module = LogicECM.module || {};
 						});
 					} else {
 						if (oResults.redirect && oResults.redirect != 'null') {
-							LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + oResults.redirect);
+							window.location.href = Alfresco.constants.URL_PAGECONTEXT + oResults.redirect;
+							//LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + oResults.redirect);
 						} else {
 							// document.location.href = document.location.href;
 							// ALF-2803
