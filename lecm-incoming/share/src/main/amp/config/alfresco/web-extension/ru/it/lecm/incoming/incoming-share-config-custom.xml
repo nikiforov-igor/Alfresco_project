@@ -33,10 +33,6 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-not-registered"/>
                     
-                    <show id="lecm-review-ts:review-start-date" />
-                    <show id="lecm-review-ts:review-finish-date"/>
-                    <show id="lecm-review-ts:review-state" />     
-                    <show id="lecm-review-ts:initiator-assoc" />
                     <show id="lecm-review-ts:review-table-assoc"/>
                 </field-visibility>
                 
@@ -144,13 +140,6 @@
                         </control>
                     </field>
                     
-                    
-                    <field set="review" id="lecm-review-ts:review-start-date" read-only="true"></field>     
-                    <field set="review" id="lecm-review-ts:review-finish-date" read-only="true"></field>     
-                    <field set="review" id="lecm-review-ts:review-state" read-only="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-                    </field>     
-                    <field set="review" id="lecm-review-ts:initiator-assoc" read-only="true"></field>     
                     <field set="review" id="lecm-review-ts:review-table-assoc">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>

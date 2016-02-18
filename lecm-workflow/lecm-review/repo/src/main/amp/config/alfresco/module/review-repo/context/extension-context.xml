@@ -7,6 +7,8 @@
 	<bean id="review.workflow.extension" parent="baseScript"
 		  class="ru.it.lecm.workflow.review.extensions.ReviewWorkflowJavascriptExtension"
 		  p:extensionName="review"
-		  p:reviewWorkflowService-ref="reviewWorkflowService"/>
+		  p:reviewWorkflowService-ref="reviewWorkflowService"
+                  p:reviewServiceImpl-ref="reviewService"
+        />
 
 </beans>

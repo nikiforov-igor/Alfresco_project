@@ -10,7 +10,14 @@
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
 	<util:constant id="MIMETYPE" static-field="org.alfresco.repo.workflow.WorkflowDeployer.MIMETYPE"/>
 	<util:constant id="REDEPLOY" static-field="org.alfresco.repo.workflow.WorkflowDeployer.REDEPLOY"/>
-	<util:list id="review.workflows">
+	
+        <util:list id="review.actions">
+            	<value>alfresco/module/${artifactId}/actions/cancel-review-action.xml</value>
+            	<value>alfresco/module/${artifactId}/actions/confirm-review-action.xml</value>
+            	<value>alfresco/module/${artifactId}/actions/send-to-review-action.xml</value>
+        </util:list>
+	
+        <util:list id="review.workflows">
 		<props>
 			<prop key="#{ENGINE_ID}">activiti</prop>
 			<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/review-workflow.bpmn20.xml</prop>
@@ -32,14 +39,24 @@
 		<value>alfresco/module/${artifactId}/messages/lecm-review-result</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-review-ts</value>
 	</util:list>
-	<bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
+        <bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, workflow.model.bootstrap"
 		  p:models-ref="review.models" p:labels-ref="review.labels"/>
 
+        <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+		  p:dictionaries-ref="review.actions"/>
+        
 	<bean id="reviewWorkflowService" class="ru.it.lecm.workflow.review.ReviewWorkflowServiceImpl"
 		  parent="lecmWorkflowService" depends-on="review.model.bootstrap"
 		  p:workCalendarService-ref="WorkCalendarService"
 		  p:assigneesListService-ref="workflowAssigneesListService"
 		  p:resultListService-ref="workflowResultListService"
 		  p:documentService-ref="documentService" />
+        
+	<bean id="reviewService" class="ru.it.lecm.workflow.review.ReviewServiceImpl"
+		  parent="baseBean" depends-on="review.model.bootstrap"
+		  p:documentTableService-ref="documentTableService"
+                  p:orgstructureBean-ref="serviceOrgstructure"
+        />
 </beans>

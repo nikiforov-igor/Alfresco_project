@@ -4,7 +4,11 @@
             <form>
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
-                    <show id="lecm-review-ts:reviewer-assoc"/>
+                    <show id="lecm-review-ts:review-state" readonly="true"/>
+                    <show id="lecm-review-ts:review-start-date" readonly="true"/>
+                    <show id="lecm-review-ts:review-finish-date" readonly="true"/>
+                    <show id="lecm-review-ts:initiator-assoc" readonly="true"/>
+                    <show id="lecm-review-ts:reviewer-assoc" readonly="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-document:indexTableRow">
@@ -18,7 +22,7 @@
 
     <config evaluator="model-type" condition="lecm-review-ts:review-table-item">
         <forms>
-            <form>
+            <form submission-url="/lecm/review/type/lecm-review-ts%3Areview-table-item/formprocessor" >
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
                     <show id="lecm-review-ts:reviewer-assoc"/>
@@ -34,8 +38,10 @@
                 <field-visibility>
                     <show id="lecm-document:indexTableRow"/>
                     <show id="lecm-review-ts:reviewer-assoc"/>
-                    <show id="lecm-review-ts:review-item-finished"/>
-                    <show id="lecm-review-ts:review-item-date"/>
+                    <show id="lecm-review-ts:review-state"/>
+                    <show id="lecm-review-ts:review-start-date"/>
+                    <show id="lecm-review-ts:review-finish-date"/>
+                    <show id="lecm-review-ts:initiator-assoc"/>
                 </field-visibility>
                 <appearance>
 					
