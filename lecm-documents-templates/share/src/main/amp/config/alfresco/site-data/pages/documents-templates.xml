@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+	<title>Шаблоны создания документов</title>
+	<description>Шаблоны создания документов</description>
+	<template-instance>documents-templates</template-instance>
+	<authentication>user</authentication>
+</page>
