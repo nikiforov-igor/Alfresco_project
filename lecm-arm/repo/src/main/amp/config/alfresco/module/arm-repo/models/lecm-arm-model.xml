@@ -456,6 +456,20 @@
 				</property>
 			</properties>
 		</type>
+		<type name="lecm-arm:script-child-rule">
+			<parent>lecm-arm:base-child-rule</parent>
+			<properties>
+				<property name="lecm-arm:script-child-rule-root">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
 
         <type name="lecm-arm:filter">
             <parent>lecm-dic:plane_dictionary_values</parent>

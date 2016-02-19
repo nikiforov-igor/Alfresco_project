@@ -1,6 +1,7 @@
 package ru.it.lecm.search.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
@@ -9,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
@@ -55,6 +57,16 @@ public class SearchEditorService extends BaseBean {
     public final static QName TYPE_SEARCH_QUERY_DIC = QName.createQName(SEARCH_QUERIES_NAMESPACE, "dic");
     public final static QName PROP_SEARCH_QUERY_QUERY = QName.createQName(SEARCH_QUERIES_NAMESPACE, "query");
     public final static QName PROP_SEARCH_QUERY_SETTING = QName.createQName(SEARCH_QUERIES_NAMESPACE, "query-setting");
+
+    private OrgstructureBean orgstructureBean;
+
+    public OrgstructureBean getOrgstructureBean() {
+        return orgstructureBean;
+    }
+
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
+    }
 
     public enum Types {
         ASSOC("association") {
@@ -353,15 +365,32 @@ public class SearchEditorService extends BaseBean {
             return null;
         }
     }
-    
+
     @Override
     public NodeRef getServiceRootFolder() {
         return getFolder(LECM_SEARCH_QUERIES_ROOT_ID);
     }
 
+    /**
+    * @return Возвращает NodeRef где лежат поисковые запросы пользователя в родительской дериктории "Личные поисковые запросы"
+    * Если дериктории нет, то создаем ее с именем идентификатора текущего пользователя.
+    *
+    * */
     public NodeRef getStoreFolder() {
-        NodeRef rootFolder = getServiceRootFolder();
-        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, "Личные поисковые запросы");
+        final NodeRef nodeRefParent = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, "Личные поисковые запросы");
+        NodeRef nodeRefChild = getFolder(nodeRefParent, orgstructureBean.getCurrentEmployee().getId());
+
+        if (nodeRefChild != null) {
+            return nodeRefChild;
+        } else {
+            return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
+                @Override
+                public NodeRef execute() throws Throwable {
+                    return createFolder(nodeRefParent,  orgstructureBean.getCurrentEmployee().getId());
+                }
+
+            });
+        }
     }
 
     public String buildQuery(JSONObject config) {

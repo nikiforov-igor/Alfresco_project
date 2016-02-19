@@ -6219,40 +6219,38 @@
                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                 <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
-                <items>
-                    <item name="cm:Управление поисковыми запросами" type="lecm-arm:html-node">
-                        <property name="cm:name"><![CDATA[Управление поисковыми запросами]]></property>
-                        <property name="lecm-arm:order"><![CDATA[5]]></property>
-                        <property name="lecm-arm:html-url"><![CDATA[page/search-query-create]]></property>
-                    </item>
-                    <item name="cm:Поисковые запросы" type="lecm-arm:html-node">
-                        <property name="cm:name"><![CDATA[Поисковые запросы]]></property>
-                        <property name="lecm-arm:order"><![CDATA[0]]></property>
-                        <property name="lecm-arm:html-url">
-                            <![CDATA[page/lecm/arm/blank?title=Поисковые запросы&description=Выберите поисковый запрос]]></property>
-                        <items>
-                            <item name="cm:Запросы" type="lecm-arm:html-node">
-                                <property name="cm:name"><![CDATA[Запросы]]></property>
-                                <property name="lecm-arm:order"><![CDATA[0]]></property>
-                                <property name="lecm-arm:html-url"><![CDATA[page/search-query-view]]></property>
-                                <items>
-                                    <item name="cm:5d13d875-1748-4a33-8bf1-73d1e3497265"
-                                          type="lecm-arm:query-child-rule">
-                                        <property name="cm:name">
-                                            <![CDATA[5d13d875-1748-4a33-8bf1-73d1e3497265]]></property>
-                                        <property name="lecm-arm:list-query-child-rule">
-                                            <![CDATA[+TYPE: "lecm-search-queries:dic" AND PATH: "/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_поисковые_x0020_запросы/lecm-dic:Личные_x0020_поисковые_x0020_запросы//*" AND NOT @lecm\-dic:active:false AND @lecm\-search\-queries\:employee\-assoc\-ref: "#current-user"]]></property>
-                                    </item>
-                                </items>
-                                <assocs>
-                                    <assoc type="lecm-arm:node-child-rule-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Мои поисковые запросы/Поисковые запросы/Запросы/5d13d875-1748-4a33-8bf1-73d1e3497265"/>
-                                </assocs>
-                            </item>
-                        </items>
-                    </item>
-                </items>
-            </item>
+            <items>
+                <item name="cm:Управление поисковыми запросами" type="lecm-arm:html-node">
+                    <property name="cm:name"><![CDATA[Управление поисковыми запросами]]></property>
+                    <property name="lecm-arm:order"><![CDATA[5]]></property>
+                    <property name="lecm-arm:html-url"><![CDATA[page/search-query-create]]></property>
+                </item>
+                <item name="cm:Поисковые запросы" type="lecm-arm:html-node">
+                    <property name="cm:name"><![CDATA[Поисковые запросы]]></property>
+                    <property name="lecm-arm:order"><![CDATA[0]]></property>
+                    <property name="lecm-arm:html-url">
+                        <![CDATA[page/lecm/arm/blank?title=Поисковые запросы&description=Выберите поисковый запрос]]></property>
+                    <items>
+                        <item name="cm:Запросы" type="lecm-arm:html-node">
+                            <property name="cm:name"><![CDATA[Запросы]]></property>
+                            <property name="lecm-arm:order"><![CDATA[0]]></property>
+                            <property name="lecm-arm:html-url"><![CDATA[page/search-query-view]]></property>
+                            <items>
+                                <item name="cm:4c9cd9c0-518f-4150-8b15-26c9a9f45c52" type="lecm-arm:script-child-rule">
+                                    <property name="cm:name"><![CDATA[4c9cd9c0-518f-4150-8b15-26c9a9f45c52]]></property>
+                                    <property name="lecm-arm:script-child-rule-root"><![CDATA[(function() {
+  var result;
+  // Возвращаем поисковые шаблоны запросов пользователя типа Scriptable.
+  result = searchQueries.getStore().getChildren();
+
+  model.result = result;
+})();]]></property>
+                                </item>
+                            </items>
+                        </item>
+                    </items>
+                </item>
+            </items>
             <item name="cm:Работа руководителя" type="lecm-arm:accordion">
                 <property name="cm:name"><![CDATA[Работа руководителя]]></property>
                 <property name="lecm-arm:order"><![CDATA[0]]></property>

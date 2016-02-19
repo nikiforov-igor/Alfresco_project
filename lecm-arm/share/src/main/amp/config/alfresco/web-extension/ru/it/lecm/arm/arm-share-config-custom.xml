@@ -227,8 +227,8 @@
 					</field>
 					<field id="lecm-arm:node-child-rule-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
-							<control-param name="nameSubstituteString">{lecm-arm:list-query-child-rule}{lecm-arm:child-rule-dictionary-assoc/cm:name}{lecm-arm:statuses-rule}{lecm-arm:xpath-child-rule-root-xpath}</control-param>
-							<control-param name="itemTypes">lecm-arm:query-child-rule,lecm-arm:dictionary-child-rule,lecm-arm:statuses-child-rule,lecm-arm:xpath-child-rule</control-param>
+							<control-param name="nameSubstituteString">{lecm-arm:list-query-child-rule}{lecm-arm:child-rule-dictionary-assoc/cm:name}{lecm-arm:statuses-rule}{lecm-arm:xpath-child-rule-root-xpath}{lecm-arm:script-child-rule-root}</control-param>
+							<control-param name="itemTypes">lecm-arm:query-child-rule,lecm-arm:dictionary-child-rule,lecm-arm:statuses-child-rule,lecm-arm:xpath-child-rule,lecm-arm:script-child-rule</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
@@ -350,8 +350,8 @@
 				<appearance>
 					<field id="lecm-arm:node-child-rule-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
-							<control-param name="nameSubstituteString">{lecm-arm:list-query-child-rule}{lecm-arm:child-rule-dictionary-assoc/cm:name}{lecm-arm:statuses-rule}{lecm-arm:xpath-child-rule-root-xpath}</control-param>
-							<control-param name="itemTypes">lecm-arm:query-child-rule,lecm-arm:dictionary-child-rule,lecm-arm:xpath-child-rule</control-param>
+							<control-param name="nameSubstituteString">{lecm-arm:list-query-child-rule}{lecm-arm:child-rule-dictionary-assoc/cm:name}{lecm-arm:statuses-rule}{lecm-arm:xpath-child-rule-root-xpath}{lecm-arm:script-child-rule-root}</control-param>
+							<control-param name="itemTypes">lecm-arm:query-child-rule,lecm-arm:dictionary-child-rule,lecm-arm:xpath-child-rule,lecm-arm:script-child-rule</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
@@ -508,6 +508,40 @@
 					<show id="lecm-arm:xpath-child-rule-types" force="true"/>
 					<show id="lecm-arm:xpath-child-rule-filter" force="true"/>
 				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:script-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:script-child-rule-root" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:script-child-rule-root">
+						<control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:script-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:script-child-rule-root" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:script-child-rule-root">
+						<control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>

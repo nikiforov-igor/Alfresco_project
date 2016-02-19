@@ -22,6 +22,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         YAHOO.Bubbling.on("updateCurrentColumns", this.onUpdateSelectedColumns, this);
         YAHOO.Bubbling.on("armRefreshSelectedTreeNode", this.onRefreshSelectedTreeNode, this);
+        YAHOO.Bubbling.on("armRefreshParentSelectedTreeNode", this.onRefreshParentSelectedTreeNode, this);
         YAHOO.Bubbling.on("beforeDateChanged", this.onCalSelect, this);
 
         return this;
@@ -46,6 +47,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         expiresDate: new Date(),
 
         calendarNode: null,
+
+        expandedChildren: [],
 
         onReady: function () {
             var date = new Date;
@@ -580,7 +583,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _isNodeExpanded: function (nodeId) {
-            if (nodeId && this.menuState.selected.length > 0) {
+            if (this.expandedChildren.length != 0) {
+                var index = this.expandedChildren.indexOf(nodeId);
+                if (index >= 0) {
+                    this.expandedChildren.splice(index, 1);
+                    return true;
+                }
+            } else if (nodeId && this.menuState.selected.length > 0) {
                 return this.menuState.selected.indexOf(nodeId) >= 0;
             }
             return false;
@@ -621,9 +630,18 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         onRefreshSelectedTreeNode: function() {
-//            console.log("refreshTreeNode");
             this._loadTree(this.selectedNode);
-        }
+        },
 
+        onRefreshParentSelectedTreeNode: function() {
+            var nodeParent = this.selectedNode.parent;
+            this.expandedChildren = [];
+            for (var i=0; i < nodeParent.children.length; i++) {
+                if (nodeParent.children[i].expanded) {
+                    this.expandedChildren.push(nodeParent.children[i].id);
+                }
+            }
+            this._loadTree(nodeParent);
+        }
     });
 })();

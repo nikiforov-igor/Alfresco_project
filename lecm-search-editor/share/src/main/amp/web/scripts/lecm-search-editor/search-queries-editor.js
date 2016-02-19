@@ -459,6 +459,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                             text:me.msg("msg.editor.query.save")
                                         });
                                     me.saveDialogOpening = false;
+                                    Bubbling.fire("armRefreshParentSelectedTreeNode");
                                 },
                                 scope:this
                             },

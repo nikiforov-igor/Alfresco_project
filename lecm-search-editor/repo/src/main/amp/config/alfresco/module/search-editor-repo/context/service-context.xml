@@ -47,6 +47,7 @@
 
 	<bean id="searchEditorService" class="ru.it.lecm.search.beans.SearchEditorService" parent="baseBean"
 		  depends-on="searchEditor.LogicEcmModelsBootstrap">
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 		<property name="folders">
 			<map>
 				<entry key="#{LECM_SEARCH_QUERIES_ROOT_ID}" value="Сервис поисковые запросы"/>

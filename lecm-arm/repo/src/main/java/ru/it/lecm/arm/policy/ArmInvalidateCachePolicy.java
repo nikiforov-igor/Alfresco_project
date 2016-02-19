@@ -63,13 +63,16 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
                 new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                ArmService.TYPE_SCRIPT_CHILD_RULE,
+                new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ArmService.TYPE_DICTIONARY_CHILD_RULE,
                 new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ArmService.TYPE_QUERY_CHILD_RULE,
                 new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
                 ArmService.TYPE_ARM_COLUMN,
@@ -111,6 +114,9 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
                 ArmService.TYPE_XPATH_CHILD_RULE,
                 new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ArmService.TYPE_SCRIPT_CHILD_RULE,
+                new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
                 ArmService.TYPE_DICTIONARY_CHILD_RULE,

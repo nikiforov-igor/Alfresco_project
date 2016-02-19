@@ -6,6 +6,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.ScriptService;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
@@ -42,6 +43,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private AuthorityService authorityService;
     private SearchQueryProcessorService processorService;
     private SecretaryService secretaryService;
+    private ScriptService scriptService;
 
     private SimpleCache<String, List<ArmColumn>> columnsCache;
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
@@ -99,6 +101,14 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         }
     };
     private StateMachineServiceBean stateMachineService;
+
+    public ScriptService getScriptService() {
+        return scriptService;
+    }
+
+    public void setScriptService(ScriptService scriptService) {
+        this.scriptService = scriptService;
+    }
 
     public void setColumnsCache(SimpleCache<String, List<ArmColumn>> columnsCache) {
         this.columnsCache = columnsCache;
@@ -589,6 +599,11 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                         ((ArmXPathChildRule) result).setSearchService(searchService);
                         ((ArmXPathChildRule) result).setNodeService(nodeService);
 						((ArmXPathChildRule) result).setProcessorService(processorService);
+                    } else if (TYPE_SCRIPT_CHILD_RULE.equals(queryType)) {
+                        result = new ArmScriptChildRule();
+                        ((ArmScriptChildRule) result).setScript((String) props.get(PROP_ROOT_SCRIPT));
+                        ((ArmScriptChildRule) result).setScriptService(scriptService);
+                        ((ArmScriptChildRule) result).setOrgstructureService(orgstructureBean);
                     }
                 }
                 childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
