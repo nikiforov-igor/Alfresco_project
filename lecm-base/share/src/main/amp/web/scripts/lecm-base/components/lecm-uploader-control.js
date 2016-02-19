@@ -85,11 +85,9 @@ LogicECM.control = LogicECM.control || {};
 		},
 
 		loadRootNode: function () {
-			var sUrl = this.generateRootUrlPath() + this.generateRootUrlParams();
-
 			Alfresco.util.Ajax.jsonGet(
 				{
-					url: sUrl,
+					url: this.generateRootUrlPath(),
 					successCallback:
 					{
 						fn: function (response) {
@@ -133,18 +131,15 @@ LogicECM.control = LogicECM.control || {};
             }
         },
 
-		generateRootUrlPath: function ()
-		{
-			return Alfresco.constants.PROXY_URI + "/lecm/forms/node/search";
-		},
-
-		generateRootUrlParams: function ()
-		{
-			var params = "?titleProperty=" + encodeURIComponent("cm:name");
+		generateRootUrlPath: function () {
+			var sUrl = "";
+			var params = "";
 			if (this.options.uploadDirectoryPath) {
 				if (this.options.uploadDirectoryPath.charAt(0) == "/") {
-					params += "&xpath=" + encodeURIComponent(this.options.uploadDirectoryPath);
+					sUrl = "lecm/forms/node/search";
+					params = "?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent(this.options.uploadDirectoryPath);
 				} else if (this.options.uploadDirectoryPath.charAt(0) == "{") {
+					sUrl = "lecm/repository/api/getRootDirectory";
 					var location = "";
 					if (this.options.uploadDirectoryPath == "{companyhome}") {
 						location = "alfresco://company/home";
@@ -156,12 +151,15 @@ LogicECM.control = LogicECM.control || {};
 						location = "alfresco://user/temp";
 					}
 					if (location.length > 0) {
-						params += "&rootNode=" + encodeURIComponent(location);
+						params = "?rootNode=" + encodeURIComponent(location);
 					}
 				}
+			} else {
+				sUrl = "lecm/repository/api/getRootDirectory";
+				params = "?rootNode=" + encodeURIComponent("alfresco://user/temp");
 			}
 
-			return params;
+			return Alfresco.constants.PROXY_URI + sUrl + params;
 		},
 
 		onFileUpload: function(e, obj) {
