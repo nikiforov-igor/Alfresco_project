@@ -155,7 +155,7 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 };
 
-                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form";
 	            var templateRequestParams = {
 		            itemKind: "node",
 		            itemId: this.options.documentRef,
