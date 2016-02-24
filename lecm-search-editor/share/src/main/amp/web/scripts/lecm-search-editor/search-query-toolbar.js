@@ -106,8 +106,9 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                     var me = this;
                     var fn = "onActionDelete";
                     if (fn && (typeof dataGrid[fn] == "function")) {
-                        dataGrid[fn].call(dataGrid, [{nodeRef:this.options.queryNodeRef}], null, {fullDelete: false}, function () {
-                            me._reloadPage(me.options.deletePath);
+                        dataGrid[fn].call(dataGrid, [{nodeRef:this.options.queryNodeRef}], null, {fullDelete: true}, function () {
+                            YAHOO.Bubbling.fire("armRefreshParentSelectedTreeNode");
+                            YAHOO.Bubbling.fire("selectedParentCurrentNode");
                         });
                     }
                 } else {

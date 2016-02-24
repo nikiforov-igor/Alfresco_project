@@ -2044,7 +2044,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		            startRecord,
 		            endRecord,
 		            record;
-	            if (this.widgets.paginator) {
+	            if (this.widgets.paginator.getPageRecords()) {
 		            aPageRecords = this.widgets.paginator.getPageRecords();
 		            startRecord = aPageRecords[0];
 		            endRecord = aPageRecords[1];
@@ -2084,7 +2084,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 						startRecord,
 						len = checks.length,
 						record, i, fnCheck;
-                    if (this.widgets.paginator) {
+                    if (this.widgets.paginator.getPageRecords()) {
                         aPageRecords = this.widgets.paginator.getPageRecords();
                         startRecord = aPageRecords[0];
                     } else {
@@ -2383,7 +2383,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var recordSet = this.widgets.dataTable.getRecordSet();
                 Bubbling.fire("itemsListChanged");
                 var index = 0;
-                if (this.widgets.paginator) {
+                if (this.widgets.paginator.getCurrentPage()) {
                     index = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
                 }
                 for (var i = index, j = recordSet.getLength(); i < j; i++)

@@ -24,6 +24,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         YAHOO.Bubbling.on("armRefreshSelectedTreeNode", this.onRefreshSelectedTreeNode, this);
         YAHOO.Bubbling.on("armRefreshParentSelectedTreeNode", this.onRefreshParentSelectedTreeNode, this);
         YAHOO.Bubbling.on("beforeDateChanged", this.onCalSelect, this);
+        YAHOO.Bubbling.on("selectedParentCurrentNode", this.onSelectedParentCurrentNode, this);
 
         return this;
     };
@@ -642,6 +643,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
             }
             this._loadTree(nodeParent);
+        },
+
+        onSelectedParentCurrentNode: function() {
+            this._treeNodeSelected(this.selectedNode.parent);
         }
     });
 })();
