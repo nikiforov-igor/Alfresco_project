@@ -1,8 +1,4 @@
 (function() {
-	var clientTimeOffset = args["timeOffset"];
-	var serverTimeOffset = new Date().getTimezoneOffset();
-	var timeOffset = serverTimeOffset - clientTimeOffset;
-
 	var monthNames = {
 		m00 : msg.get("lecm.calendar.absence.january"),
 		m01 : msg.get("lecm.calendar.absence.february"),
@@ -37,7 +33,8 @@
 			searchNodes: "",
 			fields: "lecm-absence_abscent-employee-assoc,lecm-absence_begin,lecm-absence_end,lecm-absence_unlimited,lecm-absence_abscence-reason-assoc",
 			nameSubstituteStrings: ",,,,",
-			showInactive: false
+			showInactive: false,
+			useChildQuery: true
 		}
 	};
 
@@ -61,8 +58,8 @@
 				employeesAbsences[abscentEmployeeDV] = [];
 			}
 			employeesAbsences[abscentEmployeeDV].push({
-				begin: addMinutes(DateFromISO8601(itemData["prop_lecm-absence_begin"].value), timeOffset),
-				end: addMinutes(DateFromISO8601(itemData["prop_lecm-absence_end"].value), timeOffset),
+				begin: DateFromISO8601(itemData["prop_lecm-absence_begin"].value),
+				end: DateFromISO8601(itemData["prop_lecm-absence_end"].value),
 				reason: absenceReason.displayValue
 			});
 			reasons[absenceReason.displayValue] = {
@@ -199,8 +196,4 @@ function DateFromISO8601() {
 	}();
 
 	return fromISOString.apply(arguments.callee, arguments);
-}
-
-function addMinutes(date, minutes) {
-	return new Date(date.getTime() + minutes*60000);
 }
