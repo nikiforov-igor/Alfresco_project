@@ -160,7 +160,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-errands:initiator-assoc-text-content">

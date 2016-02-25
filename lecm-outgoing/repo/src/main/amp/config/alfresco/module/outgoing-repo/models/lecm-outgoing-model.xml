@@ -64,7 +64,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-outgoing:contractor-assoc-text-content">
@@ -80,7 +80,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-outgoing:recipient-assoc-text-content">

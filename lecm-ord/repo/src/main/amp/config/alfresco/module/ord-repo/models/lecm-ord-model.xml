@@ -63,7 +63,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-ord:controller-assoc-text-content">
@@ -80,7 +80,7 @@
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
-						<tokenised>both</tokenised>
+						<tokenised>false</tokenised>
 					</index>
 				</property>
 				<property name="lecm-ord:signers-assoc-text-content">
