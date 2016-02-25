@@ -1,8 +1,15 @@
-<h1>This is details</h1>
+<#assign detailsViewId = args.htmlid + '-templatesDetailsViewContainer'/>
+
+<div id='${detailsViewId}'>
+	<div id='${detailsViewId}-details'></div>
+</div>
 <script type='text/javascript'>//<![CDATA[
 	(function () {
 
 		function initDocumentsTemplatesDetails() {
+			new LogicECM.module.DocumentsTemplates.DetailsView('${detailsViewId}', {
+				bubblingLabel: 'documentsTemplatesDetailsView'
+			}, ${messages});
 		}
 
 		LogicECM.module.Base.Util.loadResources([

@@ -1,4 +1,38 @@
 <alfresco-config>
+	<config evaluator="model-type" condition="lecm-template:document-template">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-template:doc-type"/>
+					<show id="lecm-template:attributes"/>
+				</field-visibility>
+				<appearance>
+<!--					<field id="lecm-template:attributes">
+						<control template="">
 
+						</control>
+					</field>-->
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecm-template:document-template">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-template:doc-type"/>
+					<show id="lecm-template:attributes"/>
+				</field-visibility>
+				<appearance>
+<!--					<field id="lecm-template:attributes">
+						<control template="">
 
+						</control>
+					</field>-->
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

@@ -11,7 +11,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 	var Event = YAHOO.util.Event,
 		Bubbling = YAHOO.Bubbling;
 
-	LogicECM.module.DocumentsTemplates.TreeView = function(containerId, options, messages) {
+	LogicECM.module.DocumentsTemplates.TreeView = function (containerId, options, messages) {
 		LogicECM.module.DocumentsTemplates.TreeView.superclass.constructor.call(this, 'LogicECM.module.DocumentsTemplates.TreeView', containerId);
 		this.setOptions(options);
 		this.setMessages(messages);
@@ -32,13 +32,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			xpath: null
 		},
 
-		_loadTypesData: function(node, fnLoadComplete) {
+		_loadTypesData: function (node, fnLoadComplete) {
 			/* this == LogicECM.module.DocumentsTemplates.TreeView */
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + 'lecm/documents/types',
 				successCallback: {
 					scope: this,
-					fn: function(successResponse) {
+					fn: function (successResponse) {
 						var types = successResponse.json.data;
 						types.forEach(function (type) {
 							new YAHOO.widget.TextNode({
@@ -62,7 +62,6 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 									formId: ''
 								}
 							}, node).setDynamicLoad(this.bind(this._loadTemplatesData));
-							//TODO: в каждой новой ноде хранить конфиг для Alfresco.util.InsituEditor
 						}, this);
 						if (YAHOO.lang.isFunction(fnLoadComplete)) {
 							fnLoadComplete.call(node);
@@ -71,7 +70,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				},
 				failureCallback: {
 					scope: this,
-					fn: function(failureResponse) {
+					fn: function (failureResponse) {
 						Alfresco.util.PopupManager.displayMessage({
 							text: this.msg('message.failure')
 						});
@@ -83,7 +82,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			});
 		},
 
-		_loadTemplatesData: function(node, fnLoadComplete) {
+		_loadTemplatesData: function (node, fnLoadComplete) {
 			/* this == LogicECM.module.DocumentsTemplates.TreeView */
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + 'lecm/forms/picker/node/children',
@@ -97,15 +96,28 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				},
 				successCallback: {
 					scope: this,
-					fn: function(successResponse) {
+					fn: function (successResponse) {
 						debugger;
 						// var templates = successResponse.json;
 						// templates.forEach(function (template) {
-						// 	new YAHOO.widget.TextNode({
-						// 		label: '',
-						// 		isLeaf: true
-						// 	}, node);
 						//TODO: в каждой новой ноде хранить конфиг для Alfresco.util.InsituEditor
+						// new YAHOO.widget.TextNode({
+						// 	label: type.name,
+						// 	value: type.value,
+						// 	isLeaf: true,
+						// 	config: {
+						// 		showDelay: 100,
+						// 		hideDelay: 100,
+						// 		autoDismissDelay: 0,
+						// 		disabled: false,
+						// 		value: type.value,
+						// 		title: 'Редактировать шаблон',
+						// 		itemKind: 'node',
+						// 		itemId: type.value,
+						// 		mode: 'edit',
+						// 		formId: ''
+						// 	}
+						// }, node);
 						// }, this);
 						if (YAHOO.lang.isFunction(fnLoadComplete)) {
 							fnLoadComplete.call(node);
@@ -114,7 +126,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				},
 				failureCallback: {
 					scope: this,
-					fn: function(failureResponse) {
+					fn: function (failureResponse) {
 						Alfresco.util.PopupManager.displayMessage({
 							text: this.msg('message.failure')
 						});
@@ -126,8 +138,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			});
 		},
 
-		onExpandComplete: function(node, tree) {
-			node.children.forEach(function(childNode) {
+		onExpandComplete: function (node, tree) {
+			node.children.forEach(function (childNode) {
 				if (childNode.data.config && !childNode.data.insituEditor) {
 					childNode.data.config.container = childNode.getContentEl();
 					childNode.data.config.context = childNode.getContentEl().parentElement;
@@ -136,9 +148,44 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			});
 		},
 
-		onReady: function() {
+		onTreeNodeClicked: function (obj, tree) {
+			if (obj.node.isLeaf) {
+				Bubbling.fire('beforeTemplate', {
+					bubblingLabel: 'documentsTemplatesDetailsView'
+				});
+
+				Alfresco.util.Ajax.request({
+					url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+					dataObj: {
+						htmlid: Alfresco.util.generateDomId(),
+						itemKind: obj.params.itemKind,
+						itemId: obj.params.itemId,
+						mode:  obj.params.mode,
+						formId: obj.params.formId,
+						submitType: 'json',
+						showSubmitButton: false
+					},
+					successCallback: {
+						scope: this,
+						fn: function (successResponse) {
+							Bubbling.fire('templateEdited', {
+								bubblingLabel: 'documentsTemplatesDetailsView',
+								html: successResponse.serverResponse.responseText,
+								htmlid: successResponse.config.dataObj.htmlid
+							});
+						}
+					},
+					failureMessage: Alfresco.util.message('message.failure'),
+					execScripts: true
+				});
+			}
+			return false;
+		},
+
+		onReady: function () {
 			console.log(this.name + '[' + this.id + '] is ready');
 			this.widgets.treeView = new YAHOO.widget.TreeView(this.treeViewId);
+			this.widgets.treeView.singleNodeHighlight = true;
 			this.widgets.treeView.data = {
 				documentsTemplates: this
 			};
@@ -148,12 +195,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			}, this.widgets.treeView.getRoot());
 			root.setDynamicLoad(this.bind(this._loadTypesData));
 			this.widgets.treeView.subscribe('expandComplete', this.onExpandComplete, this.widgets.treeView, this);
+			this.widgets.treeView.subscribe('clickEvent', this.onTreeNodeClicked, this.widgets.treeView, this);
 
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + 'lecm/documents-templates/root',
 				successCallback: {
 					scope: this,
-					fn: function(successResponse) {
+					fn: function (successResponse) {
 						this.nodeRef = successResponse.json.nodeRef;
 						this.xpath = successResponse.json.xpath;
 						this.widgets.treeView.draw();
@@ -164,7 +212,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		}
 	}, true);
 
-	Alfresco.widget.InsituEditorTemplateCreate = function(p_editor, p_params) {
+	Alfresco.widget.InsituEditorTemplateCreate = function (p_editor, p_params) {
 		Alfresco.widget.InsituEditorTemplateCreate.superclass.constructor.call(this, p_editor, p_params);
 		return this;
 	};
@@ -176,8 +224,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				return;
 			}
 
+			Bubbling.fire('beforeTemplate', {
+				bubblingLabel: 'documentsTemplatesDetailsView'
+			});
+
 			Alfresco.util.Ajax.request({
-				url: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
+				url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
 				dataObj: {
 					htmlid: Alfresco.util.generateDomId(),
 					itemKind: obj.params.itemKind,
@@ -186,20 +238,58 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					mode:  obj.params.mode,
 					formId: obj.params.formId,
 					submitType: 'json',
-					showCancelButton: true
+					showSubmitButton: false,
+					initFields: JSON.stringify({
+						"lecm-template:doc-type": obj.params.value
+					})
 				},
 				successCallback: {
 					scope: this,
-					fn: function(successResponse) {
-						Bubbling.fire('', {
-							bubblingLabel: '',
-							form: successResponse.serverResponse.responseText
+					fn: function (successResponse) {
+						Bubbling.fire('templateCreated', {
+							bubblingLabel: 'documentsTemplatesDetailsView',
+							html: successResponse.serverResponse.responseText,
+							htmlid: successResponse.config.dataObj.htmlid
 						});
 					}
 				},
-				failureMessage: Alfresco.util.message('message.failure')
+				failureMessage: Alfresco.util.message('message.failure'),
+				execScripts: true
 			});
 
+			Event.stopEvent(e);
+		}
+	}, true);
+
+	Alfresco.widget.InsituEditorTemplateDelete = function (p_editor, p_params) {
+		Alfresco.widget.InsituEditorTemplateDelete.superclass.constructor.call(this, p_editor, p_params);
+	};
+
+	YAHOO.lang.extend(Alfresco.widget.InsituEditorTemplateDelete, Alfresco.widget.InsituEditorIcon, {
+
+		onIconClick: function (e, obj) {
+			if (obj.disabled) {
+				return;
+			}
+
+			Alfresco.util.PopupManager.displayPrompt({
+				title: 'Удаление шаблона',
+				text: 'Вы действительно хотите удалить шаблон создания документа?',
+				modal: true,
+				buttons: [{
+					text: 'Да',
+					handler: function () {
+						//TODO Ajax-запрос на удаление шаблона
+					   this.destroy();
+					},
+					isDefault: true
+				}, {
+					text: 'Нет',
+					handler: function () {
+					   this.destroy();
+					}
+				}]
+			});
 			Event.stopEvent(e);
 		}
 	}, true);
