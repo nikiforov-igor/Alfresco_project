@@ -11,6 +11,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 	var attributeForShow = "";
 
 	LogicECM.module.WCalendar.Absence.DataGrid = function(containerId) {
+		this.timezone = Alfresco.util.toISO8601(new Date()).substr(23);
 		return LogicECM.module.WCalendar.Absence.DataGrid.superclass.constructor.call(this, containerId);
 	};
 
@@ -71,11 +72,9 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 											columnContent += '<span class="person">' + $userProfile(data.metadata, data.displayValue) + '</span>';
 											break;
 
-										case "datetime":
-											columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.defaultDateOnly"));
-											break;
-
-										case "date":
+										case "datetime": case "date":
+											//Заменяем таймзону на клиентскую
+											data.value = data.value.substr(0, 23) + scope.timezone;
 											columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("lecm.date-format.defaultDateOnly"));
 											break;
 

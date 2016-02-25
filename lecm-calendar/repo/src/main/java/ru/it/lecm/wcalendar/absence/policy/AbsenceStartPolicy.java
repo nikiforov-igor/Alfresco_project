@@ -1,19 +1,23 @@
 package ru.it.lecm.wcalendar.absence.policy;
 
-import java.util.Calendar;
-import java.util.Date;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
 import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
+import ru.it.lecm.wcalendar.absence.beans.AbsenceBean;
+
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Полиси, срабатывающая на создание ассоциции у объекта типа absence. Если
@@ -50,6 +54,15 @@ public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
 		NodeRef absenceRef = nodeAssocRef.getSourceRef();
 		Date absenceBegin = absenceService.getAbsenceStartDate(absenceRef);
 		Date absenceEnd = absenceService.getAbsenceEndDate(absenceRef);
+
+		//Даты приходят в UTC-0, заменяем их таймзону на серверную
+		try {
+			absenceBegin = AbsenceBean.DateFormatISO8601.parse(ISO8601DateFormat.format(absenceBegin));
+			absenceEnd = AbsenceBean.DateFormatISO8601.parse(ISO8601DateFormat.format(absenceEnd));
+		} catch (ParseException e) {
+			logger.warn("absenceBegin or/and absenceEnd has wrong format");
+		}
+
 		absenceBegin = DateUtils.truncate(absenceBegin, Calendar.DATE);
 		absenceEnd = DateUtils.setHours(absenceEnd, 23);
 		absenceEnd = DateUtils.setMinutes(absenceEnd, 59);
