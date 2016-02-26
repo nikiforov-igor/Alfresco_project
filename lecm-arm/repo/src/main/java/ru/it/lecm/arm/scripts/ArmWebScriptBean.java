@@ -251,6 +251,15 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
     }
 
     /**
+     * Получение узла с настройками для Динамического узла АРМ
+     * @param armNode узел
+     */
+    public ScriptNode getDynamicNodeUserSettings(ScriptNode dynamicNode, ScriptNode parentStaticNode) {
+        NodeRef settings = armService.getDynamicNodeUserSettings(dynamicNode.getNodeRef(), parentStaticNode.getNodeRef());
+        return (settings == null) ? null : new ScriptNode(settings, serviceRegistry, getScope());
+    }
+    
+    /**
      * Создание узел с настройками для узла АРМ
      * @param armNode узел
      */
@@ -265,6 +274,21 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
         return (settings == null) ? null : new ScriptNode(settings, serviceRegistry, getScope());
     }
 
+    /**
+     * Создание узла с настройками для Динамического узла АРМ
+     * @param armNode узел
+     */
+    public ScriptNode createDynamicNodeUserSettings(ScriptNode dynamicNode, ScriptNode parentStaticNode) {
+        NodeRef settings = null;
+        try {
+            settings = armService.createUserSettingsForDynamicNode(dynamicNode.getNodeRef(), parentStaticNode.getNodeRef());
+        } catch (WriteTransactionNeededException e) {
+            logger.warn("Can not create user settings node");
+        }
+
+        return (settings == null) ? null : new ScriptNode(settings, serviceRegistry, getScope());
+    }
+    
     /**
      * Возвращает список столбцов (объектов из репозитория, ScriptNode) для заданного узла АРМ
      * @param armNode узел
@@ -292,33 +316,62 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                 if (settingsNode == null) {
                     settingsNode = createNodeUserSettings(armNode);
                 }
-                if (settingsNode != null) {
-                    List<NodeRef> targetColumns = new ArrayList<>();
-                    try {
-                        JSONObject columnsSettings = new JSONObject(columnsToSavedJSON);
-                        JSONArray selectedColumnsArray = (JSONArray) columnsSettings.get("selected");
-                        for (int j = 0; j < selectedColumnsArray.length(); j++) {
-                            String columnRef = (String) selectedColumnsArray.get(j);
-                            if (NodeRef.isNodeRef(columnRef)) {
-                                targetColumns.add(new NodeRef(columnRef));
-                            }
-                        }
-                    } catch (JSONException e) {
-                        logger.error(e.getMessage(), e);
-                    }
+                result = saveUserColumnsSettings(settingsNode, columnsToSavedJSON);
+                return result;
+            }
+        };
 
-                    nodeService.setAssociations(settingsNode.getNodeRef(), ArmService.ASSOC_USER_NODE_COLUMNS, targetColumns);
+        return AuthenticationUtil.runAsSystem(saveColumns);
+	}
 
-                    result = true;
+    /**
+     * Сохраняет список столбцов для Динамического узла.
+     * @param dynamicNode динамический узел
+     * @param parentStaticNode родительский статический узел
+     */
+    @SuppressWarnings("unused")
+    public boolean saveUserColumnsSet(final ScriptNode dynamicNode, final ScriptNode parentStaticNode, final String columnsToSavedJSON) {
+        final AuthenticationUtil.RunAsWork<Boolean> saveColumns = new AuthenticationUtil.RunAsWork<Boolean>() {
+            @Override
+            public Boolean doWork() throws Exception {
+                boolean result = false;
+                ScriptNode settingsNode = getDynamicNodeUserSettings(dynamicNode, parentStaticNode);
+                if (settingsNode == null) {
+                    settingsNode = createDynamicNodeUserSettings(dynamicNode, parentStaticNode);
                 }
-                armService.invalidateCurrentUserCache();
+                result = saveUserColumnsSettings(settingsNode, columnsToSavedJSON);
                 return result;
             }
         };
 
         return AuthenticationUtil.runAsSystem(saveColumns);
     }
+    
+    private boolean saveUserColumnsSettings(ScriptNode settingsNode, final String columnsToSavedJSON) {
+    	boolean result = false;
+        if (settingsNode != null) {
+            List<NodeRef> targetColumns = new ArrayList<>();
+            try {
+                JSONObject columnsSettings = new JSONObject(columnsToSavedJSON);
+                JSONArray selectedColumnsArray = (JSONArray) columnsSettings.get("selected");
+                for (int j = 0; j < selectedColumnsArray.length(); j++) {
+                    String columnRef = (String) selectedColumnsArray.get(j);
+                    if (NodeRef.isNodeRef(columnRef)) {
+                        targetColumns.add(new NodeRef(columnRef));
+                    }
+                }
+            } catch (JSONException e) {
+                logger.error(e.getMessage(), e);
+            }
 
+            nodeService.setAssociations(settingsNode.getNodeRef(), ArmService.ASSOC_USER_NODE_COLUMNS, targetColumns);
+
+            result = true;
+        }
+        armService.invalidateCurrentUserCache();
+        return result;
+    }
+    
     public JSONObject convertPathToNodes(String code, String path) {
         JSONObject result = new JSONObject();
         try {

@@ -22,9 +22,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         YAHOO.Bubbling.on("updateCurrentColumns", this.onUpdateSelectedColumns, this);
         YAHOO.Bubbling.on("armRefreshSelectedTreeNode", this.onRefreshSelectedTreeNode, this);
-        YAHOO.Bubbling.on("armRefreshParentSelectedTreeNode", this.onRefreshParentSelectedTreeNode, this);
         YAHOO.Bubbling.on("beforeDateChanged", this.onCalSelect, this);
-        YAHOO.Bubbling.on("selectedParentCurrentNode", this.onSelectedParentCurrentNode, this);
 
         return this;
     };
@@ -48,8 +46,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         expiresDate: new Date(),
 
         calendarNode: null,
-
-        expandedChildren: [],
 
         onReady: function () {
             var date = new Date;
@@ -584,13 +580,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _isNodeExpanded: function (nodeId) {
-            if (this.expandedChildren.length != 0) {
-                var index = this.expandedChildren.indexOf(nodeId);
-                if (index >= 0) {
-                    this.expandedChildren.splice(index, 1);
-                    return true;
-                }
-            } else if (nodeId && this.menuState.selected.length > 0) {
+            if (nodeId && this.menuState.selected.length > 0) {
                 return this.menuState.selected.indexOf(nodeId) >= 0;
             }
             return false;
@@ -611,7 +601,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         columns: YAHOO.lang.JSON.stringify({
                             selected:columns
                         }),
-                        nodeRef: ref
+                        nodeRef: ref,
+						parentStaticNodeRef: this.getCurrentParentStaticNode()
                     },
                     successCallback: {
                         fn: function (oResponse) {
@@ -630,23 +621,25 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
         },
 
+        getCurrentParentStaticNode : function() {
+			var documentsToolbarComponent = Alfresco.util.ComponentManager.findFirst("LogicECM.module.ARM.DocumentsToolbar");
+			if (documentsToolbarComponent) {
+				var currentNode = documentsToolbarComponent.currentNode;
+				if (currentNode && currentNode.data && currentNode.data.nodeType) {
+					var currentNodeType = currentNode.data.nodeType;
+					if (currentNodeType.indexOf("lecm-arm") == -1) {
+						var currentParentStaticNode = documentsToolbarComponent.parentStaticNode;
+						return currentParentStaticNode;
+					}
+				}
+			}
+			return null;
+        },
+        
         onRefreshSelectedTreeNode: function() {
+//            console.log("refreshTreeNode");
             this._loadTree(this.selectedNode);
-        },
-
-        onRefreshParentSelectedTreeNode: function() {
-            var nodeParent = this.selectedNode.parent;
-            this.expandedChildren = [];
-            for (var i=0; i < nodeParent.children.length; i++) {
-                if (nodeParent.children[i].expanded) {
-                    this.expandedChildren.push(nodeParent.children[i].id);
-                }
-            }
-            this._loadTree(nodeParent);
-        },
-
-        onSelectedParentCurrentNode: function() {
-            this._treeNodeSelected(this.selectedNode.parent);
         }
+
     });
 })();
