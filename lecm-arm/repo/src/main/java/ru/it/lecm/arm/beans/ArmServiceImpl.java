@@ -470,7 +470,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	}
 
 	private NodeRef getUserSettingsContainer(NodeRef node) {
-		if (!this.nodeService.getType(node).equals(ArmService.TYPE_ARM_NODE)) {
+		QName nodeType = this.nodeService.getType(node);
+		if (!nodeType.equals(ArmService.TYPE_ARM_NODE) && !nodeType.equals(ArmService.TYPE_ARM_ACCORDION)) {
 			// Поиск контейнера с настройками пользователей для текущего динамического узла.
 			List<AssociationRef> userSettings = this.nodeService.getTargetAssocs(node, ArmService.ASSOC_ARM_USER_SETTINGS);
 			NodeRef userSettingsContainer = null;
