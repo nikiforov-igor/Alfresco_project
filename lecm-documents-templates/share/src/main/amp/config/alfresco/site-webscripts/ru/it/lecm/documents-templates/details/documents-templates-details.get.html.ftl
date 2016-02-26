@@ -1,7 +1,7 @@
 <#assign detailsViewId = args.htmlid + '-templatesDetailsViewContainer'/>
 
 <div id='${detailsViewId}'>
-	<div id='${detailsViewId}-details'></div>
+	<div id='${detailsViewId}-details' class='templateDetails'></div>
 </div>
 <script type='text/javascript'>//<![CDATA[
 	(function () {
@@ -15,7 +15,7 @@
 		LogicECM.module.Base.Util.loadResources([
 			'scripts/documents-templates/details/documents-templates-details.js'
 		],[
-//			'css/documents-templates/details/documents-templates-details.css'
+			'css/documents-templates/details/documents-templates-details.css'
 		], initDocumentsTemplatesDetails);
 	})();
 //]]></script>

@@ -1,6 +1,6 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-	"nodeRef": "${nodeRef?string}",
+	"nodeRef": "${nodeRef}",
 	"xpath": "${xpath}"
 }
 </#escape>

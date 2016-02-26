@@ -20,6 +20,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		Bubbling.on('beforeTemplate', this.onBeforeTemplate, this);
 		Bubbling.on('templateCreated', this.onTemplateCreated, this);
 		Bubbling.on('templateEdited', this.onTemplateEdited, this);
+		Bubbling.on('submitTemplate', this.onTemplateSubmit, this);
 		return this;
 	};
 
@@ -32,13 +33,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		/* получаем NodeRef или itemType, загружаем форму и отображаем ее в себе */
 
 		_destroyForms: function () {
-			var i;
-			for (i in this.widgets) {
+			if (this.widgets.formsRuntime) {
 				LogicECM.module.Base.Util.formDestructor('destroy', null, {
-					moduleId: this.widgets[i].formId, force: true
+					moduleId: this.widgets.formsRuntime.formId, force: true
 				});
-				delete this.widgets[i];
-				this.widgets[i] = null;
+				delete this.widgets.formsRuntime;
+				this.widgets.formsRuntime = null;
 			}
 		},
 
@@ -53,42 +53,22 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		onAfterFormRuntimeInit: function(layer, args) {
 			var obj = args[1];
 			switch (obj.component.options.mode) {
-				case 'create':
-					if (!this.widgets.createFormRuntime) {
-						this.widgets.createFormRuntime = obj.component.formsRuntime;
-						this.widgets.createFormRuntime.applyTabFix();
+				case 'create': case 'edit':
+					if (!this.widgets.formsRuntime) {
+						this.widgets.formsRuntime = obj.component.formsRuntime;
+						this.widgets.formsRuntime.ajaxSubmitHandlers.successCallback.fn = function(sucessResponse) {
+							Alfresco.util.PopupManager.displayMessage({
+								text: 'Шаблон успешно сохранен'
+								//TODO перезагрузить на редактирование
+							});
+						};
+						this.widgets.formsRuntime.applyTabFix();
 					} else {
-						console.warn('createFormRuntime already exists for LogicECM.module.DocumentsTemplates.DetailsView[' + this.id + ']');
-					}
-					break;
-				case 'edit':
-					if (!this.widgets.editFormRuntime) {
-						this.widgets.editFormRuntime = obj.component.formsRuntime;
-						this.widgets.editFormRuntime.applyTabFix();
-					} else {
-						console.warn('editFormRuntime already exists for LogicECM.module.DocumentsTemplates.DetailsView[' + this.id + ']');
+						console.warn('formsRuntime already exists for LogicECM.module.DocumentsTemplates.DetailsView[' + this.id + '] mode ' + obj.component.options.mode);
 					}
 					break;
 				default: throw obj.component.options.mode + ' mode is not implemented for LogicECM.module.DocumentsTemplates.DetailsView';
 			}
-			// this.widgets.createFormRuntime = new Alfresco.forms.Form(htmlid + '-form');
-			// this.widgets.createFormRuntime.setSubmitElements(this.widgets.okButton);
-			// this.widgets.createFormRuntime.setAJAXSubmit(true, {
-			//	 successCallback: {
-			//		 fn: this.onSuccess,
-			//		 scope: this
-			//	 },
-			//	 failureCallback: {
-			//		 fn: this.onFailure,
-			//		 scope: this
-			//	 }
-			// });
-			// this.widgets.createFormRuntime.setSubmitAsJSON(true);
-
-			// Initialise the form
-			// this.widgets.createFormRuntime.init();
-
-			// We're in a popup, so need the tabbing fix
 		},
 
 		onBeforeTemplate: function (layer, args) {
@@ -97,7 +77,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			}
 		},
 
-		_onTemplateCreated: function (html, htmlid) {
+		_onTemplateLoaded: function (html, htmlid) {
 			var detailsView = Dom.get(this.detailsViewId);
 			detailsView.innerHTML = html;
 
@@ -117,19 +97,21 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		onTemplateCreated: function (layer, args) {
 			var obj = args[1];
 			if (this._hasEventInterest(obj)) {
-				this._onTemplateCreated(obj.html, obj.htmlid);
+				this._onTemplateLoaded(obj.html, obj.htmlid);
 			}
 		},
 
-		_onTemplateEdited: function (html, htmlid) {
-
-		},
-
 		onTemplateEdited: function (layer, args) {
-			//TODO: обработчик события "редактировать шаблон"
 			var obj = args[1];
 			if (this._hasEventInterest(obj)) {
-				this._onTemplateEdited(obj.html, obj.htmlid);
+				this._onTemplateLoaded(obj.html, obj.htmlid);
+			}
+		},
+
+		onTemplateSubmit: function (layer, args) {
+			var obj = args[1];
+			if (this._hasEventInterest(obj)) {
+				this.widgets.formsRuntime._submitInvoked('submit');
 			}
 		},
 

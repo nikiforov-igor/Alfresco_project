@@ -3,16 +3,27 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="lecm-template:actions"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
 				</field-visibility>
 				<appearance>
-<!--					<field id="lecm-template:attributes">
-						<control template="">
+						<set id="top" template="/org/alfresco/components/form/2-column-set.ftl"/>
+						<set id="bottom"/>
 
-						</control>
-					</field>-->
+						<field id="cm:title" set="top">
+							<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						</field>
+						<field id="lecm-template:actions" set="top">
+							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
+						</field>
+						<field id="lecm-template:doc-type" set="bottom">
+							<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+						</field>
+						<field id="lecm-template:attributes" set="bottom">
+
+						</field>
 				</appearance>
 			</form>
 		</forms>
@@ -21,16 +32,27 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="lecm-template:actions"/>
 					<show id="cm:title"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
 				</field-visibility>
 				<appearance>
-<!--					<field id="lecm-template:attributes">
-						<control template="">
+						<set id="top" template="/org/alfresco/components/form/2-column-set.ftl"/>
+						<set id="bottom"/>
 
-						</control>
-					</field>-->
+						<field id="cm:title" set="top">
+							<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						</field>
+						<field id="lecm-template:actions" set="top">
+							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
+						</field>
+						<field id="lecm-template:doc-type" set="bottom">
+							<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+						</field>
+						<field id="lecm-template:attributes" set="bottom">
+
+						</field>
 				</appearance>
 			</form>
 		</forms>

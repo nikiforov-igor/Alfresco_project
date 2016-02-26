@@ -1,0 +1,10 @@
+.templateDetails .yui-u {
+	float: none;
+	width: auto;
+	overflow: hidden;
+}
+
+.templateDetails .yui-u.first {
+	float: right;
+	width: 310px;
+}

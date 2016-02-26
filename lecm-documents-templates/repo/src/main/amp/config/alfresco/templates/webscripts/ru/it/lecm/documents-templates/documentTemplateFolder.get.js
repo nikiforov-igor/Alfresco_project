@@ -2,6 +2,6 @@
 
 (function() {
 	var serviceFolder = documentTemplateService.getDocumentTemplateFolder();
-	model.nodeRef = serviceFolder.nodeRef;
+	model.nodeRef = serviceFolder.nodeRef.toString();
 	model.xpath = serviceFolder.qnamePath;
 })();

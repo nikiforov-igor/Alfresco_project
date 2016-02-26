@@ -48,11 +48,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 									showDelay: 100,
 									hideDelay: 100,
 									autoDismissDelay: 0,
-									// error: null,
 									disabled: false,
-									// type: 'textBox',
-									// nodeRef: null,
-									// name: null,
 									value: type.value,
 									title: 'Создать шаблон',
 									itemKind: 'type',
@@ -91,34 +87,34 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					searchTerm: '',
 					size: 100,
 					sortProp: 'cm:created',
-					additionalFilter: '=@lecm\\-template\\:doc\\-type:"' + node.data.value + '"',
-					xpath: this.options.xpath
+					additionalFilter: '@lecm\\-template\\:doc\\-type:"' + node.data.value + '"',
+					xpath: this.options.xpath,
+					nameSubstituteString: '{cm:title}',
+					titleNameSubstituteString: '{cm:title}'
 				},
 				successCallback: {
 					scope: this,
 					fn: function (successResponse) {
-						debugger;
-						// var templates = successResponse.json;
-						// templates.forEach(function (template) {
-						//TODO: в каждой новой ноде хранить конфиг для Alfresco.util.InsituEditor
-						// new YAHOO.widget.TextNode({
-						// 	label: type.name,
-						// 	value: type.value,
-						// 	isLeaf: true,
-						// 	config: {
-						// 		showDelay: 100,
-						// 		hideDelay: 100,
-						// 		autoDismissDelay: 0,
-						// 		disabled: false,
-						// 		value: type.value,
-						// 		title: 'Редактировать шаблон',
-						// 		itemKind: 'node',
-						// 		itemId: type.value,
-						// 		mode: 'edit',
-						// 		formId: ''
-						// 	}
-						// }, node);
-						// }, this);
+						var templates = successResponse.json.data.items;
+						templates.forEach(function (template) {
+							new YAHOO.widget.TextNode({
+								label: template.title,
+								value: template.nodeRef,
+								isLeaf: true,
+								config: {
+									showDelay: 100,
+									hideDelay: 100,
+									autoDismissDelay: 0,
+									disabled: false,
+									value: template.nodeRef,
+									title: 'Редактировать шаблон',
+									itemKind: 'node',
+									itemId: template.nodeRef,
+									mode: 'edit',
+									formId: ''
+								}
+							}, node);
+						}, this);
 						if (YAHOO.lang.isFunction(fnLoadComplete)) {
 							fnLoadComplete.call(node);
 						}
@@ -143,7 +139,14 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				if (childNode.data.config && !childNode.data.insituEditor) {
 					childNode.data.config.container = childNode.getContentEl();
 					childNode.data.config.context = childNode.getContentEl().parentElement;
-					childNode.data.insituEditor = new Alfresco.widget.InsituEditorTemplateCreate(null, childNode.data.config);
+					switch(childNode.data.config.itemKind) {
+						case 'type':
+							childNode.data.insituEditor = new Alfresco.widget.InsituEditorTemplateCreate(null, childNode.data.config);
+							break;
+						case 'node':
+						childNode.data.insituEditor = new Alfresco.widget.InsituEditorTemplateDelete(null, childNode.data.config);
+							break;
+					}
 				}
 			});
 		},
@@ -158,10 +161,10 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
 					dataObj: {
 						htmlid: Alfresco.util.generateDomId(),
-						itemKind: obj.params.itemKind,
-						itemId: obj.params.itemId,
-						mode:  obj.params.mode,
-						formId: obj.params.formId,
+						itemKind: obj.node.data.config.itemKind,
+						itemId: obj.node.data.config.itemId,
+						mode: obj.node.data.config.mode,
+						formId: obj.node.data.config.formId,
 						submitType: 'json',
 						showSubmitButton: false
 					},
@@ -235,7 +238,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					itemKind: obj.params.itemKind,
 					itemId: obj.params.itemId,
 					destination: obj.params.destination,
-					mode:  obj.params.mode,
+					mode: obj.params.mode,
 					formId: obj.params.formId,
 					submitType: 'json',
 					showSubmitButton: false,
@@ -280,13 +283,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					text: 'Да',
 					handler: function () {
 						//TODO Ajax-запрос на удаление шаблона
-					   this.destroy();
+						this.destroy();
 					},
 					isDefault: true
 				}, {
 					text: 'Нет',
 					handler: function () {
-					   this.destroy();
+						this.destroy();
 					}
 				}]
 			});
