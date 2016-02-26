@@ -9,6 +9,7 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-arm-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-arm-aspects-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">

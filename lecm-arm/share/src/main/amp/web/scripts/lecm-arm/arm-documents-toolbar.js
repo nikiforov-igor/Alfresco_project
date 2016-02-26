@@ -37,6 +37,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DocumentsToolbar.prototype,
         {
+			parentStaticNode: null,
             filtersDialog: null,
             columnsDialog: null,
             splashScreen: null,
@@ -87,6 +88,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var columnsDiv = Dom.get(this.id + "-columns-dialog-content");
                 var toolbar = this;
                 var ref = this.currentNode.data.nodeRef;
+				this.findStaticParent(this.currentNode);
                 if (!ref) {
                     ref = this.currentNode.data.armNodeRef;
                 }
@@ -96,7 +98,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     dataObj: {
                         htmlId: Alfresco.util.generateDomId(),
                         nodeRef: ref,
-                        columns: this._getNodeColumnsStr(this.currentNode)
+                        columns: this._getNodeColumnsStr(this.currentNode),
+						parentStaticNode: this.parentStaticNode ? this.parentStaticNode : null
                     },
                     successCallback: {
                         fn: function (oResponse) {
@@ -116,6 +119,22 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     execScripts: true
                 });
             },
+			
+			findStaticParent: function (node) {
+			    this.parentStaticNode = null;
+				if (node && node.data && node.data.nodeType && node.data.nodeType.indexOf("lecm-arm") > -1) {
+				    this.parentStaticNode = node.data.nodeRef;
+				    return;
+				}
+				else {
+				    if (node.parent) {
+					    this.findStaticParent(node.parent);
+					}
+					else {
+					    return;
+					}
+				}
+			},
 
             _getNodeColumnsStr: function(node) {
                 var columns = [];
@@ -650,8 +669,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                     this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isNotGridNode || !hasFilters);
                     this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isNotGridNode);
-                    this.toolbarButtons["defaultActive"].columnsButton.set("disabled", args[1].isNotGridNode || !isArmNode || !hasColumns);
-                    this.toolbarButtons["defaultActive"].exportButton.set("disabled", args[1].isNotGridNode || !isArmNode || !hasColumns);
+                    this.toolbarButtons["defaultActive"].columnsButton.set("disabled", args[1].isNotGridNode);
+                    this.toolbarButtons["defaultActive"].exportButton.set("disabled", args[1].isNotGridNode);
 
                     var searchInput = Dom.get(this.id + "-full-text-search");
                     if (args[1].isNotGridNode) {

@@ -427,7 +427,14 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public List<ArmColumn> getNodeColumns(NodeRef node) {
-		List<ArmColumn> result = getUserNodeColumns(node); // получаем список колонок из настроек пользователя
+		NodeRef userSettingsContainer = getUserSettingsContainer(node);
+		List<ArmColumn> result = null;
+		if (userSettingsContainer != null) {
+			result = getUserNodeColumns(userSettingsContainer); // получаем список колонок из настроек пользователя
+		}
+		else {
+			result = new ArrayList<ArmColumn>(); // Если контейнер с настройками не найден, то возвращаем пустой список колонок.
+		}
         if (result.isEmpty()) { // пусто - тащим из настроек АРМ
             if (columnsCache.contains(node.toString())) {
                 return columnsCache.get(node.toString());
@@ -460,6 +467,27 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             columnsCache.put(node.toString(), result);
         }
 		return result;
+	}
+
+	private NodeRef getUserSettingsContainer(NodeRef node) {
+		if (!this.nodeService.getType(node).equals(ArmService.TYPE_ARM_NODE)) {
+			// Поиск контейнера с настройками пользователей для текущего динамического узла.
+			List<AssociationRef> userSettings = this.nodeService.getTargetAssocs(node, ArmService.ASSOC_ARM_USER_SETTINGS);
+			NodeRef userSettingsContainer = null;
+			if (!userSettings.isEmpty()) {
+				NodeRef userSettingsNode = userSettings.get(0).getTargetRef();
+				List<ChildAssociationRef> parentAssocs = this.nodeService.getParentAssocs(userSettingsNode);
+				if (!parentAssocs.isEmpty()) {
+					userSettingsContainer = parentAssocs.get(0).getParentRef();
+					return userSettingsContainer;
+				}
+			}
+			return null;
+		}
+		else {
+			// Контейнером для статического узла будет сам статический узел.
+			return node;
+		}
 	}
 
     @Override
@@ -527,6 +555,26 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     }
 
     @Override
+    public NodeRef getDynamicNodeUserSettings(final NodeRef dynamicNode, final NodeRef parentStaticNode) {
+        NodeRef employee = orgstructureBean.getCurrentEmployee();
+        if (employee == null) {
+            logger.error("Could not get current employee. Skip creating settings object");
+            return null;
+        }
+        String loginName = orgstructureBean.getEmployeeLogin(employee);
+        String containerName = nodeService.getProperty(dynamicNode, ContentModel.PROP_NODE_UUID).toString();
+        NodeRef userSettingsNodeContainer = nodeService.getChildByName(parentStaticNode, ContentModel.ASSOC_CONTAINS, containerName);
+        if (userSettingsNodeContainer != null) {
+        	NodeRef userSettingsNode = nodeService.getChildByName(userSettingsNodeContainer, ContentModel.ASSOC_CONTAINS, loginName);
+        	if (userSettingsNode != null) {
+        		return userSettingsNode;
+        	}
+        }
+        // DynamicNodeUserSettings not found!
+        return null;
+    }
+    
+    @Override
     public NodeRef createUserSettingsForNode(final NodeRef node) throws WriteTransactionNeededException {
         try {
             lecmTransactionHelper.checkTransaction();
@@ -547,6 +595,54 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         return nodeRef;
     }
 
+    @Override
+    public NodeRef createUserSettingsForDynamicNode(final NodeRef dynamicNode, final NodeRef parentStaticNode) throws WriteTransactionNeededException {
+        try {
+            lecmTransactionHelper.checkTransaction();
+        } catch (TransactionNeededException ex) {
+            throw new WriteTransactionNeededException("Can't create user settings for dynamic node " + dynamicNode);
+        }
+        
+        List<AssociationRef> userSettingsAssocs = this.nodeService.getTargetAssocs(dynamicNode, ArmService.ASSOC_ARM_USER_SETTINGS);
+        if (userSettingsAssocs.isEmpty()) {
+        	// Если для динамического узла еще не было настроек, то сохраняем их в контейнер родительского статического узла.
+            String containerName = nodeService.getProperty(dynamicNode, ContentModel.PROP_NODE_UUID).toString();
+            NodeRef userSettingsContainer = nodeService.getChildByName(parentStaticNode, ContentModel.ASSOC_CONTAINS, containerName);
+            if (userSettingsContainer == null) {
+            	userSettingsContainer = createNode(parentStaticNode, ContentModel.TYPE_FOLDER, containerName, null);
+            	hideNode(userSettingsContainer, true);
+            }
+            return createUserSettingsNode(dynamicNode, userSettingsContainer);
+        }
+        else {
+        	// Если для динамического узла уже были настройки, то сохраняем их в тот же контейнер к первым.
+        	NodeRef userSettings = userSettingsAssocs.get(0).getTargetRef();
+        	List<ChildAssociationRef> parentAssocs = this.nodeService.getParentAssocs(userSettings);
+        	NodeRef userSettingsContainer = parentAssocs.get(0).getParentRef();
+        	return createUserSettingsNode(dynamicNode, userSettingsContainer);
+        }
+    }
+    
+    private NodeRef createUserSettingsNode(NodeRef dynamicNode, NodeRef userSettingsNodeContainer) throws WriteTransactionNeededException {
+    	if (userSettingsNodeContainer != null) {
+	        NodeRef employee = orgstructureBean.getCurrentEmployee();
+	        if (employee == null) {
+	            logger.error("Could not get current employee. Skip creating settings object");
+	            return null;
+	        }
+	
+	        String loginName = orgstructureBean.getEmployeeLogin(employee);
+        
+            // создать и скрыть
+            NodeRef nodeRef = createNode(userSettingsNodeContainer, TYPE_USER_SETTINGS, loginName, null);
+            hideNode(nodeRef, true);
+        	// Создать ассоциацию для связи динамического узла и контейнера с настройками пользователей.
+        	this.nodeService.createAssociation(dynamicNode, nodeRef, ArmService.ASSOC_ARM_USER_SETTINGS);
+            return nodeRef;
+        }
+    	return null;
+    }
+    
     @Override
 	public ArmBaseChildRule getNodeChildRule(NodeRef node) {
 		if (isArmElement(node)) {

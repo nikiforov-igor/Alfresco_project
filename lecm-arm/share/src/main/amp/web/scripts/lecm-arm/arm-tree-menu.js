@@ -611,7 +611,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         columns: YAHOO.lang.JSON.stringify({
                             selected:columns
                         }),
-                        nodeRef: ref
+                        nodeRef: ref,
+						parentStaticNodeRef: this.getCurrentParentStaticNode()
                     },
                     successCallback: {
                         fn: function (oResponse) {
@@ -630,6 +631,21 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
         },
 
+        getCurrentParentStaticNode : function() {
+			var documentsToolbarComponent = Alfresco.util.ComponentManager.findFirst("LogicECM.module.ARM.DocumentsToolbar");
+			if (documentsToolbarComponent) {
+				var currentNode = documentsToolbarComponent.currentNode;
+				if (currentNode && currentNode.data && currentNode.data.nodeType) {
+					var currentNodeType = currentNode.data.nodeType;
+					if (currentNodeType.indexOf("lecm-arm") == -1) {
+						var currentParentStaticNode = documentsToolbarComponent.parentStaticNode;
+						return currentParentStaticNode;
+					}
+				}
+			}
+			return null;
+        },
+        
         onRefreshSelectedTreeNode: function() {
             this._loadTree(this.selectedNode);
         },

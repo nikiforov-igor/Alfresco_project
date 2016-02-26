@@ -87,6 +87,11 @@ public interface ArmService {
 	public static final QName PROP_ARM_ACCORDION_RUN_AS_PATH = QName.createQName(ARM_NAMESPACE_URI, "path-to-node");
 	public static final QName PROP_ARM_ACCORDION_NAME_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "name-format-string");
 	public static final QName ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE = QName.createQName(ARM_NAMESPACE_URI, "runAs-employee");
+
+	public static final String ARM_ASPECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/model/arm/aspects/1.0";
+	public static final QName ASPECT_ARM_USER_SETTINGS = QName.createQName(ARM_ASPECTS_NAMESPACE_URI, "arm-user-settings");
+	public static final QName ASSOC_ARM_USER_SETTINGS = QName.createQName(ARM_ASPECTS_NAMESPACE_URI, "arm-user-settings-assoc");
+
 	/**
 	 * проверяет что объект является аккордионом
 	 */
@@ -205,11 +210,23 @@ public interface ArmService {
     public NodeRef getNodeUserSettings(final NodeRef node);
 
     /**
+     * Получение узла с настройками для динамического узла АРМ
+     * @param node узел
+     */
+    public NodeRef getDynamicNodeUserSettings(final NodeRef dynamicNode, final NodeRef parentStaticNode);
+    
+    /**
      * Создание узел с настройками для узла АРМ
      * @param node узел
      */
     public NodeRef createUserSettingsForNode(final NodeRef node) throws WriteTransactionNeededException;
 
+    /**
+     * Создание узла с настройками для динамического узла АРМ
+     * @param node узел
+     */
+    public NodeRef createUserSettingsForDynamicNode(final NodeRef dynamicNode, final NodeRef parentStaticNode) throws WriteTransactionNeededException;
+    
     void invalidateCache();
 
     void invalidateCurrentUserCache();

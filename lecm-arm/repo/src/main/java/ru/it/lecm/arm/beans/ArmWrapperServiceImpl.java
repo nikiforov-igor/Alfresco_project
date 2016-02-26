@@ -273,7 +273,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setSearchType(parentNode.getSearchType());
 
         if (!onlyMeta) {
-            node.setColumns(parentNode.getColumns());
+        	List<ArmColumn> columns = getNodeColumns(nodeRef);
+        	if (columns.size() == 0) {
+        		columns = parentNode.getColumns();
+        	}
+			node.setColumns(columns);
             node.setAvaiableFilters(parentNode.getAvaiableFilters());
             node.setCounter(parentNode.getCounter());
             node.setCreateTypes(parentNode.getCreateTypes());

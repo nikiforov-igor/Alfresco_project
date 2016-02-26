@@ -1,10 +1,15 @@
 function main() {
     var node = search.findNode(args["nodeRef"]);
+	
+	var parentStaticNode = null;
+    if (args["parentStaticNode"] && args["parentStaticNode"].indexOf("/") > -1) {
+        parentStaticNode = search.findNode(args["parentStaticNode"]);
+    }
 
     if (node) {
         var columnsArray = [];
 
-        var allColumns = arm.getNodeColumns(node);
+		var allColumns = parentStaticNode ? arm.getNodeColumns(parentStaticNode) : arm.getNodeColumns(node);
 
         var userColumnsIds = [];
         if (args["columns"] != null) {
