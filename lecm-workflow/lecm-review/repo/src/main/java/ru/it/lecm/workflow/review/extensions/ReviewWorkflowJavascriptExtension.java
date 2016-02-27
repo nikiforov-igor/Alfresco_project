@@ -13,7 +13,6 @@ import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.util.ParameterCheck;
 import ru.it.lecm.workflow.review.ReviewServiceImpl;
@@ -126,6 +125,4 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
         return reviewServiceImpl.needReviewByCurrentUser(documentRef.getNodeRef());
     }
     
-    
-
 }
