@@ -1,15 +1,20 @@
 var documentNodeRef = args['documentNodeRef'];
-var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : false;
+var exclude = 'true' == args['exclErrands'];
 
 var document = search.findNode(documentNodeRef);
-var excludeErrands = document != null && document.isSubType("lecm-eds-document:base") && exclude;
+var excludeErrands = document && document.isSubType("lecm-eds-document:base") && exclude;
 
 model.documentService = documentScript;
 var connectDocs = documentConnection.getConnectionsWithDocument(documentNodeRef);
-var result = [];
-for (var i = 0; i < connectDocs.length; i++) {
-    if (!connectDocs[i].isSubType("lecm-errands:document") || !excludeErrands) {
-        result.push(connectDocs[i]);
+
+if (excludeErrands) {
+    var result = [];
+    for (var i = 0; i < connectDocs.length; i++) {
+        if (!connectDocs[i].isSubType("lecm-errands:document")) {
+            result.push(connectDocs[i]);
+        }
     }
+    model.items = result;
+} else {
+    model.items = connectDocs;
 }
-model.items = result;
