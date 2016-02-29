@@ -22,7 +22,7 @@
 							<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 						</field>
 						<field id="lecm-template:attributes" set="bottom">
-
+							<control template="/ru/it/lecm/documents-templates/components/controls/attributes.ftl"/>
 						</field>
 				</appearance>
 			</form>
@@ -51,7 +51,7 @@
 							<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 						</field>
 						<field id="lecm-template:attributes" set="bottom">
-
+							<control template="/ru/it/lecm/documents-templates/components/controls/attributes.ftl"/>
 						</field>
 				</appearance>
 			</form>

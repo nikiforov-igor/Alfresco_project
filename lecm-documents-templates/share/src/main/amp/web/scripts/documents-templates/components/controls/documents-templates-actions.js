@@ -26,6 +26,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		onActionAddClick: function (event, actionEl) {
 			Bubbling.fire('addTemplateAttribute', {
+				bubblingLabel: 'documentsTemplatesAttributes',
 				event: event,
 				actionEl: actionEl
 			});
@@ -41,6 +42,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		onActionClearClick: function (event, actionEl) {
 			Bubbling.fire('clearTemplateAttributes', {
+				bubblingLabel: 'documentsTemplatesAttributes',
 				event: event,
 				actionEl: actionEl
 			});
