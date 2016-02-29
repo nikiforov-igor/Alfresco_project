@@ -125,4 +125,9 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
         return reviewServiceImpl.needReviewByCurrentUser(documentRef.getNodeRef());
     }
     
+	public void processItem(ScriptNode item ) throws WriteTransactionNeededException {
+		ParameterCheck.mandatory("item", item);
+		reviewServiceImpl.processItem(item.getNodeRef());
+	}
+	
 }

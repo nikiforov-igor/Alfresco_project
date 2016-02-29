@@ -10,7 +10,7 @@
   review.markReviewedTS(document);
 })();]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
-        <property name="cm:title"><![CDATA[Ознакомиться с документом(гр.оп.)]]></property>
+        <property name="cm:title"><![CDATA[Ознакомиться с документом]]></property>
         <property name="lecm-group-actions:availableForReader"><![CDATA[true]]></property>
     </item>
 </items>

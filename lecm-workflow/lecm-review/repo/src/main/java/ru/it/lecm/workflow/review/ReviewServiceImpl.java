@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -25,11 +29,14 @@ public class ReviewServiceImpl extends BaseBean {
 	public static final String CONSTRAINT_REVIEW_TS_STATE_CANCELLED = "CANCELLED";
 
 	public static final String REVIEW_TS_NAMESPACE = "http://www.it.ru/logicECM/model/review-ts/1.0";
+	public static final String REVIEW_LIST_NAMESPACE = "http://www.it.ru/logicECM/model/review-list/1.0";
 	public static final QName ASSOC_REVIEW_TS_REVIEW_TABLE = QName.createQName(REVIEW_TS_NAMESPACE, "review-table-assoc");
 	public static final QName ASSOC_REVIEW_TS_REVIEWER = QName.createQName(REVIEW_TS_NAMESPACE, "reviewer-assoc");
 	public static final QName ASSOC_REVIEW_TS_INITIATOR = QName.createQName(REVIEW_TS_NAMESPACE, "initiator-assoc");
 	public static final QName TYPE_REVIEW_TS_REVIEW_TABLE = QName.createQName(REVIEW_TS_NAMESPACE, "review-table");
 	public static final QName TYPE_REVIEW_TS_REVIEW_TABLE_ITEM = QName.createQName(REVIEW_TS_NAMESPACE, "review-table-item");
+	public static final QName TYPE_REVIEW_LIST_REWIEW_LIST_ITEM = QName.createQName(REVIEW_LIST_NAMESPACE, "review-list-item");
+	public static final QName ASSOC_REVIEW_LIST_REWIEWER = QName.createQName(REVIEW_LIST_NAMESPACE, "reviewer-assoc");
 	public static final QName PROP_REVIEW_TS_STATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-state");
 	public static final QName PROP_REVIEW_TS_REVIEW_FINISH_DATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-finish-date");
 	public static final QName PROP_REVIEW_TS_ACTIVE_REVIEWERS = QName.createQName(REVIEW_TS_NAMESPACE, "active-reviewers");
@@ -156,6 +163,26 @@ public class ReviewServiceImpl extends BaseBean {
 			}
 		}
 		return false;
+	}
+
+	public void processItem(NodeRef nodeRef) throws WriteTransactionNeededException {
+		if (TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
+			NodeRef rootFolder = nodeService.getPrimaryParent(nodeRef).getParentRef();
+			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+			NodeRef list = findNodeByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, TYPE_REVIEW_LIST_REWIEW_LIST_ITEM, ASSOCIATION_TYPE.TARGET);
+			
+			if (list != null) {
+				List<NodeRef> employeesList = findNodesByAssociationRef(list, ASSOC_REVIEW_LIST_REWIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET);
+				for (NodeRef employee : employeesList) {
+					NodeRef newItem = createNode(rootFolder, TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, null, null);
+					nodeService.setProperty(newItem, DocumentTableService.PROP_INDEX_TABLE_ROW, documentTableService.getTableDataRows(rootFolder).size()-1);
+					nodeService.createAssociation(newItem, employee, ASSOC_REVIEW_TS_REVIEWER);
+					nodeService.createAssociation(newItem, currentEmployee, ASSOC_REVIEW_TS_INITIATOR);
+				}
+			}
+			nodeService.moveNode(nodeRef, repositoryStructureHelper.getUserTemp(false), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString()));
+			nodeService.addAspect(nodeRef, ContentModel.ASPECT_TEMPORARY, null);
+		}
 	}
 
 }

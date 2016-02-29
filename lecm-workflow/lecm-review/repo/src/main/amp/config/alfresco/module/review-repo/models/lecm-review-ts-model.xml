@@ -60,7 +60,7 @@
                         <many>true</many>
                     </source>
                     <target>
-                        <class>lecm-orgstr:employee</class>
+                        <class>cm:cmobject</class>
                         <mandatory>true</mandatory>
                         <many>false</many>
                     </target>

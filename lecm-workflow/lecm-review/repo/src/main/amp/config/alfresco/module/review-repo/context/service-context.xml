@@ -11,13 +11,17 @@
 	<util:constant id="MIMETYPE" static-field="org.alfresco.repo.workflow.WorkflowDeployer.MIMETYPE"/>
 	<util:constant id="REDEPLOY" static-field="org.alfresco.repo.workflow.WorkflowDeployer.REDEPLOY"/>
 	
-        <util:list id="review.actions">
-            	<value>alfresco/module/${artifactId}/actions/cancel-review-action.xml</value>
-            	<value>alfresco/module/${artifactId}/actions/confirm-review-action.xml</value>
-            	<value>alfresco/module/${artifactId}/actions/send-to-review-action.xml</value>
-        </util:list>
+	<util:list id="review.actions">
+		<value>alfresco/module/${artifactId}/actions/cancel-review-action.xml</value>
+		<value>alfresco/module/${artifactId}/actions/confirm-review-action.xml</value>
+		<value>alfresco/module/${artifactId}/actions/send-to-review-action.xml</value>
+	</util:list>
 	
-        <util:list id="review.workflows">
+	<util:list id="review.dics">
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-review-list-dictionary.xml</value>
+	</util:list>
+	
+	<util:list id="review.workflows">
 		<props>
 			<prop key="#{ENGINE_ID}">activiti</prop>
 			<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/review-workflow.bpmn20.xml</prop>
@@ -25,28 +29,37 @@
 			<prop key="#{REDEPLOY}">${redeploy.process.definitions}</prop>
 		</props>
 	</util:list>
-	<bean id="review.workflow.bootstrap" parent="workflowDeployer"
-		  depends-on="review.model.bootstrap"
-		  p:workflowDefinitions-ref="review.workflows"/>
-
+	
 	<util:list id="review.models">
 		<value>alfresco/module/${artifactId}/models/lecm-review-workflow-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-result-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-ts-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-review-list-model.xml</value>
 	</util:list>
+
 	<util:list id="review.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-review-workflow</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-review-result</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-review-ts</value>
 	</util:list>
-        <bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap, workflow.model.bootstrap"
-		  p:models-ref="review.models" p:labels-ref="review.labels"/>
 
-        <bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
-		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
-		  p:dictionaries-ref="review.actions"/>
-        
+	<bean id="review.workflow.bootstrap" parent="workflowDeployer"
+		  depends-on="review.model.bootstrap"
+		  p:workflowDefinitions-ref="review.workflows"/>
+	
+	<bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
+			  depends-on="dictionaryBootstrap, workflow.model.bootstrap"
+			  p:models-ref="review.models" p:labels-ref="review.labels"/>
+
+	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+			  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+			  p:dictionaries-ref="review.actions"/>
+	
+	<bean id="review.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="review.model.bootstrap"
+		  p:dictionaries-ref="review.dics"
+          />
+	
 	<bean id="reviewWorkflowService" class="ru.it.lecm.workflow.review.ReviewWorkflowServiceImpl"
 		  parent="lecmWorkflowService" depends-on="review.model.bootstrap"
 		  p:workCalendarService-ref="WorkCalendarService"
@@ -57,16 +70,16 @@
 	<bean id="reviewService" class="ru.it.lecm.workflow.review.ReviewServiceImpl"
 		  parent="baseBean" depends-on="review.model.bootstrap"
 		  p:documentTableService-ref="documentTableService"
-                  p:orgstructureBean-ref="serviceOrgstructure"
-        />
+		  p:orgstructureBean-ref="serviceOrgstructure"
+	/>
 	
 	<bean id="reviewItemChangePolicy" class="ru.it.lecm.workflow.review.policy.ItemChangedPolicy"
 		  depends-on="review.model.bootstrap" init-method="init"
-			p:authenticationService-ref="authenticationService"
-			p:nodeService-ref="nodeService"
-			p:orgstructureService-ref="serviceOrgstructure"
-			p:reviewService-ref="reviewService"
-			p:tableService-ref="documentTableService"
-			p:policyComponent-ref="policyComponent"
-        />
+		  p:authenticationService-ref="authenticationService"
+		  p:nodeService-ref="nodeService"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:reviewService-ref="reviewService"
+		  p:tableService-ref="documentTableService"
+		  p:policyComponent-ref="policyComponent"
+	/>
 </beans>
