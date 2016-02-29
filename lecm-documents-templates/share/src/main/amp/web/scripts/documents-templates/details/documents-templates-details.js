@@ -28,9 +28,9 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		detailsViewId: null,
 
-		// doBeforeFOrmSubmit; doBeforeAjaxRequest;
-
-		/* получаем NodeRef или itemType, загружаем форму и отображаем ее в себе */
+		options: {
+			bubblingLabel: null
+		},
 
 		_destroyForms: function () {
 			if (this.widgets.formsRuntime) {
@@ -38,7 +38,6 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					moduleId: this.widgets.formsRuntime.formId, force: true
 				});
 				delete this.widgets.formsRuntime;
-				this.widgets.formsRuntime = null;
 			}
 		},
 
@@ -51,17 +50,31 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onAfterFormRuntimeInit: function(layer, args) {
+
+			function onSuccessFormSubmit(successResponse) {
+				/* this == Alfresco.FormUI */
+				var form = Dom.get(this.formsRuntime.formId),
+					templateNode = new Alfresco.util.NodeRef(successResponse.json.persistedObject);
+				Alfresco.util.PopupManager.displayMessage({
+					text: 'Шаблон успешно сохранен'
+				});
+				Bubbling.fire(this.options.mode  + 'Node', {
+					bubblingLabel: 'documentsTemplatesTreeView',
+					nodeRef: templateNode.nodeRef,
+					formData: successResponse.config.dataObj
+				});
+				// хак для замены формы создания на форму редактирования без обновления страницы
+				form.attributes.action.nodeValue = Alfresco.constants.PROXY_URI_RELATIVE + 'api/node/' + templateNode.uri + '/formprocessor';
+				this.options.mode = 'edit';
+			}
+
 			var obj = args[1];
 			switch (obj.component.options.mode) {
 				case 'create': case 'edit':
 					if (!this.widgets.formsRuntime) {
+						// doBeforeFOrmSubmit; doBeforeAjaxRequest;
 						this.widgets.formsRuntime = obj.component.formsRuntime;
-						this.widgets.formsRuntime.ajaxSubmitHandlers.successCallback.fn = function(sucessResponse) {
-							Alfresco.util.PopupManager.displayMessage({
-								text: 'Шаблон успешно сохранен'
-								//TODO перезагрузить на редактирование
-							});
-						};
+						this.widgets.formsRuntime.ajaxSubmitHandlers.successCallback.fn = onSuccessFormSubmit;
 						this.widgets.formsRuntime.applyTabFix();
 					} else {
 						console.warn('formsRuntime already exists for LogicECM.module.DocumentsTemplates.DetailsView[' + this.id + '] mode ' + obj.component.options.mode);

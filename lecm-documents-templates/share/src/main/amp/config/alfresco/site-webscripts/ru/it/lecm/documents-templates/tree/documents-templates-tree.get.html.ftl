@@ -8,6 +8,7 @@
 
 		function initDocumentsTemplatesTree() {
 			new LogicECM.module.DocumentsTemplates.TreeView('${treeViewId}', {
+				bubblingLabel: 'documentsTemplatesTreeView',
 				selectableType: '${args.selectableType}',
 				xpath: '${args.xpath}'
 			}, ${messages});
