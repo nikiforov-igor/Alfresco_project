@@ -37,7 +37,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DocumentsToolbar.prototype,
         {
-			parentStaticNode: null,
             filtersDialog: null,
             columnsDialog: null,
             splashScreen: null,
@@ -88,8 +87,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var columnsDiv = Dom.get(this.id + "-columns-dialog-content");
                 var toolbar = this;
                 var ref = this.currentNode.data.nodeRef;
-				this.findStaticParent(this.currentNode);
-                if (!ref) {
+                if (!ref || this.currentNode.data.nodeType != "lecm-arm:node") {
                     ref = this.currentNode.data.armNodeRef;
                 }
                 Alfresco.util.Ajax.jsonRequest({
@@ -98,8 +96,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     dataObj: {
                         htmlId: Alfresco.util.generateDomId(),
                         nodeRef: ref,
-                        columns: this._getNodeColumnsStr(this.currentNode),
-						parentStaticNode: this.parentStaticNode ? this.parentStaticNode : null
+                        columns: this._getNodeColumnsStr(this.currentNode)
                     },
                     successCallback: {
                         fn: function (oResponse) {
@@ -119,22 +116,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     execScripts: true
                 });
             },
-			
-			findStaticParent: function (node) {
-			    this.parentStaticNode = null;
-				if (node && node.data && node.data.nodeType && node.data.nodeType.indexOf("lecm-arm") > -1) {
-				    this.parentStaticNode = node.data.nodeRef;
-				    return;
-				}
-				else {
-				    if (node.parent) {
-					    this.findStaticParent(node.parent);
-					}
-					else {
-					    return;
-					}
-				}
-			},
 
             _getNodeColumnsStr: function(node) {
                 var columns = [];

@@ -1,13 +1,5 @@
 var node = search.findNode(json.get("nodeRef"));
-var parentStaticNode = null;
-if (json.has("parentStaticNodeRef") && json.get("parentStaticNodeRef") != null && json.get("parentStaticNodeRef") != "null") {
-	parentStaticNode = search.findNode(json.get("parentStaticNodeRef"));
-}
-
-if (parentStaticNode && node) {
-	model.saved = arm.saveUserColumnsSet(node, parentStaticNode, json.has("columns") ? json.get("columns").toString() : "{selected:[]}");   
-}
-else if (node) {
+if (node) {
 	model.saved = arm.saveUserColumnsSet(node, json.has("columns") ? json.get("columns").toString() : "{selected:[]}");
 }
 else {
