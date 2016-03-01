@@ -255,6 +255,10 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public boolean checkLocationAvailable(String location, String ignoreNode,  String fromDate, String toDate, boolean allDay) {
+        return checkLocationAvailable(location, ignoreNode, fromDate, toDate, allDay, 0);
+    }
+
+    public boolean checkLocationAvailable(String location, String ignoreNode,  String fromDate, String toDate, boolean allDay, int clientServerTimezoneDifference) {
         ParameterCheck.mandatory("location", location);
         ParameterCheck.mandatory("fromDate", fromDate);
         ParameterCheck.mandatory("toDate", toDate);
@@ -266,8 +270,10 @@ public class EventsWebScriptBean extends BaseWebScript {
             if (ignoreNode != null) {
                 ignoreNodeRef = new NodeRef(ignoreNode);
             }
-
+        if (clientServerTimezoneDifference == 0) {
             return eventService.checkLocationAvailable(locationRef, ignoreNodeRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay);
+        } else
+            return eventService.checkLocationAvailable(locationRef, ignoreNodeRef, ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), allDay, clientServerTimezoneDifference);
         }
 
         return false;

@@ -6,7 +6,11 @@ function main() {
 	var members = json.has("members") ? json.get("members") : null;
 	var event = json.has("event") ? json.get("event") : null;
 
-	model.locationAvailable = events.checkLocationAvailable(location, event, fromDate, toDate, allDay == "true");
+	var clientTimezoneOffset = json.get("clientTimezoneOffset");
+	var serverTimezoneOffset = new Date().getTimezoneOffset();
+	var clientServerTimezoneDifference = Math.floor((clientTimezoneOffset - serverTimezoneOffset)/60);
+
+	model.locationAvailable = events.checkLocationAvailable(location, event, fromDate, toDate, allDay == "true", clientServerTimezoneDifference);
 
 	var membersResult = [];
 	if (members == null && event != null) {

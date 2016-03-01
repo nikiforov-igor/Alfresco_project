@@ -42,6 +42,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	private TransactionListener transactionListener;
 	private static final String EVENTS_TRANSACTION_LISTENER = "events_transaction_listaner";
+	private static final boolean DAY_BEGIN = true;
+	private static final boolean DAY_END = false;
+	private static final long HOUR = 3600*1000; // in milli-seconds
 
 	private DictionaryBean dictionaryBean;
 	private OrgstructureBean orgstructureBean;
@@ -424,22 +427,16 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public boolean checkLocationAvailable(NodeRef location, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay) {
-		if (allDay) {
-			Calendar fromDateCal = Calendar.getInstance();
-			fromDateCal.setTime(fromDate);
-			fromDateCal.set(Calendar.HOUR_OF_DAY, 0);
-			fromDateCal.set(Calendar.MINUTE, 1);
-			fromDateCal.set(Calendar.SECOND, 0);
-			fromDateCal.set(Calendar.MILLISECOND, 0);
-			fromDate = fromDateCal.getTime();
+		return checkLocationAvailable(location, ignoreNode, fromDate, toDate, allDay, 0);
+	}
 
-			Calendar toDateCal = Calendar.getInstance();
-			toDateCal.setTime(toDate);
-			toDateCal.set(Calendar.HOUR_OF_DAY, 23);
-			toDateCal.set(Calendar.MINUTE, 59);
-			toDateCal.set(Calendar.SECOND, 0);
-			toDateCal.set(Calendar.MILLISECOND, 0);
-			toDate = toDateCal.getTime();
+	@Override
+	public boolean checkLocationAvailable(NodeRef location, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay, int clientTimezoneOffset) {
+		if (allDay) {
+			fromDate = toFullDate(fromDate, DAY_BEGIN);
+			fromDate = new Date(fromDate.getTime() + clientTimezoneOffset * HOUR);
+			toDate = toFullDate(toDate, DAY_END);
+			toDate = new Date(toDate.getTime() + clientTimezoneOffset * HOUR);
 		}
 
 		String additionalFilter = " AND @lecm\\-events\\:location\\-assoc\\-ref:\"" + location.toString() + "\"";
@@ -450,6 +447,22 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
 
 		return events == null || events.isEmpty();
+	}
+
+	private Date toFullDate(Date date, boolean isBegin) {
+		Calendar dateCal = Calendar.getInstance();
+		dateCal.setTime(date);
+		if (isBegin == DAY_BEGIN) {
+			dateCal.set(Calendar.HOUR_OF_DAY, 0);
+			dateCal.set(Calendar.MINUTE, 1);
+		}
+		else {
+			dateCal.set(Calendar.HOUR_OF_DAY, 23);
+			dateCal.set(Calendar.MINUTE, 59);
+		}
+		dateCal.set(Calendar.SECOND, 0);
+		dateCal.set(Calendar.MILLISECOND, 0);
+		return dateCal.getTime();
 	}
 
 	@Override
@@ -464,21 +477,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			return false;
 		} else {
 			if (allDay) {
-				Calendar fromDateCal = Calendar.getInstance();
-				fromDateCal.setTime(fromDate);
-				fromDateCal.set(Calendar.HOUR_OF_DAY, 0);
-				fromDateCal.set(Calendar.MINUTE, 1);
-				fromDateCal.set(Calendar.SECOND, 0);
-				fromDateCal.set(Calendar.MILLISECOND, 0);
-				fromDate = fromDateCal.getTime();
-
-				Calendar toDateCal = Calendar.getInstance();
-				toDateCal.setTime(toDate);
-				toDateCal.set(Calendar.HOUR_OF_DAY, 23);
-				toDateCal.set(Calendar.MINUTE, 59);
-				toDateCal.set(Calendar.SECOND, 0);
-				toDateCal.set(Calendar.MILLISECOND, 0);
-				toDate = toDateCal.getTime();
+				fromDate = toFullDate(fromDate, DAY_BEGIN);
+				toDate = toFullDate(toDate, DAY_END);
 			}
 
 			String additionalFilter = " AND @lecm\\-events\\:temp\\-members\\-assoc\\-ref:\"*" + member.toString() + "*\"";
