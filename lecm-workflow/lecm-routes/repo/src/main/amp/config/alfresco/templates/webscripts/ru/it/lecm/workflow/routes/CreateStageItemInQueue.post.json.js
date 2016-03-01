@@ -23,11 +23,22 @@
 		return;
 	}
 
+	var existsStageItems = stageNode.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
+	var maxInd = -1;
+	if (existsStageItems) {
+		for (var item in existsStageItems) {
+			if (existsStageItems[item].properties['lecmWorkflowRoutes:stageItemOrder'] > maxInd) {
+				maxInd = existsStageItems[item].properties['lecmWorkflowRoutes:stageItemOrder'];
+			}
+		}
+	}
+
 	for (i = 0, length = refs.length; i < length; ++i) {
 		targetNode = search.findNode(refs[i]);
 		stageItem = stageNode.createNode(null, 'lecmWorkflowRoutes:stageItem', {
-			'lecmWorkflowRoutes:stageItemOrder': i
+			'lecmWorkflowRoutes:stageItemOrder': i + maxInd + 1
 		});
+
 		stageItem.createAssociation(targetNode, assocTypeQName);
 		if (resolveMacros) {
 			documentNode = routesService.getDocumentByStage(stageNode);
