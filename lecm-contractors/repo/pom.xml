@@ -67,6 +67,7 @@
             <groupId>ru.it.lecm.orgstructure</groupId>
             <artifactId>orgstructure-repo-api</artifactId>
             <version>${platform.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>

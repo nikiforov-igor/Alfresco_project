@@ -1,26 +1,27 @@
 package ru.it.lecm.contractors.policies;
 
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.alfresco.util.PropertyMap;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.util.PropertyMap;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  * User: pmelnikov
@@ -31,6 +32,7 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
     private LecmBasePropertiesService propertiesService;
     private PolicyComponent policyComponent;
     private NodeService nodeService;
+    private OrgstructureBean orgstructureBean;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -42,6 +44,10 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
     }
     public void setPropertiesService(LecmBasePropertiesService propertiesService) {
         this.propertiesService = propertiesService;
+    }
+
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
     }
 
     public final void init() {
@@ -130,14 +136,24 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
         }
         if (enabled) {
 			List<AssociationRef> assocs = nodeService.getSourceAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-			if (assocs.size() > 0) {
-				NodeRef orgUnitRef = assocs.get(0).getSourceRef();
-				PropertyMap props = new PropertyMap();
-				props.put(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME, after.get(Contractors.PROP_CONTRACTOR_FULLNAME));
-				props.put(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME, after.get(Contractors.PROP_CONTRACTOR_SHORTNAME));
-				props.put(OrgstructureBean.PROP_UNIT_CODE, after.get(Contractors.PROP_CONTRACTOR_CODE));
-				nodeService.addProperties(orgUnitRef, props);
-			}
+
+            if (assocs.size() > 0) {
+                Iterator<AssociationRef> assocIterator = assocs.iterator();
+                boolean find = false;
+
+                while (assocIterator.hasNext() && !find) {
+                    NodeRef node = assocIterator.next().getSourceRef();
+                    if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.equals(nodeService.getType(node)) &&
+                            orgstructureBean.getRootUnit().equals(nodeService.getPrimaryParent(node).getParentRef())) {
+                        find = true;
+                        PropertyMap props = new PropertyMap();
+                        props.put(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME, after.get(Contractors.PROP_CONTRACTOR_FULLNAME));
+                        props.put(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME, after.get(Contractors.PROP_CONTRACTOR_SHORTNAME));
+                        props.put(OrgstructureBean.PROP_UNIT_CODE, after.get(Contractors.PROP_CONTRACTOR_CODE));
+                        nodeService.addProperties(node, props);
+                    }
+                }
+            }
 
             final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
             final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);

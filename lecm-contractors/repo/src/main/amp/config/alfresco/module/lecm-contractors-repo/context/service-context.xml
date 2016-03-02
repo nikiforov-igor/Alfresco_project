@@ -172,6 +172,7 @@
         <property name="propertiesService" ref="propertiesService"/>
         <property name="policyComponent" ref="policyComponent"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
     </bean>
 
 
