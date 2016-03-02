@@ -4,6 +4,13 @@
 
 .attributes .delete-td {
 	width: 1px;
+	vertical-align: top;
+	padding-top: 9px;
+}
+
+.attributes .attribute-td {
+	vertical-align: top;
+	padding-top: 3px;
 }
 
 .attributes .value-td {
@@ -19,6 +26,10 @@
 
 .attributes .yui-dt-liner .attribute {
 	width: 100%;
+	height: auto;
+	min-height: 28px;
+	border: 1px solid #ccc;
+	resize: none;
 }
 
 .attributes .yui-dt-liner .value {
@@ -27,4 +38,8 @@
 
 .attributes .yui-dt-liner .value .label-div {
 	display: none;
+}
+
+.attributes tr.yui-dt-rec.yui-dt-even, tr.yui-dt-rec.yui-dt-odd {
+	background-color: #fff !important;
 }

@@ -24,11 +24,15 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 	YAHOO.lang.extend(LogicECM.module.DocumentsTemplates.Attributes, Alfresco.component.Base, {
 
+		DICTIONARY_TYPES: [ 'any', 'encrypted', 'text', 'mltext', 'content', 'int', 'long', 'float', 'double', 'date', 'datetime', 'boolean', 'qname', 'noderef', 'childassocref', 'assocref', 'path', 'category', 'locale', 'version', 'period' ],
+
 		_fields: null,
 
 		_fieldsPromise: null,
 
 		templateDocType: null,
+
+		defaultParams: null,
 
 		columnDefinitions: null,
 
@@ -50,6 +54,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		_init: function () {
 			var form = Dom.get(this.options.formId);
 			this.templateDocType = YAHOO.util.Selector.query('input[name="prop_lecm-template_doc-type"]', form, true).value;
+			this.defaultParams = {
+				defaultValue: '',
+				docType: this.templateDocType,
+				// endpointMany: true,
+				showCreateNewButton: false,
+				showCreateNewLink: false
+			};
 			this.columnDefinitions = [{
 				key: 'delete',
 				label: '',
@@ -81,6 +92,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/type/fields',
 				dataObj: {
+					formId: '',
+					useDefaultForm: true,
 					itemType: this.templateDocType
 				},
 				successCallback: {
@@ -157,7 +170,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		_valueFormatter: function (elCell, record, column, data) {
 			/* this == this.widgets.datatable */
 			elCell.innerHTML = YAHOO.lang.substitute(this.owner.templates.valueTemplate, {
-				id: record.getId(),
+				id: record.getId()
 			});
 		},
 
@@ -177,29 +190,37 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onDatatableRendered: function () {
-			this.widgets.datatable.unsubscribe('renderEvent', this.onDatatableRendered);
-			Dom.removeClass(this.id + '-datatable', 'hidden');
+			var hasRecords = this.widgets.datatable.getRecordSet().getLength();
+			if (hasRecords) {
+				Dom.removeClass(this.id + '-datatable', 'hidden');
+			} else {
+				Dom.addClass(this.id + '-datatable', 'hidden');
+			}
 		},
 
 		onChangeAttribute: function (event, obj) {
 			/* event can be null */
 			debugger;
-			var field = JSON.parse(obj.elSelect.selectedOptions[0].dataset.attribute);
+			var selectedOption = obj.elSelect.options[obj.elSelect.selectedIndex],
+				dataStr = (selectedOption.dataset) ? selectedOption.dataset.attribute : selectedOption.getAttribute('data-attribute'),
+				field = JSON.parse(dataStr),
+				fieldType = (this.DICTIONARY_TYPES.indexOf(field.dataType) > -1) ? 'd:' + field.dataType : field.dataType,
+				fieldParams = (field.control.params && field.control.params.length) ? field.control.params : [],
+				params = fieldParams.reduce(function(prev, curr) {
+					var param = {};
+					param[curr.name] = curr.value;
+					return YAHOO.lang.merge(prev, param);
+				}, this.defaultParams);
 			obj.record.setData('attribute', field);
 			Alfresco.util.Ajax.request({
 				url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/control',
 				dataObj: {
 					fieldId: field.name.replace(/:/g, '_'),
-					labelId: field.name.replace(/:/g, '_'),
-					type: field.dataType,
-					params: YAHOO.lang.JSON.stringify({
-						defaultValue: '',
-						docType: this.templateDocType,
-						endpointMany: true,
-						showCreateNewButton: false,
-						showCreateNewLink: false
-					}),
-					htmlid: obj.record.getId() + '-value-ctrl'
+					labelId: field.label,
+					type: fieldType,
+					template: field.control.template,
+					htmlid: obj.record.getId() + '-value-ctrl',
+					params: params
 				},
 				valueId: obj.record.getId() + '-value',
 				successCallback: {

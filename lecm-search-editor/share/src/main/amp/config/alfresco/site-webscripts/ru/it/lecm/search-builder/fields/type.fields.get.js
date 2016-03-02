@@ -8,11 +8,10 @@ function getArgument(argName, defValue) {
     return result;
 }
 
-function getFormConfig(itemId, formId) {
+function getFormConfig(itemId, formId, useDefaultForm) {
     var formConfig = null;
     // query for configuration for item
     var nodeConfig = config.scoped[itemId];
-
     if (nodeConfig !== null) {
         // get the forms configuration
         var formsConfig = nodeConfig.forms;
@@ -23,10 +22,10 @@ function getFormConfig(itemId, formId) {
                 formConfig = formsConfig.getForm(formId);
             }
 
-            /*if (formConfig === null) {
+            if (formConfig === null && useDefaultForm) {
                 // look up the default form
                 formConfig = formsConfig.defaultForm;
-            }*/
+            }
         }
     }
 
@@ -86,12 +85,13 @@ function createPostBody(itemKind, itemId, visibleFields, formConfig) {
 function main() {
     var itemType = getArgument("itemType"),
         formId = getArgument("formId", "search-editor-fields"),
+		useDefaultForm = getArgument('useDefaultForm', 'false') == 'true',
         fields = [],
         columnDefs = [];
 
     if (itemType !== null && itemType.length > 0) {
         // get the config for the form
-        var formConfig = getFormConfig(itemType, formId);
+        var formConfig = getFormConfig(itemType, formId, useDefaultForm);
 
         // может содержать форматную строку для колонки послке "|"
         var visibleFields = getVisibleFields("view", formConfig);
