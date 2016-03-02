@@ -139,12 +139,13 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
 
             if (assocs.size() > 0) {
                 Iterator<AssociationRef> assocIterator = assocs.iterator();
+                NodeRef rootUnit = orgstructureBean.getRootUnit();
                 boolean find = false;
 
                 while (assocIterator.hasNext() && !find) {
                     NodeRef node = assocIterator.next().getSourceRef();
                     if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.equals(nodeService.getType(node)) &&
-                            orgstructureBean.getRootUnit().equals(nodeService.getPrimaryParent(node).getParentRef())) {
+                            rootUnit.equals(nodeService.getPrimaryParent(node).getParentRef())) {
                         find = true;
                         PropertyMap props = new PropertyMap();
                         props.put(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME, after.get(Contractors.PROP_CONTRACTOR_FULLNAME));
