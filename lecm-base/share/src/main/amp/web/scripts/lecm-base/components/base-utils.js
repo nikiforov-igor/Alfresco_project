@@ -794,6 +794,48 @@ LogicECM.module.Base.Util = {
 
 };
 
+LogicECM.module.Base.SimplePromise = function () {
+	this._callbacks = [];
+	this._isDone = false;
+	return this;
+};
+
+LogicECM.module.Base.SimplePromise.prototype = {
+
+	_callbacks: null,
+
+	_isDone: null,
+
+	isDone: function () {
+		return this._isDone;
+	},
+
+	then: function (func, context) {
+		var p;
+		if (this._isDone) {
+			p = func.apply(context, this.result);
+		} else {
+			p = new LogicECM.module.Base.SimplePromise();
+			this._callbacks.push(function () {
+				var res = func.apply(context, arguments);
+				if (res && typeof res.then === 'function') {
+					res.then(p.done, p);
+				}
+			});
+		}
+		return p;
+	},
+
+	done: function () {
+		this.result = arguments;
+		this._isDone = true;
+		for (var i = 0; i < this._callbacks.length; i++) {
+			this._callbacks[i].apply(null, arguments);
+		}
+		this._callbacks = [];
+	}
+};
+
 (function() {
 	/**
 	 * YUI Library aliases
