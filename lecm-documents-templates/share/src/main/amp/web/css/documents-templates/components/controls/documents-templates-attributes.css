@@ -17,6 +17,10 @@
 	width: 1px;
 }
 
+.attributes .attribute-option:disabled {
+	display: none;
+}
+
 .attributes .yui-dt-liner .delete {
 	display: block;
 	background: url(/share/res/components/images/delete-16.png) no-repeat center center;
