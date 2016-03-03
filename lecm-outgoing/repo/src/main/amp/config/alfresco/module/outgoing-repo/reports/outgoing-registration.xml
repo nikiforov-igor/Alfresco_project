@@ -9,7 +9,7 @@
             <![CDATA[TYPE:"lecm-outgoing:document" AND  @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></property>
         <property name="lecm-rpeditor:reportCode"><![CDATA[outgoing-registration]]></property>
         <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[true]]></property>
-        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[doc-created-date|ASC]]></property>
+        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[doc-created|ASC]]></property>
         <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
         <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
@@ -102,6 +102,17 @@
                         <property name="lecm-rpeditor:dataColumnExpression">
                             <![CDATA[{cm:created?dd.MM.yyyy}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[doc-created-date]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Дата создания документа" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Дата создания документа]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{cm:created?yyyyMMddHHmmss}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[doc-created]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
