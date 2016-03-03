@@ -2,7 +2,7 @@
 	<div id='${fieldHtmlId}-actions' class='widget-panel-grey'>
 		<div id='${fieldHtmlId}-action-add' class='widget-button-grey text-cropped'>Добавить</div>
 		<div id='${fieldHtmlId}-action-submit' class='widget-button-grey text-cropped'>Сохранить</div>
-		<div id='${fieldHtmlId}-action-clear' class='widget-button-grey text-cropped'>Очистить</div>
+		<#-- <div id='${fieldHtmlId}-action-clear' class='widget-button-grey text-cropped'>Очистить</div> -->
 	</div>
 </div>
 <script type='text/javascript'>//<![CDATA[

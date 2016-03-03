@@ -23,8 +23,13 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.*;
+import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.NodeService;
+import ru.it.lecm.documents.templates.api.DocumentTemplateModel;
+import ru.it.lecm.documents.templates.api.DocumentTemplateService;
 
 /**
  * User: dbashmakov
@@ -65,6 +70,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         private LecmTransactionHelper lecmTransactionHelper;
 	private TransactionService transtactionService;
     private ArmServiceImpl armService;
+	private DocumentTemplateService documentTemplateService;
+	private NodeService nodeService;
 
     public void setArmService(ArmServiceImpl armService) {
         this.armService = armService;
@@ -96,6 +103,14 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+	public void setDocumentTemplateService(DocumentTemplateService documentTemplateService) {
+		this.documentTemplateService = documentTemplateService;
+	}
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
 	}
 
 	@Override
@@ -290,6 +305,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 						json.put("disabled", !isStarter);
 						json.put("label", typeDefinition.getTitle(dictionaryService));
                         json.put("page", documentService.getCreateUrl(typeQName));
+						json.put("templates", getTemplates(type));
 
                         results.add(json);
 					} catch (Exception ex) {
@@ -315,6 +331,21 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 			}
 		});
 		return new JSONArray(results);
+	}
+
+	private JSONArray getTemplates(String type) throws JSONException {
+		List<NodeRef> templateRefs = documentTemplateService.getDocumentTemplatesForType(type);
+		JSONArray templates = new JSONArray();
+		for (NodeRef templateRef : templateRefs) {
+			Map<QName, Serializable> props = nodeService.getProperties(templateRef);
+			String name = (String)props.get(ContentModel.PROP_TITLE);
+			JSONArray attributes = new JSONArray((String)props.get(DocumentTemplateModel.PROP_DOCUMENT_TEMPLATE_ATTRIBUTES));
+			JSONObject template = new JSONObject();
+			template.put("name", name);
+			template.put("attributes", attributes);
+			templates.put(template);
+		}
+		return templates;
 	}
 
     private JSONArray getFiltersJSON(List<ArmFilter> filters) throws JSONException {

@@ -115,6 +115,8 @@
 		<property name="stateMachineService" ref="stateMachineHelper"/>
 		<property name="documentService" ref="documentService"/>
 		<property name="armService" ref="armService"/>
+		<property name="documentTemplateService" ref="documentTemplateService"/>
+		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
 	<bean id="armWrapperService"

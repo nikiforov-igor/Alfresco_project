@@ -94,6 +94,12 @@
             <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents-templates</groupId>
+			<artifactId>documents-templates-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

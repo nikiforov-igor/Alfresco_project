@@ -40,5 +40,6 @@
 				<entry key="#{documentTemplateFolderId}" value="Сервис шаблоны создания документов"/>
 			</map>
 		</property>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 </beans>
