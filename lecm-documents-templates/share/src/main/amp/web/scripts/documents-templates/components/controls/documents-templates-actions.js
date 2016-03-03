@@ -33,6 +33,10 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onActionSubmitClick: function (event, actionEl) {
+			Bubbling.fire('beforeSubmitTemplate', {
+				event: event,
+				actionEl: actionEl
+			});
 			Bubbling.fire('submitTemplate', {
 				bubblingLabel: 'documentsTemplatesDetailsView',
 				event: event,
