@@ -21,7 +21,6 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -95,7 +94,14 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
             if (enabled) {
                 //проверка на уникальность подразделения первого уровня
                 final NodeRef unit = childAssocRef.getChildRef();
-                NodeRef parent = orgstructureService.getParentUnit(unit);
+
+                NodeRef parent;
+                if (orgstructureService.getRootUnit().equals(childAssocRef.getParentRef())) {
+                    parent = orgstructureService.getParentUnit(unit, false);
+                } else {
+                    parent = orgstructureService.getParentUnit(unit);
+                }
+
                 if (parent == null) {
                     NodeRef root = orgstructureService.getRootUnit();
                     if (root != null && !root.equals(unit)) {

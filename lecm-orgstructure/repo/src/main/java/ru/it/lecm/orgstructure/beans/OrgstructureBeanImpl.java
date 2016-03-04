@@ -24,7 +24,6 @@ import ru.it.lecm.orgstructure.policies.PolicyUtils;
 
 import java.io.Serializable;
 import java.util.*;
-import static ru.it.lecm.orgstructure.beans.OrgstructureBean.HOLDING_ROOT_NAME;
 
 /**
  * @author dbashmakov Date: 27.11.12 Time: 17:08
@@ -356,7 +355,8 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         return getParentUnit(unitRef, true);
 	}
 
-    private NodeRef getParentUnit(NodeRef unitRef, boolean checkAccess) {
+	@Override
+    public NodeRef getParentUnit(NodeRef unitRef, boolean checkAccess) {
         if (!checkAccess || hasAccessToOrgElement(unitRef)) {
             ChildAssociationRef parentRef = nodeService.getPrimaryParent(unitRef);
             if (parentRef != null) {

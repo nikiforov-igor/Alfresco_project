@@ -193,6 +193,8 @@ public interface OrgstructureBean {
 	 */
 	NodeRef getParentUnit(NodeRef unitRef);
 
+	NodeRef getParentUnit(NodeRef unitRef, boolean checkAccess);
+
 	/**
 	 * проверяет что объект является подразделением
 	 */
