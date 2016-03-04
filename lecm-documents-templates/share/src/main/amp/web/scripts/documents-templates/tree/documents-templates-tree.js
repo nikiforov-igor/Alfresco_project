@@ -8,7 +8,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 (function () {
-	var Event = YAHOO.util.Event,
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
 		Bubbling = YAHOO.Bubbling;
 
 	LogicECM.module.DocumentsTemplates.TreeView = function (containerId, options, messages) {
@@ -91,7 +92,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 								value: type.value,
 								config: {
 									showDelay: 100,
-									hideDelay: 100,
+									hideDelay: 200,
 									autoDismissDelay: 0,
 									disabled: false,
 									value: type.value,
@@ -148,7 +149,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 								isLeaf: true,
 								config: {
 									showDelay: 100,
-									hideDelay: 100,
+									hideDelay: 200,
 									autoDismissDelay: 0,
 									disabled: false,
 									value: template.nodeRef,
@@ -323,7 +324,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						isLeaf: true,
 						config: {
 							showDelay: 100,
-							hideDelay: 100,
+							hideDelay: 200,
 							autoDismissDelay: 0,
 							disabled: false,
 							value: nodeRef,
@@ -399,6 +400,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 	Alfresco.widget.InsituEditorTemplateCreate = function (p_editor, p_params) {
 		Alfresco.widget.InsituEditorTemplateCreate.superclass.constructor.call(this, p_editor, p_params);
+		Dom.removeClass(this.editIcon, 'insitu-edit');
+		Dom.addClass(this.editIcon, 'insitu-create');
 		return this;
 	};
 
@@ -420,6 +423,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 	Alfresco.widget.InsituEditorTemplateDelete = function (p_editor, p_params) {
 		Alfresco.widget.InsituEditorTemplateDelete.superclass.constructor.call(this, p_editor, p_params);
+		Dom.removeClass(this.editIcon, 'insitu-edit');
+		Dom.addClass(this.editIcon, 'insitu-delete');
 	};
 
 	YAHOO.lang.extend(Alfresco.widget.InsituEditorTemplateDelete, Alfresco.widget.InsituEditorIcon, {
