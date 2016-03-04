@@ -43,7 +43,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
         },
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
-			window.location.href = Alfresco.constants.URL_PAGECONTEXT + p_oItem.page + "?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=" + p_oItem.type);
+			var attributes = p_oItem.attributes ? p_oItem.attributes : [];
+			var params = attributes.reduce(function(prev, curr) {
+				return prev + '&' + curr.initial.formsName + '=' + curr.initial.value;
+			}, 'documentType=' + p_oItem.type);
+			window.location.href = Alfresco.constants.URL_PAGECONTEXT + p_oItem.page + "?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
 		},
 		onUpdateArmToolbar: function(layer, args) {
 			var createTypes = args[1].createTypes;
@@ -51,15 +55,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 			var menu = button.getMenu();
 			var hasCreateTypes = createTypes && createTypes.length > 0;
 			if (hasCreateTypes) {
-				var items = [];
-				for (var i = 0; i < createTypes.length; i++) {
-					var type = createTypes[i];
-					var page = "document-create";
-					if (type.page != null) {
-						page = type.page;
-					}
-
-					items.push({
+				var items = createTypes.map(function (type) {
+					var page = (type.page) ? type.page : "document-create";
+					var item = {
 						text: type.label,
 						value: type.type,
 						disabled: type.disabled,
@@ -72,8 +70,31 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 							},
 							scope: this
 						}
-					});
-				}
+					};
+					if (type.templates && type.templates.length) {
+						item.submenu = {
+							id: type.type,
+							itemData: type.templates.map(function (template) {
+								return {
+									text: template.name,
+									value: type.type,
+									disabled: type.disabled,
+									onclick: {
+										fn: this.onNewRow,
+										obj: {
+											type: type.type,
+											typeLabel: type.label,
+											page: page,
+											attributes: template.attributes
+										},
+										scope: this
+									}
+								};
+							}, this)
+						};
+					}
+					return item;
+				}, this);
 				if (Dom.inDocument(menu.element)) {
 					menu.clearContent();
 					menu.addItems(items);
