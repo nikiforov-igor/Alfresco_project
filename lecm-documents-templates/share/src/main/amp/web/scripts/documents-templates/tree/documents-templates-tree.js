@@ -29,8 +29,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		nodeRef: null,
 
-		/* not used */
-		// xpath: null,
+		xpath: null,
 
 		treeViewId: null,
 
@@ -41,9 +40,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		currentDeleteNode: null,
 
 		options: {
-			bubblingLabel: null,
-			selectableType: null,
-			xpath: null
+			bubblingLabel: null
 		},
 
 		_hasEventInterest: function (obj) {
@@ -98,7 +95,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 									autoDismissDelay: 0,
 									disabled: false,
 									value: type.value,
-									title: 'Создать шаблон',
+									title: this.msg('template-tree-action-create.title'),
 									itemKind: 'type',
 									itemId: 'lecm-template:document-template',
 									mode: 'create',
@@ -131,12 +128,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI + 'lecm/forms/picker/node/children',
 				dataObj: {
-					selectableType: this.options.selectableType,
+					selectableType: 'lecm-template:document-template',
 					searchTerm: '',
 					size: 100,
 					sortProp: 'cm:created',
 					additionalFilter: '@lecm\\-template\\:doc\\-type:"' + node.data.value + '"',
-					xpath: this.options.xpath,
+					xpath: this.xpath,
 					nameSubstituteString: '{cm:title}',
 					titleNameSubstituteString: '{cm:title}'
 				},
@@ -155,7 +152,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 									autoDismissDelay: 0,
 									disabled: false,
 									value: template.nodeRef,
-									title: 'Удалить шаблон',
+									title: this.msg('template-tree-action-delete.title'),
 									itemKind: 'node',
 									itemId: template.nodeRef,
 									mode: 'edit',
@@ -302,7 +299,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 										deleteResult: result
 									});
 									Alfresco.util.PopupManager.displayMessage({
-										text: 'Шаблон успешно удален'
+										text: this.msg('template-tree-successfull-template-deletion.title')
 									});
 								}
 							}
@@ -330,7 +327,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							autoDismissDelay: 0,
 							disabled: false,
 							value: nodeRef,
-							title: 'Редактировать шаблон',
+							title: this.msg('template-tree-action-edit.title'),
 							itemKind: 'node',
 							itemId: nodeRef,
 							mode: 'edit',
@@ -378,7 +375,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				documentsTemplates: this
 			};
 			var root = new YAHOO.widget.TextNode({
-				label: 'Шаблоны документов',
+				label: this.msg('template-tree-root.title'),
 				expanded: true
 			}, this.widgets.treeView.getRoot());
 			root.setDynamicLoad(this.bind(this._loadTypesData));
@@ -391,8 +388,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					scope: this,
 					fn: function (successResponse) {
 						this.nodeRef = successResponse.json.nodeRef;
-						/* not used */
-						// this.xpath = successResponse.json.xpath;
+						this.xpath = successResponse.json.xpath;
 						this.widgets.treeView.draw();
 					}
 				},
@@ -434,11 +430,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			}
 
 			Alfresco.util.PopupManager.displayPrompt({
-				title: 'Удаление шаблона',
-				text: 'Вы действительно хотите удалить шаблон создания документа?',
+				title: obj.params.treeNode.tree.data.documentsTemplates.msg('template-tree-template-deletion.title'),
+				text: obj.params.treeNode.tree.data.documentsTemplates.msg('template-tree-template-deletion-text.title'),
 				modal: true,
 				buttons: [{
-					text: 'Да',
+					text: obj.params.treeNode.tree.data.documentsTemplates.msg('template-tree-template-deletion-yes.title'),
 					handler: function () {
 						Bubbling.fire('deleteTemplate', {
 							bubblingLabel: 'documentsTemplatesTreeView',
@@ -448,7 +444,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					},
 					isDefault: true
 				}, {
-					text: 'Нет',
+					text: obj.params.treeNode.tree.data.documentsTemplates.msg('template-tree-template-deletion-no.title'),
 					handler: function () {
 						this.destroy();
 					}

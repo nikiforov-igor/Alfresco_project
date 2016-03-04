@@ -5,10 +5,6 @@
 		<component>
 			<region-id>tree-panel</region-id>
 			<url>/lecm/documents-templates/tree</url>
-			<properties>
-				<selectableType>lecm-template:document-template</selectableType>
-				<xpath>/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_шаблоны_x0020_создания_x0020_документов</xpath>
-			</properties>
 		</component>
 		<component>
 			<region-id>details-panel</region-id>

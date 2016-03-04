@@ -56,7 +56,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				var form = Dom.get(this.formsRuntime.formId),
 					templateNode = new Alfresco.util.NodeRef(successResponse.json.persistedObject);
 				Alfresco.util.PopupManager.displayMessage({
-					text: 'Шаблон успешно сохранен'
+					text: message
 				});
 				Bubbling.fire(this.options.mode  + 'Node', {
 					bubblingLabel: 'documentsTemplatesTreeView',
@@ -68,7 +68,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				this.options.mode = 'edit';
 			}
 
-			var obj = args[1];
+			var obj = args[1],
+				message = this.msg('template-details-successfull-form-submit.title');
 			switch (obj.component.options.mode) {
 				case 'create': case 'edit':
 					if (!this.widgets.formsRuntime) {

@@ -12,12 +12,12 @@
 		</property>
 	</bean>
 
-<!--	<bean class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+	<bean class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
 		<property name="resourceBundles">
 			<list>
-				<value>alfresco.web-extensionru.it.lecm.documents-templates.form</value>
+				<value>alfresco.web-extension.ru.it.lecm.documents-templates.form</value>
 			</list>
 		</property>
-	</bean>-->
+	</bean>
 </beans>
 

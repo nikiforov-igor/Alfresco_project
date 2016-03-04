@@ -91,7 +91,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				formatter: this._deleteFormatter
 			}, {
 				key: 'attribute',
-				label: 'Атрибут',
+				label: this.msg('template-attributes-column-attribute.title'),
 				className: 'attribute-td',
 				sortable: false,
 				// width: 350,
@@ -99,7 +99,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				formatter: this._attributeFormatter
 			}, {
 				key: 'value',
-				label: 'Значение',
+				label: this.msg('template-attributes-column-value.title'),
 				className: 'value-td',
 				sortable: false,
 				width: 400,
@@ -138,7 +138,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			/* this == this.widgets.datatable */
 			elCell.innerHTML = YAHOO.lang.substitute(this.owner.templates.deleteTemplate, {
 				id: record.getId(),
-				title: 'Удалить условие'
+				title: this.owner.msg('template-attributes-column-delete.title')
 			});
 		},
 
