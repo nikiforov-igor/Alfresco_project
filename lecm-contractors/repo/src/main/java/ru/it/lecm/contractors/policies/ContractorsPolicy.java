@@ -135,10 +135,10 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
             throw new IllegalStateException("Cannot read contractor properties");
         }
         if (enabled) {
-			List<AssociationRef> assocs = nodeService.getSourceAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+			List<AssociationRef> linkedOrgAssocs = nodeService.getSourceAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
 
-            if (assocs.size() > 0) {
-                Iterator<AssociationRef> assocIterator = assocs.iterator();
+            if (linkedOrgAssocs.size() > 0) {
+                Iterator<AssociationRef> assocIterator = linkedOrgAssocs.iterator();
                 NodeRef rootUnit = orgstructureBean.getRootUnit();
                 boolean find = false;
 
@@ -164,7 +164,31 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
             if (changed && !nowActive) {
                 // Провеяряем аспект у контрагента
                 if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
-                    throw new IllegalStateException("Невозможно удалить контрагента! На него ссылается орг.единица!");
+
+                    boolean hasActiveOrgUnits = false;
+                    Iterator<AssociationRef> assocIterator = linkedOrgAssocs.iterator();
+                    NodeRef rootUnit = orgstructureBean.getRootUnit();
+                    NodeRef orgUnit = null;
+
+                    while (assocIterator.hasNext() && !hasActiveOrgUnits) {
+                        NodeRef node = assocIterator.next().getSourceRef();
+                        if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.equals(nodeService.getType(node))) {
+                            if (rootUnit.equals(nodeService.getPrimaryParent(node).getParentRef())) {
+                                orgUnit = node;
+                            } else {
+                                Boolean isActive = (Boolean) nodeService.getProperty(node, BaseBean.IS_ACTIVE);
+                                if (Boolean.TRUE.equals(isActive)) {
+                                    hasActiveOrgUnits = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (hasActiveOrgUnits) {
+                        throw new IllegalStateException("Невозможно удалить контрагента! На него ссылается орг.единица!");
+                    } else if (orgUnit != null) {
+                        nodeService.setProperty(orgUnit, BaseBean.IS_ACTIVE, false);
+                    }
                 }
             }
         }
