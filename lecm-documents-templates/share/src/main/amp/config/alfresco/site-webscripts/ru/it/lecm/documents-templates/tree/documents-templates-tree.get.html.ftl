@@ -1,7 +1,7 @@
 <#assign treeViewId = args.htmlid + '-templatesTreeViewContainer'/>
 
 <div id='${treeViewId}'>
-	<div id='${treeViewId}-tree'></div>
+	<div id='${treeViewId}-tree' class='ygtv-highlight templateTree'></div>
 </div>
 <script type='text/javascript'>//<![CDATA[
 	(function () {

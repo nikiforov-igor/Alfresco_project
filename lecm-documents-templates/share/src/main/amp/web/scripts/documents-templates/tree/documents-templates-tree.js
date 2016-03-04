@@ -185,7 +185,6 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onTreeNodeClicked: function (obj, tree) {
-			obj.node.highlight();
 			if (obj.node.isLeaf) {
 				this.currentEditNode = obj.node;
 				Bubbling.fire('editTemplate', {
@@ -193,7 +192,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					params: obj.node.data.config
 				});
 			}
-			return false;
+			return tree.onEventToggleHighlight(obj);
 		},
 
 		onCreateTemplate: function (layer, args) {
@@ -372,6 +371,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		onReady: function () {
 			console.log(this.name + '[' + this.id + '] is ready');
 			this.widgets.treeView = new YAHOO.widget.TreeView(this.treeViewId);
+			this.widgets.treeView.singleNodeHighlight = true;
 			this.widgets.treeView.data = {
 				documentsTemplates: this
 			};
