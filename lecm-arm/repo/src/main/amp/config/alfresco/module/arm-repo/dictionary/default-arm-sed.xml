@@ -5356,6 +5356,10 @@
 })();]]></property>
 									</item>
 								</items>
+								<assocs>
+									<assoc type="lecm-arm:node-child-rule-assoc"
+										   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Мои поисковые запросы/Поисковые запросы/Запросы/4c9cd9c0-518f-4150-8b15-26c9a9f45c52"/>
+								</assocs>
 							</item>
 						</items>
 					</item>
