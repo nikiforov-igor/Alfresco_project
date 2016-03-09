@@ -25,30 +25,31 @@
 					var stage = children[i];
 					if (stage.typeShort == "lecmWorkflowRoutes:stage" && !stage.hasAspect("sys:temporary") && !stage.hasAspect("lecm-workflow:temp")) {
 						var items = [];
-						var stageChildren = stage.getChildren();
+						var stageChildren = stage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
+						stageChildren.sort(function (left, right) {
+							return left.properties['lecmWorkflowRoutes:stageItemOrder'] - right.properties['lecmWorkflowRoutes:stageItemOrder'];
+						});
 						if (stageChildren != null) {
 							for (var j = 0; j < stageChildren.length; j++) {
 								var item = stageChildren[j];
-								if (item.typeShort == "lecmWorkflowRoutes:stageItem") {
-									var employeeName = null;
-									var employeeAssoc = item.associations["lecmWorkflowRoutes:stageItemEmployeeAssoc"];
-									if (employeeAssoc != null && employeeAssoc.length > 0) {
-										employeeName = employeeAssoc[0].properties["lecm-orgstr:employee-short-name"];
-									}
-
-									items.push({
-										employee: employeeName,
-										dueDate: item.properties["lecmWorkflowRoutes:stageItemDueDate"],
-										decision: {
-											value: item.properties["lecmApproveAspects:approvalDecision"],
-											displayValue: Evaluator.translateField(decisionPropDefinition, item.properties["lecmApproveAspects:approvalDecision"], dictionaryService)
-										},
-										state: {
-											value: item.properties["lecmApproveAspects:approvalState"],
-											displayValue: Evaluator.translateField(statePropDefinition, item.properties["lecmApproveAspects:approvalState"], dictionaryService)
-										}
-									});
+								var employeeName = null;
+								var employeeAssoc = item.associations["lecmWorkflowRoutes:stageItemEmployeeAssoc"];
+								if (employeeAssoc != null && employeeAssoc.length > 0) {
+									employeeName = employeeAssoc[0].properties["lecm-orgstr:employee-short-name"];
 								}
+
+								items.push({
+									employee: employeeName,
+									dueDate: item.properties["lecmWorkflowRoutes:stageItemDueDate"],
+									decision: {
+										value: item.properties["lecmApproveAspects:approvalDecision"],
+										displayValue: Evaluator.translateField(decisionPropDefinition, item.properties["lecmApproveAspects:approvalDecision"], dictionaryService)
+									},
+									state: {
+										value: item.properties["lecmApproveAspects:approvalState"],
+										displayValue: Evaluator.translateField(statePropDefinition, item.properties["lecmApproveAspects:approvalState"], dictionaryService)
+									}
+								});
 							}
 						}
 						stages.push({
