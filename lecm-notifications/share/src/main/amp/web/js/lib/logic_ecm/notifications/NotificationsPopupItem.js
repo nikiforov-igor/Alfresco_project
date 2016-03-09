@@ -36,15 +36,17 @@ define(['dojo/_base/declare',
 
 			cssRequirements: [{cssFile: './css/AlfMenuItem.css'}],
 
-			i18nScope: 'notificationsPopup',
-
-			i18nRequirements: [{i18nFile: './properties/NotificationsPopup.properties'}],
-
 			_toggleRead: function (isRead) {
+				var idx;
 				if (isRead) {
+					this.params.notificationsPopup.readNotifications.push(this.params.item.nodeRef);
 					domAttr.set(this.notificationNode, 'title', this.message('message.notification.item.read.title'));
 					domClass.replace(this.notificationNode, 'read', 'unread');
 				} else {
+					idx = this.params.notificationsPopup.readNotifications.indexOf(this.params.item.nodeRef);
+					if (idx > -1) {
+						this.params.notificationsPopup.readNotifications.splice(idx, 1);
+					}
 					domAttr.set(this.notificationNode, 'title', this.message('message.notification.item.unread.title'));
 					domClass.replace(this.notificationNode, 'unread', 'read');
 				}

@@ -34,13 +34,13 @@ define(['dojo/_base/declare',
 
 			notificationsCounterId: 'notificationsCounter',
 
-			notificationsCounter: null,
-
 			refreshCountTime: 60000,
 
 			loadItemsCount: 6,
 
-			skipItemsCount: 0,
+			skipItemsCount: null,
+
+			readNotifications: null,
 
 			rootWidget: null,
 
@@ -51,7 +51,14 @@ define(['dojo/_base/declare',
 			widgets: [{
 				name: 'alfresco/menus/AlfMenuGroup',
 				config: {
-					widgets: []
+					widgets: [{
+						i18nScope: 'notificationsPopup',
+						name: 'alfresco/header/AlfMenuItem',
+						config: {
+							i18nScope: 'notificationsPopup',
+							label: 'message.notifications.none'
+						}
+					}]
 				}
 			}],
 
@@ -70,7 +77,7 @@ define(['dojo/_base/declare',
 				}).then(lang.hitch(this, function(success) {
 					var oResults = success;
 					if (oResults && oResults.newCount) {
-						var elem = Dom.get(this.notificationsCounterId);
+						var elem = dom.byId(this.notificationsCounterId);
 						if (elem) {
 							elem.innerHTML = (oResults.newCount > 99) ? '∞' : oResults.newCount;
 							this.checkVisibleCounter(oResults.newCount);
@@ -90,7 +97,6 @@ define(['dojo/_base/declare',
 
 			postCreate: function () {
 				this.inherited(arguments);
-				this.notificationsCounter = dom.byId(this.notificationsCounterId);
 				if (this.popup && this.popup.domNode) {
 					// This ensures that we can differentiate between header menu popups and regular menu popups with our CSS selectors
 					domClass.add(this.popup.domNode, 'alf-header-menu-bar');
@@ -109,27 +115,38 @@ define(['dojo/_base/declare',
 				}
 			},
 
-			loadNotifications: function () {
+			loadNotifications: function (initialLoad) {
 				xhr.post(Alfresco.constants.PROXY_URI + 'lecm/notifications/active-channel/api/records', {
 					handleAs: 'json',
 					headers: {'Content-Type': 'application/json'},
 					data: json.stringify({
 						skipItemsCount: this.skipItemsCount,
-						loadItemsCount: this.loadItemsCount
-					}),
+						loadItemsCount: this.loadItemsCount,
+						ignoreNotifications: this.readNotifications
+					})
 				}).then(lang.hitch(this, function(success){
-					var items = success.items;
+					var items = success.items,
+						notificationsConfig;
+
 					this.skipItemsCount += items.length;
-					var notificationsConfig = array.map(items, function (item) {
-						return {
-							name: 'logic_ecm/notifications/NotificationsPopupItem',
-							config: {
-								item: item,
-								notificationsPopup: this
-							}
-						};
-					}, this);
-					this.rootWidget.processWidgets(notificationsConfig, this.rootWidget.domNode);
+					if (items.length) {
+						if (initialLoad) {
+							array.forEach(this.rootWidget.getChildren(), function (itemWidget) {
+								this.rootWidget.removeChild(itemWidget);
+							}, this);
+						}
+						notificationsConfig = array.map(items, function (item) {
+							return {
+								name: 'logic_ecm/notifications/NotificationsPopupItem',
+								config: {
+									i18nScope: 'notificationsPopup',
+									item: item,
+									notificationsPopup: this
+								}
+							};
+						}, this);
+						this.rootWidget.processWidgets(notificationsConfig, this.rootWidget.domNode);
+					}
 				}), lang.hitch(this, function(failure) {
 					Alfresco.util.PopupManager.displayMessage({
 						text: this.message('message.notifications.load.failure')
@@ -139,14 +156,12 @@ define(['dojo/_base/declare',
 
 			initNotifications: function () {
 				this.skipItemsCount = 0;
+				this.readNotifications = [];
 				var widgets = this.popup.getChildren();
 				if (widgets && widgets.length) {
-					this.rootWidget = widgets[0];
-					array.forEach(this.rootWidget.getChildren(), function (itemWidget) {
-						this.rootWidget.removeChild(itemWidget);
-					}, this);
+				 	this.rootWidget = widgets[0];
 				}
-				this.loadNotifications();
+				this.loadNotifications(true);
 			}
 		});
 	}
