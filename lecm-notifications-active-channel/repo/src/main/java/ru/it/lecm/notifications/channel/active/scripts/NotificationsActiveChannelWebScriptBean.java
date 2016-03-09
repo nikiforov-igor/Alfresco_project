@@ -1,5 +1,6 @@
 package ru.it.lecm.notifications.channel.active.scripts;
 
+import java.io.Serializable;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -83,5 +84,23 @@ public class NotificationsActiveChannelWebScriptBean extends BaseWebScript {
 			}
 		}
 		this.service.setReadNotifications(nodeRefsList);
+	}
+
+	public Serializable toggleReadNotifications(final JSONArray nodeRefs) {
+		List<NodeRef> nodeRefsList = new ArrayList<>();
+		for (int i = 0; i < nodeRefs.length(); ++i) {
+			NodeRef nodeRef = null;
+			try {
+				nodeRef = new NodeRef (nodeRefs.getJSONObject (i).getString ("nodeRef"));
+			} catch (JSONException ex) {
+				logger.error (ex.getMessage (), ex);
+			}
+			if (nodeRef != null && this.service.isActiveChannelNotification(nodeRef)) {
+				nodeRefsList.add(nodeRef);
+			}
+		}
+		List<String> result = this.service.toggleReadNotifications(nodeRefsList);
+		return getValueConverter().convertValueForScript(serviceRegistry, getScope(), null, (ArrayList<String>)result);
+
 	}
 }

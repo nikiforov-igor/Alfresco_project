@@ -240,6 +240,21 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
         }
     }
 
+	public List<String> toggleReadNotifications(List<NodeRef> nodeRefs) {
+		List<String> result = new ArrayList<>();
+		if (nodeRefs != null) {
+			for (NodeRef ref : nodeRefs) {
+				Map<QName, Serializable> properties = nodeService.getProperties(ref);
+				boolean isRead = Boolean.TRUE.equals(properties.get(PROP_IS_READ));
+				properties.put(PROP_READ_DATE, isRead ? null : new Date());
+				properties.put(PROP_IS_READ, !isRead);
+				nodeService.setProperties(ref, properties);
+				result.add(Boolean.toString(!isRead));
+			}
+		}
+		return result;
+	}
+
     @Override
     public NodeRef getServiceRootFolder() {
         return getRootRef();

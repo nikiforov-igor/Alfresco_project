@@ -5,6 +5,7 @@
  * @extends module:alfresco/header/AlfMenuItem
  * @param declare
  * @param lang
+ * @param domAttr
  * @param domClass
  * @param domConstruct
  * @param html
@@ -17,6 +18,7 @@
  */
 define(['dojo/_base/declare',
 	'dojo/_base/lang',
+	'dojo/dom-attr',
 	'dojo/dom-class',
 	'dojo/dom-construct',
 	'dojo/html',
@@ -26,7 +28,7 @@ define(['dojo/_base/declare',
 	'dojo/text!./templates/NotificationsPopupItem.html',
 	'alfresco/header/AlfMenuItem'
 ],
-	function (declare, lang, domClass, domConstruct, html, on, xhr, json, template, AlfMenuItem) {
+	function (declare, lang, domAttr, domClass, domConstruct, html, on, xhr, json, template, AlfMenuItem) {
 
 		return declare([AlfMenuItem], {
 
@@ -34,19 +36,29 @@ define(['dojo/_base/declare',
 
 			cssRequirements: [{cssFile: './css/AlfMenuItem.css'}],
 
-			i18nScope: 'notificationsPopupItem',
+			i18nScope: 'notificationsPopup',
 
-			i18nRequirements: [{i18nFile: './properties/NotificationsPopupItem.properties'}],
+			i18nRequirements: [{i18nFile: './properties/NotificationsPopup.properties'}],
+
+			_toggleRead: function (isRead) {
+				if (isRead) {
+					domAttr.set(this.notificationNode, 'title', this.message('message.notification.item.read.title'));
+					domClass.replace(this.notificationNode, 'read', 'unread');
+				} else {
+					domAttr.set(this.notificationNode, 'title', this.message('message.notification.item.unread.title'));
+					domClass.replace(this.notificationNode, 'unread', 'read');
+				}
+			},
 
 			_markAsRead: function() {
-				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/active-channel/api/set/read', {
+				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/active-channel/api/toggle/read', {
 					handleAs: 'json',
 					headers: {'Content-Type': 'application/json'},
 					data: json.stringify([{
 						nodeRef: this.params.item.nodeRef
 					}])
 				}).then(lang.hitch(this, function(success) {
-					domClass.remove(this.notificationNode, 'bold');
+					this._toggleRead(success.resp[this.params.item.nodeRef] === 'true');
 					this.params.notificationsPopup.loadNewNotificationsCount();
 				}), lang.hitch(this, function(failure) {
 					Alfresco.util.PopupManager.displayMessage({
@@ -59,7 +71,7 @@ define(['dojo/_base/declare',
 				this.inherited(arguments);
 				html.set(this.notificationDetailsNode, this.params.item.description);
 				domConstruct.place(Alfresco.util.relativeTime(new Date(this.params.item.formingDate)), this.notificationNode, 'last');
-				domClass.toggle(this.notificationNode, 'bold', this.params.item.isRead == 'false');
+				this._toggleRead(this.params.item.isRead === 'true');
 				on(this.domNode, 'a:click', lang.hitch(this, this._onHrefClick));
 			},
 
