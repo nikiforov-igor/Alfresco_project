@@ -3,5 +3,6 @@
 	<BusinessRole id="BR_ORGSTRUCTURE_ENGINEER">
 		<Permission object="Бизнес роли" permissionGroup="Collaborator"/>
 		<Permission object="Контрагенты" permissionGroup="Collaborator"/>
+		<Permission object="Должностные позиции" permissionGroup="Collaborator"/>
 	</BusinessRole>
 </ReposioryPermissions>
