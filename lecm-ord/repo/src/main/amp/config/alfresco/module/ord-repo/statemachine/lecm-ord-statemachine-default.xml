@@ -6899,18 +6899,18 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                                 <value><![CDATA[/* направить на регистрацию */
 (function(){
     var i,
-        ord = stm_document, /* орд документ */
-        registrars = ordStatemachine.getRegistrars("DA_REGISTRARS", ord), /* получение списка регистраторов по документу */
-        registrarsCount = registrars.length,
-        registratorAssoc = ord.assocs['lecm-document-aspects:registrator-assoc'][0],
-        notification;
+            ord = stm_document, /* орд документ */
+            registrars,
+            registratorAssocs = ord.assocs['lecm-document-aspects:registrator-assoc'],
+            notification;
 
     /* раздаем права регистраторам */
-    if (registratorAssoc) {
-        registratorAssoc = delegation.getEffectiveEmployee(registratorAssoc, 'DA_REGISTRARS');
-        registrars.push(registratorAssoc);
+    if (registratorAssocs && registratorAssocs.length) {
+        registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
+    } else {
+        registrars = ordStatemachine.getRegistrars("DA_REGISTRARS", ord); /* получение списка регистраторов по документу */
     }
-    for(i = 0; i < registrarsCount; ++i) {
+    for(i = 0; i < registrars.length; ++i) {
         statemachine.grandDynamicRoleForEmployee(ord, registrars[i], "DA_REGISTRAR_DYN", task);
     }
 

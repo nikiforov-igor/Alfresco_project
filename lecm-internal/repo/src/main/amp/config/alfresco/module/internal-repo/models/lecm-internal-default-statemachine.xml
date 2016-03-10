@@ -6707,21 +6707,21 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[/* направить на регистрацию */
-(function(){
+(function () {
     var i,
-        internal = stm_document, /* исходящий документ */
-        registrars = edsGlobalSettings.getRegistrars('DA_REGISTRARS', internal), /* получение списка регистраторов по документу */
-        registrarsCount = registrars.length,
-        recipients = [],
-        notificationText = 'Документ ' + documentScript.wrapperDocumentLink(internal, '{lecm-document:present-string}') + ' поступил Вам на регистрацию',
-        registratorAssoc = internal.assocs['lecm-document-aspects:registrator-assoc'][0];
+            internal = stm_document, /* исходящий документ */
+            registrars, recipients = [],
+            notificationText = 'Документ ' + documentScript.wrapperDocumentLink(internal, '{lecm-document:present-string}') + ' поступил Вам на регистрацию',
+            registratorAssocs = internal.assocs['lecm-document-aspects:registrator-assoc'];
 
-    if (registratorAssoc) {
-        registratorAssoc = delegation.getEffectiveEmployee(registratorAssoc, 'DA_REGISTRARS');
-        registrars.push(registratorAssoc);
+    if (registratorAssocs && registratorAssocs.length) {
+        registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
+    } else {
+        registrars = edsGlobalSettings.getRegistrars('DA_REGISTRARS', internal);
+        /* получение списка регистраторов по документу */
     }
     /* раздаем права регистраторам */
-    for(i = 0; i < registrarsCount; ++i) {
+    for (i = 0; i < registrars.length; ++i) {
         statemachine.grandDynamicRoleForEmployee(internal, registrars[i], 'DA_REGISTRAR_DYN', task);
         recipients.push(registrars[i].getNodeRef().toString());
     }

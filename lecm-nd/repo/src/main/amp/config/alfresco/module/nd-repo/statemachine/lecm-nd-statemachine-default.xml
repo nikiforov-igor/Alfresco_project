@@ -7360,19 +7360,19 @@ businessJournal.log(nd.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></va
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
     var i,
-        nd = stm_document, /* орд документ */
-        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", nd), /* получение списка регистраторов по документу */
-        registrarsCount = registrars.length,
-        registratorAssoc = nd.assocs['lecm-document-aspects:registrator-assoc'][0],
-        notification;
+            nd = stm_document, /* орд документ */
+            registrars, /* получение списка регистраторов по документу */
+            registratorAssocs = nd.assocs['lecm-document-aspects:registrator-assoc'],
+            notification;
 
-    if (registratorAssoc) {
-        registratorAssoc = delegation.getEffectiveEmployee(registratorAssoc, 'DA_REGISTRARS');
-        registrars.push(registratorAssoc);
+    if (registratorAssocs && registratorAssocs.length) {
+        registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
+    } else {
+        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", nd);
     }
 
     /* раздаем права регистраторам */
-    for(i = 0; i < registrarsCount; ++i) {
+    for(i = 0; i < registrars.length; ++i) {
         statemachine.grandDynamicRoleForEmployee(nd, registrars[i], "DA_REGISTRAR_DYN", task);
     }
 

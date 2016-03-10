@@ -17,6 +17,19 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			var index = recordSet.getRecords().findIndex(hasNodeRef, rowData);
 			var approvalListDatagrid = Alfresco.util.ComponentManager.find({name: 'LogicECM.module.Approval.ApprovalListDataGridControl'})[0];
 			var prevRowData = recordSet.getRecord(index - 1);
+			//var currentStage = this.datagridMeta.nodeRef;
+			//var records = approvalListDatagrid.widgets.dataTable.getRecordSet().getRecords();
+			//var currentStageType, currentStageState;
+            //
+			//if (records) {
+			//	for (var i = 0; i < records.length; i++) {
+			//		if (currentStage == records[i].getData('nodeRef')) {
+			//			currentStageState = records[i].getData('itemData').prop_prop_lecmApproveAspects_approvalState.value;
+			//			currentStageType = records[i].getData('itemData').prop_lecmWorkflowRoutes_stageWorkflowType.value;
+			//			break;
+			//		}
+			//	}
+			//}
 			/*
 			 * передвигать вверх можно если стоит галка "Разрешить изменять параметры согласования"
 			 * элементу есть куда двигаться вверх

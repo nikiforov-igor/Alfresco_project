@@ -8069,17 +8069,17 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                 <value><![CDATA[/* направить на регистрацию */
 (function(){
     var i,
-        outgoing = stm_document, /* исходящий документ */
-        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", outgoing), /* получение списка регистраторов по документу */
-        registrarsCount = registrars.length,
-        registratorAssoc = outgoing.assocs['lecm-document-aspects:registrator-assoc'][0],
-        notification;
-    if (registratorAssoc) {
-        registratorAssoc = delegation.getEffectiveEmployee(registratorAssoc, 'DA_REGISTRARS');
-        registrars.push(registratorAssoc);
+            outgoing = stm_document, /* исходящий документ */
+            registrars, /* получение списка регистраторов по документу */
+            registratorAssocs = outgoing.assocs['lecm-document-aspects:registrator-assoc'],
+            notification;
+    if (registratorAssocs && registratorAssocs.length) {
+        registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
+    } else {
+        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRARS", outgoing);
     }
     /* раздаем права регистраторам */
-    for(i = 0; i < registrarsCount; ++i) {
+    for(i = 0; i < registrars.length; ++i) {
         statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "DA_REGISTRAR_DYN", task);
     }
     /* подготавливаем уведомление */
