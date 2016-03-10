@@ -84,9 +84,17 @@ define(['dojo/_base/declare',
 						}
 					}
 				}), lang.hitch(this, function(failure) {
-					Alfresco.util.PopupManager.displayMessage({
-						text: this.message('message.new.notifications.count.load.failure')
-					});
+					var status = failure.response.status,
+						msg = failure.message,
+						exception = failure.response.data ? failure.response.data.exception : null;
+
+					console.warn('Status: %s. Message: %s.', status, msg);
+					if (500 === status) {
+						console.warn('Server exception: %s', exception);
+						Alfresco.util.PopupManager.displayMessage({
+							text: this.message('message.new.notifications.count.load.failure')
+						});
+					}
 				}));
 			},
 
