@@ -680,12 +680,12 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
          * Custom event handler to highlight row.
          *
          * @method onEventHighlightRow
-         * @param oArgs.event {HTMLEvent} Event object.
-         * @param oArgs.target {HTMLElement} Target element.
+         * @param oArgs.el {HTMLElement} The highlighted TR element.
+         * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
          */
         onEventHighlightRow:function DataGrid_onEventHighlightRow(oArgs) {
             // elActions is the element id of the active table cell where we'll inject the actions
-            var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
+            var elActions = Dom.get(this.id + "-actions-" + oArgs.el.id);
 
             this.onHighlightRowFunction(oArgs, elActions,(this.id + "-actionSet"), (this.id + "-moreActions"));
 
@@ -700,32 +700,24 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             }
 
             if (!this.options.overrideSortingWith){
-                var elOtherActions = Dom.get(this.id + "-other-actions-" + oArgs.target.id);
+                var elOtherActions = Dom.get(this.id + "-other-actions-" + oArgs.el.id);
                 this.onHighlightRowFunction(oArgs, elOtherActions,(this.id + "-otherActionSet"), (this.id + "-otherMoreActions"));
                 Dom.removeClass(elOtherActions, "hidden");
             }
         },
         onHighlightRowFunction: function(oArgs, elActions, actionSetId, moreActionId){
-            // Выбранный элемент
-            var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
-            if (this.widgets.paginator) {
-                numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
-            }
-
-            var selectItem = this.widgets.dataTable.getRecordSet().getRecord(numSelectItem);
+            var selectItem = oArgs.record;
             if (selectItem){
                 var oData = selectItem.getData();
-                this._showVersionLabel(oData.itemData, oArgs.target.id);
+                this._showVersionLabel(oData.itemData, oArgs.el.id);
             }
 
             if ((oData != undefined) && (oData.type != "total")) {
                 // Inject the correct action elements into the actionsId element
                 if (elActions && !this.showingMoreActions) {
-                    // Call through to get the row highlighted by YUI
-                    this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
 
                     // Clone the actionSet template node from the DOM
-                    var record = this.widgets.dataTable.getRecord(oArgs.target.id),
+                    var record = this.widgets.dataTable.getRecord(oArgs.el.id),
                         clone = null;
                     if (elActions.firstChild === null){
                         clone = Dom.get(actionSetId).cloneNode(true);
@@ -738,7 +730,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         var actionsDivs = YAHOO.util.Selector.query("div", clone);
                         for (index = 0; index < actionsDivs.length; index++) {
                             var actionDiv = actionsDivs[index];
-                            Dom.generateId(actionDiv, actionDiv.className + "-" + oArgs.target.id);
+                            Dom.generateId(actionDiv, actionDiv.className + "-" + oArgs.el.id);
                         }
 
                         // Simple view by default
@@ -780,7 +772,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 
                     var actionsBlock = elActions.firstChild;
 
-                    this.updateActions(actionsBlock, oArgs.target.id, oData);
+                    this.updateActions(actionsBlock, oArgs.el.id, oData);
 
                     // Проверяем сколько у нас осталось действий и нужно ли рисовать "More >" контейнер?
                     var splitAt = this.options.splitActionsAt;
@@ -840,15 +832,14 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
          * Custom event handler to unhighlight row.
          *
          * @method onEventUnhighlightRow
-         * @param oArgs.event {HTMLEvent} Event object.
-         * @param oArgs.target {HTMLElement} Target element.
+         * @param oArgs.el {HTMLElement} The highlighted TR element.
+         * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
          */
         onEventUnhighlightRow: function DataGrid_onEventUnhighlightRow(oArgs)
         {
-            // Call through to get the row unhighlighted by YUI
-            this.widgets.dataTable.onEventUnhighlightRow.call(this.widgets.dataTable, oArgs);
+            var elActions = Dom.get(this.id + "-actions-" + (oArgs.el.id));
 
-            var elActions = Dom.get(this.id + "-actions-" + (oArgs.target.id));
+            var elActions = Dom.get(this.id + "-actions-" + (oArgs.el.id));
 
             // Don't hide unless the More Actions drop-down is showing, or a dialog mask is present
             if (!this.showingMoreActions || Dom.hasClass(document.body, "masked"))
@@ -859,7 +850,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             }
 
             if (!this.options.overrideSortingWith){
-                var elOtherActions = Dom.get(this.id + "-other-actions-" + oArgs.target.id);
+                var elOtherActions = Dom.get(this.id + "-other-actions-" + oArgs.el.id);
                 Dom.addClass(elOtherActions, "hidden");
             }
         },

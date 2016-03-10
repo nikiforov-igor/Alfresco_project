@@ -1,3 +1,5 @@
+/* global YAHOO, Alfresco */
+
 /**
  * Copyright (C) 2005-2010 Alfresco Software Limited.
  *
@@ -1517,8 +1519,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 dTable.subscribe("renderEvent", this.onRenderEvent.bind(this), this, true);
 
                 // Enable row highlighting
-                dTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
-                dTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
+                dTable.subscribe("rowMouseoverEvent", dTable.onEventHighlightRow, null, dTable);
+                dTable.subscribe("rowMouseoutEvent", dTable.onEventUnhighlightRow, null, dTable);
+                dTable.subscribe("rowHighlightEvent", this.onEventHighlightRow, this, true);
+                dTable.subscribe("rowUnhighlightEvent", this.onEventUnhighlightRow, this, true);
 
                 if (this.options.height != null) {
                     YAHOO.util.Dom.setStyle(this.id + "-grid", "height", this.options.height + "px");
@@ -1844,32 +1848,33 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * Custom event handler to highlight row.
              *
              * @method onEventHighlightRow
-             * @param oArgs.event {HTMLEvent} Event object.
-             * @param oArgs.target {HTMLElement} Target element.
+             * @param oArgs.el {HTMLElement} The highlighted TR element.
+             * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
              */
             onEventHighlightRow:function DataGrid_onEventHighlightRow(oArgs) {
                 // elActions is the element id of the active table cell where we'll inject the actions
-                var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
+                var elActions = Dom.get(this.id + "-actions-" + oArgs.el.id);
 
                 // Выбранный элемент
-                var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
-                if (this.widgets.paginator) {
-                    numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
-                }
+                //var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
+                // if (this.widgets.paginator) {
+                //     numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+                // }
 
-                var selectItem = this.widgets.dataTable.getRecordSet().getRecord(numSelectItem);
+                // var selectItem = this.widgets.dataTable.getRecordSet().getRecord(numSelectItem);
+                var selectItem = oArgs.record;
                 if (selectItem){
                     var oData = selectItem.getData();
-                    this._showVersionLabel(oData.itemData, oArgs.target.id);
+                    this._showVersionLabel(oData.itemData, oArgs.el.id);
                 }
 
                 // Inject the correct action elements into the actionsId element
                 if (elActions && !this.showingMoreActions) {
                     // Call through to get the row highlighted by YUI
-                    this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
+                    //this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
 
                     // Clone the actionSet template node from the DOM
-                    var record = this.widgets.dataTable.getRecord(oArgs.target.id),
+                    var record = this.widgets.dataTable.getRecord(oArgs.el.id),
                         clone = null;
                     if (elActions.firstChild === null){
                         clone = Dom.get(this.id + "-actionSet").cloneNode(true);
@@ -1882,7 +1887,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         var actionsDivs = YAHOO.util.Selector.query("div", clone);
                         for (index = 0; index < actionsDivs.length; index++) {
                             var actionDiv = actionsDivs[index];
-                            Dom.generateId(actionDiv, actionDiv.className + "-" + oArgs.target.id);
+                            Dom.generateId(actionDiv, actionDiv.className + "-" + oArgs.el.id);
                         }
 
                         // Simple view by default
@@ -1923,7 +1928,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                     var actionsBlock = elActions.firstChild;
 
-                    this.updateActions(actionsBlock, oArgs.target.id, oData);
+                    this.updateActions(actionsBlock, oArgs.el.id, oData);
 
                     // Проверяем сколько у нас осталось действий и нужно ли рисовать "More >" контейнер?
                     var splitAt = this.options.splitActionsAt;
@@ -1993,15 +1998,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * Custom event handler to unhighlight row.
              *
              * @method onEventUnhighlightRow
-             * @param oArgs.event {HTMLEvent} Event object.
-             * @param oArgs.target {HTMLElement} Target element.
+             * @param oArgs.el {HTMLElement} The highlighted TR element.
+             * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
              */
             onEventUnhighlightRow: function DataGrid_onEventUnhighlightRow(oArgs)
             {
                 // Call through to get the row unhighlighted by YUI
-                this.widgets.dataTable.onEventUnhighlightRow.call(this.widgets.dataTable, oArgs);
+                // this.widgets.dataTable.onEventUnhighlightRow.call(this.widgets.dataTable, oArgs);
 
-                var elActions = Dom.get(this.id + "-actions-" + (oArgs.target.id));
+                var elActions = Dom.get(this.id + "-actions-" + (oArgs.el.id));
 
                 // Don't hide unless the More Actions drop-down is showing, or a dialog mask is present
                 if (!this.showingMoreActions || Dom.hasClass(document.body, "masked"))

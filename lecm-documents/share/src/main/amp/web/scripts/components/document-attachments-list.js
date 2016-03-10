@@ -744,30 +744,33 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 };
 
 	            // Enable row highlighting
-	            this.widgets.dataTable.subscribe("rowMouseoverEvent", this.onEventHighlightRow, this, true);
-	            this.widgets.dataTable.subscribe("rowMouseoutEvent", this.onEventUnhighlightRow, this, true);
+	            this.widgets.dataTable.subscribe("rowMouseoverEvent", this.widgets.dataTable.onEventHighlightRow, null, this.widgets.dataTable);
+	            this.widgets.dataTable.subscribe("rowMouseoutEvent", this.widgets.dataTable.onEventUnhighlightRow, null, this.widgets.dataTable);
+	            this.widgets.dataTable.subscribe("rowHighlightEvent", this.onEventHighlightRow, this, true);
+	            this.widgets.dataTable.subscribe("rowUnhighlightEvent", this.onEventUnhighlightRow, this, true);
             },
 
 	        /**
 	         * Custom event handler to highlight row.
 	         *
 	         * @method onEventHighlightRow
-	         * @param oArgs.event {HTMLEvent} Event object.
-	         * @param oArgs.target {HTMLElement} Target element.
+             * @param oArgs.el {HTMLElement} The highlighted TR element.
+             * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
 	         */
 	        onEventHighlightRow: function DocumentAttachmentsList_onEventHighlightRow(oArgs)
 	        {
 		        // Call through to get the row highlighted by YUI
-		        this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
+		        //this.widgets.dataTable.onEventHighlightRow.call(this.widgets.dataTable, oArgs);
 
 		        // elActions is the element id of the active table cell where we'll inject the actions
-		        var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
+		        var elActions = Dom.get(this.id + "-actions-" + oArgs.el.id);
 
 		        // Inject the correct action elements into the actionsId element
 		        if (elActions && elActions.firstChild === null)
 		        {
 			        // Retrieve the actionSet for this record
-			        var oRecord = this.widgets.dataTable.getRecord(oArgs.target.id),
+			        //var oRecord = this.widgets.dataTable.getRecord(oArgs.target.id),
+			        var oRecord = oArgs.record,
 				        record = oRecord.getData(),
 				        jsNode = record.jsNode,
 				        actions = this.checkActions(record),
@@ -831,15 +834,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	         * Custom event handler to unhighlight row.
 	         *
 	         * @method onEventUnhighlightRow
-	         * @param oArgs.event {HTMLEvent} Event object.
-	         * @param oArgs.target {HTMLElement} Target element.
+             * @param oArgs.el {HTMLElement} The highlighted TR element.
+             * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
 	         */
 	        onEventUnhighlightRow: function DocumentAttachmentsList_onEventUnhighlightRow(oArgs)
 	        {
 		        // Call through to get the row unhighlighted by YUI
-		        this.widgets.dataTable.onEventUnhighlightRow.call(this.widgets.dataTable, oArgs);
+		        //this.widgets.dataTable.onEventUnhighlightRow.call(this.widgets.dataTable, oArgs);
 
-		        var elActions = Dom.get(this.id + "-actions-" + (oArgs.target.id));
+		        var elActions = Dom.get(this.id + "-actions-" + (oArgs.el.id));
 
 		        // Don't hide unless the More Actions drop-down is showing, or a dialog mask is present
 		        if ((elActions && !this.showingMoreActions) || Dom.hasClass(document.body, "masked"))
