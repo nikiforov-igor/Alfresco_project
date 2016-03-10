@@ -204,7 +204,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		initDatasource: function (initialRequest, datasource, callback) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var dataStr = this.widgets.hiddenValue.value,
-				templateData = dataStr ? JSON.parse(dataStr) : {};
+				templateData = dataStr ? JSON.parse(dataStr) : [];
 
 			callback.scope.owner = this;
 

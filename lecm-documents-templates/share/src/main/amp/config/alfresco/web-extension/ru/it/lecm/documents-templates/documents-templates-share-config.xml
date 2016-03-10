@@ -12,7 +12,7 @@
 						<set id="top" template="/org/alfresco/components/form/2-column-set.ftl"/>
 						<set id="bottom"/>
 
-						<field id="cm:title" set="top">
+						<field id="cm:title" set="top" mandatory="true">
 							<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 						</field>
 						<field id="lecm-template:actions" set="top">
@@ -41,7 +41,7 @@
 						<set id="top" template="/org/alfresco/components/form/2-column-set.ftl"/>
 						<set id="bottom"/>
 
-						<field id="cm:title" set="top">
+						<field id="cm:title" set="top" mandatory="true">
 							<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 						</field>
 						<field id="lecm-template:actions" set="top">

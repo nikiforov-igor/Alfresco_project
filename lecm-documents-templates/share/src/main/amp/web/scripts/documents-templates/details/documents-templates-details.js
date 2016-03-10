@@ -69,6 +69,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			}
 
 			var obj = args[1],
+				form = Dom.get(obj.component.id),
+				fieldId = YAHOO.util.Selector.query('input[name="prop_lecm-template_attributes"]', form, true).id,
 				message = this.msg('template-details-successfull-form-submit.title');
 			switch (obj.component.options.mode) {
 				case 'create': case 'edit':
@@ -83,6 +85,27 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					break;
 				default: throw obj.component.options.mode + ' mode is not implemented for LogicECM.module.DocumentsTemplates.DetailsView';
 			}
+			Bubbling.fire('registerValidationHandler', {
+				fieldId: fieldId,
+				handler: this.validateTemplateDataHandler,
+				args: {
+					scope: this
+				},
+				message: this.msg('template-details-invalid-attributes.title')
+			});
+
+		},
+
+		validateTemplateDataHandler: function (field, args, event, formsRuntime, silent, message) {
+
+			function hasTemplateValue (attribute) {
+				return !!attribute.initial.value;
+			}
+
+			var dataStr = field.value,
+				templateData = dataStr ? JSON.parse(dataStr) : [];
+
+			return templateData.length && templateData.some(hasTemplateValue);
 		},
 
 		onBeforeTemplate: function (layer, args) {
@@ -123,9 +146,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onTemplateSubmit: function (layer, args) {
-			var obj = args[1];
+			var obj = args[1],
+				submitEvent;
 			if (this._hasEventInterest(obj)) {
-				this.widgets.formsRuntime._submitInvoked('submit');
+				submitEvent = document.createEvent('Event');
+				submitEvent.initEvent('submit', true, false);
+				this.widgets.formsRuntime._submitInvoked(submitEvent);
 			}
 		},
 
