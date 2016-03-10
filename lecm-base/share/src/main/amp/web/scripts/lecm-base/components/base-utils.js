@@ -790,6 +790,11 @@ LogicECM.module.Base.Util = {
 
 		document.body.appendChild(form);
 		form.submit();
+	},
+
+	dateToUTC0: function(date) {
+		var dateStr = Alfresco.util.toISO8601(date).substring(0,10) + "T00:00:00.000+00:00";
+		return Alfresco.util.fromISO8601(dateStr);
 	}
 
 };

@@ -89,15 +89,10 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						var htmlNodeEnd = Dom.get(this.id + "_prop_lecm-absence_end"),
 							htmlNodeUnlimited = Dom.get(this.id + "_prop_lecm-absence_unlimited"),
 							htmlNodeBegin = document.getElementsByName("prop_lecm-absence_begin")[0],
-							endDate, beginDate = new Date();
+							beginDate = LogicECM.module.Base.Util.dateToUTC0(new Date()),
+							endDate = htmlNodeUnlimited.checked ? beginDate : LogicECM.module.Base.Util.dateToUTC0(Alfresco.util.fromISO8601(htmlNodeEnd.value));
 
 						htmlNodeBegin.value = Alfresco.util.toISO8601(beginDate);
-						if (htmlNodeUnlimited.checked) {
-							endDate = new Date(beginDate);
-						} else {
-							endDate = Alfresco.util.fromISO8601(htmlNodeEnd.value);
-						}
-						//endDate.setHours(23, 59, 59, 0);
 						htmlNodeEnd.value = Alfresco.util.toISO8601(endDate);
 					},
 					scope: this

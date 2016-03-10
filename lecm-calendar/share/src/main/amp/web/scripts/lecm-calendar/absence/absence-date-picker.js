@@ -9,8 +9,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 (function() {
 
 	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event,
-		Bubbling = YAHOO.Bubbling;
+		Event = YAHOO.util.Event;
 
 	LogicECM.module.WCalendar.Absence.DatePicker = function(htmlId, currentValueHtmlId) {
 		// Mandatory properties
@@ -125,42 +124,4 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			this._handleFieldChange(null);
 			}
     };
-
-    LogicECM.module.WCalendar.Absence.DatePicker.prototype._handlePickerChange = function DatePicker__handlePickerChange(type, args, obj) {
-
-        var me = this;
-        var selected = args[0];
-        var selDate = new Date(Date.UTC(selected[0][0], selected[0][1] - 1, selected[0][2]));
-        var dateEntry = selDate.toString(me._msg("lecm.form.control.date-picker.entry.date.format"));
-        Dom.get(me.id + "-date").value = dateEntry;
-
-        if (selDate != null) {
-            Dom.removeClass(me.id + "-date", "invalid");
-            if (me.options.showTime) {
-                Dom.removeClass(me.id + "-time", "invalid");
-            }
-            var isoValue = Alfresco.util.toISO8601(selDate, {"milliseconds": true});
-            Dom.get(me.currentValueHtmlId).value = isoValue;
-
-            if (Alfresco.logger.isDebugEnabled())
-                Alfresco.logger.debug("Hidden field '" + me.currentValueHtmlId + "' updated to '" + isoValue + "'");
-
-            Bubbling.fire("mandatoryControlValueUpdated", me);
-
-            if (me.options.changeFireAction != null) {
-                Bubbling.fire(me.options.changeFireAction, {
-                    date: isoValue
-                });
-            }
-        }
-        else {
-            Dom.addClass(me.id + "-date", "invalid");
-
-            if (me.options.showTime) {
-                Dom.addClass(me.id + "-time", "invalid");
-            }
-        }
-
-		this._hidePicker();
-    }
 })();
