@@ -359,8 +359,8 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                     nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
                 }
 
-                if (currentEmployee != null) {
-                    List<NodeRef> targetRefs = new ArrayList<NodeRef>();
+                if (currentEmployee != null && !isProjectRegister) {
+                    List<NodeRef> targetRefs = new ArrayList<>();
                     targetRefs.add(currentEmployee);
                     nodeService.setAssociations(documentNode, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR, targetRefs);
                 }
