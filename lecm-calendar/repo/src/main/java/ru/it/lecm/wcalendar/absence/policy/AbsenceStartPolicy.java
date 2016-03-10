@@ -18,6 +18,8 @@ import ru.it.lecm.wcalendar.absence.beans.AbsenceBean;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateNodePolicy;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 
 /**
  * Полиси, срабатывающая на создание ассоциции у объекта типа absence. Если
@@ -27,7 +29,7 @@ import java.util.Date;
  *
  * @author vlevin
  */
-public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
+public class AbsenceStartPolicy implements OnCreateNodePolicy, OnCreateAssociationPolicy {
 
 	private IAbsence absenceService;
 	private PolicyComponent policyComponent;
@@ -38,6 +40,7 @@ public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
 		PropertyCheck.mandatory(this, "absenceService", absenceService);
 
 		logger.info("Initializing AbsenceStartPolicy");
+		policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME, IAbsence.TYPE_ABSENCE, new JavaBehaviour(this, "onCreateNode", NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, IAbsence.TYPE_ABSENCE, IAbsence.ASSOC_ABSENCE_EMPLOYEE, new JavaBehaviour(this, "onCreateAssociation", NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
@@ -50,11 +53,10 @@ public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
 	}
 
 	@Override
-	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-		NodeRef absenceRef = nodeAssocRef.getSourceRef();
+	public void onCreateNode(ChildAssociationRef childAssocRef) {
+		NodeRef absenceRef = childAssocRef.getChildRef();
 		Date absenceBegin = absenceService.getAbsenceStartDate(absenceRef);
 		Date absenceEnd = absenceService.getAbsenceEndDate(absenceRef);
-
 		//Даты приходят в UTC-0, заменяем их таймзону на серверную
 		try {
 			absenceBegin = AbsenceBean.DateFormatISO8601.parse(ISO8601DateFormat.format(absenceBegin));
@@ -62,7 +64,6 @@ public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
 		} catch (ParseException e) {
 			logger.warn("absenceBegin or/and absenceEnd has wrong format");
 		}
-
 		absenceBegin = DateUtils.truncate(absenceBegin, Calendar.DATE);
 		absenceEnd = DateUtils.setHours(absenceEnd, 23);
 		absenceEnd = DateUtils.setMinutes(absenceEnd, 59);
@@ -70,6 +71,14 @@ public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
 		absenceEnd = DateUtils.setMilliseconds(absenceEnd, 0);
 		absenceService.setAbsenceBegin(absenceRef, absenceBegin);
 		absenceService.setAbsenceEnd(absenceRef, absenceEnd);
+	}
+
+	@Override
+	public void onCreateAssociation(AssociationRef nodeAssocRef) {
+		NodeRef absenceRef = nodeAssocRef.getSourceRef();
+		Date absenceBegin = absenceService.getAbsenceStartDate(absenceRef);
+//		Date absenceEnd = absenceService.getAbsenceEndDate(absenceRef);
+
 		Date today = new Date();
 		absenceService.addBusinessJournalRecord(absenceRef, CalendarCategory.ADD_ABSENCE);
 		if (absenceBegin.compareTo(today) <= 0) {

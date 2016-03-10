@@ -71,12 +71,22 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 		if (deleted && today.after(curStart) && today.before(curEnd)) {
 			absenceService.endAbsence(nodeRef);
 			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
-		} // если: бывшее время окончания присутствует И окончание отстутствия изменилось И сегодняшняя дата позже бывшего начала отсутствия
-		// И раньше его бывшего конца И нынешний конец отсутствия - сегодня
-		else if (prevEnd != null && !prevEnd.equals(curEnd) && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
-			absenceService.endAbsence(nodeRef);
-			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
 		}
+		/*
+			ALF-4912
+			это условие не сработает для свежесозданного отсутствия, потому-что prevEnd==null так как нода отсутствия новая и никаких предыдущих значений у нее нет
+			для отсутствий на заданный период это условие также не сработает так-как даты отсутствий не меняются после создания
+			отсутствия на заданный период отключаются или по расписанию или вручную
+			для бессрочных отсутствий возможна ситуация отсутствие будет деактивировано после его пролонгации ночью,
+			так как сработает проверка resetTime(today).equals(resetTime(curEnd)), где today это 01:00 какого-то дня, curEnd это 23:59 этого же дня
+			бессрочные отсутствия отключаются только вручную
+		*/
+//		else if (prevEnd != null && !prevEnd.equals(curEnd) && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
+			// если: бывшее время окончания присутствует И окончание отстутствия изменилось И сегодняшняя дата позже бывшего начала отсутствия
+			// И раньше его бывшего конца И нынешний конец отсутствия - сегодня
+//			absenceService.endAbsence(nodeRef);
+//			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
+//		}
 //		dumpNodeContent(nodeRef, "onUpdateProperties");
 
 	}
