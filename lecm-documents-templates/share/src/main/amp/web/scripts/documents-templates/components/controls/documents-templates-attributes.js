@@ -322,7 +322,10 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			var templateData = records.reduce(function (prev, curr) {
 				prev.push({
 					initial: {
+						dataType: curr.getData('attribute').dataType,
+						formsName: curr.getData('attribute').formsName,
 						attribute: curr.getData('attribute').name,
+						type: curr.getData('attribute').type,
 						value: Dom.get(curr.getData('value')).value
 					}
 				});
