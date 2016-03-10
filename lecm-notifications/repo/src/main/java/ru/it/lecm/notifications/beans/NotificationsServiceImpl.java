@@ -26,6 +26,10 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import ru.it.lecm.notifications.template.Parser;
+import ru.it.lecm.notifications.template.ParserImpl;
 
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_BUSINESS_ROLE;
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_EMPLOYEE;
@@ -34,7 +38,7 @@ import ru.it.lecm.secretary.SecretaryService;
 /**
  * User: AIvkin Date: 10.01.13 Time: 16:53
  */
-public class NotificationsServiceImpl extends BaseBean implements NotificationsService {
+public class NotificationsServiceImpl extends BaseBean implements NotificationsService, ApplicationContextAware {
 
     private static final String NOTIFICATION_POST_TRANSACTION_PENDING_OBJECTS = "notification_post_transaction_pending_objects";
 
@@ -52,7 +56,16 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     private ThreadPoolExecutor threadPoolExecutor;
     private TransactionListener transactionListener;
+	private ApplicationContext applicationContext;
 
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+
+	public void setApplicationContext(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
+	
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
     }
@@ -571,6 +584,27 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         sendNotification(channels, notification, dontCheckAccessToObject);
 	}
 
+	private String parseTemplate(String templateCode, Map<String, NodeRef> objects) throws TemplateRunException, TemplateParseException {
+		NodeRef templateRef = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, PROP_NOTIFICATION_TEMPLATE_CODE, templateCode);
+		String template = nodeService.getProperty(templateRef, PROP_NOTIFICATION_TEMPLATE).toString();
+		Parser parcer = new ParserImpl(applicationContext);
+		return parcer.runTemplate(template, objects);
+	}
+	
+	@Override
+	public void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException {
+        String desc = parseTemplate(templateCode, objects);
+		logger.debug(desc);
+		Notification notification = new Notification();
+        notification.setAuthor(author);
+        notification.setRecipientEmployeeRefs(recipientEmployees);
+        notification.setObjectRef(objects.get("mainObject"));
+		notification.setDescription(desc);
+		notification.setInitiatorRef(initiatorRef);
+		
+        sendNotification(notification, dontCheckAccessToObject);
+	}
+	
     private class NotificationTransactionListener implements TransactionListener {
 
         @Override

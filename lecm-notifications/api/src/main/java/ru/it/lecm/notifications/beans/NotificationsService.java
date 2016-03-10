@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.List;
+import java.util.Map;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -17,6 +18,7 @@ public interface NotificationsService {
 	final String NOTIFICATIONS_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/1.0";
 	final String NOTIFICATIONS_TYPE_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/types/1.0";
 	final String NOTIFICATIONS_SETTINGS_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/settings/1.0";
+	final String NOTIFICATIONS_TEMPLATE_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/template/1.0";
 
 	final String NOTIFICATIONS_ROOT_NAME = "Сервис Уведомления";
 	final String NOTIFICATIONS_ROOT_ID = "NOTIFICATIONS_ROOT_ID";
@@ -37,6 +39,12 @@ public interface NotificationsService {
 	QName ASSOC_RECIPIENT_BUSINESS_ROLE = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-business-role-assoc");
 	QName ASSOC_NOTIFICATION_OBJECT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "object-assoc");
 
+	String NOTIFICATION_TEMPLATE_DICTIONARY_NAME = "Шаблоны сообщений";
+	QName TYPE_NOTIFICATION_TEMPLATE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template");
+	QName PROP_NOTIFICATION_TEMPLATE_CODE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "code");
+	QName PROP_NOTIFICATION_TEMPLATE_DESCRIPTION = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "description");
+	QName PROP_NOTIFICATION_TEMPLATE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template");
+	
 	String NOTIFICATION_TYPE_DICTIONARY_NAME = "Типы доставки уведомлений";
 	QName TYPE_NOTIFICATION_TYPE = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "notification-type");
 	QName PROP_SPRING_BEAN_ID = QName.createQName(NOTIFICATIONS_TYPE_NAMESPACE_URI, "spring-bean-id");
@@ -219,4 +227,6 @@ public interface NotificationsService {
 	 * @param delegateBusinessRoleRefs список бизнес ролей, по которым проверять наличие делегатов у получателей
      */
     void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef, boolean dontCheckAccessToObject, List<NodeRef> delegateBusinessRoleRefs);
+
+	void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException;
 }

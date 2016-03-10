@@ -18,11 +18,13 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-notifications-template-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/notifications_type</value>
+				<value>alfresco/module/${artifactId}/messages/notifications_template</value>
 			</list>
 		</property>
 	</bean>
@@ -40,12 +42,22 @@
 			</list>
 		</property>
 	</bean>
-
+	
 	<bean id="${groupId}.${artifactId}.notificationsTypesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-notifications-type.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="${groupId}.${artifactId}.notificationsTemplatesBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-notifications-templates-dic.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-notifications-templates-dic-items.xml</value>
 			</list>
 		</property>
 	</bean>

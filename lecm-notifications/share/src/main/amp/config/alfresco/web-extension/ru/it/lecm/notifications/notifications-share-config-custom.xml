@@ -75,6 +75,92 @@
 
         </forms>
 	</config>
+	
+	<config evaluator="node-type" condition="lecm-notification-template:template">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-notification-template:code"/>
+					<show id="lecm-notification-template:description"/>
+					<show id="lecm-notification-template:template"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name"/>
+					<field id="lecm-notification-template:code" read-only="true"/>
+					<field id="lecm-notification-template:description"/>
+					<field id="lecm-notification-template:template">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-notification-template:template">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-notification-template:code"/>
+					<show id="lecm-notification-template:description"/>
+					<show id="lecm-notification-template:template"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-notf-type:code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-notification-template:template">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							
+						</control>
+					</field>
+				</appearance>
+			</form>
+
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-notification-template:code"/>
+					<show id="lecm-notification-template:description"/>
+				</field-visibility>
+			</form>
+
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+					<show id="lecm-notification-template:code"/>
+					<show id="lecm-notification-template:description"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-notification-template:code" mandatory="false">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="nameSuffix">-strong-constant</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-notification-template:description" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
+
+        </forms>
+	</config>
 
 	<config evaluator="node-type" condition="lecm-notf-settings:user">
 		<forms>

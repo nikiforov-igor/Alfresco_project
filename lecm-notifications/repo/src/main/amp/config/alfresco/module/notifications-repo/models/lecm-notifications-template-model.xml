@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecm-notification-template:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<description>Notifications template</description>
+	<author>VKuprin</author>
+	<published>2016-02-29</published>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.it.ru/lecm/notifications/types/1.0" prefix="lecm-notf-type"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/lecm/notifications/template/1.0" prefix="lecm-notification-template"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-notification-template:template">
+			<title>Notification template</title>
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<archive>false</archive>
+			<properties>
+				<property name="lecm-notification-template:description">
+					<title>Description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-notification-template:template">
+					<title>Template</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-notification-template:code">
+					<title>Template code</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>
