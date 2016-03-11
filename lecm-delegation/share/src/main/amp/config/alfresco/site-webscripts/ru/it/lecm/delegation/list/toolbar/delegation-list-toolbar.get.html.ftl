@@ -16,14 +16,10 @@
         function init() {
             LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-base/components/lecm-toolbar.js',
-                'scripts/lecm-delegation/list/delegation-list-toolbar.js',
-                'modules/simple-dialog.js',
-                'scripts/lecm-delegation/list/delegation-list.js'
+                'scripts/lecm-delegation/list/delegation-list-toolbar.js'
             ], [
-                'css/lecm-base/components/base-menu/base-menu.css',
-                'css/lecm-delegation/delegation-menu.css',
                 'components/data-lists/toolbar.css',
-                'css/lecm-delegation/list/delegation-list.css'
+                'css/lecm-base/components/toolbar.css'
             ], createToolbar);
         }
 

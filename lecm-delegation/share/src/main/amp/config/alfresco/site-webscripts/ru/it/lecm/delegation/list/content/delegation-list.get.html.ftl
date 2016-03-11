@@ -43,17 +43,11 @@
 
 		function init() {
 			LogicECM.module.Base.Util.loadResources([
-				'scripts/lecm-delegation/delegation-menu.js',
-				'scripts/lecm-base/components/lecm-toolbar.js',
-				'scripts/lecm-delegation/list/delegation-list-toolbar.js',
-				'modules/simple-dialog.js',
 				'scripts/lecm-base/components/advsearch.js',
 				'scripts/lecm-base/components/lecm-datagrid.js',
 				'scripts/lecm-delegation/list/delegation-list.js'
 			], [
-				'css/lecm-base/components/base-menu/base-menu.css',
-				'css/lecm-delegation/delegation-menu.css',
-				'components/data-lists/toolbar.css',
+				'css/lecm-base/components/datagrid.css',
 				'css/lecm-delegation/list/delegation-list.css'
 			], createDatagrid);
 		}
