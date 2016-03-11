@@ -10,23 +10,7 @@
         <serviceTask id="empty-service-task" name="Service task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
             <extensionElements>
                 <activiti:field name="script">
-                    <activiti:string><![CDATA[
-                    	var emptyServiceTask = "Service task";
-
-                        var document = bpm_package.children[0]
-                    	var assocs = document.assocs['lecmSignAspects:signerEmployeeAssoc'];
-                        var initiator = orgstructure.getCurrentEmployee();
-                        var msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(document, "{lecm-document:ext-present-string}");
-                        businessJournal.log(document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(document.nodeRef.toString(), msg), []);
-                        document.properties['lecmSignAspects:isSigned'] = true;
-                        document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
-                        document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
-                        document.save();
-                        if (assocs && assocs.length) {
-                            document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
-                        }
-                        document.createAssociation(initiator, 'lecmSignAspects:signerEmployeeAssoc');
-                    ]]></activiti:string>
+                    <activiti:string><![CDATA[(function () {})();]]></activiti:string>
                 </activiti:field>
             </extensionElements>
         </serviceTask>
@@ -39,8 +23,26 @@
             <extensionElements>
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-                        var document = bpm_package.children[0]
+                        var document = bpm_package.children[0],
+                            withSigning = execution.getVariable('withSigning'),
+                            assocs,
+                            initiator,
+                            msg;
                         execution.setVariable("assigneesList", edsDocument.getRecipientLogins(document));
+                        if (withSigning && 'true' == ('' + withSigning)) {
+                            assocs = document.assocs['lecmSignAspects:signerEmployeeAssoc'];
+                            initiator = orgstructure.getCurrentEmployee();
+                            msg = "#initiator подписал(а) документ " + documentScript.wrapperDocumentLink(document, "{lecm-document:ext-present-string}");
+                            businessJournal.log(document.nodeRef.toString(), "SIGNING", substitude.formatNodeTitle(document.nodeRef.toString(), msg), []);
+                            document.properties['lecmSignAspects:isSigned'] = true;
+                            document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
+                            document.properties['lecmSignAspects:signingDate'] = base.getValueConverter().convertValueForJava(new Date());
+                            document.save();
+                            if (assocs && assocs.length) {
+                                document.removeAssociation(assocs[0], 'lecmSignAspects:signerEmployeeAssoc');
+                            }
+                            document.createAssociation(initiator, 'lecmSignAspects:signerEmployeeAssoc');
+                        }
                     ]]></activiti:string>
                 </activiti:field>
             </extensionElements>
@@ -201,4 +203,3 @@
 
     </process>
 </definitions>
-
