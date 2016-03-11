@@ -7,14 +7,19 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 (function () {
 
-	function hasNodeRef(element) {
-		return element.getData().nodeRef == this.nodeRef;
+	function getRecordIndex(array, element) {
+		for (var i = 0; i < array.length; i++) {
+			if (array[i].getData().nodeRef == element.nodeRef) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	LogicECM.module.Routes.Evaluators = {
 		stageItemUp: function (rowData) {
 			var recordSet = this.widgets.dataTable.getRecordSet();
-			var index = recordSet.getRecords().findIndex(hasNodeRef, rowData);
+			var index = getRecordIndex(recordSet.getRecords(), rowData);
 			var approvalListDatagrid = Alfresco.util.ComponentManager.find({name: 'LogicECM.module.Approval.ApprovalListDataGridControl'})[0];
 			var prevRowData = recordSet.getRecord(index - 1);
 			/*
@@ -30,7 +35,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 		},
 		stageItemDown: function (rowData) {
 			var recordSet = this.widgets.dataTable.getRecordSet();
-			var index = recordSet.getRecords().findIndex(hasNodeRef, rowData);
+			var index = getRecordIndex(recordSet.getRecords(), rowData);
 			var approvalListDatagrid = Alfresco.util.ComponentManager.find({name: 'LogicECM.module.Approval.ApprovalListDataGridControl'})[0];
 			var nextRowData = recordSet.getRecord(index + 1);
 			/*
