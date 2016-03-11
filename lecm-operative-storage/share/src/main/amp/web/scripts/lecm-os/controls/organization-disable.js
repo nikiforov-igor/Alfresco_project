@@ -17,7 +17,8 @@
 								var oResults = response.json;
 								orgXPath = oResults.xPath;
 								LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-									rootLocation: orgXPath
+									rootLocation: orgXPath,
+									additionalFilter: "+PATH:\"" + orgXPath + "/*\""
 								});
 							}
 						}
