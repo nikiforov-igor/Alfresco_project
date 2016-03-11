@@ -9,7 +9,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 (function () {
 	var Bubbling = YAHOO.Bubbling,
-		Dom = YAHOO.util.Dom;
+		Dom = YAHOO.util.Dom,
+		Selector = YAHOO.util.Selector;
 
 	LogicECM.module.DocumentsTemplates.DetailsView = function (containerId, options, messages) {
 		LogicECM.module.DocumentsTemplates.DetailsView.superclass.constructor.call(this, 'LogicECM.module.DocumentsTemplates.DetailsView', containerId);
@@ -70,7 +71,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 			var obj = args[1],
 				form = Dom.get(obj.component.id),
-				fieldId = YAHOO.util.Selector.query('input[name="prop_lecm-template_attributes"]', form, true).id,
+				fieldId = Selector.query('input[name="prop_lecm-template_attributes"]', form, true).id,
 				message = this.msg('template-details-successfull-form-submit.title');
 			switch (obj.component.options.mode) {
 				case 'create': case 'edit':

@@ -10,6 +10,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
+		Selector = YAHOO.util.Selector,
 		Bubbling = YAHOO.Bubbling;
 
 	LogicECM.module.DocumentsTemplates.Attributes = function (containerId, options, messages) {
@@ -57,7 +58,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		_updateDisabledOptions: function () {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
-			var options = YAHOO.util.Selector.query('.attribute-option', this.id + '-datatable');
+			var options = Selector.query('.attribute-option', this.id + '-datatable');
 			options.forEach(function(option) {
 				if (this.selectedFields.hasOwnProperty(option.value) && !option.selected) {
 					option.disabled = 'disabled';
@@ -72,7 +73,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			var form = Dom.get(this.options.formId);
 			this.templates = {};
 			this.selectedFields = {};
-			this.templateDocType = YAHOO.util.Selector.query('input[name="prop_lecm-template_doc-type"]', form, true).value;
+			this.templateDocType = Selector.query('input[name="prop_lecm-template_doc-type"]', form, true).value;
 			this.defaultParams = {
 				defaultValue: '',
 				docType: this.templateDocType,
@@ -239,11 +240,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					var param = {};
 					param[curr.name] = curr.value;
 					return YAHOO.lang.merge(prev, param);
-				}, this.defaultParams),
+				}, YAHOO.lang.merge(this.defaultParams)),
 				fieldId = field.name.replace(/:/g, '_'),
 				htmlid = obj.record.getId() + '-value-ctrl';
 
-			params.defaultValue = initial.value;
+			if (field.name === initial.attribute && initial.value) {
+				params.defaultValue = initial.value;
+			}
 
 			if (prevField && this.selectedFields.hasOwnProperty(prevField.name)) {
 				delete this.selectedFields[prevField.name];
@@ -286,7 +289,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			if (this._hasEventInterest(obj)) {
 				this.widgets.datatable.addRow({
 					'initial': {
-						value: ''
+						dataType: null,
+						formsName: null,
+						attribute: null,
+						type: null,
+						value: null
 					},
 					'delete': null,
 					'attribute': null,
@@ -320,7 +327,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var records = this.widgets.datatable.getRecordSet().getRecords();
 			var templateData = records.reduce(function (prev, curr) {
-				prev.push({
+				var obj = {
 					initial: {
 						dataType: curr.getData('attribute').dataType,
 						formsName: curr.getData('attribute').formsName,
@@ -328,7 +335,9 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						type: curr.getData('attribute').type,
 						value: Dom.get(curr.getData('value')).value
 					}
-				});
+				};
+				curr.setData('initial', obj.initial);
+				prev.push(obj);
 				return prev;
 			}, []);
 			this.widgets.hiddenValue.value = JSON.stringify(templateData);
