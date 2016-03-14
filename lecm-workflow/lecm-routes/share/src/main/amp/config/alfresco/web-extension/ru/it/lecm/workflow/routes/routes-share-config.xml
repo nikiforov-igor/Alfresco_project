@@ -221,6 +221,7 @@
 			<form id="createNewStageItemForEmployee">
 				<field-visibility>
 					<show id="lecmWorkflowRoutes:stageItemEmployeeAssoc"/>
+					<show id="stageItemEmployeeFilter"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutes:stageItemEmployeeAssoc" mandatory="true">
@@ -236,11 +237,17 @@
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
 						</control>
 					</field>
+					<field id="stageItemEmployeeFilter">
+						<control template="/ru/it/lecm/workflow/routes/controls/stage-item-validation.ftl">
+							<control-param name="fieldId">lecmWorkflowRoutes:stageItemEmployeeAssoc</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 			<form id="createNewStageItemForMacros">
 				<field-visibility>
 					<show id="lecmWorkflowRoutes:stageItemMacrosAssoc"/>
+					<show id="stageItemEmployeeFilter"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutes:stageItemMacrosAssoc" mandatory="true">
@@ -251,6 +258,11 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">false</control-param>
 							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+					<field id="stageItemEmployeeFilter">
+						<control template="/ru/it/lecm/workflow/routes/controls/stage-item-validation.ftl">
+							<control-param name="fieldId">lecmWorkflowRoutes:stageItemMacrosAssoc</control-param>
 						</control>
 					</field>
 				</appearance>
