@@ -4508,38 +4508,6 @@
                                                                 <name>variables</name>
                                                                 <nodes>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>f28eef28-1035-4db7-aaca-8b9aab2e5c1e
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/6a564ee7-35f4-48d9-a2fa-e6ccff659b3d
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>does-not-block</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Действие доступно только регистратору.]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[user.currentUser().hasBusinessRole("DA_REGISTRARS")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
                                                                         <type>inputVariable</type>
                                                                         <name>5b865504-eecd-47cf-8e2f-1c0b3ed41adc
                                                                         </name>
@@ -5201,7 +5169,7 @@ var recipient = stm_document.properties['lecm-incoming:auto-transition-from-erra
 
 if (recipient != null) {
 
-  /*выдать права*/  
+  /*выдать права*/
   statemachine.grandDynamicRoleForEmployee(incoming, recipient, "DA_RECIPIENT_DYN");
   var recipientAssocs = incoming.assocs["lecm-eds-document:recipients-assoc"];
   if ((recipientAssocs != null)) {
@@ -5210,7 +5178,7 @@ if (recipient != null) {
     }
   }
   incoming.createAssociation(recipient, "lecm-eds-document:recipients-assoc");
-  
+
   var logObjects = [];
   logObjects.push("" + recipient.nodeRef.toString());
   var logText = "Документ "
