@@ -3451,49 +3451,6 @@ if (soExecutors != null) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
-                                                    <node>
-                                                        <type>transition</type>
-                                                        <name>335733c0-e70a-4203-8129-6cbaebd6e2a1</name>
-                                                        <nodeRef>workspace://SpacesStore/f00c70d0-a2b1-417d-b2d7-3f54bf18539c</nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionExpression</name>
-                                                                <value><![CDATA[doc.attr("lecm-errands:dummy")==true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[(function () {
-  var document = stm_document;
-  document.properties["lecm-errands:dummy"]=false;
-  document.save();
-  var recipient = document.assocs["lecm-errands:executor-assoc"][0];
-  /* поиск связанных входящих*/
-  var incomings = documentConnection.getConnectedWithDocument(document, 'onBasis', 'lecm-incoming:document');
-  for each (var incoming in incomings) {
-  	/* проверка статуса */  
-    var status = incoming.properties['lecm-statemachine:status'];
-    if (status == 'Направлен на исполнение' || status == "На рассмотрении" || status == "Зарегистрирован") {
-  		/* перевод в новый статус */
-      	
-      	incoming.properties["lecm-incoming:auto-transition-from-errand"] = recipient;
-       	incoming.save();
-    }
-  }
-}
-)();]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>
@@ -3571,17 +3528,22 @@ if (initiatorAssoc !== null && initiatorAssoc.length == 1) {
                                                     <node>
                                                         <type>ScriptActionEntity</type>
                                                         <name>65784de3-a420-4153-9d02-529dd7159515</name>
-                                                        <nodeRef>workspace://SpacesStore/ec1d41a2-7da0-440c-9e17-f07f6be878ee</nodeRef>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/b36d0fdf-8f12-44c8-99ce-862c67144bcd
+                                                        </nodeRef>
                                                         <properties>
                                                             <property>
-                                                                <name>scriptLabel</name>
-                                                                <value><![CDATA[Перевод входящих в статус "На исполнении"]]></value>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[(function(){
+  errands.changeStatusDocumentByExecution(stm_document);
+})();
+
+]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>actionScript</name>
-                                                                <value><![CDATA[stm_document.properties["lecm-errands:dummy"]=true;
-stm_document.save();
-]]></value>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Перевод входящих в статус "На исполнении"]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>

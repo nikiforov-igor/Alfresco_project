@@ -28,6 +28,7 @@ import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
@@ -57,8 +58,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private TransactionService transactionService;
     private RepositoryStructureHelper repositoryStructureHelper;
     private CopyService copyService;
+    private NamespaceService namespaceService;
 
-	public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
 		this.lecmTransactionHelper = lecmTransactionHelper;
 	}
 
@@ -108,8 +110,6 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         ISSUED_ERRANDS_EXPIRED_IMPORTANT,
         ISSUED_ERRANDS_DEADLINE_IMPORTANT
     }
-
-    private NamespaceService namespaceService;
 
 	public void setErrandsService(ErrandsService errandsService) {
 		this.errandsService = errandsService;
@@ -731,5 +731,20 @@ public class ErrandsWebScriptBean extends BaseWebScript {
             }
         };
         threadPoolExecutor.execute(runnable);
+    }
+
+    public void changeStatusDocumentByExecution(ScriptNode doc) {
+        NodeRef nodeRef = doc.getNodeRef();
+        QName documentType = QName.createQName("lecm-incoming:document", namespaceService);
+        QName transitionFromErrand = QName.createQName("http://www.it.ru/logicECM/incoming/1.0", "auto-transition-from-errand");
+        AssociationRef assocErrandsExecutors = nodeService.getTargetAssocs(nodeRef, errandsService.ASSOC_ERRANDS_EXECUTOR).get(0);
+        List<NodeRef> nodeRefList = documentConnectionService.getConnectedWithDocument(nodeRef, "onBasis", documentType);
+
+        for (NodeRef ref : nodeRefList) {
+            String status = String.valueOf(nodeService.getProperty(ref, StatemachineModel.PROP_STATUS));
+            if (status.equals("Направлен на исполнение") || status.equals("На рассмотрении") || status.equals("Зарегистрирован")) {
+                nodeService.setProperty(ref, transitionFromErrand, assocErrandsExecutors.getTargetRef());
+            }
+        }
     }
 }
