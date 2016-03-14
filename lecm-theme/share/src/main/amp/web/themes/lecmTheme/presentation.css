@@ -1871,13 +1871,19 @@ a.remove-item {
 }
 
 a.up-item {
+  width: 20px;
+  height: 16px;
   background-image :url("/share/res/images/lecm-base/components/triangle_up.png");
-  padding-right:16px;
+  float: right;
+  margin-top: 3px;
 }
 
 a.down-item {
+  width: 20px;
+  height: 16px;
   background-image :url("/share/res/images/lecm-base/components/triangle_down.png");
-  padding-right:16px;
+  float: right;
+  margin-top: 3px;
 }
 
 /* */
