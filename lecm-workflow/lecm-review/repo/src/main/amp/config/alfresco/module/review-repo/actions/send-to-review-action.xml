@@ -23,7 +23,8 @@
         var itemInitiator = row.assocs["lecm-review-ts:initiator-assoc"];
         if (itemInitiator!=null && itemInitiator.length>0 && initiator.nodeRef.toString().equals(itemInitiator[0].nodeRef.toString())) {
           if (row.properties['lecm-review-ts:review-state']=='NOT_STARTED') {
-			documentMembers.addMemberWithoutCheckPermission(document, reviewer, "LECM_BASIC_PG_Reader");
+			documentMembers.addMemberWithoutCheckPermission(document, reviewer, "LECM_BASIC_PG_Reader", true);
+            recipients.push(reviewer);
             row.properties['lecm-review-ts:review-state'] = "NOT_REVIEWED";
 			row.properties['lecm-review-ts:review-start-date'] = new Date();
             row.save();
