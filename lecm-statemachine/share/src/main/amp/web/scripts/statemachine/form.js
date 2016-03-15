@@ -389,19 +389,35 @@ LogicECM.module = LogicECM.module || {};
 												var json = oResponse.json;
 												var item = json.forCollection ? json : json.items[0];
 												var message;
+												//1. есть ошибки
+												//показываем сообщение об ошибке, и подробности если есть
+												if (item.withErrors) {
+													var title = Alfresco.util.message('title.action_error') + ' ' + action.label;
+													this._displayErrorMessageWithDetails(title, item.message);
+												} else 
+												//2. есть отметка - показывать сообщение	
+												if (item.showModalWindow==true) {
+													message = '<div class="noerror-item">' + item.message + '</div>';
+													if (item.redirect) {
+														this._openMessageWindow(action.label, message, true, Alfresco.constants.URL_PAGECONTEXT + item.redirect);
+													} else {
+														this._openMessageWindow(action.label, message, true);
+													}
+												} else 
+												//3. редирект
 												if (item.redirect) {
                                                     if (item.postRedirect) {
                                                         LogicECM.module.Base.Util.setPostLocation(Alfresco.constants.URL_PAGECONTEXT + item.redirect);
                                                     } else {
                                                         window.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
                                                     }
-												} else if (item.openWindow) {
+												} else 
+												//4. open window
+												if (item.openWindow) {
 													window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no');
-												} else if (!item.withErrors){
-													window.location.reload(true);
 												} else {
-													message = '<div class=\'' + (item.withErrors ? 'error-item' : 'noerror-item') + '\'>' + item.message + '</div>';
-													this._openMessageWindow(action.label, message, true);
+												//5. по дефолту  - просто обновить.
+													window.location.reload(true);
 												}
 											}
 										},
@@ -657,7 +673,38 @@ LogicECM.module = LogicECM.module || {};
 			YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroyWithAnimationsStop);
 		},
 
-		_openMessageWindow: function openMessageWindowFunction(title, message, reload) {
+		_displayErrorMessageWithDetails: function(title, msgDetails) {
+			
+			var customMsg = msgDetails.match("\\[\\[.+\\]\\]");
+			if (customMsg != null) {
+				msgDetails = customMsg[0].replace("[[", "").replace("]]", "");
+			}
+			var errorDialogBody = '<div class="error-item">' + title + '</div>';
+			errorDialogBody += '<a href="javascript:void(0);" id="' + this.id + '-error-message-show-details-link">' + this.msg("logicecm.base.error.show.details") + '</a></div>';
+			errorDialogBody += '<div id="' + this.id + '-error-message-show-details" style="display:none" class="error-dialog-details">' + msgDetails + '</div>';
+
+			Alfresco.util.PopupManager.displayPrompt({
+				title: Alfresco.util.message('title.action_error'),
+				text: errorDialogBody,
+				noEscape: true,
+				buttons: [{
+					text: Alfresco.util.message('button.ok'),
+					handler: function dlA_onAction_action() {
+						this.destroy();
+						// ALF-2803
+						window.location.reload(true);
+					}
+				}]
+			});
+
+			YAHOO.util.Event.on(this.id + "-error-message-show-details-link", "click", this._errorMessageShowDetails, null, this);
+		},
+
+		_errorMessageShowDetails: function() {
+			Dom.setStyle(this.id + "-error-message-show-details", "display", "block");
+		},
+
+		_openMessageWindow: function openMessageWindowFunction(title, message, reload, newHref) {
 			Alfresco.util.PopupManager.displayPrompt({
 				title: Alfresco.util.message('title.action_result',this.name,{0:title }),
 				text: message,
@@ -667,9 +714,12 @@ LogicECM.module = LogicECM.module || {};
 					handler: function dlA_onAction_action() {
 						this.destroy();
 						if (reload) {
-							// document.location.href = document.location.href;
-							// ALF-2803
-							window.location.reload(true);
+							if ((newHref === undefined)) {
+								// ALF-2803
+								window.location.reload(true);
+							} else {
+								document.location.href = newHref;
+							}
 						}
 					}
 				}]

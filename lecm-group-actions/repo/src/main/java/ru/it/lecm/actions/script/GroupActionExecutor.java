@@ -23,6 +23,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.*;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: pmelnikov
@@ -35,8 +36,17 @@ public class GroupActionExecutor extends DeclarativeWebScript {
     private GroupActionsServiceImpl actionsService;
     private ServiceRegistry serviceRegistry;
     private TransactionService transactionService;
+	private LecmTransactionHelper lecmTransactionHelper;
 
     final private static Logger logger = LoggerFactory.getLogger(GroupActionExecutor.class);
+
+	public LecmTransactionHelper getLecmTransactionHelper() {
+		return lecmTransactionHelper;
+	}
+
+	public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+		this.lecmTransactionHelper = lecmTransactionHelper;
+	}
 
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
@@ -121,38 +131,43 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                 result.put("redirect", returnModel.get("redirect"));
                 result.put("postRedirect", returnModel.get("postRedirect"));
                 result.put("openWindow", returnModel.get("openWindow"));
+                result.put("showModalWindow", returnModel.get("showModalWindow"));
+                result.put("messageVar", returnModel.get("message")==null ? "" : returnModel.get("message").toString().replace("\"", "\\\""));
             } else {
                 result.put("forCollection", false);
                 result.put("withErrors", false);
+                result.put("messageVar", "");
                 final ScriptContent scriptContent = new StringScriptContent(script);
                 final ArrayList<HashMap<String, Object>> itemsResult = new ArrayList<HashMap<String, Object>>();
 
-				//TODO проверить, нужна ли здесь вообще транзакция
-				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+				lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 					@Override
 					public Object execute() throws Throwable {
 						for (NodeRef item : items) {
 							scriptModel.put("document", item);
 							HashMap<String, Object> itemResult = new HashMap<String, Object>();
-                            String message = ((String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING));
-							itemResult.put("message", message == null ? message : message.replace("\"", "\\\""));
+                            String message;
 							itemResult.put("withErrors", false);
                             try {
                                 scriptProcessor.executeScript(scriptContent, scriptModel);
+								message = returnModel.get("message")==null ? ((String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING)): returnModel.get("message").toString();
                             } catch (Exception e) {
                                 logger.error("Error while execute script: ", e);
                                 result.put("withErrors", true);
                                 itemResult.put("withErrors", true);
+								message = e.getMessage();
                             }
 
 							itemResult.put("redirect", returnModel.get("redirect"));
 							itemResult.put("postRedirect", returnModel.get("postRedirect"));
 							itemResult.put("openWindow", returnModel.get("openWindow"));
+							itemResult.put("showModalWindow", returnModel.get("showModalWindow"));
+							itemResult.put("message", message == null ? message : message.replace("\"", "\\\""));
 							itemsResult.add(itemResult);
 						}
 						return null;
 					}
-				}, false, true);
+				});
                 result.put("items", itemsResult);
             }
         }
