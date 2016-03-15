@@ -14,41 +14,18 @@
 					<field id="lecm-document:indexTableRow">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl"/>
 					</field>
-					<field id="lecm-review-ts:review-state" readonly="true"/>
-					<field id="lecm-review-ts:review-start-date" readonly="true"/>
-					<field id="lecm-review-ts:review-finish-date" readonly="true"/>
-					<field id="lecm-review-ts:initiator-assoc" readonly="true"/>
-					<field id="lecm-review-ts:reviewer-assoc" readonly="true"/>
+					<field id="lecm-review-ts:review-state" read-only="true">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+					</field>
+					<field id="lecm-review-ts:review-start-date" read-only="true"/>
+					<field id="lecm-review-ts:review-finish-date" read-only="true"/>
+					<field id="lecm-review-ts:initiator-assoc" read-only="true"/>
+					<field id="lecm-review-ts:reviewer-assoc" read-only="true"/>
 				</appearance>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-review-list:review-list-item">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name"/>
-					<show id="lecm-review-list:reviewer-assoc"/>
-				</field-visibility>
-				<appearance>
-				</appearance>
-			</form>
-		</forms>
-	</config>
-	
-	<config evaluator="model-type" condition="lecm-review-list:review-list-item">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name"/>
-					<show id="lecm-review-list:reviewer-assoc"/>
-				</field-visibility>
-				<appearance>
-				</appearance>
-			</form>
-		</forms>
-	</config>
 	
 	<config evaluator="model-type" condition="lecm-review-ts:review-table-item">
 		<forms>
@@ -99,4 +76,29 @@
 		</forms>
 	</config>
 
+	<config evaluator="node-type" condition="lecm-review-list:review-list-item">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-review-list:reviewer-assoc"/>
+				</field-visibility>
+				<appearance>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	
+	<config evaluator="model-type" condition="lecm-review-list:review-list-item">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-review-list:reviewer-assoc"/>
+				</field-visibility>
+				<appearance>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>
