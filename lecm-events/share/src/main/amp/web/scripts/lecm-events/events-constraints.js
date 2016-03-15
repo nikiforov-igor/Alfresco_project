@@ -81,6 +81,9 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 			}
 		});
 
+		LogicECM.module.Events.fromDateValue = times[0].savedValue;
+		LogicECM.module.Events.toDateValue = times[1].savedValue;
+
 		var dates = [
 			{
 				value: Alfresco.util.fromISO8601(fromDate.value),
