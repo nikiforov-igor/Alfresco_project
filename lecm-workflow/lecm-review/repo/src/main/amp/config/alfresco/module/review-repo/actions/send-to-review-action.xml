@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Отправить на ознакомление(гр.оп)" type="lecm-group-actions:script-action">
-        <property name="lecm-group-actions:expression"><![CDATA[doc.hasAspect('lecm-review-ts:review-aspect') AND @reviewService.canSendToReview(doc.nodeRef)]]></property>
-        <property name="cm:name"><![CDATA[Отправить на ознакомление(гр.оп)]]></property>
-        <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
-        <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
-        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
-        <property name="lecm-group-actions:script"><![CDATA[(function(){
+	<item name="cm:Отправить на ознакомление(гр.оп)" type="lecm-group-actions:script-action">
+		<property name="lecm-group-actions:expression"><![CDATA[doc.hasAspect('lecm-review-ts:review-aspect') AND @reviewService.canSendToReview(doc.nodeRef)]]></property>
+		<property name="cm:name"><![CDATA[Отправить на ознакомление(гр.оп)]]></property>
+		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+		<property name="lecm-group-actions:script"><![CDATA[(function(){
+  model.showModalWindow=true;
   var initiator = orgstructure.getCurrentEmployee();
-
   var notificationText = 'Вам необходимо ознакомиться с документом '; 
   notificationText += documentScript.wrapperDocumentLink(document, documentScript.getPresentString(document));
   notificationText += '. Инициатор ознакомления: ';
@@ -31,11 +31,16 @@
         }
     }
   }
-  notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+  if (recipients.length>0) {
+	notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+    model.message = "Документ отправлен на ознакомление";
+  } else {
+  	model.message = "Нет сотрудников для ознакомления с документом";
+  }
   
 })();]]></property>
-        <property name="lecm-group-actions:order"><![CDATA[0]]></property>
-        <property name="cm:title"><![CDATA[Отправить на ознакомление]]></property>
-        <property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
-    </item>
+		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
+		<property name="cm:title"><![CDATA[Отправить на ознакомление]]></property>
+		<property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
+	</item>
 </items>
