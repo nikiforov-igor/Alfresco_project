@@ -35,130 +35,116 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 
 		var formId = form.formId.replace("-form", "");
 
-		var fromDateField = Dom.get(fromDate.id + "-cntrl-date");
 		var toDateField = Dom.get(toDate.id + "-cntrl-date");
 		var fromTime = Dom.get(fromDate.id + "-cntrl-time");
 		var toTime = Dom.get(toDate.id + "-cntrl-time");
 
-		Dom.removeClass(fromDate.id+ "-cntrl-date", "invalid");
-		Dom.removeClass(fromTime.id, "invalid");
-		Dom.removeClass(toDate.id + "-cntrl-date", "invalid");
-		Dom.removeClass(toTime.id, "invalid");
-
 		var allDay = field.value == "true";
 
-		if (fromTime != null) {
-			Dom.setStyle(fromTime.id + "-container", "display", allDay ? "none" : "block");
-
-			if (allDay && fromTime.value != "00:01") {
-				LogicECM.module.Events.fromDateValue = fromTime.value;
-				fromTime.value = "00:01";
-				YAHOO.Bubbling.fire("handleFieldChange", {
-					formId: formId,
-					fieldId: fromDateFieldId
-				});
-			} else if (!allDay && LogicECM.module.Events.fromDateValue != null && fromTime.value != LogicECM.module.Events.fromDateValue) {
-				fromTime.value = LogicECM.module.Events.fromDateValue;
-				YAHOO.Bubbling.fire("handleFieldChange", {
-					formId: formId,
-					fieldId: fromDateFieldId
-				});
-				LogicECM.module.Events.fromDateValue = null;
+		var times = [
+			{
+				field: fromTime,
+				allDayValue: "00:01",
+				savedValue: LogicECM.module.Events.fromDateValue,
+				fieldId: fromDateFieldId
+			},
+			{
+				field: toTime,
+				allDayValue: "23:59",
+				savedValue: LogicECM.module.Events.toDateValue,
+				fieldId: toDateFieldId
 			}
+		];
 
-			if (!allDay && fromTime.value.length == 0) {
-				Dom.addClass(fromTime.id, "invalid");
-			}
-		}
-		if (toTime != null) {
-			if (allDay && toTime.value != "23:59") {
-				LogicECM.module.Events.toDateValue = toTime.value;
-				toTime.value = "23:59";
-				YAHOO.Bubbling.fire("handleFieldChange", {
-					formId: formId,
-					fieldId: toDateFieldId
-				});
-			} else if (!allDay && LogicECM.module.Events.toDateValue != null && toTime.value != LogicECM.module.Events.toDateValue) {
-				toTime.value = LogicECM.module.Events.toDateValue;
-				YAHOO.Bubbling.fire("handleFieldChange", {
-					formId: formId,
-					fieldId: toDateFieldId
-				});
-				LogicECM.module.Events.toDateValue = null;
-			}
+		times.forEach(function (time) {
+			if (time.field != null) {
+				Dom.setStyle(time.field.id + "-container", "display", allDay ? "none" : "block");
 
-			Dom.setStyle(toTime.id + "-container", "display", allDay ? "none" : "block");
-			if (!allDay && toTime.value.length == 0) {
-				Dom.addClass(toTime.id, "invalid");
-			}
-		}
+				var valueChanged = false;
 
-		var fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
-		var toDateTime = Alfresco.util.fromISO8601(toDate.value);
-
-		if (fromDateTime != null && LogicECM.module.Events.currentFromDateValue != null) {
-			if (fromDateTime.getMinutes() != LogicECM.module.Events.currentFromDateValue.getMinutes() ||
-				fromDateTime.getHours() != LogicECM.module.Events.currentFromDateValue.getHours()) {
-				if (fromDateTime > toDateTime) {
-					var newDate = new Date(fromDateTime.getTime() + 1000 * 60 * 60);
-					toDateField.value = newDate.toString(Alfresco.util.message("lecm.form.control.date-picker.entry.date.format"));
-					toTime.value = newDate.toString(Alfresco.util.message("form.control.date-picker.entry.time.format"));
-					YAHOO.Bubbling.fire("handleFieldChange", {
-						formId: formId,
-						fieldId: toDateFieldId
-					});
+				if (allDay && time.field.value != time.allDayValue) {
+					time.savedValue = time.field.value;
+					time.field.value = time.allDayValue;
+					valueChanged = true;
+				} else if (!allDay && time.savedValue && time.field.value != time.savedValue) {
+					time.field.value = time.savedValue;
+					time.savedValue = null;
+					valueChanged = true;
 				}
-			} else if (fromDateTime.getFullYear() != LogicECM.module.Events.currentFromDateValue.getFullYear() ||
-				fromDateTime.getMonth() != LogicECM.module.Events.currentFromDateValue.getMonth() ||
-				fromDateTime.getDate() != LogicECM.module.Events.currentFromDateValue.getDate()) {
-				if (fromDateTime > toDateTime) {
-					toDateField.value = fromDateTime.toString(Alfresco.util.message("lecm.form.control.date-picker.entry.date.format"));
+
+				if (valueChanged) {
 					YAHOO.Bubbling.fire("handleFieldChange", {
 						formId: formId,
-						fieldId: toDateFieldId
+						fieldId: time.fieldId
 					});
 				}
 			}
-		}
+		});
 
-		if (toDateTime != null && LogicECM.module.Events.currentToDateValue != null) {
-			if (toDateTime.getMinutes() != LogicECM.module.Events.currentToDateValue.getMinutes() ||
-				toDateTime.getHours() != LogicECM.module.Events.currentToDateValue.getHours()) {
-				if (fromDateTime > toDateTime) {
-					var newDate = new Date(fromDateTime.getTime() + 1000 * 60 * 15);
-					toDateField.value = newDate.toString(Alfresco.util.message("lecm.form.control.date-picker.entry.date.format"));
-					toTime.value = newDate.toString(Alfresco.util.message("form.control.date-picker.entry.time.format"));
-					YAHOO.Bubbling.fire("handleFieldChange", {
-						formId: formId,
-						fieldId: toDateFieldId
-					});
-				}
-			} else if (toDateTime.getFullYear() != LogicECM.module.Events.currentToDateValue.getFullYear() ||
-				toDateTime.getMonth() != LogicECM.module.Events.currentToDateValue.getMonth() ||
-				toDateTime.getDate() != LogicECM.module.Events.currentToDateValue.getDate()) {
-				if (fromDateTime > toDateTime) {
-					toDateField.value = fromDateTime.toString(Alfresco.util.message("lecm.form.control.date-picker.entry.date.format"));
-					YAHOO.Bubbling.fire("handleFieldChange", {
-						formId: formId,
-						fieldId: toDateFieldId
-					});
-				}
-
+		var dates = [
+			{
+				value: Alfresco.util.fromISO8601(fromDate.value),
+				previousValue: LogicECM.module.Events.currentFromDateValue
+			},
+			{
+				value: Alfresco.util.fromISO8601(toDate.value),
+				previousValue: LogicECM.module.Events.currentToDateValue
 			}
-		}
+		];
 
-		fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
-		toDateTime = Alfresco.util.fromISO8601(toDate.value);
+		dates.forEach(function (date, i, dates) {
+			if (date.previousValue) {
+				if (dates[0].value > dates[1].value) {
+					var changed = false;
 
-		if (toDateTime < fromDateTime) {
-			Dom.addClass(fromDate.id+ "-cntrl-date", "invalid");
-			Dom.addClass(fromTime.id, "invalid");
-			Dom.addClass(toDate.id + "-cntrl-date", "invalid");
-			Dom.addClass(toTime.id, "invalid");
-		}
+					if (date.value.getMinutes() != date.previousValue.getMinutes() ||
+						date.value.getHours() != date.previousValue.getHours()) {
+						if (i == 0) {
+							dates[1].value = new Date(dates[0].value.getTime() + 1000 * 60 * 60)
+						} else {
+							dates[1].value = new Date(dates[0].value.getTime() + 1000 * 60 * 15)
+						}
+						toDateField.value = dates[1].value.toString(Alfresco.util.message("lecm.form.control.date-picker.entry.date.format"));
+						toTime.value = dates[1].value.toString(Alfresco.util.message("form.control.date-picker.entry.time.format"));
 
-		LogicECM.module.Events.currentFromDateValue = fromDateTime;
-		LogicECM.module.Events.currentToDateValue = toDateTime;
+						changed = true;
+
+
+					} else if (date.value.getFullYear() != date.previousValue.getFullYear() ||
+						date.value.getMonth() != date.previousValue.getMonth() ||
+						date.value.getDate() != date.previousValue.getDate()) {
+
+						dates[1].value.setFullYear(dates[0].value.getFullYear());
+						dates[1].value.setMonth(dates[0].value.getMonth());
+						dates[1].value.setDate(dates[0].value.getDate());
+
+						toDateField.value = dates[1].value.toString(Alfresco.util.message("lecm.form.control.date-picker.entry.date.format"));
+
+						if (dates[1].value.getHours() < dates[0].value.getHours() ||
+							(dates[1].value.getHours() == dates[0].value.getHours() && dates[1].value.getMinutes() < dates[0].value.getMinutes())) {
+
+							dates[1].value.setHours(dates[0].value.getHours());
+							dates[1].value.setMinutes(dates[0].value.getMinutes());
+
+							toTime.value = dates[1].value.toString(Alfresco.util.message("form.control.date-picker.entry.time.format"));
+						}
+
+						changed = true;
+					}
+
+					if (changed) {
+						YAHOO.Bubbling.fire("handleFieldChange", {
+							formId: formId,
+							fieldId: toDateFieldId
+						});
+						return 0;
+					}
+				}
+			}
+		});
+
+		LogicECM.module.Events.currentFromDateValue = dates[0].value;
+		LogicECM.module.Events.currentToDateValue = dates[1].value;
 	}
 	return true;
 };
@@ -222,14 +208,11 @@ LogicECM.module.Events.updateLocationDSValidation =
 			var fromDateValueInput = field.form["prop_lecm-events_from-date"];
 			var toDateValueInput = field.form["prop_lecm-events_to-date"];
 
-			var fromDateInput = Dom.get(fromDateValueInput.id + "-cntrl-time");
-			var toDateInput = Dom.get(toDateValueInput.id + "-cntrl-time");
-			var fromTimeInput = Dom.get(fromDateValueInput.id + "-cntrl-time");
-			var toTimeInput = Dom.get(toDateValueInput.id + "-cntrl-time");
-
-			if (fromDateValueInput != null && toDateValueInput != null &&
-				fromDateInput != null && toDateInput != null &&
-				fromTimeInput != null && toTimeInput != null) {
+			if (fromDateValueInput && toDateValueInput) {
+				var fromDateInput = Dom.get(fromDateValueInput.id + "-cntrl-date");
+				var toDateInput = Dom.get(toDateValueInput.id + "-cntrl-date");
+				var fromTimeInput = Dom.get(fromDateValueInput.id + "-cntrl-time");
+				var toTimeInput = Dom.get(toDateValueInput.id + "-cntrl-time");
 
 				var fromDate = fromDateValueInput.value;
 				var toDate = toDateValueInput.value;
