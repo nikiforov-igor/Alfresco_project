@@ -8,3 +8,10 @@
 	word-break: break-all;
 	word-break: break-word;
 }
+
+.control.document-table-control .datalist-toolbar .header-bar {
+    height: 30px;
+    background: #c5c5c5;
+    margin: 0;
+    padding: 0;
+}
