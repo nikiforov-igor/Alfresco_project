@@ -19,6 +19,7 @@
 	
 	<util:list id="review.dics">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-review-list-dictionary.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-objectType-items.xml</value>
 	</util:list>
 	
 	<util:list id="review.workflows">
