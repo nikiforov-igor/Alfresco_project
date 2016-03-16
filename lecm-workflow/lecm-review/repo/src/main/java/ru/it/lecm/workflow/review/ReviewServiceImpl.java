@@ -3,11 +3,14 @@ package ru.it.lecm.workflow.review;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -19,7 +22,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  *
- * @author kuper
+ * @author vkuprin
  */
 public class ReviewServiceImpl extends BaseBean {
 
@@ -169,19 +172,22 @@ public class ReviewServiceImpl extends BaseBean {
 		if (TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
 			NodeRef rootFolder = nodeService.getPrimaryParent(nodeRef).getParentRef();
 			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-			NodeRef list = findNodeByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, TYPE_REVIEW_LIST_REWIEW_LIST_ITEM, ASSOCIATION_TYPE.TARGET);
-			
-			if (list != null) {
-				List<NodeRef> employeesList = findNodesByAssociationRef(list, ASSOC_REVIEW_LIST_REWIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET);
-				for (NodeRef employee : employeesList) {
+			Set<NodeRef> employeeSet = new HashSet<>();
+			employeeSet.addAll(findNodesByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET));
+			List<NodeRef> list = findNodesByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, TYPE_REVIEW_LIST_REWIEW_LIST_ITEM, ASSOCIATION_TYPE.TARGET);
+			for (NodeRef record : list) {
+				employeeSet.addAll(findNodesByAssociationRef(record, ASSOC_REVIEW_LIST_REWIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET));
+			}
+			if (employeeSet.size()!=1) {
+				for (NodeRef employee : employeeSet) {
 					NodeRef newItem = createNode(rootFolder, TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, null, null);
-					nodeService.setProperty(newItem, DocumentTableService.PROP_INDEX_TABLE_ROW, documentTableService.getTableDataRows(rootFolder).size()-1);
+					nodeService.setProperty(newItem, DocumentTableService.PROP_INDEX_TABLE_ROW, documentTableService.getTableDataRows(rootFolder).size() - 1);
 					nodeService.createAssociation(newItem, employee, ASSOC_REVIEW_TS_REVIEWER);
 					nodeService.createAssociation(newItem, currentEmployee, ASSOC_REVIEW_TS_INITIATOR);
 				}
+				nodeService.moveNode(nodeRef, repositoryStructureHelper.getUserTemp(false), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString()));
+				nodeService.addAspect(nodeRef, ContentModel.ASPECT_TEMPORARY, null);
 			}
-			nodeService.moveNode(nodeRef, repositoryStructureHelper.getUserTemp(false), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString()));
-			nodeService.addAspect(nodeRef, ContentModel.ASPECT_TEMPORARY, null);
 		}
 	}
 

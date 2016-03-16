@@ -62,7 +62,7 @@
                     <target>
                         <class>cm:cmobject</class>
                         <mandatory>true</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </target>
                 </association>
                 <association name="lecm-review-ts:initiator-assoc">

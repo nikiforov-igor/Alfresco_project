@@ -6,10 +6,10 @@ function createReviewTSItem(persistedObject) {
 		var currentEmployee = orgstructure.getCurrentEmployee();
 		if (reviewItem.typeShort == 'lecm-review-ts:review-table-item') {
 			reviewItem.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
-			var reviewObject = reviewItem.assocs['lecm-review-ts:reviewer-assoc'][0];
-			if (reviewObject.typeShort == 'lecm-review-list:review-list-item') {
+//			var reviewObjects = reviewItem.assocs['lecm-review-ts:reviewer-assoc'];
+//			if ((reviewObjects.length > 0) || (reviewObjects[0].typeShort == 'lecm-review-list:review-list-item')) {
 				review.processItem(reviewItem);
-			}
+//			}
 		}
 	} catch (error) {
 		var msg = error.message;

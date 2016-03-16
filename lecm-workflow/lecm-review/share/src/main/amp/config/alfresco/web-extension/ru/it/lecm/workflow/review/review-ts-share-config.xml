@@ -20,7 +20,7 @@
 					<field id="lecm-review-ts:review-start-date" read-only="true"/>
 					<field id="lecm-review-ts:review-finish-date" read-only="true"/>
 					<field id="lecm-review-ts:initiator-assoc" read-only="true"/>
-					<field id="lecm-review-ts:reviewer-assoc" read-only="true"/>
+					<field id="lecm-review-ts:reviewer-assoc" label-id="label.reviewer" read-only="true"/>
 				</appearance>
 			</form>
 		</forms>
