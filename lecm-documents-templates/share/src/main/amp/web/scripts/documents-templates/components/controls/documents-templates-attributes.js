@@ -278,28 +278,49 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			});
 		},
 
-		onAddTemplateAttributeRow: function (obj) {
-			var record = obj.record,
-				data = obj.data;
-		},
+		//onAddTemplateAttributeRow: function (obj) {
+		//	var record = obj.record,
+		//		data = obj.data;
+		//},
 
 		onAddTemplateAttribute: function (layer, args) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
-			var obj = args[1];
-			if (this._hasEventInterest(obj)) {
-				this.widgets.datatable.addRow({
-					'initial': {
-						dataType: null,
-						formsName: null,
-						attribute: null,
-						type: null,
-						value: null
-					},
-					'delete': null,
-					'attribute': null,
-					'value': null
-				});
-			}
+			this.getFields().then(function (fields) {
+
+				if (fields.some(function (field) {
+						return !this.selectedFields.hasOwnProperty(field.name);
+					}, this)) {
+
+					var obj = args[1];
+					if (this._hasEventInterest(obj)) {
+						this.widgets.datatable.addRow({
+							'initial': {
+								dataType: null,
+								formsName: null,
+								attribute: null,
+								type: null,
+								value: null
+							},
+							'delete': null,
+							'attribute': null,
+							'value': null
+						});
+					}
+
+				}
+
+				var hasUnselectedFields = false,
+					i = 0;
+				while (!hasUnselectedFields && i < fields.length) {
+					hasUnselectedFields = !this.selectedFields.hasOwnProperty(fields[i]);
+					i++;
+				}
+
+				if (hasUnselectedFields) {
+
+				}
+
+			}, this);
 		},
 
 		onDeleteTemplateAttribute: function (event) {
@@ -356,7 +377,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			// this.widgets.datatable.on('dataReturnEvent', this.onDataReturn, null, this);
 			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
 			this.widgets.datatable.on('cellClickEvent', this.onDeleteTemplateAttribute, null, this);
-			this.widgets.datatable.getRecordSet().subscribe('recordAddEvent', this.onAddTemplateAttributeRow, null, this);
+			//this.widgets.datatable.getRecordSet().subscribe('recordAddEvent', this.onAddTemplateAttributeRow, null, this);
 		}
 }, true);
 })();
