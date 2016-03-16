@@ -240,7 +240,9 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					var param = {};
 					param[curr.name] = curr.value;
 					return YAHOO.lang.merge(prev, param);
-				}, YAHOO.lang.merge(this.defaultParams)),
+				}, YAHOO.lang.merge(this.defaultParams, {
+					endpointMany: field.endpointMany
+				})),
 				fieldId = field.name.replace(/:/g, '_'),
 				htmlid = obj.record.getId() + '-value-ctrl';
 

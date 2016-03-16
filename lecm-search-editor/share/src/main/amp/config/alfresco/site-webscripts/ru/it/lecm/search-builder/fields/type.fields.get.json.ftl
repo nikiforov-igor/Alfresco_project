@@ -33,9 +33,19 @@
             "dataType": "${col.endpointType}",
             </#if>
             <#if col.sortable??>
-            "sortable": ${col.sortable?string}
+            "sortable": ${col.sortable?string},
             <#else>
-            "sortable": true
+            "sortable": true,
+            </#if>
+            <#if col.endpointMany??>
+            "endpointMany": ${col.endpointMany?string},
+            <#else>
+            "endpointMany": false,
+            </#if>
+            <#if col.endpointMandatory??>
+            "endpointMandatory": ${col.endpointMandatory?string}
+            <#else>
+            "endpointMandatory": false
             </#if>
         }<#if col_has_next>,</#if>
         </#list>
