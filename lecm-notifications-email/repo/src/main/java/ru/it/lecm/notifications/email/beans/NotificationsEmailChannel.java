@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -61,10 +62,17 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 		String email = (String) nodeService.getProperty(notification.getRecipientRef(), OrgstructureBean.PROP_EMPLOYEE_EMAIL);
 		if (email != null) {
 			try {
+				String body = notification.getBody();
+				String subject = notification.getSubject();
+				if (StringUtils.isNotEmpty(body)) {
+					notification.setDescription(body);
+				}
 				createNotification(notification, email);
 
-				String subject = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
-				if (subject == null) {
+				if (StringUtils.isEmpty(subject)) {
+					subject = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
+				}
+				if (StringUtils.isEmpty(subject)) {
 					subject = "New notification";
 				}
 				sendEmail(subject, notification.getDescription(), email);

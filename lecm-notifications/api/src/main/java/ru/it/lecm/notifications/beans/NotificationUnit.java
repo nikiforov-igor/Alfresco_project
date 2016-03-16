@@ -42,6 +42,16 @@ public class NotificationUnit {
 	 */
 	private NodeRef objectRef;
 
+	/**
+	 * Тело почтового уведомления
+	 */
+	private String body;
+
+	/**
+	 * Тема почтового уведомления
+	 */
+	private String subject;
+
 	public NotificationUnit() {
 	}
 
@@ -95,6 +105,22 @@ public class NotificationUnit {
 
 	public void setObjectRef(NodeRef objectRef) {
 		this.objectRef = objectRef;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 	@Override

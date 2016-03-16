@@ -3,6 +3,7 @@ package ru.it.lecm.notifications.template;
 import ru.it.lecm.notifications.beans.TemplateRunException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -57,7 +58,13 @@ class ObjectMapImpl implements ObjectMap {
 			objectsCache.put(name, obj);
 			return obj;
 		}
-
 	}
 
+	@Override
+	public Map<String, CMObject> getFullMap() throws TemplateRunException {
+		for (String key : objects.keySet()) {
+			get(key);
+		}
+		return objectsCache;
+	}
 }

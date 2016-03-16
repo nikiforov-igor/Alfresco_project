@@ -75,7 +75,7 @@
 
         </forms>
 	</config>
-	
+
 	<config evaluator="node-type" condition="lecm-notification-template:template">
 		<forms>
 			<form>
@@ -84,14 +84,26 @@
 					<show id="lecm-notification-template:code"/>
 					<show id="lecm-notification-template:description"/>
 					<show id="lecm-notification-template:template"/>
+					<show id="lecm-notification-template:subject"/>
+					<show id="lecm-notification-template:template-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:name"/>
 					<field id="lecm-notification-template:code" read-only="true"/>
 					<field id="lecm-notification-template:description"/>
 					<field id="lecm-notification-template:template">
-						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-							
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
+					<field id="lecm-notification-template:subject">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
+					<field id="lecm-notification-template:template-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="plane">true</control-param>
+							<control-param name="showPath">false</control-param>
+							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="rootLocation">/app:company_home/app:dictionary/app:email_templates</control-param>
+							<control-param name="additionalFilter">PATH:\"/app:company_home/app:dictionary/app:email_templates//*\"</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -107,6 +119,8 @@
 					<show id="lecm-notification-template:code"/>
 					<show id="lecm-notification-template:description"/>
 					<show id="lecm-notification-template:template"/>
+					<show id="lecm-notification-template:subject"/>
+					<show id="lecm-notification-template:template-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-notf-type:code">
@@ -116,8 +130,18 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-notification-template:template">
-						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
-							
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
+					<field id="lecm-notification-template:subject">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
+					<field id="lecm-notification-template:template-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+							<control-param name="plane">true</control-param>
+							<control-param name="showPath">false</control-param>
+							<control-param name="showAutocomplete">false</control-param>
+							<control-param name="rootLocation">/app:company_home/app:dictionary/app:email_templates</control-param>
+							<control-param name="additionalFilter">PATH:\"/app:company_home/app:dictionary/app:email_templates//*\"</control-param>
 						</control>
 					</field>
 				</appearance>

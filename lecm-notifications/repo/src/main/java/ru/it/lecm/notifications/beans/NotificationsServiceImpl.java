@@ -26,10 +26,12 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import ru.it.lecm.notifications.template.FreemarkerParserImpl;
 import ru.it.lecm.notifications.template.Parser;
-import ru.it.lecm.notifications.template.ParserImpl;
+import ru.it.lecm.notifications.template.SpelParserImpl;
 
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_BUSINESS_ROLE;
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_EMPLOYEE;
@@ -65,7 +67,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
-	
+
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
     }
@@ -242,7 +244,10 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
      * @param generalizedNotification Обобщённое уведомление
      * @return Множество атомарных уведомлений
      */
-    private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
+    private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) throws TemplateRunException, TemplateParseException {
+		String templateBody = parseTemplateRef(generalizedNotification.getTemplateRef(), generalizedNotification.getTemplateModel());
+		String templateDescription = parseTemplate(generalizedNotification.getTemplate(), generalizedNotification.getTemplateModel());
+		String templateSubject  = parseTemplate(generalizedNotification.getSubject(), generalizedNotification.getTemplateModel());
         long start = System.currentTimeMillis();
         logger.trace("createAtomicNotifications start: {}", start);
         Set<NotificationUnit> result = new HashSet<NotificationUnit>();
@@ -333,14 +338,24 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 						List<NodeRef> typeRefs = generalizedNotification.getTypeRefs();
 						if (typeRefs == null || typeRefs.isEmpty()) {
 							typeRefs = getEmployeeDefaultNotificationTypes(tasksSecretary);
-            }
-						String description = String.format("Уведомление для %s: %s",
-								nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME),
-								generalizedNotification.getDescription());
+						}
+						Serializable employeeShortName = nodeService.getProperty(employee, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+						String description;
+						String unitTemplateSubject = null;
+						if (StringUtils.isNotEmpty(templateDescription)) {
+							description = String.format("Уведомление для %s: %s", employeeShortName, templateDescription);
+						} else {
+							description = String.format("Уведомление для %s: %s", employeeShortName, generalizedNotification.getDescription());
+						}
+						if (StringUtils.isNotEmpty(templateSubject)) {
+							unitTemplateSubject = String.format("Уведомление для %s: %s", employeeShortName, templateSubject);
+						}
 						for (NodeRef typeRef : typeRefs) {
 							NotificationUnit newNotificationUnit = new NotificationUnit();
 							newNotificationUnit.setAutor(generalizedNotification.getAuthor());
 							newNotificationUnit.setDescription(description);
+							newNotificationUnit.setBody(templateBody);
+							newNotificationUnit.setSubject(unitTemplateSubject);
 							newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
 							newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
 
@@ -353,13 +368,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 				}
             }
             logger.trace("Delegates added. Current size: {}", employeeRefs.size());
-            result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));
+            result.addAll(addNotificationUnits(generalizedNotification, employeeRefs, templateBody, templateDescription, templateSubject));
             logger.debug("Atomic notifications. Current size: {}, time: {}", result.size(), System.currentTimeMillis() - start);
         }
         return result;
     }
 
-    private Set<NotificationUnit> addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs) {
+    private Set<NotificationUnit> addNotificationUnits(Notification generalizedNotification, Set<NodeRef> employeeRefs, String templateBody, String templateDescription, String templateSubject) {
         Set<NotificationUnit> result = new HashSet<NotificationUnit>();
 
         for (NodeRef employeeRef : employeeRefs) {
@@ -372,11 +387,17 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                 for (NodeRef typeRef : typeRefs) {
                     NotificationUnit newNotificationUnit = new NotificationUnit();
                     newNotificationUnit.setAutor(generalizedNotification.getAuthor());
-                    newNotificationUnit.setDescription(generalizedNotification.getDescription());
+					if (StringUtils.isNotEmpty(templateDescription)) {
+						newNotificationUnit.setDescription(templateDescription);
+					} else {
+						newNotificationUnit.setDescription(generalizedNotification.getDescription());
+					}
                     newNotificationUnit.setFormingDate(generalizedNotification.getFormingDate());
                     newNotificationUnit.setObjectRef(generalizedNotification.getObjectRef());
                     newNotificationUnit.setTypeRef(typeRef);
                     newNotificationUnit.setRecipientRef(employeeRef);
+					newNotificationUnit.setBody(templateBody);
+					newNotificationUnit.setSubject(templateSubject);
                     result.add(newNotificationUnit);
                 }
             }
@@ -584,27 +605,50 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         sendNotification(channels, notification, dontCheckAccessToObject);
 	}
 
-	private String parseTemplate(String templateCode, Map<String, NodeRef> objects) throws TemplateRunException, TemplateParseException {
-		NodeRef templateRef = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, PROP_NOTIFICATION_TEMPLATE_CODE, templateCode);
-		String template = nodeService.getProperty(templateRef, PROP_NOTIFICATION_TEMPLATE).toString();
-		Parser parcer = new ParserImpl(applicationContext);
-		return parcer.runTemplate(template, objects);
+	private String parseTemplate(String template, Map<String, NodeRef> objects) throws TemplateRunException, TemplateParseException {
+		String parsed;
+		if (StringUtils.isNotEmpty(template)) {
+			Parser parcer = new SpelParserImpl(applicationContext);
+			parsed = parcer.runTemplate(template, objects);
+		} else {
+			parsed = null;
+		}
+		return parsed;
 	}
-	
+
+	private String parseTemplateRef(NodeRef templateRef, Map<String, NodeRef> objects) throws TemplateRunException, TemplateParseException {
+		String parsed;
+		if (templateRef !=null) {
+			Parser parcer = new FreemarkerParserImpl(applicationContext);
+			parsed = parcer.runTemplate(templateRef.toString(), objects);
+		} else {
+			parsed = null;
+		}
+		return parsed;
+	}
+
 	@Override
-	public void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException {
-        String desc = parseTemplate(templateCode, objects);
-		logger.debug(desc);
-		Notification notification = new Notification();
-        notification.setAuthor(author);
-        notification.setRecipientEmployeeRefs(recipientEmployees);
-        notification.setObjectRef(objects.get("mainObject"));
-		notification.setDescription(desc);
+	public void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) {
+		NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, PROP_NOTIFICATION_TEMPLATE_CODE, templateCode);
+		String template = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
+		String subject = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
+		List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
+		NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+//        String desc = parseTemplate(templateCode, objects);
+//		logger.debug(desc);
+		Notification notification = new Notification(objects);
+		notification.setTemplate(template);
+		notification.setSubject(subject);
+		notification.setTemplateRef(templateRef);
+		notification.setAuthor(author);
+		notification.setRecipientEmployeeRefs(recipientEmployees);
+		notification.setObjectRef(objects.get("mainObject"));
+//		notification.setDescription(desc);
 		notification.setInitiatorRef(initiatorRef);
-		
+
         sendNotification(notification, dontCheckAccessToObject);
 	}
-	
+
     private class NotificationTransactionListener implements TransactionListener {
 
         @Override

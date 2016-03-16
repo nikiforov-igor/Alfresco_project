@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: AIvkin
@@ -66,7 +67,7 @@ public class Notification {
 	 */
 	private List<NodeRef> recipientBusinessRoleRefs;
 
-    private NodeRef initiatorRef;
+	private NodeRef initiatorRef;
 
 	/**
 	 * Проверять ли доступ до основного объекта. Задаётся автоматически.
@@ -80,7 +81,31 @@ public class Notification {
 	 */
 	private boolean includeSeretaries = true;
 
-    public Notification() {
+	/**
+	 * SPEL шаблон текста уведомления
+	 */
+	private String template;
+
+	/**
+	 * Шаблон темы письма для почтового уведомления
+	 */
+	private String subject;
+
+	/**
+	 * Ссылка на freemarker шаблон текста уведомления
+	 */
+	private NodeRef templateRef;
+
+	/**
+	 * Данные для построения текста уведомления по его шаблону
+	 */
+	private Map<String, NodeRef> templateModel;
+
+	public Notification() {
+	}
+
+	public Notification(Map<String, NodeRef> templateModel) {
+		this.templateModel = templateModel;
 	}
 
 	public String getAuthor() {
@@ -159,21 +184,21 @@ public class Notification {
 		this.recipientWorkGroupRefs = recipientWorkGroupRefs;
 	}
 
-    public List<NodeRef> getRecipientBusinessRoleRefs() {
-        return recipientBusinessRoleRefs;
-    }
+	public List<NodeRef> getRecipientBusinessRoleRefs() {
+		return recipientBusinessRoleRefs;
+	}
 
-    public void setRecipientBusinessRoleRefs(List<NodeRef> recipientBusinessRoleRefs) {
-        this.recipientBusinessRoleRefs = recipientBusinessRoleRefs;
-    }
+	public void setRecipientBusinessRoleRefs(List<NodeRef> recipientBusinessRoleRefs) {
+		this.recipientBusinessRoleRefs = recipientBusinessRoleRefs;
+	}
 
-    public void setInitiatorRef(NodeRef initiatorRef) {
-        this.initiatorRef = initiatorRef;
-    }
+	public void setInitiatorRef(NodeRef initiatorRef) {
+		this.initiatorRef = initiatorRef;
+	}
 
-    public NodeRef getInitiatorRef() {
-        return initiatorRef;
-    }
+	public NodeRef getInitiatorRef() {
+		return initiatorRef;
+	}
 
 	public boolean isDontCheckAccessToObject() {
 		return dontCheckAccessToObject;
@@ -197,5 +222,33 @@ public class Notification {
 
 	public void setIncludeSeretaries(boolean includeSeretaries) {
 		this.includeSeretaries = includeSeretaries;
+	}
+
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public NodeRef getTemplateRef() {
+		return templateRef;
+	}
+
+	public void setTemplateRef(NodeRef templateRef) {
+		this.templateRef = templateRef;
+	}
+
+	public Map<String, NodeRef> getTemplateModel() {
+		return templateModel;
 	}
 }
