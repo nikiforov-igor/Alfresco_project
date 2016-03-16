@@ -8,6 +8,9 @@
 <#assign itemEditFormId = (field.control.params.itemEditFormId) ! "">
 
 <#assign allowCreate = true>
+<#if field.control.params.allowCreate?? && field.control.params.allowCreate == "false">
+	<#assign allowCreate = false>
+</#if>
 <#assign inArchive = false>
 
 <#if form.fields["prop_lecm-os_nomenclature-case-status"]??>

@@ -780,6 +780,7 @@
                             <control-param name="itemType">lecm-os:nomenclature-case-volume</control-param>
                             <control-param name="height">400</control-param>
                             <control-param name="itemEditFormId">edit-in-archive</control-param>
+                            <control-param name="allowCreate">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-os:nomenclature-case-visibility-unit-assoc" set="security">
