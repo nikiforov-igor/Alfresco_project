@@ -148,8 +148,8 @@
                             <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="forceEditable">true</control-param>
                             <!--<control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>-->
-                            <!--<control-param name="editFormTitleMsg">stage.edit.form.title</control-param>-->
-                            <!--<control-param name="createFormTitleMsg">stage.create.form.title</control-param>-->
+                            <control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>
+                            <control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>
                             <!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
                             <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
                         </control>
