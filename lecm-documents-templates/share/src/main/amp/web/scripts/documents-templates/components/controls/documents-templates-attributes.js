@@ -356,7 +356,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						formsName: curr.getData('attribute').formsName,
 						attribute: curr.getData('attribute').name,
 						type: curr.getData('attribute').type,
-						value: Dom.get(curr.getData('value')).value
+						value: Dom.get(curr.getData('value')) ? Dom.get(curr.getData('value')).value : null
 					}
 				};
 				curr.setData('initial', obj.initial);
