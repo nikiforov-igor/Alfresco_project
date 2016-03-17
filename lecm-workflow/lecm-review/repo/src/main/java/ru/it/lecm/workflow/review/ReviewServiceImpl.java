@@ -174,11 +174,12 @@ public class ReviewServiceImpl extends BaseBean {
 			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 			Set<NodeRef> employeeSet = new HashSet<>();
 			employeeSet.addAll(findNodesByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET));
+			Boolean noEmployee = employeeSet.isEmpty();
 			List<NodeRef> list = findNodesByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, TYPE_REVIEW_LIST_REWIEW_LIST_ITEM, ASSOCIATION_TYPE.TARGET);
 			for (NodeRef record : list) {
 				employeeSet.addAll(findNodesByAssociationRef(record, ASSOC_REVIEW_LIST_REWIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET));
 			}
-			if (employeeSet.size()!=1) {
+			if (employeeSet.size()!=1 || (noEmployee)) {
 				for (NodeRef employee : employeeSet) {
 					NodeRef newItem = createNode(rootFolder, TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, null, null);
 					nodeService.setProperty(newItem, DocumentTableService.PROP_INDEX_TABLE_ROW, documentTableService.getTableDataRows(rootFolder).size() - 1);
