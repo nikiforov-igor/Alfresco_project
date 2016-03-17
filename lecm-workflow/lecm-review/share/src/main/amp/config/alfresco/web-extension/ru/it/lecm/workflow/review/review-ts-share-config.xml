@@ -131,6 +131,24 @@
 				<appearance>
 				</appearance>
 			</form>
+			<form id="search">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-review-list:reviewer-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name" mandatory="false" >
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-review-list:reviewer-assoc" mandatory="false">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>

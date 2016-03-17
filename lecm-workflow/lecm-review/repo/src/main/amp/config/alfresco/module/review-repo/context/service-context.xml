@@ -74,6 +74,10 @@
 		  p:orgstructureBean-ref="serviceOrgstructure"
 	/>
 	
+	<bean id="reviewListAssociationPolicy" class="ru.it.lecm.workflow.review.policy.ReviewListAssociationPolicy"
+			parent="logicEcmAssociationPolicy" init-method="init" 
+	/>
+	
 	<bean id="reviewItemChangePolicy" class="ru.it.lecm.workflow.review.policy.ItemChangedPolicy"
 		  depends-on="review.model.bootstrap" init-method="init"
 		  p:authenticationService-ref="authenticationService"
