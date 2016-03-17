@@ -289,10 +289,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			this.getFields().then(function (fields) {
 
-				if (fields.some(function (field) {
-						return !this.selectedFields.hasOwnProperty(field.name);
-					}, this)) {
+				var hasUnselectedFields = fields.some(function (field) {
+					return !this.selectedFields.hasOwnProperty(field.name);
+                }, this);
 
+                if (hasUnselectedFields) {
 					var obj = args[1];
 					if (this._hasEventInterest(obj)) {
 						this.widgets.datatable.addRow({
@@ -308,20 +309,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							'value': null
 						});
 					}
-
 				}
-
-				var hasUnselectedFields = false,
-					i = 0;
-				while (!hasUnselectedFields && i < fields.length) {
-					hasUnselectedFields = !this.selectedFields.hasOwnProperty(fields[i]);
-					i++;
-				}
-
-				if (hasUnselectedFields) {
-
-				}
-
 			}, this);
 		},
 
