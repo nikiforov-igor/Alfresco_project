@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
-    <item name="cm:Ознакомиться с документом(гр.оп.)" type="lecm-group-actions:script-action">
+<items updateMode="CreateOrUpdate">
+    <item name="cm:Ознакомиться с документом" type="lecm-group-actions:script-action">
         <property name="lecm-group-actions:expression"><![CDATA[doc.hasAspect('lecm-review-ts:review-aspect') AND @reviewService.needReviewByCurrentUser(doc.nodeRef)]]></property>
-        <property name="cm:name"><![CDATA[Ознакомиться с документом(гр.оп.)]]></property>
+        <property name="cm:name"><![CDATA[Ознакомиться с документом]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
