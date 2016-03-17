@@ -50,51 +50,44 @@
 		}
 	}
 
-	if(params.searchConfig && params.searchConfig.contains('fullTextSearch') && isEngineer) {
-		model.data = getSearchResults(params);
-	} else {
+    if (params.searchConfig && params.searchConfig.contains('fullTextSearch') && isEngineer) {
+        model.data = getSearchResults(params);
+    } else if (isEngineer) {
 
-		if(isEngineer) {
+        var tmpParams = {};
+        tmpParams.fields = 'lecm-orgstr_employee-last-name,lecm-orgstr_employee-first-name,lecm-orgstr_employee-middle-name';
+        tmpParams.itemType = 'lecm-orgstr:employee';
+        tmpParams.maxResults = params.maxResults;
+        tmpParams.nameSubstituteStrings = ',,,{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name},{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}';
+        tmpParams.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();
+        tmpParams.searchNodes = null;
+        tmpParams.showInactive = params.showInactive;
+        tmpParams.sort = 'lecm-orgstr:employee-last-name|true';
+        tmpParams.startIndex = params.startIndex;
+        tmpParams.useChildQuery = false;
+        tmpParams.useFilterByOrg = false;
+        tmpParams.useOnlyInSameOrg = false;
+        tmpParams.filter = [];
 
-			var tmpParams = {};
-			tmpParams.fields = 'lecm-orgstr_employee-last-name,lecm-orgstr_employee-first-name,lecm-orgstr_employee-middle-name';
-			tmpParams.itemType = 'lecm-orgstr:employee';
-			tmpParams.maxResults = params.maxResults;
-			tmpParams.nameSubstituteStrings = ',,,{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name},{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}';
-			tmpParams.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();
-			tmpParams.searchNodes = null;
-			tmpParams.showInactive = true;
-			tmpParams.sort = 'lecm-orgstr:employee-last-name|true';
-			tmpParams.startIndex = params.startIndex;
-			tmpParams.useChildQuery = false;
-			tmpParams.useFilterByOrg = false;
-			tmpParams.useOnlyInSameOrg = false;
-			tmpParams.filter = [];
+        model.data = getSearchResults(tmpParams);
+        var result = model.data.items;
 
-			model.data = getSearchResults(tmpParams);
-			var result = model.data.items;
-
-			for (i in result) {
-				employees.push(result[i].node);
-			}
-		}
-
-		var delegationOpts = [];
-		for (i in employees) {
-			var employeeRef = employees[i].nodeRef;
-			var isEmployeeActive = !!employees[i].properties['lecm-dic:active'];
-			if (employeeRef && (params.showInactive || isEmployeeActive)) {
-				var opts = delegation.getDelegationOpts(employeeRef);
-				if (opts) {
-					delegationOpts.push(opts);
+        var delegationOpts = [];
+        for (i in result) {
+            var employeeRef = result[i].node.nodeRef;
+            if (employeeRef) {
+                var opts = delegation.getDelegationOpts(employeeRef);
+                if (opts) {
+                    delegationOpts.push(opts);
+                } else {
+					logger.log('ERROR: delegation opts not found');
 				}
-			} else if (!employeeRef) {
-				logger.log ('ERROR: there is no nodeRef for employee');
-			}
-		}
+            } else {
+                logger.log('ERROR: there is no nodeRef for employee');
+            }
+        }
 
-		model.data = processResults(delegationOpts, params.fields, params.nameSubstituteStrings, params.startIndex, delegationOpts.length);
-		model.data.paging.totalRecords = delegationOpts.length;
-	}
+        model.data = processResults(delegationOpts, params.fields, params.nameSubstituteStrings, params.startIndex, model.data.paging.totalRecords);
+    }
 
 })();
