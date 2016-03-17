@@ -116,8 +116,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		_onTemplateLoaded: function (html, htmlid) {
-			var detailsView = Dom.get(this.detailsViewId);
-			detailsView.innerHTML = html;
+			var detailsView = Dom.get(this.detailsViewId),
+				markupAndScripts = Alfresco.util.Ajax.sanitizeMarkup(html),
+				markup = markupAndScripts[0],
+				scripts = markupAndScripts[1];
+
+			detailsView.innerHTML = markup;
 
 			// Make sure forms without Share-specific templates render roughly ok
 			Dom.addClass(htmlid + '-form', 'bd');
@@ -130,6 +134,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			while (dialogDiv && dialogDiv.tagName.toLowerCase() != 'div') {
 				dialogDiv = Dom.getNextSibling(dialogDiv);
 			}
+			// Run the js code from the webscript's <script> elements
+			setTimeout(scripts, 0);
 		},
 
 		onTemplateCreated: function (layer, args) {

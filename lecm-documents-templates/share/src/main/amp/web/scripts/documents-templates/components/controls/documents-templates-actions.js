@@ -55,11 +55,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		onReady: function () {
 			var actionAdd = Dom.get(this.id + '-action-add');
 			var actionSubmit = Dom.get(this.id + '-action-submit');
-			// var actionClear = Dom.get(this.id + '-action-clear');
+			var actionClear = Dom.get(this.id + '-action-clear');
 
 			Event.on(actionAdd, 'click', this.onActionAddClick, actionAdd, this);
 			Event.on(actionSubmit, 'click', this.onActionSubmitClick, actionSubmit, this);
-			// Event.on(actionClear, 'click', this.onActionClearClick, actionClear, this);
+			Event.on(actionClear, 'click', this.onActionClearClick, actionClear, this);
 
 			console.log(this.name + '[' + this.id + '] is ready');
 		}

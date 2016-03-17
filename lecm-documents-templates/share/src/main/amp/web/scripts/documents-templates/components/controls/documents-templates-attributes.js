@@ -68,6 +68,24 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			}, this);
 		},
 
+		_getPreviousComponents: function (idPrefix) {
+			var components = Alfresco.util.ComponentManager.list();
+			return components.filter(function (component) {
+				return component.id.indexOf(this.idPrefix) === 0;
+			}, {
+				idPrefix: idPrefix
+			});
+		},
+
+		_clearComponents: function (components) {
+			components.forEach(function (component) {
+				if (YAHOO.lang.isFunction(component.destroy)) {
+					component.destroy();
+				}
+				Alfresco.util.ComponentManager.unregister(component);
+			});
+		},
+
 		_init: function () {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var form = Dom.get(this.options.formId);
@@ -77,7 +95,6 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			this.defaultParams = {
 				defaultValue: '',
 				docType: this.templateDocType,
-				// endpointMany: true,
 				showCreateNewButton: false,
 				showCreateNewLink: false
 			};
@@ -212,10 +229,6 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			return templateData;
 		},
 
-		// onDataReturn: function () {
-		// 	/* this === LogicECM.module.DocumentsTemplates.Attributes */
-		// },
-
 		onDatatableRendered: function () {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			var hasRecords = this.widgets.datatable.getRecordSet().getLength();
@@ -229,7 +242,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		onChangeAttribute: function (event, obj) {
 			/* event can be null */
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
-			var selectedOption = obj.elSelect.options[obj.elSelect.selectedIndex],
+			var previousComponents = this._getPreviousComponents(obj.record.getId()),
+				selectedOption = obj.elSelect.options[obj.elSelect.selectedIndex],
 				dataStr = (selectedOption.dataset) ? selectedOption.dataset.attribute : selectedOption.getAttribute('data-attribute'),
 				initial = obj.record.getData('initial'),
 				prevField = obj.record.getData('attribute'),
@@ -268,11 +282,19 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					params: JSON.stringify(params)
 				},
 				valueId: obj.record.getId() + '-value',
+				previousComponents: previousComponents,
 				successCallback: {
 					scope: this,
 					fn: function (successResponse) {
-						var container = Dom.get(successResponse.config.valueId);
-						container.innerHTML = successResponse.serverResponse.responseText;
+						var container = Dom.get(successResponse.config.valueId),
+							markupAndScripts = Alfresco.util.Ajax.sanitizeMarkup(successResponse.serverResponse.responseText),
+							markup = markupAndScripts[0],
+							scripts = markupAndScripts[1];
+
+						this._clearComponents(successResponse.config.previousComponents);
+						container.innerHTML = markup;
+						// Run the js code from the webscript's <script> elements
+						setTimeout(scripts, 0);
 					}
 				},
 				failureMessage: this.msg('message.failure'),
@@ -280,20 +302,14 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			});
 		},
 
-		//onAddTemplateAttributeRow: function (obj) {
-		//	var record = obj.record,
-		//		data = obj.data;
-		//},
-
 		onAddTemplateAttribute: function (layer, args) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
 			this.getFields().then(function (fields) {
-
 				var hasUnselectedFields = fields.some(function (field) {
 					return !this.selectedFields.hasOwnProperty(field.name);
-                }, this);
+				}, this);
 
-                if (hasUnselectedFields) {
+				if (hasUnselectedFields) {
 					var obj = args[1];
 					if (this._hasEventInterest(obj)) {
 						this.widgets.datatable.addRow({
@@ -315,8 +331,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		onDeleteTemplateAttribute: function (event) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
-			var target = event.target,
-				column = this.widgets.datatable.getColumn(event.target),
+			var column = this.widgets.datatable.getColumn(event.target),
 				record = this.widgets.datatable.getRecord(event.target),
 				field = record.getData('attribute');
 			if ('delete' === column.key) {
@@ -324,6 +339,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					delete this.selectedFields[field.name];
 					this._updateDisabledOptions();
 				}
+				this._clearComponents(this._getPreviousComponents(record.getId()));
 				this.widgets.datatable.deleteRow(event.target);
 				return false;
 			}
@@ -331,7 +347,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		onClearTemplateAttributes: function (layer, args) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
-
+			var records = this.widgets.datatable.getRecordSet().getRecords();
+			this.selectedFields = {};
+			records.forEach(function (record) {
+				this._clearComponents(this._getPreviousComponents(record.getId()));
+			}, this);
+			this.widgets.datatable.deleteRows(0, records.length);
+			this.widgets.hiddenValue.value = '[]';
 		},
 
 		onBeforeSubmitTemplate: function (layer, args) {
@@ -364,10 +386,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				scope: this
 			});
 			this.widgets.datatable = new YAHOO.widget.DataTable(this.id + '-datatable', this.columnDefinitions, this.widgets.datasource);
-			// this.widgets.datatable.on('dataReturnEvent', this.onDataReturn, null, this);
 			this.widgets.datatable.on('renderEvent', this.onDatatableRendered, null, this);
 			this.widgets.datatable.on('cellClickEvent', this.onDeleteTemplateAttribute, null, this);
-			//this.widgets.datatable.getRecordSet().subscribe('recordAddEvent', this.onAddTemplateAttributeRow, null, this);
 		}
 }, true);
 })();
