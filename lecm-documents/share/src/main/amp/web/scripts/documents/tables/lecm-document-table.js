@@ -50,7 +50,11 @@ LogicECM.module = LogicECM.module || {};
 				createFormTitleMsg: "label.create-row.title",
                 viewFormTitleMsg: "logicecm.view",
                 expandable: false,
-                expandDataSource: "components/form"
+                expandDataSource: "components/form",
+				dataSource: "lecm/search",
+				allowCreate: true,
+				allowDelete: true,
+				allowEdit: true
 			},
 
             datagrid: null,
@@ -108,7 +112,7 @@ LogicECM.module = LogicECM.module || {};
 						bubblingLabel: this.options.bubblingLabel,
 						itemType: this.tableData.rowType,
 						destination: this.tableData.nodeRef,
-						newRowButtonType: this.options.disabled ? "inActive" : "defaultActive"
+						newRowButtonType: this.options.disabled || (this.options.allowCreate === false) ? "inActive" : "defaultActive"
 					});
 				}
 			},
@@ -124,42 +128,49 @@ LogicECM.module = LogicECM.module || {};
 					var actions = [];
 					var actionType = "datagrid-action-link-" + this.options.bubblingLabel;
 					if (!this.options.disabled && this.options.mode=="edit") {
-						actions.push({
-							type: actionType,
-							id: "onActionEdit",
-							permission: "edit",
-							label: this.msg("actions.edit")
-						});
-						actions.push({
-							type: actionType,
-							id: "onActionDelete",
-							permission: "delete",
-							label: this.msg("actions.delete-row")
-						});
+						if (this.options.allowEdit===true) {
+							actions.push({
+								type: actionType,
+								id: "onActionEdit",
+								permission: "edit",
+								label: this.msg("actions.edit")
+							});
+						}
+						if (this.options.allowDelete===true) {
+							actions.push({
+								type: actionType,
+								id: "onActionDelete",
+								permission: "delete",
+								label: this.msg("actions.delete-row")
+							});
+						}
 					}
                     var splitActionAt = actions.length;
 
                     if (!this.options.isTableSortable && this.options.showActions && this.options.mode=="edit" && !this.options.disabled) {
                         var otherActions = [];
-                        otherActions.push({
-                            type: actionType,
-                            id: "onMoveTableRowUp",
-                            permission: "edit",
-                            label: this.msg("actions.tableRowUp")
-                        });
-                        otherActions.push({
-                            type: actionType,
-                            id: "onMoveTableRowDown",
-                            permission: "edit",
-                            label: this.msg("action.tableRowDown")
-                        });
-                        otherActions.push({
-                            type: actionType,
-                            id: "onAddRow",
-                            permission: "edit",
-                            label: this.msg("action.addRow")
-                        });
-
+						if (this.options.allowEdit===true) {
+							otherActions.push({
+								type: actionType,
+								id: "onMoveTableRowUp",
+								permission: "edit",
+								label: this.msg("actions.tableRowUp")
+							});
+							otherActions.push({
+								type: actionType,
+								id: "onMoveTableRowDown",
+								permission: "edit",
+								label: this.msg("action.tableRowDown")
+							});
+						}
+						if (this.options.allowCreate===true) {
+							otherActions.push({
+								type: actionType,
+								id: "onAddRow",
+								permission: "edit",
+								label: this.msg("action.addRow")
+							});
+						}
                         actions = actions.concat(otherActions);
                         splitActionAt = actions.length;
                     }
@@ -194,6 +205,7 @@ LogicECM.module = LogicECM.module || {};
 						editFormTitleMsg: this.options.editFormTitleMsg,
 						createFormTitleMsg: this.options.createFormTitleMsg,
 						viewFormTitleMsg: this.options.viewFormTitleMsg,
+						dataSource: this.options.dataSource,
                         expandable: this.options.expandable,
                         expandDataSource: this.options.expandDataSource
 					}).setMessages(this.options.messages);

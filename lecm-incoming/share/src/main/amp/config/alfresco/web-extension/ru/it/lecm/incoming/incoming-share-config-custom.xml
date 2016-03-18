@@ -147,6 +147,10 @@
                             <control-param name="isTableSortable">true</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="forceEditable">true</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="allowEdit">false</control-param>
+                            <control-param name="allowDelete">true</control-param>
+                            <control-param name="dataSource">lecm/review/ds/reviewListDS</control-param>
                             <!--<control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>-->
                             <control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>

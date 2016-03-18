@@ -130,4 +130,9 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 		reviewServiceImpl.processItem(item.getNodeRef());
 	}
 	
+	public Boolean deleteRowAllowed(ScriptNode item) {
+		ParameterCheck.mandatory("item", item);
+		return reviewServiceImpl.deleteRowAllowed(item.getNodeRef());
+	}
+	
 }

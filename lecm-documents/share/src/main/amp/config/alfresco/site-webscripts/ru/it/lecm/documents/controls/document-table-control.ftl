@@ -29,6 +29,27 @@
     <#assign showLabel = true>
 </#if>
 
+<#assign dataSource=""/>
+<#if params.dataSource?has_content>
+    <#assign dataSource = params.dataSource/>
+</#if>
+
+<#assign allowCreate = "true"/>
+<#if field.control.params.allowCreate??>
+	<#assign allowCreate = field.control.params.allowCreate?lower_case/>
+</#if>
+
+<#assign allowDelete = "true"/>
+<#if field.control.params.allowDelete??>
+    <#assign allowDelete = field.control.params.allowDelete?lower_case/>
+</#if>
+
+<#assign allowEdit = "true"/>
+<#if field.control.params.allowEdit??>
+    <#assign allowEdit = field.control.params.allowEdit?lower_case/>
+</#if>
+
+
 <#assign expandDataSource=""/>
 <#if params.expandDataSource?has_content>
     <#assign expandDataSource = params.expandDataSource/>
@@ -121,6 +142,9 @@
                 sort: "${sort?string}",
                 externalCreateId: "${form.arguments.externalCreateId!""}",
                 refreshAfterCreate: ${refreshAfterCreate?string},
+				allowCreate: ${allowCreate},
+				allowDelete: ${allowDelete},
+				allowEdit: ${allowEdit},
 				<#if params.deleteMessageFunction??>
 					deleteMessageFunction: "${params.deleteMessageFunction}",
 				</#if>
@@ -136,6 +160,9 @@
                 expandable: ${expandable?string},
                 <#if expandDataSource?has_content>
                     expandDataSource: "${expandDataSource}",
+                </#if>
+                <#if dataSource?has_content>
+                    dataSource: "${dataSource}",
                 </#if>
                 showActions: <#if editable>${showActions?string}<#else>false</#if>
 			});

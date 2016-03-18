@@ -168,6 +168,17 @@ public class ReviewServiceImpl extends BaseBean {
 		return false;
 	}
 
+	public Boolean deleteRowAllowed(NodeRef nodeRef) {
+		Boolean result = true;
+		if (null!=nodeRef && TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
+			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+			NodeRef itemInitiator = findNodeByAssociationRef(nodeRef, ASSOC_REVIEW_TS_INITIATOR, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			String status = nodeService.getProperty(nodeRef, PROP_REVIEW_TS_STATE).toString();
+			result = currentEmployee.equals(itemInitiator) && (CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED.equals(status));
+		}
+		return result;
+	}
+
 	public void processItem(NodeRef nodeRef) throws WriteTransactionNeededException {
 		if (TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
 			NodeRef rootFolder = nodeService.getPrimaryParent(nodeRef).getParentRef();
@@ -179,7 +190,7 @@ public class ReviewServiceImpl extends BaseBean {
 			for (NodeRef record : list) {
 				employeeSet.addAll(findNodesByAssociationRef(record, ASSOC_REVIEW_LIST_REWIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET));
 			}
-			if (employeeSet.size()!=1 || (noEmployee)) {
+			if (employeeSet.size() != 1 || (noEmployee)) {
 				for (NodeRef employee : employeeSet) {
 					NodeRef newItem = createNode(rootFolder, TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, null, null);
 					nodeService.setProperty(newItem, DocumentTableService.PROP_INDEX_TABLE_ROW, documentTableService.getTableDataRows(rootFolder).size() - 1);
