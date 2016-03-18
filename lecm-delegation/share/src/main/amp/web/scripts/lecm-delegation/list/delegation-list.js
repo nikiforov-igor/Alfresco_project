@@ -2,6 +2,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	LogicECM = {};
 }
 
+
+
 LogicECM.module = LogicECM.module || {};
 
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
@@ -10,6 +12,7 @@ LogicECM.module.Delegation.DelegationList = LogicECM.module.Delegation.Delegatio
 
 (function () {
 	"use strict";
+	var $html = Alfresco.util.encodeHTML;
 	LogicECM.module.Delegation.DelegationList.Grid = function (containerId) {
 		return LogicECM.module.Delegation.DelegationList.Grid.superclass.constructor.call(this, containerId);
 	};
