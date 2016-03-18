@@ -141,6 +141,29 @@ div.metadata-form div.lecm-dashlet-actions + div {
     border-radius: 5px;
 }
 
+.widget-button-grey-locked {
+    margin: 5px 0;
+    padding: 3px 12px;
+    border: 1px solid transparent;
+    font-style: normal;
+    text-decoration: none;
+}
+
+.widget-subbutton-grey {
+    margin: 0;
+    padding: 0px 12px 3px 24px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 8pt;
+    text-decoration: none;
+}
+
+.widget-subbutton-grey:hover {
+    background-color: #ddd;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
 .dndDocListHighlight {
 	outline: 2px solid #4F94C9;
 	outline-offset: -2px;
@@ -369,6 +392,11 @@ div.metadata-form div.lecm-dashlet-actions + div {
 
 .task-marker {
     background: url(/share/images/lecm-documents/task-marker.png) no-repeat 3px 3px;
+    padding-left: 22px;
+}
+
+.chief-task-marker {
+    background: url(/share/images/lecm-documents/chief-task-marker.png) no-repeat 3px 3px;
     padding-left: 22px;
 }
 

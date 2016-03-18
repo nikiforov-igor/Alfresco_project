@@ -55,7 +55,7 @@ LogicECM.module = LogicECM.module || {};
 				scope: this,
 				fn: function(serverResponse) {
 					var oResults = serverResponse.json;
-					var container, actionsContainer, index, action, actionDiv;
+					var container, actionsContainer, index, action, actionDiv, actionChiefDiv;
                     var showBlock = false;
 					if (oResults.actions && oResults.actions.length) {
 						this.taskId = oResults.taskId;
@@ -73,17 +73,39 @@ LogicECM.module = LogicECM.module || {};
 							action = oResults.actions[index];
                             if (!action.hideAction) {
                                 actionDiv = document.createElement('div');
-                                actionDiv.className = 'widget-button-grey text-cropped';
                                 actionDiv.innerHTML = action.label;
-                                actionDiv.onclick = this.show.bind(this, action);
+								if (action.type != 'chief_task') {
+									actionDiv.onclick = this.show.bind(this, action);
+									actionDiv.className = 'widget-button-grey text-cropped';
+								}
+								else {
+									actionDiv.className = 'widget-button-grey-locked text-cropped';
+								}
                                 if (action.dueDate) {
                                     actionDiv.title = Alfresco.util.message('label.due_date', this.name, {0: action.dueDate});
                                 }
-                                if (action.type == 'task') {
-                                    actionDiv.className += ' task-marker';
-                                }
+								if (action.chiefLogin) {
+									actionDiv.className += ' chief-task-marker';
+								}
+								else if (action.type == 'task') {
+									actionDiv.className += ' task-marker';
+								}
                                 actionsContainer.appendChild(actionDiv);
-                                showBlock = true;
+
+								if (action.chiefLogin) {
+									actionChiefDiv = document.createElement('div');
+									actionChiefDiv.className = 'widget-subbutton-grey text-cropped';
+									if (action.type == 'chief_task') {
+										actionChiefDiv.innerHTML = Alfresco.util.message('label.take_chief_task', this.name, {0: action.chiefLogin});
+										actionChiefDiv.onclick = this.takeChiefTask.bind(this, action);
+									}
+									else {
+										actionChiefDiv.innerHTML = Alfresco.util.message('label.return_chief_task', this.name, {0: action.chiefLogin});
+										actionChiefDiv.onclick = this.returnChiefTask.bind(this, action);
+									}
+									actionsContainer.appendChild(actionChiefDiv);
+								}
+								showBlock = true;
                             }
 						}
 						container.insertBefore(actionsContainer, container.firstChild);
@@ -478,6 +500,58 @@ LogicECM.module = LogicECM.module || {};
 			});
 			LogicECM.module.Base.Util.registerDialog(taskDetails);
 			taskDetails.show();
+		},
+		takeChiefTask: function(action) {
+			var template = '{proxyUri}lecm/statemachine/takeChiefTask?documentNodeRef={documentNodeRef}&actionId={actionId}';
+			var url = YAHOO.lang.substitute(template, {
+				proxyUri: Alfresco.constants.PROXY_URI,
+				documentNodeRef: encodeURIComponent(this.options.nodeRef),
+				actionId: encodeURIComponent(action.actionId)
+			});
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					var oResults = serverResponse.json;
+					if (oResults.errors && oResults.errors.length && !oResults.doesNotBlock) {
+						this.doubleClickLock = false;
+						var viewDialog = new LogicECM.module.EditFieldsConfirm('confirm-edit-fields');
+						viewDialog.show(this.options.nodeRef, action.label, oResults.errors, oResults.fields);
+						return;
+					}
+					window.location.reload(true);
+				}
+			};
+			Alfresco.util.Ajax.jsonGet({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
+			});
+		},
+		returnChiefTask: function(action) {
+			var template = '{proxyUri}lecm/statemachine/returnChiefTask?documentNodeRef={documentNodeRef}&actionId={actionId}';
+			var url = YAHOO.lang.substitute(template, {
+				proxyUri: Alfresco.constants.PROXY_URI,
+				documentNodeRef: encodeURIComponent(this.options.nodeRef),
+				actionId: encodeURIComponent(action.actionId)
+			});
+			var successCallback = {
+				scope: this,
+				fn: function(serverResponse) {
+					var oResults = serverResponse.json;
+					if (oResults.errors && oResults.errors.length && !oResults.doesNotBlock) {
+						this.doubleClickLock = false;
+						var viewDialog = new LogicECM.module.EditFieldsConfirm('confirm-edit-fields');
+						viewDialog.show(this.options.nodeRef, action.label, oResults.errors, oResults.fields);
+						return;
+					}
+					window.location.reload(true);
+				}
+			};
+			Alfresco.util.Ajax.jsonGet({
+				url: url,
+				successCallback: successCallback,
+				failureMessage: this.msg('message.failure')
+			});
 		},
 		_createScriptForm: function _createScriptFormFunction(action) {
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form/script';

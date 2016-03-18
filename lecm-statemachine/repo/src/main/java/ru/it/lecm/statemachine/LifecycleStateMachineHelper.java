@@ -169,8 +169,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
             for (WorkflowInstance workflow : workflows) {
                 for (Task task : tasks) {
                     if (workflow.getId().indexOf(task.getProcessInstanceId()) != -1) {
-                        task.setAssignee(afterAuthority);
-                        activitiProcessEngineConfiguration.getTaskService().saveTask(task);
+                        setTaskAssignee(task, afterAuthority);
                         isTransfer = true;
                     }
 
@@ -179,6 +178,44 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
         }
 
         return isTransfer;
+    }
+
+    @Override
+    public boolean setTaskAssignee(NodeRef documentRef, String taskId, String beforeAuthority, String afterAuthority) {
+        Task resultTask = null;
+        TaskQuery query = activitiProcessEngineConfiguration.getTaskService().createTaskQuery();
+        List<Task> taskList = query.taskAssignee(beforeAuthority).list();
+        for (Task task : taskList) {
+            if (task.getId().equalsIgnoreCase(taskId)) {
+                resultTask = task;
+            }
+        }
+        if (resultTask != null) {
+            setTaskAssignee(resultTask, afterAuthority);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private void setTaskAssignee(Task task, String authority) {
+        task.setAssignee(authority);
+        activitiProcessEngineConfiguration.getTaskService().saveTask(task);
+    }
+
+    @Override
+    public boolean setWorkflowTaskProperty(NodeRef documentRef, String workflowTaskId, QName propertyName, Serializable propertyValue) {
+        WorkflowTask workflowTask = serviceRegistry.getWorkflowService().getTaskById(workflowTaskId);
+        if (workflowTask != null) {
+            Map<QName, Serializable> workflowParameters = new HashMap<QName, Serializable>();
+            workflowParameters.put(propertyName, propertyValue);
+            workflowTask = serviceRegistry.getWorkflowService().updateTask(workflowTaskId, workflowParameters, null, null);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /*

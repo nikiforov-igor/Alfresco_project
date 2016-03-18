@@ -22,6 +22,7 @@ public class StatemachineModel {
     public final static QName PROP_FINISH_TIMESTAMP = QName.createQName(STATEMACHINE_URI, "finishTimestamp");
     public final static QName PROP_EXPRESSION = QName.createQName(STATEMACHINE_URI, "expression");
     public final static QName PROP_OUTPUT_VALUE = QName.createQName(STATEMACHINE_URI, "outputValue");
+    public final static QName PROP_CHIEF_LOGIN = QName.createQName(STATEMACHINE_URI, "chiefLogin");
 
 	public final static QName PROP_STATUS = QName.createQName(STATEMACHINE_URI, "status");
 	public final static QName ASPECT_WORKFLOW_DOCUMENT_TASK = QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "documentTask");

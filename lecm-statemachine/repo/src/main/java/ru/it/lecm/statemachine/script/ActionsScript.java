@@ -1,85 +1,34 @@
 package ru.it.lecm.statemachine.script;
 
-import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.repo.workflow.WorkflowModel;
-import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.cmr.workflow.WorkflowPath;
-import org.alfresco.service.cmr.workflow.WorkflowService;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.actions.bean.GroupActionsService;
-import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
-import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.statemachine.action.Conditions;
-import ru.it.lecm.statemachine.action.StateMachineAction;
-import ru.it.lecm.statemachine.action.UserWorkflow;
-import ru.it.lecm.statemachine.action.WorkflowVariables;
-import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
-import ru.it.lecm.statemachine.bean.ActionsScriptBean;
-import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
+import ru.it.lecm.statemachine.bean.UserActionsService;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: PMelnikov
  * Date: 17.10.12
  * Time: 16:49
  */
-public class ActionsScript extends DeclarativeWebScript implements ActionsScriptBean {
+public class ActionsScript extends DeclarativeWebScript {
 
-    private static ServiceRegistry serviceRegistry;
-    private static DocumentFrequencyAnalysisService frequencyAnalysisService;
-    private static OrgstructureBean orgstructureService;
-    private static DocumentService documentService;
-    private static final QName PROP_DUE_DATE = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate");
-    private GroupActionsService groupActionsService;
-    private AuthenticationService authService;
-    private LecmPermissionService lecmPermissionService;
+    private UserActionsService userActionsService;
     private LifecycleStateMachineHelper stateMachineService;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-
-    private final static String STATEMACHINE_EDITOR_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
-    public final static QName PROP_FORM_INPUT_TO_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputToValue");
-    public final static QName PROP_FORM_INPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromType");
-    public final static QName PROP_FORM_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromValue");
-
 
     public void setStateMachineService(LifecycleStateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
     }
 
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        ActionsScript.orgstructureService = orgstructureService;
-    }
-
-    public void setDocumentService(DocumentService documentService) {
-        ActionsScript.documentService = documentService;
-    }
-
-    public void setFrequencyAnalysisService(DocumentFrequencyAnalysisService frequencyAnalysisService) {
-        ActionsScript.frequencyAnalysisService = frequencyAnalysisService;
-    }
-
-    public void setGroupActionsService(GroupActionsService groupActionsService) {
-        this.groupActionsService = groupActionsService;
+    public void setUserActionsService(UserActionsService userActionsService) {
+        this.userActionsService = userActionsService;
     }
 
     @Override
@@ -113,7 +62,7 @@ public class ActionsScript extends DeclarativeWebScript implements ActionsScript
         NodeRef nodeRef = new NodeRef(documentRef);
         if (req.getParameter("actionId") != null) {
             String actionId = req.getParameter("actionId");
-            HashMap<String, Object> result = getActions(nodeRef);
+            HashMap<String, Object> result = userActionsService.getActions(nodeRef);
             ArrayList<HashMap<String, Object>> actions = (ArrayList<HashMap<String, Object>>) result.get("actions");
             HashMap<String, Object> action = null;
             for (HashMap<String, Object> a : actions) {
@@ -138,7 +87,7 @@ public class ActionsScript extends DeclarativeWebScript implements ActionsScript
                 return response;
             }
         } else {
-            HashMap<String, Object> result = getActions(nodeRef);
+            HashMap<String, Object> result = userActionsService.getActions(nodeRef);
             JSONObject jsonResponse = new JSONObject(result);
             HashMap<String, Object> response = new HashMap<String, Object>();
             response.put("result", jsonResponse.toString());
@@ -146,305 +95,4 @@ public class ActionsScript extends DeclarativeWebScript implements ActionsScript
         }
     }
 
-    @Override
-    public HashMap<String, Object> getActions(final NodeRef nodeRef) {
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        ArrayList<HashMap<String, Object>> actionsList = new ArrayList<HashMap<String, Object>>();
-        NodeService nodeService = serviceRegistry.getNodeService();
-        final WorkflowService workflowService = serviceRegistry.getWorkflowService();
-
-        Map<String, Long> counts = getActionsCounts(nodeRef);
-        List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
-            @Override
-            public List<WorkflowTask> doWork() throws Exception {
-                return stateMachineService.getDocumentTasks(nodeRef, true);
-            }
-        });
-
-        String currentUserName = authService.getCurrentUserName();
-        
-        boolean hasExecutionPermission = stateMachineService.isFinal(nodeRef) || (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", nodeRef, currentUserName)
-                || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", nodeRef, currentUserName) && stateMachineService.isDraft(nodeRef)));
-
-        List<WorkflowTask> userTasks = stateMachineService.getAssignedAndPooledTasks(currentUserName);
-        for (WorkflowTask activeTask : activeTasks) {
-            for (WorkflowTask userTask : userTasks) {
-                if (activeTask.getId().equals(userTask.getId())) {
-                    HashMap<String, Object> taskStruct = new HashMap<String, Object>();
-                    taskStruct.put("type", "task");
-                    taskStruct.put("actionId", userTask.getId());
-                    taskStruct.put("label", userTask.getTitle());
-                    taskStruct.put("count", Long.MAX_VALUE);
-                    taskStruct.put("isForm", false);
-                    Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
-                    taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
-                    actionsList.add(taskStruct);
-                }
-            }
-        }
-
-        String statemachineId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
-        if (statemachineId != null) {
-            List<WorkflowPath> paths = workflowService.getWorkflowPaths(statemachineId);
-            for (WorkflowPath path : paths) {
-                final String pathId = path.getId();
-                List<WorkflowTask> tasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
-                    @Override
-                    public List<WorkflowTask> doWork() throws Exception {
-                        return workflowService.getTasksForWorkflowPath(pathId);
-                    }
-                });
-
-                for (WorkflowTask task : tasks) {
-                    result.put("taskId", task.getId());
-                    Map<QName, Serializable> properties = task.getProperties();
-                    NodeRef packageRef = (NodeRef) properties.get(WorkflowModel.ASSOC_PACKAGE);
-                    NodeRef documentRef = nodeService.getChildAssocs(packageRef).get(0).getChildRef();
-
-                    if (hasExecutionPermission) {
-
-                        //TODO Сразу передавать нужные параметры
-                        List<StateMachineAction> actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class));
-                        for (StateMachineAction action : actions) {
-                            FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
-                            List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
-                            for (FinishStateWithTransitionAction.NextState state : states) {
-                                ArrayList<String> messages = new ArrayList<String>();
-                                HashSet<String> fields = new HashSet<String>();
-                                boolean hideAction = false;
-                                boolean doesNotBlock = true;
-                                for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
-                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                        messages.add(condition.getErrorMessage());
-                                        fields.addAll(condition.getFields());
-                                        hideAction = hideAction || condition.isHideAction();
-                                        doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
-                                    }
-                                }
-
-                                Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, state.getVariables().getInput());
-
-                                Long count = counts.get(state.getActionId());
-                                if (count == null) {
-                                    count = 0L;
-                                }
-
-                                HashMap<String, Object> resultState = new HashMap<String, Object>();
-                                resultState.put("type", "trans");
-                                resultState.put("actionId", state.getActionId());
-                                resultState.put("label", state.getLabel());
-                                resultState.put("workflowId", state.getWorkflowId());
-                                resultState.put("errors", messages);
-                                resultState.put("doesNotBlock", doesNotBlock);
-                                resultState.put("fields", fields);
-                                resultState.put("count", count);
-                                resultState.put("variables", variables);
-                                resultState.put("isForm", state.isForm());
-                                resultState.put("hideAction", hideAction);
-                                if (state.isForm()) {
-                                    resultState.put("documentType", state.getFormType());
-                                    resultState.put("createUrl", documentService.getCreateUrl(QName.createQName(state.getFormType(), serviceRegistry.getNamespaceService())));
-                                    resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
-                                    resultState.put("connectionType", state.getFormConnection());
-                                    resultState.put("connectionIsSystem", state.isSystemFormConnection());
-                                    resultState.put("connectionIsReverse", state.isReverseFormConnection());
-                                    resultState.put("autoFill", state.isAutoFill());
-                                }
-                                actionsList.add(resultState);
-                            }
-                        }
-
-                        //TODO getTaskActionsByName сразу передавать нужные параметры
-                        actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class));
-                        for (StateMachineAction action : actions) {
-                            UserWorkflow userWorkflow = (UserWorkflow) action;
-                            List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
-                            for (UserWorkflow.UserWorkflowEntity entity : entities) {
-                                ArrayList<String> messages = new ArrayList<String>();
-                                HashSet<String> fields = new HashSet<String>();
-                                boolean hideAction = false;
-                                boolean doesNotBlock = true;
-                                for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
-                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                        messages.add(condition.getErrorMessage());
-                                        fields.addAll(condition.getFields());
-                                        hideAction = hideAction || condition.isHideAction();
-                                        doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
-                                    }
-                                }
-
-                                Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
-
-                                if (!hideAction) {
-                                    Long count = counts.get(entity.getId());
-                                    if (count == null) {
-                                        count = 0L;
-                                    }
-                                    HashMap<String, Object> workflow = new HashMap<String, Object>();
-                                    workflow.put("type", "user");
-                                    workflow.put("actionId", entity.getId());
-                                    workflow.put("label", entity.getLabel());
-                                    workflow.put("workflowId", entity.getWorkflowId());
-                                    workflow.put("errors", messages);
-                                    workflow.put("doesNotBlock", doesNotBlock);
-                                    workflow.put("fields", fields);
-                                    workflow.put("count", count);
-                                    workflow.put("variables", variables);
-                                    workflow.put("isForm", false);
-                                    actionsList.add(workflow);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            //Сортируем по частоте использования
-            sort(actionsList);
-        }
-
-        List<NodeRef> groupActions = null;
-        if (hasExecutionPermission) {
-            groupActions = groupActionsService.getActiveActions(nodeRef);
-        } else if (lecmPermissionService.hasReadAccess(nodeRef, currentUserName)) {
-            groupActions = groupActionsService.getActionsForReader(nodeRef);
-        }
-
-        if (groupActions != null) {
-            boolean hasStatemachine = stateMachineService.hasActiveStatemachine(nodeRef);
-            for (NodeRef action : groupActions) {
-                HashMap<String, Object> actionStruct = new HashMap<String, Object>();
-                actionStruct.put("type", "group");
-                actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
-                Object title = nodeService.getProperty(action, ContentModel.PROP_TITLE);
-                if (title == null || "".equals(title)) {
-                    actionStruct.put("label", nodeService.getProperty(action, ContentModel.PROP_NAME));
-                } else {
-                    actionStruct.put("label", title);
-                }
-
-                QName type = nodeService.getType(action);
-                if (type.equals(GroupActionsService.TYPE_GROUP_DOCUMENT_ACTION)) {
-                    actionStruct.put("subtype", "document");
-                    actionStruct.put("documentType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_TYPE));
-                    actionStruct.put("createUrl", documentService.getCreateUrl(QName.createQName(nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_TYPE).toString(), serviceRegistry.getNamespaceService())));
-                    actionStruct.put("connectionType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION));
-                    actionStruct.put("connectionIsSystem", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION_SYSTEM));
-                    actionStruct.put("autoFill", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_AUTO_FILL));
-                    actionStruct.put("formFolder", documentService.getDraftRoot().toString());
-                    Map<String, String> processingVars = processingVariables(nodeRef, action, statemachineId, hasStatemachine);
-                    actionStruct.put("variables", processingVars);
-                    actionStruct.put("isForm", false);
-                } else if (type.equals(GroupActionsService.TYPE_GROUP_WORKFLOW_ACTION)) {
-                    actionStruct.put("subtype", "workflow");
-                    actionStruct.put("workflowType", nodeService.getProperty(action, GroupActionsService.PROP_WORKFLOW));
-                    Map<String, String> processingVars = processingVariables(nodeRef, action, statemachineId, hasStatemachine);
-                    actionStruct.put("variables", processingVars);
-                    actionStruct.put("isForm", false);
-                } else {
-                    actionStruct.put("subtype", "script");
-                    actionStruct.put("isForm", nodeService.getChildAssocs(action).size() > 0);
-                }
-                actionsList.add(actionStruct);
-            }
-        }
-        if (actionsList.size() > 0) {
-            result.put("actions", actionsList);
-        }
-        return result;
-    }
-
-    private Map<String, String> processingVariables(NodeRef document, NodeRef action, String statemachineId, boolean hasStatemachine) {
-        NodeService nodeService = serviceRegistry.getNodeService();
-        WorkflowVariables variables = new WorkflowVariables();
-        List<ChildAssociationRef> vars = nodeService.getChildAssocs(action);
-        for (ChildAssociationRef var : vars) {
-            String formInputFromValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_VALUE).toString();
-            String formInputFromType;
-            if (!hasStatemachine && "stm_document".equals(formInputFromValue)) {
-                formInputFromType = WorkflowVariables.Type.VALUE.toString();
-                formInputFromValue = document.toString();
-            } else {
-                formInputFromType = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_TYPE).toString();
-            }
-            String formInputToValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_TO_VALUE).toString();
-            variables.addInput(formInputFromType, formInputFromValue, WorkflowVariables.Type.VARIABLE.toString(), formInputToValue);
-        }
-        return stateMachineService.getInputVariablesMap(statemachineId, document, variables.getInput());
-    }
-
-    private Map<String, Long> getActionsCounts(NodeRef nodeRef) {
-        NodeService nodeService = serviceRegistry.getNodeService();
-        QName type = nodeService.getType(nodeRef);
-        String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
-
-        NodeRef employee = orgstructureService.getCurrentEmployee();
-        Map<String, Long> counts = new HashMap<String, Long>();
-        if (employee != null) {
-            counts = frequencyAnalysisService.getFrequenciesCountsByDocType(employee, shortTypeName);
-        }
-        return counts;
-    }
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        ActionsScript.serviceRegistry = serviceRegistry;
-    }
-
-    private void sort(ArrayList<HashMap<String, Object>> unsorted) {
-        class ElementComparator<T extends Map> implements Comparator<T> {
-            @Override
-            public int compare(T o1, T o2) {
-                Long count1 = (Long) o1.get("count");
-                Long count2 = (Long) o2.get("count");
-                return count2.compareTo(count1);
-            }
-        }
-        Collections.sort(unsorted, new ElementComparator<HashMap>());
-    }
-
-    private NodeRef getDestinationFolder(String path) {
-        NodeRef result = documentService.getDraftRoot();
-        if (path == null) {
-            return result;
-        }
-        NodeService nodeService = serviceRegistry.getNodeService();
-        StringTokenizer pathTokenizer = new StringTokenizer(path, "/");
-        while (pathTokenizer.hasMoreTokens()) {
-            String folder = pathTokenizer.nextToken();
-            if (!"".equals(folder)) {
-                NodeRef folderRef = nodeService.getChildByName(result, ContentModel.ASSOC_CONTAINS, folder);
-                if (folderRef == null) {
-                    folderRef = createFolder(result, folder);
-                }
-                result = folderRef;
-            }
-        }
-        return result;
-    }
-
-    private NodeRef createFolder(final NodeRef parent, final String name) {
-        final NodeService nodeService = serviceRegistry.getNodeService();
-        final HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
-        props.put(ContentModel.PROP_NAME, name);
-        ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
-            @Override
-            public ChildAssociationRef execute() throws Throwable {
-                ChildAssociationRef childAssocRef = nodeService.createNode(
-                        parent,
-                        ContentModel.ASSOC_CONTAINS,
-                        QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
-                        ContentModel.TYPE_FOLDER,
-                        props);
-                return childAssocRef;
-            }
-        }, false, true);
-        return childAssocRef.getChildRef();
-    }
-
-    public void setAuthService(AuthenticationService authService) {
-        this.authService = authService;
-    }
-
-    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-        this.lecmPermissionService = lecmPermissionService;
-    }
 }

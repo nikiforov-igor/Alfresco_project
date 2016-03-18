@@ -7,6 +7,6 @@ import java.util.HashMap;
 /**
  * Created by pmelnikov on 15.07.2015.
  */
-public interface ActionsScriptBean {
+public interface UserActionsService {
     HashMap<String, Object> getActions(NodeRef nodeRef);
 }

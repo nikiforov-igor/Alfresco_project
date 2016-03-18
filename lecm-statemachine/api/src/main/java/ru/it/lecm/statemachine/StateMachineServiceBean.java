@@ -4,7 +4,9 @@ import org.activiti.engine.task.Task;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.namespace.QName;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,6 +124,8 @@ public interface StateMachineServiceBean {
 	void checkReadOnlyCategory(NodeRef document, String category);
 
 	boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority);
+	boolean setTaskAssignee(NodeRef documentRef, String taskId, String beforeAuthority, String afterAuthority);
+	boolean setWorkflowTaskProperty(NodeRef documentRef, String workflowTaskId, QName propertyName, Serializable propertyValue);
 
 	/*
      * Используется в

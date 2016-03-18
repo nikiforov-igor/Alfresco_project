@@ -55,6 +55,11 @@
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.delegation</groupId>
+            <artifactId>lecm-delegation-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
 			<artifactId>statemachine-api</artifactId>

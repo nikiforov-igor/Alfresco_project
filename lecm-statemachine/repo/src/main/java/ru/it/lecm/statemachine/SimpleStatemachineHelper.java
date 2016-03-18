@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -169,6 +170,16 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
 
     @Override
     public boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority) {
+        throw createNotImplementedException();
+    }
+
+    @Override
+    public boolean setTaskAssignee(NodeRef documentRef, String taskId, String beforeAuthority, String afterAuthority) {
+        throw createNotImplementedException();
+    }
+
+    @Override
+    public boolean setWorkflowTaskProperty(NodeRef documentRef, String workflowTaskId, QName propertyName, Serializable propertyValue) {
         throw createNotImplementedException();
     }
 

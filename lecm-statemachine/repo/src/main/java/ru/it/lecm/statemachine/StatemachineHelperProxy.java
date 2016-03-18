@@ -9,6 +9,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.statemachine.bean.SimpleDocumentRegistryImpl;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -149,6 +150,16 @@ public class StatemachineHelperProxy implements StateMachineServiceBean {
     @Override
     public boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority) {
         return getHelper(documentRef).transferRightTask(documentRef, beforeAuthority, afterAuthority);
+    }
+
+    @Override
+    public boolean setTaskAssignee(NodeRef documentRef, String taskId, String beforeAuthority, String afterAuthority) {
+        return getHelper(documentRef).setTaskAssignee(documentRef, taskId, beforeAuthority, afterAuthority);
+    }
+
+    @Override
+    public boolean setWorkflowTaskProperty(NodeRef documentRef, String workflowTaskId, QName propertyName, Serializable propertyValue) {
+        return getHelper(documentRef).setWorkflowTaskProperty(documentRef, workflowTaskId, propertyName, propertyValue);
     }
 
     @Override
