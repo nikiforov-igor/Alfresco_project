@@ -325,6 +325,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							'value': null
 						});
 					}
+				} else {
+					Alfresco.util.PopupManager.displayMessage({text: this.msg("templare-no-attributes-to-add.message")});
 				}
 			}, this);
 		},
