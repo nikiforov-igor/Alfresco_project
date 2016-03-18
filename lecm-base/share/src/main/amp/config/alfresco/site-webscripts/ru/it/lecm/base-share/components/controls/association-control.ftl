@@ -14,6 +14,11 @@
 	<#assign showPath = false>
 </#if>
 
+<#assign showPath = true>
+<#if params.showPath?? && params.showPath == "false">
+	<#assign showPath = false>
+</#if>
+
 <#assign showAutocomplete = true>
 <#if params.showAutocomplete?? && params.showAutocomplete == "false">
 	<#assign showAutocomplete = false>
@@ -27,6 +32,11 @@
 <#assign showCreateNewButton = false>
 <#if params.showCreateNewButton?? && params.showCreateNewButton == "true">
 	<#assign showCreateNewButton = true>
+</#if>
+
+<#assign showParentNodeInTreeView = true>
+<#if params.showParentNodeInTreeView?? && params.showParentNodeInTreeView == "false">
+	<#assign showParentNodeInTreeView = false>
 </#if>
 
 <#assign showSearch = false>
@@ -173,6 +183,7 @@
 			<#if params.rootLocation??>
 				rootLocation: "${params.rootLocation}",
 			</#if>
+                showParentNodeInTreeView: ${showParentNodeInTreeView?string},
 			<#if field.mandatory??>
 				mandatory: ${field.mandatory?string},
 			<#elseif field.endpointMandatory??>

@@ -100,6 +100,8 @@ LogicECM.module = LogicECM.module || {};
 
 				showCreateNewLink: false,
 
+				showParentNodeInTreeView: true,
+
 				showCreateNewButton: false,
 
 				setCurrentValue: true,
@@ -1266,19 +1268,28 @@ LogicECM.module = LogicECM.module || {};
 								var oResults = response.json;
 								if (oResults != null) {
 									if (!this.options.plane) {
-										var newNode = {
-											label:oResults.title,
-											nodeRef:oResults.nodeRef,
-											isLeaf:oResults.isLeaf,
-											type:oResults.type,
-											isContainer: oResults.isContainer,
-											hasPermAddChildren: oResults.hasPermAddChildren,
-											displayPath: oResults.displayPath,
-											path: oResults.path,
-											simplePath: oResults.simplePath,
-											renderHidden:true
-										};
-										this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
+										if (this.options.showParentNodeInTreeView) {
+											var newNode = {
+												label:oResults.title,
+												nodeRef:oResults.nodeRef,
+												isLeaf:oResults.isLeaf,
+												type:oResults.type,
+												isContainer: oResults.isContainer,
+												hasPermAddChildren: oResults.hasPermAddChildren,
+												displayPath: oResults.displayPath,
+												path: oResults.path,
+												simplePath: oResults.simplePath,
+												renderHidden:true
+											};
+											this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
+										} else {
+											this.rootNode = this.tree.getRoot();
+											var augmented = Alfresco.util.deepCopy(this.tree.getRoot());
+											augmented.data = {
+												nodeRef: oResults.nodeRef
+											};
+											this._loadNode(augmented);
+										}
 										this.options.rootNodeRef = oResults.nodeRef;
 
 										this.tree.draw();

@@ -30,20 +30,53 @@ if (parentNode != null) {
 			language: "fts-alfresco"
 		});
 
-    for each(var item in values) {
+	function getCountOpenCases(qnamePath) {
+		return searchCounter.query({
+			language: 'fts-alfresco',
+			query: 'PATH:"/' + qnamePath + '//*" AND (+TYPE:"lecm-os:nomenclature-case") AND (@lecm\\-os:nomenclature\\-case\\-status:"OPEN")'
+		});
+	}
+
+	for each(var item in values) {
 		if (isSubType(item, selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
-            && orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
-	        branch.push({
-	            label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
-	            title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
-	            type: item.getTypeShort(),
-	            nodeRef: item.getNodeRef().toString(),
-	            isLeaf: "" + !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType, true),
-	            isContainer: "" + item.isContainer,
-		        hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren")
-	        });
+			&& orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
+			var isLeaf = !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType, true);
+
+			if (item.getTypeShort() == "lecm-os:nomenclature-unit-section") {
+				var unitSections = search.query(
+					{
+						query: 'PARENT:"' + nodeRef + '" AND (+TYPE:"lecm-os:nomenclature-unit-section")',
+						language: "fts-alfresco"
+					});
+				for each(var unitSection in values) {
+					if (getCountOpenCases(unitSection.getQnamePath()) > 0) {
+						isLeaf = true;
+						break;
+					}
+				}
+			}
+
+			if (getCountOpenCases(item.getQnamePath()) > 0) {
+				branch.push({
+					label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
+					title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
+					type: item.getTypeShort(),
+					nodeRef: item.getNodeRef().toString(),
+					isLeaf: "" + isLeaf,
+					isContainer: "" + item.isContainer,
+					hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren")
+				});
+			}
 		}
-    }
+	}
+
+	function compareLabel(branchA, branchB) {
+		if (branchA.label > branchB.label) return 1;
+		if (branchA.label < branchB.label) return -1;
+		return 0;
+	}
+
+	branch.sort(compareLabel);
 }
 
 function isSubType(item, typesStr){
