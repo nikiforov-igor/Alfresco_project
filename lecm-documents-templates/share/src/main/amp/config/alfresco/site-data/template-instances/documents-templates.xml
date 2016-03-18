@@ -10,5 +10,9 @@
 			<region-id>details-panel</region-id>
 			<url>/lecm/documents-templates/details</url>
 		</component>
+		<component>
+			<region-id>forbidden</region-id>
+			<url>/lecm/base/forbidden</url>
+		</component>
 	</components>
 </template-instance>
