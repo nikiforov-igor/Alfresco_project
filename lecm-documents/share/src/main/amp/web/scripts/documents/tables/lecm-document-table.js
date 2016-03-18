@@ -112,7 +112,7 @@ LogicECM.module = LogicECM.module || {};
 						bubblingLabel: this.options.bubblingLabel,
 						itemType: this.tableData.rowType,
 						destination: this.tableData.nodeRef,
-						newRowButtonType: this.options.disabled || (this.options.allowCreate === false) ? "inActive" : "defaultActive"
+						newRowButtonType: (this.options.disabled || (this.options.allowCreate === false)) ? "inActive" : "defaultActive"
 					});
 				}
 			},

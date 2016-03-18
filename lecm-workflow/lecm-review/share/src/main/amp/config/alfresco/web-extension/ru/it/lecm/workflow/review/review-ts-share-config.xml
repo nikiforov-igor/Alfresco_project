@@ -51,7 +51,8 @@
 
 							<control-param name="secondItemType">lecm-review-list:review-list-item</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Списки_x0020_ознакомления</control-param>
-							<control-param name="secondNameSubstituteString">{cm:name} ({lecm-review-list:reviewer-assoc-text-content}) </control-param>
+							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondShowAssocViewForm">true</control-param>
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>

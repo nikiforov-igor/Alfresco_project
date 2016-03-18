@@ -47,6 +47,11 @@
 	<#assign showAssocViewForm = true>
 </#if>
 
+<#assign secondShowAssocViewForm = false>
+<#if params.secondShowAssocViewForm?? && params.secondShowAssocViewForm == "true">
+	<#assign secondShowAssocViewForm = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -299,6 +304,7 @@
             additionalFilter: "${params.secondAdditionalFilter!''}",
 		    showSelectedItemsPath: false,
 		    multipleSelectMode: ${endpointMany?string},
+            showAssocViewForm: ${secondShowAssocViewForm?string},
 		    showSearch: ${secondShowSearch?string},
 		    plane: ${secondPlane?string},
 		    currentValue: "${field.value!''}",
