@@ -114,6 +114,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var toDate = Dom.get(this.runtimeForm.formId)["prop_lecm-events_to-date"];
 				var allDay = Dom.get(this.runtimeForm.formId)["prop_lecm-events_all-day"];
 				var location = Dom.get(this.runtimeForm.formId)["assoc_lecm-events_location-assoc"];
+				var timezoneOffset = new Date().getTimezoneOffset();
 
 				Alfresco.util.Ajax.jsonPost({
 					url: Alfresco.constants.PROXY_URI + "lecm/events/event/checkAvailable",
@@ -121,6 +122,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						"fromDate": fromDate.value,
 						"toDate": toDate.value,
 						"allDay": allDay.value,
+						"clientTimezoneOffset": timezoneOffset,
 						"location": location.value,
 						"event": this.options.nodeRef
 					},
