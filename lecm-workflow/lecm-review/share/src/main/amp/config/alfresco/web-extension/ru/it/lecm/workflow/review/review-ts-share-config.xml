@@ -33,6 +33,7 @@
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-review-ts:reviewer-assoc"/>
+					<show id="lecm-review-ts:initializer" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:indexTableRow">
@@ -57,6 +58,11 @@
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>
+						</control>
+					</field>
+					<field id="lecm-review-ts:initializer">
+						<control template="/ru/it/lecm/workflow/review/controls/review-list-item-validation.ftl">
+							<control-param name="fieldId">lecm-review-ts:reviewer-assoc</control-param>
 						</control>
 					</field>
 				</appearance>

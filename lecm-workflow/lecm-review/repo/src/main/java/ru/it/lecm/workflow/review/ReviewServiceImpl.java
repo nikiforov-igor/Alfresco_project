@@ -94,20 +94,36 @@ public class ReviewServiceImpl extends BaseBean {
 		return result;
 	}
 
-	public List<NodeRef> getActiveReviewersForDocument(NodeRef document) {
+	private List<NodeRef> getReviwersWithStatuses(NodeRef document, Set<String> statuses) {
 		NodeRef tableData = findNodeByAssociationRef(document, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
 		List<NodeRef> result = new ArrayList<>();
 		if (null != tableData) {
 			List<NodeRef> reviewList = documentTableService.getTableDataRows(tableData);
 			for (NodeRef reviewListRow : reviewList) {
-				NodeRef itemEmployee = findNodeByAssociationRef(reviewListRow, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-				String state = (String) nodeService.getProperty(reviewListRow, PROP_REVIEW_TS_STATE);
-				if (CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS.equals(state)) {
-					result.add(itemEmployee);
+				if (!nodeService.hasAspect(reviewListRow, ContentModel.ASPECT_TEMPORARY)) {
+					NodeRef itemEmployee = findNodeByAssociationRef(reviewListRow, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+					String state = (String) nodeService.getProperty(reviewListRow, PROP_REVIEW_TS_STATE);
+					if (statuses.contains(state)) {
+						result.add(itemEmployee);
+					}
 				}
 			}
 		}
 		return result;
+	}
+
+	public List<NodeRef> getExcludeUsersList(NodeRef document) {
+		HashSet<String> statuses = new HashSet<>();
+		statuses.add(CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED);
+		statuses.add(CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS);
+		statuses.add(CONSTRAINT_REVIEW_TS_STATE_REVIEWED);
+		return getReviwersWithStatuses(document, statuses);
+	}
+
+	public List<NodeRef> getActiveReviewersForDocument(NodeRef document) {
+		HashSet<String> statuses = new HashSet<>();
+		statuses.add(CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS);
+		return getReviwersWithStatuses(document, statuses);
 	}
 
 	public void markReviewed(final NodeRef document) {
@@ -170,7 +186,7 @@ public class ReviewServiceImpl extends BaseBean {
 
 	public Boolean deleteRowAllowed(NodeRef nodeRef) {
 		Boolean result = true;
-		if (null!=nodeRef && TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
+		if (null != nodeRef && TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
 			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 			NodeRef itemInitiator = findNodeByAssociationRef(nodeRef, ASSOC_REVIEW_TS_INITIATOR, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			String status = nodeService.getProperty(nodeRef, PROP_REVIEW_TS_STATE).toString();
@@ -191,6 +207,8 @@ public class ReviewServiceImpl extends BaseBean {
 				employeeSet.addAll(findNodesByAssociationRef(record, ASSOC_REVIEW_LIST_REWIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET));
 			}
 			if (employeeSet.size() != 1 || (noEmployee)) {
+				List<NodeRef> excludeUsers = getExcludeUsersList(documentTableService.getDocumentByTableDataRow(nodeRef));
+				employeeSet.removeAll(excludeUsers);
 				for (NodeRef employee : employeeSet) {
 					NodeRef newItem = createNode(rootFolder, TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, null, null);
 					nodeService.setProperty(newItem, DocumentTableService.PROP_INDEX_TABLE_ROW, documentTableService.getTableDataRows(rootFolder).size() - 1);
@@ -198,7 +216,9 @@ public class ReviewServiceImpl extends BaseBean {
 					nodeService.createAssociation(newItem, currentEmployee, ASSOC_REVIEW_TS_INITIATOR);
 				}
 				nodeService.moveNode(nodeRef, repositoryStructureHelper.getUserTemp(false), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString()));
-				nodeService.addAspect(nodeRef, ContentModel.ASPECT_TEMPORARY, null);
+				//nodeService.addAspect(nodeRef, ContentModel.ASPECT_TEMPORARY, null);
+			} else {
+				nodeService.removeAspect(nodeRef, ContentModel.ASPECT_TEMPORARY);
 			}
 		}
 	}

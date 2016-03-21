@@ -20,6 +20,11 @@
 	<#assign firstShowCreateNewLink = false>
 </#if>
 
+<#assign firstAllowedNodesScript = "">
+<#if field.control.params.firstAllowedNodesScript?has_content>
+    <#assign firstAllowedNodesScript = field.control.params.firstAllowedNodesScript?string>
+</#if>
+
 <#assign secondControlId = fieldHtmlId + "-second-cntrl">
 <#if params.secondPlane?? && params.secondPlane == "true">
 	<#assign secondPlane = true>
@@ -50,6 +55,11 @@
 <#assign secondShowAssocViewForm = false>
 <#if params.secondShowAssocViewForm?? && params.secondShowAssocViewForm == "true">
 	<#assign secondShowAssocViewForm = true>
+</#if>
+
+<#assign secondAllowedNodesScript = "">
+<#if field.control.params.secondAllowedNodesScript?has_content>
+    <#assign secondAllowedNodesScript = field.control.params.secondAllowedNodesScript?string>
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
@@ -216,6 +226,9 @@
 	        <#if renderPickerJSSelectedValue??>
 		        selectedValue: "${renderPickerJSSelectedValue}",
 	        </#if>
+	        <#if firstAllowedNodesScript?has_content>
+		        allowedNodesScript: "${firstAllowedNodesScript}",
+	        </#if>
 		    <#if params.firstItemType??>
 		        itemType: "${params.firstItemType}",
 		    <#else>
@@ -224,7 +237,9 @@
 		    showCreateNewLink: ${firstShowCreateNewLink?string},
             additionalFilter: "${params.firstAdditionalFilter!''}",
             showAssocViewForm: ${showAssocViewForm?string},
-		    clearFormsOnStart: false
+		    clearFormsOnStart: false,
+			fieldId: "${field.configName}-first",
+			formId: "${args.htmlid}"
 	    });
 	    fistControl.setMessages(${messages});
 
@@ -300,6 +315,9 @@
             <#if args.ignoreNodes??>
                 ignoreNodes: "${args.ignoreNodes}".split(","),
             </#if>
+			<#if secondAllowedNodesScript?has_content>
+		        allowedNodesScript: "${secondAllowedNodesScript}",
+	        </#if>
 		    showCreateNewLink: ${secondShowCreateNewLink?string},
             additionalFilter: "${params.secondAdditionalFilter!''}",
 		    showSelectedItemsPath: false,
@@ -308,7 +326,9 @@
 		    showSearch: ${secondShowSearch?string},
 		    plane: ${secondPlane?string},
 		    currentValue: "${field.value!''}",
-		    clearFormsOnStart: false
+		    clearFormsOnStart: false,
+			fieldId: "${field.configName}-second",
+			formId: "${args.htmlid}"
 	    });
 	    secondControl.setMessages(${messages});
 	}

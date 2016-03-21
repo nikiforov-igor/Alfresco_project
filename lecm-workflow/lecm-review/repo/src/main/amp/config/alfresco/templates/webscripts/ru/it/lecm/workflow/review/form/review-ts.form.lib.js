@@ -8,7 +8,8 @@ function createReviewTSItem(persistedObject) {
 			reviewItem.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
 //			var reviewObjects = reviewItem.assocs['lecm-review-ts:reviewer-assoc'];
 //			if ((reviewObjects.length > 0) || (reviewObjects[0].typeShort == 'lecm-review-list:review-list-item')) {
-				review.processItem(reviewItem);
+			reviewItem.addAspect('sys:temporary');	
+			review.processItem(reviewItem);
 //			}
 		}
 	} catch (error) {
