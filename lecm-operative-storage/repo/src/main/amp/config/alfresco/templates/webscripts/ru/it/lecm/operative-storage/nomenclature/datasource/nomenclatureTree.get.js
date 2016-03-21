@@ -48,7 +48,7 @@ if (parentNode != null) {
 						query: 'PARENT:"' + nodeRef + '" AND (+TYPE:"lecm-os:nomenclature-unit-section")',
 						language: "fts-alfresco"
 					});
-				for each(var unitSection in values) {
+				for each(var unitSection in unitSections) {
 					if (getCountOpenCases(unitSection.getQnamePath()) > 0) {
 						isLeaf = true;
 						break;
