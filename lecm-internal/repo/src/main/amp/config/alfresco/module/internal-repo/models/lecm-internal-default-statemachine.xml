@@ -7321,7 +7321,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ResponsibleEmployee]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>

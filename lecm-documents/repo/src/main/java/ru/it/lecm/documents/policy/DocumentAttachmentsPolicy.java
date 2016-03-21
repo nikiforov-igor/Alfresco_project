@@ -346,7 +346,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 		if (hasDeletePermission) {
 			this.stateMachineService.checkReadOnlyCategory(document, categoryName);
-		} else {
+		} else if (nodeService.exists(attachment)){
 			throw new AlfrescoRuntimeException("Does not have permission 'delete' for node " + attachment);
 		}
 
