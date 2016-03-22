@@ -373,6 +373,10 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 		onPrintInventory: function(p_items, owner, actionsConfig, fnPrompt) {
 			LogicECM.module.Base.Util.printReport(p_items.nodeRef, 'case-inventory');
+
+			Bubbling.fire("datagridRefresh", {
+				bubblingLabel: this.options.bubblingLabel
+			});
 		},
 
 		onPrintVolumes: function(p_items, owner, actionsConfig, fnPrompt) {
