@@ -1,0 +1,30 @@
+.tableRowData .control .label-div ~ .container {
+    min-width: 10px !important;
+}
+#propIndexTableRow .control .container .value-div {
+    width: 40px !important;
+}
+#propStartDate .control .label-div {
+    width: 100px !important;
+}
+#propStartDate .control .container .value-div {
+    width: 80px !important;
+}
+#propEndDate .control .label-div {
+    width: 110px !important;
+}
+#propEndDate .control .container .value-div {
+    width: 80px !important;
+}
+#propStartDateReal .control .label-div {
+    width: 148px !important;
+}
+#propEndDateReal .control .label-div {
+    width: 159px !important;
+}
+#price .price-control .price-currency {
+    width: 330px;
+}
+#price .price-control .price-currency .label-div {
+    display: inline;
+}

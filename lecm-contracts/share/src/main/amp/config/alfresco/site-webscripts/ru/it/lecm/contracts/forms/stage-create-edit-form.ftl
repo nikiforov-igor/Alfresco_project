@@ -1,3 +1,4 @@
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-contracts/contracts-stages-view-mode.css" />
 <#-- Identifiers -->
 <#assign htmlId = args.htmlid>
 <#assign formId = htmlId + "-form">
@@ -31,53 +32,53 @@
 	<@formLib.renderFormsRuntime formId = formId />
 </#if>
 <@formLib.renderFormContainer formId = formId>
-	<table class="${form.mode}-stage">
-		<tbody>
-		<#if inEditOrViewMode>
-		<tr>
-			<td colspan="3"><@formLib.renderField field = form.fields[propStatus] /></td>
-			<input id="${htmlId}_${propStatus}" name="${propStatus}" value="${form.fields[propStatus].value}" type="hidden"/>
-		</tr>
-		</#if>
-		<tr>
-			<td><@formLib.renderField field = form.fields[propIndexTableRow] /></td>
-			<td><@formLib.renderField field = form.fields[propStartDate] /></td>
-			<td><@formLib.renderField field = form.fields[propEndDate] /></td>
-		</tr>
-		<#if inEditOrViewMode>
-		<tr class="${form.mode}-stage-dates">
-			<td></td>
-			<td><@formLib.renderField field = form.fields[propStartDateReal] /></td>
-			<td><@formLib.renderField field = form.fields[propEndDateReal] /></td>
-		</tr>
-		</#if>
-		<tr>
-			<td colspan="3" <#if inViewMode>class="view-name"</#if>><@formLib.renderField field = form.fields[propName] /></td>
-		</tr>
-		<tr>
-			<td colspan="3">
+    <table class="${form.mode}-stage">
+        <tbody>
+			<#if inEditOrViewMode>
+            <tr>
+                <td colspan="3"><@formLib.renderField field = form.fields[propStatus] /></td>
+                <input id="${htmlId}_${propStatus}" name="${propStatus}" value="${form.fields[propStatus].value}" type="hidden"/>
+                <td></td>
+            </tr>
+			</#if>
+        <tr <#if inViewMode>class="tableRowData"</#if>>
+            <td <#if inViewMode>id="propIndexTableRow"</#if>><@formLib.renderField field = form.fields[propIndexTableRow] /></td>
+            <td <#if inViewMode>id="propStartDate"</#if>><@formLib.renderField field = form.fields[propStartDate] /></td>
+            <td <#if inViewMode>id="propEndDate"</#if>><@formLib.renderField field = form.fields[propEndDate] /></td>
+        </tr>
+			<#if inEditOrViewMode>
+            <tr class="${form.mode}-stage-dates tableRowData" >
+                <td></td>
+                <td <#if inViewMode>id="propStartDateReal"</#if>><@formLib.renderField field = form.fields[propStartDateReal] /></td>
+                <td <#if inViewMode>id="propEndDateReal"</#if>><@formLib.renderField field = form.fields[propEndDateReal] /></td>
+            </tr>
+			</#if>
+        <tr>
+            <td colspan="3" <#if inViewMode>class="view-name"</#if>><@formLib.renderField field = form.fields[propName] /></td>
+        </tr>
+        <tr>
+            <td <#if inViewMode>id="price"</#if> colspan="3">
 				<#list form.structure as item>
 					<#if item.id == "price">
-						<#include "${item.template}" />
-						<#break>
-					</#if>
+					<#include "${item.template}" />
+					<#break>
+				</#if>
 				</#list>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="3">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
 				<@formLib.renderField field = form.fields[propComment] />
-			</td>
-		</tr>
-		</tbody>
-	</table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 	<#if inEditOrViewMode>
 		<@formLib.renderField field = form.fields[assocAttachments] />
 	</#if>
 </@>
 </div>
-
 <script type="text/javascript">
 	(function() {
 		<#if inEditMode>
