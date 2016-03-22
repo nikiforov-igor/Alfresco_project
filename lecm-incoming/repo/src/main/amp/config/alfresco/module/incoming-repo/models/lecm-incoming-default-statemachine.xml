@@ -5242,7 +5242,7 @@ stm_document.save();]]></value>
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var currentUser =  orgstructure.getCurrentEmployee();
-execution.setVariableLocal("sendToExecution", currentUser.nodeRef.toString());]]></value>
+execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
