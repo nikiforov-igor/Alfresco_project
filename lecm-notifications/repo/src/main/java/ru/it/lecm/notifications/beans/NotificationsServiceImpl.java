@@ -605,7 +605,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         sendNotification(channels, notification, dontCheckAccessToObject);
 	}
 
-	private String parseTemplate(String template, Map<String, NodeRef> objects) throws TemplateRunException, TemplateParseException {
+	private String parseTemplate(String template, Map<String, Object> objects) throws TemplateRunException, TemplateParseException {
 		String parsed;
 		if (StringUtils.isNotEmpty(template)) {
 			Parser parcer = new SpelParserImpl(applicationContext);
@@ -616,7 +616,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return parsed;
 	}
 
-	private String parseTemplateRef(NodeRef templateRef, Map<String, NodeRef> objects) throws TemplateRunException, TemplateParseException {
+	private String parseTemplateRef(NodeRef templateRef, Map<String, Object> objects) throws TemplateRunException, TemplateParseException {
 		String parsed;
 		if (templateRef !=null) {
 			Parser parcer = new FreemarkerParserImpl(applicationContext);
@@ -627,6 +627,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return parsed;
 	}
 
+	/*
 	@Override
 	public void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) {
 		NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, PROP_NOTIFICATION_TEMPLATE_CODE, templateCode);
@@ -647,6 +648,26 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		notification.setInitiatorRef(initiatorRef);
 
         sendNotification(notification, dontCheckAccessToObject);
+	}
+	*/
+
+	@Override
+	public void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject) {
+		NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
+		String template = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
+		String subject = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
+		List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
+		NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+		Notification notification = new Notification(config);
+		notification.setTemplate(template);
+		notification.setSubject(subject);
+		notification.setTemplateRef(templateRef);
+		notification.setAuthor(author);
+		notification.setRecipientEmployeeRefs(recipientRefs);
+		notification.setObjectRef((NodeRef)config.get("mainObject"));
+		notification.setInitiatorRef(initiatorRef);
+
+		sendNotification(notification, dontCheckAccessToObject);
 	}
 
     private class NotificationTransactionListener implements TransactionListener {

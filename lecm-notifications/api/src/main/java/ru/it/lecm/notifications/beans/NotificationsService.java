@@ -39,9 +39,8 @@ public interface NotificationsService {
 	QName ASSOC_RECIPIENT_BUSINESS_ROLE = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "recipient-business-role-assoc");
 	QName ASSOC_NOTIFICATION_OBJECT = QName.createQName(NOTIFICATIONS_NAMESPACE_URI, "object-assoc");
 
-	String NOTIFICATION_TEMPLATE_DICTIONARY_NAME = "Шаблоны сообщений";
+	String NOTIFICATION_TEMPLATE_DICTIONARY_NAME = "Шаблоны уведомлений";
 	QName TYPE_NOTIFICATION_TEMPLATE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template");
-	QName PROP_NOTIFICATION_TEMPLATE_CODE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "code");
 	QName PROP_NOTIFICATION_TEMPLATE_DESCRIPTION = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "description");
 	QName PROP_NOTIFICATION_TEMPLATE = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "template");
 	QName PROP_NOTIFICATION_TEMPLATE_SUBJECT = QName.createQName(NOTIFICATIONS_TEMPLATE_NAMESPACE_URI, "subject");
@@ -230,5 +229,7 @@ public interface NotificationsService {
      */
     void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef, boolean dontCheckAccessToObject, List<NodeRef> delegateBusinessRoleRefs);
 
-	void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException;
+//	void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException;
+
+	void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject);
 }

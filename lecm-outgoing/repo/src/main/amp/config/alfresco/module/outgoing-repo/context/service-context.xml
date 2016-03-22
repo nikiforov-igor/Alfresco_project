@@ -22,10 +22,12 @@
 		<value>alfresco/module/${artifactId}/dictionaries/outgoing-bj-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/outgoing-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/outgoing-rn-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/outgoing-nt-items.xml</value>
 	</util:list>
 	<bean id="outgoing.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+					  ru.it.lecm.notifications.notifications-reponotificationsTemplatesBootstrap,
 					  businessJournalLogEventsPolicy"
 		  p:dictionaries-ref="outgoing.dictionaries"/>
 

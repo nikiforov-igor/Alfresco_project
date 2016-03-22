@@ -19,18 +19,15 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.repository.MalformedNodeRefException;
 import org.alfresco.service.transaction.TransactionService;
-import org.springframework.extensions.webscripts.WebScriptException;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
-import ru.it.lecm.notifications.beans.TemplateParseException;
-import ru.it.lecm.notifications.beans.TemplateRunException;
 
 /**
  * User: AIvkin
@@ -49,7 +46,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
         public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
             this.lecmTransactionHelper = lecmTransactionHelper;
         }
-        
+
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
 	}
@@ -259,7 +256,7 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	public void sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object, boolean dontCheckAccessToObject) {
 		sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object, orgstructureService.getCurrentEmployee(), dontCheckAccessToObject);
 	}
-	
+
 	/**
 	 * Отправка уведомлений от текущего пользователя
 	 * @param employee Список ссылок на получателей (пользователей).
@@ -267,39 +264,90 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	 * @param map Набор объектов. Обязательно должен приисутствовать как минимум один объект с идентификатором "mainObject"
 	 * @param dontCheckAccessToObject не проверять доступность объекта получателю
 	 */
-	public void sendNotificationFromCurrentUser(Scriptable employee, String templateCode, Scriptable map, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException {
-		Map<String,NodeRef> objects = getMap(map);
-		String author = authService.getCurrentUserName();
-		List<NodeRef> recipientsArray = getRecipientsList(employee);
-		
-		service.sendNotification(author, objects, templateCode, recipientsArray, orgstructureService.getCurrentEmployee(), dontCheckAccessToObject);
+//	public void sendNotificationFromCurrentUser(Scriptable employee, String templateCode, Scriptable map, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException {
+//		Map<String,NodeRef> objects = getMap(map);
+//		String author = authService.getCurrentUserName();
+//		List<NodeRef> recipientsArray = getRecipientsList(employee);
+//
+//		service.sendNotification(author, objects, templateCode, recipientsArray, orgstructureService.getCurrentEmployee(), dontCheckAccessToObject);
+//	}
+
+	/**
+	 * Отправка уведомлений по заданной конфигурации
+	 * @param oParams native json object параметры отправлямого уведомления
+	 * формат
+	 * {
+	 *   "author": "string", //значение по умолчанию WebScript
+	 *   "recipients": [scriptNode1, scriptNode1, ...], //scriptNode-ы получателей
+	 *   "templateCode": "string" //строковый код шаблона уведомления
+	 *   "templateConfig": { //конфигурация с переменными передаваемыми в шаблон
+	 *       "var1": "value1",
+	 *       "var1": "value2",
+	 *   },
+	 *   "initiator": scriptNode, //ScriptNode на сотрудника, являющегося инициатором уведомления, может быть null
+	 *   "dontCheckAccessToObject": boolean, //значение по умолчанию false, не проверять доступность объекта получателю
+	 * }
+	 */
+	public void sendNotification(Scriptable oParams) {
+		sendNotification((Map<String, Object>)getValueConverter().convertValueForJava(oParams));
 	}
 
-	private Map<String, NodeRef> getMap(Scriptable object) {
-		Map<String, NodeRef> result = new HashMap<>();
-		if (null != object) {
-			List<String> ids = getArraysList(object.getIds());
-			for (String id : ids) {
-				Object obj = object.get(id, getScope());
-				if (obj instanceof NativeJavaObject) {
-					obj=((NativeJavaObject)obj).unwrap();
-				}
-				if (obj instanceof ScriptNode) {
-					result.put(id, ((ScriptNode) obj).getNodeRef());
-				} else if (obj instanceof String) {
-					if (NodeRef.isNodeRef(obj.toString())) {
-						NodeRef ref = new NodeRef(obj.toString());
-						result.put(id, ref);
-					} else {
-						logger.error("Skipping invalid string in map:" + id +"='"+ obj.toString()+"'");
-					}
-				}
-				
-			}
-		}
-		return result;
+	public void sendNotificationFromCurrentUser(Scriptable oParams) {
+		Map<String, Object> params = (Map<String, Object>)getValueConverter().convertValueForJava(oParams);
+		params.put("author", authService.getCurrentUserName());
+		params.put("initiator", orgstructureService.getCurrentEmployee());
+		sendNotification(params);
 	}
-	
+
+	private void sendNotification(Map<String, Object> params) {
+		String author = "WebScript";
+		List<NodeRef> recipients = (List<NodeRef>)params.get("recipients");
+		String templateCode = (String)params.get("templateCode");
+		Map<String, Object> templateConfig = (Map<String, Object>)params.get("templateConfig");
+		NodeRef initiator = (NodeRef)params.get("initiator");
+		boolean dontCheckAccessToObject = false;
+
+		ParameterCheck.mandatory("recipients", recipients);
+		ParameterCheck.mandatory("templateCode", templateCode);
+		ParameterCheck.mandatory("templateConfig", templateConfig);
+		ParameterCheck.mandatory("templateConfig.mainObject", templateConfig.get("mainObject"));
+
+		if (StringUtils.isNotBlank((String)params.get("author"))) {
+			author = (String)params.get("author");
+		}
+
+		if (params.get("dontCheckAccessToObject") != null) {
+			dontCheckAccessToObject = (Boolean)params.get("dontCheckAccessToObject");
+		}
+
+		service.sendNotification(author, initiator, recipients, templateCode, templateConfig, dontCheckAccessToObject);
+	}
+
+//	private Map<String, NodeRef> getMap(Scriptable object) {
+//		Map<String, NodeRef> result = new HashMap<>();
+//		if (null != object) {
+//			List<String> ids = getArraysList(object.getIds());
+//			for (String id : ids) {
+//				Object obj = object.get(id, getScope());
+//				if (obj instanceof NativeJavaObject) {
+//					obj=((NativeJavaObject)obj).unwrap();
+//				}
+//				if (obj instanceof ScriptNode) {
+//					result.put(id, ((ScriptNode) obj).getNodeRef());
+//				} else if (obj instanceof String) {
+//					if (NodeRef.isNodeRef(obj.toString())) {
+//						NodeRef ref = new NodeRef(obj.toString());
+//						result.put(id, ref);
+//					} else {
+//						logger.error("Skipping invalid string in map:" + id +"='"+ obj.toString()+"'");
+//					}
+//				}
+//
+//			}
+//		}
+//		return result;
+//	}
+
     private ArrayList<String> getArraysList(Object[] object){
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {

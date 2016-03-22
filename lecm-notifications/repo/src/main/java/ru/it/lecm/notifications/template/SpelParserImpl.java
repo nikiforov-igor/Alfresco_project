@@ -5,7 +5,6 @@ import ru.it.lecm.notifications.beans.TemplateRunException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.expression.BeanFactoryResolver;
@@ -50,9 +49,10 @@ public class SpelParserImpl extends AbstractParserImpl {
 	}
 
 	@Override
-	public String runTemplate(String templateStr, Map<String,NodeRef> objectsMap) throws TemplateParseException, TemplateRunException {
+	public String runTemplate(String templateStr, Map<String,Object> objectsMap) throws TemplateParseException, TemplateRunException {
 		String result = null;
 		setObjects(objectsMap);
+		context.setVariables(getObjects().getFullMap());
 		Expression exp = null;
 
 		try {

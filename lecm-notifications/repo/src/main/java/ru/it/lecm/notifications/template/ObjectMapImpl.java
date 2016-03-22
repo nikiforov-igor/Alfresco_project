@@ -3,7 +3,6 @@ package ru.it.lecm.notifications.template;
 import ru.it.lecm.notifications.beans.TemplateRunException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -18,16 +17,16 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  */
 class ObjectMapImpl implements ObjectMap {
 
-	private final Map<String, NodeRef> objects;
+	private final Map<String, Object> objects;
 
-	private final Map<String, CMObject> objectsCache;
+	private final Map<String, Object> objectsCache;
 
 	private final ApplicationContext applicationContext;
 
 	private final DictionaryService dictionaryService;
 	private final NodeService nodeService;
 
-	public ObjectMapImpl(Map<String, NodeRef> objects, ApplicationContext applicationContext) {
+	public ObjectMapImpl(Map<String, Object> objects, ApplicationContext applicationContext) {
 		this.objects = new HashMap<>(objects);
 		this.objectsCache = new HashMap<>();
 		this.applicationContext = applicationContext;
@@ -36,32 +35,39 @@ class ObjectMapImpl implements ObjectMap {
 	}
 
 	@Override
-	public CMObject get(String name) throws TemplateRunException {
+	public Object get(String name) throws TemplateRunException {
 		if (objectsCache.containsKey(name)) {
 			return objectsCache.get(name);
 		} else {
-			NodeRef ref = objects.get(name);
-			if (null == ref) {
+			Object result;
+			Object obj = objects.get(name);
+			if (null == obj) {
 				throw new TemplateRunException("No object with id \"" + name + "\"");
 			}
 
-			QName objType = nodeService.getType(ref);
-			CMObject obj;
-			if (dictionaryService.isSubClass(objType, DocumentService.TYPE_BASE_DOCUMENT)) {
-				obj = new DocumentImpl(ref, applicationContext);
-			} else if (dictionaryService.isSubClass(objType, OrgstructureBean.TYPE_EMPLOYEE)) {
-				obj = new EmployeeImpl(ref, applicationContext);
+			if (NodeRef.isNodeRef(obj.toString())) {
+				NodeRef ref = (NodeRef) obj;
+				QName objType = nodeService.getType(ref);
+				CMObject cmobj;
+				if (dictionaryService.isSubClass(objType, DocumentService.TYPE_BASE_DOCUMENT)) {
+					cmobj = new DocumentImpl(ref, applicationContext);
+				} else if (dictionaryService.isSubClass(objType, OrgstructureBean.TYPE_EMPLOYEE)) {
+					cmobj = new EmployeeImpl(ref, applicationContext);
+				} else {
+					cmobj = new CMObjectImpl(ref, applicationContext);
+				}
+				objectsCache.put(name, cmobj);
+				result = cmobj;
 			} else {
-				obj = new CMObjectImpl(ref, applicationContext);
+				objectsCache.put(name, obj);
+				result = obj;
 			}
-
-			objectsCache.put(name, obj);
-			return obj;
+			return result;
 		}
 	}
 
 	@Override
-	public Map<String, CMObject> getFullMap() throws TemplateRunException {
+	public Map<String, Object> getFullMap() throws TemplateRunException {
 		for (String key : objects.keySet()) {
 			get(key);
 		}

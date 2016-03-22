@@ -9,7 +9,7 @@ import ru.it.lecm.notifications.beans.TemplateRunException;
  */
 public interface ObjectMap {
 
-	CMObject get(String name) throws TemplateRunException;
+	Object get(String name) throws TemplateRunException;
 
-	Map<String, CMObject> getFullMap() throws TemplateRunException;
+	Map<String, Object> getFullMap() throws TemplateRunException;
 }

@@ -5,7 +5,6 @@ import freemarker.template.TemplateModelException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.TemplateService;
 import org.springframework.context.ApplicationContext;
 import ru.it.lecm.notifications.beans.TemplateParseException;
@@ -29,7 +28,7 @@ public class FreemarkerParserImpl extends AbstractParserImpl {
 
 
 	@Override
-	public String runTemplate(String templateStr, Map<String, NodeRef> objectsMap) throws TemplateParseException, TemplateRunException {
+	public String runTemplate(String templateStr, Map<String, Object> objectsMap) throws TemplateParseException, TemplateRunException {
 		setObjects(objectsMap);
 		Map<String, Object> templateModel = new HashMap<>();
 		templateModel.putAll(utilsModel);

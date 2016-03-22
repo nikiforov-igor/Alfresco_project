@@ -99,12 +99,12 @@ public class Notification {
 	/**
 	 * Данные для построения текста уведомления по его шаблону
 	 */
-	private Map<String, NodeRef> templateModel;
+	private Map<String, Object> templateModel;
 
 	public Notification() {
 	}
 
-	public Notification(Map<String, NodeRef> templateModel) {
+	public Notification(Map<String, Object> templateModel) {
 		this.templateModel = templateModel;
 	}
 
@@ -248,7 +248,7 @@ public class Notification {
 		this.templateRef = templateRef;
 	}
 
-	public Map<String, NodeRef> getTemplateModel() {
+	public Map<String, Object> getTemplateModel() {
 		return templateModel;
 	}
 }

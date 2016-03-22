@@ -3,7 +3,6 @@ package ru.it.lecm.notifications.template;
 import ru.it.lecm.notifications.beans.TemplateParseException;
 import ru.it.lecm.notifications.beans.TemplateRunException;
 import java.util.Map;
-import org.alfresco.service.cmr.repository.NodeRef;
 
 /**
  *
@@ -24,7 +23,7 @@ public interface Parser {
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
 	 */
-	String runTemplate(String templateStr, Map<String,NodeRef> objectsMap) throws TemplateParseException, TemplateRunException;
+	String runTemplate(String templateStr, Map<String,Object> objectsMap) throws TemplateParseException, TemplateRunException;
 
 	/**
 	 * Проверить, является ли шаблон синтаксически верным с точни зрения

@@ -39,16 +39,6 @@
 					<type>d:text</type>
 					<index enabled="false"/>
 				</property>
-				<property name="lecm-notification-template:code">
-					<title>Template code</title>
-					<type>d:text</type>
-					<mandatory>true</mandatory>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>false</tokenised>
-					</index>
-				</property>
 				<property name="lecm-notification-template:subject">
 					<type>d:text</type>
 					<index enabled="false"/>

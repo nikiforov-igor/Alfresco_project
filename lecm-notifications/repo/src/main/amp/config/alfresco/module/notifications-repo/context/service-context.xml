@@ -42,7 +42,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="${groupId}.${artifactId}.notificationsTypesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
 		<property name="dictionaries">
@@ -51,13 +51,12 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="${groupId}.${artifactId}.notificationsTemplatesBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="businessJournalLogEventsPolicy,ru.it.lecm.notifications.notifications-repo.notificationsBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-notifications-templates-dic.xml</value>
-				<value>alfresco/module/${artifactId}/dictionaries/lecm-notifications-templates-dic-items.xml</value>
 			</list>
 		</property>
 	</bean>

@@ -3915,9 +3915,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 		stageItems,
 		employees,
 		recipients = [],
-		i,
-		documentLink,
-		msg;
+		i;
 	if (currentIterationNode) {
 		stageItems = search.query({
 			query: 'TYPE:"lecmWorkflowRoutes:stageItem" AND PATH:"' + currentIterationNode.qnamePath + '//*"',
@@ -3926,12 +3924,16 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 		for (i in stageItems) {
 			employees = stageItems[i].assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
 			if (employees && employees.length) {
-				recipients.push(employees[0].nodeRef.toString());
+				recipients.push(employees[0]);
 			}
 		}
-		documentLink = documentScript.wrapperDocumentLink(stm_document, '{lecm-document:present-string}');
-		msg = 'Документ ' + documentLink + ' был возвращен на доработку автором документа.';
-		notifications.sendNotification(recipients, msg, stm_document);
+		notifications.sendNotification({
+			recipients: recipients,
+			templateCode: 'OUTGOING_REWORK',
+			templateConfig: {
+				mainObject: stm_document
+			}
+		});
 	}
 })();]]></value>
                                                             </property>
@@ -8069,10 +8071,9 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                                                 <value><![CDATA[/* направить на регистрацию */
 (function(){
     var i,
-            outgoing = stm_document, /* исходящий документ */
-            registrars, /* получение списка регистраторов по документу */
-            registratorAssocs = outgoing.assocs['lecm-document-aspects:registrator-assoc'],
-            notification;
+        outgoing = stm_document, /* исходящий документ */
+        registrars, /* получение списка регистраторов по документу */
+        registratorAssocs = outgoing.assocs['lecm-document-aspects:registrator-assoc'];
     if (registratorAssocs && registratorAssocs.length) {
         registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
     } else {
@@ -8082,10 +8083,15 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
     for(i = 0; i < registrars.length; ++i) {
         statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "DA_REGISTRAR_DYN", task);
     }
-    /* подготавливаем уведомление */
-    notification = outgoingStatemachine.prepareNotificationAboutRegistration(outgoing, registrars);
     /* рассылаем уведомление */
-    notifications.sendNotification(notification);
+    notifications.sendNotification({
+        author: 'System',
+        recipients: registrars,
+        templateCode: 'OUTGOING_REGISTER',
+        templateConfig: {
+            mainObject: stm_document
+        }
+    });
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -8952,8 +8958,15 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                                                 <value><![CDATA[/* уведомить об отправке */
 (function() {
     var outgoing = stm_document,
-        notification = outgoingStatemachine.prepareNotificationAboutSending(outgoing);
-    notifications.sendNotification(notification);
+        senders = orgstructure.getEmployeesByBusinessRoleId('OUTGOING_SENDERS', true);
+    notifications.sendNotification({
+        author: 'System',
+        recipients: senders,
+        templateCode: 'OUTGOING_SEND',
+        templateConfig: {
+            mainObject: stm_document
+        }
+    });
 
 	var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(outgoing, "№ {~REGNUM} от {~REGDATE}") + " на отправку";
     logText = substitude.formatNodeTitle(outgoing.nodeRef.toString(), logText);

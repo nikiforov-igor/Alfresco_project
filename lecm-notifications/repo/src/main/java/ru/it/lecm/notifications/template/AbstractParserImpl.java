@@ -1,7 +1,6 @@
 package ru.it.lecm.notifications.template;
 
 import java.util.Map;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -29,7 +28,7 @@ public abstract class AbstractParserImpl implements Parser {
 	/**
 	 * Создание объекта objects для SpEL'а.
 	 */
-	protected void setObjects(Map<String, NodeRef> objects) {
+	protected void setObjects(Map<String, Object> objects) {
 		this.notificationObjects = new ObjectMapImpl(objects, applicationContext);
 	}
 }
