@@ -1,3 +1,5 @@
+var formsConfig = null;
+
 function getArgument(argName, defValue) {
     var result = args[argName];
 
@@ -14,7 +16,7 @@ function getFormConfig(itemId, formId, useDefaultForm) {
     var nodeConfig = config.scoped[itemId];
     if (nodeConfig !== null) {
         // get the forms configuration
-        var formsConfig = nodeConfig.forms;
+        formsConfig = nodeConfig.forms;
 
         if (formsConfig !== null) {
             if (formId !== null && formId.length > 0) {
@@ -80,6 +82,74 @@ function createPostBody(itemKind, itemId, visibleFields, formConfig) {
     }
 
     return postBody;
+}
+
+function isDataTypeNumber(dataType)
+{
+    if ("int" === dataType || "long" === dataType || "double" === dataType || "float" === dataType)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+function processFieldConstraints(fieldDefinition, fieldConfig) {
+    var constraints = [];
+    if (fieldDefinition.endpointMandatory) {
+        constraints.push(generateConstraintModelById(fieldDefinition, 'MANDATORY'));
+    }
+
+    if (fieldConfig) {
+        var constraintDefinitionMap = fieldConfig.getConstraintDefinitionMap();
+        if (constraintDefinitionMap) {
+            for (var i = 0; i < constraintDefinitionMap.length; i++) {
+                var constraintHandler = constraintDefinitionMap[i];
+                constraints.push(generateConstraintModel(fieldDefinition, constraintHandler));
+            }
+        }
+    }
+
+    if (fieldDefinition.constraints) {
+        for (i = 0; i < fieldDefinition.constraints.length; i++) {
+            constraints.push(generateConstraintModelById(fieldDefinition, fieldDefinition.constraints[i].type))
+        }
+    }
+
+    if (isDataTypeNumber(fieldDefinition.dataType)) {
+        constraints.push(generateConstraintModelById(fieldDefinition, 'NUMBER'));
+    }
+
+
+
+    return constraints;
+
+}
+
+function generateConstraintModelById(fieldDefinition, constraintId) {
+    var constraintHandlers = formsConfig.getConstraintHandlers();
+    var constraintHandler = constraintHandlers.items[constraintId];
+
+    return generateConstraintModel(fieldDefinition, constraintHandler);
+}
+
+function generateConstraintModel(fieldDefinition, constraintHandler) {
+    var constraint = {};
+
+    if (constraintHandler) {
+        constraint.fieldId = fieldDefinition.dataKeyName;
+        constraint.handler = constraintHandler.validationHandler;
+        constraint.event = constraintHandler.event;
+        if (constraintHandler.messageId) {
+            constraint.message = constraintHandler.messageId;
+        } else if (constraintHandler.message) {
+            constraint.message = constraintHandler.message;
+        } else {
+            constraint.message = constraintHandler.validationHandler + ".message";
+        }
+    }
+
+    return constraint;
 }
 
 function main() {
@@ -169,6 +239,7 @@ function main() {
                         colDef.control.params.push(param);
                     }
                 }
+                colDef.constraints = processFieldConstraints(colDef, formField);
             }
             model.fields.push(colDef);
         }

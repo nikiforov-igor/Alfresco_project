@@ -257,7 +257,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				}, YAHOO.lang.merge(this.defaultParams, {
 					endpointMany: field.endpointMany
 				})),
-				fieldId = field.name.replace(/:/g, '_'),
+				fieldId = field.formsName,
 				htmlid = obj.record.getId() + '-value-ctrl';
 
 			if (field.name === initial.attribute && initial.value) {
@@ -266,6 +266,10 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 			if (prevField && this.selectedFields.hasOwnProperty(prevField.name)) {
 				delete this.selectedFields[prevField.name];
+				Bubbling.fire('validatorUnregister', {
+					bubblingLabel: 'documentsTemplatesDetailsView',
+					fieldId: htmlid + '_' + prevField.formsName
+				});
 			}
 			this.selectedFields[field.name] = field;
 			this._updateDisabledOptions();
@@ -281,6 +285,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					htmlid: htmlid,
 					params: JSON.stringify(params)
 				},
+				fieldConstraints: field.fieldConstraints,
 				valueId: obj.record.getId() + '-value',
 				previousComponents: previousComponents,
 				successCallback: {
@@ -295,6 +300,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						container.innerHTML = markup;
 						// Run the js code from the webscript's <script> elements
 						setTimeout(scripts, 0);
+
+						Bubbling.fire('validatorRegister', {
+							bubblingLabel: 'documentsTemplatesDetailsView',
+							fieldConstraints: successResponse.config.fieldConstraints,
+							htmlId: successResponse.config.dataObj.htmlid
+						});
 					}
 				},
 				failureMessage: this.msg('message.failure'),
@@ -304,14 +315,14 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		onAddTemplateAttribute: function (layer, args) {
 			/* this === LogicECM.module.DocumentsTemplates.Attributes */
-			this.getFields().then(function (fields) {
-				var hasUnselectedFields = fields.some(function (field) {
-					return !this.selectedFields.hasOwnProperty(field.name);
-				}, this);
+			var obj = args[1];
+			if (this._hasEventInterest(obj)) {
+				this.getFields().then(function (fields) {
+					var hasUnselectedFields = fields.some(function (field) {
+						return !this.selectedFields.hasOwnProperty(field.name);
+					}, this);
 
-				if (hasUnselectedFields) {
-					var obj = args[1];
-					if (this._hasEventInterest(obj)) {
+					if (hasUnselectedFields) {
 						this.widgets.datatable.addRow({
 							'initial': {
 								dataType: null,
@@ -324,11 +335,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							'attribute': null,
 							'value': null
 						});
+					} else {
+						Alfresco.util.PopupManager.displayMessage({text: this.msg("templare-no-attributes-to-add.message")});
 					}
-				} else {
-					Alfresco.util.PopupManager.displayMessage({text: this.msg("templare-no-attributes-to-add.message")});
-				}
-			}, this);
+				}, this);
+			}
 		},
 
 		onDeleteTemplateAttribute: function (event) {
@@ -343,6 +354,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				}
 				this._clearComponents(this._getPreviousComponents(record.getId()));
 				this.widgets.datatable.deleteRow(event.target);
+
+				var htmlId = record.getId() + '-value-ctrl';
+				Bubbling.fire('validatorUnregister', {
+					bubblingLabel: 'documentsTemplatesDetailsView',
+					fieldId: htmlId + '_' + field.formsName
+				});
+
 				return false;
 			}
 		},

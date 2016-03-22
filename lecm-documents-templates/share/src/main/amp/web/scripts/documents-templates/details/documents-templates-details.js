@@ -22,6 +22,8 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		Bubbling.on('templateCreated', this.onTemplateCreated, this);
 		Bubbling.on('templateEdited', this.onTemplateEdited, this);
 		Bubbling.on('submitTemplate', this.onTemplateSubmit, this);
+		Bubbling.on('validatorRegister', this.onValidatorRegister, this);
+		Bubbling.on('validatorUnregister', this.onValidatorUnregister, this);
 		return this;
 	};
 
@@ -164,6 +166,34 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		onReady: function () {
 			console.log(this.name + '[' + this.id + '] is ready');
+		},
+
+		onValidatorRegister: function (layer, args) {
+			var obj = args[1];
+
+			if (this._hasEventInterest(obj)) {
+				var fieldConstraints = obj.fieldConstraints;
+				if (fieldConstraints) {
+					fieldConstraints.forEach(function (constraint) {
+						Bubbling.fire('registerValidationHandler', YAHOO.lang.merge(constraint, {
+							fieldId: obj.htmlId + '_' + constraint.fieldId,
+							handler: eval(constraint.handler),
+							args: {}
+						}));
+					});
+				}
+			}
+		},
+
+		onValidatorUnregister: function(layer, args) {
+			var obj = args[1];
+			if (this._hasEventInterest(obj)) {
+				var fieldId = obj.fieldId;
+				YAHOO.util.Event.removeListener(fieldId);
+				this.widgets.formsRuntime.validations = this.widgets.formsRuntime.validations.filter(function (validation) {
+					return fieldId != validation.fieldId;
+				});
+			}
 		}
 	}, true);
 })();
