@@ -67,7 +67,10 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 							break;
 					}
 				}
-			});
+				if (childNode.expanded && !childNode.isLeaf) {
+					this._createInsituEditors(childNode);
+				}
+			}, this);
 		},
 
 		_deleteInsituEditors: function (node) {
@@ -75,7 +78,10 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				if (childNode.data.insituEditor) {
 					delete childNode.data.insituEditor;
 				}
-			});
+				if (childNode.expanded && !childNode.isLeaf) {
+					this._deleteInsituEditors(childNode);
+				}
+			}, this);
 		},
 
 		_loadTypesData: function (node, fnLoadComplete) {
@@ -358,13 +364,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 		},
 
 		onDeleteNode: function (layer, args) {
-			var parentNode;
 			if (this._hasEventInterest(args[1]) && this.currentDeleteNode) {
-				parentNode = this.currentDeleteNode.parent;
-				this._deleteInsituEditors(parentNode);
+				this._deleteInsituEditors(this.widgets.treeRoot);
 				this.widgets.treeView.removeNode(this.currentDeleteNode, true);
 				delete this.currentDeleteNode;
-				this._createInsituEditors(parentNode);
+				this._createInsituEditors(this.widgets.treeRoot);
 			}
 		},
 
@@ -375,11 +379,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			this.widgets.treeView.data = {
 				documentsTemplates: this
 			};
-			var root = new YAHOO.widget.TextNode({
+			this.widgets.treeRoot = new YAHOO.widget.TextNode({
 				label: this.msg('template-tree-root.title'),
 				expanded: true
 			}, this.widgets.treeView.getRoot());
-			root.setDynamicLoad(this.bind(this._loadTypesData));
+			this.widgets.treeRoot.setDynamicLoad(this.bind(this._loadTypesData));
 			this.widgets.treeView.subscribe('expandComplete', this.onExpandComplete, this.widgets.treeView, this);
 			this.widgets.treeView.subscribe('clickEvent', this.onTreeNodeClicked, this.widgets.treeView, this);
 
