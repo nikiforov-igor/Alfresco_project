@@ -245,14 +245,14 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
      * @return Множество атомарных уведомлений
      */
     private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) throws TemplateRunException, TemplateParseException {
-		String templateBody = parseTemplateRef(generalizedNotification.getTemplateRef(), generalizedNotification.getTemplateModel());
-		String templateDescription = parseTemplate(generalizedNotification.getTemplate(), generalizedNotification.getTemplateModel());
-		String templateSubject  = parseTemplate(generalizedNotification.getSubject(), generalizedNotification.getTemplateModel());
         long start = System.currentTimeMillis();
         logger.trace("createAtomicNotifications start: {}", start);
-        Set<NotificationUnit> result = new HashSet<NotificationUnit>();
+        Set<NotificationUnit> result = new HashSet<>();
         if (generalizedNotification != null) {
-            Set<NodeRef> employeeRefs = new HashSet<NodeRef>();
+			String templateBody = parseTemplateRef(generalizedNotification.getTemplateRef(), generalizedNotification.getTemplateModel());
+			String templateDescription = parseTemplate(generalizedNotification.getTemplate(), generalizedNotification.getTemplateModel());
+			String templateSubject  = parseTemplate(generalizedNotification.getSubject(), generalizedNotification.getTemplateModel());
+            Set<NodeRef> employeeRefs = new HashSet<>();
             if (generalizedNotification.getRecipientEmployeeRefs() != null) {
                 employeeRefs.addAll(generalizedNotification.getRecipientEmployeeRefs());
                 logger.trace("Recipients added. Current size: {}", employeeRefs.size());
