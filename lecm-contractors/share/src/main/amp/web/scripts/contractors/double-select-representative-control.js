@@ -26,8 +26,16 @@ LogicECM.module = LogicECM.module || {};
 
         this.previousSelected = null;
 		this.controlsDeferred = new Alfresco.util.Deferred(["AssociationTreeViewer"], {
-			fn: this._updateControls.bind(this, true, {}, {}),
-			scope: this
+			scope: this,
+			obj: {
+				selectedContractor: null,
+				reset: false,
+				autocompleteConf: {},
+				treeConf: {}
+			},
+			fn: function (oParams) {
+				this._updateControls(obj.selectedContractor, obj.reset, obj.autocompleteConf, obj.treeConf);
+			}
 		});
 
         return this;
@@ -36,8 +44,8 @@ LogicECM.module = LogicECM.module || {};
     YAHOO.extend(LogicECM.module.DoubleSelectRepresentativeForContractor, Alfresco.component.Base, {
         previousSelectedContr: null,
         previousSelectedOrg: null,
-		
-		
+
+
 		controlsDeferred: null,
 
         options: {
@@ -67,7 +75,7 @@ LogicECM.module = LogicECM.module || {};
 
         onReady: function SelectRepresentativeForContractor_onReady() {
         },
-		
+
 		onControlRegistered: function (layer, args) {
 			var obj = args[1];
 			var control = obj.eventGroup;
