@@ -9,18 +9,18 @@
 		<items>
 			<item name="cm:OUTGOING_REWORK" type="lecm-notification-template:template">
 				<property name="cm:name"><![CDATA[OUTGOING_REWORK]]></property>
-				<property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink("{lecm-document:present-string}")} был возвращен на доработку автором документа.]]></property>
+				<property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} был возвращен на доработку автором документа.]]></property>
 				<property name="lecm-notification-template:description"><![CDATA[Исходящий. Вернуть на доработку]]></property>
 				<property name="lecm-notification-template:subject"><![CDATA[]]></property>
 			</item>
 			<item name="cm:OUTGOING_REGISTER" type="lecm-notification-template:template">
-				<property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink("{lecm-document:present-string}")} поступил Вам на регистрацию.]]></property>
+				<property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} поступил Вам на регистрацию.]]></property>
 				<property name="cm:name"><![CDATA[OUTGOING_REGISTER]]></property>
 				<property name="lecm-notification-template:description"><![CDATA[Исходящий. Направить на регистрацию]]></property>
 				<property name="lecm-notification-template:subject"><![CDATA[]]></property>
 			</item>
 			<item name="cm:OUTGOING_SEND" type="lecm-notification-template:template">
-				<property name="lecm-notification-template:template"><![CDATA[На отправку поступил документ {#mainObject.wrapAsLink("{lecm-document:present-string}")}.]]></property>
+				<property name="lecm-notification-template:template"><![CDATA[На отправку поступил документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))}.]]></property>
 				<property name="cm:name"><![CDATA[OUTGOING_SEND]]></property>
 				<property name="lecm-notification-template:description"><![CDATA[Исходящий. Подготовить к отправке]]></property>
 				<property name="lecm-notification-template:subject"><![CDATA[]]></property>
