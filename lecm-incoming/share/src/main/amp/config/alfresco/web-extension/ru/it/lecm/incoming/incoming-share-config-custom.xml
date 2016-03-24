@@ -734,7 +734,7 @@
                             <control-param name="targetField">assoc:lecmIncomingWf:sendToReviewRecipient</control-param>
                         </control>
                     </field>
-                    <field id="bpm:comment">
+                    <field id="bpm:comment" label-id="label.commentary">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                 </appearance>
