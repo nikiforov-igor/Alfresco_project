@@ -17,14 +17,17 @@
     width: 80px !important;
 }
 #propStartDateReal .control .label-div {
-    width: 148px !important;
+    width: 138px !important;
 }
 #propEndDateReal .control .label-div {
-    width: 159px !important;
+    width: 158px !important;
 }
 #price .price-control .price-currency {
-    width: 330px;
+    width: 330px !important;
 }
 #price .price-control .price-currency .label-div {
-    display: inline;
+    display: inline !important;
+}
+#propIndexTableRow {
+    width: 34% !important;
 }
