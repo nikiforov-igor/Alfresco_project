@@ -10,9 +10,12 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
@@ -20,22 +23,19 @@ import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.notifications.template.FreemarkerParserImpl;
+import ru.it.lecm.notifications.template.Parser;
+import ru.it.lecm.notifications.template.SpelParserImpl;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import ru.it.lecm.notifications.template.FreemarkerParserImpl;
-import ru.it.lecm.notifications.template.Parser;
-import ru.it.lecm.notifications.template.SpelParserImpl;
 
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_BUSINESS_ROLE;
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_EMPLOYEE;
-import ru.it.lecm.secretary.SecretaryService;
 
 /**
  * User: AIvkin Date: 10.01.13 Time: 16:53
@@ -653,15 +653,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	@Override
 	public void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject) {
-		NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
-		String template = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
-		String subject = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
-		List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
-		NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
 		Notification notification = new Notification(config);
-		notification.setTemplate(template);
-		notification.setSubject(subject);
-		notification.setTemplateRef(templateRef);
+        fillNotificationByTemplateCode(notification, templateCode);
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientRefs);
 		notification.setObjectRef((NodeRef)config.get("mainObject"));
@@ -669,6 +662,19 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 		sendNotification(notification, dontCheckAccessToObject);
 	}
+
+    @Override
+    public void fillNotificationByTemplateCode(Notification notification, String templateCode) {
+        NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
+        String template = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
+        String subject = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
+        List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
+        NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+
+        notification.setTemplate(template);
+        notification.setSubject(subject);
+        notification.setTemplateRef(templateRef);
+    }
 
     private class NotificationTransactionListener implements TransactionListener {
 

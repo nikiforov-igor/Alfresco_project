@@ -1938,15 +1938,17 @@
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[(function(){
-    var doc = bpm_package.children[0];
+    var recipients = stm_document.associations["lecm-incoming:recipient-assoc"];
+    statemachine.grandDynamicRoleForEmployee(stm_document, recipients[0], "DA_RECIPIENT_DYN", task);
 
-    var recipient = doc.associations["lecm-incoming:recipient-assoc"];
-    statemachine.grandDynamicRoleForEmployee(doc, recipient[0], "DA_RECIPIENT_DYN", task);
-
-    var notificationText = "Вам направлен новый документ ";
-    notificationText += documentScript.wrapperDocumentLink(doc,"{lecm-document:title}");
-
-    notifications.sendNotificationFromCurrentUser(recipient,notificationText, doc, true);
+    notifications.sendNotificationFromCurrentUser({
+        recipients: recipients,
+        templateCode: 'INCOMING_SEND_TO_RECIPIENT',
+        templateConfig: {
+            mainObject: stm_document
+        },
+        dontCheckAccessToObject: true
+    });
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -2017,17 +2019,20 @@
                                                             <property>
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
-    var incoming = bpm_package.children[0];
+    var incoming = stm_document;
     var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
     if (recipient != null && recipient.length == 1) {
         lecmPermission.revokeDynamicRole(incoming, recipient[0], "DA_RECIPIENT_DYN");
     }
     var curators =  orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
-    var notificationText = documentScript.wrapperLink(recipient[0].nodeRef,"{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name}");
-    notificationText += " просит зарегистрировать ";
-    var docTitle = substitude.formatNodeTitle(incoming, "входящий документ {lecm-incoming:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:fullname}");
-    notificationText += documentScript.wrapperDocumentLink(incoming, docTitle);
-    notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);
+
+    notifications.sendNotificationFromCurrentUser({
+        recipients: curators,
+        templateCode: 'INCOMING_REGISTRATION_REQUEST',
+        templateConfig: {
+            mainObject: stm_document
+        }
+    });
 
 	var currentUser =  orgstructure.getCurrentEmployee();
     var logText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
@@ -5313,7 +5318,7 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
                                                             <property>
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
-    var incoming = bpm_package.children[0];
+    var incoming = stm_document;
     var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
     if (recipient != null && recipient.length == 1) {
         lecmPermission.revokeDynamicRole(incoming, recipient[0], "DA_RECIPIENT_DYN");
@@ -5326,13 +5331,20 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
     notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
     if (sendToExecution != null) {
-      var sendToExecutionUser = search.findNode(sendToExecution);
-      if (sendToExecutionUser != null) {
-          notificationText += " сотруднику " + documentScript.wrapperLink(sendToExecutionUser, sendToExecutionUser.properties["lecm-orgstr:employee-short-name"]);
-      }
+        var sendToExecutionUser = search.findNode(sendToExecution);
+    } else {
+        sendToExecutionUser = null;
     }
 
-    notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);
+    notifications.sendNotificationFromCurrentUser({
+        recipients: curators,
+        templateCode: 'INCOMING_RETURN_DOCUMENT',
+        templateConfig: {
+            mainObject: stm_document,
+            sender: currentUser,
+            sendToExecutionUser: sendToExecutionUser
+        }
+    });
 
   	businessJournal.log(incoming.nodeRef.toString(), "RETURN_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), notificationText), []);
 })();]]></value>
@@ -5527,13 +5539,23 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
     notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
     if (sendToExecution != null) {
-      var sendToExecutionUser = search.findNode(sendToExecution);
-      if (sendToExecutionUser != null) {
-          notificationText += " сотруднику " + documentScript.wrapperLink(sendToExecutionUser, sendToExecutionUser.properties["lecm-orgstr:employee-short-name"]);
-      }
+        var sendToExecutionUser = search.findNode(sendToExecution);
+        if (sendToExecutionUser != null) {
+            notificationText += " сотруднику " + documentScript.wrapperLink(sendToExecutionUser, sendToExecutionUser.properties["lecm-orgstr:employee-short-name"]);
+        }
+    } else {
+        sendToExecutionUser = null;
     }
-  	notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);
 
+  	notifications.sendNotificationFromCurrentUser({
+        recipients: curators,
+        templateCode: 'INCOMING_RETURN_DOCUMENT',
+        templateConfig: {
+            mainObject: stm_document,
+            sender: currentUser,
+            sendToExecutionUser: sendToExecutionUser
+        }
+    });
 
 	businessJournal.log(incoming.nodeRef.toString(), "RETURN_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), notificationText), []);
 })();]]></value>

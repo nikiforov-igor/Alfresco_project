@@ -8,7 +8,6 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.incoming.beans.IncomingServiceImpl;
 import ru.it.lecm.notifications.beans.Notification;
@@ -16,10 +15,7 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -31,9 +27,6 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
     private NotificationsService notificationsService;
     private NodeService nodeService;
     private IWorkCalendar calendarBean;
-    private IncomingServiceImpl incomingService;
-    private OrgstructureBean orgstructureBean;
-    private DocumentService documentService;
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
@@ -45,10 +38,6 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
 
     public void setCalendarBean(IWorkCalendar calendarBean) {
         this.calendarBean = calendarBean;
-    }
-
-    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
-        this.orgstructureBean = orgstructureBean;
     }
 
     @Override
@@ -77,26 +66,24 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
         int days = notificationsService.getSettingsNDays();
         Date workCalendarDate = calendarBean.getNextWorkingDate(now, days, Calendar.DAY_OF_MONTH);
 
-        String notificationDescription = null;
+        String notificationTemplateCode = null;
         if (now.after(incomingExecutionDate)) {
-            notificationDescription = "Превышен срок исполнения по документу ";
+            notificationTemplateCode = "INCOMING_EXCEEDED_DEADLINE";
         } else if (now.equals(incomingExecutionDate) || (incomingExecutionDate.after(now) && (incomingExecutionDate.before(workCalendarDate) || incomingExecutionDate.equals(workCalendarDate)))) {
-            notificationDescription = "Приближается срок исполнения документа ";
+            notificationTemplateCode = "INCOMING_APPROACHING_DEADLINE";
         }
 
-        if (notificationDescription != null) {
-            notificationDescription += incomingService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(nodeRef));
-            if (nodeService.getProperty(nodeRef, DocumentService.PROP_TITLE) != null) {
-                notificationDescription += ": " + nodeService.getProperty(nodeRef, DocumentService.PROP_TITLE).toString();
-            }
-            Notification notification = new Notification();
+        if (notificationTemplateCode != null) {
+            Map<String, Object> notificationTemplateModel = new HashMap<>();
+            notificationTemplateModel.put("mainObject", nodeRef);
+            Notification notification = new Notification(notificationTemplateModel);
+            notificationsService.fillNotificationByTemplateCode(notification, notificationTemplateCode);
             if (employeeList.size() > 0) {
                 notification.setRecipientEmployeeRefs(employeeList);
             } else if (unitList.size() > 0) {
                 notification.setRecipientOrganizationUnitRefs(unitList);
             }
             notification.setAuthor(AuthenticationUtil.getSystemUserName());
-            notification.setDescription(notificationDescription);
             notification.setObjectRef(nodeRef);
             notificationsService.sendNotification(notification);
         }
@@ -115,13 +102,5 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
-    }
-
-    public void setIncomingService(IncomingServiceImpl incomingService) {
-        this.incomingService = incomingService;
-    }
-
-    public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
     }
 }

@@ -39,6 +39,7 @@
           parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
                       ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                      ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       businessJournalLogEventsPolicy, documents.LogicEcmConnectionTypesBootstrap,
 					  regNumbers.regNumbersTemplatesDicBootstrap">
         <property name="dictionaries">
@@ -46,6 +47,7 @@
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-regnumbers.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-incoming-nt-items.xml</value>
             </list>
         </property>
     </bean>
@@ -143,10 +145,7 @@
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="calendarBean" ref="WorkCalendarService"/>
-        <property name="incomingService" ref="incomingService"/>
-        <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="publicAction" value="false" />
-        <property name="documentService" ref="documentService"/>
     </bean>
 
     <bean id="incoming.executionNotificationSchedule" class="ru.it.lecm.incoming.schedule.ExecutionNotificationSchedule">

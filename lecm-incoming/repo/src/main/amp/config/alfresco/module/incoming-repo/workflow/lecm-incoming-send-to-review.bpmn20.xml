@@ -30,12 +30,16 @@
 								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYN");
 								    	document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
 
-								    	var notificationText = currentEmployee.properties['lecm-orgstr:employee-short-name'] + "направил Вам документ ";
-	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
-	                                    notificationText += " на рассмотрение. Комментарий: " + comment;
-	                                    var recipients = [];
-	                                    recipients.push(recipient.nodeRef.toString());
-	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+								    	notifications.sendNotificationFromCurrentUser({
+											recipients: [recipient],
+											templateCode: 'INCOMING_REVIEW',
+											templateConfig: {
+												mainObject: document,
+												sender: currentEmployee,
+												comment: comment
+											},
+											dontCheckAccessToObject: true
+										});
 
 	                                    var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
@@ -54,7 +58,7 @@
 								    	        var employee = allEmployeeInUnit[i];
 								            	if (orgstructure.hasBusinessRole(employee, "INCOMING_REVIEWERS_IN_UNIT")) {
 								                	employees.push(employee);
-								                	recipients.push(employee.nodeRef.toString());
+								                	recipients.push(employee);
 								            	}
 								    	    }
 								    	}
@@ -63,7 +67,7 @@
                                             var boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
                                             if (boss != null) {
                                                 employees.push(boss);
-								                recipients.push(boss.nodeRef.toString());
+								                recipients.push(boss);
                                             }
                                         }
 
@@ -73,10 +77,16 @@
 								    	        document.createAssociation(employees[i], "lecm-eds-document:reviewers-assoc");
 								    	    }
 
-											var notificationText = currentEmployee.properties['lecm-orgstr:employee-short-name'] + "направил Вам документ ";
-	                                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
-	                                        notificationText += " на рассмотрение. Комментарий: " + comment;
-		                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+											notifications.sendNotificationFromCurrentUser({
+												recipients: recipients,
+												templateCode: 'INCOMING_REVIEW',
+												templateConfig: {
+													mainObject: document,
+													sender: currentEmployee,
+													comment: comment
+												},
+												dontCheckAccessToObject: true
+											});
 								    	}
 
 								    	var logObjects = [];
@@ -96,10 +106,16 @@
 							                document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
 							            }
 
-								    	var notificationText = currentEmployee.properties['lecm-orgstr:employee-short-name'] + "направил Вам документ ";
-	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:shortname}");
-	                                    notificationText += " на рассмотрение. Комментарий: " + comment;
-	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+								    	notifications.sendNotificationFromCurrentUser({
+											recipients: recipients,
+											templateCode: 'INCOMING_REVIEW',
+											templateConfig: {
+												mainObject: document,
+												sender: currentEmployee,
+												comment: comment
+											},
+											dontCheckAccessToObject: true
+										});
 							        }
 
 			                        var logObjects = [];

@@ -232,4 +232,6 @@ public interface NotificationsService {
 //	void sendNotification(String author, Map<String, NodeRef> objects, String templateCode, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject) throws TemplateRunException, TemplateParseException;
 
 	void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject);
+
+	void fillNotificationByTemplateCode(Notification notification, String templateCode);
 }
