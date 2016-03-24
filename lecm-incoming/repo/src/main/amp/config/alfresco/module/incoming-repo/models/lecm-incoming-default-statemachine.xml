@@ -3884,6 +3884,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>44d36049-ba3d-41e1-850d-14cfbb0b8a0e</name>
+                                        <nodeRef>workspace://SpacesStore/44d36049-ba3d-41e1-850d-14cfbb0b8a0e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect />
+                                            <business-role />
+                                        </aspects>
+                                        <associations />
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders />
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -5002,6 +5025,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>c4a329c9-decf-4144-9232-26c7ea2d6ba3</name>
+                                        <nodeRef>workspace://SpacesStore/c4a329c9-decf-4144-9232-26c7ea2d6ba3</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect />
+                                            <business-role />
+                                        </aspects>
+                                        <associations />
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders />
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -6104,6 +6150,29 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>95accdcf-6d6b-492f-9cb6-327f7fe9843a</name>
+                                        <nodeRef>workspace://SpacesStore/95accdcf-6d6b-492f-9cb6-327f7fe9843a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect />
+                                            <business-role />
+                                        </aspects>
+                                        <associations />
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders />
                                     </node>
                                 </nodes>
                             </subFolder>
@@ -9539,6 +9608,23 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>bb1698dc-5eba-45a0-a350-176f24c9e6d1</name>
+                        <nodeRef>workspace://SpacesStore/b8d86c05-ebb7-46f0-8e0e-b7097540fecd</nodeRef>
+                        <properties />
+                        <aspects>
+                            <business-role />
+                        </aspects>
+                        <associations />
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>INCOMING_ALREADY_REVIEWED_DYN</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders />
                     </node>
                 </nodes>
             </subFolder>

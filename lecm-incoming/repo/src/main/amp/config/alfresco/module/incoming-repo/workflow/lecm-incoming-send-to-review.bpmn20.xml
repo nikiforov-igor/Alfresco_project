@@ -28,6 +28,7 @@
 								if (recipient != null) {
 								 	if (recipient.typeShort == "lecm-orgstr:employee") {
 								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYN");
+								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_ALREADY_REVIEWED_DYN");
 								    	document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
 
 								    	notifications.sendNotificationFromCurrentUser({
