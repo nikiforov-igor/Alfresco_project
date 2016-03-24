@@ -46,22 +46,6 @@
                     <![CDATA[Входящий. Направить получателю (Не требует регистрации)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
             </item>
-            <item name="cm:INCOMING_APPROACHING_DEADLINE" type="lecm-notification-template:template">
-                <property name="cm:name"><![CDATA[INCOMING_APPROACHING_DEADLINE]]></property>
-                <property name="lecm-notification-template:template">
-                    <![CDATA[Приближается срок исполнения документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}: {lecm-document:title}"))}]]></property>
-                <property name="lecm-notification-template:description">
-                    <![CDATA[Входящий. Приближается срок исполнения]]></property>
-                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
-            </item>
-            <item name="cm:INCOMING_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
-                <property name="cm:name"><![CDATA[INCOMING_EXCEEDED_DEADLINE]]></property>
-                <property name="lecm-notification-template:template">
-                    <![CDATA[Превышен срок исполнения по документу {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}: {lecm-document:title}"))}]]></property>
-                <property name="lecm-notification-template:description">
-                    <![CDATA[Входящий. Превышен срок исполнения]]></property>
-                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
-            </item>
         </items>
     </item>
 </items>

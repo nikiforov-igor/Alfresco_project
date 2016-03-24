@@ -218,6 +218,7 @@
                         documents.LogicEcmModelsStampsBootstrap,
                         documents.dictionaries.LogicEcmModelsBootstrap,
                         ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                        ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                         businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
@@ -232,6 +233,7 @@
                 <value>alfresco/module/documents-repo/dictionaries/lecm-delivery-method-items.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-objectType-items.xml</value>
                 <value>alfresco/module/documents-repo/dictionaries/lecm-document-stamps.xml</value>
+                <value>alfresco/module/documents-repo/dictionaries/lecm-document-nt-items.xml</value>
                 <value>alfresco/module/documents-repo/models/lecm-document-br-items.xml</value>
 		    </list>
 	    </property>
