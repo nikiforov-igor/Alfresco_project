@@ -42,6 +42,12 @@
     <#assign secondShowCreateNewLink = false>
 </#if>
 
+<#if params.mixTypes?? && params.mixTypes?string == "true">
+    <#assign mixTypes = true>
+<#else>
+    <#assign mixTypes = false>
+</#if>
+
 <#assign endpointMany = field.endpointMany>
 <#if field.control.params.endpointMany??>
     <#assign endpointMany = (field.control.params.endpointMany == "true")>
@@ -239,7 +245,8 @@
             showAssocViewForm: ${showAssocViewForm?string},
 		    clearFormsOnStart: false,
 			fieldId: "${field.configName}-first",
-			formId: "${args.htmlid}"
+			formId: "${args.htmlid}",
+			checkTypes: ${(!mixType)?string}
 	    });
 	    fistControl.setMessages(${messages});
 
@@ -328,7 +335,8 @@
 		    currentValue: "${field.value!''}",
 		    clearFormsOnStart: false,
 			fieldId: "${field.configName}-second",
-			formId: "${args.htmlid}"
+			formId: "${args.htmlid}",
+			checkType: ${(!mixTypes)?string}
 	    });
 	    secondControl.setMessages(${messages});
 	}
