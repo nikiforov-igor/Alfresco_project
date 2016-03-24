@@ -1,13 +1,5 @@
 package ru.it.lecm.ord;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -22,6 +14,8 @@ import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.ord.api.ORDNotificationService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
+
+import java.util.*;
 
 /**
  *
@@ -47,7 +41,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 	
 	@Override
 	public void notifyInitiatorDeadlineComing(NodeRef documentRef, NodeRef initiatorRef, Date deadlineDate) {
-		List<NodeRef> recipients = new ArrayList<NodeRef>();
+		List<NodeRef> recipients = new ArrayList<>();
 		recipients.add(initiatorRef);
 		
 		Date comingSoonDate = workCalendarService.getEmployeePreviousWorkingDay(initiatorRef, deadlineDate, -DEADLINE_ALARM_PERIOD);
@@ -55,14 +49,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 		if (comingSoonDate != null) {
 			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
 			if (comingSoon >= 0) {
-				String message = createInitiatorDeadlineComingMessage(documentRef, deadlineDate);
-				
-				notificationsService.sendNotification(
-					AuthenticationUtil.getSystemUserName(), 
-					documentRef, 
-					message, 
-					recipients, 
-					null);
+				sendNotification("ORD_EXCEEDED_DEADLINE", documentRef, recipients);
 			}
 		}
 	}
@@ -71,46 +58,31 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
-	
-	private void sendNotification(String message, NodeRef documentRef, List<NodeRef> recipients) {
-		Notification notification = new Notification();
+
+	private void sendNotification(String templateCode, NodeRef documentRef, List<NodeRef> recipients) {
+		Map<String, Object> notificationTemplateModel = new HashMap<>();
+		notificationTemplateModel.put("mainObject", documentRef);
+		Notification notification = new Notification(notificationTemplateModel);
+		notificationsService.fillNotificationByTemplateCode(notification, templateCode);
 		notification.setAuthor(AuthenticationUtil.getSystemUserName());
-		notification.setDescription(message);
 		notification.setObjectRef(documentRef);
 		notification.setRecipientEmployeeRefs(recipients);
 		notificationsService.sendNotification(notification);
 	}
-	
-	public String createInitiatorDeadlineComingMessage(NodeRef documentRef, Date deadlineDate) {
-		String template = "Напоминание: документ %s по непонятным причинам до сих пор не исполнен, срок исполнения %s";
-		return String.format(template, ordDocumentService.getDocumentURL(documentRef), new SimpleDateFormat(DATE_FORMAT).format(deadlineDate));
-	}
 
 	@Override
 	public void notifyAssigneeDeadlineComing(NodeRef documentRef, NodeRef employee, Date deadlineDate) {
-		List<NodeRef> recipients = new ArrayList<NodeRef>();
+		List<NodeRef> recipients = new ArrayList<>();
 		recipients.add(employee);
 		Date comingSoonDate = workCalendarService.getEmployeePreviousWorkingDay(employee, deadlineDate, -DEADLINE_ALARM_PERIOD);
 		Date currentDate = new Date();
 		if (comingSoonDate != null) {
 			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
-						
 			if (comingSoon >= 0) {
-				String message = createAssigneeDeadlineComingMessage(documentRef, deadlineDate);
-				
-				notificationsService.sendNotification(
-					AuthenticationUtil.getSystemUserName(), 
-					documentRef, 
-					message, 
-					recipients, 
-					null);
+				sendNotification("ORD_APPROACHING_DEADLINE", documentRef, recipients);
+
 			}
 		}
-	}
-	
-	public String createAssigneeDeadlineComingMessage(NodeRef documentRef, Date deadlineDate) {
-		String template = "Напоминание: вам необходимо что-то сделать с незакрытыми пунктами документа %s, срок исполнения %s";
-		return String.format(template, ordDocumentService.getDocumentURL(documentRef), new SimpleDateFormat(DATE_FORMAT).format(deadlineDate));
 	}
 
 	@Override

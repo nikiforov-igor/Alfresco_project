@@ -3261,12 +3261,17 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 		for (i in stageItems) {
 			employees = stageItems[i].assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
 			if (employees && employees.length) {
-				recipients.push(employees[0].nodeRef.toString());
+				recipients.push(employees[0]);
 			}
 		}
-		documentLink = documentScript.wrapperDocumentLink(stm_document, '{lecm-document:present-string}');
-		msg = 'Документ ' + documentLink + ' был возвращен на доработку автором документа.';
-		notifications.sendNotification(recipients, msg, stm_document);
+
+		notifications.sendNotification({
+            recipients: recipients,
+            templateCode: 'DOCUMENT_REWORK',
+            templateConfig: {
+                mainObject: stm_document
+            }
+        });
 	}
 })();]]></value>
                                                             </property>
@@ -6914,11 +6919,14 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
         statemachine.grandDynamicRoleForEmployee(ord, registrars[i], "DA_REGISTRAR_DYN", task);
     }
 
-    /* подготавливаем уведомление */
-    notification = ordStatemachine.prepareNotificationAboutRegistration(ord, registrars);
-
     /* рассылаем уведомление */
-    notifications.sendNotification(notification);
+    notifications.sendNotification({
+        recipients: registrars,
+        templateCode: 'DOCUMENT_REGISTER',
+        templateConfig: {
+            mainObject: ord
+        }
+    });
 })();]]></value>
                                                             </property>
                                                             <property>
@@ -8756,11 +8764,14 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
         /* выдадим права контролеру */
         statemachine.grandDynamicRoleForEmployee(ord, controller, "DA_CONTROLLER_DYN", task);
 
-        /* подготавливаем уведомление */
-        notification = ordStatemachine.prepareNotificationToController(ord, controller);
-
         /* рассылаем уведомление */
-        notifications.sendNotification(notification);
+        notifications.sendNotification({
+            recipients: controllerAssoc,
+            templateCode: 'ORD_GEN_ORDERS',
+            templateConfig: {
+                mainObject: ord
+            }
+        });
     }
 })();]]></value>
                                                             </property>

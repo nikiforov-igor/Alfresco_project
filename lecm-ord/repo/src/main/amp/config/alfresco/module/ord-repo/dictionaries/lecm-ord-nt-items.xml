@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
+        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
+        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
+        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
+        <property name="lecm-dic:plane"><![CDATA[true]]></property>
+        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
+        <items>
+            <item name="cm:ORD_GEN_ORDERS" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ORD_GEN_ORDERS]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Вы назначены Контролером по документу {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))}. Срок исполнения: {#mainObject.attribute("lecm-eds-document:execution-date") != null ? #formatDate("dd.MM.yyyy", #mainObject.attribute("lecm-eds-document:execution-date")): "не указан"}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[ОРД. Сформировать поручения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ORD_APPROACHING_DEADLINE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Напоминание: вам необходимо что-то сделать с незакрытыми пунктами документа {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"}))}, срок исполнения {#mainObject.attribute("lecm-eds-document:execution-date") != null ? #formatDate("dd.MM.yyyy", #mainObject.attribute("lecm-eds-document:execution-date")): "не указан"}]]></property>
+                <property name="cm:name"><![CDATA[ORD_APPROACHING_DEADLINE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[ОРД. Приближается срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ORD_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Напоминание: документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:ext-present-string}"))} по непонятным причинам до сих пор не исполнен, срок исполнения {#mainObject.attribute("lecm-eds-document:execution-date") != null ? #formatDate("dd.MM.yyyy", #mainObject.attribute("lecm-eds-document:execution-date")): "не указан"}]]></property>
+                <property name="cm:name"><![CDATA[ORD_EXCEEDED_DEADLINE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[ОРД. Превышен срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+        </items>
+    </item>
+</items>
