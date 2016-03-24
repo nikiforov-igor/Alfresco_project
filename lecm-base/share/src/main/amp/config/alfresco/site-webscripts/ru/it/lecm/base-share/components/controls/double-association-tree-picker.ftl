@@ -246,7 +246,10 @@
 		    clearFormsOnStart: false,
 			fieldId: "${field.configName}-first",
 			formId: "${args.htmlid}",
-			checkTypes: ${(!mixType)?string}
+			<#if params.selectedItemsNameSubstituteString?has_content>
+			selectedItemsNameSubstituteString: "${params.selectedItemsNameSubstituteString}",
+			</#if>
+			checkType: ${(!mixTypes)?string}
 	    });
 	    fistControl.setMessages(${messages});
 
@@ -336,6 +339,9 @@
 		    clearFormsOnStart: false,
 			fieldId: "${field.configName}-second",
 			formId: "${args.htmlid}",
+			<#if params.selectedItemsNameSubstituteString?has_content>
+			selectedItemsNameSubstituteString: "${params.selectedItemsNameSubstituteString}",
+			</#if>
 			checkType: ${(!mixTypes)?string}
 	    });
 	    secondControl.setMessages(${messages});
