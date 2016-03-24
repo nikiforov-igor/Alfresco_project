@@ -95,10 +95,15 @@
                         task.setVariableLocal("internalDirect_formData", formData);
 
                         var curators = [];
-                        curators.push(employee.nodeRef.toString());
-					    var notificationText = documentScript.wrapperLink(initiator, initiator.properties["lecm-orgstr:employee-short-name"]) + " направил вам документ ";
-                        notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:ext-present-string}");
-                        notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+                        curators.push(employee);
+					    notifications.sendNotificationFromCurrentUser({
+                            recipients: curators,
+                            templateCode: 'INTERNAL_DIRECT',
+                            templateConfig: {
+                                mainObject: document,
+                                sender: initiator
+                            }
+                        });
 
                         var logObjects = [];
 				        logObjects.push("" + employee.nodeRef.toString());
@@ -119,7 +124,7 @@
 							var answerObject = search.findNode(task.getVariableLocal("answer"));
 							var curator = search.findNode(task.getVariableLocal("initiatorEmployee"));
 							var curators = [];
-							curators.push(curator.nodeRef.toString());
+							curators.push(curator);
 							var currentUser = orgstructure.getCurrentEmployee();
 							var newDocumentRef = task.getVariable("lecmWorkflowDocument_createdNodeRef");
 							if (newDocumentRef != null && newDocumentRef != "") {
@@ -145,9 +150,15 @@
                                     answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
                                     answerObject.properties["lecm-internal-table-structure:answer-details"] = "Принято к сведению";
                                     answerObject.save();
-                                    var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " принял к сведению направленный вами документ ";
-                                    notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
-                                    notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+
+                                    notifications.sendNotificationFromCurrentUser({
+                                        recipients: curators,
+                                        templateCode: 'INTERNAL_ACCEPT',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            sender: currentUser
+                                        }
+                                    });
 
 				                    var logText = "#initiator принял(а) внутренний документ "
 				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " к сведению";
@@ -180,9 +191,14 @@
                                     answerObject.properties["lecm-internal-table-structure:answer-details"] = "!html " + documentScript.wrapperAttribute(answerObject, answerText);
                                     answerObject.save();
 
-                                    var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " ответил с комментарием на ваш документ ";
-                                    notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
-                                    notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+                                    notifications.sendNotificationFromCurrentUser({
+                                        recipients: curators,
+                                        templateCode: 'INTERNAL_ANSWER',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            sender: currentUser
+                                        }
+                                    });
 
                                     var logText = "#initiator создал(а) ответ-комментарий к документу "
 				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}");

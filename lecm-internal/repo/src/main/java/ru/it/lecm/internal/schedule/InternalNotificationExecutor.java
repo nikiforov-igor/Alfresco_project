@@ -20,10 +20,7 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -90,19 +87,20 @@ public class InternalNotificationExecutor implements Job {
                             int days = notificationsService.getSettingsNDays();
                             Date workCalendarDate = calendarBean.getNextWorkingDate(now, days, Calendar.DAY_OF_MONTH);
 
-                            String notificationDescription = null;
+                            String notificationTemplateCode = null;
                             if (now.after(internalExecutionDate)) {
-                                notificationDescription = "Превышен срок исполнения по документу ";
+                                notificationTemplateCode = "DOCUMENT_EXCEEDED_DEADLINE";
                             } else if (now.equals(internalExecutionDate) || (internalExecutionDate.after(now) && (internalExecutionDate.before(workCalendarDate) || internalExecutionDate.equals(workCalendarDate)))) {
-                                notificationDescription = "Приближается срок исполнения документа ";
+                                notificationTemplateCode = "DOCUMENT_APPROACHING_DEADLINE";
                             }
 
-                            if (notificationDescription != null) {
-                                notificationDescription += internalService.wrapperLink(internal, nodeService.getProperty(internal, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(internal));
-                                Notification notification = new Notification();
+                            if (notificationTemplateCode != null) {
+                                Map<String, Object> notificationTemplateModel = new HashMap<>();
+                                notificationTemplateModel.put("mainObject", internal);
+                                Notification notification = new Notification(notificationTemplateModel);
+                                notificationsService.fillNotificationByTemplateCode(notification, notificationTemplateCode);
                                 notification.setRecipientEmployeeRefs(employeeList);
                                 notification.setAuthor(AuthenticationUtil.getSystemUserName());
-                                notification.setDescription(notificationDescription);
                                 notification.setObjectRef(internal);
                                 notificationsService.sendNotification(notification);
                             }

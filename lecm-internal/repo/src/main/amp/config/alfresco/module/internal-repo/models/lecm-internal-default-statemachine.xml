@@ -3390,12 +3390,16 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 		for (i in stageItems) {
 			employees = stageItems[i].assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
 			if (employees && employees.length) {
-				recipients.push(employees[0].nodeRef.toString());
+				recipients.push(employees[0]);
 			}
 		}
-		documentLink = documentScript.wrapperDocumentLink(stm_document, '{lecm-document:present-string}');
-		msg = 'Документ ' + documentLink + ' был возвращен на доработку автором документа.';
-		notifications.sendNotification(recipients, msg, stm_document);
+		notifications.sendNotification({
+			recipients: recipients,
+			templateCode: 'DOCUMENT_REWORK',
+			templateConfig: {
+				mainObject: stm_document
+			}
+		});
 	}
 })();]]></value>
                                                             </property>
@@ -6756,11 +6760,17 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
     /* раздаем права регистраторам */
     for (i = 0; i < registrars.length; ++i) {
         statemachine.grandDynamicRoleForEmployee(internal, registrars[i], 'DA_REGISTRAR_DYN', task);
-        recipients.push(registrars[i].getNodeRef().toString());
     }
 
     /* уведомление */
-    notifications.sendNotificationFromCurrentUser(recipients, notificationText, internal, true);
+    notifications.sendNotificationFromCurrentUser({
+        recipients: registrars,
+        templateCode: 'DOCUMENT_REGISTER',
+        templateConfig: {
+            mainObject: stm_document
+        },
+        dontCheckAccessToObject: true
+    });
 })();]]></value>
                                                             </property>
                                                             <property>
