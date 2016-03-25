@@ -36,10 +36,12 @@
 
 	<util:list id="reservation.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/reservation-bj-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/reservation-nt-items.xml</value>
 	</util:list>
 	<bean id="reservation.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+					  ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
 					  businessJournalLogEventsPolicy"
 		  p:dictionaries-ref="reservation.dictionaries"/>
 

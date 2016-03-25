@@ -84,8 +84,13 @@
 					<activiti:string><![CDATA[
 						reservationWorkflow.setEmptyRegnum(bpm_package);
 						var reservateInitiator = execution.getVariableLocal("reservateInitiator");
-						var notification = reservationWorkflow.prepareNotificationAboutEmptyRegistrars(bpm_package, reservateInitiator);
-						notifications.sendNotification(notification);
+						notifications.sendNotification({
+							recipients: [reservateInitiator],
+							templateCode: 'RESERVATION_EMPTY_REGISTRARS',
+							templateConfig: {
+								mainObject: bpm_package.children[0]
+							}
+						});
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
