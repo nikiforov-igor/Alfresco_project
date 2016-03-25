@@ -449,7 +449,7 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 		List<BusinessJournalRecord> filtered = new ArrayList<>();
 		for (BusinessJournalRecord record : res) {
 			if (initiator.isEmpty() || initiator.equals(record.getInitiator().toString())) {
-				if (mainObject.isEmpty() || mainObject.equals(record.getInitiator().toString())) {
+				if (mainObject.isEmpty() || mainObject.equals(record.getMainObject().toString())) {
 					if (eventCategory.isEmpty() || eventCategory.equals(record.getEventCategory().toString())) {
 						if (objectType.isEmpty() || objectType.equals(record.getObjectType().toString())) {
 							if ((begin != null && record.getDate().after(begin) || begin == null) && (end != null && record.getDate().before(end) || end == null)) {
