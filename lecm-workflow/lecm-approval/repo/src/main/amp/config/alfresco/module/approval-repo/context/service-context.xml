@@ -9,11 +9,13 @@
 	<util:list id="approve3.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-approval-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-approval-event-category-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-approval-nt-items.xml</value>
 	</util:list>
 
 	<bean id="approve3.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+					  ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
 					  businessJournalLogEventsPolicy"
 		  p:dictionaries-ref="approve3.dictionaries"/>
 

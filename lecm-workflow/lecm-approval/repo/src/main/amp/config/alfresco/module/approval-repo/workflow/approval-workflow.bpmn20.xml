@@ -8,11 +8,9 @@
   /* пометка итерации как завершенной */
   var isEnded = execution.isEnded();
   var deleteReason = (execution.getDeleteReason() != null) ? '' + execution.getDeleteReason() : null;
-  var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, j, size, length, currentDecision, items, state;
+  var document, initiator, currentIteration, stages, decisions, approvalDecision, i, j, size, length, currentDecision, items, state;
   if (isEnded || deleteReason) {
     document = bpm_package.children[0];
-    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
-    msg = 'Принято решение по согласованию документа ' + documentLink;
     initiator = execution.getVariable('initiatorEmployee');
     currentIteration = execution.getVariableLocal('currentIteration');
     stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
@@ -68,7 +66,14 @@
     currentIteration.properties['lecmWorkflowRoutes:routeCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
     currentIteration.save();
     /* уведомление о завершении согласования */
-    notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+
+    notifications.sendNotification({
+      recipients: [initiator],
+      templateCode: 'APPROVAL_RESOLUTION',
+      templateConfig: {
+          mainObject: document
+      }
+    });
     /* запись в БЖ о завершении согласования */
     businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Принято решение по согласованию документа #mainobject', []);
     /* отцепляемся от машины состояний, потому что мы все сделали */
@@ -206,13 +211,11 @@
               <activiti:string><![CDATA[(function(){ /* assign */
   var assignee = '' + task.getAssignee();
   var previousAssignee = '' + task.getVariableLocal('previousAssignee');
-  var document, documentLink, msg, employee;
+  var document, employee;
   var realExecution, stageItem, previousEmployee;
   if (previousAssignee != assignee) {
     task.setVariableLocal('previousAssignee', assignee);
     document = bpm_package.children[0];
-    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
-    msg = documentLink + ' направлен Вам на согласование.';
     employee = orgstructure.getEmployeeByLogin(assignee);
 
     /* Переназначение задачи */
@@ -228,7 +231,13 @@
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */
-    notifications.sendNotification([employee.nodeRef.toString()], msg, document);
+    notifications.sendNotification({
+      recipients: [employee],
+      templateCode: 'APPROVAL_DIRECT',
+      templateConfig: {
+          mainObject: document
+      }
+    });
   }
 })();]]></activiti:string>
             </activiti:field>
@@ -290,7 +299,7 @@
   var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
   var document = bpm_package.children[0];
   var employee = task.getVariableLocal('effectiveEmployee');
-  var documentLink, msg, initiator;
+  var initiator;
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
     attachment.move(stageItem);
@@ -307,10 +316,15 @@
   documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
   /* уведомление о согласовании */
   if (notifyAboutEveryDecision) {
-    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     initiator = realExecution.getVariable('initiatorEmployee');
-    msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
-    notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+    notifications.sendNotification({
+      recipients: [initiator],
+      templateCode: 'APPROVAL_EMPLOYEE_RESOLUTION',
+      templateConfig: {
+          mainObject: document,
+          employee: employee
+      }
+    });
     /* запись в БЖ о согласовании конкретным участником */
     businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Сотрудник #object1 принял решение по согласованию документа #mainobject', [employee.nodeRef.toString()]);
   }
@@ -367,13 +381,11 @@
               <activiti:string><![CDATA[(function(){ /* assign multi */
   var assignee = '' + task.getAssignee();
   var previousAssignee = '' + task.getVariableLocal('previousAssignee');
-  var document, documentLink, msg, employee;
+  var document, employee;
   var previousEmployee;
   if (previousAssignee != assignee) {
     task.setVariableLocal('previousAssignee', assignee);
     document = bpm_package.children[0];
-    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
-    msg = documentLink + ' направлен Вам на согласование.';
     employee = orgstructure.getEmployeeByLogin(assignee);
 
     /* Переназначение задачи */
@@ -387,7 +399,13 @@
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */
-    notifications.sendNotification([employee.nodeRef.toString()], msg, document);
+    notifications.sendNotification({
+      recipients: [employee],
+      templateCode: 'APPROVAL_DIRECT',
+      templateConfig: {
+          mainObject: document
+      }
+    });
   }
 })();]]></activiti:string>
             </activiti:field>
@@ -451,7 +469,7 @@
   var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
   var document = bpm_package.children[0];
   var employee = task.getVariableLocal('effectiveEmployee');
-  var documentLink, msg, initiator;
+  var initiator;
   task.setVariable('isCompleted', isCompleted);
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
@@ -469,10 +487,15 @@
   documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
   /* уведомление о согласовании */
   if (notifyAboutEveryDecision) {
-    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     initiator = realExecution.getVariable('initiatorEmployee');
-    msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
-    notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+    notifications.sendNotification({
+      recipients: [initiator],
+      templateCode: 'APPROVAL_EMPLOYEE_RESOLUTION',
+      templateConfig: {
+          mainObject: document,
+          employee: employee
+      }
+    });
     /* запись в БЖ о согласовании конкретным участником */
     businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Сотрудник #object1 принял решение по согласованию документа #mainobject', [employee.nodeRef.toString()]);
   }
@@ -512,7 +535,7 @@
   /* получаем настоящий execution */
   var realExecution = (execution.parent) ? execution.parent : execution;
 
-  var document, documentLink, msg;
+  var document;
   var localAssignee = realExecution.getVariableLocal('localAssignee');
   var localDueDate = realExecution.getVariableLocal('localDueDate');
   var isSameDay;
@@ -520,9 +543,13 @@
     isSameDay = Packages.org.apache.commons.lang.time.DateUtils.isSameDay(localDueDate, base.getValueConverter().convertValueForJava(new Date()));
     if (isSameDay) {
       document = bpm_package.children[0];
-      documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
-      var msg = 'Истек срок согласования Вами документа ' + documentLink + '.';
-      notifications.sendNotification([localAssignee.nodeRef.toString()], msg, document);
+      notifications.sendNotification({
+        recipients: [localAssignee],
+        templateCode: 'APPROVAL_EXCEEDED_DEADLINE',
+        templateConfig: {
+            mainObject: document
+        }
+      });
     }
   }
 })();]]></activiti:string>
