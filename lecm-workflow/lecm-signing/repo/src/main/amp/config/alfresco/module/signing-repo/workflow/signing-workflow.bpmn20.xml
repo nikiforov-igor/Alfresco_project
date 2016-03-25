@@ -59,7 +59,8 @@
   effectiveEmployee = delegation.getEffectiveEmployee(signerEmployee, 'LECM_SIGNER_DYN');
   if(effectiveEmployee == null || signerEmployee.nodeRef.equals(effectiveEmployee.nodeRef)) {
     /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
-    effectiveEmployee = secretaryService.getEffectiveEmployee(signerEmployee);
+    /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
+    /*effectiveEmployee = secretaryService.getEffectiveEmployee(signerEmployee);*/
   }
   task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(signerEmployee.nodeRef));
   task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));

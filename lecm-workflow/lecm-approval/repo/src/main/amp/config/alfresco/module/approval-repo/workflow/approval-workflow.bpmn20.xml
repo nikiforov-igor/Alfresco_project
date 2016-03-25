@@ -259,7 +259,8 @@
     effectiveEmployee = delegation.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
     if(effectiveEmployee == null || employees[0].nodeRef.equals(effectiveEmployee.nodeRef)) {
       /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
-      effectiveEmployee = secretaryService.getEffectiveEmployee(employees[0]);
+      /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
+      /*effectiveEmployee = secretaryService.getEffectiveEmployee(employees[0]);*/
     }
     task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
     task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
@@ -428,7 +429,8 @@
     effectiveEmployee = delegation.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
     if(effectiveEmployee == null || employees[0].nodeRef.equals(effectiveEmployee.nodeRef)) {
       /* так как делегирование или неактивно или не настроено, то получаем секретаря ответственного за задачи */
-      effectiveEmployee = secretaryService.getEffectiveEmployee(employees[0]);
+      /* update: начиная с 1.8.3 секретарь работает с задачами, назначенными непосредственно на руководителя */
+      /*effectiveEmployee = secretaryService.getEffectiveEmployee(employees[0]);*/
     }
     task.setVariableLocal('originalEmployee', base.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
     task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
