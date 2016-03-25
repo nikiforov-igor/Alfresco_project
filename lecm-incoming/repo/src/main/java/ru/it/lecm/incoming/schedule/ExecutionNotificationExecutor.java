@@ -68,9 +68,9 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
 
         String notificationTemplateCode = null;
         if (now.after(incomingExecutionDate)) {
-            notificationTemplateCode = "DOCUMENT_EXCEEDED_DEADLINE";
+            notificationTemplateCode = "INCOMING_EXCEEDED_DEADLINE";
         } else if (now.equals(incomingExecutionDate) || (incomingExecutionDate.after(now) && (incomingExecutionDate.before(workCalendarDate) || incomingExecutionDate.equals(workCalendarDate)))) {
-            notificationTemplateCode = "DOCUMENT_APPROACHING_DEADLINE";
+            notificationTemplateCode = "INCOMING_APPROACHING_DEADLINE";
         }
 
         if (notificationTemplateCode != null) {

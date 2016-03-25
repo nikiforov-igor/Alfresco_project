@@ -89,9 +89,9 @@ public class InternalNotificationExecutor implements Job {
 
                             String notificationTemplateCode = null;
                             if (now.after(internalExecutionDate)) {
-                                notificationTemplateCode = "DOCUMENT_EXCEEDED_DEADLINE";
+                                notificationTemplateCode = "INTERNAL_EXCEEDED_DEADLINE";
                             } else if (now.equals(internalExecutionDate) || (internalExecutionDate.after(now) && (internalExecutionDate.before(workCalendarDate) || internalExecutionDate.equals(workCalendarDate)))) {
-                                notificationTemplateCode = "DOCUMENT_APPROACHING_DEADLINE";
+                                notificationTemplateCode = "INTERNAL_APPROACHING_DEADLINE";
                             }
 
                             if (notificationTemplateCode != null) {

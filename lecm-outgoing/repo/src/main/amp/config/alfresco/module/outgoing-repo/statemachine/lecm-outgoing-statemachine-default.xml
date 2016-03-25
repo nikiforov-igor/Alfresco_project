@@ -3929,7 +3929,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 		}
 		notifications.sendNotification({
 			recipients: recipients,
-			templateCode: 'DOCUMENT_REWORK',
+			templateCode: 'OUTGOING_REWORK',
 			templateConfig: {
 				mainObject: stm_document
 			}
@@ -8087,7 +8087,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
     notifications.sendNotification({
         author: 'System',
         recipients: registrars,
-        templateCode: 'DOCUMENT_REGISTER',
+        templateCode: 'OUTGOING_REGISTER',
         templateConfig: {
             mainObject: stm_document
         }

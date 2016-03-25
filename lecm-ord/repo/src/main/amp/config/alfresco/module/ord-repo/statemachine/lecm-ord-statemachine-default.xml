@@ -3267,7 +3267,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 
 		notifications.sendNotification({
             recipients: recipients,
-            templateCode: 'DOCUMENT_REWORK',
+            templateCode: 'ORD_REWORK',
             templateConfig: {
                 mainObject: stm_document
             }
@@ -6922,7 +6922,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
     /* рассылаем уведомление */
     notifications.sendNotification({
         recipients: registrars,
-        templateCode: 'DOCUMENT_REGISTER',
+        templateCode: 'ORD_REGISTER',
         templateConfig: {
             mainObject: ord
         }

@@ -3395,7 +3395,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 		}
 		notifications.sendNotification({
 			recipients: recipients,
-			templateCode: 'DOCUMENT_REWORK',
+			templateCode: 'INTERNAL_REWORK',
 			templateConfig: {
 				mainObject: stm_document
 			}
@@ -6765,7 +6765,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
     /* уведомление */
     notifications.sendNotificationFromCurrentUser({
         recipients: registrars,
-        templateCode: 'DOCUMENT_REGISTER',
+        templateCode: 'INTERNAL_REGISTER',
         templateConfig: {
             mainObject: stm_document
         },

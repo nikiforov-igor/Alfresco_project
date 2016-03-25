@@ -31,6 +31,18 @@
                     <![CDATA[ОРД. Превышен срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
             </item>
+            <item name="cm:ORD_REWORK" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ORD_REWORK]]></property>
+                <property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} был возвращен на доработку автором документа.]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[ОРД. Вернуть на доработку]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ORD_REGISTER" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} поступил Вам на регистрацию.]]></property>
+                <property name="cm:name"><![CDATA[ORD_REGISTER]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[ОРД. Направить на регистрацию]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
         </items>
     </item>
 </items>
