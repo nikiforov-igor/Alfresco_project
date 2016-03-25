@@ -154,9 +154,10 @@ public class ExpressionDocument {
         return false;
     }
 
-    //Наличие вложения с определенным типом????
+    //Имя предыдущего статуса документа
     public String getPreviousStatusName() {
-        return stateMachineService.getPreviousStatusNameOnTake(nodeRef);
+        List<String> previousStatusesNames = stateMachineService.getPreviousStatusesNames(nodeRef);
+        return previousStatusesNames.size() > 1 ? previousStatusesNames.get(1) : null;
     }
 
 	public boolean hasDuplicates(boolean onlyHasRegDat, String... props) {
