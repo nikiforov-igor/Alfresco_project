@@ -14,6 +14,7 @@
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
 		<import uri="http://www.it.ru/logicECM/model/signing/aspects/1.0" prefix="lecmSignAspects"/>
+		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/lecm/ORD/1.0" prefix="lecm-ord"/>
@@ -146,6 +147,7 @@
 			<mandatory-aspects>
 				<aspect>lecm-ord-table-structure:table-items-aspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
+				<aspect>lecm-review-ts:review-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

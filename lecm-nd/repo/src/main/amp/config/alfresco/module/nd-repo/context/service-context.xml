@@ -33,7 +33,8 @@
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
             eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
             documents.LogicEcmModelsBootstrap,
-             lecm.sign2.helper.model.bootstrap"
+            lecm.sign2.helper.model.bootstrap
+            review.model.bootstrap"
           p:models-ref="nd.models"
           p:labels-ref="nd.models.labels"/>
 

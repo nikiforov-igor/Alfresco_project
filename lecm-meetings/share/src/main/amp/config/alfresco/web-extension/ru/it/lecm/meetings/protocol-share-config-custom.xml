@@ -33,11 +33,13 @@
 					<show id="lecm-protocol-ts:points-assoc"/>
 					<!--Список согласующих-->
 					<show id="lecm-contract:approval" force="true"/>
+					<show id="lecm-review-ts:review-table-assoc"/>
 				</field-visibility>
 				<appearance>
 					<set id="common" label-id="label.attributes"/>
 					<set id="points" label-id="label.points"/>
 					<set id="approvalTab" appearance="" label-id="label.approval"/>
+					<set id="review" label="Ознакомление"/>
 
 					<field id="lecm-document:title" set="common" />
 					<field id="lecm-eds-document:document-type-assoc" set="common">
@@ -93,6 +95,24 @@
 					<!--Список согласующих-->
 					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+					</field>
+					<field set="review" id="lecm-review-ts:review-table-assoc">
+						<control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+							<control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
+							<control-param name="datagridFormId">datagrid</control-param>
+							<control-param name="isTableSortable">true</control-param>
+							<control-param name="refreshAfterCreate">true</control-param>
+							<control-param name="forceEditable">true</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="allowEdit">false</control-param>
+							<control-param name="allowDelete">true</control-param>
+							<control-param name="dataSource">lecm/review/ds/reviewListDS</control-param>
+							<!--<control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>-->
+							<control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>
+							<control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>
+							<!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
+							<!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -270,6 +290,7 @@
 					<show id="lecm-eds-document:execution-date"/>
 					<!--Председатель совещания-->
 					<show id="lecm-protocol:meeting-chairman-assoc"/>
+					<show id="lecm-review-ts:review-table-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-contract:approval" label-id="label.approval"/>

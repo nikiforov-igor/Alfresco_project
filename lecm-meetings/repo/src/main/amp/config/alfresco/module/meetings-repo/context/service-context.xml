@@ -5,14 +5,14 @@
 	   xmlns:util="http://www.springframework.org/schema/util"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
-	
+
 	<util:list id="meetingsDictionariesModels">
 		<value>alfresco/module/${artifactId}/models/lecm-meetings-dictionaries-model.xml</value>
 	</util:list>
 	<util:list id="meetingsDictionariesLabels">
 		<value>alfresco/module/${artifactId}/messages/lecm-meetings-dictionaries-model</value>
 	</util:list>
-	
+
 	<bean id="meetings.dictionaries.modelsBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap
 				,ru.it.lecm.dictionary.dictionary-repo.dictionary
@@ -22,7 +22,7 @@
 		  p:models-ref="meetingsDictionariesModels"
 		  p:labels-ref="meetingsDictionariesLabels"
 	/>
-  
+
 	<util:list id="meetingsModels">
 		<value>alfresco/module/${artifactId}/models/lecm-meetings-table-structure-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-meetings-model.xml</value>
@@ -31,7 +31,7 @@
 		<value>alfresco/module/${artifactId}/messages/lecm-meetings-table-structure-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-meetings-model</value>
 	</util:list>
-  
+
 	<bean id="meetings.ModelsBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="dictionaryBootstrap,
 					meetings.dictionaries.modelsBootstrap,
@@ -40,18 +40,18 @@
 					lecm.approve3.model.bootstrap,
 					events.LogicEcmInternalBootstrap
 				 "
-		  p:models-ref="meetingsModels"		 
-		  p:labels-ref="meetingsLabels"		 
+		  p:models-ref="meetingsModels"
+		  p:labels-ref="meetingsLabels"
 	/>
-		
-	
+
+
 	<util:list id="meetingsDictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-br-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-agenda-point-states.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-bj-items.xml</value>
 	</util:list>
-	
-	
+
+
 	<util:list id="protocolModels">
 		<value>alfresco/module/${artifactId}/models/lecm-protocol-table-structure-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-protocol-model.xml</value>
@@ -60,23 +60,24 @@
 		<value>alfresco/module/${artifactId}/messages/lecm-protocol-table-structure-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-protocol-model</value>
 	</util:list>
-	
+
 	<bean id="protocol.ModelsBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="documents.LogicEcmModelsBootstrap,
 		      dictionaryBootstrap,
 			  ru.it.lecm.dictionary.dictionary-repo.dictionary,
 		      ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
   			  eds.models.bootstrap,
-			  errands.LogicEcmModelsBootstrap"
-		  p:models-ref="protocolModels"		 
-		  p:labels-ref="protocolLabels"		 
+			  errands.LogicEcmModelsBootstrap
+			  review.model.bootstrap"
+		  p:models-ref="protocolModels"
+		  p:labels-ref="protocolLabels"
 	/>
-	
+
 	<bean id="meetings.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="meetings.dictionaries.modelsBootstrap"
 		  p:dictionaries-ref="meetingsDictionaries"
 	/>
-	
+
 	<bean id="protocol.meetings.LogicEcmProtocolDictionariesBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="documents.dictionaries.LogicEcmModelsBootstrap,
 		  regNumbers.regNumbersTemplatesDicBootstrap,
@@ -100,7 +101,7 @@
 		  init-method="init"
 		  p:workflowService-ref="WorkflowService"
 		  p:personService-ref="personService"
-		  p:stateMachineService-ref="stateMachineHelper"	
+		  p:stateMachineService-ref="stateMachineHelper"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentTableService-ref="documentTableService"
 		  p:documentService-ref="documentService"
@@ -128,7 +129,7 @@
 	/>
 
 	<bean id="meetingsPolicy" class="ru.it.lecm.meetings.policy.MeetingsPolicy" parent="baseBean"
-		  init-method="init" 
+		  init-method="init"
 		  depends-on="documents.LogicEcmModelsBootstrap,
 				meetings.ModelsBootstrap,
 				meetingsService,
@@ -141,11 +142,11 @@
 		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:documentMembersService-ref="documentMembersService"
 		  p:meetingsService-ref="meetingsService"
-		  
+
 	/>
-	
+
 	<bean id="protocolPolicy" class="ru.it.lecm.meetings.policy.ProtocolPolicy" parent="baseBean"
-		  init-method="init" 
+		  init-method="init"
 		  depends-on="documents.LogicEcmModelsBootstrap,
 				protocolService,
 				documentTableService,
@@ -153,9 +154,9 @@
 		  p:documentTableService-ref="documentTableService"
 		  p:policyComponent-ref="policyComponent"
 		  p:behaviourFilter-ref="policyBehaviourFilter"
-		  
+
 	/>
-	
+
 	<bean id="protocol.statemachine.bootstrap" parent="defaultStatemachines"
 		  p:statemachineName="lecm-protocol:document"
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-protocol-statemachine-default.xml"/>
@@ -163,7 +164,7 @@
 	<bean id="meetings.statemachine.bootstrap" parent="defaultStatemachines"
 		 p:statemachineName="lecm-meetings:document"
 		 p:path="alfresco/module/${artifactId}/statemachine/lecm-meetings-statemachine-default.xml"/>
-	
+
 	<util:list id="protocol.taggedCounterRegistrator.tags">
 		<value>project</value>
 	</util:list>
@@ -171,7 +172,7 @@
 		  parent="regNumbersTaggedCounterRegistrator"
 		  p:documentType="lecm-protocol:document"
 		  p:tags-ref="protocol.taggedCounterRegistrator.tags"/>
-	
+
 	<bean id="protocolService" class="ru.it.lecm.meetings.beans.ProtocolServiceImpl" parent="baseBean"
 		  depends-on="protocol.ModelsBootstrap,
                       ServiceRegistry, nodeService, transactionService"
@@ -181,7 +182,7 @@
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
 		  p:orgstructureService-ref="serviceOrgstructure"
 	/>
-	
+
 	<bean id="protocolScript" parent="baseScript" class="ru.it.lecm.meetings.scripts.ProtocolWebScriptBean"
 		  depends-on="nodeService, protocolService"
 		  p:nodeService-ref="nodeService"
@@ -194,12 +195,12 @@
 		  p:protocolReportsService-ref="protocolReportsService"
 		  p:extensionName="protocolService"
 	/>
-	
+
 	<bean id="protocolReportsService" parent="baseBean"
 		  class="ru.it.lecm.meetings.beans.ProtocolReportsServiceImpl"
 		  p:reportsManager-ref="reportsManager"
 		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
-	
+
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
 		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
 		<property name="dictionaries">
@@ -212,8 +213,8 @@
 			</list>
 		</property>
 	</bean>
-	
-	
+
+
 	<bean id="protocol.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
@@ -234,5 +235,5 @@
             </list>
         </property>
     </bean>
-	
+
 </beans>

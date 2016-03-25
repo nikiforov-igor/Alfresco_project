@@ -10,11 +10,12 @@
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/protocol/table-structure/1.0" prefix="lecm-protocol-ts"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
+		<import uri="http://www.it.ru/logicECM/model/review-ts/1.0" prefix="lecm-review-ts"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/protocol/1.0" prefix="lecm-protocol"/>
 	</namespaces>
-    
+
 	<constraints>
 		<constraint name="lecm-protocol:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
 			<parameter name="presentString">
@@ -42,7 +43,7 @@
 			</parameter>
 		</constraint>
 	</constraints>
-    
+
 	<types>
 		<type name="lecm-protocol:document">
 			<title>Logic Ecm Protocol Document</title>
@@ -53,7 +54,7 @@
 					<type>d:boolean</type>
 					<mandatory>false</mandatory>
 				</property>
-				
+
 				<!--Служебные атрибуты-->
 				<property name="lecm-protocol:signers-assoc-ref">
                     <type>d:text</type>
@@ -184,7 +185,8 @@
 			</associations>
 			<mandatory-aspects>
                 <aspect>lecm-protocol-ts:points-table-aspect</aspect>
+				<aspect>lecm-review-ts:review-aspect</aspect>
             </mandatory-aspects>
-		</type>    
+		</type>
 	</types>
-</model>    
+</model>
