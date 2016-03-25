@@ -4,7 +4,7 @@
         <items updateMode="CreateOrUpdate">
             <item name="cm:Номер проекта внутреннего" type="lecm-regnum:template">
                 <property name="cm:name">Номер проекта внутреннего</property>
-                <property name="lecm-regnum:template-string">ВНУТР-{#formatNumber('00000', doc.counterYearDoctype('project'))}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-string">{#employeeOrgUnitCode(doc.creator)}-{#formatNumber('00000', doc.counterYearDoctype('project'))}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера проекта внутреннего</property>
                 <property name="lecm-regnum:template-service-id">INTERNAL_PRJ_NUMBER</property>
             </item>
