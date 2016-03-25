@@ -74,18 +74,22 @@
             <activiti:string><![CDATA[(function() { /* assign */
   var assignee = '' + task.getAssignee();
   var previousAssignee = '' + task.getVariableLocal('previousAssignee');
-  var document, documentLink, msg, employee;
+  var document, employee;
   if (previousAssignee != assignee) {
     task.setVariableLocal('previousAssignee', assignee);
     document = bpm_package.children[0];
-    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
-    msg = documentLink + ' направлен Вам на подписание.';
     employee = orgstructure.getEmployeeByLogin(assignee);
     task.setVariableLocal('effectiveEmployee', base.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_SIGNER_DYN', 'LECM_BASIC_PG_ResponsibleEmployee');
     /* уведомление актуальному исполнителю */
-    notifications.sendNotification([employee.nodeRef.toString()], msg, document);
+    notifications.sendNotification({
+      recipients: [employee],
+      templateCode: 'SIGNING_DIRECT',
+      templateConfig: {
+          mainObject: document
+      }
+    });
   }
 })();]]></activiti:string>
           </activiti:field>
@@ -115,17 +119,14 @@
         <activiti:field name="script">
           <activiti:string><![CDATA[(function() { /* запись в БЖ, рассылка уведомлений, запись результата в документ */
   var document = bpm_package.children[0];
-  var documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
   var initiator = execution.getVariable('initiatorEmployee');
   var signerEmployee = execution.getVariableLocal('signerEmployee');
   var effectiveEmployee = execution.getVariableLocal('effectiveEmployee');
-  var employeeName = effectiveEmployee.properties['lecm-orgstr:employee-short-name'];
   var decision = '' + execution.getVariableLocal('employeeDecision');
   var comment = (execution.getVariableLocal('employeeComment') != null) ? '' + execution.getVariableLocal('employeeComment') : null;
   var isSigned = 'SIGNED' == decision;
   var msg, bjMsg, wrapped;
   if (isSigned) {
-    msg = 'Сотрудник ' + employeeName + ' подписал документ ' + documentLink;
     bjMsg = 'Сотрудник #object1 подписал документ #mainobject';
 
     document.properties['lecmSignAspects:isSigned'] = true;
@@ -136,13 +137,21 @@
     document.createAssociation(effectiveEmployee, 'lecmSignAspects:signerEmployeeAssoc');
   } else {
     wrapped = documentScript.wrapperTitle('отклонил подписание', comment);
-    msg = 'Сотрудник ' + employeeName + ' ' + wrapped + ' документа ' + documentLink;
     bjMsg = 'Сотрудник #object1 ' + wrapped + ' документа #mainobject';
 
     document.properties['lecmSignAspects:signingState'] = 'COMPLETE';
     document.save();
   }
-  notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+  notifications.sendNotification({
+    recipients: [initiator],
+    templateCode: 'SIGNING_RESOLUTION',
+    templateConfig: {
+        mainObject: document,
+        signer: effectiveEmployee,
+        isSigned: isSigned,
+        comment: comment
+    }
+  });
   businessJournal.log(document.nodeRef.toString(), 'SIGNING', bjMsg, [effectiveEmployee.nodeRef.toString()]);
 })();]]></activiti:string>
         </activiti:field>

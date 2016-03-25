@@ -1,5 +1,15 @@
 package ru.it.lecm.notifications.template;
 
+import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.service.ServiceRegistry;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -7,14 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.alfresco.repo.admin.SysAdminParams;
-import org.alfresco.service.ServiceRegistry;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * @author vkuprin
@@ -87,6 +89,11 @@ public final class Utils implements ApplicationContextAware {
         String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
         return "<a href=\"" + serverUrl + url + "\">"
                 + description + "</a>";
+	}
+
+	@NotificationsTemplateFunction
+	public static String wrapTitle(String text, String title) {
+		return  "<span class=\"wrapper-title\" title=\"" + StringEscapeUtils.escapeHtml(title) + "\">" + text + "</span>";
 	}
 	
 	private Utils() {
