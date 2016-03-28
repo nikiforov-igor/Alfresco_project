@@ -96,11 +96,11 @@ LogicECM.module = LogicECM.module || {};
 									actionChiefDiv = document.createElement('div');
 									actionChiefDiv.className = 'widget-subbutton-grey text-cropped';
 									if (action.type == 'chief_task') {
-										actionChiefDiv.innerHTML = Alfresco.util.message('label.take_chief_task', this.name, {0: action.chiefLogin});
+										actionChiefDiv.innerHTML = Alfresco.util.message('label.take_chief_task', this.name, {0: action.chiefShortName});
 										actionChiefDiv.onclick = this.takeChiefTask.bind(this, action);
 									}
 									else {
-										actionChiefDiv.innerHTML = Alfresco.util.message('label.return_chief_task', this.name, {0: action.chiefLogin});
+										actionChiefDiv.innerHTML = Alfresco.util.message('label.return_chief_task', this.name, {0: action.chiefShortName});
 										actionChiefDiv.onclick = this.returnChiefTask.bind(this, action);
 									}
 									actionsContainer.appendChild(actionChiefDiv);

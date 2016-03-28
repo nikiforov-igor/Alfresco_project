@@ -50,6 +50,7 @@ public class UserActionsServiceImpl implements UserActionsService {
     private final static QName PROP_FORM_INPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromType");
     private final static QName PROP_FORM_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromValue");
     private final static QName PROP_DUE_DATE = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate");
+    public static final QName ORIGINAL_EMPLOYEE = QName.createQName("", "originalEmployee");
 
     public void setStateMachineService(LifecycleStateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -121,7 +122,14 @@ public class UserActionsServiceImpl implements UserActionsService {
                     Serializable chiefLogin = userTask.getProperties().get(StatemachineModel.PROP_CHIEF_LOGIN);
                     if (chiefLogin != null) {
                         taskStruct.put("chiefLogin", chiefLogin.toString());
+                        NodeRef chief = (NodeRef) userTask.getProperties().get(ORIGINAL_EMPLOYEE);
+                        if (chief != null) {
+                            String shortName = (String) nodeService.getProperty(chief, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                            taskStruct.put("chiefShortName", shortName);
+                        }
+
                     }
+
                     actionsList.add(taskStruct);
                 }
             }
@@ -131,6 +139,7 @@ public class UserActionsServiceImpl implements UserActionsService {
         List<NodeRef> chiefNodeRefList = secretaryService.getChiefs(currentEmployee);
         for (NodeRef chiefNodeRef : chiefNodeRefList) {
             String chiefLogin = orgstructureService.getEmployeeLogin(chiefNodeRef);
+            String chiefShortName = (String) nodeService.getProperty(chiefNodeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
             List<WorkflowTask> chiefTasks = stateMachineService.getAssignedAndPooledTasks(chiefLogin);
             for (WorkflowTask activeTask : activeTasks) {
                 for (WorkflowTask chiefTask : chiefTasks) {
@@ -140,6 +149,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                         taskStruct.put("actionId", chiefTask.getId());
                         taskStruct.put("label", chiefTask.getTitle());
                         taskStruct.put("chiefLogin", chiefLogin);
+                        taskStruct.put("chiefShortName", chiefShortName);
                         taskStruct.put("count", Long.MAX_VALUE);
                         taskStruct.put("isForm", false);
                         Serializable dueDate = chiefTask.getProperties().get(PROP_DUE_DATE);
