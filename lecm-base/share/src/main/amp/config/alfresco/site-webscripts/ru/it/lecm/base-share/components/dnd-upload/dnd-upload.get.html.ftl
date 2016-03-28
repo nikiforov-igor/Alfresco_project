@@ -76,7 +76,7 @@
 	      </div>
 	         <div class="bdft">
 		        <input id="${el}-upload-button" type="button" value="${msg("button.upload")}" tabindex="0"/>
-	            <input id="${el}-cancelOk-button" type="button" value="${msg("button.no")}" tabindex="0"/>
+	            <input id="${el}-cancelOk-button" type="button" value="${msg("button.cancel")}" tabindex="0"/>
 	         </div>
 	   </div>
 	</div>

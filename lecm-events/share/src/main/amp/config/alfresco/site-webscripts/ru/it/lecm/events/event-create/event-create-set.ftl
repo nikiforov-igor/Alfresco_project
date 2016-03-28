@@ -12,7 +12,7 @@
                 <div>
                     <ul>
                         <li class="event-save"><a id="${id}-event-action-save" href="#">${msg("button.create")}</a></li>
-                        <li class="event-cancel"><a id="${id}-event-action-cancel" href="#">${msg("button.no")}</a></li>
+                        <li class="event-cancel"><a id="${id}-event-action-cancel" href="#">${msg("button.cancel")}</a></li>
                     </ul>
                 </div>
             </div>

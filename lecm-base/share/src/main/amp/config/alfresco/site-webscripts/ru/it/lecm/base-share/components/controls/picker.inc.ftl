@@ -85,7 +85,7 @@
       </div>
       <div class="bdft">
          <button id="${controlId}-ok" tabindex="0">${msg("button.ok")}</button>
-         <button id="${controlId}-cancel" tabindex="0">${msg("button.no")}</button>
+         <button id="${controlId}-cancel" tabindex="0">${msg("button.cancel")}</button>
       </div>
    </div>
 
