@@ -34,7 +34,7 @@ LogicECM.module = LogicECM.module || {};
 				treeConf: {}
 			},
 			fn: function (oParams) {
-				this._updateControls(obj.selectedContractor, obj.reset, obj.autocompleteConf, obj.treeConf);
+				this._updateControls(oParams.selectedContractor, oParams.reset, oParams.autocompleteConf, oParams.treeConf);
 			}
 		});
 
