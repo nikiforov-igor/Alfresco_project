@@ -120,7 +120,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                     Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
                     taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
                     Serializable chiefLogin = userTask.getProperties().get(StatemachineModel.PROP_CHIEF_LOGIN);
-                    if (chiefLogin != null) {
+                    if (chiefLogin != null && !chiefLogin.equals(currentUserName)) {
                         taskStruct.put("chiefLogin", chiefLogin.toString());
                         NodeRef chief = (NodeRef) userTask.getProperties().get(ORIGINAL_EMPLOYEE);
                         if (chief != null) {
