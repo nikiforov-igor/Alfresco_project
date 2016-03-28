@@ -54,11 +54,13 @@
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
+            <scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>ru.it.lecm.delegation</groupId>
             <artifactId>lecm-delegation-repo-api</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
@@ -68,37 +70,42 @@
 		<dependency>
 			<groupId>org.acegisecurity</groupId>
 			<artifactId>acegi-security</artifactId>
-                        <scope>provided</scope>
+            <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-api</artifactId>
 			<version>${project.version}</version>
+            <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>ru.it.lecm.business-journal</groupId>
             <artifactId>business-journal-repo-api</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.calendar</groupId>
             <artifactId>lecm-calendar-repo-api</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.group-actions</groupId>
             <artifactId>group-actions-repo-api</artifactId>
             <version>${project.version}</version>
-        <scope>provided</scope>
+            <scope>provided</scope>
         </dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
