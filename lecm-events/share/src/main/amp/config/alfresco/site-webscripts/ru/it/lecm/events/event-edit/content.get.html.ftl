@@ -48,7 +48,7 @@
 							<div>
 								<ul>
 									<li class="event-save"><a id="${el}-event-action-save" href="#">${msg("label.save")}</a></li>
-									<li class="event-cancel"><a id="${el}-event-action-cancel" href="#">${msg("button.cancel")}</a></li>
+									<li class="event-cancel"><a id="${el}-event-action-cancel" href="#">${msg("button.no")}</a></li>
 								</ul>
 							</div>
 						</div>

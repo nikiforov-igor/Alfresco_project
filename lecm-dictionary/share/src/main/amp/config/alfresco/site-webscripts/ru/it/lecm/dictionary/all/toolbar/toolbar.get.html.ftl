@@ -91,7 +91,7 @@
 					</ul>
 					<div class="bdft">
 						<button id="${importFormId}-submit" disabled="true" tabindex="0">${msg("button.import-xml")}</button>
-						<button id="${importFormId}-cancel" tabindex="1">${msg("button.cancel")}</button>
+						<button id="${importFormId}-cancel" tabindex="1">${msg("button.no")}</button>
 					</div>
 				</form>
 			</div>

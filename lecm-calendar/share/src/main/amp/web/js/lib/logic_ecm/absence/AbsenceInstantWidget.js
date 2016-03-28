@@ -75,13 +75,17 @@ define(["dojo/_base/declare",
 
         isAbsent: null,
 
+        i18nScope: 'absenceInstantWidget',
+
+        i18nRequirements: [{i18nFile: './properties/AbsenceInstantWidget.properties'}],
+
         onCurrentEmployeeAbsenceChanged: function(layer, args) {
 	        this.isAbsent = args[1].isAbsent;
             if (this.isAbsent) {
-                this.textDirNode.innerHTML = "Отменить отсутствие";
+                this.textDirNode.innerHTML = this.message('title.cancel.absence');
                 this.onClick = this.showCancelAbsenceDialog;
             } else {
-                this.textDirNode.innerHTML = "Меня нет в офисе";
+                this.textDirNode.innerHTML = this.message('title.out.of.office');
                 this.onClick = this.newInstantAbsence;
             }
         },
@@ -136,18 +140,18 @@ define(["dojo/_base/declare",
         showCancelAbsenceDialog: function(evt) {
             var me = this;
             Alfresco.util.PopupManager.displayPrompt({
-                title: "Отменить отсутствие",
-                text: "В системе отмечено Ваше отсутствие. Вы хотите его отменить? Делегирования в этом случае также будут отменены.",
+                title: me.message('title.cancel.absence'),
+                text: me.message('message.cancel.absence.confirmation'),
                 close: false,
                 modal: true,
                 buttons: [{
-                    text: 'Да',
+                    text: me.message('button.yes'),
                     handler: function() {
                         me.acceptCancel();
                         this.destroy();
                     }
                 }, {
-                    text: 'Нет',
+                    text: me.message('button.no'),
                     handler: function() {
                         this.destroy();
                     },
@@ -158,6 +162,7 @@ define(["dojo/_base/declare",
         },
 
         acceptCancel: function() {
+            var me = this;
             Alfresco.util.Ajax.request({
                 method: "GET",
                 url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/set/endCurrentEmployeeActiveAbsence",
@@ -170,7 +175,7 @@ define(["dojo/_base/declare",
                             isAbsent: false
                         });
                         Alfresco.util.PopupManager.displayMessage({
-                            text: "Отсутствие отменено"
+                            text: me.message("message.absence.has.been.canceled")
                         });
                     },
                     scope: this
@@ -267,7 +272,7 @@ define(["dojo/_base/declare",
                 destroyOnHide: true,
                 doBeforeDialogShow: {
                     fn: function(p_form, p_dialog) {
-                        p_dialog.dialog.setHeader("Отсутствие");
+                        p_dialog.dialog.setHeader(this.message("header.title"));
                     },
                     scope: this
                 },
@@ -297,7 +302,7 @@ define(["dojo/_base/declare",
                             responseContentType: "application/json"
                         });
                         Alfresco.util.PopupManager.displayMessage({
-                            text: "Отсутствие успешно создано"
+                            text: this.message('message.absence.has.been.created')
                         });
                     },
                     scope: this
@@ -305,7 +310,7 @@ define(["dojo/_base/declare",
                 onFailure: {
                     fn: function(response) {
                         Alfresco.util.PopupManager.displayMessage({
-                            text: "Произошла ошибка"
+                            text: this.message('message.error')
                         });
                     },
                     scope: this
