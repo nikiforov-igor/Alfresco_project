@@ -17,21 +17,13 @@
        and include them in the AMP, they are provided by Alfresco
    -->
     <dependencies>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-repository</artifactId>
-        </dependency>
 		<dependency>
 			<groupId>org.alfresco</groupId>
-			<artifactId>alfresco-data-model</artifactId>
+			<artifactId>alfresco-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-surf</artifactId>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-repository</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -67,19 +59,25 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.orgstructure</groupId>
-                    <artifactId>orgstructure-repo-api</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.base</groupId>
-            <artifactId>base-repo-api</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>ru.it.lecm.orgstructure</groupId>
+			<artifactId>orgstructure-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.base</groupId>
+			<artifactId>base-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
        for AMP version numbering

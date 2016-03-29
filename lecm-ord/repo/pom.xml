@@ -17,15 +17,15 @@
        need to list these as a provided so that Maven doesn't download them
        and include them in the AMP, they are provided by Alfresco
    -->
-    <dependencies>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-repository</artifactId>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-repository</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
@@ -34,14 +34,14 @@
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.ord</groupId>
 			<artifactId>ord-repo-api</artifactId>
@@ -60,78 +60,78 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		    <groupId>ru.it.lecm.eds-documents</groupId>
-		    <artifactId>eds-documents-repo-api</artifactId>
-		    <version>${platform.version}</version>
+			<groupId>ru.it.lecm.eds-documents</groupId>
+			<artifactId>eds-documents-repo-api</artifactId>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-	    <dependency>
-		    <groupId>ru.it.lecm.errands</groupId>
-		    <artifactId>errands-repo-api</artifactId>
-		    <version>${platform.version}</version>
+		<dependency>
+			<groupId>ru.it.lecm.errands</groupId>
+			<artifactId>errands-repo-api</artifactId>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
-	    </dependency>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>
 			<artifactId>workflow-repo-api</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.dictionary</groupId>
-            <artifactId>dictionary-repo-api</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.workflow.signing</groupId>
-            <artifactId>signing-repo-api</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.statemachine</groupId>
-            <artifactId>statemachine-api</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.security</groupId>
-            <artifactId>lecm-security-api</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.calendar</groupId>
-            <artifactId>lecm-calendar-repo-api</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-engine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.reports</groupId>
-            <artifactId>lecm-reports-api</artifactId>
-            <version>${platform.version}</version>
-            <type>jar</type>
-        </dependency>
-
-<dependency>
-            <groupId>ru.it.lecm.nd</groupId>
-            <artifactId>nd-repo-api</artifactId>
-            <version>${platform.version}</version>
+		<dependency>
+			<groupId>ru.it.lecm.dictionary</groupId>
+			<artifactId>dictionary-repo-api</artifactId>
+			<version>${platform.version}</version>
 			<scope>provided</scope>
-        </dependency>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.signing</groupId>
+			<artifactId>signing-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.statemachine</groupId>
+			<artifactId>statemachine-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.security</groupId>
+			<artifactId>lecm-security-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.calendar</groupId>
+			<artifactId>lecm-calendar-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.reports</groupId>
+			<artifactId>lecm-reports-api</artifactId>
+			<version>${platform.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>ru.it.lecm.nd</groupId>
+			<artifactId>nd-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo-api</artifactId>
@@ -144,7 +144,13 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-    </dependencies>
+		<dependency>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
        for AMP version numbering

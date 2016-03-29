@@ -17,23 +17,23 @@
        need to list these as a provided so that Maven doesn't download them
        and include them in the AMP, they are provided by Alfresco
    -->
-    <dependencies>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-repository</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-repository</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>ru.it.lecm.operative-storage</groupId>
@@ -89,8 +89,14 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-        <!-- Don't add here amp dependencies as it will break amp packaging -->
-    </dependencies>
+		<dependency>
+			<groupId>ru.it.lecm.business-journal</groupId>
+			<artifactId>business-journal-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Don't add here amp dependencies as it will break amp packaging -->
+	</dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required
        for AMP version numbering
