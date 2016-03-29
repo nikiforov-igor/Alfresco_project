@@ -151,7 +151,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
 
 .widget-subbutton-grey {
     margin: 0;
-    padding: 0px 12px 3px 24px;
+    padding: 0px 12px 0px 32px;
     border: 1px solid transparent;
     cursor: pointer;
     font-size: 8pt;
@@ -398,6 +398,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
 .chief-task-marker {
     background: url(/share/images/lecm-documents/chief-task-marker.png) no-repeat 3px 3px;
     padding-left: 22px;
+    margin-bottom: 0px;
 }
 
 .right-block-content {
