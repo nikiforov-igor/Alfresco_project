@@ -10,3 +10,9 @@
 .unsubscribe span.first-child button {
     padding-left: 30px;
 }
+.subscribe .hidden1 {
+	display: none;
+}
+.unsubscribe .hidden1 {
+	display: none;
+}
