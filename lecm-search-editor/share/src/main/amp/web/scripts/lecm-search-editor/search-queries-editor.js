@@ -201,7 +201,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                     id: !record.getData().isOperator ? fieldId : this.operatorKey,
                                     type: !record.getData().isOperator ? this._getTypeByFieldId(fieldId, false) : this.operatorKey,
                                     case: !record.getData().isOperator ? this._getCaseByRecord(record) : this.operatorKey,
-                                    value: !record.getData().isOperator ? (isEncode ? encodeURIComponent(this._getValueByRecord(record)) : this._getValueByRecord(record)): this._getOperatorByRecord(record)
+                                    value: !record.getData().isOperator ? (isEncode ? encodeURIComponent(this._getValueByRecord(record).trim()) : this._getValueByRecord(record)): this._getOperatorByRecord(record)
                                 };
                                 config.attributes.push(attrConf);
                             }
