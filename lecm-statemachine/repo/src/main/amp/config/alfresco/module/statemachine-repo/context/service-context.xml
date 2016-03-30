@@ -59,10 +59,15 @@
 
     <bean id="statemachine.businessJournalDictionaryBootstrap"
           parent="lecmDictionaryBootstrap"
-          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+           			  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+           			  ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap,
+           			  ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
+           			  businessJournalLogEventsPolicy">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/statemachine-repo/models/lecm-business-journal-eventCategory-items.xml</value>
+				<value>alfresco/module/statemachine-repo/models/lecm-statemachine-nt-items.xml</value>
             </list>
         </property>
     </bean>
@@ -233,6 +238,9 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="userActionsService" ref="userActionsService"/>
 		<property name="stateMachineService" ref="lifecycleStateMachineHelper"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="workflowService" ref="WorkflowService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.returnChiefTask.get"
@@ -241,6 +249,9 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="userActionsService" ref="userActionsService"/>
 		<property name="stateMachineService" ref="lifecycleStateMachineHelper"/>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="workflowService" ref="WorkflowService"/>
 	</bean>
 
     <bean id="statemachine.endWorkflowEvent"

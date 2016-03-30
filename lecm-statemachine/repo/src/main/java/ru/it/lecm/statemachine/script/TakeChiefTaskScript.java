@@ -3,17 +3,24 @@ package ru.it.lecm.statemachine.script;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.namespace.QName;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.bean.UserActionsService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +29,11 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
     private UserActionsService userActionsService;
     private StateMachineServiceBean stateMachineService;
     private ServiceRegistry serviceRegistry;
+    private NotificationsService notificationsService;
+    private BusinessJournalService businessJournalService;
+    private WorkflowService workflowService;
+    public static final QName ORIGINAL_EMPLOYEE = QName.createQName("", "originalEmployee");
+    public static final QName EFFECTIVE_EMPLOYEE = QName.createQName("", "effectiveEmployee");
 
     public void setStateMachineService(LifecycleStateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -33,6 +45,18 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+    public void setWorkflowService(WorkflowService workflowService) {
+        this.workflowService = workflowService;
     }
 
     @Override
@@ -84,6 +108,20 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
                             errors.add("При выполнении передачи задания руководителя произоошла ошибка.");
                             actionResult.put("errors", errors);
                             actionResult.put("doesNotBlock", false);
+                        } else {
+                            WorkflowTask task = workflowService.getTaskById(actionId);
+                            NodeRef recipient = (NodeRef) task.getProperties().get(ORIGINAL_EMPLOYEE);
+                            NodeRef secretary = (NodeRef) task.getProperties().get(EFFECTIVE_EMPLOYEE);
+                            Map<String, Object> notificationTemplateModel = new HashMap<>();
+                            notificationTemplateModel.put("mainObject", documentNodeRef);
+                            notificationTemplateModel.put("secretary", secretary);
+                            Notification notification = new Notification(notificationTemplateModel);
+                            notificationsService.fillNotificationByTemplateCode(notification, "SECRETARY_TAKE");
+                            notification.setRecipientEmployeeRefs(Collections.singletonList(recipient));
+                            notification.setAuthor(AuthenticationUtil.getSystemUserName());
+                            notification.setObjectRef(documentNodeRef);
+                            notificationsService.sendNotification(notification);
+                            //TODO: отправка уведомления, создание записи в БЖ
                         }
                         return null;
                     }
