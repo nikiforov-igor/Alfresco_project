@@ -51,7 +51,8 @@ LogicECM.module = LogicECM.module || {};
                 viewFormTitleMsg: "logicecm.view",
                 expandable: false,
                 expandDataSource: "components/form",
-				isInitOrSec: false
+				isInitOrSec: false,
+				availableEditRoles: null
 			},
 
             datagrid: null,
@@ -59,7 +60,31 @@ LogicECM.module = LogicECM.module || {};
 			tableData: null,
 
 			onReady: function(){
-				this.loadTableData();
+				if (this.options.availableEditRoles != null) {
+					var me = this;
+					Alfresco.util.Ajax.request(
+						{
+							url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessOneRole",
+							dataObj: {
+								rolesId: this.options.availableEditRoles
+							},
+							successCallback: {
+								fn: function (response) {
+									if (!response.json) {
+										me.options.disabled = true;
+									}
+									me.loadTableData();
+								}
+							},
+							failureMessage: {
+								fn: function (response) {
+									alert(response.responseText);
+								}
+							}
+						});
+				} else {
+					this.loadTableData();
+				}
 			},
 
             // инициализация грида
@@ -741,8 +766,15 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
          * @param oArgs.event {HTMLEvent} Event object.
          * @param oArgs.target {HTMLElement} Target element.
          */
-        onEventHighlightRow:function DataGrid_onEventHighlightRow(oArgs) {
-            // elActions is the element id of the active table cell where we'll inject the actions
+        onEventHighlightRow:function DataGrid_onEventHighlightRow(oArgs)
+		{
+			// Fix if oArgs.target == undefined
+			if (!oArgs.target && oArgs.el) {
+				oArgs.target = {};
+				oArgs.target.id = oArgs.el.id;
+			}
+
+			// elActions is the element id of the active table cell where we'll inject the actions
             var elActions = Dom.get(this.id + "-actions-" + oArgs.target.id);
 
             this.onHighlightRowFunction(oArgs, elActions,(this.id + "-actionSet"), (this.id + "-otherMoreActions"));
@@ -763,7 +795,8 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                 Dom.removeClass(elOtherActions, "hidden");
             }
         },
-        onHighlightRowFunction: function(oArgs, elActions, actionSetId, moreActionId){
+        onHighlightRowFunction: function(oArgs, elActions, actionSetId, moreActionId)
+		{
             // Выбранный элемент
             var numSelectItem = this.widgets.dataTable.getTrIndex(oArgs.target);
             if (this.widgets.paginator) {
@@ -902,7 +935,13 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
          * @param oArgs.target {HTMLElement} Target element.
          */
         onEventUnhighlightRow: function DataGrid_onEventUnhighlightRow(oArgs)
-        {
+		{
+			// Fix if oArgs.target == undefined
+			if (!oArgs.target && oArgs.el) {
+				oArgs.target = {};
+				oArgs.target.id = oArgs.el.id;
+			}
+
             // Call through to get the row unhighlighted by YUI
             this.widgets.dataTable.onEventUnhighlightRow.call(this.widgets.dataTable, oArgs);
 

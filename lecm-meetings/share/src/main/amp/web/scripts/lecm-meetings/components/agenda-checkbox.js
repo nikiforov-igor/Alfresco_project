@@ -47,7 +47,8 @@ LogicECM.module = LogicECM.module || {};
 							hideFieldsIfSelect: null,
 							hideFieldsIfNotSelect: null,
 							fireMandatoryByChange: false,
-							attentionMessage: null
+							attentionMessage: null,
+							availableEditRoles: null
 						},
 				checkboxId: null,
 				attentionId: null,
@@ -63,6 +64,35 @@ LogicECM.module = LogicECM.module || {};
 					return this;
 				},
 				onReady: function ()
+				{
+					if (this.options.availableEditRoles != null) {
+						var me = this;
+						Alfresco.util.Ajax.request(
+							{
+								url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessOneRole",
+								dataObj: {
+									rolesId: this.options.availableEditRoles
+								},
+								successCallback: {
+									fn: function (response) {
+										if (!response.json) {
+											var checkboxEl = Dom.get(me.checkboxId);
+											checkboxEl.disabled = true;
+										}
+										me.init();
+									}
+								},
+								failureMessage: {
+									fn: function (response) {
+										alert(response.responseText);
+									}
+								}
+							});
+					} else {
+						this.init();
+					}
+				},
+				init: function()
 				{
 					this.checkbox = Dom.get(this.checkboxId);
 					if (this.checkbox) {

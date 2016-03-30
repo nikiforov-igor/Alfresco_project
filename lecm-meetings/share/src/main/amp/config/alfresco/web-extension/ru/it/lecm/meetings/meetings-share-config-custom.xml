@@ -233,6 +233,7 @@
 							<control-param name="editFormTitleMsg">meeting.item.edit.form.title</control-param>
 							<control-param name="createFormTitleMsg">meeting.item.create.form.title</control-param>
 							<control-param name="viewFormTitleMsg">meeting.item.view.form.title</control-param>
+							<control-param name="availableEditRoles">BR_INITIATOR,EVENTS_INITIATOR_DYN,MEETINGS_CREATOR,MEETINGS_ENGINEER</control-param>
 						</control>
 					</field>
 					<field id="approve-agenda-label">
@@ -243,6 +244,7 @@
 					<field id="lecm-meetings:approve-agenda">
 						<control template="/ru/it/lecm/meetings/components/controls/checkbox-control.ftl">
 							<control-param name="hideFieldsIfSelect">lecm-meetings:approval</control-param>
+							<control-param name="availableEditRoles">BR_INITIATOR,EVENTS_INITIATOR_DYN,MEETINGS_CREATOR,MEETINGS_ENGINEER</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings:approval">

@@ -131,6 +131,9 @@
                 <#if expandDataSource?has_content>
                     expandDataSource: "${expandDataSource}",
                 </#if>
+                <#if field.control.params.availableEditRoles??>
+                    availableEditRoles: "${field.control.params.availableEditRoles}",
+                </#if>
                 showActions: <#if editable>${showActions?string}<#else>false</#if>
 			});
 	}
