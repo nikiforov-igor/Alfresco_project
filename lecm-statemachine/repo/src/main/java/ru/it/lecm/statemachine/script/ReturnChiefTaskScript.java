@@ -3,6 +3,7 @@ package ru.it.lecm.statemachine.script;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
@@ -14,6 +15,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.bean.UserActionsService;
@@ -34,6 +36,7 @@ public class ReturnChiefTaskScript extends DeclarativeWebScript {
     private NotificationsService notificationsService;
     private BusinessJournalService businessJournalService;
     private WorkflowService workflowService;
+    private NodeService nodeService;
 
     public void setStateMachineService(LifecycleStateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -59,6 +62,10 @@ public class ReturnChiefTaskScript extends DeclarativeWebScript {
         this.workflowService = workflowService;
     }
 
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         final String documentRef = req.getParameter("documentNodeRef");
@@ -81,7 +88,7 @@ public class ReturnChiefTaskScript extends DeclarativeWebScript {
         }
         else {
             final NodeRef documentNodeRef = new NodeRef(documentRef);
-            HashMap<String, Object> userActions = userActionsService.getActions(documentNodeRef);
+            final HashMap<String, Object> userActions = userActionsService.getActions(documentNodeRef);
             ArrayList<HashMap<String, Object>> actions = (ArrayList<HashMap<String, Object>>) userActions.get("actions");
             HashMap<String, Object> action = null;
             for (HashMap<String, Object> a : actions) {
@@ -97,7 +104,8 @@ public class ReturnChiefTaskScript extends DeclarativeWebScript {
                 AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork() {
                     @Override
                     public Object doWork() throws Exception {
-                        if (!stateMachineService.setTaskAssignee(documentNodeRef, taskId, serviceRegistry.getAuthenticationService().getCurrentUserName(), chiefLogin)) {
+                        String currentUserName = serviceRegistry.getAuthenticationService().getCurrentUserName();
+                        if (!stateMachineService.setTaskAssignee(documentNodeRef, taskId, currentUserName, chiefLogin)) {
                             ArrayList<String> errors = new ArrayList<>();
                             errors.add("При выполнении возвращения задания руководителю произоошла ошибка.");
                             actionResult.put("errors", errors);
@@ -115,7 +123,8 @@ public class ReturnChiefTaskScript extends DeclarativeWebScript {
                             notification.setAuthor(AuthenticationUtil.getSystemUserName());
                             notification.setObjectRef(documentNodeRef);
                             notificationsService.sendNotification(notification);
-                            //TODO: создание записи в БЖ
+                            String chiefShortName = (String) nodeService.getProperty(secretary, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                            businessJournalService.log(currentUserName, documentNodeRef, "EXEC_ACTION", "Сотрудник #initiator вернул(а) задачу сотруднику " + chiefShortName + " по документу #mainobject", Collections.singletonList("string"));
                         }
                         return null;
                     }

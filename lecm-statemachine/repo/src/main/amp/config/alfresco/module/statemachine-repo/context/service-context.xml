@@ -241,6 +241,7 @@
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="workflowService" ref="WorkflowService"/>
+		<property name="nodeService" ref="NodeService"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.returnChiefTask.get"
@@ -252,6 +253,7 @@
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="workflowService" ref="WorkflowService"/>
+		<property name="nodeService" ref="NodeService"/>
 	</bean>
 
     <bean id="statemachine.endWorkflowEvent"

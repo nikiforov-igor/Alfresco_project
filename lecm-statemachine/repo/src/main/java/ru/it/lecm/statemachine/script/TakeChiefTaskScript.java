@@ -3,6 +3,7 @@ package ru.it.lecm.statemachine.script;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
@@ -14,6 +15,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -32,6 +34,7 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
     private NotificationsService notificationsService;
     private BusinessJournalService businessJournalService;
     private WorkflowService workflowService;
+    private NodeService nodeService;
     public static final QName ORIGINAL_EMPLOYEE = QName.createQName("", "originalEmployee");
     public static final QName EFFECTIVE_EMPLOYEE = QName.createQName("", "effectiveEmployee");
 
@@ -57,6 +60,10 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
 
     public void setWorkflowService(WorkflowService workflowService) {
         this.workflowService = workflowService;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
     }
 
     @Override
@@ -103,25 +110,29 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
                             actionResult.put("errors", errors);
                             actionResult.put("doesNotBlock", false);
                         }
-                        else if (!stateMachineService.setTaskAssignee(documentNodeRef, taskId, chiefLogin, serviceRegistry.getAuthenticationService().getCurrentUserName())) {
-                            ArrayList<String> errors = new ArrayList<String>();
-                            errors.add("При выполнении передачи задания руководителя произоошла ошибка.");
-                            actionResult.put("errors", errors);
-                            actionResult.put("doesNotBlock", false);
-                        } else {
-                            WorkflowTask task = workflowService.getTaskById(actionId);
-                            NodeRef recipient = (NodeRef) task.getProperties().get(ORIGINAL_EMPLOYEE);
-                            NodeRef secretary = (NodeRef) task.getProperties().get(EFFECTIVE_EMPLOYEE);
-                            Map<String, Object> notificationTemplateModel = new HashMap<>();
-                            notificationTemplateModel.put("mainObject", documentNodeRef);
-                            notificationTemplateModel.put("secretary", secretary);
-                            Notification notification = new Notification(notificationTemplateModel);
-                            notificationsService.fillNotificationByTemplateCode(notification, "SECRETARY_TAKE");
-                            notification.setRecipientEmployeeRefs(Collections.singletonList(recipient));
-                            notification.setAuthor(AuthenticationUtil.getSystemUserName());
-                            notification.setObjectRef(documentNodeRef);
-                            notificationsService.sendNotification(notification);
-                            //TODO: отправка уведомления, создание записи в БЖ
+                        else {
+                            String currentUserName = serviceRegistry.getAuthenticationService().getCurrentUserName();
+                            if (!stateMachineService.setTaskAssignee(documentNodeRef, taskId, chiefLogin, currentUserName)) {
+                                ArrayList<String> errors = new ArrayList<String>();
+                                errors.add("При выполнении передачи задания руководителя произоошла ошибка.");
+                                actionResult.put("errors", errors);
+                                actionResult.put("doesNotBlock", false);
+                            } else {
+                                WorkflowTask task = workflowService.getTaskById(actionId);
+                                NodeRef recipient = (NodeRef) task.getProperties().get(ORIGINAL_EMPLOYEE);
+                                NodeRef secretary = (NodeRef) task.getProperties().get(EFFECTIVE_EMPLOYEE);
+                                Map<String, Object> notificationTemplateModel = new HashMap<>();
+                                notificationTemplateModel.put("mainObject", documentNodeRef);
+                                notificationTemplateModel.put("secretary", secretary);
+                                Notification notification = new Notification(notificationTemplateModel);
+                                notificationsService.fillNotificationByTemplateCode(notification, "SECRETARY_TAKE");
+                                notification.setRecipientEmployeeRefs(Collections.singletonList(recipient));
+                                notification.setAuthor(AuthenticationUtil.getSystemUserName());
+                                notification.setObjectRef(documentNodeRef);
+                                notificationsService.sendNotification(notification);
+                                String chiefShortName = (String) nodeService.getProperty(secretary, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                                businessJournalService.log(currentUserName, documentNodeRef, "EXEC_ACTION", "Сотрудник #initiator принял(а) задачу сотрудника " + chiefShortName + " по документу #mainobject", Collections.singletonList("string"));
+                            }
                         }
                         return null;
                     }
