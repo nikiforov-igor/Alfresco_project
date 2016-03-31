@@ -182,18 +182,28 @@ LogicECM.module = LogicECM.module || {};
 
 		onEventsLoaded: function (o)
 		{
+			var zeroTime = {
+				hour: 0,
+				minute: 0,
+				second: 0,
+				millisecond: 0
+			};
 			var data = YAHOO.lang.JSON.parse(o.serverResponse.responseText).events;
 			var nonWorking = YAHOO.lang.JSON.parse(o.serverResponse.responseText).nonWorkingDays;
 
 			for (var i = 0; i < data.length; i++) {
 				var ev = data[i];
-				var date = fromISO8601(ev.startAt.iso8601);
-				var endDate = fromISO8601(ev.endAt.iso8601);
+				var date = fromISO8601(ev.startAt.iso8601).set(zeroTime);
+				var endDate = fromISO8601(ev.endAt.iso8601).set(zeroTime);
 				if (date != null && endDate != null) {
-					var cellIndex = this.calendar.getCellIndex(date);
+					var currentDate = date.clone();
+					while(currentDate.compareTo(endDate) <= 0) {
+						var cellIndex = this.calendar.getCellIndex(currentDate);
 
-					if (cellIndex > -1) {
-						Dom.addClass(this.calendar.cells[cellIndex], "with-events");
+						if (cellIndex > -1) {
+							Dom.addClass(this.calendar.cells[cellIndex], "with-events");
+						}
+						currentDate.addDays(1);
 					}
 				}
 			}
