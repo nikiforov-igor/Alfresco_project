@@ -70,7 +70,8 @@ LogicECM.module = LogicECM.module || {};
 
             autoCompleteJsName: "select-representative-autoComplete",
             treeViewJsName:"select-representative-treeView",
-			fieldHtmlId: ""
+            fieldHtmlId: "",
+            showAssocViewForm: false
         },
 
         onReady: function SelectRepresentativeForContractor_onReady() {
@@ -114,7 +115,8 @@ LogicECM.module = LogicECM.module || {};
                         nameSubstituteString: this.options.representativesSubstitute,
                         selectedValueNodeRef:"",
                         lazyLoading: false,
-						disabled: false
+                        disabled: false,
+                        showAssocViewForm: this.options.showAssocViewForm
                     },
                     {
                         rootLocation: this.options.representativesLocation,
@@ -214,7 +216,8 @@ LogicECM.module = LogicECM.module || {};
                             }) : null,
                         nameSubstituteString: this.options.employeesNameSubstitute,
                         lazyLoading: false,
-						disabled: false
+                        disabled: false,
+                        showAssocViewForm: this.options.showAssocViewForm
                     },
                     {
                         rootLocation: this.options.employeesLocation,

@@ -15,6 +15,9 @@
         new LogicECM.module.DoubleSelectRepresentativeForContractor("${controlId}",
                 "${params.updateOnContractorSelect!"contractor.selected"}",
                 "${params.updateOnOrganizationSelect!"organization.selected"}").setOptions({
+                <#if field.control.params.showAssocViewForm??>
+                    showAssocViewForm: ${field.control.params.showAssocViewForm?string},
+                </#if>
                     disabled: ${disabled?string},
                     currentValue: "${field.value!''}",
                 <#if params.employeesByOrgDS??>

@@ -32,10 +32,10 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-not-registered"/>
-                    
+
                     <show id="lecm-review-ts:review-table-assoc"/>
                 </field-visibility>
-                
+
                 <appearance>
                     <set id="common" label="Основные сведения"/>
                     <set id="review" label="Ознакомление"/>
@@ -52,9 +52,15 @@
                     <field set="common" id="lecm-eds-document:document-type-assoc"/>
                     <field set="common" id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
 
-                    <field set="common" id="lecm-incoming:sender-assoc" mandatory="true"/>
+                    <field set="common" id="lecm-incoming:sender-assoc" mandatory="true">
+                        <control>
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="secondShowAssocViewForm">true</control-param>
+                        </control>
+                    </field>
                     <field set="common" id="lecm-incoming:addressee-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -139,7 +145,7 @@
                             <control-param name="maxLength">9</control-param>
                         </control>
                     </field>
-                    
+
                     <field set="review" id="lecm-review-ts:review-table-assoc">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
@@ -158,7 +164,7 @@
                             <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
                         </control>
                     </field>
-                    
+
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
@@ -207,8 +213,15 @@
                             <control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
                         </control>
                     </field>
+                    <field id="lecm-incoming:sender-assoc" mandatory="true">
+                        <control>
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="secondShowAssocViewForm">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-incoming:addressee-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -324,10 +337,15 @@
                     <field id="lecm-document:title"/>
                     <field id="lecm-eds-document:document-type-assoc"/>
                     <field id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
-
-                    <field id="lecm-incoming:sender-assoc" mandatory="true"/>
+                    <field id="lecm-incoming:sender-assoc" mandatory="true">
+                        <control>
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="secondShowAssocViewForm">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-incoming:addressee-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -562,8 +580,15 @@
                             <control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
                         </control>
                     </field>
+                    <field id="lecm-incoming:sender-assoc" mandatory="true">
+                        <control>
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="secondShowAssocViewForm">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-incoming:addressee-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->

@@ -108,9 +108,15 @@
 	                    </constraint-handlers>
                     </field>
                     <field id="lecm-contract:dateConclusionContracts" set="date-conclusion"/>
-                    <field id="lecm-contract:partner-assoc" set="counterparty-info"/>
+                    <field id="lecm-contract:partner-assoc" set="counterparty-info">
+                        <control>
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="secondShowAssocViewForm">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contract:representative-assoc" set="counterparty-info" label-id="label.representative">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
@@ -340,9 +346,15 @@
 		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" event="change"/>
 	                    </constraint-handlers>
                     </field>
-                    <field id="lecm-contract:partner-assoc" set="afterPrice"/>
+                    <field id="lecm-contract:partner-assoc" set="afterPrice">
+                        <control>
+                            <control-param name="showAssocViewForm">true</control-param>
+                            <control-param name="secondShowAssocViewForm">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-contract:representative-assoc" label-id="label.representative" set="afterPrice">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
+                            <control-param name="showAssocViewForm">true</control-param>
                             <control-param name="updateOnContractorSelect">contractor.selected</control-param>
                             <control-param name="updateOnOrganizationSelect">organization.selected</control-param>
                             <!-- autocomplete options-->
