@@ -5,7 +5,9 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,12 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.security.LecmPermissionService;
 
-import java.io.*;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -86,6 +89,13 @@ public class EventsPolicy extends BaseBean {
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_INVITED_MEMBERS,
 				new JavaBehaviour(this, "onRemoveInvitedMember", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_INITIATOR,
+				new JavaBehaviour(this, "onCreateInitiator", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				EventsService.TYPE_EVENT, EventsService.ASSOC_EVENT_INITIATOR,
+				new JavaBehaviour(this, "onRemoveInitiator", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				EventsService.TYPE_EVENT,
@@ -317,6 +327,34 @@ public class EventsPolicy extends BaseBean {
 						nodeService.setProperties(row, properties);
 					}
 				}
+			}
+		}
+	}
+
+	public void onCreateInitiator(AssociationRef nodeAssocRef) {
+		NodeRef event = nodeAssocRef.getSourceRef();
+		NodeRef initiator = nodeAssocRef.getTargetRef();
+		List<AssociationRef> authorAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_AUTHOR);
+
+		if (authorAssocs != null && !authorAssocs.isEmpty()) {
+			NodeRef author = authorAssocs.get(0).getTargetRef();
+
+			if (!author.equals(initiator)) {
+				lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, initiator.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
+			}
+		}
+	}
+
+	public void onRemoveInitiator(AssociationRef nodeAssocRef) {
+		NodeRef event = nodeAssocRef.getSourceRef();
+		NodeRef initiator = nodeAssocRef.getTargetRef();
+		List<AssociationRef> authorAssocs = nodeService.getTargetAssocs(event, DocumentService.ASSOC_AUTHOR);
+
+		if (authorAssocs != null && !authorAssocs.isEmpty()) {
+			NodeRef author = authorAssocs.get(0).getTargetRef();
+
+			if (!author.equals(initiator)) {
+				lecmPermissionService.revokeDynamicRole("EVENTS_INITIATOR_DYN", event, initiator.getId());
 			}
 		}
 	}
