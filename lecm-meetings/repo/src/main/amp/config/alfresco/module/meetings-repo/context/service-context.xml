@@ -236,4 +236,32 @@
         </property>
     </bean>
 
+	<util:list id="meetings.copySettings.propsToCopy">
+		<value>lecm-events:title</value>
+		<value>lecm-events:description</value>
+	</util:list>
+
+	<util:list id="meetings.copySettings.assocsToCopy">
+		<value>lecm-events:location-assoc</value>
+		<value>lecm-meetings:chairman-assoc</value>
+		<value>lecm-events:initiator-assoc</value>
+		<value>lecm-meetings:secretary-assoc</value>
+		<value>lecm-events:temp-members-assoc</value>
+		<value>lecm-events:invited-members-assoc</value>
+		<value>lecm-events:temp-resources-assoc</value>
+		<value>lecm-events:subject-assoc</value>
+		<value>lecm-meetings:temp-items-assoc</value>
+	</util:list>
+
+	<bean id="meetings.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
+		  p:propsToCopy-ref="meetings.copySettings.propsToCopy"
+		  p:assocsToCopy-ref="meetings.copySettings.assocsToCopy" />
+
+	<util:map id="meetings.copySettings.bean.settings">
+		<entry key="lecm-meetings:document" value-ref="meetings.copySettings"/>
+	</util:map>
+
+	<bean id="meetings.copySettings.bean" parent="documentCopySettingsBean"
+		  p:settings-ref="meetings.copySettings.bean.settings" />
+
 </beans>

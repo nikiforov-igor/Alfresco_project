@@ -312,7 +312,7 @@ public class EventsPolicy extends BaseBean {
 		final Date toDateBefore = (Date) before.get(EventsService.PROP_EVENT_TO_DATE);
 		final Date toDateAfter = (Date) after.get(EventsService.PROP_EVENT_TO_DATE);
 
-		if (!fromDateAfter.equals(fromDateBefore) || !toDateAfter.equals(toDateBefore)) {
+		if ((fromDateAfter != null && !fromDateAfter.equals(fromDateBefore)) || (toDateAfter != null && !toDateAfter.equals(toDateBefore))) {
 			NodeRef table = eventService.getMemberTable(nodeRef);
 			if (table != null) {
 				List<NodeRef> rows = documentTableService.getTableDataRows(table);
