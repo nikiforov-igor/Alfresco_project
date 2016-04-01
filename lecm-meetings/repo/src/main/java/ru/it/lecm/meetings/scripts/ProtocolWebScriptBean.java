@@ -96,37 +96,18 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 				String errandStatus = (String) nodeService.getProperty(sender, StatemachineModel.PROP_STATUS);
 				NodeRef point = protocolService.getErrandLinkedPoint(sender);
 				if (null!=point){
-					Boolean is_expired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
+					Boolean isExpired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
 					if (!checkPointExecutedStatus(point) && "Исполнено".equals(errandStatus)){
 						// переведем пункт в статус "Исполнен"
-						protocolService.changePointStatus(point,ProtocolService.P_STATUSES.EXECUTED_STATUS);
-						//установим атрибут дату исполнеия
-						nodeService.setProperty(point, ProtocolService.PROP_PROTOCOL_POINT_DATE_REAL, new Date());
-						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
-						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
-						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Исполнен", pointNumber);
-						List<String> secondaryObj = Arrays.asList(point.toString());
-						businessJournalService.log("System", protocol, "PROTOCOL_POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+						changePointStatus(protocol, point, ProtocolService.P_STATUSES.EXECUTED_STATUS);
 					}
-					else if (!checkPointExecutedStatus(point) && !"Исполнено".equals(errandStatus) && is_expired) {
+					else if (!checkPointExecutedStatus(point) && isExpired && "Не исполнено".equals(errandStatus)) {
 						// переведем пункт в статус "Просрочен"
-						protocolService.changePointStatus(point, ProtocolService.P_STATUSES.EXPIRED_STATUS);
-						//запись в бизнес журнал о том, что пункт перешел в статус просрочен
-						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
-						String bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
-						List<String> secondaryObj = Arrays.asList(point.toString());
-						businessJournalService.log("System", protocol, "PROTOCOL_POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+						changePointStatus(protocol, point, ProtocolService.P_STATUSES.EXPIRED_STATUS);
 					}
-					else if (!checkPointExecutedStatus(point) && "Не исполнено".equals(errandStatus)){
+					else if (!checkPointExecutedStatus(point) && !isExpired && "Не исполнено".equals(errandStatus)){
 						// переведем пункт в статус "Не исполнен"
-						protocolService.changePointStatus(point,ProtocolService.P_STATUSES.NOT_EXECUTED_STATUS);
-						//установим атрибут дата исполнеия
-						nodeService.setProperty(point, ProtocolService.PROP_PROTOCOL_POINT_DATE_REAL, new Date());
-						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
-						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
-						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Не исполнен", pointNumber);
-						List<String> secondaryObj = Arrays.asList(point.toString());
-						businessJournalService.log("System", protocol, "PROTOCOL_POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+						changePointStatus(protocol, point, ProtocolService.P_STATUSES.NOT_EXECUTED_STATUS);
 					}
 				}
 			}
@@ -134,7 +115,34 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 			documentEventService.removeEventSender(protocol, sender);
 		}
 	}
-	
+
+	/**
+	 * Перевести пункт протокола в необходимый статус, записать дату фактичесоого завершения, сделать запись в БЖ.
+	 *
+	 * @param protocol - NodeRef протокола
+	 * @param point - NodeRef пункта протокола
+	 * @param statusKey - Статус, в который нужно перевести пункт протокола
+     */
+	private void changePointStatus(NodeRef protocol, NodeRef point, ProtocolService.P_STATUSES statusKey) {
+		// переведем пункт в необходимый статус
+		protocolService.changePointStatus(point, statusKey);
+
+		Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+		String status = ProtocolService.POINT_STATUSES.get(statusKey);
+		boolean isExpired = "Просрочен".equals(status) ? true : false;
+		String bjMessage = "";
+		if (isExpired) {
+			bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
+		}
+		else {
+			bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус %s", pointNumber, status);
+			// установим атрибут дату исполнения
+			nodeService.setProperty(point, ProtocolService.PROP_PROTOCOL_POINT_DATE_REAL, new Date());
+		}
+		List<String> secondaryObj = Arrays.asList(point.toString());
+		businessJournalService.log("System", protocol, "PROTOCOL_POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+	}
+
 	public void changePointStatus(String sPointRef, String status){
 		if (null!=sPointRef && !sPointRef.isEmpty()){
 			NodeRef point = new NodeRef(sPointRef);
