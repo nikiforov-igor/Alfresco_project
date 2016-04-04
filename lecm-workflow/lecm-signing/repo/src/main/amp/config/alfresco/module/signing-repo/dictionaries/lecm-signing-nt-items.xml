@@ -17,7 +17,7 @@
             <item name="cm:SIGNING_RESOLUTION" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[SIGNING_RESOLUTION]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Сотрундик {#signer.wrapAsLink(#signer.attribute("lecm-orgstr:employee-short-name"))} {#isSigned ? "подписал документ" : #wrapTitle("отклонил подписание", #comment) + " документа"} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
+                    <![CDATA[Сотрудник {#signer.wrapAsLink(#signer.attribute("lecm-orgstr:employee-short-name"))} {#isSigned ? "подписал документ" : #wrapTitle("отклонил подписание", #comment) + " документа"} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Подписание. Решение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
             </item>
