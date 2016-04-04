@@ -11,7 +11,7 @@
         ], createSelectOne);
     }
     function createSelectOne(){
-        new LogicECM.module.SelectOne("${fieldHtmlId}").setOptions({
+        new LogicECM.module.StatemachineSelectOne("${fieldHtmlId}").setOptions({
             controlId: "${controlId}",
             webscriptType: "${field.control.params.webscriptType!"share"}",
             webscript: "${field.control.params.webscript}",

@@ -19,8 +19,8 @@ LogicECM.module = LogicECM.module || {};
 (function () {
 
     var Dom = YAHOO.util.Dom;
-    LogicECM.module.SelectOne = function LogicECM_module_SelectOne(fieldHtmlId) {
-        LogicECM.module.SelectOne.superclass.constructor.call(this, "LogicECM.module.SelectOne", fieldHtmlId, [ "container", "datasource"]);
+    LogicECM.module.StatemachineSelectOne = function (fieldHtmlId) {
+        LogicECM.module.StatemachineSelectOne.superclass.constructor.call(this, "LogicECM.module.StatemachineSelectOne", fieldHtmlId, [ "container", "datasource"]);
 
         YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
         YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
@@ -28,7 +28,7 @@ LogicECM.module = LogicECM.module || {};
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.SelectOne, Alfresco.component.Base, {
+    YAHOO.extend(LogicECM.module.StatemachineSelectOne, Alfresco.component.Base, {
         options: {
             controlId: null,
             selectedValue: null,
