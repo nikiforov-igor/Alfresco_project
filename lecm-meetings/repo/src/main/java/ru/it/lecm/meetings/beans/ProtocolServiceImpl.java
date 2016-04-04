@@ -143,6 +143,14 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             NodeRef table = tableAssocs.get(0).getTargetRef();
             Set<QName> pointType = new HashSet<QName>(Arrays.asList(ProtocolService.TYPE_PROTOCOL_TS_POINT));
             List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, pointType);
+
+            // Получение инициатора поручений из поля протокола "Председатель совещания"
+            NodeRef errandInitiator = null;
+            List<AssociationRef> protocolInitatorAssocs = nodeService.getTargetAssocs(protocol, ProtocolService.ASSOC_PROTOCOL_MEETING_CHAIRMAN);
+            if (protocolInitatorAssocs.size() > 0) {
+                errandInitiator = protocolInitatorAssocs.get(0).getTargetRef();
+            }
+
             for (ChildAssociationRef pointAssoc : pointAssocs) {
                 NodeRef point = pointAssoc.getChildRef();
 
@@ -172,14 +180,12 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
 
                 //ассоциации поручения
                 Map<String, String> associations = new HashMap<String, String>();
-                //инициатор поручения
-                NodeRef errandInitiator = orgstructureService.getCurrentEmployee();
-                
+
                 // Назначить инициатора поручения
                 if (null != errandInitiator) {
-                	associations.put("lecm-errands:initiator-assoc", errandInitiator.toString());
+                    associations.put("lecm-errands:initiator-assoc", errandInitiator.toString());
                 }
-                
+
                 //исполнитель
                 List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);
                 if (pointExecutorAssocs.size() > 0) {
