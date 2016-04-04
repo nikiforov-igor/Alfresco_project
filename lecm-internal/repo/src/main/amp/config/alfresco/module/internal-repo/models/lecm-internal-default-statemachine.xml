@@ -1269,36 +1269,36 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>513d3c3c-455e-432d-8c1a-71b5fbbd5089</name>
+                                                                        <nodeRef>workspace://SpacesStore/bd58c063-720d-4f03-bb1a-489c11f5a036</nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value><![CDATA[Документ не имеет вложений! Направить на подписание?]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value><![CDATA[doc.hasCategoryAttachment("Внутренний")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
-                                                    </node>
-                                                    <node>
-                                                        <type>conditionAccess</type>
-                                                        <name>513d3c3c-455e-432d-8c1a-71b5fbbd5089</name>
-                                                        <nodeRef>workspace://SpacesStore/bd58c063-720d-4f03-bb1a-489c11f5a036</nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>does-not-block</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>conditionErrorMessage</name>
-                                                                <value><![CDATA[Документ не имеет вложений! Направить на подписание?]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>hideAction</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>condition</name>
-                                                                <value><![CDATA[doc.hasCategoryAttachment("Внутренний")]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects/>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
                                                     </node>
                                                 </nodes>
                                             </subFolder>
