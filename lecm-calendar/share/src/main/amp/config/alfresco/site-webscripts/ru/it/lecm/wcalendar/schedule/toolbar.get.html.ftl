@@ -29,17 +29,12 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
             'scripts/lecm-calendar/schedule/schedule-toolbar.js',
             'scripts/lecm-calendar/schedule/schedule-limit-validation.js',
             'scripts/lecm-calendar/schedule/reiteration-rules-validation.js',
-            'scripts/lecm-calendar/schedule/time-validation.js',
-            'scripts/lecm-calendar/schedule/jquery-ui-1.10.3.custom.js',
-            'scripts/lecm-calendar/schedule/jquery-ui-timepicker-addon.js',
-            'scripts/lecm-calendar/schedule/jquery-ui-sliderAccess.js'
+            'scripts/lecm-calendar/schedule/time-validation.js'
         ], [
             'components/data-lists/toolbar.css',
             'css/lecm-calendar/wcalendar-toolbar.css',
             'css/lecm-base/components/base-menu/base-menu.css',
-            'css/lecm-calendar/reiteration-control.css',
-            'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
-            'css/lecm-calendar/jquery-ui-timepicker-addon.css'
+            'css/lecm-calendar/reiteration-control.css'
         ], createToolbar);
     }
 
@@ -53,4 +48,3 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 	<div id="${toolbarId}-btnCreateNewSpecialSchedule"></div>
 	<#--<div id="${toolbarId}-btnCreateNewLink"></div>-->
 </@comp.baseToolbar>
-

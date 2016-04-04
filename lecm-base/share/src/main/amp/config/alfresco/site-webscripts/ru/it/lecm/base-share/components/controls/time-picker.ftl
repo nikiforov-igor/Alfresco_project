@@ -55,12 +55,17 @@
 	(function(){
 		LogicECM.CurrentModules = LogicECM.CurrentModules || {};
 
-        function init() {
-            LogicECM.module.Base.Util.loadScripts([
-                'scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js',
-                'scripts/lecm-base/third-party/jquery-ui-sliderAccess.js'
-            ], onLoaded);
-        }
+		function init() {
+			var resources = ($.timepicker) ? [] : [
+				'scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js',
+				'scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js',
+				'scripts/lecm-base/third-party/jquery-ui-sliderAccess.js'
+			];
+			LogicECM.module.Base.Util.loadResources(resources, [
+				'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
+				'css/lecm-calendar/jquery-ui-timepicker-addon.css'
+			], onLoaded);
+		}
 
 		function onLoaded() {
 			var zIndex = $('#${containerId}').zIndex(),
