@@ -240,8 +240,8 @@
 		<property name="stateMachineService" ref="lifecycleStateMachineHelper"/>
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="workflowService" ref="WorkflowService"/>
 		<property name="nodeService" ref="NodeService"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
 	<bean id="webscript.ru.it.lecm.statemachine.returnChiefTask.get"
@@ -252,7 +252,7 @@
 		<property name="stateMachineService" ref="lifecycleStateMachineHelper"/>
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="workflowService" ref="WorkflowService"/>
+		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 		<property name="nodeService" ref="NodeService"/>
 	</bean>
 

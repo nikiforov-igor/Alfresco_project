@@ -50,7 +50,6 @@ public class UserActionsServiceImpl implements UserActionsService {
     private final static QName PROP_FORM_INPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromType");
     private final static QName PROP_FORM_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromValue");
     private final static QName PROP_DUE_DATE = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate");
-    public static final QName ORIGINAL_EMPLOYEE = QName.createQName("", "originalEmployee");
 
     public void setStateMachineService(LifecycleStateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -122,7 +121,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                     Serializable chiefLogin = userTask.getProperties().get(StatemachineModel.PROP_CHIEF_LOGIN);
                     if (chiefLogin != null && !chiefLogin.equals(currentUserName)) {
                         taskStruct.put("chiefLogin", chiefLogin.toString());
-                        NodeRef chief = (NodeRef) userTask.getProperties().get(ORIGINAL_EMPLOYEE);
+                        NodeRef chief = orgstructureService.getEmployeeByPerson(chiefLogin.toString());
                         if (chief != null) {
                             String shortName = (String) nodeService.getProperty(chief, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
                             taskStruct.put("chiefShortName", shortName);
