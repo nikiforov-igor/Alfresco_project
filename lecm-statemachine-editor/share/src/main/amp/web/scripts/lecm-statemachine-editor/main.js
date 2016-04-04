@@ -1,3 +1,5 @@
+/* global Alfresco, YAHOO */
+
 /**
  * LogicECM root namespace.
  *
@@ -77,35 +79,39 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			el.innerHTML = "";
 
 			this._showSplash();
-			var me = this;
-			var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/process?statemachineId=" + this.statemachineId;
-			var callback = {
-				success:function (oResponse) {
-					oResponse.argument.parent._hideSplash();
-					var oResults = eval("(" + oResponse.responseText + ")");
-					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
-					oResponse.argument.parent.machineNodeRef = oResults.machineNodeRef;
-					oResponse.argument.parent.versionsNodeRef = oResults.versionsNodeRef;
-					oResponse.argument.parent.isFinalizeToUnit = oResults.isFinalizeToUnit;
-					oResponse.argument.parent.isSimple = oResults.isSimple;
-					oResponse.argument.parent._drawElements(el, oResults.statuses);
-					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=diagram";
-					sUrl = YAHOO.lang.substitute(sUrl, {
-						statemachineNodeRef: oResults.packageNodeRef
-					});
-					var diagram = document.getElementById("diagram");
-					diagram.src = sUrl;
-					if (me.initCallback && typeof(me.initCallback) === "function") {
-						me.initCallback.call();
-						me.initCallback = null;
+			Alfresco.util.Ajax.jsonGet({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/statemachine/editor/process',
+				dataObj: {
+					statemachineId: this.statemachineId
+				},
+				successCallback: {
+					scope: this,
+					fn: function (successResponse) {
+						var diagram = document.getElementById('diagram');
+						var sUrl = '{proxy}lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type={type}&noCache={noCache}';
+						var oResults = successResponse.json;
+						this._hideSplash();
+						this.packageNodeRef = oResults.packageNodeRef;
+						this.machineNodeRef = oResults.machineNodeRef;
+						this.versionsNodeRef = oResults.versionsNodeRef;
+						this.isFinalizeToUnit = oResults.isFinalizeToUnit;
+						this.isSimple = oResults.isSimple;
+						this._drawElements(el, oResults.statuses);
+						sUrl = YAHOO.lang.substitute(sUrl, {
+							proxy: Alfresco.constants.PROXY_URI_RELATIVE,
+							statemachineNodeRef: oResults.packageNodeRef,
+							type: 'diagram',
+							noCache: new Date().getTime()
+						});
+						diagram.src = sUrl;
+						if (YAHOO.lang.isFunction(this.initCallback)) {
+							this.initCallback.call();
+							this.initCallback = null;
+						}
 					}
 				},
-				argument:{
-					parent: this
-				},
-				timeout: 60000
-			};
-			YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+				failureMessage: this.msg('message.failure')
+			});
 		},
 
 		_clearListeners: function() {
@@ -328,22 +334,21 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 		},
 		_deleteStatus: function(nodeRef) {
-			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/status?nodeRef={nodeRef}";
-			sUrl = YAHOO.lang.substitute(sUrl, {
+			var params = Alfresco.util.Ajax.jsonToParamString({
 				nodeRef: nodeRef
-			});
+			}, true);
 			this._showSplash();
-			var callback = {
-				success:function (oResponse) {
-					oResponse.argument.parent._hideSplash();
-					oResponse.argument.parent.draw();
+			Alfresco.util.Ajax.jsonDelete({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/statemachine/editor/status?' + params,
+				successCallback: {
+					scope: this,
+					fn: function(successResponse) {
+						this._hideSplash();
+						this.draw();
+					}
 				},
-				argument:{
-					parent: this
-				},
-				timeout: 60000
-			};
-			YAHOO.util.Connect.asyncRequest('DELETE', sUrl, callback);
+				failureMessage: this.msg('message.failure')
+			});
 		},
 
 		_deleteStatusPrompt: function(event, obj) {
@@ -371,34 +376,31 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 
 		_deployStatemachine: function() {
 			var commentConfirm = new LogicECM.module.CommentConfirm();
-			var me = this;
 			commentConfirm.setOptions({
 				title: Alfresco.util.message("title.publish_new_version"),
 				fieldTitle: Alfresco.util.message("label.new_version_comments"),
 				onSave: function save_deployComment(comment) {
-					var sUrl = Alfresco.constants.PROXY_URI + "lecm/statemachine/editor/diagram";
-					var data = "statemachineNodeRef={statemachineNodeRef}&type=deploy&comment={comment}";
-					data = YAHOO.lang.substitute(data, {
-						statemachineNodeRef: me.packageNodeRef,
-						comment: comment
-					});
-					me._showSplash();
-					var callback = {
-						success:function (oResponse) {
-							oResponse.argument.parent._hideSplash();
-							Alfresco.util.PopupManager.displayMessage(
-								{
-									text: Alfresco.util.message("msg.statemachine_deployed_successfully"),
+					this._showSplash();
+					Alfresco.util.Ajax.jsonGet({
+						url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/statemachine/editor/diagram',
+						dataObj: {
+							statemachineNodeRef: this.packageNodeRef,
+							type: 'deploy',
+							comment: comment
+						},
+						successCallback: {
+							scope: this,
+							fn: function(successResponse) {
+								this._hideSplash();
+								Alfresco.util.PopupManager.displayMessage({
+									text: this.msg("msg.statemachine_deployed_successfully"),
 									displayTime: 3
 								});
+							}
 						},
-						argument:{
-							parent: me
-						},
-						timeout: 60000
-					};
-					YAHOO.util.Connect.asyncRequest('GET', sUrl + "?" + encodeURI(data), callback);
-				}
+						failureMessage: this.msg('message.failure')
+					});
+				}.bind(this)
 			});
 			commentConfirm.show();
 		},
@@ -436,95 +438,95 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 		},
 
 		_restoreDefaultStatemachine: function() {
-			var me = this;
 			Alfresco.util.PopupManager.displayPrompt({
 				title: Alfresco.util.message("title.restore_default_statemachine"),
 				text: Alfresco.util.message("msg.restore_default_statemachine_confirm"),
-				buttons: [
-					{
-						text: Alfresco.util.message("button.yes"),
-						handler: function dlA_onActionDeploy()
-						{
+				buttons: [{
+					text: Alfresco.util.message("button.yes"),
+					handler: {
+						obj: {
+							context: this
+						},
+						fn: function(event, obj) {
 							this.destroy();
-							var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/import?default=true&stateMachineId={statemachineId}";
-							sUrl = YAHOO.lang.substitute(sUrl, {
-								statemachineId: me.statemachineId
-							});
-							me._showSplash();
-							var callback = {
-								success:function (oResponse) {
-									oResponse.argument.parent._hideSplash();
-									Alfresco.util.PopupManager.displayMessage(
-										{
-											text: Alfresco.util.message("msg.statemashine_restored"),
+							obj.context._showSplash();
+							Alfresco.util.Ajax.jsonGet({
+								url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/statemachine/editor/import',
+								dataObj: {
+									'default': true,
+									stateMachineId: obj.context.statemachineId
+								},
+								successCallback: {
+									scope: obj.context,
+									fn: function(successResponse) {
+										this._hideSplash();
+										Alfresco.util.PopupManager.displayMessage({
+											text: this.msg("msg.statemashine_restored"),
 											displayTime: 3
 										});
-									document.location.href = Alfresco.constants.URL_CONTEXT + "page/statemachine?statemachineId=" + oResponse.argument.parent.statemachineId;
+										document.location.href = Alfresco.constants.URL_CONTEXT + "page/statemachine?statemachineId=" + this.statemachineId;
+									}
 								},
-								argument:{
-									parent: me
-								},
-								timeout: 60000
-							};
-							YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+								failureMessage: obj.context.msg('message.failure')
+							});
 						}
-					},
+					}
+				},{
+					text: Alfresco.util.message("button.no"),
+					handler: function dlA_onActionDelete_cancel()
 					{
-						text: Alfresco.util.message("button.no"),
-						handler: function dlA_onActionDelete_cancel()
-						{
-							this.destroy();
-						},
-						isDefault: true
-					}]
+						this.destroy();
+					},
+					isDefault: true
+				}]
 			});
 		},
 
 		restoreStatemachineVersion: function(item) {
-			var me = this;
 			var version = item.itemData["prop_lecm-stmeditor_version"].value;
 			Alfresco.util.PopupManager.displayPrompt({
 				title: Alfresco.util.message("title.restore_statemachine_version"),
 				text: Alfresco.util.message("msg.restore_statemachine_version_confirm", this.name, {0:version}),
-				buttons: [
-					{
+				buttons: [{
 						text: Alfresco.util.message("button.yes"),
-						handler: function dlA_onActionDeploy()
-						{
-							this.destroy();
-							if (me.versionsForm != null) {
-								me.versionsForm.hide();
-								me.versionsForm.destroy();
-							}
-							var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/import?history=true&stateMachineId={statemachineId}&version={version}&nodeRef={nodeRef}";
-							sUrl = YAHOO.lang.substitute(sUrl, {
-								statemachineId: me.statemachineId,
-								nodeRef: me.machineNodeRef,
+						handler: {
+							obj: {
+								context: this,
 								version: version
-							});
-							me._showSplash();
-							var callback = {
-								success:function (oResponse) {
-									oResponse.argument.parent._hideSplash();
-									Alfresco.util.PopupManager.displayMessage(
-										{
-											text: Alfresco.util.message("msg.statemachine_version_restored"),
-											displayTime: 3
-										});
-									document.location.reload(true);
-								},
-								argument:{
-									parent: me
-								},
-								timeout: 60000
-							};
-							YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+							},
+							fn: function (event, obj) {
+								this.destroy();
+								if (obj.context.versionsForm != null) {
+									obj.context.versionsForm.hide();
+									obj.context.versionsForm.destroy();
+								}
+								obj.context._showSplash();
+								Alfresco.util.Ajax.jsonGet({
+									url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/statemachine/editor/import',
+									dataObj: {
+										history: true,
+										stateMachineId: obj.context.statemachineId,
+										version: obj.version,
+										nodeRef: obj.context.machineNodeRef
+									},
+									successCallback: {
+										scope: obj.context,
+										fn: function(successResponse) {
+											this._hideSplash();
+											Alfresco.util.PopupManager.displayMessage({
+												text: this.msg("msg.statemachine_version_restored"),
+												displayTime: 3
+											});
+											document.location.reload(true);
+										}
+									},
+									failureMessage: obj.context.msg('message.failure')
+								});
+							}
 						}
-					},
-					{
+					},{
 						text: Alfresco.util.message("button.no"),
-						handler: function dlA_onActionDelete_cancel()
-						{
+						handler: function dlA_onActionDelete_cancel() {
 							this.destroy();
 						},
 						isDefault: true
@@ -799,7 +801,5 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				}
 			}.bind(this);
 		}
-
 	});
-
 })();
