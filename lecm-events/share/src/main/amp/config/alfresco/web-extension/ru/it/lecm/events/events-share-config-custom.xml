@@ -200,15 +200,6 @@
                     </field>
                 </appearance>
             </form>
-            <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
-            <form id="document">
-                <field-visibility>
-                    <show id="lecm-events:title"/>
-                    <show id="lecm-events:from-date"/>
-                    <show id="lecm-events:initiator-assoc"/>
-                    <show id="lecm-events:location-assoc"/>
-                </field-visibility>
-            </form>
         </forms>
     </config>
 
