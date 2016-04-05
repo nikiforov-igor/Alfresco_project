@@ -237,10 +237,8 @@
 						</#if>
 					}).setMessages(${messages});
 
-				<#if form.mode == "edit">
 					YAHOO.Bubbling.on("nodeCreated", datagrid.onCreated, datagrid);
 					YAHOO.Bubbling.on("dataItemsDeleted", datagrid.onDeleted, datagrid);
-				</#if>
 
 				datagrid.draw();
 			}
