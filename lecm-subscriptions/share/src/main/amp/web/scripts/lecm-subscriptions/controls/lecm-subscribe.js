@@ -81,11 +81,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 									}
 								}
 							},
-							failureMessage: {
-								fn: function (response) {
-									alert(response.responseText);
-								}
-							}
+							failureMessage: "message.failure"
 						});
 				} else {
 					this.init();

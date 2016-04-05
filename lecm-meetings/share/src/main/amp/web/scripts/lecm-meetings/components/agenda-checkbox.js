@@ -82,11 +82,7 @@ LogicECM.module = LogicECM.module || {};
 										me.init();
 									}
 								},
-								failureMessage: {
-									fn: function (response) {
-										alert(response.responseText);
-									}
-								}
+								failureMessage: "message.failure"
 							});
 					} else {
 						this.init();
