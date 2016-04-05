@@ -940,6 +940,11 @@
 																<value><![CDATA[true]]></value>
 															</property>
 															<property>
+																<name>transition-script</name>
+																<value><![CDATA[var protocol = stm_document;
+protocolService.setPointsStatusRemoved(protocol);]]></value>
+															</property>
+															<property>
 																<name>transitionLabel</name>
 																<value><![CDATA[Удалить]]></value>
 															</property>
@@ -2684,6 +2689,11 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 															<property>
 																<name>stopSubWorkflows</name>
 																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value><![CDATA[var protocol = stm_document;
+protocolService.setPointsStatusRemoved(protocol);]]></value>
 															</property>
 															<property>
 																<name>transitionLabel</name>

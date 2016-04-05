@@ -20,6 +20,9 @@
 			<item name="cm:Просрочен" type="lecm-dic:plane_dictionary_values">
 				<property name="cm:name">Просрочен</property>
 			</item>
+			<item name="cm:Удален" type="lecm-dic:plane_dictionary_values">
+				<property name="cm:name">Удален</property>
+			</item>
 		</items>
 	</item>
 </items>

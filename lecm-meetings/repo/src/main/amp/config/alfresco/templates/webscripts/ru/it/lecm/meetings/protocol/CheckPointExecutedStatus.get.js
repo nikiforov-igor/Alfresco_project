@@ -1,7 +1,13 @@
 function main() {
 	var pointRef = args["pointRef"];
 	var isExecuted = protocolService.checkPointExecutedStatus(pointRef);
-	model.isExecuted = isExecuted;
+	var isRemoved = protocolService.checkPointRemovedStatus(pointRef);
+	if (isExecuted == true || isRemoved == true) {
+		model.isExecuted = true;
+	}
+	else {
+		model.isExecuted = false;
+	}
 
 	if ("true" !== isExecuted) {
 		var node = search.findNode(pointRef);

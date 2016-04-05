@@ -28,12 +28,13 @@ public interface ProtocolService {
 	public static final QName ASSOC_PROTOCOL_POINT_STATUS = QName.createQName(PROTOCOL_TS_NAMESPACE, "point-status-assoc");
 	public static final QName ASSOC_PROTOCOL_TEMP_ITEM = QName.createQName(PROTOCOL_NAMESPACE, "temp-items-assoc");
 	
-	public static enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS };
+	public static enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS, REMOVED_STATUS };
 	public static final EnumMap<P_STATUSES,String> POINT_STATUSES = new EnumMap<P_STATUSES,String>(P_STATUSES.class){{
 		put(P_STATUSES.PERFORMANCE_STATUS, "На исполнении");
 		put(P_STATUSES.EXECUTED_STATUS, "Исполнен");
 		put(P_STATUSES.NOT_EXECUTED_STATUS, "Не исполнен");
 		put(P_STATUSES.EXPIRED_STATUS, "Просрочен");
+		put(P_STATUSES.REMOVED_STATUS, "Удален");
 	}};
 	
 	public static enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, ORIGINAL, OTHERS };
@@ -51,4 +52,5 @@ public interface ProtocolService {
 	public Boolean checkPointStatus(NodeRef point, ProtocolService.P_STATUSES statusKey);
 	public String getPointStatus(NodeRef point);
 	public void formErrands(final NodeRef protocol);
+	public void setPointsStatusRemoved(final NodeRef protocol);
 }

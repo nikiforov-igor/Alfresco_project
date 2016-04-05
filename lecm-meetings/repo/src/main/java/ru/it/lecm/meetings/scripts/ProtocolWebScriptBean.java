@@ -170,7 +170,26 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 		}
 		return false;
 	}
-	
+
+	public Boolean checkPointRemovedStatus(String sPointRef){
+		if (null != sPointRef && !sPointRef.isEmpty()){
+			NodeRef point = new NodeRef(sPointRef);
+			if (nodeService.exists(point)){
+				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.REMOVED_STATUS);
+			}
+		}
+		return false;
+	}
+
+	public Boolean checkPointRemovedStatus(NodeRef point){
+		if (null != point){
+			if (nodeService.exists(point)){
+				return protocolService.checkPointStatus(point, ProtocolService.P_STATUSES.REMOVED_STATUS);
+			}
+		}
+		return false;
+	}
+
 	public ScriptNode generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
 		NodeRef reportNodeRef = protocolReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
 
@@ -193,5 +212,15 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Установить все пункты протокола в статус "Удален"
+	 * @param protocolSNode
+     */
+	public void setPointsStatusRemoved(ScriptNode protocolSNode) {
+		ParameterCheck.mandatory("protocolSNode", protocolSNode);
+		NodeRef protocol = protocolSNode.getNodeRef();
+		protocolService.setPointsStatusRemoved(protocol);
 	}
 }

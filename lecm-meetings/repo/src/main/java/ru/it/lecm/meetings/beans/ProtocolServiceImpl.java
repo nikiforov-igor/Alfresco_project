@@ -221,4 +221,28 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
             }
         }
     }
+
+    /**
+     * Установить все пункты протокола в статус "Удален"
+     *
+     * @param protocol
+     */
+    @Override
+    public void setPointsStatusRemoved(final NodeRef protocol) {
+        List<AssociationRef> tableAssocs = nodeService.getTargetAssocs(protocol, ProtocolService.ASSOC_PROTOCOL_POINTS);
+        if (tableAssocs.size() > 0) {
+            NodeRef table = tableAssocs.get(0).getTargetRef();
+            Set<QName> pointType = new HashSet<QName>(Arrays.asList(ProtocolService.TYPE_PROTOCOL_TS_POINT));
+            List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, pointType);
+
+            String status = ProtocolService.POINT_STATUSES.get(P_STATUSES.REMOVED_STATUS);
+            NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ProtocolService.PROTOCOL_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
+            List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+
+            for (ChildAssociationRef pointAssoc : pointAssocs) {
+                NodeRef point = pointAssoc.getChildRef();
+                nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
+            }
+        }
+    }
 }
