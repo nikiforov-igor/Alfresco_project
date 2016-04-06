@@ -40,10 +40,10 @@
 	                                <#list item.attachments as attachment>
 	                                    <li  title="${attachment.name!""}" class="text-cropped">
 		                                    <#if hasViewAttachmentPerm>
-			                                    <a id="listTextElementId" class="text-cropped-listElement"
-			                                       <#if item.category.nodeRef == "">target="_blank"</#if>>
+			                                    <a class="text-cropped"
+												   onclick="LogicECM.module.Base.Util.showAttachmentsModalForm('${nodeRef}', '${attachment.nodeRef}')"
+												   <#if item.category.nodeRef == "">target="_blank"</#if>>
 			                                        ${attachment.name!""}
-                                                                <input type='hidden' value="${attachment.nodeRef}"/>
 			                                    </a>
 		                                    <#else>
 		                                        ${attachment.name!""}
@@ -80,65 +80,12 @@
 		}
 
 	    (function () {
-
-                function attachModalListener() {
-                    
-                    var attachedDocumentsInList = document.getElementsByClassName("text-cropped-listElement");
-
-                    for(var i = 0; i < attachedDocumentsInList.length; i++) {
-                        attachedDocumentsInList[i].addEventListener("click", showAttachmentsModalForm);
-                    }
-                    
-                };
-
-                function showAttachmentsModalForm(ev) {
-                    var documentRef = "${nodeRef}";
-                    var attachmentsModalForm = new Alfresco.module.SimpleDialog("modalWindow");
-                    var selectedAttr = ev.currentTarget.children.item(0).value;
-                    this.getAttribute('refElement');
-
-                    attachmentsModalForm.setOptions({
-                        width: '50em',
-                        templateUrl: Alfresco.constants.URL_SERVICECONTEXT + '/lecm/components/document/attachments-preview',
-                        templateRequestParams: {
-                                nodeRef : documentRef,
-                                forTask : false,
-                                selectedAttachmentNodeRef : selectedAttr
-                        },
-                        destroyOnHide: true,
-                        doBeforeDialogShow: {
-                            fn: function (form, simpleDialog) {
-                                    var formNode = YAHOO.util.Dom.get(form.formId);
-                                    var nameInput = YAHOO.util.Dom.getElementsBy(function (a) {
-                                            return a.name.indexOf('cm_title') >= 0;
-                                    }, 'input', formNode)[0];
-
-
-                                    //simpleDialog.widgets.okButton.setStyle('display', 'none');
-
-                                    simpleDialog.dialog.setHeader("Вложения");
-                                    this.createDialogOpening = false;
-                                    simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
-                                            LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
-                                            LogicECM.module.Base.Util.formDestructor(event, args, params);
-                                    }, {moduleId: simpleDialog.id}, this);
-                            },
-                            scope: this
-                        }
-                    });
-                    attachmentsModalForm.show();
-		}
-
-
-                YAHOO.util.Event.onAvailable("${el}-attach-list", attachModalListener);
-
 	        function init() {
-	            LogicECM.DocumentAttachmentsComponent = new LogicECM.DocumentAttachments("${el}").setOptions(
-	                    {
-	                        nodeRef: "${nodeRef}",
-	                        title: "${msg('heading')}",
-	                        showAfterReady: ${(view?? && view == "attachments")?string}
-	                    }).setMessages(${messages});
+	            LogicECM.DocumentAttachmentsComponent = new LogicECM.DocumentAttachments("${el}").setOptions({
+					nodeRef: "${nodeRef}",
+					title: "${msg('heading')}",
+					showAfterReady: ${(view?? && view == "attachments")?string}
+				}).setMessages(${messages});
 	        }
 
 	        YAHOO.util.Event.onDOMReady(init);

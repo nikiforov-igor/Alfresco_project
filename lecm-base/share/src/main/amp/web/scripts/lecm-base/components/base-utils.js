@@ -795,6 +795,41 @@ LogicECM.module.Base.Util = {
 	dateToUTC0: function(date) {
 		var dateStr = Alfresco.util.toISO8601(date).substring(0,10) + "T00:00:00.000+00:00";
 		return Alfresco.util.fromISO8601(dateStr);
+	},
+
+	showAttachmentsModalForm: function(documentRef, attachmentRef) {
+		
+		var self = this;
+		var attachmentsModalForm = new Alfresco.module.SimpleDialog("modalWindow");
+
+		attachmentsModalForm.setOptions({
+			width: '50em',
+			templateUrl: Alfresco.constants.URL_SERVICECONTEXT + '/lecm/components/document/attachments-preview',
+			templateRequestParams: {
+				nodeRef : documentRef,
+				forTask : false,
+				selectedAttachmentNodeRef : attachmentRef
+			},
+			destroyOnHide: true,
+			doBeforeDialogShow: {
+				fn: function (form, simpleDialog) {
+					var formNode = YAHOO.util.Dom.get(form.formId);
+					var nameInput = YAHOO.util.Dom.getElementsBy(function (a) {
+						return a.name.indexOf('cm_title') >= 0;
+					}, 'input', formNode)[0];
+
+					simpleDialog.dialog.setHeader("Вложения");
+					this.createDialogOpening = false;
+					simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
+						self.destroyForm(simpleDialog.id);
+						self.formDestructor(event, args, params);
+					}, {moduleId: simpleDialog.id}, this);
+				},
+				scope: this
+			}
+		});
+
+		attachmentsModalForm.show();
 	}
 
 };

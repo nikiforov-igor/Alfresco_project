@@ -113,7 +113,7 @@ var $html = Alfresco.util.encodeHTML,
 							}
 
 							if (oColumn.field == "prop_cm_name") {
-								html += "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + oRecord.getData("nodeRef") + "'>" + columnContent + "</a>";
+								html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.showAttachmentsModalForm('" + grid.options.documentRef + "', '" + oRecord.getData("nodeRef") + "')\">" + columnContent + "</a>";
 							} else if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
 								html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
 							} else {
