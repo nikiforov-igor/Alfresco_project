@@ -70,9 +70,6 @@
 			<#if field.control.params.hideFieldsIfNotSelect??>
 				hideFieldsIfNotSelect: "${field.control.params.hideFieldsIfNotSelect}".split(","),
 			</#if>
-			<#if field.control.params.availableEditRoles??>
-                availableEditRoles: "${field.control.params.availableEditRoles}",
-			</#if>
 				fireMandatoryByChange: "${fireMandatoryByChange?string}",
 				mode: "${form.mode}",
 				fieldId: "${field.configName}",

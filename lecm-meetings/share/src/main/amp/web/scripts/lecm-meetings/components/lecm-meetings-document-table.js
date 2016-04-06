@@ -51,8 +51,7 @@ LogicECM.module = LogicECM.module || {};
                 viewFormTitleMsg: "logicecm.view",
                 expandable: false,
                 expandDataSource: "components/form",
-				isInitOrSec: false,
-				availableEditRoles: null
+				isInitOrSec: false
 			},
 
             datagrid: null,
@@ -60,31 +59,7 @@ LogicECM.module = LogicECM.module || {};
 			tableData: null,
 
 			onReady: function(){
-				if (this.options.availableEditRoles != null) {
-					var me = this;
-					Alfresco.util.Ajax.request(
-						{
-							url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/isCurrentEmployeeHasBusinessOneRole",
-							dataObj: {
-								rolesId: this.options.availableEditRoles
-							},
-							successCallback: {
-								fn: function (response) {
-									if (!response.json) {
-										me.options.disabled = true;
-									}
-									me.loadTableData();
-								}
-							},
-							failureMessage: {
-								fn: function (response) {
-									alert(response.responseText);
-								}
-							}
-						});
-				} else {
-					this.loadTableData();
-				}
+				this.loadTableData();
 			},
 
             // инициализация грида
