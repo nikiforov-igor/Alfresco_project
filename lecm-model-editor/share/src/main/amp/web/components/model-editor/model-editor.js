@@ -1,3 +1,5 @@
+/* global YAHOO, Alfresco */
+
 if (typeof IT == "undefined" || !IT) {
 	var IT = {};
 }
@@ -728,6 +730,9 @@ IT.component = IT.component || {};
 					});
 				}
 			}
+			if (Object.getOwnPropertyNames(args.modelObject.model.constraints.constraint).length === 0 || args.modelObject.model.constraints.constraint.length === 0) {
+				delete args.modelObject.model.constraints;
+			}
 			//types
 			if(!YAHOO.lang.isObject(args.modelObject.model.types)) {
 				args.modelObject.model.types = {}
@@ -852,6 +857,10 @@ IT.component = IT.component || {};
 				if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,rec.getData("table"))) {
 					args.modelObject.model.types.type["mandatory-aspects"].aspect.push((rec.getData("table")||""));
 				}
+			}
+
+			if (Object.getOwnPropertyNames(args.modelObject.model.types.type["mandatory-aspects"].aspect).length === 0 || args.modelObject.model.types.type["mandatory-aspects"].aspect.length === 0) {
+				delete args.modelObject.model.types.type["mandatory-aspects"];
 			}
 
 			//json2xml
