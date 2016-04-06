@@ -1,8 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?><stateMachine>
+<?xml version='1.0' encoding='UTF-8'?>
+<stateMachine>
 	<node>
 		<type>statemachine</type>
 		<name>lecm-meetings_document</name>
-		<nodeRef>workspace://SpacesStore/f7a9182c-793a-4805-9580-8aec90345192</nodeRef>
+		<nodeRef>workspace://SpacesStore/b4c32bea-e764-4923-bc44-baffe35c68be</nodeRef>
 		<properties>
 			<property>
 				<name>archiveFolder</name>
@@ -31,7 +32,7 @@
 					<node>
 						<type>taskStatus</type>
 						<name>Новое</name>
-						<nodeRef>workspace://SpacesStore/d13babbb-1c72-4d90-bf7f-2f639845e591</nodeRef>
+						<nodeRef>workspace://SpacesStore/4597f047-4e61-47be-9e92-d1282161cd0f</nodeRef>
 						<properties>
 							<property>
 								<name>forDraft</name>
@@ -54,7 +55,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>cb48c5b6-4656-4e4b-8e3a-62e1009aea1d</name>
-										<nodeRef>workspace://SpacesStore/0830b35c-1bb7-4751-8d3f-37a31eca423e</nodeRef>
+										<nodeRef>workspace://SpacesStore/4e92225d-3860-4edf-b6e2-4170e8e779cc</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -73,7 +74,7 @@
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>e5daec5d-9fb5-4667-9f0b-f9d038a43d2e</name>
-										<nodeRef>workspace://SpacesStore/2afde5c3-546f-47b3-ae44-5a17f4e8271b</nodeRef>
+										<nodeRef>workspace://SpacesStore/0ec7d2f0-1737-4a60-ba61-0cac56072e6b</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -94,7 +95,9 @@
 													<node>
 														<type>transition</type>
 														<name>e68a81a2-9dc5-4a3e-8172-7e9f987a1310</name>
-														<nodeRef>workspace://SpacesStore/f87c6fcf-f70f-4010-8930-c8f76932d1a0</nodeRef>
+														<nodeRef>
+															workspace://SpacesStore/38341136-6834-44cf-8210-ed17aadae66f
+														</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -102,7 +105,8 @@
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA[doc.attr("lecm-events:removed")]]></value>
+																<value>
+																	<![CDATA[doc.attr("lecm-events:removed")]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -115,7 +119,9 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/bbe81fc8-df8e-40f6-a898-a077040b2155</reference>
+																<reference>
+																	workspace://SpacesStore/1b1feeb5-49b9-4f90-90ae-c16d72cc5cb3
+																</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -128,7 +134,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>daf602c3-0c7b-4e59-9069-76f29a589fe1</name>
-										<nodeRef>workspace://SpacesStore/ddf14f12-012b-4424-989b-adc97b84cb4f</nodeRef>
+										<nodeRef>workspace://SpacesStore/33293ec2-a28b-467b-83f4-35217829402a</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -149,7 +155,9 @@
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>0e1ef3f7-f3b2-4147-a054-d8f087e43c87</name>
-														<nodeRef>workspace://SpacesStore/c8216f62-fe2d-4290-9638-277931174054</nodeRef>
+														<nodeRef>
+															workspace://SpacesStore/524692b7-9e0a-4552-9416-416cc568b4a2
+														</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -173,15 +181,15 @@
 		  approveDate.setDate(documentDate.getDate()-DEFAULT_APPROVAL_TERM);
 		  approveDate.setMonth(documentDate.getMonth());
 		  approveDate.setFullYear(documentDate.getYear()+1900);
-		} 
+		}
 		day = approveDate.getDate();
-		day = day<10?("0"+day):(""+day);																	
-		month = approveDate.getMonth()+1;  
+		day = day<10?("0"+day):(""+day);
+		month = approveDate.getMonth()+1;
 		year = approveDate.getFullYear();
 		stage.properties['cm:title'] = "Согласование повестки от "+day+"."+(month>9?month:("0"+month))+"."+year;
 		stage.save();
 		stage.removeAspect('sys:temporary');
-		
+
 		var approvals = events.getEventMembers(document.nodeRef.toString());
 		if (approvals && approvals.length>0) {
 			for (i = 0, size = approvals.length; i < size; ++i) {
@@ -196,9 +204,9 @@
 				stageItem.removeAspect('sys:temporary');
 			}
 		}
-                        
+
   }
-  
+
 
 })();]]></value>
 															</property>
@@ -219,7 +227,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>09e76b3a-5ba2-401a-a859-460f5493615c</name>
-										<nodeRef>workspace://SpacesStore/e5bd5857-a35e-49b8-8b38-4a71ee9de0d0</nodeRef>
+										<nodeRef>workspace://SpacesStore/3c8185f8-9413-4bb7-927b-f6af97681f7e</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -238,7 +246,7 @@
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>22d73e48-37e7-49c1-98c1-5602f0d98343</name>
-										<nodeRef>workspace://SpacesStore/433ee54b-ef92-4edb-9762-9b8440b1b12d</nodeRef>
+										<nodeRef>workspace://SpacesStore/32f3019f-a60c-48e0-8e05-0a289cd1db30</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -259,7 +267,9 @@
 													<node>
 														<type>userTransition</type>
 														<name>aa197db5-3f31-489e-a9cc-ee5ced1cf7c6</name>
-														<nodeRef>workspace://SpacesStore/b27f7d78-2241-4a29-98dc-4b6f4a53a9e5</nodeRef>
+														<nodeRef>
+															workspace://SpacesStore/d031a33d-5e95-4010-ad9f-835035e2d8d4
+														</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -281,7 +291,9 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/a1aaceaa-114e-4bee-97cf-ddbcbb103f53</reference>
+																<reference>
+																	workspace://SpacesStore/3e8dd2f7-16f7-472e-a0f5-34086e8070db
+																</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -291,8 +303,11 @@
 																<nodes>
 																	<node>
 																		<type>conditionAccess</type>
-																		<name>328a73f0-e97d-45d9-9cad-e23a0f6d3d9d</name>
-																		<nodeRef>workspace://SpacesStore/7cf2d789-e36d-47d3-96a6-62e54e4f1c12</nodeRef>
+																		<name>328a73f0-e97d-45d9-9cad-e23a0f6d3d9d
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/b693474c-148a-47d5-91fc-b0fad1720fad
+																		</nodeRef>
 																		<properties>
 																			<property>
 																				<name>does-not-block</name>
@@ -300,7 +315,8 @@
 																			</property>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Действие доступно только инициатору совещания]]></value>
+																				<value>
+																					<![CDATA[Действие доступно только инициатору совещания]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -308,7 +324,115 @@
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")]]></value>
+																				<value>
+																					<![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
+													</node>
+													<node>
+														<type>transitionWorkflow</type>
+														<name>fae4f6a7-8117-4a02-a5f2-4e12e087c02a</name>
+														<nodeRef>
+															workspace://SpacesStore/8d68ca6b-f17d-44a5-be38-6d2666bf8704
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Согласовать повестку]]></value>
+															</property>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$lecmApprovementWorkflow]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<workflowAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/236c0367-c84e-4493-ac3c-de042d7bf085
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>791e43cd-d138-43ce-baa8-030d9a533042
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/25008997-38d7-427e-afd8-2e6a94f31e2e
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>does-not-block</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")) AND (@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>43046439-66a9-4af6-830c-e02a5fe89f98
+																		</name>
+																		<nodeRef>
+																			workspace://SpacesStore/5ba83bd5-a817-4f85-8bc9-dbaa0407e43e
+																		</nodeRef>
+																		<properties>
+																			<property>
+																				<name>does-not-block</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[Согласование повестки не требуется]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[doc.attr('lecm-meetings:approve-agenda')!=true]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -327,7 +451,7 @@
 									<node>
 										<type>UserWorkflow</type>
 										<name>bafd37a7-0765-4925-9149-1ae0ee2324f5</name>
-										<nodeRef>workspace://SpacesStore/12428fde-f9db-41eb-993b-d0b34b9bda32</nodeRef>
+										<nodeRef>workspace://SpacesStore/1656bfab-63b4-44e8-a9cd-8e9c456409e0</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -341,99 +465,12 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders>
-											<subFolder>
-												<name>transitions</name>
-												<nodes>
-													<node>
-														<type>UserWorkflowEntity</type>
-														<name>e743c8a1-3b25-4307-af87-02033f1ec787</name>
-														<nodeRef>workspace://SpacesStore/4d9004f5-4e54-45b6-b49a-3a0f78ce1bd6</nodeRef>
-														<properties>
-															<property>
-																<name>workflowId</name>
-																<value><![CDATA[activiti$lecmApprovementWorkflow]]></value>
-															</property>
-															<property>
-																<name>workflowLabel</name>
-																<value><![CDATA[Согласовать повестку]]></value>
-															</property>
-														</properties>
-														<aspects>
-															<workflowAspect/>
-														</aspects>
-														<associations/>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>92a5ea3f-af2d-4038-8936-e95c1c360b5e</name>
-																		<nodeRef>workspace://SpacesStore/05f741de-a1c6-4821-9e52-47e6d904184b</nodeRef>
-																		<properties>
-																			<property>
-																				<name>does-not-block</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Согласование повестки не требуется]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[doc.attr('lecm-meetings:approve-agenda')!=true]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>5554eea0-ccd9-42a2-86d1-e7eb9a83e05c</name>
-																		<nodeRef>workspace://SpacesStore/b02874b2-748d-4d3f-a5a9-6469a0e98636</nodeRef>
-																		<properties>
-																			<property>
-																				<name>does-not-block</name>
-																				<value><![CDATA[false]]></value>
-																			</property>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value><![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")) AND (@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW")]]></value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-												</nodes>
-											</subFolder>
-										</subFolders>
+										<subFolders/>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
 										<name>75d2d519-0ed5-4653-b7e2-a0b72bc40a28</name>
-										<nodeRef>workspace://SpacesStore/98f2a924-bdc7-4ca3-967e-f0fda6855a95</nodeRef>
+										<nodeRef>workspace://SpacesStore/c91cf925-ca14-46b4-a593-c27c18e32b87</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -452,7 +489,7 @@
 									<node>
 										<type>TransitionAction</type>
 										<name>717f219d-84fa-4900-b654-1b4930d3fff3</name>
-										<nodeRef>workspace://SpacesStore/d9341b5d-4511-4bd7-8641-753b7e1adfb0</nodeRef>
+										<nodeRef>workspace://SpacesStore/e46c07c3-4c7b-47dc-baf9-d9855c09dbc1</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -471,7 +508,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>e5126089-6959-47c5-a30f-edee7aab681c</name>
-										<nodeRef>workspace://SpacesStore/47fab32b-06e1-4918-88b1-bae49e7834f6</nodeRef>
+										<nodeRef>workspace://SpacesStore/5fbf6193-a52f-4421-8a1c-3e3c437f50b5</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -490,7 +527,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>42a533e0-a135-4a16-917a-cc0f821c37e1</name>
-										<nodeRef>workspace://SpacesStore/bb6daacc-40e3-4f5d-bd54-2ba98b4161da</nodeRef>
+										<nodeRef>workspace://SpacesStore/2e15ddba-41e7-4477-8049-236235a4ea72</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -514,7 +551,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_title</name>
-										<nodeRef>workspace://SpacesStore/955c4374-439b-46e6-857a-767702396a23</nodeRef>
+										<nodeRef>workspace://SpacesStore/34f2c35f-1178-4166-a4bc-55732c070804</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -529,7 +566,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_all-day</name>
-										<nodeRef>workspace://SpacesStore/3d30a0b6-f0b2-4beb-a813-3b8e31436eb5</nodeRef>
+										<nodeRef>workspace://SpacesStore/775f9c93-621d-4c7c-966f-eb4f16fbfcb7</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -544,7 +581,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_from-date</name>
-										<nodeRef>workspace://SpacesStore/e5639048-338e-41de-9bf8-cb5bc65c2428</nodeRef>
+										<nodeRef>workspace://SpacesStore/cc79c1f1-981c-40df-b2b1-590d84531a7f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -559,7 +596,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_to-date</name>
-										<nodeRef>workspace://SpacesStore/337fbe52-6f9d-443b-b72e-5832dbcb8caf</nodeRef>
+										<nodeRef>workspace://SpacesStore/cd96ba43-d8c0-4cee-b425-3238b9e5b07e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -574,7 +611,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable</name>
-										<nodeRef>workspace://SpacesStore/64144230-7198-4ac0-945f-244738208a55</nodeRef>
+										<nodeRef>workspace://SpacesStore/875fbaa4-172d-41e9-9b17-d43d0a548323</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -589,7 +626,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-start-period</name>
-										<nodeRef>workspace://SpacesStore/b57adbae-4f7a-4ed9-8776-014d41c0c5cd</nodeRef>
+										<nodeRef>workspace://SpacesStore/d5ab3ba0-4424-48fc-a72a-3f29fa02dc7f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -604,7 +641,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-end-period</name>
-										<nodeRef>workspace://SpacesStore/97120664-b1b7-498e-b76e-cefce90c396c</nodeRef>
+										<nodeRef>workspace://SpacesStore/e92d40f0-97ba-4773-9f27-8405a88aadfc</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -619,7 +656,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-rule</name>
-										<nodeRef>workspace://SpacesStore/d5168b67-be64-4ec9-9bf3-cfacc0651001</nodeRef>
+										<nodeRef>workspace://SpacesStore/fd4db3d4-1d0c-4f39-85e1-6b94f7b66b0e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -634,7 +671,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_members-assoc</name>
-										<nodeRef>workspace://SpacesStore/19ed390e-c844-4975-9956-85ba102f5ef2</nodeRef>
+										<nodeRef>workspace://SpacesStore/1024866d-fc22-43f5-b376-b6f80e8c93d5</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -649,7 +686,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/45b14a5b-d8e5-4c26-ba39-e8278a77ef0f</nodeRef>
+										<nodeRef>workspace://SpacesStore/f91566ab-752c-41e9-84eb-4f9ffbb6e59a</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -664,7 +701,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc-json</name>
-										<nodeRef>workspace://SpacesStore/35c5b75f-d859-4711-b984-1c809d5b729c</nodeRef>
+										<nodeRef>workspace://SpacesStore/2365d922-b99e-4283-90f6-5eac1b6d2f38</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -679,7 +716,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_chairman-assoc</name>
-										<nodeRef>workspace://SpacesStore/63e5b6ec-9a42-4072-a396-be1ae545f5e4</nodeRef>
+										<nodeRef>workspace://SpacesStore/067e3014-9273-4ab7-8ce1-c4e4462a2130</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -694,7 +731,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_secretary-assoc</name>
-										<nodeRef>workspace://SpacesStore/8179475c-9245-4ab4-a5f9-13d0a41d33f2</nodeRef>
+										<nodeRef>workspace://SpacesStore/f5428bbe-a5ce-4762-b1fa-2665d68af1b0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -709,7 +746,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/e1f3d27a-7b58-47a8-9b1e-5dd68bb58c8d</nodeRef>
+										<nodeRef>workspace://SpacesStore/40cdf5d9-dc6b-4729-94a8-840263a46409</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -724,7 +761,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_location-assoc</name>
-										<nodeRef>workspace://SpacesStore/8115391a-96bb-4556-bf64-b2d9fbf059be</nodeRef>
+										<nodeRef>workspace://SpacesStore/663905f0-b65c-4fdb-9c40-d7ce7fe4cc6c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -739,7 +776,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/c35db621-ccf1-4737-a47f-698b1fe169b8</nodeRef>
+										<nodeRef>workspace://SpacesStore/ca367bbf-db85-4ef2-9fe0-e724de7699d7</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -754,7 +791,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_initiator-assoc</name>
-										<nodeRef>workspace://SpacesStore/0680b6d4-823b-4881-949b-915688ce241b</nodeRef>
+										<nodeRef>workspace://SpacesStore/5abf12cb-4714-490e-aec1-c647f63a4c1c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -769,7 +806,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_description</name>
-										<nodeRef>workspace://SpacesStore/309230d5-537b-4ba2-8827-c53e46238bcd</nodeRef>
+										<nodeRef>workspace://SpacesStore/6afebea6-1034-44c8-a9e9-400b742ae47e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -784,7 +821,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/3ab1b54c-a367-4645-b5fd-d94d35a7533a</nodeRef>
+										<nodeRef>workspace://SpacesStore/74b0080d-c68b-421d-8b93-c423ce0192f4</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -799,7 +836,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings-ts_items-assoc</name>
-										<nodeRef>workspace://SpacesStore/f011ea8e-f251-4972-ae9f-2bb4d27a68b1</nodeRef>
+										<nodeRef>workspace://SpacesStore/7c88cea0-2080-49bd-a526-020d7204e24a</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -814,7 +851,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approve-agenda</name>
-										<nodeRef>workspace://SpacesStore/86fc88da-cd01-44e6-b70f-7e78ec3ad8bc</nodeRef>
+										<nodeRef>workspace://SpacesStore/ea02665b-69d7-40e1-a43e-8bd514f66a62</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -829,7 +866,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approval</name>
-										<nodeRef>workspace://SpacesStore/4037b8b7-9139-4b22-bc21-eef6a22a11c7</nodeRef>
+										<nodeRef>workspace://SpacesStore/73a4c981-6353-4dcd-bce8-93da48a71a8e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -844,7 +881,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-start-date</name>
-										<nodeRef>workspace://SpacesStore/94f7fe09-b084-4a58-9a91-09ffdb77044c</nodeRef>
+										<nodeRef>workspace://SpacesStore/f7286fbf-697c-45ad-9c91-407d31db6424</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -859,7 +896,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/de9c34ef-f5ed-42be-bab3-71c5e40deff4</nodeRef>
+										<nodeRef>workspace://SpacesStore/ba5d31fc-7232-480e-8c3f-dfdf60eb99f6</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -874,7 +911,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/a02f0e63-7d3d-48a9-b6ae-faa04a2f456d</nodeRef>
+										<nodeRef>workspace://SpacesStore/b498acd4-68fa-4001-8752-dd3aa8e53fdc</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -889,7 +926,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/66c0a6fa-c621-4f93-ac01-51dddf8f3f50</nodeRef>
+										<nodeRef>workspace://SpacesStore/7f7aa2b0-5caa-47ac-848a-b1de92aa7037</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -909,7 +946,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>a7e9310d-9d03-415e-82c6-7149f6eb45bc</name>
-										<nodeRef>workspace://SpacesStore/25b9e819-cc8a-4eb7-a0f6-2a285a71acfd</nodeRef>
+										<nodeRef>workspace://SpacesStore/206251c2-f48c-4500-a792-6e9f9dc756cb</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -932,7 +969,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>9a653f74-8c5a-4953-b14a-a62479e82c91</name>
-										<nodeRef>workspace://SpacesStore/a4efb2a2-a570-48c6-a0f9-2846a56c9ab0</nodeRef>
+										<nodeRef>workspace://SpacesStore/1f3a1150-ba42-46bd-818a-f05d7c3e32c2</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -955,11 +992,11 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>f3b60c42-2107-41ac-a884-9ff51aa9fedd</name>
-										<nodeRef>workspace://SpacesStore/5dc09500-96d2-4bfe-a504-5a881c2288f9</nodeRef>
+										<nodeRef>workspace://SpacesStore/3c27ae23-3ff8-4630-93c9-cac345caae30</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
-												<value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
 											</property>
 										</properties>
 										<aspects>
@@ -978,7 +1015,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>f1fbf67a-7abd-47e0-b194-1421447bbad3</name>
-										<nodeRef>workspace://SpacesStore/bb46965e-2435-4b66-8de1-07c0fe45b776</nodeRef>
+										<nodeRef>workspace://SpacesStore/7b6f9f76-b27b-4412-af30-9538c7def747</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -993,7 +1030,8 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN</businessRoleName>
+												<businessRoleName>EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN
+												</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -1001,7 +1039,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>9456d9c9-5854-4af3-b94a-8ad0451ddabe</name>
-										<nodeRef>workspace://SpacesStore/9ee74711-5f87-4191-a936-36974703cdcf</nodeRef>
+										<nodeRef>workspace://SpacesStore/8d9bf28c-0b3d-435d-b370-6d0ce5ddf17b</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1028,7 +1066,7 @@
 					<node>
 						<type>taskStatus</type>
 						<name>Утверждено</name>
-						<nodeRef>workspace://SpacesStore/a1aaceaa-114e-4bee-97cf-ddbcbb103f53</nodeRef>
+						<nodeRef>workspace://SpacesStore/3e8dd2f7-16f7-472e-a0f5-34086e8070db</nodeRef>
 						<properties>
 							<property>
 								<name>timerDuration</name>
@@ -1047,7 +1085,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>1f3a9ae5-9f2f-4d6c-9c50-2583506423fb</name>
-										<nodeRef>workspace://SpacesStore/e1c0176c-d5dc-4fae-81a6-08257b14239a</nodeRef>
+										<nodeRef>workspace://SpacesStore/a574ca7d-7b06-4f00-9bd2-badd02166e19</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1066,7 +1104,7 @@
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>6be5e759-d3db-405c-9c2f-05fed73aee6c</name>
-										<nodeRef>workspace://SpacesStore/748681d4-e239-4872-b6c8-ac75cc49eef5</nodeRef>
+										<nodeRef>workspace://SpacesStore/21757990-64fe-4256-b2c0-86f5d147a14a</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1087,7 +1125,9 @@
 													<node>
 														<type>transition</type>
 														<name>8cfc9868-250d-4c76-9c09-4a0461c9503f</name>
-														<nodeRef>workspace://SpacesStore/bc0d2b7b-429c-4626-ba5f-047044ec5b05</nodeRef>
+														<nodeRef>
+															workspace://SpacesStore/8d43a865-5e59-442e-be82-7bd5280bc9fa
+														</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1095,7 +1135,8 @@
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA[doc.attr("lecm-events:removed")]]></value>
+																<value>
+																	<![CDATA[doc.attr("lecm-events:removed")]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -1108,7 +1149,9 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/bbe81fc8-df8e-40f6-a898-a077040b2155</reference>
+																<reference>
+																	workspace://SpacesStore/1b1feeb5-49b9-4f90-90ae-c16d72cc5cb3
+																</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -1117,7 +1160,9 @@
 													<node>
 														<type>transition</type>
 														<name>34e4bddf-19a6-4e38-a112-0f383dd22424</name>
-														<nodeRef>workspace://SpacesStore/532120d6-c61a-4b0a-a3ad-67f5e03dd840</nodeRef>
+														<nodeRef>
+															workspace://SpacesStore/11094dd7-ca39-4dd2-aab6-d8fb5454570a
+														</nodeRef>
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
@@ -1125,7 +1170,8 @@
 															</property>
 															<property>
 																<name>transitionExpression</name>
-																<value><![CDATA[doc.attr("lecm-meetings:finished")]]></value>
+																<value>
+																	<![CDATA[doc.attr("lecm-meetings:finished")]]></value>
 															</property>
 															<property>
 																<name>transitionDocumentChangeScript</name>
@@ -1138,7 +1184,9 @@
 														<associations>
 															<association>
 																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/975bb2b7-9b68-4ad0-910e-8c3bd3b77416</reference>
+																<reference>
+																	workspace://SpacesStore/f753f45c-ef20-4946-a827-e189803a924f
+																</reference>
 															</association>
 														</associations>
 														<roleAssociations/>
@@ -1151,7 +1199,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>ebee6b6d-2d9c-4228-82a0-0caa591b5840</name>
-										<nodeRef>workspace://SpacesStore/96c88224-f21d-4cb4-9b88-939ee205dc87</nodeRef>
+										<nodeRef>workspace://SpacesStore/d0f45c69-8b09-4d1d-bca9-cd24089d98e0</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1172,7 +1220,9 @@
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>ce15c44c-dd25-4a89-8ee3-72718be6fa39</name>
-														<nodeRef>workspace://SpacesStore/d9875725-0f8d-483f-942b-1cfda5ddc394</nodeRef>
+														<nodeRef>
+															workspace://SpacesStore/dbe41a63-942a-451e-8db7-808f683ebb8b
+														</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -1232,7 +1282,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>d483ab5a-49b2-450c-9ed5-4d432b1f1200</name>
-										<nodeRef>workspace://SpacesStore/bc875771-2951-434a-bf0c-bff2d228ad83</nodeRef>
+										<nodeRef>workspace://SpacesStore/2f314c60-ebbf-40c3-89db-c360ade4b645</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1251,7 +1301,7 @@
 									<node>
 										<type>FinishStateWithTransition</type>
 										<name>a0291db5-3e15-4a23-86ec-af4cd107de70</name>
-										<nodeRef>workspace://SpacesStore/a8980850-1660-443c-89f9-9c1c5e77b2e3</nodeRef>
+										<nodeRef>workspace://SpacesStore/364b3114-cca4-4758-9a01-82ea0fdaf31d</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1270,7 +1320,7 @@
 									<node>
 										<type>UserWorkflow</type>
 										<name>91c8b1f0-ba99-478a-84aa-aec5faa1201a</name>
-										<nodeRef>workspace://SpacesStore/f02ad633-5f8b-4b3f-a901-cb66aa4c3e39</nodeRef>
+										<nodeRef>workspace://SpacesStore/e129a947-dd46-4914-8fc5-f30aa29a36bf</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1289,7 +1339,7 @@
 									<node>
 										<type>StartWorkflow</type>
 										<name>ac8d2a34-60b9-49c8-9dcf-f012baae5e6c</name>
-										<nodeRef>workspace://SpacesStore/f8db40a7-f090-4bbc-8304-bf0ff5f5c7bd</nodeRef>
+										<nodeRef>workspace://SpacesStore/e12c9834-edf0-4661-b930-dfc885eff379</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1308,7 +1358,7 @@
 									<node>
 										<type>TransitionAction</type>
 										<name>a3b14f28-0a2f-4c45-bb61-b8d19e16128f</name>
-										<nodeRef>workspace://SpacesStore/ab6a7890-6eb3-4be7-bb7b-3cff6a757baa</nodeRef>
+										<nodeRef>workspace://SpacesStore/2952b1dc-ac21-483b-a7c1-ef00ad67153c</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1327,7 +1377,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>7e4f934e-799c-4024-a965-28b452384deb</name>
-										<nodeRef>workspace://SpacesStore/87de3dac-a963-4418-9d84-e0a0404f21bb</nodeRef>
+										<nodeRef>workspace://SpacesStore/77c8767c-9389-4881-af26-200c74ec26ff</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1346,7 +1396,7 @@
 									<node>
 										<type>TimerAction</type>
 										<name>d300bf01-7260-4f23-9bbb-4976cc49e890</name>
-										<nodeRef>workspace://SpacesStore/b39b3486-16f9-4f53-aaf2-71567ffe2ff3</nodeRef>
+										<nodeRef>workspace://SpacesStore/6ecba1a4-4c02-4f3c-b89c-052086130a3a</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1370,7 +1420,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_title</name>
-										<nodeRef>workspace://SpacesStore/c59dc313-edcb-412a-bbba-15f7af26a0eb</nodeRef>
+										<nodeRef>workspace://SpacesStore/e1fbd4c9-fb8b-4205-927f-54d8c249b249</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1385,7 +1435,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_all-day</name>
-										<nodeRef>workspace://SpacesStore/37f69976-a5af-44dd-9765-983a1957a9ef</nodeRef>
+										<nodeRef>workspace://SpacesStore/c1b922d2-e9ff-4877-b474-6050ed6ea54b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1400,7 +1450,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_from-date</name>
-										<nodeRef>workspace://SpacesStore/c6045a08-b9a2-4ea7-8278-c10da6c03cd3</nodeRef>
+										<nodeRef>workspace://SpacesStore/0e85636b-e6b5-4cf6-870d-da7abf53b234</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1415,7 +1465,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_to-date</name>
-										<nodeRef>workspace://SpacesStore/c86e631f-483c-4759-bfe9-b48e6bef06a4</nodeRef>
+										<nodeRef>workspace://SpacesStore/ff294ee8-f0fc-4df4-8640-59d7d3fadd42</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1430,7 +1480,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable</name>
-										<nodeRef>workspace://SpacesStore/f8169d22-68d7-4822-8441-9ef02369bef8</nodeRef>
+										<nodeRef>workspace://SpacesStore/d556160c-e491-4027-b8c8-f120fb635e77</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1445,7 +1495,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-start-period</name>
-										<nodeRef>workspace://SpacesStore/5952f7f0-02fc-4b1d-aef4-1ff559514cc6</nodeRef>
+										<nodeRef>workspace://SpacesStore/9d113bbe-3d18-4449-9bd5-cae988d94c41</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1460,7 +1510,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-end-period</name>
-										<nodeRef>workspace://SpacesStore/a1fba3f8-d9e9-493f-ad03-ad3b8287aefd</nodeRef>
+										<nodeRef>workspace://SpacesStore/06024111-84e3-4bb0-b041-b16486e7e873</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1475,7 +1525,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-rule</name>
-										<nodeRef>workspace://SpacesStore/9df5f30b-9477-4169-871f-0089e7ca100c</nodeRef>
+										<nodeRef>workspace://SpacesStore/d334f734-6dc2-430c-8541-648a46657899</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1490,7 +1540,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_members-assoc</name>
-										<nodeRef>workspace://SpacesStore/12136de0-f044-4679-bc83-92b30f033d78</nodeRef>
+										<nodeRef>workspace://SpacesStore/1fd33af7-163e-42aa-9510-e9253e966a96</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1505,7 +1555,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/24deb221-1ee6-4381-927c-4aaf40cc35aa</nodeRef>
+										<nodeRef>workspace://SpacesStore/e33fb967-44bf-42a1-a69e-9713cb1c13c4</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1520,7 +1570,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc-json</name>
-										<nodeRef>workspace://SpacesStore/8630d81b-dc1e-48d0-8b22-7116e73ab0d4</nodeRef>
+										<nodeRef>workspace://SpacesStore/ec46c703-49e1-4093-b5d5-db97c65c03af</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1535,7 +1585,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_chairman-assoc</name>
-										<nodeRef>workspace://SpacesStore/bfd9bd88-e8bb-4c25-bb38-72732d968868</nodeRef>
+										<nodeRef>workspace://SpacesStore/05f03a4e-0e83-4049-aaf1-20d871b91938</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1550,7 +1600,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_secretary-assoc</name>
-										<nodeRef>workspace://SpacesStore/27f4f1bc-4558-4cb3-94ee-e4240a6fef4b</nodeRef>
+										<nodeRef>workspace://SpacesStore/93140c8a-b0c2-46cd-b182-856edfa7e728</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1565,7 +1615,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/504057b8-43d5-4a2a-9858-e9a57072cfe0</nodeRef>
+										<nodeRef>workspace://SpacesStore/b56e20be-4dcb-4966-b490-1b87d1c8fa88</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1580,7 +1630,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_location-assoc</name>
-										<nodeRef>workspace://SpacesStore/38440efb-6115-4903-8294-d8519b9245b3</nodeRef>
+										<nodeRef>workspace://SpacesStore/2a1b9c62-b8e4-4e4f-ae6c-d513ab1d495c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1595,7 +1645,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/10fa0353-e4d5-4761-9af6-1da2e2613a81</nodeRef>
+										<nodeRef>workspace://SpacesStore/a87af8fc-1e64-4506-a14c-45d9fb2aa9a4</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1610,7 +1660,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_initiator-assoc</name>
-										<nodeRef>workspace://SpacesStore/5d22bf8c-5731-4d82-89fe-d4fd65eaf899</nodeRef>
+										<nodeRef>workspace://SpacesStore/cf35551e-4c03-4e31-8877-861b079da6ae</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1625,7 +1675,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_description</name>
-										<nodeRef>workspace://SpacesStore/8575d5c7-fa4d-43b0-afdd-201c8043149e</nodeRef>
+										<nodeRef>workspace://SpacesStore/b5aa4a19-c054-47fd-b3b7-122dc57f70c8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1640,7 +1690,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/da264971-55a8-4523-8737-db10bc51b579</nodeRef>
+										<nodeRef>workspace://SpacesStore/51f15785-3dde-44fa-98a2-710b7023ed36</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1655,7 +1705,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings-ts_items-assoc</name>
-										<nodeRef>workspace://SpacesStore/e9deab1e-2aa6-4547-8275-b59b5ab4f49e</nodeRef>
+										<nodeRef>workspace://SpacesStore/28daa2d9-20c0-4268-8366-8c2bbd6a2911</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1670,7 +1720,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approve-agenda</name>
-										<nodeRef>workspace://SpacesStore/ba7b42d0-2ced-4514-9742-04db13815618</nodeRef>
+										<nodeRef>workspace://SpacesStore/b2fe5c1d-370a-4c1b-9083-074d9d0dc2ca</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1685,7 +1735,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approval</name>
-										<nodeRef>workspace://SpacesStore/b158e08a-718d-42e7-9b0a-4b5a720295b7</nodeRef>
+										<nodeRef>workspace://SpacesStore/a4447e09-76bd-4fa2-9c0d-1ee1b7cb9630</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1700,7 +1750,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-start-date</name>
-										<nodeRef>workspace://SpacesStore/f956c489-53b2-42ee-84be-1af40778733b</nodeRef>
+										<nodeRef>workspace://SpacesStore/dee7a543-d9f1-4a31-b5df-398450e2f144</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1715,7 +1765,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/095ae7ae-c32e-417a-b535-24bbc57baa87</nodeRef>
+										<nodeRef>workspace://SpacesStore/cc7feb68-0900-4e7d-8c88-6e87454035d9</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1730,7 +1780,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/c852eaba-06b9-434d-857e-f4b0602fc59e</nodeRef>
+										<nodeRef>workspace://SpacesStore/7f6111c3-5df7-4c1b-8d44-b9560b712ff2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1745,7 +1795,7 @@
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/f24f7da1-7824-4bef-8926-e1cc0a9eb7f4</nodeRef>
+										<nodeRef>workspace://SpacesStore/839911b8-c592-4ead-b275-8510202711ea</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1765,7 +1815,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>03e0cdfb-ee9e-412e-9b6a-f0c6ab15df29</name>
-										<nodeRef>workspace://SpacesStore/c8242326-27ad-4034-b710-c62a958241a6</nodeRef>
+										<nodeRef>workspace://SpacesStore/5f35242c-6ec7-4b11-aa12-22634040ac59</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1788,7 +1838,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>8cacfb80-9a32-4c28-ad38-890333c7b9ec</name>
-										<nodeRef>workspace://SpacesStore/73fc1355-a25e-451d-8b67-481b9af20a5a</nodeRef>
+										<nodeRef>workspace://SpacesStore/dc99ad7e-8128-4bab-9d56-15a7d7ce4953</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1811,7 +1861,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>5a7b2f52-1bfa-4029-9b61-8bfaa9fe2874</name>
-										<nodeRef>workspace://SpacesStore/6ea2b8bd-1b99-4575-af2d-e9be069860a4</nodeRef>
+										<nodeRef>workspace://SpacesStore/5c288595-f5e0-43a5-bbd0-d7dd4b3813a8</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1826,7 +1876,8 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN</businessRoleName>
+												<businessRoleName>EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN
+												</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -1834,7 +1885,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>0c3d2718-319e-4cec-b5ba-3b0283f4968b</name>
-										<nodeRef>workspace://SpacesStore/eb9e52c9-618c-4116-be88-bd5313b68449</nodeRef>
+										<nodeRef>workspace://SpacesStore/991276b7-8934-44cc-acec-dd3ec7efd963</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1857,7 +1908,7 @@
 									<node>
 										<type>dynamic-role</type>
 										<name>d2e167a0-9c16-4b96-b523-39dab3c441f3</name>
-										<nodeRef>workspace://SpacesStore/7f69dec3-36f4-46a4-a2a0-1aed9428433f</nodeRef>
+										<nodeRef>workspace://SpacesStore/bd436564-4b9c-4fe2-a2b1-3af5d8d621fd</nodeRef>
 										<properties>
 											<property>
 												<name>permissionTypeValue</name>
@@ -1884,7 +1935,7 @@
 					<node>
 						<type>endEvent</type>
 						<name>Проведено</name>
-						<nodeRef>workspace://SpacesStore/975bb2b7-9b68-4ad0-910e-8c3bd3b77416</nodeRef>
+						<nodeRef>workspace://SpacesStore/f753f45c-ef20-4946-a827-e189803a924f</nodeRef>
 						<properties/>
 						<aspects/>
 						<associations/>
@@ -1896,7 +1947,7 @@
 									<node>
 										<type>ScriptAction</type>
 										<name>256be33f-77fd-4d75-a0bb-306aaab7d7ca</name>
-										<nodeRef>workspace://SpacesStore/f75d364e-a453-4438-bfed-0f6ff8558722</nodeRef>
+										<nodeRef>workspace://SpacesStore/47b3aafa-c7f0-4d75-8dd2-6aed3c173b71</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -1917,7 +1968,9 @@
 													<node>
 														<type>ScriptActionEntity</type>
 														<name>993d1e67-2eac-43c2-acd8-0d2f9d8f796f</name>
-														<nodeRef>workspace://SpacesStore/7372bf38-558a-4d4f-ac3d-a3087c9d8787</nodeRef>
+														<nodeRef>
+															workspace://SpacesStore/ce70f1a4-8ca8-4f0d-aea0-169f2958b534
+														</nodeRef>
 														<properties>
 															<property>
 																<name>actionScript</name>
@@ -1951,7 +2004,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_title</name>
-										<nodeRef>workspace://SpacesStore/607f3acd-94c9-4392-98da-fd38aac8daf4</nodeRef>
+										<nodeRef>workspace://SpacesStore/2a799b74-e062-4c62-b1c7-6a283aede3db</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1966,7 +2019,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_all-day</name>
-										<nodeRef>workspace://SpacesStore/f94492e9-98a9-4c0b-bf75-345453a520d9</nodeRef>
+										<nodeRef>workspace://SpacesStore/0f3e0661-ad8f-4716-ba1e-8fdd98aad84a</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1981,7 +2034,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_from-date</name>
-										<nodeRef>workspace://SpacesStore/9e94f755-c48d-45e8-9913-9294e869f9c2</nodeRef>
+										<nodeRef>workspace://SpacesStore/496311dc-ff48-43db-bd63-817fd2ef2783</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -1996,7 +2049,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_to-date</name>
-										<nodeRef>workspace://SpacesStore/b04e4f60-7df4-4f24-8c56-2478cccbcd83</nodeRef>
+										<nodeRef>workspace://SpacesStore/2e18550d-e003-4e27-a952-0fefc40c4b37</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2011,7 +2064,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable</name>
-										<nodeRef>workspace://SpacesStore/fb0bbcd9-fe61-42aa-a033-571a6a87dfe4</nodeRef>
+										<nodeRef>workspace://SpacesStore/4bf6f865-cef9-44ba-870b-47b07c5bbd63</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2026,7 +2079,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-start-period</name>
-										<nodeRef>workspace://SpacesStore/1645199e-c74e-475f-b25d-c774fa10ae7c</nodeRef>
+										<nodeRef>workspace://SpacesStore/fdc2f73e-dea8-4f3b-86af-4bdf758835e2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2041,7 +2094,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-end-period</name>
-										<nodeRef>workspace://SpacesStore/1148144a-b8db-409e-983e-4a396152a81b</nodeRef>
+										<nodeRef>workspace://SpacesStore/40beb7b9-1eeb-4e2a-be1a-2290d716ea1c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2056,7 +2109,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-rule</name>
-										<nodeRef>workspace://SpacesStore/2b89eea6-b1a2-409e-9c33-0f20aa80c6c0</nodeRef>
+										<nodeRef>workspace://SpacesStore/3ee7d8f6-b5e5-48c1-99cd-620c62391cf2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2071,7 +2124,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_members-assoc</name>
-										<nodeRef>workspace://SpacesStore/11605129-797f-4161-947e-050310471005</nodeRef>
+										<nodeRef>workspace://SpacesStore/98b5acb3-ab02-426a-8f9b-5a10dbba247e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2086,7 +2139,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/be95201c-2377-4c2c-b018-617da0e6acfd</nodeRef>
+										<nodeRef>workspace://SpacesStore/75e35d9e-472b-4392-aa3e-e6f82c2953bc</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2101,7 +2154,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc-json</name>
-										<nodeRef>workspace://SpacesStore/922aeec1-5e7e-4f86-8261-095c4ceae80d</nodeRef>
+										<nodeRef>workspace://SpacesStore/5a80368c-451b-4e83-b8bc-8f38007f0706</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2116,7 +2169,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_chairman-assoc</name>
-										<nodeRef>workspace://SpacesStore/267f0d8b-e8bd-4af6-be42-403a2492239d</nodeRef>
+										<nodeRef>workspace://SpacesStore/076e0b81-e50f-422c-99a0-088b35a6203f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2131,7 +2184,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_secretary-assoc</name>
-										<nodeRef>workspace://SpacesStore/21427cf1-27f0-454c-ab7a-5f06ff63a591</nodeRef>
+										<nodeRef>workspace://SpacesStore/324da31d-dcbd-42cd-b5b2-920dd0f09a5d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2146,7 +2199,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/1a4b34c8-6dd4-448e-ad01-b9741b06f56c</nodeRef>
+										<nodeRef>workspace://SpacesStore/2ca33c49-eb65-4fa6-b995-5aa4f13499a2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2161,7 +2214,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_location-assoc</name>
-										<nodeRef>workspace://SpacesStore/6b0d4e40-20d1-4d41-9702-20c6247c5dac</nodeRef>
+										<nodeRef>workspace://SpacesStore/cd9b1871-e157-47b6-9cc6-0ebfbe17b9ba</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2176,7 +2229,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/57a49eb7-38c9-4ddf-8627-0e907711940f</nodeRef>
+										<nodeRef>workspace://SpacesStore/f9e123d0-2d15-4061-900f-76c944a08c0e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2191,7 +2244,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_initiator-assoc</name>
-										<nodeRef>workspace://SpacesStore/10e72741-3768-4146-9462-9520fa7ee10f</nodeRef>
+										<nodeRef>workspace://SpacesStore/60d0e452-d282-4b77-909d-81c5f6fda420</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2206,7 +2259,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_description</name>
-										<nodeRef>workspace://SpacesStore/bc3e43d4-42d7-4c9a-aca8-fca60f820eea</nodeRef>
+										<nodeRef>workspace://SpacesStore/f0751dbd-80f9-45f2-b164-7cbb28117899</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2221,7 +2274,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/e136f930-f629-4060-a810-abd691d11be2</nodeRef>
+										<nodeRef>workspace://SpacesStore/e53164e0-0b7b-4c78-b87c-95aa0847fb37</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2236,7 +2289,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings-ts_items-assoc</name>
-										<nodeRef>workspace://SpacesStore/631b1766-e243-40f3-b0f9-9cf7a550467b</nodeRef>
+										<nodeRef>workspace://SpacesStore/38759db6-8c15-4cce-9275-65a96b0b9ba5</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2251,7 +2304,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approve-agenda</name>
-										<nodeRef>workspace://SpacesStore/5e5c3ffb-4077-4d6f-ac98-562a5fdff72a</nodeRef>
+										<nodeRef>workspace://SpacesStore/ad832363-3ea3-43dc-bb67-f9db25618d75</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2266,7 +2319,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approval</name>
-										<nodeRef>workspace://SpacesStore/31a8f6db-740a-4f7a-84d0-92ea34ac6842</nodeRef>
+										<nodeRef>workspace://SpacesStore/bb17891a-309f-4e1c-84ef-713291e0aab2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2281,7 +2334,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-start-date</name>
-										<nodeRef>workspace://SpacesStore/c573558d-07db-4450-8d37-2c52c0eeb3ad</nodeRef>
+										<nodeRef>workspace://SpacesStore/b9bf1933-6851-410d-8ff0-941f3441eed0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2296,7 +2349,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/3f4445cf-0751-41f6-af50-85425ea39b5d</nodeRef>
+										<nodeRef>workspace://SpacesStore/7d28cd25-8b47-49d7-a7c8-9795fee1c5f2</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2311,7 +2364,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/527b6fff-6b20-4d32-ad66-a5f6ec51973e</nodeRef>
+										<nodeRef>workspace://SpacesStore/1c454432-6966-486e-b0bd-be0d86864ef7</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2326,7 +2379,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/3247cda0-2c69-45fc-a5e5-6e4bb4e7672d</nodeRef>
+										<nodeRef>workspace://SpacesStore/f985347a-d0e8-4e70-bb72-11cee442e701</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2345,7 +2398,7 @@ if (document !== null) {
 					<node>
 						<type>endEvent</type>
 						<name>Удалено</name>
-						<nodeRef>workspace://SpacesStore/bbe81fc8-df8e-40f6-a898-a077040b2155</nodeRef>
+						<nodeRef>workspace://SpacesStore/1b1feeb5-49b9-4f90-90ae-c16d72cc5cb3</nodeRef>
 						<properties/>
 						<aspects/>
 						<associations/>
@@ -2357,7 +2410,7 @@ if (document !== null) {
 									<node>
 										<type>ScriptAction</type>
 										<name>42e6f4eb-0477-4d0b-a19c-7fa116ead8b4</name>
-										<nodeRef>workspace://SpacesStore/3aeef2b7-bf80-449e-99b8-983600e2ba23</nodeRef>
+										<nodeRef>workspace://SpacesStore/7171c170-d21a-43bb-a9ba-4b441026ff52</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -2381,7 +2434,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_title</name>
-										<nodeRef>workspace://SpacesStore/f57225bc-4df0-462a-885d-0c10953393f7</nodeRef>
+										<nodeRef>workspace://SpacesStore/17fd892e-05ed-4925-b700-86e9891cb44d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2396,7 +2449,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_all-day</name>
-										<nodeRef>workspace://SpacesStore/f850aa72-5d0b-48b3-9e34-bc6ae3db5d5f</nodeRef>
+										<nodeRef>workspace://SpacesStore/ea048265-168b-48bb-b464-c32ba1634177</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2411,7 +2464,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_from-date</name>
-										<nodeRef>workspace://SpacesStore/acb8a0c3-5f6f-4eeb-83bb-0176abe6a1cc</nodeRef>
+										<nodeRef>workspace://SpacesStore/a9249ddc-6c62-4441-a838-6c52e2a01e40</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2426,7 +2479,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_to-date</name>
-										<nodeRef>workspace://SpacesStore/c46be7be-1f09-4394-8a9a-8112ae396378</nodeRef>
+										<nodeRef>workspace://SpacesStore/4221236c-730b-451d-af1e-f7178f61f2e3</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2441,7 +2494,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable</name>
-										<nodeRef>workspace://SpacesStore/ddaa57b7-ead4-484e-af21-c77321c1a5be</nodeRef>
+										<nodeRef>workspace://SpacesStore/5483b598-223f-448a-ae7d-6c6b813870f7</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2456,7 +2509,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-start-period</name>
-										<nodeRef>workspace://SpacesStore/24a1126d-c986-4f42-8eb3-e4f8129f0b81</nodeRef>
+										<nodeRef>workspace://SpacesStore/901077fb-3410-4506-88f5-1c3b5ef2ee2a</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2471,7 +2524,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-end-period</name>
-										<nodeRef>workspace://SpacesStore/1cfe90b9-eaf5-45a4-ad5e-7cef6517ffb0</nodeRef>
+										<nodeRef>workspace://SpacesStore/074bfd30-0666-4afd-8ec1-9ae294280f64</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2486,7 +2539,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_repeatable-rule</name>
-										<nodeRef>workspace://SpacesStore/bb5b2f98-1f53-4da5-ace6-d2a438c1b54f</nodeRef>
+										<nodeRef>workspace://SpacesStore/3d6b6161-5ef5-4645-bfe3-61ebca926b9a</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2501,7 +2554,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_members-assoc</name>
-										<nodeRef>workspace://SpacesStore/6906a359-7bae-4f56-9dea-c317500c0a48</nodeRef>
+										<nodeRef>workspace://SpacesStore/773501f5-263e-47c4-a1a3-a7d1442e36e0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2516,7 +2569,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/3f699a93-5771-41be-862d-032354192932</nodeRef>
+										<nodeRef>workspace://SpacesStore/0251cecc-2cc3-4b7f-81fa-c53244d285e8</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2531,7 +2584,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-members-assoc-json</name>
-										<nodeRef>workspace://SpacesStore/1bb3efed-f423-4457-be9e-9deab44be6dd</nodeRef>
+										<nodeRef>workspace://SpacesStore/2930376d-a5d7-4a5a-8ed9-8af8f594650c</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2546,7 +2599,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_chairman-assoc</name>
-										<nodeRef>workspace://SpacesStore/9bc6a2a1-1de4-4f69-8eb6-e7fb78fccdf5</nodeRef>
+										<nodeRef>workspace://SpacesStore/6450a277-cc6e-46b8-a289-7c4e6e2062e5</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2561,7 +2614,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_secretary-assoc</name>
-										<nodeRef>workspace://SpacesStore/ce4b571f-98fc-488c-a303-3eaa3572865b</nodeRef>
+										<nodeRef>workspace://SpacesStore/1540d771-346a-4fce-bab7-a739108d824b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2576,7 +2629,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/721f89b6-5a9e-45cf-9440-a2d8eb36b8c5</nodeRef>
+										<nodeRef>workspace://SpacesStore/f0439ef5-befe-4d21-90de-536c857e1403</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2591,7 +2644,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_location-assoc</name>
-										<nodeRef>workspace://SpacesStore/2c3eeb91-e975-485f-ab87-0d537268feb9</nodeRef>
+										<nodeRef>workspace://SpacesStore/07aeb480-f741-4af0-ad7e-c6610b029e55</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2606,7 +2659,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events-ts_resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/387fed74-e7a7-4a67-9885-dfdb63b2c3ba</nodeRef>
+										<nodeRef>workspace://SpacesStore/4b859c67-e5cf-482d-9ef2-4827fca195cb</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2621,7 +2674,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_initiator-assoc</name>
-										<nodeRef>workspace://SpacesStore/2d6b29ee-e8c7-44d4-a48f-1ee3da135522</nodeRef>
+										<nodeRef>workspace://SpacesStore/e7356804-e084-4ee5-b7b6-9811c345ed5f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2636,7 +2689,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_description</name>
-										<nodeRef>workspace://SpacesStore/b3eb75e1-64c4-4f84-b095-c27ae4c4755f</nodeRef>
+										<nodeRef>workspace://SpacesStore/a69bfb14-dacb-4331-982b-6b3c6f60eee3</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2651,7 +2704,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_subject-assoc</name>
-										<nodeRef>workspace://SpacesStore/a72717ca-9e28-4bad-8dd3-c60f3be591a6</nodeRef>
+										<nodeRef>workspace://SpacesStore/4baee52e-f8cb-48d6-b243-e659ff6c3555</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2666,7 +2719,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings-ts_items-assoc</name>
-										<nodeRef>workspace://SpacesStore/62b38579-3df8-4099-aee1-e70cd12fb947</nodeRef>
+										<nodeRef>workspace://SpacesStore/7f54fe15-1509-40af-8177-f8290ca6af8d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2681,7 +2734,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approve-agenda</name>
-										<nodeRef>workspace://SpacesStore/8074adc6-9e3d-4ef6-9c15-94721eda738b</nodeRef>
+										<nodeRef>workspace://SpacesStore/90344051-7da2-4857-91d9-a78b347f43bb</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2696,7 +2749,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_approval</name>
-										<nodeRef>workspace://SpacesStore/22ca965f-70ca-4658-9f6a-687d15cab524</nodeRef>
+										<nodeRef>workspace://SpacesStore/03920909-d211-4c3b-9045-bc2d533a3ba0</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2711,7 +2764,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-start-date</name>
-										<nodeRef>workspace://SpacesStore/382ac2a6-467b-4a95-b232-02a237a7bc1a</nodeRef>
+										<nodeRef>workspace://SpacesStore/80860ce9-bf44-4e14-8ca4-811df642eb83</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2726,7 +2779,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/c5d4a68c-9a55-42f6-b05d-6ca018d26c18</nodeRef>
+										<nodeRef>workspace://SpacesStore/249064dd-6285-4007-9897-cad7450716f4</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2741,7 +2794,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-meetings_holding-invited-members-assoc</name>
-										<nodeRef>workspace://SpacesStore/0cf3195f-174f-4ea1-81ec-8197ad24510f</nodeRef>
+										<nodeRef>workspace://SpacesStore/87a7a167-387b-4359-8564-6c35383715a7</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2756,7 +2809,7 @@ if (document !== null) {
 									<node>
 										<type>documentField</type>
 										<name>lecm-events_temp-resources-assoc</name>
-										<nodeRef>workspace://SpacesStore/b49d2a33-209c-4ba0-a6e5-20697c6be4d4</nodeRef>
+										<nodeRef>workspace://SpacesStore/6aa7d196-f393-490d-a84e-2cd83da47d03</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -2772,6 +2825,916 @@ if (document !== null) {
 							</subFolder>
 						</subFolders>
 					</node>
+					<node>
+						<type>taskStatus</type>
+						<name>Cогласование повестки</name>
+						<nodeRef>workspace://SpacesStore/236c0367-c84e-4493-ac3c-de042d7bf085</nodeRef>
+						<properties>
+							<property>
+								<name>timerDuration</name>
+								<value><![CDATA[]]></value>
+							</property>
+						</properties>
+						<aspects>
+							<transitionStatusAspect/>
+						</aspects>
+						<associations/>
+						<roleAssociations/>
+						<subFolders>
+							<subFolder>
+								<name>actions</name>
+								<nodes>
+									<node>
+										<type>StartWorkflow</type>
+										<name>fac67403-7dd1-42c5-acaf-782183dd84e5</name>
+										<nodeRef>workspace://SpacesStore/7c9966ce-592c-4b66-9464-345bddfc854c</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[StartWorkflow]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[start]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>WaitForDocumentChange</type>
+										<name>58670b78-3426-4022-817a-e5854608fc26</name>
+										<nodeRef>workspace://SpacesStore/da52f4e0-2ebd-4628-8af6-d19f4eae28bb</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[WaitForDocumentChange]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[start]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>ccaeaf24-4ce2-4614-85f0-b84f033fc4c5</name>
+														<nodeRef>
+															workspace://SpacesStore/1466afb8-d861-4388-8a89-8eb1f27950be
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED"]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/4597f047-4e61-47be-9e92-d1282161cd0f
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>de6a8c10-7029-453e-9bce-5c8b4561d152</name>
+														<nodeRef>
+															workspace://SpacesStore/05956ed5-02db-4b33-b71c-e84e7cddd206
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED_FORCED"]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/4597f047-4e61-47be-9e92-d1282161cd0f
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>692c6350-8919-49c2-8480-290482c885ae</name>
+														<nodeRef>
+															workspace://SpacesStore/430eb5a1-8d23-46ec-b10a-4e8f1078fe87
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[@routesService.getApprovalState(doc.nodeRef) == "REJECTED_FORCED"]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/4597f047-4e61-47be-9e92-d1282161cd0f
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>bbe239d5-c0e4-4ac6-9739-07dbf7474af3</name>
+														<nodeRef>
+															workspace://SpacesStore/95a0dd91-6063-43ae-a850-9a267c756bdb
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[@routesService.getApprovalState(doc.nodeRef) == "APPROVED_WITH_REMARK"]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/4597f047-4e61-47be-9e92-d1282161cd0f
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>transition</type>
+														<name>61902bfe-9bbe-407c-b3c7-908e1253003a</name>
+														<nodeRef>
+															workspace://SpacesStore/a5d6c420-d44e-4280-8421-10df48c7c1c0
+														</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[@routesService.getApprovalState(doc.nodeRef) == "REJECTED"]]></value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[]]></value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>
+																	workspace://SpacesStore/4597f047-4e61-47be-9e92-d1282161cd0f
+																</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
+									</node>
+									<node>
+										<type>ScriptAction</type>
+										<name>9f8dda6e-115a-4ffb-bf4f-dcfaad4c5421</name>
+										<nodeRef>workspace://SpacesStore/57b41d97-1f54-4360-8a60-eb2064d48571</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[ScriptAction]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[start]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>TimerAction</type>
+										<name>4c9195df-261c-49a8-ae26-18b9d9f73a43</name>
+										<nodeRef>workspace://SpacesStore/7ced0364-1178-4207-b4be-153599f88163</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[TimerAction]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[start]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>FinishStateWithTransition</type>
+										<name>ca8e1d69-360d-42af-94ff-17a1a3e256a0</name>
+										<nodeRef>workspace://SpacesStore/78b14966-17fc-469f-a8a6-2a99416033ce</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[FinishStateWithTransition]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[take]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>UserWorkflow</type>
+										<name>baaf4591-7d29-480f-b980-d79a83dbe3ca</name>
+										<nodeRef>workspace://SpacesStore/2a258443-6a23-4ab1-8bcd-41757d4c88dd</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[UserWorkflow]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[take]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>StartWorkflow</type>
+										<name>86039745-3ae2-4806-94c3-c5eebf62a54c</name>
+										<nodeRef>workspace://SpacesStore/81896bb3-0c67-4b9a-b2cd-0904ef42e2fe</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[StartWorkflow]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[end]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>TransitionAction</type>
+										<name>2bb44c8a-1bd7-43c8-8495-a1df8b304b80</name>
+										<nodeRef>workspace://SpacesStore/eba2f4a8-5d76-4389-a0ba-ded88344b838</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[TransitionAction]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[end]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>ScriptAction</type>
+										<name>0e302b63-9997-4bb7-8b1c-a86da356bc36</name>
+										<nodeRef>workspace://SpacesStore/7a023972-976b-4b5b-bb9c-ca460fd4268a</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[ScriptAction]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[end]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>TimerAction</type>
+										<name>eecb270a-573c-4873-b591-df58a26be6b4</name>
+										<nodeRef>workspace://SpacesStore/3502ffee-021d-44dc-ab02-6ffab9cec281</nodeRef>
+										<properties>
+											<property>
+												<name>actionId</name>
+												<value><![CDATA[TimerAction]]></value>
+											</property>
+											<property>
+												<name>actionExecution</name>
+												<value><![CDATA[end]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
+								<name>fields</name>
+								<nodes>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_title</name>
+										<nodeRef>workspace://SpacesStore/72016917-5dc3-4b61-8197-d35445a4a0da</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_all-day</name>
+										<nodeRef>workspace://SpacesStore/3a596cd7-1271-49e8-aec6-14e0218824d9</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_from-date</name>
+										<nodeRef>workspace://SpacesStore/c23d42d3-b3c1-47f5-838a-80151693b3f7</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_to-date</name>
+										<nodeRef>workspace://SpacesStore/5881bedd-a259-406b-83e3-a4549622b77a</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_repeatable</name>
+										<nodeRef>workspace://SpacesStore/971d2542-84b6-4526-8d0c-a2bb7d5a80b6</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_repeatable-start-period</name>
+										<nodeRef>workspace://SpacesStore/6d251f13-8a27-47a1-9240-f9686bc8c5df</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_repeatable-end-period</name>
+										<nodeRef>workspace://SpacesStore/e49900c4-b51c-41ea-87bb-fab2460e05a8</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_repeatable-rule</name>
+										<nodeRef>workspace://SpacesStore/3ccd5d0a-bc3f-4e9f-8bc7-9ce85610db08</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events-ts_members-assoc</name>
+										<nodeRef>workspace://SpacesStore/4ab9ecf4-b9db-4539-bf02-ef197f7c7172</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_temp-members-assoc</name>
+										<nodeRef>workspace://SpacesStore/875c8aa3-8f23-4268-a3ed-7da58e3cc41d</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_temp-members-assoc-json</name>
+										<nodeRef>workspace://SpacesStore/a7944579-f48d-4192-b32a-f3f9029e9e72</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings_chairman-assoc</name>
+										<nodeRef>workspace://SpacesStore/02101915-4a02-4f18-ae71-c38d1a8e8bf8</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings_secretary-assoc</name>
+										<nodeRef>workspace://SpacesStore/a85cfac8-e181-4f52-8f5a-b334557ce440</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_invited-members-assoc</name>
+										<nodeRef>workspace://SpacesStore/01a72276-942a-4ab4-bef3-b2bd93349c93</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_location-assoc</name>
+										<nodeRef>workspace://SpacesStore/8e1f14cc-3676-49f6-829d-ca6454d4ccfd</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events-ts_resources-assoc</name>
+										<nodeRef>workspace://SpacesStore/80477080-78fb-4a3f-a84c-2845d7060548</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_temp-resources-assoc</name>
+										<nodeRef>workspace://SpacesStore/9ac2f9c0-409a-4af0-a98c-f3fd2ca49012</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_initiator-assoc</name>
+										<nodeRef>workspace://SpacesStore/b114b487-e5be-436f-bcf6-6e8ca968f54d</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_description</name>
+										<nodeRef>workspace://SpacesStore/fde1dba2-0fe5-46ec-ab6e-6f9a91a801d4</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-events_subject-assoc</name>
+										<nodeRef>workspace://SpacesStore/a4781109-128d-449d-8432-c96b0bfe46e0</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings-ts_items-assoc</name>
+										<nodeRef>workspace://SpacesStore/252b1431-3334-49b3-8e0a-9f2cfc5127c6</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings_approve-agenda</name>
+										<nodeRef>workspace://SpacesStore/074ea822-b15e-4a46-8764-8373cb38eed9</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings_approval</name>
+										<nodeRef>workspace://SpacesStore/aec8bffd-420e-4583-a433-afc9272d0900</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings_holding-start-date</name>
+										<nodeRef>workspace://SpacesStore/ad103d6d-1bdd-4ee1-a26c-552221dd862c</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings_holding-members-assoc</name>
+										<nodeRef>workspace://SpacesStore/c9834627-34d9-46d4-81af-44f48d208420</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-meetings_holding-invited-members-assoc</name>
+										<nodeRef>workspace://SpacesStore/1f955b6a-70db-4bb2-b6f3-b1c5d8014cf8</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+							<subFolder>
+								<name>dynamicRoles</name>
+								<nodes>
+									<node>
+										<type>dynamic-role</type>
+										<name>51d1b3e4-596d-47ce-9454-d008736c5030</name>
+										<nodeRef>workspace://SpacesStore/c00721da-7e51-47b2-9823-a975486157d5</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>025c6763-6465-4765-900e-d9687dd76223</name>
+										<nodeRef>workspace://SpacesStore/273ef01d-a473-4cbd-8d03-cb7b8545545a</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN
+												</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>feda9f7e-9812-412b-92c0-a493ce7370cc</name>
+										<nodeRef>workspace://SpacesStore/c1bf54b2-ab9a-4068-a88b-173cd392e866</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Owner]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>EVENTS_INITIATOR_DYN</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>af0ed0ff-4962-409d-ae31-db296e663d8d</name>
+										<nodeRef>workspace://SpacesStore/3e8a98cc-3b76-48cb-b575-5591d9902263</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>BR_MEMBER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>dynamic-role</type>
+										<name>e337623e-78e2-443e-9960-81ae79821800</name>
+										<nodeRef>workspace://SpacesStore/117ec7fa-3e76-4b89-a2d0-fca6df6997ff</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>EVENTS_MEMBER_DYN</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+								</nodes>
+							</subFolder>
+						</subFolders>
+					</node>
 				</nodes>
 			</subFolder>
 			<subFolder>
@@ -2780,15 +3743,15 @@ if (document !== null) {
 					<node>
 						<type>static-role-item</type>
 						<name>d7cdc3e1-8ebb-43a2-ae47-b1bca82e0390</name>
-						<nodeRef>workspace://SpacesStore/e94b7977-9a43-457c-95cd-679541cd8cc5</nodeRef>
+						<nodeRef>workspace://SpacesStore/cf189cdb-eaf4-4ea3-bc69-02b3880c5540</nodeRef>
 						<properties>
-							<property>
-								<name>static-role-privilege</name>
-								<value><![CDATA[]]></value>
-							</property>
 							<property>
 								<name>isCreator</name>
 								<value><![CDATA[true]]></value>
+							</property>
+							<property>
+								<name>static-role-privilege</name>
+								<value><![CDATA[]]></value>
 							</property>
 						</properties>
 						<aspects>
@@ -2806,7 +3769,7 @@ if (document !== null) {
 					<node>
 						<type>dynamic-role-item</type>
 						<name>63a8387f-64a9-4b66-a08b-304914dc7694</name>
-						<nodeRef>workspace://SpacesStore/eca585c3-f48a-4dbb-b8dc-49c7e910002a</nodeRef>
+						<nodeRef>workspace://SpacesStore/b6e2707a-7cae-4694-acef-789701d67f92</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
@@ -2823,7 +3786,7 @@ if (document !== null) {
 					<node>
 						<type>dynamic-role-item</type>
 						<name>163d43a0-cfda-4480-ab71-c5ed261f7f2a</name>
-						<nodeRef>workspace://SpacesStore/43d013a1-614e-4a32-8fd8-21e866e73bb4</nodeRef>
+						<nodeRef>workspace://SpacesStore/f8164d5d-154d-4412-bc81-28c504ba5990</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
@@ -2840,7 +3803,7 @@ if (document !== null) {
 					<node>
 						<type>dynamic-role-item</type>
 						<name>20cafedd-d0f5-4562-9ac1-8c8e1133592c</name>
-						<nodeRef>workspace://SpacesStore/ef0c055e-631e-40b5-ad61-070f16b8dbb3</nodeRef>
+						<nodeRef>workspace://SpacesStore/5508eb23-dc98-400e-b220-30fc95f92b25</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
@@ -2857,7 +3820,7 @@ if (document !== null) {
 					<node>
 						<type>dynamic-role-item</type>
 						<name>041ccba8-57bb-41c3-abf7-ed4e8ed7df60</name>
-						<nodeRef>workspace://SpacesStore/4e33d541-9a43-4b98-a991-f26c9d0f9fb2</nodeRef>
+						<nodeRef>workspace://SpacesStore/e2a00f9d-8dbc-4361-bad2-40db4c0004cb</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
@@ -2874,7 +3837,7 @@ if (document !== null) {
 					<node>
 						<type>dynamic-role-item</type>
 						<name>33b6e941-0a5b-4dcb-b013-8e3e60bbc672</name>
-						<nodeRef>workspace://SpacesStore/d8d0ba06-1509-4901-aad4-ebdafbdb68ac</nodeRef>
+						<nodeRef>workspace://SpacesStore/97ab519a-dd1e-4da8-8519-3f7f939e7097</nodeRef>
 						<properties/>
 						<aspects>
 							<business-role/>
