@@ -223,36 +223,37 @@
     <config evaluator="model-type" condition="lecm-errands:document">
         <forms>
             <form>
+                <create-form template="/ru/it/lecm/errands/components/errands-create-form-template.ftl" />
                 <field-visibility>
-                    <!-- Исполнитель -->
-                    <show id="lecm-errands:executor-assoc"/>
-                    <!-- Важное -->
-                    <show id="lecm-errands:is-important"/>
                     <!--  Заголовок поручения -->
                     <show id="lecm-errands:title"/>
+                    <!-- Исполнитель -->
+                    <show id="lecm-errands:executor-assoc"/>
                     <!-- Содержание -->
                     <show id="lecm-errands:content"/>
-                    <!-- Срок исполнения -->
-                    <show id="lecm-errands:limitation-date"/>
-                    <!--  Вложения -->
-	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
-                    <!-- Тематика -->
-                    <show id="lecm-document:subject-assoc"/>
-                    <!-- Инициатор -->
-                    <show id="lecm-errands:initiator-assoc"/>
-                    <!-- Без утверждения инициатором -->
-                    <show id="lecm-errands:without-initiator-approval"/>
-                    <!-- ККонтролер-->
-                    <show id="lecm-errands:controller-assoc"/>
                     <!-- Соисполнители -->
                     <show id="lecm-errands:coexecutors-assoc"/>
+                    <!-- Срок исполнения -->
+                    <show id="lecm-errands:limitation-date"/>
+                    <!-- Контролер-->
+                    <show id="lecm-errands:controller-assoc"/>
+                    <!-- Инициатор -->
+                    <show id="lecm-errands:initiator-assoc"/>
+                    <!-- Важное -->
+                    <show id="lecm-errands:is-important"/>
+                    <!-- Без утверждения инициатором -->
+                    <show id="lecm-errands:without-initiator-approval"/>
                     <!-- Дата начала -->
                     <show id="lecm-errands:start-date"/>
+                    <!-- Тематика -->
+                    <show id="lecm-document:subject-assoc"/>
                     <!-- Исполнить точно в срок  -->
                     <show id="lecm-errands:just-in-time"/>
+                    <!--  Вложения -->
+	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
+
                     <!-- Свернута ли форма  -->
                     <show id="lecm-errands:is-short"/>
-
 	                <!-- Ссылки  -->
                     <show id="lecm-errands:links-assoc"/>
 	                <!-- отчёт об исполнении  -->
@@ -266,19 +267,13 @@
                     <show id="change-executors-script" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <set id="collapsable" appearance="" template="/ru/it/lecm/base-share/components/collapsable-set.ftl" />
-                    <set id="exist-bussines-role" parent="collapsable" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
-	                <set id="collapsable-inner" parent="collapsable" appearance=""/>
+                    <set id="collapsible1"/>
+                    <set id="static1"/>
+                    <set id="collapsible2"/>
+                    <set id="exist-bussines-role" parent="collapsible2" template="/ru/it/lecm/deputy/controls/errands-choosing-set.ftl" />
+                    <set id="collapsible2-inner" parent="collapsible2"/>
+                    <set id="static2"/>
 
-                    <field id="lecm-errands:executor-assoc">
-                        <control>
-	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
-							<control-param name="showSearch">true</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-errands:is-important">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-                    </field>
                     <field id="lecm-errands:title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -290,25 +285,26 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
+                    <field id="lecm-errands:executor-assoc">
+                        <control>
+	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+							<control-param name="showSearch">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands:content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" mandatory="true">
+	                <field id="lecm-errands:coexecutors-assoc" set="collapsible1">
+		                <control>
+			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+		                </control>
+	                </field>
+                    <field id="lecm-errands:limitation-date" mandatory="true" set="static1">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:attachments-temp-assoc">
-		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
-			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-			                <control-param name="directoryName">label.errands.attachments</control-param>
-		                </control>
-	                </field>
-                    <field id="lecm-document:subject-assoc" set="collapsable">
-                        <control>
-	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
-                        </control>
-                    </field>
+                    <field id="lecm-errands:controller-assoc" set="collapsible2"/>
                     <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
@@ -320,29 +316,36 @@
                             <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:without-initiator-approval" set="collapsable-inner">
+                    <field id="lecm-errands:is-important" set="collapsible2-inner">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
+                    <field id="lecm-errands:without-initiator-approval" set="collapsible2-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultWithoutInitiatorApproval</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:controller-assoc" set="collapsable-inner"/>
-	                <field id="lecm-errands:coexecutors-assoc" set="collapsable-inner">
-		                <control>
-			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
-		                </control>
-	                </field>
-					<field id="lecm-errands:start-date" set="collapsable-inner">
+					<field id="lecm-errands:start-date" set="collapsible2-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
 					</field>
-                    <field id="lecm-errands:just-in-time" set="collapsable-inner">
+                    <field id="lecm-document:subject-assoc" set="collapsible2-inner">
+                        <control>
+	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-errands:just-in-time" set="collapsible2-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-                    <field id="lecm-errands:is-short" set="collapsable">
+                    <field id="lecm-document-aspects:attachments-temp-assoc" set="static2">
+		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
+			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+			                <control-param name="directoryName">label.errands.attachments</control-param>
+		                </control>
+	                </field>
+                    <field id="lecm-errands:is-short">
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
-
 	                <field id="lecm-errands:links-assoc">
 		                <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
 	                </field>
@@ -767,6 +770,7 @@
 				<field-visibility>
 					<show id="lecm-errands:settings-mode-choosing-executors"/>
 					<show id="lecm-errands:settings-transfer-rights"/>
+                    <show id="lecm-errands:settings-hide-additional-attrs"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-errands:settings-mode-choosing-executors">

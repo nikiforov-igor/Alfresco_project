@@ -1,0 +1,1 @@
+model.hideAdditionAttributes = errands.isHideAdditionAttributes();

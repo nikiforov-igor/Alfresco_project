@@ -200,6 +200,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
+    public boolean isHideAdditionAttributes() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            return Boolean.TRUE.equals(nodeService.getProperty(settings, SETTINGS_HIDE_ADDITIONAL_ATTRS));
+        }
+        return false;
+    }
+
+    @Override
     public NodeRef getCurrentUserSettingsNode() {
 //		TODO: Метод разделён, создание вынесено в createCurrentUserSettingsNode
         final NodeRef rootFolder = this.getServiceRootFolder();

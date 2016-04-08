@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Errands Settings is hide additional attributes</shortname>
+    <description>Errands Settings is hide additional attributes</description>
+    <url>/lecm/errands/isHideAdditionAttributes</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

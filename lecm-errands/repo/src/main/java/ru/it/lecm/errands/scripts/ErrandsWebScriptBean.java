@@ -46,7 +46,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public static final String EXECUTION_KEY = "Ожидает исполнения";
     public static final int DEADLINE_DAY_COUNT = 5;
-    ErrandsService errandsService;
+    private ErrandsService errandsService;
 
     private OrgstructureBean orgstructureService;
     private DocumentService documentService;
@@ -746,5 +746,9 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                 nodeService.setProperty(ref, transitionFromErrand, assocErrandsExecutors.getTargetRef());
             }
         }
+    }
+
+    public boolean isHideAdditionAttributes() {
+        return errandsService.isHideAdditionAttributes();
     }
 }

@@ -347,6 +347,11 @@
 				    <mandatory>true</mandatory>
 				    <default>false</default>
 			    </property>
+				<!-- Скрывать расширенные атрибуты поручения -->
+				<property name="lecm-errands:settings-hide-additional-attrs">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
 		    </properties>
 	    </type>
 
