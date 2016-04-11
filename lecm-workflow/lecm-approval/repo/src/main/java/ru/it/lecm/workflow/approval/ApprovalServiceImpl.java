@@ -23,12 +23,12 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private final static String APPROVAL_GLOBAL_SETTINGS_NAME = "Глобальные настройки согласования";
 	private final static String DOCUMENT_APPROVAL_FOLDER = "Согласование";
 	private final static String DOCUMENT_APPROVAL_HISTORY_FOLDER = "История";
-	private final static int DEFAULT_DEFAULT_APROVAL_TERM = 1;
+	private final static int DEFAULT_DEFAULT_APPROVAL_TERM = 1;
 
 	private Integer defaultApprovalTerm;
 
 	public void setDefaultApprovalTerm(Integer defaultApprovalTerm) {
-		this.defaultApprovalTerm = (defaultApprovalTerm != null) ? defaultApprovalTerm : DEFAULT_DEFAULT_APROVAL_TERM;
+		this.defaultApprovalTerm = (defaultApprovalTerm != null) ? defaultApprovalTerm : DEFAULT_DEFAULT_APPROVAL_TERM;
 	}
 
 	public void init() {

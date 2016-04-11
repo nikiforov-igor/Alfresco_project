@@ -37,12 +37,14 @@
 		<value>alfresco/module/${artifactId}/models/lecm-review-result-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-ts-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-list-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-review-global-settings-model.xml</value>
 	</util:list>
 
 	<util:list id="review.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-review-workflow</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-review-result</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-review-ts</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-review-global-settings</value>
 	</util:list>
 
 	<bean id="review.workflow.bootstrap" parent="workflowDeployer"
@@ -68,11 +70,17 @@
 		  p:assigneesListService-ref="workflowAssigneesListService"
 		  p:resultListService-ref="workflowResultListService"
 		  p:documentService-ref="documentService" />
-        
+
+	<util:constant id="reviewFolder" static-field="ru.it.lecm.workflow.review.ReviewServiceImpl.REVIEW_FOLDER"/>
+	<util:map id="review.folders">
+		<entry key="#{reviewFolder}" value="Сервис Ознакомление документов"/>
+	</util:map>
 	<bean id="reviewService" class="ru.it.lecm.workflow.review.ReviewServiceImpl"
-		  parent="baseBean" depends-on="review.model.bootstrap"
+		  parent="baseBean" depends-on="review.model.bootstrap" init-method="init"
 		  p:documentTableService-ref="documentTableService"
 		  p:orgstructureBean-ref="serviceOrgstructure"
+		  p:folders-ref="review.folders"
+		  p:defaultReviewTerm="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.review.defaultTerm}') ? T(java.lang.Integer).parseInt('${lecm.review.defaultTerm}') : null}"
 	/>
 	
 	<bean id="reviewListAssociationPolicy" class="ru.it.lecm.workflow.review.policy.ReviewListAssociationPolicy"
@@ -88,4 +96,12 @@
 		  p:tableService-ref="documentTableService"
 		  p:policyComponent-ref="policyComponent"
 	/>
+
+	<util:list id="review3.arm.dictionaries">
+		<value>alfresco/module/${artifactId}/arm/review-settings-arm.xml</value>
+	</util:list>
+	<bean id="review3.arm.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
+		  p:dictionaries-ref="review3.arm.dictionaries"/>
 </beans>

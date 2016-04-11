@@ -1,8 +1,5 @@
 package ru.it.lecm.workflow.review.policy;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -14,7 +11,11 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.workflow.review.ReviewServiceImpl;
+import ru.it.lecm.workflow.review.api.ReviewService;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -26,51 +27,27 @@ public class ItemChangedPolicy implements NodeServicePolicies.OnUpdateProperties
 	private NodeService nodeService;
 	private OrgstructureBean orgstructureService;
 	private AuthenticationService authenticationService;
-	private ReviewServiceImpl reviewService;
+	private ReviewService reviewService;
 	private DocumentTableService tableService;
-
-	public DocumentTableService getTableService() {
-		return tableService;
-	}
 
 	public void setTableService(DocumentTableService tableService) {
 		this.tableService = tableService;
 	}
 	
-	public ReviewServiceImpl getReviewService() {
-		return reviewService;
-	}
-
-	public void setReviewService(ReviewServiceImpl reviewService) {
+	public void setReviewService(ReviewService reviewService) {
 		this.reviewService = reviewService;
-	}
-
-	public NodeService getNodeService() {
-		return nodeService;
 	}
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
 
-	public OrgstructureBean getOrgstructureService() {
-		return orgstructureService;
-	}
-
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
 
-	public AuthenticationService getAuthenticationService() {
-		return authenticationService;
-	}
-
 	public void setAuthenticationService(AuthenticationService authenticationService) {
 		this.authenticationService = authenticationService;
-	}
-
-	public PolicyComponent getPolicyComponent() {
-		return policyComponent;
 	}
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
@@ -85,14 +62,14 @@ public class ItemChangedPolicy implements NodeServicePolicies.OnUpdateProperties
 		PropertyCheck.mandatory(this, "reviewService", reviewService);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				ReviewServiceImpl.TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				ReviewService.TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		if (null != nodeRef
-				&& null != before.get(ReviewServiceImpl.PROP_REVIEW_TS_STATE)
-				&& !before.get(ReviewServiceImpl.PROP_REVIEW_TS_STATE).equals(after.get(ReviewServiceImpl.PROP_REVIEW_TS_STATE))) {
+				&& null != before.get(ReviewService.PROP_REVIEW_TS_STATE)
+				&& !before.get(ReviewService.PROP_REVIEW_TS_STATE).equals(after.get(ReviewService.PROP_REVIEW_TS_STATE))) {
 			NodeRef document = tableService.getDocumentByTableDataRow(nodeRef);
 			List<NodeRef> employees = reviewService.getActiveReviewersForDocument(document);
 			StringBuilder sb = new StringBuilder();
@@ -102,7 +79,7 @@ public class ItemChangedPolicy implements NodeServicePolicies.OnUpdateProperties
 			if (sb.length()>0) {
 				sb.deleteCharAt(sb.length()-1);
 			}
-			nodeService.setProperty(document, ReviewServiceImpl.PROP_REVIEW_TS_ACTIVE_REVIEWERS, sb.toString());
+			nodeService.setProperty(document, ReviewService.PROP_REVIEW_TS_ACTIVE_REVIEWERS, sb.toString());
 		}
 	}
 

@@ -3,19 +3,19 @@ package ru.it.lecm.workflow.review.extensions;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.ParameterCheck;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.workflow.review.api.ReviewService;
 import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
 
 import java.util.Date;
 import java.util.List;
-import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.util.ParameterCheck;
-import ru.it.lecm.workflow.review.ReviewServiceImpl;
 
 /**
  *
@@ -25,14 +25,14 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 
     private ReviewWorkflowService reviewWorkflowService;
 
-    private ReviewServiceImpl reviewServiceImpl;
+    private ReviewService reviewService;
 
-    public ReviewServiceImpl getReviewServiceImpl() {
-        return reviewServiceImpl;
+    public ReviewService getReviewServiceImpl() {
+        return reviewService;
     }
 
-    public void setReviewServiceImpl(ReviewServiceImpl reviewServiceImpl) {
-        this.reviewServiceImpl = reviewServiceImpl;
+    public void setReviewService(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
     public void setReviewWorkflowService(ReviewWorkflowService reviewWorkflowService) {
@@ -116,23 +116,27 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 
     public void markReviewedTS(ScriptNode documentRef) {
         ParameterCheck.mandatory("documentRef", documentRef);
-        reviewServiceImpl.markReviewed(documentRef.getNodeRef());
+        reviewService.markReviewed(documentRef.getNodeRef());
     }
     
     public Boolean needReviewByCurrentUser(ScriptNode documentRef) {
         ParameterCheck.mandatory("documentRef", documentRef);
         
-        return reviewServiceImpl.needReviewByCurrentUser(documentRef.getNodeRef());
+        return reviewService.needReviewByCurrentUser(documentRef.getNodeRef());
     }
     
 	public void processItem(ScriptNode item ) throws WriteTransactionNeededException {
 		ParameterCheck.mandatory("item", item);
-		reviewServiceImpl.processItem(item.getNodeRef());
+		reviewService.processItem(item.getNodeRef());
 	}
 	
 	public Boolean deleteRowAllowed(ScriptNode item) {
 		ParameterCheck.mandatory("item", item);
-		return reviewServiceImpl.deleteRowAllowed(item.getNodeRef());
+		return reviewService.deleteRowAllowed(item.getNodeRef());
 	}
+
+    public ScriptNode getSettings() {
+        return new ScriptNode(reviewService.getSettings(), serviceRegistry, getScope());
+    }
 	
 }

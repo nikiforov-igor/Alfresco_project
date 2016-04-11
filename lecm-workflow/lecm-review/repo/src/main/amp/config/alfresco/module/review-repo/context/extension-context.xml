@@ -8,7 +8,7 @@
 		  class="ru.it.lecm.workflow.review.extensions.ReviewWorkflowJavascriptExtension"
 		  p:extensionName="review"
 		  p:reviewWorkflowService-ref="reviewWorkflowService"
-                  p:reviewServiceImpl-ref="reviewService"
-        />
+		  p:reviewService-ref="reviewService"
+	/>
 
 </beans>

@@ -9,6 +9,7 @@
 	<util:list id="review.workflow.share.configs">
 		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/review/review-share-config.xml</value>
 		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/review/review-ts-share-config.xml</value>
+		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/review/review-settings-share-config.xml</value>
 	</util:list>
 
 	<bean id="review.workflow.share.bootstrap" init-method="register"

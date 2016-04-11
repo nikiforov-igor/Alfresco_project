@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecmReviewGlobalSettings:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Model for storing review global settings</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/review/workflow/global-settings/1.0" prefix="lecmReviewGlobalSettings"/>
+	</namespaces>
+
+	<types>
+		<!-- Глобальные настройки ознакомления -->
+		<type name="lecmReviewGlobalSettings:settings">
+			<parent>cm:cmobject</parent>
+			<properties>
+				<!-- срок согласования по-умолчанию -->
+				<property name="lecmReviewGlobalSettings:defaultReviewTerm">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint name="lecmReviewGlobalSettings:defaultReviewTermConstraint" type="MINMAX">
+							<parameter name="minValue">
+								<value>1</value>
+							</parameter>
+							<parameter name="maxValue">
+								<value>2147483647</value>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>

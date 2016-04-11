@@ -1,82 +1,74 @@
 package ru.it.lecm.workflow.review;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyMap;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.workflow.review.api.ReviewService;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
  * @author vkuprin
  */
-public class ReviewServiceImpl extends BaseBean {
+public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
-	public static final String CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS = "NOT_REVIEWED";
-	public static final String CONSTRAINT_REVIEW_TS_STATE_REVIEWED = "REVIEWED";
-	public static final String CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED = "NOT_STARTED";
-	public static final String CONSTRAINT_REVIEW_TS_STATE_CANCELLED = "CANCELLED";
-
-	public static final String REVIEW_TS_NAMESPACE = "http://www.it.ru/logicECM/model/review-ts/1.0";
-	public static final String REVIEW_LIST_NAMESPACE = "http://www.it.ru/logicECM/model/review-list/1.0";
-	public static final QName ASSOC_REVIEW_TS_REVIEW_TABLE = QName.createQName(REVIEW_TS_NAMESPACE, "review-table-assoc");
-	public static final QName ASSOC_REVIEW_TS_REVIEWER = QName.createQName(REVIEW_TS_NAMESPACE, "reviewer-assoc");
-	public static final QName ASSOC_REVIEW_TS_INITIATOR = QName.createQName(REVIEW_TS_NAMESPACE, "initiator-assoc");
-	public static final QName TYPE_REVIEW_TS_REVIEW_TABLE = QName.createQName(REVIEW_TS_NAMESPACE, "review-table");
-	public static final QName TYPE_REVIEW_TS_REVIEW_TABLE_ITEM = QName.createQName(REVIEW_TS_NAMESPACE, "review-table-item");
-	public static final QName TYPE_REVIEW_LIST_REWIEW_LIST_ITEM = QName.createQName(REVIEW_LIST_NAMESPACE, "review-list-item");
-	public static final QName ASSOC_REVIEW_LIST_REWIEWER = QName.createQName(REVIEW_LIST_NAMESPACE, "reviewer-assoc");
-	public static final QName PROP_REVIEW_TS_STATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-state");
-	public static final QName PROP_REVIEW_TS_REVIEW_FINISH_DATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-finish-date");
-	public static final QName PROP_REVIEW_TS_ACTIVE_REVIEWERS = QName.createQName(REVIEW_TS_NAMESPACE, "active-reviewers");
+	public static final String REVIEW_FOLDER = "REVIEW_FOLDER";
+	private final static String REVIEW_GLOBAL_SETTINGS_NAME = "Глобальные настройки ознакомления";
+	private final static int DEFAULT_REVIEW_TERM = 1;
 
 	private DocumentTableService documentTableService;
 	private OrgstructureBean orgstructureBean;
-	private SearchService searchService;
-
-	public SearchService getSearchService() {
-		return searchService;
-	}
-
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
-	}
-
-	public OrgstructureBean getOrgstructureBean() {
-		return orgstructureBean;
-	}
+	private Integer defaultReviewTerm;
 
 	public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
 		this.orgstructureBean = orgstructureBean;
-	}
-
-	public DocumentTableService getDocumentTableService() {
-		return documentTableService;
 	}
 
 	public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
 	}
 
-	@Override
-	public NodeRef getServiceRootFolder() {
-		return null;
+	public void setDefaultReviewTerm(Integer defaultReviewTerm) {
+		this.defaultReviewTerm = (defaultReviewTerm != null) ? defaultReviewTerm : DEFAULT_REVIEW_TERM;
 	}
 
+	public void init() {
+		if (null == getSettings()) {
+			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+				@Override
+				public NodeRef doWork() throws Exception {
+					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+						@Override
+						public NodeRef execute() throws Throwable {
+							PropertyMap props = new PropertyMap();
+							if (defaultReviewTerm != null) {
+								props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
+							}
+							return createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
+						}
+					}, false, true);
+				}
+			});
+		}
+	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return getFolder(REVIEW_FOLDER);
+	}
+
+	@Override
 	public Boolean needReviewByCurrentUser(NodeRef document) {
 		NodeRef tableData = findNodeByAssociationRef(document, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
 		Boolean result = false;
@@ -94,7 +86,7 @@ public class ReviewServiceImpl extends BaseBean {
 		return result;
 	}
 
-	private List<NodeRef> getReviwersWithStatuses(NodeRef document, Set<String> statuses) {
+	private List<NodeRef> getReviewersWithStatuses(NodeRef document, Set<String> statuses) {
 		NodeRef tableData = findNodeByAssociationRef(document, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
 		List<NodeRef> result = new ArrayList<>();
 		if (null != tableData) {
@@ -112,20 +104,23 @@ public class ReviewServiceImpl extends BaseBean {
 		return result;
 	}
 
+	@Override
 	public List<NodeRef> getExcludeUsersList(NodeRef document) {
 		HashSet<String> statuses = new HashSet<>();
 		statuses.add(CONSTRAINT_REVIEW_TS_STATE_NOT_STARTED);
 		statuses.add(CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS);
 		statuses.add(CONSTRAINT_REVIEW_TS_STATE_REVIEWED);
-		return getReviwersWithStatuses(document, statuses);
+		return getReviewersWithStatuses(document, statuses);
 	}
 
+	@Override
 	public List<NodeRef> getActiveReviewersForDocument(NodeRef document) {
 		HashSet<String> statuses = new HashSet<>();
 		statuses.add(CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS);
-		return getReviwersWithStatuses(document, statuses);
+		return getReviewersWithStatuses(document, statuses);
 	}
 
+	@Override
 	public void markReviewed(final NodeRef document) {
 		NodeRef tableData = findNodeByAssociationRef(document, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
 		if (null != tableData) {
@@ -152,6 +147,7 @@ public class ReviewServiceImpl extends BaseBean {
 		}
 	}
 
+	@Override
 	public Boolean canSendToReview(NodeRef document) {
 		NodeRef tableData = findNodeByAssociationRef(document, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
 		if (null != tableData) {
@@ -168,6 +164,7 @@ public class ReviewServiceImpl extends BaseBean {
 		return false;
 	}
 
+	@Override
 	public Boolean canCancelReview(NodeRef document) {
 		NodeRef tableData = findNodeByAssociationRef(document, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
 		if (null != tableData) {
@@ -184,6 +181,7 @@ public class ReviewServiceImpl extends BaseBean {
 		return false;
 	}
 
+	@Override
 	public Boolean deleteRowAllowed(NodeRef nodeRef) {
 		Boolean result = true;
 		if (null != nodeRef && TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
@@ -195,6 +193,7 @@ public class ReviewServiceImpl extends BaseBean {
 		return result;
 	}
 
+	@Override
 	public void processItem(NodeRef nodeRef) throws WriteTransactionNeededException {
 		if (TYPE_REVIEW_TS_REVIEW_TABLE_ITEM.equals(nodeService.getType(nodeRef))) {
 			NodeRef rootFolder = nodeService.getPrimaryParent(nodeRef).getParentRef();
@@ -202,9 +201,9 @@ public class ReviewServiceImpl extends BaseBean {
 			Set<NodeRef> employeeSet = new HashSet<>();
 			employeeSet.addAll(findNodesByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET));
 			Boolean noEmployee = employeeSet.isEmpty();
-			List<NodeRef> list = findNodesByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, TYPE_REVIEW_LIST_REWIEW_LIST_ITEM, ASSOCIATION_TYPE.TARGET);
+			List<NodeRef> list = findNodesByAssociationRef(nodeRef, ASSOC_REVIEW_TS_REVIEWER, TYPE_REVIEW_LIST_REVIEW_LIST_ITEM, ASSOCIATION_TYPE.TARGET);
 			for (NodeRef record : list) {
-				employeeSet.addAll(findNodesByAssociationRef(record, ASSOC_REVIEW_LIST_REWIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET));
+				employeeSet.addAll(findNodesByAssociationRef(record, ASSOC_REVIEW_LIST_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET));
 			}
 			if (employeeSet.size() != 1 || (noEmployee)) {
 				List<NodeRef> excludeUsers = getExcludeUsersList(documentTableService.getDocumentByTableDataRow(nodeRef));
@@ -221,6 +220,19 @@ public class ReviewServiceImpl extends BaseBean {
 				nodeService.removeAspect(nodeRef, ContentModel.ASPECT_TEMPORARY);
 			}
 		}
+	}
+
+	@Override
+	public NodeRef getSettings() {
+		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, REVIEW_GLOBAL_SETTINGS_NAME);
+	}
+
+	@Override
+	public int getApprovalTerm() {
+		NodeRef settingsNode = getSettings();
+		Integer approvalTerm = (Integer) nodeService.getProperty(settingsNode, PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM);
+
+		return approvalTerm != null ? approvalTerm : defaultReviewTerm;
 	}
 
 }
