@@ -62,8 +62,42 @@ LogicECM.module = LogicECM.module || {};
 							});
 					return this;
 				},
-				onReady: function ()
-				{
+
+				onReady: function () {
+					var item = this.options.itemId;
+					if (item) {
+						var nodeUUID = item.replace("workspace://SpacesStore/","");
+						Alfresco.util.Ajax.request(
+							{
+								method: "GET",
+								url: Alfresco.constants.PROXY_URI + "slingshot/doclib/node/workspace/SpacesStore/" + nodeUUID,
+								successCallback: {
+									fn: this.checkPermissions,
+									scope: this
+								},
+								failureMessage: this.msg("message.failure"),
+								scope: this,
+								execScripts: false
+							});
+					}
+				},
+
+				checkPermissions: function (response) {
+					var res = response.json;
+					if (res && res.item && res.item.permissions && res.item.permissions.userAccess) {
+						if (!res.item.permissions.userAccess.delete) {
+							if (Dom.get(this.checkboxId)) {
+								Dom.get(this.checkboxId).disabled = true;
+							}
+							else {
+								// Check Initiator or secretary
+							}
+						}
+					}
+					this.init();
+				},
+
+				init: function () {
 					this.checkbox = Dom.get(this.checkboxId);
 					if (this.checkbox) {
 						if (this.options.mode == "create") {
@@ -80,6 +114,7 @@ LogicECM.module = LogicECM.module || {};
 
 					LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
 				},
+
 				loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
 					if (this.options.defaultValue != null) {
 						this.checkbox.checked = this.options.defaultValue == "true";

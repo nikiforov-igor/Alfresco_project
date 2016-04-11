@@ -58,7 +58,32 @@ LogicECM.module = LogicECM.module || {};
 
 			tableData: null,
 
-			onReady: function(){
+			onReady: function() {
+				var item = this.options.currentValue;
+				if (item) {
+					var nodeUUID = item.replace("workspace://SpacesStore/","");
+					Alfresco.util.Ajax.request(
+						{
+							method: "GET",
+							url: Alfresco.constants.PROXY_URI + "slingshot/doclib/node/workspace/SpacesStore/" + nodeUUID,
+							successCallback: {
+								fn: this.checkPermissions,
+								scope: this
+							},
+							failureMessage: this.msg("message.failure"),
+							scope: this,
+							execScripts: false
+						});
+				}
+			},
+
+			checkPermissions: function (response) {
+				var res = response.json;
+				if (res && res.item && res.item.permissions && res.item.permissions.userAccess) {
+					if (!res.item.permissions.userAccess.delete) {
+						this.options.disabled = true;
+					}
+				}
 				this.loadTableData();
 			},
 
