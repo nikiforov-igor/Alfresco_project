@@ -6,43 +6,34 @@
 
 	function eliminateDuplicates(arr) {
 		var i,
-			len=arr.length,
 			out=[],
 			obj={};
 
-		for (i=0;i<len;i++) {
-		  obj[arr[i]]=0;
+		for (i in arr) {
+			obj[arr[i]]=0;
 		}
 		for (i in obj) {
-		  out.push(i);
+			out.push(i);
 		}
 		return out;
-	  }
-
-	var pars = json.get("params");
-	var docNodeRefString = args['docNodeRef'];
-	var docNodeRef = null;
-	var currentEmployee = orgstructure.getCurrentEmployee();
-
-	if(docNodeRefString) {
-		docNodeRef = search.findNode(docNodeRefString);
 	}
 
-	var fields = pars.get('fields'),
-	nameSubstituteStrings = pars.get('nameSubstituteStrings'),
-	children = [],
-	employeeDeputy = [],
-	deputyAssocs = null;
-
-	deputyAssocs = currentEmployee.assocs['lecm-deputy:deputy-assoc'];
-
-	chiefsAssocs = currentEmployee.assocs['lecm-secretary-aspects:chief-assoc'];
+	var pars = json.get("params"),
+		docNodeRefString = args['docNodeRef'],
+		docNodeRef = (docNodeRefString) ? search.findNode(docNodeRefString) : null,
+		currentEmployee = orgstructure.getCurrentEmployee(),
+		fields = pars.get('fields'),
+		nameSubstituteStrings = pars.get('nameSubstituteStrings'),
+		children = [],
+		employeeDeputy = [],
+		deputyAssocs = currentEmployee.assocs['lecm-deputy:deputy-assoc'],
+		chiefsAssocs = currentEmployee.assocs['lecm-secretary-aspects:chief-assoc'];
 
 	if(chiefsAssocs) {
-		for each(chiefAssoc in chiefsAssocs) {
-			chiefDeputyAssocs = chiefAssoc.assocs['lecm-deputy:deputy-assoc'];
+		for each(var chiefAssoc in chiefsAssocs) {
+			var chiefDeputyAssocs = chiefAssoc.assocs['lecm-deputy:deputy-assoc'];
 
-			for each(chiefDep in chiefDeputyAssocs) {
+			for each(var chiefDep in chiefDeputyAssocs) {
 				deputyAssocs.push(chiefDep);
 			}
 		}
@@ -50,7 +41,7 @@
 
 	eliminateDuplicates(deputyAssocs);
 
-	for each(deputy in deputyAssocs) {
+	for each(var deputy in deputyAssocs) {
 		var employeeAssocs = deputy.assocs['lecm-deputy:employee-assoc'];
 		if(employeeAssocs) {
 			var employee = employeeAssocs[0];
@@ -63,7 +54,7 @@
 
 			var canPush = true;
 
-			for each(child in children) {
+			for each(var child in children) {
 				if(('' + child.nodeRef.toString() == '' + employeeNodeRef) || ('' + currentEmployee.nodeRef.toString() == '' + employeeNodeRef)) {
 					canPush = false;
 					break;
@@ -78,7 +69,7 @@
 
 	var data = processResults(children, fields, nameSubstituteStrings, 0, children.length);
 
-	for each(item in data.items) {
+	for each(var item in data.items) {
 		var node = item.node;
 		var highlight = false;
 		var deputies = employeeDeputy[node.nodeRef];
@@ -93,10 +84,10 @@
 		}
 
 		var itemData = item.nodeData;
-		itemData['highlightable'] = {
+		itemData.highlightable = {
 			value: highlight,
 			displayValue: highlight
-		}
+		};
 	}
 
 	model.data = data;
