@@ -108,14 +108,14 @@
                 <version>1.1.1</version>
                 <extensions>true</extensions>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jasperreports-maven-plugin</artifactId>
-                <configuration>
-					<sourceDirectory>src/main/amp/reportdefinitions</sourceDirectory>
-					<outputDirectory>${project.build.directory}/${project.build.finalName}/reportdefinitions</outputDirectory>
-				</configuration>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>jasperreports-maven-plugin</artifactId>-->
+                <!--<configuration>-->
+					<!--<sourceDirectory>src/main/amp/reportdefinitions</sourceDirectory>-->
+					<!--<outputDirectory>${project.build.directory}/${project.build.finalName}/reportdefinitions</outputDirectory>-->
+				<!--</configuration>-->
+            <!--</plugin>-->
 		</plugins>
 		<resources>
 			<resource>
