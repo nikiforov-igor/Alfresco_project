@@ -432,13 +432,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public boolean checkLocationAvailable(NodeRef location, NodeRef ignoreNode, Date fromDate, Date toDate, boolean allDay, int clientTimezoneOffset) {
-		if (allDay) {
-			fromDate = toFullDate(fromDate, DAY_BEGIN);
-			fromDate = new Date(fromDate.getTime() + clientTimezoneOffset * HOUR);
-			toDate = toFullDate(toDate, DAY_END);
-			toDate = new Date(toDate.getTime() + clientTimezoneOffset * HOUR);
-		}
-
 		String additionalFilter = " AND @lecm\\-events\\:location\\-assoc\\-ref:\"" + location.toString() + "\"";
 		if (ignoreNode != null) {
 			additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
@@ -672,7 +665,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				action.getRecipients().put(recipient, actionType);
 			}
 		}
-		
+
 //		eventsNotificationsService.notifyEvent(event, isFirst, recipients);
 	}
 
@@ -712,7 +705,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		}
 		action.created = true;
 	}
-	
+
 	@Override
 	public List<NodeRef> getNextRepeatedEvents(NodeRef event) {
 		List<NodeRef> results = new ArrayList<>();
@@ -900,8 +893,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	;
-	
-	
+
+
 	private class EventsTransactionListener implements TransactionListener {
 
 		@Override
