@@ -133,8 +133,7 @@
 	<bean id="ordNotificationService" parent="baseBean"
 		  class="ru.it.lecm.ord.ORDNotificationServiceImpl"
 		  p:workCalendarService-ref="WorkCalendarService"
-		  p:notificationsService-ref="notificationsService"
-		  p:ordDocumentService-ref="ordDocumentService"/>
+		  p:notificationsService-ref="notificationsService"/>
 
 	<!--notification scheduler-->
 	<bean id="ord.notification.schedule" class="ru.it.lecm.ord.scheduler.ORDNotificationScheduler"

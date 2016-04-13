@@ -1,6 +1,5 @@
 package ru.it.lecm.ord;
 
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -8,9 +7,7 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.eds.api.EDSDocumentService;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
-import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.ord.api.ORDNotificationService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -24,15 +21,10 @@ import java.util.*;
 public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificationService {
 
 	private IWorkCalendar workCalendarService;
-	private ORDDocumentService ordDocumentService;
 	private NotificationsService notificationsService;
 	
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
-	}
-	
-	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
-		this.ordDocumentService = ordDocumentService;
 	}
 	
 	public void setNotificationsService(NotificationsService notificationsService) {
@@ -49,7 +41,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 		if (comingSoonDate != null) {
 			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
 			if (comingSoon >= 0) {
-				sendNotification("ORD_EXCEEDED_DEADLINE", documentRef, recipients);
+				notificationsService.sendNotificationByTemplate(documentRef, recipients, "ORD_EXCEEDED_DEADLINE");
 			}
 		}
 	}
@@ -57,17 +49,6 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
-	}
-
-	private void sendNotification(String templateCode, NodeRef documentRef, List<NodeRef> recipients) {
-		Map<String, Object> notificationTemplateModel = new HashMap<>();
-		notificationTemplateModel.put("mainObject", documentRef);
-		Notification notification = new Notification(notificationTemplateModel);
-		notificationsService.fillNotificationByTemplateCode(notification, templateCode);
-		notification.setAuthor(AuthenticationUtil.getSystemUserName());
-		notification.setObjectRef(documentRef);
-		notification.setRecipientEmployeeRefs(recipients);
-		notificationsService.sendNotification(notification);
 	}
 
 	@Override
@@ -79,7 +60,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 		if (comingSoonDate != null) {
 			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
 			if (comingSoon >= 0) {
-				sendNotification("ORD_APPROACHING_DEADLINE", documentRef, recipients);
+				notificationsService.sendNotificationByTemplate(documentRef, recipients, "ORD_APPROACHING_DEADLINE");
 
 			}
 		}
@@ -99,7 +80,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 	
 	@Override
 	public void notifyAssigneesDeadlineComing(NodeRef documentRef) {
-		Set<QName> pointType = new HashSet<QName>(Arrays.asList(ORDModel.TYPE_ORD_TABLE_ITEM));
+		Set<QName> pointType = new HashSet<>(Collections.singletonList(ORDModel.TYPE_ORD_TABLE_ITEM));
 		
 		List<AssociationRef> tablesAssocs = nodeService.getTargetAssocs(documentRef, ORDModel.ASSOC_ORD_TABLE_ITEMS);
 		for (AssociationRef tableAssoc : tablesAssocs) {

@@ -15,12 +15,14 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.internal.api.InternalService;
 import ru.it.lecm.internal.beans.InternalServiceImpl;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * User: dbashmakov
@@ -29,13 +31,13 @@ import java.util.*;
  */
 public class InternalNotificationExecutor implements Job {
 
-    public static final String KEY_DOC_SERVICE = "documentService";
-    public static final String KEY_NODE_SERVICE = "nodeService";
-    public static final String KEY_NOTIFICATION_SERVICE = "notificationsService";
-    public static final String KEY_CALENDAR_SERVICE = "calendarBean";
-    public static final String KEY_INTERNAL_SERVICE = "internalService";
-    public static final String KEY_CONNECTION_SERVICE = "connectionService";
-    public static final String KEY_TRANSACTION_SERVICE = "transactionService";
+    private static final String KEY_DOC_SERVICE = "documentService";
+    private static final String KEY_NODE_SERVICE = "nodeService";
+    private static final String KEY_NOTIFICATION_SERVICE = "notificationsService";
+    private static final String KEY_CALENDAR_SERVICE = "calendarBean";
+    private static final String KEY_INTERNAL_SERVICE = "internalService";
+    private static final String KEY_CONNECTION_SERVICE = "connectionService";
+    private static final String KEY_TRANSACTION_SERVICE = "transactionService";
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -55,7 +57,7 @@ public class InternalNotificationExecutor implements Job {
 //                    public NodeRef execute() throws Throwable {
                         List<NodeRef> internals = getInternal(documentService, notificationsService, calendarBean);
 
-                        List<NodeRef> connectedDocs = new ArrayList<NodeRef>();
+                        List<NodeRef> connectedDocs = new ArrayList<>();
                         for (NodeRef internal : internals) {
                             List<NodeRef> connectedRefs = connectionService.getConnectedDocuments(internal, "inResponseTo", InternalService.TYPE_INTERNAL);
                             for (NodeRef connectedRef : connectedRefs) {
@@ -67,7 +69,7 @@ public class InternalNotificationExecutor implements Job {
                         }
 
                         for (NodeRef internal : internals) {
-                            List<NodeRef> employeeList = new ArrayList<NodeRef>();
+                            List<NodeRef> employeeList = new ArrayList<>();
                             List<AssociationRef> recipientsAssoc = nodeService.getTargetAssocs(internal, EDSDocumentService.ASSOC_RECIPIENTS);
 
                             for (AssociationRef associationRef : recipientsAssoc) {
@@ -95,14 +97,7 @@ public class InternalNotificationExecutor implements Job {
                             }
 
                             if (notificationTemplateCode != null) {
-                                Map<String, Object> notificationTemplateModel = new HashMap<>();
-                                notificationTemplateModel.put("mainObject", internal);
-                                Notification notification = new Notification(notificationTemplateModel);
-                                notificationsService.fillNotificationByTemplateCode(notification, notificationTemplateCode);
-                                notification.setRecipientEmployeeRefs(employeeList);
-                                notification.setAuthor(AuthenticationUtil.getSystemUserName());
-                                notification.setObjectRef(internal);
-                                notificationsService.sendNotification(notification);
+                                notificationsService.sendNotificationByTemplate(internal, employeeList, notificationTemplateCode);
                             }
                         }
                         return null;
@@ -138,13 +133,13 @@ public class InternalNotificationExecutor implements Job {
         calendar.set(Calendar.MILLISECOND, 0);
         end = calendar.getTime();
 
-        List<QName> types = new ArrayList<QName>();
+        List<QName> types = new ArrayList<>();
         types.add(InternalService.TYPE_INTERNAL);
 
-        List<String> paths = new ArrayList<String>();
+        List<String> paths = new ArrayList<>();
         paths.add(documentService.getDocumentsFolderPath());
 
-        List<String> statuses = new ArrayList<String>();
+        List<String> statuses = new ArrayList<>();
         statuses.add("Направлен");
 
         String filters = "@lecm\\-eds\\-document\\:execution\\-date: [\"" + BaseBean.DateFormatISO8601.format(start) + "\" to \"" + BaseBean.DateFormatISO8601.format(end) + "\"]";
@@ -152,10 +147,10 @@ public class InternalNotificationExecutor implements Job {
     }
 
     private boolean isEmployeeCreatorComments(NodeRef employee, DocumentService documentService) {
-        List<QName> types = new ArrayList<QName>();
+        List<QName> types = new ArrayList<>();
         types.add(InternalService.TYPE_ANSWER);
 
-        List<String> paths = new ArrayList<String>();
+        List<String> paths = new ArrayList<>();
         paths.add(documentService.getDocumentsFolderPath());
 
         String filters = "@lecm\\-document\\:author\\-assoc\\-ref:\"" + employee.toString() + "\"";
