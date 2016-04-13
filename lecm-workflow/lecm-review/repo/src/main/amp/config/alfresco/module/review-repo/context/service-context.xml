@@ -97,11 +97,19 @@
 		  p:policyComponent-ref="policyComponent"
 	/>
 
-	<util:list id="review3.arm.dictionaries">
+	<util:list id="review.admin.arm.dictionaries">
 		<value>alfresco/module/${artifactId}/arm/review-settings-arm.xml</value>
 	</util:list>
-	<bean id="review3.arm.bootstrap" parent="lecmDictionaryBootstrap"
+	<bean id="review.admin.arm.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="eds.documents.arm.settings.LogicEcmBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"
-		  p:dictionaries-ref="review3.arm.dictionaries"/>
+		  p:dictionaries-ref="review.admin.arm.dictionaries"/>
+
+	<util:list id="review.my-profile.arm.dictionaries">
+		<value>alfresco/module/${artifactId}/arm/review-list-my-profile-arm.xml</value>
+	</util:list>
+	<bean id="review.my-profile.arm.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"
+		  p:dictionaries-ref="review.my-profile.arm.dictionaries"/>
 </beans>

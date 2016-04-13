@@ -42,6 +42,10 @@
 						<tokenised>both</tokenised>
 					</index>
                 </property>
+                <property name="lecm-review-list:is-public">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-review-list:reviewer-assoc">
@@ -57,6 +61,9 @@
                     </target>
                 </association>
             </associations>
+            <mandatory-aspects>
+                <aspect>cm:titled</aspect>
+            </mandatory-aspects>
         </type>
 	</types>
 </model>
