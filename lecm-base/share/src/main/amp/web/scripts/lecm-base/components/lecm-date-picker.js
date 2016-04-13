@@ -180,7 +180,7 @@
                     var theDate = null;
 
                     // calculate current date
-                    if (me.options.currentValue !== null && me.options.currentValue !== "") {
+                    if (me.options.currentValue !== null && me.options.currentValue !== "" && me.options.currentValue !== "now") {
                         theDate = Alfresco.util.fromISO8601(me.options.currentValue);
                     }
                     else {
