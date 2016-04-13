@@ -29,6 +29,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	private DocumentTableService documentTableService;
 	private OrgstructureBean orgstructureBean;
 	private Integer defaultReviewTerm;
+	private Integer defaultTermToNotify;
 
 	public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
 		this.orgstructureBean = orgstructureBean;
@@ -40,6 +41,10 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 	public void setDefaultReviewTerm(Integer defaultReviewTerm) {
 		this.defaultReviewTerm = (defaultReviewTerm != null) ? defaultReviewTerm : DEFAULT_REVIEW_TERM;
+	}
+
+	public void setDefaultTermToNotify(Integer defaultTermToNotify) {
+		this.defaultTermToNotify = (defaultTermToNotify != null) ? defaultTermToNotify : DEFAULT_REVIEW_TERM;
 	}
 
 	public void init() {
@@ -54,6 +59,7 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 							PropertyMap props = new PropertyMap();
 							if (defaultReviewTerm != null) {
 								props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
+								props.put(PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE, defaultTermToNotify);
 							}
 							return createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
 						}

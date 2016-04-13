@@ -81,6 +81,7 @@
 		  p:orgstructureBean-ref="serviceOrgstructure"
 		  p:folders-ref="review.folders"
 		  p:defaultReviewTerm="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.review.defaultTerm}') ? T(java.lang.Integer).parseInt('${lecm.review.defaultTerm}') : null}"
+		  p:defaultTermToNotify="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.review.defaultTermToNotify}') ? T(java.lang.Integer).parseInt('${lecm.review.defaultTermToNotify}') : null}"
 	/>
 	
 	<bean id="reviewListAssociationPolicy" class="ru.it.lecm.workflow.review.policy.ReviewListAssociationPolicy"

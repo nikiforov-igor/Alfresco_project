@@ -5,9 +5,13 @@
 			<form id="lecm-review-settings">
 				<field-visibility>
 					<show id="lecmReviewGlobalSettings:defaultReviewTerm"/>
+					<show id="lecmReviewGlobalSettings:termToNotifyBeforeDeadline"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmReviewGlobalSettings:defaultReviewTerm">
+						<control template="/ru/it/lecm/base-share/components/controls/number.ftl"/>
+					</field>
+					<field id="lecmReviewGlobalSettings:termToNotifyBeforeDeadline">
 						<control template="/ru/it/lecm/base-share/components/controls/number.ftl"/>
 					</field>
 				</appearance>

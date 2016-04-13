@@ -33,6 +33,21 @@
 						</constraint>
 					</constraints>
 				</property>
+				<!-- За сколько дней до истечения срока уведомления уведомлять -->
+				<property name="lecmReviewGlobalSettings:termToNotifyBeforeDeadline">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint name="lecmReviewGlobalSettings:termToNotifyBeforeDeadlineConstraint" type="MINMAX">
+							<parameter name="minValue">
+								<value>1</value>
+							</parameter>
+							<parameter name="maxValue">
+								<value>2147483647</value>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
 			</properties>
 		</type>
 	</types>

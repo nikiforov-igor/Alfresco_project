@@ -30,6 +30,7 @@ public interface ReviewService extends InitializingBean {
     QName PROP_REVIEW_TS_REVIEW_FINISH_DATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-finish-date");
     QName PROP_REVIEW_TS_ACTIVE_REVIEWERS = QName.createQName(REVIEW_TS_NAMESPACE, "active-reviewers");
     QName PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "defaultReviewTerm");
+    QName PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "termToNotifyBeforeDeadline");
 
     Boolean needReviewByCurrentUser(NodeRef document);
 
