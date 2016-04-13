@@ -312,10 +312,8 @@
 
     <bean id="errandsEveryDayStatusExecutor" class="ru.it.lecm.errands.shedule.EveryDayStatusExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
-        <property name="errandsService" ref="errandsService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
-        <property name="documentService" ref="documentService"/>
     <property name="publicAction" value="false" />
     </bean>
 
@@ -368,10 +366,8 @@
 
     <bean id="errandsEveryDayNotificationExecutor" class="ru.it.lecm.errands.shedule.EveryDayNotificationExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
-        <property name="errandsService" ref="errandsService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
-        <property name="documentService" ref="documentService"/>
     <property name="publicAction" value="false" />
     </bean>
 
@@ -520,11 +516,13 @@
     <bean id="errands.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
           dataSourcePolicy,reportDescriptorPolicy">
         <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/reports/exec-doc-tree.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/errands-nt-items.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="errands.reportsDeployer"/>

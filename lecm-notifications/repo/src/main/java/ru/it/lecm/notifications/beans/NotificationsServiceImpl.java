@@ -605,6 +605,18 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         sendNotification(channels, notification, dontCheckAccessToObject);
 	}
 
+    @Override
+    public void sendNotificationByTemplate(NodeRef nodeRef, List<NodeRef> recipients, String templateCode) {
+        Map<String, Object> notificationTemplateModel = new HashMap<>();
+        notificationTemplateModel.put("mainObject", nodeRef);
+        Notification notification = new Notification(notificationTemplateModel);
+        fillNotificationByTemplateCode(notification, templateCode);
+        notification.setRecipientEmployeeRefs(recipients);
+        notification.setAuthor(AuthenticationUtil.getSystemUserName());
+        notification.setObjectRef(nodeRef);
+        sendNotification(notification);
+    }
+
 	private String parseTemplate(String template, Map<String, Object> objects) throws TemplateRunException, TemplateParseException {
 		String parsed;
 		if (StringUtils.isNotEmpty(template)) {

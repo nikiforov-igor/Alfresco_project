@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
+        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
+        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
+        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
+        <property name="lecm-dic:plane"><![CDATA[true]]></property>
+        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
+        <items>
+            <item name="cm:ERRANDS_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#mainObject.attribute("lecm-errands:just-in-time") ? "" : "Обратите внимание: поручение "}{#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не не исполнено в установленный срок. {#mainObject.attribute("lecm-errands:just-in-time") ? "Работа с ним завершена, поручение переходит в статус \"Не исполнено\"" : ""}]]></property>
+                <property name="cm:name"><![CDATA[ERRANDS_EXCEEDED_DEADLINE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Превышен срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ERRANDS_DIRECTED" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_DIRECTED]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Вам направлено {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[Поручение. Направлено]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ERRANDS_APPROACHING_DEADLINE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_APPROACHING_DEADLINE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Приближается срок выполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Поручение. Приближается срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ERRANDS_DEADLINE_COME" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ERRANDS_DEADLINE_COME]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Наступил срок выполнения поручения: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-errands:title"))}]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[Поручение. Наступил срок]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+        </items>
+    </item>
+</items>
