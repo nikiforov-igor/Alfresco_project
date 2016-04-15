@@ -59,7 +59,8 @@
 	</bean>
 
 	<bean id="events.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="events.dictionaries.LogicEcmModelsBootstrap,documents.LogicEcmConnectionTypesBootstrap">
+	      depends-on="events.dictionaries.LogicEcmModelsBootstrap,documents.LogicEcmConnectionTypesBootstrap
+	      			  ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-locations.xml</value>
@@ -67,6 +68,7 @@
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-locations-pl.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-resources-pl.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-br-items.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-nt-items.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-connection-types-items.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-events-business-journal-objectType-items.xml</value>
 			</list>

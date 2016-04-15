@@ -28,35 +28,18 @@ if (memberRow != null) {
 
 	var currentEmployee = orgstructure.getCurrentEmployee();
 	var initiator = document.assocs["lecm-events:initiator-assoc"][0];
-	var type = document.getTypeShort();
-	var objectType="";		
-	if (type == "lecm-events:document") {
-		objectType +=  "мероприятии ";
-	} else if (type == "lecm-meetings:document") {
-		objectType +=  "совещании ";
-	}
+
 	if (currentEmployee != null && initiator != null) {
-		var notificationText = "Сотрудник ";
-		notificationText += documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
-		notificationText += " подтвердил свое участие в ";
-		notificationText += objectType;
-		notificationText += events.wrapperEventLink(document, "{lecm-events:title}");
 
-		var fromDate = document.properties["lecm-events:from-date"];
-		if (fromDate != null) {
-			var dateFormat = new Packages.java.text.SimpleDateFormat("dd.MM.yyyy");
-			var timeFormat = new Packages.java.text.SimpleDateFormat("HH:mm");
-			var date = new java.util.Date(fromDate.getTime());
+		notifications.sendNotificationFromCurrentUser({
+            recipients: [initiator],
+            templateCode: 'EVENTS.INVITATION_CONFIRM',
+            templateConfig: {
+                mainObject: document,
+                eventExecutor: currentEmployee
+            }
+        });
 
-			notificationText += " Начало: ";
-			notificationText += dateFormat.format(date);
-			notificationText += ", в ";
-			notificationText += timeFormat.format(date);
-		}
-
-		var recipients = [];
-		recipients.push(initiator);
-		notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 	}
 }]]></property>
     </item>

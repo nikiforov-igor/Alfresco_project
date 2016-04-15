@@ -1,7 +1,6 @@
 package ru.it.lecm.events.schedule;
 
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -14,7 +13,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.events.beans.EventsServiceImpl;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -62,14 +60,9 @@ public class EventNotificationExecutor extends ActionExecuterAbstractBase {
     protected void executeImpl(Action action, NodeRef nodeRef) {
         Date fromDate = (Date) nodeService.getProperty(nodeRef, EventsService.PROP_EVENT_FROM_DATE);
         if (fromDate != null) {
-            Notification notification = new Notification();
-            String notificationDescription = "Напоминание: Вы приглашены на мероприятие " + eventService.wrapAsEventLink(nodeRef) + ". Начало: " + notificationDateFormat.format(fromDate);
+
             List<NodeRef> recipients = eventService.getEventMembers(nodeRef);
-            notification.setAuthor(AuthenticationUtil.getSystemUserName());
-            notification.setRecipientEmployeeRefs(recipients);
-            notification.setDescription(notificationDescription);
-            notification.setObjectRef(nodeRef);
-            notificationsService.sendNotification(notification);
+            notificationsService.sendNotificationByTemplate(nodeRef, recipients, "EVENTS.REMINDER");
 
             List<NodeRef> invitedMembers = eventService.getEventInvitedMembers(nodeRef);
             for (NodeRef invitedMember : invitedMembers) {
@@ -81,6 +74,7 @@ public class EventNotificationExecutor extends ActionExecuterAbstractBase {
                         helper.setTo(email);
                         helper.setFrom(defaultFromEmail);
                         helper.setSubject("Напоминание о мероприятии");
+                        String notificationDescription = "Напоминание: Вы приглашены на мероприятие " + eventService.wrapAsEventLink(nodeRef) + ". Начало: " + notificationDateFormat.format(fromDate);
                         helper.setText("<html><body>" + notificationDescription + "</body></html>", true);
                         mailService.send(message);
                     } catch (Exception e) {

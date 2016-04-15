@@ -4,7 +4,6 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -240,16 +239,13 @@ public class EventsPolicy extends BaseBean {
 			for (NodeRef employee : responsible) {
 				lecmPermissionService.grantDynamicRole("EVENTS_RESPONSIBLE_FOR_RESOURCES_DYN", event, employee.getId(), lecmPermissionService.findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader));
 
-				Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
 				Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
 				sendNotifications = null == sendNotifications ? false : sendNotifications;
 				if (sendNotifications) {
 					//Отправка уведомления
-					String author = AuthenticationUtil.getSystemUserName();
-					String text = "Запланированное " + eventService.wrapAsEventLink(event) + " требует привлечения ресурсов за которые вы ответственны. Начало: " + dateFormat.format(fromDate) + ", в " + timeFormat.format(fromDate);
 					List<NodeRef> recipients = new ArrayList<>();
 					recipients.add(employee);
-					notificationsService.sendNotification(author, event, text, recipients, null);
+					notificationsService.sendNotificationByTemplate(event, recipients, "EVENTS.RESPONSIBLE_FOR_RESOURCES");
 				}
 			}
 		}
