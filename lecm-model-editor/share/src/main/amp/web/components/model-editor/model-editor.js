@@ -19,7 +19,7 @@ IT.component = IT.component || {};
 	{
 		//Свойства
 		storage : null,
-
+		deferredRender: null,
 		modelObject : {},
 		categoryArray : [],
 		attributesArray : [],
@@ -32,70 +32,24 @@ IT.component = IT.component || {};
 			nodeRef : null,
 			currentUser : null
 		},
-		//Методы
-		//Обработчик внешнего события от контролов ввода inputChangeEvent
-		//TODO:Подумать как не обрабатывать события от полей диалога (Вариант 1: добавить свойство "посылать событие"
-		onChangeValue : function(event, args) {
-			var target = args[1].target;
-			this[target.name] = ""+target.value;
-		},
-		//Обработчик события <ScopeID>showEditDialog
-		onShowCategoryDialog : function() {
-			this.categoryDialog.show();
-		},//onShowCategoryDialog
-		//Обработчик события <ScopeID>hideEditDialog
-		onHideCategoryDialog : function(layer, args) {
-			var validation = args[1], data = {};
-			for(var i in validation.args) { data[validation.args[i].name] = validation.args[i].value; }
-			this.widgets.categoriesDataTable.addRow(data, 0);
-			this.categoryDialog.hide();
-			Bubbling.fire("mandatoryControlValueUpdated", this);
-		},//onHideCategoryDialog
-		//Обработчик события <ScopeID>showEditDialog
-		onShowAttributesDialog : function() {
-			this.attributesDialog.show();
-		},//onShowAttributesDialog
-		//Обработчик события <ScopeID>hideEditDialog
-		onHideAttributesDialog : function(layer, args) {
-			var validation = args[1], data = {};
-			for(var i in validation.args) { data[validation.args[i].name] = validation.args[i].value; }
-			this.widgets.attributesDataTable.addRow(data, 0);
-			this.attributesDialog.hide();
-			Bubbling.fire("mandatoryControlValueUpdated", this);
-		},//onHideAttributesDialog
-		//Обработчик события <ScopeID>showEditDialog
-		onShowAssociationsDialog : function() {
-			this.associationsDialog.show();
-		},//onShowAssociationsDialog
-		//Обработчик события <ScopeID>hideEditDialog
-		onHideAssociationsDialog : function(layer, args) {
-			var validation = args[1], data = {};
-			for(var i in validation.args) { data[validation.args[i].name] = validation.args[i].value; }
-			this.widgets.associationsDataTable.addRow(data, 0);
-			this.associationsDialog.hide();
-			Bubbling.fire("mandatoryControlValueUpdated", this);
-		},//onHideAssociationsDialog
-		onShowTablesDialog : function() {
-			this.tablesDialog.show();
-		},//onShowTablesDialog
-		//Обработчик события <ScopeID>hideEditDialog
-		onHideTablesDialog : function(layer, args) {
-			var validation = args[1], data = {};
-			for(var i in validation.args) { data[validation.args[i].name] = validation.args[i].value; }
-			this.widgets.tablesDataTable.addRow(data, 0);
-			this.tablesDialog.hide();
-			Bubbling.fire("mandatoryControlValueUpdated", this);
-		},//onHideTablesDialog
+
 		//Обработчик системного события onContentReady (ждет появления контента на странице)
 		onReady : function ModelEditor_onReady() {
 			Alfresco.logger.debug("Model-editor: ID - " + this.id + ", NodeRef - " + this.options.nodeRef + ", Form ID - " + this.options.formId + ", User - "+this.options.currentUser);
 			//storage
 			this.storage = YAHOO.util.StorageManager.get("html5", "LOCATION_LOCAL", {force: false});
+			//deferredRender
+			this.deferredRender = new Alfresco.util.Deferred(['populateContent', 'populateAssocs', 'populateTables', 'populateNamespaces'], {
+				scope: this,
+				fn: this._renderEditor
+			});
 			//_populateContent
-			this._populateContent( { successCallback : { fn : this._populateAssoc, scope : this } } );
+			this._populateContent();
+			this._populateAssoc();
+			this._populateTables();
+			this._populateNamespaces();
 			//registerValidationHandler
 			Bubbling.fire("registerValidationHandler",  { fieldId: this.id, handler: this._validate, args: this });
-			Bubbling.on("inputChangeEvent", this.onChangeValue, this);
 			//перехват изменения cm_name для генерации события inputChangeEvent
 			Bubbling.fire("registerValidationHandler", {
 				fieldId: this.id.replace("cm_content","cm_name"),
@@ -104,9 +58,10 @@ IT.component = IT.component || {};
 					return true;
 				},
 				when: "keyup"
-		    });
+			});
 
 		},//onReady
+
 		//Инициализация внутренних объектов на основе полученного контента
 		_initObjects: function() {
 			if(YAHOO.lang.isValue(this.modelObject.model._name)) {
@@ -118,7 +73,7 @@ IT.component = IT.component || {};
 				this.model_description = this.modelObject.model.description;
 				if(YAHOO.lang.isObject(this.modelObject.model.types)) {
 					if(YAHOO.lang.isArray(this.modelObject.model.types.type)) {
-						this.typeTitle = this.modelObject.model.types.type[0].title
+						this.typeTitle = this.modelObject.model.types.type[0].title;
 						this.prop_type_name = (this.modelObject.model.types.type[0]._name.substr(this.modelObject.model.types.type[0]._name.indexOf(":")+1,this.modelObject.model.types.type[0]._name.length));
 
 						this.parentRef = this.modelObject.model.types.type[0].parent;
@@ -569,6 +524,7 @@ IT.component = IT.component || {};
 			this.tablesArray = tmpTablesArray;
 
 		},//_initObjects
+
 		//Обработчик событий валидации формы (заполняет скрытое поле для отправки контента вместе с формой)
 		_validate:  function validate_model(field, args, event, form, silent, message) {
 			if(args.initSuccess==false) return true;
@@ -612,7 +568,7 @@ IT.component = IT.component || {};
 				//TODO: Как по NS определять его URL?
 				if(namespace!==NS) {
 					for(var n in args.namespaces) {
-						if(args.namespaces[n].prefix==NS&&!containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
+						if(args.namespaces[n].prefix==NS&&!IT.Utils.containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
 							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
 						}
 					}
@@ -626,7 +582,7 @@ IT.component = IT.component || {};
 				//TODO: Как по NS определять его URL?
 				for(var n in args.namespaces) {
 					//ALF-4787 Добавил проверку на наличие в инпортах добавляемого namespace-а
-					if(args.namespaces[n].prefix==NS&&!containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
+					if(args.namespaces[n].prefix==NS&&!IT.Utils.containsUri(args.modelObject.model.imports["import"],{"_uri":args.namespaces[n].uri,"_prefix":NS})) {
 							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
 					}
 				}
@@ -643,7 +599,7 @@ IT.component = IT.component || {};
 			if(YAHOO.lang.isString(modelDescription)) args.modelObject.model.description = modelDescription;
 			//constraints
 			if(!YAHOO.lang.isObject(args.modelObject.model.constraints)) {
-				args.modelObject.model.constraints = {}
+				args.modelObject.model.constraints = {};
 			}
 			//if(!YAHOO.lang.isObject(args.modelObject.model.constraints.constraint)) {
 				args.modelObject.model.constraints.constraint = [];
@@ -695,13 +651,13 @@ IT.component = IT.component || {};
 						parameters.push({
 							_name:"createUrl",
 							value:args.createUrl
-						})
+						});
 					}
 					if (args.viewUrl && args.viewUrl.length>0) {
 						parameters.push({
 							_name:"viewUrl",
 							value:args.viewUrl
-						})
+						});
 					}
 					args.modelObject.model.constraints.constraint.push({
 						_name:namespace+":document-url-constraint",
@@ -735,13 +691,13 @@ IT.component = IT.component || {};
 			}
 			//types
 			if(!YAHOO.lang.isObject(args.modelObject.model.types)) {
-				args.modelObject.model.types = {}
+				args.modelObject.model.types = {};
 			}
 			if(!YAHOO.lang.isObject(args.modelObject.model.types.type)||args.modelObject.model.types.type._name!=""+namespace+":"+typeName) {
 				args.modelObject.model.types.type = {
 						"_name":namespace+":"+typeName,
 						"title":(typeTitle||""),
-						"parent":(parentRef||"lecm-document:base"),
+						"parent":(parentRef||"lecm-document:base")
 				};
 			}
 			if(YAHOO.lang.isString(typeTitle)) args.modelObject.model.types.type.title = typeTitle;
@@ -818,43 +774,43 @@ IT.component = IT.component || {};
 			if(args.rating==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
 					//ALF-4787 Добавил проверку на наличие в инпортах добавляемого namespace-а
-					if(!containsUri(args.modelObject.model.imports["import"],{"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"})) {
+					if(!IT.Utils.containsUri(args.modelObject.model.imports["import"],{"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"})) {
 						args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"});
 					}
-					if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-document-aspects:rateable")) {
+					if(!IT.Utils.contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-document-aspects:rateable")) {
 						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-document-aspects:rateable");
 					}
 				}
 			} else {
 				//ALF-4788 Добавил явное удаление аспекта из списка т.к. аспекты не чистились из-за необходимости сохранить прописанные вне редактора
-				if(contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-document-aspects:rateable")) {
+				if(IT.Utils.contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-document-aspects:rateable")) {
 					for (var i = args.modelObject.model.types.type["mandatory-aspects"].aspect.length - 1; i >= 0; i--) {
-					    if (args.modelObject.model.types.type["mandatory-aspects"].aspect[i] === "lecm-document-aspects:rateable") args.modelObject.model.types.type["mandatory-aspects"].aspect.splice(i, 1);
+						if (args.modelObject.model.types.type["mandatory-aspects"].aspect[i] === "lecm-document-aspects:rateable") args.modelObject.model.types.type["mandatory-aspects"].aspect.splice(i, 1);
 					}
 				}
 			}
 			if(args.signed==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
 					//ALF-4782 При сохранении модели проверяется наличие импорта lecm-signed-docflow, если его нет, то такой импорт добавляется
-					if(!containsUri(args.modelObject.model.imports["import"],{"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"})) {
+					if(!IT.Utils.containsUri(args.modelObject.model.imports["import"],{"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"})) {
 						args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"});
 					}
-					if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
+					if(!IT.Utils.contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
 						args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-signed-docflow:docflowable");
 					}
 				}
 			} else {
 				//ALF-4788 Добавил явное удаление аспекта из списка т.к. аспекты не чистились из-за необходимости сохранить прописанные вне редактора
-				if(contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
+				if(IT.Utils.contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,"lecm-signed-docflow:docflowable")) {
 					for (var i = args.modelObject.model.types.type["mandatory-aspects"].aspect.length - 1; i >= 0; i--) {
-					    if (args.modelObject.model.types.type["mandatory-aspects"].aspect[i] === "lecm-signed-docflow:docflowable") args.modelObject.model.types.type["mandatory-aspects"].aspect.splice(i, 1);
+						if (args.modelObject.model.types.type["mandatory-aspects"].aspect[i] === "lecm-signed-docflow:docflowable") args.modelObject.model.types.type["mandatory-aspects"].aspect.splice(i, 1);
 					}
 				}
 			}
 			var records = args.widgets.tablesDataTable.getRecordSet().getRecords();
 			for(var i in records) {
 				var rec = records[i];
-				if(!contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,rec.getData("table"))) {
+				if(!IT.Utils.contains(args.modelObject.model.types.type["mandatory-aspects"].aspect,rec.getData("table"))) {
 					args.modelObject.model.types.type["mandatory-aspects"].aspect.push((rec.getData("table")||""));
 				}
 			}
@@ -864,7 +820,7 @@ IT.component = IT.component || {};
 			}
 
 			//json2xml
-			var xval = json2xml(args.modelObject,"");
+			var xval = IT.Utils.json2xml(args.modelObject,"");
 			//set field hidden input
 			Dom.get(field.id).value = xval;
 			//validation conditions
@@ -876,11 +832,11 @@ IT.component = IT.component || {};
 			//	requestContentType : "application/json",
 			//	dataObj: args.modelObject,
 			//	successCallback : { fn : function GenericFormTool_onLoad_onFormLoaded(response)
-	        //       {
-	        //       } , scope : this },
+			//	   {
+			//	   } , scope : this },
 			//	failureCallback : { fn : function GenericFormTool_onLoad_onFormLoaded(response)
-	        //       {
-	        //       }, scope : this }
+			//	   {
+			//	   }, scope : this }
 			//});// request
 
 			if(args.widgets.categoriesDataTable.getRecordSet().getLength()>0) return true;
@@ -889,34 +845,32 @@ IT.component = IT.component || {};
 			if(args.widgets.tablesDataTable.getRecordSet().getLength()>0) return true;
 			return false;
 		},//_validate
+
 		//Получение списка типов для ассоциаций
-		_populateTables : function ContentControl__populateTables(callback) {
+		_populateTables : function ContentControl__populateTables() {
 			var onSuccessTables = function ContentControl__populateTables_onSuccess(response) {
 				var r = response.json;
 				var dTables = [""];
-				for(j in r) {
+				for(var j in r) {
 					dTables.push({label:r[j].title+" - "+r[j].name,value:r[j].name});
 				}
 
 				//Ассоциации
 				this.tablesDialogEl = [
-		                            { name: "table", label: Alfresco.util.message('lecm.meditor.lbl.table'), type:"select", options: dTables, showdefault: false }
-		                        ];
+									{ name: "table", label: Alfresco.util.message('lecm.meditor.lbl.table'), type:"select", options: dTables, showdefault: false }
+								];
 
 				this.tablesColumnDefs = [
-		                            { className: "viewmode-label", key:"table", label:Alfresco.util.message('lecm.meditor.lbl.table'), dropdownOptions : dTables, formatter: "dropdown", width : 737, maxAutoWidth : 737 },
-		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 }
-		                        ];
+									{ className: "viewmode-label", key:"table", label:Alfresco.util.message('lecm.meditor.lbl.table'), dropdownOptions : dTables, formatter: "dropdown", width : 737, maxAutoWidth : 737 },
+									{ key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 }
+								];
 				this.tablesResponseSchema = { fields : [{key : "table"}] };
-
-				if (callback && callback.successCallback) {
-					Dom.get(this.id+"_loading").setAttribute("style", "display:none");
-					Dom.get(this.id+"_props").setAttribute("style", "display:block");
-					callback.successCallback.fn.call(callback.successCallback.scope);
-				}
-			}
+				this.deferredRender.fulfil('populateTables');
+			};
 			var onFailureTables = function ContentControl__populateTables_onFailure(response) {
-
+				Alfresco.util.PopupManager.displayMessage({
+					text: this.msg('Не удалось получить табличные данные модели')
+				});
 			};// onFailure
 			Alfresco.util.Ajax.request({
 				url : Alfresco.constants.PROXY_URI + "api/classes/lecm-document_tableDataAspect/subclasses?r=false",//"api/dictionary",
@@ -925,17 +879,20 @@ IT.component = IT.component || {};
 				failureCallback : { fn : onFailureTables, scope : this }
 			});// request
 		},
-		_populateAssoc : function ContentControl__populateAssoc(callback) {
+
+		_populateAssoc : function ContentControl__populateAssoc() {
 			var onSuccessAssoc = function ContentControl__populateAssoc_onSuccess(response) {
 				var r = response.json;
-				var dAssociations = [""];
+				var dAssociations = [""]; //наполняется из r, используется только в ассоциациях
+				//используется в атрибутах
 				var dTypes = ["",{label:Alfresco.util.message('lecm.meditor.lbl.any'),value:"d:any"},{label:Alfresco.util.message('lecm.meditor.lbl.text'),value:"d:text"},{label:Alfresco.util.message('lecm.meditor.lbl.content'),value:"d:content"},{label:Alfresco.util.message('lecm.meditor.lbl.integer'),value:"d:int"},{label:Alfresco.util.message('lecm.meditor.lbl.long'),value:"d:long"},{label:Alfresco.util.message('lecm.meditor.lbl.float'),value:"d:float"},{label:Alfresco.util.message('lecm.meditor.lbl.double'),value:"d:double"},{label:Alfresco.util.message('lecm.meditor.lbl.date'),value:"d:date"},{label:Alfresco.util.message('lecm.meditor.lbl.datetime'),value:"d:datetime"},{label:Alfresco.util.message('lecm.meditor.lbl.boolean'),value:"d:boolean"},{label:Alfresco.util.message('lecm.meditor.lbl.qname'),value:"d:qname"},{label:Alfresco.util.message('lecm.meditor.lbl.noderef'),value:"d:noderef"},{label:Alfresco.util.message('lecm.meditor.lbl.category'),value:"d:category"}];
+				//используется в атрибутах
 				var dTokenised = ["",{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"},{label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"},{label:Alfresco.util.message('lecm.meditor.lbl.both'),value:"both"}];
 				//Категории
 				this.categoryDialogEl = {"name":{name:"name",label:Alfresco.util.message('lecm.meditor.lbl.category'),type:"input",value:""}};
 				this.categoryColDefs = 	[
-		                       	 	{ className: "viewmode-label", key:"name", label:Alfresco.util.message('lecm.meditor.lbl.category'), formatter: this._formatText, width: 360, maxAutoWidth: 360 },
-		                       	 	{ key : "delete", label : "", formatter:this._formatActions, width: 15, maxAutoWidth: 15}
+							   	 	{ className: "viewmode-label", key:"name", label:Alfresco.util.message('lecm.meditor.lbl.category'), formatter: this._formatText, width: 360, maxAutoWidth: 360 },
+							   	 	{ key : "delete", label : "", formatter:this._formatActions, width: 15, maxAutoWidth: 15}
 								];
 				this.categoryResponseSchema = { fields : [{key : "name"}] };
 				//Атрибуты
@@ -950,47 +907,43 @@ IT.component = IT.component || {};
 									//"validator": { name: "validator", label: "Валидатор", type:"select", options: [""], showdefault: false },
 								};
 				this.attributesColumnDefs = [
-		                            { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key : "title", label : Alfresco.util.message('lecm.meditor.lbl.title'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key : "default", label : Alfresco.util.message('lecm.meditor.lbl.default'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key : "type", label : Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dTypes, formatter : "dropdown", width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key : "mandatory", label : Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key : "_enabled", label : Alfresco.util.message('lecm.meditor.lbl.index'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key : "tokenised", label : Alfresco.util.message('lecm.meditor.lbl.tokenised'), dropdownOptions : dTokenised, formatter : "dropdown", width : 100, maxAutoWidth : 100 },
-		                            //{ key : "validator", label : "Валидатор", width : 70, maxAutoWidth : 70, dropdownOptions: [""], formatter:  "dropdown" },
-		                            { key : "delete", label : "", formatter : this._formatActions, width : 15, maxAutoWidth : 15}
-		                        ];
+									{ className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
+									{ className: "viewmode-label", key : "title", label : Alfresco.util.message('lecm.meditor.lbl.title'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
+									{ className: "viewmode-label", key : "default", label : Alfresco.util.message('lecm.meditor.lbl.default'), formatter : this._formatText, width : 170, maxAutoWidth : 170 },
+									{ className: "viewmode-label", key : "type", label : Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dTypes, formatter : "dropdown", width : 100, maxAutoWidth : 100 },
+									{ className: "viewmode-label", key : "mandatory", label : Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
+									{ className: "viewmode-label", key : "_enabled", label : Alfresco.util.message('lecm.meditor.lbl.index'), formatter : this._formatBoolean, width : 100, maxAutoWidth : 100 },
+									{ className: "viewmode-label", key : "tokenised", label : Alfresco.util.message('lecm.meditor.lbl.tokenised'), dropdownOptions : dTokenised, formatter : "dropdown", width : 100, maxAutoWidth : 100 },
+									//{ key : "validator", label : "Валидатор", width : 70, maxAutoWidth : 70, dropdownOptions: [""], formatter:  "dropdown" },
+									{ key : "delete", label : "", formatter : this._formatActions, width : 15, maxAutoWidth : 15}
+								];
 				this.attribyteResponseSchema = { fields : [{key : "_id"}, {key : "_name"}, {key : "title"}, {key : "default"}, {key : "type"}, {key : "mandatory"}, {key : "_enabled"}, {key : "tokenised"}, {key : "validator"}] };
 				//Ассоциации
 				this.associationsDialogEl = [
-				                    { name: "_name", label: Alfresco.util.message('lecm.meditor.lbl.name'), type:"input" },
-		                            { name: "title", label: Alfresco.util.message('lecm.meditor.lbl.title'), type:"input" },
-		                            { name: "class", label: Alfresco.util.message('lecm.meditor.lbl.type'), type:"select", options: dAssociations, showdefault: false },
-		                            { name: "mandatory", label: Alfresco.util.message('lecm.meditor.lbl.mandatory'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"}, {label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
-		                            { name: "many", label: Alfresco.util.message('lecm.meditor.lbl.multiple'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"}, {label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
-		                        ];
-				for(j in r) {
+									{ name: "_name", label: Alfresco.util.message('lecm.meditor.lbl.name'), type:"input" },
+									{ name: "title", label: Alfresco.util.message('lecm.meditor.lbl.title'), type:"input" },
+									{ name: "class", label: Alfresco.util.message('lecm.meditor.lbl.type'), type:"select", options: dAssociations, showdefault: false },
+									{ name: "mandatory", label: Alfresco.util.message('lecm.meditor.lbl.mandatory'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"}, {label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false },
+									{ name: "many", label: Alfresco.util.message('lecm.meditor.lbl.multiple'), type:"select", options: [{label:Alfresco.util.message('lecm.meditor.lbl.yes'),value:"true"}, {label:Alfresco.util.message('lecm.meditor.lbl.no'),value:"false"}], value: "false", showdefault: false }
+								];
+				for(var j in r) {
 					dAssociations.push({label:r[j].title+" - "+r[j].name,value:r[j].name});
 				}
 				this.associationsColumnDefs = [
-				                    { className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key:"title", label:Alfresco.util.message('lecm.meditor.lbl.title'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
-		                            { className: "viewmode-label", key:"class", label:Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dAssociations, formatter: "dropdown", width : 291, maxAutoWidth : 291 },
-		                            { className: "viewmode-label", key:"mandatory", label:Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 },
-		                            { className: "viewmode-label", key:"many", label:Alfresco.util.message('lecm.meditor.lbl.multiple'), formatter: this._formatBoolean, width : 223, maxAutoWidth : 223 },
-		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 }
-		                        ];
+									{ className: "viewmode-label", key:"_name", label:Alfresco.util.message('lecm.meditor.lbl.name'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
+									{ className: "viewmode-label", key:"title", label:Alfresco.util.message('lecm.meditor.lbl.title'), formatter: this._formatText, width : 170, maxAutoWidth : 170 },
+									{ className: "viewmode-label", key:"class", label:Alfresco.util.message('lecm.meditor.lbl.type'), dropdownOptions : dAssociations, formatter: "dropdown", width : 291, maxAutoWidth : 291 },
+									{ className: "viewmode-label", key:"mandatory", label:Alfresco.util.message('lecm.meditor.lbl.mandatory'), formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 },
+									{ className: "viewmode-label", key:"many", label:Alfresco.util.message('lecm.meditor.lbl.multiple'), formatter: this._formatBoolean, width : 223, maxAutoWidth : 223 },
+									{ key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 }
+								];
 				this.associationResponseSchema = { fields : [{key : "_name"}, {key : "class"}, {key : "title"}, {key : "mandatory"}, {key : "many"}] };
-
-				if (callback && callback.successCallback) {
-					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
-					//Dom.get(this.id+"_loading").setAttribute("style", "display:none");
-					//Dom.get(this.id+"_props").setAttribute("style", "display:block");
-					callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._renderEditor, scope : this } });
-				}
+				this.deferredRender.fulfil('populateAssocs');
 			};// onSuccess
 			var onFailureAssoc = function ContentControl_populateContent_onFailure(response) {
-
+				Alfresco.util.PopupManager.displayMessage({
+					text: this.msg('Не удалось получить ассоциации модели')
+				});
 			};// onFailure
 			//api/classes/cm_cmobject/subclasses?r=true
 			//api/classes/cm_content/subclasses?r=false
@@ -1001,33 +954,40 @@ IT.component = IT.component || {};
 				failureCallback : { fn : onFailureAssoc, scope : this }
 			});// request
 		},
+
 		//Получение контента из repo
-		_populateContent : function ContentControl__populateContent(callback) {
-			if (this.options.nodeRef !== null && this.options.nodeRef.length > 0) {
-				var onSuccess = function ContentControl_populateContent_onSuccess(response) {
+		_populateContent : function ContentControl__populateContent() {
+			var nodeRef,
+				onSuccess,
+				onFailure;
+			if (this.options.nodeRef) {
+				nodeRef = new Alfresco.util.NodeRef(this.options.nodeRef);
+				onSuccess = function ContentControl_populateContent_onSuccess(response) {
 					//prepare model
 					var responseXML = response.serverResponse.responseXML;
-					if(responseXML==null||responseXML.documentElement==null)
-						responseXML = parseXML(response.serverResponse.responseText);
+					if(responseXML==null||responseXML.documentElement==null) {
+						responseXML = IT.Utils.parseXML(response.serverResponse.responseText);
+					}
 
-					this.modelObject = YAHOO.lang.JSON.parse(xml2json(responseXML,""));
+					this.modelObject = YAHOO.lang.JSON.parse(IT.Utils.xml2json(responseXML,""));
 					this._initObjects();
 					//render form
-					if (callback && callback.successCallback) {
-						if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
-						callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._populateTables, scope : this } } );
-					}
+					this.deferredRender.fulfil('populateContent');
 				};// onSuccess
 				// Failure handler
-				var onFailure = function ContentControl_populateContent_onFailure(response) {
+				onFailure = function ContentControl_populateContent_onFailure(response) {
 					var elText = document.createTextNode(Alfresco.util.message('lecm.meditor.msg.get.data.error'));
 					Dom.get(this.id+"_base").appendChild(elText);
-					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: failure");
+					if (Alfresco.logger.isDebugEnabled()) {
+						Alfresco.logger.debug("Model-editor: failure");
+					}
+					Alfresco.util.PopupManager.displayMessage({
+						text: this.msg('Не удалось получить модель')
+					});
 				};// onFailure
-				var nodeRefUrl = this.options.nodeRef.replace("://", "/");
 				//Get content node
 				Alfresco.util.Ajax.request({
-					url : Alfresco.constants.PROXY_URI + "api/node/content/" + nodeRefUrl,
+					url : Alfresco.constants.PROXY_URI + "api/node/content/" + nodeRef.uri,
 					method : "GET",
 					successCallback : { fn : onSuccess, scope : this },
 					failureCallback : { fn : onFailure, scope : this }
@@ -1039,17 +999,20 @@ IT.component = IT.component || {};
 				//Dom.get(this.id+"_loading").setAttribute("style", "display:none");
 				//Dom.get(this.id+"_props").setAttribute("style", "display:block");
 				//render form
-				if (callback && callback.successCallback) {
-					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
-					callback.successCallback.fn.call(callback.successCallback.scope, { successCallback : { fn : this._populateTables, scope : this } } );
-				}
+				this.deferredRender.fulfil('populateContent');
 			}// if
 
+		},//_populateContent
+
+		_populateNamespaces: function() {
 			var onSuccessNS = function ContentControl_populateContent_onSuccess(response) {
-				var r = response.json;
-				this.namespaces = r;
+				this.namespaces = response.json;
+				this.deferredRender.fulfil('populateNamespaces');
 			};// onSuccess
 			var onFailureNS = function ContentControl_populateContent_onFailure(response) {
+				Alfresco.util.PopupManager.displayMessage({
+					text: this.msg('Не удалось получить пространства имен модели')
+				});
 			};// onFailure
 			Alfresco.util.Ajax.request({
 				url : Alfresco.constants.PROXY_URI + "namespaces/",
@@ -1057,32 +1020,35 @@ IT.component = IT.component || {};
 				successCallback : { fn : onSuccessNS, scope : this },
 				failureCallback : { fn : onFailureNS, scope : this }
 			});// request
-		},//_populateContent
+		},
+
 		//Форматер для чекбоксов в таблице
-	    _formatBoolean : function(el, oRecord, oColumn, oData, oDataTable) {
-	        var oDT = oDataTable || this;
-	    	var bChecked = oData;
-	        bChecked = (bChecked==="true") ? " checked=\"checked\"" : "";
-	        el.innerHTML = "<input type=\"checkbox\"" + bChecked +
-	                " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\" />";
+		_formatBoolean : function(el, oRecord, oColumn, oData, oDataTable) {
+			var oDT = oDataTable || this;
+			var bChecked = oData;
+			bChecked = (bChecked==="true") ? " checked=\"checked\"" : "";
+			el.innerHTML = "<input type=\"checkbox\"" + bChecked +
+					" class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\" />";
 
-	        YAHOO.util.Event.addListener(el,"change",function(e, oSelf) {
-		    	var elTarget = YAHOO.util.Event.getTarget(e);
-		        oSelf.fireEvent("valueChangeEvent", {event:e, target:elTarget});
-		    },oDT);
-	    },//_formatBoolean
-	    //Форматер для полей ввода в таблице
-	    _formatText : function(el, oRecord, oColumn, oData, oDataTable) {
-	    	var oDT = oDataTable || this;
-	        var value = (Lang.isValue(oData)) ? Lang.escapeHTML(oData.toString()) : "",
-	            markup = "<input style=\"width:"+oColumn.width+"px;\" type=\"text\" value=\"" + value + "\" title=\"" + value + "\" />";
-	        el.innerHTML = markup;
+			YAHOO.util.Event.addListener(el,"change",function(e, oSelf) {
+				var elTarget = YAHOO.util.Event.getTarget(e);
+				oSelf.fireEvent("valueChangeEvent", {event:e, target:elTarget});
+			},oDT);
+		},//_formatBoolean
 
-	        YAHOO.util.Event.addListener(el,"keyup",function(e, oSelf) {
-		    	var elTarget = YAHOO.util.Event.getTarget(e);
-		        oSelf.fireEvent("valueChangeEvent", {event:e, target:elTarget});
-		    },oDT);
-	    },//_formatText
+		//Форматер для полей ввода в таблице
+		_formatText : function(el, oRecord, oColumn, oData, oDataTable) {
+			var oDT = oDataTable || this;
+			var value = (Lang.isValue(oData)) ? Lang.escapeHTML(oData.toString()) : "",
+				markup = "<input style=\"width:"+oColumn.width+"px;\" type=\"text\" value=\"" + value + "\" title=\"" + value + "\" />";
+			el.innerHTML = markup;
+
+			YAHOO.util.Event.addListener(el,"keyup",function(e, oSelf) {
+				var elTarget = YAHOO.util.Event.getTarget(e);
+				oSelf.fireEvent("valueChangeEvent", {event:e, target:elTarget});
+			},oDT);
+		},//_formatText
+
 		//Форматер для поля с действиями
 		_formatActions: function formaterRenderActions(el, oRecord, oColumn, oData, oDataTable) {
 			var oDT = oDataTable || this;
@@ -1092,56 +1058,26 @@ IT.component = IT.component || {};
 			deleteLink.innerHTML = "&nbsp;";
 			el.appendChild(deleteLink);
 		},//_formatActions
+
 		//Обработчик клика по кнопке столбцу удаления
 		_deleteRow: function(oArgs) {
-		    var target = oArgs.target;
-		    var column = this.getColumn(target);
-		    if (column.key == 'delete') {
+			var target = oArgs.target;
+			var column = this.getColumn(target);
+			if (column.key == 'delete') {
 				if (confirm(Alfresco.util.message('lecm.meditor.msg.approve.delete.row'))) {
 					this.deleteRow(target);
 					Bubbling.fire("mandatoryControlValueUpdated", this);
 				}
-		    } else {
-		    	//this.onEventShowCellEditor(oArgs);
-		    }
+			} else {
+				//this.onEventShowCellEditor(oArgs);
+			}
 		},//_deleteRow
+
 		//Отрисовка редактора
 		_renderEditor : function RichTextControl__renderEditor() {
 			Alfresco.logger.debug("Model-editor: render editor");
-			//categoryDialog
-			this.categoryDialogId = this.id+"_categoryDlg";
-			Bubbling.on(this.categoryDialogId+"showEditDialog", this.onShowCategoryDialog, this);
-			Bubbling.on(this.categoryDialogId+"hideEditDialog", this.onHideCategoryDialog, this);
-			this.categoryDialog = new IT.widget.Dialog(this.categoryDialogId,
-				{width: "300px", modal:true, fixedcenter: true, constraintoviewport: true, underlay: "shadow", close: true, visible: false, draggable: false,
-				 elements: this.categoryDialogEl } );
-			this.categoryDialog.render();
-			//attributesDialog
-			this.attributesDialogId = this.id+"_attributesDlg";
-			Bubbling.on(this.attributesDialogId+"showEditDialog", this.onShowAttributesDialog, this);
-			Bubbling.on(this.attributesDialogId+"hideEditDialog", this.onHideAttributesDialog, this);
-			this.attributesDialog = new IT.widget.Dialog(this.attributesDialogId,
-				{width: "300px", modal:true, fixedcenter: true, constraintoviewport: true, underlay: "shadow", close: true, visible: false,
-				 draggable: false, elements: this.attributesDialogEl });
-			this.attributesDialog.render();
-			//associationsDialog
-			this.associationsDialogId = this.id+"_associationsDlg";
-			Bubbling.on(this.associationsDialogId+"showEditDialog", this.onShowAssociationsDialog, this);
-			Bubbling.on(this.associationsDialogId+"hideEditDialog", this.onHideAssociationsDialog, this);
-		    this.associationsDialog = new IT.widget.Dialog(this.associationsDialogId,
-		    	{width: "300px", modal:true, fixedcenter: true, constraintoviewport: true,
-            	underlay: "shadow", close: true, visible: false, draggable: false,
-	            elements: this.associationsDialogEl });
-		    this.associationsDialog.render();
-		    //tablesDialog
-			this.tablesDialogId = this.id+"_tablesDlg";
-			Bubbling.on(this.tablesDialogId+"showEditDialog", this.onShowTablesDialog, this);
-			Bubbling.on(this.tablesDialogId+"hideEditDialog", this.onHideTablesDialog, this);
-		    this.tablesDialog = new IT.widget.Dialog(this.tablesDialogId,
-		    	{width: "300px", modal:true, fixedcenter: true, constraintoviewport: true,
-            	underlay: "shadow", close: true, visible: false, draggable: false,
-	            elements: this.tablesDialogEl });
-		    this.tablesDialog.render();
+			Dom.get(this.id+"_loading").setAttribute("style", "display:none");
+			Dom.get(this.id+"_props").setAttribute("style", "display:block");
 			//Описание
 			var oSpan = document.createElement("span");
 			var input = new IT.widget.Input({ name: "model_description", label: "<b>" + Alfresco.util.message('lecm.meditor.lbl.model.desc') + "</b>", value: (this.model_description||""), help:Alfresco.util.message('lecm.meditor.lbl.model.desc')} );
@@ -1214,11 +1150,11 @@ IT.component = IT.component || {};
 			});
 			var categoryAddSpan = document.createElement("span");
 			if (Button) {
-                var oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
-                oYUIButton.appendTo(categoryAddSpan);
-                oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.categoryDialogId+"showEditDialog"); }, obj: this, scope: this });
+				var oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
+				oYUIButton.appendTo(categoryAddSpan);
+				oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.categoryDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
-            Dom.get(this.id+"_categories").appendChild(categoryAddSpan);
+			Dom.get(this.id+"_categories").appendChild(categoryAddSpan);
 			//Атрибуты
 			this.widgets.attributesDataSource = new YAHOO.util.DataSource(this.attributesArray,{responseSchema:this.attribyteResponseSchema});
 			this.widgets.attributesDataTable = new YAHOO.widget.DataTable(this.id+"_attributes", this.attributesColumnDefs, this.widgets.attributesDataSource);
@@ -1234,11 +1170,11 @@ IT.component = IT.component || {};
 			});
 			var attributesAddSpan = document.createElement("span");
 			if (Button) {
-                var oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
-                oYUIButton.appendTo(attributesAddSpan);
-                oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.attributesDialogId+"showEditDialog"); }, obj: this, scope: this });
+				var oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
+				oYUIButton.appendTo(attributesAddSpan);
+				oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.attributesDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
-            Dom.get(this.id+"_attributes").appendChild(attributesAddSpan);
+			Dom.get(this.id+"_attributes").appendChild(attributesAddSpan);
 			//Ассоциации
 			this.widgets.associationsDataSource = new YAHOO.util.DataSource(this.associationsArray,{responseSchema:this.associationResponseSchema});
 			this.widgets.associationsDataTable = new YAHOO.widget.DataTable(this.id+"_associations", this.associationsColumnDefs, this.widgets.associationsDataSource);
@@ -1252,14 +1188,14 @@ IT.component = IT.component || {};
 				var e = args.event, t = args.target, r = this.getRecord(t), c = this.getColumn(this.getCellIndex(t.parentNode));
 				r.setData(c.key, t.value);
 			});
-            var associationsAddSpan = document.createElement("span");
+			var associationsAddSpan = document.createElement("span");
 			if (Button) {
-                oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
-                oYUIButton.appendTo(associationsAddSpan);
-                oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.associationsDialogId+"showEditDialog"); }, obj: this, scope: this });
+				oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
+				oYUIButton.appendTo(associationsAddSpan);
+				oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.associationsDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
-            Dom.get(this.id+"_associations").appendChild(associationsAddSpan);
-            //Таблицы
+			Dom.get(this.id+"_associations").appendChild(associationsAddSpan);
+			//Таблицы
 			this.widgets.tablesDataSource = new YAHOO.util.DataSource(this.tablesArray,{responseSchema:this.tablesResponseSchema});
 			this.widgets.tablesDataTable = new YAHOO.widget.DataTable(this.id+"_tables", this.tablesColumnDefs, this.widgets.tablesDataSource);
 			this.widgets.tablesDataTable.subscribe('cellClickEvent',this._deleteRow);
@@ -1267,14 +1203,42 @@ IT.component = IT.component || {};
 				var e = args.event, t = args.target, r = this.getRecord(t), c = this.getColumn(this.getCellIndex(t.parentNode));
 				r.setData(c.key, t.value);
 			});
-            var tablesAddSpan = document.createElement("span");
+			var tablesAddSpan = document.createElement("span");
 			if (Button) {
-                oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
-                oYUIButton.appendTo(tablesAddSpan);
-                oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.tablesDialogId+"showEditDialog"); }, obj: this, scope: this });
+				oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
+				oYUIButton.appendTo(tablesAddSpan);
+				oYUIButton.set("onclick", { fn: function(evt, obj) { Bubbling.fire(obj.tablesDialogId+"showEditDialog"); }, obj: this, scope: this });
 			}
-            Dom.get(this.id+"_tables").appendChild(tablesAddSpan);
-//            ////////////////////////////////////// Debug /////////////////////////////////////////////////////////
+			Dom.get(this.id+"_tables").appendChild(tablesAddSpan);
+			//categoryDialog
+			this.categoryDialogId = this.id+"_categoryDlg";
+			this.categoryDialog = new IT.widget.Dialog(this.categoryDialogId, this.widgets.categoriesDataTable, {
+				width: "300px", modal: true, fixedcenter: true, constraintoviewport: true, underlay: "shadow",
+				close: true, visible: false, draggable: false, elements: this.categoryDialogEl
+			});
+			this.categoryDialog.render();
+			//attributesDialog
+			this.attributesDialogId = this.id+"_attributesDlg";
+			this.attributesDialog = new IT.widget.Dialog(this.attributesDialogId, this.widgets.attributesDataTable, {
+				width: "300px", modal:true, fixedcenter: true, constraintoviewport: true, underlay: "shadow",
+				close: true, visible: false, draggable: false, elements: this.attributesDialogEl
+			});
+			this.attributesDialog.render();
+			//associationsDialog
+			this.associationsDialogId = this.id+"_associationsDlg";
+			this.associationsDialog = new IT.widget.Dialog(this.associationsDialogId, this.widgets.associationsDataTable, {
+				width: "300px", modal:true, fixedcenter: true, constraintoviewport: true, underlay: "shadow",
+				close: true, visible: false, draggable: false, elements: this.associationsDialogEl
+			});
+			this.associationsDialog.render();
+			//tablesDialog
+			this.tablesDialogId = this.id+"_tablesDlg";
+			this.tablesDialog = new IT.widget.Dialog(this.tablesDialogId, this.widgets.tablesDataTable, {
+				width: "300px", modal:true, fixedcenter: true, constraintoviewport: true, underlay: "shadow",
+				close: true, visible: false, draggable: false, elements: this.tablesDialogEl
+			});
+			this.tablesDialog.render();
+//			////////////////////////////////////// Debug /////////////////////////////////////////////////////////
 //			this.widgets.button = Alfresco.util.createYUIButton(this,null,
 //				function(n, v) {
 //					var name = n, value = v;
@@ -1290,246 +1254,4 @@ IT.component = IT.component || {};
 			this.initSuccess = true;
 		}//_renderEditor
 	});
-	//Служебные функции
-	//TODO: Вынести в отдельный файл
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function contains(a, obj) {
-	    for (var i = 0; i < a.length; i++) {
-	        if (a[i] === obj) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-	function containsUri(a, obj) {
-	    for (var i = 0; i < a.length; i++) {
-	        if (a[i]._uri === obj._uri) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-	function parseXML( data , xml , tmp ) {
-		if ( window.DOMParser ) { // Standard
-			tmp = new DOMParser();
-			xml = tmp.parseFromString( data , "text/xml" );
-		} else { // IE
-			xml = new ActiveXObject( "Microsoft.XMLDOM" );
-			xml.async = "false";
-			xml.loadXML( data );
-		}
-		tmp = xml.documentElement;
-		if ( ! tmp || ! tmp.nodeName || tmp.nodeName === "parsererror" ) {
-			jQuery.error( "Invalid XML: " + data );
-		}
-		return xml;
-	};
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function json2xml(o, tab) {
-		var toXml = function(v, name, ind) {
-			var xml = "";
-			if (v instanceof Array) {
-				for ( var i = 0, n = v.length; i < n; i++)
-					xml += ind + toXml(v[i], name, ind + "\t") + "\n";
-			} else if (typeof (v) == "object") {
-				var hasChild = false;
-				xml += ind + "<" + name;
-				for ( var m in v) {
-					if (m.charAt(0) == "_")
-						xml += " " + m.substr(1) + "=\"" + v[m].toString() + "\"";
-					else
-						hasChild = true;
-				}
-				xml += hasChild ? ">" : "/>";
-				if (hasChild) {
-					for ( var m in v) {
-						if (m == "#text")
-							xml += v[m];
-						else if (m == "#cdata")
-							xml += "<![CDATA[" + v[m] + "]]>";
-						else if (m.charAt(0) != "_")
-							xml += toXml(v[m], m, ind + "\t");
-					}
-					xml += (xml.charAt(xml.length - 1) == "\n" ? ind : "") + "</"
-							+ name + ">";
-				}
-			} else {
-				xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
-			}
-			YAHOO.log(xml);
-			return xml;
-		}, xml = "";
-		for ( var m in o)
-			xml += toXml(o[m], m, "");
-		return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
-	};
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function xml2json(xml, tab) {
-		var X = {
-			toObj : function(xml) {
-				var o = {};
-				if (xml.nodeType == 1) { // element node ..
-					if (xml.attributes.length) // element with attributes ..
-						for ( var i = 0; i < xml.attributes.length; i++)
-							o["_" + xml.attributes[i].nodeName] = (xml.attributes[i].nodeValue || "")
-									.toString();
-					if (xml.firstChild) { // element has child nodes ..
-						var textChild = 0, cdataChild = 0, hasElementChild = false;
-						for ( var n = xml.firstChild; n; n = n.nextSibling) {
-							if (n.nodeType == 1)
-								hasElementChild = true;
-							else if (n.nodeType == 3
-									&& n.nodeValue.match(/[^ \f\n\r\t\v]/))
-								textChild++; // non-whitespace text
-							else if (n.nodeType == 4)
-								cdataChild++; // cdata section node
-						}
-						if (hasElementChild) {
-							if (textChild < 2 && cdataChild < 2) { // structured
-																	// element with
-																	// evtl. a
-																	// single text
-																	// or/and cdata
-																	// node ..
-								X.removeWhite(xml);
-								for ( var n = xml.firstChild; n; n = n.nextSibling) {
-									if (n.nodeType == 3) // text node
-										o["#text"] = X.escape(n.nodeValue);
-									else if (n.nodeType == 4) // cdata node
-										o["#cdata"] = X.escape(n.nodeValue);
-									else if (n.nodeType == 8) {//
-										// comment node
-									} else if (o[n.nodeName]) { // multiple
-																// occurence of
-																// element ..
-										if (o[n.nodeName] instanceof Array)
-											o[n.nodeName][o[n.nodeName].length] = X
-													.toObj(n);
-										else
-											o[n.nodeName] = [ o[n.nodeName],
-													X.toObj(n) ];
-									} else
-										// first occurence of element..
-										o[n.nodeName] = X.toObj(n);
-								}
-							} else { // mixed content
-								if (!xml.attributes.length)
-									o = X.escape(X.innerXml(xml));
-								else
-									o["#text"] = X.escape(X.innerXml(xml));
-							}
-						} else if (textChild) { // pure text
-							if (!xml.attributes.length)
-								o = X.escape(X.innerXml(xml));
-							else
-								o["#text"] = X.escape(X.innerXml(xml));
-						} else if (cdataChild) { // cdata
-							if (cdataChild > 1)
-								o = X.escape(X.innerXml(xml));
-							else
-								for ( var n = xml.firstChild; n; n = n.nextSibling)
-									o["#cdata"] = X.escape(n.nodeValue);
-						}
-					}
-					if (!xml.attributes.length && !xml.firstChild)
-						o = null;
-				} else if (xml.nodeType == 9) { // document.node
-					o = X.toObj(xml.documentElement);
-				} else {
-					// alert("unhandled node type: " + xml.nodeType);
-				}
-				return o;
-			},
-			toJson : function(o, name, ind) {
-				var json = name ? ("\"" + name + "\"") : "";
-				if (o instanceof Array) {
-					for ( var i = 0, n = o.length; i < n; i++)
-						o[i] = X.toJson(o[i], "", ind + "\t");
-					json += (name ? ":[" : "[")
-							+ (o.length > 1 ? ("\n" + ind + "\t"
-									+ o.join(",\n" + ind + "\t") + "\n" + ind) : o
-									.join("")) + "]";
-				} else if (o == null)
-					json += (name && ":") + "null";
-				else if (typeof (o) == "object") {
-					var arr = [];
-					for ( var m in o)
-						arr[arr.length] = X.toJson(o[m], m, ind + "\t");
-					json += (name ? ":{" : "{")
-							+ (arr.length > 1 ? ("\n" + ind + "\t"
-									+ arr.join(",\n" + ind + "\t") + "\n" + ind)
-									: arr.join("")) + "}";
-				} else if (typeof (o) == "string")
-					json += (name && ":") + "\"" + o.toString() + "\"";
-				else
-					json += (name && ":") + o.toString();
-				return json;
-			},
-			innerXml : function(node) {
-				var s = ""
-				if ("innerHTML" in node)
-					s = node.innerHTML;
-				else {
-					var asXml = function(n) {
-						var s = "";
-						if (n.nodeType == 1) {
-							s += "<" + n.nodeName;
-							for ( var i = 0; i < n.attributes.length; i++)
-								s += " "
-										+ n.attributes[i].nodeName
-										+ "=\""
-										+ (n.attributes[i].nodeValue || "")
-												.toString() + "\"";
-							if (n.firstChild) {
-								s += ">";
-								for ( var c = n.firstChild; c; c = c.nextSibling)
-									s += asXml(c);
-								s += "</" + n.nodeName + ">";
-							} else
-								s += "/>";
-						} else if (n.nodeType == 3)
-							s += n.nodeValue;
-						else if (n.nodeType == 4)
-							s += "<![CDATA[" + n.nodeValue + "]]>";
-						return s;
-					};
-					for ( var c = node.firstChild; c; c = c.nextSibling)
-						s += asXml(c);
-				}
-				return s;
-			},
-			escape : function(txt) {
-				return txt.replace(/[\\]/g, "\\\\").replace(/[\"]/g, '\\"')
-						.replace(/[\n]/g, '\\n').replace(/[\r]/g, '\\r');
-			},
-			removeWhite : function(e) {
-				e.normalize();
-				for ( var n = e.firstChild; n;) {
-					if (n.nodeType == 3) { // text node
-						if (!n.nodeValue.match(/[^ \f\n\r\t\v]/)) { // pure
-																	// whitespace
-																	// text node
-							var nxt = n.nextSibling;
-							e.removeChild(n);
-							n = nxt;
-						} else
-							n = n.nextSibling;
-					} else if (n.nodeType == 1) { // element node
-						X.removeWhite(n);
-						n = n.nextSibling;
-					} else
-						// any other node
-						n = n.nextSibling;
-				}
-				return e;
-			}
-		};
-		if (xml.nodeType == 9) // document node
-			xml = xml.documentElement;
-		var json = X.toJson(X.toObj(X.removeWhite(xml)), xml.nodeName, "\t");
-		return "{\n" + tab
-				+ (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, ""))
-				+ "\n}";
-	};
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 })();

@@ -1,7 +1,15 @@
-<#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
-<script type="text/javascript">//<![CDATA[
-   new Alfresco.component.FormManager("${args.htmlid}").setOptions(
-   {
-
-   }).setMessages(${messages});
-//]]></script>
+<@script type='text/javascript' src='${url.context}/res/components/model-editor/model-editor-form-manager.js' group='model-editor'/>
+<@inlineScript group='model-editor'>
+(function () {
+	LogicECM.module.ModelEditor.ModelPromise = new LogicECM.module.Base.SimplePromise();
+	new LogicECM.module.ModelEditor.FormManager('${args.htmlid}', {
+		args: {
+			formId: '${context.page.properties.formId!page.url.args.formId}',
+			redirect: '${context.page.properties.redirect!page.url.args.redirect}',
+			destination: '${context.page.properties.destination!page.url.args.destination}',
+			itemId: '${context.page.properties.itemId!page.url.args.itemId}',
+			mimeType: '${context.page.properties.mimeType!page.url.args.mimeType}'
+		}
+	}, ${messages});
+})();
+</@>

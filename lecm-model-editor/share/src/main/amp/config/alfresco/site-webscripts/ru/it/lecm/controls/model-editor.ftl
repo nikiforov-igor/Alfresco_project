@@ -5,6 +5,7 @@
       @import "/share/res/components/model-editor/model-editor.css";
 </style>
 
+<@script type="text/javascript" src="${url.context}/res/components/model-editor/utils.js" />
 <@script type="text/javascript" src="${url.context}/res/components/model-editor/controls/dialog.js" />
 <@script type="text/javascript" src="${url.context}/res/components/model-editor/controls/input.js" />
 <@script type="text/javascript" src="${url.context}/res/components/model-editor/controls/select.js" />
@@ -55,7 +56,7 @@
 			<label><b>${msg("lecm.meditor.lbl.tables")}<b/></label>
 			<div id="${fieldHtmlId}_tables" class="form-container form-field"></div>
 		</div>
-		<!-- Debug -->	
+		<!-- Debug -->
 		<pre id="${fieldHtmlId}_console"></pre>
 		<div id="${fieldHtmlId}_btn"></div>
 		<!-- Debug end -->

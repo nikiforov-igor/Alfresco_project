@@ -1,8 +1,9 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
-<#include "/org/alfresco/include/documentlibrary.inc.ftl" />
-<@templateHeader />
-
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
+<@bpage.templateHeader>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/model-editor/model-editor.css" group="model-editor"/>
+	<@script type="text/javascript" src="${url.context}/res/components/model-editor/utils.js" group="model-editor"/>
+</@>
 
 <@bpage.basePage showToolbar=isAdmin showMenu=isAdmin>
 	<#if isAdmin>

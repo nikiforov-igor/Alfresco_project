@@ -5,20 +5,20 @@ if (typeof IT == "undefined" || !IT) {
 IT.widget = IT.widget || {};
 
 (function() {
-	var Dom = YAHOO.util.Dom, Lang = YAHOO.util.Lang, Button = YAHOO.widget.Button, Bubbling = YAHOO.Bubbling; 
+	var Dom = YAHOO.util.Dom, Lang = YAHOO.util.Lang, Button = YAHOO.widget.Button, Bubbling = YAHOO.Bubbling;
 	var DEFAULT_CONFIG = {
-			"ELEMENTS": { 
-				key: "elements", 
+			"ELEMENTS": {
+				key: "elements",
 				value: {}
 			},
-			"CLEARFORM": { 
-				key: "clearform", 
+			"CLEARFORM": {
+				key: "clearform",
 				value: true
 			}
 	};
-			
 
-	IT.widget.Dialog = function IT_widget_Dialog(id, config) {
+
+	IT.widget.Dialog = function IT_widget_Dialog(id, dataTable, config) {
 		IT.widget.Dialog.superclass.constructor.call(this, id || YAHOO.util.Dom.generateId(), config );
 
 		var header = document.createElement("div");
@@ -31,10 +31,10 @@ IT.widget = IT.widget || {};
 			oYUIButton = new Button({ label: Alfresco.util.message('lecm.meditor.lbl.add'), type: "button" });
 			//oYUIButton.set("id", id+"_btn");
 			oYUIButton.appendTo(oSpan);
-			oYUIButton.set("onclick", { 
-				fn: this._addClick, 
-				obj: this, 
-				scope: this 
+			oYUIButton.set("onclick", {
+				fn: this._addClick,
+				obj: this,
+				scope: this
 			});
 		}
 		this.setHeader(header);
@@ -50,22 +50,27 @@ IT.widget = IT.widget || {};
 		this.setFooter(oSpan);
 		var els = this.cfg.getProperty("elements");
 		this.beforeShowEvent.subscribe(this.handleShow);
-		
+		this.dataTable = dataTable;
+
+		Bubbling.on(this.id + "showEditDialog", this.onShowDialog, this);
+		Bubbling.on(this.id + "hideEditDialog", this.onHideDialog, this);
 		//Bubbling.on("visibleUpdated", this.onShowElements, this);
 	};
 
-	YAHOO.extend(IT.widget.Dialog,  YAHOO.widget.Panel, 
+	YAHOO.extend(IT.widget.Dialog,  YAHOO.widget.Panel,
 	{
+		dataTable: null,
+
 		//_elements: [],
 		handleShow: function(event, obj) {
 			if(this.cfg.getProperty("clearform")) {
 				function isFormElement(p_oElement) {
 					var sTag = p_oElement.tagName.toUpperCase();
-					return ((sTag == "INPUT" || sTag == "TEXTAREA" || 
+					return ((sTag == "INPUT" || sTag == "TEXTAREA" ||
 							sTag == "SELECT"));
 				}
 				var oElements = Dom.getElementsBy(isFormElement, "*", this.element);
-			
+
 				for(var i in oElements) {
 					oElements[i].value = "";
 				}
@@ -76,12 +81,12 @@ IT.widget = IT.widget || {};
 		_addClick: function(evt, obj) {
 			function isFormElement(p_oElement) {
 				var sTag = p_oElement.tagName.toUpperCase();
-				return ((sTag == "INPUT" || sTag == "TEXTAREA" || 
+				return ((sTag == "INPUT" || sTag == "TEXTAREA" ||
 						sTag == "SELECT"));
 			}
 			var oElements = Dom.getElementsBy(isFormElement, "*", this.element);
-			
-			Bubbling.fire(obj.id+"hideEditDialog", 
+
+			Bubbling.fire(obj.id+"hideEditDialog",
 			{
 				fieldId: obj.id,
 				args: oElements
@@ -89,7 +94,7 @@ IT.widget = IT.widget || {};
 		},
 		initElements: function (type, args, obj) {
 			var val = args[0];
-			
+
 			//if(val.length>0) {
 				//this.setHeader("Add parameter");
 				//Dialog
@@ -120,21 +125,37 @@ IT.widget = IT.widget || {};
 			//}
 		},
 		initDefaultConfig: function () {
-			
+
 			IT.widget.Dialog.superclass.initDefaultConfig.call(this);
 
 			var cfg = this.cfg;
-			
-			cfg.addProperty(DEFAULT_CONFIG.ELEMENTS.key, { 
-				
+
+			cfg.addProperty(DEFAULT_CONFIG.ELEMENTS.key, {
+
 				handler: this.initElements,
 				value : DEFAULT_CONFIG.ELEMENTS.value
 			});
-			
-			cfg.addProperty(DEFAULT_CONFIG.CLEARFORM.key, { 
-				
+
+			cfg.addProperty(DEFAULT_CONFIG.CLEARFORM.key, {
+
 				value : DEFAULT_CONFIG.CLEARFORM.value
 			});
+		},
+
+		onShowDialog: function() {
+			this.show();
+		},
+
+		onHideDialog: function(layer, args) {
+			var validation = args[1],
+				data = validation.args.reduce(function(prev, curr) {
+					var data = {};
+					data[curr.name] = curr.value;
+					return YAHOO.lang.merge(prev, data);
+				}, {});
+			this.dataTable.addRow(data, 0);
+			this.hide();
+			Bubbling.fire("mandatoryControlValueUpdated", this);
 		}
 //        onShowElements: function (event, args, obj) {
 //        	var attr = args[1];
