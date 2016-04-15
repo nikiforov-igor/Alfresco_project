@@ -2178,15 +2178,14 @@ if (executorAssoc != null && executorAssoc.length == 1) {
 	lecmPermission.grantDynamicRole(document, executor, "ERRANDS_EXECUTOR", "LECM_BASIC_PG_ActionPerformer");
 
 	if (initiator != null) {
-		var notificationText = "";
-		notificationText += documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-		notificationText += " направил(а) вам поручение ";
-		notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-		notificationText += " № {lecm-errands:number}";
-
-		var recipients = [];
-		recipients.push(executor);
-		notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+		notifications.sendNotificationFromCurrentUser({
+		    recipients: [executor],
+		    templateCode: 'ERRANDS_DIRECTED_BY_INITIATOR',
+		    templateConfig: {
+                mainObject: document,
+                eventExecutor: initiator
+            }
+		});
 	}
 }
 
@@ -2198,13 +2197,14 @@ if (soExecutors != null) {
 	}
 
 	if (initiator != null) {
-		notificationText = "";
-		notificationText += documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-		notificationText += " назначил вас соисполнителем по поручению ";
-		notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-		notificationText += " № {lecm-errands:number}";
-
-		notifications.sendNotificationFromCurrentUser(soExecutors, notificationText, document);
+		notifications.sendNotificationFromCurrentUser({
+		   recipients: soExecutors,
+		   templateCode: 'ERRANDS_CO_EXECUTOR',
+		   templateConfig: {
+               mainObject: document,
+               eventExecutor: initiator
+           }
+		});
 	}
 }]]></value>
                                                             </property>

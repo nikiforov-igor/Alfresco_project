@@ -8,17 +8,21 @@ if (report != null && report.properties["lecm-errands-ts:coexecutor-report-statu
 		report.properties["lecm-errands-ts:coexecutor-report-status"] = "DECLINE";
 		report.save();
 
-		var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
-		notificationText +=  " отклонил ваш отчет по поручению ";
-		notificationText += documentScript.wrapperDocumentLink(document, "{lecm-document:present-string}");
-
 		var recipients = [];
 		var coexecutorAssoc = report.assocs["lecm-errands-ts:coexecutor-assoc"];
 		if (coexecutorAssoc != null && coexecutorAssoc.length > 0) {
 			recipients.push(coexecutorAssoc[0]);
 		}
 
-		notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+		notifications.sendNotificationFromCurrentUser({
+			recipients: recipients,
+			templateCode: 'ERRANDS_CO_EXECUTOR_DECLINE',
+			templateConfig: {
+				mainObject: document,
+				eventExecutor: currentEmployee
+			},
+			dontCheckAccessToObject: true
+		});
 
 		model.success = true;
 	}

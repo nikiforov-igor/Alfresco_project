@@ -48,7 +48,16 @@
 	                                    recipients.push(executorAssoc[0]);
 	                                }
 
-                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+	                                notifications.sendNotificationFromCurrentUser({
+                                        recipients: recipients,
+                                        templateCode: 'ERRANDS_EXEC_REPORT',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            eventExecutor: currentUser
+                                        },
+                                        dontCheckAccessToObject: true
+                                    });
+
 		                        }
 	                        }
                         ]]></activiti:string>

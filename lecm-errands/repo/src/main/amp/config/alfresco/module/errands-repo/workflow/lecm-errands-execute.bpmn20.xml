@@ -29,13 +29,15 @@
 								}
 
 								if (controller != null) {
-									var recipients = [];
-									recipients.push(controller);
-									var notificationText = documentScript.wrapperLink(executor, "{lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}");
-									notificationText += " исполнил поручение: ";
-									notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-									notificationText += " № {lecm-errands:number}";
-									notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+									notifications.sendNotificationFromCurrentUser({
+										recipients: [controller],
+										templateCode: 'ERRANDS_EXECUTED_TO_CONTROLLER',
+										templateConfig: {
+											mainObject: document,
+											eventExecutor: executor
+										}
+									});
 
 									execution.setVariable("executeResult", "approveController");
 								} else {
@@ -45,13 +47,14 @@
 										initiator = initiatorAssoc[0];
 									}
 
-									var recipients = [];
-									recipients.push(initiator);
-									var notificationText = documentScript.wrapperLink(executor, "{lecm-errands:executor-assoc/lecm-orgstr:employee-short-name}");
-									notificationText += " исполнил ваше поручение: ";
-									notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-									notificationText += " № {lecm-errands:number}";
-									notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+									notifications.sendNotificationFromCurrentUser({
+										recipients: [initiator],
+										templateCode: 'ERRANDS_EXECUTED_TO_INITIATOR',
+										templateConfig: {
+											mainObject: document,
+											eventExecutor: executor
+										}
+									});
 
 									if (document.properties["lecm-errands:without-initiator-approval"]) {
 										execution.setVariable("executeResult", "executed");

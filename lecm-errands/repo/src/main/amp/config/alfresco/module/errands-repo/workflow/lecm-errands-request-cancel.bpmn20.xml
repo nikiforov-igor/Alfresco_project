@@ -36,9 +36,15 @@
 		                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
 		                        notificationText += " № {lecm-errands:number}";
 
-		                        var recipients = [];
-		                        recipients.push(initiator);
-		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+								notifications.sendNotificationFromCurrentUser({
+									recipients: [initiator],
+									templateCode: 'ERRANDS_CANCEL_REQUEST',
+									templateConfig: {
+										mainObject: document,
+										eventExecutor: currentEmployee,
+										reason: lecmErrandWf_requestCancelReason
+									}
+								});
 
 	                            execution.setVariable("requestCancelAssignee", orgstructure.getEmployeeLogin(initiator));
 	                            execution.setVariable("requestCancelTitle", substitude.formatNodeTitle(document, notificationText));
@@ -82,11 +88,14 @@
 								    recipients.push(executor);
 
 							        if (decision == "REJECTED") {
-									    var notificationText = "Ваш запрос об отмене поручения ";
-									    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-									    notificationText += " № {lecm-errands:number}";
-									    notificationText += " отклонён";
-									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+
+									    notifications.sendNotificationFromCurrentUser({
+											recipients: recipients,
+											templateCode: 'ERRANDS_REJECT_CANCEL_REQUEST',
+											templateConfig: {
+												mainObject: document
+											}
+										});
 
 	                                    var logText = "#initiator отклонил запрос на отмену поручения: #mainobject.";
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
@@ -105,11 +114,15 @@
 				                            recipients.push(controllerAssoc[0]);
 				                        }
 
-									    var notificationText = "Запрос об отмене поручения  ";
-									    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-									    notificationText += " № {lecm-errands:number}";
-									    notificationText += " принят. Поручение отменено";
-									    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+									    notifications.sendNotificationFromCurrentUser({
+											recipients: recipients,
+											templateCode: 'ERRANDS_ACCEPT_CANCEL_REQUEST',
+											templateConfig: {
+												mainObject: document,
+												isExecutorChanged: false
+											},
+											dontCheckAccessToObject: true
+										});
 
 									    var logText = "Сотрудник #initiator отменил поручение: #mainobject.";
 									    businessJournal.log(document.nodeRef.toString(), "CANCEL_ERRAND", logText, []);
@@ -119,11 +132,15 @@
 							                document.removeAssociation(executor, "lecm-errands:executor-assoc");
 							                document.createAssociation(newExecutor, "lecm-errands:executor-assoc");
 
-										    var notificationText = "Запрос об отмене поручения  ";
-										    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-										    notificationText += " № {lecm-errands:number}";
-										    notificationText += " принят. Поручению назначен другой Исполнитель";
-										    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+										    notifications.sendNotificationFromCurrentUser({
+												recipients: recipients,
+												templateCode: 'ERRANDS_ACCEPT_CANCEL_REQUEST',
+												templateConfig: {
+													mainObject: document,
+													isExecutorChanged: true
+												},
+												dontCheckAccessToObject: true
+											});
 
 						                    var logObjects = [];
 						                    logObjects.push("" + newExecutor.nodeRef);

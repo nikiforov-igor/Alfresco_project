@@ -30,14 +30,15 @@
 	                        var currentEmployee = orgstructure.getCurrentEmployee();
 
 	                        if (initiator != null) {
-		                        var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
-		                        notificationText += " просит изменить срок исполнения поручения: ";
-		                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-		                        notificationText += " № {lecm-errands:number}";
 
-		                        var recipients = [];
-		                        recipients.push(initiator);
-		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+								notifications.sendNotificationFromCurrentUser({
+									recipients: [initiator],
+									templateCode: 'ERRANDS_CHANGE_DUE_DATE_REQUEST',
+									templateConfig: {
+										mainObject: document,
+										eventExecutor: currentEmployee
+									}
+								});
 
 		                        execution.setVariable("requestDueDateChangeAssignee", orgstructure.getEmployeeLogin(initiator));
 	                        }
@@ -92,11 +93,14 @@
 	                                }
 
 			                        if (decision == "REJECTED") {
-	                                    var notificationText = documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-				                        notificationText += " отклонил ваш запрос об изменении сроков поручения ";
-				                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-				                        notificationText += " № {lecm-errands:number}";
-				                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+										notifications.sendNotificationFromCurrentUser({
+											recipients: recipients,
+											templateCode: 'ERRANDS_REJECT_CHANGE_DUE_DATE_REQUEST',
+											templateConfig: {
+												mainObject: document,
+												eventExecutor: initiator
+											}
+										});
 			                        } else if (decision == "APPROVED") {
 	                                    var newDueDate = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskNewDate");
 	                                    if (newDueDate != null) {
@@ -111,12 +115,15 @@
                                                             document.save();
 				                        }
 
-	                                    var notificationText = documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-				                        notificationText += " назначил новый срок по поручению ";
-				                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-				                        notificationText += " № {lecm-errands:number}";
-				                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 
+										notifications.sendNotificationFromCurrentUser({
+											recipients: recipients,
+											templateCode: 'ERRANDS_ACCEPT_CHANGE_DUE_DATE_REQUEST',
+											templateConfig: {
+												mainObject: document,
+												eventExecutor: initiator
+											}
+										});
 				                        var logText = "#initiator утвердил ";
 										var comment = task.getVariableLocal("lecmErrandWf_requestDueDateChangeTaskComment");
 										if (comment != null) {

@@ -31,28 +31,27 @@
                                     var recipients = [];
                                     recipients.push(executor);
 
-                                    var notificationText = "Поручение ";
-                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-                                    notificationText += " назначенное вам сотрудником ";
-                                    notificationText += documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-                                    notificationText += " ";
-                                    notificationText += documentScript.wrapperTitle("отменено", comment);
-
                                     var countChildErrands = 0;
                                     var connectedDocuments = errands.getChildErrands(document.nodeRef.toString());
                                     if (connectedDocuments != null) {
                                         countChildErrands = connectedDocuments.length;
                                     }
-                                    notificationText += ". Внимание: На основании этого поручения Вами было создано ";
                                     var documentRefLink = document.nodeRef.toString().replace("://", "/");
                                     var url = "/share/page/errands-list?query=" + encodeURIComponent("!Отменено, !Удалено, !Исполнено, !Не исполнено");
                                     url += "&formId=" + encodeURIComponent("Все");
                                     url += "#filter=errandsChildFilter|" + documentRefLink;
-                                    notificationText += "<a href='" + url + "'>";
-                                    notificationText += countChildErrands;
-                                    notificationText += "</a>";
 
-                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+                                    notifications.sendNotificationFromCurrentUser({
+                                        recipients: recipients,
+                                        templateCode: 'ERRANDS_CANCEL',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            eventExecutor: initiator,
+                                            comment: comment,
+                                            link_url: url,
+                                            link_title: countChildErrands
+                                        }
+                                    });
                                 }
                             }
                             ]]>

@@ -31,12 +31,14 @@
 		                            initiator = initiatorAssoc[0];
 		                        }
 
-		                        var notificationText = documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-		                        notificationText += documentScript.wrapperTitle(" отклонил ", lecmErrandWf_initiatorDeclineReason);;
-		                        notificationText += "исполнение поручения: ";
-		                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-		                        notificationText += " № {lecm-errands:number}";
-		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+								notifications.sendNotificationFromCurrentUser({
+									recipients: recipients,
+									templateCode: 'ERRANDS_DECLINE_EXEC',
+									templateConfig: {
+										mainObject: document,
+										eventExecutor: initiator
+									}
+								});
 
 		                        var logText = "#initiator ";
 		                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_initiatorDeclineReason);

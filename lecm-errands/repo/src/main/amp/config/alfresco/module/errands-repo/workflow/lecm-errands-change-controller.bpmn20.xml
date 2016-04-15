@@ -31,14 +31,15 @@
 	                                if (controller != null) {
 	                                    document.removeAssociation(controller, "lecm-errands:controller-assoc");
 
-				                        var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
-				                        notificationText += "отменил(а) назначение вас контроллером по поручению ";
-				                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-				                        notificationText += " № {lecm-errands:number}";
-
-	                                    var recipients = [];
-	                                    recipients.push(controller);
-	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+	                                    notifications.sendNotificationFromCurrentUser({
+                                            recipients: [controller],
+                                            templateCode: 'ERRANDS_CONTROLLER_DISMISS',
+                                            templateConfig: {
+                                                mainObject: document,
+                                                eventExecutor: currentEmployee
+                                            },
+                                            dontCheckAccessToObject: true
+                                        });
 
 	                                    lecmPermission.revokeDynamicRole(document, controller, "ERRANDS_CONTROLLER");
                                         documentMembers.deleteMember(document, controller);
@@ -47,19 +48,21 @@
 	                                document.createAssociation(lecmErrandWf_changeControllerNewController, "lecm-errands:controller-assoc");
                                     statemachine.grandDynamicRoleForEmployee(document, lecmErrandWf_changeControllerNewController, "ERRANDS_CONTROLLER");
 
-                                    var notificationText = documentScript.wrapperLink(currentEmployee, currentEmployee.properties["lecm-orgstr:employee-short-name"]);
-                                    notificationText +=  "назначил(а) вас контроллером по поручению ";
-                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-                                    notificationText += " № {lecm-errands:number}";
-
                                     var newController = null;
                                     var newControllerAssoc = document.assocs["lecm-errands:controller-assoc"];
                                     if (newControllerAssoc != null &amp;&amp; newControllerAssoc.length == 1) {
                                         newController = newControllerAssoc[0];
                                     }
-                                    var recipients = [];
-                                    recipients.push(newController);
-                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+
+                                    notifications.sendNotificationFromCurrentUser({
+                                        recipients: [newController],
+                                        templateCode: 'ERRANDS_CONTROLLER_ASSIGN',
+                                        templateConfig: {
+                                            mainObject: document,
+                                            eventExecutor: currentEmployee
+                                        },
+                                        dontCheckAccessToObject: true
+                                    });
                                 }
                             }
                         </activiti:string>

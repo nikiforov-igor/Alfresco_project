@@ -620,8 +620,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private String parseTemplate(String template, Map<String, Object> objects) throws TemplateRunException, TemplateParseException {
 		String parsed;
 		if (StringUtils.isNotEmpty(template)) {
-			Parser parcer = new SpelParserImpl(applicationContext);
-			parsed = parcer.runTemplate(template, objects);
+			Parser parser = new SpelParserImpl(applicationContext);
+			parsed = parser.runTemplate(template, objects);
 		} else {
 			parsed = null;
 		}

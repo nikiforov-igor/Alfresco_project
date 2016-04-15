@@ -25,12 +25,14 @@
 		                            executor = executorAssoc[0];
 		                        }
 
-		                        var recipients = [];
-		                        recipients.push(executor);
-		                        var notificationText = documentScript.wrapperLink(controller, "{lecm-errands:controller-assoc/lecm-orgstr:employee-short-name}");
-		                        notificationText += " принял исполнение поручения: ";
-		                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+								notifications.sendNotificationFromCurrentUser({
+									recipients: [executor],
+									templateCode: 'ERRANDS_ACCEPT_EXEC',
+									templateConfig: {
+										mainObject: document,
+										eventExecutor: controller
+									}
+								});
 
 		                        if (document.properties["lecm-errands:without-initiator-approval"]) {
 		                            execution.setVariable("controllerApproveResult", "executed");
@@ -41,13 +43,14 @@
 			                            initiator = initiatorAssoc[0];
 			                        }
 
-			                        recipients = [];
-			                        recipients.push(initiator);
-			                        var notificationText = documentScript.wrapperLink(controller, "{lecm-errands:controller-assoc/lecm-orgstr:employee-short-name}");
-			                        notificationText += " подтвердил выполнения поручения ";
-			                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-			                        notificationText += " № {lecm-errands:number}";
-			                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+									notifications.sendNotificationFromCurrentUser({
+										recipients: [initiator],
+										templateCode: 'ERRANDS_CONFIRM_EXEC',
+										templateConfig: {
+											mainObject: document,
+											eventExecutor: controller
+										}
+									});
 
 		                            execution.setVariable("controllerApproveResult", "approveInitiator");
 		                        }

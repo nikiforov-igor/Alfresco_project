@@ -31,11 +31,14 @@
 		                            initiator = initiatorAssoc[0];
 		                        }
 
-		                        var notificationText = documentScript.wrapperLink(initiator, "{lecm-errands:initiator-assoc/lecm-orgstr:employee-short-name}");
-		                        notificationText += " принял исполнение поручения:  ";
-		                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-		                        notificationText += " № {lecm-errands:number}";
-		                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+								notifications.sendNotificationFromCurrentUser({
+									recipients: recipients,
+									templateCode: 'ERRANDS_ACCEPT_EXEC',
+									templateConfig: {
+										mainObject: document,
+										eventExecutor: initiator
+									}
+								});
 	                        }
                         </activiti:string>
                     </activiti:field>

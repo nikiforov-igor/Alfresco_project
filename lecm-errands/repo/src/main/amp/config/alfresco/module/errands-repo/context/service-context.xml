@@ -58,6 +58,7 @@
 	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 	                  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                       businessJournalLogEventsPolicy, regNumbers.regNumbersTemplatesDicBootstrap,
+                      ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       errands.dictionaries.LogicEcmModelsBootstrap">
 		<property name="dictionaries">
 			<list>
@@ -65,6 +66,7 @@
 				<value>alfresco/module/${artifactId}/models/lecm-errands-business-journal-objectType-items.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-roles-items.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-regnumbers.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/errands-nt-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -516,13 +518,11 @@
     <bean id="errands.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
-          ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
           dataSourcePolicy,reportDescriptorPolicy">
         <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/reports/exec-doc-tree.xml</value>
-                <value>alfresco/module/${artifactId}/dictionaries/errands-nt-items.xml</value>
             </list>
         </property>
         <property name="xmlImportListener" ref="errands.reportsDeployer"/>

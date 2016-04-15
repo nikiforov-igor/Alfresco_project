@@ -21,14 +21,15 @@
 			                        if (controllerAssoc != null &amp;&amp; controllerAssoc.length == 1) {
 	                                    var controller = controllerAssoc[0];
 
-				                        var recipients = [];
-				                        recipients.push(executor);
-				                        var notificationText = documentScript.wrapperLink(controller, "{lecm-errands:controller-assoc/lecm-orgstr:employee-short-name}");
-				                        notificationText += documentScript.wrapperTitle(" отклонил ", lecmErrandWf_controllerDeclineReason);;
-				                        notificationText += "исполнение вам поручения: ";
-				                        notificationText += documentScript.wrapperDocumentLink(document, "{lecm-errands:title}");
-				                        notificationText += " № {lecm-errands:number}";
-				                        notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+										notifications.sendNotificationFromCurrentUser({
+											recipients: [executor],
+											templateCode: 'ERRANDS_DECLINE_EXEC',
+											templateConfig: {
+												mainObject: document,
+												eventExecutor: controller,
+												reason: lecmErrandWf_controllerDeclineReason
+											}
+										});
 
 				                        var logText = "#initiator ";
 				                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_controllerDeclineReason);
