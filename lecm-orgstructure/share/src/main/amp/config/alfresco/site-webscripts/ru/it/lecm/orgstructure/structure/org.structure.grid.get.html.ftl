@@ -51,8 +51,32 @@
                                                     {
                                                         text:me.msg("message.delete.unit.failure.has.children")
                                                     });
-                                        } else { // удаляем! вызов метода из грида
-                                            me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+                                        } else {
+                                            // проверим нет ли связанных номенклатурных дел
+                                            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/hasUnitNomenclatureCases?nodeRef=" + deletedUnit.nodeRef;
+                                            var callback = {
+                                                success: function (oResponse) {
+                                                    var oResults = eval("(" + oResponse.responseText + ")");
+                                                    if (oResults && oResults.hasNomenclatureCases && oResults.hasNomenclatureCases == "true") { // нельзя удалять - есть связанные номенклатурные дела
+                                                        Alfresco.util.PopupManager.displayMessage(
+                                                        {
+                                                            text:me.msg("message.delete.unit.failure.has.nomenclature.cases")
+                                                        });
+                                                    }
+                                                    else { // удаляем! вызов метода из грида
+                                                        me.onDelete(p_items, owner, actionsConfig, fnDeleteComplete, null);
+                                                    }
+                                                },
+                                                failure:function (oResponse) {
+                                                    Alfresco.util.PopupManager.displayMessage(
+                                                            {
+                                                                text:me.msg("message.delete.unit.error")
+                                                            });
+                                                },
+                                                argument:{
+                                                }
+                                            };
+                                            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
                                         }
                                     },
                                     failure:function (oResponse) {
