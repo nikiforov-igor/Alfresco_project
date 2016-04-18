@@ -49,7 +49,7 @@
             <item name="cm:MEETINGS_INVITE_TO_SITE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[MEETINGS_INVITE_TO_SITE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} пригласил вас на сайт <a href="{#url}">{#mainObject.attribute("cm:title")}</a>}]]></property>
+                    <![CDATA[{#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} пригласил вас на сайт <a href="{#url}">{#mainObject.attribute("cm:title")}</a>]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Совещания. Приглашение на сайт]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
