@@ -2619,10 +2619,13 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
     if (authorAssocs && authorAssocs.length == 1) {
       author = authorAssocs[0];
 
-      var notificationText = "Проект документа ";
-      notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM|Не присвоено}");
-      notificationText += " направлен вам на доработку";
-	  notifications.sendNotification([author.nodeRef.toString()], notificationText, protocol);
+	  notifications.sendNotification({
+		recipients: [author.nodeRef.toString()],
+	  	templateCode: 'PROTOCOL_REWORK',
+	  	templateConfig: {
+	      mainObject: protocol
+	  	}
+	  });
     }
 
 })();]]></value>
@@ -4087,10 +4090,13 @@ protocolService.setPointsStatusRemoved(protocol);]]></value>
     }
 
     /* рассылаем уведомление */
-    var notificationText = "Документ ";
-    notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-eds-document:document-type-assoc/cm:name}, проект №{~REGNUM|Не присвоено}");
-    notificationText += " поступил на регистрацию";
-	notifications.sendNotification(registrars, notificationText, protocol);
+	notifications.sendNotification({
+    	recipients: registrars,
+    	templateCode: 'PROTOCOL_REGISTER',
+    	templateConfig: {
+			mainObject: protocol
+		}
+	});
 })();]]></value>
 															</property>
 															<property>
@@ -5698,9 +5704,14 @@ protocolService.setPointsStatusRemoved(protocol);]]></value>
 
 						var pointNumber = pointAssocs[i].properties["lecm-document:indexTableRow"];
 
-						var notificationText = "Вы назначены исполнителем по пункту " + pointNumber + " протокола " ;
-						notificationText += documentScript.wrapperDocumentLink(protocol, "{lecm-document:present-string}");
-						notifications.sendNotification([pointExecutor.nodeRef.toString()], notificationText, protocol);
+						notifications.sendNotification({
+							recipients: [pointExecutor.nodeRef.toString()],
+							templateCode: 'PROTOCOL_POINT_EXECUTOR',
+							templateConfig: {
+								mainObject: protocol,
+								pointNumber: pointNumber
+							}
+						});
 					}
 				}
 			}

@@ -1,9 +1,6 @@
 package ru.it.lecm.meetings.beans;
 
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.logging.Level;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -12,7 +9,6 @@ import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -41,6 +37,10 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.workflow.routes.api.RoutesService;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.logging.Level;
 
 /**
  *
@@ -619,14 +619,13 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 	
 	private void sendNotificationAboutInviteToSite(NodeRef site, String siteShortName, List<NodeRef> recipients){
 		SysAdminParams params = serviceRegistry.getSysAdminParams();
-		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+		Map<String, Object> objects = new HashMap<>();
+		String url = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+		url = url + "/share/page/site/" + siteShortName + "/dashboard";
+		objects.put("url", url);
+		objects.put("eventExecutor", orgstructureService.getCurrentEmployee());
 
-		String author = AuthenticationUtil.getSystemUserName();
-		String employeeName = (String) nodeService.getProperty(orgstructureService.getCurrentEmployee(), OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-		String siteTitle = (String) nodeService.getProperty(site, ContentModel.PROP_TITLE);
-		String siteLinkUrl = "<a href=\"" + serverUrl + "/share/page/site/" + siteShortName + "/dashboard" + "\">" + siteTitle + "</a>";
-		String text = employeeName + " пригласил вас на сайт " + siteLinkUrl;
-		notificationsService.sendNotification(author, site, text, recipients, null);
+		notificationsService.sendNotificationByTemplate(site, recipients, "MEETINGS_INVITE_TO_SITE", objects);
 	}
 	
 	private boolean addAuthorityToSite(final String siteShortName, final String permissionGroup, final NodeRef employee){
