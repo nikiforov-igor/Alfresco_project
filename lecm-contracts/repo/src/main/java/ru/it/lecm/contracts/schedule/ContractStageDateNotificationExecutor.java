@@ -1,22 +1,16 @@
 package ru.it.lecm.contracts.schedule;
 
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: PMelnikov
@@ -25,15 +19,10 @@ import java.util.List;
  */
 public class ContractStageDateNotificationExecutor extends ActionExecuterAbstractBase {
 
-    private ContractsBeanImpl contractsService;
     private NotificationsService notificationsService;
     private NodeService nodeService;
     private DocumentService documentService;
     private DocumentTableService documentTableService;
-
-    public void setContractsService(ContractsBeanImpl contractsService) {
-        this.contractsService = contractsService;
-    }
 
     public void setNotificationsService(NotificationsService notificationsService) {
         this.notificationsService = notificationsService;
@@ -53,23 +42,19 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
 
     @Override
     protected void executeImpl(Action action, NodeRef nodeRef) {
-        Notification notification = new Notification();
+        Boolean isStartPoint = getIsStartPoint(nodeRef);
+        if (isStartPoint != null) {
+            Integer stageNumber = (Integer) nodeService.getProperty(nodeRef, DocumentTableService.PROP_INDEX_TABLE_ROW);
+            NodeRef documentRef = documentTableService.getDocumentByTableDataRow(nodeRef);
+            Map<String, Object> objects = new HashMap<>();
+            objects.put("stageNumber", stageNumber);
+            objects.put("isStartPoint", isStartPoint);
 
-        NodeRef documentRef = documentTableService.getDocumentByTableDataRow(nodeRef);
-        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-        NodeRef initiator = documentService.getDocumentAuthor(documentRef);
-        if (initiator != null) {
+            ArrayList<NodeRef> employeeList = new ArrayList<>();
+            NodeRef initiator = documentService.getDocumentAuthor(documentRef);
             employeeList.add(initiator);
-        }
 
-        String description = getNotificationDescription(documentRef, nodeRef);
-        if (description != null) {
-            notification.setRecipientEmployeeRefs(employeeList);
-            notification.setAuthor(AuthenticationUtil.getSystemUserName());
-            notification.setDescription(description);
-            notification.setObjectRef(nodeRef);
-            notification.setInitiatorRef(null);
-            notificationsService.sendNotification(notification);
+            notificationsService.sendNotificationByTemplate(documentRef, employeeList, "CONTRACT_WORK_PLANNING", objects);
         }
     }
 
@@ -77,7 +62,7 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
     protected void addParameterDefinitions(List<ParameterDefinition> parameterDefinitions) {
     }
 
-    private String getNotificationDescription(NodeRef document, NodeRef row) {
+    private Boolean getIsStartPoint(NodeRef row) {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
@@ -97,8 +82,6 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
         Object stageStartDate = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_START_DATE);
         Object stageEndDate = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_END_DATE);
         Object stageStatus = nodeService.getProperty(row, ContractsBeanImpl.PROP_STAGE_STATUS);
-        Integer index = (Integer) nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW);
-        String docDesc = contractsService.wrapperLink(document, nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(document));
 
         Date normalStartDate = null;
         if (stageStartDate != null) {
@@ -120,12 +103,11 @@ public class ContractStageDateNotificationExecutor extends ActionExecuterAbstrac
             normalEndDate = calendar.getTime();
         }
 
-        String desc = null;
         if (normalStartDate != null && startPoint.equals(normalStartDate) && "Не начат".equals(stageStatus)) {
-            desc = "Сегодня запланировано начало работ по этапу № " + index + " к договору " + docDesc;
+            return true;
         } else if (normalEndDate != null && endPoint.equals(normalEndDate) && !"Закрыт".equals(stageStatus)){
-            desc = "Сегодня запланировано окончание работ по этапу № " + index + " к договору " + docDesc;
+            return false;
         }
-        return desc;
+        return null;
     }
 }

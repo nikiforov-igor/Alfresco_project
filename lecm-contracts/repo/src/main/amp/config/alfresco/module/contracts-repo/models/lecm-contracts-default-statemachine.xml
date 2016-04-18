@@ -1923,22 +1923,19 @@ regnumbers.registerProject(contract, "CONTRACT_PROJECT_REGNUM");
 contract.save();
 
 var curators =  orgstructure.getEmployeesByBusinessRoleId("CONTRACT_CURATOR", true);
-var notificationText = "Зарегистрирован проект договора c ";
 var partnerAssocs = contract.assocs["lecm-contract:partner-assoc"];
-if (partnerAssocs != null && partnerAssocs.length == 1) {
-	notificationText += documentScript.wrapperLink(partnerAssocs[0], "{lecm-contract:partner-assoc/lecm-contractor:shortname}");
-}
-
-notificationText += ", вид договора {lecm-contract:typeContract-assoc/cm:name}";
-notificationText += ", тематика {lecm-document:subject-assoc/cm:name}";
-notificationText += ", исполнитель ";
 var executor = contract.properties["lecm-document:creator-ref"];
-notificationText += documentScript.wrapperLink(executor, "{lecm-document:creator}");
 
-notificationText += ", номер проекта ";
-notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-document-aspects:reg-project-data-number}");
-
-notifications.sendNotificationFromCurrentUser(curators, notificationText, contract);]]></value>
+notifications.sendNotificationFromCurrentUser({
+    recipients: curators,
+    templateCode: 'CONTRACT_PROJECT_REGISTER',
+    templateConfig: {
+        mainObject: contract,
+        partner: partnerAssocs[0],
+        executor: executor
+    }
+});
+]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -8102,17 +8099,23 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var contract = bpm_package.children[0];
 
-var notificationText = "Поступил новый договор на регистрации, номер проекта: ";
-notificationText += documentScript.wrapperDocumentLink(contract,"{lecm-document-aspects:reg-project-data-number}");
 var recorders = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_RECORDER", true);
-notifications.sendNotificationFromCurrentUser(recorders, notificationText, contract);
+notifications.sendNotificationFromCurrentUser({
+    recipients: recorders,
+    templateCode: 'CONTRACT_REGISTER',
+    templateConfig: {
+        mainObject: contract,
+    }
+});
 
-var notificationText = "Проект договор номер ";
-notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-document-aspects:reg-project-data-number}");
-notificationText += " направлен на регистрацию";
 var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR", true);
-
-notifications.sendNotificationFromCurrentUser(executors,notificationText, contract);]]></value>
+notifications.sendNotificationFromCurrentUser({
+    recipients: executors,
+    templateCode: 'CONTRACT_DIRECT_TO_REGISTER',
+    templateConfig: {
+        mainObject: contract,
+    }
+});]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -13912,13 +13915,14 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var contract = bpm_package.children[0];
-var notificationText = "Проект договор номер ";
-notificationText +=  documentScript.wrapperDocumentLink(contract,"{lecm-document-aspects:reg-project-data-number}");
-
-notificationText += " подписан. Подтвердите подписание Контрагентом";
-
 var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR",true);
-notifications.sendNotificationFromCurrentUser(executors,notificationText, contract);]]></value>
+notifications.sendNotificationFromCurrentUser({
+    recipients: executors,
+    templateCode: 'CONTRACT_PARTNER_SIGN_APPROVE',
+    templateConfig: {
+        mainObject: contract,
+    }
+});]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>

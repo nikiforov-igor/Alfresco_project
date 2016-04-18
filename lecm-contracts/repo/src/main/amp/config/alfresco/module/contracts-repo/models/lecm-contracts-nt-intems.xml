@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
+        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
+        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
+        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
+        <property name="lecm-dic:plane"><![CDATA[true]]></property>
+        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
+        <items>
+            <item name="cm:CONTRACT_REGISTER" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Поступил новый договор на регистрации, номер проекта: {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))}]]></property>
+                <property name="cm:name"><![CDATA[CONTRACT_REGISTER]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Договор. Поступил на регистрации]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:CONTRACT_PROJECT_REGISTER" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[CONTRACT_PROJECT_REGISTER]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Зарегистрирован проект договора c {#partner.wrapAsLink(#partner.attribute("lecm-contractor:shortname"))}, вид договора {#mainObject.getFormatted("{lecm-contract:typeContract-assoc/cm:name}, тематика {lecm-document:subject-assoc/cm:name}")}, исполнитель {#executor.wrapAsLink(#executor.attribute("lecm-orgstr:employee-short-name"))}, номер проекта {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Договор. Зарегистрирован проект договора]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:CONTRACT_DIRECT_TO_REGISTER" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[CONTRACT_DIRECT_TO_REGISTER]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Проект договор номер {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))} направлен на регистрацию]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Договор. Направлен на регистрацию]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:CONTRACT_PARTNER_SIGN_APPROVE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[CONTRACT_PARTNER_SIGN_APPROVE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Проект договор номер #mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))} подписан. Подтвердите подписание Контрагентом]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Договор. Подтвердить подписание контрагентом]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ADDITIONAL_DOCUMENT_PROJECT_REGISTER" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ADDITIONAL_DOCUMENT_PROJECT_REGISTER]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Зарегистрирован проект документ вида {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-additional-document:additionalDocumentType/cm:name}"))} к договору номер {#contract.wrapAsLink(#contract.attribute("lecm-document:regnum"))}, вид договора {#contract.getFormatted("{lecm-contract:typeContract-assoc/cm:name}, тематика {lecm-document:subject-assoc/cm:name}")}, исполнитель {#executor.wrapAsLink(#executor.attribute("lecm-orgstr:employee-short-name"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Документ к договору. Зарегистрирован проект]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ADDITIONAL_DOCUMENT_SIGN" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ADDITIONAL_DOCUMENT_SIGN]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Вам поступил на подписание {#mainObject.wrapAsLink(#mainObject.getFormatted("документ {lecm-additional-document:additionalDocumentType/cm:name}")} к договору номер {#contract.wrapAsLink(#contract.attribute("lecm-document:regnum"))}, исполнитель {#executor.wrapAsLink(#executor.attribute("lecm-orgstr:employee-short-name"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Документ к договору. Поступил на подписание]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:ADDITIONAL_DOCUMENT_SIGNED" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[ADDITIONAL_DOCUMENT_SIGNED]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-additional-document:additionalDocumentType/cm:name}"))} к договору номер {#contract.wrapAsLink(#contract.attribute("lecm-document:regnum"))} подписан.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Документ к договору. Подписан]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:CONTRACT_WORK_PLANNING" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[CONTRACT_WORK_PLANNING]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Сегодня запланировано {#isStartPoint ? "начало" : "окончание"} работ по этапу № {#stageNumber} к договору {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Договор. Запланированны работы]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:CONTRACT_EXECUTION_TERM" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[CONTRACT_EXECUTION_TERM]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[{#isStarting ? "Начинается" : "Заканчивается"} срок исполнения по договору {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}]]></property>
+                <property name="lecm-notification-template:description"><![CDATA[Договор. Срок исполнения]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+        </items>
+    </item>
+</items>

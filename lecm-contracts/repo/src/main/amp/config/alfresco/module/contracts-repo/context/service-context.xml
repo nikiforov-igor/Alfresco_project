@@ -115,6 +115,7 @@
           parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
                       ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                      ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       businessJournalLogEventsPolicy, documents.LogicEcmConnectionTypesBootstrap,
 					  regNumbers.regNumbersTemplatesDicBootstrap">
         <property name="dictionaries">
@@ -127,6 +128,7 @@
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-regnumbers.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-nt-items.xml</value>
             </list>
         </property>
     </bean>
@@ -266,7 +268,6 @@
     <bean id="contractsInitiatorNotificationExecutor"
           class="ru.it.lecm.contracts.schedule.InitiatorEveryDayNotificationExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
-        <property name="contractsService" ref="contractService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
@@ -324,7 +325,6 @@
     <bean id="contractsStageDateNotificationExecutor"
           class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
-        <property name="contractsService" ref="contractService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>

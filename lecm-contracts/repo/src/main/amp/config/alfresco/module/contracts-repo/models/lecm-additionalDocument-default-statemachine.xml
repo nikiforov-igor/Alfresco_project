@@ -2537,23 +2537,18 @@ regnumbers.registerProject(additionalDocument, "CONTRACT_DOCUMENT_PROJECT_REGNUM
 var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
 if (contractAssocs != null && contractAssocs.length == 1) {
     var contract = contractAssocs[0];
-    var notificationText = "Зарегистрирован проект документ вида ";
-    var typeAssocs = additionalDocument.assocs["lecm-additional-document:additionalDocumentType"];
-    if (typeAssocs != null && typeAssocs.length == 1) {
-        notificationText += documentScript.wrapperLink(typeAssocs[0], "{lecm-additional-document:additionalDocumentType/cm:name}");
-    }
-    notificationText += " к договору номер ";
-    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-document:regnum}");
-
-    notificationText += ", вид договора {lecm-additional-document:document-assoc/lecm-contract:typeContract-assoc/cm:name}";
-    notificationText += ", тематика {lecm-additional-document:document-assoc/lecm-document:subject-assoc/cm:name}";
-
-    notificationText += ", исполнитель ";
     var executor = contract.properties["lecm-document:creator-ref"];
-    notificationText += documentScript.wrapperLink(executor, "{lecm-additional-document:document-assoc/lecm-document:creator}");
-
     var curators = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_CURATOR", true);
-    notifications.sendNotificationFromCurrentUser(curators, notificationText, additionalDocument);
+
+    notifications.sendNotificationFromCurrentUser({
+        recipients: curators,
+        templateCode: 'ADDITIONAL_DOCUMENT_PROJECT_REGISTER',
+        templateConfig: {
+            mainObject: additionalDocument,
+            contract: contract,
+            executor: executor
+        }
+    });
 																	}]]></value>
                                                             </property>
                                                             <property>
@@ -7816,20 +7811,18 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																	var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
 																	if (contractAssocs != null && contractAssocs.length == 1) {
     var contract = contractAssocs[0];
-
-    var notificationText = "Вам поступил на подписание";
-    notificationText += documentScript.wrapperDocumentLink(additionalDocument, "документ");
-    notificationText += "{lecm-additional-document:additionalDocumentType/cm:name}";
-
-    notificationText += " к договору номер ";
-    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-document:regnum}");
-
-    notificationText += ", исполнитель ";
     var executor = contract.properties["lecm-document:creator-ref"];
-    notificationText += documentScript.wrapperLink(executor, "{lecm-additional-document:document-assoc/lecm-document:creator}");
-
     var signers = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_SIGNER", true);
-    notifications.sendNotificationFromCurrentUser(signers, notificationText, additionalDocument);
+
+    notifications.sendNotificationFromCurrentUser({
+        recipients: signers,
+        templateCode: 'ADDITIONAL_DOCUMENT_SIGN',
+        templateConfig: {
+            mainObject: additionalDocument,
+            contract: contract,
+            executor: executor
+        }
+    });
 																	}]]></value>
                                                             </property>
                                                             <property>
@@ -8915,17 +8908,16 @@ additionalDocument.save();
 																	var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
 																	if (contractAssocs != null && contractAssocs.length == 1) {
     var contract = contractAssocs[0];
-
-    var notificationText = "Документ ";
-    notificationText += documentScript.wrapperDocumentLink(additionalDocument, "{lecm-additional-document:additionalDocumentType/cm:name}");
-
-    notificationText += " к договору номер ";
-    notificationText += documentScript.wrapperDocumentLink(contract, "{lecm-additional-document:document-assoc/lecm-document:regnum}");
-
-    notificationText += " подписан";
-
     var executors = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_EXECUTOR", true);
-    notifications.sendNotificationFromCurrentUser(executors, notificationText, additionalDocument);
+
+    notifications.sendNotificationFromCurrentUser({
+        recipients: executors,
+        templateCode: 'ADDITIONAL_DOCUMENT_SIGNED',
+        templateConfig: {
+            mainObject: additionalDocument,
+            contract: contract
+        }
+    });
 																	}]]></value>
                                                             </property>
                                                             <property>
