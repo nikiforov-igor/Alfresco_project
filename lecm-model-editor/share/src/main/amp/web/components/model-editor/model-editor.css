@@ -56,3 +56,7 @@
 .models .form-container select.yui-dt-dropdown {
 	width:100%;
 }
+
+.share-form .form-container .form-fields .set  .control.datatable.models .container .value-div {
+	overflow: visible;
+}

@@ -75,7 +75,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 
 		onReady: function () {
-			this.widgets.datasource = new YAHOO.util.DataSource(this.categoryArray, {
+			this.widgets.datasource = new YAHOO.util.DataSource(this.options.data, {
 				responseSchema: this.options.responseSchema
 			});
 

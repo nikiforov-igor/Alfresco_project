@@ -10,7 +10,8 @@
 <@inlineScript group='model-editor'>
 (function () {
 	new LogicECM.module.ModelEditor.ContentControl('${fieldHtmlId}', {
-		value: '${field.value}'
+		itemKind: '${form.arguments.itemKind}',
+		itemId: '${form.arguments.itemId}'
 	}, ${messages});
 })();
 </@>

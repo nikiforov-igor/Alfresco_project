@@ -18,7 +18,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 	YAHOO.extend(LogicECM.module.ModelEditor.ContentControl, Alfresco.component.Base, {
 
 		options: {
-			value: null
+			itemKind: null,
+			itemId: null
 		},
 
 		deferredInit: null,
@@ -36,6 +37,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				modelObject.prop_namespace_name = (model._name.substr(0,model._name.indexOf(':')));
 
 				modelObject.model_description = model.description;
+				modelObject.rating = 'false';
+				modelObject.signed = 'false';
 				if(YAHOO.lang.isObject(model.types)) {
 					if(YAHOO.lang.isArray(model.types.type)) {
 						modelObject.typeTitle = model.types.type[0].title;
@@ -493,10 +496,10 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		_initModelContent: function () {
 			var nodeRef;
-			if (this.options.value) {
-				nodeRef = new Alfresco.util.NodeRef('workspace://SpacesStore/25ab9269-e1b9-45ea-b494-066d52977212');
+			if (this.options.itemKind === 'node' && this.options.itemId) {
+				nodeRef = new Alfresco.util.NodeRef(this.options.itemId);
 				Alfresco.util.Ajax.request({
-					url: Alfresco.constants.PROXY_URI_RELATIVE + 'api/node/content' + nodeRef.uri,
+					url: Alfresco.constants.PROXY_URI_RELATIVE + 'api/node/content/' + nodeRef.uri,
 					successCallback: {
 						scope: this,
 						fn: function (successResponse) {
