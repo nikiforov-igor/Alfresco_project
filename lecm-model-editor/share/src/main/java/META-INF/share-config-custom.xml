@@ -11,82 +11,94 @@
 		<forms>
 			<form id="edit-model">
 				<field-visibility>
+					<show id="cm:name" />
 					<show id="cm:modelActive" />
 					<show id="cm:content" />
-					<show id="prop_cm_lecmModelDescription" />
-					<show id="prop_cm_lecmTypeTitle" />
-					<show id="prop_cm_lecmParentRef" />
-					<show id="prop_cm_lecmPresentString" />
-					<show id="prop_cm_lecmArmUrl" />
-					<show id="prop_cm_lecmCreateUrl" />
-					<show id="prop_cm_lecmViewUrl" />
-					<show id="prop_cm_lecmAuthorProperty" />
-					<show id="prop_cm_lecmRegNumbersProperties" />
-					<show id="prop_cm_lecmRating" />
-					<show id="prop_cm_lecmSigned" />
+					<show id="cm:lecmModelName"/>
+					<show id="cm:lecmModelNamespace"/>
+					<show id="cm:lecmModelDescription" />
+					<show id="cm:lecmTypeName"/>
+					<show id="cm:lecmTypeTitle" />
+					<show id="cm:lecmParentRef" />
+					<show id="cm:lecmPresentString" />
+					<show id="cm:lecmArmUrl" />
+					<show id="cm:lecmCreateUrl" />
+					<show id="cm:lecmViewUrl" />
+					<show id="cm:lecmAuthorProperty" />
+					<show id="cm:lecmRegNumbersProperties" />
+					<show id="cm:lecmRating" />
+					<show id="cm:lecmSigned" />
 					<show id="cm:lecmModelCategories"/>
 					<show id="cm:lecmModelAttributes"/>
 					<show id="cm:lecmModelAssociations"/>
 					<show id="cm:lecmModelTables"/>
 				</field-visibility>
 				<appearance>
-					<set id="parameters"/>
-					<set id="datatables"/>
-
-					<field id="cm:modelActive" set="parameters" />
-					<field id="cm:content" set="parameters">
-						<!--<control template="/ru/it/lecm/controls/model-editor.ftl" />-->
+					<field id="cm:name">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="cm:modelActive"/>
+					<field id="cm:content">
 						<control template="/ru/it/lecm/controls/content.ftl" />
 					</field>
-					<field id="prop_cm_lecmModelDescription" set="parameters" label-id="lecm.meditor.lbl.model.desc">
+					<field id="cm:lecmModelName">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="cm:lecmModelNamespace">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="cm:lecmModelDescription" label-id="lecm.meditor.lbl.model.desc">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmTypeTitle" set="parameters" label-id="lecm.meditor.lbl.doc.desc">
+					<field id="cm:lecmTypeName">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="cm:lecmTypeTitle" label-id="lecm.meditor.lbl.doc.desc">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmParentRef" set="parameters" label-id="lecm.meditor.lbl.parent.doc">
+					<field id="cm:lecmParentRef" label-id="lecm.meditor.lbl.parent.doc">
 						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
 							<control-param name="options">lecm-document:base|LECM BASE,lecm-eds-document:base|LECM EDS BASE</control-param>
 						</control>
 					</field>
-					<field id="prop_cm_lecmPresentString" set="parameters" label-id="lecm.meditor.lbl.templ.pres.string">
+					<field id="cm:lecmPresentString" label-id="lecm.meditor.lbl.templ.pres.string">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmArmUrl" set="parameters" label-id="lecm.meditor.lbl.docs.list.page">
+					<field id="cm:lecmArmUrl" label-id="lecm.meditor.lbl.docs.list.page">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmCreateUrl" set="parameters" label-id="lecm.meditor.lbl.docs.create.page">
+					<field id="cm:lecmCreateUrl" label-id="lecm.meditor.lbl.docs.create.page">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmViewUrl" set="parameters" label-id="lecm.meditor.lbl.docs.view.page">
+					<field id="cm:lecmViewUrl" label-id="lecm.meditor.lbl.docs.view.page">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmAuthorProperty" set="parameters" label-id="lecm.meditor.lbl.author">
+					<field id="cm:lecmAuthorProperty" label-id="lecm.meditor.lbl.author">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmRegNumbersProperties" set="parameters" label-id="lecm.meditor.lbl.reg.numbers">
+					<field id="cm:lecmRegNumbersProperties" label-id="lecm.meditor.lbl.reg.numbers">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmRating" set="parameters" label-id="lecm.meditor.lbl.rating">
+					<field id="cm:lecmRating" label-id="lecm.meditor.lbl.rating">
 						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
 							<control-param name="options">true|Да,false|Нет</control-param>
 						</control>
 					</field>
-					<field id="prop_cm_lecmSigned" set="parameters" label-id="lecm.meditor.lbl.take.part.edi">
+					<field id="cm:lecmSigned" label-id="lecm.meditor.lbl.take.part.edi">
 						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
 							<control-param name="options">true|Да,false|Нет</control-param>
 						</control>
 					</field>
-					<field id="cm:lecmModelCategories" set="datatables" label-id="lecm.meditor.lbl.attachs.categors">
+					<field id="cm:lecmModelCategories" label-id="lecm.meditor.lbl.attachs.categors">
 						<control template="/ru/it/lecm/controls/categories-datatable.ftl"/>
 					</field>
-					<field id="cm:lecmModelAttributes" set="datatables" label-id="lecm.meditor.lbl.attrs">
+					<field id="cm:lecmModelAttributes" label-id="lecm.meditor.lbl.attrs">
 						<control template="/ru/it/lecm/controls/attributes-datatable.ftl"/>
 					</field>
-					<field id="cm:lecmModelAssociations" set="datatables" label-id="lecm.meditor.lbl.assocs">
+					<field id="cm:lecmModelAssociations" label-id="lecm.meditor.lbl.assocs">
 						<control template="/ru/it/lecm/controls/associations-datatable.ftl"/>
 					</field>
-					<field id="cm:lecmModelTables" set="datatables" label-id="lecm.meditor.lbl.tables">
+					<field id="cm:lecmModelTables" label-id="lecm.meditor.lbl.tables">
 						<control template="/ru/it/lecm/controls/tables-datatable.ftl"/>
 					</field>
 				</appearance>
@@ -102,84 +114,93 @@
 					<show id="cm:name" />
 					<show id="cm:modelActive" />
 					<show id="cm:content" />
-					<show id="prop_cm_lecmModelDescription" />
-					<show id="prop_cm_lecmTypeTitle" />
-					<show id="prop_cm_lecmParentRef" />
-					<show id="prop_cm_lecmPresentString" />
-					<show id="prop_cm_lecmArmUrl" />
-					<show id="prop_cm_lecmCreateUrl" />
-					<show id="prop_cm_lecmViewUrl" />
-					<show id="prop_cm_lecmAuthorProperty" />
-					<show id="prop_cm_lecmRegNumbersProperties" />
-					<show id="prop_cm_lecmRating" />
-					<show id="prop_cm_lecmSigned" />
+					<show id="cm:lecmModelName"/>
+					<show id="cm:lecmModelNamespace"/>
+					<show id="cm:lecmModelDescription" />
+					<show id="cm:lecmTypeName"/>
+					<show id="cm:lecmTypeTitle" />
+					<show id="cm:lecmParentRef" />
+					<show id="cm:lecmPresentString" />
+					<show id="cm:lecmArmUrl" />
+					<show id="cm:lecmCreateUrl" />
+					<show id="cm:lecmViewUrl" />
+					<show id="cm:lecmAuthorProperty" />
+					<show id="cm:lecmRegNumbersProperties" />
+					<show id="cm:lecmRating" />
+					<show id="cm:lecmSigned" />
 					<show id="cm:lecmModelCategories"/>
 					<show id="cm:lecmModelAttributes"/>
 					<show id="cm:lecmModelAssociations"/>
 					<show id="cm:lecmModelTables"/>
 				</field-visibility>
 				<appearance>
-					<set id="parameters"/>
-					<set id="datatables"/>
-					<field id="cm:name" set="parameters">
+					<field id="cm:name">
 						<constraint-handlers>
 							<constraint type="REGEX" validation-handler="LogicECM.module.modelNameValidation" message-id="lecm.meditor.msg.invalid.model.name" event="keyup"/>
 						</constraint-handlers>
 					</field>
-					<field id="cm:modelActive" set="parameters" />
-					<field id="cm:content" set="parameters">
-						<!--<control template="/ru/it/lecm/controls/model-editor.ftl" />-->
+					<field id="cm:modelActive" />
+					<field id="cm:content">
 						<control template="/ru/it/lecm/controls/content.ftl" />
 					</field>
-					<field id="prop_cm_lecmModelDescription" set="parameters" label-id="lecm.meditor.lbl.model.desc">
+					<field id="cm:lecmModelName">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="cm:lecmModelNamespace">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="cm:lecmModelDescription" label-id="lecm.meditor.lbl.model.desc">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmTypeTitle" set="parameters" label-id="lecm.meditor.lbl.doc.desc">
+					<field id="cm:lecmTypeName">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="cm:lecmTypeTitle" label-id="lecm.meditor.lbl.doc.desc">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmParentRef" set="parameters" label-id="lecm.meditor.lbl.parent.doc">
+					<field id="cm:lecmParentRef" label-id="lecm.meditor.lbl.parent.doc">
 						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
 							<control-param name="options">lecm-document:base|LECM BASE,lecm-eds-document:base|LECM EDS BASE</control-param>
 						</control>
 					</field>
-					<field id="prop_cm_lecmPresentString" set="parameters" label-id="lecm.meditor.lbl.templ.pres.string">
+					<field id="cm:lecmPresentString" label-id="lecm.meditor.lbl.templ.pres.string">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmArmUrl" set="parameters" label-id="lecm.meditor.lbl.docs.list.page">
+					<field id="cm:lecmArmUrl" label-id="lecm.meditor.lbl.docs.list.page">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmCreateUrl" set="parameters" label-id="lecm.meditor.lbl.docs.create.page">
+					<field id="cm:lecmCreateUrl" label-id="lecm.meditor.lbl.docs.create.page">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmViewUrl" set="parameters" label-id="lecm.meditor.lbl.docs.view.page">
+					<field id="cm:lecmViewUrl" label-id="lecm.meditor.lbl.docs.view.page">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmAuthorProperty" set="parameters" label-id="lecm.meditor.lbl.author">
+					<field id="cm:lecmAuthorProperty" label-id="lecm.meditor.lbl.author">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmRegNumbersProperties" set="parameters" label-id="lecm.meditor.lbl.reg.numbers">
+					<field id="cm:lecmRegNumbersProperties" label-id="lecm.meditor.lbl.reg.numbers">
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
-					<field id="prop_cm_lecmRating" set="parameters" label-id="lecm.meditor.lbl.rating">
+					<field id="cm:lecmRating" label-id="lecm.meditor.lbl.rating">
 						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
 							<control-param name="options">true|Да,false|Нет</control-param>
 						</control>
 					</field>
-					<field id="prop_cm_lecmSigned" set="parameters" label-id="lecm.meditor.lbl.take.part.edi">
+					<field id="cm:lecmSigned" label-id="lecm.meditor.lbl.take.part.edi">
 						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl">
 							<control-param name="options">true|Да,false|Нет</control-param>
 						</control>
 					</field>
-					<field id="cm:lecmModelCategories" set="datatables" label-id="lecm.meditor.lbl.attachs.categors">
+					<field id="cm:lecmModelCategories" label-id="lecm.meditor.lbl.attachs.categors">
 						<control template="/ru/it/lecm/controls/categories-datatable.ftl"/>
 					</field>
-					<field id="cm:lecmModelAttributes" set="datatables" label-id="lecm.meditor.lbl.attrs">
+					<field id="cm:lecmModelAttributes" label-id="lecm.meditor.lbl.attrs">
 						<control template="/ru/it/lecm/controls/attributes-datatable.ftl"/>
 					</field>
-					<field id="cm:lecmModelAssociations" set="datatables" label-id="lecm.meditor.lbl.assocs">
+					<field id="cm:lecmModelAssociations" label-id="lecm.meditor.lbl.assocs">
 						<control template="/ru/it/lecm/controls/associations-datatable.ftl"/>
 					</field>
-					<field id="cm:lecmModelTables" set="datatables" label-id="lecm.meditor.lbl.tables">
+					<field id="cm:lecmModelTables" label-id="lecm.meditor.lbl.tables">
 						<control template="/ru/it/lecm/controls/tables-datatable.ftl"/>
 					</field>
 				</appearance>
