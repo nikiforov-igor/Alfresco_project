@@ -83,3 +83,12 @@ div.notification-row span.detail {
 tr.notification-row-delimiter td {
 	border-bottom: 1px solid #d7d7d7 !important;
 }
+
+.notifications-group .notifications-group-clear-all {
+	text-align: right;
+}
+
+.notifications-group .notifications-group-clear-all i.icon-trash {
+	color: #E7E7E7;
+	cursor: pointer;
+}

@@ -1,7 +1,7 @@
 /* global Alfresco */
 
 /**
- * @module alfresco/header/AlfMenuBarPopup
+ * @module logic_ecm/notifications/NotificationsPopup
  * @extends module:alfresco/menus/AlfMenuBarPopup
  * @param declare
  * @param lang
@@ -14,7 +14,7 @@
  * @param xhr
  * @param json
  * @param AlfMenuBarPopup
- * @author logicECM
+ * @author LogicECM
  */
 define(['dojo/_base/declare',
 	'dojo/_base/lang',
@@ -49,8 +49,9 @@ define(['dojo/_base/declare',
 			showArrow: false,
 
 			widgets: [{
-				name: 'alfresco/menus/AlfMenuGroup',
+				name: 'logic_ecm/notifications/NotificationsGroup',
 				config: {
+					i18nScope: 'notificationsPopup',
 					widgets: [{
 						i18nScope: 'notificationsPopup',
 						name: 'alfresco/header/AlfMenuItem',
@@ -104,6 +105,7 @@ define(['dojo/_base/declare',
 			},
 
 			postCreate: function () {
+				var widgets;
 				this.inherited(arguments);
 				if (this.popup && this.popup.domNode) {
 					// This ensures that we can differentiate between header menu popups and regular menu popups with our CSS selectors
@@ -111,9 +113,14 @@ define(['dojo/_base/declare',
 					domClass.add(this.popup.domNode, 'main-part');
 					domConstruct.place('<span class="counter" id="notificationsCounter"></span>', this.domNode);
 					this.popup.onOpen = lang.hitch(this, 'initNotifications');
+					on(this.popup.domNode, 'scroll', lang.hitch(this, this.onContainerScroll));
+					widgets = this.popup.getChildren();
+					if (widgets && widgets.length) {
+						this.rootWidget = widgets[0];
+						this.rootWidget.params.notificationsPopup = this;
+					}
 				}
 				this.startLoadNewNotifications();
-				on(this.popup.domNode, 'scroll', lang.hitch(this, this.onContainerScroll));
 			},
 
 			onContainerScroll: function (event) {
@@ -137,6 +144,7 @@ define(['dojo/_base/declare',
 						notificationsConfig;
 
 					this.skipItemsCount += items.length;
+					lang.isFunction(this.rootWidget.toggle) && this.rootWidget.toggle(items.length === 0);
 					if (items.length) {
 						if (initialLoad) {
 							array.forEach(this.rootWidget.getChildren(), function (itemWidget) {
@@ -165,10 +173,6 @@ define(['dojo/_base/declare',
 			initNotifications: function () {
 				this.skipItemsCount = 0;
 				this.readNotifications = [];
-				var widgets = this.popup.getChildren();
-				if (widgets && widgets.length) {
-				 	this.rootWidget = widgets[0];
-				}
 				this.loadNotifications(true);
 			}
 		});
