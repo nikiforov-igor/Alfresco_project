@@ -183,25 +183,23 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 				return;
 			}
 
-			List<NodeRef> recipients = new ArrayList<NodeRef>();
+			List<NodeRef> recipients = new ArrayList<>();
 			recipients.add(employee);
 			Date comingSoonDate = workCalendarService.getEmployeePreviousWorkingDay(employee, dueDate, -1);
 			Date currentDate = new Date();
 			if (comingSoonDate != null) {
 				int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
 				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
-				Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
+				Map<QName, Serializable> fakeProps = new HashMap<>();
+				Map<String, Object> templateObjects = new HashMap<>();
+				templateObjects.put("dueDate", dueDate);
 				if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
 					fakeProps.put(FAKE_PROP_COMINGSOON, "");
-					String template = "Напоминание: Вам необходимо ознакомиться с документом %s, срок ознакомления %s";
-					String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-					sendNotification(description, docInfo.getDocumentRef(), recipients);
+					notificationsService.sendNotificationByTemplate(docInfo.getDocumentRef(), recipients, "REVIEW_NEED_COMING_SOON", templateObjects);
 				}
 				if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
 					fakeProps.put(FAKE_PROP_OVERDUE, "");
-					String template = "Внимание: Вы не ознакомились с документом %s, срок ознакомления %s";
-					String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-					sendNotification(description, docInfo.getDocumentRef(), recipients);
+					notificationsService.sendNotificationByTemplate(docInfo.getDocumentRef(), recipients, "REVIEW_NEED_OVERDUE", templateObjects);
 				}
 				if (!fakeProps.isEmpty()) {
 					workflowService.updateTask(userTask.getId(), fakeProps, null, null);
@@ -217,7 +215,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		try {
 			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
 			if (docInfo.getDocumentRef() != null) {
-				Set<NodeRef> recipients = new HashSet<NodeRef>();
+				Set<NodeRef> recipients = new HashSet<>();
 				recipients.add(docInfo.getInitiatorRef());
 				WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
 				Date dueDate = workflowInstance.getDueDate();
@@ -228,16 +226,17 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 					int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
 					if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
 						variableScope.setVariable("initiatorComingSoon", "");
-						String template = "Напоминание: Вы направили на ознакомление документ %s, срок ознакомления %s";
-						String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+						Map<String, Object> templateObjects = new HashMap<>();
+						templateObjects.put("dueDate", dueDate);
+						notificationsService.sendNotificationByTemplate(docInfo.getDocumentRef(), new ArrayList<>(recipients), "REVIEW_COMING_SOON", templateObjects);
 					}
 					if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
 						variableScope.setVariable("initiatorOverdue", "");
 						String people = getIncompleteAssignees(processInstanceId);
-						String template = "Внимание: с документом %s не ознакомились в срок %s. Следующие сотрудники не ознакомились: %s";
-						String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
-						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+						Map<String, Object> templateObjects = new HashMap<>();
+						templateObjects.put("dueDate", dueDate);
+						templateObjects.put("employees", people);
+						notificationsService.sendNotificationByTemplate(docInfo.getDocumentRef(), new ArrayList<>(recipients), "REVIEW_OVERDUE", templateObjects);
 					}
 				}
 			} else {

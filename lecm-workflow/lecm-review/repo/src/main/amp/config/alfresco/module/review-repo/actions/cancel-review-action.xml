@@ -9,10 +9,6 @@
         <property name="lecm-group-actions:script"><![CDATA[(function() {
   var initiator = orgstructure.getCurrentEmployee();
 
-  var notificationText = 'Ознакомление по документу '; 
-  notificationText += documentScript.wrapperDocumentLink(document, documentScript.getPresentString(document));
-  notificationText += ' отозвано!';
-
   var recipients = [];
   var reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
   if (null != reviewTable) {
@@ -30,7 +26,13 @@
         }
     }
   }
-  notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
+  notifications.sendNotificationFromCurrentUser({
+    recipients: recipients,
+    templateCode: 'REVIEW_CANCELED',
+    templateConfig: {
+      mainObject: document
+    }
+  });
   
   
 })();]]></property>
