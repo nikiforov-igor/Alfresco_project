@@ -5373,24 +5373,22 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
     var currentUser =  orgstructure.getCurrentEmployee();
     incoming.removeAssociation(currentUser, "lecm-eds-document:recipients-assoc");
     lecmPermission.revokeDynamicRole(incoming, currentUser, "DA_RECIPIENT_DYN");
-    var curators =  orgstructure.getEmployeesByBusinessRoleId("DA_REGISTRARS", true);
     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
     notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
     if (sendToExecution != null) {
         var sendToExecutionUser = search.findNode(sendToExecution);
+        notifications.sendNotificationFromCurrentUser({
+            recipients: [sendToExecutionUser],
+            templateCode: 'INCOMING_RETURN_DOCUMENT',
+            templateConfig: {
+                mainObject: stm_document,
+                sender: currentUser,
+                sendToExecutionUser: sendToExecutionUser
+            }
+        });
     } else {
         sendToExecutionUser = null;
     }
-
-    notifications.sendNotificationFromCurrentUser({
-        recipients: curators,
-        templateCode: 'INCOMING_RETURN_DOCUMENT',
-        templateConfig: {
-            mainObject: stm_document,
-            sender: currentUser,
-            sendToExecutionUser: sendToExecutionUser
-        }
-    });
 
   	businessJournal.log(incoming.nodeRef.toString(), "RETURN_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), notificationText), []);
 })();]]></value>
@@ -5581,27 +5579,25 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
     var currentUser =  orgstructure.getCurrentEmployee();
     lecmPermission.revokeDynamicRole(incoming, currentUser, "DA_RECIPIENT_DYN");
     incoming.removeAssociation(currentUser, "lecm-eds-document:recipients-assoc");
-    var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
     notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
     if (sendToExecution != null) {
         var sendToExecutionUser = search.findNode(sendToExecution);
         if (sendToExecutionUser != null) {
             notificationText += " сотруднику " + documentScript.wrapperLink(sendToExecutionUser, sendToExecutionUser.properties["lecm-orgstr:employee-short-name"]);
+            notifications.sendNotificationFromCurrentUser({
+                recipients: [sendToExecutionUser],
+                templateCode: 'INCOMING_RETURN_DOCUMENT',
+                templateConfig: {
+                    mainObject: stm_document,
+                    sender: currentUser,
+                    sendToExecutionUser: sendToExecutionUser
+                }
+            });
         }
     } else {
         sendToExecutionUser = null;
     }
-
-  	notifications.sendNotificationFromCurrentUser({
-        recipients: curators,
-        templateCode: 'INCOMING_RETURN_DOCUMENT',
-        templateConfig: {
-            mainObject: stm_document,
-            sender: currentUser,
-            sendToExecutionUser: sendToExecutionUser
-        }
-    });
 
 	businessJournal.log(incoming.nodeRef.toString(), "RETURN_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), notificationText), []);
 })();]]></value>
