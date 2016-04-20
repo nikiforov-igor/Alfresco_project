@@ -103,4 +103,8 @@ public class NotificationsActiveChannelWebScriptBean extends BaseWebScript {
 		return getValueConverter().convertValueForScript(serviceRegistry, getScope(), null, (ArrayList<String>)result);
 
 	}
+
+	public void setReadAllNotifications(final ScriptNode employee) {
+		service.setReadAllNotifications(employee.getNodeRef());
+	}
 }

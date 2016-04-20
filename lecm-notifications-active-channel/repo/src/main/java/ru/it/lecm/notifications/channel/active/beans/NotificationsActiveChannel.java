@@ -259,4 +259,18 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
     public NodeRef getServiceRootFolder() {
         return getRootRef();
     }
+
+	public void setReadAllNotifications(NodeRef employeeRef) {
+		List<AssociationRef> assocs = nodeService.getSourceAssocs(employeeRef, NotificationsService.ASSOC_RECIPIENT);
+		for (AssociationRef assoc : assocs) {
+			NodeRef notificationRef = assoc.getSourceRef();
+			Map<QName, Serializable> properties = nodeService.getProperties(notificationRef);
+			boolean isRead = Boolean.TRUE.equals(properties.get(PROP_IS_READ));
+			if (!isRead) {
+				properties.put(PROP_IS_READ, true);
+				properties.put(PROP_READ_DATE, new Date());
+				nodeService.setProperties(notificationRef, properties);
+			}
+		}
+	}
 }

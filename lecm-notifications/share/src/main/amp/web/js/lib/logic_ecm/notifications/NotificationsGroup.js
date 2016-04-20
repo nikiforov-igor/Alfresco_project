@@ -49,10 +49,22 @@ define(['dojo/_base/declare',
 				on (this._clearAllNode, 'i:click', lang.hitch(this, this._onClearAllClick));
 			},
 
+			_clearAllSuccess: function(success) {
+				this.params.notificationsPopup.loadNewNotificationsCount();
+			},
+
+			_clearAllFailure: function(failure) {
+				Alfresco.util.PopupManager.displayMessage({
+					text: this.message('message.notifications.clearall.set.read.failure')
+				});
+			},
+
 			_clearAll: function() {
-				console.debug('_clearAll');
-				//послать ajax-запрос на очистку уведомлений /* написать вебскрипт который все уведомления текущего пользователя "прочтет" */
-				//вызвать метод обновления кол-ва в счетчике /* this.params.notificationsPopup.loadNewNotificationsCount(); */
+				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/active-channel/api/set/read/all', {
+					handleAs: 'json',
+					headers: {'Content-Type': 'application/json'},
+					data: '{}',
+				}).then(lang.hitch(this, this._clearAllSuccess), lang.hitch(this, this._clearAllFailure));
 			},
 
 			_onClearAllClick: function(evt) {
