@@ -18,6 +18,7 @@
     "use strict";
 
 LogicECM.module.Base.Util.loadScripts([
+    'scripts/lecm-base/components/advsearch.js',
 	'scripts/lecm-base/components/lecm-datagrid.js'
 	], function() {
 
