@@ -31,7 +31,7 @@
             <option value="complete">${msg("errandslist.option.completed")}</option>
         </select>
        <#if createButton??>
-        <#if isErrandsStarter && hasStatemachine && (createButton == "true")>
+        <#if isErrandsStarter && hasStatemachine && isRegistered && (createButton == "true")>
             <span class="lecm-dashlet-actions">
                 <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.createChildErrand()" class="add" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</a>
             </span>
