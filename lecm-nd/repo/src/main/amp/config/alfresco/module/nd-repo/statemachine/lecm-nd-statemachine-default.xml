@@ -7241,8 +7241,7 @@ businessJournal.log(nd.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></va
     var i,
             nd = stm_document, /* орд документ */
             registrars, /* получение списка регистраторов по документу */
-            registratorAssocs = nd.assocs['lecm-document-aspects:registrator-assoc'],
-            notification;
+            registratorAssocs = nd.assocs['lecm-document-aspects:registrator-assoc'];
 
     if (registratorAssocs && registratorAssocs.length) {
         registrars = [delegation.getEffectiveEmployee(registratorAssocs[0], 'DA_REGISTRARS')];
@@ -7255,11 +7254,14 @@ businessJournal.log(nd.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></va
         statemachine.grandDynamicRoleForEmployee(nd, registrars[i], "DA_REGISTRAR_DYN", task);
     }
 
-    /* подготавливаем уведомление */
-    notification = ordStatemachine.prepareNotificationAboutRegistration(nd, registrars);
-
     /* рассылаем уведомление */
-    notifications.sendNotification(notification);
+    notifications.sendNotification({
+    	recipients: registrars,
+		templateCode: 'ND_REGISTER',
+		templateConfig: {
+			mainObject: nd
+		}
+    });
 })();]]></value>
 															</property>
 															<property>

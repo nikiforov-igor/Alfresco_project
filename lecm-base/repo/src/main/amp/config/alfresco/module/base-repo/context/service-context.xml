@@ -222,6 +222,15 @@
 		</property>
 	</bean>
 
+	<bean id="dictionaries.LogicEcmBase" parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-base-nt-items.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="lecmModelsService" class="ru.it.lecm.base.beans.LecmModelsService"
 		  depends-on="dictionaryBootstrap">
 		<property name="dictionaryDAO" ref="dictionaryDAO"/>
@@ -478,4 +487,6 @@
 		<property name="dictionaryService" ref="dictionaryService" />
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
+
+
 </beans>

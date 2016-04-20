@@ -13,12 +13,9 @@ import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,7 +34,6 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
     private OrgstructureBean orgstructureService;
     private AuthorityService authorityService;
     private DictionaryService dictionaryService;
-    private DocumentService documentService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -56,19 +52,13 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
                 public Object doWork() throws Exception {
                     NodeRef sharedFolder = getSharedFolder(nodeRef);
                     List<NodeRef> employees = getReaders(sharedFolder);
-                    Notification notification = new Notification();
-                    notification.setRecipientEmployeeRefs(employees); // значения должны быть уникальны
-                    notification.setAuthor(AuthenticationUtil.getSystemUserName());
-                    OrgstructureBeanImpl orgstructureBeanImpl = (OrgstructureBeanImpl) orgstructureService;
+                    String template;
                     if (isContent) {
-                        String name = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME).toString();
-                        notification.setDescription("В хранилище подразделения размещен документ " + orgstructureBeanImpl.wrapperLink(nodeRef, name, BaseBean.DETAILS_LINK_URL));
+                        template = "ORGUNIT_REPOSITORY_CONTENT_ADD";
                     } else {
-                        String presentString = (String) nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING);
-                        notification.setDescription("В хранилище подразделения размещен документ " + orgstructureBeanImpl.wrapperLink(nodeRef, presentString, documentService.getDocumentUrl(nodeRef)));
+                        template = "ORGUNIT_REPOSITORY_DOCUMENT_ADD";
                     }
-                    notification.setObjectRef(nodeRef);
-                    notificationService.sendNotification(notification);
+                    notificationService.sendNotificationByTemplate(nodeRef, employees, template);
                     return null;
                 }
             });
@@ -170,7 +160,4 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
         }
     }
 
-    public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
-    }
 }

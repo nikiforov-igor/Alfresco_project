@@ -10,7 +10,6 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
@@ -107,15 +106,11 @@ public class ReturnChiefTaskScript extends DeclarativeWebScript {
                         } else {
                             NodeRef chief = orgstructureBean.getEmployeeByPerson(chiefLogin);
                             NodeRef secretary = orgstructureBean.getEmployeeByPerson(currentUserName);
-                            Map<String, Object> notificationTemplateModel = new HashMap<>();
-                            notificationTemplateModel.put("mainObject", documentNodeRef);
-                            notificationTemplateModel.put("secretary", secretary);
-                            Notification notification = new Notification(notificationTemplateModel);
-                            notificationsService.fillNotificationByTemplateCode(notification, "SECRETARY_RETURN");
-                            notification.setRecipientEmployeeRefs(Collections.singletonList(chief));
-                            notification.setAuthor(AuthenticationUtil.getSystemUserName());
-                            notification.setObjectRef(documentNodeRef);
-                            notificationsService.sendNotification(notification);
+
+                            Map<String, Object> templateObjects = new HashMap<>();
+                            templateObjects.put("secretary", secretary);
+                            notificationsService.sendNotificationByTemplate(documentNodeRef, Collections.singletonList(chief), "SECRETARY_RETURN", templateObjects);
+
                             String chiefShortName = (String) nodeService.getProperty(chief, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
                             businessJournalService.log(currentUserName, documentNodeRef, "EXEC_ACTION", "Сотрудник #initiator вернул(а) задачу сотруднику " + chiefShortName + " по документу #mainobject", Collections.singletonList("string"));
                         }

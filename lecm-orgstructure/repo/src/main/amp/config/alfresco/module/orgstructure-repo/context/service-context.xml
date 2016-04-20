@@ -46,7 +46,8 @@
 		depends-on="businessJournalLogEventsPolicy, orgstructureBusinessRolePolicy, orgstructureBossPolicy
 			, orgstructurePrimaryPositionPolicy, orgstucturePersonEmployeeRelationsPolicy, orgstructureEmployeeLinkPolicy
 			, orgstructureUnitPolicy, orgstructureStaffListPolicy, orgstructureOrganizationPolicy
-			, orgstructureStaffPositionPolicy, orgstructureWorkGroupPolicy, orgstructureWorkForcePolicy, ${groupId}.${artifactId}.orgStructureBootstrap">
+			, orgstructureStaffPositionPolicy, orgstructureWorkGroupPolicy, orgstructureWorkForcePolicy, ${groupId}.${artifactId}.orgStructureBootstrap,
+			ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-roles.xml</value>
@@ -55,6 +56,7 @@
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-business-roles.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-business-roles-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionary/lecm-orgstructure-nt-items.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -272,7 +274,6 @@
         <property name="authorityService" ref="authorityService"/>
         <property name="dictionaryService" ref="dictionaryService" />
         <property name="publicAction" value="false" />
-        <property name="documentService" ref="documentService"/>
     </bean>
 
     <bean id="orgstructure.exportEmployees.model" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">

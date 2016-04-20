@@ -20,7 +20,6 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.documents.beans.DocumentServiceImpl;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -188,13 +187,12 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             // уведомление
             Boolean silent = (Boolean) nodeService.getProperty(member, DocumentMembersService.PROP_SILENT);
             if (silent == null || !silent) {
-                Notification notification = new Notification();
-                ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-                employeeList.add(employee);
-                notification.setRecipientEmployeeRefs(employeeList);
+                HashMap<String, Object> templateObjects = new HashMap<>();
+                templateObjects.put("mainObject", docRef);
+                Notification notification = new Notification(templateObjects);
+                notification.setRecipientEmployeeRefs(Collections.singletonList(employee));
                 notification.setAuthor(authService.getCurrentUserName());
-                notification.setDescription("Вы приглашены как новый участник в документ " +
-                        wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), documentService.getDocumentUrl(docRef)));
+                notificationService.fillNotificationByTemplateCode(notification, "DOCUMENT_INVITATION");
                 notification.setObjectRef(docRef);
                 notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
                 notificationService.sendNotification(notification);
@@ -258,7 +256,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         final String userName = (String) nodeService.getProperty(docRef, ContentModel.PROP_CREATOR);
         if (!AuthenticationUtil.getSystemUserName().equals(userName)) {
             final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
-            Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+            Map<QName, Serializable> props = new HashMap<>();
             props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
             //полиси onCreate. транзакция должна быть                        
             try {
@@ -282,7 +280,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
             final String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
             final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
 
-            Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+            Map<QName, Serializable> props = new HashMap<>();
             props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
 //			TODO: Метод addMemberWithoutCheckPermission использует метод getMembersFolderRef,
 //			который был разделён, поэтому выполним проверку и создадим папку, если надо

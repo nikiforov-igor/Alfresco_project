@@ -22,6 +22,7 @@
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-connection-types-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-type-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-nd-bj-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-nt-items.xml</value>
     </util:list>
 
     <util:list id="nd.rn.tags">
@@ -40,6 +41,7 @@
 
     <bean id="nd.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                      ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
                       nd.document.models.bootstrap,
 					  businessJournalLogEventsPolicy,
                       documents.LogicEcmConnectionTypesBootstrap,

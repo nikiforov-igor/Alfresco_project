@@ -116,6 +116,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param ordRef ссылка на ОРД документ из машины состояний
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutRework(final ScriptNode ordRef) {
 		String ordURL = getOrdURL(ordRef);
 		String description = String.format("Проект документа %s направлен Вам на доработку", ordURL);
@@ -129,6 +130,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param description текст сообщения, которое необходимо отправить
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutRework(final ScriptNode ordRef, final String description) {
 		NodeRef documentAuthorRef = documentService.getDocumentAuthor(ordRef.getNodeRef());
 
@@ -184,6 +186,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * машины состояний
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutRegistration(final ScriptNode ordRef, final Scriptable registrars) {
 		String ordURL = getOrdURL(ordRef);
 		String description = String.format("Документ %s поступил Вам на регистрацию", ordURL);
@@ -200,6 +203,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param description текст сообщения, которое необходимо отправить
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutRegistration(final ScriptNode ordRef, final Scriptable registrars, final String description) {
 		Object[] elements = Context.getCurrentContext().getElements(registrars);
 		ArrayList<NodeRef> registrarRefs = new ArrayList<NodeRef>();
@@ -232,6 +236,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param controller ссылка на контролера из скрипта машины состояний
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationToController(final ScriptNode ord, final ScriptNode controller) {
 		String ordURL = getOrdURL(ord);
 		Date execDate = (Date) nodeService.getProperty(ord.getNodeRef(), EDSDocumentService.PROP_EXECUTION_DATE);

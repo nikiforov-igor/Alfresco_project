@@ -1,8 +1,5 @@
 package ru.it.lecm.outgoing.extensions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -14,12 +11,15 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -78,6 +78,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param description текст сообщения, которое необходимо отправить
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutRework(final ScriptNode outgoingRef, final String description) {
 		NodeRef documentAuthorRef = documentService.getDocumentAuthor(outgoingRef.getNodeRef());
 
@@ -114,6 +115,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param description текст сообщения, которое необходимо отправить
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutRegistration(final ScriptNode outgoingRef, final Scriptable registrars, final String description) {
 		Object[] elements = Context.getCurrentContext().getElements(registrars);
 		ArrayList<NodeRef> registrarRefs = new ArrayList<NodeRef>();
@@ -145,6 +147,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param outgoingRef ссылка на исходящее из машины состояний
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutSending(final ScriptNode outgoingRef) {
 		String outgoingURL = getOutgoingURL(outgoingRef);
 		String description = String.format("На отправку поступил документ %s", outgoingURL);
@@ -158,6 +161,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	 * @param description текст сообщения, которое необходимо отправить
 	 * @return готовое к отправке уведомление
 	 */
+	@Deprecated
 	public Notification prepareNotificationAboutSending(final ScriptNode outgoingRef, final String description) {
 		//получаем список сотрудников включенных в статическую роль "Отправляющий" с учетом делегирования
 		List<NodeRef> senders = orgstructureService.getEmployeesByBusinessRole(OUTGOING_SENDERS, true);

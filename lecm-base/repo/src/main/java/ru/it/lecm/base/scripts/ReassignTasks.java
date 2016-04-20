@@ -1,7 +1,6 @@
 package ru.it.lecm.base.scripts;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
@@ -20,10 +19,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -77,24 +73,19 @@ public class ReassignTasks extends AbstractWebScript {
 					if (nodeService.exists(employeeRef) && orgstructureService.isEmployee(employeeRef)) {
 						String userName = orgstructureService.getEmployeeLogin(employeeRef);
 						if (userName != null) {
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+							Map<QName, Serializable> properties = new HashMap<>();
 							properties.put(ContentModel.PROP_OWNER, userName);
 							workflowService.updateTask(taskId, properties, null, null);
 
 							NodeRef document = getDocumentFromTask(taskId);
 							if (document != null) {
 								//Отправка уведомления
-								String author = AuthenticationUtil.getSystemUserName();
-								String employeeName = (String) nodeService.getProperty(orgstructureService.getCurrentEmployee(), OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-								String text = "Сотрудник " + employeeName + " переназначил вам задачу по документу:  " + documentService.wrapAsDocumentLink(document);
-
-								List<NodeRef> recipients = new ArrayList<NodeRef>();
-								recipients.add(employeeRef);
-
-								notificationsService.sendNotification(author, document, text, recipients, null);
+								Map<String, Object> templateObjects = new HashMap<>();
+								templateObjects.put("eventExecutor", orgstructureService.getCurrentEmployee());
+								notificationsService.sendNotificationByTemplate(document, Collections.singletonList(employeeRef), "REASSIGN_TASK", templateObjects);
 
 								//Запись в бизнес-журнал
-								List<String> objects = new ArrayList<String>();
+								List<String> objects = new ArrayList<>();
 								objects.add(employeeRef.toString());
 								String template = "Сотрудник #initiator переназначил задачу по документу: #mainobject сотруднику #object1";
 								businessJournalService.log(document, EventCategory.EDIT, template, objects);

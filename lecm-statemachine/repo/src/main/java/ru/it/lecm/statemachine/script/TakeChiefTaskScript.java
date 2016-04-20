@@ -10,7 +10,6 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
@@ -65,17 +64,17 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         final String documentRef = req.getParameter("documentNodeRef");
         final String actionId = req.getParameter("actionId");
-        final HashMap<String, Object> actionResult = new HashMap<String, Object>();
+        final HashMap<String, Object> actionResult = new HashMap<>();
 
         if (documentRef == null) {
-            ArrayList<String> errors = new ArrayList<String>();
+            ArrayList<String> errors = new ArrayList<>();
             errors.add("Ошибка скрипта. Параметр documentNodeRef не определен.");
             actionResult.put("errors", errors);
             actionResult.put("doesNotBlock", false);
             actionResult.put("fields", new ArrayList<String>());
         }
         else if (actionId == null) {
-            ArrayList<String> errors = new ArrayList<String>();
+            ArrayList<String> errors = new ArrayList<>();
             errors.add("Ошибка скрипта. Параметр actionId не определен.");
             actionResult.put("errors", errors);
             actionResult.put("doesNotBlock", false);
@@ -100,7 +99,7 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
                     @Override
                     public Object doWork() throws Exception {
                         if (!stateMachineService.setWorkflowTaskProperty(documentNodeRef, actionId, StatemachineModel.PROP_CHIEF_LOGIN, chiefLogin)) {
-                            ArrayList<String> errors = new ArrayList<String>();
+                            ArrayList<String> errors = new ArrayList<>();
                             errors.add("При изменении свойств задания руководителя произоошла ошибка.");
                             actionResult.put("errors", errors);
                             actionResult.put("doesNotBlock", false);
@@ -108,22 +107,18 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
                         else {
                             String currentUserName = serviceRegistry.getAuthenticationService().getCurrentUserName();
                             if (!stateMachineService.setTaskAssignee(documentNodeRef, taskId, chiefLogin, currentUserName)) {
-                                ArrayList<String> errors = new ArrayList<String>();
+                                ArrayList<String> errors = new ArrayList<>();
                                 errors.add("При выполнении передачи задания руководителя произоошла ошибка.");
                                 actionResult.put("errors", errors);
                                 actionResult.put("doesNotBlock", false);
                             } else {
                                 NodeRef chief = orgstructureBean.getEmployeeByPerson(chiefLogin);
                                 NodeRef secretary = orgstructureBean.getEmployeeByPerson(currentUserName);
-                                Map<String, Object> notificationTemplateModel = new HashMap<>();
-                                notificationTemplateModel.put("mainObject", documentNodeRef);
-                                notificationTemplateModel.put("secretary", secretary);
-                                Notification notification = new Notification(notificationTemplateModel);
-                                notificationsService.fillNotificationByTemplateCode(notification, "SECRETARY_TAKE");
-                                notification.setRecipientEmployeeRefs(Collections.singletonList(chief));
-                                notification.setAuthor(AuthenticationUtil.getSystemUserName());
-                                notification.setObjectRef(documentNodeRef);
-                                notificationsService.sendNotification(notification);
+
+                                Map<String, Object> templateObjects = new HashMap<>();
+                                templateObjects.put("secretary", secretary);
+                                notificationsService.sendNotificationByTemplate(documentNodeRef, Collections.singletonList(chief), "SECRETARY_TAKE", templateObjects);
+
                                 String chiefShortName = (String) nodeService.getProperty(chief, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
                                 businessJournalService.log(currentUserName, documentNodeRef, "EXEC_ACTION", "Сотрудник #initiator принял(а) задачу сотрудника " + chiefShortName + " по документу #mainobject", Collections.singletonList("string"));
                             }
@@ -133,7 +128,7 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
                 });
             }
             else {
-                ArrayList<String> errors = new ArrayList<String>();
+                ArrayList<String> errors = new ArrayList<>();
                 errors.add("Ошибка скрипта. Задание не найдено.");
                 actionResult.put("errors", errors);
                 actionResult.put("doesNotBlock", false);
@@ -141,7 +136,7 @@ public class TakeChiefTaskScript extends DeclarativeWebScript {
             }
         }
 
-        HashMap<String, Object> response = new HashMap<String, Object>();
+        HashMap<String, Object> response = new HashMap<>();
         if (actionResult.size() > 0) {
             response.put("result", new JSONObject(actionResult).toString());
         }

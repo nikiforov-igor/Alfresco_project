@@ -1,7 +1,6 @@
 package ru.it.lecm.delegation.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
@@ -33,16 +32,15 @@ import ru.it.lecm.delegation.IDelegationDescriptor;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
+import ru.it.lecm.secretary.SecretarySecurityService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 import java.io.Serializable;
 import java.util.*;
-import ru.it.lecm.secretary.SecretarySecurityService;
 
 public class DelegationBean extends BaseBean implements IDelegation, IDelegationDescriptor {
 
@@ -163,7 +161,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		QName assocQName = QName.createQName(DELEGATION_NAMESPACE, CONTAINER); //the qualified name of the association
 		QName nodeTypeQName = TYPE_DELEGATION_OPTS_CONTAINER; //a reference to the node type
 		// создание корневого узла для делегирований в Компании ...
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
+		Map<QName, Serializable> properties = new HashMap<>(1); //optional map of properties to keyed by their qualified names
 		properties.put(ContentModel.PROP_NAME, CONTAINER);
 		ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 		NodeRef delegationRoot = associationRef.getChildRef();
@@ -205,7 +203,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 				QName assocTypeQName = ASSOC_DELEGATION_OPTS_CONTAINER; //the type of the association to create. This is used for verification against the data dictionary.
 				QName assocQName = QName.createQName(DELEGATION_NAMESPACE, delegationOptsName); //the qualified name of the association
 				QName nodeTypeQName = TYPE_DELEGATION_OPTS; //a reference to the node type
-				Map<QName, Serializable> properties = new HashMap<QName, Serializable>(); //optional map of properties to keyed by their qualified names
+				Map<QName, Serializable> properties = new HashMap<>(); //optional map of properties to keyed by their qualified names
 				properties.put(ContentModel.PROP_NAME, delegationOptsName);
 				properties.put(IS_ACTIVE, false);//параметры делегирования по умолчанию создаем неактивными
 				NodeRef delegationOptsNodeRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties).getChildRef();
@@ -244,7 +242,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	@Override
 	public List<NodeRef> getUniqueBusinessRolesByEmployee(final NodeRef employeeNodeRef, final boolean onlyActive) {
 		//получаем все бизнес роли
-		Set<NodeRef> uniqueBusinessRoleNodeRefs = new HashSet<NodeRef>(orgstructureService.getEmployeeRoles(employeeNodeRef));
+		Set<NodeRef> uniqueBusinessRoleNodeRefs = new HashSet<>(orgstructureService.getEmployeeRoles(employeeNodeRef));
 		final List<NodeRef> dynamicBusinessRoles = dictionaryService.getRecordsByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, true);
 		for (NodeRef businessRole : dynamicBusinessRoles) {
 			String roleName = nodeService.getProperty(businessRole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER).toString();
@@ -253,7 +251,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			}
 		}
 
-		return new ArrayList<NodeRef>(uniqueBusinessRoleNodeRefs);
+		return new ArrayList<>(uniqueBusinessRoleNodeRefs);
 	}
 
 	@Override
@@ -271,7 +269,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	@Override
 	public List<NodeRef> getProcuracies(final NodeRef nodeRef, final boolean onlyActive) {
 		NodeRef delegationOptsNodeRef = getDelegationOpts(nodeRef);
-		List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef>();
+		List<NodeRef> procuracyNodeRefs = new ArrayList<>();
 		if (delegationOptsNodeRef != null) {
 			List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs(delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
 			if (childAssociationRefs != null) {
@@ -307,13 +305,13 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			throw new WebScriptException("Can't create procuracies", ex);
 		}
 
-		List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef>();
+		List<NodeRef> procuracyNodeRefs = new ArrayList<>();
 		for (NodeRef businessRoleNodeRef : businessRoleNodeRefs) {
 			NodeRef parentRef = delegationOptsNodeRef; //the parent node
 			QName assocTypeQName = ASSOC_DELEGATION_OPTS_PROCURACY; //the type of the association to create. This is used for verification against the data dictionary.
 			QName assocQName = QName.createQName(DELEGATION_NAMESPACE, "доверенность_" + UUID.randomUUID().toString()); //the qualified name of the association
 			QName nodeTypeQName = TYPE_PROCURACY; //a reference to the node type
-			Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
+			Map<QName, Serializable> properties = new HashMap<>(1); //optional map of properties to keyed by their qualified names
 			properties.put(IS_ACTIVE, false);
 			ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 			NodeRef procuracyNodeRef = associationRef.getChildRef();
@@ -431,12 +429,12 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 
 		NodeRef mainObject = findNodeByAssociationRef(delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 
-		Set<NodeRef> receivers = new HashSet<NodeRef>();
+		Set<NodeRef> receivers = new HashSet<>();
 
 		NodeRef optsTrusteeRef = findNodeByAssociationRef(delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		if (optsTrusteeRef != null) {
 			receivers.add(optsTrusteeRef);
-			List<String> objects = new ArrayList<String>();
+			List<String> objects = new ArrayList<>();
 			objects.add((String) nodeService.getProperty(optsTrusteeRef, ContentModel.PROP_NAME));
 			String template = "Сотруднику #object1 делегированы все полномочия сотрудника #mainobject";
 			businessJournalService.log(initiator, mainObject, DelegationEventCategory.START_DELEGATE_ALL, template, objects);
@@ -449,7 +447,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		//получить список активных доверенностей и для каждой залоггировать
 		List<NodeRef> procuracyRefs = getProcuracies(delegationOptsRef, true);
 		for (NodeRef procuracyRef : procuracyRefs) {
-			List<String> objects = new ArrayList<String>();
+			List<String> objects = new ArrayList<>();
 			NodeRef procTrusteeRef = findNodeByAssociationRef(procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			NodeRef businessRoleRef = findNodeByAssociationRef(procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
 			if (procTrusteeRef != null) {
@@ -464,10 +462,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		}
 
 		if (!receivers.isEmpty()) {
-			String shortName = (String) nodeService.getProperty(mainObject, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-			List<NodeRef> receiversList = new ArrayList<NodeRef>(receivers.size());
-			receiversList.addAll(receivers);
-			notificationsService.sendNotification("Система", mainObject, "Сотрудник " + shortName + " делегировал Вам свои полномочия по причине своего отсутствия.", receiversList, mainObject, true);
+			notificationsService.sendNotificationByTemplate(mainObject, new ArrayList<>(receivers), "DELEGATION_DELEGATE_TRUSTEE_START");
 		}
 	}
 
@@ -477,7 +472,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		String template = "Делегирование полномочий сотрудника #mainobject прекращено";
 		businessJournalService.log(initiator, mainObject, DelegationEventCategory.STOP_DELEGATE, template, null);
 
-		Set<NodeRef> receivers = new HashSet<NodeRef>();
+		Set<NodeRef> receivers = new HashSet<>();
 
 		NodeRef optsTrusteeRef = findNodeByAssociationRef(delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		if (optsTrusteeRef != null) {
@@ -493,10 +488,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		}
 
 		if (!receivers.isEmpty()) {
-			String shortName = (String) nodeService.getProperty(mainObject, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-			List<NodeRef> receiversList = new ArrayList<NodeRef>(receivers.size());
-			receiversList.addAll(receivers);
-			notificationsService.sendNotification("Система", mainObject, "Делегирование полномочий сотрудника " + shortName + " завершено по причине его выхода на работу.", receiversList, mainObject, true);
+			notificationsService.sendNotificationByTemplate(mainObject, new ArrayList<>(receivers), "DELEGATION_DELEGATE_TRUSTEE_STOP");
 		}
 	}
 
@@ -662,7 +654,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 
 	@Override
 	public Map<NodeRef, NodeRef> getBusinessRoleToTrusteeByDelegationOpts(final NodeRef delegationOpts, final boolean activeOnly) {
-		Map<NodeRef, NodeRef> result = new HashMap<NodeRef, NodeRef>();
+		Map<NodeRef, NodeRef> result = new HashMap<>();
 		List<NodeRef> procuracies = getProcuracies(delegationOpts, activeOnly);
 		if (procuracies == null || procuracies.isEmpty()) {
 			return result;
@@ -754,7 +746,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	private NodeRef createTaskDelegationItem(final NodeRef assumedExecutor, final NodeRef effectiveExecutor, final String taskID) {
 		String itemName = taskID + "-" + UUID.randomUUID().toString();
 		QName assocQName = QName.createQName(DELEGATION_NAMESPACE, itemName);
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		Map<QName, Serializable> properties = new HashMap<>();
 		properties.put(ContentModel.PROP_NAME, itemName);
 		properties.put(PROP_TASK_DELEGATION_TASK_ID, taskID);
 		ChildAssociationRef taskDelegationItemChildAssoc = nodeService.createNode(getTasksDelegationFolder(), ContentModel.ASSOC_CONTAINS, assocQName, TYPE_TASK_DELEGATION, properties);
@@ -770,7 +762,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 
 	@Override
 	public List<NodeRef> getDelegatedTasksForAssumedExecutor(final NodeRef assumedExecutor, final boolean activeOnly) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<NodeRef> result = new ArrayList<>();
 		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(getTasksDelegationFolder(), ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		for (ChildAssociationRef childAssoc : childAssocs) {
 			NodeRef delegatedTask = childAssoc.getChildRef();
@@ -810,7 +802,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			revokeTaskPermissions(taskID, effectiveExecutor, REVIEWER_PERMISSION_GROUP);
 			grantTaskPermissions(taskID, delegatedTask, READER_PERMISSION_GROUP);
 			assignTaskToEmployee(taskID, assumedExecutor);
-			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+			Map<QName, Serializable> properties = new HashMap<>();
 			properties.put(IS_ACTIVE, false);
 			nodeService.addAspect(delegatedTask, ASPECT_ACTIVE, properties);
 
@@ -836,7 +828,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 
 	@Deprecated
 	private void assignTaskToEmployee(String taskID, NodeRef employeeRef) throws WriteTransactionNeededException {
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		Map<QName, Serializable> properties = new HashMap<>();
 		NodeRef personForEmployee = orgstructureService.getPersonForEmployee(employeeRef);
 		String userName = (String) nodeService.getProperty(personForEmployee, ContentModel.PROP_USERNAME);
 		properties.put(ContentModel.PROP_OWNER, userName);
@@ -845,20 +837,11 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 	}
 
 	private void sendNewTaskNotification(final NodeRef employeeRef, final String taskID) {
-		SysAdminParams params = serviceRegistry.getSysAdminParams();
-		String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+		String url = "/share/page/task-edit?taskId=" + taskID;
+		Map<String, Object> templateObjects = new HashMap<>();
+		templateObjects.put("url", url);
 
-		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
-		recipients.add(employeeRef);
-
-		String description = "Вам назначена новая <a href='" + serverUrl + "/share/page/task-edit?taskId=" + taskID + "'>задача</a>";
-
-		Notification notification = new Notification();
-		notification.setAuthor(AuthenticationUtil.getSystemUserName());
-		notification.setDescription(description);
-		notification.setObjectRef(employeeRef);
-		notification.setRecipientEmployeeRefs(recipients);
-		notificationsService.sendNotification(notification);
+		notificationsService.sendNotificationByTemplate(employeeRef, Collections.singletonList(employeeRef), "DELEGATION_NEW_TASK", templateObjects);
 	}
 
 	private void grantTaskPermissions(String taskID, NodeRef employeeNodeRef, String permissionGroup) throws WriteTransactionNeededException {
@@ -909,13 +892,13 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 
 	@Override
 	public Set<NodeRef> getDeletionOwnerEmployees(NodeRef employee, Set<String> roles) {
-		Set<NodeRef> results = new HashSet<NodeRef>();
+		Set<NodeRef> results = new HashSet<>();
 		if (roles != null) {
 			List<NodeRef> allInitiatorBusinesRoles = orgstructureService.getEmployeeRoles(employee, false, true);
 			for (NodeRef roleRef : allInitiatorBusinesRoles) {
 				String roleIdentifier = orgstructureService.getBusinessRoleIdentifier(roleRef);
 				if (roleIdentifier != null && roles.contains(roleIdentifier)) {
-					return new HashSet<NodeRef>();
+					return new HashSet<>();
 				}
 			}
 
@@ -969,25 +952,16 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 			List<WorkflowTask> tasks = getActiveEmployeeTasks(sourceEmployeeRef);
 			if (tasks != null && tasks.size() > 0) {
 				for (WorkflowTask task : tasks) {
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+					Map<QName, Serializable> properties = new HashMap<>();
 					properties.put(ContentModel.PROP_OWNER, destUserName);
 					workflowService.updateTask(task.getId(), properties, null, null);
 				}
 
-				String author = AuthenticationUtil.getSystemUserName();
-
-				SysAdminParams params = serviceRegistry.getSysAdminParams();
-
-				String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-				String link = "<a href=\"" + serverUrl + "/share/page/my-profile?path=Мое%20делегирование/Распределение%20задач\">ссылке</a>";
-
-				String userName = (String) nodeService.getProperty(sourceEmployeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-				String text = "От пользователя " + userName + " вам делегировано " + tasks.size() + " задач. Распределить на других исполнителей можно по " + link;
-
-				List<NodeRef> recipients = new ArrayList<NodeRef>();
-				recipients.add(destEmployee);
-
-				notificationsService.sendNotification(author, sourceEmployeeRef, text, recipients, null);
+				String url = "/share/page/my-profile?path=Мое%20делегирование/Распределение%20задач";
+				Map<String, Object> templateObjects = new HashMap<>();
+				templateObjects.put("tasksCount", tasks.size());
+				templateObjects.put("url", url);
+				notificationsService.sendNotificationByTemplate(sourceEmployeeRef, Collections.singletonList(destEmployee), "DELEGATION_DELEGATE_TASKS", templateObjects);
 			}
 		}
 	}
