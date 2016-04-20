@@ -90,4 +90,61 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="model-type" condition="lecm-regnum:doctype-year-counter">
+		<forms>
+			<form id="year-counter-datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:doctype"/>
+					<show id="lecm-regnum:value"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-regnum:doctype-year-counter">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:doctype"/>
+					<show id="lecm-regnum:value"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name" read-only="true"/>
+					<field id="lecm-regnum:doctype" read-only="true"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-regnum:doctype-plain-counter">
+		<forms>
+			<form id="year-counter-datagrid">
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:doctype"/>
+					<show id="lecm-regnum:value"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-regnum:doctype-plain-counter">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-regnum:doctype"/>
+					<show id="lecm-regnum:value"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:name" read-only="true"/>
+					<field id="lecm-regnum:doctype" read-only="true"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 </alfresco-config>
