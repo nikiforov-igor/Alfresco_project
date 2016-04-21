@@ -21,19 +21,15 @@
 
                                 var initiator = null;
                                 var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
-                                if (initiatorAssoc != null && initiatorAssoc.length == 1) {
+                                if (initiatorAssoc && initiatorAssoc.length) {
                                     initiator = initiatorAssoc[0];
                                 }
 
                                 var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
-                                if (executorAssoc != null && executorAssoc.length == 1 && initiator != null) {
-                                    var executor = executorAssoc[0];
-                                    var recipients = [];
-                                    recipients.push(executor);
-
+                                if (executorAssoc && executorAssoc.length && initiator) {
                                     var countChildErrands = 0;
                                     var connectedDocuments = errands.getChildErrands(document.nodeRef.toString());
-                                    if (connectedDocuments != null) {
+                                    if (connectedDocuments && connectedDocuments.length) {
                                         countChildErrands = connectedDocuments.length;
                                     }
                                     var documentRefLink = document.nodeRef.toString().replace("://", "/");
@@ -42,7 +38,7 @@
                                     url += "#filter=errandsChildFilter|" + documentRefLink;
 
                                     notifications.sendNotificationFromCurrentUser({
-                                        recipients: recipients,
+                                        recipients: executorAssoc,
                                         templateCode: 'ERRANDS_CANCEL',
                                         templateConfig: {
                                             mainObject: document,
