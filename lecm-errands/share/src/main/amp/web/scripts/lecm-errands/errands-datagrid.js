@@ -40,7 +40,7 @@
                             switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
                                 case "lecm-errands:is-important":
                                     if (data.value && (("" + data.value) != "false")) {
-                                        columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="'+this.msg('label.important')+'" title="'+this.msg('label.important') + '" />';
+                                        columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-documents/exclamation_16.png' + '" width="16" alt="'+grid.msg('label.important')+'" title="'+grid.msg('label.important') + '" />';
                                     }
                                     break;
                                 case "lecm-errands:baseDocString":
@@ -52,12 +52,12 @@
                                     var value = data.displayValue;
                                     if (value == "Не присвоено") {
                                         value = " - ";
-                                        columnContent += '<div style="text-align: center;">'
+                                        columnContent += '<div style="text-align: center;">';
                                     } else {
-                                        columnContent += '<div>'
+                                        columnContent += '<div>';
                                     }
                                     columnContent += $links($html(value));
-                                    columnContent += '</div>'
+                                    columnContent += '</div>';
                                     break;
                                 default:
                                     break;
