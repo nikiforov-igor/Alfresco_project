@@ -479,7 +479,6 @@
                     <show id="lecm-errands:is-short"/>
                     <!-- Ссылка на документ основание  -->
                     <show id="lecm-errands:additional-document-assoc"/>
-                    <show id="change-executors-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="collapsible1"/>
@@ -527,11 +526,6 @@
                     <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
-                        </control>
-                    </field>
-                    <field id="change-executors-script" set="exist-bussines-role">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-executors.js</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important" set="collapsible2-inner">
