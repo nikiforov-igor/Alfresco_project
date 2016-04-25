@@ -9,7 +9,7 @@
         <items>
             <item name="cm:ERRANDS_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[{#mainObject.attribute("lecm-errands:just-in-time") ? "" : "Обратите внимание: поручение "} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок. {#mainObject.attribute("lecm-errands:just-in-time") ? "Работа с ним завершена, поручение переходит в статус \"Не исполнено\"" : ""}]]></property>
+                    <![CDATA[{#mainObject.attribute("lecm-errands:just-in-time") ? "" : "Обратите внимание: поручение "} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} не исполнено в установленный срок. {#mainObject.attribute("lecm-errands:just-in-time") ? "Работа с ним завершена, поручение переходит в статус 'Не исполнено'" : ""}]]></property>
                 <property name="cm:name"><![CDATA[ERRANDS_EXCEEDED_DEADLINE]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Поручение. Превышен срок исполнения]]></property>
