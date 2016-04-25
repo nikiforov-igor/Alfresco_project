@@ -2616,18 +2616,15 @@ businessJournal.log(protocol.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
     var protocol = stm_document;
     var author = null;
 	var authorAssocs = protocol.assocs["lecm-document:author-assoc"];
-    if (authorAssocs && authorAssocs.length == 1) {
-      author = authorAssocs[0];
-
-	  notifications.sendNotification({
-		recipients: [author.nodeRef.toString()],
-	  	templateCode: 'PROTOCOL_REWORK',
-	  	templateConfig: {
-	      mainObject: protocol
-	  	}
-	  });
+    if (authorAssocs && authorAssocs.length) {
+        notifications.sendNotification({
+            recipients: authorAssocs,
+            templateCode: 'PROTOCOL_REWORK',
+            templateConfig: {
+                mainObject: protocol
+            }
+        });
     }
-
 })();]]></value>
 															</property>
 															<property>

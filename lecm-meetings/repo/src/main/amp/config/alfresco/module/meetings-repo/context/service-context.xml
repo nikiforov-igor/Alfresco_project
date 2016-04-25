@@ -91,7 +91,7 @@
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-regnumbers-items.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-event-items.xml</value>
 				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-bj-items.xml</value>
-				<value>alfresco/module/${artifactId}/dictionaries/lecm-protocol-nt-items.xml</value>
+				<value>alfresco/module/${artifactId}/dictionaries/lecm-meetings-nt-items.xml</value>
 			</list>
 		</property>
 	</bean>
