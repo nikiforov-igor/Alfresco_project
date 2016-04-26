@@ -5,9 +5,10 @@
  */
 package ru.it.lecm.operativestorage.beans;
 
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+
+import java.util.List;
 
 /**
  *
@@ -55,6 +56,7 @@ public interface OperativeStorageService {
 	QName PROP_NOMENCLATURE_CASE_YEAR_COMMENT = QName.createQName(OS_NAMESPACE, "nomenclature-year-section-comment");
 	QName PROP_NOMENCLATURE_CASE_CREATION_DATE = QName.createQName(OS_NAMESPACE, "nomenclature-case-creation-date");
 	QName PROP_NOMENCLATURE_CASE_CLOSE_DATE = QName.createQName(OS_NAMESPACE, "nomenclature-case-close-date");
+	QName PROP_NOMENCLATURE_CASE_TRANSIENT = QName.createQName(OS_NAMESPACE, "nomenclature-case-transient");
 	QName PROP_NO_PERM_CHANGE = QName.createQName(OS_NAMESPACE, "nomenclature-case-no-permissions-change-on-archivation");
 	QName TYPE_BASE_OS = QName.createQName(OS_NAMESPACE, "base");
 	QName TYPE_NOMENCLATURE_CASE = QName.createQName(OS_NAMESPACE, "nomenclature-case");

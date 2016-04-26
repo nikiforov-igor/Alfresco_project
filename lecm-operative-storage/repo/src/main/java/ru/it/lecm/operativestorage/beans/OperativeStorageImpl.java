@@ -5,14 +5,6 @@
  */
 package ru.it.lecm.operativestorage.beans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -30,6 +22,7 @@ import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -42,6 +35,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.statemachine.StatemachineModel;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -283,7 +279,20 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public void moveDocToNomenclatureCase(NodeRef docNodeRef, NodeRef caseNodeRef) {
+		List<String> folderPath = getDateFolderPath(new Date());
+
+		Boolean isTransient = (Boolean) nodeService.getProperty(caseNodeRef, PROP_NOMENCLATURE_CASE_TRANSIENT);
+		if (!Boolean.TRUE.equals(isTransient)) {
+			folderPath.remove(0);
+		}
+
 		NodeRef docFolder = getDocuemntsFolder(caseNodeRef);
+		try {
+			docFolder = createPath(docFolder, folderPath);
+		} catch (TransactionNeededException ex) {
+			logger.error("Can't create folders:  " + folderPath + " in case "+ caseNodeRef +" for document " + docNodeRef);
+		}
+
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
 		nodeService.moveNode(docNodeRef, docFolder, ContentModel.ASSOC_CONTAINS, assocQName);
 
