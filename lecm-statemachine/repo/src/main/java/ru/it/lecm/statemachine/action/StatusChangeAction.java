@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
@@ -48,7 +49,7 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
     private Set<StateField> categories = new HashSet<StateField>();
     private final static Object lock = new Object();
 
-    private final static SimpleDateFormat statusDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final static SimpleDateFormat statusDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
     private static final transient Logger logger = LoggerFactory.getLogger(StatusChangeAction.class);
 
@@ -120,20 +121,21 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
                     @Override
                     public Object execute() throws Throwable {
                         try {
-                            NodeRef documents = getRepositoryStructureHelper().getDocumentsRef();
+                            RepositoryStructureHelper repositoryStructureHelper = getRepositoryStructureHelper();
+                            NodeRef documents = repositoryStructureHelper.getDocumentsRef();
                             //Существует ли папка processId
                             NodeRef processFolder = null;
                             if (documents != null && processId != null) {
                                 processFolder = nodeService.getChildByName(documents, ContentModel.ASSOC_CONTAINS, processId);
                                 if (processFolder == null) {
-                                    processFolder = getRepositoryStructureHelper().createFolder(documents, processId);
+                                    processFolder = repositoryStructureHelper.createFolder(documents, processId);
                                 }
                             }
                             NodeRef versionFolder = null;
                             if (processFolder != null && version != null) {
                                 versionFolder = nodeService.getChildByName(processFolder, ContentModel.ASSOC_CONTAINS, version);
                                 if (versionFolder == null) {
-                                    versionFolder = getRepositoryStructureHelper().createFolder(processFolder, version);
+                                    versionFolder = repositoryStructureHelper.createFolder(processFolder, version);
                                 }
                             }
 
@@ -141,7 +143,7 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
                                 //Создаем папку статуса
                                 statusFolder = nodeService.getChildByName(versionFolder, ContentModel.ASSOC_CONTAINS, status);
                                 if (statusFolder == null) {
-                                    statusFolder = getRepositoryStructureHelper().createFolder(versionFolder, status);
+                                    statusFolder = repositoryStructureHelper.createFolder(versionFolder, status);
                                     //Установка статических прав на папку статуса
                                     if (statusFolder != null && processId != null) {
                                         staticPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStaticRoles();
@@ -159,17 +161,16 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
                                 }
                             }
 
-                            String dateStatus = statusDateFormat.format(new Date());
-                            NodeRef storeFolder = nodeService.getChildByName(statusFolder, ContentModel.ASSOC_CONTAINS, dateStatus);
-                            if (storeFolder == null) {
-                                storeFolder = getRepositoryStructureHelper().createFolder(statusFolder, dateStatus);
-                            }
+                            Date now = new Date();
+                            List<String> directoryPaths = repositoryStructureHelper.getDateFolderPath(now);
+                            NodeRef storeFolder = repositoryStructureHelper.createPath(NamespaceService.CONTENT_MODEL_1_0_URI, statusFolder, directoryPaths);
+
                             //Перемещаем в нужную папку
                             if (storeFolder != null) {
                                 String name = (String) nodeService.getProperty(stm_document, ContentModel.PROP_NAME);
                                 nodeService.moveNode(stm_document, storeFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
                             } else {
-                                throw new Exception("Папка статуса " + status + "/" + dateStatus + " для документа " + stm_document + " не создана");
+                                throw new Exception("Папка статуса " + status + "/" + statusDateFormat.format(now) + " для документа " + stm_document + " не создана");
                             }
 
                             // Установка динамических ролей для файла

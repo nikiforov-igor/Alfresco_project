@@ -2,6 +2,7 @@ package ru.it.lecm.base.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AuthenticationService;
@@ -10,6 +11,9 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.QNamePattern;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.base.ServiceFolder;
 
@@ -18,10 +22,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * User: AIvkin Date: 27.12.12 Time: 15:12
@@ -331,9 +331,14 @@ public abstract class BaseBean implements InitializingBean {
                 NodeRef pathDir = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
                 if (pathDir == null) {
                     QName assocQName = QName.createQName(nameSpace, pathString);
-                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                    Map<QName, Serializable> properties = new HashMap<>(1);
                     properties.put(ContentModel.PROP_NAME, pathString);
-                    directoryRef = nodeService.createNode(directoryRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties).getChildRef();
+                    try {
+                        directoryRef = nodeService.createNode(directoryRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties).getChildRef();
+                    } catch (DuplicateChildNodeNameException e) {
+                        //есть вероятность, что папка создана другим потоком/транзакцией
+                        directoryRef = nodeService.getChildByName(directoryRef, ContentModel.ASSOC_CONTAINS, pathString);
+                    }
                 } else {
                     directoryRef = pathDir;
                 }

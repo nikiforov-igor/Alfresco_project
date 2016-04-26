@@ -1,7 +1,9 @@
 package ru.it.lecm.base.beans;
 
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Класс отвечающий за создание структуры папок в хранилище он создает папки с
@@ -107,4 +109,6 @@ public interface RepositoryStructureHelper {
     NodeRef createPath(String nameSpace, NodeRef root, List<String> directoryPaths) throws WriteTransactionNeededException;
 
     NodeRef getFolder( NodeRef parentRef, String folder);
+
+    List<String> getDateFolderPath(Date date);
 }

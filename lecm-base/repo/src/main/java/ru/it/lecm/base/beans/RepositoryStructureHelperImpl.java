@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.ServiceFolder;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -40,6 +42,9 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
     private final static char FOLDER_SEPARATOR = '/';
     private final static String COLLABORATOR = "Collaborator";
     private final static String CONSUMER = "Consumer";
+    private final DateFormat FolderNameFormatYear = new SimpleDateFormat("yyyy");
+    private final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
+    private final DateFormat FolderNameFormatDay = new SimpleDateFormat("dd");
 
     private Repository repository;
     private NodeService nodeService;
@@ -459,5 +464,14 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
     public NodeRef createUserTemp() throws WriteTransactionNeededException {
             NodeRef userHome = repositoryHelper.getUserHome(repositoryHelper.getPerson());
             return createFolder(userHome, this.usertemp);
+    }
+
+    @Override
+    public List<String> getDateFolderPath(Date date) {
+        List<String> result = new ArrayList<String>();
+        result.add(FolderNameFormatYear.format(date));
+        result.add(FolderNameFormatMonth.format(date));
+        result.add(FolderNameFormatDay.format(date));
+        return result;
     }
 }
