@@ -165,6 +165,20 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="createReviewList">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-review-list:reviewer-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:title" mandatory="true" >
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
 			<form id="search">
 				<field-visibility>
 					<show id="cm:title"/>

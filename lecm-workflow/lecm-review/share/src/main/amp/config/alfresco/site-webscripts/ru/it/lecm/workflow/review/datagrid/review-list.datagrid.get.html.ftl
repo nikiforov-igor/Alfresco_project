@@ -17,7 +17,7 @@
                 showActionColumn: true,
                 expandable: false,
                 bubblingLabel: '${bubblingLabel}',
-                excludeColumns:['deletable'],
+                excludeColumns:['deletable', 'lecm-review-list:is-public'],
                 actions: [{
                     type:'datagrid-action-link-' + '${bubblingLabel}',
                     id:'onActionEdit',
@@ -31,7 +31,7 @@
                 }]
             }, {
                 datagridFormId: 'reviewListDatagrid',
-                createFormId: 'contractorOrg',
+                createFormId: 'createReviewList',
                 itemType: '${itemType}',
                 nodeRef: '${nodeRef}',
                 useChildQuery: false,
