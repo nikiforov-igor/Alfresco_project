@@ -201,7 +201,12 @@ function getSearchQuery(params) {
 									}
 								}
                                 else {
-                                    if (propName.match("-strong-constant$") == "-strong-constant") {
+                                    var propNamePrefix = '';
+                                    if ((propName.match("-strong-constant-upper-case$") == "-strong-constant-upper-case")) {
+                                        propName = propName.substr(0, propName.length - "-strong-constant-upper-case".length);
+                                        propValue = '"' + propValue.toUpperCase() + '"';
+                                        propNamePrefix = '=';
+                                    } else if (propName.match("-strong-constant$") == "-strong-constant") {
                                         propName = propName.substr(0, propName.length - "-strong-constant".length);
                                         propValue = '"' + propValue + '"';
                                     } else {
@@ -222,7 +227,7 @@ function getSearchQuery(params) {
                                             }
                                         }
                                     }
-                                    formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':' + propValue;
+                                    formQuery += (first ? '' : ' AND ') + propNamePrefix + escapeQName(propName) + ':' + propValue;
                                     first = false;
                                 }
 							}

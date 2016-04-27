@@ -444,6 +444,12 @@
                             <control-param name="options">true|Да,false|Нет</control-param>
                         </control>
                     </field>
+                    <field id="lecm-errands:base-doc-number">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="nameSuffix">-strong-constant-upper-case</control-param>
+                        </control>
+                    </field>
+
                 </appearance>
             </form>
             <form id="workflow-form">
