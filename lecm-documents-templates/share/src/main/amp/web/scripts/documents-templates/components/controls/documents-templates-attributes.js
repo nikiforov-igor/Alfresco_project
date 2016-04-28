@@ -129,7 +129,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/type/fields',
 				dataObj: {
-					formId: '',
+					formId: 'document-template-fields',
 					useDefaultForm: true,
 					itemType: this.templateDocType
 				},
