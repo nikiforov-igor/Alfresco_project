@@ -39,7 +39,7 @@
 			</form>
 		</forms>
 	</config>
-	
+
 	<config evaluator="node-type" condition="lecm-meetings:document">
 		<forms>
 			<form>
@@ -101,7 +101,7 @@
 						<constraint-handlers>
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
 						</constraint-handlers>
-					</field>					
+					</field>
 					<!--повторность-->
 					<field id="lecm-events:repeatable" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
@@ -109,15 +109,15 @@
 						</control>
 					</field>
 					<field id="lecm-events:repeatable-start-period" read-only="true">
-						
+
 					</field>
 					<field id="lecm-events:repeatable-end-period" read-only="true" >
-						
+
 					</field>
 					<field id="lecm-events:repeatable-rule" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
 					</field>
-					
+
 					<!--Председатель-->
 					<field id="lecm-meetings:chairman-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
@@ -199,7 +199,7 @@
 					<field id="lecm-events:description" >
 						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 					</field>
-					
+
 				</appearance>
 			</form>
 			<form id="agenda">
@@ -210,7 +210,7 @@
 					<show id="approve-agenda-label" force="true"/>
 					<!--Требование согласовать повестку-->
 					<show id="lecm-meetings:approve-agenda"/>
-					<show id="lecm-meetings:approval"/>				
+					<show id="lecm-meetings:approval"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-meetings-ts:items-assoc-label">
@@ -247,12 +247,12 @@
 					</field>
 					<field id="lecm-meetings:approval">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
-							
+
 						</control>
 					</field>
 				</appearance>
 			</form>
-			
+
 			<form id="popup-form">
 				<field-visibility>
 					<!-- Заголовок -->
@@ -301,7 +301,7 @@
 			<!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
 			<form id="document">
 				<field-visibility>
-					<!--Заголовок--> 
+					<!--Заголовок-->
 					<show id="lecm-events:title"/>
 					<!--Председатель-->
 					<show id="lecm-meetings:chairman-assoc"/>
@@ -430,7 +430,7 @@
 				</field-visibility>
 				<appearance>
 					<set id="createEventSet" appearance="" template="/ru/it/lecm/events/event-create/event-create-set.ftl" />
-					
+
 					<field id="lecm-document-aspects:attachments-temp-assoc" label-id="attachments.label" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -438,7 +438,7 @@
 							<control-param name="suppressRefreshEvent">true</control-param>
 						</control>
 					</field>
-					
+
 					<field id="lecm-events:title" set="createEventSet"/>
 					<field id="lecm-events:all-day" set="createEventSet">
 						<constraint-handlers>
@@ -463,7 +463,7 @@
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
 						</constraint-handlers>
 					</field>
-					
+
 					<field id="lecm-events:repeatable" set="createEventSet">
 						<constraint-handlers>
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
@@ -487,7 +487,7 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
 						</constraint-handlers>
 					</field>
-					
+
 					<!--Председатель-->
 					<field id="lecm-meetings:chairman-assoc" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
@@ -532,7 +532,7 @@
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 						</control>
 					</field>
-					
+
 					<field id="lecm-events:location-assoc" set="createEventSet">
 						<control template="/ru/it/lecm/events/controls/events-location-control.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Места_x0020_проведения_x0020_мероприятий</control-param>
@@ -565,6 +565,202 @@
 					</field>
 					<field id="lecm-events:subject-assoc-ref" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="lecm-meetings:approve-agenda" set="createEventSet"/>
+					<field id="lecm-meetings:temp-items-assoc" label-id="label.items" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/association-datagrid-control.ftl">
+							<control-param name="itemType">lecm-meetings-ts:item</control-param>
+							<control-param name="allowCreate">true</control-param>
+							<control-param name="allowExpand">false</control-param>
+							<control-param name="showActions">true</control-param>
+							<control-param name="fullDelete">true</control-param>
+							<control-param name="isTableSortable">false</control-param>
+							<control-param name="height">100</control-param>
+							<control-param name="rootNode">{usertemp}</control-param>
+							<control-param name="showCreateButton">true</control-param>
+							<control-param name="showSearch">false</control-param>
+							<control-param name="showLabel">true</control-param>
+							<control-param name="newRowDialogTitle">meeting.item.create.form.title</control-param>
+							<control-param name="editRowDialogTitle">meeting.item.edit.form.title</control-param>
+							<control-param name="datagridFormId">datagrid</control-param>
+							<control-param name="editFormId">create-meetings-item-edit-form</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="document-template-fields">
+				<field-visibility>
+					<!--Вложения-->
+					<show id="lecm-document-aspects:attachments-temp-assoc"/>
+					<!-- Заголовок -->
+					<show id="lecm-events:title"/>
+					<!-- Весь день -->
+					<show id="lecm-events:all-day"/>
+					<!-- Дата начала мероприятия -->
+					<show id="lecm-events:from-date"/>
+					<!-- Дата окончания мероприятия -->
+					<show id="lecm-events:to-date"/>
+					<!-- Повторное -->
+					<show id="lecm-events:repeatable"/>
+					<!-- Дата начала периода -->
+					<show id="lecm-events:repeatable-start-period"/>
+					<!-- Дата окончания периода -->
+					<show id="lecm-events:repeatable-end-period"/>
+					<!-- Правила -->
+					<show id="lecm-events:repeatable-rule"/>
+					<!--Председатель-->
+					<show id="lecm-meetings:chairman-assoc"/>
+					<!--Секретарь-->
+					<show id="lecm-meetings:secretary-assoc"/>
+					<!-- Участники -->
+					<show id="lecm-events:temp-members-assoc"/>
+					<!-- Приглашённые -->
+					<show id="lecm-events:invited-members-assoc"/>
+					<!-- Место проведения -->
+					<show id="lecm-events:location-assoc"/>
+					<!-- Ресурсы -->
+					<show id="lecm-events:temp-resources-assoc"/>
+					<!-- Инициатор -->
+					<show id="lecm-events:initiator-assoc"/>
+					<!-- Описание -->
+					<show id="lecm-events:description"/>
+					<!-- Тематика -->
+					<show id="lecm-events:subject-assoc"/>
+					<!--Согласовать повестку-->
+					<show id="lecm-meetings:approve-agenda"/>
+					<!-- Повестка -->
+					<show id="lecm-meetings:temp-items-assoc"/>
+				</field-visibility>
+				<appearance>
+					<set id="createEventSet" appearance="" template="/ru/it/lecm/events/event-create/event-create-set.ftl" />
+
+					<field id="lecm-document-aspects:attachments-temp-assoc" label-id="attachments.label" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
+							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
+							<control-param name="directoryName">Вложения</control-param>
+							<control-param name="suppressRefreshEvent">true</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-events:title" set="createEventSet"/>
+					<field id="lecm-events:all-day" set="createEventSet">
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:from-date" set="createEventSet">
+						<control>
+							<control-param name="defaultValue">now</control-param>
+							<control-param name="defaultTime">12:00</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:to-date" set="createEventSet">
+						<control>
+							<control-param name="defaultValue">now</control-param>
+							<control-param name="defaultTime">13:00</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+
+					<field id="lecm-events:repeatable" set="createEventSet">
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeRepeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-start-period" mandatory="true" set="createEventSet">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-end-period" mandatory="true" set="createEventSet">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Events.repeateDateValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-events:repeatable-rule" mandatory="true" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/reiteration-control-ext.ftl" />
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Events.repeatableValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+
+					<!--Председатель-->
+					<field id="lecm-meetings:chairman-assoc" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
+							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+						</control>
+					</field>
+					<!--Секретарь-->
+					<field id="lecm-meetings:secretary-assoc" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
+							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="childrenDataSource">lecm/employees/MEETINGS_CREATOR/picker</control-param>
+						</control>
+					</field>
+					<!--участники-->
+					<field id="lecm-events:temp-members-assoc" set="createEventSet">
+						<control template="/ru/it/lecm/events/controls/events-members-control.ftl">
+							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
+						</control>
+					</field>
+					<!--Приглашенные-->
+					<field id="lecm-events:invited-members-assoc" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
+							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+							<control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
+							<control-param name="itemType">lecm-representative:representative-type</control-param>
+						</control>
+					</field>
+
+					<field id="lecm-events:location-assoc" set="createEventSet">
+						<control template="/ru/it/lecm/events/controls/events-location-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Места_x0020_проведения_x0020_мероприятий</control-param>
+							<control-param name="plane">true</control-param>
+							<control-param name="childrenDataSource">lecm/events/locations/picker</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:temp-resources-assoc" set="createEventSet">
+						<control>
+							<control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:initiator-assoc" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
+							<control-param name="plane">true</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+						</control>
+					</field>
+					<field id="lecm-events:description" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+					</field>
+					<field id="lecm-events:subject-assoc" set="createEventSet">
+						<control template="/ru/it/lecm/base-share/components/controls/association-token-control.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+						</control>
 					</field>
 					<field id="lecm-meetings:approve-agenda" set="createEventSet"/>
 					<field id="lecm-meetings:temp-items-assoc" label-id="label.items" set="createEventSet">
@@ -774,7 +970,7 @@
 			</form>
 		</forms>
 	</config>
-	
+
 	<config evaluator="model-type" condition="lecm-meetings-ts:item">
 		<forms>
 			<form>
@@ -822,7 +1018,7 @@
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
-							
+
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
 					</field>
@@ -878,7 +1074,7 @@
 			</form>
 		</forms>
 	</config>
-	
+
 	<config evaluator="node-type" condition="lecm-meetings-ts:item">
 		<forms>
 			<form>
@@ -925,7 +1121,7 @@
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
-							
+
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
 					</field>
@@ -954,7 +1150,7 @@
 							<!--<control-param name="additionalFilter">(TYPE:\"\" AND NOT @lecm-statemachine\\:status:\"Черновик\") </control-param>-->
 						</control>
 					</field>
-					
+
 					<field id="lecm-meetings-ts:attachments-assoc" label-id="attachments.label">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -962,14 +1158,14 @@
 							<control-param name="suppressRefreshEvent">true</control-param>
 						</control>
 					</field>
-					
+
 					<field id="lecm-meetings-ts:site-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
                             <control-param name="formatString">
                                 <![CDATA[<a href='/share/page/site/{lecm-meetings-ts:site-assoc/cm:name}/dashboard'>{lecm-meetings-ts:site-assoc/cm:title}</a>]]>
                             </control-param>
                         </control>
-					</field>				
+					</field>
 				</appearance>
 			</form>
 			<form id="create-meetings-item-edit-form">
@@ -1015,7 +1211,7 @@
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">label.representative.select</control-param>
-							
+
 							<control-param name="itemTypeSubstituteStrings">lecm-representative:representative-type,{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename};lecm-orgstr:employee,{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 						</control>
 					</field>
@@ -1044,7 +1240,7 @@
 							<!--<control-param name="additionalFilter">(TYPE:\"\" AND NOT @lecm-statemachine\\:status:\"Черновик\") </control-param>-->
 						</control>
 					</field>
-					
+
 					<field id="lecm-meetings-ts:attachments-assoc" label-id="attachments.label">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -1058,7 +1254,7 @@
 				<field-visibility>
 					<show id="lecm-meetings-ts:new-workspace"/>
 					<show id="lecm-meetings-ts:site-assoc"/>
-				</field-visibility>	
+				</field-visibility>
 				<appearance>
 					<field id="lecm-meetings-ts:new-workspace" label-id="label.meetings.new.workspace">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
@@ -1132,7 +1328,7 @@
 			</form>
 		</forms>
 	</config>
-	
+
 	<config evaluator="node-type" condition="lecm-meetings-ts:itemsTable">
 		<forms>
 			<form>
