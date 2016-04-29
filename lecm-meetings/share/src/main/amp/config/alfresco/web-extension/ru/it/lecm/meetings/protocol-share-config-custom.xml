@@ -288,8 +288,6 @@
 					<show id="lecm-eds-document:file-register-assoc"/>
 					<!--Автосоздание поручений-->
 					<show id="lecm-protocol:errands-autocreation"/>
-					<!--Вложения-->
-					<show id="lecm-document-aspects:attachments-temp-assoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -334,14 +332,6 @@
 					<field id="lecm-document:subject-assoc"/>
 					<field id="lecm-eds-document:file-register-assoc"/>
 					<field id="lecm-protocol:errands-autocreation"/>
-
-					<field id="lecm-document-aspects:attachments-temp-assoc" label-id="meetings.attachments">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
-							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
-							<control-param name="directoryName">Вложения</control-param>
-							<control-param name="suppressRefreshEvent">true</control-param>
-						</control>
-					</field>
 					<field id="lecm-eds-document:sheets-number">
 						<control template="/ru/it/lecm/base-share/components/controls/number.ftl">
 							<control-param name="maxLength">9</control-param>

@@ -390,8 +390,6 @@
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Исполнить точно в срок  -->
                     <show id="lecm-errands:just-in-time"/>
-                    <!--  Вложения -->
-	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="collapsible1"/>
@@ -458,12 +456,6 @@
                     <field id="lecm-errands:just-in-time" set="collapsible2-inner">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-                    <field id="lecm-document-aspects:attachments-temp-assoc" set="static2">
-		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
-			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-			                <control-param name="directoryName">label.errands.attachments</control-param>
-		                </control>
-	                </field>
                 </appearance>
             </form>
             <form id="datagrid">
