@@ -299,6 +299,7 @@
 			<form-type id="documentDashletForm" formId="document-dashlet" evaluatorType="node-type" localName="Дашлет" />
 			<form-type id="documentForm" formId="document" evaluatorType="node-type" localName="Правая область" />
 			<form-type id="mainPageDashletsForm" formId="main-page-dashlets" evaluatorType="node-type" localName="Главная страница" />
+			<form-type id="documentTemplateFieldsForm" formId="document-template-fields" evaluatorType="model-type" localName="Форма создания шаблона документа" />
 			<form-layout localName="В одну колонку" template=""/>
 			<form-layout localName="В две колонки" template="/ru/it/lecm/controls/2-column-edit-form.ftl" />
 			<form-layout localName="С вкладками" template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
