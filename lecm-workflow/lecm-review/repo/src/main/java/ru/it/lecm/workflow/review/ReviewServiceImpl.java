@@ -211,6 +211,9 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 			for (NodeRef record : list) {
 				employeeSet.addAll(findNodesByAssociationRef(record, ASSOC_REVIEW_LIST_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET));
 			}
+			NodeRef newItemInfo = createNode(rootFolder, TYPE_REVIEW_INFO, null, null);
+			nodeService.createAssociation(newItemInfo, currentEmployee, ASSOC_REVIEW_INFO_INITIATOR);
+
 			if (employeeSet.size() != 1 || (noEmployee)) {
 				List<NodeRef> excludeUsers = getExcludeUsersList(documentTableService.getDocumentByTableDataRow(nodeRef));
 				employeeSet.removeAll(excludeUsers);
@@ -219,11 +222,13 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 					nodeService.setProperty(newItem, DocumentTableService.PROP_INDEX_TABLE_ROW, documentTableService.getTableDataRows(rootFolder).size() - 1);
 					nodeService.createAssociation(newItem, employee, ASSOC_REVIEW_TS_REVIEWER);
 					nodeService.createAssociation(newItem, currentEmployee, ASSOC_REVIEW_TS_INITIATOR);
+					nodeService.createAssociation(newItem, newItemInfo, ASSOC_REVIEW_INFO);
 				}
 				nodeService.moveNode(nodeRef, repositoryStructureHelper.getUserTemp(false), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString()));
 				//nodeService.addAspect(nodeRef, ContentModel.ASPECT_TEMPORARY, null);
 			} else {
 				nodeService.removeAspect(nodeRef, ContentModel.ASPECT_TEMPORARY);
+				nodeService.createAssociation(nodeRef, newItemInfo, ASSOC_REVIEW_INFO);
 			}
 		}
 	}

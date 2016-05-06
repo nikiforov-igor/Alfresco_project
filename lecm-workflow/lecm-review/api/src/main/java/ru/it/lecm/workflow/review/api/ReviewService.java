@@ -18,6 +18,7 @@ public interface ReviewService extends InitializingBean {
     String REVIEW_TS_NAMESPACE = "http://www.it.ru/logicECM/model/review-ts/1.0";
     String REVIEW_LIST_NAMESPACE = "http://www.it.ru/logicECM/model/review-list/1.0";
     String REVIEW_GLOBAL_SETTINGS_NAMESPACE = "http://www.it.ru/logicECM/model/review/workflow/global-settings/1.0";
+	String REVIEW_INFO_NAMESPACE = "http://www.it.ru/logicECM/model/review-info/1.0";
     QName ASSOC_REVIEW_TS_REVIEW_TABLE = QName.createQName(REVIEW_TS_NAMESPACE, "review-table-assoc");
     QName ASSOC_REVIEW_TS_REVIEWER = QName.createQName(REVIEW_TS_NAMESPACE, "reviewer-assoc");
     QName ASSOC_REVIEW_TS_INITIATOR = QName.createQName(REVIEW_TS_NAMESPACE, "initiator-assoc");
@@ -25,12 +26,18 @@ public interface ReviewService extends InitializingBean {
     QName TYPE_REVIEW_TS_REVIEW_TABLE_ITEM = QName.createQName(REVIEW_TS_NAMESPACE, "review-table-item");
     QName TYPE_REVIEW_LIST_REVIEW_LIST_ITEM = QName.createQName(REVIEW_LIST_NAMESPACE, "review-list-item");
     QName TYPE_REVIEW_GLOBAL_SETTINGS = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "settings");
+	QName TYPE_REVIEW_INFO = QName.createQName(REVIEW_INFO_NAMESPACE, "info");
     QName ASSOC_REVIEW_LIST_REVIEWER = QName.createQName(REVIEW_LIST_NAMESPACE, "reviewer-assoc");
     QName PROP_REVIEW_TS_STATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-state");
     QName PROP_REVIEW_TS_REVIEW_FINISH_DATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-finish-date");
     QName PROP_REVIEW_TS_ACTIVE_REVIEWERS = QName.createQName(REVIEW_TS_NAMESPACE, "active-reviewers");
     QName PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "defaultReviewTerm");
     QName PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "termToNotifyBeforeDeadline");
+	QName PROP_REVIEW_INFO_REVIEW_START_DATE = QName.createQName(REVIEW_INFO_NAMESPACE, "review-start-date");
+	QName PROP_REVIEW_INFO_REVIEW_STATE = QName.createQName(REVIEW_INFO_NAMESPACE, "review-state");
+	QName ASSOC_REVIEW_INFO_INITIATOR = QName.createQName(REVIEW_INFO_NAMESPACE, "initiator-assoc");
+	QName ASSOC_REVIEW_REVIEW_LIST = QName.createQName(REVIEW_INFO_NAMESPACE, "review-list-assoc");
+	QName ASSOC_REVIEW_INFO = QName.createQName(REVIEW_INFO_NAMESPACE, "info-assoc");
 
     Boolean needReviewByCurrentUser(NodeRef document);
 

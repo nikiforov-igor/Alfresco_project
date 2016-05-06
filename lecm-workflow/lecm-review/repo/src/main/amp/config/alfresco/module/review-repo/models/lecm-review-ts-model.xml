@@ -35,7 +35,7 @@
 
 	<types>
 		<type name="lecm-review-info:info">
-			<parent>cm:cmobject</parent>
+			<parent>lecm-document:tableDataRow</parent>
 			<properties>
 				<property name="lecm-review-info:review-start-date">
 					<type>d:date</type>
@@ -56,17 +56,6 @@
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-				<association name="lecm-review-info:review-list-assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>cm:cmobject</class>
 						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
@@ -135,10 +124,10 @@
 			<parent>lecm-document:tableData</parent>
 			<overrides>
 				<property name="lecm-document:tableDataRowType">
-					<default>lecm-review-ts:review-table-item</default>
+					<default>lecm-review-info:info</default>
 				</property>
 				<property name="lecm-document:pageSize">
-					<default>5</default>
+					<default>15</default>
 				</property>
 			</overrides>
 		</type>

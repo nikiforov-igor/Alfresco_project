@@ -1,8 +1,9 @@
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/evaluator.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/datasources/reviewEvaluator.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/search.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/org/alfresco/slingshot/datalists/parse-args.lib.js">
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/filter.lib.js">
-const DEFAULT_MAX_RESULTS = 3000;
+
 const DEFAULT_PAGE_SIZE = 20;
 const DEFAULT_INDEX = 0;
 
@@ -16,7 +17,7 @@ function main() {
             sort: (pars.get("sort").length() > 0)  ? pars.get("sort") : null,
             maxResults:(pars.get("maxResults") !== null) ? parseInt(pars.get("maxResults"), 10) : DEFAULT_PAGE_SIZE,
             fields:(pars.get("fields").length() > 0) ? pars.get("fields") : null,
-			nameSubstituteStrings:(pars.get("nameSubstituteStrings") !== null) ? pars.get("nameSubstituteStrings") : null,        
+			nameSubstituteStrings:(pars.get("nameSubstituteStrings") !== null) ? pars.get("nameSubstituteStrings") : null,
 			showInactive: pars.get("showInactive") == true,
             parent: (pars.get("parent").length() > 0)  ? pars.get("parent") : null,
 			searchNodes: (pars.get("searchNodes").length() > 0)  ? pars.get("searchNodes").split(",") : null,
