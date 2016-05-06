@@ -240,6 +240,9 @@
 		    <#else>
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
+			<#if params.firstNodesMarker??>
+			    nodesMarker: "${params.firstNodesMarker?string}",
+			</#if>
 		    showCreateNewLink: ${firstShowCreateNewLink?string},
             additionalFilter: "${params.firstAdditionalFilter!''}",
             showAssocViewForm: ${showAssocViewForm?string},
@@ -322,6 +325,9 @@
 		    <#else>
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
+			<#if params.secondNodesMarker??>
+				nodesMarker: "${params.secondNodesMarker?string}",
+			</#if>
             <#if args.ignoreNodes??>
                 ignoreNodes: "${args.ignoreNodes}".split(","),
             </#if>

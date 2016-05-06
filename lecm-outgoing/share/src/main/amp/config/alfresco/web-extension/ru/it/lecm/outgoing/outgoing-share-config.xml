@@ -44,7 +44,16 @@
 					<field id="lecm-eds-document:document-type-assoc" set="common"/>
 					<field id="lecm-outgoing:delivery-method-assoc" set="common"/>
 
-					<field id="lecm-outgoing:contractor-assoc" set="common"/>
+					<field id="lecm-outgoing:contractor-assoc" set="common">
+						<control>
+							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="secondNodesMarker">organisation</control-param>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+
 					<field id="lecm-outgoing:recipient-assoc" set="common">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
                             <control-param name="showAssocViewForm">true</control-param>
@@ -279,7 +288,16 @@
 					<field id="lecm-eds-document:document-type-assoc"/>
 					<field id="lecm-outgoing:delivery-method-assoc"/>
 
-					<field id="lecm-outgoing:contractor-assoc"/>
+					<field id="lecm-outgoing:contractor-assoc">
+						<control>
+							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="secondNodesMarker">organisation</control-param>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
+
 					<field id="lecm-outgoing:recipient-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
                             <control-param name="showAssocViewForm">true</control-param>
@@ -401,7 +419,15 @@
 					<field id="lecm-eds-document:document-type-assoc"/>
 					<field id="lecm-outgoing:delivery-method-assoc"/>
 
-					<field id="lecm-outgoing:contractor-assoc"/>
+					<field id="lecm-outgoing:contractor-assoc">
+						<control>
+							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="secondNodesMarker">organisation</control-param>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+					</field>
 					<field id="lecm-outgoing:recipient-assoc">
                         <control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
                             <control-param name="showAssocViewForm">true</control-param>
@@ -533,11 +559,18 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-outgoing:contractor-assoc" mandatory="false">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
-                        </constraint-handlers>
-                    </field>
+					<field id="lecm-outgoing:contractor-assoc" mandatory="false">
+						<control>
+							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="secondNodesMarker">organisation</control-param>
+							<control-param name="endpointMany">true</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+						</constraint-handlers>
+					</field>
 					<field id="lecm-outgoing:recipient-assoc">
 						<control template="/ru/it/lecm/contractors/contractors-double-select-representative.ftl">
 							<control-param name="showAssocViewForm">true</control-param>
@@ -639,6 +672,15 @@
 							<control-param name="employeeAbsenceMarker">false</control-param>
 							<control-param name="useStrictFilterByOrg">false</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+						</control>
+					</field>
+					<field id="lecm-outgoing:contractor-assoc">
+						<control>
+							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="secondNodesMarker">organisation</control-param>
+							<control-param name="endpointMany">true</control-param>
 						</control>
 					</field>
 				</appearance>

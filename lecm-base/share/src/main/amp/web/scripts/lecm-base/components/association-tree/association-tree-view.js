@@ -81,6 +81,8 @@ LogicECM.module = LogicECM.module || {};
 
 		alreadyShowCreateNewLink: false,
 
+        selectedItemsMarkers: {},
+
 		options:
 		{
 			// скрывать ли игнорируемые ноды в дереве
@@ -194,7 +196,9 @@ LogicECM.module = LogicECM.module || {};
 
             loadDefault: true,
 
-            pathNameSubstituteString: null
+            pathNameSubstituteString: null,
+
+            nodesMarker: null
         },
 
         onReady: function AssociationTreeViewer_onReady() {
@@ -1657,6 +1661,7 @@ LogicECM.module = LogicECM.module || {};
             var fieldId = this.options.pickerId + "-selected-elements";
             Dom.get(fieldId).innerHTML = '';
             Dom.get(fieldId).className = 'currentValueDisplay';
+            
 
             var num = 0;
             for (i in items) {
@@ -1769,13 +1774,14 @@ LogicECM.module = LogicECM.module || {};
 		        clearCurrentDisplayValue = true;
 	        }
 
-            var el;
-            el = Dom.get(this.options.controlId + "-currentValueDisplay");
+            var el = Dom.get(this.options.controlId + "-currentValueDisplay");
+            
 	        if (el != null) {
 		        if (clearCurrentDisplayValue) {
 	                el.innerHTML = '';
 		        }
-	            var num = 0;
+                var markers = this.selectedItemsMarkers;
+                
 	            for (var i in this.selectedItems) {
 	                if (this.options.plane || !this.options.showSelectedItemsPath) {
 	                    var displayName = this.selectedItems[i].selectedName;
@@ -1807,13 +1813,28 @@ LogicECM.module = LogicECM.module || {};
 				            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 			            }
 
+                        if (this.options.nodesMarker) {
+                            if (!markers[i]) {
+                                markers[i] = this.options.nodesMarker;
+                            }
+                        }
+                        
 			            YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 		            }
 	            }
 	        }
 
-            if(!this.options.disabled)
-            {
+            if (!this.options.disabled) {
+                if (this.options.nodesMarker) {
+                    this.selectedItemsMarkers = {};
+
+                    for (i in markers) {
+                        if (this.selectedItems[i]) {
+                            this.selectedItemsMarkers[i] = markers[i];
+                        }
+                    }
+                }
+                
                 var addItems = this.getAddedItems();
 
                 // Update added fields in main form to be submitted
@@ -1879,11 +1900,15 @@ LogicECM.module = LogicECM.module || {};
 		            });
             }
             if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
-                YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+                var params = {
                     selectedItems: this.selectedItems,
-	                formId: this.options.formId,
-	                fieldId: this.options.fieldId
-                });
+                    formId: this.options.formId,
+                    fieldId: this.options.fieldId
+                };
+                if (this.options.nodesMarker && Object.keys(this.selectedItems).length == 1) {
+                    params.markers = this.selectedItemsMarkers;
+                }
+                YAHOO.Bubbling.fire(this.options.changeItemsFireAction, params);
             }
         },
 

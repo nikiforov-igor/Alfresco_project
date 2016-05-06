@@ -102,7 +102,7 @@
 					<target>
 						<class>lecm-contractor:contractor-type</class>
 						<mandatory>true</mandatory>
-						<many>false</many>
+						<many>true</many>
 					</target>
 				</association>
 				<association name="lecm-outgoing:recipient-assoc">

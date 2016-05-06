@@ -430,6 +430,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                                 columnContent = columnContent.substring(0, 150) + "...";
                                             }
                                             break;
+                                        
+                                        case "lecm-outgoing:contractor-assoc":
+                                            if (columnContent.length > 200) {
+                                                tooltip = columnContent;
+                                                columnContent = columnContent.substring(0, 200) + "...";
+                                            }
+                                            break;
                                         default:
                                             if (datalistColumn.name.toLowerCase().indexOf("cm:nowrap") == 0) {
                                                 columnContent = "<div style='white-space: nowrap'>" + data.displayValue + "</div>";
