@@ -29,7 +29,6 @@
     }
   }
   if (recipients.length > 0) {
-	notifications.sendNotificationFromCurrentUser(recipients, notificationText, document);
 	notifications.sendNotificationFromCurrentUser({
 	  recipients: recipients,
 	  templateCode: 'REVIEW_NEED',
