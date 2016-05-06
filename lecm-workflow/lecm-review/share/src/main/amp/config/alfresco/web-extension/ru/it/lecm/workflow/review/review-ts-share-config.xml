@@ -133,7 +133,7 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="cm:title"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-review-list:reviewer-assoc"/>
 				</field-visibility>
 				<appearance>
@@ -153,7 +153,7 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-review-list:is-public"/>
-					<show id="cm:title"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-review-list:reviewer-assoc"/>
 				</field-visibility>
 				<appearance>
@@ -181,7 +181,7 @@
 			</form>
 			<form id="search">
 				<field-visibility>
-					<show id="cm:title"/>
+					<show id="cm:title" force="true"/>
 					<show id="lecm-review-list:reviewer-assoc"/>
 				</field-visibility>
 				<appearance>
