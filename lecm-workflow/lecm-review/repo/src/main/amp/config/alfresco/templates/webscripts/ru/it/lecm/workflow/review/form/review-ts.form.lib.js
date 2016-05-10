@@ -1,4 +1,4 @@
-/* global logger, search, orgstructure */
+/* global logger, search, orgstructure, documentMembers, notifications, businessJournal, review, documentTables */
 
 function createReviewTSItem(persistedObject) {
 	try {
@@ -18,7 +18,7 @@ function createReviewTSItem(persistedObject) {
 
 		if (logger.isLoggingEnabled()) {
 			logger.log(msg);
-			logger.log("Returning 500 status code");
+			logger.log('Returning 500 status code');
 		}
 	}
 }
@@ -26,6 +26,7 @@ function createReviewTSItem(persistedObject) {
 function createReviewTSItem(reviewInfo, reviewTsItems) {
 	// надо достать имплоев из ассоков и для каждого склепать итем
 	var i, j, item,
+		items = [],
 		employee,
 		employees = {},
 		assocs,
@@ -56,5 +57,43 @@ function createReviewTSItem(reviewInfo, reviewTsItems) {
 		item.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
 		item.createAssociation(employee, 'lecm-review-ts:reviewer-assoc');
 		item.createAssociation(reviewInfo, 'lecm-review-info:info-assoc');
+		items.push(item);
+	}
+	return items;
+}
+
+function sendToReview(reviewInfo, items) {
+	var document = documentTables.getDocumentByTableDataRow(reviewInfo),
+		initiator = orgstructure.getCurrentEmployee(),
+		recipients = [],
+		row;
+
+	for each (row in items) {
+		var reviewer = row.associations['lecm-review-ts:reviewer-assoc'][0];
+		var itemInitiator = row.assocs['lecm-review-ts:initiator-assoc'];
+		if (itemInitiator && itemInitiator.length && initiator.nodeRef.equals(itemInitiator[0].nodeRef)) {
+			if (row.properties['lecm-review-ts:review-state'] == 'NOT_STARTED') {
+				documentMembers.addMemberWithoutCheckPermission(document, reviewer, 'LECM_BASIC_PG_Reader', true);
+				recipients.push(reviewer);
+				row.properties['lecm-review-ts:review-state'] = 'NOT_REVIEWED';
+				row.properties['lecm-review-ts:review-start-date'] = new Date();
+				row.save();
+			}
+		}
+	}
+	if (recipients.length > 0) {
+		reviewInfo.properties['lecm-review-info:review-state'] = 'NOT_REVIEWED';
+		reviewInfo.properties['lecm-review-info:review-start-date'] = new Date();
+		reviewInfo.save();
+
+		notifications.sendNotificationFromCurrentUser({
+			recipients: recipients,
+			templateCode: 'REVIEW_NEED',
+			templateConfig: {
+				mainObject: document,
+				eventExecutor: initiator
+			}
+		});
+		businessJournal.log(document.nodeRef.toString(), 'SEND_TO_REVIEW', 'Документ #mainobject направлен на ознакомление пользователем #initiator', []);
 	}
 }

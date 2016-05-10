@@ -14,5 +14,6 @@ if (status.code == status.STATUS_OK && model.persistedObject) {
 			reviewTsItems.push(utils.getNodeFromString(tmpTsItems[i]));
 		}
 	}
-	createReviewTSItem(reviewInfo, reviewTsItems);
+	reviewTsItems = createReviewTSItem(reviewInfo, reviewTsItems);
+	sendToReview(reviewInfo, reviewTsItems);
 }
