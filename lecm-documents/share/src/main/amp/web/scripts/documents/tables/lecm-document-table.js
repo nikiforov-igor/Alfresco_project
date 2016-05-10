@@ -54,7 +54,9 @@ LogicECM.module = LogicECM.module || {};
 				dataSource: "lecm/search",
 				allowCreate: true,
 				allowDelete: true,
-				allowEdit: true
+				allowEdit: true,
+				createItemBtnMsg: null,
+				newRowDialogTitle: null
 			},
 
             datagrid: null,
@@ -112,6 +114,7 @@ LogicECM.module = LogicECM.module || {};
 						bubblingLabel: this.options.bubblingLabel,
 						itemType: this.tableData.rowType,
 						destination: this.tableData.nodeRef,
+						newRowDialogTitle: this.options.newRowDialogTitle,
 						newRowButtonType: (this.options.disabled || (this.options.allowCreate === false)) ? "inActive" : "defaultActive"
 					});
 				}
@@ -207,7 +210,8 @@ LogicECM.module = LogicECM.module || {};
 						viewFormTitleMsg: this.options.viewFormTitleMsg,
 						dataSource: this.options.dataSource,
                         expandable: this.options.expandable,
-                        expandDataSource: this.options.expandDataSource
+                        expandDataSource: this.options.expandDataSource,
+						createItemBtnMsg: this.options.createItemBtnMsg
 					}).setMessages(this.options.messages);
 				}
 
@@ -1117,5 +1121,3 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 	}, true)
 
 })();
-
-

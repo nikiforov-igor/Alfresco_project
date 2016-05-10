@@ -118,6 +118,15 @@
 	<#assign controlMode = "edit" >
 </#if>
 
+<#assign newRowDialogTitle = ''>
+<#if params.newRowDialogTitle??>
+	<#assign newRowDialogTitle = params.newRowDialogTitle>
+</#if>
+<#assign createItemBtnMsg = ''>
+<#if params.createItemBtnMsg??>
+	<#assign createItemBtnMsg = params.createItemBtnMsg>
+</#if>
+
 <#assign editable = ((params.editable!"true") == "true") && !(field.disabled) && (controlMode?string=="edit") >
 
 <script type="text/javascript">//<![CDATA[
@@ -164,6 +173,12 @@
                 <#if dataSource?has_content>
                     dataSource: "${dataSource}",
                 </#if>
+				<#if newRowDialogTitle?has_content>
+					newRowDialogTitle: "${newRowDialogTitle}",
+				</#if>
+				<#if createItemBtnMsg?has_content>
+					createItemBtnMsg: "${createItemBtnMsg}",
+				</#if>
                 showActions: <#if editable>${showActions?string}<#else>false</#if>
 			});
 	}

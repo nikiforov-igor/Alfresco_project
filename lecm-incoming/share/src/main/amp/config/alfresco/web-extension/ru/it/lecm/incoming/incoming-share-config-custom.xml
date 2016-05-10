@@ -158,6 +158,8 @@
                             <control-param name="allowDelete">true</control-param>
                             <!--<control-param name="dataSource">lecm/review/ds/reviewListDS</control-param>-->
                             <!--<control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>-->
+                            <control-param name="newRowDialogTitle">reviewer.create.button.title</control-param>
+                            <control-param name="createItemBtnMsg">reviewer.create.button.title</control-param>
                             <control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>
                             <!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
