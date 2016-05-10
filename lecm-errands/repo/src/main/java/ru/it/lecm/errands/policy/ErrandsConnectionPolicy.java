@@ -10,7 +10,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -111,15 +110,14 @@ public class ErrandsConnectionPolicy extends BaseBean implements NodeServicePoli
             }
         }
 
-        List<String> regNums = documentService.getRegNumbersValues(baseDoc);
-        if (regNums != null && !regNums.isEmpty()) {
-            String regNumberValue = "";
-            for (String number : regNums) {
-                if (number != null) {
-                    regNumberValue += ((regNumberValue.length() > 0 ? "," : "") + number);
-                }
-            }
-            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNumberValue);
+        String regNum = documentService.getDocumentRegNumber(baseDoc);
+
+        if (regNum == null) {
+            regNum = documentService.getProjectRegNumber(baseDoc);
+        }
+
+        if (regNum != null && !regNum.isEmpty()) {
+            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNum);
         }
 
 
