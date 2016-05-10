@@ -5702,7 +5702,7 @@ protocolService.setPointsStatusRemoved(protocol);]]></value>
 						var pointNumber = pointAssocs[i].properties["lecm-document:indexTableRow"];
 
 						notifications.sendNotification({
-							recipients: [pointExecutor.nodeRef.toString()],
+							recipients: [pointExecutor],
 							templateCode: 'PROTOCOL_POINT_EXECUTOR',
 							templateConfig: {
 								mainObject: protocol,
