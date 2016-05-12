@@ -225,6 +225,7 @@
 					<show id="lecm-document:indexTableRow"/>
 					<show id="lecm-review-ts:reviewer-assoc"/>
 					<show id="lecm-review-ts:initializer"/>
+					<show id="lecm-review-ts:save-as"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:indexTableRow">
@@ -233,7 +234,6 @@
 					<field id="lecm-review-ts:reviewer-assoc" label="Ознакамливающийся">
 						<control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
 							<control-param name="endpointMany">true</control-param>
-							<control-param name="selectedItemsNameSubstituteString">{cm:name}</control-param>
 							<control-param name="mixTypes">true</control-param>
 
 							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
@@ -244,21 +244,29 @@
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstUseStrictFilterByOrg">true</control-param>
+							<control-param name="firstChangeItemsFireAction">employeesSelected</control-param>
 
 							<control-param name="secondItemType">lecm-review-list:review-list-item</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Списки_x0020_ознакомления</control-param>
-							<control-param name="secondNameSubstituteString">{cm:name}</control-param>
+							<control-param name="secondNameSubstituteString">{cm:title}</control-param>
+							<control-param name="secondSelectedItemsNameSubstituteString">{cm:title}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{cm:title}</control-param>
+							<control-param name="secondtreeNodeTitleSubstituteString">{cm:title}</control-param>
 							<control-param name="secondShowAssocViewForm">true</control-param>
 							<control-param name="secondPlane">true</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>
+							<control-param name="secondChangeItemsFireAction">reviewListsSelected</control-param>
 						</control>
 					</field>
 					<field id="lecm-review-ts:initializer">
 						<control template="/ru/it/lecm/workflow/review/controls/review-list-item-validation.ftl">
 							<control-param name="fieldId">lecm-review-ts:reviewer-assoc</control-param>
 						</control>
+					</field>
+					<field id="lecm-review-ts:save-as">
+						<control template="/ru/it/lecm/workflow/review/controls/review-list-save-control.ftl"/>
 					</field>
 				</appearance>
 			</form>
