@@ -9,7 +9,6 @@
 		(function () {
 			function _initReviewTsItemsDatagrid(layer, args) {
 				if (this.options.bubblingLabel == args[1].datagrid.options.bubblingLabel) {
-					debugger;
 					YAHOO.Bubbling.unsubscribe(layer, _initReviewTsItemsDatagrid);
 					YAHOO.Bubbling.fire('activeGridChanged', {
 						bubblingLabel: this.options.bubblingLabel,
