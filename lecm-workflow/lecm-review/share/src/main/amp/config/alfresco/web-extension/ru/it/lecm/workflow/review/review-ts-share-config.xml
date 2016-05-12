@@ -138,7 +138,8 @@
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" mandatory="true" label-id="lecm.review.cm_title.title">
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<!--<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>-->
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
@@ -158,7 +159,8 @@
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" mandatory="true" label-id="lecm.review.cm_title.title">
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<!--<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>-->
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
@@ -177,10 +179,31 @@
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" mandatory="true" label-id="lecm.review.cm_title.title">
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<!--<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>-->
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+			<form id="saveReviewList">
+				<field-visibility>
+					<show id="cm:title" force="true"/>
+					<show id="lecm-review-list:reviewer-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:title" mandatory="true" label-id="lecm.review.cm_title.title">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<!--<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>-->
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+					<field id="lecm-review-list:reviewer-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl">
+							<control-param name="contextProperty">selectedItems</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>

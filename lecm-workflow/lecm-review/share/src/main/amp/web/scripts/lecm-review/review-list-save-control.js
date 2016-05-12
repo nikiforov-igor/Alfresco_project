@@ -31,6 +31,8 @@ LogicECM.module.Review.ReviewList = LogicECM.module.Review.ReviewList || {};
 
 	YAHOO.lang.extend(LogicECM.module.Review.ReviewList.SaveControl, Alfresco.component.Base, {
 
+		selectedItems: null,
+
 		deferredInit: null,
 
 		reviewListDictionary: null,
@@ -46,6 +48,9 @@ LogicECM.module.Review.ReviewList = LogicECM.module.Review.ReviewList || {};
 			var obj = args[1],
 				nodeRef,
 				disabled = true;
+
+			this.selectedItems = [];
+
 			if (obj.selectedItems && Object.keys(obj.selectedItems).length) {
 				disabled = false;
 				for (nodeRef in obj.selectedItems) {
@@ -53,9 +58,15 @@ LogicECM.module.Review.ReviewList = LogicECM.module.Review.ReviewList || {};
 						disabled = true;
 						break;
 					}
+					this.selectedItems.push(nodeRef);
 				}
 			}
 			this.widgets.buttonSave.set('disabled', disabled);
+			if (disabled) {
+				Dom.addClass(this.id, 'hidden');
+			} else {
+				Dom.removeClass(this.id, 'hidden');
+			}
 		},
 
 		onButtonSaveClick: function (evt, target) {
@@ -82,11 +93,12 @@ LogicECM.module.Review.ReviewList = LogicECM.module.Review.ReviewList || {};
 				width: '50em',
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 				templateRequestParams: {
+					selectedItems: this.selectedItems.join(),
 					itemKind: 'type',
 					itemId: 'lecm-review-list:review-list-item',
 					destination: this.reviewListDictionary,
 					mode: 'create',
-//					formId: null,
+					formId: 'saveReviewList',
 					submitType: 'json',
 					showCancelButton: true
 				},

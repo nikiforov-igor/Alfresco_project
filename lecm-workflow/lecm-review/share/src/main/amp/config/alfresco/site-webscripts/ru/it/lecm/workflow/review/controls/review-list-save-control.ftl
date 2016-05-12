@@ -2,7 +2,7 @@
 <#assign controlId = fieldHtmlId>
 <#assign buttonId = fieldHtmlId + '-btn-save'>
 
-<div id='${controlId}' class='control review-list-save'>
+<div id='${controlId}' class='control review-list-save hidden'>
 	<div class='label-div'></div>
 	<div class='container'>
 		<div class='buttons-div'>
