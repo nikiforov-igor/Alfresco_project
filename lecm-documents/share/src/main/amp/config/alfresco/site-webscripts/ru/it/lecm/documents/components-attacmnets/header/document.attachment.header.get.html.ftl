@@ -48,9 +48,9 @@
 			<h1 class="thin dark breadcrumb">
 				<#if documentNodeRef??>
 				<#if hasViewListPerm>
-					<a class="title" href="${siteURL("document?nodeRef=" + documentNodeRef)}">${documentName}</a> :: <a class="title" href="${siteURL("document?nodeRef=" + documentNodeRef + "&view=attachments")}">${msg("title.attachments")}</a> ::
+					<a class="title" href="${siteURL("${documentPageName}" + "?nodeRef=" + documentNodeRef)}">${documentName}</a> :: <a class="title" href="${siteURL("${documentPageName}" + "?nodeRef=" + documentNodeRef + "&view=attachments")}">${msg("title.attachments")}</a> ::
 				<#else>
-					<a class="title" href="${siteURL("document?nodeRef=" + documentNodeRef)}">${documentName}</a> :: ${msg("title.attachments")} ::
+					<a class="title" href="${siteURL("${documentPageName}" + "?nodeRef=" + documentNodeRef)}">${documentName}</a> :: ${msg("title.attachments")} ::
 				</#if>
 				</#if>
 			</h1>

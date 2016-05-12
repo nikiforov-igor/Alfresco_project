@@ -45,6 +45,7 @@ function main() {
 		}
 	}
 	model.hasViewListPerm = hasViewListPerm;
+	model.documentPageName = getDocumentPage(document.nodeRef) ? getDocumentPage(document.nodeRef).pageName : 'document';
 }
 
 function getDocumentByAttachments(nodeRef, defaultValue) {
@@ -66,6 +67,15 @@ function getAllDocumentAttachments(nodeRef, defaultValue) {
 		if (defaultValue !== undefined) {
 			return defaultValue;
 		}
+		return null;
+	}
+	return eval('(' + result + ')');
+}
+
+function getDocumentPage(nodeRef) {
+	var url = '/lecm/document/attachments/api/getDocumentPage?documentNodeRef=' + nodeRef;
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
 		return null;
 	}
 	return eval('(' + result + ')');
