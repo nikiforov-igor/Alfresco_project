@@ -82,17 +82,11 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-document:indexTableRow"/>
 					<show id="lecm-review-ts:reviewer-assoc"/>
 					<show id="lecm-review-ts:review-state"/>
 					<show id="lecm-review-ts:review-start-date"/>
 					<show id="lecm-review-ts:review-finish-date"/>
-					<show id="lecm-review-ts:initiator-assoc"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-review-ts:reviewer-assoc" label-id="label.reviewer"/>
-
-				</appearance>
 			</form>
 		</forms>
 	</config>

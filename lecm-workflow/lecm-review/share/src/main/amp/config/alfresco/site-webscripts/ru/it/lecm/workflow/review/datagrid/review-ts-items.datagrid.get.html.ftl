@@ -32,58 +32,12 @@
 					showExtendSearchBlock: false,
 					overrideSortingWith: false,
 					showCheckboxColumn: false,
-					showActionColumn: true,
+					showActionColumn: false,
 					expandable: false,
-					bubblingLabel: '${bubblingLabel}',
-					actions: [{
-						type:'datagrid-action-link-' + '${bubblingLabel}',
-						id:'onActionDelete',
-						permission:'delete',
-						label: '${msg("actions.delete-row")}'
-					}]
+					bubblingLabel: '${bubblingLabel}'
 				});
 
 				YAHOO.Bubbling.on('initDatagrid', _initReviewTsItemsDatagrid, datagrid);
-
-				<#--
-				new LogicECM.module.OrgStructure.OrganizationsList('${datagridId}', {
-					usePagination: true,
-					disableDynamicPagination: false,
-					showExtendSearchBlock: true,
-					overrideSortingWith: false,
-					showCheckboxColumn: false,
-					showActionColumn: true,
-					expandable: false,
-					bubblingLabel: '${bubblingLabel}',
-					excludeColumns:['deletable'],
-					actions: [{
-						type:'datagrid-action-link-' + '${bubblingLabel}',
-						id:'onActionEdit',
-						permission:'edit',
-						label: '${msg("actions.edit")}'
-					}, {
-						type:'datagrid-action-link-' + '${bubblingLabel}',
-						id:'onActionDelete',
-						permission:'delete',
-						label: '${msg("actions.delete-row")}'
-					}]
-				}, {
-					datagridFormId: 'organizationsListDatagrid',
-					createFormId: 'contractorOrg',
-					itemType: '${itemType}',
-					nodeRef: '${nodeRef}',
-					useChildQuery: false,
-					useFilterByOrg: false,
-					//				sort: 'cm:created|true',
-					searchConfig: {
-						filter: '+ASPECT:"lecm-orgstr-aspects:is-organization-aspect"'
-					},
-					//				actionsConfig: {
-					//					fullDelete: true,
-					//					trash: false
-					//				}
-				}, ${messages});
-				-->
 			}
 			LogicECM.module.Base.Util.loadResources([
 				'scripts/lecm-base/components/advsearch.js',
