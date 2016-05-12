@@ -10,20 +10,20 @@
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
 	<util:constant id="MIMETYPE" static-field="org.alfresco.repo.workflow.WorkflowDeployer.MIMETYPE"/>
 	<util:constant id="REDEPLOY" static-field="org.alfresco.repo.workflow.WorkflowDeployer.REDEPLOY"/>
-	
+
 	<util:list id="review.actions">
 		<value>alfresco/module/${artifactId}/actions/cancel-review-action.xml</value>
 		<value>alfresco/module/${artifactId}/actions/confirm-review-action.xml</value>
 		<value>alfresco/module/${artifactId}/actions/send-to-review-action.xml</value>
 	</util:list>
-	
+
 	<util:list id="review.dics">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-review-list-dictionary.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-review-nt-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-objectType-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-business-journal-eventCategory-items.xml</value>
 	</util:list>
-	
+
 	<util:list id="review.workflows">
 		<props>
 			<prop key="#{ENGINE_ID}">activiti</prop>
@@ -32,7 +32,7 @@
 			<prop key="#{REDEPLOY}">${redeploy.process.definitions}</prop>
 		</props>
 	</util:list>
-	
+
 	<util:list id="review.models">
 		<value>alfresco/module/${artifactId}/models/lecm-review-workflow-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-result-model.xml</value>
@@ -51,7 +51,7 @@
 	<bean id="review.workflow.bootstrap" parent="workflowDeployer"
 		  depends-on="review.model.bootstrap"
 		  p:workflowDefinitions-ref="review.workflows"/>
-	
+
 	<bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
 			  depends-on="dictionaryBootstrap, workflow.model.bootstrap"
 			  p:models-ref="review.models" p:labels-ref="review.labels"/>
@@ -59,12 +59,12 @@
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
 			  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
 			  p:dictionaries-ref="review.actions"/>
-	
+
 	<bean id="review.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="review.model.bootstrap, ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap"
 		  p:dictionaries-ref="review.dics"
           />
-	
+
 	<bean id="reviewWorkflowService" class="ru.it.lecm.workflow.review.ReviewWorkflowServiceImpl"
 		  parent="lecmWorkflowService" depends-on="review.model.bootstrap"
 		  p:workCalendarService-ref="WorkCalendarService"
@@ -84,11 +84,11 @@
 		  p:defaultReviewTerm="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.review.defaultTerm}') ? T(java.lang.Integer).parseInt('${lecm.review.defaultTerm}') : null}"
 		  p:defaultTermToNotify="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.review.defaultTermToNotify}') ? T(java.lang.Integer).parseInt('${lecm.review.defaultTermToNotify}') : null}"
 	/>
-	
+
 	<bean id="reviewListAssociationPolicy" class="ru.it.lecm.workflow.review.policy.ReviewListAssociationPolicy"
-			parent="logicEcmAssociationPolicy" init-method="init" 
+			parent="logicEcmAssociationPolicy" init-method="init"
 	/>
-	
+
 	<bean id="reviewItemChangePolicy" class="ru.it.lecm.workflow.review.policy.ItemChangedPolicy"
 		  depends-on="review.model.bootstrap" init-method="init"
 		  p:authenticationService-ref="authenticationService"
@@ -114,4 +114,33 @@
 		  depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Настройки"
 		  p:dictionaries-ref="review.my-profile.arm.dictionaries"/>
+
+	<bean id="reviewNotificationExecutor" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationExecutor" parent="action-executer"
+		  p:ignoreLock="false"
+		  p:publicAction="false"
+		  p:nodeService-ref="nodeService"
+		  p:notificationsService-ref="notificationsService"
+		  p:calendarBean-ref="WorkCalendarService"
+		  p:reviewService-ref="reviewService"
+	/>
+
+	<bean id="reviewNotificationSchedule" class="ru.it.lecm.workflow.review.schedule.ReviewNotificationSchedule"
+		  p:transactionMode="ISOLATED_TRANSACTIONS"
+		  p:compensatingActionMode="IGNORE"
+          p:cronExpression="0 0 5 */1 * ?"
+          p:firstStartExpression="0 */15 * * * ?"
+          p:onServerStart="false"
+          p:jobName="review-notification"
+		  p:jobGroup="review"
+		  p:triggerName="review-notification-trigger"
+		  p:triggerGroup="review-trigger"
+		  p:runAsUser="System"
+		  p:scheduler-ref="schedulerFactory"
+		  p:documentService-ref="documentService"
+		  p:reviewService-ref="reviewService"
+		  p:calendarBean-ref="WorkCalendarService"
+		  p:actionService-ref="ActionService"
+		  p:transactionService-ref="TransactionService"
+	/>
+
 </beans>

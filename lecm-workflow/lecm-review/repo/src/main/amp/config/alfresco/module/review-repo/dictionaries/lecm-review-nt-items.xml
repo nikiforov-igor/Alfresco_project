@@ -54,6 +54,22 @@
                     <![CDATA[Ознакомление. С документом не ознакомились в срок]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
             </item>
+            <item name="cm:REVIEW_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[REVIEW_EXCEEDED_DEADLINE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Внимание: Истек срок ознакомления с документом {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}. Инициатор ознакомления {#initiator.wrapAsLink(#initiator.attribute("lecm-orgstr:employee-short-name"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Ознакомление. Истек срок ознакомления]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
+            <item name="cm:REVIEW_APPROACHING_DEADLINE" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[REVIEW_APPROACHING_DEADLINE]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Приблежается срок ознакомления с документом {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}. Инициатор ознакомления {#initiator.wrapAsLink(#initiator.attribute("lecm-orgstr:employee-short-name"))}]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Ознакомление. Приблежается срок ознакомления]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
         </items>
     </item>
 </items>

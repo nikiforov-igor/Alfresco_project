@@ -239,11 +239,31 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	}
 
 	@Override
-	public int getApprovalTerm() {
+	public int getReviewTerm() {
 		NodeRef settingsNode = getSettings();
 		Integer approvalTerm = (Integer) nodeService.getProperty(settingsNode, PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM);
 
 		return approvalTerm != null ? approvalTerm : defaultReviewTerm;
+	}
+
+	@Override
+	public int getReviewNotificationTerm() {
+		NodeRef settingsNode = getSettings();
+		Integer approvalTerm = (Integer) nodeService.getProperty(settingsNode, PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE);
+
+		return approvalTerm != null ? approvalTerm : defaultReviewTerm;
+	}
+
+	@Override
+	public NodeRef getDocumentByReviewTableItem(NodeRef nodeRef) {
+		for (int i = 0; i < 3; i++) {
+			if (nodeRef == null) {
+				return null;
+			}
+			nodeRef = nodeService.getPrimaryParent(nodeRef).getParentRef();
+		}
+
+		return nodeRef;
 	}
 
 }

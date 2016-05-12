@@ -314,12 +314,20 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 	@Override
 	public Date getNextWorkingDateByDays(Date start, int workingDaysNumber) {
+
+		int day = 1;
+
+		if (workingDaysNumber < 0) {
+			day = -1;
+			workingDaysNumber = Math.abs(workingDaysNumber);
+		}
+
 		int i = 0;
 
 		Date curDay = new Date(start.getTime());
 		while (i <= workingDaysNumber) {
 			if (i != workingDaysNumber) {
-				curDay = DateUtils.addDays(curDay, 1);
+				curDay = DateUtils.addDays(curDay, day);
 			}
 
 			Boolean isWorkingDay = WCalendarService.isWorkingDay(curDay);

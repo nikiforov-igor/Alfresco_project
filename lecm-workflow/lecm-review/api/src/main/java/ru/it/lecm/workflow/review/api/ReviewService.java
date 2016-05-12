@@ -30,6 +30,7 @@ public interface ReviewService extends InitializingBean {
     QName ASSOC_REVIEW_LIST_REVIEWER = QName.createQName(REVIEW_LIST_NAMESPACE, "reviewer-assoc");
     QName PROP_REVIEW_TS_STATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-state");
     QName PROP_REVIEW_TS_REVIEW_FINISH_DATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-finish-date");
+    QName PROP_REVIEW_TS_REVIEW_START_DATE = QName.createQName(REVIEW_TS_NAMESPACE, "review-start-date");
     QName PROP_REVIEW_TS_ACTIVE_REVIEWERS = QName.createQName(REVIEW_TS_NAMESPACE, "active-reviewers");
     QName PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "defaultReviewTerm");
     QName PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "termToNotifyBeforeDeadline");
@@ -57,5 +58,9 @@ public interface ReviewService extends InitializingBean {
 
     NodeRef getSettings();
 
-    int getApprovalTerm();
+    int getReviewTerm();
+
+    int getReviewNotificationTerm();
+
+    NodeRef getDocumentByReviewTableItem(NodeRef nodeRef);
 }
