@@ -6,47 +6,50 @@
 		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
-		<property name="lecm-group-actions:script"><![CDATA[(function(){
-  model.showModalWindow=true;
-  var initiator = orgstructure.getCurrentEmployee();
+		<property name="lecm-group-actions:script"><![CDATA[
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/form/review-ts.form.lib.js">
+(function() {
+	var i,
+		reviewInfo,
+		reviewTsItems = [],
+		reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
 
-  var recipients = [];
-  var reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
-  if (null != reviewTable) {
-    var reviewTableData = documentTables.getTableDataRows((reviewTable[0]).nodeRef.toString());
-    for each (var row in reviewTableData) {
-      	var reviewer = row.associations['lecm-review-ts:reviewer-assoc'][0];
-        var itemInitiator = row.assocs["lecm-review-ts:initiator-assoc"];
-        if (itemInitiator!=null && itemInitiator.length>0 && initiator.nodeRef.toString().equals(itemInitiator[0].nodeRef.toString())) {
-          if (row.properties['lecm-review-ts:review-state']=='NOT_STARTED') {
-			documentMembers.addMemberWithoutCheckPermission(document, reviewer, "LECM_BASIC_PG_Reader", true);
-            recipients.push(reviewer);
-            row.properties['lecm-review-ts:review-state'] = "NOT_REVIEWED";
-			row.properties['lecm-review-ts:review-start-date'] = new Date();
-            row.save();
-          }
-        }
-    }
-  }
-  if (recipients.length > 0) {
-	notifications.sendNotificationFromCurrentUser({
-	  recipients: recipients,
-	  templateCode: 'REVIEW_NEED',
-	  templateConfig: {
-	    mainObject: document,
-	    eventExecutor: initiator
-	  }
-	});
-    var logText = "Документ #mainobject направлен на ознакомление пользователем #initiator";
-    businessJournal.log(document.nodeRef.toString(), "SEND_TO_REVIEW", logText, []);
-    model.message = "Документ отправлен на ознакомление";
-  } else {
-  	model.message = "Нет сотрудников для ознакомления с документом";
-  }
-  
-})();]]></property>
+	if (reviewTable && reviewTable.length) {
+		reviewTable = reviewTable[0];
+		reviewInfo = reviewTable.createNode(null, 'lecm-review-info:info', {
+		});
+		reviewers = reviewers.split(',');
+		for (i in reviewers) {
+			reviewers[i] = utils.getNodeFromString(reviewers[i]);
+		}
+		reviewTsItems = createReviewTSItem(reviewInfo, reviewers);
+		sendToReview(reviewInfo, reviewTsItems);
+	}
+
+	model.message = (reviewTsItems.length) ? 'Документ отправлен на ознакомление' : 'Нет сотрудников для ознакомления с документом';
+	model.showModalWindow = true;
+})();
+]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
 		<property name="cm:title"><![CDATA[Отправить на ознакомление]]></property>
 		<property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
+		<items>
+			<item name="cm:Ознакамливающийся" type="lecm-group-actions:form-field">
+				<property name="cm:name"><![CDATA[Ознакамливающийся]]></property>
+				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+				<property name="lecm-group-actions:field-id"><![CDATA[reviewers]]></property>
+				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[true]]></property>
+				<property name="lecm-group-actions:field-type"><![CDATA[lecm-review-ts:reviewers]]></property>
+				<property name="lecm-group-actions:field-priority"><![CDATA[0]]></property>
+			</item>
+			<item name="cm:Сохранить список" type="lecm-group-actions:form-field">
+				<property name="cm:name"><![CDATA[Сохранить список]]></property>
+				<property name="lecm-group-actions:field-default-value"><![CDATA[]]></property>
+				<property name="lecm-group-actions:field-id"><![CDATA[saveas]]></property>
+				<property name="lecm-group-actions:field-is-mandatory"><![CDATA[false]]></property>
+				<property name="lecm-group-actions:field-type"><![CDATA[lecm-review-ts:saveas]]></property>
+				<property name="lecm-group-actions:field-priority"><![CDATA[1]]></property>
+			</item>
+		</items>
 	</item>
 </items>

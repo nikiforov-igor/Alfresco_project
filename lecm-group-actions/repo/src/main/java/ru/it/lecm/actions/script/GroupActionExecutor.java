@@ -23,6 +23,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
@@ -32,6 +34,8 @@ import ru.it.lecm.base.beans.LecmTransactionHelper;
  */
 public class GroupActionExecutor extends DeclarativeWebScript {
 
+	private static final Pattern nodeRefPattern = Pattern.compile("^[a-zA-Z]+://[a-zA-Z]+/[a-zA-Z0-9/-]+$");
+
     private NodeService nodeService;
     private GroupActionsServiceImpl actionsService;
     private ServiceRegistry serviceRegistry;
@@ -39,6 +43,11 @@ public class GroupActionExecutor extends DeclarativeWebScript {
 	private LecmTransactionHelper lecmTransactionHelper;
 
     final private static Logger logger = LoggerFactory.getLogger(GroupActionExecutor.class);
+
+	private static boolean isNodeRef(String nodeRef) {
+		Matcher matcher = nodeRefPattern.matcher(nodeRef);
+		return matcher.matches();
+	}
 
 	public LecmTransactionHelper getLecmTransactionHelper() {
 		return lecmTransactionHelper;
@@ -188,11 +197,11 @@ public class GroupActionExecutor extends DeclarativeWebScript {
     }
 
     private void addParamenersToModel(HashMap<String, String> parameters, Map<String, Object> model) {
-        for (String key : parameters.keySet()) {
-            String normalizeKey = key.replace(":", "_");
-            String stringValue = parameters.get(key);
+        for (Map.Entry<String, String> param : parameters.entrySet()) {
+            String normalizeKey = param.getKey().replace(":", "_");
+            String stringValue = param.getValue();
             Object value;
-            if (NodeRef.isNodeRef(stringValue)) {
+            if (isNodeRef(stringValue)) {
                 value = new NodeRef(stringValue);
             } else {
                 value = stringValue;
