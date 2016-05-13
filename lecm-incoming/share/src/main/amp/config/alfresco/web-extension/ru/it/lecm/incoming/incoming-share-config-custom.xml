@@ -166,6 +166,8 @@
                             <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
 							<control-param name="expandable">true</control-param>
 							<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>
+							<control-param name="jsObjectName">LogicECM.module.Review.DocumentTable</control-param>
+							<control-param name="jsDependencies">scripts/lecm-review/review-document-table.js</control-param>
                         </control>
                     </field>
 
