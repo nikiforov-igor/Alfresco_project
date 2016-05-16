@@ -1,6 +1,6 @@
 <#import '/ru/it/lecm/base-share/components/lecm-datagrid.ftl' as grid/>
 
-<#assign bubblingLabel = 'review-ts-items'/>
+<#assign bubblingLabel = args['itemId'] + '-review-ts-items'/>
 <#assign datagridId = args.htmlid + '-' + bubblingLabel/>
 
 <div id='${datagridId}'>
