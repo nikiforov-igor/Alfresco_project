@@ -33,12 +33,23 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 		onActionCancelReview: function (rowData, target, actionsConfig, confirmFunction) {
 
+			function onSuccessCancelReview (successResponse) {
+				Alfresco.util.PopupManager.displayMessage({
+					text: this.msg('message.save.success')
+				});
+				//Ajax запрос или бабблинг на обновление строки датагрида
+			}
+
 			Alfresco.util.Ajax.jsonPost({
-				url: Alfresco.constants.PROXY_URI + '',
+				url: Alfresco.constants.PROXY_URI + 'lecm/workflow/review/cancelReview',
 				dataObj: {
-					nodeRef: rowData.nodeRef
+					nodeRef: rowData.nodeRef,
+					documentRef: Alfresco.util.getQueryStringParameter('nodeRef')
 				},
-				successMessage: this.msg('message.save.success'),
+				successCallback: {
+					scope: this,
+					fn: onSuccessCancelReview
+				},
 				failureMessage: this.msg('message.failure')
 			});
 		},

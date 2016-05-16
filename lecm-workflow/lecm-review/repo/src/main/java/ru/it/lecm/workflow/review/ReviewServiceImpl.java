@@ -130,12 +130,14 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	public void markReviewed(final NodeRef document) {
 		NodeRef tableData = findNodeByAssociationRef(document, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
 		if (null != tableData) {
+			NodeRef reviewInfo = null;
 			List<NodeRef> reviewList = documentTableService.getTableDataRows(tableData);
 			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 			for (final NodeRef reviewListRow : reviewList) {
 				NodeRef itemEmployee = findNodeByAssociationRef(reviewListRow, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 				if (currentEmployee.equals(itemEmployee)) {
 					if (CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS.equals(nodeService.getProperty(reviewListRow, PROP_REVIEW_TS_STATE))) {
+						reviewInfo = findNodeByAssociationRef(reviewListRow, ASSOC_REVIEW_INFO, TYPE_REVIEW_INFO, ASSOCIATION_TYPE.TARGET);
 						AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
 
 							@Override
@@ -148,6 +150,27 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 							}
 						});
 					}
+				}
+			}
+			if (reviewInfo != null) {
+				List<NodeRef> items = findNodesByAssociationRef(reviewInfo, ASSOC_REVIEW_INFO, TYPE_REVIEW_TS_REVIEW_TABLE_ITEM, ASSOCIATION_TYPE.SOURCE);
+				int reviewed = 0;
+				for (NodeRef item : items) {
+					Serializable state = nodeService.getProperty(item, PROP_REVIEW_TS_STATE);
+					if (CONSTRAINT_REVIEW_TS_STATE_REVIEWED.equals(state)) {
+						reviewed++;
+					}
+				}
+				if (reviewed == items.size()) {
+					final NodeRef reviewInfoRef = reviewInfo;
+					AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+
+						@Override
+						public Void doWork() throws Exception {
+							nodeService.setProperty(reviewInfoRef, PROP_REVIEW_INFO_REVIEW_STATE, CONSTRAINT_REVIEW_TS_STATE_REVIEWED);
+							return null;
+						}
+					});
 				}
 			}
 		}

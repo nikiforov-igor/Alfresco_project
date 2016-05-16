@@ -12,7 +12,6 @@
 	<util:constant id="REDEPLOY" static-field="org.alfresco.repo.workflow.WorkflowDeployer.REDEPLOY"/>
 
 	<util:list id="review.actions">
-		<value>alfresco/module/${artifactId}/actions/cancel-review-action.xml</value>
 		<value>alfresco/module/${artifactId}/actions/confirm-review-action.xml</value>
 		<value>alfresco/module/${artifactId}/actions/send-to-review-action.xml</value>
 	</util:list>
