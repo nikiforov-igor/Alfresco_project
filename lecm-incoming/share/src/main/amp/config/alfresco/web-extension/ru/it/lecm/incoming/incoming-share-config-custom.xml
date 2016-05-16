@@ -168,6 +168,7 @@
 							<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>
 							<control-param name="jsObjectName">LogicECM.module.Review.DocumentTable</control-param>
 							<control-param name="jsDependencies">scripts/lecm-review/review-document-table.js</control-param>
+							<control-param name="cssDependencies">css/lecm-review/review-document-table.css</control-param>
                         </control>
                     </field>
 

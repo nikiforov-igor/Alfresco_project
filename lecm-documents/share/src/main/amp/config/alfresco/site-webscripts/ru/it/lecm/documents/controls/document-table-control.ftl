@@ -196,7 +196,12 @@
 	        </#if>
 		],
 		[
-            'css/components/document-table-control.css'
+            'css/components/document-table-control.css',
+	        <#if params.cssDependencies??>
+		        <#list params.cssDependencies?split(",") as css>
+			        '${css}',
+		        </#list>
+	        </#if>
         ], drawForm);
     }
 	YAHOO.util.Event.onDOMReady(init);
