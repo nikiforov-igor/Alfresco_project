@@ -51,6 +51,7 @@
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
 							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
+							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
 					</field>
 
@@ -295,6 +296,7 @@
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
 							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
+							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
 					</field>
 
@@ -426,6 +428,7 @@
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
 							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
+							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-outgoing:recipient-assoc">
@@ -566,6 +569,7 @@
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
 							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
+							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -681,6 +685,7 @@
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
 							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
+							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
 					</field>
 				</appearance>

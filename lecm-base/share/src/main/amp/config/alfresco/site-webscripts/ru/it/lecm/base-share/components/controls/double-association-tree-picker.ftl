@@ -68,6 +68,12 @@
     <#assign secondAllowedNodesScript = field.control.params.secondAllowedNodesScript?string>
 </#if>
 
+<#if params.clearFormsOnStart?? && params.clearFormsOnStart == "true">
+	<#assign clearFormsOnStart = true>
+<#else>
+	<#assign clearFormsOnStart = false>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -246,7 +252,7 @@
 		    showCreateNewLink: ${firstShowCreateNewLink?string},
             additionalFilter: "${params.firstAdditionalFilter!''}",
             showAssocViewForm: ${showAssocViewForm?string},
-		    clearFormsOnStart: false,
+		    clearFormsOnStart: ${clearFormsOnStart?string},
 			fieldId: "${field.configName}-first",
 			formId: "${args.htmlid}",
 			<#if params.selectedItemsNameSubstituteString?has_content>
@@ -342,7 +348,7 @@
 		    showSearch: ${secondShowSearch?string},
 		    plane: ${secondPlane?string},
 		    currentValue: "${field.value!''}",
-		    clearFormsOnStart: false,
+		    clearFormsOnStart: ${clearFormsOnStart?string},
 			fieldId: "${field.configName}-second",
 			formId: "${args.htmlid}",
 			<#if params.selectedItemsNameSubstituteString?has_content>

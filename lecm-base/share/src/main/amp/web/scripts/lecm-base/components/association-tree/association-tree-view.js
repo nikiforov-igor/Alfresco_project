@@ -419,16 +419,16 @@ LogicECM.module = LogicECM.module || {};
                     item;
                 this.selectedItems = {};
 
-	            this.singleSelectedItem = null;
+                this.singleSelectedItem = null;
                 for (var i = 0, il = items.length; i < il; i++) {
                     item = items[i];
-	                if (!this.options.checkType || item.type == this.options.itemType) {
+                    if (!this.options.checkType || item.type == this.options.itemType) {
                         this.selectedItems[item.nodeRef] = item;
 
-		                if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
-			                this.singleSelectedItem = item;
-		                }
-	                }
+                        if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
+                            this.singleSelectedItem = item;
+                        }
+                    }
                 }
 
                 if(!this.options.disabled)
@@ -436,7 +436,7 @@ LogicECM.module = LogicECM.module || {};
                     this.updateSelectedItems();
                     this.updateAddButtons();
                 }
-	            if (updateForms) {
+                if (updateForms) {
                     this.updateFormFields(clearCurrentDisplayValue);
                 }
             };
@@ -446,46 +446,44 @@ LogicECM.module = LogicECM.module || {};
                 this.selectedItems = {};
             };
 
-            if (arrItems !== "")
-            {
-                Alfresco.util.Ajax.jsonRequest(
+            if (arrItems !== "") {
+                Alfresco.util.Ajax.jsonRequest({
+                    url: Alfresco.constants.PROXY_URI + this.options.pickerItemsScript,
+                    method: "POST",
+                    dataObj:
                     {
-                        url: Alfresco.constants.PROXY_URI + this.options.pickerItemsScript,
-                        method: "POST",
-                        dataObj:
-                        {
-                            items: arrItems.split(","),
-                            itemValueType: "nodeRef",
-                            itemNameSubstituteString: this.options.nameSubstituteString,
-                            sortProp: this.options.sortProp,
-	                        selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
-                        },
-                        successCallback:
-                        {
-                            fn: onSuccess,
-                            scope: this
-                        },
-                        failureCallback:
-                        {
-                            fn: onFailure,
-                            scope: this
-                        }
-                    });
+                        items: arrItems.split(","),
+                        itemValueType: "nodeRef",
+                        itemNameSubstituteString: this.options.nameSubstituteString,
+                        sortProp: this.options.sortProp,
+                        selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
+                    },
+                    successCallback:
+                    {
+                        fn: onSuccess,
+                        scope: this
+                    },
+                    failureCallback:
+                    {
+                        fn: onFailure,
+                        scope: this
+                    }
+                });
             }
             else
             {
                 // if disabled show the (None) message
                 this.selectedItems = {};
                 this.singleSelectedItem = null;
-	            if (!this.options.disabled) {
-	                this.updateSelectedItems();
-	                this.updateAddButtons();
-	            } else if (Dom.get(this.options.controlId + "-currentValueDisplay") != null && Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML.trim() === "") {
+                if (!this.options.disabled) {
+                    this.updateSelectedItems();
+                    this.updateAddButtons();
+                } else if (Dom.get(this.options.controlId + "-currentValueDisplay") != null && Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML.trim() === "") {
                     Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
                 }
-	            if (updateForms) {
-		            this.updateFormFields(clearCurrentDisplayValue);
-	            }
+                if (updateForms) {
+                    this.updateFormFields(clearCurrentDisplayValue);
+                }
             }
         },
 
@@ -1044,11 +1042,51 @@ LogicECM.module = LogicECM.module || {};
                                             }
                                         });
                                 }
-                                this._loadSelectedItems(this.options.clearFormsOnStart, true);
 
-	                            if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
-									this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren);
-	                            }
+                                if (this.options.nodesMarker && (this.options.selectedItems || this.options.currentValue)) {
+
+                                    Alfresco.util.Ajax.jsonRequest({
+                                        url: Alfresco.constants.PROXY_URI + '/lecm/contractors/hasIsOrganizationAspect',
+                                        method: "GET",
+                                        dataObj:
+                                        {
+                                            nodeRef: this.options.selectedItems ? this.options.selectedItems : this.options.currentValue
+                                        },
+                                        successCallback:
+                                        {
+                                            fn: function (response) {
+                                                var items = response.json.result;
+                                                var isContractor = this.options.nodesMarker == 'contractor';
+
+                                                for (var i in items) {
+                                                    if (items[i] === isContractor) {
+                                                        this.selectedItemsMarkers[i] = isContractor ? 'contractor' : 'organisation';
+                                                    } else {
+                                                        this.selectedItemsMarkers[i] = isContractor ? 'organisation' : 'contractor';
+                                                    }
+                                                }
+
+                                                this._loadSelectedItems(this.options.clearFormsOnStart, true);
+                                            },
+                                            scope: this
+                                        },
+                                        failureCallback:
+                                        {
+                                            fn: function () {
+                                                this._loadSelectedItems(this.options.clearFormsOnStart, true);
+                                            },
+                                            scope: this
+                                        }
+                                    });
+
+                                } else {
+                                    this._loadSelectedItems(this.options.clearFormsOnStart, true);
+                                }
+
+                                if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
+                                    this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren);
+                                }
+
                             }
                         },
                         scope: this

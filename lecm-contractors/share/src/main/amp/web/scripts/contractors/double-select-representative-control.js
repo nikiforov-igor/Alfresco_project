@@ -207,8 +207,6 @@ LogicECM.module = LogicECM.module || {};
                 if (selectedContractor != null) {
                     control.setOptions(autocompleteConf);
                     control.onReady();
-                } else if (!control.selectedItems || Object.keys(control.selectedItems).length == 0) {
-                    control.onDisableControl(null, [null, {fieldId: control.options.fieldId, formId: control.options.formId}]);
                 }
             }
             var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
