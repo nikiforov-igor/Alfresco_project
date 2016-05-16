@@ -1,3 +1,11 @@
 .control.document-table-control.with-grid .value-div .datagrid .grid {
 	max-height: none;
 }
+
+.datagrid .onActionPrintReview a {
+	background: url("/share/res/components/images/printer-16.png") no-repeat;
+}
+
+.datagrid .onActionCancelReview a {
+	background: url("/share/res/components/images/edit-cancel-16.png") no-repeat;
+}

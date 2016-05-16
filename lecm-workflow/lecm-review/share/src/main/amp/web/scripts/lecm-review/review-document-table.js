@@ -17,11 +17,50 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 	YAHOO.lang.extend(LogicECM.module.Review.DocumentTable, LogicECM.module.DocumentTable, {
 
+		actionCancelReviewEvaluator: function (rowData) {
+			var state = rowData.itemData['prop_lecm-review-info_review-state'],
+				username = rowData.itemData['prop_lecm-review-info_initiator-username'];
+
+			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value;
+		},
+
+		onActionPrintReview: function (rowData, target, actionsConfig, confirmFunction) {
+			// если отчет будет строиться по какому-то одному ознакомлению
+			// LogicECM.module.Base.Util.printReport(rowData.nodeRef, 'ИД отчета');
+			// если отчет будет строиться по всем ознакомлениям сразу
+			// LogicECM.module.Base.Util.printReport(this.datagridMeta.nodeRef, 'ИД отчета');
+		},
+
+		onActionCancelReview: function (rowData, target, actionsConfig, confirmFunction) {
+
+			Alfresco.util.Ajax.jsonPost({
+				url: Alfresco.constants.PROXY_URI + '',
+				dataObj: {
+					nodeRef: rowData.nodeRef
+				},
+				successMessage: this.msg('message.save.success'),
+				failureMessage: this.msg('message.failure')
+			});
+		},
+
 		createDataGrid: function() {
-			if (this.tableData != null && this.tableData.rowType != null) {
+			if (this.tableData && this.tableData.rowType) {
 				var actions = [];
 				var actionType = "datagrid-action-link-" + this.options.bubblingLabel;
 				if (!this.options.disabled && this.options.mode == "edit") {
+					actions.push({
+						type: actionType,
+						id: 'onActionPrintReview',
+						permission: 'edit',
+						label: this.msg('Печать листа ознакомления')
+					});
+					actions.push({
+						type: actionType,
+						id: 'onActionCancelReview',
+						permission: 'edit',
+						label: this.msg('Отозвать с ознакомления'),
+						evaluator: this.actionCancelReviewEvaluator
+					});
 					if (this.options.allowEdit === true) {
 						actions.push({
 							type: actionType,
@@ -39,42 +78,14 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 						});
 					}
 				}
-				var splitActionAt = actions.length;
-
-				if (!this.options.isTableSortable && this.options.showActions && this.options.mode == "edit" && !this.options.disabled) {
-					var otherActions = [];
-					if (this.options.allowEdit === true) {
-						otherActions.push({
-							type: actionType,
-							id: "onMoveTableRowUp",
-							permission: "edit",
-							label: this.msg("actions.tableRowUp")
-						});
-						otherActions.push({
-							type: actionType,
-							id: "onMoveTableRowDown",
-							permission: "edit",
-							label: this.msg("action.tableRowDown")
-						});
-					}
-					if (this.options.allowCreate === true) {
-						otherActions.push({
-							type: actionType,
-							id: "onAddRow",
-							permission: "edit",
-							label: this.msg("action.addRow")
-						});
-					}
-					actions = actions.concat(otherActions);
-					splitActionAt = actions.length;
-				}
 
 				var datagrid = new LogicECM.module.DocumentTableDataGrid(this.options.containerId).setOptions({
+					excludeColumns: ['lecm-review-info:initiator-username'],
 					usePagination: true,
 					showExtendSearchBlock: false,
 					formMode: this.options.mode,
 					actions: actions,
-					splitActionsAt: splitActionAt,
+					splitActionsAt: actions.length,
 					datagridMeta: {
 						useFilterByOrg: false,
 						itemType: this.tableData.rowType,
@@ -92,7 +103,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 					showOtherActionColumn: true,
 					showCheckboxColumn: false,
 					attributeForShow: this.options.attributeForShow,
-					pageSize: this.tableData.pageSize != null && this.tableData.pageSize > 0 ? this.tableData.pageSize : 10,
+					pageSize: this.tableData.pageSize ? this.tableData.pageSize : 10,
 					useCookieForSort: false,
 					overrideSortingWith: this.options.isTableSortable,
 					refreshAfterCreate: this.options.refreshAfterCreate,
@@ -104,13 +115,13 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 					expandDataSource: this.options.expandDataSource,
 					createItemBtnMsg: this.options.createItemBtnMsg
 				}).setMessages(this.options.messages);
-			}
 
-			if (this.tableData != null) {
 				datagrid.tableDataNodeRef = this.tableData.nodeRef;
+				datagrid.deleteMessageFunction = this.options.deleteMessageFunction;
+				datagrid.onActionPrintReview = this.onActionPrintReview;
+				datagrid.onActionCancelReview = this.onActionCancelReview;
+				datagrid.draw();
 			}
-			datagrid.deleteMessageFunction = this.options.deleteMessageFunction;
-			datagrid.draw();
 		}
 	}, true);
 })();
