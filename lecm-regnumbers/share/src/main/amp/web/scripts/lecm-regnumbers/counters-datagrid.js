@@ -83,6 +83,85 @@ LogicECM.module.Counters = LogicECM.module.Counters || {};
                         scope: this
                     }
                 });
+        },
+
+        getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
+            var html = "";
+            // Populate potentially missing parameters
+            if (!oRecord) {
+                oRecord = this.getRecord(elCell);
+            }
+            if (!oColumn) {
+                oColumn = this.getColumn(elCell.parentNode.cellIndex);
+            }
+
+            if (oRecord && oColumn) {
+                if (!oData) {
+                    oData = oRecord.getData("itemData")[oColumn.field];
+                }
+
+                if (oData) {
+                    var datalistColumn = grid.datagridColumns[oColumn.key];
+                    if (datalistColumn) {
+                        oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+                        for (var i = 0, ii = oData.length, data; i < ii; i++) {
+                            data = oData[i];
+
+                            var columnContent = "";
+                            switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
+                                case "lecm-regnum:doctype":
+                                    if (data.value && (("" + data.value) != "false")) {
+                                        columnContent += (data.value + " (" + grid.getDisplayedType(data.value) + ")");
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            if (i < ii - 1) {
+                                html += "<br />";
+                            }
+
+                            html += columnContent;
+                        }
+                    }
+                }
+            }
+            return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
+        },
+
+        getDisplayedType: function(docType) {
+            var displayedType = "";
+            switch (docType) {
+                case "lecm-additional-document:additionalDocument":
+                    displayedType = this.msg("type.additionalDocument");
+                    break;
+                case "lecm-contract:document":
+                    displayedType = this.msg("type.contract");
+                    break;
+                case "lecm-nd:document":
+                    displayedType = this.msg("type.nd");
+                    break;
+                case "lecm-ord:document":
+                    displayedType = this.msg("type.ord");
+                    break;
+                case "lecm-outgoing:document":
+                    displayedType = this.msg("type.outgoing");
+                    break;
+                case "lecm-protocol:document":
+                    displayedType = this.msg("type.protocol");
+                    break;
+                case "lecm-errands:document":
+                    displayedType = this.msg("type.errands");
+                    break;
+                case "lecm-incoming:document":
+                    displayedType = this.msg("type.incoming");
+                    break;
+                case "lecm-internal:document":
+                    displayedType = this.msg("type.internal");
+                    break;
+            }
+            return displayedType;
         }
 
     }, true);

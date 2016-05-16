@@ -35,11 +35,12 @@
                     type:"datagrid-action-link-" + LogicECM.module.Counters.Const.COUNTERS_DATAGRID_LABEL,
                     id:"onActionEdit",
                     permission:"edit",
-                    label:"${msg('actions.edit')}",
+                    label:"${msg('actions.counters.edit')}",
                     evaluator: function() {
                         return LogicECM.module.Counters.isEngineer;
                     }
-                }]
+                }],
+                editFormTitleMsg: "${msg('actions.counters.edit')}"
             });
 
             datagrid.setMessages(${messages});

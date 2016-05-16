@@ -5,8 +5,8 @@
 		<property name="lecm-arm:order"><![CDATA[60]]></property>
 		<property name="lecm-arm:html-url"><![CDATA[page/lecm/arm/blank?title=Настройки СЭД&description=Общие настройки СЭД и настройки маршрутов]]></property>
 		<items>
-			<item name="cm:Cброс счетчиков документов" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Сброс счетчиков документов]]></property>
+			<item name="cm:Счетчики регистрационных номеров" type="lecm-arm:html-node">
+				<property name="cm:name"><![CDATA[Счетчики регистрационных номеров]]></property>
 				<property name="lecm-arm:order"><![CDATA[70]]></property>
 				<property name="lecm-arm:html-url"><![CDATA[page/documents-counters-reset]]></property>
 			</item>
