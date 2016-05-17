@@ -144,12 +144,12 @@ define(['dojo/_base/declare',
 						notificationsConfig;
 
 					this.skipItemsCount += items.length;
-					lang.isFunction(this.rootWidget.toggle) && this.rootWidget.toggle(items.length === 0);
+					lang.isFunction(this.rootWidget.toggle) && this.rootWidget.toggle(this.skipItemsCount === 0);
 					if (items.length) {
 						if (initialLoad) {
 							array.forEach(this.rootWidget.getChildren(), function (itemWidget) {
-								this.rootWidget.removeChild(itemWidget);
-							}, this);
+								this.removeChild(itemWidget);
+							}, this.rootWidget);
 						}
 						notificationsConfig = array.map(items, function (item) {
 							return {

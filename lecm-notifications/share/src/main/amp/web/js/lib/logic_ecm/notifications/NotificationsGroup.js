@@ -5,6 +5,7 @@
  * @extends module:alfresco/menus/AlfMenuGroup
  * @param declare
  * @param lang
+ * @param array
  * @param event
  * @param string
  * @param domAttr
@@ -19,6 +20,7 @@
  */
 define(['dojo/_base/declare',
 		'dojo/_base/lang',
+		'dojo/_base/array',
 		'dojo/_base/event',
 		'dojo/string',
 		'dojo/dom-attr',
@@ -30,12 +32,12 @@ define(['dojo/_base/declare',
 		'alfresco/menus/AlfMenuGroup',
 		'dojo/text!./templates/NotificationsGroup.html'
 	],
-	function(declare, lang, event, string, domAttr, domClass, on, xhr, json, AlfDropDownMenu, AlfMenuGroup, template) {
+	function(declare, lang, array, event, string, domAttr, domClass, on, xhr, json, AlfDropDownMenu, AlfMenuGroup, template) {
 		return declare([AlfMenuGroup], {
 
 			templateString: template,
 
-			cssRequirements: [{cssFile: './css/AlfMenuGroup.css'}],
+			cssRequirements: [{cssFile: '../../../alfresco/menus/css/AlfMenuGroup.css'}],
 
 			constructor: function() {
 				this.templateString = string.substitute(template, {
@@ -51,6 +53,16 @@ define(['dojo/_base/declare',
 
 			_clearAllSuccess: function(success) {
 				this.params.notificationsPopup.loadNewNotificationsCount();
+				array.forEach(this.params.notificationsPopup.rootWidget.getChildren(), function (itemWidget) {
+					this.removeChild(itemWidget);
+				}, this.params.notificationsPopup.rootWidget);
+				this.params.notificationsPopup.rootWidget.processWidgets([{
+					name: 'alfresco/header/AlfMenuItem',
+					config: {
+						i18nScope: 'notificationsPopup',
+						label: 'message.notifications.none'
+					}
+				}], this.params.notificationsPopup.rootWidget.domNode);
 			},
 
 			_clearAllFailure: function(failure) {
@@ -63,7 +75,7 @@ define(['dojo/_base/declare',
 				xhr.post(Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/notifications/active-channel/api/set/read/all', {
 					handleAs: 'json',
 					headers: {'Content-Type': 'application/json'},
-					data: '{}',
+					data: '{}'
 				}).then(lang.hitch(this, this._clearAllSuccess), lang.hitch(this, this._clearAllFailure));
 			},
 
