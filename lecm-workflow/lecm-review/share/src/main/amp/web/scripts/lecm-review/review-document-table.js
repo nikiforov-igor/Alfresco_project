@@ -8,6 +8,7 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.Review = LogicECM.module.Review || {};
 
 (function () {
+	var Bubbling = YAHOO.Bubbling;
 
 	LogicECM.module.Review.DocumentTable = function (containerId) {
 		LogicECM.module.Review.DocumentTable.superclass.constructor.call(this, containerId);
@@ -33,11 +34,27 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 		onActionCancelReview: function (rowData, target, actionsConfig, confirmFunction) {
 
-			function onSuccessCancelReview (successResponse) {
+			function onSuccessItemUpdate (successResponse) {
 				Alfresco.util.PopupManager.displayMessage({
-					text: this.msg('message.save.success')
+					text: this.msg('message.details.success')
 				});
-				//Ajax запрос или бабблинг на обновление строки датагрида
+				Bubbling.fire('dataItemUpdated', {
+					item: successResponse.json.item,
+					bubblingLabel: this.options.bubblingLabel
+				});
+			}
+
+			function onSuccessCancelReview (successResponse) {
+				var nodeRef =  new Alfresco.util.NodeRef(successResponse.json.persistedObject);
+				Alfresco.util.Ajax.jsonPost({
+					url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/base/item/node/' + nodeRef.uri,
+					dataObj: this._buildDataGridParams(),
+					successCallback: {
+						scope: this,
+						fn: onSuccessItemUpdate
+					},
+					failureMessage: this.msg('message.failure')
+				});
 			}
 
 			Alfresco.util.Ajax.jsonPost({

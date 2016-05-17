@@ -25,4 +25,6 @@
 		});
 	}
 
+	model.nodeRef = json.get('nodeRef');
+
 })();
