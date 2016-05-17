@@ -68,6 +68,11 @@
 					<title>Дата окончания согласования по маршруту</title>
 					<type>d:datetime</type>
 				</property>
+				<property name="lecmWorkflowRoutes:routeAutoStartSigning">
+					<title>Автоматически переходить к подписанию</title>
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecmWorkflowRoutes:routeOrganizationUnitAssoc">

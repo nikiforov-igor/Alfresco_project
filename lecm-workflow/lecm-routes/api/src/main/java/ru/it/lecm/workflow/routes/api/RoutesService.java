@@ -1,9 +1,10 @@
 package ru.it.lecm.workflow.routes.api;
 
-import java.util.List;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+
+import java.util.List;
 
 /**
  * Сервис маршрутов документов.
@@ -73,4 +74,6 @@ public interface RoutesService {
 	boolean hasEmployeesInRoute(final NodeRef documentRef);
 
 	String getApprovalState(NodeRef documentNode);
+
+	boolean getRouteIsAutoStartSigning(NodeRef documentRef);
 }

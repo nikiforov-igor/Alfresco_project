@@ -1,23 +1,10 @@
 package ru.it.lecm.workflow.routes.beans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.scripts.ScriptException;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.CopyService;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.ScriptService;
-import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
@@ -38,6 +25,9 @@ import ru.it.lecm.workflow.routes.api.ConvertRouteToIterationResult;
 import ru.it.lecm.workflow.routes.api.RoutesMacrosModel;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -636,6 +626,20 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		}
 
 		return result;
+	}
+
+	@Override
+	public boolean getRouteIsAutoStartSigning(NodeRef documentRef) {
+		NodeRef route = getDocumentCurrentIteration(documentRef);
+
+		if (route == null) {
+			return false;
+		}
+
+		Boolean isAutoStartSigning = (Boolean) nodeService.getProperty(route, RoutesModel.PROP_ROUTE_AUTO_START_SIGNING);
+
+		return Boolean.TRUE.equals(isAutoStartSigning);
+
 	}
 
 }
