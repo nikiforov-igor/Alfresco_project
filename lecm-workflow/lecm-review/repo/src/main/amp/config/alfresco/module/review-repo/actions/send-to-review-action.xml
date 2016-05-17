@@ -18,9 +18,13 @@
 		reviewTable = reviewTable[0];
 		reviewInfo = reviewTable.createNode(null, 'lecm-review-info:info', {
 		});
-		reviewers = reviewers.split(',');
-		for (i in reviewers) {
-			reviewers[i] = utils.getNodeFromString(reviewers[i]);
+		if ('string' === typeof reviewers) {
+			reviewers = reviewers.split(',');
+			for (i in reviewers) {
+				reviewers[i] = utils.getNodeFromString(reviewers[i]);
+			}
+		} else {
+			reviewers = [reviewers];
 		}
 		reviewTsItems = createReviewTSItem(reviewInfo, reviewers);
 		sendToReview(reviewInfo, reviewTsItems);
