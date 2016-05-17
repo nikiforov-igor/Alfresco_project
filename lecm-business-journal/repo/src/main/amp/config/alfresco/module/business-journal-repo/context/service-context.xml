@@ -134,7 +134,7 @@
 			<amq:transportConnector uri="${businessjournal.brokerURL}"/>
 		</amq:transportConnectors>
 		<persistenceAdapter>
-			<kahaDB directory="${dir.root}/queue/Kaha"/>
+			<kahaDB directory="${dir.root}/queue/Kaha" checkForCorruptJournalFiles="true"/>
 		</persistenceAdapter>
 	</amq:broker>
 
