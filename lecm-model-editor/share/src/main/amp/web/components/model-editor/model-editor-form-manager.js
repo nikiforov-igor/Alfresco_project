@@ -96,7 +96,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				published: modelPublished.getFullYear() + '-' + month[modelPublished.getMonth()] + '-' + (modelPublished.getDate()<10 ? '0' : '') + modelPublished.getDate(),
 				version: '1.0',
 				imports: {
-					import: [
+					"import": [
 						{ _uri: 'http://www.alfresco.org/model/dictionary/1.0', _prefix: 'd' },
 						{ _uri: 'http://www.alfresco.org/model/content/1.0', _prefix: 'cm' },
 						{ _uri: 'http://www.alfresco.org/model/system/1.0', _prefix: 'sys' },
@@ -149,8 +149,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					NS = clazz.substr(0, clazz.indexOf(':'));
 					if (NS !== namespace) {
 						for (j in obj.namespaces) {
-							if (obj.namespaces[j].prefix == NS && !IT.Utils.containsUri(model.imports.import, { _uri: obj.namespaces[j].uri, _prefix: NS })) {
-								model.imports.import.push({ _uri: obj.namespaces[j].uri, _prefix: NS });
+							if (obj.namespaces[j].prefix == NS && !IT.Utils.containsUri(model.imports["import"], { _uri: obj.namespaces[j].uri, _prefix: NS })) {
+								model.imports["import"].push({ _uri: obj.namespaces[j].uri, _prefix: NS });
 							}
 						}
 					}
@@ -163,8 +163,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					clazz = records[i].getData('table');
 					NS = clazz.substr(0, clazz.indexOf(':'));
 					for (j in obj.namespaces) {
-						if (obj.namespaces[j].prefix == NS && !IT.Utils.containsUri(model.imports.import, { _uri: obj.namespaces[j].uri, _prefix: NS })) {
-							model.imports.import.push({ _uri: obj.namespaces[j].uri, _prefix: NS });
+						if (obj.namespaces[j].prefix == NS && !IT.Utils.containsUri(model.imports["import"], { _uri: obj.namespaces[j].uri, _prefix: NS })) {
+							model.imports["import"].push({ _uri: obj.namespaces[j].uri, _prefix: NS });
 						}
 					}
 				}
@@ -305,8 +305,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			}
 
 			if (form.elements['cm_lecmRating'].value === 'true') {
-				if (!IT.Utils.containsUri(model.imports.import, { _uri: 'http://www.it.ru/lecm/document/aspects/1.0', _prefix: 'lecm-document-aspects' })) {
-					model.imports.import.push({ _uri: 'http://www.it.ru/lecm/document/aspects/1.0', _prefix: 'lecm-document-aspects' });
+				if (!IT.Utils.containsUri(model.imports["import"], { _uri: 'http://www.it.ru/lecm/document/aspects/1.0', _prefix: 'lecm-document-aspects' })) {
+					model.imports["import"].push({ _uri: 'http://www.it.ru/lecm/document/aspects/1.0', _prefix: 'lecm-document-aspects' });
 				}
 				if (!IT.Utils.contains(model.types.type['mandatory-aspects'].aspect, 'lecm-document-aspects:rateable')) {
 					model.types.type['mandatory-aspects'].aspect.push('lecm-document-aspects:rateable');
@@ -322,8 +322,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			}
 
 			if (form.elements['cm_lecmSigned'].value === 'true') {
-				if (!IT.Utils.containsUri(model.imports.import, { _uri: 'http://www.it.ru/lecm/model/signed-docflow/1.0', _prefix: 'lecm-signed-docflow' })) {
-					model.imports.import.push({ _uri: 'http://www.it.ru/lecm/model/signed-docflow/1.0', _prefix: 'lecm-signed-docflow' });
+				if (!IT.Utils.containsUri(model.imports["import"], { _uri: 'http://www.it.ru/lecm/model/signed-docflow/1.0', _prefix: 'lecm-signed-docflow' })) {
+					model.imports["import"].push({ _uri: 'http://www.it.ru/lecm/model/signed-docflow/1.0', _prefix: 'lecm-signed-docflow' });
 				}
 				if (!IT.Utils.contains(model.types.type['mandatory-aspects'].aspect, 'lecm-signed-docflow:docflowable')) {
 					model.types.type['mandatory-aspects'].aspect.push('lecm-signed-docflow:docflowable');

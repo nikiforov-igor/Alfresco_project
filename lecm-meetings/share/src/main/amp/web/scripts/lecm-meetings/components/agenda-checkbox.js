@@ -85,7 +85,7 @@ LogicECM.module = LogicECM.module || {};
 				checkPermissions: function (response) {
 					var res = response.json;
 					if (res && res.item && res.item.permissions && res.item.permissions.userAccess) {
-						if (!res.item.permissions.userAccess.delete) {
+						if (!res.item.permissions.userAccess["delete"]) {
 							if (Dom.get(this.checkboxId)) {
 								Dom.get(this.checkboxId).disabled = true;
 							}
