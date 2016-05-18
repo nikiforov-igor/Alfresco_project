@@ -26,10 +26,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 		},
 
 		onActionPrintReview: function (rowData, target, actionsConfig, confirmFunction) {
-			// если отчет будет строиться по какому-то одному ознакомлению
-			// LogicECM.module.Base.Util.printReport(rowData.nodeRef, 'ИД отчета');
-			// если отчет будет строиться по всем ознакомлениям сразу
-			// LogicECM.module.Base.Util.printReport(this.datagridMeta.nodeRef, 'ИД отчета');
+			LogicECM.module.Base.Util.printReport(rowData.nodeRef, 'review_list');
 		},
 
 		onActionCancelReview: function (rowData, target, actionsConfig, confirmFunction) {
