@@ -403,9 +403,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 	}, true);
 
 	Alfresco.widget.InsituEditorTemplateCreate = function (p_editor, p_params) {
+		var span = document.createElement('span');
 		Alfresco.widget.InsituEditorTemplateCreate.superclass.constructor.call(this, p_editor, p_params);
 		Dom.removeClass(this.editIcon, 'insitu-edit');
 		Dom.addClass(this.editIcon, 'insitu-create');
+		span.innerHTML = '&nbsp;&nbsp;&nbsp;';
+		this.params.container.appendChild(span);
 		return this;
 	};
 
@@ -426,9 +429,13 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 	}, true);
 
 	Alfresco.widget.InsituEditorTemplateDelete = function (p_editor, p_params) {
+		var span = document.createElement('span');
 		Alfresco.widget.InsituEditorTemplateDelete.superclass.constructor.call(this, p_editor, p_params);
 		Dom.removeClass(this.editIcon, 'insitu-edit');
 		Dom.addClass(this.editIcon, 'insitu-delete');
+		span.innerHTML = '&nbsp;&nbsp;&nbsp;';
+		this.params.container.appendChild(span);
+		return this;
 	};
 
 	YAHOO.lang.extend(Alfresco.widget.InsituEditorTemplateDelete, Alfresco.widget.InsituEditorIcon, {
