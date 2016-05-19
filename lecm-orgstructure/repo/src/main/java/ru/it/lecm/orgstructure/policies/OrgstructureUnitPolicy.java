@@ -181,8 +181,9 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                         nodeService.setProperty(folder, ContentModel.PROP_NAME, name + " (Удалено)");
                     }
 
-                    //Удаляем аспект у контрагента при удалении подразделения
                     NodeRef parent = nodeService.getPrimaryParent(nodeRef).getParentRef();
+                    //Удаляем аспект у контрагента при удалении подразделения
+                    /* ALF-5321
                     if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)
                             && parent != null
                             && !nodeService.hasAspect(parent, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
@@ -191,8 +192,11 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                             nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION);
                         }
                     }
+                    */
                     // оповещение securityService по Департаменту ...
-                    notifyDeleteOU(nodeRef, parent);
+                    if (parent != null) {
+                        notifyDeleteOU(nodeRef, parent);
+                    }
                 } else {
                     // отслеживаем короткое название для SG-обозначений
                     final Object oldValue = before.get(PolicyUtils.PROP_ORGELEMENT_NAME);
