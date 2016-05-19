@@ -22,21 +22,8 @@ LogicECM.module = LogicECM.module || {};
 
         YAHOO.Bubbling.on(contractorSelectEvent, this.onSelect, this);
         YAHOO.Bubbling.on(organizationSelectEvent, this.onSelect, this);
-        YAHOO.Bubbling.on('formValueChanged', this.onControlRegistered, this);
 
         this.previousSelected = null;
-        this.controlsDeferred = new Alfresco.util.Deferred(["AssociationTreeViewer"], {
-            scope: this,
-            obj: {
-                selectedContractor: null,
-                reset: false,
-                autocompleteConf: {},
-                treeConf: {}
-            },
-            fn: function (oParams) {
-                this._updateControls(oParams.selectedContractor, oParams.reset, oParams.autocompleteConf, oParams.treeConf);
-            }
-        });
         this.options.contractorSelectEvent = contractorSelectEvent;
         this.options.organizationSelectEvent = organizationSelectEvent;
 
@@ -45,8 +32,6 @@ LogicECM.module = LogicECM.module || {};
 
     YAHOO.extend(LogicECM.module.DoubleSelectRepresentativeForContractor, Alfresco.component.Base, {
         previousSelected: null,
-
-        controlsDeferred: null,
 
         options: {
             employeesByOrgDS: "lecm/employees/byOrg/{organization}/picker",
@@ -67,6 +52,8 @@ LogicECM.module = LogicECM.module || {};
             disabled: false,
 
             currentValue: '',
+            defaultValue: '',
+            defaultValueLoaded: false,
 
             autoCompleteJsName: "select-representative-autoComplete",
             treeViewJsName: "select-representative-treeView",
@@ -76,14 +63,6 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onReady: function SelectRepresentativeForContractor_onReady() {
-        },
-
-        onControlRegistered: function (layer, args) {
-            var obj = args[1];
-            var control = obj.eventGroup;
-            if (control.id === this.options.fieldHtmlId) {
-                this.controlsDeferred.fulfil(control.name);
-            }
         },
 
         onSelect: function (layer, args) {
@@ -206,6 +185,9 @@ LogicECM.module = LogicECM.module || {};
                 });
                 if (selectedContractor != null) {
                     control.setOptions(autocompleteConf);
+                    if (!control.options.currentValue && this.options.defaultValue && !this.options.defaultValueLoaded) {
+                        control.options.selectedValueNodeRef = this.options.defaultValue;
+                    }
                     control.onReady();
                 }
             }
@@ -225,9 +207,11 @@ LogicECM.module = LogicECM.module || {};
                 });
                 if (selectedContractor != null && treeConf) {
                     treeControl.setOptions(treeConf);
+                    if (!treeControl.options.currentValue && this.options.defaultValue && !this.options.defaultValueLoaded) {
+                        treeControl.options.selectedValue = this.options.defaultValue;
+                        this.options.defaultValueLoaded = true;
+                    }
                     treeControl.init();
-                } else if (!treeControl.selectedItems || Object.keys(treeControl.selectedItems).length == 0) {
-                    treeControl.onDisableControl(null, [null, {fieldId: treeControl.options.fieldId, formId: treeControl.options.formId}]);
                 }
             }
         }

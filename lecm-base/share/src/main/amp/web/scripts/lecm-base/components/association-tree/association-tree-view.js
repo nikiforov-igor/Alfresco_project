@@ -1043,26 +1043,26 @@ LogicECM.module = LogicECM.module || {};
                                         });
                                 }
 
-                                if (this.options.nodesMarker && (this.options.selectedItems || this.options.currentValue)) {
+                                if (this.options.nodesMarker && (this.options.selectedValue || this.options.currentValue)) {
 
                                     Alfresco.util.Ajax.jsonRequest({
                                         url: Alfresco.constants.PROXY_URI + '/lecm/contractors/hasIsOrganizationAspect',
                                         method: "GET",
                                         dataObj:
                                         {
-                                            nodeRef: this.options.selectedItems ? this.options.selectedItems : this.options.currentValue
+                                            nodeRef: this.options.selectedValue ? this.options.selectedValue : this.options.currentValue
                                         },
                                         successCallback:
                                         {
                                             fn: function (response) {
                                                 var items = response.json.result;
-                                                var isContractor = this.options.nodesMarker == 'contractor';
+                                                var isOrganisation = this.options.nodesMarker == 'organisation';
 
                                                 for (var i in items) {
-                                                    if (items[i] === isContractor) {
-                                                        this.selectedItemsMarkers[i] = isContractor ? 'contractor' : 'organisation';
+                                                    if (items[i] === isOrganisation) {
+                                                        this.selectedItemsMarkers[i] = isOrganisation ? 'organisation' : 'contractor';
                                                     } else {
-                                                        this.selectedItemsMarkers[i] = isContractor ? 'organisation' : 'contractor';
+                                                        this.selectedItemsMarkers[i] = isOrganisation ? 'contractor' : 'organisation';
                                                     }
                                                 }
 

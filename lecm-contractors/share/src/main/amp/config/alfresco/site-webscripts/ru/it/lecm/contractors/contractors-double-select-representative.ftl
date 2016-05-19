@@ -20,6 +20,7 @@
                 </#if>
                     disabled: ${disabled?string},
                     currentValue: "${field.value!''}",
+                    defaultValue: "${fieldValue}",
                 <#if params.employeesByOrgDS??>
                     employeesByOrgDS: "${params.employeesByOrgDS}",
                 </#if>
