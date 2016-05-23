@@ -14,7 +14,8 @@
 }
 
 .attributes .value-td {
-	width: 1px;
+	width: 400px;
+	max-width: 400px;
 }
 
 .attributes .attribute-option:disabled {

@@ -120,9 +120,11 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				label: this.msg('template-attributes-column-value.title'),
 				className: 'value-td',
 				sortable: false,
-				width: 400,
-				minWidth: 400,
+				/* ALF-5513 */
+				// width: 400,
+				// minWidth: 400,
 				// maxAutoWidth: 90000,
+				/* ALF-5513 */
 				formatter: this._valueFormatter
 			}];
 			this._fieldsPromise = new LogicECM.module.Base.SimplePromise();
@@ -206,14 +208,6 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 		_valueFormatter: function (elCell, record, column, data) {
 			/* this == this.widgets.datatable */
-			/* ALF-5513 */
-			var td = elCell.parentNode,
-				classes = td.className.match(/yui-dt\d+-col-value/);
-
-			if (classes && classes.length) {
-				Dom.removeClass(td, classes[0]);
-			}
-			/* ALF-5513 */
 			elCell.innerHTML = YAHOO.lang.substitute(this.owner.templates.valueTemplate, {
 				id: record.getId()
 			});
