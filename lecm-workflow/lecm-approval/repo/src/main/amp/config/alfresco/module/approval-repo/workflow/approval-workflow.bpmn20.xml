@@ -131,6 +131,10 @@
     approvalState = (approvalState != null) ? '' + approvalState : null;
     items = stage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
     /* выбор первого неактивного этапа */
+    var expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
+    if (expression && !approval.checkExpression(bpm_package.children[0].nodeRef, expression)) {
+      continue;
+    }
     if (!isTemp && (!approvalState || 'NEW' == approvalState) && items && items.length) {
       break;
     }
@@ -656,6 +660,11 @@
     approvalState = stages[i].properties['lecmApproveAspects:approvalState'];
     approvalState = (approvalState != null) ? '' + approvalState : null;
     items = stages[i].getChildAssocsByType('lecmWorkflowRoutes:stageItem');
+
+    var expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
+    if (expression && !approval.checkExpression(bpm_package.children[0].nodeRef, expression)) {
+      continue;
+    }
     /* поиск неактивных этапов */
     if (!isTemp && (!approvalState || 'NEW' == approvalState) && items && items.length) {
       hasNextStage = true;

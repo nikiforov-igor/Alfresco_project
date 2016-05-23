@@ -55,4 +55,6 @@ public interface ApprovalService {
 	 * @throws AlfrescoRuntimeException если папка "Согласование" не существует, а мы попытались создать папку "Согласование/История"
 	 */
 	NodeRef createDocumentApprovalHistoryFolder(final NodeRef documentRef);
+
+	boolean checkExpression(NodeRef nodeRef, String expression);
 }

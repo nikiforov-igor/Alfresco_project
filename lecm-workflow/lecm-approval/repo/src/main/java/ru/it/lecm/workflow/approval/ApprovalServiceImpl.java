@@ -11,6 +11,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 
 /**
@@ -26,6 +27,11 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private final static int DEFAULT_DEFAULT_APPROVAL_TERM = 1;
 
 	private Integer defaultApprovalTerm;
+	private DocumentService documentService;
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
+	}
 
 	public void setDefaultApprovalTerm(Integer defaultApprovalTerm) {
 		this.defaultApprovalTerm = (defaultApprovalTerm != null) ? defaultApprovalTerm : DEFAULT_DEFAULT_APPROVAL_TERM;
@@ -107,5 +113,10 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 		PropertyMap props = new PropertyMap();
 		props.put(ContentModel.PROP_NAME, DOCUMENT_APPROVAL_HISTORY_FOLDER);
 		return nodeService.createNode(documentApprovalFolder, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+	}
+
+	@Override
+	public boolean checkExpression(NodeRef nodeRef, String expression) {
+		return documentService.execExpression(nodeRef, expression);
 	}
 }

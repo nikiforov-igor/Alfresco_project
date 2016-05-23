@@ -139,6 +139,10 @@
 						<constraint ref="lecmWorkflowRoutes:termLimitConstraint"/>
 					</constraints>
 				</property>
+				<property name="lecmWorkflowRoutes:stageExpression">
+					<title>Условие прохождения</title>
+					<type>d:text</type>
+				</property>
 			</properties>
 			<mandatory-aspects>
 				<aspect>cm:titled</aspect>

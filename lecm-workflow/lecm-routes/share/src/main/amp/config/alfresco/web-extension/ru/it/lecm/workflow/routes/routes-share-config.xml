@@ -189,6 +189,7 @@
 					<show id="cm:title" force="true"/>
 					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
 					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
+					<show id="lecmWorkflowRoutes:stageExpression"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" mandatory="true" label-id="lecm.routers.stage.name">
