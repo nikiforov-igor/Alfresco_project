@@ -73,8 +73,8 @@
         <dependency>
             <groupId>ru.it.lecm.documents</groupId>
             <artifactId>documents-repo-api</artifactId>
-            <version>1.8.0</version>
-            <type>jar</type>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <!--

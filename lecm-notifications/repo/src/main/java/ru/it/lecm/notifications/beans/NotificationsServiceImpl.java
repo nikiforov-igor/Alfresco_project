@@ -31,6 +31,7 @@ import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -46,6 +47,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     final private static Logger logger = LoggerFactory.getLogger(NotificationsServiceImpl.class);
     private static final int DEFAULT_N_DAYS = 5;
+    public static final String DEFAULT_TEMPLATE_WITH_DOCUMENT = "Документ {#mainObject.wrapAsLink(#mainObject.attribute(\"lecm-document:present-string\"))} был изменен";
+    public static final String DEFAULT_TEMPLATE_WITHOUT_DOCUMENT = "При формировании уведомления произошла ошибка. Обратитесь к администратору. %s %s";
 
     private OrgstructureBean orgstructureService;
     private DictionaryBean dictionaryService;
@@ -685,14 +688,29 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     @Override
     public void fillNotificationByTemplateCode(Notification notification, String templateCode) {
         NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
-        String template = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
-        String subject = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
-        List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
-        NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+        if (templateDicRec != null) {
+            String template = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
+            String subject = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
+            List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
+            NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
 
-        notification.setTemplate(template);
-        notification.setSubject(subject);
-        notification.setTemplateRef(templateRef);
+            notification.setTemplate(template);
+            notification.setSubject(subject);
+            notification.setTemplateRef(templateRef);
+        } else {
+            String error = "Не найден шаблон уведомления: " + templateCode;
+            logger.error(error);
+            fillNotificationDefaultTemplate(notification, error);
+        }
+    }
+
+    private void fillNotificationDefaultTemplate(Notification notification, String error) {
+        if (notification.getTemplateModel().get("mainObject") != null) {
+            notification.setTemplate(DEFAULT_TEMPLATE_WITH_DOCUMENT);
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+            notification.setTemplate(String.format(DEFAULT_TEMPLATE_WITHOUT_DOCUMENT, dateFormat.format(new Date()), error));
+        }
     }
 
     private class NotificationTransactionListener implements TransactionListener {
@@ -752,7 +770,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                                             while (!pool.isEmpty()) {
                                                 Notification notification = pool.poll();
                                                 if (checkNotification(notification)) {
-                                                        Set<NotificationUnit> notificationUnits = createAtomicNotifications(notification);
+                                                    Set<NotificationUnit> notificationUnits;
+                                                    try {
+                                                        notificationUnits = createAtomicNotifications(notification);
+                                                    } catch (TemplateParseException | TemplateRunException e) {
+                                                        fillNotificationDefaultTemplate(notification, e.getMessage());
+                                                        notificationUnits = createAtomicNotifications(notification);
+                                                    }
                                                         if (notificationUnits != null && notificationUnits.size() > 0) {
                                                             for (NotificationUnit notf : notificationUnits) {
                                                                 sendNotification(notf, notification.isDontCheckAccessToObject());
