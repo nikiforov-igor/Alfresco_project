@@ -26,6 +26,7 @@
 							stage.removeAspect('sys:temporary');
 							for (i = 0, size = approvals.size(); i < size; ++i) {
 								var stageItem = routesService.createNewTemporaryNode(stage.getNodeRef(),"lecmWorkflowRoutes:stageItem");
+								stageItem.properties['lecmWorkflowRoutes:stageItemOrder'] = i;
 								stageItem.save();								
 								stageItem.createAssociation(approvals.get(i),  'lecmWorkflowRoutes:stageItemEmployeeAssoc');
 								stageItem.removeAspect('sys:temporary');

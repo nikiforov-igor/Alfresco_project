@@ -199,6 +199,7 @@
 				  row.save();
 				}
 				var stageItem = routesService.createNewTemporaryNode(stage.getNodeRef(),"lecmWorkflowRoutes:stageItem");
+				stageItem.properties['lecmWorkflowRoutes:stageItemOrder'] = i;
 				stageItem.save();
 				stageItem.createAssociation(approvals[i],  'lecmWorkflowRoutes:stageItemEmployeeAssoc');
 				stageItem.removeAspect('sys:temporary');
