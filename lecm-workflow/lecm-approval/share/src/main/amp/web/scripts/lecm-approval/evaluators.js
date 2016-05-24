@@ -69,12 +69,12 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 		},
 		iterationAdd: function (rowData) {
 			/*
-			 * добавить участника можно, если этап новый или активный.
+			 * добавить участника можно, только если стоит галка "Разрешить изменять параметры согласования", если этап новый или активный.
 			 * в завершенный этап никого добавить нельзя
 			 */
 			var state = rowData.itemData.prop_lecmApproveAspects_approvalState.value,
 				type = rowData.itemData.prop_lecmWorkflowRoutes_stageWorkflowType.value;
-			return state === 'NEW' || (state === 'ACTIVE' && type === 'SEQUENTIAL');
+			return this.approvalIsEditable && state === 'NEW' || (state === 'ACTIVE' && type === 'SEQUENTIAL');
 		},
 		iterationEdit: function (rowData) {
 			/*
