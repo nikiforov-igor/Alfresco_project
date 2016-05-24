@@ -628,18 +628,4 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		return result;
 	}
 
-	@Override
-	public boolean getRouteIsAutoStartSigning(NodeRef documentRef) {
-		NodeRef route = getDocumentCurrentIteration(documentRef);
-
-		if (route == null) {
-			return false;
-		}
-
-		Boolean isAutoStartSigning = (Boolean) nodeService.getProperty(route, RoutesModel.PROP_ROUTE_AUTO_START_SIGNING);
-
-		return Boolean.TRUE.equals(isAutoStartSigning);
-
-	}
-
 }

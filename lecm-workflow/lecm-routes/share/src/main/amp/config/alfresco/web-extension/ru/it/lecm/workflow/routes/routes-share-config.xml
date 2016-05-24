@@ -46,7 +46,6 @@
 					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
 					<show id="lecmWorkflowRoutes:routeEditable"/>
-					<show id="lecmWorkflowRoutes:routeAutoStartSigning"/>
 					<show id="lecmWorkflowRoutes:stagesControlFake" force="true" />
 				</field-visibility>
 				<appearance>
@@ -83,9 +82,6 @@
 					<field id="lecmWorkflowRoutes:routeEditable" set="params">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
-					<field id="lecmWorkflowRoutes:routeAutoStartSigning" set="params">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
 					<field id="lecmWorkflowRoutes:stagesControlFake" set="stages">
 						<control template="/ru/it/lecm/workflow/routes/controls/stages-control.ftl"/>
 					</field>
@@ -95,16 +91,12 @@
 				<field-visibility>
 					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
-					<show id="lecmWorkflowRoutes:routeAutoStartSigning"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutes:routeInterruptAfterReject">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeAutoStartSigning">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 				</appearance>
@@ -118,7 +110,6 @@
 					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
 					<show id="lecmWorkflowRoutes:routeEditable"/>
-					<show id="lecmWorkflowRoutes:routeAutoStartSigning"/>
 					<show id="lecmWorkflowRoutes:stagesControlFake" force="true"/>
 				</field-visibility>
 				<appearance>
@@ -153,9 +144,6 @@
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:routeEditable" set="params">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeAutoStartSigning" set="params">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:stagesControlFake" set="stages">

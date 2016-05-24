@@ -19,7 +19,6 @@ public final class RoutesModel {
 	public final static QName PROP_ROUTE_START_DATE = QName.createQName(ROUTES_URL, "routeStartDate");
 	public final static QName PROP_ROUTE_COMPLETE_DATE = QName.createQName(ROUTES_URL, "routeCompleteDate");
 	public final static QName ASSOC_ROUTE_INITIATOR_EMPLOYEE = QName.createQName(ROUTES_URL, "initiatorEmployeeAssoc");
-	public final static QName PROP_ROUTE_AUTO_START_SIGNING = QName.createQName(ROUTES_URL, "routeAutoStartSigning");
 
 	public final static QName TYPE_STAGE = QName.createQName(ROUTES_URL, "stage");
 	public final static QName PROP_STAGE_WORKFLOW_TYPE = QName.createQName(ROUTES_URL, "stageWorkflowType");

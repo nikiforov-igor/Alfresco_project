@@ -75,5 +75,4 @@ public interface RoutesService {
 
 	String getApprovalState(NodeRef documentNode);
 
-	boolean getRouteIsAutoStartSigning(NodeRef documentRef);
 }
