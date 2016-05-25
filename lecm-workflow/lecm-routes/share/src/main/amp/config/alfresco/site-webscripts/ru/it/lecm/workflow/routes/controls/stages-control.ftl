@@ -3,6 +3,18 @@
 <#assign params = field.control.params/>
 <#assign editable = form.mode != "view"/>
 
+<#assign createStageFormId="createStageForm"/>
+<#if field.control.params.contextProperty??>
+	<#if context.properties[field.control.params.contextProperty]??>
+		<#assign createStageFormId = context.properties[field.control.params.contextProperty]>
+	<#elseif args[field.control.params.contextProperty]??>
+		<#assign createStageFormId = args[field.control.params.contextProperty]>
+	</#if>
+<#elseif context.properties[field.name]??>
+	<#assign createStageFormId = context.properties[field.name]>
+</#if>
+
+
 <#assign itemId = args.itemId/>
 
 <#assign controlId = fieldHtmlId + "-cntrl">
@@ -26,6 +38,7 @@
 		LogicECM.CurrentModules[controlId] = new LogicECM.module.Routes.StagesControlDatagrid(controlId);
 		LogicECM.CurrentModules[controlId].setMessages(${messages});
 		LogicECM.CurrentModules[controlId].setOptions({
+            createStageFormId: "${createStageFormId}",
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,

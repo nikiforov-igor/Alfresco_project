@@ -17,7 +17,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 	YAHOO.lang.augmentObject(LogicECM.module.Routes.StagesControlDatagrid.prototype, {
 		onActionCreate: function (event, obj, isApprovalListContextProp) {
 			function onCreateStageSuccess(r) {
-				var formId = 'createStageForm';
+				var formId = this.options.createStageFormId;
 				var createStageForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 				var stageRef = r.json.nodeRef;
 

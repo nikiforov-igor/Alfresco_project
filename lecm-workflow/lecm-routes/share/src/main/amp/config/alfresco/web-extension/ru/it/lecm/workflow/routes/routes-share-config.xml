@@ -83,7 +83,9 @@
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:stagesControlFake" set="stages">
-						<control template="/ru/it/lecm/workflow/routes/controls/stages-control.ftl"/>
+						<control template="/ru/it/lecm/workflow/routes/controls/stages-control.ftl">
+							<control-param name="contextProperty">createStageFormId</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -162,10 +164,12 @@
 					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
 					<show id="lecmApproveAspects:approvalState"/>
 					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
+					<show id="lecmWorkflowRoutes:stageExpression"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" label-id="lecm.routers.stage"/>
 					<field id="lecmApproveAspects:approvalState" label-id="lecm.routers.status"/>
+					<field id="lecmWorkflowRoutes:stageExpression" label-id="lecm.routers.conditional"/>
 				</appearance>
 			</form>
 		</forms>
@@ -173,6 +177,27 @@
 	<config evaluator="node-type" condition="lecmWorkflowRoutes:stage">
 		<forms>
 			<form>
+				<field-visibility>
+					<show id="cm:title" force="true"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:title" mandatory="true" label-id="lecm.routers.stage.name">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:stageWorkflowType">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:stageWorkflowTerm">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield-with-default-value.ftl">
+							<control-param name="defaultValueDataSource">/lecm/approval/defaultTerm</control-param>
+							<control-param name="allowInNonCreateMode">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+			<form id="createStageFormWithExpression">
 				<field-visibility>
 					<show id="cm:title" force="true"/>
 					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
