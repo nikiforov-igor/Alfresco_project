@@ -77,7 +77,7 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
             Map<String, Object> notificationTemplateModel = new HashMap<>();
             notificationTemplateModel.put("mainObject", nodeRef);
             Notification notification = new Notification(notificationTemplateModel);
-            notificationsService.fillNotificationByTemplateCode(notification, notificationTemplateCode);
+            notification.setTemplateCode(notificationTemplateCode);
             if (employeeList.size() > 0) {
                 notification.setRecipientEmployeeRefs(employeeList);
             } else if (unitList.size() > 0) {

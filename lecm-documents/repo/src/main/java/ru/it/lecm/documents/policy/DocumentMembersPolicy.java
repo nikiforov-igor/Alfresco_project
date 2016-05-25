@@ -192,7 +192,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
                 Notification notification = new Notification(templateObjects);
                 notification.setRecipientEmployeeRefs(Collections.singletonList(employee));
                 notification.setAuthor(authService.getCurrentUserName());
-                notificationService.fillNotificationByTemplateCode(notification, "DOCUMENT_INVITATION");
+                notification.setTemplateCode("DOCUMENT_INVITATION");
                 notification.setObjectRef(docRef);
                 notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
                 notificationService.sendNotification(notification);

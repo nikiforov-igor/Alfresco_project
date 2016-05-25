@@ -47,8 +47,8 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     final private static Logger logger = LoggerFactory.getLogger(NotificationsServiceImpl.class);
     private static final int DEFAULT_N_DAYS = 5;
-    public static final String DEFAULT_TEMPLATE_WITH_DOCUMENT = "Документ {#mainObject.wrapAsLink(#mainObject.attribute(\"lecm-document:present-string\"))} был изменен";
-    public static final String DEFAULT_TEMPLATE_WITHOUT_DOCUMENT = "При формировании уведомления произошла ошибка. Обратитесь к администратору. %s %s";
+    private static final String DOCUMENT_LINK = "Документ {#mainObject.wrapAsLink(#mainObject.attribute(\"lecm-document:present-string\"))}";
+    private static final String DEFAULT_NOTIFICATION_TEMPLATE = "При формировании уведомления произошла ошибка. За дополнительной информацией обратитесь к администратору. %s Ошибка: %s";
 
     private OrgstructureBean orgstructureService;
     private DictionaryBean dictionaryService;
@@ -247,11 +247,29 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
      * @param generalizedNotification Обобщённое уведомление
      * @return Множество атомарных уведомлений
      */
-    private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) throws TemplateRunException, TemplateParseException {
+    private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) throws TemplateRunException, TemplateParseException, TemplateNotFoundException {
         long start = System.currentTimeMillis();
         logger.trace("createAtomicNotifications start: {}", start);
         Set<NotificationUnit> result = new HashSet<>();
         if (generalizedNotification != null) {
+
+            if (generalizedNotification.getTemplateCode() != null) {
+
+                NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, generalizedNotification.getTemplateCode());
+                if (templateDicRec != null) {
+                    String template = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
+                    String subject = (String) nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
+                    List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
+                    NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
+
+                    generalizedNotification.setTemplate(template);
+                    generalizedNotification.setSubject(subject);
+                    generalizedNotification.setTemplateRef(templateRef);
+                } else {
+                    throw new TemplateNotFoundException("Не найден шаблон уведомления: " + generalizedNotification.getTemplateCode());
+                }
+            }
+
 			String templateBody = parseTemplateRef(generalizedNotification.getTemplateRef(), generalizedNotification.getTemplateModel());
 			String templateDescription = parseTemplate(generalizedNotification.getTemplate(), generalizedNotification.getTemplateModel());
 			String templateSubject  = parseTemplate(generalizedNotification.getSubject(), generalizedNotification.getTemplateModel());
@@ -620,7 +638,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         }
         objects.put("mainObject", nodeRef);
         Notification notification = new Notification(objects);
-        fillNotificationByTemplateCode(notification, templateCode);
+        notification.setTemplateCode(templateCode);
         notification.setRecipientEmployeeRefs(recipients);
         notification.setAuthor(AuthenticationUtil.getSystemUserName());
         notification.setObjectRef(nodeRef);
@@ -676,7 +694,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	@Override
 	public void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject) {
 		Notification notification = new Notification(config);
-        fillNotificationByTemplateCode(notification, templateCode);
+        notification.setTemplateCode(templateCode);
 		notification.setAuthor(author);
 		notification.setRecipientEmployeeRefs(recipientRefs);
 		notification.setObjectRef((NodeRef)config.get("mainObject"));
@@ -684,34 +702,6 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 		sendNotification(notification, dontCheckAccessToObject);
 	}
-
-    @Override
-    public void fillNotificationByTemplateCode(Notification notification, String templateCode) {
-        NodeRef templateDicRec = dictionaryService.getRecordByParamValue(NOTIFICATION_TEMPLATE_DICTIONARY_NAME, ContentModel.PROP_NAME, templateCode);
-        if (templateDicRec != null) {
-            String template = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE);
-            String subject = (String)nodeService.getProperty(templateDicRec, PROP_NOTIFICATION_TEMPLATE_SUBJECT);
-            List<AssociationRef> templateAssocs = nodeService.getTargetAssocs(templateDicRec, ASSOC_NOTIFICATION_TEMPLATE_TEMPLATE_ASSOC);
-            NodeRef templateRef = templateAssocs.isEmpty() ? null : templateAssocs.get(0).getTargetRef();
-
-            notification.setTemplate(template);
-            notification.setSubject(subject);
-            notification.setTemplateRef(templateRef);
-        } else {
-            String error = "Не найден шаблон уведомления: " + templateCode;
-            logger.error(error);
-            fillNotificationDefaultTemplate(notification, error);
-        }
-    }
-
-    private void fillNotificationDefaultTemplate(Notification notification, String error) {
-        if (notification.getTemplateModel().get("mainObject") != null) {
-            notification.setTemplate(DEFAULT_TEMPLATE_WITH_DOCUMENT);
-        } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
-            notification.setTemplate(String.format(DEFAULT_TEMPLATE_WITHOUT_DOCUMENT, dateFormat.format(new Date()), error));
-        }
-    }
 
     private class NotificationTransactionListener implements TransactionListener {
 
@@ -773,8 +763,15 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                                                     Set<NotificationUnit> notificationUnits;
                                                     try {
                                                         notificationUnits = createAtomicNotifications(notification);
-                                                    } catch (TemplateParseException | TemplateRunException e) {
-                                                        fillNotificationDefaultTemplate(notification, e.getMessage());
+                                                    } catch (TemplateParseException | TemplateRunException | TemplateNotFoundException e) {
+                                                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+                                                        String error = dateFormat.format(new Date()) + " " + e.getMessage();
+                                                        String document = "";
+                                                        if (notification.getTemplateModel().get("mainObject") != null) {
+                                                            document = DOCUMENT_LINK;
+                                                        }
+                                                        notification.setTemplateCode(null);
+                                                        notification.setTemplate(String.format(DEFAULT_NOTIFICATION_TEMPLATE, document, error));
                                                         notificationUnits = createAtomicNotifications(notification);
                                                     }
                                                         if (notificationUnits != null && notificationUnits.size() > 0) {

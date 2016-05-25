@@ -237,5 +237,4 @@ public interface NotificationsService {
 
 	void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject);
 
-	void fillNotificationByTemplateCode(Notification notification, String templateCode);
 }

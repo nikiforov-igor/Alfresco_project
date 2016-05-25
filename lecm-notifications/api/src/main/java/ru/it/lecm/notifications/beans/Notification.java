@@ -97,6 +97,11 @@ public class Notification {
 	private NodeRef templateRef;
 
 	/**
+	 * Код шаблона из справочника
+	 */
+	private String templateCode;
+
+	/**
 	 * Данные для построения текста уведомления по его шаблону
 	 */
 	private Map<String, Object> templateModel;
@@ -250,5 +255,17 @@ public class Notification {
 
 	public Map<String, Object> getTemplateModel() {
 		return templateModel;
+	}
+
+	public String getTemplateCode() {
+		return templateCode;
+	}
+
+	public void setTemplateCode(String templateCode) {
+		this.templateCode = templateCode;
+	}
+
+	public void setTemplateModel(Map<String, Object> templateModel) {
+		this.templateModel = templateModel;
 	}
 }
