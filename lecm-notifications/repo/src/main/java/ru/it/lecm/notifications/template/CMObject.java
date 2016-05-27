@@ -1,8 +1,9 @@
 package ru.it.lecm.notifications.template;
 
+import org.alfresco.service.cmr.repository.NodeRef;
+
 import java.io.Serializable;
 import java.util.List;
-import org.alfresco.service.cmr.repository.NodeRef;
 
 /**
  *
@@ -44,4 +45,6 @@ public interface CMObject {
 	String wrapAsLink(String description);
 
 	String getFormatted(String substitudeString);
+
+	String getContentAsBase64();
 }

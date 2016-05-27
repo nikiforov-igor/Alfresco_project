@@ -1,18 +1,21 @@
 package ru.it.lecm.notifications.template;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.ApplicationContext;
 import ru.it.lecm.base.beans.SubstitudeBean;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,6 +27,7 @@ public class CMObjectImpl implements CMObject {
 	protected final NodeService nodeService;
 	protected final NamespaceService namespaceService;
 	protected final ApplicationContext applicationContext;
+	protected final ContentService contentService;
 	private final static String LINK_URL = "view-metadata";
 	
 	CMObjectImpl(NodeRef ref, ApplicationContext applicationContext) {
@@ -31,6 +35,7 @@ public class CMObjectImpl implements CMObject {
 		this.applicationContext = applicationContext;
 		this.nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		this.namespaceService = applicationContext.getBean("namespaceService", NamespaceService.class);
+		this.contentService = applicationContext.getBean("contentService", ContentService.class);
 	}
 
 	@Override
@@ -104,6 +109,19 @@ public class CMObjectImpl implements CMObject {
 	@Override
 	public String wrapAsLink() {
 		return this.wrapAsLink(this.getPresentString());
+	}
+
+	@Override
+	public String getContentAsBase64() {
+		ContentReader reader = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+		InputStream contentInputStream = reader.getContentInputStream();
+		try {
+			String base64String = Base64.encodeBase64String(IOUtils.toByteArray(contentInputStream));
+			String mimeType = reader.getMimetype();
+			return "data:" + mimeType + ";base64," + base64String;
+		} catch (IOException e) {
+			return "";
+		}
 	}
 	
 }

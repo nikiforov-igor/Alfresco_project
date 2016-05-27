@@ -163,4 +163,18 @@
         </property>
     </bean>
 
+	<bean id="notificationTemplateBootstrap" parent="spacesStoreImporter">
+		<property name="useExistingStore" value="true"/>
+		<property name="bootstrapViews">
+			<list>
+				<props>
+					<prop key="uuidBinding">UPDATE_EXISTING</prop>
+					<prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}/${spaces.templates.email.childname}</prop>
+					<prop key="location">alfresco/module/${artifactId}/bootstrap/defaultNotificationTemplate.xml</prop>
+					<prop key="messages">alfresco/messages/bootstrap-spaces</prop>
+				</props>
+			</list>
+		</property>
+	</bean>
+
 </beans>

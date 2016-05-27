@@ -258,6 +258,9 @@
 			<#if defaultValue?has_content>
 				defaultValue: "${defaultValue?string}",
 			</#if>
+			<#if params.defaultValue??>
+                defaultValue: "${params.defaultValue?string}",
+			</#if>
 			<#if params.fireAction?? && params.fireAction != "">
 				fireAction: {
 					<#list params.fireAction?split(optionSeparator) as typeValue>

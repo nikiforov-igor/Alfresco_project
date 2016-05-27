@@ -1,15 +1,17 @@
 package ru.it.lecm.notifications.template;
 
-import ru.it.lecm.notifications.beans.TemplateRunException;
-import java.util.HashMap;
-import java.util.Map;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.springframework.context.ApplicationContext;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.notifications.beans.TemplateRunException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -25,6 +27,7 @@ class ObjectMapImpl implements ObjectMap {
 
 	private final DictionaryService dictionaryService;
 	private final NodeService nodeService;
+	private static final Pattern nodeRefPattern = Pattern.compile("^[a-zA-Z]+://[a-zA-Z]+/[a-zA-Z0-9/-]+$");
 
 	public ObjectMapImpl(Map<String, Object> objects, ApplicationContext applicationContext) {
 		this.objects = new HashMap<>(objects);
@@ -45,7 +48,7 @@ class ObjectMapImpl implements ObjectMap {
 				throw new TemplateRunException("No object with id \"" + name + "\"");
 			}
 
-			if (NodeRef.isNodeRef(obj.toString())) {
+			if (nodeRefPattern.matcher(obj.toString()).matches()) {
 				NodeRef ref = (NodeRef) obj;
 				QName objType = nodeService.getType(ref);
 				CMObject cmobj;

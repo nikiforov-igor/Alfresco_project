@@ -1,0 +1,38 @@
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+           xmlns:cm="http://www.alfresco.org/model/content/1.0"
+           xmlns:app="http://www.alfresco.org/model/application/1.0"
+           xmlns:sys="http://www.alfresco.org/model/system/1.0">
+
+    <cm:content view:childName="cm:defaultNotificationTemplate.ftl">
+        <view:aspects>
+            <cm:titled/>
+            <sys:referenceable/>
+            <app:inlineeditable/>
+        </view:aspects>
+        <view:properties>
+            <sys:node-uuid>default-notification-template</sys:node-uuid>
+            <sys:store-protocol>workspace</sys:store-protocol>
+            <sys:store-identifier>SpacesStore</sys:store-identifier>
+            <app:editInline>true</app:editInline>
+            <cm:name>defaultNotificationTemplate.ftl</cm:name>
+            <cm:title>defaultNotificationTemplate.ftl</cm:title>
+            <cm:description>Default email notification template.</cm:description>
+            <cm:content>contentUrl=classpath:alfresco/module/notifications-repo/bootstrap/defaultNotificationTemplate.ftl|mimetype=text/plain|encoding=UTF-8</cm:content>
+        </view:properties>
+    </cm:content>
+    <cm:content view:childName="cm:defaultNotificationTemplateImage.png">
+        <view:aspects>
+            <cm:titled/>
+            <sys:referenceable/>
+        </view:aspects>
+        <view:properties>
+            <sys:node-uuid>default-notification-template-image</sys:node-uuid>
+            <sys:store-protocol>workspace</sys:store-protocol>
+            <sys:store-identifier>SpacesStore</sys:store-identifier>
+            <cm:name>defaultNotificationTemplateImage.png</cm:name>
+            <cm:title>defaultNotificationTemplateImage.png</cm:title>
+            <cm:description>Default email notification template image.</cm:description>
+            <cm:content>contentUrl=classpath:alfresco/module/notifications-repo/bootstrap/defaultNotificationTemplateImage.png|mimetype=image/png|encoding=UTF-8</cm:content>
+        </view:properties>
+    </cm:content>
+</view:view>
