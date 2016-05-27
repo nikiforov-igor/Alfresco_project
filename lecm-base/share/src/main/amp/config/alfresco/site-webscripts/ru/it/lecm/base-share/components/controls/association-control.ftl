@@ -165,6 +165,8 @@
 
 		<#elseif form.arguments[field.name]?has_content>
 			<#assign defaultValue=form.arguments[field.name]>
+		<#elseif params.defaultValue??>
+			<#assign defaultValue=params.defaultValue>
 		</#if>
 	</#if>
 
@@ -257,9 +259,6 @@
 			</#if>
 			<#if defaultValue?has_content>
 				defaultValue: "${defaultValue?string}",
-			</#if>
-			<#if params.defaultValue??>
-                defaultValue: "${params.defaultValue?string}",
 			</#if>
 			<#if params.fireAction?? && params.fireAction != "">
 				fireAction: {
