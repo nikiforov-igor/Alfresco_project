@@ -138,7 +138,7 @@
 							<control-param name="showPath">false</control-param>
 							<control-param name="showAutocomplete">false</control-param>
 							<control-param name="rootLocation">/app:company_home/app:dictionary/app:email_templates</control-param>
-							<control-param name="additionalFilter">PATH:\"/app:company_home/app:dictionary/app:email_templates//*\"</control-param>
+							<control-param name="additionalFilter">PATH:\"/app:company_home/app:dictionary/app:email_templates//*.ftl\"</control-param>
 							<control-param name="defaultValue">workspace://SpacesStore/default-notification-template</control-param>
 						</control>
 					</field>

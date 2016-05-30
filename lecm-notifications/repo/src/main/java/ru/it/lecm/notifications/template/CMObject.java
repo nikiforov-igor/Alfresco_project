@@ -45,6 +45,4 @@ public interface CMObject {
 	String wrapAsLink(String description);
 
 	String getFormatted(String substitudeString);
-
-	String getContentAsBase64();
 }

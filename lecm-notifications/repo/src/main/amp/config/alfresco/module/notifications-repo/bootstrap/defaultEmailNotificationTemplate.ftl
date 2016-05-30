@@ -32,7 +32,7 @@
 <div id="notification">
     <table>
         <tr>
-            <td class="image-cell"><img src="${notificationImage.getContentAsBase64()}"/></td>
+            <td class="image-cell"><img src="${image("defaultEmailNotificationTemplateImage.png")}"/></td>
             <td class="text-cell">${notificationText}</td>
         </tr>
     </table>

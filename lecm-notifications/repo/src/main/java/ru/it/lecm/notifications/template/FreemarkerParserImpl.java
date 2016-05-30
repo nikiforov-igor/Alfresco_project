@@ -2,13 +2,14 @@ package ru.it.lecm.notifications.template;
 
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.service.cmr.repository.TemplateService;
 import org.springframework.context.ApplicationContext;
 import ru.it.lecm.notifications.beans.TemplateParseException;
 import ru.it.lecm.notifications.beans.TemplateRunException;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -23,6 +24,7 @@ public class FreemarkerParserImpl extends AbstractParserImpl {
 	public FreemarkerParserImpl(ApplicationContext applicationContext) {
 		super(applicationContext);
 		utilsModel.put("formatLink", new FormatLinkFunc());
+		utilsModel.put("image", new NotificationImage());
 		templateService = applicationContext.getBean("templateService", TemplateService.class);
 	}
 
@@ -49,6 +51,17 @@ public class FreemarkerParserImpl extends AbstractParserImpl {
 				throw new TemplateModelException("function formatLink requires 2 args: String url, String description");
 			}
 			return Utils.formatLink((String)args.get(0), (String)args.get(1));
+		}
+	}
+
+	private static class NotificationImage implements TemplateMethodModelEx {
+		@Override
+		public Object exec(List args) throws TemplateModelException {
+			if (args == null || args.isEmpty()) {
+				throw new TemplateModelException("function image required 1 arg: String imageName");
+			}
+
+			return Utils.getImageAsBase64(args.get(0).toString());
 		}
 	}
 }
