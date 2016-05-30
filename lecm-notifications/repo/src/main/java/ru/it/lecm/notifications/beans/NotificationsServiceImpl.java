@@ -272,7 +272,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 			String templateDescription = parseTemplate(generalizedNotification.getTemplate(), generalizedNotification.getTemplateModel());
             NodeRef templateRef = generalizedNotification.getTemplateRef();
-            if (templateRef != null && templateRef.getId().equals("default-notification-template")) {
+            if (templateRef != null && generalizedNotification.getTemplateModel() != null) {
                 generalizedNotification.getTemplateModel().put("notificationText", templateDescription);
             }
 			String templateBody = parseTemplateRef(generalizedNotification.getTemplateRef(), generalizedNotification.getTemplateModel());
