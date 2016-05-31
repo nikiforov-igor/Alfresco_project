@@ -36,7 +36,8 @@
 									templateCode: 'ERRANDS_DECLINE_EXEC',
 									templateConfig: {
 										mainObject: document,
-										eventExecutor: initiator
+										eventExecutor: initiator,
+										reason: lecmErrandWf_initiatorDeclineReason
 									}
 								});
 
