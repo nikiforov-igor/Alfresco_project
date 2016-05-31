@@ -302,6 +302,40 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 		},
 		onActionAddMacros: function (item) {
 			this._createNewStageItem('macros', item.nodeRef);
+		},
+		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
+			var html = null;
+
+			if (!oRecord) {
+				oRecord = this.getRecord(elCell);
+			}
+			if (!oColumn) {
+				oColumn = this.getColumn(elCell.parentNode.cellIndex);
+			}
+
+			if (oRecord && oColumn) {
+				if (!oData) {
+					oData = oRecord.getData("itemData")[oColumn.field];
+				}
+
+				if (oData) {
+					var datalistColumn = grid.datagridColumns[oColumn.key];
+					if (datalistColumn) {
+						oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+						for (var i = 0; i < oData.length; i++) {
+							if (datalistColumn.name == "lecmWorkflowRoutes:stageExpression") {
+								if (oData[i].displayValue && oData[i].displayValue.length) {
+									html = '<div class="centered"><img src="/share/res/components/images/complete-16.png" width="16" alt="true" title="true" id="yui-gen538"></div>';
+								} else {
+									html = '';
+								}
+								break;
+							}
+						}
+					}
+				}
+			}
+			return html;
 		}
 
 	}, true);

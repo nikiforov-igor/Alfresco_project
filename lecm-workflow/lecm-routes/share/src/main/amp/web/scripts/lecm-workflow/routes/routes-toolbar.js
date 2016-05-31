@@ -33,7 +33,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						itemKind: 'node',
 						mode: 'edit',
 						showCancelButton: true,
-						submitType: 'json'
+						submitType: 'json',
+						createStageFormId: 'createStageFormWithExpression'
 					},
 					destroyOnHide: true,
 					doBeforeDialogShow: {
