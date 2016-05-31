@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<items>
-    <item name="cm:Настройки замещения" type="lecm-arm:html-node">
-		<property name="cm:name"><![CDATA[Настройки замещения]]></property>
-		<property name="lecm-arm:order"><![CDATA[60]]></property>
-		<property name="lecm-arm:html-url"><![CDATA[page/deputy-settings]]></property>
-	</item>
-</items>
