@@ -22,8 +22,15 @@ LogicECM.module = LogicECM.module || {};
 
         YAHOO.Bubbling.on(contractorSelectEvent, this.onSelect, this);
         YAHOO.Bubbling.on(organizationSelectEvent, this.onSelect, this);
+        YAHOO.Bubbling.on('formValueChanged', this.onControlRegistered, this);
 
         this.previousSelected = null;
+        this.controlsDeferred = new Alfresco.util.Deferred(["AssociationTreeViewer"], {
+            scope: this,
+            fn: function (oParams) {
+                this._updateControlsOnDeferred();
+            }
+        });
         this.options.contractorSelectEvent = contractorSelectEvent;
         this.options.organizationSelectEvent = organizationSelectEvent;
 
@@ -32,6 +39,7 @@ LogicECM.module = LogicECM.module || {};
 
     YAHOO.extend(LogicECM.module.DoubleSelectRepresentativeForContractor, Alfresco.component.Base, {
         previousSelected: null,
+        controlsDeferred: null,
 
         options: {
             employeesByOrgDS: "lecm/employees/byOrg/{organization}/picker",
@@ -63,6 +71,14 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onReady: function SelectRepresentativeForContractor_onReady() {
+        },
+
+        onControlRegistered: function (layer, args) {
+            var obj = args[1];
+            var control = obj.eventGroup;
+            if (control.id === this.options.fieldHtmlId) {
+                this.controlsDeferred.fulfil(control.name);
+            }
         },
 
         onSelect: function (layer, args) {
@@ -162,6 +178,19 @@ LogicECM.module = LogicECM.module || {};
             }
         },
 
+        _updateControlsOnDeferred() {
+            var control = LogicECM.CurrentModules[this.options.autoCompleteJsName];
+            var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
+
+            if (control && treeControl) {
+                var disabled = this.previousSelected == null;
+                control.options.disabled = disabled;
+                treeControl.options.disabled = disabled;
+                control.onReady();
+                treeControl.init();
+            }
+        },
+
         _updateControls: function (selectedContractor, reset, autocompleteConf, treeConf) {
             var control = LogicECM.CurrentModules[this.options.autoCompleteJsName];
             if (control != null) {
@@ -183,13 +212,20 @@ LogicECM.module = LogicECM.module || {};
                     selectedValueNodeRef: "",
                     lazyLoading: (selectedContractor != null)
                 });
+                
                 if (selectedContractor != null) {
-                    control.setOptions(autocompleteConf);
+                    if (autocompleteConf) {
+                        control.setOptions(autocompleteConf);
+                    } else {
+                        control.options.disabled = false;
+                    }
                     if (!control.options.currentValue && this.options.defaultValue && !this.options.defaultValueLoaded) {
                         control.options.selectedValueNodeRef = this.options.defaultValue;
                     }
-                    control.onReady();
+                } else {
+                    control.options.disabled = true;
                 }
+                control.onReady();
             }
             var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
             if (treeControl != null) {
@@ -205,14 +241,18 @@ LogicECM.module = LogicECM.module || {};
                 treeControl.setOptions({
                     selectedValue: null
                 });
+                
                 if (selectedContractor != null && treeConf) {
                     treeControl.setOptions(treeConf);
                     if (!treeControl.options.currentValue && this.options.defaultValue && !this.options.defaultValueLoaded) {
                         treeControl.options.selectedValue = this.options.defaultValue;
                         this.options.defaultValueLoaded = true;
                     }
-                    treeControl.init();
+                } else {
+                    treeControl.options.disabled = selectedContractor == null;
                 }
+
+                treeControl.init();
             }
         }
     });
