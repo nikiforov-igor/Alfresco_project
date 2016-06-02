@@ -97,21 +97,22 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 				NodeRef point = protocolService.getErrandLinkedPoint(sender);
 				if (null!=point){
 					Boolean isExpired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
+					Boolean justInTime = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_JUST_IN_TIME);
 					if (!checkPointExecutedStatus(point) && "Исполнено".equals(errandStatus)){
-						// переведем пункт в статус "Исполнен"
+						// Переведем пункт в статус "Исполнен":
 						changePointStatus(protocol, point, ProtocolService.P_STATUSES.EXECUTED_STATUS);
 					}
-					else if (!checkPointExecutedStatus(point) && isExpired && "Не исполнено".equals(errandStatus)) {
-						// переведем пункт в статус "Просрочен"
-						changePointStatus(protocol, point, ProtocolService.P_STATUSES.EXPIRED_STATUS);
-					}
-					else if (!checkPointExecutedStatus(point) && !isExpired && "Не исполнено".equals(errandStatus)){
-						// переведем пункт в статус "Не исполнен"
+					else if (!checkPointExecutedStatus(point) && isExpired && justInTime){
+						// Переведем пункт в статус "Не исполнен":
 						changePointStatus(protocol, point, ProtocolService.P_STATUSES.NOT_EXECUTED_STATUS);
+					}
+					else if (!checkPointExecutedStatus(point) && isExpired && !justInTime) {
+						// Переведем пункт в статус "Просрочен":
+						changePointStatus(protocol, point, ProtocolService.P_STATUSES.EXPIRED_STATUS);
 					}
 				}
 			}
-			// удалим отправителей из списка, чтобы в следующий раз были только новые
+			// Удалим отправителей из списка, чтобы в следующий раз были только новые:
 			documentEventService.removeEventSender(protocol, sender);
 		}
 	}
