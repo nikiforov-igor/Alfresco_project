@@ -1,6 +1,6 @@
 <#include "/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 <#assign params = field.control.params>
-<script>//<![CDATA[
+<script>
 (function () {
     LogicECM.CurrentModules = LogicECM.CurrentModules || {};
 
@@ -57,4 +57,4 @@
 
     YAHOO.util.Event.onDOMReady(init);
 })();
-//]]></script>
+</script>

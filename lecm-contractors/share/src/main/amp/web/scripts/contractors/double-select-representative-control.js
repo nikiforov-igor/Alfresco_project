@@ -178,7 +178,7 @@ LogicECM.module = LogicECM.module || {};
             }
         },
 
-        _updateControlsOnDeferred() {
+        _updateControlsOnDeferred: function() {
             var control = LogicECM.CurrentModules[this.options.autoCompleteJsName];
             var treeControl = LogicECM.CurrentModules[this.options.treeViewJsName];
 
