@@ -198,7 +198,7 @@ LogicECM.module = LogicECM.module || {};
 
             pathNameSubstituteString: null,
 
-            nodesMarker: null
+            markNodes: null
         },
 
         onReady: function AssociationTreeViewer_onReady() {
@@ -1043,7 +1043,8 @@ LogicECM.module = LogicECM.module || {};
                                         });
                                 }
 
-                                if (this.options.nodesMarker && (this.options.selectedValue || this.options.currentValue)) {
+                                if (this.options.markNodes && ((this.options.selectedValue && this.options.selectedValue.indexOf(',') == '-1') ||
+                                    (this.options.selectedValue && this.options.currentValue && this.options.currentValue.indexOf(',') == '-1'))) {
 
                                     Alfresco.util.Ajax.jsonRequest({
                                         url: Alfresco.constants.PROXY_URI + '/lecm/contractors/hasIsOrganizationAspect',
@@ -1056,14 +1057,9 @@ LogicECM.module = LogicECM.module || {};
                                         {
                                             fn: function (response) {
                                                 var items = response.json.result;
-                                                var isOrganisation = this.options.nodesMarker == 'organisation';
 
                                                 for (var i in items) {
-                                                    if (items[i] === isOrganisation) {
-                                                        this.selectedItemsMarkers[i] = isOrganisation ? 'organisation' : 'contractor';
-                                                    } else {
-                                                        this.selectedItemsMarkers[i] = isOrganisation ? 'contractor' : 'organisation';
-                                                    }
+                                                    this.selectedItemsMarkers[i] = items[i] ? 'organisation' : 'contractor';
                                                 }
 
                                                 this._loadSelectedItems(this.options.clearFormsOnStart, true);
@@ -1818,7 +1814,6 @@ LogicECM.module = LogicECM.module || {};
 		        if (clearCurrentDisplayValue) {
 	                el.innerHTML = '';
 		        }
-                var markers = this.selectedItemsMarkers;
                 
 	            for (var i in this.selectedItems) {
 	                if (this.options.plane || !this.options.showSelectedItemsPath) {
@@ -1851,27 +1846,12 @@ LogicECM.module = LogicECM.module || {};
 				            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 			            }
 
-                        if (this.options.nodesMarker) {
-                            if (!markers[i]) {
-                                markers[i] = this.options.nodesMarker;
-                            }
-                        }
-                        
 			            YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 		            }
 	            }
 	        }
 
             if (!this.options.disabled) {
-                if (this.options.nodesMarker) {
-                    this.selectedItemsMarkers = {};
-
-                    for (i in markers) {
-                        if (this.selectedItems[i]) {
-                            this.selectedItemsMarkers[i] = markers[i];
-                        }
-                    }
-                }
                 
                 var addItems = this.getAddedItems();
 
@@ -1936,17 +1916,49 @@ LogicECM.module = LogicECM.module || {};
 			            selectedItems:selectedItems,
 			            selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
 		            });
-            }
-            if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
-                var params = {
-                    selectedItems: this.selectedItems,
-                    formId: this.options.formId,
-                    fieldId: this.options.fieldId
-                };
-                if (this.options.nodesMarker && Object.keys(this.selectedItems).length == 1) {
-                    params.markers = this.selectedItemsMarkers;
+                
+                if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+                    var params = {
+                        selectedItems: this.selectedItems,
+                        formId: this.options.formId,
+                        fieldId: this.options.fieldId
+                    };
+                    
+                    if (this.options.markNodes && Object.keys(this.selectedItems).length == 1) {
+                        Alfresco.util.Ajax.jsonRequest({
+                            url: Alfresco.constants.PROXY_URI + '/lecm/contractors/hasIsOrganizationAspect',
+                            method: "GET",
+                            dataObj:
+                            {
+                                nodeRef: Object.keys(this.selectedItems)[0]
+                            },
+                            params: params,
+                            successCallback:
+                            {
+                                fn: function (response) {
+                                    var items = response.json.result;
+                                    
+                                    for (var i in items) {
+                                        this.selectedItemsMarkers[i] = items[i] ? 'organisation' : 'contractor';
+                                    }
+
+                                    response.config.params.markers = this.selectedItemsMarkers;
+                                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, response.config.params);
+                                },
+                                scope: this
+                            },
+                            failureCallback:
+                            {
+                                fn: function (response) {
+                                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, response.config.params);
+                                },
+                                scope: this
+                            }
+                        });
+                    } else {
+                        YAHOO.Bubbling.fire(this.options.changeItemsFireAction, params);    
+                    }
                 }
-                YAHOO.Bubbling.fire(this.options.changeItemsFireAction, params);
             }
         },
 

@@ -246,8 +246,8 @@
 		    <#else>
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
-			<#if params.firstNodesMarker??>
-			    nodesMarker: "${params.firstNodesMarker?string}",
+			<#if params.markNodes?? && params.markNodes == "true">
+			    markNodes: true,
 			</#if>
 		    showCreateNewLink: ${firstShowCreateNewLink?string},
             additionalFilter: "${params.firstAdditionalFilter!''}",
@@ -331,8 +331,8 @@
 		    <#else>
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
-			<#if params.secondNodesMarker??>
-				nodesMarker: "${params.secondNodesMarker?string}",
+			<#if params.markNodes?? && params.markNodes == "true">
+				markNodes: true,
 			</#if>
             <#if args.ignoreNodes??>
                 ignoreNodes: "${args.ignoreNodes}".split(","),

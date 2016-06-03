@@ -47,9 +47,8 @@
 					<field id="lecm-outgoing:contractor-assoc" set="common">
 						<control>
 							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="markNodes">true</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
@@ -292,9 +291,8 @@
 					<field id="lecm-outgoing:contractor-assoc">
 						<control>
 							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="markNodes">true</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
@@ -424,9 +422,8 @@
 					<field id="lecm-outgoing:contractor-assoc">
 						<control>
 							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="markNodes">true</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
@@ -565,9 +562,8 @@
 					<field id="lecm-outgoing:contractor-assoc" mandatory="false">
 						<control>
 							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="markNodes">true</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
@@ -681,9 +677,8 @@
 					<field id="lecm-outgoing:contractor-assoc">
 						<control>
 							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="firstNodesMarker">contractor</control-param>
+							<control-param name="markNodes">true</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="secondNodesMarker">organisation</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 						</control>
