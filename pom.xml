@@ -57,6 +57,10 @@
             <id>alfresco-public</id>
             <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
         </pluginRepository>
+        <pluginRepository>
+            <id>maven-rep</id>
+            <url>https://maven-repository.com/artifact/</url>
+        </pluginRepository>
     </pluginRepositories>
     <properties>
         <!--
@@ -680,6 +684,17 @@
                     <version>2.1</version>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.kuali.maven.plugins</groupId>
+                    <artifactId>graph-maven-plugin</artifactId>
+                    <version>1.2.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.googlecode.maven-overview-plugin</groupId>
+                    <artifactId>maven-overview-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
         <plugins>
@@ -687,7 +702,14 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
             </plugin>
-
+            <plugin>
+                <groupId>org.kuali.maven.plugins</groupId>
+                <artifactId>graph-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.maven-overview-plugin</groupId>
+                <artifactId>maven-overview-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
@@ -758,4 +780,5 @@
             </modules>
         </profile>
     </profiles>
+
 </project>
