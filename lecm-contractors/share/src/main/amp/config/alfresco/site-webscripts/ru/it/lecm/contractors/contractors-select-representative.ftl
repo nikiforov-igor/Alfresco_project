@@ -71,7 +71,7 @@
 </#if>
 <div class="clear"></div>
 
-<script>
+<script type="text/javascript">//<![CDATA[
 (function () {
     LogicECM.CurrentModules = LogicECM.CurrentModules || {};
 
@@ -136,4 +136,4 @@
 
     YAHOO.util.Event.onDOMReady(init);
 })();
-</script>
+//]]></script>
