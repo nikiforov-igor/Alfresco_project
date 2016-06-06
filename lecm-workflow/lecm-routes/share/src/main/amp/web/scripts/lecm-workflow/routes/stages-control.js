@@ -145,7 +145,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 		},
 		onActionEdit: function (item) {
-			var formId = 'editStageForm';
+			var formId = this.options.createStageFormId;
 			var editStageFormId = this.id + '-' + formId;
 			var editStageForm = new Alfresco.module.SimpleDialog(editStageFormId);
 
@@ -153,6 +153,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 				width: '50em',
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 				templateRequestParams: {
+					formId: formId,
 					itemId: item.nodeRef,
 					itemKind: 'node',
 					mode: 'edit',

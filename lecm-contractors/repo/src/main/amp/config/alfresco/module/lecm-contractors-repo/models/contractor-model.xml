@@ -11,7 +11,7 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
-    <import uri="http://www.it.ru/lecm/org/structure/docTypes/1.0" prefix="lecm-orgstr-docType"/>
+        <import uri="http://www.it.ru/lecm/org/structure/docTypes/1.0" prefix="lecm-orgstr-docType"/>
     </imports>
 
     <namespaces>
@@ -53,11 +53,11 @@
                     <title>Short Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
-	                <index enabled="true">
-		                <atomic>true</atomic>
-		                <stored>false</stored>
-		                <tokenised>both</tokenised>
-	                </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Полное наименование -->
@@ -79,25 +79,31 @@
                     <mandatory>true</mandatory>
                 </property>
 
+                <!-- Почтовый индекс -->
+                <property name="lecm-contractor:postal-code">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
                 <!-- Фактический адрес -->
                 <property name="lecm-contractor:physical-address">
                     <type>d:text</type>
                     <mandatory>true</mandatory>
-	                <index enabled="true">
-		                <atomic>true</atomic>
-		                <stored>false</stored>
-		                <tokenised>both</tokenised>
-	                </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Телефон -->
                 <property name="lecm-contractor:phone">
                     <type>d:text</type>
-	                <index enabled="true">
-		                <atomic>true</atomic>
-		                <stored>false</stored>
-		                <tokenised>both</tokenised>
-	                </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Факс -->
@@ -173,15 +179,15 @@
                     <type>d:text</type>
                 </property>
 
-	            <property name="lecm-contractor:contractor-to-specialization-association-ref">
-		            <title>Specialization Ref</title>
-		            <type>d:text</type>
-		            <index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>false</tokenised>
-		            </index>
-	            </property>
+                <property name="lecm-contractor:contractor-to-specialization-association-ref">
+                    <title>Specialization Ref</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
 
             </properties>
 
@@ -276,11 +282,11 @@
                     <title>Surname</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
-					<index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>both</tokenised>
-		            </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Имя -->
@@ -288,22 +294,22 @@
                     <title>First Name</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
-					<index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>both</tokenised>
-		            </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Отчество -->
                 <property name="lecm-representative:middlename">
                     <title>Middle Name</title>
                     <type>d:text</type>
-					<index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>both</tokenised>
-		            </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Пол -->
@@ -322,44 +328,44 @@
                 <property name="lecm-representative:document-number">
                     <title>Document Number</title>
                     <type>d:text</type>
-					<index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>both</tokenised>
-		            </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Серия документа -->
                 <property name="lecm-representative:document-series">
                     <title>Document Series</title>
                     <type>d:text</type>
-					<index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>both</tokenised>
-		            </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Дата выдачи документа -->
                 <property name="lecm-representative:document-issuance-date">
                     <title>Document's Issuance Date</title>
                     <type>d:date</type>
-					<index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>both</tokenised>
-		            </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Телефон -->
                 <property name="lecm-representative:work-phone">
                     <title>Work Phone</title>
                     <type>d:text</type>
-					<index enabled="true">
-			            <atomic>true</atomic>
-			            <stored>false</stored>
-			            <tokenised>both</tokenised>
-		            </index>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
 
                 <!-- Индекс -->
