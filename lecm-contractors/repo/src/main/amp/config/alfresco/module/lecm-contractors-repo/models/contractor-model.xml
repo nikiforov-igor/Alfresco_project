@@ -79,12 +79,6 @@
                     <mandatory>true</mandatory>
                 </property>
 
-                <!-- Почтовый индекс -->
-                <property name="lecm-contractor:postal-code">
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
-
                 <!-- Фактический адрес -->
                 <property name="lecm-contractor:physical-address">
                     <type>d:text</type>
