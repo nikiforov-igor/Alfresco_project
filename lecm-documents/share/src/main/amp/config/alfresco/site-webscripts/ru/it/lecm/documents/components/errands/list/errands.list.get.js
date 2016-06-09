@@ -26,7 +26,7 @@ function main() {
 	} else {
 		isRegistered = false;
 	}
-	model.isRegistered = isRegistered;
+	model.isRegistered = !!isRegistered;
 }
 
 main();
