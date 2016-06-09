@@ -24,7 +24,6 @@ public class FreemarkerParserImpl extends AbstractParserImpl {
 	public FreemarkerParserImpl(ApplicationContext applicationContext) {
 		super(applicationContext);
 		utilsModel.put("formatLink", new FormatLinkFunc());
-		utilsModel.put("image", new NotificationImage());
 		templateService = applicationContext.getBean("templateService", TemplateService.class);
 	}
 
@@ -54,14 +53,4 @@ public class FreemarkerParserImpl extends AbstractParserImpl {
 		}
 	}
 
-	private static class NotificationImage implements TemplateMethodModelEx {
-		@Override
-		public Object exec(List args) throws TemplateModelException {
-			if (args == null || args.isEmpty()) {
-				throw new TemplateModelException("function image required 1 arg: String imageName");
-			}
-
-			return Utils.getImageAsBase64(args.get(0).toString());
-		}
-	}
 }

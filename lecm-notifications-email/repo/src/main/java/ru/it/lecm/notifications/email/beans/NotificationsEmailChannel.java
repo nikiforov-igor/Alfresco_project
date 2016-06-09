@@ -8,20 +8,20 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.I18NUtil;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.lang.StringUtils;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User: AIvkin
@@ -123,7 +123,19 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 
 	public void sendEmail(String subject, String message, String email) {
 		logger.debug("Sending email to: {}", email);
-		Action mail = actionService.createAction(MailActionExecuter.NAME);
+		Action mail = actionService.createAction(MailActionExecuterWithAttachment.NAME);
+
+		Pattern pattern = Pattern.compile("<img\\s+src\\s*=\\s*(\"|')([^\"']+)(\"|')/>");
+		Matcher matcher = pattern.matcher(message);
+
+		ArrayList<String> attachments = new ArrayList<>();
+		while (matcher.find()) {
+			attachments.add(matcher.group(2));
+		}
+		if (!attachments.isEmpty()) {
+			message = matcher.replaceAll("<img src=\"cid:$2\"");
+			mail.setParameterValue(MailActionExecuterWithAttachment.ATTACHMENTS, attachments);
+		}
 
 		mail.setParameterValue(MailActionExecuter.PARAM_TO, email);
 		mail.setParameterValue(MailActionExecuter.PARAM_SUBJECT, subject);

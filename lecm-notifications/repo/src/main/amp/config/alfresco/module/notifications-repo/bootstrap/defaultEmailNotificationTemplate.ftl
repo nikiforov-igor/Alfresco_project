@@ -7,7 +7,7 @@
 <div style="width: 100%;">
     <table style="border: 1px solid #000; border-collapse: collapse; margin: 10px 5%; vertical-align: middle; width: 90%;">
         <tr>
-            <td style="border: 1px solid #000; padding: 5px; width: 48px;"><img src="${image("defaultEmailNotificationTemplateImage.png")}"/></td>
+            <td style="border: 1px solid #000; padding: 5px; width: 48px;"><img src="defaultEmailNotificationTemplateImage.png"/></td>
             <td style="border: 1px solid #000; padding: 5px; text-align: justify;">${notificationText}</td>
         </tr>
     </table>
