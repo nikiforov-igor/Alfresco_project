@@ -100,3 +100,70 @@ showExSeacrhBtn(необязательный) - добавить(показыв�
 	</div>
 </div>
 </#macro>
+
+<#-- Макрос для типового контрола
+Список параметров:
+field (обязательный) - объект в котором хранится описание поля для которого строится контрол
+name (обязательный) - имя контрола, используется вместе с fieldHtmlId для построения полного html-идентификатора контрола, имеет вид ${fieldHtmlId}-${name}
+classes (необязательный) - дополнительные css-классы с помощью которых настраивается внешний вид контрола
+buttons (необязательный) - html-верстка кнопок для контрола
+value (необязательный) - html-верстка полей отвечающих за ввод, хранение и отображение данных в контроле
+nested - дополнительная верстка,
+-->
+<#macro baseControl field name classes buttons value>
+<#assign fieldHtmlId = args.htmlid?html + '_' + field.id>
+<div id='${fieldHtmlId}-${name}' class='control ${classes}'>
+	<div class='label-div'>
+		<label for='${fieldHtmlId}'>
+			<span>${field.label?html}:</span>
+			<#if field.mandatory!false>
+			<span class='incomplete-warning'>
+				<img src='${url.context}/res/components/form/images/warning-16.png' title='${msg("form.field.incomplete")}'/>
+			<span>
+			</#if>
+		</label>
+	</div>
+	<div class='container'>
+		<#if buttons??>
+		<div class='buttons-div'>${buttons}</div>
+		</#if>
+		<#if value??>
+		<div class='value-div'>${value}</div>
+		</#if>
+	</div>
+	<#nested/>
+</div>
+</#macro>
+
+<#macro baseControlBtns field renderPickerBtn=true renderCreateBtn=true renderHelpBtn=false>
+<#assign fieldHtmlId = args.htmlid?html + '_' + field.id>
+<#if renderPickerBtn>
+<span id='${fieldHtmlId}-btn-pick' class='yui-button'>
+	<span class='first-child'>
+		<input type='button' value='...'>
+	</span>
+</span>
+</#if>
+<#if renderCreateBtn>
+<span id='${fieldHtmlId}-btn-create' class='create-new-button yui-button'>
+	<span class='first-child'>
+		<input type='button' value=''>
+	</span>
+</span>
+</#if>
+<#nested/>
+<#if renderHelpBtn>
+	<@formLib.renderFieldHelp field=field/>
+</#if>
+</#macro>
+
+<#macro baseControlValue field showAutocomplete>
+<#assign fieldHtmlId = args.htmlid?html + '_' + field.id>
+<input type='hidden' id='${fieldHtmlId}-added' name='${field.name}_added'>
+<input type='hidden' id='${fieldHtmlId}-removed' name='${field.name}_removed'>
+<input type='hidden' id='${fieldHtmlId}' name='-' value='${field.value?html}'>
+<#if showAutocomplete>
+<input type='text' id='${fieldHtmlId}-autocomplete'>
+</#if>
+<div id='${fieldHtmlId}-displayed' class='control-selected-values'></div>
+</#macro>

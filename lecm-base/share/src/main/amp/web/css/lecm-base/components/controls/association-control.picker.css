@@ -1,0 +1,57 @@
+.association-picker {
+
+}
+
+.yui-panel.association-picker .ft {
+	font-size: 13px;
+}
+
+.association-picker .button-select button {
+	text-align: left;
+	width: 250px;
+}
+
+.association-picker .panel-left {
+	float: none;
+	width: 49.5%;
+	overflow: hidden;
+}
+
+.association-picker .panel-left .treeview {
+	border: 1px solid #7f7f7f;
+	height: 150px;
+	max-height: 150px;
+	overflow: auto;
+}
+
+.association-picker .panel-right {
+	float: right;
+	width: 49.5%;
+}
+
+.association-picker .panel-right .datatable,
+.association-picker .panel-datatable .datatable {
+	height: 150px;
+	max-height: 150px;
+	width: 100%;
+}
+
+.association-picker .panel-right .datatable table,
+.association-picker .panel-datatable .datatable table {
+	width: 100%;
+}
+
+.association-picker .panel-right .datatable table thead,
+.association-picker .panel-datatable .datatable table thead {
+	display: none;
+}
+
+.association-picker .panel-right .datatable .name-td,
+.association-picker .panel-datatable .datatable .name-td {
+
+}
+
+.association-picker .panel-right .datatable .add-td,
+.association-picker .panel-datatable .datatable .add-td {
+	width: 1px;
+}
