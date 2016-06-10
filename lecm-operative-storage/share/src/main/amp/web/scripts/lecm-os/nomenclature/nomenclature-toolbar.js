@@ -39,7 +39,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 
 			this.toolbarButtons["defaultActive"].newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow);
 			this.toolbarButtons["defaultActive"].newRowButtonAdditional = Alfresco.util.createYUIButton(this, "newRowButtonAdditional", this.onNewRow);
-			this.toolbarButtons["defaultActive"].deleteNodeButton = Alfresco.util.createYUIButton(this, "deleteNodeButton", this.onDeleteNode);
+			// this.toolbarButtons["defaultActive"].deleteNodeButton = Alfresco.util.createYUIButton(this, "deleteNodeButton", this.onDeleteNode);
 			this.toolbarButtons["defaultActive"].exportButton = Alfresco.util.createYUIButton(this, "exportButton", this.onExport);
 			this.toolbarButtons["defaultActive"].importButton = Alfresco.util.createYUIButton(this, "importButton", this.showImportDialog,
 				{
@@ -1010,9 +1010,9 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				this.toolbarButtons["defaultActive"].newRowButton.set("label", Alfresco.util.message('lecm.os.lbl.add') + " " + this.getTypeName(this.node.itemType));
 			}
 
-			this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", Alfresco.util.message('lecm.os.lbl.remove.selected') + " " + this.getTypeName(this.node.currentItemType));
+			// this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", Alfresco.util.message('lecm.os.lbl.remove.selected') + " " + this.getTypeName(this.node.currentItemType));
 
-			this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType != "lecm-dic:dictionary");
+			// this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType != "lecm-dic:dictionary");
 
 			this.toolbarButtons["defaultActive"].exportButton.set("disabled", this.node.currentItemType != "lecm-dic:dictionary");
 			this.toolbarButtons["defaultActive"].importButton.set("disabled", this.node.currentItemType != "lecm-dic:dictionary");

@@ -66,13 +66,13 @@
 			</span>
 		</span>
 	</div>
-	<div class="delete-node">
-		<span id="${id}-deleteNodeButton" class="yui-button yui-push-button">
-			<span class="first-child">
-				<button type="button">${msg('lecm.os.nomenclature.delete-element')}</button>
-			</span>
-		</span>
-	</div>
+	<#--<div class="delete-node">-->
+		<#--<span id="${id}-deleteNodeButton" class="yui-button yui-push-button">-->
+			<#--<span class="first-child">-->
+				<#--<button type="button">${msg('lecm.os.nomenclature.delete-element')}</button>-->
+			<#--</span>-->
+		<#--</span>-->
+	<#--</div>-->
 	<div class="export">
 		<span id="${id}-exportButton" class="yui-button yui-push-button">
 			<span class="first-child">
