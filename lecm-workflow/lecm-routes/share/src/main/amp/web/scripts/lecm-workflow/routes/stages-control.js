@@ -176,6 +176,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					fn: function (response) {
 						// Спасаем тонущий popup
 						Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(editStageFormId + '-form-container_c').style['z-index'] + 1;
+						YAHOO.Bubbling.fire("datagridRefresh", {
+							bubblingLabel:this.options.bubblingLabel
+						});
 						Alfresco.util.PopupManager.displayMessage({
 							text: this.msg('lecm.routers.stage.changes.saved')
 						});
