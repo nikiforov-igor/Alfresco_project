@@ -1924,7 +1924,7 @@ contract.save();
 
 var curators =  orgstructure.getEmployeesByBusinessRoleId("CONTRACT_CURATOR", true);
 var partnerAssocs = contract.assocs["lecm-contract:partner-assoc"];
-var executor = contract.properties["lecm-document:creator-ref"];
+var executor = search.findNode(contract.properties["lecm-document:creator-ref"]);
 
 notifications.sendNotificationFromCurrentUser({
     recipients: curators,
