@@ -1,5 +1,9 @@
 package ru.it.lecm.workflow.routes.beans;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ValueConverter;
@@ -26,6 +30,7 @@ import ru.it.lecm.workflow.routes.api.RoutesMacrosModel;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.*;
 
@@ -290,8 +295,33 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 				logger.warn("Script {} returned no employee. I'll delete stage item, related to macros node {}", macrosString, macrosNode);
 				permDeleteNode(stageItemNode);
 			} else {
-				nodeService.createAssociation(stageItemNode, employeeRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
-				result = true;
+
+				NodeRef stage = nodeService.getPrimaryParent(stageItemNode).getParentRef();
+				List<ChildAssociationRef> stageItemsAssocs = new ArrayList<>(nodeService.getChildAssocsWithoutParentAssocsOfType(stage, RoutesModel.TYPE_STAGE_ITEM));
+
+				List<NodeRef> employees = Lists.newArrayList(Iterables.filter(Iterables.transform(stageItemsAssocs, new Function<ChildAssociationRef, NodeRef>() {
+					@Override
+					public NodeRef apply(@Nullable ChildAssociationRef childAssociationRef) {
+						List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(childAssociationRef.getChildRef(), RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+						if (targetAssocs != null && !targetAssocs.isEmpty()) {
+							return targetAssocs.get(0).getTargetRef();
+						} else {
+							return null;
+						}
+					}
+				}), new Predicate<NodeRef>() {
+					@Override
+					public boolean apply(@Nullable NodeRef nodeRef) {
+						return nodeRef != null;
+					}
+				}));
+
+				if (employees.contains(employeeRef)) {
+					permDeleteNode(stageItemNode);
+				} else {
+					nodeService.createAssociation(stageItemNode, employeeRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+					result = true;
+				}
 			}
 		}
 		return result;
