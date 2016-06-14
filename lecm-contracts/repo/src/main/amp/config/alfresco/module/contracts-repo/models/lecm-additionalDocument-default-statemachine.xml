@@ -2537,7 +2537,7 @@ regnumbers.registerProject(additionalDocument, "CONTRACT_DOCUMENT_PROJECT_REGNUM
 var contractAssocs = additionalDocument.assocs["lecm-additional-document:document-assoc"];
 if (contractAssocs != null && contractAssocs.length == 1) {
     var contract = contractAssocs[0];
-    var executor = contract.properties["lecm-document:creator-ref"];
+    var executor = search.findNode(contract.properties["lecm-document:creator-ref"]);
     var curators = orgstructure.getEmployeesByBusinessRoleId("CONTRACT_CURATOR", true);
 
     notifications.sendNotificationFromCurrentUser({
