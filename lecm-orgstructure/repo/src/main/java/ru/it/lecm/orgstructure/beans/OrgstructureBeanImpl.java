@@ -1935,25 +1935,25 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return isEmployeeHasBusinessRole(employeeRef, businessRoleIdentifier, withDelegation, inheritSubordinatesRoles, true);
 	}
 
-    private boolean isEmployeeHasBusinessRole(NodeRef employeeRef, String businessRoleIdentifier, boolean withDelegation, boolean inheritSubordinatesRoles, boolean checkAccess) {
-        if (withDelegation && inheritSubordinatesRoles) {
-            final String employeeLogin = getEmployeeLogin(employeeRef);
-            @SuppressWarnings("unchecked") Set<String> auth = (Set<String>) AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                @Override
-                public Object doWork() throws Exception {
-                    return serviceRegistry.getAuthorityService().getAuthoritiesForUser(employeeLogin);
-                }
-            });
+	private boolean isEmployeeHasBusinessRole(final NodeRef employeeRef, String businessRoleIdentifier, boolean withDelegation, boolean inheritSubordinatesRoles, boolean checkAccess) {
+		boolean result;
+		if (withDelegation && inheritSubordinatesRoles) {
+			Set<String> auth = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Set<String>>() {
+				@Override
+				public Set<String> doWork() throws Exception {
+					return serviceRegistry.getAuthorityService().getAuthoritiesForUser(getEmployeeLogin(employeeRef));
+				}
+			});
 
-            if (auth.contains("GROUP__LECM$BR%" + businessRoleIdentifier)) {
-                return true;
-            }
-        }
-        List<NodeRef> allEmployeeBusinessRoles = getEmployeeRoles(employeeRef, withDelegation, inheritSubordinatesRoles, checkAccess);
-        NodeRef businessRole = getBusinessRoleByIdentifier(businessRoleIdentifier);
+			result = auth.contains("GROUP__LECM$BR%" + businessRoleIdentifier);
+		} else {
+			List<NodeRef> allEmployeeBusinessRoles = getEmployeeRoles(employeeRef, withDelegation, inheritSubordinatesRoles, checkAccess);
+			NodeRef businessRole = getBusinessRoleByIdentifier(businessRoleIdentifier);
 
-        return allEmployeeBusinessRoles != null && businessRole != null && allEmployeeBusinessRoles.contains(businessRole);
-    }
+			result = businessRole != null && allEmployeeBusinessRoles.contains(businessRole);
+		}
+		return result;
+	}
 
 	@Override
 	public List<NodeRef> getNodeRefEmployees(NodeRef nodeRef) {
