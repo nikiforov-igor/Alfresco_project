@@ -142,4 +142,13 @@
 		  p:transactionService-ref="TransactionService"
 	/>
 
+	<bean parent="ServiceFolderPermissionHelper">
+		<property name="serviceBean" ref="serviceDictionary"/>
+		<property name="permissionsList">
+			<list>
+				<value>alfresco/module/${artifactId}/permissions/dictionaries-permissions.xml</value>
+			</list>
+		</property>
+	</bean>
+	
 </beans>
