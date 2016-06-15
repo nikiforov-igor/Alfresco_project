@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="cm:Запросить номер" type="lecm-group-actions:workflow-action">
+		<property name="cm:name"><![CDATA[Запросить номер]]></property>
+		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
+		<property name="lecm-group-actions:type"><![CDATA[[lecm-contract:document, lecm-nd:document, lecm-internal:document, lecm-outgoing:document, lecm-ord:document]]]></property>
+		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-document:regnum") == "Не присвоено"]]></property>
+		<property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
+		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
+		<property name="cm:title"><![CDATA[Запросить номер]]></property>
+		<property name="lecm-group-actions:workflow"><![CDATA[activiti$regnumReservationExecution]]></property>
+	</item>
+</items>

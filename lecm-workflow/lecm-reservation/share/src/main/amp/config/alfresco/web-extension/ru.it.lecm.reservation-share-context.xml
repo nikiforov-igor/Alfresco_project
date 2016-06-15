@@ -8,6 +8,7 @@
 
 	<util:list id="reservation.workflow.share.configs">
 		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/reservation/reservation-share-config.xml</value>
+		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/reservation/lecm-regnumber-reservation-share-config.xml</value>
 	</util:list>
 
 	<bean id="reservation.workflow.share.bootstrap" init-method="register"

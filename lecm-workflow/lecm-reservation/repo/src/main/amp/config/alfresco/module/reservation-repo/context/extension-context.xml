@@ -12,4 +12,10 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:reservationWorkflowService-ref="reservationWorkflowService"/>
 
+	<bean id="reservation.workflow.extension2" parent="baseScript"
+		  class="ru.it.lecm.workflow.reservation.extensions.ReservationWorkflowJavascriptExtension2"
+		  p:extensionName="reservationWorkflow2"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:reservationWorkflowService-ref="reservationWorkflowService2"/>
+
 </beans>

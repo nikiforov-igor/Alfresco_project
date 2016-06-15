@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<alfresco-config>
+	<!-- Workflow "regnumReservationExecution" -->
+	<config evaluator="string-compare" condition="activiti$regnumReservationExecution">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="warning" force="true"/>
+					<show id="packageItems"/>
+					<show id="bpm:workflowDescription" />
+					<show id="lecmRegnumRes:mode" />
+					<show id="lecmRegnumRes:date" />
+				</field-visibility>
+				<appearance>
+					<field id="warning">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.reservation.approveAction</control-param>
+						</control>
+					</field>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+					<field id="bpm:workflowDescription">
+						<control template="/ru/it/lecm/documents/controls/workflow/document-present-string-hidden.ftl">
+							<control-param name="leftPartTextCode">ru.it.reservation.workflowDescription.message</control-param>
+						</control>
+					</field>
+					<field id="lecmRegnumRes:mode">
+						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reservation-radiobuttons.ftl">
+							<control-param name="options">REG_DATE|На дату#alf#NO_REG_DATE|Без указания даты</control-param>
+						</control>
+					</field>
+					<field id="lecmRegnumRes:date">
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+							<control-param name="showTime">false</control-param>
+							<control-param name="defaultValue">now</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="lecmRegnumRes:reserveTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="reservationWf:presentString" force="true" />
+					<show id="lecmRegnumRes:decision" />
+					<show id="bpm:comment" />
+					<show id="bpm:reassignable" />
+				</field-visibility>
+				<appearance>
+					<field id="reservationWf:presentString">
+						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
+					</field>
+					<field id="lecmRegnumRes:decision" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
+							<control-param name="options">RESERVED|Зарезервировать#alf#REJECTED|Отклонить</control-param>
+						</control>
+					</field>
+					<field id="bpm:comment">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
+					<field id="bpm:reassignable">
+						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="string-compare" condition="Workflow">
+		<hidden-workflows>
+			<workflow name="activiti$regnumReservationExecution"/>
+		</hidden-workflows>
+	</config>
+
+</alfresco-config>
