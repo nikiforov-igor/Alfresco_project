@@ -5,7 +5,7 @@
 		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
 		<property name="lecm-group-actions:type"><![CDATA[[lecm-contract:document, lecm-nd:document, lecm-internal:document, lecm-outgoing:document, lecm-ord:document]]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
-		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-document:regnum") == "Не присвоено"]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[doc.attr("lecm-document:regnum") == "Не присвоено" and doc.attr("lecm-reservation-aspects:isReservationRunning") != true]]></property>
 		<property name="lecm-group-actions:availableForReader"><![CDATA[false]]></property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
 		<property name="cm:title"><![CDATA[Запросить номер]]></property>
