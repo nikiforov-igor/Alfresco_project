@@ -197,7 +197,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * подготовить уведомление регистраторам о том, что надо зарегистрировать
 	 * ОРД документ
 	 *
-	 * @param Ref ссылка на ОРД документ из машины состояний
+	 * @param ordRef ссылка на ОРД документ из машины состояний
 	 * @param registrars js-массив регистраторов который мы получили из скрипта
 	 * машины состояний
 	 * @param description текст сообщения, которое необходимо отправить
@@ -232,7 +232,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * Подготовить уведомление сотруднику о том, что он выбран в качестве
 	 * Контролера ОРД документа
 	 *
-	 * @param ordRef ссылка на ОРД документ из скрипта машины состояний
+	 * @param ord ссылка на ОРД документ из скрипта машины состояний
 	 * @param controller ссылка на контролера из скрипта машины состояний
 	 * @return готовое к отправке уведомление
 	 */
@@ -341,8 +341,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					}
 				}
 
-				// установим системную связь между ОРД и созданным поручением
-				documentConnectionService.createConnection(ord, errand, DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, true, true);
+				//создадим ассоциацию между между Протоколом и созданным поручением, системная связь создастся автоматически
+				nodeService.createAssociation(errand, ord, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
 				// создадим ассоциацию пункта с поручением
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
