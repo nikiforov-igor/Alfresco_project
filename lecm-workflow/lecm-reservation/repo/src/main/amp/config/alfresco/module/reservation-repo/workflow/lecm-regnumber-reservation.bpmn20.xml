@@ -61,6 +61,10 @@
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
 							reservationWorkflow2.reassignTask(assignee, task);
+							var document, employee;
+							document = bpm_package.children[0];
+							employee = orgstructure.getEmployeeByLogin(assignee.properties['cm:userName']);
+							lecmPermission.grantDynamicRole(document, employee, 'LECM_REGISTRAR_DYN', 'LECM_BASIC_PG_Employee');
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -69,6 +73,11 @@
                         <activiti:string><![CDATA[
 							reservationWorkflow2.completeTask(assignee, task);
 							reservationWorkflow2.notifyReservationFinished(bpm_package, task);
+							var document, employee;
+							document = bpm_package.children[0];
+							employee = orgstructure.getEmployeeByLogin(assignee.properties['cm:userName']);
+  							lecmPermission.revokeDynamicRole(document, employee, 'LECM_REGISTRAR_DYN');
+  							documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
