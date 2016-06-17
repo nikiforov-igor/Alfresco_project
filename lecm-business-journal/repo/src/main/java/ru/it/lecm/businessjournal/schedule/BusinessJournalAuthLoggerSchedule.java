@@ -20,6 +20,8 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -31,6 +33,8 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
 //TODO вынести в настройки
     private String cronExpression = "0/1 * * * * ?";
     private final static String appName = "AuthAudit";
+
+    Lock lock = new ReentrantLock();
 //
 
     /*
@@ -152,73 +156,83 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
 
     @Override
     public List<NodeRef> getNodes() {
-        if (auditService.isAuditEnabled()) {
-            getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-                @Override
-                public Void execute() throws Throwable {
-                    AuditQueryParameters params = new AuditQueryParameters();
-
-                    params.setApplicationName(appName);
-
-                    auditService.auditQuery(new AuditService.AuditQueryCallback() {
+        if (lock.tryLock()) {
+            try {
+                if (auditService.isAuditEnabled()) {
+                    getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
 
                         @Override
-                        public boolean valuesRequired() {
-                            return true;
-                        }
+                        public Void execute() throws Throwable {
+                            AuditQueryParameters params = new AuditQueryParameters();
 
-                        @Override
-                        public boolean handleAuditEntry(Long entryId, String applicationName, String user, long time, Map<String, Serializable> values) {
-                            String type = "";
-                            String login = "";
-                            String text = "test";
+                            params.setApplicationName(appName);
 
-                            logger.debug("Handle entry " + entryId + "\n" + "Values:");
-                            for (String key : values.keySet()) {
-                                if (values.get(key) != null) {
-                                    logger.debug(key + ": " + values.get(key).toString());
-                                    if (key.equals("/authAudit/login/no-error/user")) {
-                                        type = EventCategory.LOGIN_SUCCESS;
-                                        login = values.get(key).toString();
-                                        text = "Пользователь "+login+" вошёл в систему.";
+                            auditService.auditQuery(new AuditService.AuditQueryCallback() {
 
-                                    } else if (key.equals("/authAudit/error/error/user")) {
-                                        type = EventCategory.LOGIN_FAILED;
-                                        login = values.get(key).toString();
-                                        text = "Неудачная попытка входа. Login="+login;
-                                    } else if (key.equals("/authAudit/logout/args/user")) {
-                                        type = EventCategory.LOGOUT;
-                                        login = values.get(key).toString();
-                                        text = "Пользователь "+login+" завершил сеанс.";
-                                    } else {
-                                        logger.debug(key);
-                                    }
+                                @Override
+                                public boolean valuesRequired() {
+                                    return true;
                                 }
-                            }
 
+                                @Override
+                                public boolean handleAuditEntry(Long entryId, String applicationName, String user, long time, Map<String, Serializable> values) {
+                                    String type = "";
+                                    String login = "";
+                                    String text = "test";
 
-                            //если логин пуст, падает метод personExists в недрах log()
-                            if (null == login || login.isEmpty()) {
-                                login = "broken";
-                            }
+                                    logger.debug("Handle entry " + entryId + "\n" + "Values:");
+                                    for (String key : values.keySet()) {
+                                        if (values.get(key) != null) {
+                                            logger.debug(key + ": " + values.get(key).toString());
+                                            switch (key) {
+                                                case "/authAudit/login/no-error/user":
+                                                    type = EventCategory.LOGIN_SUCCESS;
+                                                    login = values.get(key).toString();
+                                                    text = "Пользователь " + login + " вошёл в систему.";
 
-                            businessJournalService.log(new Date(time), login, businessJournalService.getBusinessJournalDirectory(), type, text, Collections.EMPTY_LIST);
-                            return true;
+                                                    break;
+                                                case "/authAudit/error/error/user":
+                                                    type = EventCategory.LOGIN_FAILED;
+                                                    login = values.get(key).toString();
+                                                    text = "Неудачная попытка входа. Login=" + login;
+                                                    break;
+                                                case "/authAudit/logout/args/user":
+                                                    type = EventCategory.LOGOUT;
+                                                    login = values.get(key).toString();
+                                                    text = "Пользователь " + login + " завершил сеанс.";
+                                                    break;
+                                                default:
+                                                    logger.debug(key);
+                                                    break;
+                                            }
+                                        }
+                                    }
+
+                                    //если логин пуст, падает метод personExists в недрах log()
+                                    if (null == login || login.isEmpty()) {
+                                        login = "broken";
+                                    }
+
+                                    businessJournalService.log(new Date(time), login, businessJournalService.getBusinessJournalDirectory(), type, text, Collections.EMPTY_LIST);
+                                    auditService.clearAudit(Collections.singletonList(entryId));
+                                    return true;
+                                }
+
+                                @Override
+                                public boolean handleAuditEntryError(Long entryId, String errorMsg, Throwable error) {
+                                    throw new AlfrescoRuntimeException(errorMsg, error);
+                                }
+                            }, params, 0);
+
+                            return null;
                         }
-
-                        @Override
-                        public boolean handleAuditEntryError(Long entryId, String errorMsg, Throwable error) {
-                            throw new AlfrescoRuntimeException(errorMsg, error);
-                        }
-                    }, params, 0);
-                    auditService.clearAudit(appName, null, null);
-                    return null;
+                    }, false, true);
                 }
-            }, false, true);
-
+            } finally {
+                lock.unlock();
+            }
         }
-        return new ArrayList<NodeRef>();
+        return new ArrayList<>();
     }
 
     @Override
