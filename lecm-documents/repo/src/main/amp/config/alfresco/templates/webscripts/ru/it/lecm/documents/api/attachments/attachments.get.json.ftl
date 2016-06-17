@@ -7,7 +7,7 @@
                 <#if item.category?? && item.category.node??>
 	                "category": {
 		                "nodeRef": "${item.category.node.nodeRef}",
-		                "name": "${item.category.node.name}",
+		                "name": <#if item.category.node.properties["cm:title"]?has_content>"${item.category.node.properties["cm:title"]}"<#else>item.category.node.name</#if>,
                         "isReadOnly": ${item.category.isReadOnly?string}
 	                },
                 </#if>

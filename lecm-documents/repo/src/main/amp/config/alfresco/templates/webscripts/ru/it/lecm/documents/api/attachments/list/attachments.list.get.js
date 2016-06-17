@@ -25,7 +25,7 @@
 			category = categories[i];
 			model.categories.push({
 				nodeRef: category.nodeRef.toString(),
-				displayName: category.name,
+				displayName: category.properties['cm:title'] ? category.properties['cm:title'] : category.name,
 				attachments: []
 			});
 
