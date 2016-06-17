@@ -309,6 +309,8 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="businessJournalService" ref="businessJournalService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="messageService" ref="messageService"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"

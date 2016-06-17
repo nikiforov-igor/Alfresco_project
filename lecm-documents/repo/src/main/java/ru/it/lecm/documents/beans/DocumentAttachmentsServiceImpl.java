@@ -20,6 +20,12 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.*;
+import org.alfresco.repo.i18n.MessageService;
+import org.alfresco.repo.node.MLPropertyInterceptor;
+import org.alfresco.service.cmr.repository.MLText;
+import org.alfresco.util.PropertyMap;
+import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -33,6 +39,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private LecmPermissionService lecmPermissionService;
 	private StateMachineServiceBean stateMachineService;
 	private BusinessJournalService businessJournalService;
+	private NamespaceService namespaceService;
+	private MessageService messageService;
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -52,6 +60,14 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
 	}
 
 	@Override
@@ -74,9 +90,9 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	@Override
 	public List<NodeRef> getCategories(final NodeRef documentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
-		QName type = nodeService.getType(documentRef);
+		final QName type = nodeService.getType(documentRef);
 		List<String> categories = getCategories(type);
-		final List<NodeRef> result = new ArrayList<NodeRef>();
+		final List<NodeRef> result = new ArrayList<>();
 		final NodeRef attachmentRootRef = getRootFolder(documentRef);
 		//TODO Рефакторинг AL-2733
 		//TODO Вроде как категории _должны_ создаваться машиной состояний, но сейчас всю работу по созданию выполняет этот метод, так что оптимизируем транзакцию,
@@ -85,9 +101,10 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		if (null == attachmentRootRef) {
 			toCreate = categories;
 		} else {
-			toCreate = new ArrayList<String>();
+			toCreate = new ArrayList<>();
 			for (String category : categories) {
-				NodeRef categoryFolderRef = getFolder(attachmentRootRef, category);
+				String[] names = StringUtils.split(category, '|');
+				NodeRef categoryFolderRef = getFolder(attachmentRootRef, names[0]);
 				if (null == categoryFolderRef) {
 					toCreate.add(category);
 				} else {
@@ -101,12 +118,12 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			public Void execute() throws Throwable {
 				NodeRef rootRef = (null == attachmentRootRef ? createRootFolder(documentRef) : attachmentRootRef);
 				for (String folder : toCreate) {
-					result.add(createCategoryFolder(folder, rootRef));
+					result.add(createCategoryFolder(folder, rootRef, type));
 				}
 				return null;
 			}
 		}
-                        
+
 		);
 		return result;
 	}
@@ -129,7 +146,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		return categories;
 	}
 
-	//TODO: надо разделить на получение и создание, чтобы вынести транзакции из цикла getCategories... а создание категорий вызывать отдельно. 
+	//TODO: надо разделить на получение и создание, чтобы вынести транзакции из цикла getCategories... а создание категорий вызывать отдельно.
 	//TODO Refactoring in progress
 	//Разделить получение и создание.
 	//В итоге, в получении вообще делать нечего оказалось.
@@ -138,9 +155,28 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 //		return result;
 //	}
 
-	public NodeRef createCategoryFolder(final String category, final NodeRef attachmentRootRef) throws WriteTransactionNeededException {
-		NodeRef categoryRef = createNode(attachmentRootRef, TYPE_CATEGORY, category, null);
+	private NodeRef createCategoryFolder(final String category, final NodeRef attachmentRootRef, final QName type) throws WriteTransactionNeededException {
+		String[] names = StringUtils.split(category, '|');
+		NodeRef categoryRef = createNode(attachmentRootRef, TYPE_CATEGORY, names[0], null);
 		disableNodeIndex(categoryRef);
+		if (names.length == 2) { //если у категории через разделитель задан ключ локализации
+			String typename = type.toPrefixString(namespaceService).replace(':', '_');
+			String categoryKey = names[1];
+			String messageKey = String.format("%s.attachmentCategory.%s.title", typename, categoryKey);
+			Locale[] locales = Locale.getAvailableLocales();
+			MLPropertyInterceptor.setMLAware(true);
+			MLText mlText = new MLText(LocaleUtils.toLocale("ru"), names[0]);
+			for (Locale locale : locales) {
+				String categoryTitle = messageService.getMessage(messageKey, locale);
+				if (categoryTitle != null) {
+					mlText.addValue(locale, categoryTitle);
+				}
+			}
+			PropertyMap props = new PropertyMap();
+			props.put(ContentModel.PROP_TITLE, mlText);
+			nodeService.addAspect(categoryRef, ContentModel.ASPECT_TITLED, props);
+			MLPropertyInterceptor.setMLAware(false);
+		}
 		return categoryRef;
 	}
 
@@ -149,7 +185,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		NodeRef attachmentRootRef = getRootFolder(documentRef);
 
 		//TODO Рефакторинг AL-2733
-		//TODO Вроде как категории создаются машиной состояний, и, вряд ли здесь будет существовать транзакция на запись при получении категорий. 
+		//TODO Вроде как категории создаются машиной состояний, и, вряд ли здесь будет существовать транзакция на запись при получении категорий.
 		//Так что создание закомментировал. Заменил на возврат null. Требуется тестирование.
 		if (null == attachmentRootRef){
 			return null;

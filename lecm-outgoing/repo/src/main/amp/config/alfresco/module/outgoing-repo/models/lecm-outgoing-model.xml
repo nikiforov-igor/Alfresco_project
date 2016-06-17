@@ -35,9 +35,9 @@
 		<constraint name="lecm-outgoing:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Исходящее</value>
-					<value>Согласование</value>
-					<value>Прочее</value>
+					<value>Исходящее|OUTGOING</value>
+					<value>Согласование|APPROVAL</value>
+					<value>Прочее|OTHER</value>
 				</list>
 			</parameter>
 		</constraint>
