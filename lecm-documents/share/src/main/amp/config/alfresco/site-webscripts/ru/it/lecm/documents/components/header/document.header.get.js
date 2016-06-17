@@ -9,7 +9,7 @@ function main() {
     if (nodeDetails) {
         model.item = nodeDetails.item;
 
-        var presentString = nodeDetails.item.node.properties["lecm-document:present-string"];
+        var presentString = nodeDetails.item.node.properties["lecm-document:ml-present-string"];
         if (presentString != null) {
             model.documentName = presentString;
         } else {

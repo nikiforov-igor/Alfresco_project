@@ -452,6 +452,7 @@
 		<property name="behaviourFilter" ref="policyBehaviourFilter" />
 		<property name="regNumbersService" ref="regNumbersService" />
         <property name="documentService" ref="documentService"/>
+		<property name="messageService" ref="messageService"/>
     </bean>
 
     <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"
@@ -748,4 +749,28 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
+
+	<util:constant id="DOCUMENT_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.documents.beans.DocumentMessageServiceImpl.DOCUMENT_MESSAGE_FOLDER_ID"/>
+	<bean id="documentMessageService"
+		  init-method="init"
+		  parent="baseBean"
+		  depends-on="dictionaryBootstrap"
+		  class="ru.it.lecm.documents.beans.DocumentMessageServiceImpl">
+		<property name="messageService" ref="messageService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
+		<property name="folders">
+			<map>
+				<entry key="#{DOCUMENT_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
+			</map>
+		</property>
+	</bean>
+
+<!--	<bean init-method="init"
+		  class="ru.it.lecm.documents.policy.DocumentMessagePolicy">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="documentMessageService" ref="documentMessageService"/>
+	</bean>-->
+
 </beans>

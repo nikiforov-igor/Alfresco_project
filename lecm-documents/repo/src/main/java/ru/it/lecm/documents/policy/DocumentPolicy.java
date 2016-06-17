@@ -45,6 +45,10 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.i18n.MessageService;
+import org.alfresco.repo.node.MLPropertyInterceptor;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.apache.commons.lang.LocaleUtils;
 
 /**
  * User: dbashmakov
@@ -77,6 +81,7 @@ public class DocumentPolicy extends BaseBean
 	private BehaviourFilter behaviourFilter;
 	private RegNumbersService regNumbersService;
     private DocumentService documentService;
+	private MessageService messageService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -142,6 +147,10 @@ public class DocumentPolicy extends BaseBean
 
 	public void setRegNumbersService(RegNumbersService regNumbersService) {
 		this.regNumbersService = regNumbersService;
+	}
+
+	public void setMessageService(MessageService messageService) {
+		this.messageService = messageService;
 	}
 
 	final public void init() {
@@ -417,6 +426,9 @@ public class DocumentPolicy extends BaseBean
 		presentStringValue  = presentStringValue.replaceAll("\r", " ").replaceAll("\n", " ");
         if (presentStringValue != null) {
             setPropertyAsSystem(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
+
+			updateMLPresentString(type, nodeRef, presentStringValue);
+
 	        if (presentStringValue.endsWith(".")) {
 		        presentStringValue = presentStringValue.substring(0, presentStringValue.length() - 1);
 	        }
@@ -443,6 +455,33 @@ public class DocumentPolicy extends BaseBean
         }
 
     }
+
+	private void updateMLPresentString(final QName type, final NodeRef nodeRef, final String presentStringValue) {
+		String typename = type.toPrefixString(namespaceService).replace(':', '_');
+		String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
+		String messageKey = String.format("%s.property.%s.value", typename, propname);
+		Locale[] locales = Locale.getAvailableLocales();
+		MLPropertyInterceptor.setMLAware(true);
+		MLText mlText = (MLText)nodeService.getProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING);
+		mlText = mlText != null ? mlText : new MLText();
+		mlText.addValue(LocaleUtils.toLocale("ru"), presentStringValue);
+		for (Locale locale : locales) {
+			final String presentString = messageService.getMessage(messageKey, locale);
+			if (presentString != null) {
+				String value = AuthenticationUtil.runAsSystem(new RunAsWork<String> () {
+					@Override
+					public String doWork() throws Exception {
+						return substituteService.formatNodeTitle(nodeRef, presentString);
+					}
+				});
+				if (value != null) {
+					mlText.addValue(locale, value.replaceAll("\r", " ").replaceAll("\n", " "));
+				}
+			}
+		}
+		nodeService.setProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING, mlText);
+		MLPropertyInterceptor.setMLAware(false);
+	}
 
     private boolean changeIgnoredProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
         for (QName ignored : IGNORED_PROPERTIES) {

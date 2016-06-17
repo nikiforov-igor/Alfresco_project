@@ -41,6 +41,14 @@
 				<property name="lecm-document:sys_workflows">
 					<type>d:text</type>
 				</property>
+				<property name="lecm-document:ml-present-string">
+					<type>d:mltext</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
                 <property name="lecm-document:present-string">
                     <type>d:text</type>
                     <index enabled="true">
