@@ -5,7 +5,7 @@
             <#if item.category??>
 	            {
 	                "nodeRef": "${item.category.nodeRef}",
-	                "name": <#if item.category.properties["cm:title"]?has_content>"${item.category.properties["cm:title"]}"<#else>item.category.name</#if>,
+	                "name": <#if item.category.properties["cm:title"]?has_content>"${item.category.properties["cm:title"]}"<#else>"${item.category.name}"</#if>,
 	                "path": "${item.category.displayPath}/${item.category.name}",
                     "isReadOnly": ${item.isReadOnly?string}
 	            }<#if item_has_next>,</#if>
