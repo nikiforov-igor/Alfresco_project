@@ -7,11 +7,7 @@
 		<properties>
 			<property>
 				<name>archiveFolder</name>
-				<value><![CDATA[/Архив]]></value>
-			</property>
-			<property>
-				<name>archiveFolderAdditional</name>
-				<value><![CDATA[ОРД]]></value>
+				<value><![CDATA[/Архив/ОРД]]></value>
 			</property>
 			<property>
 				<name>notArmCreate</name>

@@ -4,16 +4,19 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.expression.BeanFactoryResolver;
+import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.utils.SpELUtils;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.expression.BeanFactoryResolver;
 
 /**
  * User: PMelnikov
@@ -38,8 +41,7 @@ public class Expression {
 
     public Expression(NodeRef document, ServiceRegistry serviceRegistry, ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-        NodeRef documentRef = document;
-        this.doc = new ExpressionDocument(documentRef, serviceRegistry);
+        this.doc = new ExpressionDocument(document, serviceRegistry);
         this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean, documentService);
         String executionId = stateMachineService.getStatemachineId(document);
         if (!"Не запущен".equals(executionId)) {
@@ -47,6 +49,12 @@ public class Expression {
         }
         this.context = new StandardEvaluationContext(this);
 		this.context.setBeanResolver(new BeanFactoryResolver(this.applicationContext));
+
+        // Регистрация утилитарных функций SpEL
+        Map<String, Method> templateFunctions = SpELUtils.getTemplateFunctionMethods();
+        for (Map.Entry<String, Method> entry : templateFunctions.entrySet()) {
+            context.registerFunction(entry.getKey(), entry.getValue());
+        }
     }
 
 	public boolean executeAsBoolean(String expression) {
@@ -62,15 +70,15 @@ public class Expression {
         }
     }
 
-	public String executeAsString(String expression) {
-		try {
-			String result = new SpelExpressionParser().parseExpression(expression).getValue(context, String.class);
-			return result != null ? result : "";
-		} catch (Exception e) {
-			logger.error("Expression: " + expression + " has errors", e);
-			return "";
-		}
-	}
+    public String executeAsString(String expression) {
+        try {
+            String result = new SpelExpressionParser().parseExpression(expression, new TemplateParserContext()).getValue(context, String.class);
+            return result != null ? result : "";
+        } catch (Exception e) {
+            logger.error("Expression: " + expression + " has errors", e);
+            return "";
+        }
+    }
 
 	public Object state(String variableName) {
 		return state.get(variableName);

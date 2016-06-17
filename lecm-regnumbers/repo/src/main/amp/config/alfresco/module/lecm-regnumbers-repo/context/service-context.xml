@@ -66,8 +66,6 @@
 		<property name="counterFactory" ref="regNumbersCounterFactory"/>
 	</bean>
 
-	<bean id="regNumbersTemplateUtils" class="ru.it.lecm.regnumbers.template.Utils" depends-on="serviceOrgstructure"/>
-
 	<bean id="regNumbersJavascriptExtension" class="ru.it.lecm.regnumbers.extension.RegNumbersJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="regnumbers"/>
 		<property name="regNumbersService" ref="regNumbersService"/>

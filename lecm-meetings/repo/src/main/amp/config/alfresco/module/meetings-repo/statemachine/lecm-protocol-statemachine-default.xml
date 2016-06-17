@@ -7,15 +7,11 @@
 		<properties>
 			<property>
 				<name>archiveFolder</name>
-				<value><![CDATA[/Архив]]></value>
+				<value><![CDATA[/Архив/Протокол]]></value>
 			</property>
 			<property>
 				<name>simple-document</name>
 				<value><![CDATA[false]]></value>
-			</property>
-			<property>
-				<name>archiveFolderAdditional</name>
-				<value><![CDATA[new String('Протокол')]]></value>
 			</property>
 			<property>
 				<name>notArmCreate</name>

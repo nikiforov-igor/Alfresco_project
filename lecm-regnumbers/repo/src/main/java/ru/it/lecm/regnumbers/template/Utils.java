@@ -26,6 +26,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *
  * @author vlevin
  */
+@Deprecated
 public final class Utils implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;

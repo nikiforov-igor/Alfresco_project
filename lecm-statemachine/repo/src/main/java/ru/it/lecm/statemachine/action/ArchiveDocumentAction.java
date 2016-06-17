@@ -48,6 +48,8 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
     protected Expression archiveFolder;
     protected Expression archiveFolderAdditional;
 
+    private String DEFAULT_ARCHIVE_PATH = "/Архив";
+
     public void setArchiveFolder(Expression archiveFolder) {
         this.archiveFolder = archiveFolder;
     }
@@ -223,7 +225,10 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
 
     private NodeRef createArchivePath(NodeRef node) {
         //Проверяем структуру
-        String rootFolder = archiveFolderPath;
+        String rootFolder = getDocumentService().execStringExpression(node, archiveFolderPath);
+        if (rootFolder.isEmpty()) {
+            rootFolder = DEFAULT_ARCHIVE_PATH;
+        }
 
         NodeService nodeService = getServiceRegistry().getNodeService();
         NodeRef archiveFolder = getRepositoryStructureHelper().getCompanyHomeRef();
@@ -255,7 +260,6 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
             }
             getServiceRegistry().getPermissionService().setPermission(archiveFolder, AuthenticationUtil.SYSTEM_USER_NAME, "LECM_BASIC_PG_Reader", true);
         }
-        archiveFolder = createAdditionalPath(node, archiveFolder);
         return archiveFolder;
     }
 

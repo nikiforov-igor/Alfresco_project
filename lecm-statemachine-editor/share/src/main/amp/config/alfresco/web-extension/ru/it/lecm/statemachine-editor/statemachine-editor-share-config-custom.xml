@@ -912,7 +912,6 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:simple-document" force="true"/>
 					<show id="lecm-stmeditor:archiveFolder" force="true"/>
-					<show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
 					<show id="lecm-stmeditor:notArmCreate" force="true"/>
 					<show id="lecm-stmeditor:staticRolesList" force="true"/>
 					<show id="lecm-stmeditor:dynamicRolesList" force="true"/>
@@ -923,7 +922,11 @@
 							<control-param name="attentionMessageKey">statetemachine.lifecicle.attention</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:archiveFolderAdditional" />
+					<field id="lecm-stmeditor:archiveFolder">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield-with-reset-value.ftl">
+							<control-param name="defaultValue">/Архив/#{doc.typeTitle()}/#{#formatCurrentDate('yyyy/MM/dd')}</control-param>
+						</control>
+					</field>
 					<field id="lecm-stmeditor:staticRolesList">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:static-role-item</control-param>
@@ -948,7 +951,6 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:simple-document" force="true"/>
 					<show id="lecm-stmeditor:archiveFolder" force="true"/>
-					<show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
 					<show id="lecm-stmeditor:notArmCreate" force="true"/>
 					<show id="lecm-stmeditor:staticRolesList" force="true"/>
 				</field-visibility>
@@ -958,7 +960,11 @@
 							<control-param name="attentionMessageKey">statetemachine.lifecicle.attention</control-param>
 						</control>
 					</field>
-					<field id="lecm-stmeditor:archiveFolderAdditional" />
+					<field id="lecm-stmeditor:archiveFolder">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield-with-reset-value.ftl">
+							<control-param name="defaultValue">/Архив/#{doc.typeTitle()}/#{#formatCurrentDate('yyyy/MM/dd')}</control-param>
+						</control>
+					</field>
 					<field id="lecm-stmeditor:staticRolesList">
 						<control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
 							<control-param name="itemType">lecm-stmeditor:static-role-item</control-param>
@@ -976,14 +982,12 @@
             <form id="statemachine-editor-edit-statemachine-finalize-to-unit">
                 <field-visibility>
                     <show id="lecm-stmeditor:archiveFolder" force="true"/>
-                    <show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
 	                <show id="lecm-stmeditor:notArmCreate" force="true"/>
                     <show id="lecm-stmeditor:staticRolesList" force="true"/>
                     <show id="lecm-stmeditor:dynamicRolesList" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:archiveFolder" read-only="true"/>
-                    <field id="lecm-stmeditor:archiveFolderAdditional" />
                     <field id="lecm-stmeditor:staticRolesList">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-stmeditor:static-role-item</control-param>

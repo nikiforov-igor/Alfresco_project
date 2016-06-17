@@ -1,12 +1,15 @@
 package ru.it.lecm.documents.expression;
 
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.QName;
+import org.springframework.extensions.surf.util.I18NUtil;
+import org.springframework.util.StringUtils;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -46,6 +49,17 @@ public class ExpressionDocument {
     //Значение аттрибута
     public String type() {
         return serviceRegistry.getNodeService().getType(nodeRef).toPrefixString(serviceRegistry.getNamespaceService());
+    }
+
+    public String typeTitle() {
+        final String type = type();
+        QName typeQName = QName.createQName(type, serviceRegistry.getNamespaceService());
+        TypeDefinition definition = serviceRegistry.getDictionaryService().getType(typeQName);
+        String key = definition.getModel().getName().toPrefixString(serviceRegistry.getNamespaceService());
+        key += ".type." + type + ".title";
+        key = StringUtils.replace(key, ":", "_");
+        String label = I18NUtil.getMessage(key, I18NUtil.getLocale());
+        return label != null ? label : key;
     }
 
 	//Значение аттрибута

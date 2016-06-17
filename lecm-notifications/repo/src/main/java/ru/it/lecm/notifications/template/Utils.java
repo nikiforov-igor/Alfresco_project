@@ -20,6 +20,7 @@ import java.util.Map;
 /**
  * @author vkuprin
  */
+@Deprecated
 public final class Utils {
 
 	private static ApplicationContext applicationContext;

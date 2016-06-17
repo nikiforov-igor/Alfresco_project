@@ -14,10 +14,6 @@
 				<value><![CDATA[false]]></value>
 			</property>
 			<property>
-				<name>archiveFolderAdditional</name>
-				<value><![CDATA[]]></value>
-			</property>
-			<property>
 				<name>notArmCreate</name>
 				<value><![CDATA[false]]></value>
 			</property>

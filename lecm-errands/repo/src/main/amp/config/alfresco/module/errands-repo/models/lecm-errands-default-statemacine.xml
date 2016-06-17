@@ -5,10 +5,6 @@
         <nodeRef>workspace://SpacesStore/1e159d78-faf0-431a-99b9-1041130a8e9e</nodeRef>
         <properties>
             <property>
-                <name>archiveFolderAdditional</name>
-                <value><![CDATA[]]></value>
-            </property>
-            <property>
                 <name>notArmCreate</name>
                 <value><![CDATA[false]]></value>
             </property>

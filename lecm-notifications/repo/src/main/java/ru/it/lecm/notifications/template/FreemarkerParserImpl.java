@@ -4,6 +4,7 @@ import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;
 import org.alfresco.service.cmr.repository.TemplateService;
 import org.springframework.context.ApplicationContext;
+import ru.it.lecm.documents.utils.SpELUtils;
 import ru.it.lecm.notifications.beans.TemplateParseException;
 import ru.it.lecm.notifications.beans.TemplateRunException;
 
@@ -49,7 +50,7 @@ public class FreemarkerParserImpl extends AbstractParserImpl {
 			if (args == null || args.size() < 2) {
 				throw new TemplateModelException("function formatLink requires 2 args: String url, String description");
 			}
-			return Utils.formatLink((String)args.get(0), (String)args.get(1));
+			return SpELUtils.formatLink((String) args.get(0), (String) args.get(1));
 		}
 	}
 

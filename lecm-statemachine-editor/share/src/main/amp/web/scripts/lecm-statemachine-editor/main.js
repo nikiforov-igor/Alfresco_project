@@ -618,7 +618,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 
 			this._showSplash();
 			new Alfresco.module.SimpleDialog("statemachine-editor-edit-statemachine").setOptions({
-				width:"40em",
+				width:"50em",
 				templateUrl:templateUrl,
 				actionUrl:null,
 				destroyOnHide:true,

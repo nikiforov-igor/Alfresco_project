@@ -10,6 +10,7 @@ import org.springframework.expression.ParseException;
 import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import ru.it.lecm.documents.utils.SpELUtils;
 import ru.it.lecm.notifications.beans.TemplateParseException;
 import ru.it.lecm.notifications.beans.TemplateRunException;
 
@@ -42,12 +43,11 @@ public class SpelParserImpl extends AbstractParserImpl {
 		context.setBeanResolver(new BeanFactoryResolver(applicationContext));
 
 		// Регистрация утилитарных функций SpEL
-		Map<String, Method> templateFunctions = Utils.getTemplateFunctionMethods();
+		Map<String, Method> templateFunctions = SpELUtils.getTemplateFunctionMethods();
 		for (Entry<String, Method> entry : templateFunctions.entrySet()) {
 			context.registerFunction(entry.getKey(), entry.getValue());
 		}
 		expressionParser = new SpelExpressionParser();
-		Utils.setApplicationContext(applicationContext);
 	}
 
 	@Override
