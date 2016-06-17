@@ -31,6 +31,7 @@
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/models/dictionaries/contractor-dictionary.xml</value>
+                <value>alfresco/module/${artifactId}/models/dictionaries/physical-person-dictionary.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/legalform-dictionary.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/representative-dictionary.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/specialization-dictionary.xml</value>

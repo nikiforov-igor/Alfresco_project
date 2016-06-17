@@ -136,9 +136,9 @@
 				</control>
 			</field-type>
 
-			<field-type id="lecm-orgstr-docType:documentType" localName="Тип документа">
+			<field-type id="lecm-orgstr-docType:documentType" localName="Тип документа удостоверяющего личность">
 				<control id="lecm-orgstr-docType:documentType-default-control" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl" localName="Выбор типа документа">
-					<param id="rootLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Виды_x0020_документов</param>
+					<param id="rootLocation" localName="" mandatory="false" visible="false">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Виды_x0020_удостоверений_x0020_личности</param>
 					<param id="nameSubstituteString" localName="" mandatory="false" visible="false">{cm:name}</param>
 					<param id="plane" localName="" mandatory="false" visible="false">true</param>
 					<param id="showCreateNewLink" localName="Показывать ссылку создания нового" mandatory="false" visible="true">false</param>

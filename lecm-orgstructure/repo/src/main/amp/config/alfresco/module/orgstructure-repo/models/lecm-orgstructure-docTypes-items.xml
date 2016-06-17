@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="lecm-dic:Виды документов" type="lecm-dic:dictionary">
+    <item name="lecm-dic:Виды удостоверений личности" type="lecm-dic:dictionary">
         <items updateMode="CreateOrUpdate">
             <item name="cm:Паспорт" type="lecm-orgstr-docType:documentType">
                 <property name="cm:name"><![CDATA[Паспорт]]></property>
