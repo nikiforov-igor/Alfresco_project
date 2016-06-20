@@ -9,48 +9,52 @@ import java.util.Map;
 
 public interface Contractors {
 
-    public static final String CONTRACTOR_NAMESPACE = "http://www.it.ru/lecm/contractors/model/contractor/1.0";
-    public static final String REPRESENTATIVE_NAMESPACE = "http://www.it.ru/lecm/contractors/model/representative/1.0";
-    public static final QName TYPE_CONTRACTOR = QName.createQName(CONTRACTOR_NAMESPACE, "contractor-type");
-    public static final QName TYPE_REPRESENTATIVE = QName.createQName(REPRESENTATIVE_NAMESPACE, "representative-type");
-    public static final QName TYPE_REPRESENTATIVE_AND_CONTRACTOR = QName.createQName(CONTRACTOR_NAMESPACE, "link-representative-and-contractor");
-    public static final QName PROP_CONTRACTOR_SHORTNAME = QName.createQName(CONTRACTOR_NAMESPACE, "shortname");
-    public static final QName PROP_CONTRACTOR_FULLNAME = QName.createQName(CONTRACTOR_NAMESPACE, "fullname");
-    public static final QName PROP_CONTRACTOR_CODE = QName.createQName(CONTRACTOR_NAMESPACE, "contractor-code");
-    public static final QName PROP_CONTRACTOR_LEGAL_ADDRESS = QName.createQName(CONTRACTOR_NAMESPACE, "legal-address");
-    public static final QName PROP_CONTRACTOR_PHISICAL_ADDRESS = QName.createQName(CONTRACTOR_NAMESPACE, "physical-address");
-    public static final QName PROP_CONTRACTOR_INN = QName.createQName(CONTRACTOR_NAMESPACE, "INN");
-    public static final QName PROP_CONTRACTOR_KPP = QName.createQName(CONTRACTOR_NAMESPACE, "KPP");
-    public static final QName PROP_REPRESENTATIVE_SURNAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "surname");
-    public static final QName PROP_REPRESENTATIVE_FIRSTNAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "firstname");
-    public static final QName PROP_REPRESENTATIVE_MIDDLENAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "middlename");
-    public static final QName PROP_REPRESENTATIVE_EMAIL = QName.createQName(REPRESENTATIVE_NAMESPACE, "email");
-    public static final QName ASSOC_LINK_TO_REPRESENTATIVE = QName.createQName(CONTRACTOR_NAMESPACE, "link-to-representative-association");
-    public static final QName PROP_CONTRACTOR_INTERACTION_TYPE = QName.createQName(CONTRACTOR_NAMESPACE, "interaction-type");
-    public static final QName PROP_CONTRACTOR_EMAIL = QName.createQName(CONTRACTOR_NAMESPACE, "email");
+    String CONTRACTOR_NAMESPACE = "http://www.it.ru/lecm/contractors/model/contractor/1.0";
+    String REPRESENTATIVE_NAMESPACE = "http://www.it.ru/lecm/contractors/model/representative/1.0";
+    QName TYPE_CONTRACTOR = QName.createQName(CONTRACTOR_NAMESPACE, "contractor-type");
+    QName TYPE_PHYSICAL_PERSON = QName.createQName(CONTRACTOR_NAMESPACE, "physical-person-type");
+    QName TYPE_REPRESENTATIVE = QName.createQName(REPRESENTATIVE_NAMESPACE, "representative-type");
+    QName TYPE_REPRESENTATIVE_AND_CONTRACTOR = QName.createQName(CONTRACTOR_NAMESPACE, "link-representative-and-contractor");
+    QName PROP_CONTRACTOR_SHORTNAME = QName.createQName(CONTRACTOR_NAMESPACE, "shortname");
+    QName PROP_CONTRACTOR_FULLNAME = QName.createQName(CONTRACTOR_NAMESPACE, "fullname");
+    QName PROP_CONTRACTOR_CODE = QName.createQName(CONTRACTOR_NAMESPACE, "contractor-code");
+    QName PROP_CONTRACTOR_LEGAL_ADDRESS = QName.createQName(CONTRACTOR_NAMESPACE, "legal-address");
+    QName PROP_CONTRACTOR_PHISICAL_ADDRESS = QName.createQName(CONTRACTOR_NAMESPACE, "physical-address");
+    QName PROP_CONTRACTOR_INN = QName.createQName(CONTRACTOR_NAMESPACE, "INN");
+    QName PROP_CONTRACTOR_KPP = QName.createQName(CONTRACTOR_NAMESPACE, "KPP");
+    QName PROP_REPRESENTATIVE_SURNAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "surname");
+    QName PROP_REPRESENTATIVE_FIRSTNAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "firstname");
+    QName PROP_REPRESENTATIVE_MIDDLENAME = QName.createQName(REPRESENTATIVE_NAMESPACE, "middlename");
+    QName PROP_REPRESENTATIVE_EMAIL = QName.createQName(REPRESENTATIVE_NAMESPACE, "email");
+    QName ASSOC_LINK_TO_REPRESENTATIVE = QName.createQName(CONTRACTOR_NAMESPACE, "link-to-representative-association");
+    QName PROP_CONTRACTOR_INTERACTION_TYPE = QName.createQName(CONTRACTOR_NAMESPACE, "interaction-type");
+    QName PROP_CONTRACTOR_EMAIL = QName.createQName(CONTRACTOR_NAMESPACE, "email");
+    QName PROP_PHYSICAL_PERSON_LAST_NAME = QName.createQName(CONTRACTOR_NAMESPACE, "lastName");
+    QName PROP_PHYSICAL_PERSON_FIST_NAME = QName.createQName(CONTRACTOR_NAMESPACE, "firstName");
+    QName PROP_PHYSICAL_PERSON_MIDDLE_NAME = QName.createQName(CONTRACTOR_NAMESPACE, "middleName");
 
-    public void assignAsPrimaryRepresentative(NodeRef representativeToAssignAsPrimary);
+    void assignAsPrimaryRepresentative(NodeRef representativeToAssignAsPrimary);
 
-    public List<NodeRef> getContractorsForRepresentative(NodeRef childContractor);
+    List<NodeRef> getContractorsForRepresentative(NodeRef childContractor);
 
-    public Map<String, String> getParentContractor(NodeRef childContractor);
+    Map<String, String> getParentContractor(NodeRef childContractor);
 
-    public List<Object> getRepresentatives(NodeRef targetContractor);
+    List<Object> getRepresentatives(NodeRef targetContractor);
 
-    public JSONArray getBusyRepresentatives();
+    JSONArray getBusyRepresentatives();
 
     /**
      * Возвращает адресанта контрагента по E-Mail
      * @param email
      * @return
      */
-    public NodeRef getRepresentativeByEmail(String email);
+    NodeRef getRepresentativeByEmail(String email);
 
     /**
      * Возвращает ссылку на контрагента, которому пренадлежит адресант
      * @param representative
      * @return
      */
-    public NodeRef getContractor(NodeRef representative);
+    NodeRef getContractor(NodeRef representative);
 
 }

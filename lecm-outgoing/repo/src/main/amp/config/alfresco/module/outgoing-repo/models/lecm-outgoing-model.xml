@@ -100,7 +100,7 @@
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-contractor:contractor-type</class>
+						<class>cm:cmobject</class>
 						<mandatory>true</mandatory>
 						<many>true</many>
 					</target>

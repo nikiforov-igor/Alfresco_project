@@ -83,6 +83,11 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
+    <bean id="physicalPersonPolicy" class="ru.it.lecm.contractors.policies.PhysicalPersonPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
     <bean id="contractors.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
         <constructor-arg>
             <map>

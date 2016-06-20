@@ -48,25 +48,6 @@
                     </constraints>
                 </property>
 
-                <!-- Сокращенное наименование -->
-                <property name="lecm-contractor:shortname">
-                    <title>Short Name</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-
-                <!-- Полное наименование -->
-                <property name="lecm-contractor:fullname">
-                    <title>Full Name</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                </property>
-
                 <!-- Телефон -->
                 <property name="lecm-contractor:phone">
                     <type>d:text</type>
@@ -551,6 +532,26 @@
     <aspects>
         <aspect name="lecm-contractor:contractor-data-aspect">
             <properties>
+
+                <!-- Сокращенное наименование -->
+                <property name="lecm-contractor:shortname">
+                    <title>Short Name</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+
+                <!-- Полное наименование -->
+                <property name="lecm-contractor:fullname">
+                    <title>Full Name</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+
                 <!-- Комментарий -->
                 <property name="lecm-contractor:comment">
                     <title>Comment</title>
