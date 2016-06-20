@@ -159,7 +159,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
 
                 List<String> attachments = (List<String>) ruleAction.getParameterValue(ATTACHMENTS);
 
-                boolean multipart = attachments != null && !attachments.isEmpty();
+                int multipart = attachments != null && !attachments.isEmpty() ? MimeMessageHelper.MULTIPART_MODE_RELATED : MimeMessageHelper.MULTIPART_MODE_NO;
 
                 messageRef[0] = new MimeMessageHelper(mimeMessage, multipart, "UTF-8");
 
@@ -172,7 +172,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
                     List<String> authorities = null;
                     if (authoritiesValue != null) {
                         if (authoritiesValue instanceof String) {
-                            authorities = new ArrayList<String>(1);
+                            authorities = new ArrayList<>(1);
                             authorities.add((String) authoritiesValue);
                         } else {
                             authorities = (List<String>) authoritiesValue;
@@ -194,7 +194,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
                             }
 
                             if (authType.equals(AuthorityType.USER)) {
-                                if (personService.personExists(authority) == true) {
+                                if (personService.personExists(authority)) {
                                     NodeRef person = personService.getPerson(authority);
                                     String address = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
                                     if (address != null && address.length() != 0 && validateAddress(address)) {
@@ -232,7 +232,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
                                 }
 
                                 for (String userAuth : users) {
-                                    if (personService.personExists(userAuth) == true) {
+                                    if (personService.personExists(userAuth)) {
                                         NodeRef person = personService.getPerson(userAuth);
                                         String address = (String) nodeService.getProperty(person, ContentModel.PROP_EMAIL);
                                         if (address != null && address.length() != 0) {
@@ -344,7 +344,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
 
                 // templateRef: either a nodeRef or classpath (see ClasspathRepoTemplateLoader)
                 Serializable ref = ruleAction.getParameterValue(PARAM_TEMPLATE);
-                String templateRef = (ref instanceof NodeRef ? ((NodeRef) ref).toString() : (String) ref);
+                String templateRef = (ref instanceof NodeRef ? ref.toString() : (String) ref);
                 if (templateRef != null) {
                     Map<String, Object> suppliedModel = null;
                     if (ruleAction.getParameterValue(PARAM_TEMPLATE_MODEL) != null) {
@@ -409,7 +409,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
                     messageRef[0].setText(text, isHTML);
                 }
 
-                if (multipart) {
+                if (multipart == MimeMessageHelper.MULTIPART_MODE_RELATED) {
 
                     NodeRef nodeRef = new NodeRef("workspace://SpacesStore/notification-template-images");
                     String path = nodeService.getPath(nodeRef).toPrefixString(namespaceService);
@@ -421,19 +421,15 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
                         parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
                         parameters.setQuery(" +PATH:\"" + path + "//*\" AND @cm\\:name:\"" + attachment + "\"");
 
-
                         try {
                             ResultSet resultSet = searchService.query(parameters);
                             if (resultSet != null && resultSet.length() > 0) {
                                 NodeRef imageNode = resultSet.getRow(0).getNodeRef();
                                 ContentReader reader = contentService.getReader(imageNode, ContentModel.PROP_CONTENT);
 
-                                messageRef[0].addInline(attachment, new ByteArrayResource(IOUtils.toByteArray(reader.getContentInputStream())){
-                                    @Override
-                                    public String getFilename() {
-                                        return attachment;
-                                    }
-                                });
+                                ByteArrayResource resource = new ByteArrayResource(IOUtils.toByteArray(reader.getContentInputStream()));
+                                String contentType = messageRef[0].getFileTypeMap().getContentType(attachment) + "; name=\"" + attachment + "\"";
+                                messageRef[0].addInline(attachment, resource, contentType);
 
                             }
                         } catch (Exception e) {
@@ -472,7 +468,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
     }
 
     private Map<String, Object> createEmailTemplateModel(NodeRef ref, Map<String, Object> suppliedModel, NodeRef fromPerson) {
-        Map<String, Object> model = new HashMap<String, Object>(8, 1.0f);
+        Map<String, Object> model = new HashMap<>(8, 1.0f);
 
         if (fromPerson != null) {
             model.put("person", new TemplateNode(fromPerson, serviceRegistry, null));
@@ -518,7 +514,7 @@ public class MailActionExecuterWithAttachment extends MailActionExecuter {
     }
 
     private String getLocalizedSubject(String subject, Object[] params, Locale locale) {
-        String localizedSubject = null;
+        String localizedSubject;
         if (locale == null) {
             localizedSubject = I18NUtil.getMessage(subject, params);
         } else {
