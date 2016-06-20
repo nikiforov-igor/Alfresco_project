@@ -48,25 +48,25 @@
             <form>
                 <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:fullname" force="true"/>
                     <!-- Полное наименование -->
-                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:shortname" force="true"/>
                     <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:comment"/>
+                    <show id="lecm-contractor:comment" force="true"/>
                     <!-- Комментарий -->
-                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:legal-address" force="true"/>
                     <!-- Юридический адрес -->
                     <show id="lecm-contractor:postal-code" force="true"/>
                     <!-- Почтовый индекс -->
-                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:physical-address" force="true"/>
                     <!-- Фактический адрес -->
                     <show id="lecm-contractor:phone"/>
                     <!-- Телефон -->
-                    <show id="lecm-contractor:fax"/>
+                    <show id="lecm-contractor:fax" force="true"/>
                     <!-- Факс -->
-                    <show id="lecm-contractor:email"/>
+                    <show id="lecm-contractor:email" force="true"/>
                     <!-- E-mail -->
-                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
                     <!-- ИНН -->
                     <show id="lecm-contractor:OKPO"/>
                     <!-- ОКПО -->
@@ -76,7 +76,7 @@
                     <!-- ОКОГУ -->
                     <show id="lecm-contractor:KPP"/>
                     <!-- КПП -->
-                    <show id="lecm-contractor:OGRN"/>
+                    <show id="lecm-contractor:OGRN" force="true"/>
                     <!-- ОГРН -->
                     <show id="lecm-contractor:transactional-account"/>
                     <!-- Расчетный счет -->
@@ -207,25 +207,25 @@
             <form id="contractorOrg" submission-url="/lecm/contractors/organization/type/lecm-contractor%3Acontractor-type/formprocessor">
                 <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:fullname" force="true"/>
                     <!-- Полное наименование -->
-                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:shortname" force="true"/>
                     <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:comment"/>
+                    <show id="lecm-contractor:comment" force="true"/>
                     <!-- Комментарий -->
-                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:legal-address" force="true"/>
                     <!-- Юридический адрес -->
                     <show id="lecm-contractor:postal-code" force="true"/>
                     <!-- Почтовый индекс -->
-                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:physical-address" force="true"/>
                     <!-- Фактический адрес -->
                     <show id="lecm-contractor:phone"/>
                     <!-- Телефон -->
-                    <show id="lecm-contractor:fax"/>
+                    <show id="lecm-contractor:fax" force="true"/>
                     <!-- Факс -->
-                    <show id="lecm-contractor:email"/>
+                    <show id="lecm-contractor:email" force="true"/>
                     <!-- E-mail -->
-                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
                     <!-- ИНН -->
                     <show id="lecm-contractor:OKPO"/>
                     <!-- ОКПО -->
@@ -235,7 +235,7 @@
                     <!-- ОКОГУ -->
                     <show id="lecm-contractor:KPP"/>
                     <!-- КПП -->
-                    <show id="lecm-contractor:OGRN"/>
+                    <show id="lecm-contractor:OGRN" force="true"/>
                     <!-- ОГРН -->
                     <show id="lecm-contractor:transactional-account"/>
                     <!-- Расчетный счет -->
@@ -365,9 +365,9 @@
             <!-- Контрагент: Таблица -->
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:shortname" force="true"/>
                     <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:physical-address" force="true"/>
                     <!-- Фактический адрес -->
                     <show id="lecm-contractor:phone"/>
                     <!-- Телефон -->
@@ -389,9 +389,9 @@
             <form id="search">
                 <field-visibility>
                     <show id="lecm-contractor:fullname"/>
-                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:shortname" force="true"/>
                     <show id="lecm-contractor:contractor-to-specialization-association"/>
-                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contractor:fullname" mandatory="false">
@@ -433,23 +433,23 @@
                     <!-- Наименование материнской компании -->
                     <show id="lecm-contractor:fullname"/>
                     <!-- Полное наименование -->
-                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:shortname" force="true"/>
                     <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:comment"/>
+                    <show id="lecm-contractor:comment" force="true"/>
                     <!-- Комментарий -->
-                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:legal-address" force="true"/>
                     <!-- Юридический адрес -->
                     <show id="lecm-contractor:postal-code" force="true"/>
                     <!-- Почтовый индекс -->
-                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:physical-address" force="true"/>
                     <!-- Фактический адрес -->
                     <show id="lecm-contractor:phone"/>
                     <!-- Телефон -->
-                    <show id="lecm-contractor:fax"/>
+                    <show id="lecm-contractor:fax" force="true"/>
                     <!-- Факс -->
-                    <show id="lecm-contractor:email"/>
+                    <show id="lecm-contractor:email" force="true"/>
                     <!-- E-mail -->
-                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
                     <!-- ИНН -->
                     <show id="lecm-contractor:OKPO"/>
                     <!-- ОКПО -->
@@ -459,7 +459,7 @@
                     <!-- ОКОГУ -->
                     <show id="lecm-contractor:KPP"/>
                     <!-- КПП -->
-                    <show id="lecm-contractor:OGRN"/>
+                    <show id="lecm-contractor:OGRN" force="true"/>
                     <!-- ОГРН -->
                     <show id="lecm-contractor:transactional-account"/>
                     <!-- Расчетный счет -->
@@ -617,23 +617,23 @@
                     <!-- Наименование материнской компании -->
                     <show id="lecm-contractor:fullname"/>
                     <!-- Полное наименование -->
-                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:shortname" force="true"/>
                     <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:comment"/>
+                    <show id="lecm-contractor:comment" force="true"/>
                     <!-- Комментарий -->
-                    <show id="lecm-contractor:legal-address"/>
+                    <show id="lecm-contractor:legal-address" force="true"/>
                     <!-- Юридический адрес -->
                     <show id="lecm-contractor:postal-code" force="true"/>
                     <!-- Почтовый индекс -->
-                    <show id="lecm-contractor:physical-address"/>
+                    <show id="lecm-contractor:physical-address" force="true"/>
                     <!-- Фактический адрес -->
                     <show id="lecm-contractor:phone"/>
                     <!-- Телефон -->
-                    <show id="lecm-contractor:fax"/>
+                    <show id="lecm-contractor:fax" force="true"/>
                     <!-- Факс -->
-                    <show id="lecm-contractor:email"/>
+                    <show id="lecm-contractor:email" force="true"/>
                     <!-- E-mail -->
-                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
                     <!-- ИНН -->
                     <show id="lecm-contractor:OKPO"/>
                     <!-- ОКПО -->
@@ -643,7 +643,7 @@
                     <!-- ОКОГУ -->
                     <show id="lecm-contractor:KPP"/>
                     <!-- КПП -->
-                    <show id="lecm-contractor:OGRN"/>
+                    <show id="lecm-contractor:OGRN" force="true"/>
                     <!-- ОГРН -->
                     <show id="lecm-contractor:transactional-account"/>
                     <!-- Расчетный счет -->
@@ -1022,16 +1022,16 @@
                     <show id="lecm-contractor:document-series"/>
                     <show id="lecm-contractor:document-issuance-date"/>
                     <show id="lecm-contractor:document-issuance-agency"/>
-                    <show id="lecm-contractor:INN"/>
-                    <show id="lecm-contractor:OGRN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
+                    <show id="lecm-contractor:OGRN" force="true"/>
                     <show id="lecm-contractor:postal-code"/>
-                    <show id="lecm-contractor:physical-address"/>
-                    <show id="lecm-contractor:legal-address"/>
-                    <show id="lecm-contractor:fax"/>
-                    <show id="lecm-contractor:email"/>
+                    <show id="lecm-contractor:physical-address" force="true"/>
+                    <show id="lecm-contractor:legal-address" force="true"/>
+                    <show id="lecm-contractor:fax" force="true"/>
+                    <show id="lecm-contractor:email" force="true"/>
                     <show id="lecm-contractor:additional-contact-information"/>
                     <show id="lecm-contractor:contractor-to-specialization-association" force="true"/>
-                    <show id="lecm-contractor:comment"/>
+                    <show id="lecm-contractor:comment" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contractor:is-sole-proprietor">
@@ -1059,7 +1059,7 @@
                 <field-visibility>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:document-number"/>
-                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contractor:lastName" mandatory="false">
@@ -1074,7 +1074,7 @@
                 <field-visibility>
                     <show id="lecm-contractor:lastName"/>
                     <show id="lecm-contractor:firstName"/>
-                    <show id="lecm-contractor:INN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
                 </field-visibility>
             </form>
         </forms>
@@ -1096,16 +1096,16 @@
                     <show id="lecm-contractor:document-series"/>
                     <show id="lecm-contractor:document-issuance-date"/>
                     <show id="lecm-contractor:document-issuance-agency"/>
-                    <show id="lecm-contractor:INN"/>
-                    <show id="lecm-contractor:OGRN"/>
+                    <show id="lecm-contractor:INN" force="true"/>
+                    <show id="lecm-contractor:OGRN" force="true"/>
                     <show id="lecm-contractor:postal-code"/>
-                    <show id="lecm-contractor:physical-address"/>
-                    <show id="lecm-contractor:legal-address"/>
-                    <show id="lecm-contractor:fax"/>
-                    <show id="lecm-contractor:email"/>
+                    <show id="lecm-contractor:physical-address" force="true"/>
+                    <show id="lecm-contractor:legal-address" force="true"/>
+                    <show id="lecm-contractor:fax" force="true"/>
+                    <show id="lecm-contractor:email" force="true"/>
                     <show id="lecm-contractor:additional-contact-information"/>
                     <show id="lecm-contractor:contractor-to-specialization-association" force="true"/>
-                    <show id="lecm-contractor:comment"/>
+                    <show id="lecm-contractor:comment" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-contractor:is-sole-proprietor">
