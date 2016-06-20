@@ -72,7 +72,7 @@
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>
 							<control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="endpointType">lecm-contractor:physical-person-type</control-param>
+							<control-param name="endpointType">lecm-contractor:contractor-type</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>
@@ -218,6 +218,40 @@
                             <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
                         </control>
                     </field>
+					<field id="lecm-outgoing:contractor-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="firstTreeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="firstTreeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="firstPlane">false</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstShowCreateNewLink">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
+							<control-param name="firstChangeItemsFireAction">contractor.selected</control-param>
+							<control-param name="firstAdditionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="firstPathNameSubstituteString">{lecm-contractor:shortname}</control-param>
+
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+							<control-param name="secondNameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondShowCreateNewLink">false</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
+							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>
+							<control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="endpointType">lecm-contractor:contractor-type</control-param>
+							<control-param name="endpointMany">true</control-param>
+							<control-param name="clearFormsOnStart">true</control-param>
+							<control-param name="markNodes">true</control-param>
+						</control>
+					</field>
                 </appearance>
 			</form>
 
@@ -267,6 +301,40 @@
                             <control-param name="representativesDefaultValueDS">lecm/contractors/getMainRepresentative?contractor={contractor}</control-param>
                         </control>
                     </field>
+					<field id="lecm-outgoing:contractor-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="firstTreeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="firstTreeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="firstPlane">false</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstShowCreateNewLink">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
+							<control-param name="firstChangeItemsFireAction">contractor.selected</control-param>
+							<control-param name="firstAdditionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+							<control-param name="firstPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="firstPathNameSubstituteString">{lecm-contractor:shortname}</control-param>
+
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+							<control-param name="secondNameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="secondPlane">true</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondShowCreateNewLink">false</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
+							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>
+							<control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
+							<control-param name="endpointType">lecm-contractor:contractor-type</control-param>
+							<control-param name="endpointMany">true</control-param>
+							<control-param name="clearFormsOnStart">true</control-param>
+							<control-param name="markNodes">true</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 
@@ -341,7 +409,7 @@
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>
 							<control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="endpointType">lecm-contractor:physical-person-type</control-param>
+							<control-param name="endpointType">lecm-contractor:contractor-type</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>
@@ -497,7 +565,7 @@
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>
 							<control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="endpointType">lecm-contractor:physical-person-type</control-param>
+							<control-param name="endpointType">lecm-contractor:contractor-type</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>
@@ -662,7 +730,7 @@
 						<control-param name="secondChangeItemsFireAction">organization.selected</control-param>
 						<control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 						<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-						<control-param name="endpointType">lecm-contractor:physical-person-type</control-param>
+						<control-param name="endpointType">lecm-contractor:contractor-type</control-param>
 						<control-param name="endpointMany">true</control-param>
 						<control-param name="clearFormsOnStart">true</control-param>
 						<control-param name="markNodes">true</control-param>
@@ -802,7 +870,7 @@
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>
 							<control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="secondPickerItemsScript">/lecm/forms/picker/mix/items</control-param>
-							<control-param name="endpointType">lecm-contractor:physical-person-type</control-param>
+							<control-param name="endpointType">lecm-contractor:contractor-type</control-param>
 							<control-param name="endpointMany">true</control-param>
 							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>

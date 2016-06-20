@@ -244,7 +244,7 @@
 		    <#if params.firstItemType??>
 		        itemType: "${params.firstItemType}",
 		    <#else>
-			    itemType: "${field.endpointType! params.endpointType}",
+			    itemType: "${params.endpointType! field.endpointType}",
 		    </#if>
 			<#if params.markNodes?? && params.markNodes == "true">
 			    markNodes: true,
@@ -329,7 +329,7 @@
 		    <#if params.secondItemType??>
 			    itemType: "${params.secondItemType}",
 		    <#else>
-			    itemType: "${field.endpointType! params.endpointType}",
+			    itemType: "${params.endpointType! field.endpointType}",
 		    </#if>
 			<#if params.markNodes?? && params.markNodes == "true">
 				markNodes: true,
