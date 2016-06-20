@@ -519,6 +519,7 @@
                     <field id="lecm-errands:number">
                         <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
                             <control-param name="hideValue"/>
+                            <control-param name="nameSuffix">-strong-constant-upper-case</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:executor-assoc" mandatory="false">
