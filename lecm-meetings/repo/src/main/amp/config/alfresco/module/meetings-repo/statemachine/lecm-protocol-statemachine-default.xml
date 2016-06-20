@@ -7,7 +7,7 @@
 		<properties>
 			<property>
 				<name>archiveFolder</name>
-				<value><![CDATA[/Архив/Протокол]]></value>
+				<value><![CDATA[/Архив/#{doc.typeTitle()}/#{#formatCurrentDate('yyyy/MM/dd')}]]></value>
 			</property>
 			<property>
 				<name>simple-document</name>
