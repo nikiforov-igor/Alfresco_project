@@ -14,6 +14,7 @@ public interface ArmWrapperService {
     String VALUE_REF = "#value-ref";
     String VALUE = "#value";
     String VALUE_TEXT = "#value-text";
+    String VALUE_WITH_CHILDREN_REFS = "\"#value-with-children-refs\"";
 
     /**
      * возвращает списко объектов Аккордеон по коду АРма

@@ -2,6 +2,7 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -11,10 +12,12 @@ import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -330,6 +333,21 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public String formatQuery(String templateQuery, NodeRef node) {
         String formatedQuery = substitudeService.formatNodeTitle(node, templateQuery);
+
+        if (formatedQuery.contains(ArmWrapperService.VALUE_WITH_CHILDREN_REFS)) {
+            StringBuilder stringBuilder = new StringBuilder("(");
+            List<NodeRef> children = getNodeChildren(node);
+            for (NodeRef nodeRef : children) {
+                if (children.indexOf(nodeRef) != 0) {
+                    stringBuilder.append(" or ");
+                }
+                stringBuilder.append('\"').append(nodeRef.toString()).append('\"');
+            }
+            stringBuilder.append(')');
+
+            formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_WITH_CHILDREN_REFS, stringBuilder.toString());
+
+        }
         if (formatedQuery.contains(ArmWrapperService.VALUE_REF)) {
             formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_REF, node.toString());
         }
@@ -429,6 +447,26 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }
 
         return results;
+    }
+
+    private List<NodeRef> getNodeChildren(NodeRef node) {
+
+        List<NodeRef> resultList = new ArrayList<>();
+
+        if (node != null) {
+            resultList.add(node);
+            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, Collections.singleton(DocumentService.TYPE_DOC_SUBJECT));
+
+            if (childAssocs != null && !childAssocs.isEmpty()) {
+                for (ChildAssociationRef childAssoc : childAssocs) {
+                    NodeRef childRef = childAssoc.getChildRef();
+                    resultList.addAll(getNodeChildren(childRef));
+                }
+            }
+        }
+
+        return resultList;
+
     }
 
 //    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
