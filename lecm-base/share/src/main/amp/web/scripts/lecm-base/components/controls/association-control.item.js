@@ -6,17 +6,17 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 
 LogicECM.module = LogicECM.module || {};
 
-LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
+LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexControl || {};
 
 (function () {
-	var ACUtils = LogicECM.module.AssociationControl.Utils,
+	var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
 		BaseUtil = LogicECM.module.Base.Util,
 		Bubbling = YAHOO.Bubbling,
 		Dom = YAHOO.util.Dom;
 
-	LogicECM.module.AssociationControl.Item = function (containerId, key, options, fieldValues) {
+	LogicECM.module.AssociationComplexControl.Item = function (containerId, key, options, fieldValues) {
 		this.currentState = Alfresco.util.deepCopy(this.currentState); // Initialise default prototype properties
-		LogicECM.module.AssociationControl.Item.superclass.constructor.call(this, 'LogicECM.module.AssociationControl.Item', containerId);
+		LogicECM.module.AssociationComplexControl.Item.superclass.constructor.call(this, 'LogicECM.module.AssociationComplexControl.Item', containerId);
 		this.setOptions(options);
 		this.key = key;
 		this.loadHelper = Alfresco.util.Deferred(['rootNode', 'searchProperties', 'ready', 'show'], {
@@ -35,7 +35,7 @@ LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.AssociationControl.Item, Alfresco.component.Base, {
+	YAHOO.extend(LogicECM.module.AssociationComplexControl.Item, Alfresco.component.Base, {
 
 		key: null,
 

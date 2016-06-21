@@ -13,10 +13,10 @@ LogicECM.module = LogicECM.module || {};
 		Event = YAHOO.util.Event,
 		Selector = YAHOO.util.Selector;
 
-	LogicECM.module.AssociationControl = function (containerId, fieldValue, options, messages) {
+	LogicECM.module.AssociationComplexControl = function (containerId, fieldValue, options, messages) {
 		this.fieldValues = Alfresco.util.deepCopy(this.fieldValues);
 		this.searchProperties = Alfresco.util.deepCopy(this.searchProperties);
-		LogicECM.module.AssociationControl.superclass.constructor.call(this, 'LogicECM.module.AssociationControl', containerId);
+		LogicECM.module.AssociationComplexControl.superclass.constructor.call(this, 'LogicECM.module.AssociationComplexControl', containerId);
 		this.setOptions(options);
 		this.setMessages(messages);
 		if (!this.options.isComplex) {
@@ -39,7 +39,7 @@ LogicECM.module = LogicECM.module || {};
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.AssociationControl, Alfresco.component.Base, {
+	YAHOO.extend(LogicECM.module.AssociationComplexControl, Alfresco.component.Base, {
 
 		fieldValues: [],
 
@@ -66,7 +66,7 @@ LogicECM.module = LogicECM.module || {};
 
 		_renderSelectedItems: function (selectedItems, options) {
 
-			var ACUtils = LogicECM.module.AssociationControl.Utils;
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils;
 
 			function onAddListener(params) {
 				Event.on(params.id, 'click', this.onRemove, params, this);
@@ -109,14 +109,14 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		createAssociationControlPicker: function (options, messages) {
-			this.widgets.picker = new LogicECM.module.AssociationControl.Picker(this, options, messages);
+			this.widgets.picker = new LogicECM.module.AssociationComplexControl.Picker(this, options, messages);
 			this.widgets.picker.eventGroup = this.eventGroup;
 		},
 
 		createAssociationControlItems: function (messages) {
 			var i;
 			this.options.itemsOptions.forEach(function (obj) {
-				this.widgets[obj.itemKey] = new LogicECM.module.AssociationControl.Item(this.id + '-picker-' + obj.itemKey, obj.itemKey, obj.options, this.fieldValues);
+				this.widgets[obj.itemKey] = new LogicECM.module.AssociationComplexControl.Item(this.id + '-picker-' + obj.itemKey, obj.itemKey, obj.options, this.fieldValues);
 				this.widgets[obj.itemKey].eventGroup = this.eventGroup;
 			}, this);
 			for (i in this.widgets) {
@@ -242,7 +242,7 @@ LogicECM.module = LogicECM.module || {};
 			Dom.addClass(this.widgets.autocomplete.getInputEl(), 'wait-for-load');
 			searchTerm = searchTerm ? searchTerm : 'cm:name:' + decodedQuery;
 
-			return LogicECM.module.AssociationControl.Utils.generateChildrenUrlParams(this.options, searchTerm, 0, true);
+			return LogicECM.module.AssociationComplexControl.Utils.generateChildrenUrlParams(this.options, searchTerm, 0, true);
 		},
 
 		formatResult: function (oResultData, sQuery, sResultMatch) {

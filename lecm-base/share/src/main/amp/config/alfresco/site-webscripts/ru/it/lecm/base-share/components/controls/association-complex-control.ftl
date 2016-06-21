@@ -36,7 +36,7 @@
 <script type='text/javascript'>//<![CDATA[
 	(function () {
 		function initAssociationControl() {
-			new LogicECM.module.AssociationControl('${fieldHtmlId}', '${field.value}', {
+			new LogicECM.module.AssociationComplexControl('${fieldHtmlId}', '${field.value}', {
 				isComplex: ${isComplex?string},
 				showAutocomplete: ${showAutocomplete?string},
 				<#if params.childrenDataSource??>

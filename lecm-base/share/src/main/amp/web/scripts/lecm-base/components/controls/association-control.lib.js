@@ -6,12 +6,12 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 
 LogicECM.module = LogicECM.module || {};
 
-LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
+LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexControl || {};
 
 (function () {
 	var BaseUtil = LogicECM.module.Base.Util;
 
-	LogicECM.module.AssociationControl.Utils = {
+	LogicECM.module.AssociationComplexControl.Utils = {
 
 		generateChildrenUrlParams: function (options, searchTerm, skipItemsCount, forAutocomplete) {
 			/* построение параметров для запроса данных датагрида */
@@ -45,11 +45,11 @@ LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
 
 			return Alfresco.util.toQueryString({
 				selectableType: options.itemType,
-				searchTerm: searchTerm,
-				size: LogicECM.module.AssociationControl.Utils.getMaxSearchResult(options, forAutocomplete),
+				searchTerm: searchTerm ? searchTerm : '',
+				size: LogicECM.module.AssociationComplexControl.Utils.getMaxSearchResult(options, forAutocomplete),
 				nameSubstituteString: options.nameSubstituteString,
 				sortProp: options.sortProp,
-				selectedItemsNameSubstituteString: LogicECM.module.AssociationControl.Utils.getSelectedItemsNameSubstituteString(options),
+				selectedItemsNameSubstituteString: LogicECM.module.AssociationComplexControl.Utils.getSelectedItemsNameSubstituteString(options),
 				additionalFilter: additionalFilter,
 				pathRoot: options.rootLocation,
 				pathNameSubstituteString: options.treeNodeSubstituteString,

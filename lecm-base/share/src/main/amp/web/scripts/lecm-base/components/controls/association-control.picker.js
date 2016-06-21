@@ -6,22 +6,22 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 
 LogicECM.module = LogicECM.module || {};
 
-LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
+LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexControl || {};
 
 (function () {
-	var ACUtils = LogicECM.module.AssociationControl.Utils,
+	var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
 		BaseUtil = LogicECM.module.Base.Util,
 		Bubbling = YAHOO.Bubbling,
 		Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
 		Selector = YAHOO.util.Selector;
 
-	LogicECM.module.AssociationControl.Picker = function (control, options, messages) {
+	LogicECM.module.AssociationComplexControl.Picker = function (control, options, messages) {
 		this.added = Alfresco.util.deepCopy(this.added);
 		this.removed = Alfresco.util.deepCopy(this.removed);
 		this.original = Alfresco.util.deepCopy(this.original);
 //		this.selected = Alfresco.util.deepCopy(this.selected);
-		LogicECM.module.AssociationControl.Picker.superclass.constructor.call(this, 'LogicECM.module.AssociationControl.Picker', control.id + '-picker');
+		LogicECM.module.AssociationComplexControl.Picker.superclass.constructor.call(this, 'LogicECM.module.AssociationComplexControl.Picker', control.id + '-picker');
 		this.setOptions(options);
 		this.setMessages(messages);
 		this.control = control;
@@ -32,7 +32,7 @@ LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.AssociationControl.Picker, Alfresco.component.Base, {
+	YAHOO.extend(LogicECM.module.AssociationComplexControl.Picker, Alfresco.component.Base, {
 
 		control: null,
 
@@ -155,13 +155,13 @@ LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
 
 		onSelectButtonClick: function (type, args, menuItem) {
 			var i;
-			this.widgets.selectButton.set('label', menuItem.value.options.itemType);
+			this.widgets.selectButton.set('label', menuItem.value.options.label);
 			this.fire('hide', {}); /* Bubbling.fire */
 			this.fire('show', { /* Bubbling.fire */
 				itemKey: menuItem.value.itemKey
 			});
 //			for (i in this.control.widgets) {
-//				if ('LogicECM.module.AssociationControl.Item' === this.control.widgets[i].name) {
+//				if ('LogicECM.module.AssociationComplexControl.Item' === this.control.widgets[i].name) {
 //					this.control.widgets[i].hide();
 //				}
 //			}
@@ -211,7 +211,7 @@ LogicECM.module.AssociationControl = LogicECM.module.AssociationControl || {};
 
 				menu = this.options.itemsOptions.map(function (obj) {
 					return {
-						text: obj.options.itemType,
+						text: obj.options.label,
 						value: obj,
 						onclick: {
 							scope: this,
