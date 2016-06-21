@@ -311,6 +311,7 @@
         <property name="businessJournalService" ref="businessJournalService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="messageService" ref="messageService"/>
+		<property name="documentMessageService" ref="documentMessageService"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"
@@ -455,6 +456,7 @@
 		<property name="regNumbersService" ref="regNumbersService" />
         <property name="documentService" ref="documentService"/>
 		<property name="messageService" ref="messageService"/>
+		<property name="documentMessageService" ref="documentMessageService"/>
     </bean>
 
     <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"
@@ -754,13 +756,13 @@
 
 	<util:constant id="DOCUMENT_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.documents.beans.DocumentMessageServiceImpl.DOCUMENT_MESSAGE_FOLDER_ID"/>
 	<bean id="documentMessageService"
-		  init-method="init"
 		  parent="baseBean"
 		  depends-on="dictionaryBootstrap"
 		  class="ru.it.lecm.documents.beans.DocumentMessageServiceImpl">
 		<property name="messageService" ref="messageService"/>
 		<property name="namespaceService" ref="namespaceService"/>
-		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
+		<property name="contentService" ref="contentService"/>
+		<property name="locales" value="${lecm.availableLocales}"/>
 		<property name="folders">
 			<map>
 				<entry key="#{DOCUMENT_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
@@ -775,6 +777,15 @@
 		<property name="documentMessageService" ref="documentMessageService"/>
 	</bean>-->
 
+	<bean id="documentMessagesLoader"
+		  init-method="init"
+		  abstract="true"
+		  class="ru.it.lecm.documents.beans.MessageToRepositoryLoader">
+		<property name="documentMessageService" ref="documentMessageService"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="propertiesService" ref="propertiesService"/>
+		<property name="useDefaultMessages" value="${lecm.documents.useDefaultMessages}"/>
+	</bean>
 
     <bean id="spELTemplateUtils" class="ru.it.lecm.documents.utils.SpELUtils" depends-on="serviceOrgstructure"/>
 </beans>

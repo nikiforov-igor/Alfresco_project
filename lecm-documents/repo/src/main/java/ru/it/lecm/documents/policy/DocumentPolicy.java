@@ -49,6 +49,7 @@ import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * User: dbashmakov
@@ -82,6 +83,7 @@ public class DocumentPolicy extends BaseBean
 	private RegNumbersService regNumbersService;
     private DocumentService documentService;
 	private MessageService messageService;
+	private DocumentMessageService documentMessageService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -151,6 +153,10 @@ public class DocumentPolicy extends BaseBean
 
 	public void setMessageService(MessageService messageService) {
 		this.messageService = messageService;
+	}
+
+	public void setDocumentMessageService(DocumentMessageService documentMessageService) {
+		this.documentMessageService = documentMessageService;
 	}
 
 	final public void init() {
@@ -460,13 +466,14 @@ public class DocumentPolicy extends BaseBean
 		String typename = type.toPrefixString(namespaceService).replace(':', '_');
 		String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
 		String messageKey = String.format("%s.property.%s.value", typename, propname);
-		Locale[] locales = Locale.getAvailableLocales();
+		List<Locale> locales = documentMessageService.getAvailableLocales();
 		MLPropertyInterceptor.setMLAware(true);
 		MLText mlText = (MLText)nodeService.getProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING);
 		mlText = mlText != null ? mlText : new MLText();
 		mlText.addValue(LocaleUtils.toLocale("ru"), presentStringValue);
+		mlText.addValue(LocaleUtils.toLocale("ru_RU"), presentStringValue);
 		for (Locale locale : locales) {
-			final String presentString = messageService.getMessage(messageKey, locale);
+			final String presentString = StringEscapeUtils.unescapeJava(messageService.getMessage(messageKey, locale));
 			if (presentString != null) {
 				String value = AuthenticationUtil.runAsSystem(new RunAsWork<String> () {
 					@Override

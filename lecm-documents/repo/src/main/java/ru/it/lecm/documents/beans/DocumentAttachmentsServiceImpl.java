@@ -41,6 +41,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private BusinessJournalService businessJournalService;
 	private NamespaceService namespaceService;
 	private MessageService messageService;
+	private DocumentMessageService documentMessageService;
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -68,6 +69,10 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	public void setMessageService(MessageService messageService) {
 		this.messageService = messageService;
+	}
+
+	public void setDocumentMessageService(DocumentMessageService documentMessageService) {
+		this.documentMessageService = documentMessageService;
 	}
 
 	@Override
@@ -163,7 +168,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			String typename = type.toPrefixString(namespaceService).replace(':', '_');
 			String categoryKey = names[1];
 			String messageKey = String.format("%s.attachmentCategory.%s.title", typename, categoryKey);
-			Locale[] locales = Locale.getAvailableLocales();
+			List<Locale> locales = documentMessageService.getAvailableLocales();
 			MLPropertyInterceptor.setMLAware(true);
 			MLText mlText = new MLText(LocaleUtils.toLocale("ru"), names[0]);
 			for (Locale locale : locales) {
