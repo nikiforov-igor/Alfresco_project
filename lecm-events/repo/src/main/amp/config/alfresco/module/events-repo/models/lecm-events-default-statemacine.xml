@@ -7,15 +7,11 @@
         <properties>
             <property>
                 <name>archiveFolder</name>
-                <value><![CDATA[Мероприятия]]></value>
+                <value><![CDATA[/Мероприятие/#{#formatCurrentDate('yyyy/MM/dd')}]]></value>
             </property>
             <property>
                 <name>simple-document</name>
                 <value><![CDATA[true]]></value>
-            </property>
-            <property>
-                <name>archiveFolderAdditional</name>
-                <value><![CDATA[new java.text.SimpleDateFormat('yyyy-MM-dd').format(new java.util.Date())]]></value>
             </property>
             <property>
                 <name>notArmCreate</name>
