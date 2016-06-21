@@ -82,12 +82,6 @@ public class SimpleDocumentDeployer {
             storePath = storePathObj.toString();
         }
 
-        Object additionalStorePathObj = nodeService.getProperty(statemachine, StatemachineEditorModel.PROP_ARCHIVE_FOLDER_ADDITIONAL);
-        String additionalStorePath = "";
-        if (additionalStorePathObj != null) {
-            additionalStorePath = additionalStorePathObj.toString();
-        }
-
         Object isNotArmCreatedObj = nodeService.getProperty(statemachine, StatemachineEditorModel.PROP_NOT_ARM_CREATED);
         Boolean isNotArmCreated = false;
         if (isNotArmCreatedObj != null) {
@@ -116,7 +110,6 @@ public class SimpleDocumentDeployer {
         }
 
         SimpleDocumentRegistryItem item = new SimpleDocumentRegistryItem(storePath);
-        item.setAdditionalPath(additionalStorePath);
         item.setNotArmCreated(isNotArmCreated);
         item.setStarters(starters);
         item.setPermissions(permissions);

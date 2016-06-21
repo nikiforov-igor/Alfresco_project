@@ -52,14 +52,7 @@ public class ExpressionDocument {
     }
 
     public String typeTitle() {
-        final String type = type();
-        QName typeQName = QName.createQName(type, serviceRegistry.getNamespaceService());
-        TypeDefinition definition = serviceRegistry.getDictionaryService().getType(typeQName);
-        String key = definition.getModel().getName().toPrefixString(serviceRegistry.getNamespaceService());
-        key += ".type." + type + ".title";
-        key = StringUtils.replace(key, ":", "_");
-        String label = I18NUtil.getMessage(key, I18NUtil.getLocale());
-        return label != null ? label : key;
+        return documentService.getDocumentTypeLabel(type());
     }
 
 	//Значение аттрибута

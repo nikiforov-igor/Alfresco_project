@@ -19,10 +19,7 @@ public class SimpleDocumentRegistryItem {
      * Путь к хранилищу документов
      */
     private String storePath = "";
-    /**
-     * Расширенный путь в хранилище документов
-     */
-    private String additionalPath = "";
+
     /**
      * Роли пользователей, которые могут создавать документ
      */
@@ -78,13 +75,5 @@ public class SimpleDocumentRegistryItem {
 
     public void setTypeRoot(NodeRef typeRoot) {
         this.typeRoot = typeRoot;
-    }
-
-    public String getAdditionalPath() {
-        return additionalPath;
-    }
-
-    public void setAdditionalPath(String additionalPath) {
-        this.additionalPath = additionalPath;
     }
 }

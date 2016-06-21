@@ -13,11 +13,6 @@
 	<#assign mandatory = field.mandatory>
 </#if>
 
-<#assign defaultValue=field.value>
-<#if field.control.params.defaultValue??>
-    <#assign defaultValue=field.control.params.defaultValue>
-</#if>
-
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">
@@ -26,8 +21,14 @@
 		var control = new LogicECM.module.TextFieldWithReset("${fieldHtmlId}").setMessages(${messages});
 		control.setOptions(
 				{
-					defaultValue: "${defaultValue?string}",
-					fieldId: "${fieldHtmlId}",
+                <#if field.control.params.defaultValue??>
+                    defaultValue: "${field.control.params.defaultValue?string}",
+                </#if>
+                <#if field.control.params.defaultValueDataSource??>
+                    defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+                </#if>
+                    parentId:"${form.arguments.itemId!""}",
+                    fieldId: "${field.configName}",
 					disabled: ${field.disabled?string},
                     formId: "${args.htmlid}"
 				});

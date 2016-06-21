@@ -368,4 +368,5 @@ public interface DocumentService {
 
     String getDocumentUrl(NodeRef document);
 
+    String getDocumentTypeLabel(String docType);
 }

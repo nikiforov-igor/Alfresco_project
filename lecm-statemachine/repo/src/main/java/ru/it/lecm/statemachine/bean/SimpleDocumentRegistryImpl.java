@@ -51,14 +51,15 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
 
     @Override
     public void registerDocument(String type, final SimpleDocumentRegistryItem item) throws LecmBaseException {
-        final List<String> path = new ArrayList<>();
+        String pathStr = "Документы без МС";
         String[] storePath = item.getStorePath().split("/");
         for (String pathItem : storePath) {
             if (!"".equals(pathItem)) {
-                path.add(pathItem);
+                pathStr = pathItem;
+                break;
             }
         }
-
+        final String path = pathStr;
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
             @Override
             public Void doWork() throws Exception {
@@ -68,7 +69,9 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
                     public Void execute() throws Throwable {
                         NodeRef typeRoot = getFolder(repositoryHelper.getCompanyHome(), path);
                         if (typeRoot == null) {
-                            typeRoot = createPath(repositoryHelper.getCompanyHome(), path);
+                            List<String> paths = new ArrayList<>();
+                            paths.add(path);
+                            typeRoot = createPath(repositoryHelper.getCompanyHome(), paths);
                         }
                         Map<String, String> permissions = item.getPermissions();
                         Map<String, LecmPermissionService.LecmPermissionGroup> permissionGroups = new HashMap<>();

@@ -9,26 +9,46 @@ LogicECM.module = LogicECM.module || {};
 
     LogicECM.module.TextFieldWithReset = function (fieldHtmlId) {
         LogicECM.module.TextFieldWithReset.superclass.constructor.call(this, "LogicECM.module.TextFieldWithReset", fieldHtmlId, ["container", "datasource"]);
+
+        YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
         return this;
     };
 
     YAHOO.extend(LogicECM.module.TextFieldWithReset, Alfresco.component.Base, {
 
         options: {
-            defaultValue: '',
+            defaultValue: null,
+            defaultValueDataSource: null,
             fieldId: null,
+            parentId: null,
             disabled: false,
             controlId: null,
             resetBtnId: null,
-            resetButtonTitle: "Восстановить значение по умолчанию",
-            resetButtonLabel: "По умолчанию",
+            resetButtonTitle: Alfresco.util.message("label.control.restore.byDefault"),
+            resetButtonLabel: Alfresco.util.message("label.control.byDefault"),
             formId: null
         },
 
         textField: null,
+        defaultValue: null,
+
+        onReInitializeControl: function (layer, args) {
+            var formId = args[1].formId;
+            var fieldId = args[1].fieldId;
+            var options = args[1].options;
+            if (this.options.formId == formId && this.options.fieldId == fieldId) {
+                this.options = YAHOO.lang.merge(this.options, options);
+                this._init();
+            }
+        },
 
         onReady: function () {
-            this.textField = Dom.get(this.options.fieldId);
+            this._init();
+            LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
+        },
+
+        _init: function () {
+            this.textField = Dom.get(this.id);
             if (this.textField) {
                 this.options.controlId = this.id + '-cntrl';
                 this.options.resetBtnId = this.options.controlId + '-reset-button';
@@ -50,14 +70,43 @@ LogicECM.module = LogicECM.module || {};
                         this.widgets.resetButton = new YAHOO.widget.Button(this.options.resetBtnId, buttonOptions);
                         Dom.get(this.options.resetBtnId).name = buttonName;
                     }
+                    this.loadDefaultValue();
                 }
-                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             }
         },
 
-
         resetValue: function () {
-            this.textField.value = this.options.defaultValue;
+            this.updateField(true);
+        },
+
+        loadDefaultValue: function () {
+            if (this.options.defaultValue != null) {
+                this.defaultValue = this.options.defaultValue;
+                this.updateField(false);
+            } else if (this.options.defaultValueDataSource != null) {
+                Alfresco.util.Ajax.request(
+                    {
+                        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource
+                        + (this.options.defaultValueDataSource.indexOf("?") != -1 ? "&" : "?") + "id=" + encodeURIComponent(this.options.parentId),
+                        successCallback: {
+                            scope: this,
+                            fn: function (response) {
+                                var oResults = eval("(" + response.serverResponse.responseText + ")");
+                                if (oResults != null && oResults.value != null) {
+                                    this.defaultValue = oResults.value;
+                                }
+                                this.updateField(false);
+                            }
+                        },
+                        failureMessage: "message.failure"
+                    });
+            }
+        },
+
+        updateField: function (reset) {
+            if (this.textField.value == "" || reset) {
+                this.textField.value = this.defaultValue;
+            }
         }
     });
 })();

@@ -46,6 +46,7 @@ LogicECM.module = LogicECM.module || {};
                             hideFieldsIfSelect: null,
                             hideFieldsIfNotSelect: null,
 	                        fireMandatoryByChange: false,
+                            changeFireAction: null,
                             attentionMessage: null
                         },
                 checkboxId: null,
@@ -125,6 +126,13 @@ LogicECM.module = LogicECM.module || {};
 	                if (this.options.fireMandatoryByChange) {
 		                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 	                }
+                    if (this.options.changeFireAction != null && this.options.changeFireAction != "") {
+                        YAHOO.Bubbling.fire(this.options.changeFireAction, {
+                            formId: this.options.formId,
+                            fieldId: this.options.fieldId,
+                            control: this
+                        });
+                    }
                 },
 	            checkDisableRelatedFields: function() {
 		            var el = Dom.get(this.id);

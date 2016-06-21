@@ -601,13 +601,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     }
 
     private String getDraftRootLabel(String docType) {
-        QName typeQName = QName.createQName(docType, namespaceService);
-        TypeDefinition definition = dictionaryService.getType(typeQName);
-        String key = definition.getModel().getName().toPrefixString(namespaceService);
-        key += ".type." + docType + ".title";
-        key = StringUtils.replace(key, ":", "_");
-        String label = I18NUtil.getMessage(key, I18NUtil.getLocale());
-        return label != null ? label : key;
+        return getDocumentTypeLabel(docType);
     }
 
     private void refreshValues(NodeRef documentNodeRef) {
@@ -919,5 +913,16 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         SysAdminParams params = serviceRegistry.getSysAdminParams();
         String context = params.getShareContext();
         return "/" + context + "/page/" + getViewUrl(type);
+    }
+
+    @Override
+    public String getDocumentTypeLabel(String docType) {
+        QName typeQName = QName.createQName(docType, namespaceService);
+        TypeDefinition definition = dictionaryService.getType(typeQName);
+        String key = definition.getModel().getName().toPrefixString(namespaceService);
+        key += ".type." + docType + ".title";
+        key = StringUtils.replace(key, ":", "_");
+        String label = I18NUtil.getMessage(key, I18NUtil.getLocale());
+        return label != null ? label : key;
     }
 }

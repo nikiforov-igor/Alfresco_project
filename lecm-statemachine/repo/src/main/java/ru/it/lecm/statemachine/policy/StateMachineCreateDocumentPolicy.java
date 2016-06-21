@@ -12,6 +12,7 @@ import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PermissionService;
@@ -23,9 +24,9 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -57,8 +58,13 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 	private DocumentConnectionService documentConnectionService;
     private SimpleDocumentRegistryImpl simpleDocumentRegistry;
     private DocumentService documentService;
+    private RepositoryStructureHelper repositoryStructureHelper;
 
-	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+    public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
+        this.repositoryStructureHelper = repositoryStructureHelper;
+    }
+
+    public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
 	}
 
@@ -138,38 +144,62 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                 @Override
                 public Object doWork() throws Exception {
-                    try {
-                        SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
+                    SimpleDocumentRegistryItem registryItem = simpleDocumentRegistry.getRegistryItem(type);
 
-                        List<String> path = new ArrayList<>();
-                        if (StringUtils.isNotEmpty(registryItem.getAdditionalPath())) {
-                            String additionalPath = documentService.execStringExpression(docRef, registryItem.getAdditionalPath());
-                            String[] splitPath = additionalPath.split("/");
-                            for (String pathItem : splitPath) {
-                                if (!"".equals(pathItem)) {
-                                    path.add(pathItem);
-                                }
-                            }
-                        }
-
-                        NodeRef storeRef;
-                        if (path.isEmpty()) {
-                            storeRef = registryItem.getTypeRoot();
-                        } else {
-                            storeRef = simpleDocumentRegistry.getFolder(registryItem.getTypeRoot(), path);
-                            if (storeRef == null) {
-                                storeRef = simpleDocumentRegistry.createPath(registryItem.getTypeRoot(), path);
-                            }
-                        }
-                        String name = nodeService.getProperty(docRef, ContentModel.PROP_NAME).toString();
-                        QName storeQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
-                        nodeService.moveNode(docRef, storeRef, ContentModel.ASSOC_CONTAINS, storeQName);
-                    } catch (WriteTransactionNeededException e) {
-                        logger.error("Can not move document " + docRef);
+                    String rootFolder = documentService.execStringExpression(docRef, registryItem.getStorePath());
+                    if (rootFolder == null) {
+                        rootFolder = "/Документы без МС";
                     }
+
+                    NodeRef archiveFolder = repositoryStructureHelper.getCompanyHomeRef();
+                    //Создаем основной путь до папки
+                    try {
+                        StringTokenizer tokenizer = new StringTokenizer(rootFolder, "/");
+                        while (tokenizer.hasMoreTokens()) {
+                            String folderName = tokenizer.nextToken();
+                            if (!"".equals(folderName)) {
+                                NodeRef folder = nodeService.getChildByName(archiveFolder, ContentModel.ASSOC_CONTAINS, folderName);
+                                if (folder == null) {
+                                    folder = createFolder(archiveFolder, folderName);
+                                }
+                                archiveFolder = folder;
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.error("Error while create type folder", e);
+                    }
+
+                    String name = nodeService.getProperty(docRef, ContentModel.PROP_NAME).toString();
+                    QName storeQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+
+                    nodeService.moveNode(docRef, archiveFolder, ContentModel.ASSOC_CONTAINS, storeQName);
                     return null;
                 }
             });
+        }
+    }
+
+    private NodeRef createFolder(final NodeRef parent, final String name) {
+        final NodeService nodeService = serviceRegistry.getNodeService();
+        final HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+        props.put(ContentModel.PROP_NAME, name);
+        try {
+            ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
+                @Override
+                public ChildAssociationRef execute() throws Throwable {
+                    return nodeService.createNode(
+                            parent,
+                            ContentModel.ASSOC_CONTAINS,
+                            QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
+                            ContentModel.TYPE_FOLDER,
+                            props);
+                }
+            }, false, true);
+            return childAssocRef.getChildRef();
+        } catch(DuplicateChildNodeNameException e) {
+            return nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, name);
+        } catch(Exception e) {
+            return nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, name);
         }
     }
 

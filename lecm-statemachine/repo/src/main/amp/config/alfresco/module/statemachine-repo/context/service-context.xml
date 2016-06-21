@@ -196,6 +196,7 @@
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 		<property name="simpleDocumentRegistry" ref="simpleDocumentRegistry" />
 		<property name="documentService" ref="documentService"/>
+		<property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
 	</bean>
 
     <bean id="stateMachineDeleteDocumentPolicy" class="ru.it.lecm.statemachine.policy.StateMachineDeleteDocumentPolicy" init-method="init">

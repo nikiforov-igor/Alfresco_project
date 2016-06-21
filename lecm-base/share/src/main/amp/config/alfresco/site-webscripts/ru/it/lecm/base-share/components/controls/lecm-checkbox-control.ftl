@@ -70,6 +70,9 @@
 			<#if field.control.params.hideFieldsIfNotSelect??>
 				hideFieldsIfNotSelect: "${field.control.params.hideFieldsIfNotSelect}".split(","),
 			</#if>
+			<#if field.control.params.changeFireAction??>
+                changeFireAction: "${field.control.params.changeFireAction}",
+			</#if>
 				fireMandatoryByChange: "${fireMandatoryByChange?string}",
 				mode: "${form.mode}",
 				fieldId: "${field.configName}",
