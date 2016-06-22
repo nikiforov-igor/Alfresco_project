@@ -42,6 +42,9 @@
 				<#if params.childrenDataSource??>
 				childrenDataSource: '${params.childrenDataSource}',
 				</#if>
+				<#if params.changeItemsFireAction??>
+				changeItemsFireAction: '${params.changeItemsFireAction}',
+				</#if>
 				itemsOptions: [
 					<#list items as i>
 						<#assign itemKey = i?replace(":", "_")>

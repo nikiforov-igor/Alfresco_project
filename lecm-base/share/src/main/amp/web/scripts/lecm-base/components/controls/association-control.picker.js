@@ -20,7 +20,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		this.added = Alfresco.util.deepCopy(this.added);
 		this.removed = Alfresco.util.deepCopy(this.removed);
 		this.original = Alfresco.util.deepCopy(this.original);
-//		this.selected = Alfresco.util.deepCopy(this.selected);
+		this.selected = Alfresco.util.deepCopy(this.selected);
 		LogicECM.module.AssociationComplexControl.Picker.superclass.constructor.call(this, 'LogicECM.module.AssociationComplexControl.Picker', control.id + '-picker');
 		this.setOptions(options);
 		this.setMessages(messages);
@@ -29,6 +29,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		Bubbling.on('addSelectedItem', this.onAddSelectedItem, this);
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
 		Bubbling.on('loadOriginalItems', this.onLoadOriginalItems, this);
+		Bubbling.on('afterChange', this.onAfterChange, this);
 		return this;
 	};
 
@@ -81,6 +82,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					this.widgets.items.appendChild(elem.firstChild);
 				}
 			}, this);
+			return this.widgets.items;
 		},
 
 		onAddSelectedItem: function (layer, args) {
@@ -92,7 +94,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				if (isNew) {
 					this.added[nodeData.nodeRef] = nodeData;
 				}
-//				this.selected[nodeData.nodeRef] = nodeData;
+				this.selected[nodeData.nodeRef] = nodeData;
 				this._renderSelectedItems([nodeData], options);
 			}
 		},
@@ -103,7 +105,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				original = args[1].original,
 				options = args[1].options;
 				this.original = YAHOO.lang.merge(this.original, original);
-//				this.selected = YAHOO.lang.merge(this.selected, original);
+				this.selected = YAHOO.lang.merge(this.selected, original);
 				for (prop in original) {
 					selected.push(original[prop]);
 				}
@@ -125,6 +127,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				if (this.added.hasOwnProperty(nodeData.nodeRef)) {
 					delete this.added[nodeData.nodeRef];
 				}
+				if (this.selected.hasOwnProperty(nodeData.nodeRef)) {
+					delete this.selected[nodeData.nodeRef];
+				}
 				if (this.original.hasOwnProperty(nodeData.nodeRef)) {
 					this.removed[nodeData.nodeRef] = nodeData;
 				}
@@ -132,6 +137,23 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					Event.removeListener(el, 'click');
 					this.widgets.items.removeChild(el.parentNode.parentNode);
 				}, this);
+			}
+		},
+
+		onAfterChange: function (layer, args) {
+			var key, selectedItems, markers = {};
+			if (Alfresco.util.hasEventInterest(this, args)) {
+				if (this.options.changeItemsFireAction) {
+					key = args[1].key;
+					selectedItems = Object.keys(this.selected);
+					if (selectedItems.length === 1) {
+						markers[selectedItems[0]] = key;
+					}
+					Bubbling.fire(this.options.changeItemsFireAction, {
+						selectedItems: this.selected,
+						markers: markers
+					});
+				}
 			}
 		},
 
@@ -145,7 +167,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.widgets.items.removeChild(elItem);
 				this.added = {};
 				this.removed = {};
-//				this.selected = YAHOO.lang.merge(this.original);
+				this.selected = YAHOO.lang.merge(this.original);
 			}, this);
 			this.fire('hide', { /* Bubbling.fire */
 				reset: true
@@ -185,8 +207,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.widgets.picker.hide();
 			this.fire('pickerClosed', { /* Bubbling.fire */
 				added: this.added,
-				removed: this.removed,
-//				selected: this.selected
+				removed: this.removed
 			});
 		},
 

@@ -452,37 +452,45 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				//просигналить пикеру что эту ноду надо нарисовать в selectedItems
 				this.fire('addSelectedItem', { /* Bubbling.fire */
 					added: record.getData(),
-					options: this.options
+					options: this.options,
+					key: this.key
 				});
 				return false;
 			}
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var options, nodeData, records;
+			var options, nodeData, key, records;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				options = args[1].options;
 				nodeData = args[1].added;
-				records = this.widgets.datatable.getRecordSet().getRecords();
-				this.currentState.selected[nodeData.nodeRef] = nodeData;
-				records.forEach(function (record) {
-					var tdEl = this.widgets.datatable.getTdEl({
-						column: this.widgets.datatable.getColumn('add'),
-						record: record
+				key = args[1].key;
+				if (!key || key === this.key) {
+					records = this.widgets.datatable.getRecordSet().getRecords();
+					this.currentState.selected[nodeData.nodeRef] = nodeData;
+					records.forEach(function (record) {
+						var tdEl = this.widgets.datatable.getTdEl({
+							column: this.widgets.datatable.getColumn('add'),
+							record: record
+						});
+						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected);
+					}, this);
+					this.fire('afterChange', {
+						key: this.key
 					});
-					tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected);
-				}, this);
+				}
 			}
 		},
 
 		onRemoveSelectedItem: function (layer, args) {
-			var nodeData, records;
+			var nodeData, records, removeHappend;
 
 			if (Alfresco.util.hasEventInterest (this, args)) {
 				nodeData = args[1].removed;
 				records = this.widgets.datatable.getRecordSet().getRecords();
 				if (this.currentState.selected.hasOwnProperty(nodeData.nodeRef)) {
 					delete this.currentState.selected[nodeData.nodeRef];
+					removeHappend = true;
 				}
 				records./*filter(function (record) {
 					return record.getData('nodeRef') === this.nodeRef;
@@ -493,6 +501,11 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					});
 					tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected);
 				}, this);
+				if (removeHappend) {
+					this.fire('afterChange', {
+						key: this.key
+					});
+				}
 			}
 		},
 

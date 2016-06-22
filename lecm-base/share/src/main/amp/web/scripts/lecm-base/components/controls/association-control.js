@@ -48,6 +48,7 @@ LogicECM.module = LogicECM.module || {};
 		autocompleteHelper: null,
 
 		options: {
+			changeItemsFireAction: null,
 			additionalFilter: '',
 			isComplex: null,
 			childrenDataSource: 'lecm/forms/picker',
@@ -96,6 +97,7 @@ LogicECM.module = LogicECM.module || {};
 					this.widgets.selected.appendChild(elem.firstChild);
 				}
 			}, this);
+			return this.widgets.selected.childElementCount;
 		},
 
 		createAssociationControlAutocompleteHelper: function (options) {
@@ -144,16 +146,17 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var nodeData, options;
+			var nodeData, options, count;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].added,
 				options = args[1].options,
-				this._renderSelectedItems([nodeData], options);
-				if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
+				count = this._renderSelectedItems([nodeData], options);
+				if (!this.options.endpointMany && count) {
 					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 				} else {
 					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 				}
+				//посылаем событие, передаем selectedItems либо из однго элемента либо пустой
 			}
 		},
 
