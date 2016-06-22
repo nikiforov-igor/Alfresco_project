@@ -63,7 +63,7 @@
 							<control-param name="options">RESERVED|Зарезервировать#alf#REJECTED|Отклонить</control-param>
 						</control>
 					</field>
-					<field id="bpm:comment">
+					<field id="bpm:comment" label-id="ru.it.reservation.title.rejectReason">
 						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
