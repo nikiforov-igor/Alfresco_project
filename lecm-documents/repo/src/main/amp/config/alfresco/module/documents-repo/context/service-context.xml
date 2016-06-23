@@ -778,7 +778,6 @@
 	</bean>-->
 
 	<bean id="documentMessagesLoader"
-		  init-method="init"
 		  abstract="true"
 		  class="ru.it.lecm.documents.beans.MessageToRepositoryLoader">
 		<property name="documentMessageService" ref="documentMessageService"/>

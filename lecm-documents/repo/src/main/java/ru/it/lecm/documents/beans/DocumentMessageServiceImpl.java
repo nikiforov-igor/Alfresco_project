@@ -3,6 +3,7 @@ package ru.it.lecm.documents.beans;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -20,6 +21,8 @@ import org.alfresco.util.PropertyMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import ru.it.lecm.base.beans.BaseBean;
 
@@ -29,14 +32,17 @@ import ru.it.lecm.base.beans.BaseBean;
  */
 public class DocumentMessageServiceImpl extends BaseBean implements DocumentMessageService, MessageLookup {
 
+	private final static Locale[] DEFAULT_LOCALES = { LocaleUtils.toLocale("ru"), LocaleUtils.toLocale("ru_RU") };
 	public final static String DOCUMENT_MESSAGE_FOLDER_ID = "DOCUMENT_MESSAGE_FOLDER_ID";
+
+	private final static Logger logger = LoggerFactory.getLogger(DocumentMessageServiceImpl.class);
 
 	private MessageService messageService;
 	private NamespaceService namespaceService;
 	private ContentService contentService;
 //	private RepositoryLocation repoMessagesLocation;
 
-	List<Locale> availableLocales;
+	List<Locale> availableLocales = Arrays.asList(DEFAULT_LOCALES);
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -61,11 +67,20 @@ public class DocumentMessageServiceImpl extends BaseBean implements DocumentMess
 	}
 
 	public void setLocales(String availableLocales) {
-		this.availableLocales = new ArrayList<>();
 		if (availableLocales != null) {
-			String[] locales = StringUtils.split(availableLocales, ',');
-			for (String locale : locales) {
-				this.availableLocales.add(LocaleUtils.toLocale(locale));
+			List<Locale> locales = new ArrayList<>();
+			for (String locale : StringUtils.split(availableLocales, ',')) {
+				try {
+					locales.add(LocaleUtils.toLocale(locale));
+				} catch (IllegalArgumentException ex) {
+					logger.error(ex.getMessage());
+					if (logger.isTraceEnabled()) {
+						logger.trace(ex.getMessage(), ex);
+					}
+				}
+			}
+			if (locales.size() > 0) {
+				this.availableLocales = locales;
 			}
 		}
 	}

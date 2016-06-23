@@ -3,8 +3,10 @@ package ru.it.lecm.documents.beans;
 import java.util.List;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.repo.solr.SolrActiveEvent;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.transaction.TransactionService;
+import org.springframework.context.ApplicationListener;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 
@@ -12,7 +14,7 @@ import ru.it.lecm.base.beans.LecmBasePropertiesService;
  *
  * @author vmalygin
  */
-public class MessageToRepositoryLoader implements RunAsWork<Void>, RetryingTransactionCallback<Void> {
+public class MessageToRepositoryLoader implements ApplicationListener<SolrActiveEvent>, RunAsWork<Void>, RetryingTransactionCallback<Void> {
 
 	private TransactionService transactionService;
 	private LecmBasePropertiesService propertiesService;
@@ -38,6 +40,11 @@ public class MessageToRepositoryLoader implements RunAsWork<Void>, RetryingTrans
 
 	public void setMessages(List<String> messages) {
 		this.messages = messages;
+	}
+
+	@Override
+	public void onApplicationEvent(SolrActiveEvent event) {
+		init();
 	}
 
 	@Override
