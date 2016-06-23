@@ -94,8 +94,8 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
 //		}
 	}
 	
-	public void addState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, boolean autoFill, String script) {
-		NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariableName, outputVariableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, isSystemFormConnection, isReverseFormConnection, autoFill, script);
+	public void addState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, boolean autoFill, String script, boolean doNotAskForConfirmation) {
+		NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariableName, outputVariableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, isSystemFormConnection, isReverseFormConnection, autoFill, script, doNotAskForConfirmation);
 		states.add(nextState);
 	}
 
@@ -130,8 +130,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
 		private boolean isSystemFormConnection;
 		private boolean isReverseFormConnection;
 		private boolean autoFill;
+		private boolean doNotAskForConfirmation;
 
-		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, boolean autoFill, String script) {
+		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, boolean autoFill, String script, boolean doNotAskForConfirmation) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
@@ -147,6 +148,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
             this.isReverseFormConnection = isReverseFormConnection;
             this.autoFill = autoFill;
             this.script = script;
+			this.doNotAskForConfirmation = doNotAskForConfirmation;
         }
 
 		public String getActionId() {
@@ -212,5 +214,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
         public boolean isAutoFill() {
             return autoFill;
         }
+
+		public boolean isDoNotAskForConfirmation() {
+			return doNotAskForConfirmation;
+		}
     }
 }

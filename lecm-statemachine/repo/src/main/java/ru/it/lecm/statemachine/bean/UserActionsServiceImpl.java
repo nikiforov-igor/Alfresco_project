@@ -212,6 +212,7 @@ public class UserActionsServiceImpl implements UserActionsService {
                                 resultState.put("workflowId", state.getWorkflowId());
                                 resultState.put("errors", messages);
                                 resultState.put("doesNotBlock", doesNotBlock);
+                                resultState.put("doNotAskForConfirmation", state.isDoNotAskForConfirmation());
                                 resultState.put("fields", fields);
                                 resultState.put("count", count);
                                 resultState.put("variables", variables);

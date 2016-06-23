@@ -676,6 +676,7 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+					<show id="lecm-stmeditor:do-not-ask-for-confirmation" force="true"/>
 					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
 					<show id="lecm-stmeditor:transition-script" force="true"/>
 				</field-visibility>
@@ -720,6 +721,7 @@
 					<show id="lecm-stmeditor:transitionLabel" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+					<show id="lecm-stmeditor:do-not-ask-for-confirmation" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
@@ -834,6 +836,7 @@
 					<show id="lecm-stmeditor:transitionExpression" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+					<show id="lecm-stmeditor:do-not-ask-for-confirmation" force="true"/>
                     <show id="lecm-stmeditor:transitionDocumentChangeScript" force="true"/>
 				</field-visibility>
 				<appearance>
@@ -870,6 +873,7 @@
                     <show id="lecm-stmeditor:transitionExpression" force="true"/>
                     <show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+					<show id="lecm-stmeditor:do-not-ask-for-confirmation" force="true"/>
                     <show id="lecm-stmeditor:transitionDocumentChangeScript" force="true"/>
                 </field-visibility>
                 <appearance>

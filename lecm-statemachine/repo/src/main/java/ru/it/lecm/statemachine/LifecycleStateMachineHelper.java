@@ -1171,6 +1171,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    																		Node n9 = nl7.item(q);
 			    																		NodeList nl8 = n9.getChildNodes();
 			    																		Boolean stopSubWorkflows = false;
+                                                                                        Boolean doNotAskForConfirmation = false;
 			    																		String transitionLabel = "";
 			    																		String workflowId = null;
 			    																		String script = null;
@@ -1194,7 +1195,9 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    																					Node n11 = nl9.item(s);
 			    																					if("name".equals(n11.getFirstChild().getLocalName())&&"stopSubWorkflows".equals(n11.getFirstChild().getTextContent())){
 			    																						stopSubWorkflows = Boolean.parseBoolean(n11.getLastChild().getTextContent());
-			    																					} else if("name".equals(n11.getFirstChild().getLocalName())&&"transitionLabel".equals(n11.getFirstChild().getTextContent())){
+			    																					} else if("name".equals(n11.getFirstChild().getLocalName())&&"do-not-ask-for-confirmation".equals(n11.getFirstChild().getTextContent())){
+                                                                                                        doNotAskForConfirmation = Boolean.parseBoolean(n11.getLastChild().getTextContent());
+                                                                                                    } else if("name".equals(n11.getFirstChild().getLocalName())&&"transitionLabel".equals(n11.getFirstChild().getTextContent())){
 			    																						transitionLabel = n11.getLastChild().getTextContent();
 			    																					} else if("name".equals(n11.getFirstChild().getLocalName())&&"workflowId".equals(n11.getFirstChild().getTextContent())){
 			    																						workflowId = n11.getLastChild().getTextContent();
@@ -1313,7 +1316,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 			    																		if(st.getActions().get("FinishStateWithTransition")==null) {
 			    	    																	st.getActions().put("FinishStateWithTransition",new FinishStateWithTransitionAction());
 			    	    																}
-			    	    																((FinishStateWithTransitionAction)st.getActions().get("FinishStateWithTransition")).addState(actionVar+(q+1), transitionLabel, workflowId, cc, "var"+actionVar, transitionVar, wv, stopSubWorkflows, transitionFormType, transitionFormFolder, transitionFormConnection, transitionIsSystemFormConnection, transitionIsReverseFormConnection, autoFill, script);
+			    	    																((FinishStateWithTransitionAction)st.getActions().get("FinishStateWithTransition")).addState(actionVar+(q+1), transitionLabel, workflowId, cc, "var"+actionVar, transitionVar, wv, stopSubWorkflows, transitionFormType, transitionFormFolder, transitionFormConnection, transitionIsSystemFormConnection, transitionIsReverseFormConnection, autoFill, script, doNotAskForConfirmation);
 			    																	}
 
 			    																}

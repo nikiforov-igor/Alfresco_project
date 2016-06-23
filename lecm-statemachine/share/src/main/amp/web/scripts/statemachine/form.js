@@ -285,30 +285,34 @@ LogicECM.module = LogicECM.module || {};
 			for (i in errors) {
 				message += errors[i] + '<br>';
 			}
-			Alfresco.util.PopupManager.displayPrompt({
-				title: Alfresco.util.message('title.execute_action'),
-				text: message + Alfresco.util.message('msg.action_document_confirm', this.name, action.label ),
-				noEscape: true,
-				buttons: [{
-					text: Alfresco.util.message('button.ok'),
-					handler: {
-						fn: function(event, obj) {
-							this.destroy();
-							obj.parent._chooseState('trans', obj.parent.taskId, null, obj.action.actionId);
-						},
-						obj: {
-							parent: this,
-							action: action
+			if (!action.doNotAskForConfirmation) {
+				Alfresco.util.PopupManager.displayPrompt({
+					title: Alfresco.util.message('title.execute_action'),
+					text: message + Alfresco.util.message('msg.action_document_confirm', this.name, action.label),
+					noEscape: true,
+					buttons: [{
+						text: Alfresco.util.message('button.ok'),
+						handler: {
+							fn: function (event, obj) {
+								this.destroy();
+								obj.parent._chooseState('trans', obj.parent.taskId, null, obj.action.actionId);
+							},
+							obj: {
+								parent: this,
+								action: action
+							}
 						}
-					}
-				},{
-					text: Alfresco.util.message('button.cancel'),
-					handler: function(event, obj) {
-						this.destroy();
-					},
-					isDefault: true
-				}]
-			});
+					}, {
+						text: Alfresco.util.message('button.cancel'),
+						handler: function (event, obj) {
+							this.destroy();
+						},
+						isDefault: true
+					}]
+				});
+			} else {
+				this._chooseState('trans', this.taskId, null, action.actionId, action);
+			}
 			this.doubleClickLock = false;
 		},
 		onGroupActions: function onGroupActionsFunction(action) {

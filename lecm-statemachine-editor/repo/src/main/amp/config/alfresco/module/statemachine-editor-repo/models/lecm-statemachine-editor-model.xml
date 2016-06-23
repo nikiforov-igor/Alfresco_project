@@ -688,6 +688,11 @@
                 <property name="lecm-stmeditor:stopSubWorkflows">
                     <type>d:boolean</type>
                 </property>
+				<property name="lecm-stmeditor:do-not-ask-for-confirmation">
+					<title>Не запрашивать подтверждение действия</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
             </properties>
             <associations>
                 <association name="lecm-stmeditor:transitionStatus">
