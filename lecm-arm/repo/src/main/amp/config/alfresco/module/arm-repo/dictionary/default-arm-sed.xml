@@ -3968,7 +3968,7 @@
                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                 <property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
                 <property name="lecm-arm:search-query"><![CDATA[]]></property>
-                <items>
+                <items updateMode="CreateOrUpdate">
                     <item name="cm:Черновики" type="lecm-arm:node">
                         <property name="cm:name"><![CDATA[Черновики]]></property>
                         <property name="lecm-arm:order"><![CDATA[1]]></property>
@@ -5506,7 +5506,7 @@
                         <property name="lecm-arm:types"><![CDATA[]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:search-query">
-                            <![CDATA[({{ACTIVE_TASKS_ONLY({tasks:['reservationWf:regnumReservationTask'],user:'#current-user'})}})]]></property>
+                            <![CDATA[({{ACTIVE_TASKS_ONLY({tasks:['lecmRegnumRes:reserveTask'],user:'#current-user'})}})]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                     </item>
                 </items>
