@@ -24,7 +24,7 @@
 <#else>
 	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=false/></#assign>
 	<#assign value><@components.baseControlValue field=field showAutocomplete=showAutocomplete/></#assign>
-	<@components.baseControl field=field name='association-control' classes='association-control viewmode' buttons=buttons value=value>
+	<@components.baseControl field=field name='association-control' classes='association-control' buttons=buttons value=value>
 		<#if showAutocomplete>
 		<div id='${fieldHtmlId}-autocomplete-container'></div>
 		</#if>
