@@ -1062,6 +1062,7 @@
                     <show id="lecm-contractor:INN" force="true"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-contractor:document-number" label-id="title.passport_number"/>
                     <field id="lecm-contractor:lastName" mandatory="false">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
