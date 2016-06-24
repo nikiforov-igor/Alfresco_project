@@ -53,39 +53,36 @@
 	    <dependency>
 		    <groupId>ru.it.lecm.arm</groupId>
 		    <artifactId>arm-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.base</groupId>
 		    <artifactId>base-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
+            <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.dictionary</groupId>
 		    <artifactId>dictionary-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
 		    <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.documents</groupId>
 		    <artifactId>documents-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
+            <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.security</groupId>
 		    <artifactId>lecm-security-api</artifactId>
-		    <version>${project.version}</version>
-	    </dependency>
-	    <dependency>
-		    <groupId>ru.it.lecm.statemachine</groupId>
-		    <artifactId>statemachine-api</artifactId>
-		    <version>${project.version}</version>
-		    <scope>provided</scope>
+		    <version>${platform.version}</version>
+            <scope>provided</scope>
 	    </dependency>
 	    <dependency>
 		    <groupId>ru.it.lecm.calendar</groupId>
 		    <artifactId>lecm-calendar-repo-api</artifactId>
-		    <version>${project.version}</version>
+		    <version>${platform.version}</version>
 		    <scope>provided</scope>
 	    </dependency>
         <dependency>
@@ -100,6 +97,18 @@
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.orgstructure</groupId>
+            <artifactId>orgstructure-repo-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.statemachine</groupId>
+            <artifactId>statemachine-api</artifactId>
+            <version>${platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

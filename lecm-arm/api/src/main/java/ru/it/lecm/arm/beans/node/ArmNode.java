@@ -29,6 +29,7 @@ public class ArmNode {
 	private String htmlUrl;
 	private String reportCodes;
     private NodeRef runAsEmployee;
+    private List<NodeRef> children;
 
     private ArmBaseChildRule nodeQuery;
 
@@ -173,5 +174,13 @@ public class ArmNode {
 
     public void setRunAsEmployee(NodeRef runAsEmployee) {
         this.runAsEmployee = runAsEmployee;
+    }
+
+    public List<NodeRef> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<NodeRef> children) {
+        this.children = children;
     }
 }

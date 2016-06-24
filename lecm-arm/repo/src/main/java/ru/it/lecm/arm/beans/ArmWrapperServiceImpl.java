@@ -2,22 +2,20 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.BooleanUtils;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +29,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private NodeService nodeService;
     private ArmServiceImpl service;
     private SubstitudeBean substitudeService;
-    private DictionaryBean dictionaryService;
 	private NamespaceService namespaceService;
-//    private StateMachineServiceBean stateMachineHelper;
+    private DictionaryBean dictionaryBean;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -47,15 +44,15 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         this.substitudeService = substitudeService;
     }
 
-    public void setDictionaryService(DictionaryBean dictionaryService) {
-        this.dictionaryService = dictionaryService;
-    }
-
-	public void setNamespaceService(NamespaceService namespaceService) {
+    public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
 	}
 
-	public List<ArmNode> getAccordionsByArmCode(String armCode) {
+    public void setDictionaryBean(DictionaryBean dictionaryBean) {
+        this.dictionaryBean = dictionaryBean;
+    }
+
+    public List<ArmNode> getAccordionsByArmCode(String armCode) {
         return getAccordionsByArmCode(armCode, false);
     }
 
@@ -119,10 +116,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         //2. Добавить реальных дочерних узлов для иерархического справочника!
         // в остальных случаях у нас не может быть дочерних элементов
         if (node != null && !isArmElement(node)){
-            List<NodeRef> childs = parent.getNodeQuery().getChildren(node);
-            if (childs != null) {
-                for (NodeRef dicChild : childs) {
-                    result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
+            List<NodeRef> children = parent.getNodeQuery().getChildren(node);
+            if (children != null) {
+                for (NodeRef dicChild : children) {
+                    ArmNode armNode = wrapAnyNodeAsObject(dicChild, parent, onlyMeta);
+                    fillChildrenAndFormatChildrenRefsQuery(armNode);
+                    result.add(armNode);
                 }
             }
         }
@@ -331,28 +330,41 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return node;
     }
 
+    @Override
+    public void fillChildrenAndFormatChildrenRefsQuery(ArmNode armNode) {
+        Boolean cacheChildren = (Boolean) service.getCachedProperties(armNode.getArmNodeRef()).get(ArmService.PROP_ARM_NODE_CACHE_CILDREN);
+        if (BooleanUtils.isTrue(cacheChildren)) {
+            armNode.setChildren(dictionaryBean.getAllChildren(armNode.getNodeRef()));
+            String query = armNode.getSearchQuery();
+
+            if (query.contains(CHILDREN_REFS)) {
+                NodeRef nodeRef = armNode.getNodeRef();
+                StringBuilder stringBuilder = new StringBuilder("(\"" + nodeRef.toString() +"\"");
+
+                List<NodeRef> children = armNode.getChildren();
+
+                if (children != null && !children.isEmpty()) {
+                    for (NodeRef child : children) {
+                        stringBuilder.append(" or ");
+                        stringBuilder.append('\"').append(child.toString()).append('\"');
+                    }
+
+                    stringBuilder.append(')');
+                }
+
+                armNode.setSearchQuery(query.replaceAll(CHILDREN_REFS, stringBuilder.toString()));
+            }
+        }
+    }
+
     public String formatQuery(String templateQuery, NodeRef node) {
         String formatedQuery = substitudeService.formatNodeTitle(node, templateQuery);
 
-        if (formatedQuery.contains(ArmWrapperService.VALUE_WITH_CHILDREN_REFS)) {
-            StringBuilder stringBuilder = new StringBuilder("(");
-            List<NodeRef> children = getNodeChildren(node);
-            for (NodeRef nodeRef : children) {
-                if (children.indexOf(nodeRef) != 0) {
-                    stringBuilder.append(" or ");
-                }
-                stringBuilder.append('\"').append(nodeRef.toString()).append('\"');
-            }
-            stringBuilder.append(')');
-
-            formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_WITH_CHILDREN_REFS, stringBuilder.toString());
-
+        if (formatedQuery.contains(VALUE_REF)) {
+            formatedQuery = formatedQuery.replaceAll(VALUE_REF, node.toString());
         }
-        if (formatedQuery.contains(ArmWrapperService.VALUE_REF)) {
-            formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_REF, node.toString());
-        }
-        if (formatedQuery.contains(ArmWrapperService.VALUE_TEXT)) {
-            formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_TEXT, substitudeService.getObjectDescription(node));
+        if (formatedQuery.contains(VALUE_TEXT)) {
+            formatedQuery = formatedQuery.replaceAll(VALUE_TEXT, substitudeService.getObjectDescription(node));
         }
         return formatedQuery;
     }
@@ -449,29 +461,6 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return results;
     }
 
-    private List<NodeRef> getNodeChildren(NodeRef node) {
-
-        List<NodeRef> resultList = new ArrayList<>();
-
-        if (node != null) {
-            resultList.add(node);
-            List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, Collections.singleton(DocumentService.TYPE_DOC_SUBJECT));
-
-            if (childAssocs != null && !childAssocs.isEmpty()) {
-                for (ChildAssociationRef childAssoc : childAssocs) {
-                    NodeRef childRef = childAssoc.getChildRef();
-                    resultList.addAll(getNodeChildren(childRef));
-                }
-            }
-        }
-
-        return resultList;
-
-    }
-
-//    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-//        this.stateMachineHelper = stateMachineHelper;
-//    }
     public boolean isRunAsAccordion(NodeRef node) {
         return service.isRunAsArmAccordion(node);
 }

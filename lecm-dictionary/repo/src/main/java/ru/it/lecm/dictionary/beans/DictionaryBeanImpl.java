@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.Path;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -113,6 +114,34 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
         return activeChildren;
     }
+
+	@Override
+	public List<NodeRef> getAllChildren(NodeRef nodeRef) {
+
+		List<NodeRef> resultList = new ArrayList<>();
+
+		if (nodeRef != null) {
+			Path path = nodeService.getPath(nodeRef);
+			QName type = nodeService.getType(nodeRef);
+			SearchParameters sp = new SearchParameters();
+			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+			sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+			sp.setQuery("PATH:\"" + path.toPrefixString(namespaceService) + "//*\" AND TYPE:\"" + type.toPrefixString(namespaceService) + "\" AND NOT @lecm\\-dic\\:active:false");
+			ResultSet resultSet = searchService.query(sp);
+
+			if (resultSet != null) {
+				for (ResultSetRow row : resultSet) {
+					NodeRef childNode = row.getNodeRef();
+
+					if (!StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals(childNode.getStoreRef())) {
+						resultList.add(childNode);
+					}
+				}
+			}
+		}
+
+		return resultList;
+	}
 
 	@Override
 	public List<NodeRef> getRecordsByParamValue(String dictionaryName, QName parameter, Serializable value) {

@@ -29,11 +29,12 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
     @Override
     public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
         //запрос по справочнику - вернет список корневых объектов
-        List<ArmNode> nodes = new ArrayList<ArmNode>();
+        List<ArmNode> nodes = new ArrayList<>();
         //шаблонный запрос из верхнего узла
-        List<NodeRef> childrens = dictionaryService.getChildren(getDictionary());
-        for (NodeRef children : childrens) {
-            ArmNode childNode = service.wrapAnyNodeAsObject(children, node);
+        List<NodeRef> children = dictionaryService.getChildren(getDictionary());
+        for (NodeRef child : children) {
+            ArmNode childNode = service.wrapAnyNodeAsObject(child, node);
+            service.fillChildrenAndFormatChildrenRefsQuery(childNode);
             nodes.add(childNode);
         }
 

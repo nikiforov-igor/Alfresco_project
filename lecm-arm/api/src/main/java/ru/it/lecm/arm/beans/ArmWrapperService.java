@@ -14,7 +14,7 @@ public interface ArmWrapperService {
     String VALUE_REF = "#value-ref";
     String VALUE = "#value";
     String VALUE_TEXT = "#value-text";
-    String VALUE_WITH_CHILDREN_REFS = "\"#value-with-children-refs\"";
+    String CHILDREN_REFS = "\"#children-refs\"";
 
     /**
      * возвращает списко объектов Аккордеон по коду АРма
@@ -46,6 +46,8 @@ public interface ArmWrapperService {
 
     public ArmNode wrapStatusAsObject(String status, ArmNode parent);
     public ArmNode wrapStatusAsObject(String status, ArmNode parent, boolean onlyMeta);
+
+    void fillChildrenAndFormatChildrenRefsQuery(ArmNode armNode);
 
     public String formatQuery(String templateQuery, NodeRef node);
 

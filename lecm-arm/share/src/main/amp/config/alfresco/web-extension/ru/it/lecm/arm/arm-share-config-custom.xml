@@ -197,6 +197,7 @@
 					<show id="lecm-arm:counter-description" force="true"/>
 					<show id="lecm-arm:node-child-rule-assoc" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
+					<show id="lecm-arm:cache-children" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:search-query">
@@ -256,6 +257,7 @@
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
+					<show id="lecm-arm:cache-children" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:search-query">

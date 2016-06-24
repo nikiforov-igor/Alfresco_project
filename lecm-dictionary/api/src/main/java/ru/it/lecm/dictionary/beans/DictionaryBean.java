@@ -1,10 +1,10 @@
 package ru.it.lecm.dictionary.beans;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: ORakovskaya
@@ -29,6 +29,9 @@ public interface DictionaryBean {
 	public NodeRef getDictionaryValueByParam(NodeRef dictionaryRef, QName parameterName, String parameterValue);
 	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef);
 	public List<NodeRef> getChildren(NodeRef nodeRef);
+
+	List<NodeRef> getAllChildren(NodeRef nodeRef);
+
 	public List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);
 	public NodeRef getRecordByParamValue (String dictionaryName, QName parameter, Serializable value);
 	public NodeRef getDictionariesRoot();

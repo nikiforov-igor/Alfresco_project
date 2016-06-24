@@ -124,7 +124,7 @@
 		<property name="nodeService" ref="NodeService" />
 		<property name="service" ref="armService"/>
 		<property name="substitudeService" ref="substitudeService"/>
-		<property name="dictionaryService" ref="serviceDictionary"/>
+		<property name="dictionaryBean" ref="serviceDictionary"/>
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
