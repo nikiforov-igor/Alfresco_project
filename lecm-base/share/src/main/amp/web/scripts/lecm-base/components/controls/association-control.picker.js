@@ -43,6 +43,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		selected: {},
 
 		options: {
+			disabled: null,
 			isComplex: null
 		},
 
@@ -64,7 +65,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				elem = document.createElement('div'),
 				id = selected.nodeRef.replace(/:|\//g, '_'),
 				itemId = this.id + '-' + id,
-				notSelected = !Selector.query('a[id="' + itemId + '"]', this.widgets.items, true);
+				notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.items, true);
 
 				if (notSelected) {
 					if (options.plane || !options.showPath) {
@@ -73,16 +74,23 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						displayName = selected.simplePath + selected.selectedName;
 					}
 
-					Event.onAvailable(itemId, onAddListener, { id: itemId, nodeData: selected }, this);
-
-					if ('lecm-orgstr:employee' === options.itemType) {
-						elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
-						elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
-						this.widgets.items.appendChild(elem.firstChild);
+					if (this.options.disabled) {
+						if ('lecm-orgstr:employee' === options.itemType) {
+							elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(selected.nodeRef, displayName));
+						} else {
+							elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected));
+						}
+						elem.firstChild.id = itemId;
 					} else {
-						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
-						this.widgets.items.appendChild(elem.firstChild);
+						Event.onAvailable(itemId, onAddListener, { id: itemId, nodeData: selected }, this);
+						if ('lecm-orgstr:employee' === options.itemType) {
+							elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
+							elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
+						} else {
+							elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
+						}
 					}
+					this.widgets.items.appendChild(elem.firstChild);
 				}
 			}, this);
 			return this.widgets.items;
@@ -136,7 +144,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				if (this.original.hasOwnProperty(nodeData.nodeRef)) {
 					this.removed[nodeData.nodeRef] = nodeData;
 				}
-				Selector.query('a[id="' + id + '"]', this.widgets.items).forEach(function (el) {
+				Selector.query('[id="' + id + '"]', this.widgets.items).forEach(function (el) {
 					Event.removeListener(el, 'click');
 					this.widgets.items.removeChild(el.parentNode.parentNode);
 				}, this);
@@ -227,9 +235,11 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				type: YAHOO.widget.Panel
 			});
 			this.widgets.okButton = Alfresco.util.createYUIButton(this, 'ok', this.onOkButtonClick, {
+				disabled: this.options.disabled,
 				type: 'push'
 			});
 			this.widgets.cancelButton = Alfresco.util.createYUIButton(this, 'cancel', this.onCancelButtonClick, {
+				disabled: this.options.disabled,
 				type: 'push'
 			});
 			if (this.options.isComplex) {
@@ -246,6 +256,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}, this);
 
 				this.widgets.selectButton = Alfresco.util.createYUIButton(this, 'select', null, {
+					disabled: this.options.disabled,
 					label: 'Тип данных',
 					type: 'menu',
 					menu: menu,

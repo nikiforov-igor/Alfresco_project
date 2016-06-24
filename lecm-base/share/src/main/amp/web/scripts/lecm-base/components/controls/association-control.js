@@ -48,6 +48,7 @@ LogicECM.module = LogicECM.module || {};
 		autocompleteHelper: null,
 
 		options: {
+			disabled: null,
 			changeItemsFireAction: null,
 			additionalFilter: '',
 			isComplex: null,
@@ -79,7 +80,7 @@ LogicECM.module = LogicECM.module || {};
 				elem = document.createElement('div'),
 				id = selected.nodeRef.replace(/:|\//g, '_'),
 				itemId = this.id + '-' + id,
-				notSelected = !Selector.query('a[id="' + itemId + '"]', this.widgets.selected, true);
+				notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true);
 
 				if (notSelected) {
 					if (options.plane || !options.showPath) {
@@ -88,16 +89,23 @@ LogicECM.module = LogicECM.module || {};
 						displayName = selected.simplePath + selected.selectedName;
 					}
 
-					Event.onAvailable(itemId, onAddListener, { id: itemId, nodeData: selected }, this);
-
-					if ('lecm-orgstr:employee' === options.itemType) {
-						elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
-						elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
-						this.widgets.selected.appendChild(elem.firstChild);
+					if (this.options.disabled) {
+						if ('lecm-orgstr:employee' === options.itemType) {
+							elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(selected.nodeRef, displayName));
+						} else {
+							elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected));
+						}
+						elem.firstChild.id = itemId;
 					} else {
-						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
-						this.widgets.selected.appendChild(elem.firstChild);
+						Event.onAvailable(itemId, onAddListener, { id: itemId, nodeData: selected }, this);
+						if ('lecm-orgstr:employee' === options.itemType) {
+							elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
+							elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
+						} else {
+							elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
+						}
 					}
+					this.widgets.selected.appendChild(elem.firstChild);
 				}
 			}, this);
 			return this.widgets.selected.childElementCount;
@@ -168,7 +176,7 @@ LogicECM.module = LogicECM.module || {};
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].removed;
 				id = this.id + '-' + nodeData.nodeRef.replace(/:|\//g, '_');
-				Selector.query('a[id="' + id + '"]', this.widgets.selected).forEach(function (el) {
+				Selector.query('[id="' + id + '"]', this.widgets.selected).forEach(function (el) {
 					Event.removeListener(el, 'click');
 					this.widgets.selected.removeChild(el.parentNode.parentNode);
 				}, this);
@@ -356,6 +364,7 @@ LogicECM.module = LogicECM.module || {};
 			this.widgets.removed = Dom.get(this.id + '-removed');
 			this.widgets.selected = Dom.get(this.id + '-displayed');
 			this.widgets.pickerButton = new Alfresco.util.createYUIButton(this, 'btn-pick', this.onPickerButtonClick, {
+				disabled: this.options.disabled,
 				title: this.options.pickerButtonTitle,
 				label: this.options.pickerButtonLabel ? this.options.pickerButtonLabel : '...',
 				type: 'push'

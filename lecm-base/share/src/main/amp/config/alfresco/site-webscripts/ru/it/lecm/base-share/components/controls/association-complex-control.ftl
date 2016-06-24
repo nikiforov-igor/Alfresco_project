@@ -11,8 +11,9 @@
 	<#assign items = params.items?split(',')>
 </#if>
 
+<#assign disabled = 'view' == form.mode || (field.disabled && !(params.forceEditable?? && 'true' == params.forceEditable?lower_case))>
 <#assign isComplex = items?size gt 1>
-<#assign showAutocomplete = !isComplex && (!params.showAutocomplete?? || 'true' == params.showAutocomplete?lower_case)>
+<#assign showAutocomplete = !disabled && !isComplex && (!params.showAutocomplete?? || 'true' == params.showAutocomplete?lower_case)>
 
 <#if 'view' == form.mode>
 	<#assign value>
@@ -37,6 +38,7 @@
 	(function () {
 		function initAssociationControl() {
 			new LogicECM.module.AssociationComplexControl('${fieldHtmlId}', '${field.value}', {
+				disabled: ${disabled?string},
 				isComplex: ${isComplex?string},
 				showAutocomplete: ${showAutocomplete?string},
 				<#if params.childrenDataSource??>
@@ -51,6 +53,7 @@
 					{
 						itemKey: '${itemKey}',
 						options: {
+							disabled: ${disabled?string},
 							<#if isComplex>
 							itemType: '${params[itemKey + '_endpointType']}',
 							<#else>

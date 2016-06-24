@@ -53,6 +53,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		options: {
+			disabled: null,
 			ignoreNodesInTreeView: true,
 			itemType: 'cm:content',
 			showParentNodeInTreeView: true,
