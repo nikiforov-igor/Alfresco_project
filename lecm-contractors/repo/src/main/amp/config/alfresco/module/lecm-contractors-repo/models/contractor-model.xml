@@ -426,7 +426,7 @@
                 <property name="lecm-contractor:is-sole-proprietor">
                     <title>Is Sole Proprietor</title>
                     <type>d:boolean</type>
-                    <default>true</default>
+                    <default>false</default>
                 </property>
 
                 <!-- Рабочий телефон -->
