@@ -161,7 +161,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onRemoveSelectedItem: function (layer, args) {
-			var nodeData, id;
+			var nodeData, id, el, value, idx;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].removed;
 				id = this.id + '-' + nodeData.nodeRef.replace(/:|\//g, '_');
@@ -174,6 +174,13 @@ LogicECM.module = LogicECM.module || {};
 				} else {
 					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 				}
+				el = Dom.get(this.id);
+				value = el.value.split(',');
+				idx = value.indexOf(nodeData.nodeRef);
+				if (idx > -1) {
+					value.splice(idx, 1);
+					el.value = value.join(',');
+				}
 			}
 		},
 
@@ -184,17 +191,18 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onPickerClosed: function (layer, args) {
-			var added, removed/*, selected*/;
+			var added, removed, selected;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				added = Object.keys(args[1].added).join(','),
-				removed = Object.keys(args[1].removed).join(',')/*,
-				selected = args[1].selected */;
+				removed = Object.keys(args[1].removed).join(','),
+				selected = Object.keys(args[1].selected).join(',');
 				if (this.widgets.added) {
 					this.widgets.added.value = Alfresco.util.encodeHTML(added);
 				}
 				if (this.widgets.removed) {
 					this.widgets.removed.value = Alfresco.util.encodeHTML(removed);
 				}
+				Dom.get(this.id).value = Alfresco.util.encodeHTML(selected);
 				if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
 					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 				} else {

@@ -207,7 +207,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.widgets.picker.hide();
 			this.fire('pickerClosed', { /* Bubbling.fire */
 				added: this.added,
-				removed: this.removed
+				removed: this.removed,
+				selected: this.selected
 			});
 		},
 
