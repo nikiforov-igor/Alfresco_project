@@ -110,7 +110,7 @@ buttons (необязательный) - html-верстка кнопок для
 value (необязательный) - html-верстка полей отвечающих за ввод, хранение и отображение данных в контроле
 nested - дополнительная верстка,
 -->
-<#macro baseControl field name classes buttons value>
+<#macro baseControl field name classes='' buttons='' value=''>
 <#assign fieldHtmlId = args.htmlid?html + '_' + field.id>
 <div id='${fieldHtmlId}-${name}' class='control ${classes}'>
 	<div class='label-div'>
@@ -124,10 +124,10 @@ nested - дополнительная верстка,
 		</label>
 	</div>
 	<div class='container'>
-		<#if buttons??>
+		<#if buttons?? && buttons?has_content>
 		<div class='buttons-div'>${buttons}</div>
 		</#if>
-		<#if value??>
+		<#if value?? && value?has_content>
 		<div class='value-div'>${value}</div>
 		</#if>
 	</div>
