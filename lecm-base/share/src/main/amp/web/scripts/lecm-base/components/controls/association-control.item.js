@@ -235,9 +235,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			/* получение данных для поиска */
 			function onSuccess (successResponse) {
 				var columns = successResponse.json.columns;
-				this.searchProperties = columns.map(function (column) {
-					return column.name;
-				}, this);
+				this.searchProperties = columns.reduce(function (prev, curr) {
+					if ('text' === curr.dataType || 'mltext' === curr.dataType) {
+						prev.push(curr.name);
+					}
+					return prev;
+				}, []);
 				this.loadHelper.fulfil('searchProperties');
 				this.fire('searchProperties', { /* Bubbling.fire */
 					itemKey: this.key,
