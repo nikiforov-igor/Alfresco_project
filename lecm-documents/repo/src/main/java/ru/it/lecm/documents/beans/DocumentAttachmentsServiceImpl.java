@@ -25,6 +25,7 @@ import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.service.cmr.repository.MLText;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
@@ -172,7 +173,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			MLPropertyInterceptor.setMLAware(true);
 			MLText mlText = new MLText(LocaleUtils.toLocale("ru"), names[0]);
 			for (Locale locale : locales) {
-				String categoryTitle = messageService.getMessage(messageKey, locale);
+				String categoryTitle = StringEscapeUtils.unescapeJava(messageService.getMessage(messageKey, locale));
 				if (categoryTitle != null) {
 					mlText.addValue(locale, categoryTitle);
 				}
