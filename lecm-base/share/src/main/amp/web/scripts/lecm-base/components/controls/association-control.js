@@ -78,23 +78,26 @@ LogicECM.module = LogicECM.module || {};
 				elementName,
 				elem = document.createElement('div'),
 				id = selected.nodeRef.replace(/:|\//g, '_'),
-				itemId = this.id + '-' + id;
+				itemId = this.id + '-' + id,
+				notSelected = !Selector.query('a[id="' + itemId + '"]', this.widgets.selected, true);
 
-				if (options.plane || !options.showPath) {
-					displayName = selected.selectedName;
-				} else {
-					displayName = selected.simplePath + selected.selectedName;
-				}
+				if (notSelected) {
+					if (options.plane || !options.showPath) {
+						displayName = selected.selectedName;
+					} else {
+						displayName = selected.simplePath + selected.selectedName;
+					}
 
-				Event.onAvailable(itemId, onAddListener, { id: itemId, nodeData: selected }, this);
+					Event.onAvailable(itemId, onAddListener, { id: itemId, nodeData: selected }, this);
 
-				if ('lecm-orgstr:employee' === options.itemType) {
-					elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
-					elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
-					this.widgets.selected.appendChild(elem.firstChild);
-				} else {
-					elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
-					this.widgets.selected.appendChild(elem.firstChild);
+					if ('lecm-orgstr:employee' === options.itemType) {
+						elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
+						elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
+						this.widgets.selected.appendChild(elem.firstChild);
+					} else {
+						elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
+						this.widgets.selected.appendChild(elem.firstChild);
+					}
 				}
 			}, this);
 			return this.widgets.selected.childElementCount;
