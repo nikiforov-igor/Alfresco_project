@@ -59,7 +59,7 @@
 						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>
 					<field id="lecmRegnumRes:decision" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
+						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reserve-radiobuttons.ftl">
 							<control-param name="options">RESERVED|Зарезервировать#alf#REJECTED|Отклонить</control-param>
 						</control>
 					</field>
