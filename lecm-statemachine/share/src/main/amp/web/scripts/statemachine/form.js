@@ -240,6 +240,11 @@ LogicECM.module = LogicECM.module || {};
 					showCancelButton: true
 
 				};
+				if (action.variables != null) {
+					if (action.variables.formId != null && action.variables.formId.length > 0) {
+						templateRequestParams.formId = action.variables.formId;
+					}
+				}
 				var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
 					width: '65em',
 					templateUrl: templateUrl,
