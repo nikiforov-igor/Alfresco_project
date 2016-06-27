@@ -112,13 +112,16 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		createAssociationControlAutocompleteHelper: function (options) {
-			var conditions = this.options.itemsOptions.map(function (item) {
-				return item.itemKey;
-			});
-			this.autocompleteHelper = new Alfresco.util.Deferred(conditions, {
-				scope: this,
-				fn: this.enableAutocomplete
-			});
+			var conditions;
+			if (this.options.showAutocomplete) {
+				conditions = this.options.itemsOptions.map(function (item) {
+					return item.itemKey;
+				});
+				this.autocompleteHelper = new Alfresco.util.Deferred(conditions, {
+					scope: this,
+					fn: this.enableAutocomplete
+				});
+			}
 		},
 
 		createAssociationControlPicker: function (options, messages) {
@@ -150,7 +153,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onItemSearchProperties: function (layer, args) {
-			if (Alfresco.util.hasEventInterest(this, args)) {
+			if (Alfresco.util.hasEventInterest(this, args) && this.options.showAutocomplete) {
 				Array.prototype.push.apply(this.searchProperties, args[1].searchProperties);
 				this.autocompleteHelper.fulfil(args[1].itemKey);
 			}
