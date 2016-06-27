@@ -73,7 +73,7 @@
 			<#if field.control.params.changeFireAction??>
                 changeFireAction: "${field.control.params.changeFireAction}",
 			</#if>
-				fireMandatoryByChange: "${fireMandatoryByChange?string}",
+				fireMandatoryByChange: ${fireMandatoryByChange?string},
 				mode: "${form.mode}",
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}"
