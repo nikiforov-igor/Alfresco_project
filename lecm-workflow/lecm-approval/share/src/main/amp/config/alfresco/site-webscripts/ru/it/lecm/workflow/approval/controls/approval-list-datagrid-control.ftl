@@ -2,17 +2,22 @@
 
 <#assign params = field.control.params/>
 <#assign label = field.label?html/>
-<#assign itemId = args.itemId/>
+<#assign itemId = (args.itemId?? && args.itemId?contains("SpacesStore")) ? string(args.itemId, '')/>
+<#if itemId == ''>
+	<#assign itemId = (args.nodeRef?? && args.nodeRef?contains("SpacesStore")) ? string(args.nodeRef, '')/>
+</#if>
+
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign reportId = "lecm-approval-list">
 <#assign hasStatemachine = (args.hasStatemachine!"false") == "true"/>
 <#assign mayAdd = (args.mayAdd!"false") == "true"/>
 <#assign mayView = (args.mayView!"false") == "true"/>
 
-<#assign editable = ((params.editable!"true") != "false") && !(field.disabled) && hasStatemachine && mayAdd>
+<#assign editable = (((params.editable!"true") != "false") && !(field.disabled) && hasStatemachine && mayAdd)
+	|| (params.forceEditable?? && params.forceEditable == "true")>
 
 <div id='${controlId}' class='hidden'>
-
+    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value=""/><!--for validation-->
 	<div class="approvalFinishedContainer">
 		${msg("label.approvals.completed")}: <span id="${controlId}-approval-completed-count"></span>
 		<a id="${controlId}-show-history-link" href="javascript:void(0)" class="hidden">${msg("label.view.history")}</a>
@@ -33,8 +38,8 @@
 
 	<div id="${controlId}-approval-container" class="approvalContainer hidden">
 		<div class="approvalControlsContainer">
-			<#if editable><a id="editIteration" class="editIteration" href="javascript:void(0);" title="${msg('title.edit')}"></a></#if>
-			<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="${msg('title.print')}"></a>
+			<#if editable><a id="${controlId}-editIteration" class="editIteration" href="javascript:void(0);" title="${msg('title.edit')}"></a></#if>
+			<a id="${controlId}-printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="${msg('title.print')}"></a>
 		</div>
 
 		<div class="approvalDescriptionContainer">

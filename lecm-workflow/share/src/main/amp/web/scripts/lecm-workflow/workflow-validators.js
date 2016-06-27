@@ -149,3 +149,32 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 
 	return true;
 };
+
+LogicECM.module.Workflow.routeHasEmployeesValidator =
+	function (field, args,  event, form, silent, message) {
+
+		var valid = false,
+			docNodeRef = YAHOO.util.History.getQueryStringParameter('nodeRef');
+
+		// Yahoo UI не умеет синхронный (блокирующий) AJAX. Придется использовать jQuery
+		jQuery.ajax({
+			url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/routes/isHasEmployees?documentRef=" + docNodeRef + "&status=NEW",
+			type: "GET",
+			timeout: 30000, // 30 секунд таймаута хватит всем!
+			async: false, // ничего не делаем, пока не отработал запром
+			dataType: "json",
+			contentType: "application/json",
+			processData: false, // данные не трогать, не кодировать вообще
+			success: function (result, textStatus, jqXHR) {
+				valid = result && result.isHasEmployees;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				Alfresco.util.PopupManager.displayMessage({
+					text: "ERROR: can not perform field validation"
+				});
+				valid = false;
+			}
+		});
+
+		return valid;
+	};

@@ -113,4 +113,8 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 	public boolean hasEmployeesInRoute(final ScriptNode document) {
 		return routesService.hasEmployeesInRoute(document.getNodeRef());
 	}
+
+	public String getApprovalState(final ScriptNode document) {
+		return routesService.getApprovalState(document.getNodeRef());
+	}
 }

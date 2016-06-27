@@ -24,6 +24,25 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="selectRoute">
+				<field-visibility>
+					<show id="packageItems"/>
+					<show id="cm:name"/>  <!-- Нужно реальное поле, чтобы навесить проверку!-->
+				</field-visibility>
+				<appearance>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+					<field id="cm:name" force="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.routeHasEmployeesValidator" event="keyup" message-id="approval.required.new.and.filled.list"/>
+						</constraint-handlers>
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
+							<control-param name="forceEditable">true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 	<config evaluator="task-type" condition="lecmApprove3:approveTask">

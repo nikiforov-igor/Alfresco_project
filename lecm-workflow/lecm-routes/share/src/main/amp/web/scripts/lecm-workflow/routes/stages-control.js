@@ -70,7 +70,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
 											text: Alfresco.util.message('lecm.routers.stage.created')
-										});
+										}, YAHOO.util.Dom.get(this.id));
 									},
 									scope: this
 								},
@@ -79,7 +79,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
 											text: Alfresco.util.message('lecm.routers.stage.create.failed') + ': ' + r.json.message
-										});
+										},YAHOO.util.Dom.get(this.id));
 									},
 									scope: this
 								}
@@ -137,7 +137,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						this.editDialogOpening = false;
 						Alfresco.util.PopupManager.displayMessage({
 							text: Alfresco.util.message('lecm.routers.stage.create.failed') + ': ' + r.json.message
-						});
+						}, YAHOO.util.Dom.get(this.id));
 					},
 					scope: this
 				}
@@ -181,7 +181,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						});
 						Alfresco.util.PopupManager.displayMessage({
 							text: this.msg('lecm.routers.stage.changes.saved')
-						});
+						},YAHOO.util.Dom.get(this.id));
 					},
 					scope: this
 				},
@@ -191,7 +191,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(editStageFormId + '-form-container_c').style['z-index'] + 1;
 						Alfresco.util.PopupManager.displayMessage({
 							text: this.msg('lecm.routers.stage.changes.failed')
-						});
+						},YAHOO.util.Dom.get(this.id));
 					},
 					scope: this
 				}
@@ -274,7 +274,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						}
 						Alfresco.util.PopupManager.displayMessage({
 							text: message
-						});
+						},YAHOO.util.Dom.get(this.id));
 					},
 					scope: this
 				},
@@ -292,7 +292,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						} else {
 							Alfresco.util.PopupManager.displayMessage({
 								text: this.msg('message.new-row.failure')
-							});
+							},YAHOO.util.Dom.get(this.id));
 						}
 						createStageItemDialog.hide();
 					},

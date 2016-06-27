@@ -2494,7 +2494,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                                 Alfresco.util.PopupManager.displayMessage(
                                                     {
                                                         text:this.msg((actionsConfig && actionsConfig.successMessage)? actionsConfig.successMessage : "message.delete.success", items.length)
-                                                    });
+                                                    }, YAHOO.util.Dom.get(me.id));
                                             } else {
                                                 for (var i = 0, ii = response.json.results.length; i < ii; i++) {
                                                     // Reload the node's metadata
@@ -2520,7 +2520,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                             Alfresco.util.PopupManager.displayMessage(
                                                 {
                                                     text:this.msg("message.delete.failure")
-                                                });
+                                                }, YAHOO.util.Dom.get(me.id));
                                         }
                                     },
                                     scope: this
