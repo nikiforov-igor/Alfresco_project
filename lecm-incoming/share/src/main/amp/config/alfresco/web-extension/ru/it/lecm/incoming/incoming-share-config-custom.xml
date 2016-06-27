@@ -109,7 +109,7 @@
 <!--							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>-->
 							<!--<control-param name="changeItemsFireAction">contractor.selected</control-param>-->
-							<control-param name="items">employee,organization,person</control-param>
+							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
@@ -118,9 +118,9 @@
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
+							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
-                            <control-param name="firstUseStrictFilterByOrg">true</control-param>-->
+                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -131,14 +131,6 @@
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
-							<!-- lecm-contractor:physical-person-type -->
-							<control-param name="person_label">Физическое лицо</control-param>
-							<control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-							<control-param name="person_endpointMany">false</control-param>
-							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="person_plane">true</control-param>
-							<control-param name="person_showSearch">true</control-param>
 						</control>
                     </field>
 
@@ -223,7 +215,7 @@
 <!--							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>-->
 							<!--<control-param name="changeItemsFireAction">contractor.selected</control-param>-->
-							<control-param name="items">employee,organization,person</control-param>
+							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
@@ -232,9 +224,9 @@
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
+							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
-                            <control-param name="firstUseStrictFilterByOrg">true</control-param>-->
+                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -245,14 +237,6 @@
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
-							<!-- lecm-contractor:physical-person-type -->
-							<control-param name="person_label">Физическое лицо</control-param>
-							<control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-							<control-param name="person_endpointMany">false</control-param>
-							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="person_plane">true</control-param>
-							<control-param name="person_showSearch">true</control-param>
 						</control>
                     </field>
                     <field id="lecm-incoming:sender-assoc" mandatory="true">
@@ -471,7 +455,7 @@
 <!--							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>-->
 							<!--<control-param name="changeItemsFireAction">contractor.selected</control-param>-->
-							<control-param name="items">employee,organization,person</control-param>
+							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
@@ -480,9 +464,9 @@
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
+							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
-                            <control-param name="firstUseStrictFilterByOrg">true</control-param>-->
+                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -493,14 +477,6 @@
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
-							<!-- lecm-contractor:physical-person-type -->
-							<control-param name="person_label">Физическое лицо</control-param>
-							<control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-							<control-param name="person_endpointMany">false</control-param>
-							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="person_plane">true</control-param>
-							<control-param name="person_showSearch">true</control-param>
 						</control>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
@@ -657,7 +633,7 @@
 <!--							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>-->
 							<!--<control-param name="changeItemsFireAction">contractor.selected</control-param>-->
-							<control-param name="items">employee,organization,person</control-param>
+							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
@@ -666,9 +642,9 @@
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
+							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
-                            <control-param name="firstUseStrictFilterByOrg">true</control-param>-->
+                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -679,14 +655,6 @@
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
-							<!-- lecm-contractor:physical-person-type -->
-							<control-param name="person_label">Физическое лицо</control-param>
-							<control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-							<control-param name="person_endpointMany">false</control-param>
-							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="person_plane">true</control-param>
-							<control-param name="person_showSearch">true</control-param>
 						</control>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
@@ -844,7 +812,7 @@
 <!--							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>-->
 							<!--<control-param name="changeItemsFireAction">contractor.selected</control-param>-->
-							<control-param name="items">employee,organization,person</control-param>
+							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
@@ -853,9 +821,9 @@
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
+							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
-                            <control-param name="firstUseStrictFilterByOrg">true</control-param>-->
+                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -866,14 +834,6 @@
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
-							<!-- lecm-contractor:physical-person-type -->
-							<control-param name="person_label">Физическое лицо</control-param>
-							<control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-							<control-param name="person_endpointMany">false</control-param>
-							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="person_plane">true</control-param>
-							<control-param name="person_showSearch">true</control-param>
 						</control>
                     </field>
 					<field id="lecm-incoming:sender-assoc" mandatory="true">
@@ -1075,7 +1035,7 @@
 <!--							<control-param name="clearFormsOnStart">true</control-param>
 							<control-param name="markNodes">true</control-param>-->
 							<!--<control-param name="changeItemsFireAction">contractor.selected</control-param>-->
-							<control-param name="items">employee,organization,person</control-param>
+							<control-param name="items">employee,organization</control-param>
 							<!-- lecm-orgstr:employee -->
 							<control-param name="employee_label">Сотрудник</control-param>
 							<control-param name="employee_endpointType">lecm-orgstr:employee</control-param>
@@ -1084,9 +1044,9 @@
 							<control-param name="employee_nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
+							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
-                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
-                            <control-param name="firstUseStrictFilterByOrg">true</control-param>-->
+                            <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -1097,14 +1057,6 @@
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
-							<!-- lecm-contractor:physical-person-type -->
-							<control-param name="person_label">Физическое лицо</control-param>
-							<control-param name="person_endpointType">lecm-contractor:physical-person-type</control-param>
-							<control-param name="person_endpointMany">false</control-param>
-							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
-							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
-							<control-param name="person_plane">true</control-param>
-							<control-param name="person_showSearch">true</control-param>
 						</control>
                     </field>
                     <field id="deputies-grid" label-id="label.recomend.deputies.list">
