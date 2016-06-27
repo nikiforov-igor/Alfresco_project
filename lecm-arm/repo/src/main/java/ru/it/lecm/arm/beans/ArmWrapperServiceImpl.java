@@ -6,7 +6,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang.BooleanUtils;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
@@ -119,9 +118,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             List<NodeRef> children = parent.getNodeQuery().getChildren(node);
             if (children != null) {
                 for (NodeRef dicChild : children) {
-                    ArmNode armNode = wrapAnyNodeAsObject(dicChild, parent, onlyMeta);
-                    fillChildrenAndFormatChildrenRefsQuery(armNode);
-                    result.add(armNode);
+                    result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
                 }
             }
         }
@@ -330,35 +327,20 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return node;
     }
 
-    @Override
-    public void fillChildrenAndFormatChildrenRefsQuery(ArmNode armNode) {
-        Boolean cacheChildren = (Boolean) service.getCachedProperties(armNode.getArmNodeRef()).get(ArmService.PROP_ARM_NODE_CACHE_CILDREN);
-        if (BooleanUtils.isTrue(cacheChildren)) {
-            armNode.setChildren(dictionaryBean.getAllChildren(armNode.getNodeRef()));
-            String query = armNode.getSearchQuery();
-
-            if (query.contains(CHILDREN_REFS)) {
-                NodeRef nodeRef = armNode.getNodeRef();
-                StringBuilder stringBuilder = new StringBuilder("(\"" + nodeRef.toString() +"\"");
-
-                List<NodeRef> children = armNode.getChildren();
-
-                if (children != null && !children.isEmpty()) {
-                    for (NodeRef child : children) {
-                        stringBuilder.append(" or ");
-                        stringBuilder.append('\"').append(child.toString()).append('\"');
-                    }
-
-                    stringBuilder.append(')');
-                }
-
-                armNode.setSearchQuery(query.replaceAll(CHILDREN_REFS, stringBuilder.toString()));
-            }
-        }
-    }
-
     public String formatQuery(String templateQuery, NodeRef node) {
         String formatedQuery = substitudeService.formatNodeTitle(node, templateQuery);
+
+        if (formatedQuery.contains(VALUE_WITH_SUBTREE_REFS)) {
+            StringBuilder stringBuilder = new StringBuilder("(\"" + node.toString() +"\"");
+
+            for (NodeRef child : dictionaryBean.getAllChildren(node)) {
+                stringBuilder.append(" \"").append(child.toString()).append('\"');
+            }
+
+            stringBuilder.append(')');
+            formatedQuery = formatedQuery.replaceAll(VALUE_WITH_SUBTREE_REFS, stringBuilder.toString());
+
+        }
 
         if (formatedQuery.contains(VALUE_REF)) {
             formatedQuery = formatedQuery.replaceAll(VALUE_REF, node.toString());

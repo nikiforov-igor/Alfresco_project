@@ -135,17 +135,6 @@
                 <property name="lecm-arm:activeTasks-filter">
                     <type>d:text</type>
                 </property>
-				<!--Харнить потомков (для динамических узлов-->
-				<property name="lecm-arm:cache-children">
-					<type>d:boolean</type>
-					<mandatory>false</mandatory>
-					<default>false</default>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-				</property>
             </properties>
 			<overrides>
 				<property name="lecm-dic:valueContainsType">

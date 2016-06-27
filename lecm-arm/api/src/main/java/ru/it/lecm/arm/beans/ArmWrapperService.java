@@ -14,45 +14,43 @@ public interface ArmWrapperService {
     String VALUE_REF = "#value-ref";
     String VALUE = "#value";
     String VALUE_TEXT = "#value-text";
-    String CHILDREN_REFS = "\"#children-refs\"";
+    String VALUE_WITH_SUBTREE_REFS = "\"#value-with-subtree-refs\"";
 
     /**
      * возвращает списко объектов Аккордеон по коду АРма
      */
-    public List<ArmNode> getAccordionsByArmCode(String armCode);
-    public List<ArmNode> getAccordionsByArmCode(String armCode, boolean onlyMeta);
+    List<ArmNode> getAccordionsByArmCode(String armCode);
+    List<ArmNode> getAccordionsByArmCode(String armCode, boolean onlyMeta);
 
 
     /**
      * возвращает списко объектов Аккордеон по коду АРма
      */
-    public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode);
-    public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode, boolean onlyMeta);
+    List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode);
+    List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode, boolean onlyMeta);
 
     /**
      * проверяет, есть ли у узла дочерние элементы
      */
-    public boolean hasChildNodes(ArmNode node);
+    boolean hasChildNodes(ArmNode node);
 
     /**
      * возвращает Узел по nodeRef
      */
-    public ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion);
-    public ArmNode wrapArmNodeAsObject(NodeRef armNode);
-    public ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion, boolean onlyMeta);
+    ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion);
+    ArmNode wrapArmNodeAsObject(NodeRef armNode);
+    ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion, boolean onlyMeta);
 
-    public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent);
-    public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, boolean onlyMeta);
+    ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent);
+    ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, boolean onlyMeta);
 
-    public ArmNode wrapStatusAsObject(String status, ArmNode parent);
-    public ArmNode wrapStatusAsObject(String status, ArmNode parent, boolean onlyMeta);
+    ArmNode wrapStatusAsObject(String status, ArmNode parent);
+    ArmNode wrapStatusAsObject(String status, ArmNode parent, boolean onlyMeta);
 
-    void fillChildrenAndFormatChildrenRefsQuery(ArmNode armNode);
+    String formatQuery(String templateQuery, NodeRef node);
 
-    public String formatQuery(String templateQuery, NodeRef node);
+    String getNodeSearchQuery(NodeRef nodeRef);
 
-    public String getNodeSearchQuery(NodeRef nodeRef);
-
-    public boolean isAccordion(NodeRef node);
-    public boolean isRunAsAccordion(NodeRef node);
+    boolean isAccordion(NodeRef node);
+    boolean isRunAsAccordion(NodeRef node);
 }

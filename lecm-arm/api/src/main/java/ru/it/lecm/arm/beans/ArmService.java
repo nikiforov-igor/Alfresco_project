@@ -87,7 +87,6 @@ public interface ArmService {
 	QName PROP_ARM_ACCORDION_RUN_AS_PATH = QName.createQName(ARM_NAMESPACE_URI, "path-to-node");
 	QName PROP_ARM_ACCORDION_NAME_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "name-format-string");
 	QName ASSOC_ARM_ACCORDION_RUN_AS_EMPLOYEE = QName.createQName(ARM_NAMESPACE_URI, "runAs-employee");
-	QName PROP_ARM_NODE_CACHE_CILDREN = QName.createQName(ARM_NAMESPACE_URI, "cache-children");
 	/**
 	 * проверяет что объект является аккордионом
 	 */
