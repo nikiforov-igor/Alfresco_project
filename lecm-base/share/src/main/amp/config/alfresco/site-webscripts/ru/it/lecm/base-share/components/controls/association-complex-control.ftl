@@ -18,7 +18,7 @@
 <#if 'view' == form.mode>
 	<#assign value>
 		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${field.value?html}'>
-		<div id='${fieldHtmlId}-displayed' class='control-selected-values'></div>
+		<div id='${fieldHtmlId}-displayed'></div>
 	</#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control viewmode' value=value/>
 <#else>
