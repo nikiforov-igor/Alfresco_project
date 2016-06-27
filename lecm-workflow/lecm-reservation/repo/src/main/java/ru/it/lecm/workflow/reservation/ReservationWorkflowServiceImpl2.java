@@ -3,6 +3,7 @@ package ru.it.lecm.workflow.reservation;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -10,6 +11,8 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -25,6 +28,7 @@ import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -38,6 +42,11 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	private EDSGlobalSettingsService edsGlobalSettingsService;
 	private RegNumbersService regNumbersService;
 	private BusinessJournalService businessJournalService;
+	private SubstitudeBean substituteService;
+
+	public void setSubstituteService(SubstitudeBean substituteService) {
+		this.substituteService = substituteService;
+	}
 
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
@@ -109,8 +118,15 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 				regNumbersService.registerDocument(documentRef, regnumTemplateId, true);
 				nodeService.setProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_DATE, regDate);
 				//запись в бизнес журнал если решение хорошее
+				
+				String documentReservedNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+				String documentReservedDate = dateFormat.format(regDate);
+				String documentId = documentReservedNumber + " от " + documentReservedDate;
+				String wrappedDocumentId = "<a href=\"\">" + documentId + "</a>";
+				
 				String commentLink = String.format("<a href='#' title='%s'>выполнил</a>", comment);
-				String bjMessage = String.format("#initiator %s резервирование регистрационного номера для документа #mainobject", commentLink);
+				String bjMessage = String.format("#initiator %s резервирование регистрационного номера для документа " + wrappedDocumentId, commentLink);
 				String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 				businessJournalService.log(registrarLogin, documentRef, "RESERVATION", bjMessage, null);
 			} catch (TemplateParseException ex) {
@@ -229,4 +245,20 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope) {
 		//nop
 	}
+	
+    protected String wrapDocAsLink(NodeRef link) {
+        SysAdminParams params = serviceRegistry.getSysAdminParams();
+        String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+        if (link != null && !nodeService.exists(link)) {
+            return "";
+        }
+        String description = (link != null) ? substituteService.getObjectDescription(link) : "";
+        if (link != null) {
+            String linkUrl = documentService.getDocumentUrl(link);
+            return "<a href=\"" + serverUrl + linkUrl + "?nodeRef=" + link.toString() + "\">" + description + "</a>";
+        } else {
+            return description;
+        }
+    }
+    
 }
