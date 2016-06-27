@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items updateMode="CreateOrUpdate">
 	<item name="cm:Отправить на ознакомление" type="lecm-group-actions:script-action">
-		<property name="lecm-group-actions:expression"><![CDATA[doc.hasAspect('lecm-review-ts:review-aspect') AND (lecmPermission.hasPermission(doc, "_lecmPerm_ActionExec") OR user.currentUser.hasBusinessRole('DA_ENGINEER') OR user.currentUser.hasBusinessRole('DA_REGISTRARS'))]]></property>
+		<property name="lecm-group-actions:expression"><![CDATA[doc.hasAspect('lecm-review-ts:review-aspect') AND (@permissionScript.hasPermission(doc.nodeRef, "_lecmPerm_ActionExec") OR user.currentUser.hasBusinessRole('DA_ENGINEER') OR user.currentUser.hasBusinessRole('DA_REGISTRARS'))]]></property>
 		<property name="cm:name"><![CDATA[Отправить на ознакомление]]></property>
 		<property name="lecm-group-actions:statuses"><![CDATA[]]></property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
