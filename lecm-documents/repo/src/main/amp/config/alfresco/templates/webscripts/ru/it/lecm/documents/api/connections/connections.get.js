@@ -21,7 +21,7 @@ if (null != rootFolder){
 				var connectedDocumentAssoc = connections[i].assocs["lecm-connect:connected-document-assoc"];
 				if (connectedDocumentAssoc != null && connectedDocumentAssoc.length == 1
 					&& connectedDocumentAssoc[0].exists()
-					&& (!connectedDocumentAssoc[0].isSubType("lecm-errands:document") || !excludeErrands)) {
+					&& (!connectedDocumentAssoc[0].isSubType("lecm-errands:document") || !excludeErrands || !connections[i].properties['lecm-connect:is-system'])) {
 					items.push(connections[i]);
 					k++;
 				}
