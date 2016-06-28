@@ -624,16 +624,19 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	@Override
 	public boolean hasEmployeesInRoute(final NodeRef documentRef) {
-		boolean hasEmployeesInIteration = false;
 		NodeRef currentIterationRef = getDocumentCurrentIteration(documentRef);
-		if (currentIterationRef != null) {
-			List<NodeRef> items = getAllStageItemsOfRoute(currentIterationRef);
-			for (NodeRef stageItemRef : items) {
-				List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItemRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
-				hasEmployeesInIteration = assocs.size() > 0;
-				if (hasEmployeesInIteration) {
-					break;
-				}
+		return currentIterationRef != null && hasEmployeesInDocRoute(currentIterationRef);
+	}
+
+	@Override
+	public boolean hasEmployeesInDocRoute(NodeRef routeRef) {
+		boolean hasEmployeesInIteration = false;
+		List<NodeRef> items = getAllStageItemsOfRoute(routeRef);
+		for (NodeRef stageItemRef : items) {
+			List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItemRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+			hasEmployeesInIteration = assocs.size() > 0;
+			if (hasEmployeesInIteration) {
+				break;
 			}
 		}
 		return hasEmployeesInIteration;

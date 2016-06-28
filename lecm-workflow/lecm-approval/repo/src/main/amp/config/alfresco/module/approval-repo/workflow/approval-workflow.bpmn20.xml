@@ -96,6 +96,14 @@
           <activiti:string><![CDATA[(function(){ /*старт БП, подготовка переменных */
   var document = bpm_package.children[0];
   var currentEmployee = orgstructure.getCurrentEmployee();
+
+  if (execution.getVariable("lecmWorkflowRoutes_selectRouteAssoc") !== null) {
+      var routeNode = lecmWorkflowRoutes_selectRouteAssoc;
+      if (routeNode && routeNode.size() > 0) {
+          routesService.convertRouteToIteration(document, search.findNode(routeNode.get(0)));
+      }
+  }
+
   /* получение nodeRef-ы на текущую итерацию */
   var currentIteration = routesService.getDocumentCurrentIteration(document);
   /* пометка итерации как активной */
