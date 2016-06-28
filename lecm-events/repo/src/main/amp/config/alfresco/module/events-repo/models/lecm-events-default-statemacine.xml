@@ -7,7 +7,7 @@
         <properties>
             <property>
                 <name>archiveFolder</name>
-                <value><![CDATA[/Мероприятие/#{#formatCurrentDate('yyyy/MM/dd')}]]></value>
+                <value><![CDATA[/Мероприятия/#{#formatCurrentDate('yyyy/MM/dd')}]]></value>
             </property>
             <property>
                 <name>simple-document</name>
