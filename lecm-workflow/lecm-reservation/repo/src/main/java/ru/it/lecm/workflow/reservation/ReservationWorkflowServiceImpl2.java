@@ -111,18 +111,27 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 			try {
 				regNumbersService.registerDocument(documentRef, regnumTemplateId, true);
 				nodeService.setProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_DATE, regDate);
-				//запись в бизнес журнал если решение хорошее
+				
+				// Запись в бизнес журнал если решение хорошее:
+				String documentReservedNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);	
+				String regInfo = "Зарезервирован номер: " + documentReservedNumber;
+				if (regDate != null) {
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+					String documentReservedDate = dateFormat.format(regDate);
+					regInfo += " от " + documentReservedDate;
+				}	
 				String commentLink = String.format("<a href='#' title='%s'>выполнил</a>", comment);
-				String bjMessage = String.format("#initiator %s резервирование регистрационного номера для документа #mainobject", commentLink);
+				String bjMessage = String.format("#initiator %s резервирование регистрационного номера для документа #mainobject " + regInfo, commentLink);
 				String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 				businessJournalService.log(registrarLogin, documentRef, "RESERVATION", bjMessage, null);
+
 			} catch (TemplateParseException ex) {
 				logger.error(ex.getMessage(), ex);
 			} catch (TemplateRunException ex) {
 				logger.error(ex.getMessage(), ex);
 			}
 		} else if (DecisionResult.REJECTED.name().equals(decision)) {
-			//запись в бизнес журнал если решение плохое
+			// Запись в бизнес журнал если решение плохое:
 			String commentLink = String.format("<a href='#' title='%s'>отклонил</a>", comment);
 			String bjMessage = String.format("#initiator %s запрос в резервировании номера документа #mainobject", commentLink);
 			String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());

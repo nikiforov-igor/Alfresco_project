@@ -141,13 +141,19 @@ LogicECM.module = LogicECM.module || {};
 			var currentElement = Dom.get(this.id);
 			var setDiv=currentElement.parentNode.parentNode;
 			var elements = setDiv.children;
+			var dateInput = Dom.get('workflow-form_prop_lecmRegnumRes_date');
+			var dateValue = dateInput.value;
 			for (var i=0; i<elements.length; ++i) {
 				if (elements[i].id == 'workflow-form_prop_lecmRegnumRes_date-cntrl-parent') {
 					if (show) {
 						Dom.removeClass(elements[i], 'hidden');
+						// set date:
+						dateInput.value = dateValue;
 					}
 					else {
 						Dom.addClass(elements[i], 'hidden');
+						// clear date:
+						dateInput.value = '';
 					}
 					break;
 				}
