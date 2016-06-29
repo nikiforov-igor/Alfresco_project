@@ -19,8 +19,8 @@
 								var existReviewersAssocs = document.assocs["lecm-eds-document:reviewers-assoc"];
 								if (existReviewersAssocs != null) {
 									for (var i = 0; i < existReviewersAssocs.length; i++) {
-								        lecmPermission.revokeDynamicRole(document, existReviewersAssocs[0], "INCOMING_REVIEWER_DYN");
-								        document.removeAssociation(existReviewersAssocs[0], "lecm-eds-document:reviewers-assoc");
+								        lecmPermission.revokeDynamicRole(document, existReviewersAssocs[i], "INCOMING_REVIEWER_DYN");
+								        document.removeAssociation(existReviewersAssocs[i], "lecm-eds-document:reviewers-assoc");
 									}
 								}
 
