@@ -5361,14 +5361,16 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
     var incoming = stm_document;
-    var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
-    if (recipient != null && recipient.length == 1) {
-        lecmPermission.revokeDynamicRole(incoming, recipient[0], "DA_RECIPIENT_DYN");
-        incoming.removeAssociation(recipient[0], "lecm-eds-document:recipients-assoc");
+
+    var existRecipientsAssocs = incoming.assocs["lecm-eds-document:recipients-assoc"];
+    if (existRecipientsAssocs != null && existRecipientsAssocs.length > 0) {
+        for (var i = 0; i < existRecipientsAssocs.length; i++) {
+            lecmPermission.revokeDynamicRole(incoming, existRecipientsAssocs[i], "DA_RECIPIENT_DYN");
+            incoming.removeAssociation(existRecipientsAssocs[i], "lecm-eds-document:recipients-assoc");
+        }
     }
     var currentUser =  orgstructure.getCurrentEmployee();
-    incoming.removeAssociation(currentUser, "lecm-eds-document:recipients-assoc");
-    lecmPermission.revokeDynamicRole(incoming, currentUser, "DA_RECIPIENT_DYN");
+
     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
     notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
     if (sendToExecution != null) {
@@ -5567,14 +5569,16 @@ execution.setVariable("sendToExecution", currentUser.nodeRef.toString());]]></va
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[(function(){
     var incoming = bpm_package.children[0];
-    var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
-    if (recipient != null && recipient.length == 1) {
-        lecmPermission.revokeDynamicRole(incoming, recipient[0], "DA_RECIPIENT_DYN");
-        incoming.removeAssociation(recipient[0], "lecm-eds-document:recipients-assoc");
+
+    var existRecipientsAssocs = incoming.assocs["lecm-eds-document:recipients-assoc"];
+    if (existRecipientsAssocs != null && existRecipientsAssocs.length > 0) {
+        for (var i = 0; i < existRecipientsAssocs.length; i++) {
+            lecmPermission.revokeDynamicRole(incoming, existRecipientsAssocs[i], "DA_RECIPIENT_DYN");
+            incoming.removeAssociation(existRecipientsAssocs[i], "lecm-eds-document:recipients-assoc");
+        }
     }
     var currentUser =  orgstructure.getCurrentEmployee();
-    lecmPermission.revokeDynamicRole(incoming, currentUser, "DA_RECIPIENT_DYN");
-    incoming.removeAssociation(currentUser, "lecm-eds-document:recipients-assoc");
+
     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул(а) документ ";
     notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE}");
     if (sendToExecution != null) {

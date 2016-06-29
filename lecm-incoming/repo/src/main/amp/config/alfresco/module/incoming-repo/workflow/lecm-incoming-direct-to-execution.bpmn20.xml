@@ -14,6 +14,15 @@
                             var incoming = bpm_package.children[0];
                             var recipientAssoc = execution.getVariable("lecmIncomingWf_recipient");
                             if (recipientAssoc != null) {
+                                //удалим предыдущих получателей-исполнителей
+                                var existRecipientsAssocs = incoming.assocs["lecm-eds-document:recipients-assoc"];
+								if (existRecipientsAssocs != null) {
+									for (var i = 0; i < existRecipientsAssocs.length; i++) {
+								        lecmPermission.revokeDynamicRole(incoming, existRecipientsAssocs[i], "DA_RECIPIENT_DYN");
+								        incoming.removeAssociation(existRecipientsAssocs[i], "lecm-eds-document:recipients-assoc");
+									}
+								}
+
                                 statemachine.grandDynamicRoleForEmployee(incoming, recipientAssoc, "DA_RECIPIENT_DYN");
                                 incoming.createAssociation(recipientAssoc, "lecm-eds-document:recipients-assoc");
 
