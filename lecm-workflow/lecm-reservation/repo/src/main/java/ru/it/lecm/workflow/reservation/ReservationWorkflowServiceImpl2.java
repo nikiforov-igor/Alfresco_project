@@ -40,6 +40,8 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	private RegNumbersService regNumbersService;
 	private BusinessJournalService businessJournalService;
 
+	private final static String POSITIVE_DECISION = "выполнен";
+	
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
 	}
@@ -60,11 +62,49 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		String employeeUrl = wrapperLink(currentEmp, employeeName, LINK_URL);
 		return String.format(template, employeeUrl, documentLink);
 	}
+	
+	@Override
+	public void notifyWorkflowFinished(NodeRef employeeRef, String decision, NodeRef bpmPackage) {
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
+		notifyWorkflowFinished(employeeRef, decision, docInfo, bpmPackage);
+	}
 
+	private void notifyWorkflowFinished(NodeRef employeeRef, String decision, DocumentInfo docInfo, NodeRef bpmPackage) {
+		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(employeeRef);
+
+		String description = getWorkflowFinishedMessage(docInfo.getDocumentLink(), decision, bpmPackage);
+		sendNotification(description, docInfo.getDocumentRef(), recipients);
+	}
+	
+	private String getWorkflowFinishedMessage(final String documentLink, final String decision, NodeRef bpmPackage) {
+		String message = "";
+		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage);
+		String regNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);
+		// Stub:
+		if (decision.equals(POSITIVE_DECISION)) {
+			// Positive scenario:
+			String template = "Для документа %s зарезервирован регистрационный номер %s";
+			message = String.format(template, documentLink, regNumber);
+			Date reserveDate = (Date) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_DATE);
+			if (reserveDate != null) {
+				SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+				String regDateFormatted = dateFormat.format(reserveDate);
+				String templateDate = " от %s";
+				message += String.format(templateDate, regDateFormatted);
+			}
+		}
+		else {
+			// Negative scenario:
+			String template = "Ваш запрос на резервирование регистрационного номера для документа %s отклонён";
+			message = String.format(template, documentLink);
+		}
+		return message;
+	}
+	
 	@Override
 	protected String getWorkflowFinishedMessage(final String documentLink, final String decision) {
-		String template = "Ваш запрос на резервирование регистрационного номера для документа %s %s";
-		return String.format(template, documentLink, decision);
+		return null;
 	}
 
 	@Override
@@ -116,7 +156,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 				String documentReservedNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);	
 				String regInfo = "Зарезервирован номер: " + documentReservedNumber;
 				if (regDate != null) {
-					SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+					SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 					String documentReservedDate = dateFormat.format(regDate);
 					regInfo += " от " + documentReservedDate;
 				}	
@@ -254,7 +294,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		String message = "";
 
 		if (isReservationDatePresent) {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 			String reservationDate = dateFormat.format(resDate);
 			message = "Сотрудник " + employeeName + " запросил резервирование регистрационного номера на дату " + reservationDate;
 		}
