@@ -25,6 +25,7 @@ import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -79,6 +80,8 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		grantDynamicRole(employeeRef, bpmPackage, (String) task.getVariable("registrarDynamicRole"));
 		notifyWorkflowStarted(employeeRef, null, bpmPackage);
+		// Set the message for the reservation task
+		setReservationTaskMessage(bpmPackage, task);
 	}
 
 	public void reassignTask(NodeRef assignee, DelegateTask task) {
@@ -229,4 +232,28 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope) {
 		//nop
 	}
+	
+	private void setReservationTaskMessage(NodeRef bpmPackage, final DelegateTask task) {
+		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
+		
+		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
+		String employeeName = (String) nodeService.getProperty(currentEmp, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+		
+		Date resDate = (Date) task.getVariable("lecmRegnumRes_date");
+		boolean isReservationDatePresent = (resDate == null) ? false : true;
+				
+		String message = "";
+
+		if (isReservationDatePresent) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+			String reservationDate = dateFormat.format(resDate);
+			message = "Сотрудник " + employeeName + " запросил резервирование регистрационного номера на дату " + reservationDate;
+		}
+		else {
+			message = "Сотрудник " + employeeName + " запросил резервирование регистрационного номера без указания желаемой даты регистрации.";
+		}
+		
+		nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_RESERVE_TASK_MESSAGE, message);
+	}
+	
 }

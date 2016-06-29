@@ -16,6 +16,9 @@
 				<property name="lecm-reservation-aspects:isReservationRunning">
 					<type>d:boolean</type>
 				</property>
+				<property name="lecm-reservation-aspects:reserveTaskMessage">
+					<type>d:text</type>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>

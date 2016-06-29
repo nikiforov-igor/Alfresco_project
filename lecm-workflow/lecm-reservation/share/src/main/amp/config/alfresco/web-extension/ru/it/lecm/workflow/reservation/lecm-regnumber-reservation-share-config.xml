@@ -50,6 +50,7 @@
 			<form>
 				<field-visibility>
 					<show id="reservationWf:presentString" force="true" />
+					<show id="warning" force="true"/>
 					<show id="lecmRegnumRes:decision" />
 					<show id="bpm:comment" />
 					<show id="bpm:reassignable" />
@@ -57,6 +58,9 @@
 				<appearance>
 					<field id="reservationWf:presentString">
 						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
+					</field>
+					<field id="warning">
+						<control template="/ru/it/lecm/workflow/reservation/controls/reserve-message-control.ftl" />
 					</field>
 					<field id="lecmRegnumRes:decision" mandatory="true">
 						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reserve-radiobuttons.ftl">

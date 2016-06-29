@@ -97,4 +97,9 @@
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
 		  p:dictionaries-ref="lecm.reservatioin.groupOperations" />
 
+	<bean id="webscript.ru.it.lecm.workflow.reservation.GetReservationTaskMessageByNodeRef.get"
+		  class="ru.it.lecm.workflow.reservation.webscripts.GetReservationTaskMessageByNodeRef" parent="webscript"
+		  p:workflowService-ref="WorkflowService"
+		  p:nodeService-ref="nodeService" />
+
 </beans>

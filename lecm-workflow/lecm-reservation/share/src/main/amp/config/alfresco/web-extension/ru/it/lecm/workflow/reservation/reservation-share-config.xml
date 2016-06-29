@@ -34,7 +34,7 @@
 					<show id="reservationWf:presentString" force="true" />
 					<show id="reservationWf:isReservate" />
 					<show id="bpm:comment" />
-				<show id="bpm:reassignable" />
+					<show id="bpm:reassignable" />
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
