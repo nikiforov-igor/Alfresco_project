@@ -136,7 +136,14 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
      * @param reportCode         код отчета для построяния
      * @param attachmentCategory название категории вложений
      * @param filename           имя генерируемого файла
-     * @return nodeRef созданного узла
+     * @param existsPolicy       поведение при нахождении в категории вложения контента с таким же именем.
+                                 Возможные значения :
+                                    1) CREATE_NEW_VERSION - создать новую версию документа вложения
+                                    2) CREATE_NEW_FILE - создать новое вложение, к имени файла приписывается цифра
+                                    3) REWRITE_FILE - удалить старое вложение и создать новое
+                                    4) SKIP - пропустить
+                                    5) RETURN_ERROR - вернуть ошибку
+     * @return NativeObject
      */
     public NativeObject buildReportAndAttachToDocument(NodeRef document, String reportCode, String attachmentCategory, String filename, String existsPolicy) {
 
