@@ -73,6 +73,7 @@ public interface RoutesService {
 	 */
 	boolean hasEmployeesInRoute(final NodeRef documentRef);
 	boolean hasEmployeesInDocRoute(final NodeRef routeRef);
+	boolean hasPotentialEmployeesInRoute(final NodeRef routeRef, final NodeRef documentRef);
 
 	String getApprovalState(NodeRef documentNode);
 

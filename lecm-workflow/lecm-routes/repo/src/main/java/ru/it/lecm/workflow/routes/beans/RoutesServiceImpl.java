@@ -643,6 +643,31 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	}
 
 	@Override
+	public boolean hasPotentialEmployeesInRoute(NodeRef routeRef, NodeRef documentNode) {
+		boolean result = false;
+		NodeRef employeeRef = null;
+		List<NodeRef> stageItems = getAllStageItemsOfRoute(routeRef);
+		for (NodeRef stageItem : stageItems) {
+			NodeRef macrosNode = findNodeByAssociationRef(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS, RoutesMacrosModel.TYPE_MACROS, ASSOCIATION_TYPE.TARGET);
+			if (macrosNode != null && nodeService.exists(macrosNode)) {
+				String macrosString = (String) nodeService.getProperty(macrosNode, RoutesMacrosModel.PROP_MACROS_STRING);
+				try {
+					employeeRef = evaluateMacrosString(macrosString, documentNode, orgstructureService.getCurrentEmployee());
+				} catch (ScriptException ex) {
+					logger.warn("Error executing script {}. Macros node: {}", macrosString, macrosNode);
+				}
+				if (employeeRef == null) {
+					logger.warn("Script {} returned no employee. I'll delete stage item, related to macros node {}", macrosString, macrosNode);
+				} else {
+					result = true;
+					break; // Нашли хотя бы одного потенциального сотрудника в маршруте
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
 	public String getApprovalState(NodeRef documentNode) {
 		String result;
 		NodeRef currentIteration = getDocumentCurrentIteration(documentNode);
