@@ -486,7 +486,7 @@ public class DocumentPolicy extends BaseBean
 				}
 			}
 		}
-		nodeService.setProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING, mlText);
+        setPropertyAsSystem(nodeRef, DocumentService.PROP_ML_PRESENT_STRING, mlText);
 		MLPropertyInterceptor.setMLAware(false);
 	}
 
