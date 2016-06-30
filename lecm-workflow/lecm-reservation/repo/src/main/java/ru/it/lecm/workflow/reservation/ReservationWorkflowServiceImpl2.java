@@ -160,8 +160,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 					String documentReservedDate = dateFormat.format(regDate);
 					regInfo += " от " + documentReservedDate;
 				}	
-				String commentLink = String.format("<a href='#' title='%s'>выполнил</a>", comment);
-				String bjMessage = String.format("#initiator %s резервирование регистрационного номера для документа #mainobject " + regInfo, commentLink);
+				String bjMessage = "#initiator выполнил резервирование регистрационного номера для документа #mainobject " + regInfo;
 				String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 				businessJournalService.log(registrarLogin, documentRef, "RESERVATION", bjMessage, null);
 
