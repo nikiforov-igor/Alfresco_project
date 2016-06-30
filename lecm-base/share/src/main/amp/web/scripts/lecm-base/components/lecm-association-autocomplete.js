@@ -98,7 +98,9 @@ LogicECM.module = LogicECM.module || {};
 
 	            formId: false,
 
-                loadDefault: true
+                loadDefault: true,
+
+				checkType: true
             },
 
             selectedItems: null,
@@ -195,7 +197,7 @@ LogicECM.module = LogicECM.module || {};
                     for (var i = 0, il = items.length; i < il; i++)
                     {
                         item = items[i];
-                        if (item.type == this.options.itemType) {
+                        if (!this.options.checkType || item.type == this.options.itemType) {
                             this.selectedItems[item.nodeRef] = item;
                         }
                     }

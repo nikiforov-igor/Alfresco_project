@@ -189,7 +189,8 @@
 	    changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
     </#if>
 	    fieldId: "${field.configName}",
-	    formId: "${args.htmlid}"
+	    formId: "${args.htmlid}",
+		checkType: ${checkType?string}
     });
 
     LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );

@@ -71,7 +71,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			additionalFilter: '',
 			multipleSelectMode: false,
 			useObjectDescription: false,
-			checkType: true
+			checkType: true,
+			pickerItemsScript: 'lecm/forms/picker/items'
 		},
 
 		widgets: {
@@ -290,13 +291,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					original: this.currentState.selected,
 					options: this.options
 				});
+				this.fire('afterChange', {
+					key: this.key
+				});
 			}
 
 			function onFailure(failureResponse) {
 			}
 
 			Alfresco.util.Ajax.jsonPost({
-				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/forms/picker/items', /* this.options.pickerItemsScript */
+				url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
 				dataObj: {
 					items: fieldValues,
 					itemValueType: 'nodeRef',

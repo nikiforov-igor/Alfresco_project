@@ -67,6 +67,7 @@
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">false</control-param>
+							<control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
 					<!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
 							<control-param name="firstChangeItemsFireAction">contractor.selected</control-param>-->
@@ -84,6 +85,7 @@
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
+							<control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
 					<!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>-->
@@ -290,6 +292,7 @@
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">false</control-param>
+							<control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
 					<!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
 							<control-param name="firstChangeItemsFireAction">contractor.selected</control-param>-->
@@ -307,6 +310,7 @@
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
+							<control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
 					<!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>-->
@@ -456,6 +460,7 @@
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
+							<control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
 							<control-param name="firstChangeItemsFireAction">contractor.selected</control-param>-->
@@ -473,6 +478,7 @@
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
+							<control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>-->
@@ -634,6 +640,7 @@
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
+							<control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
 							<control-param name="firstChangeItemsFireAction">contractor.selected</control-param>-->
@@ -651,6 +658,7 @@
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
+							<control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>-->
@@ -924,6 +932,7 @@
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
+							<control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
 							<control-param name="firstChangeItemsFireAction">contractor.selected</control-param>-->
@@ -941,6 +950,7 @@
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
+							<control-param name="organisation_pickerItemsScript">lecm/contractors/organization/picker/items</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>
 							<control-param name="secondChangeItemsFireAction">organization.selected</control-param>-->
