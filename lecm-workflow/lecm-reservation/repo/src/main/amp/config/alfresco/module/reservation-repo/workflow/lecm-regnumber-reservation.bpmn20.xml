@@ -14,7 +14,7 @@
             <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
                 <activiti:field name="script">
                     <activiti:string><![CDATA[
-						/* reservationWorkflow2.setReservationActive(bpm_package, false); */
+						reservationWorkflow2.setReservationActive(bpm_package, false);
 					]]></activiti:string>
                 </activiti:field>
             </activiti:executionListener>
