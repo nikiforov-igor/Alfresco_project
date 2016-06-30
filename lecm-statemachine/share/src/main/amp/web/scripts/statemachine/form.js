@@ -360,8 +360,13 @@ LogicECM.module = LogicECM.module || {};
 						args: JSON.stringify(action.variables)
 					};
 
+					var dialogWidth = '84em';
+					if (action && action.workflowType == 'activiti$regnumReservationExecution') {
+						dialogWidth = '30em';
+					}
+					
 					var dialog = new Alfresco.module.SimpleDialog('workflow-form').setOptions({
-						width: '84em',
+						width: dialogWidth,
 						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
 						templateRequestParams: templateRequestParams,
 						actionUrl: null,
@@ -481,10 +486,16 @@ LogicECM.module = LogicECM.module || {};
 				showCancelButton: true,
 				reassignReload: true
 			};
+			
+			var dialogWidth = '55em';
+			if (taskName == 'Резервирование') {
+				dialogWidth = '30em';
+			}
+			
 			// Using Forms Service, so always create new instance
 			var taskDetails = new Alfresco.module.SimpleDialog(this.id + '-taskDetails');
 			taskDetails.setOptions({
-				width: '55em',
+				width: dialogWidth,
 				templateUrl: templateUrl,
 				templateRequestParams: templateRequestParams,
 				actionUrl: null,
