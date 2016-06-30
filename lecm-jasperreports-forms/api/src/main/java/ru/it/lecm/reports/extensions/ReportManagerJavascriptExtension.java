@@ -1,19 +1,21 @@
 package ru.it.lecm.reports.extensions;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.json.simple.JSONObject;
+import org.mozilla.javascript.NativeObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.webscripts.json.JSONUtils;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.api.model.ReportFileData;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -123,33 +125,39 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
      * @return nodeRef созданного узла
      */
     public ScriptNode buildReportAndSave(final String reportCode, final String templateCode, final String destFolderRef, Map<String, String> args) {
-        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
-        PropertyCheck.mandatory(this, "reportCode", reportCode);
-        PropertyCheck.mandatory(this, "templateCode", templateCode);
-        PropertyCheck.mandatory(this, "destFolderRef", destFolderRef);
-
-        ReportFileData result;
-        try {
-            result = getReportsManager().generateReport(reportCode, templateCode, args);
-        } catch (IOException ex) {
-            final String msg = String.format("Exception at buildReportAndSave(reportCode='%s', destFolder={%s}), args:\n\t%s", reportCode, destFolderRef, args);
-            logger.error(msg, ex);
-            throw new RuntimeException(msg, ex);
-        }
-
-        if (result == null || result.getData() == null) {
-            logger.warn(String.format("Built report '%s' result returns %s !?"
-                    , reportCode, (result == null ? "NULL" : "data NULL")));
-            return null;
-        }
-
-        logger.info(String.format("built report info:\n\t mimeType: %s\n\t filename: %s\n\t dataSize: %s bytes"
-                , result.getMimeType(), result.getFilename(), (result.getData() != null ? result.getData().length : "NULL")));
-
-        final NodeRef folder = new NodeRef(destFolderRef);
-        // сохранение внутри folder ...
-        final NodeRef resultRef = getReportsManager().storeAsContent(result, folder);
-
+        NodeRef resultRef = reportsManager.buildReportAndSave(reportCode, templateCode, destFolderRef, args);
         return new ScriptNode(resultRef, serviceRegistry, getScope());
+    }
+
+    /**
+     * Сгенерировать отчёт и добавить его в категорию вложений указанного документа
+     *
+     * @param document           документ в котороый
+     * @param reportCode         код отчета для построяния
+     * @param attachmentCategory название категории вложений
+     * @param filename           имя генерируемого файла
+     * @return nodeRef созданного узла
+     */
+    public NativeObject buildReportAndAttachToDocument(NodeRef document, String reportCode, String attachmentCategory, String filename, String existsPolicy) {
+
+        String error = "";
+        ScriptNode resultNode = null;
+
+        try {
+            NodeRef resultRef = reportsManager.buildReportAndAttachToDocumentCategory(document, reportCode, null, attachmentCategory, filename, ReportsManager.AttachmentExistsPolicy.valueOf(existsPolicy));
+            if (resultRef != null) {
+                resultNode = new ScriptNode(resultRef, serviceRegistry, getScope());
+            }
+        } catch (DuplicateChildNodeNameException ex) {
+            error = ex.getMessage();
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("error", error);
+        jsonObject.put("node", resultNode);
+
+        JSONUtils jsonUtils = new JSONUtils();
+        return jsonUtils.toObject(jsonObject);
+
     }
 }

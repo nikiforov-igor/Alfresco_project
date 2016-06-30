@@ -3,18 +3,23 @@ package ru.it.lecm.reports.api;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.version.VersionModel;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.cmr.version.VersionType;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
+import org.alfresco.util.PropertyMap;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.dictionary.beans.XMLExportBean;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
@@ -28,6 +33,7 @@ import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -36,13 +42,10 @@ import java.util.*;
  * @author rabdullin
  */
 public class ReportsManager{
-/*
-    public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
 
-    final public QName TYPE_REPORT_DESCRIPTOR = QName.createQName(REPORTS_EDITOR_URI, "reportDescriptor");
-    final static public QName PROP_REPORT_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportCode");
-*/
-
+    public enum AttachmentExistsPolicy {
+        CREATE_NEW_VERSION, CREATE_NEW_FILE, REWRITE_FILE, SKIP, RETURN_ERROR
+    }
     static final transient Logger logger = LoggerFactory.getLogger(ReportsManager.class);
 
     final public static String DEFAULT_REPORT_TYPE = ReportType.RTYPE_MNEMO_JASPER;
@@ -64,17 +67,11 @@ public class ReportsManager{
 
     protected ServiceRegistry serviceRegistry;
     private OrgstructureBean orgstructureBean;
-
     private SubstitudeBean substitudeService;
-
-    private XMLExportBean xmlExportBean;
-/*    private XMLImportBean xmlImportBean;*/
+    private DocumentAttachmentsService documentAttachmentsService;
 
     private SimpleCache<String, ReportDescriptor> reportsCache;
 
-/*    public void setXmlImportBean(XMLImportBean xmlImportBean) {
-        this.xmlImportBean = xmlImportBean;
-    }*/
 
     public void setReportsCache(SimpleCache<String, ReportDescriptor> reportsCache) {
         this.reportsCache = reportsCache;
@@ -140,6 +137,10 @@ public class ReportsManager{
         this.orgstructureBean = orgstructureBean;
     }
 
+    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+        this.documentAttachmentsService = documentAttachmentsService;
+    }
+
     /**
      * Файлы шаблонов для генерации шаблонов отчётов
      */
@@ -147,12 +148,9 @@ public class ReportsManager{
         return templateFileDAO;
     }
 
-    public void setXmlExportBean(XMLExportBean xmlExportBean) {
-        this.xmlExportBean = xmlExportBean;
-    }
-        /**
-         * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
-         */
+    /**
+     * @return не NULL список [ReportTypeMnemonic -> ReportGenerator]
+     */
     public Map<String, ReportGenerator> getReportGenerators() {
         if (reportGenerators == null) {
             reportGenerators = new HashMap<String, ReportGenerator>(1);
@@ -572,7 +570,7 @@ public class ReportsManager{
 
         templateFileData.setFilename(rg.getTemplateFileName(desc, null, extension));
 
-        return storeAsContent(templateFileData, reportRef);
+        return storeAsContent(templateFileData, reportRef, AttachmentExistsPolicy.REWRITE_FILE);
     }
 
     public NodeRef produceDefaultTemplate(NodeRef reportRef, NodeRef templateRef) {
@@ -604,7 +602,7 @@ public class ReportsManager{
         templateFileData.setMimeType(findMimeType(extension));
 
         templateFileData.setFilename(rg.getTemplateFileName(desc, template, extension));
-        return storeAsContent(templateFileData, reportRef);
+        return storeAsContent(templateFileData, reportRef, AttachmentExistsPolicy.REWRITE_FILE);
     }
 
     /**
@@ -765,41 +763,88 @@ public class ReportsManager{
      *
      * @return созданный id узла
      */
-    public NodeRef storeAsContent(final ReportFileData srcData, final NodeRef destParentRef) {
+    private NodeRef storeAsContent(final ReportFileData srcData, final NodeRef destParentRef, AttachmentExistsPolicy existsPolicy) throws DuplicateChildNodeNameException {
         if (srcData == null) {
             return null;
         }
 
-        final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
-        final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-        String srcDataFilename = srcData.getFilename();
-        if (srcDataFilename != null && !srcDataFilename.isEmpty()) {
-            FileNameValidator.getValidFileName(srcDataFilename);
+        String filename = srcData.getFilename();
+        if (filename == null || filename.isEmpty()) {
+            return null;
         }
 
-        properties.put(ContentModel.PROP_NAME, srcData.getFilename());
+        filename = FileNameValidator.getValidFileName(filename);
 
-        if (srcData.getFilename() != null) {
-            // предварительно удалим старый файл, если он имеется ...
-            final NodeRef prevFileNode = serviceRegistry.getNodeService().getChildByName(destParentRef, ContentModel.ASSOC_CONTAINS, srcData.getFilename());
-            if (prevFileNode != null) {
-                serviceRegistry.getNodeService().deleteNode(prevFileNode);  // удаляем старый файл
+        NodeRef prevFileNode = serviceRegistry.getNodeService().getChildByName(destParentRef, ContentModel.ASSOC_CONTAINS, filename);
+
+        if (prevFileNode != null) {
+
+            switch (existsPolicy) {
+                case REWRITE_FILE:
+                    serviceRegistry.getNodeService().deleteNode(prevFileNode);
+                    break;
+
+                case CREATE_NEW_FILE:
+                    int postfix = 0;
+                    int extensionIndex = filename.lastIndexOf('.');
+                    String filenameFormat = filename.substring(0, extensionIndex) + "%d" + filename.substring(extensionIndex);
+
+                    do {
+                        postfix++;
+                        filename = String.format(filenameFormat, postfix);
+                        prevFileNode = serviceRegistry.getNodeService().getChildByName(destParentRef, ContentModel.ASSOC_CONTAINS, filename);
+
+                    } while (prevFileNode != null);
+
+                    srcData.setFilename(filename);
+
+                    break;
+
+                case SKIP:
+                    return null;
+
+                case CREATE_NEW_VERSION:
+                    PropertyMap vProps = new PropertyMap();
+                    vProps.put(ContentModel.PROP_AUTO_VERSION, true);
+                    vProps.put(ContentModel.PROP_AUTO_VERSION_PROPS, false);
+                    serviceRegistry.getVersionService().ensureVersioningEnabled(prevFileNode, vProps);
+
+                    NodeRef workingCopyConfigNode = serviceRegistry.getCheckOutCheckInService().checkout(prevFileNode);
+                    writeContent(srcData, workingCopyConfigNode);
+                    Map<String, Serializable> ciProps = new HashMap<>();
+                    ciProps.put(Version.PROP_DESCRIPTION, "");
+                    ciProps.put(VersionModel.PROP_VERSION_TYPE, VersionType.MINOR);
+                    return serviceRegistry.getCheckOutCheckInService().checkin(workingCopyConfigNode, ciProps);
+
+                case RETURN_ERROR:
+                    throw new DuplicateChildNodeNameException(destParentRef, ContentModel.PROP_NAME, filename, new RuntimeException());
             }
         }
 
+        srcData.setFilename(filename);
+
+        final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+        final Map<QName, Serializable> properties = new HashMap<>();
+        properties.put(ContentModel.PROP_NAME, srcData.getFilename());
+
         // создание нового узла ...
-        final ChildAssociationRef newChild =
-                serviceRegistry.getNodeService().createNode(destParentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
+        final ChildAssociationRef newChild = serviceRegistry.getNodeService().createNode(destParentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_CONTENT, properties);
         final NodeRef resultFileRef = newChild.getChildRef();
 
+        writeContent(srcData, resultFileRef);
+
+        return resultFileRef;
+    }
+
+    private void writeContent(ReportFileData reportFileData, NodeRef resultFileRef) {
         final ContentService contentService = serviceRegistry.getContentService();
         final ContentWriter writer = contentService.getWriter(resultFileRef, ContentModel.PROP_CONTENT, true);
-        writer.setEncoding(srcData.getEncoding()); // "UTF-8"
+        writer.setEncoding(reportFileData.getEncoding()); // "UTF-8"
 
         // mime-тип берём по-возможности из источника ...
-        String mimeType = srcData.getMimeType();
-        if (mimeType == null && srcData.getFilename() != null) { // autodetecting ...
-            mimeType = findMimeType(FilenameUtils.getExtension(srcData.getFilename()));
+        String mimeType = reportFileData.getMimeType();
+        if (mimeType == null && reportFileData.getFilename() != null) { // autodetecting ...
+            mimeType = findMimeType(FilenameUtils.getExtension(reportFileData.getFilename()));
         }
 
         if (mimeType == null) {
@@ -809,11 +854,9 @@ public class ReportsManager{
 
         writer.setMimetype(mimeType);
 
-        if (srcData.getData() != null) {
-            writer.putContent(new ByteArrayInputStream(srcData.getData()));
+        if (reportFileData.getData() != null) {
+            writer.putContent(new ByteArrayInputStream(reportFileData.getData()));
         }
-
-        return resultFileRef;
     }
 
     /**
@@ -836,6 +879,89 @@ public class ReportsManager{
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Сгенерировать отчёт и сохранить его в указанном каталоге репозитория как
+     *
+     * @param reportCode    код отчёта для построения
+     * @param destFolderRef папка репозитория для сохранения, не может быть null
+     * @param args          аргументы для построения отчёта
+     * @return nodeRef созданного узла
+     */
+    public NodeRef buildReportAndSave(String reportCode, final String templateCode, final String destFolderRef, Map<String, String> args) {
+        ReportFileData result = buildReport(reportCode, templateCode, args);
+        if (result == null) {
+            return null;
+        }
+
+        final NodeRef folder = new NodeRef(destFolderRef);
+        return storeAsContent(result, folder, AttachmentExistsPolicy.REWRITE_FILE);
+    }
+
+
+    public NodeRef buildReportAndAttachToDocumentCategory(NodeRef document, String reportCode, String templateCode, String categoryName) {
+        String filename = generateReportFileName(reportCode, templateCode, document);
+        return buildReportAndAttachToDocumentCategory(document, reportCode, templateCode, categoryName, filename, ReportsManager.AttachmentExistsPolicy.REWRITE_FILE);
+    }
+
+    /**
+     * Сгенерировать отчёт и добавить его в категорию вложений указанного документа
+     *
+     * @param document           документ в котороый
+     * @param reportCode         код отчета для построяния
+     * @param attachmentCategory название категории вложений
+     * @param filename           имя генерируемого файла
+     * @param existsPolicy       поведение при нахождении в категории вложений контента с таким же именем
+     * @return nodeRef созданного узла
+     */
+    public NodeRef buildReportAndAttachToDocumentCategory(NodeRef document, String reportCode, String templateCode, String attachmentCategory, String filename, AttachmentExistsPolicy existsPolicy) {
+
+        NodeRef categoryRef = documentAttachmentsService.getCategory(attachmentCategory, document);
+
+        if (categoryRef == null) {
+            return null;
+        }
+
+        Map<String, String> args = new HashMap<>();
+        args.put("ID", document.toString());
+
+        ReportFileData reportFileData = buildReport(reportCode, templateCode, args);
+
+
+        if (reportFileData == null) {
+            return null;
+        }
+
+        reportFileData.setFilename(filename);
+        NodeRef resultRef = storeAsContent(reportFileData, categoryRef, existsPolicy);
+
+        if (resultRef != null) {
+            serviceRegistry.getNodeService().addAspect(resultRef, ContentModel.ASPECT_VERSIONABLE, null);
+        }
+
+        return resultRef;
+    }
+
+    private ReportFileData buildReport(String reportCode, String templateCode, Map<String, String> args) {
+        PropertyCheck.mandatory(this, "reportCode", reportCode);
+
+        ReportFileData result;
+        try {
+            result = generateReport(reportCode, templateCode, args);
+        } catch (IOException ex) {
+            final String msg = String.format("Exception at report build (reportCode='%s', args:\n\t%s", reportCode, args);
+            logger.error(msg, ex);
+            throw new RuntimeException(msg, ex);
+        }
+
+        if (result == null || result.getData() == null) {
+            logger.warn(String.format("Built report '%s' result returns %s !?", reportCode, (result == null ? "NULL" : "data NULL")));
+            return null;
+        }
+
+        logger.info(String.format("built report info:\n\t mimeType: %s\n\t filename: %s\n\t dataSize: %s bytes", result.getMimeType(), result.getFilename(), (result.getData() != null ? result.getData().length : "NULL")));
+        return result;
     }
 
     /**
@@ -1248,6 +1374,22 @@ public class ReportsManager{
                         String.format("Report '%s' must have Representation Template! Please select template from dictionary or create new!", template.getMnem()));
             }
         }
+    }
+
+    private String generateReportFileName(final String reportCode, final String templateCode, NodeRef documentRef) {
+        ReportDescriptor reportDesc = getRegisteredReportDescriptor(reportCode);
+        ReportTemplate reportTemplate = getTemplateByCode(reportDesc, templateCode);
+
+        String documentNumber = (documentRef != null) ?
+                (String) serviceRegistry.getNodeService().getProperty(documentRef, DocumentService.PROP_REG_DATA_PROJECT_NUMBER) : "";
+
+        String reportName = String.format(
+                "%s-%s-%s",
+                reportTemplate.getDefault(),
+                documentNumber,
+                new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
+
+        return FileNameValidator.getValidFileName(reportName);
     }
 
     /**

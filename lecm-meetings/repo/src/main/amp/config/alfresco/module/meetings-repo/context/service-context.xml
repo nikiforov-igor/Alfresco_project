@@ -200,8 +200,7 @@
 
 	<bean id="protocolReportsService" parent="baseBean"
 		  class="ru.it.lecm.meetings.beans.ProtocolReportsServiceImpl"
-		  p:reportsManager-ref="reportsManager"
-		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
+		  p:reportsManager-ref="reportsManager"/>
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
 		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>

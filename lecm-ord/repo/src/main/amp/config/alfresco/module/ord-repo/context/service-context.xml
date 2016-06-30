@@ -62,8 +62,7 @@
 
 	<bean id="ordReportsService" parent="baseBean"
 		  class="ru.it.lecm.ord.ORDReportsServiceImpl"
-		  p:reportsManager-ref="reportsManager"
-		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
+		  p:reportsManager-ref="reportsManager"/>
 
 	<!--service for various document utils-->
 	<bean id="ordDocumentService" parent="baseBean"

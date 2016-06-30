@@ -285,6 +285,7 @@
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="substitudeService" ref="substitudeService"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 
         <!-- хранилище отчётов редактора -->
         <property name="reportEditorDAO" ref="reportEditorDAOBean"/>
@@ -326,9 +327,6 @@
                 <property name="subReportGenerationTemplate" value="ooCalcReportCommonTemplate.ods.gen"/>
             </bean>
         </property>
-
-        <property name="xmlExportBean" ref="lecmDictionaryExportBean"/>
-<!--        <property name="xmlImportBean" ref="lecmDictionaryImportBean"/>-->
 
         <property name="reportsCache" ref="reports.descriptors.cache"/>
     </bean>
