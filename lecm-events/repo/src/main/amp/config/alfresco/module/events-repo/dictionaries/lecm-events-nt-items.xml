@@ -15,6 +15,14 @@
                     <![CDATA[Мероприятия. Принять приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
             </item>
+            <item name="cm:EVENTS.INVITATION_TENTATIVE" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Сотрдуник {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} возможно будет участвовать в {#mainObject.getType().equals("lecm-events:document") ? "мероприятии" : "совещании"} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-events:title"))}. {#mainObject.attribute("lecm-events:from-date") != null ? "Начало " + #formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date")) : ""}]]></property>
+                <property name="cm:name"><![CDATA[EVENTS.INVITATION_TENTATIVE]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Мероприятия. Возможное участие]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
             <item name="cm:EVENTS.INVITATION_DECLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
                     <![CDATA[Сотрдуник {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))} отклонил приглашение участвовать в {#mainObject.getType().equals("lecm-events:document") ? "мероприятии" : "совещании"} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-events:title"))}. {#mainObject.attribute("lecm-events:from-date") != null ? "Начало " + #formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date")) : ""}]]></property>

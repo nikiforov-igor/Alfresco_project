@@ -1,66 +1,16 @@
 package ru.it.lecm.events.beans;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.mail.BodyPart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
-import javax.mail.util.ByteArrayDataSource;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.model.TimeZoneRegistry;
-import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VTimeZone;
-import net.fortuna.ical4j.model.parameter.AltRep;
-import net.fortuna.ical4j.model.parameter.Cn;
-import net.fortuna.ical4j.model.parameter.CuType;
-import net.fortuna.ical4j.model.parameter.PartStat;
-import net.fortuna.ical4j.model.parameter.Role;
-import net.fortuna.ical4j.model.parameter.Rsvp;
-import net.fortuna.ical4j.model.parameter.SentBy;
-import net.fortuna.ical4j.model.property.Attendee;
-import net.fortuna.ical4j.model.property.CalScale;
-import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.DtEnd;
-import net.fortuna.ical4j.model.property.DtStart;
-import net.fortuna.ical4j.model.property.Location;
-import net.fortuna.ical4j.model.property.Method;
-import net.fortuna.ical4j.model.property.Organizer;
-import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Sequence;
-import net.fortuna.ical4j.model.property.Status;
-import net.fortuna.ical4j.model.property.Summary;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.model.parameter.*;
+import net.fortuna.ical4j.model.property.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.TemplateService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONArray;
@@ -74,9 +24,26 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.documents.beans.DocumentService;
-import static ru.it.lecm.events.beans.EventsService.PROP_EVENT_MEMBERS_STATUS;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.BodyPart;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
+import javax.mail.util.ByteArrayDataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Date;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  *
@@ -114,9 +81,9 @@ public class EventsNotificationsService extends BaseBean {
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_UPDATE_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-update-event-message.ftl";
 	private static final String MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-cancel-event-message.ftl";
 
-	private static final String MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-accpted-event-message.ftl";
-	private static final String MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-declined-event-message.ftl";
-	private static final String MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-tentative-event-message.ftl";
+//	private static final String MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-accpted-event-message.ftl";
+//	private static final String MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-declined-event-message.ftl";
+//	private static final String MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-tentative-event-message.ftl";
 
 	private static final String INVITED_MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-accpted-event-message.ftl";
 	private static final String INVITED_MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-declined-event-message.ftl";
@@ -888,23 +855,24 @@ public class EventsNotificationsService extends BaseBean {
 
 	public void notifyOrganizerMemberStatusChanged(NodeRef event, NodeRef member) {
 		NodeRef tableRow = eventsService.getMemberTableRow(event, member);
-		String status = null;
 		if (null != tableRow) {
-			status = nodeService.getProperty(tableRow, EventsService.PROP_EVENT_MEMBERS_STATUS).toString();
-			Map template = new HashMap(getEventTemplateModel(event));
-			String shortName = (String) nodeService.getProperty(member, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-			template.put("attendeeLink", wrapperLink(member, shortName, BaseBean.LINK_URL));
-			String message = null;
+			String status = nodeService.getProperty(tableRow, EventsService.PROP_EVENT_MEMBERS_STATUS).toString();
+			Map<String, Object> templateParams = new HashMap<>();
+			templateParams.put("eventExecutor", member);
+			String templateCode = null;
+
 			if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
-				message = templateService.processTemplate(MEMBER_ACCEPTED_INVITE_TEMPLATE, template);
+				templateCode = "EVENTS.INVITATION_CONFIRM";
 			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(status)) {
-				message = templateService.processTemplate(MEMBER_DECLINED_INVITE_TEMPLATE, template);
+				templateCode = "EVENTS.INVITATION_DECLINE";
 			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
-				message = templateService.processTemplate(MEMBER_TENTATIVE_INVITE_TEMPLATE, template);
+				templateCode = "EVENTS.INVITATION_TENTATIVE";
 			}
-			if (null != message) {
-				notificationsService.sendNotification(shortName, event, message, Arrays.asList(eventsService.getEventInitiator(event)), member);
+
+			if (templateCode != null) {
+				notificationsService.sendNotificationByTemplate(event, Collections.singletonList(eventsService.getEventInitiator(event)), templateCode, templateParams);
 			}
+
 		}
 
 	}
