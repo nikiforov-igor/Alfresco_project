@@ -10,7 +10,6 @@
 					<show id="bpm:workflowDescription" />
 					<show id="lecmRegnumRes:mode" />
 					<show id="lecmRegnumRes:date" />
-					<show id="style" />
 				</field-visibility>
 				<appearance>
 					<field id="warning">
@@ -37,9 +36,6 @@
 							<control-param name="defaultValue">now</control-param>
 						</control>
 					</field>
-					<field id="style">
-						<control template="/ru/it/lecm/workflow/reservation/controls/dialog-narrow.ftl" />
-					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -54,6 +50,7 @@
 					<show id="lecmRegnumRes:decision" />
 					<show id="bpm:comment" />
 					<show id="bpm:reassignable" />
+					<show id="style" />
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
@@ -74,6 +71,9 @@
 					</field>
 					<field id="bpm:reassignable">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
+					</field>
+					<field id="style">
+						<control template="/ru/it/lecm/workflow/reservation/controls/dialog-narrow.ftl" />
 					</field>
 				</appearance>
 			</form>
