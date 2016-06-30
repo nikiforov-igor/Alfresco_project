@@ -150,6 +150,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		if (DecisionResult.RESERVED.name().equals(decision)) {
 			try {
 				regNumbersService.registerDocument(documentRef, regnumTemplateId, true);
+				nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_IS_RESERVED, true);
 				nodeService.setProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_DATE, regDate);
 				
 				// Запись в бизнес журнал если решение хорошее:
@@ -170,6 +171,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 				logger.error(ex.getMessage(), ex);
 			}
 		} else if (DecisionResult.REJECTED.name().equals(decision)) {
+			nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_IS_RESERVED, false);
 			// Запись в бизнес журнал если решение плохое:
 			String commentLink = String.format("<a href='#' title='%s'>отклонил</a>", comment);
 			String bjMessage = String.format("#initiator %s запрос в резервировании номера документа #mainobject", commentLink);
@@ -192,7 +194,8 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 			nodeService.addAspect(documentRef, ReservationAspectsModel.ASPECT_IS_RESERVATION_RUNNING, properties);
 		}
 		if (!isActive) {
-			nodeService.removeAspect(documentRef, ReservationAspectsModel.ASPECT_IS_RESERVATION_RUNNING);
+			//nodeService.removeAspect(documentRef, ReservationAspectsModel.ASPECT_IS_RESERVATION_RUNNING);
+			nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_IS_RESERVATION_RUNNING, false);
 		}
 	}
 
