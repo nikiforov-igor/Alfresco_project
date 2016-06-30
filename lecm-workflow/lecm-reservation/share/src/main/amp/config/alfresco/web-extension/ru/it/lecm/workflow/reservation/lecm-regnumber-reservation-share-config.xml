@@ -64,7 +64,7 @@
 					</field>
 					<field id="lecmRegnumRes:decision" mandatory="true">
 						<control template="/ru/it/lecm/workflow/reservation/controls/activiti-transitions-reserve-radiobuttons.ftl">
-							<control-param name="options">RESERVED|Зарезервировать#alf#REJECTED|Отклонить</control-param>
+							<control-param name="options">RESERVED|Одобрить запрос#alf#REJECTED|Отклонить запрос</control-param>
 						</control>
 					</field>
 					<field id="bpm:comment" label-id="ru.it.reservation.title.rejectReason">
