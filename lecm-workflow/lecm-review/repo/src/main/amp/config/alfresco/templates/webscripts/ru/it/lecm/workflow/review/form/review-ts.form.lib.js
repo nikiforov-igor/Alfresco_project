@@ -1,76 +1,78 @@
-/* global logger, search, orgstructure, documentMembers, notifications, businessJournal, review, documentTables */
+/* global logger, search, orgstructure, documentMembers, notifications, businessJournal, review, documentTables, utils */
+function createReviewTSItem(reviewTable, reviewTsItems) {
 
-function createReviewTSItem(persistedObject) {
-	try {
-		var reviewItem = search.findNode(persistedObject);
-		var currentEmployee = orgstructure.getCurrentEmployee();
-		if (reviewItem.typeShort == 'lecm-review-ts:review-table-item') {
-			reviewItem.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
-//			var reviewObjects = reviewItem.assocs['lecm-review-ts:reviewer-assoc'];
-//			if ((reviewObjects.length > 0) || (reviewObjects[0].typeShort == 'lecm-review-list:review-list-item')) {
-			reviewItem.addAspect('sys:temporary');
-			review.processItem(reviewItem);
-//			}
+	function isOnReview(allRows, employee) {
+		var i, j, row, state, reviewers, isOnReview = false;
+		for (i in allRows) {
+			row = allRows[i];
+			state = '' + row.properties['lecm-review-ts:review-state'];
+			if ('NOT_REVIEWED' == state || 'REVIEWED' == state) {
+				reviewers = row.assocs['lecm-review-ts:reviewer-assoc'];
+				if (reviewers && reviewers.length) {
+					for (j in reviewers) {
+						if ('' + reviewers[j].nodeRef.toString() == reviewTsItems) {
+							isOnReview = true;
+							break;
+						}
+					}
+				}
+			}
+			if (isOnReview) {
+				break;
+			}
 		}
-	} catch (error) {
-		var msg = error.message;
-		status.setCode(500, msg);
-
-		if (logger.isLoggingEnabled()) {
-			logger.log(msg);
-			logger.log('Returning 500 status code');
-		}
+		return isOnReview;
 	}
-}
-
-function createReviewTSItem(reviewInfo, reviewTsItems) {
 	// надо достать имплоев из ассоков и для каждого склепать итем
 	var i, j, item,
 		items = [],
 		employee,
-		employees = {},
+		employees = [],
 		assocs,
 		currentEmployee = orgstructure.getCurrentEmployee(),
-		rootFolder = reviewInfo.parent;
-
-	reviewInfo.createAssociation(currentEmployee, 'lecm-review-info:initiator-assoc');
+		allRows;
 
 	for (i in reviewTsItems) {
 		item = reviewTsItems[i];
-		if ('lecm-orgstr:employee' == item.typeShort) {
-			employees[item.nodeRef.toString()] = true;
+		if ('lecm-orgstr:employee' == item.typeShort && employees.indexOf(item.nodeRef.toString()) == -1) {
+			employees.push('' + item.nodeRef.toString());
 		}
 		if ('lecm-review-list:review-list-item' == item.typeShort) {
 			assocs = item.assocs['lecm-review-list:reviewer-assoc'];
 			if (assocs && assocs.length) {
 				for (j in assocs) {
-					employees[assocs[j].nodeRef.toString()] = true;
+					if (employees.indexOf(assocs[j].nodeRef.toString()) == -1) {
+						employees.push('' + assocs[j].nodeRef.toString());
+					}
 				}
 			}
 		}
 	}
 	for (i in employees) {
-		employee = utils.getNodeFromString(i);
-		item = rootFolder.createNode(null, 'lecm-review-ts:review-table-item', {
-			// 'lecm-document:indexTableRow': documentTables.getTableTotalRow(rootFolder.nodeRef.toString())
-		});
-		item.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
-		item.createAssociation(employee, 'lecm-review-ts:reviewer-assoc');
-		item.createAssociation(reviewInfo, 'lecm-review-info:info-assoc');
-		items.push(item);
+		allRows = documentTables.getTableDataRows(reviewTable.nodeRef.toString());
+		if (!isOnReview(allRows, employees[i])) {
+			employee = utils.getNodeFromString(employees[i]);
+			item = reviewTable.createNode(null, 'lecm-review-ts:review-table-item', {
+				'lecm-document:indexTableRow': allRows.length ? allRows.length - 1 : 0
+			});
+			item.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
+			item.createAssociation(employee, 'lecm-review-ts:reviewer-assoc');
+			items.push(item);
+		}
 	}
 	return items;
 }
 
-function sendToReview(reviewInfo, items) {
-	var document = documentTables.getDocumentByTableDataRow(reviewInfo),
-		initiator = orgstructure.getCurrentEmployee(),
+function sendToReview(items) {
+	var initiator = orgstructure.getCurrentEmployee(),
 		recipients = [],
+		reviewer,
+		itemInitiator,
 		row;
 
 	for each (row in items) {
-		var reviewer = row.associations['lecm-review-ts:reviewer-assoc'][0];
-		var itemInitiator = row.assocs['lecm-review-ts:initiator-assoc'];
+		reviewer = row.associations['lecm-review-ts:reviewer-assoc'][0];
+		itemInitiator = row.assocs['lecm-review-ts:initiator-assoc'];
 		if (itemInitiator && itemInitiator.length && initiator.nodeRef.equals(itemInitiator[0].nodeRef)) {
 			if (row.properties['lecm-review-ts:review-state'] == 'NOT_STARTED') {
 				documentMembers.addMemberWithoutCheckPermission(document, reviewer, 'LECM_BASIC_PG_Reader', true);
@@ -82,10 +84,6 @@ function sendToReview(reviewInfo, items) {
 		}
 	}
 	if (recipients.length > 0) {
-		reviewInfo.properties['lecm-review-info:review-state'] = 'NOT_REVIEWED';
-		reviewInfo.properties['lecm-review-info:review-start-date'] = new Date();
-		reviewInfo.save();
-
 		notifications.sendNotificationFromCurrentUser({
 			recipients: recipients,
 			templateCode: 'REVIEW_NEED',
@@ -94,6 +92,5 @@ function sendToReview(reviewInfo, items) {
 				eventExecutor: initiator
 			}
 		});
-		businessJournal.log(document.nodeRef.toString(), 'SEND_TO_REVIEW', 'Документ #mainobject направлен на ознакомление пользователем #initiator', []);
 	}
 }

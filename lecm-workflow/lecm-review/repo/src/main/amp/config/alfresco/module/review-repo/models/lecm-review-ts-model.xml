@@ -124,7 +124,7 @@
 			<parent>lecm-document:tableData</parent>
 			<overrides>
 				<property name="lecm-document:tableDataRowType">
-					<default>lecm-review-info:info</default>
+					<default>lecm-review-ts:review-table-item</default>
 				</property>
 				<property name="lecm-document:pageSize">
 					<default>15</default>

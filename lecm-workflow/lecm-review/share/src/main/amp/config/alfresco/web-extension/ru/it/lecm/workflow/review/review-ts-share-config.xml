@@ -56,8 +56,16 @@
 					<field id="lecm-review-ts:review-state" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
 					</field>
-					<field id="lecm-review-ts:review-start-date" read-only="true"/>
-					<field id="lecm-review-ts:review-finish-date" read-only="true"/>
+					<field id="lecm-review-ts:review-start-date" read-only="true">
+						<control>
+							<control-param name="dateFormatString">dd.mm.yyyy HH:MM:ss</control-param>
+						</control>
+					</field>
+					<field id="lecm-review-ts:review-finish-date" read-only="true">
+						<control>
+							<control-param name="dateFormatString">dd.mm.yyyy HH:MM:ss</control-param>
+						</control>
+					</field>
 					<field id="lecm-review-ts:initiator-assoc" read-only="true"/>
 					<field id="lecm-review-ts:reviewer-assoc" label-id="label.reviewer" read-only="true">
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
@@ -125,10 +133,12 @@
 			</form>
 			<form id="datagrid">
 				<field-visibility>
+					<show id="lecm-document:indexTableRow"/>
 					<show id="lecm-review-ts:reviewer-assoc"/>
 					<show id="lecm-review-ts:review-state"/>
 					<show id="lecm-review-ts:review-start-date"/>
 					<show id="lecm-review-ts:review-finish-date"/>
+					<show id="lecm-review-ts:initiator-assoc"/>
 				</field-visibility>
 			</form>
 		</forms>

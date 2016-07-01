@@ -10,14 +10,11 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/workflow/review/form/review-ts.form.lib.js">
 (function() {
 	var i,
-		reviewInfo,
 		reviewTsItems = [],
 		reviewTable = document.associations['lecm-review-ts:review-table-assoc'];
 
 	if (reviewTable && reviewTable.length) {
 		reviewTable = reviewTable[0];
-		reviewInfo = reviewTable.createNode(null, 'lecm-review-info:info', {
-		});
 		if ('string' === typeof reviewers) {
 			reviewers = reviewers.split(',');
 			for (i in reviewers) {
@@ -26,8 +23,8 @@
 		} else {
 			reviewers = [reviewers];
 		}
-		reviewTsItems = createReviewTSItem(reviewInfo, reviewers);
-		sendToReview(reviewInfo, reviewTsItems);
+		reviewTsItems = createReviewTSItem(reviewTable, reviewers);
+		sendToReview(reviewTsItems);
 	}
 
 	model.message = (reviewTsItems.length) ? 'Документ отправлен на ознакомление' : 'Нет сотрудников для ознакомления с документом';

@@ -81,10 +81,7 @@
     <#assign usePagination = params.usePagination/>
 </#if>
 
-<#assign showCreateButton = true/>
-<#if field.control.params.showCreateBtn??>
-    <#assign showCreateButton = field.control.params.showCreateBtn/>
-</#if>
+<#assign showCreateButton = !field.control.params.showCreateBtn?? || "true" == field.control.params.showCreateBtn?lower_case/>
 
 <#assign isTableSortable = false/>
 <#if field.control.params.isTableSortable??>
