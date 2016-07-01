@@ -3729,7 +3729,7 @@
                                 <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[@lecm\-document\:subject\-assoc\-ref:"#value-ref"]]></property>
+                                    <![CDATA[@lecm\-document\:subject\-assoc\-ref:"#value-with-subtree-refs"]]></property>
                                 <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                 <items>
                                     <item name="cm:eef7c43b-1147-4aff-b368-b95e8857a08e"
