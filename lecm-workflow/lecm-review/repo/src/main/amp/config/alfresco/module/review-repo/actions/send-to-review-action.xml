@@ -15,15 +15,15 @@
 
 	if (reviewTable && reviewTable.length) {
 		reviewTable = reviewTable[0];
-		if ('string' === typeof reviewers) {
-			reviewers = reviewers.split(',');
-			for (i in reviewers) {
-				reviewers[i] = utils.getNodeFromString(reviewers[i]);
+		if ('string' === typeof reviewers_added) {
+			reviewers_added = reviewers_added.split(',');
+			for (i in reviewers_added) {
+				reviewers_added[i] = utils.getNodeFromString(reviewers_added[i]);
 			}
 		} else {
-			reviewers = [reviewers];
+			reviewers_added = [reviewers_added];
 		}
-		reviewTsItems = createReviewTSItem(reviewTable, reviewers);
+		reviewTsItems = createReviewTSItem(reviewTable, reviewers_added);
 		sendToReview(reviewTsItems);
 	}
 

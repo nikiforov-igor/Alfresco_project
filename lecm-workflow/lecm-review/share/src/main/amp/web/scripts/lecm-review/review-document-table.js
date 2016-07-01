@@ -19,8 +19,8 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 	YAHOO.lang.extend(LogicECM.module.Review.DocumentTable, LogicECM.module.DocumentTable, {
 
 		actionCancelReviewEvaluator: function (rowData) {
-			var state = rowData.itemData['prop_lecm-review-info_review-state'],
-				username = rowData.itemData['prop_lecm-review-info_initiator-username'];
+			var state = rowData.itemData['prop_lecm-review-ts_review-state'],
+				username = rowData.itemData['prop_lecm-review-ts_initiator-username'];
 
 			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value;
 		},
@@ -75,12 +75,6 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 				if (!this.options.disabled && this.options.mode == "edit") {
 					actions.push({
 						type: actionType,
-						id: 'onActionPrintReview',
-						permission: 'edit',
-						label: this.msg('Печать листа ознакомления')
-					});
-					actions.push({
-						type: actionType,
 						id: 'onActionCancelReview',
 						permission: 'edit',
 						label: this.msg('Отозвать с ознакомления'),
@@ -105,7 +99,7 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 				}
 
 				var datagrid = new LogicECM.module.DocumentTableDataGrid(this.options.containerId).setOptions({
-					excludeColumns: ['lecm-review-info:initiator-username'],
+					excludeColumns: ['lecm-review-ts:initiator-username'],
 					usePagination: true,
 					showExtendSearchBlock: false,
 					formMode: this.options.mode,
