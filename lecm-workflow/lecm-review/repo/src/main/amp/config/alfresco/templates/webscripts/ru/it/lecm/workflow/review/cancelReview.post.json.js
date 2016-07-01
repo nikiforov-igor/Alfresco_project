@@ -1,19 +1,14 @@
+/* global utils, notifications, json, model */
+
 (function () {
 	var document = utils.getNodeFromString(json.get('documentRef')),
-		reviewInfo = utils.getNodeFromString(json.get('nodeRef')),
-		items = reviewInfo.sourceAssocs['lecm-review-info:info-assoc'],
-		i, recipients = [];
+		reviewItem = utils.getNodeFromString(json.get('nodeRef')),
+		recipients = [];
 
-	if (items && items.length) {
-		for (i in items) {
-			recipients.push(items[i].assocs['lecm-review-ts:reviewer-assoc'][0]);
-			items[i].properties['lecm-review-ts:review-state'] = 'CANCELLED';
-			items[i].properties['lecm-review-ts:review-finish-date'] = new Date();
-			items[i].save();
-		}
-		reviewInfo.properties['lecm-review-info:review-state'] = 'CANCELLED';
-		reviewInfo.save();
-	}
+		recipients.push(reviewItem.assocs['lecm-review-ts:reviewer-assoc'][0]);
+		reviewItem.properties['lecm-review-ts:review-state'] = 'CANCELLED';
+		reviewItem.properties['lecm-review-ts:review-finish-date'] = new Date();
+		reviewItem.save();
 
 	if (recipients && recipients.length) {
 		notifications.sendNotificationFromCurrentUser({
