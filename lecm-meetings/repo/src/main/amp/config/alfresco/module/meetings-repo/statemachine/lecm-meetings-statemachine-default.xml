@@ -388,7 +388,7 @@
 																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
-																					<![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
+                                                                                    <![CDATA[Невозможно запустить согласование: требуется новый незаполненный список согласования]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
@@ -397,7 +397,7 @@
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")) AND (@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW")]]></value>
+                                                                                    <![CDATA[!@routesService.hasEmployeesInRoute(doc.nodeRef) or @routesService.getApprovalState(doc.nodeRef) != "NEW")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -437,14 +437,228 @@
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>347d2d0d-daf2-458b-8708-69fdf4738d59
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6f80f1f0-c4a3-44f0-a1fd-14272c651b38
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Недостаточно прав]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>ede4eeb8-d1ad-47a0-83fb-faf51a6b1992
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/851577dc-f89c-43f6-8b9d-65b635099df4
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[selectRoute]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
 																</nodes>
 															</subFolder>
 														</subFolders>
 													</node>
-												</nodes>
-											</subFolder>
-										</subFolders>
-									</node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>3629d618-ebde-4f9d-83e0-588dc87f53d1</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/9515238b-3f35-4af4-bc21-878193a8f44a
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[var document = stm_document;
+var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils(),
+        documentType = "" + document.typeShort, //для того чтобы java.lang.String превратился в js native string
+        variables = null,
+        workflowVariables = {
+            workflowRole: "LECM_APPROVERS",
+            workflowDynRole: "LECM_APPROVER_DYN",
+            workflowDefinition: "lecmApprovementWorkflow",
+            documentRef: document.nodeRef
+        };
+    variables = jsonUtils.toJSONObject(workflowVariables);
+    routeWorkflow.startWorkflow(variables);]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Согласовать повестку]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <transitionLabelAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+																	workspace://SpacesStore/236c0367-c84e-4493-ac3c-de042d7bf085
+                                                                </reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>58e12dbb-42d4-448d-865a-439a206294bd
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/14c454e7-68aa-4b36-9535-c96d36d849bc
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Недостаточно прав]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>d7c4f521-0794-43f8-8fa1-f68b5c16f7b6
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6ac8bb6e-7e1f-482d-8e28-334d6c93a8ab
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Согласование повестки не требуется]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr('lecm-meetings:approve-agenda')!=true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>71663e5c-b1cb-4b22-8b94-4b0ab0c5d09f
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b12db66d-8c7c-4af4-90bc-226a4c31132b
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Требуется заполненный список согласования]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
+                                    </node>
 									<node>
 										<type>UserWorkflow</type>
 										<name>bafd37a7-0765-4925-9149-1ae0ee2324f5</name>

@@ -1147,10 +1147,123 @@
 															</subFolder>
 														</subFolders>
 													</node>
-												</nodes>
-											</subFolder>
-										</subFolders>
-									</node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>429a21e6-c597-4135-9a58-e98ec88f2c9c</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/001d30b3-8fb8-4604-99f4-8c4249acd351
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[var document = stm_document;
+var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils(),
+        documentType = "" + document.typeShort, //для того чтобы java.lang.String превратился в js native string
+        variables = null,
+        workflowVariables = {
+            workflowRole: "LECM_APPROVERS",
+            workflowDynRole: "LECM_APPROVER_DYN",
+            workflowDefinition: "lecmApprovementWorkflow",
+            documentRef: document.nodeRef
+        };
+    variables = jsonUtils.toJSONObject(workflowVariables);
+    routeWorkflow.startWorkflow(variables);]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить на согласование]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <transitionLabelAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>83933c35-628b-46ca-ab74-8bc64b10cf8b
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/713f9ea5-7c7d-4692-80ae-b8456633135c
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Требуется заполненный список согласования]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>3bc3fff0-8b8d-4e5f-b2ff-4c9a09e37746
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6213e1f8-e469-4b83-9a04-c66e62522304
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
+                                    </node>
 									<node>
 										<type>UserWorkflow</type>
 										<name>722a1511-879c-4a41-8bde-4b55b4a8be7f</name>
@@ -1206,15 +1319,15 @@
 																			</property>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
+																				<value><![CDATA[Невозможно запустить согласование: требуется новый незаполненный список согласования]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
+																				<value><![CDATA[!@routesService.hasEmployeesInRoute(doc.nodeRef) or @routesService.getApprovalState(doc.nodeRef) != "NEW"]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1249,6 +1362,36 @@
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>55ebff2c-817f-4000-89e5-06000c05dc85
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/7969f3b3-683e-4689-9afa-138a35d88b7e
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[selectRoute]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -4267,10 +4410,123 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 															</subFolder>
 														</subFolders>
 													</node>
-												</nodes>
-											</subFolder>
-										</subFolders>
-									</node>
+                                                    <node>
+                                                        <type>userTransition</type>
+                                                        <name>4f784378-8773-43f3-b9d4-6a48c407e8b2</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/fdc8a49d-14f6-47ae-8bb8-ffabe202f6eb
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[var document = stm_document;
+var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils(),
+        documentType = "" + document.typeShort, //для того чтобы java.lang.String превратился в js native string
+        variables = null,
+        workflowVariables = {
+            workflowRole: "LECM_APPROVERS",
+            workflowDynRole: "LECM_APPROVER_DYN",
+            workflowDefinition: "lecmApprovementWorkflow",
+            documentRef: document.nodeRef
+        };
+    variables = jsonUtils.toJSONObject(workflowVariables);
+    routeWorkflow.startWorkflow(variables);]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить на согласование]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                            <transitionLabelAspect/>
+                                                        </aspects>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>4b332383-8722-4055-ab07-afb3a682292c
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/16bb80dd-ee36-4e12-a887-918cf20dd587
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>f37c1ab8-e2e9-437c-80e1-d3e9cad9f291
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/87ab7927-e26b-4a82-bdbd-7c221de80361
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Требуется заполненный список согласования]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
+                                    </node>
 									<node>
 										<type>UserWorkflow</type>
 										<name>7fb65d44-60a2-4b17-bedd-8a5c2aaf69f3</name>
@@ -4326,15 +4582,16 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 																			</property>
 																			<property>
 																				<name>conditionErrorMessage</name>
-																				<value><![CDATA[Невозможно запустить согласование: требуется новый заполненный список согласования]]></value>
+                                                                                <value><![CDATA[Невозможно запустить согласование: требуется новый незаполненный список согласования]]></value>
 																			</property>
 																			<property>
 																				<name>hideAction</name>
-																				<value><![CDATA[false]]></value>
+                                                                                <value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
-																				<value><![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
+                                                                                <value>
+                                                                                    <![CDATA[!@routesService.hasEmployeesInRoute(doc.nodeRef) or @routesService.getApprovalState(doc.nodeRef) != "NEW"]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4369,6 +4626,36 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+                                                                    <node>
+                                                                        <type>inputVariable</type>
+                                                                        <name>af8d086f-231e-4008-91ac-e3ee0ae7f4a4
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/fbe41ad8-9bcd-46f1-984e-0ce3182616d5
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>inputFromType</name>
+                                                                                <value><![CDATA[VALUE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToType</name>
+                                                                                <value><![CDATA[VARIABLE]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[selectRoute]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[formId]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
 																</nodes>
 															</subFolder>
 														</subFolders>
