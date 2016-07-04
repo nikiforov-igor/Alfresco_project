@@ -52,7 +52,7 @@
 		  p:workflowDefinitions-ref="review.workflows"/>
 
 	<bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
-			  depends-on="dictionaryBootstrap, workflow.model.bootstrap"
+			  depends-on="dictionaryBootstrap, workflow.model.bootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap"
 			  p:models-ref="review.models" p:labels-ref="review.labels"/>
 
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
@@ -150,5 +150,5 @@
 			</list>
 		</property>
 	</bean>
-	
+
 </beans>
