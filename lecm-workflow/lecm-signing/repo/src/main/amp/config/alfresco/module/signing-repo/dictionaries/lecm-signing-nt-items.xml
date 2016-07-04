@@ -13,6 +13,10 @@
                     <![CDATA[{#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))} направлен Вам на подписание.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Подписание. Направить]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:SIGNING_RESOLUTION" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[SIGNING_RESOLUTION]]></property>
@@ -20,6 +24,10 @@
                     <![CDATA[Сотрудник {#signer.wrapAsLink(#signer.attribute("lecm-orgstr:employee-short-name"))} {#isSigned ? "подписал документ" : #wrapTitle("отклонил подписание", #comment) + " документа"} {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Подписание. Решение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:SIGNING_PROJECT_DECISION" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -28,6 +36,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Подписание. Решение по проекту]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:SIGNING_NEED_COMING_SOON" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[SIGNING_NEED_COMING_SOON]]></property>
@@ -36,6 +48,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Подписание. Напоминание об подписании]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:SIGNING_NEED_OVERDUE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[SIGNING_NEED_OVERDUE]]></property>
@@ -44,6 +60,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Подписание. Вы не подписали документ]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:SIGNING_COMING_SOON" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[SIGNING_COMING_SOON]]></property>
@@ -52,6 +72,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Подписание. Вы направили на подписание]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:SIGNING_OVERDUE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[SIGNING_OVERDUE]]></property>
@@ -60,6 +84,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Подписание. Документ не подписан в срок]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
         </items>
     </item>

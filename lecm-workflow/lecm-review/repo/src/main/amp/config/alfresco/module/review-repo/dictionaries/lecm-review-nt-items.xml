@@ -13,6 +13,10 @@
                     <![CDATA[Ознакомление по документу {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))} отозвано.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Ознакомление. Отозвано]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:REVIEW_NEED" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -21,6 +25,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. Необходимо ознакомиться]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:REVIEW_NEED_COMING_SOON" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[REVIEW_NEED_COMING_SOON]]></property>
@@ -29,6 +37,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. Напоминание об ознакомлении]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:REVIEW_NEED_OVERDUE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[REVIEW_NEED_OVERDUE]]></property>
@@ -37,6 +49,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. Не ознакомились с документом]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:REVIEW_COMING_SOON" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[REVIEW_COMING_SOON]]></property>
@@ -45,6 +61,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. Вы направили на ознакомление]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:REVIEW_OVERDUE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[REVIEW_OVERDUE]]></property>
@@ -53,6 +73,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. С документом не ознакомились в срок]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:REVIEW_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[REVIEW_EXCEEDED_DEADLINE]]></property>
@@ -61,6 +85,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. Истек срок ознакомления]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:REVIEW_APPROACHING_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[REVIEW_APPROACHING_DEADLINE]]></property>
@@ -69,6 +97,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. Приблежается срок ознакомления]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
         </items>
     </item>

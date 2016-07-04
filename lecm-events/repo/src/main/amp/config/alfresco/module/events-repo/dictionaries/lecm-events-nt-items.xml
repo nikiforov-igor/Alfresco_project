@@ -14,6 +14,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Мероприятия. Принять приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:EVENTS.INVITATION_TENTATIVE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -22,6 +26,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Мероприятия. Возможное участие]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:EVENTS.INVITATION_DECLINE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -30,6 +38,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Мероприятия. Отменить приглашение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:EVENTS.PROPOSE_TO_POSTPONE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -38,6 +50,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Мероприятия. Предложить перенести время]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:EVENTS.REMINDER" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[EVENTS.REMINDER]]></property>
@@ -45,6 +61,10 @@
                     <![CDATA[Напоминание: Вы приглашены на мероприятие {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}. Начало {#formatDate("dd.MM.yyyy в HH:mm", #mainObject.attribute("lecm-events:from-date"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Мероприятия. Напоминание]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:EVENTS.RESPONSIBLE_FOR_RESOURCES" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[EVENTS.RESPONSIBLE_FOR_RESOURCES]]></property>
@@ -53,6 +73,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Мероприятия. Требует привлечения ресурсов]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
         </items>
     </item>

@@ -13,6 +13,10 @@
                     <![CDATA[Сотрудник {#secretary.wrapAsLink(#secretary.attribute("lecm-orgstr:employee-short-name"))} вернул задачу по документу {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))}]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Секретарь. Вернуть задачу]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:SECRETARY_TAKE" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -20,6 +24,10 @@
                 <property name="cm:name"><![CDATA[SECRETARY_TAKE]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Секретарь. Забрать задачу]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
         </items>
     </item>

@@ -14,6 +14,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Внутренний. Направить документ]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INTERNAL_ACCEPT" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -22,6 +26,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Внутренний. Принять к сведению]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INTERNAL_ANSWER" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
@@ -29,18 +37,34 @@
                 <property name="cm:name"><![CDATA[INTERNAL_ANSWER]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Внутренний. Ответить]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INTERNAL_REWORK" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INTERNAL_REWORK]]></property>
-                <property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} был возвращен на доработку автором документа.]]></property>
-                <property name="lecm-notification-template:description"><![CDATA[Внутренний. Вернуть на доработку]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} был возвращен на доработку автором документа.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Внутренний. Вернуть на доработку]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INTERNAL_REGISTER" type="lecm-notification-template:template">
-                <property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.attribute("lecm-internal:doc-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-internal:doc-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))} поступил Вам на регистрацию.]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Документ {#mainObject.attribute("lecm-internal:doc-type-assoc-text-content") != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-internal:doc-type-assoc-text-content}: {lecm-document:title}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:title"))} поступил Вам на регистрацию.]]></property>
                 <property name="cm:name"><![CDATA[INTERNAL_REGISTER]]></property>
-                <property name="lecm-notification-template:description"><![CDATA[Внутренний. Направить на регистрацию]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Внутренний. Направить на регистрацию]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INTERNAL_APPROACHING_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INTERNAL_APPROACHING_DEADLINE]]></property>
@@ -49,6 +73,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Внутренний. Приближается срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INTERNAL_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INTERNAL_EXCEEDED_DEADLINE]]></property>
@@ -57,6 +85,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Внутренний. Превышен срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
         </items>
     </item>

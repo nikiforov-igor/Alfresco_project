@@ -7,6 +7,7 @@ import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.axiom.om.util.Base64;
@@ -38,6 +39,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
     private Repository repositoryHelper;
 	private ContentService contentService;
 	private MimetypeService mimetypeService;
+    private SearchService searchService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -63,7 +65,11 @@ public class XMLImportBeanImpl implements XMLImportBean {
 		this.mimetypeService = mimetypeService;
 	}
 
-	@Override
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
+
+    @Override
     public XMLImporter getXMLImporter(InputStream inputStream) {
         return new XMLImporterImpl(inputStream);
     }
@@ -230,8 +236,9 @@ public class XMLImportBeanImpl implements XMLImportBean {
             }
             String assocTypeAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_TYPE);
             String assocPathAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_PATH);
+            String assocXPathAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_XPATH);
 
-            this.assocs.add(new AssociationInfo(parent, assocTypeAttr, assocPathAttr, updateMode));
+            this.assocs.add(new AssociationInfo(parent, assocTypeAttr, assocPathAttr, assocXPathAttr, updateMode));
 
             xmlr.nextTag();//выходим из </assoc>
             xmlr.nextTag();//выходим из </assoc>
@@ -240,13 +247,21 @@ public class XMLImportBeanImpl implements XMLImportBean {
 
 	    protected void createAssocs() {
 		    for (AssociationInfo associationInfo: this.assocs) {
-                createAssoc(associationInfo.getParentRef(), associationInfo.getAssocType(), associationInfo.getAssocPath(), associationInfo.getUpdateMode());
+                createAssoc(associationInfo.getParentRef(), associationInfo.getAssocType(), associationInfo.getAssocPath(), associationInfo.getAssocXPath(), associationInfo.getUpdateMode());
 		    }
 	    }
 
-	    private void createAssoc(NodeRef parent,  String assocTypeAttr, String assocPathAttr, UpdateMode updateMode) {
+	    private void createAssoc(NodeRef parent,  String assocTypeAttr, String assocPathAttr, String assocXPath,  UpdateMode updateMode) {
 		    QName assocType = QName.createQName(assocTypeAttr, namespaceService);
-		    NodeRef targetRef = getNodeByPath(assocPathAttr);
+
+            NodeRef targetRef = null;
+            if (StringUtils.isNotEmpty(assocXPath)) {
+                targetRef = getNodeByXPath(assocXPath);
+            }
+            if (StringUtils.isNotEmpty(assocPathAttr) && targetRef == null) {
+                targetRef = getNodeByPath(assocPathAttr);
+            }
+
 		    if (targetRef != null) {
 			    AssociationDefinition associationDefinition = dictionaryService.getAssociation(assocType);
 			    List<AssociationRef> existingAssocs = nodeService.getTargetAssocs(parent, assocType);
@@ -301,6 +316,17 @@ public class XMLImportBeanImpl implements XMLImportBean {
             }
             logger.debug("getNodeByPath: " + path + ", result: " + result);
             return result;
+        }
+
+        private NodeRef getNodeByXPath(String xPath) {
+
+            List<NodeRef> nodeRefs = searchService.selectNodes(repositoryHelper.getCompanyHome(), xPath, null, namespaceService, false);
+
+            if (nodeRefs == null || nodeRefs.isEmpty()) {
+                return null;
+            }
+
+            return nodeRefs.get(0);
         }
 
         private NodeRef checkChildSearch(NodeRef checkedChildRef, List<ChildAssociationRef> assocList, String name) {
@@ -462,12 +488,21 @@ public class XMLImportBeanImpl implements XMLImportBean {
         private NodeRef parentRef;
         private String assocType;
         private String assocPath;
+        private String assocXPath;
         private UpdateMode updateMode;
 
         public AssociationInfo(NodeRef parentRef, String assocType, String assocPath, UpdateMode updateMode) {
             this.parentRef = parentRef;
             this.assocType = assocType;
             this.assocPath = assocPath;
+            this.updateMode = updateMode;
+        }
+
+        public AssociationInfo(NodeRef parentRef, String assocType, String assocPath, String assocXPath, UpdateMode updateMode) {
+            this.parentRef = parentRef;
+            this.assocType = assocType;
+            this.assocPath = assocPath;
+            this.assocXPath = assocXPath;
             this.updateMode = updateMode;
         }
 
@@ -481,6 +516,10 @@ public class XMLImportBeanImpl implements XMLImportBean {
 
         public String getAssocPath() {
             return assocPath;
+        }
+
+        public String getAssocXPath() {
+            return assocXPath;
         }
 
         public UpdateMode getUpdateMode() {

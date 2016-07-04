@@ -42,6 +42,7 @@
         <property name="repositoryHelper" ref="repositoryHelper"/>
 	    <property name="contentService" ref="contentService"/>
 	    <property name="mimetypeService" ref="mimetypeService"/>
+        <property name="searchService" ref="searchService"/>
     </bean>
 
     <bean id="lecmDictionaryBootstrap" init-method="bootstrap" abstract="true" parent="baseBean"
@@ -51,7 +52,6 @@
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="bootstrapOnStart" value="#{new Boolean('${lecm.dictionaries.bootstrapOnStart}')}"/>
     </bean>
-
 
     <bean id="webscript.ru.it.lecm.dictionary.export.get"
           class="ru.it.lecm.dictionary.export.Export"
@@ -162,6 +162,11 @@
                         <value>cm:name</value>
                         <value>lecm-currency:digital-code</value>
                         <value>lecm-currency:alphabetic-code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-notification-template:template">
+                    <list>
+                        <value>lecm-notification-template:template-assoc</value>
                     </list>
                 </entry>
             </map>

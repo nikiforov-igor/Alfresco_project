@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <items>
-	<item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
-		<property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
-		<property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
-		<property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
-		<property name="lecm-dic:plane"><![CDATA[true]]></property>
-		<property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
-		<items>
-			<item name="cm:OUTGOING_SEND" type="lecm-notification-template:template">
-				<property name="lecm-notification-template:template"><![CDATA[На отправку поступил документ {#mainObject.attribute('lecm-eds-document:document-type-assoc-text-content') != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc-text-content} {lecm-document:present-string}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
-				<property name="cm:name"><![CDATA[OUTGOING_SEND]]></property>
-				<property name="lecm-notification-template:description"><![CDATA[Исходящий. Подготовить к отправке]]></property>
-				<property name="lecm-notification-template:subject"><![CDATA[]]></property>
-			</item>
-			<item name="cm:OUTGOING_REWORK" type="lecm-notification-template:template">
-				<property name="cm:name"><![CDATA[OUTGOING_REWORK]]></property>
-				<property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} был возвращен на доработку автором документа.]]></property>
-				<property name="lecm-notification-template:description"><![CDATA[Исходящий. Вернуть на доработку]]></property>
-				<property name="lecm-notification-template:subject"><![CDATA[]]></property>
-			</item>
-			<item name="cm:OUTGOING_REGISTER" type="lecm-notification-template:template">
-				<property name="lecm-notification-template:template"><![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} поступил Вам на регистрацию.]]></property>
-				<property name="cm:name"><![CDATA[OUTGOING_REGISTER]]></property>
-				<property name="lecm-notification-template:description"><![CDATA[Исходящий. Направить на регистрацию]]></property>
-				<property name="lecm-notification-template:subject"><![CDATA[]]></property>
-			</item>
-		</items>
-	</item>
+    <item name="lecm-dic:Шаблоны уведомлений" type="lecm-dic:dictionary">
+        <property name="cm:name"><![CDATA[Шаблоны уведомлений]]></property>
+        <property name="lecm-dic:attributeForShow"><![CDATA[cm:name]]></property>
+        <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
+        <property name="lecm-dic:plane"><![CDATA[true]]></property>
+        <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
+        <items>
+            <item name="cm:OUTGOING_SEND" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[На отправку поступил документ {#mainObject.attribute('lecm-eds-document:document-type-assoc-text-content') != null ? #mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-eds-document:document-type-assoc-text-content} {lecm-document:present-string}")) : #mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}.]]></property>
+                <property name="cm:name"><![CDATA[OUTGOING_SEND]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Исходящий. Подготовить к отправке]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:OUTGOING_REWORK" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[OUTGOING_REWORK]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} был возвращен на доработку автором документа.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Исходящий. Вернуть на доработку]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+            <item name="cm:OUTGOING_REGISTER" type="lecm-notification-template:template">
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Документ {#mainObject.wrapAsLink(#mainObject.getFormatted("{lecm-document:present-string}"))} поступил Вам на регистрацию.]]></property>
+                <property name="cm:name"><![CDATA[OUTGOING_REGISTER]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Исходящий. Направить на регистрацию]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
+            </item>
+        </items>
+    </item>
 </items>

@@ -14,6 +14,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Запрос регистрации]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INCOMING_RETURN_DOCUMENT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_RETURN_DOCUMENT]]></property>
@@ -21,6 +25,10 @@
                     <![CDATA[{#sender.wrapAsLink(#sender.getFormatted("{lecm-orgstr:employee-short-name}"))}  вернул(а) документ {#mainObject.wrapAsLink(#mainObject.getFormatted("№ {~REGNUM} от {~REGDATE}"))} {#sendToExecutionUser != null ? "сотруднику ".concat({#sendToExecutionUser.wrapAsLink(#sendToExecutionUser.getFormatted("{lecm-orgstr:employee-short-name}"))}) : ""}.]]></property>
                 <property name="lecm-notification-template:description"><![CDATA[Входящий. Вернуть]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INCOMING_RECEIVED" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_RECEIVED]]></property>
@@ -29,6 +37,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Направить на исполнение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INCOMING_REVIEW" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_REVIEW]]></property>
@@ -37,6 +49,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Направить на рассмотрение]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INCOMING_SEND_TO_RECIPIENT" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_SEND_TO_RECIPIENT]]></property>
@@ -45,6 +61,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Направить получателю (Не требует регистрации)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INCOMING_APPROACHING_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_APPROACHING_DEADLINE]]></property>
@@ -53,6 +73,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Приближается срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
             <item name="cm:INCOMING_EXCEEDED_DEADLINE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[INCOMING_EXCEEDED_DEADLINE]]></property>
@@ -61,6 +85,10 @@
                 <property name="lecm-notification-template:description">
                     <![CDATA[Входящий. Превышен срок исполнения]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+                <assocs>
+                    <assoc type="lecm-notification-template:template-assoc"
+                           xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
+                </assocs>
             </item>
         </items>
     </item>
