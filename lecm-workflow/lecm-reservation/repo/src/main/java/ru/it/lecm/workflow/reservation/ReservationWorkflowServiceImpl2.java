@@ -14,8 +14,12 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
+import ru.it.lecm.internal.api.InternalService;
+import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.outgoing.api.OutgoingModel;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
@@ -40,7 +44,20 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	private RegNumbersService regNumbersService;
 	private BusinessJournalService businessJournalService;
 
-	private final static String POSITIVE_DECISION = "выполнен";
+	private static final String POSITIVE_DECISION = "выполнен";
+	
+	private static final String OUTGOING_DOC_NUMBER = "OUTGOING_DOC_NUMBER";
+	private static final String INTERNAL_DOC_NUMBER = "INTERNAL_DOC_NUMBER";
+	private static final String ND_DOC_NUMBER = "ND_NUMBER";
+	private static final String ORD_DOC_NUMBER = "ORD_NUMBER";
+	private static final String CONTRACT_DOC_NUMBER = "CONTRACT_REGNUM";
+	
+	private static final String OUTGOING_DOC = OutgoingModel.TYPE_OUTGOING.toString();
+	private static final String INTERNAL_DOC = InternalService.TYPE_INTERNAL.toString();
+	private static final String ND_DOC = NDModel.TYPE_ND.toString();
+	private static final String ORD_DOC = ORDModel.TYPE_ORD.toString();
+	private static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
+	private static final String CONTRACT_DOC = QName.createQName(CONTRACTS_NAMESPACE_URI, "document").toString();
 	
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
@@ -135,11 +152,10 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		String comment = (String) task.getVariableLocal("bpm_comment");
 		String decision = (String) task.getVariableLocal("lecmRegnumRes_decision");
 		Date regDate = (Date) task.getVariable("lecmRegnumRes_date");
-		//TODO: Сделать подстановку regnumTemplateId в зависимости от типа документа. Пока сделано для Исходящих документов.
-		String regnumTemplateId = /* (String) task.getVariable("regnumTemplateId")*/ "OUTGOING_DOC_NUMBER";
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage);
-
+		String regnumTemplateId = getRegnumTemplateId(documentRef);
+		
 		WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
 		taskDecision.setUserName(task.getAssignee());
 		taskDecision.setDecision(decision);
@@ -182,6 +198,24 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		return taskDecision;
 	}
 
+	private String getRegnumTemplateId(NodeRef documentRef) {
+		QName documentType = nodeService.getType(documentRef);
+		String stringDocumentType = documentType.toString();
+		if (stringDocumentType.equals(OUTGOING_DOC)) {
+			return OUTGOING_DOC_NUMBER;
+		} else if (stringDocumentType.equals(INTERNAL_DOC)) {
+			return INTERNAL_DOC_NUMBER;
+		} else if (stringDocumentType.equals(ND_DOC)) {
+			return ND_DOC_NUMBER;
+		} else if (stringDocumentType.equals(ORD_DOC)) {
+			return ORD_DOC_NUMBER;
+		} else if (stringDocumentType.equals(CONTRACT_DOC)) {
+			return CONTRACT_DOC_NUMBER;
+		} else {
+			return "";
+		}
+	}
+	
 	@Override
 	public void setReservationActive(final NodeRef bpmPackage, final boolean isActive) {
 		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage);
