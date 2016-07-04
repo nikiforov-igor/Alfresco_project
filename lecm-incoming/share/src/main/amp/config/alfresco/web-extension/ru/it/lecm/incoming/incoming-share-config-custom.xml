@@ -198,7 +198,7 @@
                     </field>
 
                     <field set="review" id="lecm-review-ts:review-table-assoc">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                        <control template="/ru/it/lecm/workflow/review/controls/review-list-datagrid-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="isTableSortable">false</control-param>
@@ -217,11 +217,7 @@
                             <!--<control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>-->
                             <!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
                             <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
-                            <control-param name="expandable">false</control-param>
                             <!--<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>-->
-                            <control-param name="jsObjectName">LogicECM.module.Review.DocumentTable</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-review/review-document-table.js</control-param>
-                            <control-param name="cssDependencies">css/lecm-review/review-document-table.css</control-param>
                         </control>
                     </field>
 

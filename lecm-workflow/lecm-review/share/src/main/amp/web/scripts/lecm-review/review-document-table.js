@@ -10,13 +10,30 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 (function () {
 	var Bubbling = YAHOO.Bubbling;
 
-	LogicECM.module.Review.DocumentTable = function (containerId) {
+	LogicECM.module.Review.DocumentTable = function (containerId, documentNodeRef) {
+		this.documentNodeRef = documentNodeRef;
+
+		this.printReportButton = YAHOO.util.Dom.get(containerId + '-printReviewReport');
+		if (this.printReportButton) {
+			YAHOO.util.Event.on(this.printReportButton, 'click', function () {
+				LogicECM.module.Base.Util.printReport(this.documentNodeRef, this.options.reportId);
+			}, this, true);
+		}
+
+		this.rejectReviewButton = YAHOO.util.Dom.get(containerId + '-rejectReview');
+		if (this.rejectReviewButton) {
+			YAHOO.util.Event.on(this.rejectReviewButton, 'click', this.rejectReview, this, true);
+		}
+
 		LogicECM.module.Review.DocumentTable.superclass.constructor.call(this, containerId);
 		this.name = 'LogicECM.module.Review.DocumentTable';
 		return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.Review.DocumentTable, LogicECM.module.DocumentTable, {
+		printReportButton: null,
+		rejectReviewButton: null,
+		documentNodeRef: null,
 
 		actionCancelReviewEvaluator: function (rowData) {
 			var state = rowData.itemData['prop_lecm-review-ts_review-state'],
@@ -25,8 +42,8 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 			return 'NOT_REVIEWED' === state.value && Alfresco.constants.USERNAME === username.value;
 		},
 
-		onActionPrintReview: function (rowData, target, actionsConfig, confirmFunction) {
-			LogicECM.module.Base.Util.printReport(rowData.nodeRef, 'review_list');
+		rejectReview: function () {
+			alert("Not implemented!")
 		},
 
 		onActionCancelReview: function (rowData, target, actionsConfig, confirmFunction) {
@@ -137,7 +154,6 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 				datagrid.tableDataNodeRef = this.tableData.nodeRef;
 				datagrid.deleteMessageFunction = this.options.deleteMessageFunction;
-				datagrid.onActionPrintReview = this.onActionPrintReview;
 				datagrid.onActionCancelReview = this.onActionCancelReview;
 				datagrid.draw();
 			}
