@@ -63,4 +63,6 @@ public interface ReviewService extends InitializingBean {
     int getReviewNotificationTerm();
 
     NodeRef getDocumentByReviewTableItem(NodeRef nodeRef);
+
+	boolean reviewAllowed(NodeRef documentRef);
 }

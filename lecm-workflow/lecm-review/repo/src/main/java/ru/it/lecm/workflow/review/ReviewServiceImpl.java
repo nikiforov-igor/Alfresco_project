@@ -298,4 +298,21 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 		return nodeRef;
 	}
 
+	@Override
+	public boolean reviewAllowed(NodeRef documentRef) {
+		NodeRef reviewTableRef = findNodeByAssociationRef(documentRef, ASSOC_REVIEW_TS_REVIEW_TABLE, TYPE_REVIEW_TS_REVIEW_TABLE, ASSOCIATION_TYPE.TARGET);
+		List<NodeRef> rows = documentTableService.getTableDataRows(reviewTableRef);
+		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+		boolean isBoss = orgstructureBean.isBoss(currentEmployee);
+		boolean reviewAllowed = false;
+		for (NodeRef row : rows) {
+			String state = (String)nodeService.getProperty(row, PROP_REVIEW_TS_STATE);
+			NodeRef reviewer = findNodeByAssociationRef(row, ASSOC_REVIEW_TS_REVIEWER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			if ((CONSTRAINT_REVIEW_TS_STATE_REVIEWED.equals(state) || CONSTRAINT_REVIEW_TS_STATE_IN_PROCESS.equals(state)) && currentEmployee.equals(reviewer) && isBoss) {
+				reviewAllowed = true;
+				break;
+			}
+		}
+		return reviewAllowed;
+	}
 }
