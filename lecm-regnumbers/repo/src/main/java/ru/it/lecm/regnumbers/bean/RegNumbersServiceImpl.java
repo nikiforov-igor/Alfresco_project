@@ -328,7 +328,13 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
             Serializable number = nodeService.getProperty(documentNode, propNumber);
             String regNumber = null;
-            Date regDate = new Date();
+            
+            // Сохранить дату, если она была зарезервирована. В противном случае запомнить текущую дату.
+            Date regDate = (Date) nodeService.getProperty(documentNode, propDate);
+            if (regDate == null) {
+            	regDate = new Date();
+            }
+            
             if (number != null && !number.toString().isEmpty() && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
                 regNumber = number.toString();
                 //номер уже есть
