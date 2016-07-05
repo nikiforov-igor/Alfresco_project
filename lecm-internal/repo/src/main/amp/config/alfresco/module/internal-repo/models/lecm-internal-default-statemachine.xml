@@ -1090,6 +1090,33 @@ if (document != null) {
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+                                                                    <node>
+									                                    <type>conditionAccess</type>
+									                                    <name>caf318ee-854b-4590-a999-8a0cc48fb14f</name>
+									                                    <nodeRef>workspace://SpacesStore/2b1352a2-7aea-43e0-9e38-7e5f5c6e6310</nodeRef>
+									                                    <properties>
+									                                      <property>
+									                                        <name>does-not-block</name>
+									                                        <value><![CDATA[false]]></value>
+									                                      </property>
+									                                      <property>
+									                                        <name>conditionErrorMessage</name>
+									                                        <value><![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+									                                      </property>
+									                                      <property>
+									                                        <name>hideAction</name>
+									                                        <value><![CDATA[false]]></value>
+									                                      </property>
+									                                      <property>
+									                                        <name>condition</name>
+									                                        <value><![CDATA[doc.attr("lecm-reservation-aspects:isReservationRunning") != true]]></value>
+									                                      </property>
+									                                    </properties>
+									                                    <aspects />
+									                                    <associations />
+									                                    <roleAssociations />
+									                                    <subFolders />
+									                                </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
