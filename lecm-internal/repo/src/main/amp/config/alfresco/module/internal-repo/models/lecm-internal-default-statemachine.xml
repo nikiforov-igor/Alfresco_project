@@ -1101,11 +1101,11 @@ if (document != null) {
 									                                      </property>
 									                                      <property>
 									                                        <name>conditionErrorMessage</name>
-									                                        <value><![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+									                                        <value><![CDATA[]]></value>
 									                                      </property>
 									                                      <property>
 									                                        <name>hideAction</name>
-									                                        <value><![CDATA[false]]></value>
+									                                        <value><![CDATA[true]]></value>
 									                                      </property>
 									                                      <property>
 									                                        <name>condition</name>
