@@ -8,12 +8,14 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.ParameterCheck;
+import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.review.api.ReviewService;
 import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -138,5 +140,13 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
     public ScriptNode getSettings() {
         return new ScriptNode(reviewService.getSettings(), serviceRegistry, getScope());
     }
-	
+
+    public Boolean isReviewersByOrganization() {
+        return reviewService.isReviewersByOrganization();
+    }
+
+    public Scriptable getPotentialReviewers() {
+        List<NodeRef> potentialWorkers = reviewService.getPotentialReviewers();
+        return createScriptable(new ArrayList<>(potentialWorkers));
+    }
 }

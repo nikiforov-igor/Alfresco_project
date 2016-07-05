@@ -14,6 +14,7 @@
 					<control-param name="employee_plane">true</control-param>
 					<control-param name="employee_showSearch">true</control-param>
 					<control-param name="employee_useStrictFilterByOrg">true</control-param>
+					<control-param name="employee_childrenDataSource">/lecm/review/getPotentialReviewers/picker</control-param>
 <!--					<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 					<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 					<control-param name="firstChangeItemsFireAction">employeesSelected</control-param>-->

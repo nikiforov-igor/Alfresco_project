@@ -38,6 +38,8 @@ LogicECM.module = LogicECM.module || {};
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
+		YAHOO.Bubbling.on("hideControl", this.onHideControl, this);
+		YAHOO.Bubbling.on("showControl", this.onShowControl, this);
 
 		this.selectedItems = {};
 		this.addItemButtons = {};
@@ -2448,6 +2450,24 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
+			onHideControl: function (layer, args) {
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					if (!this.options.disabled) {
+						YAHOO.util.Dom.setStyle(this.id + '-cntrl-edt', "display", "none");
+					} else {
+						YAHOO.util.Dom.setStyle(this.id + '-cntrl', "display", "none");
+					}
+				}
+			},
+			onShowControl: function (layer, args) {
+				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+					if (!this.options.disabled) {
+						YAHOO.util.Dom.setStyle(this.id + '-cntrl-edt', "display", "block");
+					} else {
+						YAHOO.util.Dom.setStyle(this.id + '-cntrl', "display", "block");
+					}
+				}
+			},
 			onAddSelectedItems: function (layer, args) {
 				if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 					var items = args[1].items;

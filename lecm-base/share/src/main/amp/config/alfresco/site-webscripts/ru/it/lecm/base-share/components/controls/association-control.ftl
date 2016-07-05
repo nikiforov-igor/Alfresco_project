@@ -106,7 +106,7 @@
 	</div>
 </div>
 <#else>
-<div class="control association-control editmode">
+<div id="${controlId}-edt" class="control association-control editmode">
 	<div class="label-div">
 		<label for="${controlId}">
 		${field.label?html}:
