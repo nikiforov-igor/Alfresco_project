@@ -8518,6 +8518,38 @@ notifications.sendNotificationFromCurrentUser({
                                                                         <roleAssociations/>
                                                                         <subFolders/>
                                                                     </node>
+																	<node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>f1ea168e-23b9-4f98-a2ad-5318d34c83db
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/2d13ce1e-2fe7-4906-abc4-9bc6d52ce682
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Документ не может быть зарегистрирован, требуется завершить запросы на резервирование рег. номера]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-reservation-aspects:isReservationRunning") != true]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
