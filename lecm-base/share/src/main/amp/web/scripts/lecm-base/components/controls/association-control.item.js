@@ -289,7 +289,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.currentState.selected = YAHOO.lang.merge(this.currentState.original);
 				this.fire('loadOriginalItems', { /* Bubbling.fire */
 					original: this.currentState.selected,
-					options: this.options
+					options: this.options,
+					key: this.key
 				});
 				this.fire('afterChange', {
 					key: this.key

@@ -97,24 +97,30 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var nodeData, options, isNew;
+			var nodeData, options, isNew, key;
 			if (Alfresco.util.hasEventInterest(this, args)) {
-					nodeData = args[1].added,
-					options = args[1].options,
+					nodeData = args[1].added;
+					options = args[1].options;
+					key = args[1].key;
 					isNew = !this.original.hasOwnProperty(nodeData.nodeRef);
 				if (isNew) {
 					this.added[nodeData.nodeRef] = nodeData;
 				}
 				this.selected[nodeData.nodeRef] = nodeData;
+				this.selected[nodeData.nodeRef].key = key;
 				this._renderSelectedItems([nodeData], options);
 			}
 		},
 
 		onLoadOriginalItems: function(layer, args) {
-			var original, options, prop, selected = [];
+			var original, options, prop, selected = [], key;
 			if (Alfresco.util.hasEventInterest(this, args)) {
-				original = args[1].original,
+				original = args[1].original;
 				options = args[1].options;
+				key = args[1].key;
+				for (prop in original) {
+					original[prop].key = key;
+				}
 				this.original = YAHOO.lang.merge(this.original, original);
 				this.selected = YAHOO.lang.merge(this.selected, original);
 				for (prop in original) {
@@ -155,10 +161,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			var key, selectedItems, markers = {};
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				if (this.options.changeItemsFireAction) {
-					key = args[1].key;
+//					key = args[1].key;
 					selectedItems = Object.keys(this.selected);
 					if (selectedItems.length === 1) {
-						markers[selectedItems[0]] = key;
+						markers[selectedItems[0]] = this.selected[selectedItems[0]].key;
 					}
 					Bubbling.fire(this.options.changeItemsFireAction, {
 						selectedItems: this.selected,
@@ -176,10 +182,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			Dom.getChildren(this.widgets.items).forEach(function(elItem) {
 				Event.removeListener(elItem, 'click');
 				this.widgets.items.removeChild(elItem);
-				this.added = {};
-				this.removed = {};
-				this.selected = YAHOO.lang.merge(this.original);
 			}, this);
+			this.added = {};
+			this.removed = {};
+			this.selected = YAHOO.lang.merge(this.original);
 			this.fire('hide', { /* Bubbling.fire */
 				reset: true
 			});
