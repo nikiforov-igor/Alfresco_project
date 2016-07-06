@@ -105,7 +105,11 @@
 		                </control>
 	                </field>
                     <field id="lecm-errands:end-date" set="common"/>
-                    <field id="lecm-errands:controller-assoc" set="common"/>
+					<field id="lecm-errands:controller-assoc" set="common">
+						<control>
+							<control-param name="showSearch">true</control-param>
+						</control>
+					</field>
 					<field id="lecm-errands:start-date" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="minLimitCurrentDate">true</control-param>
@@ -116,6 +120,7 @@
                     </field>
                     <field id="lecm-errands:coexecutors-assoc" set="common">
 		                <control>
+							<control-param name="showSearch">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 		                </control>
 	                </field>
@@ -296,6 +301,7 @@
                     </field>
 	                <field id="lecm-errands:coexecutors-assoc" set="collapsible1">
 		                <control>
+							<control-param name="showSearch">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 		                </control>
 	                </field>
@@ -304,7 +310,11 @@
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:controller-assoc" set="collapsible2"/>
+					<field id="lecm-errands:controller-assoc" set="collapsible2">
+						<control>
+							<control-param name="showSearch">true</control-param>
+						</control>
+					</field>
                     <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
@@ -421,6 +431,7 @@
                     </field>
 	                <field id="lecm-errands:coexecutors-assoc" set="collapsible1">
 		                <control>
+							<control-param name="showSearch">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 		                </control>
 	                </field>
@@ -429,7 +440,11 @@
                             <control-param name="minLimitCurrentDate">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:controller-assoc" set="collapsible2"/>
+					<field id="lecm-errands:controller-assoc" set="collapsible2">
+						<control>
+							<control-param name="showSearch">true</control-param>
+						</control>
+					</field>
                     <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
                         <control>
                             <control-param name="changeItemsFireAction">initiatorChanged</control-param>
@@ -613,6 +628,7 @@
                     </field>
 	                <field id="lecm-errands:coexecutors-assoc" set="collapsible1">
                         <control>
+							<control-param name="showSearch">true</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="allowedNodesScript">lecm/errands/getAvailableEmployeesForChildErrand?parentDoc={parentDoc}</control-param>
                             <control-param name="param_parentDoc">parentDoc</control-param>
@@ -624,7 +640,11 @@
                             <control-param name="maxLimitArg">parentLimitationDate</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:controller-assoc" set="collapsible2"/>
+					<field id="lecm-errands:controller-assoc" set="collapsible2">
+						<control>
+							<control-param name="showSearch">true</control-param>
+						</control>
+					</field>
                     <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
                         <control>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
