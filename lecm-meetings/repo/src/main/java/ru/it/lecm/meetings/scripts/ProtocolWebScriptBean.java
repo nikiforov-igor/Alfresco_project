@@ -1,20 +1,8 @@
 package ru.it.lecm.meetings.scripts;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -23,12 +11,16 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentEventService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
-import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.meetings.beans.ProtocolReportsService;
 import ru.it.lecm.meetings.beans.ProtocolService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -191,6 +183,7 @@ public class ProtocolWebScriptBean extends BaseWebScript {
 		return false;
 	}
 
+	@Deprecated
 	public ScriptNode generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
 		NodeRef reportNodeRef = protocolReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
 

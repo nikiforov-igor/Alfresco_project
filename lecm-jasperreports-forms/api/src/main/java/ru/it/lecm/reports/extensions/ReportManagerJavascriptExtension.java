@@ -146,12 +146,53 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
      * @return NativeObject
      */
     public NativeObject buildReportAndAttachToDocument(NodeRef document, String reportCode, String attachmentCategory, String filename, String existsPolicy) {
+       return  buildReportAndAttachToDocument(document, reportCode, null, attachmentCategory, filename, existsPolicy);
+    }
+
+    /**
+     * Сгенерировать отчёт и добавить его в категорию вложений указанного документа
+     *
+     * @param document           документ в котороый
+     * @param reportCode         код отчета для построяния
+     * @param templateCode       код шаблона отчета для построения
+     * @param attachmentCategory название категории вложений
+    Возможные значения :
+    1) CREATE_NEW_VERSION - создать новую версию документа вложения
+    2) CREATE_NEW_FILE - создать новое вложение, к имени файла приписывается цифра
+    3) REWRITE_FILE - удалить старое вложение и создать новое
+    4) SKIP - пропустить
+    5) RETURN_ERROR - вернуть ошибку
+     * @return NativeObject
+     */
+    public NativeObject buildReportAndAttachToDocument(NodeRef document, String reportCode, String templateCode, String attachmentCategory) {
+        String fileName = reportsManager.generateReportFileName(reportCode, templateCode, document);
+        return  buildReportAndAttachToDocument(document, reportCode, templateCode, attachmentCategory, fileName, "REWRITE_FILE");
+    }
+
+    /**
+     * Сгенерировать отчёт и добавить его в категорию вложений указанного документа
+     *
+     * @param document           документ в котороый
+     * @param reportCode         код отчета для построяния
+     * @param templateCode       код шаблона отчета для построения
+     * @param attachmentCategory название категории вложений
+     * @param filename           имя генерируемого файла
+     * @param existsPolicy       поведение при нахождении в категории вложения контента с таким же именем.
+    Возможные значения :
+    1) CREATE_NEW_VERSION - создать новую версию документа вложения
+    2) CREATE_NEW_FILE - создать новое вложение, к имени файла приписывается цифра
+    3) REWRITE_FILE - удалить старое вложение и создать новое
+    4) SKIP - пропустить
+    5) RETURN_ERROR - вернуть ошибку
+     * @return NativeObject
+     */
+    public NativeObject buildReportAndAttachToDocument(NodeRef document, String reportCode, String templateCode, String attachmentCategory, String filename, String existsPolicy) {
 
         String error = "";
         ScriptNode resultNode = null;
 
         try {
-            NodeRef resultRef = reportsManager.buildReportAndAttachToDocumentCategory(document, reportCode, null, attachmentCategory, filename, ReportsManager.AttachmentExistsPolicy.valueOf(existsPolicy));
+            NodeRef resultRef = reportsManager.buildReportAndAttachToDocumentCategory(document, reportCode, templateCode, attachmentCategory, filename, ReportsManager.AttachmentExistsPolicy.valueOf(existsPolicy));
             if (resultRef != null) {
                 resultNode = new ScriptNode(resultRef, serviceRegistry, getScope());
             }
@@ -165,6 +206,5 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
 
         JSONUtils jsonUtils = new JSONUtils();
         return jsonUtils.toObject(jsonObject);
-
     }
 }

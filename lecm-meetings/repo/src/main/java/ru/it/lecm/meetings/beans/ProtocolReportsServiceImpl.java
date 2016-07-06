@@ -7,6 +7,7 @@ import ru.it.lecm.reports.api.ReportsManager;
 /**
  * @author snovikov
  */
+@Deprecated
 public class ProtocolReportsServiceImpl extends BaseBean implements ProtocolReportsService {
     private ReportsManager reportsManager;
 

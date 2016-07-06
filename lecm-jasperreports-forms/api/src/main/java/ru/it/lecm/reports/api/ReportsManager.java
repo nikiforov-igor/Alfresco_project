@@ -35,6 +35,8 @@ import ru.it.lecm.reports.xml.DSXMLProducer;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Биновый интерфейс для работы с шаблонами зарегистрированных отчётов.
@@ -42,6 +44,8 @@ import java.util.*;
  * @author rabdullin
  */
 public class ReportsManager{
+
+    public static final String EXTENSION_PATTERN = "^.+(\\.[A-z]+$)";
 
     public enum AttachmentExistsPolicy {
         CREATE_NEW_VERSION, CREATE_NEW_FILE, REWRITE_FILE, SKIP, RETURN_ERROR
@@ -933,6 +937,12 @@ public class ReportsManager{
             return null;
         }
 
+        if (!hasExtension(filename)) {
+            String reportFileName = reportFileData.getFilename();
+            String extension = reportFileName.substring(reportFileName.lastIndexOf('.'));
+            filename = filename + extension;
+        }
+
         reportFileData.setFilename(filename);
         NodeRef resultRef = storeAsContent(reportFileData, categoryRef, existsPolicy);
 
@@ -1376,7 +1386,7 @@ public class ReportsManager{
         }
     }
 
-    private String generateReportFileName(final String reportCode, final String templateCode, NodeRef documentRef) {
+    public String generateReportFileName(final String reportCode, final String templateCode, NodeRef documentRef) {
         ReportDescriptor reportDesc = getRegisteredReportDescriptor(reportCode);
         ReportTemplate reportTemplate = getTemplateByCode(reportDesc, templateCode);
 
@@ -1412,5 +1422,12 @@ public class ReportsManager{
             // here name1 <> null, name2 <> null ...
             return name1.compareToIgnoreCase(name2);
         }
+    }
+
+    private boolean hasExtension(String filename) {
+        Pattern pattern = Pattern.compile(EXTENSION_PATTERN);
+        Matcher matcher = pattern.matcher(filename);
+
+        return matcher.find();
     }
 }

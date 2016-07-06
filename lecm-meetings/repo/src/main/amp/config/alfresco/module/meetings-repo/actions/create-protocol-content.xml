@@ -11,7 +11,7 @@
 		<property name="cm:title"><![CDATA[Создать протокол по шаблону]]></property>
 		<property name="lecm-group-actions:script"><![CDATA[//генерация отчёта
 (function() {
-	var reportNode = protocolService.generateDocumentReport("protocol-content", templateCode, document.nodeRef);
+	var details = rptmanager.buildReportAndAttachToDocument(document.nodeRef, "protocol-content", templateCode, "Документ");
 })();]]></property>
 		<items>
 			<item name="cm:Шаблон" type="lecm-group-actions:form-field">

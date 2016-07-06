@@ -9,6 +9,7 @@ import ru.it.lecm.reports.api.ReportsManager;
 /**
  * @author dbayandin
  */
+@Deprecated
 public class ORDReportsServiceImpl extends BaseBean implements ORDReportsService {
 
     private ReportsManager reportsManager;
