@@ -44,8 +44,13 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 
 		rejectReview: function () {
 			function onSuccess (successResponse) {
+				var canceled = successResponse.json.canceled,
+					msg = canceled ? 'Ознакомление успешно отозвано' : 'Не найдено ознакамливающихся для отзыва';
 				Bubbling.fire('datagridRefresh', {
 					bubblingLabel: this.options.bubblingLabel
+				});
+				Alfresco.util.PopupManager.displayMessage({
+					text: msg
 				});
 			}
 

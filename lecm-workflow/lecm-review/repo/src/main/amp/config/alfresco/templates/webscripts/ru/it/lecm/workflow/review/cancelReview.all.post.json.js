@@ -33,4 +33,5 @@
 	}
 
 	model.nodeRef = reviewTable.nodeRef.toString();
+	model.canceled = recipients.length;
 })();

@@ -1,5 +1,6 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-	"persistedObject": "${nodeRef}"
+	"persistedObject": "${nodeRef}",
+	"canceled": ${canceled}
 }
 </#escape>
