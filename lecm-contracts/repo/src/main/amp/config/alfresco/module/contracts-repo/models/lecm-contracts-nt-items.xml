@@ -46,7 +46,7 @@
             <item name="cm:CONTRACT_PARTNER_SIGN_APPROVE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[CONTRACT_PARTNER_SIGN_APPROVE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Проект договор номер #mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))} подписан. Подтвердите подписание Контрагентом]]></property>
+                    <![CDATA[Проект договор номер {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document-aspects:reg-project-data-number"))} подписан. Подтвердите подписание Контрагентом]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Договор. Подтвердить подписание контрагентом]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
