@@ -17,6 +17,7 @@ import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.internal.api.InternalService;
 import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.outgoing.api.OutgoingModel;
@@ -34,7 +35,7 @@ import java.util.*;
 
 /**
  *
- * @author vmalygin
+ * @author vmalygin/apalm
  */
 public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract implements ReservationWorkflowService {
 
@@ -43,7 +44,8 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	private EDSGlobalSettingsService edsGlobalSettingsService;
 	private RegNumbersService regNumbersService;
 	private BusinessJournalService businessJournalService;
-
+	protected NotificationsService notificationsService;
+	
 	private static final String POSITIVE_DECISION = "выполнен";
 	
 	private static final String OUTGOING_DOC_NUMBER = "OUTGOING_DOC_NUMBER";
@@ -71,52 +73,66 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		this.businessJournalService = businessJournalService;
 	}
 
-	@Override
-	protected String getWorkflowStartedMessage(final String documentLink, final Date dueDate) {
-		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
-		String employeeName = (String) nodeService.getProperty(currentEmp, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-		String template = "%s запросил резервирование номера для документа %s";
-		String employeeUrl = wrapperLink(currentEmp, employeeName, LINK_URL);
-		return String.format(template, employeeUrl, documentLink);
+	public void setNotificationsService(NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
 	}
+	
+	// Уведомление при старте запроса на резервирование рег.номера:
+	
+	@Override
+	public void notifyWorkflowStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {		
+		NodeRef docRef = Utils.getDocumentFromBpmPackage(bpmPackage);
+		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
+		
+        HashMap<String, Object> templateObjects = new HashMap<>();
+        templateObjects.put("mainObject", docRef);
+        templateObjects.put("employee", currentEmp);
+        Notification notification = new Notification(templateObjects);
+        notification.setRecipientEmployeeRefs(Collections.singletonList(employeeRef));
+        notification.setAuthor(authService.getCurrentUserName());
+        notification.setTemplateCode("RESERVATION_REQUEST_STARTED");
+        notification.setObjectRef(docRef);
+        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+        notificationsService.sendNotification(notification);
+	}
+		
+	// Уведомление при окончании запроса на резервирование рег.номера:
 	
 	@Override
 	public void notifyWorkflowFinished(NodeRef employeeRef, String decision, NodeRef bpmPackage) {
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, documentService, nodeService, serviceRegistry);
-		notifyWorkflowFinished(employeeRef, decision, docInfo, bpmPackage);
-	}
-
-	private void notifyWorkflowFinished(NodeRef employeeRef, String decision, DocumentInfo docInfo, NodeRef bpmPackage) {
-		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
-		recipients.add(employeeRef);
-
-		String description = getWorkflowFinishedMessage(docInfo.getDocumentLink(), decision, bpmPackage);
-		sendNotification(description, docInfo.getDocumentRef(), recipients);
-	}
-	
-	private String getWorkflowFinishedMessage(final String documentLink, final String decision, NodeRef bpmPackage) {
-		String message = "";
-		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage);
-		String regNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);
-		// Stub:
-		if (decision.equals(POSITIVE_DECISION)) {
-			// Positive scenario:
-			String template = "Для документа %s зарезервирован регистрационный номер %s";
-			message = String.format(template, documentLink, regNumber);
-			Date reserveDate = (Date) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_DATE);
-			if (reserveDate != null) {
-				SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-				String regDateFormatted = dateFormat.format(reserveDate);
-				String templateDate = " от %s";
-				message += String.format(templateDate, regDateFormatted);
-			}
-		}
-		else {
-			// Negative scenario:
-			String template = "Ваш запрос на резервирование регистрационного номера для документа %s отклонён";
-			message = String.format(template, documentLink);
-		}
-		return message;
+		NodeRef docRef = Utils.getDocumentFromBpmPackage(bpmPackage);
+		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
+		String regNumber = (String) nodeService.getProperty(docRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);
+		
+        HashMap<String, Object> templateObjects = new HashMap<>();
+        templateObjects.put("mainObject", docRef);
+        
+		String templateCode = "";
+        if (decision.equals(POSITIVE_DECISION)) {
+        	templateObjects.put("regNumber", regNumber);
+        	Date reserveDate = (Date) nodeService.getProperty(docRef, DocumentService.PROP_REG_DATA_DOC_DATE);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+			String regDateFormatted = dateFormat.format(reserveDate);
+        	if (reserveDate != null) {
+        		templateCode = "RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE";
+        		templateObjects.put("reserveDate", regDateFormatted);
+        	}
+        	else {
+        		templateCode = "RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE";
+        	}
+        }
+        else {
+        	templateCode = "RESERVATION_REQUEST_FINISHED_REJECTED";
+            templateObjects.put("employee", currentEmp);
+        }
+		
+        Notification notification = new Notification(templateObjects);
+        notification.setRecipientEmployeeRefs(Collections.singletonList(employeeRef));
+        notification.setAuthor(authService.getCurrentUserName());
+        notification.setTemplateCode(templateCode);
+        notification.setObjectRef(docRef);
+        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+        notificationsService.sendNotification(notification);
 	}
 	
 	@Override
@@ -129,6 +145,11 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 		return null;
 	}
 
+	@Override
+	protected String getWorkflowStartedMessage(final String documentLink, final Date dueDate) {
+		return null;
+	}
+	
 	@Override
 	public void assignTask(final NodeRef assignee, final DelegateTask task) {
 		actualizeReservationTask(assignee, task);

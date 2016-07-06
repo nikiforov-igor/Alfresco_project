@@ -87,7 +87,8 @@
 		  depends-on="reservation.model.bootstrap"
 		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
 		  p:regNumbersService-ref="regNumbersService"
-		  p:businessJournalService-ref="businessJournalService" />
+		  p:businessJournalService-ref="businessJournalService"
+		  p:notificationsService-ref="notificationsService" />
 	
 	<util:list id="lecm.reservatioin.groupOperations">
 		<value>alfresco/module/reservation-repo/actions/reservation.xml</value>
