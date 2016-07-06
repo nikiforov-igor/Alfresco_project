@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
 import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.actions.bean.GroupActionsServiceImpl;
-import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.SubstitudeBean;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -25,7 +26,6 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: pmelnikov
@@ -41,6 +41,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
     private ServiceRegistry serviceRegistry;
     private TransactionService transactionService;
 	private LecmTransactionHelper lecmTransactionHelper;
+    private SubstitudeBean substitudeBean;
 
     final private static Logger logger = LoggerFactory.getLogger(GroupActionExecutor.class);
 
@@ -158,7 +159,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                             String message;
 							itemResult.put("withErrors", false);
                             try {
-                                message = returnModel.get("message")==null ? ((String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING)): returnModel.get("message").toString();
+                                message = returnModel.get("message") == null ? substitudeBean.getObjectDescription(item) : returnModel.get("message").toString();
                                 scriptProcessor.executeScript(scriptContent, scriptModel);
                             } catch (Exception e) {
                                 logger.error("Error while execute script: ", e);
@@ -194,6 +195,10 @@ public class GroupActionExecutor extends DeclarativeWebScript {
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+    }
+
+    public void setSubstitudeBean(SubstitudeBean substitudeBean) {
+        this.substitudeBean = substitudeBean;
     }
 
     private void addParamenersToModel(HashMap<String, String> parameters, Map<String, Object> model) {

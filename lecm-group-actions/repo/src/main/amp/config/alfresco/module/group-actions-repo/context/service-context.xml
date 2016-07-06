@@ -59,6 +59,7 @@
         <property name="serviceRegistry"  ref="ServiceRegistry"/>
         <property name="transactionService" ref="transactionService"/>
         <property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
+        <property name="substitudeBean" ref="substitudeService"/>
     </bean>
 
     <bean id="groupActions.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
