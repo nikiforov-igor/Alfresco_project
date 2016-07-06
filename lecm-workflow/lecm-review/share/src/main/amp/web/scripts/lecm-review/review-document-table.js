@@ -43,7 +43,23 @@ LogicECM.module.Review = LogicECM.module.Review || {};
 		},
 
 		rejectReview: function () {
-			alert("Not implemented!")
+			function onSuccess (successResponse) {
+				Bubbling.fire('datagridRefresh', {
+					bubblingLabel: this.options.bubblingLabel
+				});
+			}
+
+			Alfresco.util.Ajax.jsonPost({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/review/cancelReview/all',
+				dataObj: {
+					documentRef: this.documentNodeRef
+				},
+				successCallback: {
+					scope: this,
+					fn: onSuccess
+				},
+				failureMessage: this.msg('message.failure')
+			});
 		},
 
 		onActionCancelReview: function (rowData, target, actionsConfig, confirmFunction) {
