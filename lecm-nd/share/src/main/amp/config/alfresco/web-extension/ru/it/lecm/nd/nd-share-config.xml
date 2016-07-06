@@ -447,28 +447,26 @@
                         </control>
                     </field>
                     <field set="review" id="lecm-review-ts:review-table-assoc">
-                        <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
+                        <control template="/ru/it/lecm/workflow/review/controls/review-list-datagrid-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
+                            <control-param name="editable">true</control-param>
                             <control-param name="forceEditable">true</control-param>
-                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showCreateBtn">false</control-param>
+                            <control-param name="allowCreate">false</control-param>
                             <control-param name="allowEdit">false</control-param>
                             <control-param name="allowDelete">false</control-param>
                             <!--<control-param name="dataSource">lecm/review/ds/reviewListDS</control-param>-->
                             <!--<control-param name="deleteMessageFunction">LogicECM.module.Contracts.getStageDeleteMessage</control-param>-->
-                            <control-param name="newRowDialogTitle">reviewer.create.button.title</control-param>
-                            <control-param name="createItemBtnMsg">reviewer.create.button.title</control-param>
-                            <control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>
-                            <control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>
+                            <!--<control-param name="newRowDialogTitle">reviewer.create.button.title</control-param>-->
+                            <!--<control-param name="createItemBtnMsg">reviewer.create.button.title</control-param>-->
+                            <!--<control-param name="editFormTitleMsg">reviewer.edit.form.title</control-param>-->
+                            <!--<control-param name="createFormTitleMsg">reviewer.create.form.title</control-param>-->
                             <!--<control-param name="viewFormTitleMsg">stage.view.form.title</control-param>-->
                             <!--<control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>-->
-                            <control-param name="expandable">true</control-param>
-                            <control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>
-                            <control-param name="jsObjectName">LogicECM.module.Review.DocumentTable</control-param>
-                            <control-param name="jsDependencies">scripts/lecm-review/review-document-table.js</control-param>
-                            <control-param name="cssDependencies">css/lecm-review/review-document-table.css</control-param>
+                            <!--<control-param name="expandDataSource">lecm/workflow/review/ts/items/datagrid</control-param>-->
                         </control>
                     </field>
                 </appearance>

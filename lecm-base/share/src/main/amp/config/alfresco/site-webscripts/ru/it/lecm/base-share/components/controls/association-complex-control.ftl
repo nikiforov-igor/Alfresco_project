@@ -59,9 +59,6 @@
 							<#else>
 							itemType: '${i}',
 							</#if>
-							<#if params[itemKey + '_childrenDataSource']??>
-                                childrenDataSource: '${params[itemKey + '_childrenDataSource']}',
-							</#if>
 							<#if args.ignoreNodes??>
 								ignoreNodes: '${args.ignoreNodes?split(',')}',
 							<#else>
