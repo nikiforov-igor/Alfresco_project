@@ -455,6 +455,9 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 
         Map<QName, Serializable> employeeProperties = nodeService.getProperties(employee);
 
+        if (personLastName.isEmpty()) {
+            personLastName = personFirstName;
+        }
         employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_FIRST_NAME, personFirstName);
         employeeProperties.put(OrgstructureBean.PROP_EMPLOYEE_LAST_NAME, personLastName);
         if (!personMiddleName.isEmpty()) {
