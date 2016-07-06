@@ -158,13 +158,13 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                             String message;
 							itemResult.put("withErrors", false);
                             try {
+                                message = returnModel.get("message")==null ? ((String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING)): returnModel.get("message").toString();
                                 scriptProcessor.executeScript(scriptContent, scriptModel);
-								message = returnModel.get("message")==null ? ((String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING)): returnModel.get("message").toString();
                             } catch (Exception e) {
                                 logger.error("Error while execute script: ", e);
                                 result.put("withErrors", true);
                                 itemResult.put("withErrors", true);
-								message = e.getMessage();
+                                message = e.getMessage();
                             }
 
 							itemResult.put("redirect", returnModel.get("redirect"));
