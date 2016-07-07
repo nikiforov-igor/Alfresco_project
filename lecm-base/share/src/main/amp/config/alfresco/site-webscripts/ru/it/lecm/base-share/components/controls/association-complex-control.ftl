@@ -11,19 +11,41 @@
 	<#assign items = params.items?split(',')>
 </#if>
 
+<#assign defaultValue = "">
+<#if form.mode == "create" && !field.disabled>
+	<#if params.selectedItemsFormArgs??>
+		<#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
+		<#list selectedItemsFormArgs as selectedItemsFormArg>
+			<#if form.arguments[selectedItemsFormArg]??>
+				<#if (defaultValue?length > 0)>
+					<#assign defaultValue = defaultValue + ","/>
+				</#if>
+				<#assign defaultValue = defaultValue + form.arguments[selectedItemsFormArg]/>
+			</#if>
+		</#list>
+
+	<#elseif form.arguments[field.name]?has_content>
+		<#assign defaultValue=form.arguments[field.name]>
+	<#elseif params.defaultValue??>
+		<#assign defaultValue=params.defaultValue>
+	</#if>
+<#else>
+	<#assign defaultValue = field.value>
+</#if>
+
 <#assign disabled = 'view' == form.mode || (field.disabled && !(params.forceEditable?? && 'true' == params.forceEditable?lower_case))>
 <#assign isComplex = items?size gt 1>
 <#assign showAutocomplete = !disabled && !isComplex && (!params.showAutocomplete?? || 'true' == params.showAutocomplete?lower_case)>
 
 <#if 'view' == form.mode>
 	<#assign value>
-		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${field.value?html}'>
+		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${defaultValue?html}'>
 		<div id='${fieldHtmlId}-displayed'></div>
 	</#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control viewmode' value=value/>
 <#else>
 	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=false/></#assign>
-	<#assign value><@components.baseControlValue field=field showAutocomplete=showAutocomplete/></#assign>
+	<#assign value><@components.baseControlValue field=field fieldvalue=defaultValue showAutocomplete=showAutocomplete/></#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control' buttons=buttons value=value>
 		<#if showAutocomplete>
 		<div id='${fieldHtmlId}-autocomplete-container'></div>
@@ -37,7 +59,7 @@
 <script type='text/javascript'>//<![CDATA[
 	(function () {
 		function initAssociationControl() {
-			new LogicECM.module.AssociationComplexControl('${fieldHtmlId}', '${field.value}', {
+			new LogicECM.module.AssociationComplexControl('${fieldHtmlId}', '${defaultValue}', {
 				disabled: ${disabled?string},
 				isComplex: ${isComplex?string},
 				showAutocomplete: ${showAutocomplete?string},
