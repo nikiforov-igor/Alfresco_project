@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="RewriteChildren">
     <item name="cm:Списать в дело" type="lecm-group-actions:script-action">
         <property name="cm:name"><![CDATA[Списать в дело]]></property>
         <property name="cm:title"><![CDATA[Списать в дело]]></property>
