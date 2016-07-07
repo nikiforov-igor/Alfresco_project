@@ -67,3 +67,7 @@
 .datagrid .onActionAddMacros a {
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjExR/NCNwAAALdJREFUOE+lkLEKwyAURfvnfk1ACG6S7EKmLE4Fof6Di0Mo0t6am+alUkromdRzD4Rc1En+DkIIxphHBQdcKTYOgXPu3oBH6soexBg5aYDiSAbWWvoGKI5k0HUdfQMURzLo+56+AYojGczzTN8AxZEMlmXRWnMiwCMURzIAOedhGDis4IpH6sohAKWUlNKtggOuFBsMILz3+BtgmqZrBYf1BepdvgJcxnHkR3wBg7X5/KSfnAyUegKw1QorgLrU5wAAAABJRU5ErkJggg==) !important;
 }
+
+.tab-approvalTab {
+	min-height: 100px;
+}
