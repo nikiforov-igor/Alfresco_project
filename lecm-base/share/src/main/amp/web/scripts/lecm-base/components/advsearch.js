@@ -392,11 +392,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var parameters = this.prepareSearchParams(this.currentSearchArgs);
                 parameters.columns = this.dataColumns;
                 if (!isAll) {
-                    var items = this.dataGrid.getSelectedItems();
-                    var currentSelectedItems = [];
-                    for (var i = 0; i < items.length; i++) {
-                        currentSelectedItems.push(items[i].nodeRef);
-                    }
+                	var currentSelectedItems = [];
+                	for(var key in this.dataGrid.selectedItems) currentSelectedItems.push(key);
                     parameters.params.searchNodes = currentSelectedItems.join(",");
                 }
                 var form = document.createElement("form");
