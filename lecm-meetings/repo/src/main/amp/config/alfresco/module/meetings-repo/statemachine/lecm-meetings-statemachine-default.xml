@@ -397,7 +397,7 @@
 																			<property>
 																				<name>condition</name>
 																				<value>
-                                                                                    <![CDATA[!@routesService.hasEmployeesInRoute(doc.nodeRef) or @routesService.getApprovalState(doc.nodeRef) != "NEW")]]></value>
+                                                                                    <![CDATA[!@routesService.hasEmployeesInRoute(doc.nodeRef) or @routesService.getApprovalState(doc.nodeRef) != "NEW"]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -643,7 +643,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW")]]></value>
+                                                                                    <![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) AND @routesService.getApprovalState(doc.nodeRef) == "NEW"]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
