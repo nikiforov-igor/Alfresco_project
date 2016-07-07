@@ -9,7 +9,6 @@ import net.fortuna.ical4j.model.parameter.*;
 import net.fortuna.ical4j.model.property.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -77,26 +76,23 @@ public class EventsNotificationsService extends BaseBean {
 	private static final String INVITED_MEMBER_REMOVED_HTML_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-removed-html-event-message.ftl";
 	private static final String INVITED_MEMBER_REMOVED_PLAIN_TEXT_EVENT_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-removed-plain-text-event-message.ftl";
 
-	private static final String MEMBERS_STANDART_NOTIFICATIONS_NEW_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-new-event-message.ftl";
-	private static final String MEMBERS_STANDART_NOTIFICATIONS_UPDATE_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-update-event-message.ftl";
-	private static final String MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "members-standart-cancel-event-message.ftl";
-
-//	private static final String MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-accpted-event-message.ftl";
-//	private static final String MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-declined-event-message.ftl";
-//	private static final String MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "member-tentative-event-message.ftl";
-
-	private static final String INVITED_MEMBER_ACCEPTED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-accpted-event-message.ftl";
-	private static final String INVITED_MEMBER_DECLINED_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-declined-event-message.ftl";
-	private static final String INVITED_MEMBER_TENTATIVE_INVITE_TEMPLATE = MESSAGE_TEMPLATES_PATH + "invited-member-tentative-event-message.ftl";
-
 	private static final String MULTIPART_SUBTYPE_ALTERNATIVE = "alternative";
 	private static final String CONTENT_TYPE_ALTERNATIVE = "multipart/alternative";
 	private static final String CONTENT_SUBTYPE_HTML = "html";
 
+	private static final String EVENTS_NEW_EVENT = "EVENTS.NEW_EVENT";
+	private static final String EVENTS_UPDATE_EVENT = "EVENTS.UPDATE_EVENT";
+	private static final String EVENTS_CANCEL_EVENT = "EVENTS.CANCEL_EVENT";
+	private static final String EVENTS_MEMBER_INVITATION_CONFIRM = "EVENTS.MEMBER_INVITATION_CONFIRM";
+	private static final String EVENTS_MEMBER_INVITATION_DECLINE = "EVENTS.MEMBER_INVITATION_DECLINE";
+	private static final String EVENTS_MEMBER_INVITATION_TENTATIVE = "EVENTS.MEMBER_INVITATION_TENTATIVE";
+	private static final String EVENTS_INVITATION_CONFIRM = "EVENTS.INVITATION_CONFIRM";
+	private static final String EVENTS_INVITATION_DECLINE = "EVENTS.INVITATION_DECLINE";
+	private static final String EVENTS_INVITATION_TENTATIVE = "EVENTS.INVITATION_TENTATIVE";
+
 	private String prodId = "LECM-ALFRESCO";
 
-	final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-	final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	private Boolean sendIcalToMembers = false;
 	private Boolean sendIcalToInvitedMembers = true;
@@ -111,72 +107,36 @@ public class EventsNotificationsService extends BaseBean {
 	private JavaMailSender mailService;
 	private ThreadPoolExecutor threadPoolExecutor;
 
-	public ThreadPoolExecutor getThreadPoolExecutor() {
-		return threadPoolExecutor;
-	}
-
 	public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
 		this.threadPoolExecutor = threadPoolExecutor;
-	}
-
-	public String getDefaultFromEmail() {
-		return defaultFromEmail;
 	}
 
 	public void setDefaultFromEmail(String defaultFromEmail) {
 		this.defaultFromEmail = defaultFromEmail;
 	}
 
-	public JavaMailSender getMailService() {
-		return mailService;
-	}
-
 	public void setMailService(JavaMailSender mailService) {
 		this.mailService = mailService;
-	}
-
-	public ContentService getContentService() {
-		return contentService;
 	}
 
 	public void setContentService(ContentService contentService) {
 		this.contentService = contentService;
 	}
 
-	public EventsService getEventsService() {
-		return eventsService;
-	}
-
 	public void setEventsService(EventsService eventsService) {
 		this.eventsService = eventsService;
-	}
-
-	public OrgstructureBean getOrgstructureBean() {
-		return orgstructureBean;
 	}
 
 	public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
 		this.orgstructureBean = orgstructureBean;
 	}
 
-	public NamespaceService getNamespaceService() {
-		return namespaceService;
-	}
-
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
 	}
 
-	public NotificationsService getNotificationsService() {
-		return notificationsService;
-	}
-
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
-	}
-
-	public TemplateService getTemplateService() {
-		return templateService;
 	}
 
 	public void setTemplateService(TemplateService templateService) {
@@ -199,14 +159,6 @@ public class EventsNotificationsService extends BaseBean {
 		this.sendIcalToInvitedMembers = sendIcalToInvitedMembers;
 	}
 
-	public String getProdId() {
-		return prodId;
-	}
-
-	public void setProdId(String ProdId) {
-		this.prodId = ProdId;
-	}
-
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
@@ -223,11 +175,9 @@ public class EventsNotificationsService extends BaseBean {
 			}
 			//сначала шлём участникам, т.к. у них ещё стандартные уведомления
 			//Рссылаем стандартные уведомления
-			String author = AuthenticationUtil.getSystemUserName();
-			//отсылка через стандартные уведомления
 			//Возможно, тоже нужно будет сделать персонализированую
-			String text = templateService.processTemplate(MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
-			notificationsService.sendNotification(author, event, text, members, null);
+			notificationsService.sendNotificationByTemplate(event, members, EVENTS_CANCEL_EVENT);
+
 			String subject;
 			if (nodeService.getType(event).isMatch(EventsService.TYPE_EVENT)) {
 				subject = "Мероприятие ";
@@ -273,7 +223,15 @@ public class EventsNotificationsService extends BaseBean {
 		notifyEvent(event, true, recipients);
 	}
 
+	public void notifyEventUpdated(NodeRef event, List<NodeRef> recipients) {
+		notifyEvent(event, false, recipients);
+	}
+
 	private void notifyEvent(NodeRef event, boolean isNew, List<NodeRef> recipients) {
+		if (recipients.isEmpty()) {
+			return;
+		}
+
 		List<NodeRef> members = eventsService.getEventMembers(event);
 		if (!members.contains(eventsService.getEventInitiator(event))) {
 			members.add(eventsService.getEventInitiator(event));
@@ -281,19 +239,20 @@ public class EventsNotificationsService extends BaseBean {
 		List<NodeRef> sendTo = new ArrayList<>(recipients);
 		Map<String, Object> eventTemplateModel = new HashMap<>(getEventTemplateModel(event));
 		List<DataSource> attachments = new ArrayList<>(getEventAttachments(event));
-		if (null != recipients && !recipients.isEmpty()) {
+		if (!recipients.isEmpty()) {
 			sendTo.retainAll(members);
 		}
 		//Рссылаем стандартные уведомления
-		String author = AuthenticationUtil.getSystemUserName();
 		//отсылка через стандартные уведомления
 		//Возможно, тоже нужно будет сделать персонализированую
-		
-		String text = templateService.processTemplate(isNew ? MEMBERS_STANDART_NOTIFICATIONS_NEW_EVENT_MESSAGE_TEMPLATE : MEMBERS_STANDART_NOTIFICATIONS_UPDATE_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
+
+		String templateCode = isNew ? EVENTS_NEW_EVENT : EVENTS_UPDATE_EVENT;
 		List<NodeRef> notificationsSendTo = new ArrayList<>(sendTo);
 		notificationsSendTo.remove(eventsService.getEventInitiator(event));
-		notificationsService.sendNotification(author, event, text, notificationsSendTo, null);
-		
+		Map<String, Object> templateParams = new HashMap<>();
+		templateParams.put("eventExecutor", eventsService.getEventInitiator(event));
+		notificationsService.sendNotificationByTemplate(event, notificationsSendTo, templateCode, templateParams);
+
 		//теперь рассылаем письма участникам
 		if (sendIcalToMembers) {
 			for (NodeRef recipient : sendTo) {
@@ -327,9 +286,8 @@ public class EventsNotificationsService extends BaseBean {
 		//теперь рассылка приглашённым
 		List<NodeRef> invitedMembers = eventsService.getEventInvitedMembers(event);
 		sendTo = new ArrayList<>(recipients);
-		if (null != recipients && !recipients.isEmpty()) {
-			sendTo.retainAll(invitedMembers);
-		}
+		sendTo.retainAll(invitedMembers);
+
 		for (NodeRef recipient : sendTo) {
 			String email = (String) nodeService.getProperty(recipient, Contractors.PROP_REPRESENTATIVE_EMAIL);
 			if (email != null && email.length() > 0) {
@@ -356,17 +314,13 @@ public class EventsNotificationsService extends BaseBean {
 
 	}
 
-	public void notifyEventUpdated(NodeRef event, List<NodeRef> recipients) {
-		notifyEvent(event, false, recipients);
-	}
-
 	public void notifyAttendeeRemoved(NodeRef event, NodeRef attendee) {
 		if (null == attendee || null == event) {
 			return;
 		}
 		nodeService.setProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE, (Integer) nodeService.getProperty(event, EventsService.PROP_EVENT_ICAL_NEXT_SEQUENCE) + 1);
 		QName attendeeType = nodeService.getType(attendee);
-		List<NodeRef> sendTo = new ArrayList();
+		List<NodeRef> sendTo = new ArrayList<>();
 		sendTo.add(attendee);
 		String attendeeMail;
 		Map<String, Object> eventTemplateModel = new HashMap<>(getEventTemplateModel(event));
@@ -374,10 +328,8 @@ public class EventsNotificationsService extends BaseBean {
 		if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(attendeeType)) {
 			//пошлём стандартное уведомление
 			//Рссылаем стандартные уведомления
-			String author = AuthenticationUtil.getSystemUserName();
 			//отсылка через стандартные уведомления
-			String text = templateService.processTemplate(MEMBERS_STANDART_NOTIFICATIONS_CANCEL_EVENT_MESSAGE_TEMPLATE, eventTemplateModel);
-			notificationsService.sendNotification(author, event, text, sendTo, null);
+			notificationsService.sendNotificationByTemplate(event, sendTo, EVENTS_CANCEL_EVENT);
 			if (sendIcalToMembers) {
 				attendeeMail = nodeService.getProperty(attendee, OrgstructureBean.PROP_EMPLOYEE_EMAIL).toString();
 				if (null != attendeeMail && !attendeeMail.isEmpty()) {
@@ -739,10 +691,6 @@ public class EventsNotificationsService extends BaseBean {
 		return Collections.unmodifiableList(attachmentDS);
 	}
 
-	private void sendMail(String sendTo, String subject, String plainText, String htmlText, List<DataSource> attachments) {
-		sendMail(sendTo, subject, plainText, htmlText, attachments, null);
-	}
-
 	private void sendMail(String sendTo, String subject, final String plainText, final String htmlText, List<DataSource> attachments, Calendar calendar) {
 		if (null != sendTo && !sendTo.isEmpty()) {
 			try {
@@ -829,27 +777,21 @@ public class EventsNotificationsService extends BaseBean {
 		}
 	}
 
-	private String getRepresentativeShortName(NodeRef nodeRef) {
-		String surname = (String) nodeService.getProperty(nodeRef, Contractors.PROP_REPRESENTATIVE_SURNAME);
-		String firstname = (String) nodeService.getProperty(nodeRef, Contractors.PROP_REPRESENTATIVE_FIRSTNAME);
-		String name = (surname == null ? "" : surname) + " " + ((firstname == null) ? "" : firstname);
-		return name;
-	}
-
 	public void notifyOrganizerInvitedMemberStatusChanged(NodeRef event, NodeRef member, String status) {
-		Map template = new HashMap(getEventTemplateModel(event));
-		String shortName = getRepresentativeShortName(member);
-		template.put("attendeeName", shortName);
-		String message = null;
+		Map<String, Object> templateParams = new HashMap<>();
+		templateParams.put("eventExecutor", member);
+		String templateCode = null;
+
 		if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
-			message = templateService.processTemplate(INVITED_MEMBER_ACCEPTED_INVITE_TEMPLATE, template);
+			templateCode = EVENTS_MEMBER_INVITATION_CONFIRM;
 		} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(status)) {
-			message = templateService.processTemplate(INVITED_MEMBER_DECLINED_INVITE_TEMPLATE, template);
+			templateCode = EVENTS_MEMBER_INVITATION_DECLINE;
 		} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
-			message = templateService.processTemplate(INVITED_MEMBER_TENTATIVE_INVITE_TEMPLATE, template);
+			templateCode = EVENTS_MEMBER_INVITATION_TENTATIVE;
 		}
-		if (null != message) {
-			notificationsService.sendNotification(shortName, event, message, Arrays.asList(eventsService.getEventInitiator(event)), member);
+
+		if (templateCode != null) {
+			notificationsService.sendNotificationByTemplate(event, Collections.singletonList(eventsService.getEventInitiator(event)), templateCode, templateParams);
 		}
 	}
 
@@ -862,19 +804,17 @@ public class EventsNotificationsService extends BaseBean {
 			String templateCode = null;
 
 			if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_CONFIRMED.equals(status)) {
-				templateCode = "EVENTS.INVITATION_CONFIRM";
+				templateCode = EVENTS_INVITATION_CONFIRM;
 			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_DECLINED.equals(status)) {
-				templateCode = "EVENTS.INVITATION_DECLINE";
+				templateCode = EVENTS_INVITATION_DECLINE;
 			} else if (EventsService.CONSTRAINT_EVENT_MEMBERS_STATUS_EMPTY.equals(status)) {
-				templateCode = "EVENTS.INVITATION_TENTATIVE";
+				templateCode = EVENTS_INVITATION_TENTATIVE;
 			}
 
 			if (templateCode != null) {
 				notificationsService.sendNotificationByTemplate(event, Collections.singletonList(eventsService.getEventInitiator(event)), templateCode, templateParams);
 			}
-
 		}
-
 	}
 
 }

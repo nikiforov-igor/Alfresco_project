@@ -2,11 +2,22 @@ package ru.it.lecm.events.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.TransactionListener;
+import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.GUID;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -14,24 +25,14 @@ import ru.it.lecm.base.beans.SearchQueryProcessor;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
-import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.repo.transaction.TransactionListener;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.util.GUID;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 /**
  * User: AIvkin Date: 25.03.2015 Time: 14:44
@@ -44,7 +45,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private static final String EVENTS_TRANSACTION_LISTENER = "events_transaction_listaner";
 	private static final boolean DAY_BEGIN = true;
 	private static final boolean DAY_END = false;
-	private static final long HOUR = 3600*1000; // in milli-seconds
 
 	private DictionaryBean dictionaryBean;
 	private OrgstructureBean orgstructureBean;
@@ -52,17 +52,9 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private IWorkCalendar workCalendarService;
 	private DocumentTableService documentTableService;
 	private SearchQueryProcessor organizationQueryProcessor;
-	private NamespaceService namespaceService;
 	private DocumentConnectionService documentConnectionService;
 
-	private ThreadPoolExecutor threadPoolExecutor;
-
 	private EventsNotificationsService eventsNotificationsService;
-
-	//Уже есть в BaseBean
-	//final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-	final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-	final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
 	private final Map<QName, List<QName>> assocsToUpdateMap = new HashMap<>();
 	private final Map<QName, List<QName>> propsToUpdateMap = new HashMap<>();
@@ -71,10 +63,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	private final static String MONTH_DAYS = "month-days";
 
 	private List<String> propsForFilterShowIncalendar = new ArrayList<>();
-
-	public EventsNotificationsService getEventsNotificationsService() {
-		return eventsNotificationsService;
-	}
 
 	public void setEventsNotificationsService(EventsNotificationsService eventsNotificationsService) {
 		this.eventsNotificationsService = eventsNotificationsService;
@@ -90,20 +78,8 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		return eventsNotificationsService.getSendIcalToMembers();
 	}
 
-	public DocumentConnectionService getDocumentConnectionService() {
-		return documentConnectionService;
-	}
-
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
-	}
-
-	public NamespaceService getNamespaceService() {
-		return namespaceService;
-	}
-
-	public void setNamespaceService(NamespaceService namespaceService) {
-		this.namespaceService = namespaceService;
 	}
 
 	public void init() {
@@ -134,14 +110,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
-	}
-
-	public ThreadPoolExecutor getThreadPoolExecutor() {
-		return threadPoolExecutor;
-	}
-
-	public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
-		this.threadPoolExecutor = threadPoolExecutor;
 	}
 
 	public void setOrganizationQueryProcessor(SearchQueryProcessor organizationQueryProcessor) {
@@ -289,7 +257,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		return filterDeclinedEvents(results);
 	}
 
-	List<NodeRef> filterDeclinedEvents(List<NodeRef> events) {
+	private List<NodeRef> filterDeclinedEvents(List<NodeRef> events) {
 		if (!isShowDeclined()) {
 			List<NodeRef> filteredResults = new ArrayList<>();
 			NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
@@ -495,7 +463,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		return findNodeByAssociationRef(event, ASSOC_EVENT_INITIATOR, null, ASSOCIATION_TYPE.TARGET);
 	}
 
-	public NodeRef getResourcesTable(NodeRef event) {
+	private NodeRef getResourcesTable(NodeRef event) {
 		return documentTableService.getTable(event, TYPE_EVENT_RESOURCES_TABLE);
 	}
 
@@ -683,7 +651,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	@Override
-	public void notifyEventCncelled(NodeRef event) {
+	public void notifyEventCancelled(NodeRef event) {
 		bindTransactionListener();
 		Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
 		Action action = pendingActions.get(event);
@@ -892,9 +860,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		}
 	}
 
-	;
-
-
 	private class EventsTransactionListener implements TransactionListener {
 
 		@Override
@@ -917,7 +882,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			logger.error("AfterCommit start");
 			HashMap<NodeRef, Action> actions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
 			if (actions != null) {
-				List<NodeRef> nodes = new LinkedList(actions.keySet());
+				List<NodeRef> nodes = new LinkedList<>(actions.keySet());
 				while (!nodes.isEmpty()) {
 					NodeRef node = nodes.remove(0);
 					final Action action = actions.remove(node);
@@ -945,16 +910,18 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 						} else {
 							List<NodeRef> create = new ArrayList<>();
 							List<NodeRef> update = new ArrayList<>();
-							Iterator<NodeRef> iterator = action.recipients.keySet().iterator();
-							while (iterator.hasNext()) {
-								NodeRef recipient = iterator.next();
-								String notifycationType = action.getRecipients().get(recipient);
-								if (notifycationType.equals(Action.CREATE)) {
-									create.add(recipient);
-								} else if (notifycationType.equals(Action.REMOVE)) {
-									eventsNotificationsService.notifyAttendeeRemoved(event, recipient);
-								} else if (notifycationType.equals(Action.UPDATE)) {
-									update.add(event);
+							for (NodeRef recipient : action.recipients.keySet()) {
+								String notificationType = action.getRecipients().get(recipient);
+								switch (notificationType) {
+									case Action.CREATE:
+										create.add(recipient);
+										break;
+									case Action.REMOVE:
+										eventsNotificationsService.notifyAttendeeRemoved(event, recipient);
+										break;
+									case Action.UPDATE:
+										update.add(recipient);
+										break;
 								}
 							}
 							eventsNotificationsService.notifyEventCreated(event, create);

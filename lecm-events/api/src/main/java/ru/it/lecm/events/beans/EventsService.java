@@ -159,7 +159,7 @@ public interface EventsService {
 
 	void sendNotifications(NodeRef event, Boolean isFirst, List<NodeRef> recipients);
 	
-	void notifyEventCncelled(NodeRef event);
+	void notifyEventCancelled(NodeRef event);
 
 	void createRepeated(NodeRef event);
 	

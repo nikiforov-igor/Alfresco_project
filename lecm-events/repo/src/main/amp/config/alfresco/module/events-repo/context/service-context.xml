@@ -120,8 +120,6 @@
 		<property name="workCalendarService" ref="WorkCalendarService"/>
 		<property name="documentTableService" ref="documentTableService"/>
 		<property name="organizationQueryProcessor" ref="inUserOrganizationProcessor"/>
-		<property name="threadPoolExecutor" ref="lecm.events.thread.pool"/>
-		<property name="namespaceService" ref="namespaceService" />
 		<property name="eventsNotificationsService" ref="eventsNotificationsService" />
 		<property name="documentConnectionService" ref="documentConnectionService" />
 		<property name="propsForFilterShowIncalendar">

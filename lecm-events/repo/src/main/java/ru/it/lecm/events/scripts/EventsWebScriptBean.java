@@ -371,7 +371,7 @@ public class EventsWebScriptBean extends BaseWebScript {
 	
 	public void sendCancelNotifications(ScriptNode event) {
 		ParameterCheck.mandatory("event", event);
-		eventService.notifyEventCncelled(event.getNodeRef());
+		eventService.notifyEventCancelled(event.getNodeRef());
 	}
 
 
