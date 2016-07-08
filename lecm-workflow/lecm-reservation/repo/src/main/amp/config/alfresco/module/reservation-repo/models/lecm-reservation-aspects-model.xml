@@ -22,6 +22,9 @@
 				<property name="lecm-reservation-aspects:reserveTaskMessage">
 					<type>d:text</type>
 				</property>
+				<property name="lecm-reservation-aspects:presentStringBeforeReservation">
+					<type>d:text</type>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>

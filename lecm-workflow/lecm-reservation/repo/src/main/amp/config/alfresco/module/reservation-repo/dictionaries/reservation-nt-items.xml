@@ -6,7 +6,7 @@
         <property name="lecm-dic:type"><![CDATA[lecm-notification-template:template]]></property>
         <property name="lecm-dic:plane"><![CDATA[true]]></property>
         <property name="lecm-dic:description"><![CDATA[Шаблоны уведомлений]]></property>
-        <items>
+        <items updateMode="CreateOrUpdate">
             <item name="cm:RESERVATION_EMPTY_REGISTRARS" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[RESERVATION_EMPTY_REGISTRARS]]></property>
                 <property name="lecm-notification-template:template">
@@ -46,7 +46,7 @@
             <item name="cm:RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[RESERVATION_REQUEST_FINISHED_APPROVED_WITH_DATE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))} зарезервирован регистрационный номер {#regNumber} от {#reserveDate}]]></property>
+                    <![CDATA[Для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-reservation-aspects:presentStringBeforeReservation"))} зарезервирован регистрационный номер {#regNumber} от {#reserveDate}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запрос на резервирование удовлетворен (с датой)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>
@@ -58,7 +58,7 @@
             <item name="cm:RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE" type="lecm-notification-template:template">
                 <property name="cm:name"><![CDATA[RESERVATION_REQUEST_FINISHED_APPROVED_WITHOUT_DATE]]></property>
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:ext-present-string"))} зарезервирован регистрационный номер {#regNumber}]]></property>
+                    <![CDATA[Для документа {#mainObject.wrapAsLink(#mainObject.attribute("lecm-reservation-aspects:presentStringBeforeReservation"))} зарезервирован регистрационный номер {#regNumber}]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Резервирование номера. Запрос на резервирование удовлетворен (без даты)]]></property>
                 <property name="lecm-notification-template:subject"><![CDATA[]]></property>

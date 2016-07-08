@@ -108,7 +108,7 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
         templateObjects.put("mainObject", docRef);
         
 		String templateCode = "";
-        if (decision.equals(POSITIVE_DECISION)) {
+        if (decision.equals(POSITIVE_DECISION)) {        	
         	templateObjects.put("regNumber", regNumber);
         	Date reserveDate = (Date) nodeService.getProperty(docRef, DocumentService.PROP_REG_DATA_DOC_DATE);
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -186,6 +186,9 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 
 		if (DecisionResult.RESERVED.name().equals(decision)) {
 			try {
+				String presentString = (String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING);
+				nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_PRESENT_STRING_BEFORE_RESERVATION, presentString);
+				
 				regNumbersService.registerDocument(documentRef, regnumTemplateId, true);
 				nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_IS_RESERVED, true);
 				if (regDate != null) {
