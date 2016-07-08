@@ -757,11 +757,13 @@
 	<util:constant id="DOCUMENT_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.documents.beans.DocumentMessageServiceImpl.DOCUMENT_MESSAGE_FOLDER_ID"/>
 	<bean id="documentMessageService"
 		  parent="baseBean"
+		  init-method="init"
 		  depends-on="dictionaryBootstrap"
 		  class="ru.it.lecm.documents.beans.DocumentMessageServiceImpl">
 		<property name="messageService" ref="messageService"/>
 		<property name="namespaceService" ref="namespaceService"/>
-		<property name="contentService" ref="contentService"/>
+		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
+		<property name="searchService" ref="searchService"/>
 		<property name="locales" value="${lecm.availableLocales}"/>
 		<property name="folders">
 			<map>
@@ -780,7 +782,8 @@
 	<bean id="documentMessagesLoader"
 		  abstract="true"
 		  class="ru.it.lecm.documents.beans.MessageToRepositoryLoader">
-		<property name="documentMessageService" ref="documentMessageService"/>
+		<property name="documentMessageService" ref="documentMessageService"/> <!-- только для обеспечения порядка загрузки -->
+		<property name="repoAdminService" ref="repoAdminService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="propertiesService" ref="propertiesService"/>
 		<property name="useDefaultMessages" value="${lecm.documents.useDefaultMessages}"/>

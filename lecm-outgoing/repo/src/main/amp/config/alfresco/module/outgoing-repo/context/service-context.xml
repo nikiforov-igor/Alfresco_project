@@ -123,13 +123,12 @@
         </property>
     </bean>
 
-<!--	<bean parent="documentMessagesLoader">
+	<bean parent="documentMessagesLoader">
 		<property name="messages">
 			<list>
-				<value>alfresco/module/${artifactId}/messages/lecm-outgoing-document_en.properties</value>
-				<value>alfresco/module/${artifactId}/messages/lecm-outgoing-document_ru.properties</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-outgoing-document</value>
 			</list>
 		</property>
-	</bean>-->
+	</bean>
 
 </beans>

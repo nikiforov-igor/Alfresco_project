@@ -1,10 +1,12 @@
 package ru.it.lecm.documents.beans;
 
 import java.util.List;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.solr.SolrActiveEvent;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.service.cmr.admin.RepoAdminService;
 import org.alfresco.service.transaction.TransactionService;
 import org.springframework.context.ApplicationListener;
 import ru.it.lecm.base.beans.LecmBaseException;
@@ -16,11 +18,16 @@ import ru.it.lecm.base.beans.LecmBasePropertiesService;
  */
 public class MessageToRepositoryLoader implements ApplicationListener<SolrActiveEvent>, RunAsWork<Void>, RetryingTransactionCallback<Void> {
 
+	private RepoAdminService repoAdminService;
 	private TransactionService transactionService;
 	private LecmBasePropertiesService propertiesService;
 	private DocumentMessageService documentMessageService;
 	private boolean useDefaultMessages;
 	private List<String> messages;
+
+	public void setRepoAdminService(RepoAdminService repoAdminService) {
+		this.repoAdminService = repoAdminService;
+	}
 
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
@@ -55,7 +62,7 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 	@Override
 	public Void execute() throws Throwable {
 		for (String messageLocation : messages) {
-			documentMessageService.loadMessagesFromLocation(messageLocation, useDefaultMessages);
+			loadMessagesFromLocation(messageLocation, useDefaultMessages);
 		}
 		return null;
 	}
@@ -70,6 +77,29 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 			}
 		} catch (LecmBaseException ex) {
 			throw new IllegalStateException("Cannot read document messages properties");
+		}
+	}
+
+	private void loadMessagesFromLocation(String messageLocation, boolean useDefault) {
+		String locationBaseName = messageLocation;
+		int idx = messageLocation.lastIndexOf('/');
+		if (idx != -1) {
+			if (idx < messageLocation.length() - 1) {
+				locationBaseName = messageLocation.substring(idx + 1);
+			} else {
+				locationBaseName = null;
+			}
+		}
+		if (locationBaseName == null || "".equals(locationBaseName)) {
+			throw new AlfrescoRuntimeException("Loading message from location failed - missing bundle base name");
+		}
+		List<String> messageBundles = repoAdminService.getMessageBundles();
+		boolean bundleExists = messageBundles.contains(locationBaseName);
+		if (!bundleExists || useDefault) {
+			if (bundleExists) {
+				repoAdminService.undeployMessageBundle(locationBaseName);
+			}
+			repoAdminService.deployMessageBundle(messageLocation);
 		}
 	}
 }

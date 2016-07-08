@@ -10,8 +10,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
  */
 public interface DocumentMessageService {
 	NodeRef getDocumentMessageFolder();
-	boolean registerResourceBundle(NodeRef messageResource);
-	boolean unregisterResourceBundle(NodeRef messageResource);
-	void loadMessagesFromLocation(String messageLocation, boolean useDefault);
 	List<Locale> getAvailableLocales();
+	List<Locale> getFallbackLocales();
 }

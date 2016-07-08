@@ -1,36 +1,31 @@
 package ru.it.lecm.documents.beans;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import org.alfresco.model.ContentModel;
+import static org.alfresco.repo.admin.RepoAdminServiceImpl.CRITERIA_ALL;
+import static org.alfresco.repo.admin.RepoAdminServiceImpl.defaultSubtypeOfContent;
+import org.alfresco.repo.dictionary.RepositoryLocation;
 import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.service.cmr.i18n.MessageLookup;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
-import org.alfresco.util.ISO9075;
-import org.alfresco.util.PropertyMap;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 import ru.it.lecm.base.beans.BaseBean;
 
 /**
  *
  * @author vmalygin
  */
-public class DocumentMessageServiceImpl extends BaseBean implements DocumentMessageService, MessageLookup {
+public class DocumentMessageServiceImpl extends BaseBean implements DocumentMessageService {
 
 	private final static Locale[] DEFAULT_LOCALES = { LocaleUtils.toLocale("ru"), LocaleUtils.toLocale("ru_RU") };
 	public final static String DOCUMENT_MESSAGE_FOLDER_ID = "DOCUMENT_MESSAGE_FOLDER_ID";
@@ -39,10 +34,11 @@ public class DocumentMessageServiceImpl extends BaseBean implements DocumentMess
 
 	private MessageService messageService;
 	private NamespaceService namespaceService;
-	private ContentService contentService;
-//	private RepositoryLocation repoMessagesLocation;
+	private RepositoryLocation repoMessagesLocation;
+	private SearchService searchService;
 
 	List<Locale> availableLocales = Arrays.asList(DEFAULT_LOCALES);
+	List<Locale> fallbackLocales = Arrays.asList(DEFAULT_LOCALES);
 
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -62,14 +58,14 @@ public class DocumentMessageServiceImpl extends BaseBean implements DocumentMess
 		this.namespaceService = namespaceService;
 	}
 
-	public void setContentService(ContentService contentService) {
-		this.contentService = contentService;
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
 	}
 
-	public void setLocales(String availableLocales) {
-		if (availableLocales != null) {
-			List<Locale> locales = new ArrayList<>();
-			for (String locale : StringUtils.split(availableLocales, ',')) {
+	private List<Locale> toLocales(String localesString) {
+		List<Locale> locales = new ArrayList<>();
+		if (localesString != null) {
+			for (String locale : StringUtils.split(localesString, ',')) {
 				try {
 					locales.add(LocaleUtils.toLocale(locale));
 				} catch (IllegalArgumentException ex) {
@@ -79,9 +75,21 @@ public class DocumentMessageServiceImpl extends BaseBean implements DocumentMess
 					}
 				}
 			}
-			if (locales.size() > 0) {
-				this.availableLocales = locales;
-			}
+		}
+		return locales;
+	}
+
+	public void setLocales(String availableLocales) {
+		List<Locale> locales = toLocales(availableLocales);
+		if (locales.size() > 0) {
+			this.availableLocales = locales;
+		}
+	}
+
+	public void setFallback(String fallbackLocales) {
+		List<Locale> locales = toLocales(fallbackLocales);
+		if (locales.size() > 0) {
+			this.fallbackLocales = locales;
 		}
 	}
 
@@ -90,157 +98,29 @@ public class DocumentMessageServiceImpl extends BaseBean implements DocumentMess
 		return this.availableLocales;
 	}
 
-//	public void setRepoMessagesLocation(RepositoryLocation repoMessagesLocation) {
-//		this.repoMessagesLocation = repoMessagesLocation;
-//	}
-
-/*
-	public void init() {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		transactionHelper.doInTransaction(new RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				initMessages();
-				return null;
-			}
-		}, transactionService.isReadOnly(), false);
+	@Override
+	public List<Locale> getFallbackLocales() {
+		return this.fallbackLocales;
 	}
 
-	public void initMessages() {
-		NodeRef messageFolder = getDocumentMessageFolder();
-		String storeRef = messageFolder.getStoreRef().toString();
-		String path = ISO9075.decode(nodeService.getPath(messageFolder).toPrefixString(namespaceService));
-//		String storeRef = repoMessagesLocation.getStoreRef().toString();
-//		String path = repoMessagesLocation.getPath();
-		Set<QName> types = new HashSet<>();
-		types.add(ContentModel.TYPE_CONTENT);
-		List<ChildAssociationRef> refs = nodeService.getChildAssocs(messageFolder, types);
+	public void setRepoMessagesLocation(RepositoryLocation repoMessagesLocation) {
+		this.repoMessagesLocation = repoMessagesLocation;
+	}
+
+	public void init() {
+		StoreRef storeRef = repoMessagesLocation.getStoreRef();
+		NodeRef rootNode = nodeService.getRootNode(storeRef);
+		String path = repoMessagesLocation.getPath();
+		List<NodeRef> nodeRefs = searchService.selectNodes(rootNode, path + CRITERIA_ALL + "[" + defaultSubtypeOfContent + "]", null, namespaceService, false);
 		Set<String> resourceBundleBaseNames = new HashSet<>();
-		for (ChildAssociationRef ref : refs) {
-			NodeRef messageResource = ref.getChildRef();
-			String resourceName = (String) nodeService.getProperty(messageResource, ContentModel.PROP_NAME);
+		for (NodeRef nodeRef : nodeRefs) {
+			String resourceName = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
 			String bundleBaseName = messageService.getBaseBundleName(resourceName);
 
 			if(resourceBundleBaseNames.add(bundleBaseName)) {
-				String repoBundlePath =storeRef + path + "/cm:" + bundleBaseName;
+				String repoBundlePath =storeRef.toString() + path + "/cm:" + bundleBaseName;
 				messageService.registerResourceBundle(repoBundlePath);
 			}
 		}
-	}
-*/
-
-	@Override
-	public void loadMessagesFromLocation(String messageLocation, boolean useDefault) {
-		//два прохода: в зависимости от useDefault мы или грузим или не грузим ресурсный файл в репу
-		//находим в репе ресурсный файл, и регистрируем его в пучке
-		NodeRef messageFolder = getDocumentMessageFolder();
-		ClassPathResource resource = new ClassPathResource(messageLocation);
-		String filename = resource.getFilename();
-		NodeRef messageResource = nodeService.getChildByName(messageFolder, ContentModel.ASSOC_CONTAINS, filename);
-		if (messageResource == null || useDefault) {
-			boolean updateContent = false;
-			if (messageResource == null) {
-				//создать ноду
-				QName assocName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, filename);
-				PropertyMap props = new PropertyMap();
-				props.put(ContentModel.PROP_NAME, filename);
-				messageResource = nodeService.createNode(messageFolder, ContentModel.ASSOC_CONTAINS, assocName, ContentModel.TYPE_CONTENT, props).getChildRef();
-				updateContent = true;
-			} else {
-				InputStream classpathInputStream = null;
-				InputStream repoInputStream = null;
-				//сравнить контент
-				try {
-					classpathInputStream = resource.getInputStream();
-					ContentReader reader = contentService.getReader(messageResource, ContentModel.PROP_CONTENT);
-					repoInputStream = reader.getContentInputStream();
-					updateContent = !IOUtils.contentEquals(classpathInputStream, repoInputStream);
-				} catch (IOException ex) {
-				} finally {
-					IOUtils.closeQuietly(classpathInputStream);
-					IOUtils.closeQuietly(repoInputStream);
-				}
-			}
-			if (updateContent) {
-				//залить новую версию контента
-				InputStream classpathInputStream = null;
-				try {
-					classpathInputStream = resource.getInputStream();
-					if (!nodeService.hasAspect(messageResource, ContentModel.ASPECT_VERSIONABLE)) {
-						nodeService.addAspect(messageResource, ContentModel.ASPECT_VERSIONABLE, null);
-					}
-					ContentWriter contentWriter = contentService.getWriter(messageResource, ContentModel.PROP_CONTENT, true);
-					contentWriter.setEncoding("ISO-8859-1");
-					contentWriter.setMimetype("text/plain");
-					contentWriter.putContent(classpathInputStream);
-				} catch (IOException ex) {
-				} finally {
-					IOUtils.closeQuietly(classpathInputStream);
-				}
-			}
-		}
-		registerResourceBundle(messageResource);
-	}
-
-	@Override
-	public boolean registerResourceBundle(NodeRef messageResource) {
-		boolean bundleRegistered;
-		NodeRef messageFolder = getDocumentMessageFolder();
-		String storeRef = messageFolder.getStoreRef().toString();
-		String path = ISO9075.decode(nodeService.getPath(messageFolder).toPrefixString(namespaceService));
-//		String storeRef = repoMessagesLocation.getStoreRef().toString();
-//		String path = repoMessagesLocation.getPath();
-		String resourceName = (String) nodeService.getProperty(messageResource, ContentModel.PROP_NAME);
-		String bundleBaseName = messageService.getBaseBundleName(resourceName);
-		Set<String> bundles = messageService.getRegisteredBundles();
-		if (!bundles.contains(bundleBaseName)) {
-			String repoBundlePath =storeRef + path + "/cm:" + bundleBaseName;
-			messageService.registerResourceBundle(repoBundlePath);
-			bundleRegistered = true;
-		} else {
-			bundleRegistered = false;
-		}
-		return bundleRegistered;
-	}
-
-	@Override
-	public boolean unregisterResourceBundle(NodeRef messageResource) {
-		boolean bundleUngeristered;
-		NodeRef messageFolder = getDocumentMessageFolder();
-		String storeRef = messageFolder.getStoreRef().toString();
-		String path = ISO9075.decode(nodeService.getPath(messageFolder).toPrefixString(namespaceService));
-//		String storeRef = repoMessagesLocation.getStoreRef().toString();
-//		String path = repoMessagesLocation.getPath();
-		String resourceName = (String) nodeService.getProperty(messageResource, ContentModel.PROP_NAME);
-		String bundleBaseName = messageService.getBaseBundleName(resourceName);
-		Set<String> bundles = messageService.getRegisteredBundles();
-		if (bundles.contains(bundleBaseName)) {
-			String repoBundlePath =storeRef + path + "/cm:" + bundleBaseName;
-			messageService.unregisterResourceBundle(repoBundlePath);
-			bundleUngeristered = true;
-		} else {
-			bundleUngeristered = false;
-		}
-		return bundleUngeristered;
-	}
-
-	@Override
-	public String getMessage(String messageKey) {
-		return messageService.getMessage(messageKey);
-	}
-
-	@Override
-	public String getMessage(String messageKey, Locale locale) {
-		return messageService.getMessage(messageKey, locale);
-	}
-
-	@Override
-	public String getMessage(String messageKey, Object... params) {
-		return messageService.getMessage(messageKey, params);
-	}
-
-	@Override
-	public String getMessage(String messageKey, Locale locale, Object... params) {
-		return messageService.getMessage(messageKey, locale, params);
 	}
 }

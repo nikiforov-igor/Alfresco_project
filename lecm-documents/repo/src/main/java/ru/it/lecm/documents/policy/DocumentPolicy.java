@@ -48,7 +48,6 @@ import java.util.*;
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
-import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -467,11 +466,13 @@ public class DocumentPolicy extends BaseBean
 		String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
 		String messageKey = String.format("%s.property.%s.value", typename, propname);
 		List<Locale> locales = documentMessageService.getAvailableLocales();
+		List<Locale> fallback = documentMessageService.getFallbackLocales();
 		MLPropertyInterceptor.setMLAware(true);
 		MLText mlText = (MLText)nodeService.getProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING);
 		mlText = mlText != null ? mlText : new MLText();
-		mlText.addValue(LocaleUtils.toLocale("ru"), presentStringValue);
-		mlText.addValue(LocaleUtils.toLocale("ru_RU"), presentStringValue);
+		for (Locale locale : fallback) {
+			mlText.addValue(locale, presentStringValue);
+		}
 		for (Locale locale : locales) {
 			final String presentString = StringEscapeUtils.unescapeJava(messageService.getMessage(messageKey, locale));
 			if (presentString != null) {
