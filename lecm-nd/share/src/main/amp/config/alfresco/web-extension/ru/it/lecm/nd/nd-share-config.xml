@@ -28,8 +28,8 @@
                 <appearance>
 	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
 
-                    <field id="lecm-document:title" label="Заголовок"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" mandatory="true">
+                    <field id="lecm-document:title"/>
+                    <field id="lecm-eds-document:document-type-assoc" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -38,7 +38,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:additional-organization-unit-assoc" label="Подразделения" mandatory="true">
+                    <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -47,22 +47,22 @@
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:summaryContent" label="Содержание">
+                    <field id="lecm-eds-document:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-nd:begin-date"  label="Период действия" set="dates"/>
+                    <field id="lecm-nd:begin-date" label-id="label.nd.period" set="dates"/>
                     <field id="lecm-nd:end-date" label="" set="dates"/>
 	                <field id="lecm-nd:unlimited" set="dates"/>
-                    <field id="lecm-eds-document:note" label="Примечание">
+                    <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc" label="Тематика"/>
+                    <field id="lecm-document:subject-assoc"/>
 
-	                <field id="lecm-document-aspects:attachments-temp-assoc" label="Вложения">
+	                <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments.title">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
 			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
 			                <control-param name="directoryName">Вложения</control-param>
@@ -119,8 +119,8 @@
                 <appearance>
 	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
 
-                    <field id="lecm-document:title" label="Заголовок"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" mandatory="true">
+                    <field id="lecm-document:title"/>
+                    <field id="lecm-eds-document:document-type-assoc"  mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -129,7 +129,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:additional-organization-unit-assoc" label="Подразделения" mandatory="true">
+                    <field id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -138,20 +138,20 @@
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:summaryContent" label="Содержание">
+                    <field id="lecm-eds-document:summaryContent" >
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-nd:begin-date"  label="Период действия" set="dates"/>
+                    <field id="lecm-nd:begin-date"  label-id="label.nd.period" set="dates"/>
                     <field id="lecm-nd:end-date" label="" set="dates"/>
 	                <field id="lecm-nd:unlimited" set="dates"/>
-                    <field id="lecm-eds-document:note" label="Примечание">
+                    <field id="lecm-eds-document:note" >
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc" label="Тематика"/>
+                    <field id="lecm-document:subject-assoc"/>
 					<field id="lecmSignAspects:signerEmployeeAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -371,8 +371,8 @@
 					</field>
                     <field id="lecm-document-aspects:reg-data-date" set="common"/>
 
-                    <field id="lecm-document:title" label="Заголовок" set="common"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="common" mandatory="true">
+                    <field id="lecm-document:title"  set="common"/>
+                    <field id="lecm-eds-document:document-type-assoc"  set="common" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -381,7 +381,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:additional-organization-unit-assoc" label="Подразделения" set="common" mandatory="true">
+                    <field id="lecm-document-aspects:additional-organization-unit-assoc" set="common" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -390,12 +390,12 @@
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:summaryContent" label="Содержание" set="common">
+                    <field id="lecm-eds-document:summaryContent"  set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:note" label="Примечание" set="common">
+                    <field id="lecm-eds-document:note" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
@@ -405,9 +405,9 @@
 							<control-param name="maxLength">9</control-param>
 						</control>
 					</field>
-                    <field id="lecm-document:subject-assoc" label="Тематика" set="common"/>
+                    <field id="lecm-document:subject-assoc" set="common"/>
                     <field id="lecm-eds-document:file-register-assoc" set="common"/>
-	                <field id="lecm-nd:begin-date"  label="Период действия" set="dates"/>
+	                <field id="lecm-nd:begin-date"  label-id="label.nd.period" set="dates"/>
 	                <field id="lecm-nd:end-date" label="" set="dates"/>
 	                <field id="lecm-nd:unlimited" set="dates"/>
                     <field id="lecm-document:author-assoc" set="afterDates" read-only="true"/>
