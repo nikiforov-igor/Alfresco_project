@@ -188,7 +188,9 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 			try {
 				regNumbersService.registerDocument(documentRef, regnumTemplateId, true);
 				nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_IS_RESERVED, true);
-				nodeService.setProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_DATE, regDate);
+				if (regDate != null) {
+					nodeService.setProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_DATE, regDate);
+				}
 				
 				// Запись в бизнес журнал если решение хорошее:
 				String documentReservedNumber = (String) nodeService.getProperty(documentRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);	
