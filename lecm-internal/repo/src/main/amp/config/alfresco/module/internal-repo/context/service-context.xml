@@ -208,4 +208,12 @@
         </property>
     </bean>
 
+    <bean parent="documentMessagesLoader">
+        <property name="messages">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-internal-document</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

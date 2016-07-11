@@ -386,5 +386,13 @@
 		<property name="mailReciever" ref="events.mail.reciever"/>
 		
 	</bean>
-	
+
+	<bean parent="documentMessagesLoader">
+		<property name="messages">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-events-document</value>
+			</list>
+		</property>
+	</bean>
+
 </beans>

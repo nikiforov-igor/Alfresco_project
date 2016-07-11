@@ -541,4 +541,13 @@
             </list>
         </property>
     </bean>
+
+    <bean parent="documentMessagesLoader">
+        <property name="messages">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-contract-document</value>
+                <value>alfresco/module/${artifactId}/messages/lecm-additional-document-document</value>
+            </list>
+        </property>
+    </bean>
 </beans>
