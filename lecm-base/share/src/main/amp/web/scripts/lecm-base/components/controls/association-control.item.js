@@ -14,6 +14,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		Bubbling = YAHOO.Bubbling,
 		Dom = YAHOO.util.Dom;
 
+	var IDENT_CREATE_NEW = "~CREATE~NEW~";
+
 	LogicECM.module.AssociationComplexControl.Item = function (containerId, key, options, fieldValues) {
 		this.currentState = Alfresco.util.deepCopy(this.currentState); // Initialise default prototype properties
 		LogicECM.module.AssociationComplexControl.Item.superclass.constructor.call(this, 'LogicECM.module.AssociationComplexControl.Item', containerId);
@@ -72,7 +74,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			multipleSelectMode: false,
 			useObjectDescription: false,
 			checkType: true,
-			pickerItemsScript: 'lecm/forms/picker/items'
+			pickerItemsScript: 'lecm/forms/picker/items',
+			showCreateNewLink: false
 		},
 
 		widgets: {
@@ -82,6 +85,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			treeView: null,
 			datatable: null,
 			datasource: null
+		},
+
+		stateParams: {
+			doubleClickLock: false,
+			isSearch: false,
+			alreadyShowCreateNewLink: false
 		},
 
 		_nameFormatter: function (elCell, record, column, data) {
@@ -99,7 +108,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			// Create New item cell type
 			if ('~CREATE~NEW~' === record.getData('type')) {
 				msg = this.owner.options.createNewMessage ? this.owner.options.createNewMessage : this.owner.msg('form.control.object-picker.create-new');
-				elCell.innerHTML = '<a href="javascript:void(0);" title="' + msg + '" class="create-new-row create-new-item-' + this.owner.eventGroup + '" >' + msg + '</a>';
+				elCell.innerHTML = '<a id="' + this.owner.id + '-create-new-row' + '" href="javascript:void(0);" title="' + msg + '" class="create-new-row create-new-item-' + this.owner.eventGroup + '" >' + msg + '</a>';
+
+				YAHOO.util.Event.onContentReady(this.owner.id + '-create-new-row', function () {
+					var createLink = YAHOO.util.Dom.get(this.owner.id + '-create-new-row');
+					if (createLink) {
+						YAHOO.util.Event.on(createLink, 'click', this.owner._fnCreateNewItemHandler, this.owner, true);
+					}
+				}, this, true);
+
 				return;
 			}
 
@@ -274,7 +291,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			});
 		},
 
-		_loadOriginalValues: function (fieldValues) {
+		_loadOriginalValues: function (fieldValues, added) {
 
 			function onSuccess(successResponse) {
 				var items =successResponse.json.data.items,
@@ -286,6 +303,13 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					}
 					return prev;
 				}, {});
+				if (added && added.length > 0) {
+					this.fire('addSelectedItem', {
+						 added: this.currentState.original[added],
+						 options: this.options,
+						 key: this.key
+					 });
+				}
 				this.currentState.selected = YAHOO.lang.merge(this.currentState.original);
 				this.fire('loadOriginalItems', { /* Bubbling.fire */
 					original: this.currentState.selected,
@@ -354,7 +378,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				} else {
 					this.widgets.datatable.onDataReturnAppendRows(sRequest, oResponse, oPayload);
 				}
-
+				this.stateParams.alreadyShowCreateNewLink = true;
 			}
 
 			function onFailure(sRequest, oResponse) {
@@ -374,7 +398,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			}
 			var params;
-
+			if (initializeTable) {
+				this.stateParams.alreadyShowCreateNewLink = false;
+			}
 			this.currentState.skipItemsCount = initializeTable ? 0 : this.currentState.skipItemsCount;
 			params = ACUtils.generateChildrenUrlParams(this.options, searchTerm, this.currentState.skipItemsCount);
 			this.widgets.datatable.load({
@@ -397,12 +423,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				searchTerm;
 
 			if (searchData && searchData.length >= this.options.minSearchTermLength) {
+				this.stateParams.isSearch = true;
 				searchTerm = this.searchProperties.reduce(function (prev, curr) {
 					return prev + (prev.length ? '#' : '') + curr + ':' + searchData.replace(/#/g, '');
 				}, '');
 				searchTerm = searchTerm ? searchTerm : 'cm:name:' + searchData;
 				this.loadTableData(true, searchTerm);
 			} else if ('' === searchData) {
+				this.stateParams.isSearch = false;
 				this.loadTableData(true);
 			} else {
 				Alfresco.util.PopupManager.displayMessage({
@@ -428,10 +456,28 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			//createNew
 			//categories tags
 			//employeeAbsenceMarker
-			return {
-				parent: oFullResponse.data.parent,
-				items: oFullResponse.data.items
-			};
+			var updatedResponse = oFullResponse;
+
+			if (oFullResponse) {
+				var items = oFullResponse.data.items;
+
+				// Add the special "Create new" record if required
+				if (this.options.showCreateNewLink && this.currentState.nodeData != null
+					&& this.currentState.nodeData.isContainer && this.currentState.nodeData.hasPermAddChildren
+					&& (!this.stateParams.isSearch || this.options.plane)
+					&& !this.stateParams.alreadyShowCreateNewLink) {
+					items = [{type: IDENT_CREATE_NEW}].concat(items);
+				}
+
+				// we need to wrap the array inside a JSON object so the DataTable is happy
+				updatedResponse =
+				{
+					parent: oFullResponse.data.parent,
+					items: items
+				};
+			}
+
+			return updatedResponse;
 		},
 
 //		onDatatableRendered: function () {
@@ -482,7 +528,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 							column: this.widgets.datatable.getColumn('add'),
 							record: record
 						});
-						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected);
+							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected);
 					}, this);
 					this.fire('afterChange', {
 						key: this.key
@@ -508,7 +554,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						column: this.widgets.datatable.getColumn('add'),
 						record: record
 					});
-					tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected);
+						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected);
 				}, this);
 				if (removeHappend) {
 					this.fire('afterChange', {
@@ -605,6 +651,70 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
 
 			this.loadHelper.fulfil('ready');
+		},
+
+		_generateCreateNewParams: function (nodeRef, itemType) {
+			return {
+				itemKind: "type",
+				itemId: itemType,
+				destination: nodeRef,
+				mode: "create",
+				submitType: "json",
+				formId: "association-create-new-node-form",
+				showCancelButton: true
+			};
+		},
+
+		_fnCreateNewItemHandler: function() {
+			if (this.stateParams.doubleClickLock) return;
+			this.stateParams.doubleClickLock = true;
+
+			var templateRequestParams = this._generateCreateNewParams(this.currentState.nodeData.nodeRef, this.options.itemType);
+			templateRequestParams["createNewMessage"] = this.options.createNewMessage;
+
+			new Alfresco.module.SimpleDialog("create-form-dialog-" + this.eventGroup).setOptions({
+				width:"50em",
+				templateUrl: "lecm/components/form",
+				templateRequestParams: templateRequestParams,
+				actionUrl:null,
+				destroyOnHide:true,
+				doBeforeDialogShow:{
+					fn: function (p_form, p_dialog) {
+						var message;
+						if (this.options.createNewMessage) {
+							message = this.options.createNewMessage;
+						} else {
+							message = this.msg("dialog.createNew.title");
+						}
+						p_dialog.dialog.setHeader(message);
+
+						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+
+						Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+						if (this.options.createDialogClass != "") {
+							Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
+						}
+						this.stateParams.doubleClickLock = false;
+					},
+					scope: this
+				},
+				onSuccess:{
+					fn:function (response) {
+						this._loadOriginalValues(response.json.persistedObject.split(","), response.json.persistedObject);
+
+						this.stateParams.doubleClickLock = false;
+					},
+					scope:this
+				},
+				onFailure: {
+					fn:function (response) {
+						this.stateParams.doubleClickLock = false;
+					},
+					scope:this
+				}
+			}).show();
+			return true;
 		}
+
 	}, true);
 })();
