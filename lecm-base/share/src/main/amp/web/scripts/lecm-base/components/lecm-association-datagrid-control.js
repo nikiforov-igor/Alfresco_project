@@ -260,8 +260,8 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                 };
                                 this.afterDataGridUpdate.push(fnAfterUpdate);
 
-                                var recordsNum = this.widgets.dataTable.getRecordSet().getRecords().length - 1;
-                                this.widgets.dataTable.addRow(item, recordsNum > 0 ? recordsNum : 0);
+                                var recordsNum = this.widgets.dataTable.getRecordSet().getRecords().length;
+                                this.widgets.dataTable.addRow(item, recordsNum);
                                 YAHOO.Bubbling.fire("mandatoryControlValueUpdated", response.config.successCallback.scope);
 
                                 // связь 1:1
