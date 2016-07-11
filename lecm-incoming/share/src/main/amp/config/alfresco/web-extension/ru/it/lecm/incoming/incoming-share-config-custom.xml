@@ -66,7 +66,7 @@
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
-							<control-param name="contractor_showCreateNewLink">false</control-param>
+							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
@@ -291,7 +291,7 @@
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
-							<control-param name="contractor_showCreateNewLink">false</control-param>
+							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_pickerItemsScript">lecm/contractors/common/picker/items</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
