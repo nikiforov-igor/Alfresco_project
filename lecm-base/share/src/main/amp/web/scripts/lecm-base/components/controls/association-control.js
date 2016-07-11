@@ -165,10 +165,12 @@ LogicECM.module = LogicECM.module || {};
 				nodeData = args[1].added,
 				options = args[1].options,
 				count = this._renderSelectedItems([nodeData], options);
-				if (!this.options.endpointMany && count) {
-					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				} else {
-					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				if (this.widgets.autocomplete) {
+					if (!this.options.endpointMany && count) {
+						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+					} else {
+						Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+					}
 				}
 				//посылаем событие, передаем selectedItems либо из однго элемента либо пустой
 			}
@@ -183,10 +185,12 @@ LogicECM.module = LogicECM.module || {};
 					Event.removeListener(el, 'click');
 					this.widgets.selected.removeChild(el.parentNode.parentNode);
 				}, this);
-				if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
-					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				} else {
-					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				if (this.widgets.autocomplete) {
+					if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
+						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+					} else {
+						Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+					}
 				}
 				el = Dom.get(this.id);
 				value = el.value.split(',');
@@ -217,10 +221,12 @@ LogicECM.module = LogicECM.module || {};
 					this.widgets.removed.value = Alfresco.util.encodeHTML(removed);
 				}
 				Dom.get(this.id).value = Alfresco.util.encodeHTML(selected);
-				if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
-					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				} else {
-					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				if (this.widgets.autocomplete) {
+					if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
+						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+					} else {
+						Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+					}
 				}
 
 				//заполняем selected
@@ -362,7 +368,6 @@ LogicECM.module = LogicECM.module || {};
 
 		onReady: function () {
 			/* загрузка данных по field.value и передача их в picker и в items. Отрисовка selectedItems здесь и в пикере */
-			console.log(this.name + '[' + this.id + '] is ready');
 			this.widgets.added = Dom.get(this.id + '-added');
 			this.widgets.removed = Dom.get(this.id + '-removed');
 			this.widgets.selected = Dom.get(this.id + '-displayed');
