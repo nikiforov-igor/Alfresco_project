@@ -435,7 +435,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			} else {
 				Alfresco.util.PopupManager.displayMessage({
 					text: this.msg('form.control.object-picker.search.enter-more', this.options.minSearchTermLength)
-				}/* parentElement ???? */);
+				}, YAHOO.util.Dom.get(this.id));
 			}
 		},
 
@@ -528,7 +528,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 							column: this.widgets.datatable.getColumn('add'),
 							record: record
 						});
+						if (tdEl.firstChild.firstChild) {
 							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected);
+						}
 					}, this);
 					this.fire('afterChange', {
 						key: this.key
@@ -554,7 +556,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						column: this.widgets.datatable.getColumn('add'),
 						record: record
 					});
+					if (tdEl.firstChild.firstChild) {
 						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected);
+					}
 				}, this);
 				if (removeHappend) {
 					this.fire('afterChange', {
@@ -597,7 +601,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onReady: function () {
-			console.log(this.name + '[' + this.id + '] is ready');
 			if (this.options.showSearch) {
 				this.widgets.search = Dom.get(this.id + '-search-text');
 				this.widgets.searchButton = Alfresco.util.createYUIButton(this, 'search', this.onSearch, {
