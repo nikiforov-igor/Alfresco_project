@@ -157,11 +157,16 @@ nested - дополнительная верстка,
 </#if>
 </#macro>
 
-<#macro baseControlValue field fieldvalue showAutocomplete>
+<#macro baseControlValue field fieldValue showAutocomplete isDefaultValue>
 <#assign fieldHtmlId = args.htmlid?html + '_' + field.id>
-<input type='hidden' id='${fieldHtmlId}-added' name='${field.name}_added'>
+<#assign addedValue = ""/>
+<#if isDefaultValue>
+	<#assign addedValue = fieldValue/>
+</#if>
+
+<input type='hidden' id='${fieldHtmlId}-added' name='${field.name}_added' value='${addedValue?html}'>
 <input type='hidden' id='${fieldHtmlId}-removed' name='${field.name}_removed'>
-<input type='hidden' id='${fieldHtmlId}' name='-' value='${fieldvalue?html}'>
+<input type='hidden' id='${fieldHtmlId}' name='-' value='${fieldValue?html}'>
 <#if showAutocomplete>
 <input type='text' id='${fieldHtmlId}-autocomplete'>
 </#if>

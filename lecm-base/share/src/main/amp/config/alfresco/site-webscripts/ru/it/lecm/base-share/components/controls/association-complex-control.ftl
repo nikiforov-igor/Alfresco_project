@@ -29,9 +29,12 @@
 	<#elseif params.defaultValue??>
 		<#assign defaultValue=params.defaultValue>
 	</#if>
+
+	<#assign fieldValue = defaultValue>
 <#else>
-	<#assign defaultValue = field.value>
+	<#assign fieldValue = field.value>
 </#if>
+
 
 <#assign disabled = 'view' == form.mode || (field.disabled && !(params.forceEditable?? && 'true' == params.forceEditable?lower_case))>
 <#assign isComplex = items?size gt 1>
@@ -39,13 +42,13 @@
 
 <#if 'view' == form.mode>
 	<#assign value>
-		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${defaultValue?html}'>
+		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
 		<div id='${fieldHtmlId}-displayed'></div>
 	</#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control viewmode' value=value/>
 <#else>
 	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=false/></#assign>
-	<#assign value><@components.baseControlValue field=field fieldvalue=defaultValue showAutocomplete=showAutocomplete/></#assign>
+	<#assign value><@components.baseControlValue field=field fieldValue=fieldValue showAutocomplete=showAutocomplete isDefaultValue=defaultValue?has_content/></#assign>
 	<@components.baseControl field=field name='association-control' classes='association-control' buttons=buttons value=value>
 		<#if showAutocomplete>
 		<div id='${fieldHtmlId}-autocomplete-container'></div>
@@ -59,7 +62,7 @@
 <script type='text/javascript'>//<![CDATA[
 	(function () {
 		function initAssociationControl() {
-			new LogicECM.module.AssociationComplexControl('${fieldHtmlId}', '${defaultValue}', {
+			new LogicECM.module.AssociationComplexControl('${fieldHtmlId}', '${fieldValue}', {
 				disabled: ${disabled?string},
 				isComplex: ${isComplex?string},
 				showAutocomplete: ${showAutocomplete?string},
