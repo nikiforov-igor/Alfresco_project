@@ -57,6 +57,7 @@ LogicECM.module = LogicECM.module || {};
 			showAutocomplete: null,
 			pickerButtonTitle: null,
 			pickerButtonLabel: null,
+            multipleSelectMode: false,
 			itemsOptions: []
 		},
 
@@ -132,7 +133,7 @@ LogicECM.module = LogicECM.module || {};
 		createAssociationControlItems: function (messages) {
 			var i;
 			this.options.itemsOptions.forEach(function (obj) {
-				this.widgets[obj.itemKey] = new LogicECM.module.AssociationComplexControl.Item(this.id + '-picker-' + obj.itemKey, obj.itemKey, obj.options, this.fieldValues);
+				this.widgets[obj.itemKey] = new LogicECM.module.AssociationComplexControl.Item(this.id + '-picker-' + obj.itemKey, obj.itemKey, obj.options, this.fieldValues, this);
 				this.widgets[obj.itemKey].eventGroup = this.eventGroup;
 			}, this);
 			for (i in this.widgets) {

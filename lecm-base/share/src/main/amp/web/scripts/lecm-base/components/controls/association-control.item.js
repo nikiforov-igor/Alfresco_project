@@ -16,11 +16,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 	var IDENT_CREATE_NEW = "~CREATE~NEW~";
 
-	LogicECM.module.AssociationComplexControl.Item = function (containerId, key, options, fieldValues) {
+	LogicECM.module.AssociationComplexControl.Item = function (containerId, key, options, fieldValues, parentControl) {
 		this.currentState = Alfresco.util.deepCopy(this.currentState); // Initialise default prototype properties
 		LogicECM.module.AssociationComplexControl.Item.superclass.constructor.call(this, 'LogicECM.module.AssociationComplexControl.Item', containerId);
 		this.setOptions(options);
 		this.key = key;
+		this.parentControl = parentControl;
 		this.loadHelper = Alfresco.util.Deferred(['rootNode', 'searchProperties', 'ready', 'show'], {
 			scope: this,
 			fn: this.loadData
@@ -147,7 +148,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			if (record.getData('selectable')) {
 				nodeRef = record.getData('nodeRef');
-				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.selected) ? '' : ' hidden ';
+				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.selected, this.owner.parentControl) ? '' : ' hidden ';
 
 				elCell.innerHTML = '<a href="javascript:void(0);"' + hidden + 'title="' + this.owner.msg('form.control.object-picker.add-item') + '" tabindex="0"><i class="icon-plus"></i></a>';
 
@@ -529,7 +530,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 							record: record
 						});
 						if (tdEl.firstChild.firstChild) {
-							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected);
+							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected, this.parentControl);
 						}
 					}, this);
 					this.fire('afterChange', {
@@ -540,15 +541,20 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onRemoveSelectedItem: function (layer, args) {
-			var nodeData, records, removeHappend;
+			var nodeData, records, removeHappend = false, i;
 
 			if (Alfresco.util.hasEventInterest (this, args)) {
 				nodeData = args[1].removed;
 				records = this.widgets.datatable.getRecordSet().getRecords();
-				if (this.currentState.selected.hasOwnProperty(nodeData.nodeRef)) {
-					delete this.currentState.selected[nodeData.nodeRef];
-					removeHappend = true;
-				}
+                //удаляем из всех пикеров, иначе некорректно отрисуются плюсики
+                for (i = 0; !removeHappend && (i < this.parentControl.options.itemsOptions.length); i++) {
+                    var item = this.parentControl.widgets[this.parentControl.options.itemsOptions[i].itemKey];
+                    if (item.currentState.selected.hasOwnProperty(nodeData.nodeRef)) {
+                        delete item.currentState.selected[nodeData.nodeRef];
+                        removeHappend = true;
+                    }
+                }
+
 				records./*filter(function (record) {
 					return record.getData('nodeRef') === this.nodeRef;
 				}, nodeData).*/forEach(function (record) {
@@ -557,7 +563,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						record: record
 					});
 					if (tdEl.firstChild.firstChild) {
-						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected);
+						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected, this.parentControl);
 					}
 				}, this);
 				if (removeHappend) {

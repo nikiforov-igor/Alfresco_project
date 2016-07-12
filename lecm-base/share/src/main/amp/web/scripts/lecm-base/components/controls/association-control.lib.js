@@ -80,12 +80,19 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			return options.selectedItemsNameSubstituteString ? options.selectedItemsNameSubstituteString : options.nameSubstituteString;
 		},
 
-		canItemBeSelected: function (id, options, selected) {
-			var canSelect;
-			if (options.endpointMany) {
+		canItemBeSelected: function (id, options, selected, parentControl) {
+			var canSelect = true, i;
+			if (options.endpointMany && parentControl.options.multipleSelectMode) {
 				canSelect = !selected.hasOwnProperty(id);
 			} else {
-				canSelect = Object.keys(selected).length === 0;
+                if (!parentControl.options.isComplex) {
+                    canSelect = Object.keys(selected).length === 0;
+                } else {
+                    //проверяем все пикеры, чтобы учесть все выбранные элементы
+                    for (i = 0; canSelect && (i < parentControl.options.itemsOptions.length); i++) {
+                        canSelect = Object.keys(parentControl.widgets[parentControl.options.itemsOptions[i].itemKey].currentState.selected).length === 0;
+                    }
+                }
 			}
 			return canSelect;
 		},

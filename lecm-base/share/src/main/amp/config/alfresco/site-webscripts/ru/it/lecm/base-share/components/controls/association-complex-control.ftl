@@ -6,6 +6,11 @@
 
 <#assign endpointType = params.endpointType!field.endpointType>
 
+<#assign endpointMany = field.endpointMany>
+<#if params.endpointMany??>
+    <#assign endpointMany = (params.endpointMany == "true")>
+</#if>
+
 <#assign items = endpointType?split(',')>
 <#if params.items?? && params.items?has_content>
 	<#assign items = params.items?split(',')>
@@ -72,6 +77,7 @@
 				<#if params.changeItemsFireAction??>
 				changeItemsFireAction: '${params.changeItemsFireAction}',
 				</#if>
+                multipleSelectMode: ${endpointMany?string},
 				itemsOptions: [
 					<#list items as i>
 						<#assign itemKey = i?replace(":", "_")>
