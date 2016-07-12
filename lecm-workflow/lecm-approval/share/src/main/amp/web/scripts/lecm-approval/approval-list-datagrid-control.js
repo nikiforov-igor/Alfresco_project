@@ -271,10 +271,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							this.approvalIsEditable = response.json.approvalIsEditable;
 							if (!this.approvalIsEditable) {
 								YAHOO.util.Dom.setStyle(this.id + '-add-stage', "display", "none");
-								YAHOO.util.Dom.setStyle('editIteration', "display", "none");
+								YAHOO.util.Dom.setStyle(this.id + '-editIteration', "display", "none");
 							} else {
 								YAHOO.util.Dom.setStyle(this.id + '-add-stage', "display", "inline-block");
-								YAHOO.util.Dom.setStyle('editIteration', "display", "table-cell");
+								YAHOO.util.Dom.setStyle(this.id +'-editIteration', "display", "table-cell");
 							}
 
 							this.approvalHistoryFolder = response.json.approvalHistoryFolder;
