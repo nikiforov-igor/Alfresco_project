@@ -90,7 +90,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 							elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
 						}
 					}
-					this.widgets.items.appendChild(elem.firstChild);
+					if (!this.options.disabled) {
+						this.widgets.items.appendChild(elem.firstChild);
+					}
 				}
 			}, this);
 			return this.widgets.items;
