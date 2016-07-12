@@ -189,7 +189,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 		showForm: function showForm_function(action, errors) {
 			var i, message = '';
-			if (errors.length) {
+			if (errors && errors.length) {
 				for (i in errors) {
 					message += errors[i] + '<br>';
 				}

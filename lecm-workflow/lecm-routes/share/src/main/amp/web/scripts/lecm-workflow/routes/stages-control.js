@@ -272,6 +272,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						} else {
 							message = this.msg('message.macros.empty.result');
 						}
+
+						YAHOO.Bubbling.fire("redrawDocumentActions");
+
 						Alfresco.util.PopupManager.displayMessage({
 							text: message
 						},YAHOO.util.Dom.get(this.id));
