@@ -30,6 +30,7 @@
 					<control-param name="reviewItem_treeNodeTitleSubstituteString">{cm:title}</control-param>
 					<control-param name="reviewItem_plane">true</control-param>
 					<control-param name="reviewItem_showSearch">true</control-param>
+					<control-param name="reviewItem_showAssocViewForm">true</control-param>
 <!--					<control-param name="secondShowAssocViewForm">true</control-param>
 					<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 					<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>
