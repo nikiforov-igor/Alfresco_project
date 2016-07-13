@@ -53,7 +53,7 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 		if (!isOnReview(allRows, employees[i])) {
 			employee = utils.getNodeFromString(employees[i]);
 			item = reviewTable.createNode(null, 'lecm-review-ts:review-table-item', {
-				'lecm-document:indexTableRow': allRows.length ? allRows.length - 1 : 0
+				'lecm-document:indexTableRow': allRows.length ? allRows.length + 1 : 1
 			});
 			item.createAssociation(currentEmployee, 'lecm-review-ts:initiator-assoc');
 			item.createAssociation(employee, 'lecm-review-ts:reviewer-assoc');
