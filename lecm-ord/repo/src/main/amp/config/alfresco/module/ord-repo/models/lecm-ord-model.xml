@@ -23,11 +23,11 @@
 		<constraint name="lecm-ord:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Документ</value>
-					<value>Приложения</value>
-					<value>Согласование</value>
-					<value>Подлинник</value>
-					<value>Прочее</value>
+					<value>Документ|DOCUMENT</value>
+					<value>Приложения|APPENDIX</value>
+					<value>Согласование|APPROVAL</value>
+					<value>Подлинник|ORIGINAL</value>
+					<value>Прочее|OTHER</value>
 				</list>
 			</parameter>
 		</constraint>

@@ -22,9 +22,9 @@
 		<constraint name="lecm-nd:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Документ</value>
-					<value>Согласование</value>
-					<value>Прочее</value>
+					<value>Документ|DOCUMENT</value>
+					<value>Согласование|APPROVAL</value>
+					<value>Прочее|OTHER</value>
 				</list>
 			</parameter>
 		</constraint>

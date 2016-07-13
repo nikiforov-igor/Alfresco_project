@@ -32,8 +32,8 @@
         <constraint name="lecm-incoming:attachment-categories" type="LIST">
             <parameter name="allowedValues">
                 <list>
-                    <value>Входящее</value>
-                    <value>Прочее</value>
+                    <value>Входящее|INCOMING</value>
+                    <value>Прочее|OTHER</value>
                 </list>
             </parameter>
         </constraint>

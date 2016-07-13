@@ -25,10 +25,10 @@
 		<constraint name="lecm-protocol:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Документ</value>
-					<value>Приложение</value>
-					<value>Подлинник</value>
-					<value>Прочее</value>
+					<value>Документ|DOCUMENT</value>
+					<value>Приложение|APPENDIX</value>
+					<value>Подлинник|ORIGINAL</value>
+					<value>Прочее|OTHER</value>
 				</list>
 			</parameter>
 		</constraint>

@@ -32,13 +32,13 @@
 		<constraint name="lecm-contract:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Договор</value>
-					<value>Приложения</value>
-					<value>Спецификации</value>
-					<value>Согласование</value>
-					<value>Подписанный договор</value>
-					<value>Этапы</value>
-					<value>Другое</value>
+					<value>Договор|CONTRACT</value>
+					<value>Приложения|CONTRACT_APPENDIX</value>
+					<value>Спецификации|CONTRACT_SPECS</value>
+					<value>Согласование|APPROVAL</value>
+					<value>Подписанный договор|SIGNED_CONTRACT</value>
+					<value>Этапы|CONTRACT_STAGES</value>
+					<value>Другое|OTHER</value>
 				</list>
 			</parameter>
 		</constraint>

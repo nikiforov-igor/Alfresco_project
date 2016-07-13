@@ -28,7 +28,7 @@
 		<constraint name="lecm-meetings:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Вложения</value>
+					<value>Вложения|ATTACHMENTS</value>
 				</list>
 			</parameter>
 		</constraint>
