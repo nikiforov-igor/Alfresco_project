@@ -27,7 +27,8 @@
 			recipients: recipients,
 			templateCode: 'REVIEW_CANCELED_ALL',
 			templateConfig: {
-				mainObject: document
+				mainObject: document,
+				initiator: currentEmployee
 			}
 		});
 	}
