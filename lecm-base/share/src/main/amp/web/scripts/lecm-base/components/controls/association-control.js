@@ -178,7 +178,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onRemoveSelectedItem: function (layer, args) {
-			var nodeData, id, el, value, idx;
+			var nodeData, id, el, value, idx, added=[], removed=[], item, index;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].removed;
 				id = this.id + '-' + nodeData.nodeRef.replace(/:|\//g, '_');
@@ -200,6 +200,24 @@ LogicECM.module = LogicECM.module || {};
 					value.splice(idx, 1);
 					el.value = value.join(',');
 				}
+                for (index in this.fieldValues) {
+                    if (this.fieldValues.hasOwnProperty(index)) {
+                        item = this.fieldValues[index];
+                        if (value.indexOf(item) === -1) {
+                            removed.push(item);
+                        }
+                    }
+                }
+                this.widgets.removed.value = removed.join(',');
+                for (index in value) {
+                    if (value.hasOwnProperty(index)) {
+                        item = value[index];
+                        if (this.fieldValues.indexOf(item) === -1) {
+                            added.push(item);
+                        }
+                    }
+                }
+                this.widgets.added.value = added.join(',');
 			}
 		},
 
