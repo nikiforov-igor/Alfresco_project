@@ -10,7 +10,7 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 				reviewers = row.assocs['lecm-review-ts:reviewer-assoc'];
 				if (reviewers && reviewers.length) {
 					for (j in reviewers) {
-						if ('' + reviewers[j].nodeRef.toString() == reviewTsItems) {
+						if ('' + reviewers[j].nodeRef.toString() == employee) {
 							isOnReview = true;
 							break;
 						}
