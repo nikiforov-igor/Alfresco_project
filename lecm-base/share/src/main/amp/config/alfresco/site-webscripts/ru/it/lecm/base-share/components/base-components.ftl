@@ -117,6 +117,7 @@ nested - дополнительная верстка,
 		<label for='${fieldHtmlId}'>
 			<span>${field.label?html}:</span>
 			<#if field.mandatory!false>
+                <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
 			<span class='incomplete-warning'>
 				<img src='${url.context}/res/components/form/images/warning-16.png' title='${msg("form.field.incomplete")}'/>
 			<span>
