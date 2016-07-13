@@ -84,18 +84,6 @@
         <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
 	</bean>
 
-	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.statemachine.LecmWorkflowDeployerImpl">
-		<property name="workflowService" ref="WorkflowService"/>
-		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="repositoryHelper" ref="repositoryHelper" />
-		<property name="contentService" ref="contentService"/>
-		<property name="authenticationContext" ref="authenticationContext" />
-		<property name="transactionService" ref="transactionService" />
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
-	</bean>
-
 	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>

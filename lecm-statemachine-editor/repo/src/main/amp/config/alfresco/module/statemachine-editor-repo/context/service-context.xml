@@ -57,9 +57,8 @@
 	<bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.diagram.get"
 		  class="ru.it.lecm.statemachine.editor.script.BPMNDiagramScript"
 		  parent="webscript">
-		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
 		<property name="nodeService" ref="nodeService"/>
-		<property name="lecmWorkflowDeployer" ref="lecmWorkflowDeployer"/>
+		<property name="workflowService" ref="workflowServiceImpl"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="contentService" ref="contentService"/>
         <property name="fileFolderService" ref="FileFolderService"/>

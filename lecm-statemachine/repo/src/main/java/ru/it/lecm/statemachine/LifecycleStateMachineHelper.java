@@ -103,6 +103,8 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     private LecmPermissionService lecmPermissionService;
     private IWorkCalendar workCalendarService;
 
+    Lock lock = new ReentrantLock();
+
     public void setTransactionService(TransactionService transactionService) {
     	this.transactionService = transactionService;
     }
@@ -804,17 +806,16 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 
     /*
      * Используется в
-     * 		- helper - getStateMechenes
+     * 		- helper - getStateMachines
      */
     private NodeRef getVersionsRoot() {
-    	if(versionsRoot==null) versionsRoot = serviceRegistry.getNodeService().getChildByName(getServiceRoot(), ContentModel.ASSOC_CONTAINS, "versions");
-    	return versionsRoot;
+        if (versionsRoot == null) {
+            versionsRoot = serviceRegistry.getNodeService().getChildByName(getServiceRoot(), ContentModel.ASSOC_CONTAINS, "versions");
+        }
+        return versionsRoot;
     }
 
-    /*
-     * Используется в
-     * 		- LecmWorkflowDeployerImpl -> redeploy
-     */
+
     public void resetStateMachene() {
     	statemachenesCache.clear();
     }
@@ -822,19 +823,25 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      * Используется в
      * 		- helper - getStateMecheneByName
      */
-    private SimpleCache<String, StateMachene> getStateMechenes() {
-    	if(statemachenesCache.getKeys().size() == 0) {
-            NodeRef versionsRoot = getVersionsRoot();
-            //Проверяем versionsRoot, если существует, то хотя бы одна машина была развернута в системе
-            if (versionsRoot != null) {
-                List<ChildAssociationRef> statemacheneRefs = serviceRegistry.getNodeService().getChildAssocs(versionsRoot);
-                for(ChildAssociationRef child : statemacheneRefs) {
-                    StateMachene machine = new StateMachene(child.getChildRef());
-                    statemachenesCache.put(machine.getName(), machine);
+    private SimpleCache<String, StateMachene> getStateMachines() {
+
+        try {
+            lock.lock();
+            if (statemachenesCache.getKeys().size() == 0) {
+                NodeRef versionsRoot = getVersionsRoot();
+                //Проверяем versionsRoot, если существует, то хотя бы одна машина была развернута в системе
+                if (versionsRoot != null) {
+                    List<ChildAssociationRef> statemacheneRefs = serviceRegistry.getNodeService().getChildAssocs(versionsRoot);
+                    for (ChildAssociationRef child : statemacheneRefs) {
+                        StateMachene machine = new StateMachene(child.getChildRef());
+                        statemachenesCache.put(machine.getName(), machine);
+                    }
                 }
             }
-    	}
-    	return statemachenesCache;
+        } finally {
+            lock.unlock();
+        }
+        return statemachenesCache;
     }
     /*
      * Используется в
@@ -845,7 +852,7 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     	return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<StateMachene>() {
             @Override
             public StateMachene doWork() throws Exception {
-                StateMachene machene = getStateMechenes().get(name);
+                StateMachene machene = getStateMachines().get(name);
 		    	return machene == null ? new StateMachene() : machene;
             }
     	});

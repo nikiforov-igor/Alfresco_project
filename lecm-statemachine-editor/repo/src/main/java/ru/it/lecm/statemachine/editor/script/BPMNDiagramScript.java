@@ -6,10 +6,10 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.workflow.WorkflowDeployment;
+import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -21,7 +21,6 @@ import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.statemachine.bean.LecmWorkflowDeployer;
 import ru.it.lecm.statemachine.editor.SimpleDocumentDeployer;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 import ru.it.lecm.statemachine.editor.export.XMLExporter;
@@ -41,9 +40,7 @@ import java.util.Map;
 public class BPMNDiagramScript extends AbstractWebScript {
 	private static final transient Logger logger = LoggerFactory.getLogger(BPMNDiagramScript.class);
 
-	private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
 	private NodeService nodeService;
-	private LecmWorkflowDeployer lecmWorkflowDeployer;
 	private Repository repositoryHelper;
 	private ContentService contentService;
 	private FileFolderService fileFolderService;
@@ -51,12 +48,11 @@ public class BPMNDiagramScript extends AbstractWebScript {
 	private ProcessEngine activitiProcessEngine;
 	private StateMachineServiceBean statemachineService;
 	private SimpleDocumentDeployer simpleDocumentDeployer;
+	private WorkflowService workflowService;
 
 	public void setStatemachineService(StateMachineServiceBean statemachineService) {
 		this.statemachineService = statemachineService;
 	}
-
-
 
 	public void setActivitiProcessEngine(ProcessEngine activitiProcessEngine) {
 		this.activitiProcessEngine = activitiProcessEngine;
@@ -68,14 +64,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
-	}
-
-	public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
-		this.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
-	}
-
-	public void setLecmWorkflowDeployer(LecmWorkflowDeployer lecmWorkflowDeployer) {
-		this.lecmWorkflowDeployer = lecmWorkflowDeployer;
 	}
 
 	public void setRepositoryHelper(Repository repositoryHelper) {
@@ -90,7 +78,11 @@ public class BPMNDiagramScript extends AbstractWebScript {
         this.fileFolderService = fileFolderService;
     }
 
-    @Override
+	public void setWorkflowService(WorkflowService workflowService) {
+		this.workflowService = workflowService;
+	}
+
+	@Override
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 		String statemachineNodeRef = req.getParameter("statemachineNodeRef");
 		String docNodeRef = req.getParameter("docNodeRef");
@@ -112,7 +104,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		            //Создаем результирующую диаграмму
 		            String fileName = machineName + ".bpmn20.xml";
 					NodeRef companyHome = repositoryHelper.getCompanyHome();
-					NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, LecmWorkflowDeployer.WORKFLOW_FOLDER);
+					NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, "workflowStore");
 					NodeRef file = nodeService.getChildByName(workflowFolder, ContentModel.ASSOC_CONTAINS, fileName);
 					if (file == null) {
 						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
@@ -148,7 +140,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
 					if (!isSimpleDocument) {
 						logger.debug("Деплой процесса для " + machineName);
 						is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
-						WorkflowDeployment wd = lecmWorkflowDeployer.deploy("activiti", "text/xml", is, fileName);
+						WorkflowDeployment wd = workflowService.deployDefinition("activiti", is, "text/xml", fileName);
 						lastVersion = wd.getDefinition().getVersion();
 						is.close();
 						//Сохраняем свойсвтва контейнера версий
