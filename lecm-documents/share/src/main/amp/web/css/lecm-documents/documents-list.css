@@ -17,9 +17,6 @@
     background: none;
     padding: 5px 0;
 }
-#yui-main #lecm-content-ft {
-    background: #f2f2f2;
-}
 #yui-main div.datalist-toolbar div.header-bar div.new-row span.first-child {
     background: url("/share/res/images/lecm-contracts/alf_contract_add.png") no-repeat 5px 5px;
     padding-left: 0;

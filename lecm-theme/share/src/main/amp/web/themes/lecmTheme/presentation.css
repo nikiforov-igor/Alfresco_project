@@ -32,6 +32,13 @@ ol, ol li {
     padding: 0;
 }
 
+body.yui-skin-lecmTheme *:focus {
+    outline: 2px solid #ccc;
+}
+.yui-skin-lecmTheme div:focus {
+    outline-offset: -2px;
+}
+
 span.wrapper-title {
     color: #6ca5ce;
     text-decoration: underline;
@@ -150,12 +157,12 @@ span.wrapper-title {
 #bd #lecm-content-main #lecm-content-main {
     padding-bottom: 0;
 }
-#bd #lecm-content-ft {
+.yui-skin-lecmTheme #bd #lecm-content-ft {
     width: 100%;
     height: 30px;
     position: absolute;
     bottom: 0;
-    background: #c5c5c5;
+    background: #f2f2f2;
 }
 
 #alf-filters .datalists .header-bar,
@@ -2271,6 +2278,10 @@ span.person a div.description:empty {
    width: 16px;
 }
 
+.yui-skin-lecmTheme .datagrid .grid {
+    border: 1px solid #ccc;
+}
+
 .yui-skin-lecmTheme div.grid td.nowrap,
 .yui-skin-lecmTheme div.grid td.nowrap div {
     max-width: 140px;
@@ -2459,3 +2470,46 @@ div#lightbox {
 .yui-overlay.yuimenu .yuimenuitem .yuimenuitemlabel {
     font: 13px Open Sans,arial,helvetica,clean,sans-serif;
 }
+
+/* lecm-arm-documents : start */
+.yui-skin-lecmTheme div.arm-tree-menu .arm-accordion div.accordion-head {
+    background-color: #F2F2F2;
+    border-bottom: 1px solid #D7D7D7;
+    border-top: 1px solid #FFFFFF;
+    border-right: 1px solid #FFFFFF;
+    color: #333333;
+}
+.yui-skin-lecmTheme .accordion-toolbar .new-row button {
+    color: #6ca5ce;
+}
+/* lecm-arm-documents : end */
+
+/* Controls colors : start */
+.yui-skin-lecmTheme .control .container .value-div > input[type=text],
+.yui-skin-lecmTheme .control .container .value-div > div.control-selected-values,
+.yui-skin-lecmTheme .control .container .value-div > select,
+.yui-skin-lecmTheme .control .container .value-div > textarea,
+.yui-skin-lecmTheme .control.date .container .value-div > div > input[type=text] {
+    border: 1px solid #ccc;
+}
+.yui-skin-lecmTheme .control .container .value-div input.invalid + .mandatory-highlightable {
+    background-color: #faecee;
+}
+.yui-skin-lecmTheme .control .container .value-div input.mandatory + .mandatory-highlightable {
+    background-color: #fafae6;
+}
+.yui-skin-lecmTheme .control.date .calendar-icon {
+    border: 1px solid #ccc;
+}
+/* Controls colors : end */
+
+/* Tabs colors : start */
+.yui-skin-lecmTheme .yui-navset .yui-nav li a,
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a,
+.yui-skin-lecmTheme .yui-navset .yui-nav li.selected a,
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a,
+.yui-skin-lecmTheme .yui-navset .yui-content > div,
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-content > div {
+    border: 1px solid #d2d2d2;
+}
+/* Tabs colors : end */

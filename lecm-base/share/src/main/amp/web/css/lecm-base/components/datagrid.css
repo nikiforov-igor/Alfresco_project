@@ -3,7 +3,6 @@
 }
 .datagrid .grid {
     overflow: auto;
-    border: 1px solid #ccc;
 }
 .datagrid .grid:empty {
     border: none;

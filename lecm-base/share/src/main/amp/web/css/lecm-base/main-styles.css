@@ -17,12 +17,6 @@
 
 
 /* Common styles - start */
-body *:focus {
-    outline: 2px solid #ccc;
-}
-div:focus {
-    outline-offset: -2px;
-}
 .hidden1 {
     display: none;
 }
@@ -316,7 +310,6 @@ i.icon-building {
 .yui-skin-lecmTheme .yui-navset .yui-nav li a,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a {
     background: #eaeaea;
-    border: 1px solid #d2d2d2;
     border-bottom-width: 0;
     border-radius: 5px 5px 0 0;
 }
@@ -339,7 +332,6 @@ i.icon-building {
 .yui-skin-lecmTheme .yui-navset .yui-nav li.selected a,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a {
     background: #fff;
-    border: 1px solid #d2d2d2;
     border-bottom-width: 0;
 }
 .yui-skin-lecmTheme .yui-navset .yui-nav li.selected a em,
@@ -369,7 +361,6 @@ i.icon-building {
 .yui-skin-lecmTheme .yui-navset .yui-content > div,
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-content > div {
     overflow: hidden;
-    border: 1px solid #d2d2d2;
     border-radius: 5px;
     background: #fff;
     margin-left: -1px;
@@ -453,7 +444,6 @@ i.icon-building {
     width: 100%;
     height: auto;
     min-height: 28px;
-    border: 1px solid #ccc;
     position: inherit;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -467,9 +457,7 @@ i.icon-building {
 .control .container .value-div input.mandatory + .mandatory-highlightable {
     background: transparent;
 }
-.control .container .value-div input.invalid + .mandatory-highlightable {
-    background-color: #faecee;
-}
+
 .control.editmode .container .value-div input[type=text],
 .control.editmode .container .value-div .control-selected-values,
 .control.editmode .container .value-div > :last-child {
@@ -594,7 +582,6 @@ i.icon-building {
 .control.date .calendar-icon {
     width: 26px;
     height: 26px;
-    border: 1px solid #ccc;
     display: block;
     cursor: pointer;
 }

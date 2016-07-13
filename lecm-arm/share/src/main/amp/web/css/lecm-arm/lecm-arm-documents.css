@@ -98,14 +98,9 @@ div.arm-tree-menu ul.arm-accordion > li {
 div.arm-tree-menu .arm-accordion div.accordion-head {
 	cursor: pointer;
 	/*background: url('/share/res/images/lecm-arm/accordion_button.png') repeat-x;*/
-    background-color: #F2F2F2;
-    border-bottom: 1px solid #D7D7D7;
-    border-top: 1px solid #FFFFFF;
-    border-right: 1px solid #FFFFFF;
 	font-size: 13px;
 	font-weight: bold;
 	font-style: normal;
-	color: #333333;
 	padding: 8px 0 8px 10px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -231,10 +226,6 @@ div.error-item
 
 .accordion-toolbar .toolbar {
 	background-color: white;
-}
-
-.accordion-toolbar .new-row button {
-	color: #6ca5ce;
 }
 
 #bd #lecm-content-main #arm-with-tree {
