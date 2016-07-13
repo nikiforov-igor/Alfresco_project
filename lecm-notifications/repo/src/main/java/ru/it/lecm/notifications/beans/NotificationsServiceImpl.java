@@ -636,7 +636,17 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     }
 
     @Override
+    public void sendNotificationByTemplate(String author, NodeRef nodeRef, List<NodeRef> recipients, String templateCode) {
+        sendNotificationByTemplate(AuthenticationUtil.getSystemUserName(), nodeRef, recipients, templateCode, null);
+    }
+
+    @Override
     public void sendNotificationByTemplate(NodeRef nodeRef, List<NodeRef> recipients, String templateCode, Map<String, Object> objects) {
+        sendNotificationByTemplate(AuthenticationUtil.getSystemUserName(), nodeRef, recipients, templateCode, objects);
+    }
+
+    @Override
+    public void sendNotificationByTemplate(String author, NodeRef nodeRef, List<NodeRef> recipients, String templateCode, Map<String, Object> objects) {
         if (objects == null) {
             objects = new HashMap<>();
         }
@@ -644,7 +654,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         Notification notification = new Notification(objects);
         notification.setTemplateCode(templateCode);
         notification.setRecipientEmployeeRefs(recipients);
-        notification.setAuthor(AuthenticationUtil.getSystemUserName());
+        notification.setAuthor(author);
         notification.setObjectRef(nodeRef);
         sendNotification(notification);
     }

@@ -1,12 +1,5 @@
 package ru.it.lecm.workflow.reservation;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
@@ -31,6 +24,9 @@ import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 
+import java.io.Serializable;
+import java.util.*;
+
 /**
  *
  * @author vmalygin
@@ -38,6 +34,7 @@ import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract implements ReservationWorkflowService {
 
 	private final static Logger logger = LoggerFactory.getLogger(ReservationWorkflowServiceImpl.class);
+	private static final String POSITIVE_DECISION = "выполнен";
 
 	private EDSGlobalSettingsService edsGlobalSettingsService;
 	private RegNumbersService regNumbersService;
@@ -57,17 +54,35 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 
 	@Override
 	protected String getWorkflowStartedMessage(final String documentLink, final Date dueDate) {
-		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
-		String employeeName = (String) nodeService.getProperty(currentEmp, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-		String template = "%s запросил резервирование номера для документа %s";
-		String employeeUrl = wrapperLink(currentEmp, employeeName, LINK_URL);
-		return String.format(template, employeeUrl, documentLink);
+		return null;
 	}
 
 	@Override
 	protected String getWorkflowFinishedMessage(final String documentLink, final String decision) {
-		String template = "Ваш запрос на резервирование регистрационного номера для документа %s %s";
-		return String.format(template, documentLink, decision);
+		return null;
+	}
+
+	@Override
+	public void notifyWorkflowStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {
+		NodeRef docRef = Utils.getDocumentFromBpmPackage(bpmPackage);
+		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
+
+		HashMap<String, Object> templateObjects = new HashMap<>();
+		templateObjects.put("employee", currentEmp);
+		notificationsService.sendNotificationByTemplate(authService.getCurrentUserName(), docRef, Collections.singletonList(employeeRef), "RESERVATION_REQUEST_STARTED", templateObjects);
+	}
+
+	@Override
+	public void notifyWorkflowFinished(NodeRef employeeRef, String decision, NodeRef bpmPackage) {
+		NodeRef docRef = Utils.getDocumentFromBpmPackage(bpmPackage);
+
+		String templateCode;
+		if (decision.equals(POSITIVE_DECISION)) {
+			templateCode = "RESERVATION_REQUEST_FINISHED_APPROVED";
+		} else {
+			templateCode = "RESERVATION_REQUEST_FINISHED_REJECTED";
+		}
+		notificationsService.sendNotificationByTemplate(authService.getCurrentUserName(), docRef, Collections.singletonList(employeeRef), templateCode);
 	}
 
 	@Override

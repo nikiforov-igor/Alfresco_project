@@ -233,7 +233,11 @@ public interface NotificationsService {
 
 	void sendNotificationByTemplate(NodeRef nodeRef, List<NodeRef> recipients, String templateCode);
 
+	void sendNotificationByTemplate(String author, NodeRef nodeRef, List<NodeRef> recipients, String templateCode);
+
 	void sendNotificationByTemplate(NodeRef nodeRef, List<NodeRef> recipients, String templateCode, Map<String, Object> objects);
+
+	void sendNotificationByTemplate(String author, NodeRef nodeRef, List<NodeRef> recipients, String templateCode, Map<String, Object> objects);
 
 	void sendNotification(String author, NodeRef initiatorRef, List<NodeRef> recipientRefs, String templateCode, Map<String, Object> config, boolean dontCheckAccessToObject);
 

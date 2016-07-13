@@ -34,6 +34,7 @@ import java.util.*;
  *
  * @author vmalygin
  */
+@Deprecated
 public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implements SigningWorkflowService {
 
 	private final static String RESULT_LIST_NAME_FORMAT = "Лист подписания версии %s";

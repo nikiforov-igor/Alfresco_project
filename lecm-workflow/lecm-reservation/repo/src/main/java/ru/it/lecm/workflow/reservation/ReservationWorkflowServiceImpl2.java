@@ -80,20 +80,13 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	// Уведомление при старте запроса на резервирование рег.номера:
 	
 	@Override
-	public void notifyWorkflowStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {		
+	public void notifyWorkflowStarted(NodeRef employeeRef, Date dueDate, NodeRef bpmPackage) {
 		NodeRef docRef = Utils.getDocumentFromBpmPackage(bpmPackage);
 		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
 		
         HashMap<String, Object> templateObjects = new HashMap<>();
-        templateObjects.put("mainObject", docRef);
         templateObjects.put("employee", currentEmp);
-        Notification notification = new Notification(templateObjects);
-        notification.setRecipientEmployeeRefs(Collections.singletonList(employeeRef));
-        notification.setAuthor(authService.getCurrentUserName());
-        notification.setTemplateCode("RESERVATION_REQUEST_STARTED");
-        notification.setObjectRef(docRef);
-        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-        notificationsService.sendNotification(notification);
+		notificationsService.sendNotificationByTemplate(authService.getCurrentUserName(), docRef, Collections.singletonList(employeeRef), "RESERVATION_REQUEST_STARTED", templateObjects);
 	}
 		
 	// Уведомление при окончании запроса на резервирование рег.номера:
@@ -101,14 +94,11 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
 	@Override
 	public void notifyWorkflowFinished(NodeRef employeeRef, String decision, NodeRef bpmPackage) {
 		NodeRef docRef = Utils.getDocumentFromBpmPackage(bpmPackage);
-		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
-		String regNumber = (String) nodeService.getProperty(docRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);
-		
         HashMap<String, Object> templateObjects = new HashMap<>();
-        templateObjects.put("mainObject", docRef);
-        
-		String templateCode = "";
-        if (decision.equals(POSITIVE_DECISION)) {        	
+
+		String templateCode;
+        if (decision.equals(POSITIVE_DECISION)) {
+			String regNumber = (String) nodeService.getProperty(docRef, DocumentService.PROP_REG_DATA_DOC_NUMBER);
         	templateObjects.put("regNumber", regNumber);
         	Date reserveDate = (Date) nodeService.getProperty(docRef, DocumentService.PROP_REG_DATA_DOC_DATE);
 			SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -123,16 +113,9 @@ public class ReservationWorkflowServiceImpl2 extends WorkflowServiceAbstract imp
         }
         else {
         	templateCode = "RESERVATION_REQUEST_FINISHED_REJECTED";
-            templateObjects.put("employee", currentEmp);
         }
-		
-        Notification notification = new Notification(templateObjects);
-        notification.setRecipientEmployeeRefs(Collections.singletonList(employeeRef));
-        notification.setAuthor(authService.getCurrentUserName());
-        notification.setTemplateCode(templateCode);
-        notification.setObjectRef(docRef);
-        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-        notificationsService.sendNotification(notification);
+
+		notificationsService.sendNotificationByTemplate(authService.getCurrentUserName(), docRef, Collections.singletonList(employeeRef), templateCode, templateObjects);
 	}
 	
 	@Override
