@@ -26,10 +26,10 @@
         <constraint name="lecm-errands:attachment-categories" type="LIST">
             <parameter name="allowedValues">
                 <list>
-                    <value>Поручение</value>
-                    <value>Контроль</value>
-                    <value>Исполнение</value>
-                    <value>Отчеты соисполнителей</value>
+                    <value>Поручение|ERRAND</value>
+                    <value>Контроль|CONTROL</value>
+                    <value>Исполнение|EXECUTION</value>
+                    <value>Отчеты соисполнителей|EXECUTION_REPORTS</value>
                 </list>
             </parameter>
         </constraint>

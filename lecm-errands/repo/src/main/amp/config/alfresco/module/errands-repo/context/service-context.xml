@@ -552,4 +552,12 @@
             </list>
         </property>
     </bean>
+
+    <bean parent="documentMessagesLoader">
+        <property name="messages">
+            <list>
+                <value>alfresco/module/errands-repo/messages/lecm-errands-document</value>
+            </list>
+        </property>
+    </bean>
 </beans>
