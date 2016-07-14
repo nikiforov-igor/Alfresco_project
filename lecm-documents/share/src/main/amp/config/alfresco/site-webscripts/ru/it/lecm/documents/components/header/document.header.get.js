@@ -1,5 +1,6 @@
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
 
 function main() {
     AlfrescoUtil.param("nodeRef");
@@ -32,6 +33,7 @@ function main() {
         }
 
         model.subscribed = subscribed;
+        model.isDocumentStarter = isStarter(nodeDetails.item.node.type);
 
         // Get the user name of the person to get
         var login = user.id;
