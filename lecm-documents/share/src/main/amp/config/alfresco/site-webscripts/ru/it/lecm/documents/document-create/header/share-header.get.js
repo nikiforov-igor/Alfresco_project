@@ -17,7 +17,11 @@ var getDocumentPresentString = function (nodeRef) {
 	if (nodeRef) {
 		var nodeDetails = DocumentUtils.getNodeDetails(nodeRef);
 		if (nodeDetails) {
-			return msg.get('title.edit_document').replace('{0}', nodeDetails.item.node.properties["lecm-document:ext-present-string"]);
+			var presentString = nodeDetails.item.node.properties["lecm-document:ml-present-string"];
+			if (presentString == null) {
+				presentString = nodeDetails.item.node.properties["lecm-document:ext-present-string"];
+			}
+			return msg.get('title.edit_document').replace('{0}', presentString);
 		}
 	}
 	return null;
