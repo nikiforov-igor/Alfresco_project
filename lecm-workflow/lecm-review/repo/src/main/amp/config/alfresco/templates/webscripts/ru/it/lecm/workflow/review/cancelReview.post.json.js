@@ -15,8 +15,7 @@
 			recipients: recipients,
 			templateCode: 'REVIEW_CANCELED',
 			templateConfig: {
-				mainObject: document,
-				initiator: currentEmployee
+				mainObject: document
 			}
 		});
 	}

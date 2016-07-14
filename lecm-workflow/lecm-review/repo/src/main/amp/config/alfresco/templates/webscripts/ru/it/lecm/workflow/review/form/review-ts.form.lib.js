@@ -34,14 +34,14 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 
 	for (i in reviewTsItems) {
 		item = reviewTsItems[i];
-		if ('lecm-orgstr:employee' == item.typeShort && employees.indexOf(item.nodeRef.toString()) == -1) {
+		if ('lecm-orgstr:employee' == item.typeShort && employees.indexOf('' + item.nodeRef.toString()) == -1) {
 			employees.push('' + item.nodeRef.toString());
 		}
 		if ('lecm-review-list:review-list-item' == item.typeShort) {
 			assocs = item.assocs['lecm-review-list:reviewer-assoc'];
 			if (assocs && assocs.length) {
 				for (j in assocs) {
-					if (employees.indexOf(assocs[j].nodeRef.toString()) == -1) {
+					if (employees.indexOf('' + assocs[j].nodeRef.toString()) == -1) {
 						employees.push('' + assocs[j].nodeRef.toString());
 					}
 				}
