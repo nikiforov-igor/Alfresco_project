@@ -108,16 +108,17 @@ name (обязательный) - имя контрола, использует�
 classes (необязательный) - дополнительные css-классы с помощью которых настраивается внешний вид контрола
 buttons (необязательный) - html-верстка кнопок для контрола
 value (необязательный) - html-верстка полей отвечающих за ввод, хранение и отображение данных в контроле
+disabled (необязательный) - отключение контрола, на данный момент отключает в верстке вывод признака обязательности
 nested - дополнительная верстка,
 -->
-<#macro baseControl field name classes='' buttons='' value=''>
+<#macro baseControl field name classes='' buttons='' value='' disabled=false>
 <#assign fieldHtmlId = args.htmlid?html + '_' + field.id>
 <div id='${fieldHtmlId}-${name}' class='control ${classes}'>
 	<div class='label-div'>
 		<label for='${fieldHtmlId}'>
 			<span>${field.label?html}:</span>
 			<#if field.mandatory!false>
-                <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+                <#if !disabled><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
 			<span class='incomplete-warning'>
 				<img src='${url.context}/res/components/form/images/warning-16.png' title='${msg("form.field.incomplete")}'/>
 			<span>

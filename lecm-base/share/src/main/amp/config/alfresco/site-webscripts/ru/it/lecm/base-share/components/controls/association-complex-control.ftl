@@ -50,7 +50,7 @@
 		<input type='hidden' id='${fieldHtmlId}' name='${field.name}' value='${fieldValue?html}'>
 		<div id='${fieldHtmlId}-displayed'></div>
 	</#assign>
-	<@components.baseControl field=field name='association-control' classes='association-control viewmode' value=value/>
+	<@components.baseControl field=field name='association-control' classes='association-control viewmode' value=value disabled=disabled/>
 <#else>
 	<#assign buttons><@components.baseControlBtns field=field renderCreateBtn=false/></#assign>
 	<#assign value><@components.baseControlValue field=field fieldValue=fieldValue showAutocomplete=showAutocomplete isDefaultValue=defaultValue?has_content/></#assign>
