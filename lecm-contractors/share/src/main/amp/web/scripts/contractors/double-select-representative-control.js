@@ -82,6 +82,79 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onSelect: function (layer, args) {
+            var initDatatasources = function(scope) {
+                if (marker == 'contractor') {
+
+                    autocompleteConf = {
+                        startLocation: scope.options.representativesLocation,
+                        itemType: scope.options.representativesType,
+                        childrenDataSource: YAHOO.lang.substitute(scope.options.representativesByContrDS,
+                            {
+                                contractor: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
+                            }),
+                        defaultValueDataSource: YAHOO.lang.substitute(scope.options.representativesDefaultValueDS,
+                            {
+                                contractor: selectedContractor
+                            }),
+                        nameSubstituteString: scope.options.representativesSubstitute,
+                        selectedValueNodeRef: "",
+                        lazyLoading: false,
+                        disabled: false,
+                        showAssocViewForm: scope.options.showAssocViewForm
+                    };
+
+                    treeConf = {
+                        rootLocation: scope.options.representativesLocation,
+                        itemType: scope.options.representativesType,
+                        childrenDataSource: YAHOO.lang.substitute(scope.options.representativesByContrDS,
+                            {
+                                contractor: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
+                            }),
+                        defaultValueDataSource: YAHOO.lang.substitute(scope.options.representativesDefaultValueDS,
+                            {
+                                contractor: selectedContractor
+                            }),
+                        nameSubstituteString: scope.options.representativesSubstitute,
+                        selectedValue: null,
+                        initialized: false,
+                        lazyLoading: false,
+                        disabled: false
+                    }
+                } else {
+                    autocompleteConf = {
+                        startLocation: scope.options.employeesLocation,
+                        itemType: scope.options.employeesType,
+                        childrenDataSource: YAHOO.lang.substitute(scope.options.employeesByOrgDS, {
+                            organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
+                        }),
+                        defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
+                            organization: selectedContractor
+                        }) : null,
+                        nameSubstituteString: scope.options.employeesNameSubstitute,
+                        lazyLoading: false,
+                        disabled: false,
+                        showAssocViewForm: scope.options.showAssocViewForm
+                    };
+
+                    treeConf = {
+                        rootLocation: scope.options.employeesLocation,
+                        itemType: scope.options.employeesType,
+                        childrenDataSource: YAHOO.lang.substitute(scope.options.employeesByOrgDS, {
+                            organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
+                        }),
+                        defaultValueDataSource: scope.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(scope.options.employeesDefaultValueDS, {
+                            organization: selectedContractor
+                        }) : null,
+                        nameSubstituteString: scope.options.employeesNameSubstitute,
+                        initialized: false,
+                        lazyLoading: false,
+                        disabled: false
+                    }
+                }
+
+                scope._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
+            };
+
             if (!this.options.disabled) {
                 var selectedContractors = Object.keys(args[1].selectedItems); // IE 9+
                 var selectedContractor = selectedContractors.length == 1 ? selectedContractors[0] : null;
@@ -105,76 +178,29 @@ LogicECM.module = LogicECM.module || {};
                     marker = layer == this.options.contractorSelectEvent ? 'contractor' : 'organisation'; 
                 }
 
-                if (marker == 'contractor') {
-
-                    autocompleteConf = {
-                        startLocation: this.options.representativesLocation,
-                        itemType: this.options.representativesType,
-                        childrenDataSource: YAHOO.lang.substitute(this.options.representativesByContrDS,
-                            {
-                                contractor: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                            }),
-                        defaultValueDataSource: YAHOO.lang.substitute(this.options.representativesDefaultValueDS,
-                            {
-                                contractor: selectedContractor
-                            }),
-                        nameSubstituteString: this.options.representativesSubstitute,
-                        selectedValueNodeRef: "",
-                        lazyLoading: false,
-                        disabled: false,
-                        showAssocViewForm: this.options.showAssocViewForm
-                    };
-
-                    treeConf = {
-                        rootLocation: this.options.representativesLocation,
-                        itemType: this.options.representativesType,
-                        childrenDataSource: YAHOO.lang.substitute(this.options.representativesByContrDS,
-                            {
-                                contractor: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                            }),
-                        defaultValueDataSource: YAHOO.lang.substitute(this.options.representativesDefaultValueDS,
-                            {
-                                contractor: selectedContractor
-                            }),
-                        nameSubstituteString: this.options.representativesSubstitute,
-                        selectedValue: null,
-                        initialized: false,
-                        lazyLoading: false,
-                        disabled: false
-                    }
+                if (selectedContractor == null) {
+                    initDatatasources(this);
                 } else {
-                    autocompleteConf = {
-                        startLocation: this.options.employeesLocation,
-                        itemType: this.options.employeesType,
-                        childrenDataSource: YAHOO.lang.substitute(this.options.employeesByOrgDS, {
-                            organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                        }),
-                        defaultValueDataSource: this.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(this.options.employeesDefaultValueDS, {
-                            organization: selectedContractor
-                        }) : null,
-                        nameSubstituteString: this.options.employeesNameSubstitute,
-                        lazyLoading: false,
-                        disabled: false,
-                        showAssocViewForm: this.options.showAssocViewForm
-                    };
-
-                    treeConf = {
-                        rootLocation: this.options.employeesLocation,
-                        itemType: this.options.employeesType,
-                        childrenDataSource: YAHOO.lang.substitute(this.options.employeesByOrgDS, {
-                            organization: selectedContractor != null ? new Alfresco.util.NodeRef(selectedContractor).uri : ""
-                        }),
-                        defaultValueDataSource: this.options.employeesDefaultValueDS != null ? YAHOO.lang.substitute(this.options.employeesDefaultValueDS, {
-                            organization: selectedContractor
-                        }) : null,
-                        nameSubstituteString: this.options.employeesNameSubstitute,
-                        initialized: false,
-                        lazyLoading: false,
-                        disabled: false
-                    }
+                    Alfresco.util.Ajax.jsonRequest(
+                        {
+                            url: Alfresco.constants.PROXY_URI + "lecm/substitude/format/node",
+                            method: "POST",
+                            dataObj: {
+                                nodeRef: selectedContractor,
+                                substituteString: "{@hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"
+                            },
+                            successCallback: {
+                                fn: function (response) {
+                                    if (response.json != null && response.json.formatString != null) {
+                                        var result = response.json.formatString;
+                                        marker = result === 'true' ? 'organisation' : 'contractor';
+                                        initDatatasources(this);
+                                    }
+                                },
+                                scope: this
+                            }
+                        });
                 }
-
-                this._updateControls(selectedContractor, resetValue, autocompleteConf, treeConf);
             }
         },
 
