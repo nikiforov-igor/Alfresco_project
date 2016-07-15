@@ -37,7 +37,7 @@ public class DocumentMessageServiceImpl extends BaseBean implements DocumentMess
 	private RepositoryLocation repoMessagesLocation;
 	private SearchService searchService;
 
-	List<Locale> availableLocales = Arrays.asList(DEFAULT_LOCALES);
+	List<Locale> availableLocales = new ArrayList<>();
 	List<Locale> fallbackLocales = Arrays.asList(DEFAULT_LOCALES);
 
 	@Override
