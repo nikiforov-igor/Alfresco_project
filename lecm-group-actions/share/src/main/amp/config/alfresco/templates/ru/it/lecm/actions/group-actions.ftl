@@ -1,6 +1,6 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
-<@templateHeader "transitional">
+<@bpage.templateHeader "transitional">
 <#include "/org/alfresco/components/component.head.inc">
 <@script type="text/javascript" src="/res/modules/simple-dialog.js"></@script>
 
@@ -13,9 +13,9 @@
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/search/search.css" />
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/css/lecm-arm/lecm-arm.css" />
 <#include "/org/alfresco/components/form/form.dependencies.inc">
-</@templateHeader>
+</@bpage.templateHeader>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 
 <@bpage.basePage>
 	<@region id="datagrid" scope="template" />

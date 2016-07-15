@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 <script type="text/javascript">//<![CDATA[
@@ -10,7 +10,6 @@
 <#--     LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string}; -->
 //]]></script>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
 <#-- <#assign hasPermission = isOrgEngineer/> -->
 <@bpage.basePageSimple showToolbar=hasPermission>

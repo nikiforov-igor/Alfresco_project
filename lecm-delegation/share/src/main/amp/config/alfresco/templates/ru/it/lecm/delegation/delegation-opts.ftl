@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl"/>
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 
 
@@ -26,7 +26,7 @@ LogicECM.module.Delegation.Const = LogicECM.module.Delegation.Const || {
 //]]>
 </script>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <@bpage.basePageSimple>
 	<#if "me" == delegator>
 		<@region id="content" scope="template"/>

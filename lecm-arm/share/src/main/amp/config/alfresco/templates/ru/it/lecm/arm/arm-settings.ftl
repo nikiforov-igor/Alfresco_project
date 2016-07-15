@@ -1,5 +1,5 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
-<@templateHeader "transitional">
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+<@bpage.templateHeader "transitional">
     <@script type="text/javascript" src="/scripts/lecm-arm/controls/arm-settings-fields-control.js"/>
     <@script type="text/javascript" src="/scripts/lecm-arm/constraints/arm-statuses-child-rule-validator.js"/>
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-validation.js"></@script>
@@ -15,7 +15,7 @@
     <#include "/org/alfresco/components/form/form.dependencies.inc">
 </@>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
 
 <@bpage.basePage showToolbar=false>

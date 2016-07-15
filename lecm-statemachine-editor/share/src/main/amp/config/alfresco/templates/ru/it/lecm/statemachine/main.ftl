@@ -1,6 +1,6 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@templateHeader "transitional">
+<@bpage.templateHeader "transitional">
 	<#include "/org/alfresco/components/form/form.dependencies.inc">
 
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-statemachine-editor/editor.css" group="lecm-statemachine-editor"/>
@@ -14,7 +14,6 @@
 
 <#assign showContent=page.url.args.statemachineId??>
 <#assign showMenu=showContent>
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage showToolbar=hasRole showMenu=hasRole>
     <#if hasRole>

@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 
@@ -11,7 +11,6 @@
 //]]>
 </script>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#-- <#assign hasPermission = isOrgEngineer/> -->
 <@bpage.basePageSimple showToolbar=hasPermission>
 <#--     <#if hasPermission> -->

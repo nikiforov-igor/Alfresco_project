@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl"/>
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 
 
@@ -17,7 +17,7 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {
 //]]>
 </script>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <@bpage.basePageSimple>
 	<@region id="content" scope="template"/>
 </@bpage.basePageSimple>

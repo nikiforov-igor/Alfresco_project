@@ -1,6 +1,6 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
-<@templateHeader "transitional">
+<@bpage.templateHeader "transitional">
 	<#include "/org/alfresco/components/form/form.dependencies.inc">
 
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" group="lecm-controls-editor"/>
@@ -13,7 +13,6 @@
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-controls-editor/controls-editor-datagrid.js" group="lecm-controls-editor"/>
 </@>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage showToolbar=isAdmin showMenu=isAdmin>
 	<#if isAdmin>

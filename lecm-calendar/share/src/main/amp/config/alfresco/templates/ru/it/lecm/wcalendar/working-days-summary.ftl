@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl"/>
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 
 <script type="text/javascript">//<![CDATA[
@@ -15,7 +15,7 @@ LogicECM.module.WCalendar.Const.ROLES = LogicECM.module.WCalendar.Const.ROLES ||
 
 <#assign showContent = isEngineer || isBoss>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <@bpage.basePageSimple>
 	<#if showContent>
 		<@region id="working-days-summary-table" scope="template"/>

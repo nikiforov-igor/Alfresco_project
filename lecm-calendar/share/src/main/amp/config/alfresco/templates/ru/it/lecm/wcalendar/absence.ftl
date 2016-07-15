@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl"/>
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <#-- Скрипты, необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.dependencies.inc">
@@ -19,7 +19,7 @@ LogicECM.module.WCalendar.Const = LogicECM.module.WCalendar.Const || {};
 
 <#assign showContent = isEngineer || isBoss>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <@bpage.basePageSimple showToolbar=showContent>
 	<#if showContent>
 		<@region id="absence-summary-table-wrapper" scope="template"/>

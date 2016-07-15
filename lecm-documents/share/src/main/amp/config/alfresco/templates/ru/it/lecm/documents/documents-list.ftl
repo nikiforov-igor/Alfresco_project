@@ -1,5 +1,5 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
-<@templateHeader "transitional">
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+<@bpage.templateHeader "transitional">
     <#include "/org/alfresco/components/form/form.dependencies.inc">
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/document-list-filters-manager.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
@@ -101,7 +101,7 @@
     //]]></script>
 </@>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <@bpage.basePage true true hasPermission>
     <#if hasPermission>
         <div class="yui-gc">

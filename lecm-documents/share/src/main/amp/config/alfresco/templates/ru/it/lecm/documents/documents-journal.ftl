@@ -1,5 +1,5 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
-<@templateHeader "transitional">
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+<@bpage.templateHeader "transitional">
     <#include "/org/alfresco/components/form/form.dependencies.inc">
     <script type="text/javascript">//<![CDATA[
         var response = ${response};
@@ -16,7 +16,7 @@
     </script>
 </@>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 
 <@bpage.basePage>
     <@region id="documents-grid" scope="template" />

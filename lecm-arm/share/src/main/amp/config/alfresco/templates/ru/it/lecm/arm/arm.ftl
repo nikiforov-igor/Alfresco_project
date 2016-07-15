@@ -1,5 +1,5 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
-<@templateHeader "transitional">
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+<@bpage.templateHeader "transitional">
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-arm/arm-filters.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"></@script>
 
@@ -38,7 +38,7 @@
     //]]></script>
 </@>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
 
 <div id="no_menu_page" class="sticky-wrapper">

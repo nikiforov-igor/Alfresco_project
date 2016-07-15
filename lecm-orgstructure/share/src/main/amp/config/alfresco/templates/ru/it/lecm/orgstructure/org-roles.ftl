@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/orgstructure-const.js"></@script>-->
@@ -9,7 +9,6 @@
 <#--     LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string}; -->
 //]]></script>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#-- <#assign hasPermission = isOrgEngineer/> -->
 <@bpage.basePageSimple showToolbar=hasPermission>
 <#--     <#if hasPermission> -->

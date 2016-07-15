@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#-- Скрипты, необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 <script type="text/javascript">//<![CDATA[
@@ -20,7 +20,7 @@ LogicECM.module.WCalendar.Const = LogicECM.module.WCalendar.Const || {};
 })();
 //]]></script>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
 <@bpage.basePageSimple>
 	<#if isEngineer>

@@ -1,5 +1,5 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
-<@templateHeader "transitional">
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+<@bpage.templateHeader "transitional">
     <#include "/org/alfresco/components/form/form.dependencies.inc">
     <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/documents-reports.js"></@script>
@@ -22,7 +22,7 @@ LogicECM.module.Documents.SETTINGS =
 //]]></script>
 </@>
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
 
 <@bpage.basePage showToolbar=false>
     <#if hasPermission>

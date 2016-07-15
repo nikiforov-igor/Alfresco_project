@@ -1,6 +1,5 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
-<#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+<#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 
 <@bpage.basePageSimple showToolbar=isEngineer>
 <#-- <#if isEngineer> -->

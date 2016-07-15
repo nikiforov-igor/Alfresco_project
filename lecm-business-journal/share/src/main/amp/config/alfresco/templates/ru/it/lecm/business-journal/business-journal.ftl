@@ -1,4 +1,4 @@
-<#include "/org/alfresco/include/alfresco-template.ftl" />
+<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 	<script type="text/javascript">//<![CDATA[
 		var bjContainer = ${bjContainer};
 
@@ -11,7 +11,6 @@
 	</script>
 	<#include "/org/alfresco/components/form/form.dependencies.inc">
 
-<#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#assign hasPermission = isEngineer/>
 <@bpage.basePageSimple>
 	<#if hasPermission>
