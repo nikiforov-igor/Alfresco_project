@@ -2,7 +2,6 @@
 <@bpage.templateHeader "transitional">
     <@script type="text/javascript" src="/scripts/lecm-arm/controls/arm-settings-fields-control.js"/>
     <@script type="text/javascript" src="/scripts/lecm-arm/constraints/arm-statuses-child-rule-validator.js"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-validation.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>
 
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/yui/treeview/assets/skins/sam/treeview.css"/>

@@ -161,7 +161,6 @@
 
 				function init() {
                     LogicECM.module.Base.Util.loadResources([
-                        'scripts/lecm-base/components/lecm-validation.js',
                         'modules/simple-dialog.js',
                         'scripts/lecm-base/components/advsearch.js',
                         'scripts/lecm-base/components/lecm-datagrid.js',

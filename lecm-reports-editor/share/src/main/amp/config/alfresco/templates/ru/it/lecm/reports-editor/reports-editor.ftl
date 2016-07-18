@@ -4,7 +4,6 @@
     <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-reports-editor/reports-editor-const.js"></@script>-->
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
-    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-validation.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-reports-editor/editor-tree-menu.js"></@script>
