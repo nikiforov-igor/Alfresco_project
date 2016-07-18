@@ -59,10 +59,9 @@
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="commonOther"/>
                     <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-uniqueness-help-id">
-                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
-                        <constraint-handlers>
-                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
-                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-orgstr:employee-fio-g" set="commonOther"/>
                     <field id="lecm-orgstr:employee-fio-d" set="commonOther"/>
@@ -167,10 +166,9 @@
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
                     <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-uniqueness-help-id">
-                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
-                        <constraint-handlers>
-                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
-                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
@@ -210,10 +208,9 @@
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
                     <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-uniqueness-help-id">
-                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
-                        <constraint-handlers>
-                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
-                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-orgstr:employee-fio-g" set="common"/>
                     <field id="lecm-orgstr:employee-fio-d" set="common"/>
@@ -266,10 +263,9 @@
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="commonOther"/>
                     <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-uniqueness-help-id">
-                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
-                        <constraint-handlers>
-                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
-                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                        </control>
                     </field>
                     <field id="lecm-orgstr:employee-fio-g" set="commonOther"/>
                     <field id="lecm-orgstr:employee-fio-d" set="commonOther"/>
@@ -949,7 +945,14 @@
                     <show id="lecm-orgstr:staffPosition-code"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name"/>
+                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                            <control-param name="validationType">blur</control-param>
+                            <control-param name="validationMessageId">lecm.element.duplicate.name</control-param>
+                            <control-param name="checkInArchive">true</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
         </forms>
@@ -965,7 +968,14 @@
                     <show id="lecm-orgstr:staffPosition-code"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name"/>
+                    <field id="cm:name" label-id="lecm-orgstr_staffPosition-name">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                            <control-param name="validationType">blur</control-param>
+                            <control-param name="validationMessageId">lecm.element.duplicate.name</control-param>
+                            <control-param name="checkInArchive">true</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
             <form id="search">

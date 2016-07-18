@@ -89,5 +89,36 @@
             </div>
         </div>
     </div>
+<script type="text/javascript">//<![CDATA[
+(function () {
+
+    function init() {
+        LogicECM.module.Base.Util.loadScripts([
+                    'scripts/lecm-base/components/lecm-textfield.js'
+                ],
+                createControl);
+    }
+
+    function createControl(){
+        var nodeRef = ("${form.arguments.itemKind}" == "node") ? "${form.arguments.itemId}" : null;
+        var typeName = ("${form.arguments.itemKind}" == "node") ? null : "${form.arguments.itemId}";
+
+        new LogicECM.module.TextField("${fieldHtmlId}").setOptions({
+            objectNodeRef: nodeRef,
+            typeName: typeName,
+            fieldId: "${field.configName}",
+            formId: "${args.htmlid}",
+            disabled: ${disabled?string},
+
+            isUniqueValue: ${field.control.params.isUniqueValue!false?string},
+            checkInArchive: ${field.control.params.checkInArchive!false?string},
+            validationMessageId: "${field.control.params.validationMessageId!'LogicECM.constraints.isUnique.message'}",
+            validationType: "${field.control.params.validationType!'keyup'}"
+        }).setMessages(${messages});
+    }
+
+    YAHOO.util.Event.onContentReady("${fieldHtmlId}", init);
+})();
+//]]></script>
 </#if>
 <div class="clear"></div>

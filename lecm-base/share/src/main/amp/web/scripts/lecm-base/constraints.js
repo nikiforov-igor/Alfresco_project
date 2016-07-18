@@ -51,4 +51,57 @@ LogicECM.constraints.isNumber = function number(field, args, event, form) {
     return valid;
 };
 
+LogicECM.constraints.isUnique = function(field, args, event, form, silent, message) {
+    var valid = true;
+
+    var type = args != null ? args.typeName : null;
+    var nodeRef = args != null ? args.nodeRef : null;
+    var property = args != null ? args.propertyName : field.name.replace("prop_", "").replace("_", ":");
+    var messageId = args != null ? args.messageId : 'lecm.element.duplicate.name';
+    var checkInArchive = args != null ? args.checkInArchive : false;
+
+    var errorMessage = message;
+
+    if (field.value.length > 0) {
+        var validationUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/base/validation/uniqueness?newValue=" + field.value + "&propertyName=" + property;
+        if (nodeRef) {
+            validationUrl += "&nodeRef=" + nodeRef;
+        }
+        if (type) {
+            validationUrl += "&typeName=" + type;
+        }
+        jQuery.ajax({
+            url: validationUrl,
+            type: "GET",
+            timeout: 30000,
+            async: false,
+            dataType: "json",
+            contentType: "application/json",
+            processData: false,
+            success: function(result) {
+                if (result != null) {
+                    valid = result.isUnique && (!checkInArchive || result.isUniqueInArchive);
+                    if (!valid) {
+                        if (result.isUnique && !result.isUniqueInArchive) {
+                            errorMessage = Alfresco.util.message(messageId + ".archive");
+                        } else {
+                            errorMessage = Alfresco.util.message(messageId);
+                        }
+                    }
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                errorMessage = Alfresco.util.message('lecm.element.error.validation');
+                valid = false;
+            }
+        });
+    } else {
+        valid = true;
+    }
+
+    this.message = errorMessage; // подменяем сообщение
+
+    return valid;
+};
+
 

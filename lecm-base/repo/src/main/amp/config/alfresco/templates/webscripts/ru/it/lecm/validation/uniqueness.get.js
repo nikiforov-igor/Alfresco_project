@@ -1,19 +1,44 @@
-if (args.newValue == undefined || args.newValue.length == 0
-    || args.propertyName == undefined || args.propertyName.length == 0
-    || ((args.nodeRef == undefined || args.nodeRef.length == 0) && (args.typeName == undefined || args.typeName.length == 0))) {
-    model.isUnique = "false";
+if (!args["newValue"] || args["newValue"].length == 0
+    || !args["propertyName"] || args["propertyName"].length == 0) {
+    model.isUnique = false;
+    model.isUniqueInArchive = false;
 } else {
-    var typeName;
-    if (args.typeName != undefined && args.typeName.length > 0) {
-        typeName = args.typeName;
-    } else {
-        var node = search.findNode(args.nodeRef);
-        typeName = node.getType();
+    var queryBase = "@" + (args["propertyName"].replace(":", "\\:")).split("-").join("\\-") + ":\"" + args["newValue"] + "\" ";
+
+    var typeName = null;
+    if (args["typeName"] && args["typeName"].length > 0 || args["nodeRef"] && args["nodeRef"].length > 0) {
+        if (args["typeName"] && args["typeName"].length > 0) {
+            typeName = args["typeName"];
+        } else {
+            var node = search.findNode(args["nodeRef"]);
+            typeName = node.typeShort;
+        }
+    }
+    if (typeName != null) {
+        queryBase = "TYPE:\"" + typeName + "\" AND " + queryBase;
     }
 
-    var query = "TYPE:\"" + typeName + "\" AND @" + args.propertyName.replace(":", "\\:") + ":\"" + args.newValue + "\" "
-                + " AND (ISNULL:\"lecm-dic\\:active\" OR @lecm-dic\\:active:true) ";
-    var nodes = search.luceneSearch(query);
+    if (args["nodeRef"] && args["nodeRef"].length > 0) {
+        queryBase = queryBase + " AND NOT ID:\"" + args["nodeRef"] + "\"";
+    }
 
-    model.isUnique = (nodes.length > 0) ? "false" : "true";
+    var queryActive = queryBase + " AND (ISNULL:\"lecm-dic:active\" OR @lecm\\-dic\\:active:true) ";
+    var queryArchive = queryBase + " AND @lecm\\-dic\\:active:false";
+
+    var nodesActive = searchCounter.query(
+        {
+            query: queryActive,
+            language: "fts-alfresco",
+            onerror: "exception"
+        }, false, false);
+
+    var nodesArchive = searchCounter.query(
+        {
+            query: queryArchive,
+            language: "fts-alfresco",
+            onerror: "exception"
+        }, false, false);
+
+    model.isUnique = nodesActive <= 0;
+    model.isUniqueInArchive = nodesArchive <= 0;
 }
