@@ -23,26 +23,45 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 		}
 		return isOnReview;
 	}
+
+	function pushEmployeeIfNotExist(employees, employee) {
+		if (employees.indexOf('' + employee.nodeRef.toString()) == -1) {
+			employees.push('' + employee.nodeRef.toString());
+		}
+	}
+
+
+
 	// надо достать имплоев из ассоков и для каждого склепать итем
-	var i, j, item,
+	var i, j, k, item,
 		items = [],
 		employee,
 		employees = [],
 		assocs,
+		assocEmployees,
 		currentEmployee = orgstructure.getCurrentEmployee(),
 		allRows;
 
 	for (i in reviewTsItems) {
 		item = reviewTsItems[i];
-		if ('lecm-orgstr:employee' == item.typeShort && employees.indexOf('' + item.nodeRef.toString()) == -1) {
-			employees.push('' + item.nodeRef.toString());
-		}
-		if ('lecm-review-list:review-list-item' == item.typeShort) {
+		if ('lecm-orgstr:employee' == item.typeShort) {
+			pushEmployeeIfNotExist(employees, item);
+		} else if ('lecm-review-list:review-list-item' == item.typeShort) {
 			assocs = item.assocs['lecm-review-list:reviewer-assoc'];
 			if (assocs && assocs.length) {
 				for (j in assocs) {
-					if (employees.indexOf('' + assocs[j].nodeRef.toString()) == -1) {
-						employees.push('' + assocs[j].nodeRef.toString());
+					if ('lecm-orgstr:employee' == assocs[j].typeShort) {
+						pushEmployeeIfNotExist(employees, assocs[j]);
+					} else if ('lecm-orgstr:organization-unit' == assocs[j].typeShort) {
+						assocEmployees = orgstructure.getEmployeesInUnit(assocs[j]);
+                        for (k in assocEmployees) {
+							pushEmployeeIfNotExist(employees, assocEmployees[k]);
+						}
+					} else if ('lecm-orgstr:workGroup' == assocs[j].typeShort) {
+						assocEmployees = orgstructure.getWorkGroupEmployees(assocs[j].nodeRef.toString());
+						for (k in assocEmployees) {
+							pushEmployeeIfNotExist(employees, assocEmployees[k]);
+						}
 					}
 				}
 			}
