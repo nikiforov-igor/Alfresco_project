@@ -703,9 +703,9 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 				if (items.length) {
 					if (visible) {
-						reveal(items[0].element);
+						reveal(items[0]);
 					} else {
-						hide(items[0].element);
+						hide(items[0]);
 					}
 				} else if (itemData.length) {
 					if (visible) {
