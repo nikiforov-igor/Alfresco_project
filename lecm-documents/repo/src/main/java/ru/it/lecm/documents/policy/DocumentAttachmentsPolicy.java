@@ -249,8 +249,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	public void beforeCreateVersion(NodeRef versionableNode) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(versionableNode);
 		if (document != null) {
-			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD_VER, document);
-			this.stateMachineService.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(versionableNode));
+			Boolean notCheckPermissions = AlfrescoTransactionSupport.getResource(DocumentAttachmentsService.NOT_SECURITY_CREATE_VERSION_ATTACHMENT_POLICY);
+			if (notCheckPermissions == null || !notCheckPermissions) {
+				this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD_VER, document);
+				this.stateMachineService.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(versionableNode));
+			}
 		}
 	}
 

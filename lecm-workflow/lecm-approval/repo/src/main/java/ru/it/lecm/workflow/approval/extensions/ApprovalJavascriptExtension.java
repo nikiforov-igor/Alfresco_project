@@ -3,6 +3,7 @@ package ru.it.lecm.workflow.approval.extensions;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 
 /**
@@ -47,5 +48,9 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 
 	public boolean checkExpression(NodeRef nodeRef, String expression) {
 		return approvalService.checkExpression(nodeRef, expression);
+	}
+
+	public void copyToDocumentAttachmentCategory(ScriptNode attachment, ScriptNode document, String filename) throws WriteTransactionNeededException {
+		approvalService.copyToDocumentAttachmentCategory(attachment.getNodeRef(), document.getNodeRef(), filename);
 	}
 }

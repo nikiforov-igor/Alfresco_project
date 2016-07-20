@@ -84,5 +84,8 @@
 		  depends-on="lecm.approve3.model.bootstrap"
 		  p:defaultApprovalTerm="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.approval.defaultTerm}') ? T(java.lang.Integer).parseInt('${lecm.approval.defaultTerm}') : null}"
 		  p:documentService-ref="documentService"
+		  p:attachmentsService-ref="documentAttachmentsService"
+		  p:contentService-ref="contentService"
+		  p:checkOutCheckInService-ref="checkOutCheckInService"
 		  p:folders-ref="approval.folders"/>
 </beans>

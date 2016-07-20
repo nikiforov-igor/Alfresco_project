@@ -2,6 +2,7 @@ package ru.it.lecm.workflow.approval.api;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  *
@@ -57,4 +58,6 @@ public interface ApprovalService {
 	NodeRef createDocumentApprovalHistoryFolder(final NodeRef documentRef);
 
 	boolean checkExpression(NodeRef nodeRef, String expression);
+
+	void copyToDocumentAttachmentCategory(NodeRef attachment, NodeRef document, String filename) throws WriteTransactionNeededException;
 }

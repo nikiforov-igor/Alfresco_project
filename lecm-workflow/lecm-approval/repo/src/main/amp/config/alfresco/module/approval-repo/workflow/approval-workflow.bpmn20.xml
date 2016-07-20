@@ -316,6 +316,7 @@
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
     attachment.move(stageItem);
+    approval.copyToDocumentAttachmentCategory(attachment, document);
   }
   stageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
@@ -488,6 +489,20 @@
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
     attachment.move(currentStageItem);
+
+    var filename;
+
+    if (decision == 'APPROVED') {
+      filename = 'Согласовано';
+    } else if (decision == 'APPROVED_WITH_REMARK') {
+      filename = 'Согласовано c замечаниями';
+    } else {
+      filename = 'Отклонено';
+    }
+
+    filename += ' - ' + employee.properties["lecm-orgstr:employee-short-name"];
+
+    approval.copyToDocumentAttachmentCategory(attachment, document, filename);
   }
   currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
   currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;

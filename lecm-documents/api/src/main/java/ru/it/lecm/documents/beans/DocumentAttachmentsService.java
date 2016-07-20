@@ -1,11 +1,12 @@
 package ru.it.lecm.documents.beans;
 
-import java.util.Collection;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * User: AIvkin
@@ -13,23 +14,22 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
  * Time: 11:58
  */
 public interface DocumentAttachmentsService {
-    public static final String DOCUMENT_ATTACHMENTS_ROOT_NAME = "Вложения";
 
-    public static final String CONSTRAINT_ATTACHMENT_CATEGORIES = "attachment-categories";
+    String DOCUMENT_ATTACHMENTS_ROOT_NAME = "Вложения";
+    String CONSTRAINT_ATTACHMENT_CATEGORIES = "attachment-categories";
+    String NOT_SECURITY_MOVE_ATTACHMENT_POLICY = "not_security_move_attachment_policy";
+	String NOT_SECURITY_CREATE_VERSION_ATTACHMENT_POLICY = "not_security_create_versionattachment_policy";
 
-    public static final String NOT_SECURITY_MOVE_ATTACHMENT_POLICY = "not_security_move_attachment_policy";
-
-	public static final QName TYPE_CATEGORY = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "attachmentsCategory");
-	public static final QName ASSOC_CATEGORY_ATTACHMENTS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "categoryAttachments");
-
-	public static final QName ASPECT_SKIP_ON_CREATE_DOCUMENT = QName.createQName(DocumentService.DOCUMENT_ASPECTS_NAMESPACE_URI, "attachment-skip-on-create-document");
+	QName TYPE_CATEGORY = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "attachmentsCategory");
+	QName ASSOC_CATEGORY_ATTACHMENTS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "categoryAttachments");
+	QName ASPECT_SKIP_ON_CREATE_DOCUMENT = QName.createQName(DocumentService.DOCUMENT_ASPECTS_NAMESPACE_URI, "attachment-skip-on-create-document");
 
     /**
      * Получение папки с вложениями для документа
      * @param documentRef Ссылка на документ
      * @return Ссылка на папку с вложениями
      */
-    public NodeRef getRootFolder(final NodeRef documentRef);
+	NodeRef getRootFolder(final NodeRef documentRef);
 
     /**
      * Создание папки с вложениями для документа
@@ -37,21 +37,21 @@ public interface DocumentAttachmentsService {
      * @return Ссылка на папку с вложениями
 	 * @throws WriteTransactionNeededException
      */
-    public NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException;
+	NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException;
 
     /**
      * Получения папок с категориями вложений
      * @param documentRef Ссылка на документ
      * @return Список ссылок на папки с категориями вложений
      */
-    public List<NodeRef> getCategories(final NodeRef documentRef);
+	List<NodeRef> getCategories(final NodeRef documentRef);
 
     /**
      * Получения папок с категориями вложений
      * @param documentTypeQName Тип документа
      * @return Список ссылок на папки с категориями вложений
      */
-    public List<String> getCategories(final QName documentTypeQName);
+	List<String> getCategories(final QName documentTypeQName);
 
 	/**
 	 * Получение папки для категории вложений.
@@ -59,47 +59,47 @@ public interface DocumentAttachmentsService {
 	 * @param documentRef Ссылка на документ
 	 * @return
 	 */
-	public NodeRef getCategory(final String category, final NodeRef documentRef);
+	NodeRef getCategory(final String category, final NodeRef documentRef);
 
 	/**
 	 * Удаление вложения
 	 * @param nodeRef Ссылка на вложение
 	 */
-	public void deleteAttachment(NodeRef nodeRef);
+	void deleteAttachment(NodeRef nodeRef);
 
 	/**
 	 * Получение списка версий вложения
 	 * @param nodeRef Ссылка на вложение
 	 * @return Список версий
 	 */
-	public Collection<Version> getAttachmentVersions(NodeRef nodeRef);
+	Collection<Version> getAttachmentVersions(NodeRef nodeRef);
 
 	/**
 	 * Проверка, что категория доступна только для чтения
 	 * @param nodeRef Ссылка на категорию
 	 * @return true, если категория доступна только для чтения
 	 */
-	public boolean isReadonlyCategory(NodeRef nodeRef);
+	boolean isReadonlyCategory(NodeRef nodeRef);
 
 	/**
 	 * Логгирование копирования вложений
 	 * @param nodeRef Ссылка на вложения
 	 */
-	public void copyAttachmentLog(NodeRef nodeRef, NodeRef parent);
+	void copyAttachmentLog(NodeRef nodeRef, NodeRef parent);
 
-	public NodeRef getDocumentByAttachment(NodeRef attachRef);
+	NodeRef getDocumentByAttachment(NodeRef attachRef);
 
-	public NodeRef getDocumentByCategory(NodeRef categoryRef);
+	NodeRef getDocumentByCategory(NodeRef categoryRef);
 
-	public String getCategoryName(NodeRef categoryRef);
+	String getCategoryName(NodeRef categoryRef);
 
-	public String getCategoryNameByAttachment(NodeRef attachRef);
+	String getCategoryNameByAttachment(NodeRef attachRef);
 
-	public NodeRef getCategoryByAttachment(NodeRef attachRef);
+	NodeRef getCategoryByAttachment(NodeRef attachRef);
 
-	public boolean isDocumentAttachment(NodeRef nodeRef);
+	boolean isDocumentAttachment(NodeRef nodeRef);
 
-	public boolean isDocumentCategory(NodeRef nodeRef);
+	boolean isDocumentCategory(NodeRef nodeRef);
 
     /**
      * Возвращает список вложений определенной категории
@@ -107,15 +107,15 @@ public interface DocumentAttachmentsService {
      * @param categoryName - имя категории
      * @return
      */
-    public List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName);
+	List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName);
 
-	public List<NodeRef> getAttachmentsByCategory(NodeRef category);
+	List<NodeRef> getAttachmentsByCategory(NodeRef category);
 
     /** Программное добавление вложения документу без проверки прав
      *
      * @param attachmentRef - ссылка на вложение
      * @param attachmentCategoryRef - ссылка на категорию вложения
      */
-    public void addAttachment(NodeRef attachmentRef, NodeRef attachmentCategoryRef);
+	void addAttachment(NodeRef attachmentRef, NodeRef attachmentCategoryRef);
 
 }

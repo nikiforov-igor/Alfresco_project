@@ -4,15 +4,30 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.repo.version.VersionModel;
+import org.alfresco.service.cmr.coci.CheckOutCheckInService;
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.cmr.version.VersionType;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -28,6 +43,9 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
 	private Integer defaultApprovalTerm;
 	private DocumentService documentService;
+	private DocumentAttachmentsService attachmentsService;
+    private ContentService contentService;
+    private CheckOutCheckInService checkOutCheckInService;
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
@@ -37,7 +55,19 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 		this.defaultApprovalTerm = (defaultApprovalTerm != null) ? defaultApprovalTerm : DEFAULT_DEFAULT_APPROVAL_TERM;
 	}
 
-	public void init() {
+	public void setAttachmentsService(DocumentAttachmentsService attachmentsService) {
+		this.attachmentsService = attachmentsService;
+	}
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
+    public void setCheckOutCheckInService(CheckOutCheckInService checkOutCheckInService) {
+        this.checkOutCheckInService = checkOutCheckInService;
+    }
+
+    public void init() {
 		if (null == getSettings()) {
 			AuthenticationUtil.runAsSystem(this);
 		}
@@ -119,4 +149,50 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	public boolean checkExpression(NodeRef nodeRef, String expression) {
 		return documentService.execExpression(nodeRef, expression);
 	}
+
+	@Override
+	public void copyToDocumentAttachmentCategory(final NodeRef attachment, NodeRef document, String filename) throws WriteTransactionNeededException {
+		final NodeRef category = attachmentsService.getCategory("Согласование", document);
+		if (category != null) {
+			NodeRef userTemp = repositoryStructureHelper.getUserTemp(true);
+
+            String name = (String) nodeService.getProperty(attachment, ContentModel.PROP_NAME);
+            if (StringUtils.isNotBlank(name)) {
+                String extension = name.substring(name.lastIndexOf('.') + 1);
+                if (filename.toCharArray()[filename.length() - 1] != '.') {
+                    filename = filename + '.';
+                }
+                filename = filename + extension;
+            }
+            NodeRef prevFileNode = serviceRegistry.getNodeService().getChildByName(category, ContentModel.ASSOC_CONTAINS, filename);
+
+            if (prevFileNode == null) {
+                PropertyMap propertyMap = new PropertyMap();
+                propertyMap.put(ContentModel.PROP_NAME, filename);
+                NodeRef tmpAttach = nodeService.createNode(userTemp, ContentModel.ASSOC_CONTAINS, generateRandomQName(), ContentModel.TYPE_CONTENT, propertyMap).getChildRef();
+                writeContent(attachment, tmpAttach);
+                attachmentsService.addAttachment(tmpAttach, category);
+            } else {
+                AlfrescoTransactionSupport.bindResource(DocumentAttachmentsService.NOT_SECURITY_CREATE_VERSION_ATTACHMENT_POLICY, true);
+                PropertyMap vProps = new PropertyMap();
+                vProps.put(ContentModel.PROP_AUTO_VERSION, true);
+                vProps.put(ContentModel.PROP_AUTO_VERSION_PROPS, false);
+                serviceRegistry.getVersionService().ensureVersioningEnabled(prevFileNode, vProps);
+
+                NodeRef tmpAttach = serviceRegistry.getCheckOutCheckInService().checkout(prevFileNode);
+                writeContent(attachment, tmpAttach);
+                Map<String, Serializable> ciProps = new HashMap<>();
+                ciProps.put(Version.PROP_DESCRIPTION, "");
+                ciProps.put(VersionModel.PROP_VERSION_TYPE, VersionType.MAJOR);
+                serviceRegistry.getCheckOutCheckInService().checkin(tmpAttach, ciProps);
+            }
+		}
+	}
+
+    private void writeContent(NodeRef src, NodeRef dst) {
+        ContentReader cr = contentService.getReader(src, ContentModel.PROP_CONTENT);
+        ContentWriter cw = contentService.getWriter(dst, ContentModel.PROP_CONTENT, true);
+        cw.setMimetype(cr.getMimetype());
+        cw.putContent(cr.getContentInputStream());
+    }
 }
