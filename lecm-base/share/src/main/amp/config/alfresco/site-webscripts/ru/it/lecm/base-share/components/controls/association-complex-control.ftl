@@ -16,6 +16,11 @@
 	<#assign items = params.items?split(',')>
 </#if>
 
+<#assign showAssocViewForm = true>
+<#if params.showAssocViewForm?? && params.showAssocViewForm == "false">
+    <#assign showAssocViewForm = false>
+</#if>
+
 <#assign defaultValue = "">
 <#if form.mode == "create" && !field.disabled>
 	<#if params.selectedItemsFormArgs??>
@@ -78,6 +83,7 @@
 				changeItemsFireAction: '${params.changeItemsFireAction}',
 				</#if>
                 multipleSelectMode: ${endpointMany?string},
+                showAssocViewForm: ${showAssocViewForm?string},
 				itemsOptions: [
 					<#list items as i>
 						<#assign itemKey = i?replace(":", "_")>

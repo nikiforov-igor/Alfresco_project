@@ -75,40 +75,70 @@ LogicECM.module = LogicECM.module || {};
 				Event.on(params.id, 'click', this.onRemove, params, this);
 			}
 
+            options = options || this.options;
+
 			selectedItems.forEach(function(selected) {
-				var displayName,
-				elementName,
-				elem = document.createElement('div'),
-				id = selected.nodeRef.replace(/:|\//g, '_'),
-				itemId = this.id + '-' + id,
-				notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true);
+                if (selected) {
+                    var displayName,
+                        elementName,
+                        elem = document.createElement('div'),
+                        id = selected.nodeRef.replace(/:|\//g, '_'),
+                        itemId = this.id + '-' + id,
+                        notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true);
 
-				if (notSelected) {
-					if (options.plane || !options.showPath) {
-						displayName = selected.selectedName;
-					} else {
-						displayName = selected.simplePath + selected.selectedName;
-					}
+                    if (notSelected) {
+                        if (options.plane || !options.showPath) {
+                            displayName = selected.selectedName;
+                        } else {
+                            displayName = selected.simplePath + selected.selectedName;
+                        }
 
-					if (this.options.disabled) {
-						if ('lecm-orgstr:employee' === options.itemType) {
-							elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(selected.nodeRef, displayName));
-						} else {
-							elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected));
-						}
-						elem.firstChild.id = itemId;
-					} else {
-						Event.onAvailable(itemId, onAddListener, { id: itemId, nodeData: selected }, this);
-						if ('lecm-orgstr:employee' === options.itemType) {
-							elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
-							elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
-						} else {
-							elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
-						}
-					}
-					this.widgets.selected.appendChild(elem.firstChild);
-				}
+                        if (this.options.disabled) {
+                            if ('lecm-orgstr:employee' === options.itemType) {
+                                elem.innerHTML = BaseUtil.getCroppedItem(BaseUtil.getControlEmployeeView(selected.nodeRef, displayName));
+                            } else {
+                                elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected));
+                            }
+                            elem.firstChild.id = itemId;
+                        } else {
+                            Event.onAvailable(itemId, onAddListener, {id: itemId, nodeData: selected}, this);
+                            if ('lecm-orgstr:employee' === options.itemType) {
+                                elementName = ACUtils.getEmployeeAbsenceMarkeredHTML(selected.nodeRef, displayName, true, options.employeeAbsenceMarker, []);
+                                elem.innerHTML = BaseUtil.getCroppedItem(elementName, ACUtils.getRemoveButtonHTML(this.id, selected));
+                            } else {
+                                elem.innerHTML = BaseUtil.getCroppedItem(ACUtils.getDefaultView(options, displayName, selected), ACUtils.getRemoveButtonHTML(this.id, selected));
+                            }
+                        }
+                        this.widgets.selected.appendChild(elem.firstChild);
+                    }
+                }
 			}, this);
+            var index, item, removed = [], added = [],
+                el = Dom.get(this.id),
+                value = el.value.split(',');
+
+            if (this.widgets.removed) {
+                for (index in this.fieldValues) {
+                    if (this.fieldValues.hasOwnProperty(index)) {
+                        item = this.fieldValues[index];
+                        if (value.indexOf(item) === -1) {
+                            removed.push(item);
+                        }
+                    }
+                }
+                this.widgets.removed.value = removed.join(',');
+            }
+            if (this.widgets.added) {
+                for (index in value) {
+                    if (value.hasOwnProperty(index)) {
+                        item = value[index];
+                        if (this.fieldValues.indexOf(item) === -1) {
+                            added.push(item);
+                        }
+                    }
+                }
+                this.widgets.added.value = added.join(',');
+            }
 			return this.widgets.selected.childElementCount;
 		},
 
@@ -139,6 +169,10 @@ LogicECM.module = LogicECM.module || {};
 			for (i in this.widgets) {
 				this.widgets[i].setMessages(messages);
 			}
+            this.fire('resetOriginalValues', {
+                /* Bubbling.fire */
+                fieldValues: Dom.get(this.id).value.split(',')
+            });
 		},
 
 		onLoadOriginalItems: function(layer, args) {
@@ -228,18 +262,19 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onPickerClosed: function (layer, args) {
-			var added, removed, selected;
+			var removedKeys, selectedArray = [], selectedKeys, i;
+            var options = args[1].options;
 			if (Alfresco.util.hasEventInterest(this, args)) {
-				added = Object.keys(args[1].added).join(','),
-				removed = Object.keys(args[1].removed).join(','),
-				selected = Object.keys(args[1].selected).join(',');
-				if (this.widgets.added) {
-					this.widgets.added.value = Alfresco.util.encodeHTML(added);
-				}
-				if (this.widgets.removed) {
-					this.widgets.removed.value = Alfresco.util.encodeHTML(removed);
-				}
-				Dom.get(this.id).value = Alfresco.util.encodeHTML(selected);
+				removedKeys = Object.keys(args[1].removed);
+                selectedKeys =Object.keys(args[1].selected);
+                for (i = 0; i < removedKeys.length; i++) {
+                    this.onRemove(null, {nodeData: args[1].removed[removedKeys[i]]});
+                }
+                for (i = 0; i < selectedKeys.length; i++) {
+                    selectedArray.push(args[1].selected[selectedKeys[i]]);
+                }
+                Dom.get(this.id).value = Alfresco.util.encodeHTML(selectedKeys.join(','));
+                this._renderSelectedItems(selectedArray, options);
 				if (this.widgets.autocomplete) {
 					if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
 						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
@@ -382,7 +417,11 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onPickerButtonClick: function (evt, target) {
-			this.widgets.picker.show();
+            this.fire('resetOriginalValues', {
+                /* Bubbling.fire */
+                fieldValues: Dom.get(this.id).value.split(',')
+            });
+            this.widgets.picker.show();
 		},
 
 		onReady: function () {

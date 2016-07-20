@@ -26,8 +26,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		this.setMessages(messages);
 		this.control = control;
 
-		Bubbling.on('addSelectedItem', this.onAddSelectedItem, this);
-		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
+		Bubbling.on('addSelectedItemToPicker', this.onAddSelectedItem, this);
+		Bubbling.on('removeSelectedItemFromPicker', this.onRemoveSelectedItem, this);
 		Bubbling.on('loadOriginalItems', this.onLoadOriginalItems, this);
 		Bubbling.on('afterChange', this.onAfterChange, this);
 		return this;
@@ -99,15 +99,19 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var nodeData, options, isNew, key;
+			var nodeData, options, key;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 					nodeData = args[1].added;
 					options = args[1].options;
 					key = args[1].key;
-					isNew = !this.original.hasOwnProperty(nodeData.nodeRef);
-				if (isNew) {
-					this.added[nodeData.nodeRef] = nodeData;
-				}
+				if (this.removed.hasOwnProperty(nodeData.nodeRef)) {
+                    delete this.removed[nodeData.nodeRef];
+                }
+                if (this.original.hasOwnProperty(nodeData.nodeRef)) {
+                    delete this.added[nodeData.nodeRef];
+                } else {
+                    this.added[nodeData.nodeRef] = nodeData;
+                }
 				this.selected[nodeData.nodeRef] = nodeData;
 				this.selected[nodeData.nodeRef].key = key;
 				this._renderSelectedItems([nodeData], options);
@@ -133,7 +137,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onRemove: function(evt, params) {
-			this.fire('removeSelectedItem', { /* Bubbling.fire */
+			this.fire('removeSelectedItemFromPicker', { /* Bubbling.fire */
 				removed: params.nodeData
 			});
 		},
@@ -181,17 +185,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		onCancelButtonClick: function (evt, params) {
-			Dom.getChildren(this.widgets.items).forEach(function(elItem) {
-				Event.removeListener(elItem, 'click');
-				this.widgets.items.removeChild(elItem);
-			}, this);
-			this.added = {};
-			this.removed = {};
-			this.selected = YAHOO.lang.merge(this.original);
-			this.fire('hide', { /* Bubbling.fire */
-				reset: true
-			});
-			this.hide();
+            this.widgets.picker.hide();
 		},
 
 		onSelectButtonClick: function (type, args, menuItem) {

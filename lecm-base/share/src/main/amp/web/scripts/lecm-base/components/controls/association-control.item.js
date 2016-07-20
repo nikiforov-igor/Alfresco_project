@@ -28,12 +28,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		});
 		this._loadRootNode();
 		this._loadSearchProperties();
-		this._loadOriginalValues(fieldValues);
 
 		Bubbling.on('show', this.onShow, this);
 		Bubbling.on('hide', this.onHide, this);
-		Bubbling.on('addSelectedItem', this.onAddSelectedItem, this);
-		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
+		Bubbling.on('addSelectedItemToPicker', this.onAddSelectedItem, this);
+		Bubbling.on('removeSelectedItemFromPicker', this.onRemoveSelectedItem, this);
+		Bubbling.on('resetOriginalValues', this.resetOriginalValues, this);
 
 		return this;
 	};
@@ -292,26 +292,41 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			});
 		},
 
-		_loadOriginalValues: function (fieldValues, added) {
+		resetOriginalValues: function (layer, args) {
 
 			function onSuccess(successResponse) {
 				var items =successResponse.json.data.items,
 					checkType = this.options.checkType,
-					itemType = this.options.itemType;
+					itemType = this.options.itemType,
+                    item;
 				this.currentState.original = items.reduce(function (prev, curr) {
 					if (!checkType || curr.type === itemType) {
 						prev[curr.nodeRef] = curr;
 					}
 					return prev;
 				}, {});
-				if (added && added.length > 0) {
-					this.fire('addSelectedItem', {
-						 added: this.currentState.original[added],
-						 options: this.options,
-						 key: this.key
-					 });
-				}
+                //очищаем ранее выбранные
+                for (item in this.currentState.selected) {
+                    if (this.currentState.selected.hasOwnProperty(item)) {
+                        //this.onRemoveSelectedItem('removeSelectedItemFromPicker', {
+                        //    removed: this.currentState.selected[item]
+                        //});
+                        this.fire('removeSelectedItemFromPicker', { /* Bubbling.fire */
+                            removed: this.currentState.selected[item]
+                        });
+                    }
+                }
 				this.currentState.selected = YAHOO.lang.merge(this.currentState.original);
+                //добавляем актуальные выбранные
+                for (item in this.currentState.selected) {
+                    if (this.currentState.selected.hasOwnProperty(item)) {
+                        this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+                            added: this.currentState.selected[item],
+                            options: this.options,
+                            key: this.key
+                        });
+                    }
+                }
 				this.fire('loadOriginalItems', { /* Bubbling.fire */
 					original: this.currentState.selected,
 					options: this.options,
@@ -324,27 +339,28 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			function onFailure(failureResponse) {
 			}
-
-			Alfresco.util.Ajax.jsonPost({
-				url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
-				dataObj: {
-					items: fieldValues,
-					itemValueType: 'nodeRef',
-					itemNameSubstituteString: this.options.nameSubstituteString,
-					selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
-					pathRoot: this.options.rootLocation,
-					pathNameSubstituteString: this.options.treeNodeSubstituteString,
-					useObjectDescription: this.options.useObjectDescription
-				},
-				successCallback: {
-					scope: this,
-					fn: onSuccess
-				},
-				failureCallback: {
-					scope: this,
-					fn: onFailure
-				}
-			});
+            if (Alfresco.util.hasEventInterest(this, args)) {
+                Alfresco.util.Ajax.jsonPost({
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
+                    dataObj: {
+                        items: args[1].fieldValues,
+                        itemValueType: 'nodeRef',
+                        itemNameSubstituteString: this.options.nameSubstituteString,
+                        selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
+                        pathRoot: this.options.rootLocation,
+                        pathNameSubstituteString: this.options.treeNodeSubstituteString,
+                        useObjectDescription: this.options.useObjectDescription
+                    },
+                    successCallback: {
+                        scope: this,
+                        fn: onSuccess
+                    },
+                    failureCallback: {
+                        scope: this,
+                        fn: onFailure
+                    }
+                });
+            }
 		},
 
 		loadData: function () {
@@ -506,7 +522,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			if ('add' === column.key && !event.target.firstChild.firstChild.hidden) {
 				//просигналить пикеру что эту ноду надо нарисовать в selectedItems
-				this.fire('addSelectedItem', { /* Bubbling.fire */
+				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
 					added: record.getData(),
 					options: this.options,
 					key: this.key
@@ -522,20 +538,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				nodeData = args[1].added;
 				key = args[1].key;
 				if (!key || key === this.key) {
-					records = this.widgets.datatable.getRecordSet().getRecords();
-					this.currentState.selected[nodeData.nodeRef] = nodeData;
-					records.forEach(function (record) {
-						var tdEl = this.widgets.datatable.getTdEl({
-							column: this.widgets.datatable.getColumn('add'),
-							record: record
-						});
-						if (tdEl.firstChild.firstChild) {
-							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected, this.parentControl);
-						}
-					}, this);
-					this.fire('afterChange', {
-						key: this.key
-					});
+                    if (this.widgets.datatable) {
+                        records = this.widgets.datatable.getRecordSet().getRecords();
+                        this.currentState.selected[nodeData.nodeRef] = nodeData;
+                        records.forEach(function (record) {
+                            var tdEl = this.widgets.datatable.getTdEl({
+                                column: this.widgets.datatable.getColumn('add'),
+                                record: record
+                            });
+                            if (tdEl.firstChild.firstChild) {
+                                tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected, this.parentControl);
+                            }
+                        }, this);
+                        this.fire('afterChange', {
+                            key: this.key
+                        });
+                    }
 				}
 			}
 		},
@@ -709,7 +727,41 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				},
 				onSuccess:{
 					fn:function (response) {
-						this._loadOriginalValues(response.json.persistedObject.split(","), response.json.persistedObject);
+
+                        Alfresco.util.Ajax.jsonPost({
+                            url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
+                            dataObj: {
+                                items: [response.json.persistedObject],
+                                itemValueType: 'nodeRef',
+                                itemNameSubstituteString: this.options.nameSubstituteString,
+                                selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
+                                pathRoot: this.options.rootLocation,
+                                pathNameSubstituteString: this.options.treeNodeSubstituteString,
+                                useObjectDescription: this.options.useObjectDescription
+                            },
+                            successCallback: {
+                                scope: this,
+                                fn: function (successResponse) {
+                                    var items =successResponse.json.data.items;
+
+                                    if (items && items[0]) {
+                                        this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+                                            added: items[0],
+                                            options: this.options,
+                                            key: this.key
+                                        });
+                                    }
+
+                                    //this.fire('afterChange', {
+                                    //    key: this.key
+                                    //});
+                                }
+                            },
+                            failureCallback: {
+                                scope: this,
+                                fn: function () {}
+                            }
+                        });
 
 						this.stateParams.doubleClickLock = false;
 					},
