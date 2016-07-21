@@ -149,4 +149,8 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
         List<NodeRef> potentialWorkers = reviewService.getPotentialReviewers();
         return createScriptable(new ArrayList<>(potentialWorkers));
     }
+
+    public int getReviewTerm() {
+        return reviewService.getReviewTerm();
+    }
 }

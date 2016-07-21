@@ -30,8 +30,6 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 		}
 	}
 
-
-
 	// надо достать имплоев из ассоков и для каждого склепать итем
 	var i, j, k, item,
 		items = [],
@@ -87,7 +85,9 @@ function sendToReview(items) {
 		recipients = [],
 		reviewer,
 		itemInitiator,
-		row;
+		row,
+		startDate = new Date(),
+		dueDate;
 
 	for each (row in items) {
 		reviewer = row.associations['lecm-review-ts:reviewer-assoc'][0];
@@ -97,18 +97,22 @@ function sendToReview(items) {
 				documentMembers.addMemberWithoutCheckPermission(document, reviewer, 'LECM_BASIC_PG_Reader', true);
 				recipients.push(reviewer);
 				row.properties['lecm-review-ts:review-state'] = 'NOT_REVIEWED';
-				row.properties['lecm-review-ts:review-start-date'] = new Date();
+				row.properties['lecm-review-ts:review-start-date'] = startDate;
 				row.save();
 			}
 		}
 	}
 	if (recipients.length > 0) {
+		
+		dueDate = workCalendar.getNextWorkingDateByDays(startDate, review.getReviewTerm());
+		
 		notifications.sendNotificationFromCurrentUser({
 			recipients: recipients,
 			templateCode: 'REVIEW_NEED',
 			templateConfig: {
 				mainObject: document,
-				eventExecutor: initiator
+				eventExecutor: initiator,
+				dueDate: dueDate
 			}
 		});
 	}

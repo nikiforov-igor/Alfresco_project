@@ -3,6 +3,7 @@
 (function () {
 	var document = utils.getNodeFromString(json.get('documentRef')),
 		reviewItem = utils.getNodeFromString(json.get('nodeRef')),
+		currentEmployee = orgstructure.getCurrentEmployee(),
 		recipients = [];
 
 		recipients.push(reviewItem.assocs['lecm-review-ts:reviewer-assoc'][0]);
@@ -15,7 +16,8 @@
 			recipients: recipients,
 			templateCode: 'REVIEW_CANCELED',
 			templateConfig: {
-				mainObject: document
+				mainObject: document,
+				initiator: currentEmployee
 			}
 		});
 	}

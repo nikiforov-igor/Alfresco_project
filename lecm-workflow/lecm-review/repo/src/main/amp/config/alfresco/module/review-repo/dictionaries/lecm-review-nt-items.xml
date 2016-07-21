@@ -27,7 +27,7 @@
             </item>
             <item name="cm:REVIEW_NEED" type="lecm-notification-template:template">
                 <property name="lecm-notification-template:template">
-                    <![CDATA[Вам необходимо ознакомиться с документом {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}. Инициатор ознакомления: {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))}]]></property>
+                    <![CDATA[Вам необходимо ознакомиться с документом {#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:present-string"))}. Срок исполнения: {#formatDate("dd.MM.yyyy", #dueDate)}. Инициатор ознакомления: {#eventExecutor.wrapAsLink(#eventExecutor.attribute("lecm-orgstr:employee-short-name"))}]]></property>
                 <property name="cm:name"><![CDATA[REVIEW_NEED]]></property>
                 <property name="lecm-notification-template:description">
                     <![CDATA[Ознакомление. Необходимо ознакомиться]]></property>
