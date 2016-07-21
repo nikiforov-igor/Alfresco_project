@@ -96,6 +96,7 @@
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
 						</control>
@@ -321,6 +322,7 @@
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
 						</control>
@@ -487,6 +489,7 @@
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
 						</control>
@@ -667,6 +670,7 @@
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
 						</control>
@@ -961,6 +965,7 @@
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="person_plane">true</control-param>
+                            <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
 						</control>
