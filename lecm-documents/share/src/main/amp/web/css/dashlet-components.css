@@ -211,7 +211,3 @@
 .datagrid .action-set .onActionUploadNewVersion a {
 	background-image: url(/share/res/components/documentlibrary/actions/document-upload-new-version-16.png);
 }
-
-.incoming-members-dashlet {
-	padding: 5px 10px;
-}
