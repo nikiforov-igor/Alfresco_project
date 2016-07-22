@@ -16,6 +16,7 @@ public final class RoutesModel {
 	public final static QName PROP_ROUTE_NOTIFY_ABOUT_EVERY_DECISION = QName.createQName(ROUTES_URL, "routeNotifyAboutEveryDecision");
 	public final static QName PROP_ROUTE_EDITABLE = QName.createQName(ROUTES_URL, "routeEditable");
 	public final static QName ASSOC_ROUTE_ORGANIZATION_UNIT = QName.createQName(ROUTES_URL, "routeOrganizationUnitAssoc");
+	public final static QName ASSOC_ROUTE_ORGANIZATION = QName.createQName(ROUTES_URL, "routeOrganizationAssoc");
 	public final static QName PROP_ROUTE_START_DATE = QName.createQName(ROUTES_URL, "routeStartDate");
 	public final static QName PROP_ROUTE_COMPLETE_DATE = QName.createQName(ROUTES_URL, "routeCompleteDate");
 	public final static QName ASSOC_ROUTE_INITIATOR_EMPLOYEE = QName.createQName(ROUTES_URL, "initiatorEmployeeAssoc");

@@ -1,3 +1,3 @@
 var route = search.findNode(args["routeRef"]);
-var doc = search.findNode(args["documentRef"]);
-model.isHasEmployees = routesService.hasEmployeesInDocRoute(route) || routesService.hasPotentialEmployeesInRoute(route, doc);
+var doc = args["documentRef"] != null ? search.findNode(args["documentRef"]) : null;
+model.isHasEmployees = routesService.hasEmployeesInDocRoute(route) || (doc != null ?  routesService.hasPotentialEmployeesInRoute(route, doc) : false);

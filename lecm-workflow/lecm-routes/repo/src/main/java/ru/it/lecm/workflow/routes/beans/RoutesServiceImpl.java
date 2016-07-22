@@ -45,6 +45,8 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	private final String SEARCH_ROUTES_QUERY_FORMAT = "(+TYPE:\"%s\") AND (-ASPECT:\"sys:temporary\" AND -ASPECT:\"lecm-workflow:temp\") AND (+PARENT:\"%s\") AND (+ISNOTNULL:\"sys:node-dbid\")";
 	private final static String CUSTOM_ITERATION_TITLE = "Индивидуальный маршрут";
 
+	QName TYPE_CONTRACTOR = QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-type");
+
 	private ApprovalService approvalService;
 	private OrgstructureBean orgstructureService;
 	private SearchService searchService;
@@ -192,24 +194,32 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	private boolean isRouteAllowedForEmployee(NodeRef routeRef, NodeRef employeeRef, NodeRef documentRef) {
 		boolean result = false;
-		List<NodeRef> routeUnits = findNodesByAssociationRef(routeRef, RoutesModel.ASSOC_ROUTE_ORGANIZATION_UNIT, OrgstructureBean.TYPE_ORGANIZATION_UNIT, ASSOCIATION_TYPE.TARGET);
-		List<NodeRef> employeeUnits = orgstructureService.getEmployeeUnits(employeeRef, false);
-		boolean unitMatched = routeUnits.isEmpty();
+		List<NodeRef> routeOrganizations = findNodesByAssociationRef(routeRef, RoutesModel.ASSOC_ROUTE_ORGANIZATION, TYPE_CONTRACTOR, ASSOCIATION_TYPE.TARGET);
 
-		for (NodeRef routeUnit : routeUnits) {
-			if (employeeUnits.contains(routeUnit)) {
-				unitMatched = true;
-				break;
-			}
+		NodeRef routeOrganization = !routeOrganizations.isEmpty() ? routeOrganizations.get(0) : null;
+		boolean isAllowed = routeOrganization == null;
+
+		if (routeOrganization != null) {
+			NodeRef employeeOrganization = orgstructureService.getOrganization(employeeRef);
+			isAllowed = Objects.equals(routeOrganization, employeeOrganization);
 		}
 
-		if (unitMatched) {
-			String routeExpression = (String) nodeService.getProperty(routeRef, RoutesModel.PROP_ROUTE_AVAILABILITY_CONDITION);
-			if (routeExpression != null && !routeExpression.isEmpty()) {
-				boolean expressionResult = documentService.execExpression(documentRef, routeExpression);
-				result = expressionResult;
-			} else {
-				result = true;
+		if (isAllowed) { //прошли по организации
+			List<NodeRef> routeUnits = findNodesByAssociationRef(routeRef, RoutesModel.ASSOC_ROUTE_ORGANIZATION_UNIT, OrgstructureBean.TYPE_ORGANIZATION_UNIT, ASSOCIATION_TYPE.TARGET);
+			List<NodeRef> employeeUnits = orgstructureService.getEmployeeUnits(employeeRef, false);
+
+			isAllowed = routeUnits.isEmpty();
+
+			for (NodeRef routeUnit : routeUnits) {
+				if (employeeUnits.contains(routeUnit)) {
+					isAllowed = true;
+					break;
+				}
+			}
+
+			if (isAllowed) {
+				String routeExpression = (String) nodeService.getProperty(routeRef, RoutesModel.PROP_ROUTE_AVAILABILITY_CONDITION);
+				result = !(routeExpression != null && !routeExpression.isEmpty()) || documentService.execExpression(documentRef, routeExpression);
 			}
 		}
 

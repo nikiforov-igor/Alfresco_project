@@ -8,10 +8,11 @@
                         formId = formUi.parentId,
                         fieldId = "${field.control.params.fieldId}",
                         simpleDialog = Alfresco.util.ComponentManager.get(formId),
-                        routeStage = simpleDialog.options.templateRequestParams.destination;
+                        routeStage = simpleDialog.options.templateRequestParams.destination,
+                        routeOrganization = simpleDialog.options.templateRequestParams.routeOrganization;
 
                 LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                    allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + routeStage
+                    allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + routeStage + (routeOrganization ? "&organization=" + routeOrganization : "")
                 });
                 subscribed = true;
             }

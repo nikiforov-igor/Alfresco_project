@@ -223,7 +223,9 @@ LogicECM.module = LogicECM.module || {};
 
 				resetValue: false,
 
-				useObjectDescription: false
+				useObjectDescription: false,
+
+				doNotResetOnCancel: false
 			},
 
 			onReady: function () {
@@ -854,21 +856,21 @@ LogicECM.module = LogicECM.module || {};
 				this.backToControl();
 			},
 
-			onCancelWithReset: function(e, p_obj)
-			{
+			onCancelWithReset: function (e, p_obj) {
 				this.onCancel(e, p_obj);
-				this.selectedItems =  JSON.parse(this.cancelItems);
-				if (!this.options.multipleSelectMode) {
-					if (this.cancelSingleSelectedItem != null) {
-						this.singleSelectedItem = JSON.parse(this.cancelSingleSelectedItem);
-					} else {
-						this.singleSelectedItem = null;
+				if (!this.options.doNotResetOnCancel) {
+					this.selectedItems = JSON.parse(this.cancelItems);
+					if (!this.options.multipleSelectMode) {
+						if (this.cancelSingleSelectedItem != null) {
+							this.singleSelectedItem = JSON.parse(this.cancelSingleSelectedItem);
+						} else {
+							this.singleSelectedItem = null;
+						}
 					}
+					this.updateFormFields(true, false);
+					this.updateSelectedItems();
+					this.updateAddButtons();
 				}
-				this.updateFormFields();
-				this.updateSelectedItems();
-				this.updateAddButtons();
-
 			},
 
 			// после закрытия диалога вернуть фокус в исходный контрол
@@ -2020,12 +2022,14 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			// Updates all form fields
-			updateFormFields: function (clearCurrentDisplayValue) {
+            updateFormFields: function (clearCurrentDisplayValue, changeItemsFireAction) {
 				// Just element
 				if (clearCurrentDisplayValue == null) {
 					clearCurrentDisplayValue = true;
 				}
-
+                if (changeItemsFireAction == null) {
+                    changeItemsFireAction = true;
+                }
 				var el;
 				el = Dom.get(this.options.controlId + "-currentValueDisplay");
 				var autocompleteInput = Dom.get(this.options.controlId + "-autocomplete-input");
@@ -2132,7 +2136,7 @@ LogicECM.module = LogicECM.module || {};
 							selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
 						});
 				}
-				if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+                if (changeItemsFireAction && this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
 					YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
 						selectedItems: this.selectedItems,
 						formId: this.options.formId,
@@ -2373,15 +2377,6 @@ LogicECM.module = LogicECM.module || {};
 						input.disabled = true;
 					}
 					this.tempDisabled = true;
-
-					var added = Dom.get(this.options.controlId + "-added");
-					if (added != null) {
-						added.disabled = true;
-					}
-					var removed = Dom.get(this.options.controlId + "-removed");
-					if (removed != null) {
-						removed.disabled = true;
-					}
 				}
 			},
 

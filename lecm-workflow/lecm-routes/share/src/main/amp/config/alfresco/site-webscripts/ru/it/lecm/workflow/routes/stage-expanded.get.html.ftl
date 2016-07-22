@@ -5,6 +5,8 @@
 <#assign datagridId = id + "-dtgrd">
 <#assign editable = args["editable"] == "true"/>
 <#assign isApproval = args["isApproval"] == "true"/>
+<#assign routeRef = args["routeRef"]!''>
+<#assign mainFormId = args["mainFormId"]!''>
 
 <script>
 (function(){
@@ -124,13 +126,19 @@
 		});
 	};
 	<#if isApproval>
-	LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
-	LogicECM.CurrentModules["${id}"].onActionDelete = function (p_items, owner, actionsConfig, fnDeleteComplete) {
-		this.onDelete(p_items, owner, actionsConfig, function() {
-			YAHOO.Bubbling.fire('stageItemDeleted');
-		}, null);
-	};
+        LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
 	</#if>
+    LogicECM.CurrentModules["${id}"].onActionDelete = function (p_items, owner, actionsConfig, fnDeleteComplete) {
+        this.onDelete(p_items, owner, actionsConfig, function() {
+			<#if isApproval>
+				YAHOO.Bubbling.fire('stageItemDeleted');
+			</#if>
+            YAHOO.Bubbling.fire('routeStagesUpdate',{
+                formId: "${mainFormId}",
+                routeRef: "${routeRef}"
+            });
+        }, null);
+    };
 </#if>
 
 	YAHOO.util.Event.onContentReady("${datagridId}", function () {

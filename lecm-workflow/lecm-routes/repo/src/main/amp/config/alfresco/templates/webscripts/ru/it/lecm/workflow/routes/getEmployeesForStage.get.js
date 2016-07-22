@@ -1,4 +1,5 @@
 var stageNode = search.findNode(args['stage']),
+    routeOrganization = args['organization'] ? args['organization'] : null,
     employees = orgstructure.getEmployeesByBusinessRoleId("LECM_APPROVERS", false),
     stageItemsEmployees = stageNode.children.map(function (stageItem) {
         var employeeAssocs = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
@@ -10,8 +11,10 @@ var stageNode = search.findNode(args['stage']),
         return stageItem;
     });
 
+var filteredEmployees;
+
 if (stageItemsEmployees) {
-    model.employees = employees.filter(function (employee) {
+    filteredEmployees = employees.filter(function (employee) {
         for (var i in stageItemsEmployees) {
             if ('' + employee.nodeRef.getId() == stageItemsEmployees[i]) {
                 return false;
@@ -20,5 +23,14 @@ if (stageItemsEmployees) {
         return true;
     });
 } else {
-    model.employees = employees;
+    filteredEmployees = employees;
+}
+
+if (routeOrganization != null) {
+    model.employees = filteredEmployees.filter(function (employee) {
+        var employeeOrganization = employee.properties['lecm-orgstr-aspects:linked-organization-assoc-ref'];
+        return employeeOrganization == routeOrganization;
+    });
+} else {
+    model.employees = filteredEmployees;
 }

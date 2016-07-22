@@ -14,6 +14,10 @@
 	<#assign createStageFormId = context.properties[field.name]>
 </#if>
 
+<#assign disableAddButton = false>
+<#if field.control.params.disableIfOrganizationEmpty?? && field.control.params.disableIfOrganizationEmpty == "true">
+	<#assign disableAddButton = true>
+</#if>
 
 <#assign itemId = args.itemId/>
 
@@ -57,7 +61,10 @@
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionAddEmployee",
 				permission:"edit",
-				label:"${msg('actions.add.employee')}"
+				label:"${msg('actions.add.employee')}",
+				evaluator: function (rowData) {
+                    return !this.options.disableAddButton || this.routeOrganization != null;
+				}
 			}, {
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionAddMacros",
@@ -76,8 +83,13 @@
 			}],
 			</#if>
 			showActionColumn: ${editable?string},
-			allowCreate: ${editable?string}
+			allowCreate: ${editable?string},
+            disableAddButton: ${disableAddButton?string},
+            fieldId: "${field.configName}",
+            formId: "${args.htmlid}"
 		});
+
+        LogicECM.CurrentModules[controlId].setRoute('${form.arguments.itemId!""}');
 
 		YAHOO.Bubbling.fire("activeGridChanged", {
 			datagridMeta:{
@@ -95,6 +107,8 @@
 			},
 			bubblingLabel: controlId
 		});
+
+        LogicECM.CurrentModules[controlId]._fireStageControlUpdated();
 	}
 
 	YAHOO.util.Event.onContentReady('${controlId}', init);
