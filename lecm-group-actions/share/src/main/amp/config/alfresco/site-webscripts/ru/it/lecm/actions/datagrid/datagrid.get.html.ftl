@@ -1,4 +1,5 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <@markup id="css">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-group-actions/group-actions.css" />
@@ -12,6 +13,35 @@
 <#assign gridId = "group-actions"/>
 <#assign controlId = gridId + "-cntrl">
 <#assign containerId = gridId + "-container">
+
+<#assign showSearchBlock=true/>
+<#assign showExSeacrhBtn=false/>
+
+<#assign idX = args.htmlid>
+
+<script type="text/javascript">//<![CDATA[
+(function(){
+	function createToolbar() {
+	    new LogicECM.module.GroupActions.Toolbar("${idX}").setOptions({
+	    }).setMessages(${messages});
+	}
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/lecm-group-actions/group-actions-toolbar.js'
+        ], [
+            'components/data-lists/toolbar.css',
+            'css/lecm-group-actions/group-actions-toolbar.css'
+        ], createToolbar);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
+//]]></script>
+
+<@comp.baseToolbar idX true showSearchBlock showExSeacrhBtn>
+</@comp.baseToolbar>
 
 <div class="form-field with-grid group-actions-grid" id="group-actions-${controlId}">
 <div>
@@ -145,7 +175,8 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
     var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event,
             UA = YAHOO.util.UserAction,
-            Connect = YAHOO.util.Connect;
+            Connect = YAHOO.util.Connect,
+            Bubbling = YAHOO.Bubbling;
 
     /**
      * Toolbar constructor.
@@ -421,7 +452,7 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
             showCheckboxColumn: false,
             bubblingLabel: "group-actions-bubbling-label",
             allowCreate: false
-        });
+        });      
         datagrid.draw();
     });
 
