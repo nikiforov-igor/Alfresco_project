@@ -32,6 +32,7 @@
 					<control-param name="reviewItem_plane">true</control-param>
 					<control-param name="reviewItem_showSearch">true</control-param>
 					<control-param name="reviewItem_showAssocViewForm">true</control-param>
+					<control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
 <!--					<control-param name="secondShowAssocViewForm">true</control-param>
 					<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 					<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>
@@ -94,7 +95,6 @@
 				<field-visibility>
 					<show id="lecm-document:indexTableRow" force="true"/>
 					<show id="lecm-review-ts:reviewer-assoc"/>
-					<show id="lecm-review-ts:initializer" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:indexTableRow">
@@ -123,14 +123,10 @@
 							<control-param name="reviewItem_nameSubstituteString">{cm:name}</control-param>
 							<control-param name="reviewItem_plane">true</control-param>
 							<control-param name="reviewItem_showSearch">true</control-param>
+							<control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
 <!--							<control-param name="secondShowAssocViewForm">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>-->
-						</control>
-					</field>
-					<field id="lecm-review-ts:initializer">
-						<control template="/ru/it/lecm/workflow/review/controls/review-list-item-validation.ftl">
-							<control-param name="fieldId">lecm-review-ts:reviewer-assoc</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -364,7 +360,6 @@
 				<field-visibility>
 					<show id="lecm-document:indexTableRow"/>
 					<show id="lecm-review-ts:reviewer-assoc"/>
-					<show id="lecm-review-ts:initializer"/>
 					<show id="lecm-review-ts:save-as"/>
 				</field-visibility>
 				<appearance>
@@ -398,15 +393,11 @@
 							<control-param name="reviewItem_treeNodeTitleSubstituteString">{cm:title}</control-param>
 							<control-param name="reviewItem_plane">true</control-param>
 							<control-param name="reviewItem_showSearch">true</control-param>
+							<control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
 		<!--					<control-param name="secondShowAssocViewForm">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>
 							<control-param name="secondChangeItemsFireAction">reviewListsSelected</control-param>-->
-						</control>
-					</field>
-					<field id="lecm-review-ts:initializer">
-						<control template="/ru/it/lecm/workflow/review/controls/review-list-item-validation.ftl">
-							<control-param name="fieldId">lecm-review-ts:reviewer-assoc</control-param>
 						</control>
 					</field>
 					<field id="lecm-review-ts:save-as">

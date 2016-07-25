@@ -5,11 +5,18 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentTableService;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.review.api.ReviewService;
 
@@ -28,6 +35,10 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 	private DocumentTableService documentTableService;
 	private OrgstructureBean orgstructureBean;
+	private SearchService searchService;
+	private NamespaceService namespaceService;
+	private DictionaryBean dictionaryBean;
+
 	private Integer defaultReviewTerm;
 	private Integer defaultTermToNotify;
 
@@ -37,6 +48,18 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 	public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
+	}
+
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
+	}
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
+	public void setDictionaryBean(DictionaryBean dictionaryBean) {
+		this.dictionaryBean = dictionaryBean;
 	}
 
 	public void setDefaultReviewTerm(Integer defaultReviewTerm) {
@@ -353,5 +376,27 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 			reviewers.addAll(reviewersSet);
 		}
 		return reviewers;
+	}
+
+	@Override
+	public List<NodeRef> getAllowedReviewList() {
+
+		NodeRef reviewListsDictionary = dictionaryBean.getDictionaryByName("Списки ознакомления");
+
+		String path = nodeService.getPath(reviewListsDictionary).toPrefixString(namespaceService);
+		String type = TYPE_REVIEW_LIST_REVIEW_LIST_ITEM.toPrefixString(namespaceService);
+		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+
+		SearchParameters parameters = new SearchParameters();
+		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
+		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
+		parameters.setMaxItems(Integer.MAX_VALUE);
+		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"" +
+				"AND @lecm\\-dic\\:active:true AND (@lecm\\-review\\-list\\:is\\-public:true " +
+				"OR @lecm\\-document\\:creator\\-ref:\"" + currentEmployee.toString() + "\")");
+		ResultSet resultSet = searchService.query(parameters);
+
+		return resultSet.getNodeRefs();
 	}
 }

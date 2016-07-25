@@ -153,4 +153,13 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
     public int getReviewTerm() {
         return reviewService.getReviewTerm();
     }
+
+    public Scriptable getAllowedReviewList() {
+        List<NodeRef> results = reviewService.getAllowedReviewList();
+        if (results == null) {
+            return null;
+        }
+
+        return createScriptable(results);
+    }
 }
