@@ -31,7 +31,7 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
         //запрос по справочнику - вернет список корневых объектов
         List<ArmNode> nodes = new ArrayList<>();
         //шаблонный запрос из верхнего узла
-        List<NodeRef> children = dictionaryService.getChildren(getDictionary());
+        List<NodeRef> children = dictionaryService.getChildrenSortedByName(getDictionary());
         for (NodeRef child : children) {
             nodes.add(service.wrapAnyNodeAsObject(child, node));
         }
@@ -41,7 +41,7 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
 
     @Override
     public List<NodeRef> getChildren(NodeRef node) {
-        return dictionaryService.getChildren(node);
+        return dictionaryService.getChildrenSortedByName(node);
     }
 
     public void setDictionaryService(DictionaryBean dictionaryService) {

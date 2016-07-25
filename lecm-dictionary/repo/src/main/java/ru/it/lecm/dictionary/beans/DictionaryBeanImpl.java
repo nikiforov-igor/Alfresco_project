@@ -116,6 +116,28 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
     }
 
 	@Override
+	public List<NodeRef> getChildrenSortedByName(NodeRef nodeRef) {
+		List<NodeRef> resultList = new ArrayList<>();
+
+		Path path = nodeService.getPath(nodeRef);
+		SearchParameters sp = new SearchParameters();
+		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+		sp.setQuery("PATH:\"" + path.toPrefixString(namespaceService) + "/*\" AND NOT @lecm\\-dic\\:active:false");
+		sp.addSort("@" + ContentModel.PROP_NAME, true);
+		ResultSet resultSet = searchService.query(sp);
+
+		if (resultSet != null) {
+			for (ResultSetRow row : resultSet) {
+				resultList.add(row.getNodeRef());
+			}
+		}
+
+		return resultList;
+	}
+
+
+	@Override
 	public List<NodeRef> getAllChildren(NodeRef nodeRef) {
 
 		List<NodeRef> resultList = new ArrayList<>();
@@ -131,11 +153,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
 			if (resultSet != null) {
 				for (ResultSetRow row : resultSet) {
-					NodeRef childNode = row.getNodeRef();
-
-					if (!StoreRef.STORE_REF_ARCHIVE_SPACESSTORE.equals(childNode.getStoreRef())) {
-						resultList.add(childNode);
-					}
+					resultList.add(row.getNodeRef());
 				}
 			}
 		}

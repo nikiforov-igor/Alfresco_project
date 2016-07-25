@@ -30,6 +30,8 @@ public interface DictionaryBean {
 	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef);
 	public List<NodeRef> getChildren(NodeRef nodeRef);
 
+	List<NodeRef> getChildrenSortedByName(NodeRef nodeRef);
+
 	List<NodeRef> getAllChildren(NodeRef nodeRef);
 
 	public List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);
