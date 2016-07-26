@@ -42,6 +42,8 @@ LogicECM.module = LogicECM.module || {};
 	YAHOO.extend(LogicECM.module.AssociationComplexControl, Alfresco.component.Base, {
 
 		fieldValues: [],
+		
+		defaultValues: [],
 
 		searchProperties: [],
 
@@ -132,7 +134,7 @@ LogicECM.module = LogicECM.module || {};
                 for (index in value) {
                     if (value.hasOwnProperty(index)) {
                         item = value[index];
-                        if (this.fieldValues.indexOf(item) === -1) {
+                        if (this.fieldValues.indexOf(item) === -1 || this.defaultValues.indexOf(item) !== -1) {
                             added.push(item);
                         }
                     }
@@ -427,6 +429,9 @@ LogicECM.module = LogicECM.module || {};
 		onReady: function () {
 			/* загрузка данных по field.value и передача их в picker и в items. Отрисовка selectedItems здесь и в пикере */
 			this.widgets.added = Dom.get(this.id + '-added');
+			if (this.widgets.added.value) {
+				this.defaultValues = this.widgets.added.value.split(',');
+			}
 			this.widgets.removed = Dom.get(this.id + '-removed');
 			this.widgets.selected = Dom.get(this.id + '-displayed');
 			this.widgets.pickerButton = new Alfresco.util.createYUIButton(this, 'btn-pick', this.onPickerButtonClick, {
