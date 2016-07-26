@@ -57,7 +57,7 @@ public class SelectFromWhere {
    }
 
    public void setFrom(String from) {
-      this.from = from.toLowerCase();
+      this.from = from;
    }
 
    public String getWhere() {

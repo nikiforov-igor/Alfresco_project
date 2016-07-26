@@ -306,7 +306,7 @@ public class DatabaseHelperBean {
         logger.debug("rowEqualsModifiedDate: lastModified=" + lastModified + " vs. " + rl.getValue("cm_modified"));
 
         try {
-            SelectFromWhere e = new SelectFromWhere(null, rl.getTable(), rl.getValue("sys_node_uuid"));
+            SelectFromWhere e = new SelectFromWhere(null, rl.getTable().toLowerCase(), rl.getValue("sys_node_uuid"));
             e.setAndwhere(lastModified);
             if (rl.hasValue("cm_versionlabel")) {
                 e.setAndandwhere(rl.getValue("cm_versionlabel").toLowerCase());

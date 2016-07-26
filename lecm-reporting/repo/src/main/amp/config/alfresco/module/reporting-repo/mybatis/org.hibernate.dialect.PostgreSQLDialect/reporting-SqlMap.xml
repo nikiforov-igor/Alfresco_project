@@ -227,7 +227,7 @@ select 1;
 </select>
 
 <select id="show-table-count"  parameterType="SelectFromWhere"  resultType="int">
-	SELECT count(*) FROM ${from};
+	SELECT count(*) FROM "${from}";
 </select>
 
 

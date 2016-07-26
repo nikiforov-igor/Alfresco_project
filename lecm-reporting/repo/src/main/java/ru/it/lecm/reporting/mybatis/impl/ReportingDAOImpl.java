@@ -173,13 +173,13 @@ public class ReportingDAOImpl implements ReportingDAO {
 
     public int getNumberOfRowsForTable(String tablename) {
         if(logger.isDebugEnabled()) {
-            logger.debug("enter getNumberOfRowsForTable: " + tablename.toLowerCase());
+            logger.debug("enter getNumberOfRowsForTable: " + tablename);
         }
 
         int returnInt = 0;
 
         try {
-            SelectFromWhere eee = new SelectFromWhere(null, tablename.toLowerCase(), null);
+            SelectFromWhere eee = new SelectFromWhere(null, tablename, null);
             returnInt = (Integer) this.template.selectOne("show-table-count", eee);
         } catch (Exception var4) {
             logger.fatal("@@@@ getNumberOfRowsForTable Exception!: " + var4.getMessage());
