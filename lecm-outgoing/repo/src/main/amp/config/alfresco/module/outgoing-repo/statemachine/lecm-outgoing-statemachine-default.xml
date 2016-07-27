@@ -766,6 +766,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>7fd55fd5-36da-42a7-9b6b-01e92907cf1d</name>
+                                        <nodeRef>workspace://SpacesStore/2cb8abe8-7912-46bc-b9ef-0b2a88ae83bd</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -2465,6 +2488,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>8de6a009-0993-491a-a561-5e24d1ebbba5</name>
+                                        <nodeRef>workspace://SpacesStore/c05ecb1a-dc30-483a-9d69-d67f7c09d04e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -3542,6 +3588,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>ad1cfabc-4d89-4870-a073-84f7f46c0048</name>
+                                        <nodeRef>workspace://SpacesStore/22fb4c74-5d1a-4f9c-9c51-9adf52dfe45a</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -4608,6 +4677,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>DA_ENGINEER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>9d126951-7c38-45bd-811f-01b6936a99fc</name>
+                                        <nodeRef>workspace://SpacesStore/814dc836-984f-459b-b31f-8a99a6a33ee4</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -5919,6 +6011,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>17560122-dcfc-42c1-bdc1-798d569dfed8</name>
+                                        <nodeRef>workspace://SpacesStore/20e8ff50-e4db-46d8-9e38-1fe06b23e019</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -6730,6 +6845,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>41f1d5d0-0e77-4b8c-9d79-66b0cab80503</name>
+                                        <nodeRef>workspace://SpacesStore/cd22c390-9781-492e-a834-d8807e072ad1</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7498,6 +7636,29 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>DA_ENGINEER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>0693f4a4-33d4-400f-81e5-2a8a7d050931</name>
+                                        <nodeRef>workspace://SpacesStore/35010892-f521-416a-a4df-321fbd20bc04</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -9200,6 +9361,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>OUTGOING_SENDERS</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>static-role</type>
+                                        <name>0a8852b2-6e98-493e-a060-557d3931aec7</name>
+                                        <nodeRef>workspace://SpacesStore/46ec5065-600c-4c67-acc4-38fd9a4f8b91</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -10956,6 +11140,32 @@ businessJournal.log(outgoing.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                             <roleAssociation>
                                 <type>role-assoc</type>
                                 <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>static-role-item</type>
+                        <name>22435e53-cc90-430b-8839-6382b5ca952d</name>
+                        <nodeRef>workspace://SpacesStore/ba026117-059b-4f89-bd2a-9f2250090a2e</nodeRef>
+                        <properties>
+                            <property>
+                                <name>static-role-privilege</name>
+                                <value><![CDATA[]]></value>
+                            </property>
+                            <property>
+                                <name>isCreator</name>
+                                <value><![CDATA[false]]></value>
+                            </property>
+                        </properties>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>DOCUMENTS_READER</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
