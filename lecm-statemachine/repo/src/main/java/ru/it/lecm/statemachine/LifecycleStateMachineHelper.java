@@ -8,6 +8,7 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
 import org.activiti.engine.impl.calendar.CycleBusinessCalendar;
@@ -595,6 +596,47 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
 		                }
 	                }
                 }
+            }
+        }
+        return new ArrayList<>(documents);
+    }
+
+    @Override
+    public List<NodeRef> getDocumentsWithFinishedTasks(String authority, Set<String> workflowIds) {
+        Set<NodeRef> documents = new HashSet<>();
+
+        Set<String> excluded = new HashSet<>();
+        for (String key : getStateMachines().getKeys()) {
+            StateMachene machine = getStateMachines().get(key);
+            excluded.add(ACTIVITI_PREFIX + machine.getName());
+        }
+
+        WorkflowInstanceQuery query = new WorkflowInstanceQuery();
+        query.setActive(true);
+        query.setExcludedDefinitions(new ArrayList<>(excluded));
+
+        List<WorkflowInstance> workflows = serviceRegistry.getWorkflowService().getWorkflows(query);
+        for (WorkflowInstance workflow : workflows) {
+            String processId = workflow.getId().replace(ACTIVITI_PREFIX, "");
+
+            HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
+            HistoricTaskInstanceQuery taskQuery = historyService.createHistoricTaskInstanceQuery()
+                    .taskAssignee(authority)
+                    .processInstanceId(processId)
+                    .finished();
+
+            List<HistoricTaskInstance> historicTasks = taskQuery.list();
+
+            for (HistoricTaskInstance historicTask : historicTasks) {
+                if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(historicTask.getFormKey())) {
+                    NodeRef doc = getStatemachineDocument(workflow.getId());
+
+                    if (doc != null) {
+                        documents.add(doc);
+                        break;
+                    }
+                }
+
             }
         }
         return new ArrayList<>(documents);

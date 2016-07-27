@@ -239,6 +239,11 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     }
 
     @Override
+    public List<NodeRef> getDocumentsWithFinishedTasks(String employeeLogin, Set<String> workflowIds) {
+        throw createNotImplementedException();
+    }
+
+    @Override
     public void sendSignal(String executionId) {
         throw createNotImplementedException();
     }

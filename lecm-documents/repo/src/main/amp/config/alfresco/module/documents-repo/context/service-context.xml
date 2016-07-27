@@ -709,6 +709,12 @@
 	    <property name="notificationsService" ref="notificationsService"/>
     </bean>
 
+    <bean id="activeProcessFinishedTasksProcessor" class="ru.it.lecm.documents.processors.ActiveProcFinishTasksProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="ACTIVE_PROCESS_FINISHED_TASKS"/>
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+    </bean>
+
     <bean id="employeesByUnitsProcessor" class="ru.it.lecm.documents.processors.EmployeesByUnitsProcessor" parent="searchQueryBaseProccesor">
         <property name="id" value="EMPLOYEES_BY_UNITS"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
