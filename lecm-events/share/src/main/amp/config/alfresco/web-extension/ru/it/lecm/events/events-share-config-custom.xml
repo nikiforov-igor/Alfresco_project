@@ -250,6 +250,8 @@
                     <!-- Тематика -->
                     <show id="lecm-events:subject-assoc"/>
                     <show id="lecm-events:subject-assoc-ref"/>
+                    <show id="lecm-document-aspects:template-name" force="true"/>
+                    <show id="lecm-document-aspects:template-ref" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="createEventSet" appearance="" template="/ru/it/lecm/events/event-create/event-create-set.ftl" />
@@ -369,6 +371,12 @@
 					<field id="lecm-events:subject-assoc-ref" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
+                    <field id="lecm-document-aspects:template-name">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:template-ref">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
                 </appearance>
             </form>
             <form id="document-template-fields">

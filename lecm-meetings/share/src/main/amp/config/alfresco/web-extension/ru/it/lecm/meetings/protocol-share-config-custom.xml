@@ -185,6 +185,8 @@
 					<show id="lecm-document-aspects:attachments-temp-assoc"/>
 					<!--Пункты-->
 					<show id="lecm-protocol:temp-items-assoc"/>
+					<show id="lecm-document-aspects:template-name" force="true"/>
+					<show id="lecm-document-aspects:template-ref" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -263,6 +265,13 @@
 						</control>
 					</field>
 
+					<field id="lecm-document-aspects:template-name">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+					</field>
+
+					<field id="lecm-document-aspects:template-ref">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+					</field>
 				</appearance>
 			</form>
 			<form id="document-template-fields">

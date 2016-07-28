@@ -673,5 +673,17 @@
         <!-- TODO удалить в следующем релизе -->
         <aspect name="lecm-document-aspects:approval-avaliable"/>
 
+		<!-- Аспект обозначающий что документ был создан по шаблону -->
+		<aspect name="lecm-document-aspects:created-from-template">
+			<properties>
+				<property name="lecm-document-aspects:template-name">
+					<type>d:text</type>
+				</property>
+				<property name="lecm-document-aspects:template-ref">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+
     </aspects>
 </model>

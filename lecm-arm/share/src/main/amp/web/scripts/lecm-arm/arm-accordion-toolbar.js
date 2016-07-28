@@ -75,6 +75,28 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 						item.submenu = {
 							id: type.type,
 							itemData: type.templates.map(function (template) {
+
+								if (template.attributes) {
+									template.attributes.push({
+										initial: {
+											dataType: "d:text",
+											formsName: "prop_lecm-document-aspects_template-name",
+											attribute: "lecm-document-aspects:template-name",
+											type: "property",
+											value: template.name
+										}
+									});
+									template.attributes.push({
+										initial: {
+											dataType: "d:text",
+											formsName: "prop_lecm-document-aspects_template-ref",
+											attribute: "lecm-document-aspects:template-ref",
+											type: "property",
+											value: template.ref
+										}
+									});
+								}
+								
 								return {
 									text: template.name,
 									value: type.type,

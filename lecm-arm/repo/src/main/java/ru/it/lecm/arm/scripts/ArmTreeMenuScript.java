@@ -1,10 +1,12 @@
 package ru.it.lecm.arm.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
@@ -20,16 +22,14 @@ import ru.it.lecm.arm.beans.*;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.templates.api.DocumentTemplateModel;
+import ru.it.lecm.documents.templates.api.DocumentTemplateService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.*;
-import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.NodeService;
-import ru.it.lecm.documents.templates.api.DocumentTemplateModel;
-import ru.it.lecm.documents.templates.api.DocumentTemplateService;
 
 /**
  * User: dbashmakov
@@ -342,6 +342,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 			JSONArray attributes = new JSONArray((String)props.get(DocumentTemplateModel.PROP_DOCUMENT_TEMPLATE_ATTRIBUTES));
 			JSONObject template = new JSONObject();
 			template.put("name", name);
+            template.put("ref", templateRef.toString());
 			template.put("attributes", attributes);
 			templates.put(template);
 		}

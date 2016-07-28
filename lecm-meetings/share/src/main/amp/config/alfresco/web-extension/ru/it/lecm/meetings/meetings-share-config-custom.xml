@@ -427,6 +427,8 @@
 					<show id="lecm-meetings:approve-agenda"/>
 					<!-- Повестка -->
 					<show id="lecm-meetings:temp-items-assoc"/>
+					<show id="lecm-document-aspects:template-name" force="true"/>
+					<show id="lecm-document-aspects:template-ref" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="createEventSet" appearance="" template="/ru/it/lecm/events/event-create/event-create-set.ftl" />
@@ -585,6 +587,12 @@
 							<control-param name="datagridFormId">datagrid</control-param>
 							<control-param name="editFormId">create-meetings-item-edit-form</control-param>
 						</control>
+					</field>
+					<field id="lecm-document-aspects:template-name">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+					</field>
+					<field id="lecm-document-aspects:template-ref">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
 					</field>
 				</appearance>
 			</form>

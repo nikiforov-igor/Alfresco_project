@@ -430,6 +430,8 @@
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 					<show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
+					<show id="lecm-document-aspects:template-name" force="true"/>
+					<show id="lecm-document-aspects:template-ref" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:title"/>
@@ -586,6 +588,13 @@
                             <control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=DA_REGISTRARS</control-param>
                         </control>
                     </field>
+
+					<field id="lecm-document-aspects:template-name">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+					</field>
+					<field id="lecm-document-aspects:template-ref">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+					</field>
 
 				</appearance>
 			</form>

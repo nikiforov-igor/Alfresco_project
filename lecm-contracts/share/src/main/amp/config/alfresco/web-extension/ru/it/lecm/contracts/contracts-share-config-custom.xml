@@ -312,6 +312,8 @@
                     <show id="lecm-contract:regNumContractor"/>
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
+                    <show id="lecm-document-aspects:template-name" force="true"/>
+                    <show id="lecm-document-aspects:template-ref" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="price" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
@@ -416,6 +418,12 @@
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
 					</field>
+                    <field id="lecm-document-aspects:template-name">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:template-ref">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
                 </appearance>
 			</form>
 			<form id="document-template-fields">
@@ -1479,6 +1487,8 @@
                     <show id="lecm-additional-document:summaryContent"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
+                    <show id="lecm-document-aspects:template-name" force="true"/>
+                    <show id="lecm-document-aspects:template-ref" force="true"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments">
@@ -1501,6 +1511,12 @@
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
 					</field>
+                    <field id="lecm-document-aspects:template-name">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:template-ref">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
+                    </field>
 	            </appearance>
             </form>
             <form id="document-template-fields">
