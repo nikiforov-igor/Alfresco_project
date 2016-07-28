@@ -429,7 +429,7 @@ LogicECM.module = LogicECM.module || {};
 		onReady: function () {
 			/* загрузка данных по field.value и передача их в picker и в items. Отрисовка selectedItems здесь и в пикере */
 			this.widgets.added = Dom.get(this.id + '-added');
-			if (this.widgets.added.value) {
+			if (this.widgets.added && this.widgets.added.value) {
 				this.defaultValues = this.widgets.added.value.split(',');
 			}
 			this.widgets.removed = Dom.get(this.id + '-removed');
