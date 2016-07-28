@@ -2060,8 +2060,8 @@ notifications.sendNotificationFromCurrentUser({
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -3540,8 +3540,8 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -4802,8 +4802,8 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -6027,8 +6027,8 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -7385,8 +7385,8 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -8540,46 +8540,6 @@ notifications.sendNotificationFromCurrentUser({
                                                                 </nodes>
                                                             </subFolder>
                                                         </subFolders>
-                                                    </node>
-                                                    <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>54fefd85-7d1f-458c-9f08-704ce64c6566</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/c3f732cc-d4ef-4b05-a3d0-d0bb27bd23f6
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Расторгнуть]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$contractsTermination]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <workflowAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/5fadbe68-8b6d-4cae-b5a2-83abedef6beb
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
                                                     </node>
                                                 </nodes>
                                             </subFolder>
@@ -9786,8 +9746,8 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -10976,8 +10936,8 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -11016,8 +10976,8 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -12114,8 +12074,8 @@ businessJournal.log(contract.nodeRef.toString(), "EDIT", logText, []);]]></value
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -14451,8 +14411,8 @@ notifications.sendNotificationFromCurrentUser({
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
@@ -14492,8 +14452,8 @@ notifications.sendNotificationFromCurrentUser({
                                                         </properties>
                                                         <aspects>
                                                             <transitionStatusAspect/>
-                                                            <workflowAspect/>
                                                             <transitionLabelAspect/>
+                                                            <workflowAspect/>
                                                         </aspects>
                                                         <associations>
                                                             <association>
