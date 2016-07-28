@@ -63,7 +63,7 @@
 		<value>alfresco/module/${artifactId}/actions/archive-nd.xml</value>
 		<value>alfresco/module/${artifactId}/actions/close-year-section.xml</value>
 		<value>alfresco/module/${artifactId}/actions/delete-nd.xml</value>
-		<value>alfresco/module/${artifactId}/actions/move-doc-to-case.xml</value>
+		<!--<value>alfresco/module/${artifactId}/actions/move-doc-to-case.xml</value>-->
 		<value>alfresco/module/${artifactId}/actions/recreate-nomenclature.xml</value>
 	</util:list>
 
