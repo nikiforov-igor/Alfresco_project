@@ -2,6 +2,7 @@ package ru.it.lecm.events.scripts;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
@@ -17,6 +18,7 @@ import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.events.mail.incoming.MailReciever;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
@@ -39,6 +41,11 @@ public class EventsWebScriptBean extends BaseWebScript {
     private LecmPermissionService lecmPermissionService;
     private LecmTransactionHelper lecmTransactionHelper;
 	private MailReciever mailReciever;
+	private NotificationsService notificationsService;
+
+	public void setNotificationsService(NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
+	}
 
 	public MailReciever getMailReciever() {
 		return mailReciever;
@@ -413,4 +420,56 @@ public class EventsWebScriptBean extends BaseWebScript {
 			throw new WebScriptException("Mail recieve failed", ex);
 		}
 	}
+	
+	/**
+	 * Принять время совещания (положительное решение по согласованию времени)
+	 * @param document
+	 */
+	public void memberAccept(ScriptNode document) {
+		final NodeRef docNodeRef = document.getNodeRef();
+		
+        final AuthenticationUtil.RunAsWork<Boolean> memberAccept = new AuthenticationUtil.RunAsWork<Boolean>() {
+            @Override
+            public Boolean doWork() throws Exception {
+        		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();        		
+        		NodeRef memberRow = eventService.getMemberTableRow(docNodeRef, currentEmployee);
+        		if (memberRow != null) {
+        			nodeService.setProperty(memberRow, EventsService.PROP_EVENT_MEMBERS_STATUS, "CONFIRMED");
+        		}
+        		
+                List<NodeRef> repeatableEvents = new ArrayList<>();
+                repeatableEvents = eventService.getAllRepeatedEvents(docNodeRef);
+        		if (repeatableEvents != null) {
+        			for (int i = 0; i < repeatableEvents.size(); i++) {
+        				memberRow = eventService.getMemberTableRow(repeatableEvents.get(i), currentEmployee);
+        				if (memberRow != null) {
+        					nodeService.setProperty(memberRow, EventsService.PROP_EVENT_MEMBERS_STATUS, "CONFIRMED");
+        				}
+        			}
+        		}
+        		        		
+        		NodeRef initiator = new NodeRef(nodeService.getProperty(docNodeRef, EventsService.PROP_EVENT_INITIATOR).toString());
+        		
+        		if (currentEmployee != null && initiator != null) {			
+        			String author = "WebScript";
+        			
+        			List<NodeRef> recipients = new ArrayList<NodeRef>();
+        			recipients.add(initiator);
+        			
+        			String templateCode = "EVENTS.INVITATION_CONFIRM";
+        			
+        			Map<String, Object> templateConfig = new HashMap<String, Object>();
+        			templateConfig.put("mainObject", docNodeRef);
+        			templateConfig.put("eventExecutor", currentEmployee);
+        			
+        			boolean dontCheckAccessToObject = false;
+        			
+        			notificationsService.sendNotification(author, initiator, recipients, templateCode, templateConfig, dontCheckAccessToObject);
+        		}
+                return true;
+            }
+        };
+        AuthenticationUtil.runAsSystem(memberAccept);
+	}
+	
 }

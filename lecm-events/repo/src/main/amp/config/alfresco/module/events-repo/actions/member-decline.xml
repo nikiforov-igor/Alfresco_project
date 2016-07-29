@@ -9,6 +9,7 @@
             <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_MEMBER_DYN")) AND ("EMPTY".equals(@eventsService.getCurrentEmployeeMemberStatus(doc.getNodeRef())) OR "CONFIRMED".equals(@eventsService.getCurrentEmployeeMemberStatus(doc.getNodeRef()))) AND doc.attr("lecm-events:removed") == false]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="cm:title"><![CDATA[Отклонить приглашение]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[true]]></property>
         <property name="lecm-group-actions:workflow"><![CDATA[activiti$eventsMemberDecline]]></property>
     </item>
 </items>

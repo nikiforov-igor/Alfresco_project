@@ -145,6 +145,7 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
 		<property name="mailReciever" ref="events.mail.reciever"/>
+		<property name="notificationsService" ref="notificationsService"/>
 	</bean>
 
 	<bean id="eventsPolicy" class="ru.it.lecm.events.policy.EventsPolicy" parent="baseBean"

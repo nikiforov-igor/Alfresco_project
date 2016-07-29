@@ -9,6 +9,7 @@
             <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_MEMBER_DYN") AND "EMPTY".equals(@eventsService.getCurrentEmployeeMemberStatus(doc.getNodeRef())) AND doc.attr("lecm-events:removed") == false]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="cm:title"><![CDATA[Предложить другое время]]></property>
+        <property name="lecm-group-actions:availableForReader"><![CDATA[true]]></property>
         <property name="lecm-group-actions:workflow"><![CDATA[activiti$eventsRequestNewTime]]></property>
         <items>
             <item name="cm:190951df-a57e-4c81-8e23-5e8c84065f3e" type="lecm-stmeditor:inputFormVariable">

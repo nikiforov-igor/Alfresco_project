@@ -51,6 +51,9 @@
                             }
                         ]]></activiti:string>
                     </activiti:field>
+					<activiti:field name="runAs">
+						<activiti:string><![CDATA[workflow]]></activiti:string>
+					</activiti:field>
                 </activiti:executionListener>
             </extensionElements>
             <script></script>
