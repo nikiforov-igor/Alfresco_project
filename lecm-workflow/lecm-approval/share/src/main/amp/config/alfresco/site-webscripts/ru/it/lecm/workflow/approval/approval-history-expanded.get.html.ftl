@@ -19,12 +19,16 @@
 		showActionColumn: false,
 		expandable: true,
 		expandDataSource: 'ru/it/lecm/workflow/routes/stages/stageExpanded',
+        excludeColumns: ["lecmApproveAspects:hasComment"],
 		expandDataObj: {
 			editable: false,
 			isApproval: true
 		}
 	});
 
+	if (typeof LogicECM.module.Approval.StagesCellFormatter == "function") {
+        LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StagesCellFormatter;
+    }
 
 	YAHOO.util.Event.onContentReady("${datagridId}", function () {
 		YAHOO.Bubbling.fire("activeGridChanged", {

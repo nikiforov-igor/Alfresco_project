@@ -30,4 +30,61 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		}
 	}, true);
 
+	LogicECM.module.Approval.StagesCellFormatter = function (grid, elCell, oRecord, oColumn, oData) {
+		function formatState(nodeRef, decisionData, hasComment) {
+			if (!hasComment) {
+				return null;
+			}
+			var result,
+				messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewStageResult\')">{value}</a>';
+
+			result = YAHOO.lang.substitute(messageTemplate, {
+				nodeRef: nodeRef,
+				value: decisionData.displayValue
+			});
+
+			return result;
+		}
+		var html = null;
+
+		if (!oRecord) {
+			oRecord = this.getRecord(elCell);
+		}
+		if (!oColumn) {
+			oColumn = this.getColumn(elCell.parentNode.cellIndex);
+		}
+
+		if (oRecord && oColumn) {
+			if (!oData) {
+				oData = oRecord.getData("itemData")[oColumn.field];
+			}
+
+			if (oData) {
+				var datalistColumn = grid.datagridColumns[oColumn.key];
+				if (datalistColumn) {
+					oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+					for (var i = 0; i < oData.length; i++) {
+						switch (datalistColumn.name) {
+							case 'lecmApproveAspects:approvalState':
+								var state = oRecord.getData('itemData')['prop_lecmApproveAspects_approvalState'];
+								var hasComment = !!(oRecord.getData('itemData')['prop_lecmApproveAspects_hasComment'] && oRecord.getData('itemData')['prop_lecmApproveAspects_hasComment'].value);
+								var nodeRef = oRecord.getData("nodeRef");
+								html = formatState(nodeRef, state, hasComment);
+								break;
+							case 'lecmWorkflowRoutes:stageExpression':
+								if (oData[i].displayValue && oData[i].displayValue.length) {
+									html = '<div class="centered"><img src="/share/res/components/images/complete-16.png" width="16" alt="true" title="true" id="yui-gen538"></div>';
+								} else {
+									html = '';
+								}
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			}
+		}
+		return html;
+	}
 })();

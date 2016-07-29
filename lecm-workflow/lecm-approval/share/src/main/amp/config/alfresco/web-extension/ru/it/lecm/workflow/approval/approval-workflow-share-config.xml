@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <alfresco-config>
+	<config>
+		<forms>
+			<default-controls>
+				<type name="association:approvalReason" template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+					<control-param name="rows">7</control-param>
+				</type>
+			</default-controls>
+		</forms>
+	</config>
 	<config evaluator="string-compare" condition="activiti$lecmApprovementWorkflow">
 		<forms>
 			<form>

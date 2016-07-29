@@ -44,6 +44,10 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<property name="lecmApproveAspects:approvalComment">
+					<type>d:text</type>
+					<default>false</default>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>

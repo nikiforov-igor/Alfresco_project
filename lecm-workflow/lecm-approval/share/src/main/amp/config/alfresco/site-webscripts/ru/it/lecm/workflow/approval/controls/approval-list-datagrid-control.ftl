@@ -97,6 +97,7 @@
 					trash: false
 				}
 			},
+            excludeColumns: ["lecmApproveAspects:hasComment"],
 			showActionColumn: ${editable?string},
 			actions: [{
 				type:"datagrid-action-link-" + controlId,

@@ -50,7 +50,7 @@
 			overrideSortingWith: false,
 			expandable: true,
 			forceSubscribing: true,
-			excludeColumns: ["lecmApproveAspects:approvalState"],
+			excludeColumns: ["lecmApproveAspects:approvalState", "lecmApproveAspects:hasComment"],
 			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
 			expandDataObj: {
 				editable: ${editable?string},
