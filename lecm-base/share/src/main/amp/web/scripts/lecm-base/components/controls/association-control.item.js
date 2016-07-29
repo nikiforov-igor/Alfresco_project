@@ -107,16 +107,20 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				msg;
 
 			// Create New item cell type
-			if ('~CREATE~NEW~' === record.getData('type')) {
+			if (IDENT_CREATE_NEW === record.getData('type')) {
 				msg = this.owner.options.createNewMessage ? this.owner.options.createNewMessage : this.owner.msg('form.control.object-picker.create-new');
 				elCell.innerHTML = '<a id="' + this.owner.id + '-create-new-row' + '" href="javascript:void(0);" title="' + msg + '" class="create-new-row create-new-item-' + this.owner.eventGroup + '" >' + msg + '</a>';
 
-				YAHOO.util.Event.onContentReady(this.owner.id + '-create-new-row', function () {
+				YAHOO.util.Event.onContentReady(this.owner.id + '-create-new-row', function (record) {
 					var createLink = YAHOO.util.Dom.get(this.owner.id + '-create-new-row');
 					if (createLink) {
+						var tr = this.getTrEl(record);
+						if (tr) {
+							tr.hidden =  !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.owner.options, this.owner.currentState.selected, this.owner.parentControl);
+						}
 						YAHOO.util.Event.on(createLink, 'click', this.owner._fnCreateNewItemHandler, this.owner, true);
 					}
-				}, this, true);
+				}, record, this, true);
 
 				return;
 			}
@@ -546,9 +550,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
                                 column: this.widgets.datatable.getColumn('add'),
                                 record: record
                             });
-                            if (tdEl.firstChild.firstChild) {
-                                tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected, this.parentControl);
-                            }
+							if (IDENT_CREATE_NEW !== record.getData('type')) {
+								if (tdEl.firstChild.firstChild) {
+									tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected, this.parentControl);
+								}
+							} else {
+								if (tdEl.parentElement)	{
+									tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.selected, this.parentControl);
+								}
+							}
                         }, this);
                         this.fire('afterChange', {
                             key: this.key
@@ -580,8 +590,14 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						column: this.widgets.datatable.getColumn('add'),
 						record: record
 					});
-					if (tdEl.firstChild.firstChild) {
-						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected, this.parentControl);
+					if (IDENT_CREATE_NEW !== record.getData('type')) {
+						if (tdEl.firstChild.firstChild) {
+							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected, this.parentControl);
+						}
+					} else {
+						if (tdEl.parentElement)	{
+							tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.selected, this.parentControl);
+						}
 					}
 				}, this);
 				if (removeHappend) {
