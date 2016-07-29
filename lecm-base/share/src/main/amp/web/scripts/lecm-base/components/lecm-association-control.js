@@ -1039,6 +1039,16 @@ LogicECM.module = LogicECM.module || {};
 								return false;
 							}.bind(this));
 
+							this.tree.subscribe('expandComplete', function (node) {
+								this.tree.onEventToggleHighlight(node);
+								return false;
+							}.bind(this));
+
+							this.tree.subscribe('collapseComplete', function (node) {
+								this.tree.onEventToggleHighlight(node);
+								return false;
+							}.bind(this));
+
 							// уходим на следующее поле (tab-ом)
 							new KeyListener(tree, {keys: KeyListener.KEY.TAB},
 								{
