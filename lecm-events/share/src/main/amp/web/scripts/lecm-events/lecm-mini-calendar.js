@@ -36,6 +36,9 @@ LogicECM.module = LogicECM.module || {};
 	};
 
 	LogicECM.module.MiniCalendar.prototype = {
+
+		EVENTS_PREFERENCE_KEY: "ru.it.lecm.documents.events",
+
 		/**
 		 * AddEvent module instance.
 		 *
@@ -159,6 +162,16 @@ LogicECM.module = LogicECM.module || {};
 
 			//console.log("loadEvents: from " + fromDate + " to " + toDate);
 			if (fromDate != null && toDate != null) {
+				var lastCreatedString = "";
+				var lastCreated = this.getLastCreatedDocuments();
+				if (lastCreated != null) {
+					for (var i = 0; i < lastCreated.length; i++) {
+						if (lastCreatedString.length > 0) {
+							lastCreatedString += ",";
+						}
+						lastCreatedString += lastCreated[i];
+					}
+				}
 				Alfresco.util.Ajax.request(
 					{
 						url: Alfresco.constants.PROXY_URI + "lecm/events/user",
@@ -167,7 +180,8 @@ LogicECM.module = LogicECM.module || {};
 							from: toISO8601(fromDate).split('T')[0],
 							to: toISO8601(toDate).split('T')[0],
                             mode: "mini",
-                            timeZoneOffset: encodeURIComponent(new Date().getTimezoneOffset())
+                            timeZoneOffset: encodeURIComponent(new Date().getTimezoneOffset()),
+							lastCreated: lastCreatedString.length > 0 ? encodeURIComponent(lastCreatedString) : null
 						},
 						//filter out non relevant events for current view
 						successCallback:
@@ -316,6 +330,33 @@ LogicECM.module = LogicECM.module || {};
 		_msg: function (messageId)
 		{
 			return Alfresco.util.message.call(this, messageId, this.name, Array.prototype.slice.call(arguments).slice(1));
+		},
+
+		_buildLastCreatedKey: function () {
+			return this.EVENTS_PREFERENCE_KEY + ".last." + Alfresco.constants.USERNAME;
+		},
+
+		getLastCreatedDocuments: function() {
+			var result = [];
+			var lastDocuments = [];
+			var prefs = localStorage.getItem(this._buildLastCreatedKey());
+			if (prefs != null) {
+				try {
+					lastDocuments = JSON.parse(prefs);
+				} catch (e) {
+				}
+			}
+
+			var limitDate = new Date();
+			limitDate.setMinutes(limitDate.getMinutes() - 5);
+
+			lastDocuments.forEach(function (item) {
+				if (new Date(item.date).getTime() > limitDate.getTime()) {
+					result.push(item.nodeRef);
+				}
+			}.bind(this));
+
+			return result;
 		}
 	};
 })();

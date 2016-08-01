@@ -209,66 +209,7 @@
                        editable: me.options.permitToCreateEvents,
 
                        // Define the event source as the Alfresco Calendar Event API
-                       eventSources:
-                           [
-                              {
-                                 url: Alfresco.constants.PROXY_URI + "lecm/events/user?repeating=all&mode=full&timeZoneOffset=" + encodeURIComponent(new Date().getTimezoneOffset()),
-                                 startParam: "from",
-                                 startParamFn: function(rangeStart)
-                                 {
-                                    return toISO8601(rangeStart).split('T')[0];
-                                 },
-                                 endParam: "to",
-                                 endParamFn: function(rangeEnd)
-                                 {
-                                    return toISO8601(rangeEnd).split('T')[0];
-                                 },
-                                 success: function(data)
-                                 {
-                                    var parsedEvents = [];
-                                    if (data.events) {
-                                       var filteredEvents = me.tagFilter(data.events);
-
-                                       // trigger Mini Calendar's rendering:
-                                       YAHOO.Bubbling.fire("eventDataLoad", filteredEvents);
-
-                                       $.each(filteredEvents, function(i, event)
-                                       {
-                                          var className = "";
-                                          if (event.userMemberStatus == "CONFIRMED") {
-                                             className = "event-accepted";
-                                          } else if (event.userMemberStatus == "DECLINED") {
-                                             className = "event-rejected";
-                                          } else if (event.userMemberStatus == "REQUEST_NEW_TIME") {
-                                             className = "event-another-time";
-                                          } else if (event.userIsInitiator) {
-                                             className = "event-initiator"
-                                          }
-
-                                          // Map Alfresco Event object to FullCalendar Event Object (ensuring that existing properties are still present)
-                                          // Parse user input strings for XSS
-                                          parsedEvents.push(YAHOO.lang.augmentObject(
-                                              {
-                                                 id: $html(event.name),
-                                                 start: parseISO8601(event.startAt.iso8601),
-                                                 end: parseISO8601(event.endAt.iso8601),
-                                                 allDay: (event.allday === "true") ? true : false,
-                                                 location: $html(event.where),
-                                                 uri: "event?nodeRef=" + event.nodeRef,
-                                                 description: $html(event.description),
-                                                 title: event.title,
-                                                 where: $html(event.where),
-                                                 url: Alfresco.constants.URL_CONTEXT + "event?nodeRef=" + event.nodeRef,
-                                                 className: className
-                                              }, event));
-                                       });
-                                    }
-                                    me.nonWorking = data.nonWorkingDays;
-                                    me.updateNonWorkingDays();
-                                    return parsedEvents;
-                                 }
-                              }
-                           ],
+                       eventSources:[me.getEventSources()],
 
                        // Trigger the Event Info Dialogue
                        eventClick: function (calEvent, jsEvent, view)
@@ -309,6 +250,83 @@
                 $jCalendar.limitEvents(3);
 
              });
+          },
+
+          getEventSources: function () {
+             var me = this;
+             var url = Alfresco.constants.PROXY_URI + "lecm/events/user?repeating=all&mode=full&timeZoneOffset=" + encodeURIComponent(new Date().getTimezoneOffset());
+             var lastCreatedString = "";
+             var lastCreated = this.getLastCreatedDocuments();
+             if (lastCreated != null) {
+                for (var i = 0; i < lastCreated.length; i++) {
+                   if (lastCreatedString.length > 0) {
+                      lastCreatedString += ",";
+                   }
+                   lastCreatedString += lastCreated[i];
+                }
+             }
+
+             if (lastCreatedString.length > 0) {
+                url += "&lastCreated=" + encodeURIComponent(lastCreatedString);
+             }
+
+             return {
+                url: url,
+                startParam: "from",
+                startParamFn: function(rangeStart)
+                {
+                   return toISO8601(rangeStart).split('T')[0];
+                },
+                endParam: "to",
+                endParamFn: function(rangeEnd)
+                {
+                   return toISO8601(rangeEnd).split('T')[0];
+                },
+                success: function(data)
+                {
+                   var parsedEvents = [];
+                   if (data.events) {
+                      var filteredEvents = me.tagFilter(data.events);
+
+                      // trigger Mini Calendar's rendering:
+                      YAHOO.Bubbling.fire("eventDataLoad", filteredEvents);
+
+                      $.each(filteredEvents, function(i, event)
+                      {
+                         var className = "";
+                         if (event.userMemberStatus == "CONFIRMED") {
+                            className = "event-accepted";
+                         } else if (event.userMemberStatus == "DECLINED") {
+                            className = "event-rejected";
+                         } else if (event.userMemberStatus == "REQUEST_NEW_TIME") {
+                            className = "event-another-time";
+                         } else if (event.userIsInitiator) {
+                            className = "event-initiator"
+                         }
+
+                         // Map Alfresco Event object to FullCalendar Event Object (ensuring that existing properties are still present)
+                         // Parse user input strings for XSS
+                         parsedEvents.push(YAHOO.lang.augmentObject(
+                             {
+                                id: $html(event.name),
+                                start: parseISO8601(event.startAt.iso8601),
+                                end: parseISO8601(event.endAt.iso8601),
+                                allDay: (event.allday === "true") ? true : false,
+                                location: $html(event.where),
+                                uri: "event?nodeRef=" + event.nodeRef,
+                                description: $html(event.description),
+                                title: event.title,
+                                where: $html(event.where),
+                                url: Alfresco.constants.URL_CONTEXT + "event?nodeRef=" + event.nodeRef,
+                                className: className
+                             }, event));
+                      });
+                   }
+                   me.nonWorking = data.nonWorkingDays;
+                   me.updateNonWorkingDays();
+                   return parsedEvents;
+                }
+             }
           },
 
           saveLastView: function saveLastView(view) {

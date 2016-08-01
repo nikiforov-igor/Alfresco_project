@@ -7,8 +7,9 @@
     if (args['timeZoneOffset']) {
         timeZoneOffset = parseInt(args['timeZoneOffset']);
     }
+	var lastCreated = args['lastCreated'];
 
-	model.events = events.getUserEvents(from + "T00:00:00Z", to + "T23:59:59Z", loadActions, mode, timeZoneOffset);
+	model.events = events.getUserEvents(from + "T00:00:00Z", to + "T23:59:59Z", loadActions, mode, timeZoneOffset,lastCreated);
 	var nonWorkingDays = [];
 	var wCalendarNonWorkingDays = workCalendar.getEmployeeNonWorkindDays(orgstructure.getCurrentEmployee(), utils.fromISO8601(from + "T00:00:00Z"), utils.fromISO8601(to + "T23:59:59Z"));
 	if (wCalendarNonWorkingDays != null) {

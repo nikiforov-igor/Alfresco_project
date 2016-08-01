@@ -15,6 +15,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -168,11 +169,16 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter) {
-		return getEvents(fromDate, toDate, additionalFilter, false);
+		return getEvents(fromDate, toDate, additionalFilter, false, null);
 	}
 
 	@Override
 	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined) {
+		return getEvents(fromDate, toDate, additionalFilter, false, null);
+	}
+
+	@Override
+	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined, String lastCreated) {
 		List<NodeRef> results = new ArrayList<>();
 
 		SearchParameters sp = new SearchParameters();
@@ -185,16 +191,42 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		ResultSet searchResult = null;
 		try {
 			searchResult = searchService.query(sp);
-			results = searchResult.getNodeRefs();
+			results.addAll(searchResult.getNodeRefs());
 		} finally {
 			if (searchResult != null) {
 				searchResult.close();
+			}
+		}
+		if (lastCreated != null) {
+			Date from = ISO8601DateFormat.parse(fromDate);
+			Date to = ISO8601DateFormat.parse(toDate);
+			String[] lastCreatedItems = lastCreated.split(",");
+			for (String lastCreatedItem : lastCreatedItems) {
+				if (NodeRef.isNodeRef(lastCreatedItem)) {
+					NodeRef ref = new NodeRef(lastCreatedItem);
+					if (!results.contains(ref)) {
+						Map<QName, Serializable> properties = nodeService.getProperties(ref);
+						Date propFromDate = (Date) properties.get(PROP_EVENT_FROM_DATE);
+						Date propToDate = (Date) properties.get(PROP_EVENT_TO_DATE);
+						Boolean removed = (Boolean) properties.get(PROP_EVENT_REMOVED);
+						Boolean showInCalendar = (Boolean) properties.get(PROP_EVENT_SHOW_IN_CALENDAR);
+						if (propFromDate != null && propFromDate.before(to) && propToDate != null && propToDate.after(from)
+								&& !removed && showInCalendar) {
+							results.add(ref);
+						}
+					}
+				}
 			}
 		}
 		if (excludeDeclined) {
 			results = filterDeclinedEvents(results);
 		}
 		return results;
+	}
+
+	@Override
+	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, String lastCreated) {
+		return getEvents(fromDate, toDate, additionalFilter, false, lastCreated);
 	}
 
 	@Override

@@ -29,6 +29,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
    YAHOO.extend(LogicECM.module.Calendar.View, Alfresco.component.Base,
        {
+          EVENTS_PREFERENCE_KEY: "ru.it.lecm.documents.events",
+
           /**
            * Object container for storing YUI widget instances.
            *
@@ -124,6 +126,17 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
            */
           getEvents : function ()
           {
+             var lastCreatedString = "";
+             var lastCreated = this.getLastCreatedDocuments();
+             if (lastCreated != null) {
+                for (var i = 0; i < lastCreated.length; i++) {
+                   if (lastCreatedString.length > 0) {
+                      lastCreatedString += ",";
+                   }
+                   lastCreatedString += lastCreated[i];
+                }
+             }
+
              Alfresco.util.Ajax.request(
                  {
                     url: Alfresco.constants.PROXY_URI + "lecm/events/user",
@@ -133,7 +146,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                        to: toISO8601(this.options.endDate).split('T')[0],
                        repeating: "all",
                        loadActions: this.options.loadActions,
-                       timeZoneOffset: encodeURIComponent(new Date().getTimezoneOffset())
+                       timeZoneOffset: encodeURIComponent(new Date().getTimezoneOffset()),
+                       lastCreated: lastCreatedString.length > 0 ? encodeURIComponent(lastCreatedString) : null
                     },
                     //filter out non relevant events for current view
                     successCallback:
@@ -928,6 +942,33 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
                 }
                 return filteredEvents;
              }
+          },
+
+          _buildLastCreatedKey: function () {
+             return this.EVENTS_PREFERENCE_KEY + ".last." + Alfresco.constants.USERNAME;
+          },
+
+          getLastCreatedDocuments: function() {
+             var result = [];
+             var lastDocuments = [];
+             var prefs = localStorage.getItem(this._buildLastCreatedKey());
+             if (prefs != null) {
+                try {
+                   lastDocuments = JSON.parse(prefs);
+                } catch (e) {
+                }
+             }
+
+             var limitDate = new Date();
+             limitDate.setMinutes(limitDate.getMinutes() - 5);
+
+             lastDocuments.forEach(function (item) {
+                if (new Date(item.date).getTime() > limitDate.getTime()) {
+                   result.push(item.nodeRef);
+                }
+             }.bind(this));
+
+             return result;
           }
        });
    LogicECM.module.Calendar.View.VIEWTYPE_WEEK = 'week';

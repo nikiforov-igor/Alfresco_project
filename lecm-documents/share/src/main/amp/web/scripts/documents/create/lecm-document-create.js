@@ -169,6 +169,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				this.runtimeForm.submitElements[index].set('disabled', true);
 			}
 
+			if (YAHOO.lang.isFunction(LogicECM.onSuccessCustomFunction)) {
+				LogicECM.onSuccessCustomFunction(createdDocument, this);
+			}
 			var defferedConfig = {
 				scope: this,
 				fn: this.onFormSubmitSuccessRedirect,
