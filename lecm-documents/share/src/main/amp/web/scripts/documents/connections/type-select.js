@@ -149,24 +149,26 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 				if (items != null && items.length > 0) {
 					for (var i = 0; i < items.length; i++) {
 						var node = items[i];
-						var opt = document.createElement('option');
-						opt.innerHTML = node.name;
-						opt.value = node.nodeRef;
-						var exist = false;
-						if (this.existConnectionTypes != null) {
-							for (var j = 0; j < this.existConnectionTypes.length; j++) {
-								if (node.nodeRef == this.existConnectionTypes[j].nodeRef) {
-									exist = true;
+						if (!node.isAuto) {
+							var opt = document.createElement('option');
+							opt.innerHTML = node.name;
+							opt.value = node.nodeRef;
+							var exist = false;
+							if (this.existConnectionTypes != null) {
+								for (var j = 0; j < this.existConnectionTypes.length; j++) {
+									if (node.nodeRef == this.existConnectionTypes[j].nodeRef) {
+										exist = true;
+									}
 								}
 							}
+							if (exist) {
+								opt.disabled = "disabled";
+							}
+							if (!exist && this.defaultSelectedValue != null && node.nodeRef == this.defaultSelectedValue) {
+								opt.selected = true;
+							}
+							this.selectItem.appendChild(opt);
 						}
-						if (exist) {
-							opt.disabled = "disabled";
-						}
-						if (!exist && this.defaultSelectedValue != null && node.nodeRef == this.defaultSelectedValue) {
-							opt.selected = true;
-						}
-						this.selectItem.appendChild(opt);
 					}
 				}
 			},
@@ -181,7 +183,7 @@ LogicECM.module.Connection = LogicECM.module.Connection || {};
 					this.selectItem.innerHTML = "";
 					this.selectItem.appendChild(emptOpt);
 				}
-			},
+	 		},
 
 			loadConnectionTypes: function() {
 				if (this.primaryDocumentNodeRef != null && this.connectedDocumentNodeRef != null) {

@@ -42,6 +42,11 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-connect-types:for-auto-create">
+					<title>Is auto link</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-dic:aspect_active</aspect>

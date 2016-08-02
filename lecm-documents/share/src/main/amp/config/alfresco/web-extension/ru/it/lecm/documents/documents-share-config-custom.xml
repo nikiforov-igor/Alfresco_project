@@ -565,6 +565,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-connect-types:reverse-name"/>
                     <show id="lecm-connect-types:code"/>
+                    <show id="lecm-connect-types:for-auto-create"/>
                 </field-visibility>
 	            <appearance>
 	                <field id="lecm-connect-types:code" read-only="true"/>
@@ -580,6 +581,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-connect-types:reverse-name"/>
                     <show id="lecm-connect-types:code"/>
+                    <show id="lecm-connect-types:for-auto-create"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-connect-types:code">
@@ -595,6 +597,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-connect-types:reverse-name"/>
                     <show id="lecm-connect-types:code"/>
+                    <show id="lecm-connect-types:for-auto-create"/>
                 </field-visibility>
 	            <appearance>
                     <field id="cm:name" mandatory="false">
@@ -612,6 +615,11 @@
 			            <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
 			            </constraint-handlers>
+		            </field>
+                    <field id="lecm-connect-types:for-auto-create">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
+                            <control-param name="options">true|Да,false|Нет</control-param>
+                        </control>
 		            </field>
 	            </appearance>
             </form>

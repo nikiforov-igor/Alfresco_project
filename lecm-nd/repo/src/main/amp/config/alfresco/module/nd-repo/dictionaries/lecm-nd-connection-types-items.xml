@@ -6,6 +6,7 @@
                 <property name="cm:name">Вводит в действие документ</property>
                 <property name="lecm-connect-types:reverse-name">Введен в действие документом</property>
                 <property name="lecm-connect-types:code">accept</property>
+                <property name="lecm-connect-types:for-auto-create">true</property>
             </item>
         </items>
     </item>
