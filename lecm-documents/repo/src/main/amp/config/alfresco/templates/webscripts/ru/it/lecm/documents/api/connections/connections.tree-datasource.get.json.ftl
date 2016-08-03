@@ -10,6 +10,7 @@
         "status": "${item.status!''}",
         "connectionType": "${item.connectionType!''}",
         "direction": "${item.direction}",
+        "hasAccess": ${item.hasAccess?string},
         "numberOfChildErrands": ${item.numberOfChildErrands},
         "numberOfChildElements": ${item.numberOfChildElements}
         }<#if item_has_next>,</#if>

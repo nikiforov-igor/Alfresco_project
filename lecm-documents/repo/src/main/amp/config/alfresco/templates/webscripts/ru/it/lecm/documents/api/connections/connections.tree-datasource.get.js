@@ -28,6 +28,7 @@ if (isFirstLayer) {
     firstItem.status = item.properties["lecm-statemachine:status"];
     firstItem.connectionType = "Корневой элемент";
     firstItem.direction = '';
+    firstItem.hasAccess = lecmPermission.hasReadAccess(item);
 
     var childErrands = item.sourceAssocs["lecm-errands:additional-document-assoc"];
     var primaryDocAssocs = item.sourceAssocs["lecm-connect:primary-document-assoc"];
@@ -166,6 +167,7 @@ function evaluateItem(item, substituteTitle, isParent) {
             itemObj.status = document.properties["lecm-statemachine:status"];
             itemObj.connectionType = item.assocs["lecm-connect:connection-type-assoc"][0].properties["cm:name"];
             itemObj.direction = direction;
+            itemObj.hasAccess = lecmPermission.hasReadAccess(document);
 
             var childErrands = document.sourceAssocs["lecm-errands:additional-document-assoc"];
             var primaryDocAssocs = document.sourceAssocs["lecm-connect:primary-document-assoc"];

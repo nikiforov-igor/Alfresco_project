@@ -2,7 +2,7 @@
 	<shortname>connections-with-document</shortname>
 	<description>Get Connections With Document</description>
 	<url>/lecm/document/connections/api/getConnectionsWithDocument?documentNodeRef={documentNodeRef}</url>
-	<authentication>user</authentication>
+	<authentication runas="admin">user</authentication>
     <transaction>none</transaction>
 	<format default="json"/>
 </webscript>

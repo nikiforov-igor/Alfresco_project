@@ -10,6 +10,8 @@ var hasNext = false;
 var k = 0;
 
 model.documentService = documentScript;
+model.lecmPermission = lecmPermission;
+
 if (null != rootFolder){
 	var document = search.findNode(documentNodeRef);
 	var excludeErrands = document != null && document.isSubType("lecm-eds-document:base") && exclude;

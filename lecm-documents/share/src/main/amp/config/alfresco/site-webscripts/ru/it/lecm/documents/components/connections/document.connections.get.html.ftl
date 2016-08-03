@@ -31,7 +31,7 @@
                     <#if connections?? && connections.items?? && (connections.items?size > 0)>
                         <ul id="${el}-connection-set" class="document-connection-set document-right-set">
                             <#list connections.items as item>
-                                <li class="text-broken">
+                                <li class="text-broken <#if item.connectedDocument?? && !item.connectedDocument.hasAccess>dont-have-access</#if>">
                                 ${item.type.name}
                                     <br/>
                                     <#if item.connectedDocument.extPresentString?? && (item.connectedDocument.extPresentString?length > 0)>

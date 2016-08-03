@@ -45,7 +45,7 @@ YAHOO.Bubbling.on("graphContainerReady", function (layer, args) {
                                     'src="/share/res/images/lecm-documents/type-icons/' + (oRecord._oData.docType || '').replace(':', '_') + '.png"' +
                                     'onerror="this.src = \'/share/res/images/lecm-documents/type-icons/default_document.png\';"> </img>';
 
-                            var linkBlock = '<span class="link-span">';
+                            var linkBlock = '<span class="link-span' + (!oRecord._oData.hasAccess ? ' dont-have-access' : '') +'">';
                             if (!args[1].isErrandCard) {
                                 directionIconSpan = '<span class="connection-direction ' + (oRecord._oData.direction || '') + '"> </span>';
                                 linkBlock += (oRecord._oData.connectionType ? '<p class="connectionType">' + oRecord._oData.connectionType + '</p>' : '');

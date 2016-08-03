@@ -64,6 +64,9 @@ public class LecmPermissionWebScript extends BaseWebScript {
     public boolean hasReadAccess(ScriptNode node) {
         return lecmPermissionService.hasReadAccess(node.getNodeRef());
     }
+    public boolean hasReadAccess(NodeRef node) {
+        return lecmPermissionService.hasReadAccess(node);
+    }
 
 	public boolean hasPermission(String nodeRef, String permission, String userLogin) {
         return lecmPermissionService.hasPermission(permission, new NodeRef(nodeRef), userLogin);

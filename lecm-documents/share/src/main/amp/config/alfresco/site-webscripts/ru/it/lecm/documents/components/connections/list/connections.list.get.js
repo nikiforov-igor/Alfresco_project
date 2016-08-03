@@ -32,7 +32,7 @@ function getConnections(nodeRef, defaultValue) {
 }
 
 function getConnectionsWithDocument(nodeRef, defaultValue) {
-	var url = '/lecm/document/connections/api/getConnectionsWithDocument?documentNodeRef=' + nodeRef + "&exclErrands=true";
+	var url = '/lecm/document/connections/api/getConnectionsWithDocument?documentNodeRef=' + nodeRef + "&exclErrands=true&checkAccess=false";
 	var result = remote.connect("alfresco").get(url);
 	if (result.status != 200) {
 		if (defaultValue !== undefined) {

@@ -55,7 +55,7 @@
 								<img src="/share/res/images/lecm-documents/type-icons/default_document.png"/>
 							</#if>
 						</td>
-						<td class="connection">
+						<td class="connection <#if item.connectedDocument?? && !item.connectedDocument.hasAccess>dont-have-access</#if>">
 							<div class="connection-type <#if item.isSystem>system-connection</#if>">
 								<#if item.type??>
 									${item.type.name!""}
@@ -116,7 +116,7 @@
 							<img src="/share/res/images/lecm-documents/type-icons/default_document.png"/>
 						</#if>
 					</td>
-					<td class="connection">
+					<td class="connection <#if item.primaryDocument?? && !item.primaryDocument.hasAccess>dont-have-access</#if>">
 						<div class="connection-type <#if item.isSystem>system-connection</#if>">
 							<#if item.type??>
 								${item.type.reverseName!""}
