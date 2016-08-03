@@ -8,6 +8,10 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.NoSuchPersonException;
 import org.alfresco.service.cmr.security.PermissionService;
@@ -2185,20 +2189,31 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		}
 	}
 
-    @Override
-    public NodeRef getUnitByOrganization(NodeRef organization) {
-		NodeRef structureRef = getRootUnit();
-        if (nodeService.hasAspect(organization, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
-            List<AssociationRef> parents = nodeService.getSourceAssocs(organization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-            for (AssociationRef parent : parents) {
-                QName type = nodeService.getType(parent.getSourceRef());
-                if (type.equals(TYPE_ORGANIZATION_UNIT)){
-					return getOrg(parent.getSourceRef(), structureRef);
-				}
+	@Override
+	public NodeRef getUnitByOrganization(NodeRef organization) {
+
+		SearchService searchService = serviceRegistry.getSearchService();
+		SearchParameters sp = new SearchParameters();
+		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+		String path = "/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура//*";
+		String type = "lecm-orgstr:organization-unit";
+		sp.setQuery(String.format("+PATH:\"%s\" AND TYPE:\"%s\" AND @lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"%s\" AND NOT @lecm\\-dic\\:active:false", path, type, organization.toString()));
+		ResultSet results = null;
+
+		try {
+			results = searchService.query(sp);
+			if (results != null && results.length() > 0) {
+				return getOrg(results.getNodeRef(0), getRootUnit());
+			}
+		} finally {
+			if (results != null) {
+				results.close();
 			}
 		}
-        return null;
-    }
+
+		return null;
+	}
 
     @Override
     public boolean hasOrgChilds(NodeRef unit, boolean checkAccess) {

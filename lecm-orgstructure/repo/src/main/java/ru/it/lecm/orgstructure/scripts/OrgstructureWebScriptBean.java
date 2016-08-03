@@ -1218,9 +1218,9 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode getUnitByOrganization(ScriptNode organization) {
-        NodeRef unitByOrganization = orgstructureService.getUnitByOrganization(organization.getNodeRef());
-        return unitByOrganization != null ? new ScriptNode(unitByOrganization, serviceRegistry, getScope()) : null;
-    }
+		NodeRef unitByOrganization = orgstructureService.getUnitByOrganization(organization.getNodeRef());
+		return unitByOrganization != null ? new ScriptNode(unitByOrganization, serviceRegistry, getScope()) : null;
+	}
 
 	public ScriptNode getBusinessRoleByIdentifier(String roleId) {
 		NodeRef role = orgstructureService.getBusinessRoleByIdentifier(roleId);

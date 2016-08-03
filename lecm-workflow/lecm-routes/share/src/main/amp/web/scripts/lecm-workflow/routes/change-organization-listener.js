@@ -24,17 +24,24 @@
 
         if (formId != null) {
             if (organization && organization.nodeRef && organization.nodeRef.length > 0) {
-                if (currentOrganization == null) {
-                    currentOrganization = organization.nodeRef;
-                }
-
-                LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
-                LogicECM.module.Base.Util.reInitializeControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", {
-                    additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\"',
-                    resetValue:currentOrganization != organization.nodeRef
+                Alfresco.util.Ajax.jsonGet({
+                    url: Alfresco.constants.PROXY_URI + '/lecm/orgstructure/api/getUnitByOrg',
+                    dataObj: {
+                        nodeRef: organization.nodeRef
+                    },
+                    successCallback: {
+                        fn: function (response) {
+                            var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
+                            LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
+                            LogicECM.module.Base.Util.reInitializeControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", {
+                                additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\" AND NOT(@sys\\:node\\-uuid:\"' + unit.id + '\")',
+                                resetValue:currentOrganization != organization.nodeRef
+                            });
+                            currentOrganization = organization.nodeRef;
+                        }
+                    },
+                    failureMessage: Alfresco.util.message('message.failure')
                 });
-
-                currentOrganization = organization.nodeRef;
             } else {
                 currentOrganization = null;
                 LogicECM.module.Base.Util.reInitializeControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", {
