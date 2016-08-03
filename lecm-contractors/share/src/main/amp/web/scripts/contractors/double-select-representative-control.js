@@ -159,8 +159,21 @@ LogicECM.module = LogicECM.module || {};
                 var selectedContractors = Object.keys(args[1].selectedItems); // IE 9+
                 var selectedContractor = selectedContractors.length == 1 ? selectedContractors[0] : null;
 
-                var resetValue = false;
-
+                var resetValue = false, 
+                    autocompleteConf,
+                    treeConf,
+                    marker;
+                
+                if (args[1].markers && args[1].markers[selectedContractor]) {
+                    marker = args[1].markers[selectedContractor];
+                } else {
+                    marker = layer == this.options.contractorSelectEvent ? 'contractor' : 'organisation';
+                }
+                
+                if (marker == 'person') {
+                    selectedContractor = null;
+                }
+                
                 if (this.previousSelected === selectedContractor) {
                     return;
                 } else {
@@ -168,14 +181,6 @@ LogicECM.module = LogicECM.module || {};
                         resetValue = true;  // контагент сменился - прежнее значение неактуально
                     }
                     this.previousSelected = selectedContractor;
-                }
-
-                var autocompleteConf, treeConf, marker;
-                
-                if (args[1].markers && args[1].markers[selectedContractor]) {
-                    marker = args[1].markers[selectedContractor]
-                } else {
-                    marker = layer == this.options.contractorSelectEvent ? 'contractor' : 'organisation'; 
                 }
 
                 if (selectedContractor == null) {

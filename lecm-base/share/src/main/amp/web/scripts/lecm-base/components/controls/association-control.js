@@ -254,6 +254,10 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
                 this.widgets.added.value = added.join(',');
+				this.fire('resetOriginalValues', {
+					/* Bubbling.fire */
+					fieldValues: Dom.get(this.id).value.split(',')
+				});
 			}
 		},
 
