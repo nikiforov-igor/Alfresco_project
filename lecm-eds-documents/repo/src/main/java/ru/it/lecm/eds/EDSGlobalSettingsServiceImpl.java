@@ -284,4 +284,13 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		}
 		return registrars;
 	}
+
+	@Override
+	public String getLinksViewMode() {
+		NodeRef settings = getSettingsNode();
+		if (settings != null) {
+			return (String) nodeService.getProperty(settings, PROP_SETTINGS_LINKS_VIEW_MODE);
+		}
+		return null;
+	}
 }

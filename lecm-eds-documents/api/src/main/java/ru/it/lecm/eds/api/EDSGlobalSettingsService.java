@@ -24,6 +24,7 @@ public interface EDSGlobalSettingsService {
 
 	QName TYPE_SETTINGS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "settings");
 	QName PROP_SETTINGS_CENTRALIZED_REGISTRATION = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "centralized-registration");
+	QName PROP_SETTINGS_LINKS_VIEW_MODE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "links-view-mode");
 	QName PROP_SETTINGS_HIDE_PROPS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "hide-properties-for-recipients");
 	QName ASSOC_SETTINGS_ARM_DASHLET_NODE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "arm-node-for-dashlet-assoc");
 	QName ASSOC_SETTINGS_ARM_DASHLET = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "arm-for-dashlet-assoc");
@@ -55,4 +56,6 @@ public interface EDSGlobalSettingsService {
     NodeRef getArm();
 
 	List<NodeRef> getRegistras(NodeRef employeeRef, String businessRoleId);
+
+	String getLinksViewMode();
 }

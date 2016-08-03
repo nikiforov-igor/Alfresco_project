@@ -16,6 +16,18 @@
         <namespace uri="http://www.it.ru/logicECM/eds-global-settings/1.0" prefix="lecm-eds-globset"/>
     </namespaces>
 
+    <constraints>
+        <constraint name="lecm-eds-globset:links-view-const" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>VIEW_ALL</value>
+                    <value>VIEW_DIRECT</value>
+                    <value>VIEW_NO</value>
+                </list>
+            </parameter>
+        </constraint>
+    </constraints>
+
     <types>
 		<type name="lecm-eds-globset:settings">
 		    <title>Logic Ecm Documents Global Settings</title>
@@ -38,6 +50,14 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <default>SED</default>
+                </property>
+                <property name="lecm-eds-globset:links-view-mode">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <default>VIEW_ALL</default>
+                    <constraints>
+                        <constraint ref="lecm-eds-globset:links-view-const"/>
+                    </constraints>
                 </property>
 		    </properties>
             <associations>
