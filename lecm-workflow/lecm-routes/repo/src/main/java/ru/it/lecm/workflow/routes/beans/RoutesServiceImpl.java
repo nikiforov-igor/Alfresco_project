@@ -696,4 +696,34 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		return result;
 	}
 
+	@Override
+	public List<NodeRef> getEmployeesByRoute(NodeRef route) {
+		List<NodeRef> resultList = new ArrayList<>();
+
+		List<NodeRef> stageItems = getAllStageItemsOfRoute(route);
+
+		for (NodeRef stageItem : stageItems) {
+			List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+			if (targetAssocs != null && !targetAssocs.isEmpty()) {
+				resultList.add(targetAssocs.get(0).getTargetRef());
+			}
+		}
+
+		return resultList;
+	}
+
+	@Override
+	public List<NodeRef> getEmployeesOfAllDocumentRoutes(NodeRef document) {
+		List<NodeRef> resultList = new ArrayList<>();
+
+		NodeRef approvalFolder = approvalService.getDocumentApprovalFolder(document);
+		List<ChildAssociationRef> routesAssocs = nodeService.getChildAssocs(approvalFolder, Collections.singleton(RoutesModel.TYPE_ROUTE));
+
+		for (ChildAssociationRef routesAssoc : routesAssocs) {
+			resultList.addAll(getEmployeesByRoute(routesAssoc.getChildRef()));
+		}
+
+		return resultList;
+	}
+
 }

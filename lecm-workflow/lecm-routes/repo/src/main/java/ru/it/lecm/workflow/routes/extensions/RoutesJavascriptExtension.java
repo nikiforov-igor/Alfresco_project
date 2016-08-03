@@ -1,6 +1,5 @@
 package ru.it.lecm.workflow.routes.extensions;
 
-import java.io.Serializable;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -11,6 +10,8 @@ import ru.it.lecm.workflow.routes.api.ConvertRouteToIterationResult;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
 import ru.it.lecm.workflow.routes.entity.ConvertRouteToIterationResultForScript;
+
+import java.io.Serializable;
 
 /**
  *
@@ -122,5 +123,9 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 
 	public String getApprovalState(final ScriptNode document) {
 		return routesService.getApprovalState(document.getNodeRef());
+	}
+
+	public Scriptable getEmployeesOfAllDocumentRoutes(ScriptNode document) {
+		return createScriptable(routesService.getEmployeesOfAllDocumentRoutes(document.getNodeRef()));
 	}
 }

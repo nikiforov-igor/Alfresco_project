@@ -96,6 +96,5 @@
 		  p:documentService-ref="documentService"
 		  p:attachmentsService-ref="documentAttachmentsService"
 		  p:contentService-ref="contentService"
-		  p:checkOutCheckInService-ref="checkOutCheckInService"
 		  p:folders-ref="approval.folders"/>
 </beans>

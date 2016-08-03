@@ -8,7 +8,6 @@ import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.repo.version.VersionModel;
-import org.alfresco.service.cmr.coci.CheckOutCheckInService;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
@@ -45,7 +44,6 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private DocumentService documentService;
 	private DocumentAttachmentsService attachmentsService;
     private ContentService contentService;
-    private CheckOutCheckInService checkOutCheckInService;
 
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
@@ -61,10 +59,6 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
-    }
-
-    public void setCheckOutCheckInService(CheckOutCheckInService checkOutCheckInService) {
-        this.checkOutCheckInService = checkOutCheckInService;
     }
 
     public void init() {

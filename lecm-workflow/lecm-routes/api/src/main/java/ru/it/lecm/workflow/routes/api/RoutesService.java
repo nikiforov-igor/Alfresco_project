@@ -77,4 +77,7 @@ public interface RoutesService {
 
 	String getApprovalState(NodeRef documentNode);
 
+	List<NodeRef> getEmployeesByRoute(NodeRef route);
+
+	List<NodeRef> getEmployeesOfAllDocumentRoutes(NodeRef document);
 }
