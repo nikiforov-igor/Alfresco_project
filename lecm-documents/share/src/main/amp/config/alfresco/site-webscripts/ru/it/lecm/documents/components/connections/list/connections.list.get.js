@@ -20,7 +20,7 @@ function main() {
 }
 
 function getConnections(nodeRef, defaultValue) {
-	var url = '/lecm/document/connections/api/records?documentNodeRef=' + nodeRef + "&count=100&exclErrands=true";
+	var url = '/lecm/document/connections/api/records?documentNodeRef=' + nodeRef + "&count=100&applyViewMode=true";
 	var result = remote.connect("alfresco").get(url);
 	if (result.status != 200) {
 		if (defaultValue !== undefined) {
@@ -32,7 +32,7 @@ function getConnections(nodeRef, defaultValue) {
 }
 
 function getConnectionsWithDocument(nodeRef, defaultValue) {
-	var url = '/lecm/document/connections/api/getConnectionsWithDocument?documentNodeRef=' + nodeRef + "&exclErrands=true&checkAccess=false";
+	var url = '/lecm/document/connections/api/getConnectionsWithDocument?documentNodeRef=' + nodeRef + "&applyViewMode=true";
 	var result = remote.connect("alfresco").get(url);
 	if (result.status != 200) {
 		if (defaultValue !== undefined) {

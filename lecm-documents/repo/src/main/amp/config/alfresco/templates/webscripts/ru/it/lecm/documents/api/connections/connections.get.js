@@ -1,10 +1,13 @@
+var ERRAND_TYPE = 'lecm-errands:document';
+var IS_SYSTEM = 'lecm-connect:is-system';
+var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode(); /*VIEW_ALL, VIEW_DIRECT, VIEW_NO*/
+
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);
 var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : true;
 
-var checkAccess = args['checkAccess'] ? ("" + args['checkAccess']) == "true" : false;
 var checkIndirectAccess = args['checkInAccess'] ? ("" + args['checkInAccess']) == "true" : false;
-var applyViewMode = args['applyViewMode'] ? ("" + args['applyViewMode']) == "true" : false;
+var applyViewMode = args['applyViewMode'] ? ("" + args['applyViewMode']) == "true" : true;
 
 var document = search.findNode(documentNodeRef);
 var rootFolder = document != null ? documentConnection.getRootFolder(documentNodeRef) : null;
@@ -24,24 +27,10 @@ if (null != rootFolder) {
                 if (connectedDocumentAssoc != null && connectedDocumentAssoc.length == 1 && connectedDocumentAssoc[0].exists()) {
                     var connectedDocument = connectedDocumentAssoc[0];
 
-                    if (checkAccess){ /*фильтр по доступу*/
-                        if (lecmPermission.hasReadAccess(connectedDocument)) {
-                            /*Системные связи с документами всех типов, кроме поручений*/
-                            if (connections[i].properties['lecm-connect:is-system']) {
-                                if (!exclude || !connectedDocument.isSubType("lecm-errands:document")) {
-                                    itemsSystem.push(connections[i]);
-                                    k++;
-                                }
-                            } else {
-                                /*Пользовательские связи с документами всех типов*/
-                                itemsUser.push(connections[i]);
-                                k++;
-                            }
-                        }
-                    } else { /*TODO применяем фильтр по view mode*/
+                    if (lecmPermission.hasReadAccess(connectedDocument) || (applyViewMode && 'VIEW_NO' !== viewLinksMode)) {
                         /*Системные связи с документами всех типов, кроме поручений*/
-                        if (connections[i].properties['lecm-connect:is-system']) {
-                            if (!exclude || !connectedDocument.isSubType("lecm-errands:document")) {
+                        if (connections[i].properties[IS_SYSTEM]) {
+                            if (!exclude || !connectedDocument.isSubType(ERRAND_TYPE)) {
                                 itemsSystem.push(connections[i]);
                                 k++;
                             }

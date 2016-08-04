@@ -194,4 +194,8 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
         }
         return null;
     }
+
+	public String getLinksViewMode() {
+		return edsGlobalSettingsService.getLinksViewMode();
+	}
 }
