@@ -57,4 +57,4 @@
 //]]>
 </script>
 <div id='${id}-delegation-settings'></div>
-<@grid.datagrid id=id showViewForm=showViewForm showArchiveCheckBox=true/>
+<@grid.datagrid id=id showViewForm=showViewForm showArchiveCheckBox=false/>

@@ -16,9 +16,9 @@
 			maxResults:(pars.get('maxResults') !== null) ? parseInt(pars.get('maxResults'), 10) : DEFAULT_PAGE_SIZE,
 			fields:(pars.get('fields').length() > 0) ? pars.get('fields') : null,
 			nameSubstituteStrings:(pars.get('nameSubstituteStrings') !== null) ? pars.get('nameSubstituteStrings') : null,
-			showInactive: pars.get('showInactive') == true,
 			parent: (pars.get('parent').length() > 0)  ? pars.get('parent') : null,
 			searchNodes: (pars.get('searchNodes').length() > 0)  ? pars.get('searchNodes').split(',') : null,
+			showInactive: true,
 			itemType:(pars.get('itemType').length() > 0)  ? pars.get('itemType') : null,
 			startIndex: pars.has('startIndex') ? parseInt(pars.get('startIndex'), 10) : DEFAULT_INDEX,
 			useChildQuery: pars.has('useChildQuery') ? ('' + pars.get('useChildQuery') == 'true') : false,
@@ -61,7 +61,7 @@
         tmpParams.nameSubstituteStrings = ',,,{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name},{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}';
         tmpParams.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();
         tmpParams.searchNodes = null;
-        tmpParams.showInactive = params.showInactive;
+        tmpParams.showInactive = true;
         tmpParams.sort = 'lecm-orgstr:employee-last-name|true';
         tmpParams.startIndex = params.startIndex;
         tmpParams.useChildQuery = false;
