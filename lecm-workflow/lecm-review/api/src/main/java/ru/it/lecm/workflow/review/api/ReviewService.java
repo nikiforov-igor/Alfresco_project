@@ -72,7 +72,8 @@ public interface ReviewService extends InitializingBean {
     Boolean isReviewersByOrganization();
 
     List<NodeRef> getPotentialReviewers();
-    List<NodeRef> getPotentialReviewers(NodeRef unit);
+
+    List<NodeRef> getPotentialReviewers(List<NodeRef> unit);
 
     List<NodeRef> getAllowedReviewList();
 }

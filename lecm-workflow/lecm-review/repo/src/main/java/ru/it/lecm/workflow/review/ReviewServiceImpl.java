@@ -3,6 +3,7 @@ package ru.it.lecm.workflow.review;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -350,26 +351,35 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 	@Override
 	public List<NodeRef> getPotentialReviewers() {
-		NodeRef unit = null;
+		List<NodeRef> units = new ArrayList<>();
 		if (!isReviewersByOrganization()) {
-			unit = findNodeByAssociationRef(getSettings(), ASSOC_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORG_UNIT, OrgstructureBean.TYPE_ORGANIZATION_UNIT, ASSOCIATION_TYPE.TARGET);
+			List<AssociationRef> unitAssocs = nodeService.getTargetAssocs(getSettings(), ASSOC_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORG_UNIT);
+
+			if (unitAssocs != null && !unitAssocs.isEmpty()) {
+				for (AssociationRef unitAssoc : unitAssocs) {
+					units.add(unitAssoc.getTargetRef());
+				}
+			}
 		}
-		return getPotentialReviewers(unit);
+		return getPotentialReviewers(units);
 	}
 
 	@Override
-	public List<NodeRef> getPotentialReviewers(NodeRef unit) {
+	public List<NodeRef> getPotentialReviewers(List<NodeRef> units) {
 		List<NodeRef> reviewers = new ArrayList<>();
-		if (unit == null) {
+		if (units.isEmpty()) {
 			reviewers = orgstructureBean.getAllEmployees();
 		} else {
 			Set<NodeRef> reviewersSet = new HashSet<>();
+			List<NodeRef> subunits = new ArrayList<>();
 
-			List<NodeRef> units = orgstructureBean.getSubUnits(unit, true, true, false);
-			units.add(unit);
+			for (NodeRef unit : units) {
+				subunits.add(unit);
+				subunits.addAll(orgstructureBean.getSubUnits(unit, true, true, false));
+			}
 
-			for (NodeRef u : units) {
-				List<NodeRef> unitEmployees = orgstructureBean.getUnitEmployees(u, false);
+			for (NodeRef subunit : subunits) {
+				List<NodeRef> unitEmployees = orgstructureBean.getUnitEmployees(subunit, false);
 				reviewersSet.addAll(unitEmployees);
 			}
 
