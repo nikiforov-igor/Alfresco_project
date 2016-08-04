@@ -1,38 +1,69 @@
 var documentNodeRef = args['documentNodeRef'];
 var count = parseInt(args['count']);
-var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : false;
+var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : true;
 
+var checkAccess = args['checkAccess'] ? ("" + args['checkAccess']) == "true" : false;
+var checkIndirectAccess = args['checkInAccess'] ? ("" + args['checkInAccess']) == "true" : false;
+var applyViewMode = args['applyViewMode'] ? ("" + args['applyViewMode']) == "true" : false;
 
-var rootFolder = documentConnection.getRootFolder(documentNodeRef);
+var document = search.findNode(documentNodeRef);
+var rootFolder = document != null ? documentConnection.getRootFolder(documentNodeRef) : null;
 
-var items = [];
+var itemsSystem = [];
+var itemsUser = [];
+
 var hasNext = false;
 var k = 0;
 
-model.documentService = documentScript;
-model.lecmPermission = lecmPermission;
+if (null != rootFolder) {
+    var connections = rootFolder.getChildren();
+    if (connections != null && connections.length > 0) {
+        for (var i = 0; i < connections.length; i++) {
+            if (k < count) {
+                var connectedDocumentAssoc = connections[i].assocs["lecm-connect:connected-document-assoc"];
+                if (connectedDocumentAssoc != null && connectedDocumentAssoc.length == 1 && connectedDocumentAssoc[0].exists()) {
+                    var connectedDocument = connectedDocumentAssoc[0];
 
-if (null != rootFolder){
-	var document = search.findNode(documentNodeRef);
-	var excludeErrands = document != null && document.isSubType("lecm-eds-document:base") && exclude;
-
-	var connections = rootFolder.getChildren();
-	if (connections != null && connections.length > 0) {
-		for (var i = 0; i < connections.length; i++) {
-			if (k < count) {
-				var connectedDocumentAssoc = connections[i].assocs["lecm-connect:connected-document-assoc"];
-				if (connectedDocumentAssoc != null && connectedDocumentAssoc.length == 1
-					&& connectedDocumentAssoc[0].exists()
-					&& (!connectedDocumentAssoc[0].isSubType("lecm-errands:document") || !excludeErrands || !connections[i].properties['lecm-connect:is-system'])) {
-					items.push(connections[i]);
-					k++;
-				}
-			} else {
-				hasNext = true;
-			}
-		}
-	}
+                    if (checkAccess){ /*фильтр по доступу*/
+                        if (lecmPermission.hasReadAccess(connectedDocument)) {
+                            /*Системные связи с документами всех типов, кроме поручений*/
+                            if (connections[i].properties['lecm-connect:is-system']) {
+                                if (!exclude || !connectedDocument.isSubType("lecm-errands:document")) {
+                                    itemsSystem.push(connections[i]);
+                                    k++;
+                                }
+                            } else {
+                                /*Пользовательские связи с документами всех типов*/
+                                itemsUser.push(connections[i]);
+                                k++;
+                            }
+                        }
+                    } else { /*TODO применяем фильтр по view mode*/
+                        /*Системные связи с документами всех типов, кроме поручений*/
+                        if (connections[i].properties['lecm-connect:is-system']) {
+                            if (!exclude || !connectedDocument.isSubType("lecm-errands:document")) {
+                                itemsSystem.push(connections[i]);
+                                k++;
+                            }
+                        } else {
+                            /*Пользовательские связи с документами всех типов*/
+                            itemsUser.push(connections[i]);
+                            k++;
+                        }
+                    }
+                }
+            } else {
+                hasNext = true;
+                break;
+            }
+        }
+    }
+    if (!hasNext) { /*проверяем есть ли обратные связи */
+        hasNext = documentConnection.hasConnectionsWithDocument(documentNodeRef, checkIndirectAccess);
+    }
 }
 
-model.items = items;
+model.items = itemsSystem.concat(itemsUser);
 model.hasNext = hasNext;
+model.documentService = documentScript;
+model.lecmPermission = lecmPermission;

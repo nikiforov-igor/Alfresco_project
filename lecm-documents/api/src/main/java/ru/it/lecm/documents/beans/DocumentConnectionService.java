@@ -169,6 +169,8 @@ public interface DocumentConnectionService {
 	 */
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, Boolean checkPermissions);
 
+	Boolean hasConnectionsWithDocument(NodeRef documentRef, Boolean checkPermissions);
+
 	/**
 	 * Создание связи
 	 * @param primaryDocumentNodeRef Ссылка на исходный документ

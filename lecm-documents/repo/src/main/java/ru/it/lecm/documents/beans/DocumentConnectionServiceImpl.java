@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.beans;
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -290,22 +291,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef) {
-		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
-
-		List<NodeRef> results = new ArrayList<NodeRef>();
-
-		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
-		if (connections != null) {
-			for (AssociationRef assocRef : connections) {
-				NodeRef connectionRef = assocRef.getSourceRef();
-                List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
-				if (!primary.isEmpty() && !isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
-					results.add(connectionRef);
-				}
-			}
-		}
-
-		return results;
+		return getConnectionsWithDocument(documentRef, true);
 	}
 
 	@Override
@@ -534,33 +520,72 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	@Override
-	public List<NodeRef> getConnectionsWithDocument(final NodeRef documentRef, Boolean checkPermissions) {
-		final List<NodeRef> connections = new ArrayList<NodeRef>();
+	public List<NodeRef> getConnectionsWithDocument(final NodeRef documentRef, final Boolean checkPermissions) {
+		final List<NodeRef> connections = new ArrayList<>();
+		final LecmPermissionService service = this.lecmPermissionService;
+
 		if (checkPermissions) {
-			connections.addAll(getConnectionsWithDocument(documentRef));
-		} else {
-			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-				@Override
-				public Void doWork() throws Exception {
-					try {
-						List<AssociationRef> connectionsAssocRefs = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
-						if (connectionsAssocRefs != null) {
-							for (AssociationRef assocRef : connectionsAssocRefs) {
-								NodeRef connectionRef = assocRef.getSourceRef();
-                                List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
-                                if (!primary.isEmpty()) {
-                                    connections.add(connectionRef);
-                                }
+			service.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
+		}
+
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+			@Override
+			public Void doWork() throws Exception {
+				try {
+					List<AssociationRef> connectionsAssocRefs = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
+					if (connectionsAssocRefs != null) {
+						for (AssociationRef assocRef : connectionsAssocRefs) {
+							NodeRef connectionRef = assocRef.getSourceRef();
+							List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+							if (!primary.isEmpty() && (!checkPermissions || (!isArchive(connectionRef) && service.hasReadAccess(connectionRef)) )) {
+								connections.add(connectionRef);
 							}
 						}
-					} catch (InvalidNodeRefException ex) {
-						String msg = String.format("Error while getting connections with document %s. Caused by: %s", documentRef, ex.getMessage());
-						logger.warn(msg);
 					}
-					return null;
+				} catch (InvalidNodeRefException ex) {
+					String msg = String.format("Error while getting connections with document %s. Caused by: %s", documentRef, ex.getMessage());
+					logger.warn(msg);
 				}
-			});
-		}
+				return null;
+			}
+		});
+
 		return connections;
+	}
+
+	@Override
+	public Boolean hasConnectionsWithDocument(final NodeRef documentRef, final Boolean checkPermissions) {
+		final LecmPermissionService service = this.lecmPermissionService;
+
+		if (checkPermissions) {
+			try {
+				service.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
+			} catch (AlfrescoRuntimeException ex) {
+				logger.warn(ex.getMessage(), ex);
+				return false;
+			}
+		}
+
+		return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Boolean>() {
+			@Override
+			public Boolean doWork() throws Exception {
+				try {
+					List<AssociationRef> connectionsAssocRefs = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
+					if (connectionsAssocRefs != null) {
+						for (AssociationRef assocRef : connectionsAssocRefs) {
+							NodeRef connectionRef = assocRef.getSourceRef();
+							List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+							if (!primary.isEmpty() && (!checkPermissions || (!isArchive(connectionRef) && service.hasReadAccess(connectionRef)) )) {
+								return true;
+							}
+						}
+					}
+				} catch (InvalidNodeRefException ex) {
+					String msg = String.format("Error while getting connections with document %s. Caused by: %s", documentRef, ex.getMessage());
+					logger.warn(msg);
+				}
+				return false;
+			}
+		});
 	}
 }

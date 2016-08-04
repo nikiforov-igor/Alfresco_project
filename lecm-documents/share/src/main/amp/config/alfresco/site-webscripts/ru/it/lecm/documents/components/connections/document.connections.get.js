@@ -12,7 +12,7 @@ function main() {
 }
 
 function getConnections(nodeRef, defaultValue) {
-    var url = '/lecm/document/connections/api/records?documentNodeRef=' + nodeRef + "&count=5&exclErrands=true";
+    var url = '/lecm/document/connections/api/records?documentNodeRef=' + nodeRef + "&count=5&checkAccess=true&checkInAccess=false&applyViewMode=false";
     var result = remote.connect("alfresco").get(url);
     if (result.status != 200) {
         if (defaultValue !== undefined) {

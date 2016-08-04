@@ -44,20 +44,20 @@
                                     </a>
                                 </li>
                             </#list>
-                            <#if connections.hasNext == "true">
-                                <li>
-                                    <div class="right-more-link-arrow" onclick="documentConnectionsComponent.onExpand();"></div>
-                                    <div class="right-more-link" onclick="documentConnectionsComponent.onExpand();">${msg('label.connections.more')}</div>
-                                    <div class="clear"></div>
-                                </li>
-                            </#if>
                         </ul>
                     <#else>
                         <div class="block-empty-body right-block-content">
-				    <span class="block-empty faded">
-                    ${msg("message.block.empty")}
-                    </span>
+                            <span class="block-empty faded">
+                            ${msg("message.block.empty")}
+                            </span>
                         </div>
+                    </#if>
+                    <#if connections.hasNext == "true">
+                        <li>
+                            <div class="right-more-link-arrow" onclick="documentConnectionsComponent.onExpand();"></div>
+                            <div class="right-more-link" onclick="documentConnectionsComponent.onExpand();">${msg('label.connections.more')}</div>
+                            <div class="clear"></div>
+                        </li>
                     </#if>
                 </div>
 

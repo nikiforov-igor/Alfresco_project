@@ -2,8 +2,6 @@ package ru.it.lecm.documents.scripts;
 
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -267,6 +265,15 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 			return createScriptable(connections);
 		}
 		return null;
+	}
+
+	public Boolean hasConnectionsWithDocument(String documentNodeRef, Boolean checkPermission) {
+		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+		NodeRef documentRef = new NodeRef(documentNodeRef);
+		if (this.nodeService.exists(documentRef)) {
+			return this.documentConnectionService.hasConnectionsWithDocument(documentRef, checkPermission);
+		}
+		return false;
 	}
 
 	/**
