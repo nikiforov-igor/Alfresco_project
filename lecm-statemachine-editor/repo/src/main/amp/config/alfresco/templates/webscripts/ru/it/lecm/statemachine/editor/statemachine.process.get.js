@@ -81,7 +81,7 @@ if (statemachineId != null && statemachineId != '') {
     model.isFinalizeToUnit = aspects.contains(aspectQName);
 
 
-	var machineStatuses = statuses.getChildren();
+	var machineStatuses = statuses.getChildAssocsByType("lecm-stmeditor:taskStatus");
 	var statuses = [];
 	var endStatus = null;
 
@@ -128,7 +128,7 @@ if (statemachineId != null && statemachineId != '') {
 					if (!userTransition) {
 						transitionLabel = transition.properties["lecm-stmeditor:transitionExpression"];
 					}
-					var transitionStatusLabel;
+					var transitionStatusLabel = "";
 					if (transitionStatus.properties["lecm-stmeditor:endStatus"]) {
 						transitionStatusLabel = "Завершено";
 					} else {
