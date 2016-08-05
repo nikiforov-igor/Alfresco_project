@@ -1,27 +1,31 @@
+var ERRAND_TYPE = 'lecm-errands:document';
+var IS_SYSTEM = 'lecm-connect:is-system';
+/*VIEW_ALL, VIEW_DIRECT, VIEW_NO*/
+var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode();
+
 var documentNodeRef = args['documentNodeRef'];
 var previosDocRef = args['previosDocRef'];
 
+/*filtering*/
 var linkedDocTypes = args['linkedDocTypes'];
 var connectionTypes = args['connectionTypes'];
 var onlyDirect = 'true' == args['onlyDirect'];
 var isErrandCard = 'true' == args['isErrandCard'];
 var isFirstLayer = 'true' == args['isFirstLayer'];
-
 var filters = args['filters'] != null ? args['filters'].split(",") : [];
 var substituteTitle = args['substituteTitle'] != null ? args['substituteTitle'] : "{lecm-document:ext-present-string}";
-
-var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : false;
+var applyViewMode = args['applyViewMode'] ? ("" + args['applyViewMode']) == "true" : true;
+var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : true;
 
 var items = [];
 
-var document = search.findNode(documentNodeRef);
-var excludeErrands = document != null && document.isSubType("lecm-eds-document:base") && exclude;
+var item = search.findNode(documentNodeRef);
 
 if (isFirstLayer) {
     items = [];
     var properties = documentScript.getProperties(documentNodeRef);
     var firstItem = {};
-    var item = search.findNode(documentNodeRef);
+
     firstItem.title = item.properties["lecm-document:present-string"];
     firstItem.nodeRef = documentNodeRef.toString();
     firstItem.docType = item.properties["lecm-document:doc-type"];
@@ -39,62 +43,53 @@ if (isFirstLayer) {
     var numberOfConnectedDocAssocs = connectedDocAssocs === null ? 0 : connectedDocAssocs.length;
 
     firstItem.numberOfChildErrands = numberOfChildErrands;
-    firstItem.numberOfChildElements = numberOfChildErrands  + numberOfPrimaryDocAssocs + numberOfConnectedDocAssocs;
+    firstItem.numberOfChildElements = numberOfChildErrands + numberOfPrimaryDocAssocs + numberOfConnectedDocAssocs;
     if ((isErrandCard && firstItem.numberOfChildErrands > 0) || (!isErrandCard && firstItem.numberOfChildElements > 0)) {
         items.push(firstItem);
     }
-
 } else {
-    var parentConnections = documentConnection.getConnectionsWithDocument(documentNodeRef, false);
-    if (parentConnections != null && parentConnections.length > 0) {
-        for (var i = 0; i < parentConnections.length; i++) {
-            var connection = parentConnections[i];
-            if (connection.assocs["lecm-connect:primary-document-assoc"]) {
-                if (!previosDocRef || connection.assocs["lecm-connect:primary-document-assoc"][0].nodeRef != previosDocRef) {
-                    if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
-                        && checkConnectionType(connection, connectionTypes)
-                        && (!excludeErrands || !connection.assocs["lecm-connect:connected-document-assoc"][0].isSubType("lecm-errands:document"))) {
-                        var skipped = false;
-                        for (var j = 0; j < filters.length; j++) {
-                            skipped = !applyFilter(connection.assocs["lecm-connect:connected-document-assoc"][0], filters[j]);
-                            if (skipped) {
-                                break;
-                            }
-                        }
-                        if (!skipped) {
-                            var obj = evaluateItem(connection, substituteTitle, true);
-                            if (obj != null && (!onlyDirect || (onlyDirect && obj.direction == 'direct'))) {
-                                items.push(obj);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+    var connectedDocument, skipped;
     var rootFolder = documentConnection.getRootFolder(documentNodeRef);
-    var childConnections = rootFolder.getChildren();
-    if (childConnections != null && childConnections.length > 0) {
-        for (var i = 0; i < childConnections.length; i++) {
-            var connection = childConnections[i];
-            if (connection.assocs["lecm-connect:connected-document-assoc"]) {
-                if (!previosDocRef || connection.assocs["lecm-connect:connected-document-assoc"][0].nodeRef != previosDocRef) {
-                    if (checkConnectedDocType(connection.assocs["lecm-connect:connected-document-assoc"][0], linkedDocTypes)
-                        && checkConnectionType(connection, connectionTypes)
-                        && (!excludeErrands || !connection.assocs["lecm-connect:connected-document-assoc"][0].isSubType("lecm-errands:document"))) {
-                        if (filters != null) {
-                            var skipped = false;
+    if (rootFolder != null) {
+        var directConnections = rootFolder.getChildren();
+
+        var directItemsSystem = [];
+        var directItemsUser = [];
+
+        if (directConnections != null && directConnections.length > 0) {
+            for (var i = 0; i < directConnections.length; i++) {
+                var directConnection = directConnections[i];
+
+                if (directConnection.assocs["lecm-connect:connected-document-assoc"]) {
+                    if (!previosDocRef || directConnection.assocs["lecm-connect:connected-document-assoc"][0].nodeRef != previosDocRef) {
+                        connectedDocument = directConnection.assocs["lecm-connect:connected-document-assoc"][0];
+                        if (checkConnectedDocType(connectedDocument, linkedDocTypes)
+                            && checkConnectionType(directConnection, connectionTypes)) {
+                            skipped = false;
                             for (var j = 0; j < filters.length; j++) {
-                                skipped = !applyFilter(connection.assocs["lecm-connect:connected-document-assoc"][0], filters[j]);
+                                skipped = !applyFilter(connectedDocument, filters[j]);
                                 if (skipped) {
                                     break;
                                 }
                             }
                             if (!skipped) {
-                                var obj = evaluateItem(connection, substituteTitle, false);
-                                if (obj != null) {
-                                    items.push(obj);
+                                var objDirect = evaluateItem(directConnection, substituteTitle, false);
+                                if (objDirect != null) {
+                                    if (!isErrandCard) {
+                                        if (lecmPermission.hasReadAccess(connectedDocument) || (applyViewMode && 'VIEW_NO' !== viewLinksMode)) {
+                                            /*Системные связи с документами всех типов, кроме поручений*/
+                                            if (directConnection.properties[IS_SYSTEM]) {
+                                                if (!exclude || !connectedDocument.isSubType(ERRAND_TYPE)) {
+                                                    directItemsSystem.push(objDirect);
+                                                }
+                                            } else {
+                                                /*Пользовательские связи с документами всех типов*/
+                                                directItemsUser.push(objDirect);
+                                            }
+                                        }
+                                    } else {
+                                        directItemsUser.push(objDirect);
+                                    }
                                 }
                             }
                         }
@@ -103,6 +98,60 @@ if (isFirstLayer) {
             }
         }
     }
+
+    var parentConnections = documentConnection.getConnectionsWithDocument(documentNodeRef, false);
+
+    var inDirectItemsSystem = [];
+    var inDirectItemsUser = [];
+
+    if (parentConnections != null) {
+        for (var i = 0; i < parentConnections.length; i++) {
+            var inDirectConnection = parentConnections[i];
+            if (inDirectConnection.assocs["lecm-connect:primary-document-assoc"]) {
+                if (!previosDocRef || inDirectConnection.assocs["lecm-connect:primary-document-assoc"][0].nodeRef != previosDocRef) {
+                    connectedDocument = inDirectConnection.assocs["lecm-connect:primary-document-assoc"][0];
+                    if (checkConnectedDocType(connectedDocument, linkedDocTypes)
+                        && checkConnectionType(inDirectConnection, connectionTypes)) {
+                        skipped = false;
+                        for (var j = 0; j < filters.length; j++) {
+                            skipped = !applyFilter(inDirectConnection.assocs["lecm-connect:connected-document-assoc"][0], filters[j]);
+                            if (skipped) {
+                                break;
+                            }
+                        }
+                        if (!skipped) {
+                            var inDirectObj = evaluateItem(inDirectConnection, substituteTitle, true);
+                            if (inDirectObj != null && !onlyDirect) {
+                                if (!isErrandCard) {
+                                    if (lecmPermission.hasReadAccess(connectedDocument) || (applyViewMode && 'VIEW_ALL' == viewLinksMode)) {
+                                        /*Системные связи с документами всех типов, кроме поручений*/
+                                        if (inDirectConnection.properties[IS_SYSTEM]) {
+                                            if (!connectedDocument.isSubType(ERRAND_TYPE)) {
+                                                inDirectItemsSystem.push(inDirectObj);
+                                            }
+                                        } else {
+                                            /*Пользовательские связи с документами всех типов*/
+                                            inDirectItemsUser.push(inDirectObj);
+                                        }
+                                    }
+                                } else {
+                                    inDirectItemsUser.push(inDirectObj);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    var itemsSystem = [];
+    var itemsUsers = [];
+
+    itemsSystem = itemsSystem.concat(directItemsSystem).concat(inDirectItemsSystem.reverse());
+    itemsUsers = itemsUsers.concat(directItemsUser).concat(inDirectItemsUser.reverse());
+
+    items = itemsSystem.concat(itemsUsers);
 }
 
 model.items = items;
@@ -178,7 +227,7 @@ function evaluateItem(item, substituteTitle, isParent) {
             var numberOfConnectedDocAssocs = connectedDocAssocs === null ? 0 : connectedDocAssocs.length;
 
             itemObj.numberOfChildErrands = numberOfChildErrands;
-            itemObj.numberOfChildElements = numberOfChildErrands  + numberOfPrimaryDocAssocs + numberOfConnectedDocAssocs;
+            itemObj.numberOfChildElements = numberOfChildErrands + numberOfPrimaryDocAssocs + numberOfConnectedDocAssocs;
 
             return itemObj;
         }
