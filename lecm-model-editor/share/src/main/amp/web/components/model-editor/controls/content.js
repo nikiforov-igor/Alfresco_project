@@ -453,35 +453,40 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			modelObject.associationsArray = tmpAssociationsArray;
 			//Tables
 			var tmpTablesArray = [];
+			
+			function isTable(element, index, array) {
+				return this==element.value;
+			}
+			
 			if(YAHOO.lang.isObject(model.types)) {
 				if(YAHOO.lang.isArray(model.types.type)) {
 					if(YAHOO.lang.isObject(model.types.type[0]['mandatory-aspects'].aspect)) {
 						var a = model.types.type[0]['mandatory-aspects'].aspect;
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
-								if(a[i]&&a[i].indexOf('table')!==-1) {
+								if(a[i] && this.tables.some(isTable, a[i])) {
 									tmpTablesArray.push({'table':a[i]});
 								}
 							}
 						} else {
-							if(a&&a.indexOf('table')!==-1) {
+							if(a && this.tables.some(isTable, a)) {
 								tmpTablesArray.push({'table':a});
 							}
 						}
 					}
 				}
 				if(YAHOO.lang.isObject(model.types.type)) {
-					//associations
+					//aspects
 					if(YAHOO.lang.isObject(model.types.type['mandatory-aspects'])) {
 						var a = model.types.type['mandatory-aspects'].aspect;
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
-								if(a[i]&&a[i].indexOf('table')!==-1) {
+								if(a[i] && this.tables.some(isTable, a[i])) {
 									tmpTablesArray.push({'table':a[i]});
 								}
 							}
 						} else {
-							if(a&&a.indexOf('table')!==-1) {
+							if(a && this.tables.some(isTable, a)) {
 								tmpTablesArray.push({'table':a});
 							}
 						}
@@ -510,14 +515,16 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 							}
 							model = YAHOO.lang.JSON.parse(IT.Utils.xml2json(responseXML,'')).model;
 							this.model = this._initModel(model);
-							this.deferredInit.fulfil('initModelContent');
+							//this.deferredInit.fulfil('initModelContent');
+							this._deferredInit();
 						}
 					},
 					failureMessage: this.msg('Не удалось получить модель')
 				});
 			} else {
 				this.model = this._initModel({});
-				this.deferredInit.fulfil('initModelContent');
+				//this.deferredInit.fulfil('initModelContent');
+				this._deferredInit();
 			}
 		},
 
@@ -591,11 +598,10 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 		},
 
 		onReady: function () {
-			this.deferredInit = new Alfresco.util.Deferred(['initModelContent', 'initAssociations', 'initTables', 'initNamespaces'], {
+			this.deferredInit = new Alfresco.util.Deferred(['initAssociations', 'initTables', 'initNamespaces'], {
 				scope: this,
-				fn: this._deferredInit
+				fn: this._initModelContent
 			});
-			this._initModelContent();
 			this._initAssociations();
 			this._initTables();
 			this._initNamespaces();
