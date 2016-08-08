@@ -81,7 +81,7 @@ if (statemachineId != null && statemachineId != '') {
     model.isFinalizeToUnit = aspects.contains(aspectQName);
 
 
-	var machineStatuses = statuses.getChildAssocsByType("lecm-stmeditor:taskStatus");
+	var machineStatuses = statuses.childAssocs["contains"];
 	var statuses = [];
 	var endStatus = null;
 
