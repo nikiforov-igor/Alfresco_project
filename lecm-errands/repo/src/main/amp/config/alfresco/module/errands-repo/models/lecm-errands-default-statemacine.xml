@@ -9720,12 +9720,37 @@ execution.setVariable("requestCancelResult", "");]]></value>
 if (document != null) {
    document.properties["lecm-errands:end-date"] = new Date();
    document.save();
+  
+   /*ALF-5904 ...нужно исполнителя, контролера, автора и инициатора включать в участники документа*/
+   var executorAssoc = document.assocs["lecm-errands:executor-assoc"];
+   if (executorAssoc != null && executorAssoc.length == 1) {
+     var executor = executorAssoc[0];
+     documentMembers.addMember(document, executor, "ERRANDS_READER");
+   }
+  
+   var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
+   if (controllerAssoc != null && controllerAssoc.length == 1) {
+     var controller = controllerAssoc[0];
+     documentMembers.addMember(document, controller, "ERRANDS_READER");
+   }
+  
+   var authorAssoc = document.assocs["lecm-document:author-assoc"];
+    if (authorAssoc != null && authorAssoc.length == 1) {
+      var author = authorAssoc[0];
+      documentMembers.addMember(document, author, "ERRANDS_READER");
+    }
+  
+   var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
+   if (initiatorAssoc != null && initiatorAssoc.length == 1) {
+      var initiator = initiatorAssoc[0];
+      documentMembers.addMember(document, initiator, "ERRANDS_READER");
+   }
 }]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
                                                                 <value>
-                                                                    <![CDATA[Сохранение даты завершения поручения]]></value>
+                                                                    <![CDATA[Сохранение даты завершения поручения и добавление участников]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects/>
