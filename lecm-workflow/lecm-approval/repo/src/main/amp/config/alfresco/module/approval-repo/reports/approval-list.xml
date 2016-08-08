@@ -164,7 +164,7 @@ TYPE:"lecm-meetings:document"]]></property>
 						<property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
 						<property name="lecm-rpeditor:reportCode"><![CDATA[lecm-approval-list-items]]></property>
 						<property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
-						<property name="lecm-rpeditor:reportQuerySort"><![CDATA[col_stageItemCompleteDate|ASC]]></property>
+						<property name="lecm-rpeditor:reportQuerySort"><![CDATA[col_stageItemCompleteDate|ASC,col_created|ASC]]></property>
 						<property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
 						<property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
 						<property name="lecm-rpeditor:loadColumnsFromSQL"><![CDATA[false]]></property>
@@ -240,6 +240,16 @@ TYPE:"lecm-meetings:document"]]></property>
 										<property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
 										<assocs>
 											<assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+										</assocs>
+									</item>
+									<item name="cm:Дата создания" type="lecm-rpeditor:reportDataColumn">
+										<property name="cm:name"><![CDATA[Дата создания]]></property>
+										<property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{cm:created}]]></property>
+										<property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_created]]></property>
+										<property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+										<property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
+										<assocs>
+											<assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
 										</assocs>
 									</item>
 								</items>
