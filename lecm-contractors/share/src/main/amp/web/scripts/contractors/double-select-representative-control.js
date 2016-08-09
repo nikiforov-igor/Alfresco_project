@@ -156,21 +156,22 @@ LogicECM.module = LogicECM.module || {};
             };
 
             if (!this.options.disabled) {
-                var selectedContractors = Object.keys(args[1].selectedItems); // IE 9+
-                var selectedContractor = selectedContractors.length == 1 ? selectedContractors[0] : null;
-
-                var resetValue = false, 
-                    autocompleteConf,
-                    treeConf,
-                    marker;
+                var marker, selectedContractor;
                 
-                if (args[1].markers && args[1].markers[selectedContractor]) {
-                    marker = args[1].markers[selectedContractor];
+                if (args[1].marker) {
+                    marker = args[1].marker;
                 } else {
                     marker = layer == this.options.contractorSelectEvent ? 'contractor' : 'organisation';
                 }
                 
-                if (marker == 'person') {
+                if (marker != 'person') {
+                    var selectedContractors = Object.keys(args[1].selectedItems); // IE 9+
+                    selectedContractor = selectedContractors.length == 1 ? selectedContractors[0] : null;
+
+                    var resetValue = false,
+                        autocompleteConf,
+                        treeConf;
+                } else {
                     selectedContractor = null;
                 }
                 

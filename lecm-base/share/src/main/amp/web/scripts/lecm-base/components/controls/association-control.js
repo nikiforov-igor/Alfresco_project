@@ -26,15 +26,15 @@ LogicECM.module = LogicECM.module || {};
 		if (fieldValue) {
 			this.fieldValues = fieldValue.split(',');
 		}
-		this.createAssociationControlAutocompleteHelper(options);
+		this.createAssociationControlAutocompleteHelper();
 		this.createAssociationControlPicker(options, messages);
 		this.createAssociationControlItems(messages);
 
 		Bubbling.on('searchProperties', this.onItemSearchProperties, this);
 		Bubbling.on('addSelectedItem', this.onAddSelectedItem, this);
 		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this);
-		Bubbling.on('loadOriginalItems', this.onLoadOriginalItems, this);
 		Bubbling.on('pickerClosed', this.onPickerClosed, this);
+        Bubbling.on('loadAllOriginalItems', this.onLoadAllOriginalItems, this);
 
 		return this;
 	};
@@ -69,15 +69,15 @@ LogicECM.module = LogicECM.module || {};
 			datasource: null
 		},
 
-		_renderSelectedItems: function (selectedItems, options) {
+        optionsMap: {},
+
+		_renderSelectedItems: function (selectedItems) {
 
 			var ACUtils = LogicECM.module.AssociationComplexControl.Utils;
 
 			function onAddListener(params) {
 				Event.on(params.id, 'click', this.onRemove, params, this);
 			}
-
-            options = options || this.options;
 
 			selectedItems.forEach(function(selected) {
                 if (selected) {
@@ -86,7 +86,8 @@ LogicECM.module = LogicECM.module || {};
                         elem = document.createElement('div'),
                         id = selected.nodeRef.replace(/:|\//g, '_'),
                         itemId = this.id + '-' + id,
-                        notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true);
+                        notSelected = !Selector.query('[id="' + itemId + '"]', this.widgets.selected, true),
+                        options = this.optionsMap[selected.key] || this.options;
 
                     if (notSelected) {
                         if (options.plane || !options.showPath) {
@@ -115,42 +116,12 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
 			}, this);
-            var index, item, removed = [], added = [],
-                el = Dom.get(this.id),
-                value = el.value.split(',');
-
-            if (this.widgets.removed) {
-                for (index in this.fieldValues) {
-                    if (this.fieldValues.hasOwnProperty(index)) {
-                        item = this.fieldValues[index];
-                        if (value.indexOf(item) === -1) {
-                            removed.push(item);
-                        }
-                    }
-                }
-                this.widgets.removed.value = removed.join(',');
-            }
-            if (this.widgets.added) {
-                for (index in value) {
-                    if (value.hasOwnProperty(index)) {
-                        item = value[index];
-                        if (this.fieldValues.indexOf(item) === -1 || this.defaultValues.indexOf(item) !== -1) {
-                            added.push(item);
-                        }
-                    }
-                }
-                this.widgets.added.value = added.join(',');
-            }
 			return this.widgets.selected.childElementCount;
 		},
 
-		createAssociationControlAutocompleteHelper: function (options) {
-			var conditions;
+		createAssociationControlAutocompleteHelper: function () {
 			if (this.options.showAutocomplete) {
-				conditions = this.options.itemsOptions.map(function (item) {
-					return item.itemKey;
-				});
-				this.autocompleteHelper = new Alfresco.util.Deferred(conditions, {
+				this.autocompleteHelper = new Alfresco.util.Deferred(LogicECM.module.AssociationComplexControl.Utils.getItemKeys(this.options.itemsOptions), {
 					scope: this,
 					fn: this.enableAutocomplete
 				});
@@ -171,21 +142,12 @@ LogicECM.module = LogicECM.module || {};
 			for (i in this.widgets) {
 				this.widgets[i].setMessages(messages);
 			}
-            this.fire('resetOriginalValues', {
-                /* Bubbling.fire */
-                fieldValues: Dom.get(this.id).value.split(',')
-            });
 		},
 
-		onLoadOriginalItems: function(layer, args) {
-			var original, options, prop, selected = [];
+		onLoadAllOriginalItems: function(layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
-				original = args[1].original,
-				options = args[1].options;
-				for (prop in original) {
-					selected.push(original[prop]);
-				}
-				this._renderSelectedItems(selected, options);
+                this.optionsMap = args[1].optionsMap;
+                this._renderSelectedItems(args[1].selected);
 			}
 		},
 
@@ -197,11 +159,10 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var nodeData, options, count;
+			var nodeData, count;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].added,
-				options = args[1].options,
-				count = this._renderSelectedItems([nodeData], options);
+				count = this._renderSelectedItems([nodeData]);
 				if (this.widgets.autocomplete) {
 					if (!this.options.endpointMany && count) {
 						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
@@ -254,33 +215,49 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
                 this.widgets.added.value = added.join(',');
-				this.fire('resetOriginalValues', {
-					/* Bubbling.fire */
-					fieldValues: Dom.get(this.id).value.split(',')
-				});
 			}
 		},
 
 		onRemove: function(evt, params) {
-			this.fire('removeSelectedItem', { /* Bubbling.fire */
+			this.fire('removeSelectedItem', {
 				removed: params.nodeData
 			});
 		},
 
 		onPickerClosed: function (layer, args) {
-			var removedKeys, selectedArray = [], selectedKeys, i;
-            var options = args[1].options;
 			if (Alfresco.util.hasEventInterest(this, args)) {
-				removedKeys = Object.keys(args[1].removed);
-                selectedKeys =Object.keys(args[1].selected);
+                var selectedArray = [], i,
+                    selectedKeys = Object.keys(args[1].selected),
+                    removedKeys = Object.keys(args[1].removed),
+                    addedKeys = Object.keys(args[1].added);
+
+                selectedKeys.forEach(function (key) {
+                    selectedArray.push(args[1].selected[key])
+                }, this);
+
+                selectedArray.sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
+
+                this._renderSelectedItems(selectedArray);
+                
                 for (i = 0; i < removedKeys.length; i++) {
-                    this.onRemove(null, {nodeData: args[1].removed[removedKeys[i]]});
+					this.fire('removeSelectedItem', {
+						removed: args[1].removed[removedKeys[i]]
+					});
                 }
-                for (i = 0; i < selectedKeys.length; i++) {
-                    selectedArray.push(args[1].selected[selectedKeys[i]]);
+                
+                addedKeys.sort(function (a, b) {
+                    return args[1].added[a].index - args[1].added[b].index;
+                });
+
+                if (this.widgets.added) {
+                    this.widgets.added.value = Alfresco.util.encodeHTML(addedKeys.join(','));
                 }
+                if (this.widgets.removed) {
+                    this.widgets.removed.value = Alfresco.util.encodeHTML(removedKeys.join(','));
+                }
+                
                 Dom.get(this.id).value = Alfresco.util.encodeHTML(selectedKeys.join(','));
-                this._renderSelectedItems(selectedArray, options);
+                
 				if (this.widgets.autocomplete) {
 					if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
 						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
@@ -288,9 +265,8 @@ LogicECM.module = LogicECM.module || {};
 						Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 					}
 				}
-
-				//заполняем selected
-				/* this.renderSelected(selected) */
+                
+                this.fire('afterChange', {});
 			}
 		},
 
@@ -361,9 +337,8 @@ LogicECM.module = LogicECM.module || {};
 					path: results[0].path,
 					simplePath: results[0].simplePath
 				};
-				this.fire('addSelectedItem', { /* Bubbling.fire */
-					added: node,
-					options: this.options
+				this.fire('addSelectedItem', {
+					added: node
 				});
 				this.widgets.autocomplete.getInputEl().value = '';
 				if (!this.options.endpointMany) {
@@ -386,8 +361,7 @@ LogicECM.module = LogicECM.module || {};
 				simplePath: aArgs[2][4]
 			};
 			this.fire('addSelectedItem', { /* Bubbling.fire */
-				added: node,
-				options: this.options
+				added: node
 			});
 			//надо как-то понять что делать с единичным выбором
 			if (this.options.endpointMany) {
@@ -423,10 +397,6 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onPickerButtonClick: function (evt, target) {
-            this.fire('resetOriginalValues', {
-                /* Bubbling.fire */
-                fieldValues: Dom.get(this.id).value.split(',')
-            });
             this.widgets.picker.show();
 		},
 

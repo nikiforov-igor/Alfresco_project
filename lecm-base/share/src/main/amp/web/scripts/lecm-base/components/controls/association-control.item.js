@@ -28,12 +28,13 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		});
 		this._loadRootNode();
 		this._loadSearchProperties();
+		this._loadOriginalValues(fieldValues);
 
 		Bubbling.on('show', this.onShow, this);
 		Bubbling.on('hide', this.onHide, this);
-		Bubbling.on('addSelectedItemToPicker', this.onAddSelectedItem, this);
-		Bubbling.on('removeSelectedItemFromPicker', this.onRemoveSelectedItem, this);
-		Bubbling.on('resetOriginalValues', this.resetOriginalValues, this);
+		Bubbling.on('addItemToControlItems', this.onAddSelectedItem, this);
+		Bubbling.on('removeSelectedItem', this.onRemoveSelectedItem, this); 
+		Bubbling.on('removeSelectedItemFromPicker', this.onRemoveSelectedItemFromPicker, this);
 
 		return this;
 	};
@@ -51,6 +52,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		currentState: {
 			original: {},
 			selected: {}, //выбранные элементы, текущее состояние
+			temporarySelected: {}, //выбранные в пикере (до нажатия ОК)
 			nodeData: null,
 			skipItemsCount: null
 		},
@@ -116,7 +118,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					if (createLink) {
 						var tr = this.getTrEl(record);
 						if (tr) {
-							tr.hidden =  !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.owner.options, this.owner.currentState.selected, this.owner.parentControl);
+							tr.hidden =  !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl);
 						}
 						YAHOO.util.Event.on(createLink, 'click', this.owner._fnCreateNewItemHandler, this.owner, true);
 					}
@@ -152,7 +154,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			if (record.getData('selectable')) {
 				nodeRef = record.getData('nodeRef');
-				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.selected, this.owner.parentControl) ? '' : ' hidden ';
+				hidden = ACUtils.canItemBeSelected(nodeRef, this.owner.options, this.owner.currentState.temporarySelected, this.owner.parentControl) ? '' : ' hidden ';
 
 				elCell.innerHTML = '<a href="javascript:void(0);"' + hidden + 'title="' + this.owner.msg('form.control.object-picker.add-item') + '" tabindex="0"><i class="icon-plus"></i></a>';
 
@@ -296,75 +298,47 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			});
 		},
 
-		resetOriginalValues: function (layer, args) {
+		_loadOriginalValues: function (fieldValues) {
 
 			function onSuccess(successResponse) {
-				var items =successResponse.json.data.items,
+				var items = successResponse.json.data.items,
 					checkType = this.options.checkType,
-					itemType = this.options.itemType,
-                    item;
-				this.currentState.original = items.reduce(function (prev, curr) {
-					if (!checkType || curr.type === itemType) {
-						prev[curr.nodeRef] = curr;
+					itemType = this.options.itemType;
+
+				this.currentState.original = {};
+
+				items.forEach(function (item, i) {
+					if (!checkType || item.type === itemType) {
+						item.index = i;
+						this.currentState.original[item.nodeRef] = item;
 					}
-					return prev;
-				}, {});
-                //очищаем ранее выбранные
-                for (item in this.currentState.selected) {
-                    if (this.currentState.selected.hasOwnProperty(item)) {
-                        //this.onRemoveSelectedItem('removeSelectedItemFromPicker', {
-                        //    removed: this.currentState.selected[item]
-                        //});
-                        this.fire('removeSelectedItemFromPicker', { /* Bubbling.fire */
-                            removed: this.currentState.selected[item]
-                        });
-                    }
-                }
+				}, this);
+
 				this.currentState.selected = YAHOO.lang.merge(this.currentState.original);
-                //добавляем актуальные выбранные
-                for (item in this.currentState.selected) {
-                    if (this.currentState.selected.hasOwnProperty(item)) {
-                        this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
-                            added: this.currentState.selected[item],
-                            options: this.options,
-                            key: this.key
-                        });
-                    }
-                }
-				this.fire('loadOriginalItems', { /* Bubbling.fire */
-					original: this.currentState.selected,
+				this.currentState.temporarySelected = YAHOO.lang.merge(this.currentState.original);
+				this.fire('loadOriginalItems', {
+					original: this.currentState.temporarySelected,
 					options: this.options,
 					key: this.key
 				});
-				this.fire('afterChange', {
-					key: this.key
-				});
 			}
 
-			function onFailure(failureResponse) {
-			}
-            if (Alfresco.util.hasEventInterest(this, args)) {
-                Alfresco.util.Ajax.jsonPost({
-                    url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
-                    dataObj: {
-                        items: args[1].fieldValues,
-                        itemValueType: 'nodeRef',
-                        itemNameSubstituteString: this.options.nameSubstituteString,
-                        selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
-                        pathRoot: this.options.rootLocation,
-                        pathNameSubstituteString: this.options.treeNodeSubstituteString,
-                        useObjectDescription: this.options.useObjectDescription
-                    },
-                    successCallback: {
-                        scope: this,
-                        fn: onSuccess
-                    },
-                    failureCallback: {
-                        scope: this,
-                        fn: onFailure
-                    }
-                });
-            }
+			Alfresco.util.Ajax.jsonPost({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.pickerItemsScript,
+				dataObj: {
+					items: fieldValues,
+					itemValueType: 'nodeRef',
+					itemNameSubstituteString: this.options.nameSubstituteString,
+					selectedItemsNameSubstituteString: ACUtils.getSelectedItemsNameSubstituteString(this.options),
+					pathRoot: this.options.rootLocation,
+					pathNameSubstituteString: this.options.treeNodeSubstituteString,
+					useObjectDescription: this.options.useObjectDescription
+				},
+				successCallback: {
+					scope: this,
+					fn: onSuccess
+				}
+			});
 		},
 
 		loadData: function () {
@@ -501,16 +475,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			return updatedResponse;
 		},
 
-//		onDatatableRendered: function () {
-//			/* обработка отрисовки датагрида */
-//			var hasRecords = this.widgets.datatable.getRecordSet().getLength();
-//			if (hasRecords) {
-//				Dom.removeClass(this.id + '-datatable', 'hidden');
-//			} else {
-//				Dom.addClass(this.id + '-datatable', 'hidden');
-//			}
-//		},
-
 		onDatatableScroll: function (oArgs) {
 			/* обработка подгрузки новой порции данных */
 			if (oArgs.target.scrollTop + oArgs.target.clientHeight === oArgs.target.scrollHeight) {
@@ -544,7 +508,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				if (!key || key === this.key) {
                     if (this.widgets.datatable) {
                         records = this.widgets.datatable.getRecordSet().getRecords();
-                        this.currentState.selected[nodeData.nodeRef] = nodeData;
+                        this.currentState.temporarySelected[nodeData.nodeRef] = nodeData;
                         records.forEach(function (record) {
                             var tdEl = this.widgets.datatable.getTdEl({
                                 column: this.widgets.datatable.getColumn('add'),
@@ -552,59 +516,65 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
                             });
 							if (IDENT_CREATE_NEW !== record.getData('type')) {
 								if (tdEl.firstChild.firstChild) {
-									tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.selected, this.parentControl);
+									tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), options, this.currentState.temporarySelected, this.parentControl);
 								}
 							} else {
 								if (tdEl.parentElement)	{
-									tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.selected, this.parentControl);
+									tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, options, this.currentState.temporarySelected, this.parentControl);
 								}
 							}
                         }, this);
-                        this.fire('afterChange', {
-                            key: this.key
-                        });
                     }
 				}
 			}
 		},
 
 		onRemoveSelectedItem: function (layer, args) {
-			var nodeData, records, removeHappend = false, i;
-
 			if (Alfresco.util.hasEventInterest (this, args)) {
-				nodeData = args[1].removed;
-				records = this.widgets.datatable.getRecordSet().getRecords();
-                //удаляем из всех пикеров, иначе некорректно отрисуются плюсики
-                for (i = 0; !removeHappend && (i < this.parentControl.options.itemsOptions.length); i++) {
-                    var item = this.parentControl.widgets[this.parentControl.options.itemsOptions[i].itemKey];
-                    if (item.currentState.selected.hasOwnProperty(nodeData.nodeRef)) {
-                        delete item.currentState.selected[nodeData.nodeRef];
-                        removeHappend = true;
-                    }
-                }
+				this.removeSelectedItem(args[1].removed, true);
+			}
+		},
 
-				records./*filter(function (record) {
-					return record.getData('nodeRef') === this.nodeRef;
-				}, nodeData).*/forEach(function (record) {
-					var tdEl = this.widgets.datatable.getTdEl({
-						column: this.widgets.datatable.getColumn('add'),
-						record: record
-					});
-					if (IDENT_CREATE_NEW !== record.getData('type')) {
-						if (tdEl.firstChild.firstChild) {
-							tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.selected, this.parentControl);
-						}
-					} else {
-						if (tdEl.parentElement)	{
-							tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.selected, this.parentControl);
-						}
-					}
-				}, this);
-				if (removeHappend) {
-					this.fire('afterChange', {
-						key: this.key
-					});
+		onRemoveSelectedItemFromPicker: function (layer, args) {
+			if (Alfresco.util.hasEventInterest (this, args)) {
+				this.removeSelectedItem(args[1].removed, false);
+			}
+		},
+		
+		removeSelectedItem: function(nodeData, fireChangeAction) {
+			var records, removeHappens = false, i;
+			records = this.widgets.datatable.getRecordSet().getRecords();
+			//удаляем из всех пикеров, иначе некорректно отрисуются плюсики\
+			for (i = 0; !removeHappens && (i < this.parentControl.options.itemsOptions.length); i++) {
+				var item = this.parentControl.widgets[this.parentControl.options.itemsOptions[i].itemKey];
+				if (item.currentState.temporarySelected.hasOwnProperty(nodeData.nodeRef)) {
+					delete item.currentState.temporarySelected[nodeData.nodeRef];
+					removeHappens = true;
 				}
+			}
+
+			records.forEach(function (record) {
+				var tdEl = this.widgets.datatable.getTdEl({
+					column: this.widgets.datatable.getColumn('add'),
+					record: record
+				});
+				if (IDENT_CREATE_NEW !== record.getData('type')) {
+					if (tdEl.firstChild.firstChild) {
+						tdEl.firstChild.firstChild.hidden = !ACUtils.canItemBeSelected(record.getData('nodeRef'), this.options, this.currentState.temporarySelected, this.parentControl);
+					}
+				} else if (tdEl.parentElement)	{
+					tdEl.parentElement.hidden = !ACUtils.canItemBeSelected(IDENT_CREATE_NEW, this.options, this.currentState.temporarySelected, this.parentControl);
+				}
+			}, this);
+
+			for (var prop in item.currentState.temporarySelected) {
+				if (item.currentState.temporarySelected[prop].index > nodeData.index) {
+					item.currentState.temporarySelected[prop].index--;
+				}
+			}
+			
+			if (fireChangeAction && removeHappens) {
+				this.fire('afterChange', {});
 			}
 		},
 
@@ -633,8 +603,25 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		},
 
 		hide: function (reset) {
+			var prop;
 			if (reset) {
-				this.currentState.selected = YAHOO.lang.merge(this.currentState.original);
+				this.currentState.temporarySelected = {};
+				for (prop in this.currentState.selected) {
+					this.currentState.temporarySelected[prop] = YAHOO.lang.merge(this.currentState.selected[prop]);
+				}
+
+				this.fire('restorePreviousValues', {
+					original: this.currentState.original,
+					selected: this.currentState.temporarySelected,
+					options: this.options,
+					key: this.key
+				});
+				
+			} else {
+				this.currentState.selected = {};
+				for (prop in this.currentState.temporarySelected) {
+					this.currentState.selected[prop] = YAHOO.lang.merge(this.currentState.temporarySelected[prop]);
+				}
 			}
 			/* скрытие контрола */
 			Dom.addClass(this.id, 'hidden');
@@ -767,10 +754,6 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
                                             key: this.key
                                         });
                                     }
-
-                                    //this.fire('afterChange', {
-                                    //    key: this.key
-                                    //});
                                 }
                             },
                             failureCallback: {

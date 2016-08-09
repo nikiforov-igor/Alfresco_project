@@ -81,8 +81,6 @@ LogicECM.module = LogicECM.module || {};
 
 		alreadyShowCreateNewLink: false,
 
-        selectedItemsMarkers: {},
-
 		options:
 		{
 			// скрывать ли игнорируемые ноды в дереве
@@ -1042,42 +1040,8 @@ LogicECM.module = LogicECM.module || {};
                                             }
                                         });
                                 }
-
-                                if (this.options.markNodes && ((this.options.selectedValue && this.options.selectedValue.indexOf(',') == '-1') ||
-                                    (this.options.selectedValue && this.options.currentValue && this.options.currentValue.indexOf(',') == '-1'))) {
-
-                                    Alfresco.util.Ajax.jsonRequest({
-                                        url: Alfresco.constants.PROXY_URI + '/lecm/contractors/hasIsOrganizationAspect',
-                                        method: "GET",
-                                        dataObj:
-                                        {
-                                            nodeRef: this.options.selectedValue ? this.options.selectedValue : this.options.currentValue
-                                        },
-                                        successCallback:
-                                        {
-                                            fn: function (response) {
-                                                var items = response.json.result;
-
-                                                for (var i in items) {
-                                                    this.selectedItemsMarkers[i] = items[i] ? 'organisation' : 'contractor';
-                                                }
-
-                                                this._loadSelectedItems(this.options.clearFormsOnStart, true);
-                                            },
-                                            scope: this
-                                        },
-                                        failureCallback:
-                                        {
-                                            fn: function () {
-                                                this._loadSelectedItems(this.options.clearFormsOnStart, true);
-                                            },
-                                            scope: this
-                                        }
-                                    });
-
-                                } else {
-                                    this._loadSelectedItems(this.options.clearFormsOnStart, true);
-                                }
+                                
+                                this._loadSelectedItems(this.options.clearFormsOnStart, true);
 
                                 if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
                                     this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren);
@@ -1924,40 +1888,7 @@ LogicECM.module = LogicECM.module || {};
                         fieldId: this.options.fieldId
                     };
                     
-                    if (this.options.markNodes && Object.keys(this.selectedItems).length == 1) {
-                        Alfresco.util.Ajax.jsonRequest({
-                            url: Alfresco.constants.PROXY_URI + '/lecm/contractors/hasIsOrganizationAspect',
-                            method: "GET",
-                            dataObj:
-                            {
-                                nodeRef: Object.keys(this.selectedItems)[0]
-                            },
-                            params: params,
-                            successCallback:
-                            {
-                                fn: function (response) {
-                                    var items = response.json.result;
-                                    
-                                    for (var i in items) {
-                                        this.selectedItemsMarkers[i] = items[i] ? 'organisation' : 'contractor';
-                                    }
-
-                                    response.config.params.markers = this.selectedItemsMarkers;
-                                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, response.config.params);
-                                },
-                                scope: this
-                            },
-                            failureCallback:
-                            {
-                                fn: function (response) {
-                                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, response.config.params);
-                                },
-                                scope: this
-                            }
-                        });
-                    } else {
-                        YAHOO.Bubbling.fire(this.options.changeItemsFireAction, params);    
-                    }
+                    YAHOO.Bubbling.fire(this.options.changeItemsFireAction, params);
                 }
             }
         },

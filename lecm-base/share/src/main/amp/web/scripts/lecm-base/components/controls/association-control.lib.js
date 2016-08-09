@@ -154,6 +154,16 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 			return result;
 		},
+		
+		getItemKeys: function (itemsOptions) {
+			return itemsOptions.map(function (item) {
+				return item.itemKey;
+			});
+		},
+		
+		sortByIndex: function (a, b) {
+			return a.index - b.index;
+		}
 
 	};
 })();
