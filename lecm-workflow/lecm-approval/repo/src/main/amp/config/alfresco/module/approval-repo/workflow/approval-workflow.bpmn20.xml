@@ -315,8 +315,57 @@
   var initiator;
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
+				  
+	var filename = attachment.properties["cm:name"];
+	var existingFile = currentStageItem.childByNamePath(filename);
+	var parent = attachment.getParent();
+	if (existingFile !== null)
+	{
+		// Upload component was configured to find a new unique name for clashing filenames
+		var counter = 1,
+				tmpFilename,
+				dotIndex;
+
+		while (existingFile !== null)
+		{
+			dotIndex = filename.lastIndexOf(".");
+			if (dotIndex == 0)
+			{
+				// File didn't have a proper 'name' instead it had just a suffix and started with a ".", create "1.txt"
+				tmpFilename = counter + filename;
+			} else if (dotIndex > 0)
+			{
+				// Filename contained ".", create "filename-1.txt"
+				tmpFilename = filename.substring(0, dotIndex) + "-" + counter + filename.substring(dotIndex);
+			} else
+			{
+				// Filename didn't contain a dot at all, create "filename-1"
+				tmpFilename = filename + "-" + counter;
+			}
+			existingFile = currentStageItem.childByNamePath(tmpFilename);
+			if (existingFile==null) {
+				existingFile = parent.childByNamePath(tmpFilename);
+			}
+			counter++;
+		}
+		filename = tmpFilename;
+		attachment.properties["cm:name"]=filename;
+		attachment.save();
+	}
+				  
     attachment.move(stageItem);
-    approval.copyToDocumentAttachmentCategory(attachment, document);
+				  
+	var filename;
+	if (decision == 'APPROVED') {
+		filename = 'Согласовано';
+	} else if (decision == 'APPROVED_WITH_REMARK') {
+		filename = 'Согласовано c замечаниями';
+	} else {
+		filename = 'Отклонено';
+	}
+
+	filename += ' - ' + employee.properties["lecm-orgstr:employee-short-name"];
+    approval.copyToDocumentAttachmentCategory(attachment, document, filename);
   }
   stageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
