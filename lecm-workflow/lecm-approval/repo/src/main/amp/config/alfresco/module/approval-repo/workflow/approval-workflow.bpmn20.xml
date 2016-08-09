@@ -473,61 +473,96 @@
           </activiti:taskListener>
           <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
-              <activiti:string><![CDATA[(function(){ /* complete multi */
-  /* получаем настоящий execution */
-  var realExecution = (execution.parent) ? execution.parent : execution;
-  var decision = task.getVariableLocal('lecmApprove3_decision');
-  var comment = (task.getVariableLocal('bpm_comment') != null) ? '' + task.getVariableLocal('bpm_comment') : null;
-  var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
-  var routeInterruptAfterReject = realExecution.getVariable('routeInterruptAfterReject').booleanValue();
-  var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
-  var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
-  var document = bpm_package.children[0];
-  var employee = task.getVariableLocal('effectiveEmployee');
-  var initiator;
-  task.setVariable('isCompleted', isCompleted);
-  /* внутрь stageItem перемещаем загруженный файл с комментарием */
-  if (attachment) {
-    attachment.move(currentStageItem);
+              <activiti:string><![CDATA[(function () { /* complete multi */
+	/* получаем настоящий execution */
+	var realExecution = (execution.parent) ? execution.parent : execution;
+	var decision = task.getVariableLocal('lecmApprove3_decision');
+	var comment = (task.getVariableLocal('bpm_comment') != null) ? '' + task.getVariableLocal('bpm_comment') : null;
+	var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
+	var routeInterruptAfterReject = realExecution.getVariable('routeInterruptAfterReject').booleanValue();
+	var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
+	var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
+	var document = bpm_package.children[0];
+	var employee = task.getVariableLocal('effectiveEmployee');
+	var initiator;
+	task.setVariable('isCompleted', isCompleted);
+	/* внутрь stageItem перемещаем загруженный файл с комментарием */
+	if (attachment) {
+		var filename = attachment.properties["cm:name"];
+		var existingFile = currentStageItem.childByNamePath(filename);
+		var parent = attachment.getParent();
+		if (existingFile !== null)
+		{
+			// Upload component was configured to find a new unique name for clashing filenames
+			var counter = 1,
+					tmpFilename,
+					dotIndex;
 
-    var filename;
+			while (existingFile !== null)
+			{
+				dotIndex = filename.lastIndexOf(".");
+				if (dotIndex == 0)
+				{
+					// File didn't have a proper 'name' instead it had just a suffix and started with a ".", create "1.txt"
+					tmpFilename = counter + filename;
+				} else if (dotIndex > 0)
+				{
+					// Filename contained ".", create "filename-1.txt"
+					tmpFilename = filename.substring(0, dotIndex) + "-" + counter + filename.substring(dotIndex);
+				} else
+				{
+					// Filename didn't contain a dot at all, create "filename-1"
+					tmpFilename = filename + "-" + counter;
+				}
+				existingFile = currentStageItem.childByNamePath(tmpFilename);
+				if (existingFile==null) {
+					existingFile = parent.childByNamePath(tmpFilename);
+				}
+				counter++;
+			}
+			filename = tmpFilename;
+			attachment.properties["cm:name"]=filename;
+			attachment.save();
+		}
+		attachment.move(currentStageItem);
+		var filename;
 
-    if (decision == 'APPROVED') {
-      filename = 'Согласовано';
-    } else if (decision == 'APPROVED_WITH_REMARK') {
-      filename = 'Согласовано c замечаниями';
-    } else {
-      filename = 'Отклонено';
-    }
+		if (decision == 'APPROVED') {
+			filename = 'Согласовано';
+		} else if (decision == 'APPROVED_WITH_REMARK') {
+			filename = 'Согласовано c замечаниями';
+		} else {
+			filename = 'Отклонено';
+		}
 
-    filename += ' - ' + employee.properties["lecm-orgstr:employee-short-name"];
-
-    approval.copyToDocumentAttachmentCategory(attachment, document, filename);
-  }
-  currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
-  currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
-  currentStageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
-  currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
-  currentStageItem.properties['lecmApproveAspects:hasComment'] = !!(comment || attachment);
-  currentStageItem.save();
-  /* отбираем ранее нарезанные права */
-  lecmPermission.revokeDynamicRole(document, employee, 'LECM_APPROVER_DYN');
-  /* добавляем в участники как читателя */
-  documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
-  /* уведомление о согласовании */
-  if (notifyAboutEveryDecision) {
-    initiator = realExecution.getVariable('initiatorEmployee');
-    notifications.sendNotification({
-      recipients: [initiator],
-      templateCode: 'APPROVAL_EMPLOYEE_RESOLUTION',
-      templateConfig: {
-          mainObject: document,
-          employee: employee
-      }
-    });
-    /* запись в БЖ о согласовании конкретным участником */
-    businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Сотрудник #object1 принял решение по согласованию документа #mainobject', [employee.nodeRef.toString()]);
-  }
+		filename += ' - ' + employee.properties["lecm-orgstr:employee-short-name"];
+				  
+		approval.copyToDocumentAttachmentCategory(attachment, document, filename);
+	}
+	currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
+	currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
+	currentStageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
+	currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
+	currentStageItem.properties['lecmApproveAspects:hasComment'] = !!(comment || attachment);
+	currentStageItem.save();
+	/* отбираем ранее нарезанные права */
+	lecmPermission.revokeDynamicRole(document, employee, 'LECM_APPROVER_DYN');
+	/* добавляем в участники как читателя */
+	documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
+	/* уведомление о согласовании */
+	if (notifyAboutEveryDecision) {
+		initiator = realExecution.getVariable('initiatorEmployee');
+		notifications.sendNotification({
+			recipients: [initiator],
+			templateCode: 'APPROVAL_EMPLOYEE_RESOLUTION',
+			templateConfig: {
+				mainObject: document,
+				employee: employee
+			}
+		});
+		/* запись в БЖ о согласовании конкретным участником */
+		businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Сотрудник #object1 принял решение по согласованию документа #mainobject', [employee.nodeRef.toString()]);
+	}
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
