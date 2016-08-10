@@ -463,6 +463,11 @@
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
     </bean>
 
+    <bean id="inTwoWorkingDaysProcessor" class="ru.it.lecm.base.processors.InTwoWorkingDaysProcessor" parent="searchQueryBaseProccesor">
+		<property name="id" value="IN_TWO_WORKING_DAYS"/>
+		<property name="calendarBean" ref="WorkCalendarService"/>
+	</bean>
+
 	<bean id="searchQueryProcessorWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SearchQueryProcessorScript">
 		<property name="extensionName">
 			<value>searchQueryProcessor</value>
