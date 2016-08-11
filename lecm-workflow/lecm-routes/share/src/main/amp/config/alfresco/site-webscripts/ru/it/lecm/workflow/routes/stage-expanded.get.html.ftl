@@ -21,6 +21,7 @@
 		overrideSortingWith: false,
 		expandable: false,
 		showActionColumn: ${editable?string},
+		moveLock: false,
 		<#if editable>
 		actions: [{
 			type:"datagrid-action-link-${datagridId}",
@@ -62,35 +63,45 @@
 
 <#if editable>
 
-	function onMoveTableRow(direction, rowData, actionEl, moveRowFunction) {
-		var fields = this.datagridColumns.map(function(element) {
-			return element.name.replace(':', '_');
-		});
-		var nameSubstituteStrings = this.datagridColumns.map(function(element) {
-			return element.nameSubstituteString;
-		});
-		Alfresco.util.Ajax.jsonPost({
-			url: Alfresco.constants.PROXY_URI + "lecm/workflow/routes/changeStageItemOrder?direction=" + direction,
-			dataObj: {
-				nodeRef: rowData.nodeRef,
-				fields: fields.join(','),
-				nameSubstituteStrings: nameSubstituteStrings.join(',')
-			},
-			successCallback: {
-				scope: this,
-				fn: function (successResponse) {
-					var dataTable = this.widgets.dataTable;
-					var count = dataTable.getRecordSet().getLength();
-					var numSelectItem = dataTable.getTrIndex(actionEl);
-					if (this.widgets.paginator) {
-						numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
-					}
-					var record1 = dataTable.getRecord(numSelectItem);
-					moveRowFunction.call(this, dataTable, count, numSelectItem, record1, successResponse.json.firstItem, successResponse.json.secondItem);
-				}
-			},
-			failureMessage: this.msg('message.failure')
-		});
+	function onMoveTableRow(direction, rowData, actionEl, moveRowFunction, moveLock) {
+		if (!moveLock) {
+            moveLock = true;
+            var fields = this.datagridColumns.map(function (element) {
+                return element.name.replace(':', '_');
+            });
+            var nameSubstituteStrings = this.datagridColumns.map(function (element) {
+                return element.nameSubstituteString;
+            });
+            Alfresco.util.Ajax.jsonPost({
+                url: Alfresco.constants.PROXY_URI + "lecm/workflow/routes/changeStageItemOrder?direction=" + direction,
+                dataObj: {
+                    nodeRef: rowData.nodeRef,
+                    fields: fields.join(','),
+                    nameSubstituteStrings: nameSubstituteStrings.join(',')
+                },
+                successCallback: {
+                    scope: this,
+                    fn: function (successResponse) {
+                        var dataTable = this.widgets.dataTable;
+                        var count = dataTable.getRecordSet().getLength();
+                        var numSelectItem = dataTable.getTrIndex(actionEl);
+                        if (this.widgets.paginator) {
+                            numSelectItem = numSelectItem + ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+                        }
+                        var record1 = dataTable.getRecord(numSelectItem);
+                        moveRowFunction.call(this, dataTable, count, numSelectItem, record1, successResponse.json.firstItem, successResponse.json.secondItem);
+                        moveLock = false;
+                    }
+                },
+                failureCallback: {
+                    scope: this,
+                    fn: function () {
+                        moveLock = false;
+                    }
+                },
+                failureMessage: this.msg('message.failure')
+            });
+        }
 	}
 
 	LogicECM.CurrentModules["${id}"].onMoveTableRowUp = function (rowData, actionEl, actionsConfig, confirmFunction) {
@@ -108,7 +119,7 @@
 					dataTable.addRow(firstItem, numSelectItem - 1);
 				}
 			}
-		});
+		}, LogicECM.CurrentModules["${id}"].moveLock);
 	};
 	LogicECM.CurrentModules["${id}"].onMoveTableRowDown = function (rowData, actionEl, actionsConfig, confirmFunction) {
 		onMoveTableRow.call(this, 'down', rowData, actionEl, function (dataTable, count, numSelectItem, record1, firstItem, secondItem) {
@@ -123,7 +134,7 @@
 				//если запись не самая верхняя, добавляем ее
 				dataTable.addRow(firstItem, numSelectItem + 1);
 			}
-		});
+		}, LogicECM.CurrentModules["${id}"].moveLock);
 	};
 	<#if isApproval>
         LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
