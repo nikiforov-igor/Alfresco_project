@@ -305,7 +305,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
                     {
                         List<ChildAssociationRef> assocList = nodeService.getChildAssocs(result);
                         result = nodeService.getChildByName(result, ContentModel.ASSOC_CONTAINS, name);
-                        logger.debug("getChildByName: " + name + ", result: " + result);
+                        logger.trace("getChildByName: " + name + ", result: " + result);
                         result = checkChildSearch(result, assocList, name);
                     }
                     catch (AccessDeniedException ade)
