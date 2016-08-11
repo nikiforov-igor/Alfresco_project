@@ -2204,7 +2204,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		try {
 			results = searchService.query(sp);
 			if (results != null && results.length() > 0) {
-				return getOrg(results.getNodeRef(0), getRootUnit());
+				return results.getNodeRef(0);
 			}
 		} finally {
 			if (results != null) {

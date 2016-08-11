@@ -24,12 +24,17 @@
 
         if (formId != null) {
             if (organization && organization.nodeRef && organization.nodeRef.length > 0) {
+                if (currentOrganization == null) {
+                    currentOrganization = organization.nodeRef;
+                }
+                
                 Alfresco.util.Ajax.jsonGet({
                     url: Alfresco.constants.PROXY_URI + '/lecm/orgstructure/api/getUnitByOrg',
                     dataObj: {
-                        nodeRef: organization.nodeRef
+                        nodeRef: currentOrganization
                     },
                     successCallback: {
+                        scope: this,
                         fn: function (response) {
                             var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
                             LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
@@ -38,7 +43,12 @@
                                 resetValue:currentOrganization != organization.nodeRef
                             });
                             currentOrganization = organization.nodeRef;
+
+                            YAHOO.Bubbling.fire("routeOrganizationSelected", {
+                                organization: currentOrganization
+                            });
                         }
+                        
                     },
                     failureMessage: Alfresco.util.message('message.failure')
                 });
@@ -50,11 +60,10 @@
                     currentValue: ""
                 });
                 LogicECM.module.Base.Util.disableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
+                YAHOO.Bubbling.fire("routeOrganizationSelected", {
+                    organization: currentOrganization
+                });
             }
-            // обновим контрол с этапами
-            YAHOO.Bubbling.fire("routeOrganizationSelected", {
-                organization: currentOrganization
-            });
         }
     }
 
