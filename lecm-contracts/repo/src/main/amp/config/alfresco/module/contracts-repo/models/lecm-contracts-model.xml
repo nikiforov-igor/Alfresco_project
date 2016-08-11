@@ -189,7 +189,7 @@
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-contractor:contractor-type</class>
+						<class>cm:cmobject</class>
 						<mandatory>true</mandatory>
 						<many>false</many>
 					</target>
@@ -248,8 +248,8 @@
 				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
 				<aspect>lecm-contract-table-structure:table-stages-aspect</aspect>
 				<aspect>lecmSignAspects:signingDetailsAspect</aspect>
-                                <aspect>lecm-document-aspects:has-reg-document-data</aspect>
-                                <aspect>lecm-document-aspects:has-reg-project-data</aspect>
+				<aspect>lecm-document-aspects:has-reg-document-data</aspect>
+                <aspect>lecm-document-aspects:has-reg-project-data</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

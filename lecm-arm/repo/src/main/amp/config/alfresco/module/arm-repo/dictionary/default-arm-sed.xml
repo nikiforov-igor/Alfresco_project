@@ -1316,7 +1316,7 @@
                                         <property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-outgoing:contractor-assoc]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[{lecm-contractor:shortname}]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order">5</property>
@@ -4253,7 +4253,7 @@
                                         <property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-outgoing:contractor-assoc]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[{lecm-contractor:shortname}]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order">5</property>
@@ -4961,7 +4961,7 @@
                                         <property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
                                         <property name="lecm-arm:field-name">
                                             <![CDATA[lecm-outgoing:contractor-assoc]]></property>
-                                        <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                        <property name="lecm-arm:field-format-string"><![CDATA[{lecm-contractor:shortname}]]></property>
                                         <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                         <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                         <property name="lecm-arm:order">5</property>
@@ -5594,7 +5594,7 @@
                                 <property name="cm:name"><![CDATA[c78af139-3ef1-44e6-86e4-561e4fc6e5d9]]></property>
                                 <property name="lecm-arm:field-title"><![CDATA[Контрагент]]></property>
                                 <property name="lecm-arm:field-name"><![CDATA[lecm-contract:partner-assoc]]></property>
-                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[{lecm-contractor:shortname}]]></property>
                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:order">3</property>
@@ -5670,7 +5670,7 @@
                                 <property name="lecm-arm:field-title"><![CDATA[Контрагент]]></property>
                                 <property name="cm:name"><![CDATA[be1419c9-6514-4832-836c-d44776db4ed5]]></property>
                                 <property name="lecm-arm:field-name"><![CDATA[lecm-contract:partner-assoc]]></property>
-                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[{lecm-contractor:shortname}]]></property>
                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:order">1</property>
@@ -5767,7 +5767,7 @@
                                 <property name="lecm-arm:field-title"><![CDATA[Контрагент]]></property>
                                 <property name="cm:name"><![CDATA[63cb1d04-f7f0-41c9-a3e8-a2d0974e1bc9]]></property>
                                 <property name="lecm-arm:field-name"><![CDATA[lecm-contract:partner-assoc]]></property>
-                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[{lecm-contractor:shortname}]]></property>
                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:order">1</property>
@@ -5879,7 +5879,7 @@
                                 <property name="lecm-arm:field-title"><![CDATA[Контрагент]]></property>
                                 <property name="cm:name"><![CDATA[3c2d1b8e-f49b-452a-9d99-20de95dcc62e]]></property>
                                 <property name="lecm-arm:field-name"><![CDATA[lecm-contract:partner-assoc]]></property>
-                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[{lecm-contractor:shortname}]]></property>
                                 <property name="lecm-arm:field-by-default"><![CDATA[true]]></property>
                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:order">2</property>

@@ -776,6 +776,9 @@
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 				</field-visibility>
+				<appearance>
+					<field id="lecm-outgoing:recipient-assoc" substituteString="{lecm-outgoing:recipient-assoc/lecm-contractor:shortname}"/>
+				</appearance>
 			</form>
 
 			<!-- Форма атрибутивного поиска -->
