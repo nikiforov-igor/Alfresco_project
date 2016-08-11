@@ -32,6 +32,17 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                  */
                 onReady: function () {
                     var me = this;
+
+                    Dom.addClass(me.id + "-meErrands-parent", "hidden1");
+                    Dom.addClass(me.id + "-issuedByMeErrands-parent", "hidden1");
+                    Dom.addClass(me.id + "-controlledMeErrands-parent", "hidden1");
+                    Dom.addClass(me.id + "-otherErrands-parent", "hidden1");
+
+                    Dom.addClass(me.id + "-meErrands-label", "hidden1");
+                    Dom.addClass(me.id + "-issuedByMeErrands-label", "hidden1");
+                    Dom.addClass(me.id + "-controlledMeErrands-label", "hidden1");
+                    Dom.addClass(me.id + "-otherErrands-label", "hidden1");
+
                     Alfresco.util.Ajax.request({
                         url: Alfresco.constants.PROXY_URI + "/lecm/errands/api/documentErrandsFilteredList",
                         dataObj: {
@@ -40,6 +51,27 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         },
                         successCallback: {
                             fn: function (response) {
+
+                                var k = 0;
+                                if (response.json.meErrands.length > 0) {
+                                    k++;
+                                }
+                                if (response.json.issuedMeErrands.length > 0) {
+                                    k++;
+                                }
+                                if (response.json.controlledMeErrands.length > 0) {
+                                    k++;
+                                }
+                                if (response.json.otherErrands.length > 0) {
+                                    k++;
+                                }
+                                if (k > 1) {
+                                    Dom.removeClass(me.id + "-meErrands-label", "hidden1");
+                                    Dom.removeClass(me.id + "-issuedByMeErrands-label", "hidden1");
+                                    Dom.removeClass(me.id + "-controlledMeErrands-label", "hidden1");
+                                    Dom.removeClass(me.id + "-otherErrands-label", "hidden1");
+                                }
+
                                 me.showErrands(response.json.meErrands, Dom.get(me.id + "-meErrands"));
                                 me.showErrands(response.json.issuedMeErrands, Dom.get(me.id + "-issuedByMeErrands"));
                                 me.showErrands(response.json.controlledMeErrands, Dom.get(me.id + "-controlledMeErrands"));
@@ -57,6 +89,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     container.innerHTML = "";
                     var detail = "";
                     if (errands.length > 0) {
+                        Dom.removeClass(container.id + "-parent", "hidden1");
+
                         var template = "view-metadata?nodeRef={nodeRef}";
                         for (var i = 0; i < errands.length; i++) {
                             var errand = errands[i];
