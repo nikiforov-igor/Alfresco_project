@@ -270,7 +270,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					};
 
 					if (selectedItems.length === 1) {
-						params.marker = selectedItems[0].key;
+						params.marker = this.selected[selectedItems[0]].key;
 						params.selectedItems = this.selected;
 					}
 
