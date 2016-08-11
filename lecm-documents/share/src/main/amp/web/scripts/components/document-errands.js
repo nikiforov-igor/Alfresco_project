@@ -51,16 +51,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 Alfresco.util.Ajax.request({
                     url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/tasks-errands",
                     dataObj: {
-                        htmlid: this.htmlid
+                        htmlid: this.htmlid,
+                        nodeRef: this.options.nodeRef
                     },
                     successCallback: {
                         fn: function(response) {
                             var text = response.serverResponse.responseText;
                             this.expandView(text);
 
-                            this.loadMyErrands(anchor);
+                            this.loadErrandsList(anchor);
 
-                            this.loadErrandsIssuedByMe(anchor);
+                            YAHOO.util.Event.on(this.htmlid + "-errands-filter", "change", this.loadErrandsList, this, true);
                         },
                         scope: this
                     },
@@ -70,46 +71,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 });
             },
 
-            loadMyErrands: function (anchor) {
+            loadErrandsList: function (anchor) {
                 Alfresco.util.Ajax.request({
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/my-errands",
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/errandsList",
                     dataObj: {
                         nodeRef: this.options.nodeRef,
-                        errandsUrl: "/lecm/errands/api/documentMyErrands",
-                        createButton: false,
-                        htmlid: this.htmlid+"_myErrandsList",
-                        label: "my-errands",
-                        isAnchor: (anchor !=null && anchor == "myErrandsList") ? "true" : "false"
+                        htmlid: this.htmlid+"_errandsList",
+                        isAnchor: (anchor !=null && anchor == "errandsList") ? "true" : "false",
+                        filter: Dom.get(this.htmlid + "-errands-filter").value
                     },
                     successCallback: {
                         fn: function(response) {
                             var text = response.serverResponse.responseText;
-                            var listContainer = Dom.get(this.htmlid + "_myErrandsList");
-                            listContainer.innerHTML = text;
-                        },
-                        scope: this
-                    },
-                    failureMessage: this.msg("message.failure"),
-                    scope: this,
-                    execScripts: true
-                });
-            },
-
-            loadErrandsIssuedByMe: function (anchor) {
-                Alfresco.util.Ajax.request({
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/document/my-errands",
-                    dataObj: {
-                        nodeRef: this.options.nodeRef,
-                        errandsUrl: "/lecm/errands/api/documentErrandsIssuedByMe",
-                        createButton: true,
-                        htmlid: this.htmlid+"_errandsIssuedByMeList",
-                        label: "issued-by-me",
-                        isAnchor: (anchor !=null && anchor == "errandsIssuedByMeList") ? "true" : "false"
-                    },
-                    successCallback: {
-                        fn: function(response) {
-                            var text = response.serverResponse.responseText;
-                            var listContainer = Dom.get(this.htmlid + "_errandsIssuedByMeList");
+                            var listContainer = Dom.get(this.htmlid + "_errandsList");
                             listContainer.innerHTML = text;
                         },
                         scope: this

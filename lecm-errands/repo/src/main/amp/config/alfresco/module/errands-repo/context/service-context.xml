@@ -109,6 +109,7 @@
 			</map>
 		</property>
 	<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+	<property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
 	<bean id="errandsScript" parent="baseScript" class="ru.it.lecm.errands.scripts.ErrandsWebScriptBean"

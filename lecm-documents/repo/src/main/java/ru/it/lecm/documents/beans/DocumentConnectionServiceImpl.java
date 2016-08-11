@@ -431,10 +431,14 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_PRIMARY_DOCUMENT);
 		if (connections != null) {
-			NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
-					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
-					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
-					connectionTypeCode);
+			NodeRef connectionType = null;
+
+			if (connectionTypeCode != null) {
+				connectionType = dictionaryService.getDictionaryValueByParam(
+						DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+						DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+						connectionTypeCode);
+			}
 
 			for (AssociationRef assocRef : connections) {
 				NodeRef connectionRef = assocRef.getSourceRef();
@@ -443,8 +447,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 					boolean system = (Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
 					if (!onlySystem || system) {
 						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
-						if (connectionType != null && connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
-								&& connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)) {
+						if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
+								&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
 							List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTED_DOCUMENT);
 							if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
 								NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();

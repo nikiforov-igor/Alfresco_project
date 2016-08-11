@@ -22,6 +22,7 @@ import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -50,6 +51,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public static final int MAX_ITEMS = 1000;
 
     private DocumentService documentService;
+    private DocumentConnectionService documentConnectionService;
     private OrgstructureBean orgstructureService;
     private StateMachineServiceBean stateMachineService;
     private LecmObjectsService lecmObjectsService;
@@ -83,6 +85,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
             this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
     }
 
     public void init() {
@@ -303,17 +309,16 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     private List<NodeRef> getDocumentErrands(NodeRef document, Boolean active, List<QName> roles) {
         if (document == null) {
-            return new ArrayList<NodeRef>();
+            return new ArrayList<>();
         }
 
 
-        List<NodeRef> result = new ArrayList<NodeRef>();
+        List<NodeRef> result = new ArrayList<>();
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 
 
-        List<AssociationRef> documentErrandsAssocs = nodeService.getSourceAssocs(document, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
-        for (AssociationRef documentErrandsAssoc : documentErrandsAssocs) {
-            NodeRef errand = documentErrandsAssoc.getSourceRef();
+        List<NodeRef> documentErrandsDocs = documentConnectionService.getConnectedDocuments(document, null, TYPE_ERRANDS, true);
+        for (NodeRef errand : documentErrandsDocs) {
 
 			boolean hasPermission = lecmPermissionService.hasPermission("_ReadProperties", errand);
 			hasPermission = hasPermission && lecmPermissionService.hasPermission("_ReadAssociations", errand);
@@ -337,11 +342,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                 }
             }
 
-            for (QName role : roles) {
-                if (currentEmployee.equals(findNodeByAssociationRef(errand, role, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
-                    result.add(errand);
-                    break;
+            if (roles != null) {
+                for (QName role : roles) {
+                    if (currentEmployee.equals(findNodeByAssociationRef(errand, role, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
+                        result.add(errand);
+                        break;
+                    }
                 }
+            } else {
+                result.add(errand);
             }
         }
 

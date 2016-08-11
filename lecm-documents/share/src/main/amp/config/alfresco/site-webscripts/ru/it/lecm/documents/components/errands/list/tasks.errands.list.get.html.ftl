@@ -8,12 +8,23 @@
 <div id="${id}_myErrandsList-view-mode-button-group" class="yui-buttongroup connections-view-mode-button-group">
     <input id="${id}-view-mode-radiofield-links" type="radio" name="view-mode-radiofield" value="${msg("errands.list")}" checked />
     <input id="${id}-view-mode-radiofield-tree" type="radio" name="view-mode-radiofield" value="${msg("errands.tree")}" />
+	<span class="errands-list-filter">
+		<select id="${id}-errands-filter">
+			<option value="all">${msg("errandslist.option.all")}</option>
+			<option selected value="active">${msg("errandslist.option.active")}</option>
+			<option value="complete">${msg("errandslist.option.completed")}</option>
+		</select>
+	</span>
+    <#if isErrandsStarter && hasStatemachine && isRegistered>
+        <span class="lecm-dashlet-actions create-errand-action">
+            <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.createChildErrand()" class="add" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</a>
+        </span>
+    </#if>
 </div>
 
 <div class="list-container" id="${id}-listContainer">
     <div class="body scrollableList" id="${id}_results">
-        <div id="${id}_myErrandsList"></div>
-        <div id="${id}_errandsIssuedByMeList"></div>
+        <div id="${id}_errandsList"></div>
     </div>
 </div>
 
@@ -49,13 +60,16 @@
     function viewChanged(event) {
         var graphTreeContainer = Dom.get("${id}-errands-graph-tree");
         var errandsContainer = Dom.get("${id}-listContainer");
+        var errandsFilter = Dom.get("${id}-errands-filter");
 
         if (event.currentTarget.id === "${id}-view-mode-radiofield-links") {
             graphTreeContainer.style.display = "none";
             errandsContainer.style.display = "block";
+	        errandsFilter.style.display = "block";
         } else if (event.currentTarget.id === "${id}-view-mode-radiofield-tree") {
             errandsContainer.style.display = "none";
             graphTreeContainer.style.display = "block";
+	        errandsFilter.style.display = "none";
         }
     }
 
@@ -64,7 +78,8 @@
     YAHOO.util.Event.onContentReady("${id}-errands-graph-tree", function() {
         YAHOO.Bubbling.fire("graphContainerReady", {
             isErrandCard: true,
-            onlyDirect: true
+            onlyDirect: true,
+            onlySystem: true
         });
     });
 })();

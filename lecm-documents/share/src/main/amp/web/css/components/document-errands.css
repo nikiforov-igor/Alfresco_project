@@ -1,9 +1,20 @@
 .errands-list-filter {
-    margin-bottom: 20px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.create-errand-action {
+	display: inline-block;
+	vertical-align: top;
+	padding-top: 5px;
+}
+.create-errand-action.lecm-dashlet-actions .add {
+	margin-left: 13px;
 }
 
 .errands-list-filter > select {
 	margin-left: 13px;
+	height: 28px;
 }
 
 .workflow-task-item .workflow-task-title {

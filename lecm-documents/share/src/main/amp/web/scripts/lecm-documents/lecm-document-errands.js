@@ -10,8 +10,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
     /**
      * YUI Library aliases
      */
-    var Dom = YAHOO.util.Dom,
-            Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom;
 
     LogicECM.module.Errands.Lists = function ErrandsTasks_constructor(htmlId) {
         LogicECM.module.Errands.Lists.superclass.constructor.call(this, "LogicECM.module.Errands.Lists", htmlId, ["button", "container"]);
@@ -23,9 +22,8 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 options: {
                     itemType: "lecm-errands:document",
                     nodeRef: null,
-                    containerId: "",
-                    errandsUrl: "",
-                    anchorId: ""
+                    anchorId: "",
+                    filter: ""
                 },
                 listContainer: null,
                 selected: null,
@@ -33,24 +31,19 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                  * html элемент в котрый помещаем результат
                  */
                 onReady: function () {
-                    this.listContainer = Dom.get(this.options.containerId);
-                    this.selected = Dom.get(this.id + "-errands-filter");
-                    if (this.selected) {
-                        this.loadMyErrands();
-                    }
-                    Event.on(this.id + "-errands-filter", "change", this.loadMyErrands, this, true);
-            },
-
-                loadMyErrands: function () {
+                    var me = this;
                     Alfresco.util.Ajax.request({
-                        url: Alfresco.constants.PROXY_URI + this.options.errandsUrl,
+                        url: Alfresco.constants.PROXY_URI + "/lecm/errands/api/documentErrandsFilteredList",
                         dataObj: {
                             nodeRef: this.options.nodeRef,
-                            filter: (this.selected != null) ? this.selected.value : ""
+                            filter: this.options.filter
                         },
                         successCallback: {
                             fn: function (response) {
-                                this.showErrands(response);
+                                me.showErrands(response.json.meErrands, Dom.get(me.id + "-meErrands"));
+                                me.showErrands(response.json.issuedMeErrands, Dom.get(me.id + "-issuedByMeErrands"));
+                                me.showErrands(response.json.controlledMeErrands, Dom.get(me.id + "-controlledMeErrands"));
+                                me.showErrands(response.json.otherErrands, Dom.get(me.id + "-otherErrands"));
                             },
                             scope: this
                         },
@@ -59,15 +52,14 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         execScripts: true
                     });
                 },
-                    
-            showErrands: function(response) {
-                    this.listContainer.innerHTML = "";
+
+                showErrands: function(errands, container) {
+                    container.innerHTML = "";
                     var detail = "";
-                    if (response.json.errands.length > 0) {
-                        var results = response.json.errands;
+                    if (errands.length > 0) {
                         var template = "view-metadata?nodeRef={nodeRef}";
-                        for (var i = 0; i < results.length; i++) {
-                            var errand = results[i];
+                        for (var i = 0; i < errands.length; i++) {
+                            var errand = errands[i];
                             var status, statusClass;
                             if (errand.isExpired == "true") {
                                 status = this.msg("errandslist.label.overdue");
@@ -122,11 +114,11 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                         detail +=   "</div>";
                         detail +=   "<div style=\"clear: both;\"></div>";
                             detail += "</div>";
-                            this.listContainer.innerHTML += detail;
+                            container.innerHTML += detail;
                         }
                     } else {
                         detail = "<div class=\"workflow-task-line\">" + this.msg("errandslist.label.no-errands") + "</div>"
-                        this.listContainer.innerHTML += detail
+                        container.innerHTML += detail
                     }
                     if (this.options.anchorId != "") {
                         Dom.get(this.options.anchorId).scrollIntoView();

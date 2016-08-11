@@ -10,6 +10,7 @@ var previosDocRef = args['previosDocRef'];
 var linkedDocTypes = args['linkedDocTypes'];
 var connectionTypes = args['connectionTypes'];
 var onlyDirect = 'true' == args['onlyDirect'];
+var onlySystem = 'true' == args['onlySystem'];
 var isErrandCard = 'true' == args['isErrandCard'];
 var isFirstLayer = 'true' == args['isFirstLayer'];
 var filters = args['filters'] != null ? args['filters'].split(",") : [];
@@ -88,7 +89,11 @@ if (isFirstLayer) {
                                             }
                                         }
                                     } else {
-                                        directItemsUser.push(objDirect);
+                                        if (lecmPermission.hasReadAccess(connectedDocument)) {
+                                            if (!onlySystem || directConnection.properties[IS_SYSTEM]) {
+                                                directItemsUser.push(objDirect);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -135,7 +140,11 @@ if (isFirstLayer) {
                                         }
                                     }
                                 } else {
-                                    inDirectItemsUser.push(inDirectObj);
+                                    if (lecmPermission.hasReadAccess(connectedDocument)) {
+                                        if (!onlySystem || inDirectConnection.properties[IS_SYSTEM]) {
+                                            inDirectItemsUser.push(inDirectObj);
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -266,7 +266,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
     public Scriptable getMyDocumentErrands(ScriptNode document, String filter) {
         List<NodeRef> myErrands = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
-                Arrays.asList(ErrandsService.ASSOC_ERRANDS_EXECUTOR, ErrandsService.ASSOC_ERRANDS_CONTROLLER));
+                Arrays.asList(ErrandsService.ASSOC_ERRANDS_EXECUTOR, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS));
         return createScriptable(myErrands);
     }
 
@@ -274,6 +274,23 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         List<NodeRef> errandsIssuedByMe = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
                 Arrays.asList(ErrandsService.ASSOC_ERRANDS_INITIATOR));
         return createScriptable(errandsIssuedByMe);
+    }
+
+    public Scriptable getDocumentErrandsControlledMe(ScriptNode document, String filter) {
+        List<NodeRef> errandsControlledMe = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
+                Arrays.asList(ErrandsService.ASSOC_ERRANDS_CONTROLLER));
+        return createScriptable(errandsControlledMe);
+    }
+
+    public Scriptable getDocumentErrandsOther(ScriptNode document, String filter) {
+        List<NodeRef> errandsAll = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter, null);
+        List<NodeRef> errandsList = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
+                Arrays.asList(ErrandsService.ASSOC_ERRANDS_EXECUTOR, ErrandsService.ASSOC_ERRANDS_CO_EXECUTORS,
+                        ErrandsService.ASSOC_ERRANDS_INITIATOR, ErrandsService.ASSOC_ERRANDS_CONTROLLER));
+
+        errandsAll.removeAll(errandsList);
+
+        return createScriptable(errandsAll);
     }
 
     public Scriptable getActiveErrands(Scriptable paths,int skipCount, int maxItems) {
