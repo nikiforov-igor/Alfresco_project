@@ -40,8 +40,9 @@ public interface ReviewService extends InitializingBean {
 	QName ASSOC_REVIEW_REVIEW_LIST = QName.createQName(REVIEW_INFO_NAMESPACE, "review-list-assoc");
 	QName ASSOC_REVIEW_INFO = QName.createQName(REVIEW_INFO_NAMESPACE, "info-assoc");
 
-    QName PROP_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORGANIZATION = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "selectByOrganization");
-    QName ASSOC_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORG_UNIT = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "selectByOrganizationUnit-assoc");
+    String CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORGANISATION = "ORGANISATION";
+    String CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_UNIT= "UNIT";
+    QName PROP_REVIEW_GLOBAL_SETTINGS_SELECT_BY = QName.createQName(REVIEW_GLOBAL_SETTINGS_NAMESPACE, "selectBy");
 
     Boolean needReviewByCurrentUser(NodeRef document);
 
@@ -69,7 +70,7 @@ public interface ReviewService extends InitializingBean {
 
 	boolean reviewAllowed(NodeRef documentRef);
 
-    Boolean isReviewersByOrganization();
+    boolean isReviewersByOrganization();
 
     List<NodeRef> getPotentialReviewers();
 

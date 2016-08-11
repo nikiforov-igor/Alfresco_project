@@ -3,7 +3,6 @@ package ru.it.lecm.workflow.review;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -341,25 +340,18 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	}
 
 	@Override
-	public Boolean isReviewersByOrganization() {
+	public boolean isReviewersByOrganization() {
 		NodeRef settings = getSettings();
-		if (settings != null) {
-			return (Boolean) nodeService.getProperty(settings, PROP_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORGANIZATION);
-		}
-		return false;
+		return settings == null || !nodeService.getProperty(settings, PROP_REVIEW_GLOBAL_SETTINGS_SELECT_BY).equals(CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_UNIT);
 	}
 
 	@Override
 	public List<NodeRef> getPotentialReviewers() {
 		List<NodeRef> units = new ArrayList<>();
 		if (!isReviewersByOrganization()) {
-			List<AssociationRef> unitAssocs = nodeService.getTargetAssocs(getSettings(), ASSOC_REVIEW_GLOBAL_SETTINGS_SELECT_BY_ORG_UNIT);
-
-			if (unitAssocs != null && !unitAssocs.isEmpty()) {
-				for (AssociationRef unitAssoc : unitAssocs) {
-					units.add(unitAssoc.getTargetRef());
-				}
-			}
+			NodeRef unit = orgstructureBean.getPrimaryOrgUnit(orgstructureBean.getCurrentEmployee());
+			units.add(unit);
+			units.addAll(orgstructureBean.getSubUnits(unit, true));
 		}
 		return getPotentialReviewers(units);
 	}

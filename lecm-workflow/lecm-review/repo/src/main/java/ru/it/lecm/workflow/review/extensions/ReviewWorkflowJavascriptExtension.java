@@ -141,7 +141,7 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
         return new ScriptNode(reviewService.getSettings(), serviceRegistry, getScope());
     }
 
-    public Boolean isReviewersByOrganization() {
+    public boolean isReviewersByOrganization() {
         return reviewService.isReviewersByOrganization();
     }
 

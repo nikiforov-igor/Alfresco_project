@@ -1,12 +1,12 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/pickerchildren.lib.js">
 	function main() {
-		var data = [];
-
-		if (review.isReviewersByOrganization() == false) {
+		var data = [],
+			selectByOrg = !!review.isReviewersByOrganization()
+		if (!!selectByOrg) {
+			data = getPickerChildrenItems();
+		} else {
 			var filter = getFilterForAvailableElement(review.getPotentialReviewers());
 			data = getPickerChildrenItems(filter);
-		} else {
-			data = getPickerChildrenItems();
 		}
 
 		model.parent = data.parent;

@@ -6,8 +6,8 @@
 				<field-visibility>
 					<show id="lecmReviewGlobalSettings:defaultReviewTerm"/>
 					<show id="lecmReviewGlobalSettings:termToNotifyBeforeDeadline"/>
-					<show id="lecmReviewGlobalSettings:selectByOrganization"/>
-					<show id="lecmReviewGlobalSettings:selectByOrganizationUnit-assoc"/>
+					<show id="lecmReviewGlobalSettings:selectBy"/>
+
 				</field-visibility>
 				<appearance>
 					<field id="lecmReviewGlobalSettings:defaultReviewTerm">
@@ -16,22 +16,8 @@
 					<field id="lecmReviewGlobalSettings:termToNotifyBeforeDeadline">
 						<control template="/ru/it/lecm/base-share/components/controls/number.ftl"/>
 					</field>
-					<field id="lecmReviewGlobalSettings:selectByOrganization">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
-							<control-param name="disabledFieldsIfSelect">lecmReviewGlobalSettings:selectByOrganizationUnit-assoc</control-param>
-							<control-param name="hideFieldsIfSelect">lecmReviewGlobalSettings:selectByOrganizationUnit-assoc</control-param>
-						</control>
-					</field>
-					<field id="lecmReviewGlobalSettings:selectByOrganizationUnit-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
-							<control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
-							<control-param name="treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
-							<control-param name="treeNodeTitleSubstituteString">{cm:name}</control-param>
-							<control-param name="plane">false</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="showSelectedItemsPath">false</control-param>
-						</control>
+					<field id="lecmReviewGlobalSettings:selectBy">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
 					</field>
 				</appearance>
 			</form>
