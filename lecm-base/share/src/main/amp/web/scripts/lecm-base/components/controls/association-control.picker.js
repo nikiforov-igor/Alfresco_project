@@ -160,7 +160,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.selected[nodeData.nodeRef].key = key;
 				this.selected[nodeData.nodeRef].index = Object.keys(this.selected).length - 1;
 				this._renderSelectedItems([nodeData]);
-				this.fire('addItemToControlItems', args[1])
+				this.fire('addItemToControlItems', args[1]);
 			}
 		},
 

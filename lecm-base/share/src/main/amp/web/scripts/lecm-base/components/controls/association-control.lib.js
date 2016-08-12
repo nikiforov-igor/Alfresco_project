@@ -90,7 +90,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
                 } else {
                     //проверяем все пикеры, чтобы учесть все выбранные элементы
                     for (i = 0; canSelect && (i < parentControl.options.itemsOptions.length); i++) {
-                        canSelect = Object.keys(parentControl.widgets[parentControl.options.itemsOptions[i].itemKey].currentState.selected).length === 0;
+                        canSelect = Object.keys(parentControl.widgets[parentControl.options.itemsOptions[i].itemKey].currentState.temporarySelected).length === 0;
                     }
                 }
 			}
