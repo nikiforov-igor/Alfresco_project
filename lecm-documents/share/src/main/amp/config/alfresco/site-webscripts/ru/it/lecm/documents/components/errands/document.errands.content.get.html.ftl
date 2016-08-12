@@ -5,9 +5,9 @@
 
 <h2 id="${id}-heading" class="dark">
     ${msg("heading")}
-    <#if data??>
-        <span class="total-errands-count-right <#if data.errands?size == 0>hidden1</#if>">${data.errandsCount?string}</span>
-    </#if>
+    <#--<#if data??>-->
+        <#--<span class="total-errands-count-right <#if data.errands?size == 0>hidden1</#if>">${data.errandsCount?string}</span>-->
+    <#--</#if>-->
     <span class="alfresco-twister-actions">
         <a id="${id}-action-expand" href="javascript:void(0);" class="expand errands-expand" title="${msg("label.expand")}">&nbsp;</a>
     </span>
