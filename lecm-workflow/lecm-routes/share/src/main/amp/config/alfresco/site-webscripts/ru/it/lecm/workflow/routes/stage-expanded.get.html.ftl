@@ -21,7 +21,6 @@
 		overrideSortingWith: false,
 		expandable: false,
 		showActionColumn: ${editable?string},
-		moveLock: false,
 		<#if editable>
 		actions: [{
 			type:"datagrid-action-link-${datagridId}",
@@ -60,12 +59,13 @@
 			'lecmWorkflowRoutes:stageItemOrder'
 		]
 	});
+	LogicECM.CurrentModules["${id}"].moveLock = false;
 
 <#if editable>
 
-	function onMoveTableRow(direction, rowData, actionEl, moveRowFunction, moveLock) {
-		if (!moveLock) {
-            moveLock = true;
+	function onMoveTableRow(direction, rowData, actionEl, moveRowFunction) {
+		if (!this.moveLock) {
+            this.moveLock = true;
             var fields = this.datagridColumns.map(function (element) {
                 return element.name.replace(':', '_');
             });
@@ -90,13 +90,13 @@
                         }
                         var record1 = dataTable.getRecord(numSelectItem);
                         moveRowFunction.call(this, dataTable, count, numSelectItem, record1, successResponse.json.firstItem, successResponse.json.secondItem);
-                        moveLock = false;
+                        this.moveLock = false;
                     }
                 },
                 failureCallback: {
                     scope: this,
                     fn: function () {
-                        moveLock = false;
+                        this.moveLock = false;
                     }
                 },
                 failureMessage: this.msg('message.failure')
@@ -119,7 +119,7 @@
 					dataTable.addRow(firstItem, numSelectItem - 1);
 				}
 			}
-		}, LogicECM.CurrentModules["${id}"].moveLock);
+		});
 	};
 	LogicECM.CurrentModules["${id}"].onMoveTableRowDown = function (rowData, actionEl, actionsConfig, confirmFunction) {
 		onMoveTableRow.call(this, 'down', rowData, actionEl, function (dataTable, count, numSelectItem, record1, firstItem, secondItem) {
@@ -134,7 +134,7 @@
 				//если запись не самая верхняя, добавляем ее
 				dataTable.addRow(firstItem, numSelectItem + 1);
 			}
-		}, LogicECM.CurrentModules["${id}"].moveLock);
+		});
 	};
 	<#if isApproval>
         LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
