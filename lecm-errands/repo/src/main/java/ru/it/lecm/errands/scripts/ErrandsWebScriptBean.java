@@ -293,6 +293,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(errandsAll);
     }
 
+    public Scriptable getDocumentErrandsAll(ScriptNode document, String filter) {
+        List<NodeRef> errandsAll = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter, null);
+        return createScriptable(errandsAll);
+    }
+
     public Scriptable getActiveErrands(Scriptable paths,int skipCount, int maxItems) {
         List<NodeRef> activeErrands= errandsService.getActiveErrands(getElements(Context.getCurrentContext().getElements(paths)), skipCount, maxItems);
         return createScriptable(activeErrands);

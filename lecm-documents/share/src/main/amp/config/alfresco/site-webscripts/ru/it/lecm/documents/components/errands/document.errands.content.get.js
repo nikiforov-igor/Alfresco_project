@@ -12,7 +12,7 @@ function main() {
 }
 
 function getErrands(nodeRef) {
-    var url = "/lecm/errands/api/documentMyErrands?nodeRef=" + args["nodeRef"]
+    var url = "/lecm/errands/api/documentErrandsRightBoard?nodeRef=" + args["nodeRef"]
     + "&filter=" + (args["state"] != null && args["state"] != "" ? args["state"] : "active")
     + "&errandsLimit=" + (args["errandsLimit"] != null ? args["errandsLimit"]  : "-1");
     var result = remote.connect("alfresco").get(url);

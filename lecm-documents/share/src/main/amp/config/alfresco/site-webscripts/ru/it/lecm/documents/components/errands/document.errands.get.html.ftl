@@ -12,7 +12,7 @@
                         contentURL: Alfresco.constants.URL_PAGECONTEXT + "lecm/components/document/document-errands/content",
                         requestParams: {
                             nodeRef: "${args.nodeRef}",
-                            state: "active",
+                            state: "all",
                             errandsLimit: 5,
                             containerHtmlId: "${id}"
                         },

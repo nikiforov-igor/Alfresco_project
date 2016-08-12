@@ -6,7 +6,7 @@
         "latestErrandStartDate": "${latestErrandStartDate?string("dd.MM.yyyy")}",
     </#if>
     "errands": [
-        <#list myErrands as errand>
+        <#list errandsList as errand>
         {
             "nodeRef": "${errand.getNodeRef().toString()}",
             "description": "${errand.properties["lecm-errands:content"]?string}",

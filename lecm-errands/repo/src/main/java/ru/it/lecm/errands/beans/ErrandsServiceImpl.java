@@ -350,12 +350,12 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     }
                 }
             } else {
-                if (stateMachineService.isDraft(errand)) {
-                    continue;
-                }
-                if ("Удалено".equals(status)) {
-                    continue;
-                }
+//                if (stateMachineService.isDraft(errand)) {
+//                    continue;
+//                }
+//                if ("Удалено".equals(status)) {
+//                    continue;
+//                }
             }
 
             if (roles != null) {
