@@ -84,6 +84,12 @@
         <property name="stateMachineHelper" ref="lifecycleStateMachineHelper"/>
 	</bean>
 
+	<bean id="lecmWorkflowDeployer" class="ru.it.lecm.statemachine.LecmWorkflowDeployer">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
+
 	<bean id="lifecycleStateMachineHelper" class="ru.it.lecm.statemachine.LifecycleStateMachineHelper">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
