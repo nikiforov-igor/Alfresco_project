@@ -28,6 +28,7 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.io.Serializable;
 import java.util.*;
@@ -326,6 +327,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 				continue;
 			}
 
+            String status = (String) nodeService.getProperty(errand, StatemachineModel.PROP_STATUS);
+
             if (active != null) {
                 if (active) {
                     if (stateMachineService.hasActiveStatemachine(errand)) {
@@ -335,10 +338,23 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                     } else {
                         continue;
                     }
+                    if ("Удалено".equals(status)) {
+                        continue;
+                    }
                 } else {
                     if (!stateMachineService.isFinal(errand)) {
                         continue;
                     }
+                    if ("Удалено".equals(status)) {
+                        continue;
+                    }
+                }
+            } else {
+                if (stateMachineService.isDraft(errand)) {
+                    continue;
+                }
+                if ("Удалено".equals(status)) {
+                    continue;
                 }
             }
 
