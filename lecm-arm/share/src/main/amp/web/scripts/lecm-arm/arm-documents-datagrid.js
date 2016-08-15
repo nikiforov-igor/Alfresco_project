@@ -68,8 +68,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     datagridMeta.columns = [
                         {
                             dataType: "text",
-                            formsName: "prop_cm_name",
-                            name: "cm:name",
+                            formsName: "prop_lecm-document_present-string",
+                            name: "lecm-document:present-string",
                             label: Alfresco.util.message('lecm.arm.lbl.name'),
                             sortable: true,
                             type: "property"
