@@ -32,6 +32,15 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-connect-types:ml-reverse-name">
+					<title>Reverse name</title>
+					<type>d:mltext</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 				<property name="lecm-connect-types:code">
 					<title>Code</title>
 					<type>d:text</type>

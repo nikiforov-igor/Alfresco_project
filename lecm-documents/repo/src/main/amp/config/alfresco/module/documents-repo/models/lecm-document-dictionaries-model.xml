@@ -33,6 +33,14 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-doc-dic:ml-subject-description">
+					<type>d:mltext</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 		</type>
 	</types>

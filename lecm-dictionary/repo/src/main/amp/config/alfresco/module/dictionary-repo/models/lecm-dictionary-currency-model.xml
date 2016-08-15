@@ -25,6 +25,15 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<property name="lecm-currency:ml-alphabetic-code">
+					<type>d:mltext</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				
 				<property name="lecm-currency:digital-code">
 					<type>d:int</type>
 					<mandatory>true</mandatory>

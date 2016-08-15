@@ -27,9 +27,25 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-events-dic:ml-locations-note">
+                    <type>d:mltext</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
                 <property name="lecm-events-dic:locations-address">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events-dic:ml-locations-address">
+                    <type>d:mltext</type>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -95,6 +111,14 @@
                 <property name="lecm-events-dic:resources-note">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-events-dic:ml-resources-note">
+                    <type>d:mltext</type>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>

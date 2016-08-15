@@ -78,6 +78,7 @@
 			<parent>cm:content</parent>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>
+                <aspect>cm:titled</aspect>
             </mandatory-aspects>
 		</type>
 
@@ -93,6 +94,7 @@
 	        </properties>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>
+                <aspect>cm:titled</aspect>
             </mandatory-aspects>
         </type>
 
