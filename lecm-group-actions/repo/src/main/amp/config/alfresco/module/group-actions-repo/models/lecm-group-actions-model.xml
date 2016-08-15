@@ -28,10 +28,20 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                     <multiple>true</multiple>
+					<index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-group-actions:statuses">
                     <type>d:text</type>
                     <mandatory>false</mandatory>
+					<index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-group-actions:order">
                     <type>d:long</type>

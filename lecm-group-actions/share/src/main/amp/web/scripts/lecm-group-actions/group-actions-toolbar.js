@@ -70,6 +70,8 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
 		        searchButtonsType: 'defaultActive',
 		        newRowButtonType: 'defaultActive'
 	        },
+			
+			oldUseChildSearch: null,
 
             /**
              * FileUpload module instance.
@@ -110,6 +112,10 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                         }
                         datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
                         datagridMeta.sort = datagridMeta.sort ? datagridMeta.sort : "cm:modified|false";
+						if (datagridMeta.useChildQuery && this.oldUseChildQuery==null) {
+							this.oldUseChildQuery = datagridMeta.useChildQuery;
+						}
+						datagridMeta.useChildQuery = false;
                         if (datagridMeta.searchConfig.formData) {
                             if (typeof datagridMeta.searchConfig.formData == "string") {
                                 datagridMeta.searchConfig.formData = YAHOO.lang.JSON.parse(datagridMeta.searchConfig.formData);
@@ -126,6 +132,7 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                             searchNodes: datagridMeta.searchNodes,
                             searchShowInactive: dataGrid.options.searchShowInactive,
                             sort: datagridMeta.sort,
+							useChildQuery: datagridMeta.useChildQuery,
                             useOnlyInSameOrg: datagridMeta.useOnlyInSameOrg,
                             useFilterByOrg: datagridMeta.useFilterByOrg
                         });
@@ -177,9 +184,15 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                                 }
                                 if (nProps <= 1) {
                                     datagridMeta.searchConfig.fullTextSearch = null;
+									if (this.oldUseChildQuery != null) {
+										datagridMeta.useChildQuery = this.oldUseChildQuery;
+									}
                                 }
                             } else {
                                 datagridMeta.searchConfig.fullTextSearch = null;
+								if (this.oldUseChildQuery != null) {
+									datagridMeta.useChildQuery = this.oldUseChildQuery;
+								}
                             }
                         }
                     }
@@ -189,6 +202,7 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                         searchConfig: datagridMeta.searchConfig,
                         searchShowInactive: dataGrid.options.searchShowInactive,
 	                    sort: datagridMeta.sort,
+						useChildQuery: datagridMeta.useChildQuery,
                         useOnlyInSameOrg: datagridMeta.useOnlyInSameOrg,
                         useFilterByOrg: datagridMeta.useFilterByOrg
                     });
