@@ -375,7 +375,7 @@
 
 					</field>
 					<field id="lecmWorkflowRoutes:stageItemComment">
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
 					</field>
 					<field id="cm:contains" label-id="lecm.routers.file.with.notes">
 						<control template="/ru/it/lecm/base-share/components/controls/view-file-link.ftl"/>
