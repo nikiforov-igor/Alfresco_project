@@ -226,7 +226,7 @@ LogicECM.module = LogicECM.module || {};
 
 		onPickerClosed: function (layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
-                var selectedArray = [], i,
+                var selectedArray = [],
                     selectedKeys = Object.keys(args[1].selected),
                     removedKeys = Object.keys(args[1].removed),
                     addedKeys = Object.keys(args[1].added);
@@ -236,14 +236,8 @@ LogicECM.module = LogicECM.module || {};
                 }, this);
 
                 selectedArray.sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
-
-                this._renderSelectedItems(selectedArray);
-                
-                for (i = 0; i < removedKeys.length; i++) {
-					this.fire('removeSelectedItem', {
-						removed: args[1].removed[removedKeys[i]]
-					});
-                }
+				this.widgets.selected.innerHTML = '';
+				this._renderSelectedItems(selectedArray);
                 
                 addedKeys.sort(function (a, b) {
                     return args[1].added[a].index - args[1].added[b].index;
