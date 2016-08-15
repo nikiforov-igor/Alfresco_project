@@ -82,6 +82,14 @@
             </mandatory-aspects>
 		</type>
 
+        <type name="lecm-dic:big_plane_dictionary_values">
+            <title>Dictionary values</title>
+            <parent>cm:content</parent>
+            <mandatory-aspects>
+                <aspect>lecm-dic:aspect_active</aspect>
+            </mandatory-aspects>
+        </type>
+
         <!--Значения иерархического справочника-->
         <type name="lecm-dic:hierarchical_dictionary_values">
             <title>Dictionary values</title>

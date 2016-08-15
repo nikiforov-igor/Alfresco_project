@@ -48,16 +48,28 @@
 	            }).setMessages(${messages});
 
 	    if (rootNode) {
+			var meta = {
+                useFilterByOrg: false,
+                itemType: rootNode.itemType,
+                nodeRef: rootNode.nodeRef,
+                searchConfig: ('lecm-contractor:contractor-type' == rootNode.itemType) ? {
+                    filter: '-ASPECT:"lecm-orgstr-aspects:is-organization-aspect" and ISNOTNULL:"sys:node-dbid"'
+                } : null
+			};
+
+			if (rootNode.plane == "true") {
+                if (meta.searchConfig) {
+                    meta.searchConfig.filter += " and PATH: \"" + rootNode.path + "//*\""
+				} else {
+					meta.searchConfig = {
+						filter: "PATH: \"" + rootNode.path + "//*\""
+					}
+				}
+			}
+
 	        YAHOO.Bubbling.fire("activeGridChanged",
 	                {
-	                    datagridMeta: {
-                            useFilterByOrg: false,
-	                        itemType: rootNode.itemType,
-	                        nodeRef: rootNode.nodeRef,
-							searchConfig: ('lecm-contractor:contractor-type' == rootNode.itemType) ? {
-								filter: '-ASPECT:"lecm-orgstr-aspects:is-organization-aspect" and ISNOTNULL:"sys:node-dbid"'
-							} : null
-	                    },
+	                    datagridMeta: meta,
 	                    bubblingLabel:"${bubblingLabel}"
 	                });
 	    }

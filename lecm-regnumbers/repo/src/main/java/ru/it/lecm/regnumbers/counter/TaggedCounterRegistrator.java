@@ -1,7 +1,8 @@
 package ru.it.lecm.regnumbers.counter;
 
-import java.util.List;
 import org.alfresco.util.PropertyCheck;
+
+import java.util.List;
 
 /**
  * Бин используется для задания тегированных счетчиков в сторонних сервисах.

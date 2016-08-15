@@ -50,8 +50,8 @@
         <property name="businessJournalService" ref="businessJournalService"/>
 	</bean>
 
-	<util:constant id="REGNUMBERS_FOLDER_ID" static-field="ru.it.lecm.regnumbers.counter.CounterFactory.REGNUMBERS_FOLDER_ID"/>
-	<bean id="regNumbersCounterFactory" class="ru.it.lecm.regnumbers.counter.CounterFactory" init-method="init" parent="baseBean"
+	<util:constant id="REGNUMBERS_FOLDER_ID" static-field="ru.it.lecm.regnumbers.counter.CounterFactoryImpl.REGNUMBERS_FOLDER_ID"/>
+	<bean id="regNumbersCounterFactory" class="ru.it.lecm.regnumbers.counter.CounterFactoryImpl" init-method="init" parent="baseBean"
 		  depends-on="regNumbers.regNumbersBootstrap">
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>

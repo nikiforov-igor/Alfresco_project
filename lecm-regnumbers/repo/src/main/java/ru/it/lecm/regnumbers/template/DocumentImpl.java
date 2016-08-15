@@ -1,9 +1,5 @@
 package ru.it.lecm.regnumbers.template;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
@@ -18,7 +14,13 @@ import org.springframework.context.ApplicationContext;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.counter.CounterFactory;
+import ru.it.lecm.regnumbers.counter.CounterFactoryImpl;
 import ru.it.lecm.regnumbers.counter.CounterType;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Инкапсулирует методы, связанные с документом, для которого генерируется
@@ -42,7 +44,7 @@ public class DocumentImpl implements Document {
 		this.nodeService = applicationContext.getBean("nodeService", NodeService.class);
 		this.namespaceService = applicationContext.getBean("namespaceService", NamespaceService.class);
 		this.dictionaryService = applicationContext.getBean("dictionaryService", DictionaryService.class);
-		this.counterFactory = applicationContext.getBean("regNumbersCounterFactory", CounterFactory.class);
+		this.counterFactory = applicationContext.getBean("regNumbersCounterFactory", CounterFactoryImpl.class);
 		this.orgstuctureService = applicationContext.getBean("serviceOrgstructure", OrgstructureBean.class);
 		this.documentMembersService = applicationContext.getBean("documentMembersService", DocumentMembersService.class);
 	}

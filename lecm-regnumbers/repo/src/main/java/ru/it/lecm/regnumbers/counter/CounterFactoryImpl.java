@@ -1,12 +1,5 @@
 package ru.it.lecm.regnumbers.counter;
 
-import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -21,6 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 import static ru.it.lecm.regnumbers.RegNumbersService.REGNUMBERS_NAMESPACE;
 
 /**
@@ -28,7 +26,7 @@ import static ru.it.lecm.regnumbers.RegNumbersService.REGNUMBERS_NAMESPACE;
  *
  * @author vlevin
  */
-public class CounterFactory extends BaseBean {
+public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 
 	private final static String GLOBAL_PLAIN_COUNTER = "globalPlainCounter";
 	private final static String GLOBAL_YEAR_COUNTER = "globalYearCounter";
@@ -56,7 +54,7 @@ public class CounterFactory extends BaseBean {
 	 */
 	private final Map<String, NodeRef> globalCounters = new ConcurrentHashMap<>();
 	// логгер
-	private final static Logger logger = LoggerFactory.getLogger(CounterFactory.class);
+	private final static Logger logger = LoggerFactory.getLogger(CounterFactoryImpl.class);
 	/**
 	 * Чем мы будем заменять двоеточие в имени счетчика, которое содержит название типа документа.
 	 */
@@ -89,6 +87,7 @@ public class CounterFactory extends BaseBean {
 	 * @param tag метка счетчика
 	 * @return
 	 */
+	@Override
 	public Counter getCounter(final CounterType type, final NodeRef documentRef, final String tag) {
 		Counter counter;
 		NodeRef counterNodeRef;
@@ -288,7 +287,8 @@ public class CounterFactory extends BaseBean {
 	 * @param documentType Тип документа в префиксальной форме. Должен наследоваться от lecm-document:base
 	 * @param tags Список меток счетчиков.
 	 */
-	void initTaggedCounters(String documentType, List<String> tags) {
+	@Override
+	public void initTaggedCounters(String documentType, List<String> tags) {
 		Map<String, NodeRef> tagCounter = docTypeCounters.get(documentType);
 		if (tagCounter == null) {
 			tagCounter = new ConcurrentHashMap<>();

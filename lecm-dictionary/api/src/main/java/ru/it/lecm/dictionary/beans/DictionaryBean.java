@@ -11,32 +11,33 @@ import java.util.List;
  * Date: 27.12.12
  */
 public interface DictionaryBean {
-	public static final String DICTIONARIES_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
-	public static final QName TYPE_DICTIONARY = QName.createQName(DICTIONARIES_NAMESPACE_URI, "dictionary");
-	public static final QName TYPE_PLANE_DICTIONARY_VALUE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "plane_dictionary_values");
-	public static final QName TYPE_HIERARCHICAL_DICTIONARY_VALUE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "hierarchical_dictionary_values");
-	public static final QName PROPERTY_DICTIONARY_TYPE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "type");
+	String DICTIONARIES_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
+	QName TYPE_DICTIONARY = QName.createQName(DICTIONARIES_NAMESPACE_URI, "dictionary");
+	QName TYPE_PLANE_DICTIONARY_VALUE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "plane_dictionary_values");
+	QName TYPE_BIG_PLANE_DICTIONARY_VALUE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "big_plane_dictionary_values");
+	QName TYPE_HIERARCHICAL_DICTIONARY_VALUE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "hierarchical_dictionary_values");
+	QName PROPERTY_DICTIONARY_TYPE = QName.createQName(DICTIONARIES_NAMESPACE_URI, "type");
 
     String DICTIONARIES_ROOT_NAME = "Сервис Справочники";
 	String DICTIONARIES_ROOT_ID = "DICTIONARIES_ROOT_ID";
 
-	public boolean isDictionary(NodeRef ref);
-	public boolean isHeirarchicalDictionaryValue(NodeRef ref);
-	public boolean isPlaneDictionaryValue(NodeRef ref);
-	public boolean isDictionaryValue(NodeRef ref);
-	public NodeRef getDictionaryByName(String name);
-	public NodeRef getDictionaryValueByParam(String dictionaryName, QName parameterName, String parameterValue);
-	public NodeRef getDictionaryValueByParam(NodeRef dictionaryRef, QName parameterName, String parameterValue);
-	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef);
-	public List<NodeRef> getChildren(NodeRef nodeRef);
+	boolean isDictionary(NodeRef ref);
+	boolean isHeirarchicalDictionaryValue(NodeRef ref);
+	boolean isPlaneDictionaryValue(NodeRef ref);
+	boolean isDictionaryValue(NodeRef ref);
+	NodeRef getDictionaryByName(String name);
+	NodeRef getDictionaryValueByParam(String dictionaryName, QName parameterName, String parameterValue);
+	NodeRef getDictionaryValueByParam(NodeRef dictionaryRef, QName parameterName, String parameterValue);
+	NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef);
+	List<NodeRef> getChildren(NodeRef nodeRef);
 
 	List<NodeRef> getChildrenSortedByName(NodeRef nodeRef);
 
 	List<NodeRef> getAllChildren(NodeRef nodeRef);
 
-	public List<NodeRef> getRecordsByParamValue (String dictionaryName, QName parameter, Serializable value);
-	public NodeRef getRecordByParamValue (String dictionaryName, QName parameter, Serializable value);
-	public NodeRef getDictionariesRoot();
+	List<NodeRef> getRecordsByParamValue(String dictionaryName, QName parameter, Serializable value);
+	NodeRef getRecordByParamValue(String dictionaryName, QName parameter, Serializable value);
+	NodeRef getDictionariesRoot();
 
 	/**
 	 * Получить коллекцию типов данных всех справочников зарегистрированных в системе

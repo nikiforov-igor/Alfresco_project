@@ -6,6 +6,7 @@
 		"description": "${dictionary.properties["lecm-dic:description"]!""?j_string}",
 		"itemType": "${dictionary.properties["lecm-dic:type"]?string}",
 		"attributeForShow": "${dictionary.properties["lecm-dic:attributeForShow"]?string}",
-		"plane": "${dictionary.properties["lecm-dic:plane"]?string}"
+		"plane": "${dictionary.properties["lecm-dic:plane"]?string}",
+		"path": "${dictionary.getQnamePath()?string}"
 	}
 </#escape>

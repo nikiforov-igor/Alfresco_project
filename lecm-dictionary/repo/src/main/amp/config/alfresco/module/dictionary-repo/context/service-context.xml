@@ -209,4 +209,10 @@
             </list>
         </property>
     </bean>
+
+    <bean init-method="init" class="ru.it.lecm.dictionary.policy.BigPlaneDictionaryPolicy" parent="baseBean">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="dictionaryBean" ref="serviceDictionary"/>
+        <property name="counterFactoryImpl" ref="regNumbersCounterFactory"/>
+    </bean>
 </beans>
