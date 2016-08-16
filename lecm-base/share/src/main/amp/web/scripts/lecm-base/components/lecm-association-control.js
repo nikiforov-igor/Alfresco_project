@@ -1737,15 +1737,19 @@ LogicECM.module = LogicECM.module || {};
 			onRefreshItemList: function (layer, args)
 			{
 				// Check the event is directed towards this instance
-				if ($hasEventInterest(this, args))
+				if ($hasEventInterest(this, args) || (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId))
 				{
 					var searchTerm = "";
 					var obj = args[1];
-					if (obj && obj.searchTerm)
-					{
-						searchTerm = obj.searchTerm;
+					if (obj) {
+						if (obj.searchTerm) {
+							searchTerm = obj.searchTerm;
+						}
+						if (obj.additionalFilter) {
+							this.options.additionalFilter = obj.additionalFilter;
+						}
 					}
-					this._updateItems(this.options.parentNodeRef, searchTerm);
+					this._updateItems(this.options.rootNodeRef, searchTerm);
 				}
 			},
 

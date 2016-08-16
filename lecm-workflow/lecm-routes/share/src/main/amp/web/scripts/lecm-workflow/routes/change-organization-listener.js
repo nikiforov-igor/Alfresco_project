@@ -38,10 +38,13 @@
                         fn: function (response) {
                             var unit = new Alfresco.util.NodeRef(response.json.nodeRef);
                             LogicECM.module.Base.Util.enableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
-                            LogicECM.module.Base.Util.reInitializeControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", {
-                                additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\" AND NOT(@sys\\:node\\-uuid:\"' + unit.id + '\")',
-                                resetValue:currentOrganization != organization.nodeRef
-                            });
+                            YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc"), function() {
+                                YAHOO.Bubbling.fire("refreshItemList", {
+                                    formId: formId,
+                                    fieldId: "lecmWorkflowRoutes:routeOrganizationUnitAssoc",
+                                    additionalFilter: '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + organization.nodeRef + '\" AND NOT(@sys\\:node\\-uuid:\"' + unit.id + '\")',
+                                });
+                            }, this);
                             currentOrganization = organization.nodeRef;
 
                             YAHOO.Bubbling.fire("routeOrganizationSelected", {
@@ -54,11 +57,6 @@
                 });
             } else {
                 currentOrganization = null;
-                LogicECM.module.Base.Util.reInitializeControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc", {
-                    additionalFilter: 'PATH:\"//app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг/*//*\"',
-                    resetValue: true,
-                    currentValue: ""
-                });
                 LogicECM.module.Base.Util.disableControl(formId, "lecmWorkflowRoutes:routeOrganizationUnitAssoc");
                 YAHOO.Bubbling.fire("routeOrganizationSelected", {
                     organization: currentOrganization
