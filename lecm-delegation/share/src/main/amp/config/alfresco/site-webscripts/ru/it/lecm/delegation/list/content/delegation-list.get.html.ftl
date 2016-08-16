@@ -18,6 +18,7 @@
 				attributeForShow: 'lecm-d8n:delegation-opts-owner-assoc',
 				dataSource: 'lecm/delegation/list',
 				expandable: true,
+				overrideSortingWith: false,
 				expandDataSource: 'lecm/delegation/procuraciesDatagrid',
 				datagridMeta:{
 					useFilterByOrg: false,
