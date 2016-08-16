@@ -463,8 +463,8 @@
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
     </bean>
 
-    <bean id="inTwoWorkingDaysProcessor" class="ru.it.lecm.base.processors.InTwoWorkingDaysProcessor" parent="searchQueryBaseProccesor">
-		<property name="id" value="IN_TWO_WORKING_DAYS"/>
+    <bean id="timeOffsetProcessor" class="ru.it.lecm.base.processors.TimeOffsetProcessor" parent="searchQueryBaseProccesor">
+		<property name="id" value="TIME_OFFSET"/>
 		<property name="calendarBean" ref="WorkCalendarService"/>
 	</bean>
 

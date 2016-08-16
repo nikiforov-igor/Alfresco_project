@@ -379,7 +379,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                     List<ArmFilterValue> valueList = new ArrayList<>();
                     String valuesStr = (String) props.get(PROP_FILTER_VALUES);
                     if (!valuesStr.isEmpty())  {
-                        String[] valuesArray = valuesStr.split(",");
+                        String[] valuesArray = valuesStr.split(";");
+                        if (valuesArray.length < 2) {
+                        	valuesArray = valuesStr.split(",");
+                        }
 
                         for(String value :valuesArray){
                             if (!value.trim().isEmpty()) {
