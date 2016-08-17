@@ -274,6 +274,9 @@
 							<control-param name="allowInNonCreateMode">true</control-param>
 						</control>
 					</field>
+					<field id="lecmApproveAspects:approvalComment">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 				</appearance>
 			</form>
 		</forms>
