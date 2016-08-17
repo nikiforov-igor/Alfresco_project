@@ -265,13 +265,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					var selectedItems = Object.keys(this.selected);
 					
 					var params = {
-						selectedItems: {},
+						selectedItems: this.selected,
 						marker: null
 					};
 
 					if (selectedItems.length === 1) {
 						params.marker = this.selected[selectedItems[0]].key;
-						params.selectedItems = this.selected;
 					}
 
 					Bubbling.fire(this.options.changeItemsFireAction, params)
