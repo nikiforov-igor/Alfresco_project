@@ -3,6 +3,7 @@ var nodeSubstituteString = args['nodeSubstituteString'];
 var nodeTitleSubstituteString = args['nodeTitleSubstituteString'];
 var selectableType = args['selectableType'];
 var useOnlyInSameOrg = args['onlyInSameOrg'];
+var sortProp = args['sortProp'];
 
 var parentNode = search.findNode(nodeRef);
 var branch = [];
@@ -16,17 +17,33 @@ if (parentNode != null) {
     for each(var item in values) {
 		if (isSubType(item, selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
             && orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
+
+			var label = (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item);
+			var sortPropValue = label;
+			if (sortProp != null) {
+				sortPropValue = item.properties[sortProp];
+			}
+
 	        branch.push({
-	            label: (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item),
+	            label: label,
 	            title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
 	            type: item.getTypeShort(),
 	            nodeRef: item.getNodeRef().toString(),
 	            isLeaf: "" + !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType, true),
 	            isContainer: "" + item.isContainer,
-		        hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren")
+		        hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren"),
+		        sortProp: sortPropValue
 	        });
 		}
     }
+
+	branch.sort(sortBranch);
+}
+
+function sortBranch(item1, item2) {
+	var val1 = item1.sortProp.toUpperCase(),
+		val2 = item2.sortProp.toUpperCase();
+	return (val1 > val2) ? 1 : (val1 < val2) ? -1 : 0;
 }
 
 function isSubType(item, typesStr){

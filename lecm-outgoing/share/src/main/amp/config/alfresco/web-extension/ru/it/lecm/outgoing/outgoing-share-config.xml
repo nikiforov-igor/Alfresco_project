@@ -63,6 +63,7 @@
 							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
+							<control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
 <!--						<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>
 							<control-param name="firstPathNameSubstituteString">{lecm-contractor:shortname}</control-param>-->
@@ -257,6 +258,7 @@
 							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
+							<control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>-->
 							<!-- lecm-contractor:contractor-type -->
@@ -358,6 +360,7 @@
 							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
+							<control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>-->
 							<!-- lecm-contractor:contractor-type -->
@@ -458,6 +461,7 @@
 							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
+							<control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>-->
 							<!-- lecm-contractor:contractor-type -->
@@ -639,6 +643,7 @@
 							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
+							<control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>-->
 							<!-- lecm-contractor:contractor-type -->
@@ -825,6 +830,7 @@
 							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
+							<control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>-->
 							<!-- lecm-contractor:contractor-type -->
@@ -983,6 +989,7 @@
 							<control-param name="contractor_showCreateNewLink">true</control-param>
 							<control-param name="contractor_additionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="contractor_showAssocViewForm">true</control-param>
+							<control-param name="contractor_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.contractor-external.select</control-param>-->
 							<!-- lecm-contractor:contractor-type -->

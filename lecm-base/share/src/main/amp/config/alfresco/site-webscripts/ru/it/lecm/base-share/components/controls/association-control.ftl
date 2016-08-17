@@ -199,6 +199,9 @@
 			<#if params.sortProp??>
 				sortProp: "${params.sortProp}",
 			</#if>
+			<#if params.treeSortProp??>
+				treeSortProp: "${params.treeSortProp}",
+			</#if>
 			<#if params.selectedItemsNameSubstituteString??>
 				selectedItemsNameSubstituteString: "${params.selectedItemsNameSubstituteString}",
 			</#if>
