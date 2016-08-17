@@ -153,6 +153,14 @@
 				<property name="lecm-errands:work-start-date">
 					<type>d:date</type>
 				</property>
+				<!-- Переход после исполнения -->
+				<property name="lecm-errands:execute-result">
+					<type>d:text</type>
+				</property>
+				<!-- Переход после утверждения контролёром -->
+				<property name="lecm-errands:controller-approve-result">
+					<type>d:text</type>
+				</property>
 
 				<!-- Поиск/сортировка ассоциаций-->
 				<property name="lecm-errands:initiator-assoc-ref">

@@ -14,7 +14,6 @@
 							var document = bpm_package.children[0];
 							if (document != null) {
 								document.properties["lecm-errands:execution-date"] = new Date();
-								document.save();
 
 								var controller = null;
 								var controllerAssoc = document.assocs["lecm-errands:controller-assoc"];
@@ -39,7 +38,7 @@
 										}
 									});
 
-									execution.setVariable("executeResult", "approveController");
+									document.properties["lecm-errands:execute-result"] = "approveController";
 								} else {
 									var initiator = null;
 									var initiatorAssoc = document.assocs["lecm-errands:initiator-assoc"];
@@ -57,11 +56,13 @@
 									});
 
 									if (document.properties["lecm-errands:without-initiator-approval"]) {
-										execution.setVariable("executeResult", "executed");
+										document.properties["lecm-errands:execute-result"] = "executed";
 									} else {
-										execution.setVariable("executeResult", "approveInitiator");
+										document.properties["lecm-errands:execute-result"] = "approveInitiator";
 									}
 								}
+
+								document.save();
 							}
 						</activiti:string>
 					</activiti:field>

@@ -1959,7 +1959,11 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
             }
 
             if (variable.getToType() == WorkflowVariables.Type.VARIABLE) {
-                runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
+                WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(stateMachineExecutionId);
+
+                if (workflow != null && workflow.isActive()) {
+                    runtimeService.setVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getToValue(), value);
+                }
             } else if (variable.getToType() == WorkflowVariables.Type.FIELD) {
                 NodeService nodeService = serviceRegistry.getNodeService();
 
