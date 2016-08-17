@@ -22,6 +22,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		this.original = Alfresco.util.deepCopy(this.original);
 		this.selected = Alfresco.util.deepCopy(this.selected);
 		LogicECM.module.AssociationComplexControl.Picker.superclass.constructor.call(this, 'LogicECM.module.AssociationComplexControl.Picker', control.id + '-picker');
+		this.options = Alfresco.util.deepCopy(LogicECM.module.AssociationComplexControl.Picker.prototype.options, {
+			copyFunctions: true
+		});
 		this.setOptions(options);
 		this.setMessages(messages);
 		this.control = control;
@@ -51,7 +54,15 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		options: {
 			disabled: null,
-			isComplex: null
+			isComplex: null,
+			pickerParams: {
+				width: '800px',
+				close: false
+			},
+			pickerCustom: {
+				render: true,
+				type: YAHOO.widget.Panel
+			}
 		},
 
 		widgets: {
@@ -125,7 +136,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			});
 			this.fire('afterChange', {});
 		},
-		
+
 		_clearObjectPropsByKey: function (obj, key) {
 			Object.keys(obj).forEach(function (prop) {
 				if (obj[prop].key == key) {
@@ -189,11 +200,11 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					selected = args[1].selected,
 					key = args[1].key,
 					originalKeys, selectedKeys, addedKeys, removedKeys;
-				
+
 				this._clearObjectPropsByKey(this.selected, key);
 				this._clearObjectPropsByKey(this.removed, key);
 				this._clearObjectPropsByKey(this.added, key);
-				
+
 				this.selected = YAHOO.lang.merge(this.selected, selected);
 				this.added = {};
 				this.removed = {};
@@ -263,7 +274,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				if (this.options.changeItemsFireAction) {
 					var selectedItems = Object.keys(this.selected);
-					
+
 					var params = {
 						selectedItems: this.selected,
 						marker: null
@@ -273,7 +284,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 						params.marker = this.selected[selectedItems[0]].key;
 					}
 
-					Bubbling.fire(this.options.changeItemsFireAction, params)
+					Bubbling.fire(this.options.changeItemsFireAction, params);
 				}
 			}
 		},
@@ -291,7 +302,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.cancelDeferred = new Alfresco.util.Deferred(LogicECM.module.AssociationComplexControl.Utils.getItemKeys(this.options.itemsOptions), {
 				scope: this,
 				fn: this._onCancelDeferred
-			})
+			});
 			this.fire('hide', {
 				reset: true
 			});
@@ -303,6 +314,10 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.fire('show', {
 				itemKey: menuItem.value.itemKey
 			});
+		},
+
+		render: function (appendToNode) {
+			this.widgets.picker.render(appendToNode);
 		},
 
 		show: function () {
@@ -332,14 +347,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		onReady: function () {
 			var menu;
-			
-			this.widgets.picker = Alfresco.util.createYUIPanel(this.id, {
-				width: '800px',
-				close: false
-			}, {
-				render: true,
-				type: YAHOO.widget.Panel
-			});
+
+			this.widgets.picker = Alfresco.util.createYUIPanel(this.id, this.options.pickerParams, this.options.pickerCustom);
 			this.widgets.okButton = Alfresco.util.createYUIButton(this, 'ok', this.onOkButtonClick, {
 				disabled: this.options.disabled,
 				type: 'push'
@@ -372,6 +381,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 
 			this.widgets.items = Dom.get(this.id + '-items');
+			this.fire('pickerReady', {});
 		}
 	}, true);
 })();

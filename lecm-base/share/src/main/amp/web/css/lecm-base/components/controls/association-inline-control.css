@@ -1,0 +1,34 @@
+.association-inline-control {
+	font:16px/1.231 Open Sans,arial,helvetica,clean,sans-serif;
+}
+
+.association-inline-control>.container>.value-div>.control-selected-values {
+	min-height: 0;
+	display: none;
+}
+
+.association-inline-control .association-picker {
+	visibility: hidden;
+}
+
+.association-inline-control .value-div>.yui-panel-container {
+	position: static !important;
+}
+
+.association-inline-control .value-div>.yui-panel-container>.association-picker {
+	position: static;
+	border: none;
+	box-shadow: none;
+}
+
+.association-inline-control .value-div>.yui-panel-container>.association-picker .bd>.form-fields {
+	padding: 0;
+}
+
+.association-inline-control .association-picker .hd {
+	display: none;
+}
+
+.association-inline-control .association-picker .ft {
+	display: none;
+}
