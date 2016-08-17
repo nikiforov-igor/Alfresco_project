@@ -27,9 +27,9 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
         destination: null,
         mode:"view",
         submitType:"json",
-        formId: "view-node-form",
+        formId: "bj-view-node-form",
         nodeId: nodeId,
-        htmlid: "view-node-form-htmlid",
+        htmlid: "bj-view-node-form-htmlid",
         showSubmitButton: false
     };
 
@@ -39,12 +39,12 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
             dataObj: obj,
             successCallback:{
                 fn:function(response) {
-                    var formEl = Dom.get("view-node-form-content");
+                    var formEl = Dom.get("bj-view-node-form-content");
                     formEl.innerHTML = response.serverResponse.responseText;
                     if (viewDialog != null) {
-                        Dom.setStyle("view-node-form", "display", "block");
+                        Dom.setStyle("bj-view-node-form", "display", "block");
                         var message = "Просмотр";
-                        var titleElement = Dom.get("view-node-form-form-head");
+                        var titleElement = Dom.get("bj-view-node-form-form-head");
                         if (titleElement) {
                             titleElement.innerHTML = message;
                         }

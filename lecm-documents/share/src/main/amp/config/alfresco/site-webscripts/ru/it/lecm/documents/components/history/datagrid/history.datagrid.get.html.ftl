@@ -48,7 +48,7 @@
 
 <#--uncomment to display "Show Inactive" checkbox-->
 <#--<@grid.datagrid containerId true gridId+"form" showCheckBox>-->
-<@grid.datagrid containerId true>
+<@grid.datagrid id=containerId showViewForm=true viewFormId="bj-view-node-form" showArchiveCheckBox=false>
     <script type="text/javascript">//<![CDATA[
     (function () {
     	function createDatagrid() {
