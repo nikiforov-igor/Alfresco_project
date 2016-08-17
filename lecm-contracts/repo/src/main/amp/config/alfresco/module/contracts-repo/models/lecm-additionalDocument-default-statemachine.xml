@@ -4305,7 +4305,7 @@ routeWorkflow.startWorkflow(variables);]]></value>
   i;
 
 for (i in approvals) {
-  lecmPermission.grantDynamicRole(contract, approvals[i] , "BR_MEMBER", "LECM_BASIC_PG_Reader");
+  documentMembers.addMemberWithoutCheckPermission(contract, approvals[i], "LECM_BASIC_PG_Reader", true);
 }]]></value>
                                                             </property>
                                                             <property>
@@ -8341,7 +8341,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
   contract = document.assocs['lecm-additional-document:document-assoc'][0],
   signer = document.assocs['lecmSignAspects:signerEmployeeAssoc'][0];
 
-lecmPermission.grantDynamicRole(contract, signer, "BR_MEMBER", "LECM_BASIC_PG_Reader");]]></value>
+  documentMembers.addMemberWithoutCheckPermission(contract, signer, "LECM_BASIC_PG_Reader", true);]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
