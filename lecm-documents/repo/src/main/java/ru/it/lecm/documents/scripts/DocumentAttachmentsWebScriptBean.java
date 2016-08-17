@@ -131,7 +131,16 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
         ParameterCheck.mandatory("documentType", documentType);
         QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
         List<String> categories = this.documentAttachmentsService.getCategories(type);
-        return categories.toArray(new String[categories.size()]);
+		String[] result = new String[categories.size()];
+		for (String category : categories) {
+			int i = categories.indexOf(category);
+			if (category.contains("|")) {
+				result[i] = category.substring(0, category.indexOf('|'));
+			} else {
+				result[i] = category;
+			}
+		}
+		return result;
     }
 
 	/**
