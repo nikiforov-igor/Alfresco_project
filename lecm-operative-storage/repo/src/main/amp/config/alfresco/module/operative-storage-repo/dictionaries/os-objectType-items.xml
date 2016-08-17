@@ -51,6 +51,13 @@
 				<property name="lecm-busjournal:objectType-template">{cm:title}</property>
 				<property name="lecm-busjournal:objectType-list-template">{cm:title}</property>
 			</item>
+			<item name="cm:Хранилище" type="lecm-busjournal:objectType">
+				<property name="cm:name"><![CDATA[Хранилище]]></property>
+				<property name="lecm-busjournal:objectType-template"><![CDATA[{cm:title}]]></property>
+				<property name="lecm-busjournal:objectType-class"><![CDATA[lecm-os:storage]]></property>
+				<property name="lecm-busjournal:objectType-code"><![CDATA[OS_STORAGE]]></property>
+				<property name="lecm-busjournal:objectType-list-template"><![CDATA[{cm:title}]]></property>
+			</item>
 		</items>
 	</item>
 </items>
