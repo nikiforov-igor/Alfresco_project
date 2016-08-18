@@ -12,6 +12,8 @@ import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
 
@@ -107,6 +109,13 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 					results.close();
 				}
 			}
+
+			Collections.sort(nodes, new Comparator<ArmNode>() {
+				@Override
+				public int compare(ArmNode o1, ArmNode o2) {
+					return o1.getTitle().toUpperCase().compareTo(o2.getTitle().toUpperCase());
+				}
+			});
 		}
 
 		return nodes;

@@ -14,9 +14,7 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -120,6 +118,13 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 for (NodeRef dicChild : children) {
                     result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
                 }
+
+                Collections.sort(result, new Comparator<ArmNode>() {
+                    @Override
+                    public int compare(ArmNode o1, ArmNode o2) {
+                        return o1.getTitle().toUpperCase().compareTo(o2.getTitle().toUpperCase());
+                    }
+                });
             }
         }
         return result;
