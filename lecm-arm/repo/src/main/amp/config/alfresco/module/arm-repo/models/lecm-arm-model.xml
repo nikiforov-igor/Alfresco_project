@@ -240,7 +240,7 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				<!--Тип для аттрибутивного поиска-->
+				<!--Тип для атрибутивного поиска-->
 				<property name="lecm-arm:search-type">
 					<type>d:text</type>
 					<mandatory>false</mandatory>

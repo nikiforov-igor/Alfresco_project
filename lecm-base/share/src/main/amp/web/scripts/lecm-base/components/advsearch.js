@@ -81,7 +81,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 maxSearchResults:1000,
                 loopSize:50,
                 unlimited:false, // флаг, что грид не ограничен в вовзвращаемых записях (выключен paging)
-                showExtendSearchBlock: false,  // По умолчанию аттрибутивный поиск скрыт
+                showExtendSearchBlock: false,  // По умолчанию атрибутивный поиск скрыт
                 searchFormId: "searchBlock-forms"
             },
 
@@ -180,7 +180,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             /**
-             * Обработчик для кнопки Найти для аттрибутивного поиска
+             * Обработчик для кнопки Найти для атрибутивного поиска
              *
              * @method onSearchClick
              * @param e {object} DomEvent
@@ -238,7 +238,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             },
 
             /**
-             * Обработчик для кнопки "Очитста" для аттрибутивного поиска
+             * Обработчик для кнопки "Очистка" для атрибутивного поиска
              *
              * @method onClearSearchClick
              * @param e {object} DomEvent
