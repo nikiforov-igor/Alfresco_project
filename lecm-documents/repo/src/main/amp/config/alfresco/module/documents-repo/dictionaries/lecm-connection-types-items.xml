@@ -12,11 +12,13 @@
                 <property name="cm:name">Повторный к</property>
                 <property name="lecm-connect-types:reverse-name">Имеет повторное</property>
                 <property name="lecm-connect-types:code">repeatedTo</property>
+                <property name="lecm-connect-types:for-auto-create">false</property>
             </item>
 	        <item name="cm:К сведению" type="lecm-connect-types:connection-type">
                 <property name="cm:name">К сведению</property>
                 <property name="lecm-connect-types:reverse-name">К сведению</property>
                 <property name="lecm-connect-types:code">forInformation</property>
+                <property name="lecm-connect-types:for-auto-create">false</property>
             </item>
             <item name="cm:Является основанием для" type="lecm-connect-types:connection-type">
                 <property name="cm:name">Является основанием для</property>

@@ -6,6 +6,7 @@
                 <property name="cm:name">Повторное</property>
                 <property name="lecm-connect-types:reverse-name">Является повторным к</property>
                 <property name="lecm-connect-types:code">hasRepeated</property>
+                <property name="lecm-connect-types:for-auto-create">false</property>
             </item>
             <item name="cm:Мероприятие на основании" type="lecm-connect-types:connection-type">
                 <property name="cm:name">Мероприятие на основании</property>
