@@ -121,7 +121,7 @@ public class EventsPolicy extends BaseBean {
 				List<NodeRef> recipients = new ArrayList<>();
 				recipients.add(member);
 				//notificationsService.sendNotification(author, event, text, recipients, null);
-				eventService.sendNotifications(event, true, recipients);
+				eventService.sendNotifications(event, true, recipients, false);
 			}
 		}
 	}
@@ -152,7 +152,7 @@ public class EventsPolicy extends BaseBean {
 			if (initiator != null) {
 				List<NodeRef> recipients = new ArrayList<>();
 				recipients.add(member);
-				eventService.sendNotifications(event, true, recipients);
+				eventService.sendNotifications(event, true, recipients, false);
 			}
 		}
 
@@ -278,7 +278,7 @@ public class EventsPolicy extends BaseBean {
 		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
 				sendNotifications = null == sendNotifications ? false : sendNotifications;
 		if (sendNotifications) {
-			eventService.sendNotifications(event, true, Arrays.asList(eventService.getEventInitiator(event)));
+			eventService.sendNotifications(event, true, Arrays.asList(eventService.getEventInitiator(event)), false);
 		}
 	}
 

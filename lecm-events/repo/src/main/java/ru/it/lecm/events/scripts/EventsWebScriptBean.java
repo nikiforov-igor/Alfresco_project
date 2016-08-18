@@ -354,30 +354,34 @@ public class EventsWebScriptBean extends BaseWebScript {
         return wrapperLink(node.getNodeRef().toString(), description, EventsService.EVENT_LINK_URL);
     }
 
-    public void onAfterUpdate(String event, String updateRepeated) {
+    public void onAfterUpdate(String event, String updateRepeated, boolean sendToInvitedMembers, Boolean forceNotifications) {
         ParameterCheck.mandatory("event", event);
-        ParameterCheck.mandatory("updateRepeated", updateRepeated);
 
         NodeRef eventRef = new NodeRef(event);
         if (this.nodeService.exists(eventRef)) {
-            eventService.onAfterUpdate(eventRef, updateRepeated);
+            eventService.onAfterUpdate(eventRef, updateRepeated, sendToInvitedMembers, forceNotifications);
         }
     }
 
-    public void onAfterUpdate(ScriptNode event, String updateRepeated, boolean sendToInvitedMembers) {
+    public void onAfterUpdate(ScriptNode event, String updateRepeated, boolean sendToInvitedMembers, Boolean forceNotifications) {
         ParameterCheck.mandatory("event", event);
         ParameterCheck.mandatory("sendToInvitedMembers", sendToInvitedMembers);
 
         if (this.nodeService.exists(event.getNodeRef())) {
-            eventService.onAfterUpdate(event.getNodeRef(), updateRepeated, sendToInvitedMembers);
+            eventService.onAfterUpdate(event.getNodeRef(), updateRepeated, sendToInvitedMembers, forceNotifications);
         }
     }
 	
 	public void notifyMeeteengCreated(ScriptNode event) {
+		notifyMeeteengCreated(event, Boolean.TRUE, true);
+	}
+	
+	public void notifyMeeteengCreated(ScriptNode event, Boolean firstTime ,Boolean notifyInvitedMembers) {
 		ParameterCheck.mandatory("event", event);
-		ParameterCheck.mandatory("firstTime", true);
-		eventService.sendNotificationsToInvitedMembers(event.getNodeRef(), true);
-		eventService.sendNotificationsToMembers(event.getNodeRef(), true);
+		if (notifyInvitedMembers) {
+			eventService.sendNotificationsToInvitedMembers(event.getNodeRef(), true, false);
+		}
+		eventService.sendNotificationsToMembers(event.getNodeRef(), true, true);
 	}
 	
 	public void sendCancelNotifications(ScriptNode event) {

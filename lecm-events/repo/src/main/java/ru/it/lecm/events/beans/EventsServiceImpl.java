@@ -565,17 +565,15 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	@Override
-	public void onAfterUpdate(NodeRef event, String updateRepeated) {
+	public void onAfterUpdate(NodeRef event, String updateRepeated, boolean forceSending) {
 		onAfterUpdate(event, updateRepeated, false);
 	}
 
 	@Override
-	public void onAfterUpdate(NodeRef event, String updateRepeated, boolean sendToInvitedMembers) {
-		updateMembers(event);
-		Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
-		send_notifications = null == send_notifications ? false : send_notifications;
-		if (sendToInvitedMembers && send_notifications) {
-			sendNotificationsToInvitedMembers(event, false);
+	public void onAfterUpdate(NodeRef event, String updateRepeated, boolean sendToInvitedMembers, boolean forceSending) {
+		updateMembers(event, forceSending);
+		if (sendToInvitedMembers) {
+			sendNotificationsToInvitedMembers(event, false, false);
 		}
 
 		Boolean repeatable = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REPEATABLE);
@@ -584,7 +582,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		}
 	}
 
-	private void updateMembers(NodeRef event) {
+	private void updateMembers(NodeRef event, Boolean forceSending) {
 		List<NodeRef> newMembers = getEventMembers(event);
 		List<NodeRef> oldMembers = findNodesByAssociationRef(event, ASSOC_EVENT_OLD_MEMBERS, null, ASSOCIATION_TYPE.TARGET);
 
@@ -595,25 +593,22 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			}
 		}
 
-		Boolean send_notifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
-		send_notifications = null == send_notifications ? false : send_notifications;
-		if (send_notifications) {
-			NodeRef initiator = getEventInitiator(event);
-			Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
-			if (initiator != null && fromDate != null) {
-				sendNotificationsToMembers(event, false, oldAndNewMembers);
-			}
+		NodeRef initiator = getEventInitiator(event);
+		Date fromDate = (Date) nodeService.getProperty(event, EventsService.PROP_EVENT_FROM_DATE);
+		if (initiator != null && fromDate != null) {
+			sendNotificationsToMembers(event, false, oldAndNewMembers, forceSending);
 		}
+		
 		nodeService.setAssociations(event, EventsService.ASSOC_EVENT_OLD_MEMBERS, getEventMembers(event));
 	}
 
 	@Override
-	public void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst) {
-		sendNotificationsToInvitedMembers(event, isFirst, null);
+	public void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst, Boolean force) {
+		sendNotificationsToInvitedMembers(event, isFirst, null, force);
 	}
 
 	@Override
-	public void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients) {
+	public void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients, Boolean force) {
 		List<NodeRef> invitedMembers = getEventInvitedMembers(event);
 		if (null == recipients || recipients.isEmpty()) {
 			recipients = invitedMembers;
@@ -621,12 +616,12 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			recipients.retainAll(invitedMembers);
 		}
 
-		sendNotifications(event, isFirst, recipients);
+		sendNotifications(event, isFirst, recipients, force);
 	}
 
 	@Override
-	public void sendNotificationsToMembers(NodeRef event, Boolean isFirst) {
-		sendNotificationsToMembers(event, isFirst, null);
+	public void sendNotificationsToMembers(NodeRef event, Boolean isFirst, Boolean force) {
+		sendNotificationsToMembers(event, isFirst, null, force);
 	}
 
 	/**
@@ -636,7 +631,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	 * @param isFirst
 	 */
 	@Override
-	public void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients) {
+	public void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients, Boolean force) {
 		List<NodeRef> members = getEventMembers(event);
 		if (!members.contains(getEventInitiator(event))) {
 			members.add(getEventInitiator(event));
@@ -646,26 +641,29 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		} else {
 			recipients.retainAll(members);
 		}
-		sendNotifications(event, isFirst, recipients);
+		sendNotifications(event, isFirst, recipients, force);
 	}
 
 	@Override
-	public void sendNotifications(NodeRef event, Boolean isFirst, List<NodeRef> recipients) {
-		bindTransactionListener();
-		Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
-		Action action = pendingActions.get(event);
-		if (null == action) {
-			action = new Action(event);
-			pendingActions.put(event, action);
-		}
-		String actionType = isFirst ? Action.CREATE : Action.UPDATE;
-		for (NodeRef recipient : recipients) {
-			String currentType = action.getRecipients().get(recipient);
-			if (null == currentType || actionType.equals(Action.CREATE)) {
-				action.getRecipients().put(recipient, actionType);
+	public void sendNotifications(NodeRef event, Boolean isFirst, List<NodeRef> recipients, Boolean force) {
+		Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
+		sendNotifications = (sendNotifications==null?false:sendNotifications) || force;
+		if (sendNotifications) {
+			bindTransactionListener();
+			Map<NodeRef, Action> pendingActions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
+			Action action = pendingActions.get(event);
+			if (null == action) {
+				action = new Action(event);
+				pendingActions.put(event, action);
 			}
-		}
-
+			String actionType = isFirst ? Action.CREATE : Action.UPDATE;
+			for (NodeRef recipient : recipients) {
+				String currentType = action.getRecipients().get(recipient);
+				if (null == currentType || actionType.equals(Action.CREATE)) {
+					action.getRecipients().put(recipient, actionType);
+				}
+			}
+		}	
 //		eventsNotificationsService.notifyEvent(event, isFirst, recipients);
 	}
 
@@ -816,7 +814,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			}
 		}
 
-		onAfterUpdate(repeatedEvent, null);
+		onAfterUpdate(repeatedEvent, null, false);
 	}
 
 	@Override
@@ -911,7 +909,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 		@Override
 		public void afterCommit() {
-			logger.error("AfterCommit start");
+			logger.debug("AfterCommit start");
 			HashMap<NodeRef, Action> actions = AlfrescoTransactionSupport.getResource(EVENTS_TRANSACTION_LISTENER);
 			if (actions != null) {
 				List<NodeRef> nodes = new LinkedList<>(actions.keySet());
@@ -924,7 +922,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					sendNotifications(action);
 				}
 			}
-			logger.error("AfterCommit finished");
+			logger.debug("AfterCommit finished");
 		}
 
 		private void sendNotifications(final Action action) {
@@ -933,7 +931,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			Boolean sendNotifications = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_SEND_NOTIFICATIONS);
 			Boolean deleted = (Boolean) nodeService.getProperty(event, EventsService.PROP_EVENT_REMOVED);
 			sendNotifications = null == sendNotifications ? false : sendNotifications;
-			if (sendNotifications && (!deleted || action.canceled)) {
+			if (!deleted || action.canceled) {
 				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
 					@Override
 					public Void execute() throws Throwable {

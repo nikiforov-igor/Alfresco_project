@@ -141,9 +141,9 @@ public interface EventsService {
 
 	String wrapAsEventLink(NodeRef documentRef);
 
-	void onAfterUpdate(NodeRef event, String updateRepeated);
+	void onAfterUpdate(NodeRef event, String updateRepeated, boolean forceSending);
 
-	void onAfterUpdate(NodeRef event, String updateRepeated, boolean sendToInvitedMembers);
+	void onAfterUpdate(NodeRef event, String updateRepeated, boolean sendToInvitedMembers, boolean forceSending);
 
 	List<NodeRef> getNextRepeatedEvents(NodeRef event);
 
@@ -151,15 +151,15 @@ public interface EventsService {
 
 	List<NodeRef> getAllRepeatedEvents(NodeRef event);
 
-	void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst);
+	void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst, Boolean force);
 
-	void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients);
+	void sendNotificationsToInvitedMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients, Boolean force);
 
-	void sendNotificationsToMembers(NodeRef event, Boolean isFirst);
+	void sendNotificationsToMembers(NodeRef event, Boolean isFirst, Boolean force);
 
-	void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients);
+	void sendNotificationsToMembers(NodeRef event, Boolean isFirst, List<NodeRef> recipients, Boolean force);
 
-	void sendNotifications(NodeRef event, Boolean isFirst, List<NodeRef> recipients);
+	void sendNotifications(NodeRef event, Boolean isFirst, List<NodeRef> recipients, Boolean force);
 	
 	void notifyEventCancelled(NodeRef event);
 

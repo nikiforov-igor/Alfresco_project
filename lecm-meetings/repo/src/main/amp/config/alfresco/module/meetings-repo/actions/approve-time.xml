@@ -26,6 +26,8 @@ if (meeting !== null){
 	  mainObject: meeting
 	}
   });
+  /*разослать iCal уведомления*/
+  events.notifyMeeteengCreated(meeting, false, true);
 }]]></property>
 	</item>
 </items>

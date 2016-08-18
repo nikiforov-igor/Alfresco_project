@@ -1564,7 +1564,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
       }
     }
   }
-  events.notifyMeeteengCreated(stm_document);
+  events.notifyMeeteengCreated(stm_document, true, false);
   /*create repeated*/
   meetings.createRepetedMeetings(stm_document);
 }());]]></value>
