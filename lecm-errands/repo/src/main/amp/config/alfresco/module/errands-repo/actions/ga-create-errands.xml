@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="CreateOrUpdate">
     <item name="cm:Создать поручения" type="lecm-group-actions:workflow-action">
         <property name="cm:name"><![CDATA[Создать поручения]]></property>
         <property name="cm:title"><![CDATA[Создать поручения]]></property>
@@ -7,7 +7,7 @@
         <property name="lecm-group-actions:type"><![CDATA[]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression">
-            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") and doc.attr("lecm-statemachine:status") != null]]></property>
+            <![CDATA[user.currentUser().hasBusinessRole("ERRANDS_INITIATOR") and doc.attr("lecm-statemachine:status") != null and (doc.attr("lecm-statemachine-aspects:is-final") == null or doc.attr("lecm-statemachine-aspects:is-final") == false)]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
         <property name="lecm-group-actions:workflow"><![CDATA[activiti$createErrands]]></property>
     </item>
