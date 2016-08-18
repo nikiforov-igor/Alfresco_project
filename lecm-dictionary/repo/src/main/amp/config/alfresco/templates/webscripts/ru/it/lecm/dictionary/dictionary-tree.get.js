@@ -58,6 +58,13 @@ function addItems(branch, items) {
 			}
 		}
 	}
+	branch.sort(sortBranch);
+}
+
+function sortBranch(item1, item2) {
+	var val1 = item1.title.toUpperCase(),
+		val2 = item2.title.toUpperCase();
+	return (val1 > val2) ? 1 : (val1 < val2) ? -1 : 0;
 }
 
 function getHierarchicalDictionaryChildType(node) {
