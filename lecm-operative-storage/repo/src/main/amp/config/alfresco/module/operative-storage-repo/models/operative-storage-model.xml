@@ -205,6 +205,11 @@
                     <title>Номенклатурный индекс</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-os:nomenclature-case-status">
                     <title>Этап ЖЦ</title>
