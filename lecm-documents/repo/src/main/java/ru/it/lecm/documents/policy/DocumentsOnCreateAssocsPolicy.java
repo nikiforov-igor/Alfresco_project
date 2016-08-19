@@ -1,9 +1,12 @@
 package ru.it.lecm.documents.policy;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.MLText;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.SubstitudeBean;
@@ -11,6 +14,8 @@ import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
 
 public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy implements NodeServicePolicies.BeforeDeleteAssociationPolicy{
     private SubstitudeBean substitute;
@@ -64,6 +69,38 @@ public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy imp
                 strOldValue += strNewValue;
             }
             nodeService.setProperty(record, propertyTextQName, strOldValue);
+        }
+
+        List<Locale> locales = lecmMessageService.getAvailableLocales();
+        if (locales != null && !locales.isEmpty()) {
+            QName propertyMlTextQName = QName.createQName(assocQName + "-ml-text-content", namespaceService);
+            PropertyDefinition propertyDefinitionMlText = dictionaryService.getProperty(propertyMlTextQName);
+            if (propertyDefinitionMlText != null && nodeService.exists(nodeAssocRef.getTargetRef()) && nodeService.hasAspect(nodeAssocRef.getTargetRef(), ContentModel.ASPECT_TITLED)) { // ml-text-content
+                MLPropertyInterceptor.setMLAware(true);
+                MLText title = (MLText) nodeService.getProperty(nodeAssocRef.getTargetRef(), ContentModel.PROP_TITLE);
+                if (title != null) {
+                    MLText oldMlText = (MLText) nodeService.getProperty(record, propertyMlTextQName);
+                    for (Locale locale : locales) {
+                        String localeValue = title.get(locale);
+                        if (localeValue != null && !localeValue.isEmpty()) {
+
+                            String mlTextValue = oldMlText.get(locale);
+                            if (mlTextValue != null) {
+                                if (!mlTextValue.isEmpty()) {
+                                    mlTextValue += ";";
+                                }
+                                mlTextValue += localeValue;
+                            } else {
+                                mlTextValue = localeValue;
+                            }
+                            oldMlText.addValue(locale, mlTextValue);
+                        }
+                    }
+
+                    nodeService.setProperty(record, propertyMlTextQName, oldMlText);
+                }
+                MLPropertyInterceptor.setMLAware(false);
+            }
         }
     }
 

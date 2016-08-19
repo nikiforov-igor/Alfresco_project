@@ -13,8 +13,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.alfresco.util.PropertyMap;
-import org.apache.commons.lang.StringEscapeUtils;
 import ru.it.lecm.base.beans.LecmMessageService;
 
 import java.io.Serializable;
@@ -85,11 +83,9 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
         StringBuilder builderRef = new StringBuilder();
 
         QName propertyTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-text-content", namespaceService);
-        QName propertyMlTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-ml-text-content", namespaceService);
         QName propertyRefQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-ref", namespaceService);
 
         PropertyDefinition propertyDefinitionText = dictionaryService.getProperty(propertyTextQName);
-        PropertyDefinition propertyDefinitionMlText = dictionaryService.getProperty(propertyMlTextQName);
         PropertyDefinition propertyDefinitionRef = dictionaryService.getProperty(propertyRefQName);
         if (propertyDefinitionText != null || propertyDefinitionRef != null) {
             List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, assocQName);
@@ -107,30 +103,41 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
                 }
                 nodeService.setProperty(nodeRef, propertyTextQName, textValue);
             }
-            if (propertyDefinitionMlText != null) { // ml-text-content
-//                List<Locale> locales = lecmMessageService.getAvailableLocales();
-//                List<Locale> fallback = lecmMessageService.getFallbackLocales();
-//                MLPropertyInterceptor.setMLAware(true);
-//                MLText mlText = new MLText();
-//                for (Locale locale : fallback) {
-//                    mlText.addValue(locale, names[0]);
-//                }
-//                for (Locale locale : locales) {
-//                    String categoryTitle = StringEscapeUtils.unescapeJava(messageService.getMessage(messageKey, locale));
-//                    if (categoryTitle != null) {
-//                        mlText.addValue(locale, categoryTitle);
-//                    }
-//                }
-//                PropertyMap props = new PropertyMap();
-//                props.put(ContentModel.PROP_TITLE, mlText);
-//                nodeService.addAspect(categoryRef, ContentModel.ASPECT_TITLED, props);
-//                MLPropertyInterceptor.setMLAware(false);
-//
-//                String textValue = "";
-//                if (builderText.length() > 0)  {
-//                    textValue = builderText.substring(0, builderText.length() - 1);
-//                }
-//                nodeService.setProperty(nodeRef, propertyTextQName, textValue);
+
+            List<Locale> locales = lecmMessageService.getAvailableLocales();
+            if (locales != null && !locales.isEmpty()) {
+                QName propertyMlTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-ml-text-content", namespaceService);
+                PropertyDefinition propertyDefinitionMlText = dictionaryService.getProperty(propertyMlTextQName);
+                if (propertyDefinitionMlText != null) { // ml-text-content
+                    MLPropertyInterceptor.setMLAware(true);
+                    MLText mlText = new MLText();
+
+                    for (AssociationRef assoc : assocs) {
+                        NodeRef targetRef = assoc.getTargetRef();
+                        if (targetRef != null) {
+                            if (nodeService.hasAspect(targetRef, ContentModel.ASPECT_TITLED)) {
+                                MLText title = (MLText) nodeService.getProperty(targetRef, ContentModel.PROP_TITLE);
+                                if (title != null) {
+                                    for (Locale locale : locales) {
+                                        String localeValue = title.get(locale);
+                                        if (localeValue != null && !localeValue.isEmpty()) {
+                                            String mlTextValue = mlText.get(locale);
+                                            if (mlTextValue != null && !mlTextValue.isEmpty()) {
+                                                mlTextValue += ";" + localeValue;
+                                            } else {
+                                                mlTextValue = localeValue;
+                                            }
+                                            mlText.addValue(locale, mlTextValue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    nodeService.setProperty(nodeRef, propertyMlTextQName, mlText);
+                    MLPropertyInterceptor.setMLAware(false);
+                }
             }
             if (propertyDefinitionRef != null) { // -ref values
                 String textValue = "";
