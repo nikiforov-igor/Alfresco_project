@@ -311,7 +311,7 @@
         <property name="businessJournalService" ref="businessJournalService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="messageService" ref="messageService"/>
-		<property name="documentMessageService" ref="documentMessageService"/>
+		<property name="lecmMessageService" ref="lecmMessageService"/>
     </bean>
 
     <bean id="documentAttachmentsScript" parent="baseScript" class="ru.it.lecm.documents.scripts.DocumentAttachmentsWebScriptBean"
@@ -456,7 +456,7 @@
 		<property name="regNumbersService" ref="regNumbersService" />
         <property name="documentService" ref="documentService"/>
 		<property name="messageService" ref="messageService"/>
-		<property name="documentMessageService" ref="documentMessageService"/>
+		<property name="lecmMessageService" ref="lecmMessageService"/>
     </bean>
 
     <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"
@@ -760,35 +760,17 @@
         <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 
-	<util:constant id="DOCUMENT_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.documents.beans.DocumentMessageServiceImpl.DOCUMENT_MESSAGE_FOLDER_ID"/>
-	<bean id="documentMessageService"
-		  parent="baseBean"
-		  init-method="init"
-		  depends-on="dictionaryBootstrap"
-		  class="ru.it.lecm.documents.beans.DocumentMessageServiceImpl">
-		<property name="messageService" ref="messageService"/>
-		<property name="namespaceService" ref="namespaceService"/>
-		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
-		<property name="searchService" ref="searchService"/>
-		<property name="locales" value="${lecm.availableLocales}"/>
-		<property name="folders">
-			<map>
-				<entry key="#{DOCUMENT_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
-			</map>
-		</property>
-	</bean>
-
 <!--	<bean init-method="init"
 		  class="ru.it.lecm.documents.policy.DocumentMessagePolicy">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
-		<property name="documentMessageService" ref="documentMessageService"/>
+		<property name="lecmMessageService" ref="lecmMessageService"/>
 	</bean>-->
 
 	<bean id="documentMessagesLoader"
 		  abstract="true"
 		  class="ru.it.lecm.documents.beans.MessageToRepositoryLoader">
-		<property name="documentMessageService" ref="documentMessageService"/> <!-- только для обеспечения порядка загрузки -->
+		<property name="lecmMessageService" ref="lecmMessageService"/> <!-- только для обеспечения порядка загрузки -->
 		<property name="repoAdminService" ref="repoAdminService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="propertiesService" ref="propertiesService"/>

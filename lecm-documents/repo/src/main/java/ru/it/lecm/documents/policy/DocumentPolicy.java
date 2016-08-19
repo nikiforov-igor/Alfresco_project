@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmMessageService;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -82,7 +83,7 @@ public class DocumentPolicy extends BaseBean
 	private RegNumbersService regNumbersService;
     private DocumentService documentService;
 	private MessageService messageService;
-	private DocumentMessageService documentMessageService;
+	private LecmMessageService lecmMessageService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -154,8 +155,8 @@ public class DocumentPolicy extends BaseBean
 		this.messageService = messageService;
 	}
 
-	public void setDocumentMessageService(DocumentMessageService documentMessageService) {
-		this.documentMessageService = documentMessageService;
+	public void setLecmMessageService(LecmMessageService lecmMessageService) {
+		this.lecmMessageService = lecmMessageService;
 	}
 
 	final public void init() {
@@ -465,8 +466,8 @@ public class DocumentPolicy extends BaseBean
 		String typename = type.toPrefixString(namespaceService).replace(':', '_');
 		String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
 		String messageKey = String.format("%s.property.%s.value", typename, propname);
-		List<Locale> locales = documentMessageService.getAvailableLocales();
-		List<Locale> fallback = documentMessageService.getFallbackLocales();
+		List<Locale> locales = lecmMessageService.getAvailableLocales();
+		List<Locale> fallback = lecmMessageService.getFallbackLocales();
 		MLPropertyInterceptor.setMLAware(true);
 		MLText mlText = (MLText)nodeService.getProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING);
 		mlText = mlText != null ? mlText : new MLText();

@@ -14,6 +14,7 @@ import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmMessageService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
@@ -41,7 +42,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private BusinessJournalService businessJournalService;
 	private NamespaceService namespaceService;
 	private MessageService messageService;
-	private DocumentMessageService documentMessageService;
+	private LecmMessageService lecmMessageService;
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -71,8 +72,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		this.messageService = messageService;
 	}
 
-	public void setDocumentMessageService(DocumentMessageService documentMessageService) {
-		this.documentMessageService = documentMessageService;
+	public void setLecmMessageService(LecmMessageService lecmMessageService) {
+		this.lecmMessageService = lecmMessageService;
 	}
 
 	@Override
@@ -168,8 +169,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			String typename = type.toPrefixString(namespaceService).replace(':', '_');
 			String categoryKey = names[1];
 			String messageKey = String.format("%s.attachmentCategory.%s.title", typename, categoryKey);
-			List<Locale> locales = documentMessageService.getAvailableLocales();
-			List<Locale> fallback = documentMessageService.getFallbackLocales();
+			List<Locale> locales = lecmMessageService.getAvailableLocales();
+			List<Locale> fallback = lecmMessageService.getFallbackLocales();
 			MLPropertyInterceptor.setMLAware(true);
 			MLText mlText = new MLText();
 			for (Locale locale : fallback) {

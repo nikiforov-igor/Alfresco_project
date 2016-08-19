@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:p="http://www.springframework.org/schema/p"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="lecmTransactionHelper" class="ru.it.lecm.base.beans.LecmTransactionHelperImpl">
 		<property name="transactionService" ref="transactionService"/>
@@ -161,6 +161,9 @@
 		</property>
 		<property name="dictionaryService">
 			<ref bean="dictionaryService"/>
+		</property>
+		<property name="lecmMessageService">
+			<ref bean="lecmMessageService"/>
 		</property>
 	</bean>
 
@@ -493,5 +496,21 @@
 		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
-
+	<util:constant id="LECM_MESSAGE_FOLDER_ID" static-field="ru.it.lecm.base.beans.LecmMessageServiceImpl.LECM_MESSAGE_FOLDER_ID"/>
+	<bean id="lecmMessageService"
+	      parent="baseBean"
+	      init-method="init"
+	      depends-on="dictionaryBootstrap"
+	      class="ru.it.lecm.base.beans.LecmMessageServiceImpl">
+		<property name="messageService" ref="messageService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="repoMessagesLocation" ref="customMessagesRepositoryLocation"/>
+		<property name="searchService" ref="searchService"/>
+		<property name="locales" value="${lecm.availableLocales}"/>
+		<property name="folders">
+			<map>
+				<entry key="#{LECM_MESSAGE_FOLDER_ID}" value="Сервис Сообщения"/>
+			</map>
+		</property>
+	</bean>
 </beans>

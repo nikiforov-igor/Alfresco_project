@@ -9,6 +9,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransacti
 import org.alfresco.service.cmr.admin.RepoAdminService;
 import org.alfresco.service.transaction.TransactionService;
 import org.springframework.context.ApplicationListener;
+import ru.it.lecm.base.beans.LecmMessageService;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 
@@ -21,7 +22,7 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 	private RepoAdminService repoAdminService;
 	private TransactionService transactionService;
 	private LecmBasePropertiesService propertiesService;
-	private DocumentMessageService documentMessageService;
+	private LecmMessageService lecmMessageService;
 	private boolean useDefaultMessages;
 	private List<String> messages;
 
@@ -33,8 +34,8 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 		this.transactionService = transactionService;
 	}
 
-	public void setDocumentMessageService(DocumentMessageService documentMessageService) {
-		this.documentMessageService = documentMessageService;
+	public void setLecmMessageService(LecmMessageService lecmMessageService) {
+		this.lecmMessageService = lecmMessageService;
 	}
 
 	public void setPropertiesService(LecmBasePropertiesService propertiesService) {

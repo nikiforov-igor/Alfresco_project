@@ -1,4 +1,4 @@
-package ru.it.lecm.documents.beans;
+package ru.it.lecm.base.beans;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,18 +19,17 @@ import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
 
 /**
  *
  * @author vmalygin
  */
-public class DocumentMessageServiceImpl extends BaseBean implements DocumentMessageService {
+public class LecmMessageServiceImpl extends BaseBean implements LecmMessageService {
 
 	private final static Locale[] DEFAULT_LOCALES = { LocaleUtils.toLocale("ru"), LocaleUtils.toLocale("ru_RU") };
-	public final static String DOCUMENT_MESSAGE_FOLDER_ID = "DOCUMENT_MESSAGE_FOLDER_ID";
+	public final static String LECM_MESSAGE_FOLDER_ID = "LECM_MESSAGE_FOLDER_ID";
 
-	private final static Logger logger = LoggerFactory.getLogger(DocumentMessageServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(LecmMessageServiceImpl.class);
 
 	private MessageService messageService;
 	private NamespaceService namespaceService;
@@ -42,7 +41,7 @@ public class DocumentMessageServiceImpl extends BaseBean implements DocumentMess
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(DOCUMENT_MESSAGE_FOLDER_ID);
+		return getFolder(LECM_MESSAGE_FOLDER_ID);
 	}
 
 	@Override
