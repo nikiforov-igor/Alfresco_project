@@ -1,19 +1,25 @@
 package ru.it.lecm.base.policies;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.MLText;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.alfresco.util.PropertyMap;
+import org.apache.commons.lang.StringEscapeUtils;
+import ru.it.lecm.base.beans.LecmMessageService;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Policy, содержащее логику сохранения текстовых описаний (для последующего поиска по ним) объектов,
@@ -28,6 +34,7 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 	protected  NamespaceService namespaceService;
 	protected  NodeService nodeService;
 	protected  DictionaryService dictionaryService;
+    protected LecmMessageService lecmMessageService;
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
@@ -44,6 +51,10 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
 	}
+
+    public void setLecmMessageService(LecmMessageService lecmMessageService) {
+        this.lecmMessageService = lecmMessageService;
+    }
 
     public void init() {
         PropertyCheck.mandatory(this, "policyComponent", policyComponent);
@@ -74,9 +85,11 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
         StringBuilder builderRef = new StringBuilder();
 
         QName propertyTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-text-content", namespaceService);
+        QName propertyMlTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-ml-text-content", namespaceService);
         QName propertyRefQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-ref", namespaceService);
 
         PropertyDefinition propertyDefinitionText = dictionaryService.getProperty(propertyTextQName);
+        PropertyDefinition propertyDefinitionMlText = dictionaryService.getProperty(propertyMlTextQName);
         PropertyDefinition propertyDefinitionRef = dictionaryService.getProperty(propertyRefQName);
         if (propertyDefinitionText != null || propertyDefinitionRef != null) {
             List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, assocQName);
@@ -93,6 +106,31 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
                     textValue = builderText.substring(0, builderText.length() - 1);
                 }
                 nodeService.setProperty(nodeRef, propertyTextQName, textValue);
+            }
+            if (propertyDefinitionMlText != null) { // ml-text-content
+//                List<Locale> locales = lecmMessageService.getAvailableLocales();
+//                List<Locale> fallback = lecmMessageService.getFallbackLocales();
+//                MLPropertyInterceptor.setMLAware(true);
+//                MLText mlText = new MLText();
+//                for (Locale locale : fallback) {
+//                    mlText.addValue(locale, names[0]);
+//                }
+//                for (Locale locale : locales) {
+//                    String categoryTitle = StringEscapeUtils.unescapeJava(messageService.getMessage(messageKey, locale));
+//                    if (categoryTitle != null) {
+//                        mlText.addValue(locale, categoryTitle);
+//                    }
+//                }
+//                PropertyMap props = new PropertyMap();
+//                props.put(ContentModel.PROP_TITLE, mlText);
+//                nodeService.addAspect(categoryRef, ContentModel.ASPECT_TITLED, props);
+//                MLPropertyInterceptor.setMLAware(false);
+//
+//                String textValue = "";
+//                if (builderText.length() > 0)  {
+//                    textValue = builderText.substring(0, builderText.length() - 1);
+//                }
+//                nodeService.setProperty(nodeRef, propertyTextQName, textValue);
             }
             if (propertyDefinitionRef != null) { // -ref values
                 String textValue = "";
