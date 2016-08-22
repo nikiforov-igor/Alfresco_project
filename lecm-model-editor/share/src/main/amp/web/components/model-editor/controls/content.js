@@ -410,11 +410,11 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
 								tmpAssociationsArray[i] = {'_name':(a[i]._name.substr(a[i]._name.indexOf(':')+1,a[i]._name.length)), 'title':a[i].title,
-										'class':a[i].target['class'], 'mandatory':a[i].target.mandatory, 'many':a[i].target.many};
+									'class':a[i].target['class'], 'mandatory':a[i].target.mandatory, 'many':a[i].target.many};
 							}
 						} else {
 							tmpAssociationsArray.push({'_name':(a._name.substr(a._name.indexOf(':')+1,a._name.length)), 'title':a.title,
-									'class':a.target['class'], 'mandatory':a.target.mandatory, 'many':a.target.many});
+								'class':a.target['class'], 'mandatory':a.target.mandatory, 'many':a.target.many});
 						}
 					}
 				}
@@ -440,11 +440,11 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 						if (a instanceof Array) {
 							for (var i = 0, n = a.length; i < n; i++) {
 								tmpAssociationsArray[i] = {'_name':(a[i]._name.substr(a[i]._name.indexOf(':')+1,a[i]._name.length)), 'title':a[i].title,
-										'class':a[i].target['class'], 'mandatory':a[i].target.mandatory, 'many':a[i].target.many};
+									'class':a[i].target['class'], 'mandatory':a[i].target.mandatory, 'many':a[i].target.many};
 							}
 						} else {
 							tmpAssociationsArray.push({'_name':(a._name.substr(a._name.indexOf(':')+1,a._name.length)), 'title':a.title,
-									'class':a.target['class'], 'mandatory':a.target.mandatory, 'many':a.target.many});
+								'class':a.target['class'], 'mandatory':a.target.mandatory, 'many':a.target.many});
 						}
 					}
 				}
@@ -452,17 +452,12 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			modelObject.attributesArray = tmpAttributesArray;
 			modelObject.associationsArray = tmpAssociationsArray;
 			//Tables
-			var tmpTablesArray = [],
-				mandatoryAspects = [];
-			
+			var tmpTablesArray = [];
+
 			function isTable(element, index, array) {
 				return this==element.value;
 			}
-			
-			function isRepeatableOrDocflowable(aspect) {
-				return aspect == 'lecm-signed-docflow:docflowable' || aspect == 'lecm-document-aspects:rateable';
-			}
-			
+
 			if(YAHOO.lang.isObject(model.types)) {
 				if(YAHOO.lang.isArray(model.types.type)) {
 					if(YAHOO.lang.isObject(model.types.type[0]['mandatory-aspects'].aspect)) {
@@ -471,15 +466,11 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 							for (var i = 0, n = a.length; i < n; i++) {
 								if(a[i] && this.tables.some(isTable, a[i])) {
 									tmpTablesArray.push({'table':a[i]});
-								} else if (!isRepeatableOrDocflowable(a[i])) {
-									mandatoryAspects.push(a[i]);
 								}
 							}
 						} else {
 							if(a && this.tables.some(isTable, a)) {
 								tmpTablesArray.push({'table':a});
-							} else if (!isRepeatableOrDocflowable(a)) {
-								mandatoryAspects.push(a);
 							}
 						}
 					}
@@ -492,15 +483,11 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 							for (var i = 0, n = a.length; i < n; i++) {
 								if(a[i] && this.tables.some(isTable, a[i])) {
 									tmpTablesArray.push({'table':a[i]});
-								} else if (!isRepeatableOrDocflowable(a[i])) {
-									mandatoryAspects.push(a[i]);
 								}
 							}
 						} else {
 							if(a && this.tables.some(isTable, a)) {
 								tmpTablesArray.push({'table':a});
-							} else if (!isRepeatableOrDocflowable(a)) {
-								mandatoryAspects.push(a);
 							}
 						}
 					}
@@ -508,7 +495,6 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			}
 
 			modelObject.tablesArray = tmpTablesArray;
-			modelObject.mandatoryAspects = mandatoryAspects;
 
 			return modelObject;
 		},
