@@ -64,6 +64,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
@@ -82,6 +83,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
@@ -96,6 +98,7 @@
 							<control-param name="person_endpointMany">false</control-param>
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
@@ -291,6 +294,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
@@ -309,6 +313,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
@@ -323,6 +328,7 @@
 							<control-param name="person_endpointMany">false</control-param>
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
@@ -461,6 +467,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
@@ -479,6 +486,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
@@ -493,6 +501,7 @@
 							<control-param name="person_endpointMany">false</control-param>
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
@@ -651,6 +660,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
@@ -669,6 +679,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
@@ -683,6 +694,7 @@
 							<control-param name="person_endpointMany">false</control-param>
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
@@ -947,6 +959,7 @@
 							<control-param name="contractor_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="contractor_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="contractor_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="contractor_plane">false</control-param>
 							<control-param name="contractor_showSearch">true</control-param>
 							<control-param name="contractor_showCreateNewLink">true</control-param>
@@ -965,6 +978,7 @@
 							<control-param name="organisation_nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="organisation_treeNodeTitleSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="organisation_selectedItemsNameSubstituteString">{lecm-contractor:shortname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="organisation_plane">true</control-param>
 							<control-param name="organisation_showSearch">true</control-param>
 							<control-param name="organisation_showCreateNewLink">false</control-param>
@@ -979,6 +993,7 @@
 							<control-param name="person_endpointMany">false</control-param>
 							<control-param name="person_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Физические_x0020_лица</control-param>
 							<control-param name="person_nameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="person_selectedItemsNameSubstituteString">{lecm-contractor:fullname}&lt;div class="control-small-font"&gt;{lecm-contractor:postal-code}, {lecm-contractor:physical-address}&lt;/div&gt;</control-param>
 							<control-param name="person_plane">true</control-param>
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>

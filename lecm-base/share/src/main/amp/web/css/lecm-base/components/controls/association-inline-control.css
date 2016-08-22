@@ -1,3 +1,16 @@
+.control.association-control .value-div .cropped-item,
+.association-picker .currentValueDisplay .cropped-item {
+	height: auto;
+	min-height: 22px;
+}
+
+.control.association-control .value-div .cropped-item .ci-value-div .control-small-font,
+.association-picker .currentValueDisplay .cropped-item .ci-value-div .control-small-font {
+	font-size: 80%;
+	line-height: 6px;
+	padding-bottom: 5px;
+
+}
 .association-inline-control {
 	font:16px/1.231 Open Sans,arial,helvetica,clean,sans-serif;
 }
