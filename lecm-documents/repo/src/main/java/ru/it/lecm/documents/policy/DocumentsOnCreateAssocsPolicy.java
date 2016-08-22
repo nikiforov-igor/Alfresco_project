@@ -17,7 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
-public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy implements NodeServicePolicies.BeforeDeleteAssociationPolicy{
+public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy implements NodeServicePolicies.BeforeDeleteAssociationPolicy {
     private SubstitudeBean substitute;
 
     @Override
@@ -75,30 +75,39 @@ public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy imp
         if (locales != null && !locales.isEmpty()) {
             QName propertyMlTextQName = QName.createQName(assocQName + "-ml-text-content", namespaceService);
             PropertyDefinition propertyDefinitionMlText = dictionaryService.getProperty(propertyMlTextQName);
-            if (propertyDefinitionMlText != null && nodeService.exists(nodeAssocRef.getTargetRef()) && nodeService.hasAspect(nodeAssocRef.getTargetRef(), ContentModel.ASPECT_TITLED)) { // ml-text-content
+            if (propertyDefinitionMlText != null && nodeService.exists(nodeAssocRef.getTargetRef())) { // ml-text-content
                 MLPropertyInterceptor.setMLAware(true);
-                MLText title = (MLText) nodeService.getProperty(nodeAssocRef.getTargetRef(), ContentModel.PROP_TITLE);
-                if (title != null) {
-                    MLText oldMlText = (MLText) nodeService.getProperty(record, propertyMlTextQName);
-                    for (Locale locale : locales) {
-                        String localeValue = title.get(locale);
-                        if (localeValue != null && !localeValue.isEmpty()) {
-
-                            String mlTextValue = oldMlText.get(locale);
-                            if (mlTextValue != null) {
-                                if (!mlTextValue.isEmpty()) {
-                                    mlTextValue += ";";
-                                }
-                                mlTextValue += localeValue;
-                            } else {
-                                mlTextValue = localeValue;
-                            }
-                            oldMlText.addValue(locale, mlTextValue);
-                        }
-                    }
-
-                    nodeService.setProperty(record, propertyMlTextQName, oldMlText);
+                MLText title = null;
+                if (nodeService.hasAspect(nodeAssocRef.getTargetRef(), ContentModel.ASPECT_TITLED)) {
+                    title = (MLText) nodeService.getProperty(nodeAssocRef.getTargetRef(), ContentModel.PROP_TITLE);
                 }
+                MLText oldMlText = (MLText) nodeService.getProperty(record, propertyMlTextQName);
+                if (oldMlText == null) {
+                    oldMlText = new MLText();
+                }
+                for (Locale locale : locales) {
+                    String localeValue;
+                    if (title != null) {
+                        localeValue = title.get(locale);
+                    } else {
+                        localeValue = getSerializable(nodeAssocRef.getTargetRef()).toString();
+                    }
+                    if (localeValue != null && !localeValue.isEmpty()) {
+
+                        String mlTextValue = oldMlText.get(locale);
+                        if (mlTextValue != null) {
+                            if (!mlTextValue.isEmpty()) {
+                                mlTextValue += ";";
+                            }
+                            mlTextValue += localeValue;
+                        } else {
+                            mlTextValue = localeValue;
+                        }
+                        oldMlText.addValue(locale, mlTextValue);
+                    }
+                }
+
+                nodeService.setProperty(record, propertyMlTextQName, oldMlText);
                 MLPropertyInterceptor.setMLAware(false);
             }
         }
@@ -115,7 +124,7 @@ public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy imp
 
 
     @Override
-    protected Serializable getSerializable(final NodeRef node){
+    protected Serializable getSerializable(final NodeRef node) {
         return substitute.getObjectDescription(node);
     }
 
