@@ -25,9 +25,8 @@
 -->
         </div>
         <div class="event-create-center">
-    <#else>
-        <@formLib.renderField field=form.fields[item.id] />
     </#if>
+    <@formLib.renderField field=form.fields[item.id] />
 </#list>
     </div>
 </div>
