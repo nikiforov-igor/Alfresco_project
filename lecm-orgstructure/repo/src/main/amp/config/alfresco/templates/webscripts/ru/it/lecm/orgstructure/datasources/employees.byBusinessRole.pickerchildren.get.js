@@ -5,6 +5,10 @@ function main() {
 	if (url.templateArgs.role != null) {
 		var availableEmployees = orgstructure.getEmployeesByBusinessRoleId(url.templateArgs.role, true);
 		var filter = getFilterForAvailableElement(availableEmployees);
+		if (url.templateArgs.organization_store) {
+			var org = url.templateArgs.organization_store + "://" + url.templateArgs.organization_store_id + "/" + url.templateArgs.organization_id;
+			filter = filter + ' AND @lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + org + '\"';
+		}
 		data = getPickerChildrenItems(filter);
 	}
 

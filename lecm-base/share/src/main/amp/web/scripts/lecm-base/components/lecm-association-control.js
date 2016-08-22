@@ -1753,6 +1753,14 @@ LogicECM.module = LogicECM.module || {};
 						if (obj.additionalFilter) {
 							this.options.additionalFilter = obj.additionalFilter;
 						}
+						if (obj.childrenDataSource) {
+							this.options.childrenDataSource = obj.childrenDataSource;
+							this._createSelectedControls();
+							if (this.controlAutoComplete) {
+								var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node/children";
+								this.controlAutoComplete.dataSource.liveData = url;
+							}
+						}
 					}
 					this._updateItems(this.options.rootNodeRef, searchTerm);
 				}
@@ -2443,9 +2451,9 @@ LogicECM.module = LogicECM.module || {};
 						this.setOptions(options);
 					}
                     if (this.controlAutoComplete) {
-                        var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node/children";
-                        this.controlAutoComplete.dataSource.liveData = url;
-                    }
+						var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/node/children";
+						this.controlAutoComplete.dataSource.liveData = url;
+					}
 					this.selectedItems = {};
 					this.addItemButtons = {};
 					this.searchProperties = {};
