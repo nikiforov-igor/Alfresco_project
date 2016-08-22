@@ -347,6 +347,20 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				}
 			}
 
+			if (obj.model.mandatoryAspects && obj.model.mandatoryAspects.length) {
+				obj.model.mandatoryAspects.forEach(function (aspect) {
+					var ns = aspect.substr(0, aspect.indexOf(':'));
+
+					for (j in obj.namespaces) {
+						if (obj.namespaces[j].prefix == ns && !IT.Utils.containsUri(model.imports["import"], { _uri: obj.namespaces[j].uri, _prefix: ns })) {
+							model.imports["import"].push({ _uri: obj.namespaces[j].uri, _prefix: ns });
+						}
+					}
+
+					model.types.type['mandatory-aspects'].aspect.push(aspect);
+				}, this);
+			}
+
 			if (Object.getOwnPropertyNames(model.types.type['mandatory-aspects'].aspect).length === 0 || model.types.type['mandatory-aspects'].aspect.length === 0) {
 				delete model.types.type['mandatory-aspects'];
 			}
