@@ -284,7 +284,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         node.children = [];
                         for (var nodeIndex in oResults) {
                             var newNode = {
-                                id: oResults[nodeIndex].id,
+                                id: oResults[nodeIndex].id + "-" + oResults[nodeIndex].armNodeId,
                                 nodeRef: oResults[nodeIndex].nodeRef,
                                 nodeType: oResults[nodeIndex].nodeType,
                                 armNodeRef: oResults[nodeIndex].armNodeRef,
