@@ -6,7 +6,7 @@
 	<div id="yui-main-2">
 		<div class="yui-b datagrid-content" id="alf-content">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=false>
+		<@grid.datagrid id=id showViewForm=true viewFormId="bj-view-node-form">
 			<script type="text/javascript">//<![CDATA[
 			(function() {
 				function createDatagrid() {
