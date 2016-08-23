@@ -84,7 +84,7 @@
 
         <type name="lecm-dic:big_plane_dictionary_values">
             <title>Dictionary values</title>
-            <parent>cm:content</parent>
+            <parent>lecm-dic:plane_dictionary_values</parent>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>
             </mandatory-aspects>
