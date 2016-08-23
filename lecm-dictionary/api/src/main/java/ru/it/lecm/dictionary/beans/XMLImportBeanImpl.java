@@ -41,6 +41,9 @@ public class XMLImportBeanImpl implements XMLImportBean {
 	private MimetypeService mimetypeService;
     private SearchService searchService;
 
+    private static final String TAG_VALUE = "value";
+    private static final String ATTR_LANG = "lang";
+    
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -79,7 +82,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
 	    protected XMLImporterInfo importInfo;
 
 	    protected Set<AssociationInfo> assocs;
-
+	    
         /**
          * Конструктор загрузчика XML
          * @param inputStream входной XML поток
@@ -443,44 +446,76 @@ public class XMLImportBeanImpl implements XMLImportBean {
          */
         private Map<QName, Serializable> getProperties(XMLStreamReader xmlr) throws XMLStreamException {
             Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-            String value;
             String propName;
             while (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_PROPERTY)) {
                 propName = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
                 xmlr.next();
-	            value = null;
-                while (XMLStreamConstants.CHARACTERS == xmlr.getEventType()
-                        || XMLStreamConstants.CDATA == xmlr.getEventType()) {
-                    String str = xmlr.getText();
-	                if (value == null) {
-		                value = str;
-	                } else {
-		                value += str;
-	                }
-                    xmlr.next();
-                }
-	            if (value != null) {
-					QName propQName = QName.createQName(propName, namespaceService);
-					value = value.trim();
-					// проверяем на multy-value
-					final int valueLength = value.length();
-					if (valueLength > 1 && value.charAt(0) == '[' && value.charAt(valueLength - 1) == ']') {
-						String valueToSplit = value.substring(1, valueLength - 1);
-						String[] splittedValue = StringUtils.split(valueToSplit, ", ");
-						if (splittedValue != null) {
-							properties.put(propQName, new ArrayList<Serializable>(Arrays.asList(splittedValue)));
-						}
-					} else {
-						properties.put(propQName, value);
-					}
-	            }
+                getProperty(xmlr, properties, propName);
 	            xmlr.nextTag();//пропускаем закрывающий тэг
             }
             return properties;
         }
     }
-
+        
+    private void getProperty (XMLStreamReader xmlr, Map<QName, Serializable> properties, String propName) throws XMLStreamException {
+    	// Получить содержимое поля
+    	String value = getValue(xmlr);
+    	
+    	// Попробовать получить локализированные значения поля
+    	boolean hasLocales = false;
+        MLText mlTextValue = new MLText();
+        while (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
+                && xmlr.getLocalName().equals(TAG_VALUE)) {
+        	String langName = xmlr.getAttributeValue("", ATTR_LANG);
+        	xmlr.next();
+        	
+        	String mlValue = getValue(xmlr);
+            if (mlValue != null) {
+            	mlTextValue.addValue(new Locale(langName), mlValue);
+            	hasLocales = true;
+            }
+            if (XMLStreamConstants.START_ELEMENT != xmlr.getEventType()) {
+            	xmlr.nextTag();
+            }
+        }
+        
+        QName propQName = QName.createQName(propName, namespaceService);
+        if (hasLocales) {
+            // Если получены локализированные значения поля, то записать их
+        	properties.put(propQName, mlTextValue);
+        } else if (value != null) {
+        	// Если локализированные значения не получены, то записать нелокализированное содержимое поля
+			value = value.trim();
+			// проверяем на multy-value
+			final int valueLength = value.length();
+			if (valueLength > 1 && value.charAt(0) == '[' && value.charAt(valueLength - 1) == ']') {
+				String valueToSplit = value.substring(1, valueLength - 1);
+				String[] splittedValue = StringUtils.split(valueToSplit, ", ");
+				if (splittedValue != null) {
+					properties.put(propQName, new ArrayList<Serializable>(Arrays.asList(splittedValue)));
+				}
+			} else {
+				properties.put(propQName, value);
+			}
+        }
+    }
+    
+    private String getValue(XMLStreamReader xmlr) throws XMLStreamException {
+    	String value = null;
+        while (XMLStreamConstants.CHARACTERS == xmlr.getEventType()
+                || XMLStreamConstants.CDATA == xmlr.getEventType()) {
+            String str = xmlr.getText();
+            if (value == null) {
+                value = str;
+            } else {
+                value += str;
+            }
+            xmlr.next();
+        }
+        return value;
+    }
+    
     /**
      * Вспомогательный клас для запоминания ассоциаций, которые необходимо создать
      */
