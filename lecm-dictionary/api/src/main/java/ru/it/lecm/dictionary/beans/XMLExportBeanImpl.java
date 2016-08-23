@@ -51,6 +51,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
 
     private static final String TAG_VALUE = "value";
     private static final String ATTR_LANG = "lang";
+    private static final String ML_PART = ":ml-";
 	
     public void setLecmMessageService(LecmMessageService lecmMessageService) {
         this.lecmMessageService = lecmMessageService;
@@ -191,10 +192,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
 
         private void writeProperties(NodeRef childRef, boolean doNotFilterFields, List fields) throws XMLStreamException {
         	// Проверка заполненности списка локалей.
-        	boolean isLocalesAvailable = false;
-        	if (lecmMessageService.getAvailableLocales().size() > 0) {
-        		isLocalesAvailable = true;
-        	}
+        	boolean isLocalesAvailable = lecmMessageService.getAvailableLocales().size() > 0;
         	
         	// Экспорт свойств справочника
         	List<String> processedFieldNames = new ArrayList<String>();
@@ -202,15 +200,11 @@ public class XMLExportBeanImpl implements XMLExportBean {
                 QName qName = entry.getKey().getPrefixedQName(namespaceService);
                 String stringQName = qName.toPrefixString();
                 
-                // Проверка cm:title на наличие 2 или более локалей
-                boolean isMLTitle = false;
-                if (isTitle(stringQName)) {
-                	isMLTitle = hasTwoMoreLocales(childRef, qName);
-                }
+                // Проверка поля cm:title на наличие 2 или более локалей
+                boolean isMLTitle = isTitle(stringQName) ? hasTwoMoreLocales(childRef, qName) : false;
                 
-                if (isLocalesAvailable && (isMlField(stringQName) ||  isMLTitle)) {
-                	MLText mlTextProperty = getMLTextValue(childRef, qName);
-                	writeMLProperty(qName, mlTextProperty);
+                if (isMlField(stringQName) || isMLTitle) {
+                	writeMLProperty(qName, getMLTextValue(childRef, qName));
                 }
                 else {
                     String value = prepareEntryValue(entry);
@@ -241,11 +235,11 @@ public class XMLExportBeanImpl implements XMLExportBean {
         }
 
         private boolean isMlField(String fieldName) {
-        	return (fieldName.indexOf(":ml-") != -1) ? true : false;
+        	return fieldName != null && fieldName.indexOf(ML_PART) != -1;
         }
         
         private boolean isTitle(String fieldName) {
-        	return (fieldName.equals("cm:title")) ? true : false;
+        	return fieldName != null && fieldName.equals(ContentModel.PROP_TITLE.toPrefixString());
         }
         
         protected boolean isExportField(List exportFieldsList, QName qName) {
@@ -285,14 +279,14 @@ public class XMLExportBeanImpl implements XMLExportBean {
             MLPropertyInterceptor.setMLAware(true); 
             MLText mlProp = (MLText) nodeService.getProperty(nodeRef, qname);
             MLPropertyInterceptor.setMLAware(false);
-            return mlProp;
+            return mlProp != null ? mlProp : new MLText();
         }
         
         private boolean hasTwoMoreLocales(NodeRef nodeRef, QName qname) {
             MLPropertyInterceptor.setMLAware(true); 
             MLText mlProp = (MLText) nodeService.getProperty(nodeRef, qname);
             MLPropertyInterceptor.setMLAware(false);
-            return (mlProp.getLocales().size() > 1) ? true : false;
+            return (mlProp != null && mlProp.getLocales().size() > 1) ? true : false;
         }
         
         private void writeMLPropertyExample(String fieldName) throws XMLStreamException {
