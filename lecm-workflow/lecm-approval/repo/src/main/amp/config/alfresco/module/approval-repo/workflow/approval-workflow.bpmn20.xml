@@ -141,6 +141,14 @@
     /* выбор первого неактивного этапа */
     var expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
     if (expression && !approval.checkExpression(bpm_package.children[0].nodeRef, expression)) {
+      stage.properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+      stage.save();
+      if (items && items.length) {
+        for (j = 0, length = items.length; j < length; ++j) {
+          items[j].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+          items[j].save();
+        }
+      }
       continue;
     }
     if (!isTemp && (!approvalState || 'NEW' == approvalState) && items && items.length) {
@@ -770,6 +778,14 @@
 
     var expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
     if (expression && !approval.checkExpression(bpm_package.children[0].nodeRef, expression)) {
+      stages[i].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+      stages[i].save();
+      if (items && items.length) {
+        for (j = 0, length = items.length; j < length; ++j) {
+          items[j].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+          items[j].save();
+        }
+      }
       continue;
     }
     /* поиск неактивных этапов */
