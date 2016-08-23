@@ -33,6 +33,7 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="exportSettings" ref="dictionary.exportSettings"/>
         <property name="contentService" ref="contentService"/>
+        <property name="lecmMessageService" ref="lecmMessageService"/>
     </bean>
 
     <bean id="lecmDictionaryImportBean" class="ru.it.lecm.dictionary.beans.XMLImportBeanImpl">
@@ -160,8 +161,10 @@
                 <entry key="lecm-currency:currency">
                     <list>
                         <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-currency:digital-code</value>
                         <value>lecm-currency:alphabetic-code</value>
+                        <value>lecm-currency:ml-alphabetic-code</value>
                     </list>
                 </entry>
                 <entry key="lecm-notification-template:template">

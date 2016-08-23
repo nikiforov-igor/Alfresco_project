@@ -144,6 +144,7 @@
                 <entry key="lecm-notf-type:notification-type">
                     <list>
                         <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-notf-type:code</value>
                         <value>lecm-notf-type:spring-bean-id</value>
                         <value>lecm-notf-type:default-select</value>

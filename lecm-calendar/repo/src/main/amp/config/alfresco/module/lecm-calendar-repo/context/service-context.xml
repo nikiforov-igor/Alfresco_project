@@ -288,6 +288,7 @@
 				<entry key="lecm-absence:reason">
 					<list>
 						<value>cm:name</value>
+						<value>cm:title</value>
 						<value>lecm-absence:color</value>
 						<value>lecm-absence:code</value>
 					</list>

@@ -295,12 +295,14 @@
 				<entry key="lecm-busjournal:eventCategory">
 					<list>
 						<value>cm:name</value>
+						<value>cm:title</value>
 						<value>lecm-busjournal:eventCategory-code</value>
 					</list>
 				</entry>
 				<entry key="lecm-busjournal:objectType">
 					<list>
 						<value>cm:name</value>
+						<value>cm:title</value>
 						<value>lecm-busjournal:objectType-code</value>
 						<value>lecm-busjournal:objectType-template</value>
 						<value>lecm-busjournal:objectType-class</value>

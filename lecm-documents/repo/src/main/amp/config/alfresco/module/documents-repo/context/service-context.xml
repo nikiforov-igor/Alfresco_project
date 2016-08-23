@@ -527,14 +527,19 @@
                 <entry key="lecm-connect-types:connection-type">
                     <list>
                         <value>cm:name</value>
+                        <value>cm:title</value>
                         <value>lecm-connect-types:reverse-name</value>
+                        <value>lecm-connect-types:ml-reverse-name</value>
                         <value>lecm-connect-types:code</value>
                     </list>
                 </entry>
 	            <entry key="lecm-doc-dic:subjects">
 		            <list>
 			            <value>cm:name</value>
+			            <value>cm:title</value>
 			            <value>lecm-doc-dic:subject-code</value>
+			            <value>lecm-doc-dic:subject-description</value>
+			            <value>lecm-doc-dic:ml-subject-description</value>
 		            </list>
 	            </entry>
             </map>

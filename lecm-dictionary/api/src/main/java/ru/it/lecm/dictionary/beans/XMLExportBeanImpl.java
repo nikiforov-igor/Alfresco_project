@@ -1,6 +1,7 @@
 package ru.it.lecm.dictionary.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.ExportSettings;
 import ru.it.lecm.dictionary.export.ExportNamespace;
+import ru.it.lecm.base.beans.LecmMessageService;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -45,7 +47,15 @@ public class XMLExportBeanImpl implements XMLExportBean {
     protected NodeService nodeService;
     protected NamespaceService namespaceService;
 	private ContentService contentService;
+	private LecmMessageService lecmMessageService;
 
+    private static final String TAG_VALUE = "value";
+    private static final String ATTR_LANG = "lang";
+	
+    public void setLecmMessageService(LecmMessageService lecmMessageService) {
+        this.lecmMessageService = lecmMessageService;
+    }
+	
     public void setExportSettings(ExportSettings exportSettings) {
         this.exportSettings = exportSettings;
     }
@@ -180,17 +190,64 @@ public class XMLExportBeanImpl implements XMLExportBean {
         }
 
         private void writeProperties(NodeRef childRef, boolean doNotFilterFields, List fields) throws XMLStreamException {
-            //экспорт свойств справочника
+        	// Проверка заполненности списка локалей.
+        	boolean isLocalesAvailable = false;
+        	if (lecmMessageService.getAvailableLocales().size() > 0) {
+        		isLocalesAvailable = true;
+        	}
+        	
+        	// Экспорт свойств справочника
+        	List<String> processedFieldNames = new ArrayList<String>();
             for (Map.Entry<QName, Serializable> entry : nodeService.getProperties(childRef).entrySet()) {
                 QName qName = entry.getKey().getPrefixedQName(namespaceService);
-                String value = prepareEntryValue(entry);
-                if ((doNotFilterFields && !ignoredNamespaces.contains(qName.getNamespaceURI()))
-                        || (!doNotFilterFields && isExportField(fields, qName))) {
-                    writeProperty(qName, value);
+                String stringQName = qName.toPrefixString();
+                
+                // Проверка cm:title на наличие 2 или более локалей
+                boolean isMLTitle = false;
+                if (isTitle(stringQName)) {
+                	isMLTitle = hasTwoMoreLocales(childRef, qName);
+                }
+                
+                if (isLocalesAvailable && (isMlField(stringQName) ||  isMLTitle)) {
+                	MLText mlTextProperty = getMLTextValue(childRef, qName);
+                	writeMLProperty(qName, mlTextProperty);
+                }
+                else {
+                    String value = prepareEntryValue(entry);
+                    if ((doNotFilterFields && !ignoredNamespaces.contains(qName.getNamespaceURI()))
+                            || (!doNotFilterFields && isExportField(fields, qName))) {
+                        writeProperty(qName, value);
+                    }
+                }
+            	processedFieldNames.add(qName.toPrefixString());
+            }
+            
+            // Обработка незаполненных, но обязательных к экспорту mltext-полей.
+            if (isLocalesAvailable) {
+                for (String exportField : (List<String>)fields) {
+                	boolean isMlTextFieldProcessed = false;
+                	if (isMlField(exportField) || isTitle(exportField)) {
+                    	for (String processedField : processedFieldNames) {
+                    		if (exportField.equals(processedField)) {
+                    			isMlTextFieldProcessed = true;
+                    		}
+                    	}
+                    	if (!isMlTextFieldProcessed) {
+                    		writeMLPropertyExample(exportField);
+                    	}
+                	}
                 }
             }
         }
 
+        private boolean isMlField(String fieldName) {
+        	return (fieldName.indexOf(":ml-") != -1) ? true : false;
+        }
+        
+        private boolean isTitle(String fieldName) {
+        	return (fieldName.equals("cm:title")) ? true : false;
+        }
+        
         protected boolean isExportField(List exportFieldsList, QName qName) {
             return exportFieldsList != null && exportFieldsList.contains(qName.toPrefixString(namespaceService));
         }
@@ -204,6 +261,52 @@ public class XMLExportBeanImpl implements XMLExportBean {
             }
         }
 
+        private void writeMLProperty(QName propQName, MLText mlTextProperty) throws XMLStreamException {
+        	List<Locale> localeList = lecmMessageService.getAvailableLocales();
+        	if (localeList.size() > 0) {
+        		Set<Locale> propertyLocaleSet = mlTextProperty.getLocales();
+            	QName qName = propQName.getPrefixedQName(namespaceService);
+            	xmlw.writeStartElement(ExportNamespace.TAG_PROPERTY);
+            	xmlw.writeAttribute(ExportNamespace.ATTR_NAME, qName.toPrefixString());
+            	for (Locale locale : localeList) {
+            		if (propertyLocaleSet.contains(locale)) {
+            			String value = mlTextProperty.getValue(locale);
+            			xmlw.writeStartElement(TAG_VALUE);
+            			xmlw.writeAttribute(ATTR_LANG, locale.toString());
+            			xmlw.writeCData(value);
+            			xmlw.writeEndElement();
+            		}
+            	}
+            	xmlw.writeEndElement();
+        	}
+        }
+        
+        private MLText getMLTextValue(NodeRef nodeRef, QName qname) {
+            MLPropertyInterceptor.setMLAware(true); 
+            MLText mlProp = (MLText) nodeService.getProperty(nodeRef, qname);
+            MLPropertyInterceptor.setMLAware(false);
+            return mlProp;
+        }
+        
+        private boolean hasTwoMoreLocales(NodeRef nodeRef, QName qname) {
+            MLPropertyInterceptor.setMLAware(true); 
+            MLText mlProp = (MLText) nodeService.getProperty(nodeRef, qname);
+            MLPropertyInterceptor.setMLAware(false);
+            return (mlProp.getLocales().size() > 1) ? true : false;
+        }
+        
+        private void writeMLPropertyExample(String fieldName) throws XMLStreamException {
+        	List<Locale> localeList = lecmMessageService.getAvailableLocales();
+        	if (localeList.size() > 0) {
+            	String example = "<property name=\"" + fieldName + "\">";
+            	for (Locale locale : localeList) {
+            		example += "<value lang=\"" + locale.toString() + "\"><![CDATA[" + locale.toString() + " value" + "]]></value>";
+            	}
+            	example += "</property>";
+            	xmlw.writeComment(example);
+        	}
+        }
+        
 	    private void writeContent(NodeRef fileRef) throws XMLStreamException {
 		    ContentReader reader = contentService.getReader(fileRef, ContentModel.PROP_CONTENT);
 		    String contentBase64 = "";
