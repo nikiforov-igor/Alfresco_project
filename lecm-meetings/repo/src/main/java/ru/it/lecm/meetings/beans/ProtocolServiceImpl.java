@@ -1,16 +1,7 @@
 package ru.it.lecm.meetings.beans;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import com.google.common.collect.Sets;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -23,9 +14,11 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.meetings.policy.MeetingsPolicy;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author snovikov
@@ -244,5 +237,30 @@ public class ProtocolServiceImpl extends BaseBean implements ProtocolService {
                 nodeService.setAssociations(point, ProtocolService.ASSOC_PROTOCOL_POINT_STATUS, targetStatus);
             }
         }
+    }
+
+    @Override
+    public boolean checkProtocolPointsFields(NodeRef protocol) {
+        List<AssociationRef> tableAssocs = nodeService.getTargetAssocs(protocol, ProtocolService.ASSOC_PROTOCOL_POINTS);
+        if (tableAssocs != null && !tableAssocs.isEmpty()) {
+            NodeRef table = tableAssocs.get(0).getTargetRef();
+
+            List<ChildAssociationRef> pointAssocs = nodeService.getChildAssocs(table, Sets.newHashSet(ProtocolService.TYPE_PROTOCOL_TS_POINT));
+
+            for (ChildAssociationRef pointAssoc : pointAssocs) {
+                NodeRef point = pointAssoc.getChildRef();
+
+                List<AssociationRef> pointExecutorAssocs = nodeService.getTargetAssocs(point, ProtocolService.ASSOC_PROTOCOL_POINT_EXECUTOR);
+
+                if (pointExecutorAssocs == null || pointExecutorAssocs.isEmpty() ||
+                        nodeService.getProperty(point, PROP_PROTOCOL_POINT_EXEC_DATE) == null ||
+                        nodeService.getProperty(point, PROP_PROTOCOL_POINT_DECISION) == null) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
     }
 }
