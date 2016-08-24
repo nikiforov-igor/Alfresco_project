@@ -53,7 +53,7 @@ public class BigPlaneDictionaryPolicy extends BaseBean implements NodeServicePol
             NodeRef dicItem = childAssocRef.getChildRef();
             if (dictionaryBean.isDictionary(parent)) {
                 List<String> path = new ArrayList<>();
-                Long counter = (counterFactory.getCounter(CounterType.DOCTYPE_PLAIN, dicItem, null).getValue()) / 1000;
+                Long counter = (counterFactory.getCounter(CounterType.DOCTYPE_PLAIN, dicItem, null).getValue()) / 500;
                 path.add("000" + counter.toString());
                 NodeRef storeRef = getFolder(parent, path);
                 if (storeRef == null) {
