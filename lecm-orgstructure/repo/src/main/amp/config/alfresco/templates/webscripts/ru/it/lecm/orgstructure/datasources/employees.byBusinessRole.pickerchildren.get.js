@@ -7,7 +7,7 @@ function main() {
 		var filter = getFilterForAvailableElement(availableEmployees);
 		if (url.templateArgs.organization_store) {
 			var org = url.templateArgs.organization_store + "://" + url.templateArgs.organization_store_id + "/" + url.templateArgs.organization_id;
-			filter = filter + ' AND @lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + org + '\"';
+			filter = '(' + filter + ') AND @lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + org + '\"';
 		}
 		data = getPickerChildrenItems(filter);
 	}
