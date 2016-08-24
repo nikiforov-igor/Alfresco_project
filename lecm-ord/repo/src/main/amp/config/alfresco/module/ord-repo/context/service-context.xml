@@ -194,7 +194,7 @@
         </property>
     </bean>
 
-    <bean parent="documentMessagesLoader">
+    <bean parent="lecmMessagesLoader">
         <property name="messages">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-ord-document</value>

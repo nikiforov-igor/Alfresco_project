@@ -264,7 +264,7 @@
 	<bean id="meetings.copySettings.bean" parent="documentCopySettingsBean"
 		  p:settings-ref="meetings.copySettings.bean.settings" />
 
-	<bean parent="documentMessagesLoader">
+	<bean parent="lecmMessagesLoader">
 		<property name="messages">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/lecm-meetings-document</value>

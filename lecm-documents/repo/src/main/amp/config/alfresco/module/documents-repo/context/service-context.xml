@@ -772,15 +772,5 @@
 		<property name="lecmMessageService" ref="lecmMessageService"/>
 	</bean>-->
 
-	<bean id="documentMessagesLoader"
-		  abstract="true"
-		  class="ru.it.lecm.documents.beans.MessageToRepositoryLoader">
-		<property name="lecmMessageService" ref="lecmMessageService"/> <!-- только для обеспечения порядка загрузки -->
-		<property name="repoAdminService" ref="repoAdminService"/>
-		<property name="transactionService" ref="transactionService"/>
-		<property name="propertiesService" ref="propertiesService"/>
-		<property name="useDefaultMessages" value="${lecm.documents.useDefaultMessages}"/>
-	</bean>
-
     <bean id="spELTemplateUtils" class="ru.it.lecm.documents.utils.SpELUtils" depends-on="serviceOrgstructure"/>
 </beans>

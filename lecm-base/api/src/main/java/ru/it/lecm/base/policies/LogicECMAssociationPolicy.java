@@ -106,8 +106,8 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
                 nodeService.setProperty(nodeRef, propertyTextQName, textValue);
             }
 
-            List<Locale> locales = lecmMessageService.getAvailableLocales();
-            if (locales != null && !locales.isEmpty()) {
+            List<Locale> locales = lecmMessageService.getMlLocales();
+            if (lecmMessageService.isMlSupported()) {
                 QName propertyMlTextQName = QName.createQName(assocQName.toPrefixString(namespaceService) + "-ml-text-content", namespaceService);
                 PropertyDefinition propertyDefinitionMlText = dictionaryService.getProperty(propertyMlTextQName);
                 if (propertyDefinitionMlText != null) { // ml-text-content

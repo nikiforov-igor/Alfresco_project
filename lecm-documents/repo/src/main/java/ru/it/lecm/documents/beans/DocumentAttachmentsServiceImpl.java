@@ -165,11 +165,11 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		String[] names = StringUtils.split(category, '|');
 		NodeRef categoryRef = createNode(attachmentRootRef, TYPE_CATEGORY, names[0], null);
 		disableNodeIndex(categoryRef);
-		if (names.length == 2) { //если у категории через разделитель задан ключ локализации
+		if (lecmMessageService.isMlSupported() && names.length == 2) {//если у категории через разделитель задан ключ локализации
 			String typename = type.toPrefixString(namespaceService).replace(':', '_');
 			String categoryKey = names[1];
 			String messageKey = String.format("%s.attachmentCategory.%s.title", typename, categoryKey);
-			List<Locale> locales = lecmMessageService.getAvailableLocales();
+			List<Locale> locales = lecmMessageService.getMlLocales();
 			List<Locale> fallback = lecmMessageService.getFallbackLocales();
 			MLPropertyInterceptor.setMLAware(true);
 			MLText mlText = new MLText();

@@ -90,8 +90,8 @@
 	<util:constant id="EVENTS_ROOT_ID" static-field="ru.it.lecm.events.beans.EventsService.EVENTS_ROOT_ID"/>
 
 	<bean id="eventsNotificationsService" class="ru.it.lecm.events.beans.EventsNotificationsService" parent="baseBean"
-	      depends-on="events.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService"> 
-		  
+	      depends-on="events.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService">
+
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="mailService" ref="mailService"/>
@@ -104,7 +104,7 @@
 		<property name="sendIcalToInvitedMembers" value="${lecm.events.sendIcalToInvitedMembers}" />	<!--default=true-->
 		<property name="eventsService" ref="eventsService"/>
 	</bean>
-	
+
 	<bean id="eventsService" class="ru.it.lecm.events.beans.EventsServiceImpl" parent="baseBean"
 	      depends-on="events.LogicEcmInternalBootstrap, ServiceRegistry, nodeService, transactionService"
 			init-method="init">
@@ -329,16 +329,16 @@
 			</list>
 		</property>
 	</bean>
-	
-	
-	
+
+
+
 	<bean id="events.mail.reciever" parent="baseBean" class="ru.it.lecm.events.mail.incoming.MailReciever">
 		<property name="destinationFolderName" value="IncomingMail"/>
 		<property name="eventsService" ref="eventsService"/>
 		<property name="contentService" ref="contentService"/>
 		<property name="eventsNotificationsService" ref="eventsNotificationsService" />
 
-		
+
 		<property name="mailHost" value="${mail.ical.host}"/>
 		<property name="mailUsername" value="${mail.ical.username}"/>
 		<property name="mailPassword" value="${mail.ical.password}"/>
@@ -346,8 +346,8 @@
 		<property name="mailInboxFolder" value="INBOX"/>
 		<property name="mailDestinationFolder" value="icalAnswers"/>
 	</bean>
-	
-	
+
+
 	<bean id="events.recieveMailScheduler" class="ru.it.lecm.events.schedule.RecieveMailScheduler"
 	depends-on="events.mail.reciever">
 		<property name="transactionMode">
@@ -385,10 +385,10 @@
 		</property>
 
 		<property name="mailReciever" ref="events.mail.reciever"/>
-		
+
 	</bean>
 
-	<bean parent="documentMessagesLoader">
+	<bean parent="lecmMessagesLoader">
 		<property name="messages">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/lecm-events-document</value>

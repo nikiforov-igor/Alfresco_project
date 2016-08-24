@@ -36,7 +36,7 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 	private RepositoryLocation repoMessagesLocation;
 	private SearchService searchService;
 
-	List<Locale> availableLocales = new ArrayList<>();
+	List<Locale> mlLocales = new ArrayList<>();
 	List<Locale> fallbackLocales = Arrays.asList(DEFAULT_LOCALES);
 
 	@Override
@@ -78,10 +78,10 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 		return locales;
 	}
 
-	public void setLocales(String availableLocales) {
-		List<Locale> locales = toLocales(availableLocales);
+	public void setLocales(String mlLocales) {
+		List<Locale> locales = toLocales(mlLocales);
 		if (locales.size() > 0) {
-			this.availableLocales = locales;
+			this.mlLocales = locales;
 		}
 	}
 
@@ -93,13 +93,18 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 	}
 
 	@Override
-	public List<Locale> getAvailableLocales() {
-		return this.availableLocales;
+	public List<Locale> getMlLocales() {
+		return this.mlLocales;
 	}
 
 	@Override
 	public List<Locale> getFallbackLocales() {
 		return this.fallbackLocales;
+	}
+
+	@Override
+	public boolean isMlSupported() {
+		return this.mlLocales.size() > 0;
 	}
 
 	public void setRepoMessagesLocation(RepositoryLocation repoMessagesLocation) {

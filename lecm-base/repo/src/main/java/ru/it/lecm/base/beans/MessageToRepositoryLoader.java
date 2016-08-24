@@ -1,4 +1,4 @@
-package ru.it.lecm.documents.beans;
+package ru.it.lecm.base.beans;
 
 import java.util.List;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -9,9 +9,6 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransacti
 import org.alfresco.service.cmr.admin.RepoAdminService;
 import org.alfresco.service.transaction.TransactionService;
 import org.springframework.context.ApplicationListener;
-import ru.it.lecm.base.beans.LecmMessageService;
-import ru.it.lecm.base.beans.LecmBaseException;
-import ru.it.lecm.base.beans.LecmBasePropertiesService;
 
 /**
  *
@@ -98,6 +95,11 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 		boolean bundleExists = messageBundles.contains(locationBaseName);
 		if (!bundleExists || useDefault) {
 			if (bundleExists) {
+				/*
+				undeployMessageBundle выполняет удаление нод из репозитория,
+				но не помечает их как sys:temporary, поэтому они накапливаются в корзине
+				надо придумать как их вычищать оттуда
+				*/
 				repoAdminService.undeployMessageBundle(locationBaseName);
 			}
 			repoAdminService.deployMessageBundle(messageLocation);

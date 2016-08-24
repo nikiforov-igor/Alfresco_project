@@ -513,4 +513,15 @@
 			</map>
 		</property>
 	</bean>
+
+	<bean id="lecmMessagesLoader"
+		  abstract="true"
+		  class="ru.it.lecm.base.beans.MessageToRepositoryLoader">
+		<property name="lecmMessageService" ref="lecmMessageService"/> <!-- только для обеспечения порядка загрузки -->
+		<property name="repoAdminService" ref="repoAdminService"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="propertiesService" ref="propertiesService"/>
+		<property name="useDefaultMessages" value="${lecm.messages.useDefaultMessages}"/>
+	</bean>
+
 </beans>

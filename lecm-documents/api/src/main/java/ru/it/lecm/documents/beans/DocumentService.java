@@ -28,6 +28,8 @@ public interface DocumentService {
     public static final QName PROP_EXT_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "ext-present-string");
     public static final QName PROP_LIST_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "list-present-string");
     public static final QName PROP_ML_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "ml-present-string");
+    public static final QName PROP_ML_EXT_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "ml-ext-present-string");
+    public static final QName PROP_ML_LIST_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "ml-list-present-string");
     public static final String CONSTRAINT_PRESENT_STRING = "present-string-constraint";
     public static final String CONSTRAINT_AUTHOR_PROPERTY = "author-property-constraint";
     public static final String CONSTRAINT_REG_NUMBERS_PROPERTIES = "reg-number-properties-constraint";

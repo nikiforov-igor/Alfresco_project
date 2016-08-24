@@ -71,8 +71,8 @@ public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy imp
             nodeService.setProperty(record, propertyTextQName, strOldValue);
         }
 
-        List<Locale> locales = lecmMessageService.getAvailableLocales();
-        if (locales != null && !locales.isEmpty()) {
+        List<Locale> locales = lecmMessageService.getMlLocales();
+        if (lecmMessageService.isMlSupported()) {
             QName propertyMlTextQName = QName.createQName(assocQName + "-ml-text-content", namespaceService);
             PropertyDefinition propertyDefinitionMlText = dictionaryService.getProperty(propertyMlTextQName);
             if (propertyDefinitionMlText != null && nodeService.exists(nodeAssocRef.getTargetRef())) { // ml-text-content

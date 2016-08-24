@@ -46,9 +46,12 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.repo.dictionary.M2Label;
 import org.alfresco.repo.i18n.MessageService;
+import org.alfresco.repo.i18n.StaticMessageLookup;
 import org.alfresco.repo.node.MLPropertyInterceptor;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
+import org.alfresco.service.cmr.i18n.MessageLookup;
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -64,6 +67,7 @@ public class DocumentPolicy extends BaseBean
     private static final String DOCUMENT_SEARCH_CONTENT_TEMPLATE = "/alfresco/templates/webscripts/ru/it/lecm/documents/document-search-object-content.ftl";
     private static final String DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH = "/alfresco/templates/webscripts/ru/it/lecm/documents/icons/";
     final private QName[] IGNORED_PROPERTIES = {DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT, StatemachineModel.PROP_STATUS, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS};
+	final private MessageLookup staticMessageLookup = new StaticMessageLookup();
 
     private PolicyComponent policyComponent;
     private BusinessJournalService businessJournalService;
@@ -433,17 +437,15 @@ public class DocumentPolicy extends BaseBean
         if (presentStringValue != null) {
             setPropertyAsSystem(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
 
-			updateMLPresentString(type, nodeRef, presentStringValue);
+            TypeDefinition typeDef = dictionaryService.getType(type);
+			updateMLPresentString(typeDef, nodeRef, presentStringValue);
 
 	        if (presentStringValue.endsWith(".")) {
 		        presentStringValue = presentStringValue.substring(0, presentStringValue.length() - 1);
 	        }
             setPropertyAsSystem(nodeRef, ContentModel.PROP_NAME, FileNameValidator.getValidFileName(presentStringValue + " " + nodeRef.getId()));
 
-            TypeDefinition typeDef = dictionaryService.getType(type);
-            if (typeDef != null && typeDef.getTitle() != null) {
-                setPropertyAsSystem(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
-            }
+            setPropertyAsSystem(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
         }
 
 		final AuthenticationUtil.RunAsWork<String> listStringValue = new AuthenticationUtil.RunAsWork<String>() {
@@ -462,34 +464,44 @@ public class DocumentPolicy extends BaseBean
 
     }
 
-	private void updateMLPresentString(final QName type, final NodeRef nodeRef, final String presentStringValue) {
-		String typename = type.toPrefixString(namespaceService).replace(':', '_');
-		String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
-		String messageKey = String.format("%s.property.%s.value", typename, propname);
-		List<Locale> locales = lecmMessageService.getAvailableLocales();
-		List<Locale> fallback = lecmMessageService.getFallbackLocales();
-		MLPropertyInterceptor.setMLAware(true);
-		MLText mlText = (MLText)nodeService.getProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING);
-		mlText = mlText != null ? mlText : new MLText();
-		for (Locale locale : fallback) {
-			mlText.addValue(locale, presentStringValue);
-		}
-		for (Locale locale : locales) {
-			final String presentString = StringEscapeUtils.unescapeJava(messageService.getMessage(messageKey, locale));
-			if (presentString != null) {
-				String value = AuthenticationUtil.runAsSystem(new RunAsWork<String> () {
-					@Override
-					public String doWork() throws Exception {
-						return substituteService.formatNodeTitle(nodeRef, presentString);
+	private void updateMLPresentString(final TypeDefinition typeDef, final NodeRef nodeRef, final String presentStringValue) {
+		if (lecmMessageService.isMlSupported()) {
+			String typename = typeDef.getName().toPrefixString(namespaceService).replace(':', '_');
+			String propname = DocumentService.PROP_ML_PRESENT_STRING.toPrefixString(namespaceService).replace(':', '_');
+			String messageKey = String.format("%s.property.%s.value", typename, propname);
+			List<Locale> locales = lecmMessageService.getMlLocales();
+			List<Locale> fallback = lecmMessageService.getFallbackLocales();
+			MLPropertyInterceptor.setMLAware(true);
+			MLText mlText = (MLText)nodeService.getProperty(nodeRef, DocumentService.PROP_ML_PRESENT_STRING);
+			MLText mlExtText = (MLText)nodeService.getProperty(nodeRef, DocumentService.PROP_ML_EXT_PRESENT_STRING);
+			mlText = mlText != null ? mlText : new MLText();
+			mlExtText = mlExtText != null ? mlExtText : new MLText();
+			for (Locale locale : fallback) {
+				String typeValue = M2Label.getLabel(locale, typeDef.getModel(), staticMessageLookup, "type", typeDef.getName(), "title");
+				mlText.addValue(locale, presentStringValue);
+				mlExtText.addValue(locale, typeValue + ": " + presentStringValue);
+			}
+			for (Locale locale : locales) {
+				final String presentString = StringEscapeUtils.unescapeJava(messageService.getMessage(messageKey, locale));
+				if (presentString != null) {
+					String value = AuthenticationUtil.runAsSystem(new RunAsWork<String> () {
+						@Override
+						public String doWork() throws Exception {
+							return substituteService.formatNodeTitle(nodeRef, presentString);
+						}
+					});
+					if (value != null) {
+						value = value.replaceAll("\r", " ").replaceAll("\n", " ");
+						String typeValue = M2Label.getLabel(locale, typeDef.getModel(), staticMessageLookup, "class", typeDef.getName(), "title");
+						mlText.addValue(locale, value);
+						mlExtText.addValue(locale, typeValue + ": " + value);
 					}
-				});
-				if (value != null) {
-					mlText.addValue(locale, value.replaceAll("\r", " ").replaceAll("\n", " "));
 				}
 			}
+			setPropertyAsSystem(nodeRef, DocumentService.PROP_ML_PRESENT_STRING, mlText);
+			setPropertyAsSystem(nodeRef, DocumentService.PROP_ML_EXT_PRESENT_STRING, mlExtText);
+			MLPropertyInterceptor.setMLAware(false);
 		}
-        setPropertyAsSystem(nodeRef, DocumentService.PROP_ML_PRESENT_STRING, mlText);
-		MLPropertyInterceptor.setMLAware(false);
 	}
 
     private boolean changeIgnoredProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
