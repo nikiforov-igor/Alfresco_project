@@ -239,7 +239,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
         }
         
         private boolean isTitle(String fieldName) {
-        	return fieldName != null && fieldName.equals(ContentModel.PROP_TITLE.toPrefixString());
+        	return ContentModel.PROP_TITLE.toPrefixString(namespaceService).equals(fieldName);
         }
         
         protected boolean isExportField(List exportFieldsList, QName qName) {
