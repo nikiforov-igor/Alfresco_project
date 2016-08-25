@@ -434,7 +434,7 @@
 					<set id="createEventSet" appearance="" template="/ru/it/lecm/events/event-create/event-create-set.ftl" />
 
 					<field id="lecm-document-aspects:attachments-temp-assoc" label-id="attachments.label" set="createEventSet">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 							<control-param name="directoryName">Вложения</control-param>
 							<control-param name="suppressRefreshEvent">true</control-param>
