@@ -41,9 +41,6 @@ public class XMLImportBeanImpl implements XMLImportBean {
 	private MimetypeService mimetypeService;
     private SearchService searchService;
 
-    private static final String TAG_VALUE = "value";
-    private static final String ATTR_LANG = "lang";
-    
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
@@ -466,8 +463,8 @@ public class XMLImportBeanImpl implements XMLImportBean {
     	boolean hasLocales = false;
         MLText mlTextValue = new MLText();
         while (XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
-                && xmlr.getLocalName().equals(TAG_VALUE)) {
-        	String langName = xmlr.getAttributeValue("", ATTR_LANG);
+                && xmlr.getLocalName().equals(ExportNamespace.TAG_VALUE)) {
+        	String langName = xmlr.getAttributeValue("", ExportNamespace.ATTR_LANG);
         	xmlr.next();
         	
         	String mlValue = getValue(xmlr);

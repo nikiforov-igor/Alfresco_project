@@ -49,8 +49,6 @@ public class XMLExportBeanImpl implements XMLExportBean {
 	private ContentService contentService;
 	private LecmMessageService lecmMessageService;
 
-    private static final String TAG_VALUE = "value";
-    private static final String ATTR_LANG = "lang";
     private static final String ML_PART = ":ml-";
 
     public void setLecmMessageService(LecmMessageService lecmMessageService) {
@@ -262,8 +260,8 @@ public class XMLExportBeanImpl implements XMLExportBean {
             	for (Locale locale : localeList) {
             		if (propertyLocaleSet.contains(locale)) {
             			String value = mlTextProperty.getValue(locale);
-            			xmlw.writeStartElement(TAG_VALUE);
-            			xmlw.writeAttribute(ATTR_LANG, locale.toString());
+            			xmlw.writeStartElement(ExportNamespace.TAG_VALUE);
+            			xmlw.writeAttribute(ExportNamespace.ATTR_LANG, locale.toString());
             			xmlw.writeCData(value);
             			xmlw.writeEndElement();
             		}

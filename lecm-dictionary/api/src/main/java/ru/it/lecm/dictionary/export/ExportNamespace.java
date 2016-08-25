@@ -10,8 +10,8 @@ import org.alfresco.service.namespace.QName;
  * To change this template use File | Settings | File Templates.
  */
 public interface ExportNamespace {
+    String ATTR_LANG = "lang";
 	String ATTR_NAME = "name";
-    String ATTR_FMS_ORGSTR_EXT_ID = "fmsOrgstrExtID";
     String ATTR_TYPE = "type";
     String ATTR_PATH = "path";
     String ATTR_XPATH = "xpath";
@@ -26,4 +26,5 @@ public interface ExportNamespace {
     String TAG_ITEM = "item";
     String TAG_ASSOCS = "assocs";
     String TAG_ASSOC = "assoc";
+    String TAG_VALUE = "value";
 }
