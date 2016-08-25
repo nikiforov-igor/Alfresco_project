@@ -29,6 +29,7 @@
 					<value>Приложение|APPENDIX</value>
 					<value>Подлинник|ORIGINAL</value>
 					<value>Прочее|OTHER</value>
+                    <value>Согласование|APPROVAL</value>
 				</list>
 			</parameter>
 		</constraint>
