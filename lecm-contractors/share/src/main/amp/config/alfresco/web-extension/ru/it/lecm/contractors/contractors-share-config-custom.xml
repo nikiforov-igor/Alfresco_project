@@ -504,7 +504,7 @@
                     <!-- Сокращенное наименование -->
                     <field id="lecm-contractor:comment" set="contacts"/>
                     <!-- Комментарий -->
-                    <field id="lecm-contractor:legal-address" set="contacts" mandatory="true"/>
+                    <field id="lecm-contractor:legal-address" set="contacts"/>
                     <!-- Юридический адрес -->
                     <field id="lecm-contractor:postal-code" set="contacts"/>
                     <!-- Почтовый индекс -->
