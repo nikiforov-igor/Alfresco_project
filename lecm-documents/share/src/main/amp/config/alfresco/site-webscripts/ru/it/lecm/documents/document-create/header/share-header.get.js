@@ -14,13 +14,16 @@ var getDocumentTitleName = function (type) {
 };
 
 var getDocumentPresentString = function (nodeRef) {
+	var nodeDetails;
+	var presentString;
+	var isMlSupported;
+	var mlValue;
 	if (nodeRef) {
-		var nodeDetails = DocumentUtils.getNodeDetails(nodeRef);
+		nodeDetails = DocumentUtils.getNodeDetails(nodeRef);
 		if (nodeDetails) {
-			var presentString = nodeDetails.item.node.properties["lecm-document:ml-present-string"];
-			if (presentString == null) {
-				presentString = nodeDetails.item.node.properties["lecm-document:ext-present-string"];
-			}
+			isMlSupported = nodeDetails.isMlSupported;
+			mlValue = nodeDetails.item.node.properties["lecm-document:ml-ext-present-string"];
+			presentString = isMlSupported && mlValue ? mlValue : nodeDetails.item.node.properties["lecm-document:ext-present-string"];
 			return msg.get('title.edit_document').replace('{0}', presentString);
 		}
 	}
