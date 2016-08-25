@@ -550,4 +550,36 @@
             </list>
         </property>
     </bean>
+
+    <!-- Оповещении о приближении даты окончания этапа -->
+    <bean id="contractStageEndDateNotificationExecutor"
+          class="ru.it.lecm.contracts.schedule.ContractStageEndDateNotificationExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="documentTableService" ref="documentTableService"/>
+        <property name="documentMembersService" ref="documentMembersService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="templateCode" value="CONTRACT_STAGE_END"/>
+        <property name="publicAction" value="false"/>
+    </bean>
+
+    <bean id="contractStageEndDateNotificationSchedule"
+          class="ru.it.lecm.contracts.schedule.ContractStageEndDateNotificationSchedule">
+        <property name="transactionMode" value="ISOLATED_TRANSACTIONS"/>
+        <property name="compensatingActionMode" value="IGNORE"/>
+        <property name="cronExpression" value="0 0 0 * * ?"/>
+        <property name="jobName" value="lecm-contracts-stage-end-notifications-job"/>
+        <property name="jobGroup" value="lecm-contracts-stage-end-notifications"/>
+        <property name="triggerName" value="lecm-contracts-stage-end-notifications-trigger"/>
+        <property name="triggerGroup" value="lecm-contracts-stage-end-notifications"/>
+        <property name="scheduler" ref="schedulerFactory"/>
+        <property name="actionService" ref="ActionService"/>
+        <property name="transactionService" ref="TransactionService"/>
+        <property name="runAsUser" value="System"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+    </bean>
 </beans>

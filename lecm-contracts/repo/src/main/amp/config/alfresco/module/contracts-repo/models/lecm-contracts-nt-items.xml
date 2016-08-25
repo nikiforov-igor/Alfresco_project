@@ -114,6 +114,14 @@
                            xpath="/app:company_home/app:dictionary/app:email_templates/cm:defaultNotificationTemplate.ftl"/>
                 </assocs>
             </item>
+            <item name="cm:CONTRACT_STAGE_END" type="lecm-notification-template:template">
+                <property name="cm:name"><![CDATA[CONTRACT_STAGE_END]]></property>
+                <property name="lecm-notification-template:template">
+                    <![CDATA[Приближается к завершению этап договора №{#mainObject.wrapAsLink(#mainObject.attribute("lecm-document:regnum"))} от {#formatDate("dd.MM.yyyy", #mainObject.attribute("lecm-document:doc-date"))}. № этапа - {#stage.getFormatted("{lecm-document:indexTableRow}")}. Наименование {#stage.attribute("lecm-contract-table-structure:name")}. Дата завершения этапа {#formatDate("dd.MM.yyyy", #stage.attribute("lecm-contract-table-structure:end-date"))}.]]></property>
+                <property name="lecm-notification-template:description">
+                    <![CDATA[Договор. Приближение срока этапа]]></property>
+                <property name="lecm-notification-template:subject"><![CDATA[]]></property>
+            </item>
         </items>
     </item>
 </items>
