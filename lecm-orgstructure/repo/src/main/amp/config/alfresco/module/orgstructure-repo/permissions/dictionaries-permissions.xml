@@ -5,5 +5,6 @@
 		<Permission object="Контрагенты" permissionGroup="Coordinator"/>
 		<Permission object="Должностные позиции" permissionGroup="Coordinator"/>
 		<Permission object="Роли для рабочих групп" permissionGroup="Coordinator"/>
+		<Permission object="Физические лица" permissionGroup="Coordinator"/>
 	</BusinessRole>
 </ReposioryPermissions>
