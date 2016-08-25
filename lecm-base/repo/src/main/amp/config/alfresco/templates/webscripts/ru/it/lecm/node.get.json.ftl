@@ -66,6 +66,7 @@
       <#if item.parent??>"parent": <#noescape>${item.parent.nodeJSON},</#noescape></#if>
       <@itemJSON item=item />
    </#if>
-   }
+   },
+   "isMlSupported": ${isMlSupported?string}
 }
 </#escape>

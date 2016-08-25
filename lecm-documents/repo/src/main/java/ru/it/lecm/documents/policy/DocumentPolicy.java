@@ -492,7 +492,7 @@ public class DocumentPolicy extends BaseBean
 					});
 					if (value != null) {
 						value = value.replaceAll("\r", " ").replaceAll("\n", " ");
-						String typeValue = M2Label.getLabel(locale, typeDef.getModel(), staticMessageLookup, "class", typeDef.getName(), "title");
+						String typeValue = M2Label.getLabel(locale, typeDef.getModel(), staticMessageLookup, "type", typeDef.getName(), "title");
 						mlText.addValue(locale, value);
 						mlExtText.addValue(locale, typeValue + ": " + value);
 					}

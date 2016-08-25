@@ -5,6 +5,9 @@
 function main() {
     AlfrescoUtil.param("nodeRef");
 	var hasViewListPerm = false;
+	var isMlSupported;
+	var mlValue;
+	var presentString;
 
 	var rAttachmentPermission = hasReadAttachmentPermission(model.nodeRef,user.id);
 	var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
@@ -15,15 +18,13 @@ function main() {
 
 		var document = getDocumentByAttachments(model.nodeRef);
 		if (document != null && document.nodeRef != null && document.nodeRef.length > 0) {
+			isMlSupported = nodeDetails.isMlSupported;
+			mlValue = document.mlPresentString;
+			presentString = isMlSupported && mlValue ? mlValue : document.presentString;
 			hasViewListPerm = hasPermission(document.nodeRef, PERM_CONTENT_LIST);
 
 			model.documentNodeRef = document.nodeRef;
-			var presentString = document.presentString;
-	        if (presentString != null) {
-	            model.documentName = presentString;
-	        } else {
-	            model.documentName = document.name;
-	        }
+			model.documentName = presentString ? presentString : document.name;
 			model.allAttachments = getAllDocumentAttachments(document.nodeRef);
 		}
 	} else {

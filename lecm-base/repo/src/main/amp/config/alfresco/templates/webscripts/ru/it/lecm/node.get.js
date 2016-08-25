@@ -78,3 +78,4 @@ function getDoclist() {
  * Document List Component: doclist
  */
 model.doclist = getDoclist();
+model.isMlSupported = lecmMessages.isMlSupported();

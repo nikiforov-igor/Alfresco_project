@@ -82,3 +82,4 @@ if (categories != null) {
 model.items = items;
 model.hasNext = hasNext;
 model.lockStatus = lockStatus;
+model.isMlSupported = lecmMessages.isMlSupported();

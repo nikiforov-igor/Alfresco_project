@@ -6,16 +6,17 @@ function main() {
     AlfrescoUtil.param("nodeRef");
     var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
     var isAdmin = false;
+	var isMlSupported;
+	var mlValue;
+	var presentString;
     model.viewUrl = "document";
     if (nodeDetails) {
+		isMlSupported = nodeDetails.isMlSupported;
         model.item = nodeDetails.item;
 
-        var presentString = nodeDetails.item.node.properties["lecm-document:ml-present-string"];
-        if (presentString != null) {
-            model.documentName = presentString;
-        } else {
-            model.documentName = nodeDetails.item.displayName;
-        }
+		mlValue = nodeDetails.item.node.properties["lecm-document:ml-present-string"];
+		presentString = isMlSupported && mlValue ? mlValue : nodeDetails.item.node.properties["lecm-document:present-string"];
+		model.documentName = presentString ? presentString : nodeDetails.item.displayName;
 
         var listPresentString = nodeDetails.item.node.properties["lecm-document:list-present-string"];
         if (listPresentString != null) {

@@ -19,13 +19,14 @@
 	// var document = search.findNode(documentNodeRef);
 	var categories = documentAttachments.getCategories(documentNodeRef);
 	var i, j, category, attachments, attachment;
+	var isMlSupported = lecmMessages.isMlSupported();
 	model.categories = [];
 	if (categories) {
 		for (i in categories) {
 			category = categories[i];
 			model.categories.push({
 				nodeRef: category.nodeRef.toString(),
-				displayName: category.properties['cm:title'] ? category.properties['cm:title'] : category.name,
+				displayName: isMlSupported && category.properties['cm:title'] ? category.properties['cm:title'] : category.name,
 				attachments: []
 			});
 

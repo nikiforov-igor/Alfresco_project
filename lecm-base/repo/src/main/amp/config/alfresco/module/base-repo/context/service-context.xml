@@ -524,4 +524,9 @@
 		<property name="useDefaultMessages" value="${lecm.messages.useDefaultMessages}"/>
 	</bean>
 
+	<bean class="ru.it.lecm.base.extensions.LecmMessageJavascriptExtension" parent="baseScript">
+		<property name="extensionName" value="lecmMessages"/>
+		<property name="lecmMessageService" ref="lecmMessageService"/>
+	</bean>
+
 </beans>

@@ -12,4 +12,5 @@ if (categories != null) {
 		});
 	}
 }
+model.isMlSupported = lecmMessages.isMlSupported();
 model.items = items;

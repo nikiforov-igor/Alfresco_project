@@ -10,3 +10,4 @@ if (category != null) {
 } else {
 	model.category = null;
 }
+model.isMlSupported = lecmMessages.isMlSupported();
