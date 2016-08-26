@@ -212,6 +212,7 @@
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
+							<control-param name="orgUnit_sortProp">lecm-orgstr:element-short-name</control-param>
 							<!-- lecm-orgstr:workGroup -->
 							<control-param name="workGroup_label">Рабочая группа</control-param>
 							<control-param name="workGroup_endpointType">lecm-orgstr:workGroup</control-param>
@@ -265,6 +266,7 @@
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
+							<control-param name="orgUnit_sortProp">lecm-orgstr:element-short-name</control-param>
 							<!-- lecm-orgstr:workGroup -->
 							<control-param name="workGroup_label">Рабочая группа</control-param>
 							<control-param name="workGroup_endpointType">lecm-orgstr:workGroup</control-param>
