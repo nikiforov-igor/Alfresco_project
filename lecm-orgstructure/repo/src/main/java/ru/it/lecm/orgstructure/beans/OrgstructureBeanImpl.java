@@ -41,6 +41,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	private Repository repositoryHelper;
 	private AuthorityService authorityService;
     private SimpleCache<String, NodeRef> userOrganizationsCache;
+	private NamespaceService namespaceService;
 
     public void setPersonService(PersonService personService) {
 		this.personService = personService;
@@ -58,8 +59,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         this.userOrganizationsCache = userOrganizationsCache;
     }
 
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
 
-    public void setAuthorityService(AuthorityService authorityService) {
+	public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
     @Override
@@ -2196,7 +2200,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String path = "/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура//*";
+		String path = nodeService.getPath(getHolding()).toPrefixString(namespaceService) + "/*";
 		String type = "lecm-orgstr:organization-unit";
 		sp.setQuery(String.format("+PATH:\"%s\" AND TYPE:\"%s\" AND @lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"%s\" AND NOT @lecm\\-dic\\:active:false", path, type, organization.toString()));
 		ResultSet results = null;

@@ -89,6 +89,7 @@
 				<entry key="#{ORGANIZATION_ROOT_ID}" value="Сервис Структура организации и сотрудников"/>
 			</map>
 		</property>
+        <property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
