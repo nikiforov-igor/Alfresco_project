@@ -431,7 +431,7 @@
                 <field-visibility>
                     <show id="lecm-contractor:computed-parent"/>
                     <!-- Наименование материнской компании -->
-                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:fullname" force="true"/>
                     <!-- Полное наименование -->
                     <show id="lecm-contractor:shortname" force="true"/>
                     <!-- Сокращенное наименование -->
