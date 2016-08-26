@@ -5927,6 +5927,16 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Договоры/Все действующие/72d03ab2-1ce6-4a0f-b0e5-d92e18e17fa1"/>
                         </assocs>
                     </item>
+                    <item name="cm:Избранные договоры" type="lecm-arm:node">
+                        <property name="cm:name"><![CDATA[Избранные договоры]]></property>
+                        <property name="lecm-arm:order"><![CDATA[60]]></property>
+                        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+                        <property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+                        <property name="lecm-arm:types"><![CDATA[]]></property>
+                        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+                        <property name="lecm-arm:search-query"><![CDATA[{{FAVOURITES}}]]></property>
+                        <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+                    </item>
                 </items>
                 <assocs>
                     <assoc type="lecm-arm:business-roles-assoc"
