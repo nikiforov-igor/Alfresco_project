@@ -191,8 +191,8 @@
             <#if params.firstPickerItemsScript??>
                 pickerItemsScript: "${params.firstPickerItemsScript}",
 	        </#if>
-            <#if field.control.params.sortProp??>
-                sortProp: "${field.control.params.sortProp}",
+            <#if field.control.params.firstSortProp??>
+                sortProp: "${field.control.params.firstSortProp}",
             </#if>
 		    <#if params.firstSelectedItemsNameSubstituteString??>
 			    selectedItemsNameSubstituteString: "${params.firstSelectedItemsNameSubstituteString}",
@@ -288,8 +288,8 @@
             <#if params.secondPickerItemsScript??>
                 pickerItemsScript: "${params.secondPickerItemsScript}",
             </#if>
-            <#if field.control.params.sortProp??>
-                sortProp: "${field.control.params.sortProp}",
+            <#if field.control.params.secondSortProp??>
+                sortProp: "${field.control.params.secondSortProp}",
             </#if>
 		    <#if params.secondSelectedItemsNameSubstituteString??>
 			    selectedItemsNameSubstituteString: "${params.secondSelectedItemsNameSubstituteString}",

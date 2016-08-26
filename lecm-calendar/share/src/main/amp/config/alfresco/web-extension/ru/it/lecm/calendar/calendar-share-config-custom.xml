@@ -155,6 +155,7 @@
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							<control-param name="secondSortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
 					</field>
 					<field id="lecm-sched:type">
@@ -197,6 +198,7 @@
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
+							<control-param name="secondSortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
 					</field>
 					<field id="lecm-sched:std-begin" mandatory="true" set="time">
