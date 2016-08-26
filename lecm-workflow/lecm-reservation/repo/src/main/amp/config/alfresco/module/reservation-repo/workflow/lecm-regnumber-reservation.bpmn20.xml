@@ -41,6 +41,10 @@
 						var reservateInitiator = reservationWorkflow2.getCurrentEmployee();
 						execution.setVariableLocal("registrarsList", registrars);
 						execution.setVariableLocal("reservateInitiator", reservateInitiator);
+
+                        var document = bpm_package.children[0];
+                        var logText = "#initiator отправил документ #mainobject на резервирование регистрационных данных";
+                        businessJournal.log(document.nodeRef.toString(), "RESERVATION", logText, []);
 					]]></activiti:string>
                 </activiti:field>
             </extensionElements>
