@@ -58,7 +58,7 @@ LogicECM.module.Documents.Approval = LogicECM.module.Documents.Approval || {};
 				var decision = stage.decision.value;
 				var state = stage.state.value;
 
-				return decision != "NO_DECISION" || state == "CANCELLED";
+				return decision != "NO_DECISION" || state == "CANCELLED" || state == "SKIPPED";
 			},
 
 			getStageView: function (status, stage) {
