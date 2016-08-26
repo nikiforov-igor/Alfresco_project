@@ -8,7 +8,7 @@
 		if('lecm-deputy:subject-assoc' == obj.eventGroup.options.fieldId) {
 			var labels = YAHOO.util.Selector.query('label[for=' + obj.eventGroup.id + '-cntrl]');
 			if(labels && labels.length) {
-				labels[0].innerHTML = "Критерий: " + LogicECM.module.Deputy.Const.dictionaryDesc;
+				labels[0].innerHTML = "Критерий: " + (LogicECM.module.Deputy.Const.dictionaryDesc ? LogicECM.module.Deputy.Const.dictionaryDesc : 'Не задан');
 			}
 		}
 
