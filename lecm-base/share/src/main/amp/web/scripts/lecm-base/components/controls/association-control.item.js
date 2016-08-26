@@ -78,7 +78,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			useObjectDescription: false,
 			checkType: true,
 			pickerItemsScript: 'lecm/forms/picker/items',
-			showCreateNewLink: false
+			showCreateNewLink: false,
+			hasAspects: null,
+			hasNoAspects: null
 		},
 
 		widgets: {
@@ -238,13 +240,22 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}
 			}
 
-			Alfresco.util.Ajax.jsonGet({
+			var params = {
+				nodeSubstituteString: this.options.treeNodeSubstituteString,
+				nodeTitleSubstituteString: this.options.treeNodeTitleSubstituteString,
+				selectableType: this.options.treeItemType ? this.options.treeItemType : this.options.itemType,
+			};
+			
+			if (this.options.hasAspects) {
+				params.hasAspects = this.options.hasAspects;
+			}
+			if (this.options.hasNoAspects) {
+				params.hasNoAspects = this.options.hasNoAspects;
+			}
+			
+            Alfresco.util.Ajax.jsonGet({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.treeBranchesDatasource + '/' + node.data.nodeRef.replace("://", "/") + '/items',
-				dataObj: {
-					nodeSubstituteString: this.options.treeNodeSubstituteString,
-					nodeTitleSubstituteString: this.options.treeNodeTitleSubstituteString,
-					selectableType: this.options.treeItemType ? this.options.treeItemType : this.options.itemType
-				},
+				dataObj: params,
 				successCallback: {
 					scope: this,
 					fn: onSuccess

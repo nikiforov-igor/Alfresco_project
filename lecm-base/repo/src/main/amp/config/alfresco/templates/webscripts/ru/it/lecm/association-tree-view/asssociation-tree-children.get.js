@@ -1,12 +1,14 @@
-var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + "/" + url.templateArgs.id;
-var nodeSubstituteString = args['nodeSubstituteString'];
-var nodeTitleSubstituteString = args['nodeTitleSubstituteString'];
-var selectableType = args['selectableType'];
-var useOnlyInSameOrg = args['onlyInSameOrg'];
-var sortProp = args['sortProp'];
+var nodeRef = url.templateArgs.store_type + "://" + url.templateArgs.store_id + "/" + url.templateArgs.id,
+	nodeSubstituteString = args['nodeSubstituteString'],
+	nodeTitleSubstituteString = args['nodeTitleSubstituteString'],
+	selectableType = args['selectableType'],
+	useOnlyInSameOrg = args['onlyInSameOrg'],
+	sortProp = args['sortProp'],
+	hasAspects = args['hasAspects'] ? args['hasAspects'].split(',') : [],
+	hasNoAspects = args['hasNoAspects'] ? args['hasNoAspects'].split(',') : [],
+	parentNode = search.findNode(nodeRef),
+	branch = [];
 
-var parentNode = search.findNode(nodeRef);
-var branch = [];
 
 // Если условие строгое - то принимаем только те, к которым есть доступ. Если не строгое - проверяем есть ли вообще поле
 var useStrictFilterByOrg = (useOnlyInSameOrg != null && ("" + useOnlyInSameOrg) == "true");
@@ -18,22 +20,40 @@ if (parentNode != null) {
 		if (isSubType(item, selectableType) && (!item.hasAspect("lecm-dic:aspect_active") || item.properties["lecm-dic:active"])
             && orgstructure.hasAccessToOrgElement(item, useStrictFilterByOrg)) {
 
-			var label = (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item);
-			var sortPropValue = label;
-			if (sortProp != null) {
-				sortPropValue = item.properties[sortProp];
+			var skip = false;
+			var i = 0;
+			while (!skip && i < hasAspects.length) {
+				if (!item.hasAspect(hasAspects[i])) {
+					skip = true;
+				}
+				i++;
 			}
+			i = 0;
+			while (!skip && i < hasNoAspects.length) {
+				if (item.hasAspect(hasNoAspects[i])) {
+					skip = true;
+				}
+				i++;
+			}
+			
+			if (!skip) {
+				var label = (nodeSubstituteString != null && nodeSubstituteString.length > 0) ? substitude.formatNodeTitle(item, nodeSubstituteString) : substitude.getObjectDescription(item);
+				var sortPropValue = label;
+				if (sortProp != null) {
+					sortPropValue = item.properties[sortProp];
+				}
 
-	        branch.push({
-	            label: label,
-	            title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
-	            type: item.getTypeShort(),
-	            nodeRef: item.getNodeRef().toString(),
-	            isLeaf: "" + !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType, true),
-	            isContainer: "" + item.isContainer,
-		        hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren"),
-		        sortProp: sortPropValue
-	        });
+				branch.push({
+					label: label,
+					title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
+					type: item.getTypeShort(),
+					nodeRef: item.getNodeRef().toString(),
+					isLeaf: "" + !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType, true),
+					isContainer: "" + item.isContainer,
+					hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren"),
+					sortProp: sortPropValue
+				});
+			}
 		}
     }
 
