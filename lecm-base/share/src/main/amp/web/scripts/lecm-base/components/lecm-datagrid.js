@@ -2266,21 +2266,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             return function DataGrid_onDataItemsDeleted_anim()
                             {
                                 this.widgets.dataTable.deleteRow(record);
-								this.search.performSearch(
-										{
-										searchConfig: this.datagridMeta.searchConfig,
-										searchShowInactive: this.options.searchShowInactive,
-										parent: this.datagridMeta.nodeRef,
-										searchNodes: this.datagridMeta.searchNodes,
-										itemType: this.datagridMeta.itemType,
-										sort: this.datagridMeta.sort,
-										offset: this.widgets.paginator.getStartIndex(),
-										maxResults: this.widgets.paginator.getRowsPerPage(),
-										useChildQuery:this.datagridMeta.useChildQuery,
-										useOnlyInSameOrg: this.datagridMeta.useOnlyInSameOrg,
-										useFilterByOrg: this.datagridMeta.useFilterByOrg,
-										notReplaceRS:true
-									});
+								this.search.updatePage();
 							};
 						};
                         

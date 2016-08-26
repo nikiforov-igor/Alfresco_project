@@ -250,6 +250,122 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 YAHOO.Bubbling.fire("hideSearchByAttributesLabel");
             },
 
+			updatePage:  function ADVSearch__performSearch() {
+                //var searchConfig = args.searchConfig;
+
+                //this.currentSearchArgs = args;
+                var me = this;
+
+                var loadingMessage = Alfresco.util.PopupManager.displayMessage({
+                    displayTime: 0,
+                    text: $html(this.msg("label.loading")),
+                    spanClass: "wait",
+                    noEscape: true
+                });
+
+                //Обработчик на успех
+                function successHandler(sRequest, oResponse, oPayload) {
+                    loadingMessage.destroyWithAnimationsStop();
+
+                    me.searchStarted = false;
+                    // update current state on success
+                    //me.currentSearchConfig = searchConfig;
+                    if (oResponse.meta.startIndex > oResponse.meta.totalRecords) {
+                        oResponse.meta.startIndex = 0;
+                    }
+					oResponse.meta.updateIndex = oResponse.meta.startIndex;
+                    oResponse.meta.pagination =
+                    {
+                        rowsPerPage: me.dataGrid.options.pageSize,
+                        recordOffset: oResponse.meta.startIndex
+                    };
+
+                    var sotredBy = me.dataTable.get("sortedBy");
+
+					
+
+					me.dataTable.onDataReturnUpdateRows(sRequest, oResponse, oResponse.meta);
+
+                    me.dataTable.set("sortedBy", sotredBy);
+                    YAHOO.Bubbling.fire("onSearchSuccess", {
+                        bubblingLabel: this.bubblingLabel
+                    });
+
+                    //выводим предупреждающее сообщение, если достигли лимита и у нас не безграничный грид
+                    if (!me.options.unlimited && (oResponse.results && oResponse.results.length >= me.options.maxSearchResults)) {
+                        Alfresco.util.PopupManager.displayMessage(
+                            {
+                                displayTime: 3,
+                                text: this.msg("label.limit_reached")
+                            });
+                    }
+
+                    me.dataGrid.addFooter();
+
+                    if (me.options.unlimited) {
+                        var ROW_HEIGHT = 25;
+                        var ROW_HEIGHT_WITH_BORDER = 26;
+                        var firstRowId = me.dataTable.getRecordSet().getRecords().length > 0 ? me.dataTable.getRecordSet().getRecords()[0].getId() : null;
+                        var rowHeight = 0;
+                        if (firstRowId != null) {
+                            var rowStyle = Dom.getStyle(firstRowId, "height");
+                            rowHeight = rowStyle ? rowStyle.replace("px", "") : ROW_HEIGHT_WITH_BORDER;
+                        } else {
+                            rowHeight = ROW_HEIGHT_WITH_BORDER; //(высота 25 + граница 1) - хедер + пустая строка
+                        }
+
+
+                        var newHeight = (me.dataTable.getRecordSet().getRecords().length) * (rowHeight);
+
+                        // проверим, достигли ли лимита
+                        if (me.dataTable.getRecordSet().getRecords().length >= oResponse.meta.totalRecords) {
+                            me.dataGrid.loadComplete = true; // грид полностью загружен
+                            newHeight = (oResponse.meta.totalRecords > 0 ? oResponse.meta.totalRecords : 1)*rowHeight + ROW_HEIGHT_WITH_BORDER;
+                        } else {
+                            me.dataGrid.loadComplete = false;
+                        }
+                        YAHOO.util.Dom.setStyle(this.id + "-grid", "height", newHeight + "px"); // фиксируем новую высоту
+                        if (!me.dataGrid.loadComplete) { // свдвигаем скролл вверх - для удобства работы с ним
+                            var gridContainer = YAHOO.util.Dom.get(this.id + "-grid");
+                            if (gridContainer) {
+                                gridContainer.scrollTop = YAHOO.util.Dom.get(this.id + "-grid").scrollTop - ROW_HEIGHT;
+                            }
+                        }
+
+                    }
+                }
+			
+				// Обработчик на неудачу
+                function failureHandler(sRequest, oResponse) {
+                    loadingMessage.destroyWithAnimationsStop();
+
+                    me.searchStarted = false;
+                    me.dataGrid.loadComplete = false;
+                    if (oResponse.status == 401) {
+                        // Our session has likely timed-out, so refresh to offer the login page
+                        window.location.reload();
+                    } else {
+	                    if (console) {
+                            console.log(oResponse.responseText);
+                        }
+                    }
+                }
+
+                this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
+				
+				if (this.dataTable.getState().pagination) {
+					this.currentSearchArgs.offset = this.dataTable.getState().pagination.recordOffset;
+					this.currentSearchArgs.maxResults = this.dataTable.getState().pagination.rowsPerPage;
+				}
+                var searchParams = this.prepareSearchParams(this.currentSearchArgs);
+				
+                this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
+                    {
+                        success: successHandler,
+                        failure: failureHandler,
+                        scope: this
+                    });
+			},
             /**
              * Поиск
              * args - Объект с настройками поиска
