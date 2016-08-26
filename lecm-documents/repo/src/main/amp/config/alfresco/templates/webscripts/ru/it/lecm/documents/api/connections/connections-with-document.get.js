@@ -37,6 +37,7 @@ if (document) {
 itemsSystem = itemsSystem.reverse();
 itemsUser = itemsUser.reverse();
 
+model.isMlSupported = lecmMessages.isMlSupported();
 model.items = itemsSystem.concat(itemsUser);
 model.documentService = documentScript;
 model.lecmPermission = lecmPermission;

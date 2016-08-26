@@ -2,6 +2,7 @@ var ERRAND_TYPE = 'lecm-errands:document';
 var IS_SYSTEM = 'lecm-connect:is-system';
 /*VIEW_ALL, VIEW_DIRECT, VIEW_NO*/
 var viewLinksMode = '' + edsGlobalSettings.getLinksViewMode();
+var isMlSupported = lecmMessages.isMlSupported();
 
 var documentNodeRef = args['documentNodeRef'];
 var previosDocRef = args['previosDocRef'];
@@ -14,7 +15,7 @@ var onlySystem = 'true' == args['onlySystem'];
 var isErrandCard = 'true' == args['isErrandCard'];
 var isFirstLayer = 'true' == args['isFirstLayer'];
 var filters = args['filters'] != null ? args['filters'].split(",") : [];
-var substituteTitle = args['substituteTitle'] != null ? args['substituteTitle'] : "{lecm-document:ext-present-string}";
+var substituteTitle = args['substituteTitle'] != null ? args['substituteTitle'] : (isMlSupported ? "{lecm-document:ml-ext-present-string}" : "{lecm-document:ext-present-string}");
 var applyViewMode = args['applyViewMode'] ? ("" + args['applyViewMode']) == "true" : true;
 var exclude = args['exclErrands'] ? ("" + args['exclErrands']) == "true" : true;
 
@@ -27,7 +28,7 @@ if (isFirstLayer) {
     var properties = documentScript.getProperties(documentNodeRef);
     var firstItem = {};
 
-    firstItem.title = item.properties["lecm-document:present-string"];
+    firstItem.title = (isMlSupported && item.properties["lecm-document:ml-present-string"]) ? item.properties["lecm-document:ml-present-string"] : item.properties["lecm-document:present-string"];
     firstItem.nodeRef = documentNodeRef.toString();
     firstItem.docType = item.properties["lecm-document:doc-type"];
     firstItem.status = item.properties["lecm-statemachine:status"];

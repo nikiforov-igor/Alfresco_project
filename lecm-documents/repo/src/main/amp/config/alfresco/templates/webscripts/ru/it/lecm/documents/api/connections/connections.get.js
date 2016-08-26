@@ -52,6 +52,7 @@ if (null != rootFolder) {
     }
 }
 
+model.isMlSupported = lecmMessages.isMlSupported();
 model.items = itemsSystem.concat(itemsUser);
 model.hasNext = hasNext;
 model.documentService = documentScript;
