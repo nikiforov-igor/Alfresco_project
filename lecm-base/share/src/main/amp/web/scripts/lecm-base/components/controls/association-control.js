@@ -42,7 +42,7 @@ LogicECM.module = LogicECM.module || {};
 	YAHOO.extend(LogicECM.module.AssociationComplexControl, Alfresco.component.Base, {
 
 		fieldValues: [],
-		
+
 		defaultValues: [],
 
 		searchProperties: [],
@@ -54,7 +54,7 @@ LogicECM.module = LogicECM.module || {};
 			changeItemsFireAction: null,
 			additionalFilter: '',
 			isComplex: null,
-			childrenDataSource: 'lecm/forms/picker',
+			autocompleteDataSource: 'lecm/forms/picker',
 			maxSearchAutocompleteResults: 10,
 			showAutocomplete: null,
 			pickerButtonTitle: null,
@@ -73,7 +73,8 @@ LogicECM.module = LogicECM.module || {};
 
 		_renderSelectedItems: function (selectedItems) {
 
-			var ACUtils = LogicECM.module.AssociationComplexControl.Utils;
+			var ACUtils = LogicECM.module.AssociationComplexControl.Utils,
+				count;
 
 			function onAddListener(params) {
 				Event.on(params.id, 'click', this.onRemove, params, this);
@@ -116,7 +117,15 @@ LogicECM.module = LogicECM.module || {};
                     }
                 }
 			}, this);
-			return this.widgets.selected.childElementCount;
+			count = this.widgets.selected.childElementCount;
+			if (this.widgets.autocomplete) {
+				if (!this.options.endpointMany && count) {
+					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				} else {
+					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				}
+			}
+			return count;
 		},
 
 		createAssociationControlAutocompleteHelper: function () {
@@ -163,13 +172,6 @@ LogicECM.module = LogicECM.module || {};
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].added,
 				count = this._renderSelectedItems([nodeData]);
-				if (this.widgets.autocomplete) {
-					if (!this.options.endpointMany && count) {
-						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-					} else {
-						Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-					}
-				}
 				//посылаем событие, передаем selectedItems либо из однго элемента либо пустой
 			}
 		},
@@ -238,7 +240,7 @@ LogicECM.module = LogicECM.module || {};
                 selectedArray.sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
 				this.widgets.selected.innerHTML = '';
 				this._renderSelectedItems(selectedArray);
-                
+
                 addedKeys.sort(function (a, b) {
                     return args[1].added[a].index - args[1].added[b].index;
                 });
@@ -249,9 +251,9 @@ LogicECM.module = LogicECM.module || {};
                 if (this.widgets.removed) {
                     this.widgets.removed.value = Alfresco.util.encodeHTML(removedKeys.join(','));
                 }
-                
+
                 Dom.get(this.id).value = Alfresco.util.encodeHTML(selectedKeys.join(','));
-                
+
 				if (this.widgets.autocomplete) {
 					if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
 						Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
@@ -259,7 +261,7 @@ LogicECM.module = LogicECM.module || {};
 						Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 					}
 				}
-                
+
                 this.fire('afterChange', {});
 			}
 		},
@@ -358,14 +360,11 @@ LogicECM.module = LogicECM.module || {};
 				added: node
 			});
 			//надо как-то понять что делать с единичным выбором
-			if (this.options.endpointMany) {
-				this.widgets.autocomplete.getInputEl().value = '';
+			this.widgets.autocomplete.getInputEl().value = '';
+			if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
+				Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 			} else {
-				if (!this.options.endpointMany && Dom.getChildren(this.widgets.selected).length) {
-					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				} else {
-					Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
-				}
+				Dom.removeClass(this.widgets.autocomplete.getInputEl(), 'hidden');
 			}
 			if (this.widgets.autocomplete._nDelayID != -1) {
 				clearTimeout(this.widgets.autocomplete._nDelayID);
@@ -410,7 +409,7 @@ LogicECM.module = LogicECM.module || {};
 			});
 
 			if (this.options.showAutocomplete) {
-				this.widgets.datasource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI_RELATIVE + this.options.childrenDataSource + '/node/children', {
+				this.widgets.datasource = new YAHOO.util.DataSource(Alfresco.constants.PROXY_URI_RELATIVE + this.options.autocompleteDataSource + '/node/children', {
 					responseType: YAHOO.util.DataSource.TYPE_JSON,
 					connXhrMode: 'cancelStaleRequests',
 					responseSchema: {

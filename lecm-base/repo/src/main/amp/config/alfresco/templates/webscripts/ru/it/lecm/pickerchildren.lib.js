@@ -386,7 +386,7 @@ function getItemSelectableQuery(selectableType, showFolders) {
 			type = types[i];
 			if (type.length > 0) {
 				var isAspect = base.isAspect(type);
-				selectable = (selectable ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + '"' + selectableType + '"';
+				selectable += (selectable ? " OR " : "") + (isAspect ? "ASPECT:" : "TYPE:") + '"' + type + '"';
             }
         }
 		if (selectable) {

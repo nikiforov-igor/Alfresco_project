@@ -114,6 +114,8 @@
                                                         <control-param name="markNodes">true</control-param>-->
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -405,6 +407,8 @@
                                                         <control-param name="markNodes">true</control-param>-->
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>
@@ -1133,6 +1137,8 @@
                                                         <control-param name="markNodes">true</control-param>-->
                             <control-param name="changeItemsFireAction">contractor.selected</control-param>
                             <control-param name="items">contractor,organisation,person</control-param>
+							<control-param name="showAutocomplete">true</control-param>
+							<control-param name="autocompleteDataSource">lecm/complex/picker</control-param>
                             <!-- lecm-contractor:contractor-type -->
                             <control-param name="contractor_label">Внешний контрагент</control-param>
                             <control-param name="contractor_endpointType">lecm-contractor:contractor-type</control-param>

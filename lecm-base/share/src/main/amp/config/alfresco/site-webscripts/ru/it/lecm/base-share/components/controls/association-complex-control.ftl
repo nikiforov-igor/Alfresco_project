@@ -48,7 +48,7 @@
 
 <#assign disabled = 'view' == form.mode || (field.disabled && !(params.forceEditable?? && 'true' == params.forceEditable?lower_case))>
 <#assign isComplex = items?size gt 1>
-<#assign showAutocomplete = !disabled && !isComplex && (!params.showAutocomplete?? || 'true' == params.showAutocomplete?lower_case)>
+<#assign showAutocomplete = !disabled && (!params.showAutocomplete?? || 'true' == params.showAutocomplete?lower_case)>
 
 <#if 'view' == form.mode>
 	<#assign value>
@@ -76,8 +76,8 @@
 				disabled: ${disabled?string},
 				isComplex: ${isComplex?string},
 				showAutocomplete: ${showAutocomplete?string},
-				<#if params.childrenDataSource??>
-				childrenDataSource: '${params.childrenDataSource}',
+				<#if params.autocompleteDataSource??>
+				autocompleteDataSource: '${params.autocompleteDataSource}',
 				</#if>
 				<#if params.changeItemsFireAction??>
 				changeItemsFireAction: '${params.changeItemsFireAction}',
