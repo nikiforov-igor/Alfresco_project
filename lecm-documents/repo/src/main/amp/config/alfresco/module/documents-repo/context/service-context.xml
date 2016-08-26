@@ -653,6 +653,7 @@
         <property name="documentService" ref="documentService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="documentTableService" ref="documentTableService"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 

@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
@@ -30,6 +31,7 @@ public class ExpressionDocument {
 	private ServiceRegistry serviceRegistry;
     private static DocumentAttachmentsService documentAttachmentsService;
     private static DocumentConnectionService documentConnectionService;
+    private static DocumentTableService documentTableService;
 	private static DocumentService documentService;
     private static StateMachineServiceBean stateMachineService;
 
@@ -132,6 +134,27 @@ public class ExpressionDocument {
         return attributs;
     }
 
+    public List<Object> tableItemsAttrs(String tableName, String attributeName) {
+        QName tableTypeName = QName.createQName(tableName, serviceRegistry.getNamespaceService());
+        QName attributeTypeName = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
+        List<Object> attributes = new ArrayList<Object>();
+
+        NodeRef table = documentTableService.getTable(nodeRef, tableTypeName);
+        if (table != null) {
+            List<NodeRef> tableItemsRefs = documentTableService.getTableDataRows(table);
+            if (tableItemsRefs != null) {
+                for (NodeRef tableItemsRef : tableItemsRefs) {
+                    Object attr = serviceRegistry.getNodeService().getProperty(tableItemsRef, attributeTypeName);
+                    if (attr != null) {
+                        attributes.add(attr);
+                    }
+                }
+            }
+        }
+
+        return attributes;
+    }
+
 	//Наличие вложения с определенным типом
 	public boolean hasCategoryAttachment(String attachmentCategory) {
         return !documentAttachmentsService.getAttachmentsByCategory(nodeRef, attachmentCategory).isEmpty();
@@ -217,7 +240,7 @@ public class ExpressionDocument {
             return false;
         }
 	}
-	
+
 	/**
 	 * Проверка на наличие у документа указанного аспекта
 	 * @param aspectName имя аспекта в виде prefix:localName
@@ -238,7 +261,11 @@ public class ExpressionDocument {
 		ExpressionDocument.documentConnectionService = documentConnectionService;
 	}
 
-	public void setStateMachineService(StateMachineServiceBean stateMachineHelper) {
+    public void setDocumentTableService(DocumentTableService documentTableService) {
+        ExpressionDocument.documentTableService = documentTableService;
+    }
+
+    public void setStateMachineService(StateMachineServiceBean stateMachineHelper) {
 		ExpressionDocument.stateMachineService = stateMachineHelper;
 	}
 
