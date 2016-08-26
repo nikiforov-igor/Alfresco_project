@@ -12,6 +12,20 @@
         var formId = args[1].formId;
 
         if (formId != null) {
+
+            var controls = Alfresco.util.ComponentManager.find({id: formId + "_assoc_lecm-events-dic_resources-responsible-assoc"});
+
+            if (controls && controls.length) {
+                var controlSelectedItems = Object.keys(controls[0].selectedItems);
+                controlSelectedItems.forEach(function (item) {
+                    delete this.selectedItems[item];
+                }, controls[0]);
+                controls[0].singleSelectedItem = null;
+                controls[0].updateSelectedItems();
+                controls[0].updateAddButtons();
+                controls[0].updateFormFields();
+            }
+
             if (organization && organization.nodeRef) {
                 LogicECM.module.Base.Util.enableControl(formId, "lecm-events-dic:resources-responsible-assoc");
                 YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(formId, "lecm-events-dic:resources-responsible-assoc"), function() {
