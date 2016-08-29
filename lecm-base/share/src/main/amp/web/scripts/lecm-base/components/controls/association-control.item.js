@@ -55,7 +55,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			selected: {}, //выбранные элементы, текущее состояние
 			temporarySelected: {}, //выбранные в пикере (до нажатия ОК)
 			nodeData: null,
-			skipItemsCount: null
+			skipItemsCount: null,
+			searchTerm: null
 		},
 
 		options: {
@@ -369,7 +370,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 			this.widgets.datatable.set('MSG_EMPTY', this.msg('label.loading'));
 			this.widgets.datatable.showTableMessage(this.msg('label.loading'), YAHOO.widget.DataTable.CLASS_EMPTY);
-			this.loadTableData(true);
+			this.loadTableData(true, '');
 
 		},
 
@@ -409,7 +410,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.stateParams.alreadyShowCreateNewLink = false;
 			}
 			this.currentState.skipItemsCount = initializeTable ? 0 : this.currentState.skipItemsCount;
-			params = ACUtils.generateChildrenUrlParams(this.options, searchTerm, this.currentState.skipItemsCount);
+			this.currentState.searchTerm = searchTerm;
+			params = ACUtils.generateChildrenUrlParams(this.options, this.currentState.searchTerm, this.currentState.skipItemsCount);
 			this.widgets.datatable.load({
 				request: this.currentState.nodeData.nodeRef.replace('://', '/') + '/children' + params,
 				callback: {
@@ -452,7 +454,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				this.loadTableData(true, searchTerm);
 			} else if ('' === searchData) {
 				this.stateParams.isSearch = false;
-				this.loadTableData(true);
+				this.loadTableData(true, '');
 			} else {
 				Alfresco.util.PopupManager.displayMessage({
 					text: this.msg('form.control.object-picker.search.enter-more', this.options.minSearchTermLength)
@@ -471,7 +473,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 		onTreeNodeClicked: function (obj, tree) {
 			/* выбор элемента в дереве и обновление датагрида */
 			this.currentState.nodeData = obj.node.data;
-			this.loadTableData(true);
+			this.loadTableData(true, '');
 			return tree.onEventToggleHighlight(obj);
 		},
 
@@ -509,7 +511,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			/* обработка подгрузки новой порции данных */
 			if (oArgs.target.scrollTop + oArgs.target.clientHeight === oArgs.target.scrollHeight) {
 				//подумать над тем, что если у нас вернулось 0 данных, то больше ничего не грузить
-				this.loadTableData();
+				this.loadTableData(false, this.currentState.searchTerm);
 			}
 		},
 
