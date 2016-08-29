@@ -196,8 +196,9 @@ var BJEvaluator =
      */
     run: function BJEvaluator_run(record, fields, nameSubstituteStrings) {
         var permissions = {},
-            createdBy = record.getInitiator() != null ? Common.getPerson(record.getInitiator().properties["cm:creator"]) : Common.getPerson("System"),
-            modifiedBy = record.getInitiator() != null ? Common.getPerson(record.getInitiator().properties["cm:modifier"]) : Common.getPerson("System"),
+			initiator = record.getInitiator(),
+            createdBy = initiator && initiator.exists() ? Common.getPerson(initiator.properties["cm:creator"]) : Common.getPerson("System"),
+            modifiedBy = initiator && initiator.exists() ? Common.getPerson(initiator.properties["cm:modifier"]) : Common.getPerson("System"),
             nodeData = {};
 
         /**
@@ -308,9 +309,9 @@ var BJEvaluator =
                 type = "lecm-orgstr:employee";
                 value = "";
                 displayValue = "";
-                if (record.getInitiator() != null) {
-                    value = record.getInitiator().nodeRef.toString();
-                    displayValue = record.getInitiator().properties["cm:name"];
+                if (initiator && initiator.exists()) {
+                    value = initiator.nodeRef.toString();
+                    displayValue = initiator.properties["cm:name"];
                 }
 
                 objData = {
