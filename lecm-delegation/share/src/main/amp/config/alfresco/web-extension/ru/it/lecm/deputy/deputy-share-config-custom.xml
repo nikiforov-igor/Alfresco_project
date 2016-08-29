@@ -93,6 +93,8 @@
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники</control-param>
 							<control-param name="plane">false</control-param>
 							<control-param name="useObjectDescription">true</control-param>
+							<control-param name="treeItemType">cm:folder</control-param>
+							<control-param name="additionalFilter">ISNOTNULL:\"sys:node-dbid\"</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="Alfresco.forms.validation.mandatory" event="keyup" />

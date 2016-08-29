@@ -683,9 +683,15 @@ function getFilterParams(filterData, parentXPath)
 }
 
 function addAdditionalFilter(query, additionalPerameters) {
-	if (additionalPerameters !== "") {
-        var useInject = additionalPerameters.indexOf("NOT") == 0;
-		query += " AND " + "(" + (useInject ? "ISNOTNULL:\"cm:name\" AND " : "") + additionalPerameters + " )";
+	if (additionalPerameters
+		&& 'ISNOTNULL:"sys:node-dbid"' != additionalPerameters
+		&& 'ISNOTNULL:"cm:name"' != additionalPerameters) {
+
+		var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+		var singleNotQuery = additionalPerameters.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalPerameters);
+
+		query += " AND " + (!singleNotQuery ? "(" : "")
+			+ additionalPerameters + (!singleNotQuery ? ")" : "");
 	}
 	return query;
 }
