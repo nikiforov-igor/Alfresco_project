@@ -210,6 +210,28 @@
 					<field id="lecm-document:present-string" label="Название"/>
 				</appearance>
 			</form>
+			<form id="searchColumns">
+				<field-visibility>
+					<show id="lecm-document:present-string"/>
+					<show id="lecm-document:ext-present-string"/>
+					<show id="lecm-document:list-present-string"/>
+					<show id="lecm-document:ml-present-string"/>
+					<show id="lecm-document:ml-ext-present-string"/>
+					<show id="lecm-document:ml-list-present-string"/>
+
+					<show id="lecm-document:doc-type"/>
+					<show id="lecm-document:regnum"/>
+					<show id="lecm-eds-document:summaryContent"/>
+					<show id="lecm-eds-document:note"/>
+					<show id="lecm-document:title"/>
+
+					<show id="lecm-document:subject-assoc-text-content"/>
+					<show id="lecm-eds-document:document-type-assoc-text-content"/>
+					<show id="lecm-document:author-assoc-text-content"/>
+					<show id="lecm-document-aspects:registrator-assoc-text-content"/>
+					<show id="lecm-eds-document:reviewers-assoc-text-content"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>
