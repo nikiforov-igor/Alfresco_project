@@ -102,7 +102,6 @@
 
     <bean id="ndCreatePolicy" class="ru.it.lecm.nd.policy.NDCreatePolicy" init-method="init"
           p:nodeService-ref="nodeService"
-          p:orgstructureService-ref="serviceOrgstructure"
           p:policyComponent-ref="policyComponent"
     />
 
@@ -151,4 +150,37 @@
         </property>
     </bean>
 
+    <bean id="ndCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-eds-document:summaryContent</value>
+                <value>lecm-document:title</value>
+                <value>lecm-eds-document:note</value>
+                <value>lecm-eds-document:sheets-number</value>
+                <value>lecm-nd:unlimited</value>
+                <value>lecm-nd:begin-date</value>
+                <value>lecm-nd:end-date</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-eds-document:document-type-assoc</value>
+                <value>lecm-document-aspects:additional-organization-unit-assoc</value>
+                <value>lecmSignAspects:signerEmployeeAssoc</value>
+                <value>lecm-document:subject-assoc</value>
+            </list>
+        </property>
+        <property name="categoriesToCopy">
+            <list>
+                <value>Документ</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="ndCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-nd:document" value-ref="ndCopySettings"/>
+            </map>
+        </property>
+    </bean>
 </beans>

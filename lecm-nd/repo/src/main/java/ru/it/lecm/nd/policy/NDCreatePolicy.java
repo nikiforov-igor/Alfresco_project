@@ -5,37 +5,28 @@
  */
 package ru.it.lecm.nd.policy;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.nd.api.NDModel;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author ikhalikov
  */
-public class NDCreatePolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateNodePolicy {
-
-	private final static Logger logger = LoggerFactory.getLogger(NDCreatePolicy.class);
+public class NDCreatePolicy implements NodeServicePolicies.OnCreateAssociationPolicy {
 
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
-	private OrgstructureBean orgstructureService;
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -45,30 +36,22 @@ public class NDCreatePolicy implements NodeServicePolicies.OnUpdatePropertiesPol
 		this.nodeService = nodeService;
 	}
 
-	public void setOrgstructureService(OrgstructureBean orgstructureService) {
-		this.orgstructureService = orgstructureService;
-	}
-
 	public final void init() {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 
-//		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-//				NDModel.TYPE_ND,
-//				new JavaBehaviour(this,"onUpdateProperties"));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, NDModel.TYPE_ND, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+				NDModel.TYPE_ND, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC,
+				new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
-	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
+	public void onCreateAssociation(AssociationRef nodeAssocRef) {
+		NodeRef doc = nodeAssocRef.getSourceRef();
+		NodeRef orgUnit = nodeAssocRef.getTargetRef();
 
-	@Override
-	public void onCreateNode(ChildAssociationRef childAssocRef) {
-		NodeRef doc = childAssocRef.getChildRef();
-		List<AssociationRef> orgList = nodeService.getTargetAssocs(doc, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC);
-		nodeService.createAssociation(doc, orgList.get(0).getTargetRef(), DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
+		List<NodeRef> units = new ArrayList<>();
+		units.add(orgUnit);
+		nodeService.setAssociations(doc, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC, units);
 	}
-
 }
