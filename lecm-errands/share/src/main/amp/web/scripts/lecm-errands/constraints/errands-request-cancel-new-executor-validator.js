@@ -19,6 +19,13 @@ LogicECM.module.Errands.requestCancelTaskNewExecutorValidation =
 					isChangeExecutor = true;
 					LogicECM.module.Base.Util.enableControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor");
 				} else {
+					isChangeExecutor = false;
+					if (newExecutor.value != '') {
+						newExecutor.value = '';
+						LogicECM.module.Base.Util.reInitializeControl(formId, 'lecmErrandWf:requestCancelTaskNewExecutor', {
+							currentValue:""
+						});
+					}
 					LogicECM.module.Base.Util.disableControl(formId, "lecmErrandWf:requestCancelTaskNewExecutor");
 				}
 
