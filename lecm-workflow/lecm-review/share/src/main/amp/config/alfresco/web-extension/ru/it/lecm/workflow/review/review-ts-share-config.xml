@@ -336,7 +336,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
 						<!--<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>-->
 						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+							<constraint type="UNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
 						</constraint-handlers>
 					</field>
 					<field id="lecm-review-list:reviewer-assoc">
