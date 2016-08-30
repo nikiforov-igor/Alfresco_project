@@ -183,12 +183,12 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	}
 
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		// в процессе удаления ноды также сюда попадаем
 		if (nodeService.exists(nodeRef)) {
+			List<QName> changedProps = getAffectedProperties(before, after);
 			Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
 			boolean hasChanges = false;
-			for (QName changedProp : AFFECTED_PROPERTIES) {
+			for (QName changedProp : changedProps) {
 				QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName());
 				QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
 				NodeRef employeeRef = orgstructureService.getCurrentEmployee();
@@ -204,6 +204,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 			}
 		}
 
+		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
 			Serializable commentCountBefore = before.get(ForumModel.PROP_COMMENT_COUNT);
 			Serializable commentCountAfter = after.get(ForumModel.PROP_COMMENT_COUNT);
@@ -219,17 +220,19 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		}
 	}
 
-//	private List<QName> getAffectedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
-//		List<QName> result = new ArrayList<QName>();
-//		for (QName affected : AFFECTED_PROPERTIES) {
-//			Object prev = before.get(affected);
-//			Object cur = after.get(affected);
-//			if (cur != null && !cur.equals(prev)) {
-//				result.add(affected);
-//			}
-//		}
-//		return result;
-//	}
+	private List<QName> getAffectedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		List<QName> result = new ArrayList<QName>();
+		for (QName affected : AFFECTED_PROPERTIES) {
+			QName propName = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, affected.getLocalName());
+			Object propValue = before.get(propName);
+			Object prev = before.get(affected);
+			Object cur = after.get(affected);
+			if (propValue == null || (cur != null && !cur.equals(prev))) {
+				result.add(affected);
+			}
+		}
+		return result;
+	}
 
 	private boolean hasChange(Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		if (before.size() != after.size()) {
