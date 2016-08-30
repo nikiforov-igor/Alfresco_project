@@ -17,6 +17,7 @@
                     <control-param name="firstAdditionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
                     <control-param name="firstPickerItemsScript">/lecm/contractors/common/picker/items</control-param>
                     <control-param name="firstPathNameSubstituteString">{lecm-contractor:shortname}</control-param>
+                    <control-param name="firstSortProp">lecm-contractor:shortname</control-param>
 
                     <control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
                     <control-param name="secondNameSubstituteString">{lecm-contractor:shortname}</control-param>
@@ -30,6 +31,7 @@
                     <control-param name="secondChangeItemsFireAction">organization.selected</control-param>
                     <control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
                     <control-param name="secondPickerItemsScript">/lecm/contractors/organization/picker/items</control-param>
+                    <control-param name="secondSortProp">lecm-contractor:shortname</control-param>
                 </type>
                 <type name="association:lecm-representative:representative-type" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                     <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
