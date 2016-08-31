@@ -435,6 +435,7 @@
             <!-- Форма создания (по умолчанию) -->
             <form>
                 <field-visibility>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-incoming:delivery-method-assoc"/>
@@ -453,7 +454,6 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:is-not-registered"/>
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                 </field-visibility>
