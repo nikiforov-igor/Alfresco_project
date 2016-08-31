@@ -301,15 +301,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var query = node.data.searchQuery;
                 if (query && query.length > 0) {
                     var include = !node.data.isAggregate;
+                    var baseNodeId = node.data ? node.data.baseNodeId : node.baseNodeId;
                     if (!buffer) {
                         buffer = [];
                         include = true;
                     }
                     if (!parentId) {
-                        parentId = node.id;
+                        parentId = baseNodeId;
                     }
-                    if ((parentId == node.id
-                        || (parentId + '-' + (node.data.runAs ? new Alfresco.util.NodeRef(node.data.runAs).id : "")) == node.id) && include) {
+                    if ((parentId == baseNodeId
+                        || (parentId + '-' + (node.data.runAs ? new Alfresco.util.NodeRef(node.data.runAs).id : "")) == baseNodeId) && include) {
                         buffer.push(query);
                     }
                 }
@@ -430,7 +431,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                                 columnContent = columnContent.substring(0, 150) + "...";
                                             }
                                             break;
-                                        
+
                                         case "lecm-outgoing:contractor-assoc":
                                             if (columnContent.length > 200) {
                                                 tooltip = columnContent;

@@ -289,6 +289,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 nodeType: oResults[nodeIndex].nodeType,
                                 armNodeRef: oResults[nodeIndex].armNodeRef,
                                 armNodeId: oResults[nodeIndex].armNodeId,
+                                baseNodeId: oResults[nodeIndex].id,
                                 label: oResults[nodeIndex].label,
                                 isLeaf: oResults[nodeIndex].isLeaf,
                                 types: oResults[nodeIndex].types,
@@ -362,15 +363,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var query = node.data ? node.data.searchQuery : node.searchQuery;
                 if (query && query.length > 0) {
                     var include = node.data ? !node.data.isAggregate : true;
+                    var baseNodeId = node.data ? node.data.baseNodeId : node.baseNodeId;
                     if (!buffer) {
                         buffer = [];
                         include = true;
                     }
                     if (!parentId) {
-                        parentId = node.id;
+                        parentId = baseNodeId;
                     }
-                    if ((parentId == node.id ||
-                        (parentId + '-' + (node.data.runAs ? new Alfresco.util.NodeRef(node.data.runAs).id : "")) == node.id) && include) {
+                    if ((parentId == baseNodeId ||
+                        (parentId + '-' + (node.data.runAs ? new Alfresco.util.NodeRef(node.data.runAs).id : "")) == baseNodeId) && include) {
                         buffer.push(query);
                     }
                 }
