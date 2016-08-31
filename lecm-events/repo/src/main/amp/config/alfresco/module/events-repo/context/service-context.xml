@@ -395,5 +395,38 @@
 			</list>
 		</property>
 	</bean>
-
+	<bean id="eventCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+		<property name="propsToCopy">
+			<list>
+				<value>lecm-events:title</value>
+				<value>lecm-events:description</value>
+				<value>lecm-events:temp-members-assoc-json</value>
+				<value>lecm-events:all-day</value>
+				<value>lecm-events:from-date</value>
+				<value>lecm-events:to-date</value>
+				<value>lecm-events:repeatable</value>
+				<value>lecm-events:repeatable-start-period</value>
+				<value>lecm-events:repeatable-end-period</value>
+				<value>lecm-events:repeatable-rule</value>
+				<value>lecm-events:description</value>
+			</list>
+		</property>
+		<property name="assocsToCopy">
+			<list>
+				<value>lecm-events:location-assoc</value>
+				<value>lecm-events:initiator-assoc</value>
+				<value>lecm-events:invited-members-assoc</value>
+				<value>lecm-events:subject-assoc</value>
+				<value>lecm-events:temp-members-assoc</value>
+				<value>lecm-events:temp-resources-assoc</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="eventCopySettingsBean" parent="documentCopySettingsBean">
+		<property name="settings">
+			<map>
+				<entry key="lecm-events:document" value-ref="eventCopySettings"/>
+			</map>
+		</property>
+	</bean>
 </beans>

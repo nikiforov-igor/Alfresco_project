@@ -582,4 +582,20 @@
         <property name="documentService" ref="documentService"/>
         <property name="notificationsService" ref="notificationsService"/>
     </bean>
+
+    <bean id="additionalDocCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-additional-document:additionalDocumentType</value>
+                <value>lecm-additional-document:document-assoc</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="additionalDocCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-additional-document:additionalDocument" value-ref="additionalDocCopySettings"/>
+            </map>
+        </property>
+    </bean>
 </beans>
