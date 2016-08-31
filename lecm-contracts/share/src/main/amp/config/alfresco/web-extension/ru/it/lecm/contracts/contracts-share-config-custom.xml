@@ -90,12 +90,8 @@
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc" set="contract-info"/>
-                    <field id="lecm-contract:totalAmount" mandatory="true" set="price" help="">
-	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" event="change"/>
-	                    </constraint-handlers>
-		            </field>
-                    <field id="lecm-contract:currency-assoc" mandatory="true" set="price">
+                    <field id="lecm-contract:totalAmount" mandatory="true" set="price" help=""/>
+                    <field id="lecm-contract:currency-assoc" set="price">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -104,7 +100,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
 	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" event="change"/>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" message-id="validation-hint.mandatory" event="change"/>
 	                    </constraint-handlers>
                     </field>
                     <field id="lecm-contract:dateConclusionContracts" set="date-conclusion"/>
@@ -385,12 +381,8 @@
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc"/>
-                    <field id="lecm-contract:totalAmount" mandatory="true" set="price" help="">
-	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" event="change"/>
-	                    </constraint-handlers>
-                    </field>
-                    <field id="lecm-contract:currency-assoc" mandatory="true" set="price">
+                    <field id="lecm-contract:totalAmount" mandatory="true" set="price" help=""/>
+                    <field id="lecm-contract:currency-assoc" set="price">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Валюты</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -399,7 +391,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
 	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" event="change"/>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Contracts.currencyValidation" message-id="validation-hint.mandatory" event="change"/>
 	                    </constraint-handlers>
                     </field>
                     <field id="lecm-contract:partner-assoc" set="afterPrice">
