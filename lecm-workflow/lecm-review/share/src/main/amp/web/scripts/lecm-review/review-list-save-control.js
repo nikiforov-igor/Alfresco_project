@@ -45,7 +45,8 @@ LogicECM.module.Review.ReviewList = LogicECM.module.Review.ReviewList || {};
 		},
 
 		onSelectedItems: function (layer, args) {
-			var obj = args[1],
+			var disabledTypes = ['lecm-review-list:review-list-item', 'lecm-orgstr:organization-unit', 'lecm-orgstr:workGroup'],
+				obj = args[1],
 				nodeRef,
 				disabled = true;
 
@@ -54,7 +55,7 @@ LogicECM.module.Review.ReviewList = LogicECM.module.Review.ReviewList || {};
 			if (obj.selectedItems && Object.keys(obj.selectedItems).length) {
 				disabled = false;
 				for (nodeRef in obj.selectedItems) {
-					if ('lecm-review-list:review-list-item' === obj.selectedItems[nodeRef].type) {
+					if (disabledTypes.indexOf(obj.selectedItems[nodeRef].type) > -1) {
 						disabled = true;
 						break;
 					}
