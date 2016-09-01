@@ -85,6 +85,7 @@
 							<control-param name="organisation_showCreateNewLink">false</control-param>
 							<control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="organisation_showAssocViewForm">true</control-param>
+							<control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
 <!--						<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 							<!-- lecm-contractor:physical-person-type -->
@@ -285,6 +286,7 @@
 							<control-param name="organisation_showCreateNewLink">false</control-param>
 							<control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="organisation_showAssocViewForm">true</control-param>
+							<control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 							<!-- lecm-contractor:physical-person-type -->
@@ -393,6 +395,7 @@
 							<control-param name="organisation_showCreateNewLink">false</control-param>
 							<control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="organisation_showAssocViewForm">true</control-param>
+							<control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 							<!-- lecm-contractor:physical-person-type -->
@@ -500,6 +503,7 @@
 							<control-param name="organisation_showCreateNewLink">false</control-param>
 							<control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="organisation_showAssocViewForm">true</control-param>
+							<control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 							<!-- lecm-contractor:physical-person-type -->
@@ -688,6 +692,7 @@
 							<control-param name="organisation_showCreateNewLink">false</control-param>
 							<control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="organisation_showAssocViewForm">true</control-param>
+							<control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 							<!-- lecm-contractor:physical-person-type -->
@@ -881,6 +886,7 @@
 							<control-param name="organisation_showCreateNewLink">false</control-param>
 							<control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="organisation_showAssocViewForm">true</control-param>
+							<control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 							<!-- lecm-contractor:physical-person-type -->
@@ -1046,6 +1052,7 @@
 							<control-param name="organisation_showCreateNewLink">false</control-param>
 							<control-param name="organisation_additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 							<control-param name="organisation_showAssocViewForm">true</control-param>
+							<control-param name="organisation_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 							<!-- lecm-contractor:physical-person-type -->

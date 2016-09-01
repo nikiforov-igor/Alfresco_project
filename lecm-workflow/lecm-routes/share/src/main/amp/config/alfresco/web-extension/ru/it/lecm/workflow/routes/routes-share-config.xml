@@ -71,6 +71,7 @@
 							<control-param name="showSearch">true</control-param>
 							<control-param name="changeItemsFireAction">routeOrganizationSelect</control-param>
 							<control-param name="nameSubstituteString">{lecm-contractor:shortname}</control-param>
+							<control-param name="sortProp">lecm-contractor:shortname</control-param>
 						</control>
 					</field>
 					<field id="cm:description">
@@ -153,6 +154,7 @@
 							<control-param name="showSearch">true</control-param>
 							<control-param name="nameSubstituteString">{lecm-contractor:shortname}</control-param>
 							<control-param name="changeItemsFireAction">routeOrganizationSelect</control-param>
+							<control-param name="sortProp">lecm-contractor:shortname</control-param>
 						</control>
 					</field>
 					<field id="cm:description">
