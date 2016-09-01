@@ -382,7 +382,6 @@
 					<show id="cm:name"/>
 					<show id="lecm-subscr:notification-type-assoc"/>
 					<show id="lecm-subscr:destination-employee-assoc"/>
-					<show id="lecm-subscr:subscription-object-assoc"/>
 					<show id="lecm-subscr:description"/>
 				</field-visibility>
                 <appearance>
