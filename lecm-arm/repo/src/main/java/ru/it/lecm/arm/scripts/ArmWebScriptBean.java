@@ -227,7 +227,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                 } else {
                     String currentValueStr = filter.has(CUR_VALUE) ? (String) filter.get(CUR_VALUE) : null;
                     if (currentValueStr != null) {
-                        values.addAll(Arrays.asList(currentValueStr.split(",")));
+                        values.add(currentValueStr);
                     }
                 }
 
