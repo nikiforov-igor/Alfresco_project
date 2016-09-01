@@ -27,7 +27,9 @@
 	    <div id="${el}-formContainer" class="agenda-set right-block-content">
 		    <#if agendaInfo?? >
 				<div><span>${msg("title.agenda_size")}: ${agendaInfo.size}</span></div>
-	            <div><span>${msg("agenda_status."+agendaInfo.status)}</span></div>
+				<#if !agendaInfo.hideStatus>
+	            	<div><span>${msg("agenda_status."+agendaInfo.status)}</span></div>
+				</#if>
 			<#else>
 				<div class="block-empty-body">
 				    <span class="block-empty faded">

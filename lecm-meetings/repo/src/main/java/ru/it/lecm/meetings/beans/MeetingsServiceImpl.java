@@ -344,7 +344,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 
 	@Override
 	public String getAgendaInfo(NodeRef meeting) {
-		
+
 		JSONObject result = new JSONObject();
 		try {
 			if (nodeService.getType(meeting).isMatch(TYPE_MEETINGS_DOCUMENT)) {
@@ -356,12 +356,14 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 						Boolean approveAgenda = (Boolean)nodeService.getProperty(meeting, PROP_MEETINGS_APPROVE_AGENDA);
 						if (approveAgenda) {
 							result.put("status", "approvement_not_needed");
+							result.put("hideStatus", false);
 						} else {
 							String approvalState = routesService.getApprovalState(meeting);
 							if (null == approvalState || approvalState.isEmpty() || "UNDEF".equals(approvalState) ){
 								approvalState = "NEW";
 							}
 							result.put("status", approvalState);
+							result.put("hideStatus", rows.size() <= 0);
 						}
 					}
 				}
