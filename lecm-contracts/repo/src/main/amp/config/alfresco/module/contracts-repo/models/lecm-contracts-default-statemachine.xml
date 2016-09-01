@@ -2072,7 +2072,45 @@ notifications.sendNotificationFromCurrentUser({
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>3fc0b04b-a0bf-4298-8b43-b2ec5dea4303
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/b20cb1d0-641d-476d-9705-ae76b9b3d3c7
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Инициатор или Куратор]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().hasBusinessRole("CONTRACT_CURATOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                     <node>
                                                         <type>userTransition</type>
@@ -3652,54 +3690,7 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders>
-                                            <subFolder>
-                                                <name>transitions</name>
-                                                <nodes>
-                                                    <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>d7058a2f-a137-469a-8f9a-a1e74c000b63</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/8d15800b-1bfe-4c4c-bdd4-7e04848a5db8
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Удалить]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value>
-                                                                    <![CDATA[activiti$contractsDeleteReason]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <workflowAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/cbd1d320-8a4f-4a48-b276-f84d27fa534a
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                </nodes>
-                                            </subFolder>
-                                        </subFolders>
+                                        <subFolders/>
                                     </node>
                                     <node>
                                         <type>UserWorkflow</type>
@@ -4768,47 +4759,6 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                                 <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/b910ddae-127e-4d43-828a-56d60b63a1e3
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                    <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>721d5cd6-086b-4797-8b54-dd8001bc7c87</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/d8762f95-b56d-49ca-aa7d-0e6f4b6f16e4
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Удалить]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value>
-                                                                    <![CDATA[activiti$contractsDeleteReason]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <workflowAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/cbd1d320-8a4f-4a48-b276-f84d27fa534a
                                                                 </reference>
                                                             </association>
                                                         </associations>
@@ -6038,7 +5988,45 @@ routeWorkflow.startWorkflow(variables);]]></value>
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>a5c1cd9c-887a-4229-9d10-4b3d00cd500c
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/495934a0-24a4-48d5-8356-a24150d95e49
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Инициатор или Куратор]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().hasBusinessRole("CONTRACT_CURATOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                     <node>
                                                         <type>userTransition</type>
@@ -7496,54 +7484,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders>
-                                            <subFolder>
-                                                <name>transitions</name>
-                                                <nodes>
-                                                    <node>
-                                                        <type>transitionWorkflow</type>
-                                                        <name>469a86c5-44d8-444a-b7a9-4b37ca0dbe64</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/4bbce341-76e6-4b4b-aa3f-b3e9f0c7cd69
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Удалить]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value>
-                                                                    <![CDATA[activiti$contractsDeleteReason]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>do-not-ask-for-confirmation</name>
-                                                                <value><![CDATA[false]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <transitionStatusAspect/>
-                                                            <workflowAspect/>
-                                                            <transitionLabelAspect/>
-                                                        </aspects>
-                                                        <associations>
-                                                            <association>
-                                                                <type>transitionStatus</type>
-                                                                <reference>
-                                                                    workspace://SpacesStore/cbd1d320-8a4f-4a48-b276-f84d27fa534a
-                                                                </reference>
-                                                            </association>
-                                                        </associations>
-                                                        <roleAssociations/>
-                                                        <subFolders/>
-                                                    </node>
-                                                </nodes>
-                                            </subFolder>
-                                        </subFolders>
+                                        <subFolders/>
                                     </node>
                                     <node>
                                         <type>UserWorkflow</type>
@@ -14597,7 +14538,45 @@ notifications.sendNotificationFromCurrentUser({
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>1c2304dc-5a2f-431f-b44b-17408e55d978
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/7eaef512-586f-4a76-add5-a6800a492af6
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>does-not-block</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Инициатор или Куратор]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().hasBusinessRole("CONTRACT_CURATOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                     <node>
                                                         <type>transitionWorkflow</type>
