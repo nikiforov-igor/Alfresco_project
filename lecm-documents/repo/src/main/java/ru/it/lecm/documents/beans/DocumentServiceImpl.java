@@ -496,15 +496,17 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
             if (settings != null) {
                 // копируем свойства
                 List<String> propertiesToCopy = settings.getPropsToCopy();
-                Map<QName, Serializable> originalProperties = nodeService.getProperties(document);
-                for (String propName : propertiesToCopy) {
-                    try {
-                        QName propQName = QName.createQName(propName, namespaceService);
-                        if (propQName != null) {
-                            properties.put(propQName, originalProperties.get(propQName));
+                if (null != propertiesToCopy) {
+                    Map<QName, Serializable> originalProperties = nodeService.getProperties(document);
+                    for (String propName : propertiesToCopy) {
+                        try {
+                            QName propQName = QName.createQName(propName, namespaceService);
+                            if (propQName != null) {
+                                properties.put(propQName, originalProperties.get(propQName));
+                            }
+                        } catch (InvalidQNameException invalid) {
+                            logger.warn("Invalid QName for document property:" + propName);
                         }
-                    } catch (InvalidQNameException invalid) {
-                        logger.warn("Invalid QName for document property:" + propName);
                     }
                 }
             }
@@ -528,16 +530,18 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                 if (settings != null) {
                     // копируем ассоциации
                     List<String> assocsToCopy = settings.getAssocsToCopy();
-                    for (String assocName : assocsToCopy) {
-                        try {
-                            QName assocQName = QName.createQName(assocName, namespaceService);
-                            if (assocQName != null) {
-                                List<NodeRef> targets = findNodesByAssociationRef(document, assocQName, null, ASSOCIATION_TYPE.TARGET);
-                                nodeService.setAssociations(createdNode, assocQName, targets);
+                    if (null != assocsToCopy) {
+                        for (String assocName : assocsToCopy) {
+                            try {
+                                QName assocQName = QName.createQName(assocName, namespaceService);
+                                if (assocQName != null) {
+                                    List<NodeRef> targets = findNodesByAssociationRef(document, assocQName, null, ASSOCIATION_TYPE.TARGET);
+                                    nodeService.setAssociations(createdNode, assocQName, targets);
 
+                                }
+                            } catch (InvalidQNameException invalid) {
+                                logger.warn("Invalid QName for document assoc:" + assocName);
                             }
-                        } catch (InvalidQNameException invalid) {
-                            logger.warn("Invalid QName for document assoc:" + assocName);
                         }
                     }
                 }
