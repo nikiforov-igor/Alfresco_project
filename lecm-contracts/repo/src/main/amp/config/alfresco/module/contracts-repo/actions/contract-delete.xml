@@ -4,7 +4,7 @@
         <property name="cm:name"><![CDATA[Удалить договор]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Черновик]]></property>
         <property name="lecm-group-actions:type">
-            <![CDATA[[lecm-contract:document]]]></property>
+            <![CDATA[[lecm-contract:document,lecm-additional-document:additionalDocument]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression">
             <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") or user.currentUser().hasBusinessRole("CONTRACT_CURATOR")]]></property>

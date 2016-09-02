@@ -4,7 +4,7 @@
         <property name="cm:name"><![CDATA[Удалить]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Черновик;Новый]]></property>
         <property name="lecm-group-actions:type">
-            <![CDATA[[lecm-nd:document, lecm-errands:document, lecm-incoming:document, lecm-internal:document, lecm-additional-document:additionalDocument, lecm-protocol:document, lecm-outgoing:document, lecm-ord:document, lecm-eds-document:base]]]></property>
+            <![CDATA[[lecm-nd:document, lecm-errands:document, lecm-incoming:document, lecm-internal:document, lecm-protocol:document, lecm-outgoing:document, lecm-ord:document, lecm-eds-document:base]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression">
             <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR")]]></property>
