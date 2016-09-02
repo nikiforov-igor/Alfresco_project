@@ -16,9 +16,9 @@
 }
 
  .ex-search.yui-button-disabled  {
-    opacity: 0.3;    
+    opacity: 0.3;
 }
- 
+
 #searchBlock-content .search .form-buttons {
     display: none;
 }
@@ -53,6 +53,9 @@
     outline: none;
     padding-right: 0;
     margin-left: 3px;
+}
+.datalist-toolbar .search-input input::-ms-clear {
+	display: none;
 }
 .datalist-toolbar .yui-button.search {
     margin: 0;
