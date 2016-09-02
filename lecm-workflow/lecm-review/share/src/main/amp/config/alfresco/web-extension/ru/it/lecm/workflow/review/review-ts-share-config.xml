@@ -17,6 +17,7 @@
 					<control-param name="employee_showSearch">true</control-param>
 					<control-param name="employee_useStrictFilterByOrg">true</control-param>
 					<control-param name="employee_childrenDataSource">/lecm/review/getPotentialReviewers/picker</control-param>
+					<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 <!--					<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 					<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 					<control-param name="firstChangeItemsFireAction">employeesSelected</control-param>-->
@@ -37,6 +38,7 @@
 					<control-param name="workGroup_nameSubstituteString">{cm:name}</control-param>
 					<control-param name="workGroup_plane">true</control-param>
 					<control-param name="workGroup_showSearch">true</control-param>
+					<control-param name="workGroup_sortProp">lecm-orgstr:element-short-name</control-param>
 					<!-- lecm-review-list:review-list-item -->
 					<control-param name="reviewItem_label">Список ознакомления</control-param>
 					<control-param name="reviewItem_endpointType">lecm-review-list:review-list-item</control-param>
@@ -50,6 +52,7 @@
 					<control-param name="reviewItem_showSearch">true</control-param>
 					<control-param name="reviewItem_showAssocViewForm">true</control-param>
 					<control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
+					<control-param name="reviewItem_sortProp">cm:title</control-param>
 <!--					<control-param name="secondShowAssocViewForm">true</control-param>
 					<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 					<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>
@@ -130,6 +133,7 @@
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 <!--							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
@@ -149,15 +153,17 @@
 							<control-param name="workGroup_nameSubstituteString">{cm:name}</control-param>
 							<control-param name="workGroup_plane">true</control-param>
 							<control-param name="workGroup_showSearch">true</control-param>
+							<control-param name="workGroup_sortProp">lecm-orgstr:element-short-name</control-param>
 							<!-- lecm-review-list:review-list-item -->
 							<control-param name="reviewItem_label">Список ознакомления</control-param>
 							<control-param name="reviewItem_endpointType">lecm-review-list:review-list-item</control-param>
 							<control-param name="reviewItem_endpointMany">true</control-param>
 							<control-param name="reviewItem_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Списки_x0020_ознакомления</control-param>
-							<control-param name="reviewItem_nameSubstituteString">{cm:name}</control-param>
+							<control-param name="reviewItem_nameSubstituteString">{cm:title}</control-param>
 							<control-param name="reviewItem_plane">true</control-param>
 							<control-param name="reviewItem_showSearch">true</control-param>
 							<control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
+							<control-param name="reviewItem_sortProp">cm:title</control-param>
 <!--							<control-param name="secondShowAssocViewForm">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>-->
@@ -241,6 +247,7 @@
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -258,6 +265,7 @@
 							<control-param name="workGroup_nameSubstituteString">{cm:name}</control-param>
 							<control-param name="workGroup_plane">true</control-param>
 							<control-param name="workGroup_showSearch">true</control-param>
+							<control-param name="workGroup_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -298,6 +306,7 @@
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -315,6 +324,7 @@
 							<control-param name="workGroup_nameSubstituteString">{cm:name}</control-param>
 							<control-param name="workGroup_plane">true</control-param>
 							<control-param name="workGroup_showSearch">true</control-param>
+							<control-param name="workGroup_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -344,6 +354,7 @@
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -361,6 +372,7 @@
 							<control-param name="workGroup_nameSubstituteString">{cm:name}</control-param>
 							<control-param name="workGroup_plane">true</control-param>
 							<control-param name="workGroup_showSearch">true</control-param>
+							<control-param name="workGroup_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -409,6 +421,7 @@
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 							<!-- lecm-orgstr:organization-unit -->
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
@@ -426,6 +439,7 @@
 							<control-param name="workGroup_nameSubstituteString">{cm:name}</control-param>
 							<control-param name="workGroup_plane">true</control-param>
 							<control-param name="workGroup_showSearch">true</control-param>
+							<control-param name="workGroup_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
@@ -473,6 +487,7 @@
 							<control-param name="employee_plane">true</control-param>
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 		<!--					<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
 							<control-param name="firstChangeItemsFireAction">employeesSelected</control-param>-->
@@ -493,6 +508,7 @@
 							<control-param name="workGroup_nameSubstituteString">{cm:name}</control-param>
 							<control-param name="workGroup_plane">true</control-param>
 							<control-param name="workGroup_showSearch">true</control-param>
+							<control-param name="workGroup_sortProp">lecm-orgstr:element-short-name</control-param>
 							<!-- lecm-review-list:review-list-item -->
 							<control-param name="reviewItem_label">Список ознакомления</control-param>
 							<control-param name="reviewItem_endpointType">lecm-review-list:review-list-item</control-param>
@@ -505,6 +521,7 @@
 							<control-param name="reviewItem_plane">true</control-param>
 							<control-param name="reviewItem_showSearch">true</control-param>
 							<control-param name="reviewItem_childrenDataSource">lecm/review/ds/allowedReviewLists</control-param>
+							<control-param name="reviewItem_sortProp">cm:title</control-param>
 		<!--					<control-param name="secondShowAssocViewForm">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.review.list.select</control-param>

@@ -107,6 +107,7 @@
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 						</control>
                     </field>
                     <field set="common" id="lecm-incoming:addressee-assoc">
@@ -166,6 +167,7 @@
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 							<control-param name="employee_showAssocViewForm">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
                             <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
@@ -179,6 +181,7 @@
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
 							<control-param name="organization_showAssocViewForm">true</control-param>
+							<control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
                     </field>
 
@@ -272,6 +275,7 @@
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 							<control-param name="employee_showAssocViewForm">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
                             <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
@@ -285,6 +289,7 @@
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
 							<control-param name="organization_showAssocViewForm">true</control-param>
+							<control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
                     </field>
                     <field id="lecm-incoming:sender-assoc" mandatory="true">
@@ -341,6 +346,7 @@
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 						</control>
                     </field>
                     <field id="lecm-incoming:addressee-assoc">
@@ -518,6 +524,7 @@
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 						</control>
 					</field>
                     <field id="lecm-incoming:addressee-assoc">
@@ -570,6 +577,7 @@
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 							<control-param name="employee_showAssocViewForm">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
                             <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
@@ -583,6 +591,7 @@
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
 							<control-param name="organization_showAssocViewForm">true</control-param>
+							<control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
@@ -715,6 +724,7 @@
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 						</control>
 					</field>
                     <field id="lecm-incoming:addressee-assoc">
@@ -767,6 +777,7 @@
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 							<control-param name="employee_showAssocViewForm">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
                             <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
@@ -780,6 +791,7 @@
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
 							<control-param name="organization_showAssocViewForm">true</control-param>
+							<control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
                     </field>
                     <field id="lecm-document-aspects:response-to-assoc">
@@ -948,6 +960,7 @@
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 							<control-param name="employee_showAssocViewForm">true</control-param>
+							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>
 <!--                            <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
                             <control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>-->
 							<!-- lecm-orgstr:organization-unit -->
@@ -961,6 +974,7 @@
 							<control-param name="organization_plane">false</control-param>
 							<control-param name="organization_showSearch">true</control-param>
 							<control-param name="organization_showAssocViewForm">true</control-param>
+							<control-param name="organization_sortProp">lecm-orgstr:element-short-name</control-param>
 						</control>
                     </field>
 					<field id="lecm-incoming:sender-assoc" mandatory="true">
@@ -1018,6 +1032,7 @@
                             <control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 						</control>
 					</field>
                     <field id="lecm-incoming:addressee-assoc">

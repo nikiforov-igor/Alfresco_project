@@ -101,6 +101,7 @@
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="PickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="PickerButtonTitleCode">title.contractor-internal.select</control-param>
 							<control-param name="PathNameSubstituteString">{lecm-contractor:shortname}</control-param>-->
@@ -302,6 +303,7 @@
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="PickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="PickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 						</control>
@@ -411,6 +413,7 @@
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="PickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="PickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 						</control>
@@ -519,6 +522,7 @@
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="PickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="PickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 						</control>
@@ -708,6 +712,7 @@
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="PickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="PickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 						</control>
@@ -902,6 +907,7 @@
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="PickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="PickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 						</control>
@@ -1068,6 +1074,7 @@
 							<control-param name="person_showSearch">true</control-param>
 							<control-param name="person_showCreateNewLink">true</control-param>
 							<control-param name="person_showAssocViewForm">true</control-param>
+							<control-param name="person_sortProp">lecm-contractor:shortname</control-param>
 <!--							<control-param name="PickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="PickerButtonTitleCode">title.contractor-internal.select</control-param>-->
 						</control>
