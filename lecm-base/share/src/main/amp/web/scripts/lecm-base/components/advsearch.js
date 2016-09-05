@@ -266,7 +266,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 //Обработчик на успех
                 function successHandler(sRequest, oResponse, oPayload) {
                     loadingMessage.destroyWithAnimationsStop();
-
+					var jsonRequest = JSON.parse(sRequest);
                     me.searchStarted = false;
                     // update current state on success
                     //me.currentSearchConfig = searchConfig;
@@ -282,8 +282,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                     var sotredBy = me.dataTable.get("sortedBy");
 
+					if (!me.dataGrid.options.searchShowInactive && !jsonRequest.params.useChildQuery) {
+						for(var key in oResponse.results) {
+							var elem = oResponse.results[key];
+							if (!(elem.itemData['prop_lecm-dic_active'] == undefined || elem.itemData["prop_lecm-dic_active"].value == true)) {
+								oResponse.results.splice(key,1);
+								oResponse.meta.totalRecords--;
+							}
+						}
+					}
 					
-
 					me.dataTable.onDataReturnUpdateRows(sRequest, oResponse, oResponse.meta);
 
                     me.dataTable.set("sortedBy", sotredBy);
@@ -358,6 +366,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					this.currentSearchArgs.maxResults = this.dataTable.getState().pagination.rowsPerPage;
 				}
                 var searchParams = this.prepareSearchParams(this.currentSearchArgs);
+				//запас для удаленных
+                searchParams.params.maxResults = searchParams.params.maxResults+5;
 				
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
