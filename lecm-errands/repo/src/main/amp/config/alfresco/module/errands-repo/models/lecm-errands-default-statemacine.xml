@@ -1666,6 +1666,32 @@ if (soExecutors != null) {
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>022a997d-e7f7-420a-80e5-fecc65dc18e0</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/a5cb2551-6e6e-4949-ace5-429b0369ca71
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+if (document !== null) {
+   document.properties["lecm-errands:wait-for-execution-date"] = new Date();
+   document.save();
+}]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Сохранение фактического времени перехода в статус]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
                                                 </nodes>
                                             </subFolder>
                                         </subFolders>

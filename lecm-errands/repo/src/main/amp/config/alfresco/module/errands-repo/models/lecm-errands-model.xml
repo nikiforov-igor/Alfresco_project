@@ -153,6 +153,10 @@
 				<property name="lecm-errands:work-start-date">
 					<type>d:date</type>
 				</property>
+				<!-- Дата перехода в статус "Ожидает исполнения"-->
+				<property name="lecm-errands:wait-for-execution-date">
+					<type>d:date</type>
+				</property>
 				<!-- Переход после исполнения -->
 				<property name="lecm-errands:execute-result">
 					<type>d:text</type>

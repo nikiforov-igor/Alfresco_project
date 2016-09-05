@@ -94,7 +94,7 @@
         <!-- Период - это параметр для провеки сразу пары значений (начало и конец)
           -->
         <field alfrescoType="d:date" order="1" displayName="Период"
-            javaValueClass="java.util.Date" jrFldName="period" queryFldName="{lecm-errands:start-date}">
+            javaValueClass="java.util.Date" jrFldName="period" queryFldName="{lecm-errands:wait-for-execution-date}">
             <l18>
                 <item key="RU_RU" value="Период"/>
             </l18>
