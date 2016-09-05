@@ -3,21 +3,27 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <script type="text/javascript">
 (function() {
-	// YAHOO.util.Event.onAvailable('${controlId}', getOptions);
-	YAHOO.Bubbling.on('onCryptoAppletInit', function () {
-		var optsString = '';
+	/* YAHOO.util.Event.onAvailable('${controlId}', getOptions);*/
 
-		var certs = CryptoApplet.getCerts();
-		var selectBox = document.getElementById('${fieldHtmlId}');
-		for (var i = 0; i < certs.length; i++) {
-			var container = certs[i].getContainer();
-			var CN = certs[i].getOwner();
-			var opt = new Option(container + ': ' + CN, container);
-			if (container == '${field.value?string}'){
-				opt.selected = true;
-			}
-			selectBox.add(opt);
-		}
+
+	YAHOO.Bubbling.on('onCryptoAppletInit', function () {
+        this.loadCertificatesCallBack = function(results) {
+            var optsString = '';
+
+            var certs = results/*CryptoApplet.getCerts()*/;
+            var selectBox = document.getElementById('${fieldHtmlId}');
+            for (var i = 0; i < certs.length; i++) {
+                var container = result.thumbprint;
+                var CN = result.shortsubject;
+                var opt = new Option(container + ': ' + CN, container);
+                if (container == '${field.value?string}'){
+                    opt.selected = true;
+                }
+                selectBox.add(opt);
+            }
+        }
+
+        GetES6CertsJson(this);
 	});
 })();
 </script>

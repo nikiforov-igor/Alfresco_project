@@ -1,5 +1,6 @@
 package ru.it.lecm.signed.docflow.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,7 +31,6 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -38,6 +38,10 @@ import ru.it.lecm.signed.docflow.api.Signature;
 import ru.it.lecm.signed.docflow.SignedDocflowEventCategory;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
 import ru.it.lecm.signed.docflow.api.SignedDocflowModel;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.IOUtils;
+import ru.it.lecm.csp.signing.client.exception.CryptoException;
+import ru.it.lecm.signed.docflow.csp.CSPSigner;
 
 /**
  *
@@ -59,6 +63,9 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private ContentService contentService;
 	private BehaviourFilter behaviourFilter;
 	private LockService lockService;
+	private String cspdllpath;
+    private CSPSigner signer;
+    private String enforcedurl;
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
@@ -83,6 +90,15 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	public void setLockService(LockService lockService) {
 		this.lockService = lockService;
 	}
+
+	public void setCspdllpath(String cspdllpath) {
+        this.cspdllpath = cspdllpath;
+        signer = new CSPSigner(cspdllpath);
+    }
+
+    public void setEnforcedurl(String enforcedurl) {
+        this.enforcedurl = enforcedurl;
+    }
 
 	@Override
 	public List<Signature> getSignatures(NodeRef signedContentRef) {
@@ -505,4 +521,40 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
             properties.put(SignedDocflowModel.PROP_AUTH_TOKEN, token);
             nodeService.setProperties(currentEmployeeRef, properties);
 	}
+
+    @Override
+	public Map<String, Object> getHashes(List<NodeRef> refsToSignList) {
+		Map<String, Object> result = new HashMap<>();
+        for (NodeRef refToSignList : refsToSignList) {
+            String hash = generateHash(refToSignList);
+            if (!hash.isEmpty()) {
+                result.put(hash, refToSignList);
+            }
+        }
+		return result;
+	}
+
+    /**
+	 * вычислить хэш файла по нодрефе
+	 *
+	 * @param refToSignList
+	 * @return hashRef
+	 */
+	private String generateHash(NodeRef refToSignList) {
+		ContentReader sourceReader = contentService.getReader(refToSignList, ContentModel.PROP_CONTENT);
+		try {
+			byte[] sourceContentBytes = IOUtils.toByteArray(sourceReader.getContentInputStream());
+            byte[] targetContentBytes = signer.getProcessor().hashGostr3411(sourceContentBytes);
+			return Hex.encodeHexString(targetContentBytes).toUpperCase();
+		} catch (IOException | CryptoException ex) {
+			logger.error("", ex);
+		}
+		return "";
+	}
+
+    @Override
+    public String getSTSAAddress() {
+        return enforcedurl;
+    }
+
 }

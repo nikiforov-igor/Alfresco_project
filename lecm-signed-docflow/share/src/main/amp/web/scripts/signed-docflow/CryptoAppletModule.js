@@ -3,7 +3,8 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 }
 
 function checkForApplet() {
-	if (!document.getElementsByName('signApplet')) {
+	/*if (!document.getElementsByName('signApplet')) {*/
+    if (!document.getElementsByName('cadesplugin')) {
 		Alfresco.util.PopupManager.displayMessage({
 			text: Alfresco.util.message('lecm.signdoc.msg.applet.not.found')
 		});
@@ -15,6 +16,7 @@ function checkForApplet() {
 
 (function () {
 	var currentSigningCert = null,
+        sTSAAddress = "",
 		config = {
 			tsPolicy: null,
 			proxyPass: null,
@@ -48,7 +50,7 @@ function checkForApplet() {
 		LogicECM.CryptoApplet.superclass.constructor.call(this, 'LogicECM.CryptoApplet', htmlId);
 		try {
 			this.loadConfig();
-			signApplet.setConfig(config);
+			/*signApplet.setConfig(config);*/
 		} catch (ex) {
 			console.log(ex);
 		}
@@ -85,24 +87,100 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			signContent: function (nodeRefList) {
-				var i,
+            signPerformed: false,
+
+			signContent: function (nodeRefList, form) {
+
+                if (this.signPerformed) {
+                    return true;
+                }
+
+                var i,
 					signatures = [],
 					sign;
 
-
-				if (!YAHOO.lang.isArray(nodeRefList)) {
+                if (!YAHOO.lang.isArray(nodeRefList)) {
 					nodeRefList = [nodeRefList];
 				}
 
-				for (i = 0; i < nodeRefList.length; i++) {
-					sign = new Signature(currentSigningCert, nodeRefList[i]);
-					if (sign && sign.valid) {
-						signatures.push(sign);
-					}
-				}
-				return signatures;
 
+                var signCallBack = function(context, errormessage, result) {
+                    try {
+                        if (errormessage) {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: errormessage
+                            });
+                        } else {
+                            if (nodeRefList.length === result.signResult.length) {
+                                for (i = 0; i < nodeRefList.length; i++) {
+                                    sign = new Signature(currentSigningCert, nodeRefList[i], result.signResult[i]);
+                                    if (sign && sign.valid) {
+                                        signatures.push(sign);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!signatures.length) {
+							Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.create.sign.failed')});
+							form.url = null;
+							return false;
+						}
+                        else
+                        {
+                            form.url = Alfresco.constants.PROXY_URI + 'lecm/signed-docflow/signContent';
+                        }
+						for (i = 0; i < signatures.length; i++) {
+							form.dataObj.push(signatures[i].getJSONInfo());
+						}
+                    } catch(ex) {
+                        Alfresco.util.PopupManager.displayMessage({
+                            text: Alfresco.util.message("message.setting.signable.failure")
+                        });
+                    }
+                    context.signPerformed = true;
+                    Alfresco.util.Ajax.jsonRequest(form);
+                };
+
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/getHashes",
+                    dataObj: nodeRefList,
+                    failureCallback: {
+                        fn: function(response) {
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: msg("message.setting.signable.failure")
+                            });
+                        },
+                        scope: this
+                    },
+                    successCallback: {
+                        fn: function(response) {
+                            var docs = response.json;
+
+                            if (!this.useNPAPI) {
+                                SignES6Hashes(currentSigningCert.thumbprint, docs, sTSAAddress, signCallBack, this);
+                            }
+                            else {
+                                SignHashes_NPAPI(currentSigningCert.thumbprint, docs, sTSAAddress, signCallBack, this);
+                            }
+                        },
+                        scope: this
+                    }
+                });
+                /*
+                var intervalID;
+
+                var waitSignature = function(context) {
+                    if (context.signPerformed) {
+                        Alfresco.util.Ajax.jsonRequest(form);
+                        clearInterval(intervalID);
+                    }
+                };
+
+                intervalID = setInterval(waitSignature(this), 200);
+                */
+				return false;
 			},
 			signAction: function (nodeRefList, options) {
 
@@ -110,24 +188,20 @@ function checkForApplet() {
 					nodeRefList = [nodeRefList];
 				}
 
+                var signform = {};
+
 				this.loadCertsForm({
 					title: Alfresco.util.message('lecm.signdoc.msg.signing'),
-					actionURL: Alfresco.constants.PROXY_URI + 'lecm/signed-docflow/signContent',
+					actionURL: ""/*Alfresco.constants.PROXY_URI + 'lecm/signed-docflow/signContent'*/,
 					doBeforeAjaxCallback: {
 						scope: this,
 						fn: function (form) {
 							var signatures, i;
 
 							form.dataObj = [];
-							signatures = this.signContent(nodeRefList);
-							if (!signatures.length) {
-								Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message('lecm.signdoc.msg.create.sign.failed')});
-								form.options.actionURL = null;
-								return false;
-							}
-							for (i = 0; i < signatures.length; i++) {
-								form.dataObj.push(signatures[i].getJSONInfo());
-							}
+                            this.signPerformed = false;
+							var action = this.signContent(nodeRefList, form);
+                            return action;
 						}
 					},
 					successCallback: {
@@ -305,15 +379,19 @@ function checkForApplet() {
 
 			setCurrentSigningCert: function (cert) {
 				currentSigningCert = cert;
-				config.certB64 = cert.getBase64();
-				signApplet.setConfig(config);
+				/*config.certB64 = cert.getBase64();*/
+				/*signApplet.setConfig(config);*/
 			},
+            setSTSAAddress: function(paramsTSAAddress) {
+                sTSAAddress = paramsTSAAddress;
+            },
 			getCurrentSigningCert: function () {
 				return currentSigningCert;
 			},
 			//[delete?]
 			checkForApplet: function () {
-				if (!document.getElementsByName('signApplet')) {
+				/*if (!document.getElementsByName('signApplet')) {*/
+                if (!document.getElementsByName('cadesplugin')) {
 					Alfresco.util.PopupManager.displayMessage({
 						text: Alfresco.util.message('lecm.signdoc.msg.applet.not.found')
 					});
@@ -337,7 +415,7 @@ function checkForApplet() {
 							config.storeName = configRes.storeName;
 							config.licCert = configRes.licCert;
 							config.issuerCert = configRes.licCert;
-							signApplet.setConfig(config);
+							/*signApplet.setConfig(config);*/
 						}
 					},
 					failureMessage: Alfresco.util.message('lecm.signdoc.msg.applet.config.load.error')
@@ -889,6 +967,39 @@ function checkForApplet() {
 					}
 				});
 			},
+            onReady: function () {
+                //this.initPanel();
+                //this.getHtmlElements();
+                try {
+                    var js = [];
+                    this.useNPAPI = !!!window.Promise || !!!cadesplugin.CreateObjectAsync ? true : false;
+                    js.push(this.useNPAPI ? 'scripts/signed-docflow/Code.js' : 'scripts/signed-docflow/async_code.js');
+                    this.loadJs(js);
+                } catch (ex) {
+					console.log(ex);
+				}
+            },
+            loadJs: function (js) {
+                LogicECM.module.Base.Util.loadScripts(js, function() {YAHOO.Bubbling.fire('onCryptoAppletInit');});
+            },
+            loadCertificates: function () {
+                if (!this.useNPAPI) {
+                    GetES6CertsJson(this);
+                }
+                else {
+                    window.addEventListener("message", function (event) {
+                        if (event.data === "cadesplugin_loaded") {
+                            this.useNPAPI = true;
+                        }
+                    },
+                    false);
+                    window.postMessage("cadesplugin_echo_request", "*");
+                    FillCertList_NPAPIJson(this);
+                }
+            }
+            /*
+             * @Deprecated
+             *
 			onReady: function () {
 				try {
 					signApplet.setConfig(config);
@@ -898,7 +1009,7 @@ function checkForApplet() {
 				} catch (ex) {
 					console.log(ex);
 				}
-			}
+			}*/
 		});
 })();
 
@@ -1156,7 +1267,7 @@ CertificateFromBase64.prototype = Certificate.prototype;
  ==========================================================
  */
 
-function Signature(cert, nodeRef) {
+function Signature(cert, nodeRef, signResult) {
 	var contentURI;
 
 	this.signatureContent = null;
@@ -1173,8 +1284,7 @@ function Signature(cert, nodeRef) {
 
 	try {
 		this.signDate = Alfresco.util.toISO8601(new Date());
-		contentURI = new Alfresco.util.NodeRef(nodeRef).uri;
-		this.signatureContent = signApplet.sign(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL');
+		this.signatureContent = signResult.signature/*signApplet.sign(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL')*/;
 		if (!this.signatureContent) {
 			console.log('error while creating signature');
 			return null;
@@ -1299,13 +1409,21 @@ Signature.prototype = {
 		return this.valid;
 	},
 	getJSONInfo: function () {
-		var certInfo = this.certificate.getJSON();
+		/*var certInfo = this.certificate.getJSON()*/;
 		var signObj = {
+            'owner': this.certificate.shortsubject,
+            'owner-position': "",
+            'owner-organization': "",
+            'serial-number': this.certificate.serialNumber,
+            'valid-from': Alfresco.util.toISO8601(this.certificate.validFrom),
+            'valid-through': Alfresco.util.toISO8601(this.certificate.validTo),
+            'ca': this.certificate.shortissuer,
+            'fingerprint': this.certificate.thumbprint,
 			'sign-to-content-association': this.contentAssociation,
 			'content': this.signatureContent,
 			'signing-date': this.signDate
 		};
-		return YAHOO.lang.merge(signObj, certInfo);
+		return signObj/*YAHOO.lang.merge(signObj, certInfo)*/;
 	}
 };
 

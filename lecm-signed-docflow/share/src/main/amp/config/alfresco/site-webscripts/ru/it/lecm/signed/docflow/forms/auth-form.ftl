@@ -18,35 +18,51 @@
 <script>
 (function() {
 
-	var Event = YAHOO.util.Event,
-		Button = YAHOO.widget.Button,
-		data = [],
-		certs = CryptoApplet.getCerts(),
-		certsList, i;
+    this.loadCertificatesCallBack = function(results) {
 
-	for (i = 0; i < certs.length; i++) {
-		data[i] = {};
-		data[i].text = certs[i].getHumanReadable();
-		data[i].value = i;
-	}
+        Alfresco.util.Ajax.jsonRequest({
+			method: 'GET',
+			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/getSTSAAddress',
+			successCallback: {
+				scope: this,
+				fn: function (response) {
+					CryptoApplet.setSTSAAddress(response.json[0].sTSAAddress);
+                    var Event = YAHOO.util.Event,
+                        Button = YAHOO.widget.Button,
+                        data = [],
+                        certs = results/*CryptoApplet.getCerts()*/,
+                        certsList, i;
 
-	certsList = new Button({
-		id: "certs",
-		name: "certs",
-		label: "${msg('lecm.signdoc.lbl.select.cert')}",
-		type: "menu",
-		menu: data,
-		container: "selectContainer"
-	});
+                    for(i = 0; i < certs.length; i++) {
+                        data[i] = {};
+                        data[i].text = "CN=" + certs[i].shortsubject + "; Выдан: " + certs[i].normalValidFrom;
+                        data[i].value = i;
+                    }
+
+                    certsList = new Button({
+                        id: "certs",
+                        name: "certs",
+                        label: "${msg('lecm.signdoc.lbl.select.cert')}",
+                        type: "menu",
+                        menu: data,
+                        container: "selectContainer"
+                    });
 
 
-	certsList.on("selectedMenuItemChange", function(event) {
-		var oMenuItem = event.newValue,
-			CurrentContainerIndex = event.newValue.value;
+                    certsList.on("selectedMenuItemChange", function(event) {
+                        var oMenuItem = event.newValue,
+                            CurrentContainerIndex = event.newValue.value;
 
-		CryptoApplet.setCurrentSigningCert(certs[CurrentContainerIndex]);
-		this.set("label", oMenuItem.cfg.getProperty("text"));
-	});
+                        CryptoApplet.setCurrentSigningCert(certs[CurrentContainerIndex]);
+                        this.set("label", oMenuItem.cfg.getProperty("text"));
+                    });
+				}
+			},
+		});
+    };
+
+    GetES6CertsJson(this);
+
 })();
 
 </script>

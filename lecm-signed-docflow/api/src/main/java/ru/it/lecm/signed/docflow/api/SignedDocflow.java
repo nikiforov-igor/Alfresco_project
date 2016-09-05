@@ -138,4 +138,17 @@ public interface SignedDocflow {
 	 * @param token токен авторизации в сервисе unicloud
 	 */
 	void saveAuthenticationData(final String organizationId, final String organizationEdoId, final String token);
+	
+    /**
+     * получить хэши файлов для подписи.
+	 * @param refsToSignList нодрефы файлов
+	 * @return мапа хэшей
+	 */
+    Map<String, Object> getHashes(List<NodeRef> refsToSignList);
+
+    /**
+     * получить адрес сервиса штампов
+	 * @return адрес сервиса штампов
+	 */
+    String getSTSAAddress();
 }

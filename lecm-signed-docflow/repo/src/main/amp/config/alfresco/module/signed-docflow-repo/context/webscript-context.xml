@@ -71,4 +71,12 @@
 		  p:documentAttachmentsService-ref="documentAttachmentsService"
 		  p:nodeService-ref="nodeService"/>
 
+	<bean id="webscript.ru.it.lecm.signed.docflow.getHashes.getHashes.post" class="ru.it.lecm.signed.docflow.webscripts.GetHashesWebscript"
+		  parent="webscript"
+		  p:signedDocflowService-ref="signedDocflowService"/>
+
+    <bean id="webscript.ru.it.lecm.signed.docflow.getSTSAAddress.getSTSAAddress.get" class="ru.it.lecm.signed.docflow.webscripts.GetSTSAAddressWebscript"
+		  parent="webscript"
+		  p:signedDocflowService-ref="signedDocflowService"/>
+
 </beans>

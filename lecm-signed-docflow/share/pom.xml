@@ -68,6 +68,11 @@
 			<plugin>
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<configuration>
+					<excludes combine.children="append">
+						<exclude>**/scripts/signed-docflow/async_code.js</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
