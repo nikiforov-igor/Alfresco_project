@@ -443,6 +443,7 @@
 			<!-- Форма создания (по умолчанию) -->
 			<form>
 				<field-visibility>
+					<show id="lecm-document-aspects:attachments-temp-assoc"/>
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
@@ -455,7 +456,6 @@
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
-					<show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 					<show id="lecm-document-aspects:template-name" force="true"/>
 					<show id="lecm-document-aspects:template-ref" force="true"/>

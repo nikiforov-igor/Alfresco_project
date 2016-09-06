@@ -412,6 +412,7 @@
             <!-- Форма создания (по умолчанию) -->
             <form>
                 <field-visibility>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-internal:doc-type-assoc"/>
                     <show id="lecm-internal:response-date"/>
@@ -423,7 +424,6 @@
                     <show id="lecm-eds-document:sheets-number"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>

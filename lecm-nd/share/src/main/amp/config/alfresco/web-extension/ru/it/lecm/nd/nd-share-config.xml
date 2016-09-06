@@ -11,6 +11,7 @@
         <forms>
             <form>
                 <field-visibility>
+	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -22,7 +23,6 @@
                     <show id="lecm-nd:begin-date" mandatory="true"/>
                     <show id="lecm-nd:end-date" mandatory="true"/>
                     <show id="lecm-nd:unlimited" mandatory="true"/>
-	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>

@@ -348,6 +348,7 @@
 		<forms>
 			<form>
                 <field-visibility>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
                     <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
@@ -363,7 +364,6 @@
                     <show id="lecm-contract:summaryContent"/>
                     <show id="lecm-contract:regNumContractor"/>
                     <show id="lecm-contract:locationContract"/>
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>
                 </field-visibility>
@@ -498,7 +498,7 @@
                     </field>
                     <field id="lecm-contract:regNumContractor" set="afterDates"/>
                     <field id="lecm-contract:locationContract" set="afterDates"/>
-	                <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments" set="afterDates">
+	                <field id="lecm-document-aspects:attachments-temp-assoc" label-id="label.attachments">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
 			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
 			                <control-param name="directoryName">Вложения</control-param>
@@ -1742,12 +1742,12 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-additional-document:additionalDocumentType"/>
                     <show id="lecm-document:regnum"/>
                     <show id="lecm-additional-document:date"/>
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
 					<show id="lecmSignAspects:signerEmployeeAssoc"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>

@@ -3,6 +3,7 @@
         <forms>
             <form>
                 <field-visibility>
+	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:execution-date"/>
@@ -15,7 +16,6 @@
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-ord:canceled-assoc"/>
                     <show id="lecm-ord:accepted-assoc"/>
-	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document-aspects:registrator-assoc" force="true"/>
                     <show id="lecm-document-aspects:template-name" force="true"/>
                     <show id="lecm-document-aspects:template-ref" force="true"/>

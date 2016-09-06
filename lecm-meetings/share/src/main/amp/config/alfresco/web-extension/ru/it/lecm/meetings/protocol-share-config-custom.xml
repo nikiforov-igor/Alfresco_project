@@ -155,6 +155,8 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<!--Вложения-->
+					<show id="lecm-document-aspects:attachments-temp-assoc"/>
 					<!-- Заголовок -->
 					<show id="lecm-document:title"/>
 					<!--Вид документа-->
@@ -181,8 +183,6 @@
 					<show id="lecm-eds-document:file-register-assoc"/>
 					<!--Автосоздание поручений-->
 					<show id="lecm-protocol:errands-autocreation"/>
-					<!--Вложения-->
-					<show id="lecm-document-aspects:attachments-temp-assoc"/>
 					<!--Пункты-->
 					<show id="lecm-protocol:temp-items-assoc"/>
 					<show id="lecm-document-aspects:template-name" force="true"/>

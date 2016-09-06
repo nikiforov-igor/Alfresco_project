@@ -39,17 +39,19 @@
 		</label>
 	</div>
 </#if>
-	<@renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent "true"/>
 	<div class="container">
-		<div class="buttons-div">
-            <span class="show-preview-button">
-                <input type="button" id="${fieldHtmlId}-show-preview-button" name="-" value=""/>
-            </span>
-		</div>
-		<div class="value-div">
-		<#if showAttsList>
-			<ul id="${fieldHtmlId}-attachments" class="attachments-list"></ul>
-		</#if>
+		<@renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent "true"/>
+		<div>
+			<div class="buttons-div">
+				<span class="show-preview-button">
+					<input type="button" id="${fieldHtmlId}-show-preview-button" name="-" value=""/>
+				</span>
+			</div>
+			<div class="value-div">
+			<#if showAttsList>
+				<ul id="${fieldHtmlId}-attachments" class="attachments-list"></ul>
+			</#if>
+			</div>
 		</div>
 	</div>
 </div>
