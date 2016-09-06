@@ -16,3 +16,7 @@
 	text-align: center;
 	visibility: hidden;
 }
+.dashlet.business-journal .toolbar>span {
+	max-width: 25%;
+	white-space: normal;
+}
