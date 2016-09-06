@@ -351,6 +351,6 @@
 			</div>
 		</div>
 	<#else>
-		${msg("label.no.access")}
+		<div class="body scrollableList no-access">${msg("label.no.access")}</div>
 	</#if>
 </div>
