@@ -224,7 +224,7 @@
       <sequenceFlow id="flow11" sourceRef="exclusivegateway3" targetRef="alfrescoScripttask5">
         <conditionExpression xsi:type="tFormalExpression"><![CDATA[${execution.getVariableLocal('stageWorkflowType') == 'SEQUENTIAL'}]]></conditionExpression>
       </sequenceFlow>
-      <userTask id="usertask1" name="User Task" activiti:assignee="${currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName']}" activiti:formKey="lecmApprove3:approveTask">
+      <userTask id="usertask1" name="Согласовать" activiti:assignee="${currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName']}" activiti:formKey="lecmApprove3:approveTask">
         <extensionElements>
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
@@ -445,7 +445,7 @@
       <sequenceFlow id="flow16" sourceRef="exclusivegateway4" targetRef="exclusivegateway5">
         <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!execution.getVariableLocal('hasNextStageItem')}]]></conditionExpression>
       </sequenceFlow>
-      <userTask id="usertask2" name="User Task" activiti:assignee="${currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName']}" activiti:formKey="lecmApprove3:approveTask">
+      <userTask id="usertask2" name="Согласовать" activiti:assignee="${currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName']}" activiti:formKey="lecmApprove3:approveTask">
         <extensionElements>
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">

@@ -50,7 +50,7 @@
 
         <sequenceFlow id="from-receive-task-to-answer" sourceRef="receivetask" targetRef="init-service-task"></sequenceFlow>
 
-        <userTask id="parallel-answer-task" name="Ответить"
+        <userTask id="parallel-answer-task" name="Внутренний. Ответить"
                   activiti:assignee="${assignee}"
                   activiti:formKey="internalDirect:answerTask">
             <extensionElements>

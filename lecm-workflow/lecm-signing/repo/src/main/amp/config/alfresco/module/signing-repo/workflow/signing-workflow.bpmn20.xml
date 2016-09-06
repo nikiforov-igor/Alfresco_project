@@ -46,7 +46,7 @@
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="alfrescoScripttask1"></sequenceFlow>
-    <userTask id="usertask1" name="User Task" activiti:formKey="lecmSign2:signTask">
+    <userTask id="usertask1" name="Подписать" activiti:formKey="lecmSign2:signTask">
       <extensionElements>
         <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
           <activiti:field name="script">
