@@ -138,19 +138,8 @@ LogicECM.dashlet = LogicECM.dashlet || {};
                         container.appendChild(header);
                         var datetime = document.createElement('div');
                         datetime.className = 'location';
-                        var date = "";
-                        if (event.allDay) {
-                            date = Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.defaultDateOnly")) + " " + this.msg("label.all-day");
-                        } else {
-                            var fromDay = Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.defaultDateOnly"));
-                            var toDay = Alfresco.util.formatDate(new Date(event.toDate), this.msg("lecm.date-format.defaultDateOnly"));
-                            if (fromDay === toDay) {
-                                date = fromDay + ' ' + Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.time")) + ' - ' + Alfresco.util.formatDate(new Date(event.toDate), this.msg("lecm.date-format.time"));
-                            } else {
-                                date = Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.datetime")) + ' - ' + Alfresco.util.formatDate(new Date(event.toDate), this.msg("lecm.date-format.datetime"));
-                            }
-                        }
-                        datetime.innerHTML = event.location + ', ' + date;
+                        var date = Alfresco.util.formatDate(new Date(event.fromDate), this.msg("lecm.date-format.datetime")) + ' - ' + Alfresco.util.formatDate(new Date(event.toDate), this.msg("lecm.date-format.datetime"));
+                        datetime.innerHTML = date + ', ' + event.location;
                         container.appendChild(datetime);
 
                         var delim = document.createElement('div');
