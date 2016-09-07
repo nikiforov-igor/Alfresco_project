@@ -217,8 +217,8 @@
             <form>
                 <field-visibility>
                     <!--Вложения-->
-                    <show id="save-event-script" force="true"/>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
+                    <show id="save-event-script" force="true"/>
                     <!-- Заголовок -->
                     <show id="lecm-events:title"/>
                     <!-- Весмь день -->
@@ -257,16 +257,16 @@
                 <appearance>
                     <set id="createEventSet" appearance="" template="/ru/it/lecm/events/event-create/event-create-set.ftl" />
 
-                    <field id="save-event-script" set="createEventSet">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-events/save-created-event-to-storage.js</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-document-aspects:attachments-temp-assoc" label="Вложения" set="createEventSet">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryNameCode">title.event.upload.attachments.directoryName</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                        </control>
+                    </field>
+                    <field id="save-event-script" set="createEventSet">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-events/save-created-event-to-storage.js</control-param>
                         </control>
                     </field>
 
@@ -377,10 +377,10 @@
 					<field id="lecm-events:subject-assoc-ref" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
 					</field>
-                    <field id="lecm-document-aspects:template-name">
+                    <field id="lecm-document-aspects:template-name" set="createEventSet">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
                     </field>
-                    <field id="lecm-document-aspects:template-ref">
+                    <field id="lecm-document-aspects:template-ref" set="createEventSet">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
                     </field>
                 </appearance>

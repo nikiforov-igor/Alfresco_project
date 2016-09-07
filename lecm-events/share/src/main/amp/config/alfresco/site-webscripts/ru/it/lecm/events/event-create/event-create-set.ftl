@@ -16,17 +16,17 @@
                     </ul>
                 </div>
             </div>
-<#--            <div class="event-create-attachments">
+            <div class="event-create-attachments">
                 <h2 class="alfresco-twister alfresco-twister-open">
                     ${msg("label.events.attachments")}
                 </h2>
                 <@formLib.renderField field=form.fields[item.id] />
             </div>
--->
         </div>
         <div class="event-create-center">
+    <#else>
+        <@formLib.renderField field=form.fields[item.id] />
     </#if>
-    <@formLib.renderField field=form.fields[item.id] />
 </#list>
     </div>
 </div>

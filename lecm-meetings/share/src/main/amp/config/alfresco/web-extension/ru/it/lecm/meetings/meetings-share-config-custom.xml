@@ -591,10 +591,10 @@
 							<control-param name="editFormId">create-meetings-item-edit-form</control-param>
 						</control>
 					</field>
-					<field id="lecm-document-aspects:template-name">
+					<field id="lecm-document-aspects:template-name" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
 					</field>
-					<field id="lecm-document-aspects:template-ref">
+					<field id="lecm-document-aspects:template-ref" set="createEventSet">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-default-value.ftl"/>
 					</field>
 				</appearance>
