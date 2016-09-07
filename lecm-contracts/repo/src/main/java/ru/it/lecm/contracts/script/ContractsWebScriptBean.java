@@ -213,19 +213,22 @@ public class ContractsWebScriptBean extends BaseWebScript {
 
         String filterQuery = "";
 
-        List<NodeRef> initiatorsList = new ArrayList<NodeRef>();
+        List<NodeRef> initiatorsList = null;
 
         if (userFilter != null && !"".equals(userFilter)) {
             NodeRef employee = orgstructureService.getCurrentEmployee();
             if (employee != null) {
                 switch (WhoseEnum.valueOf(userFilter.toUpperCase())) {
                     case MY: {
+                        initiatorsList = new ArrayList<>();
                         initiatorsList.add(employee);
                         break;
                     }
                     case DEPARTMENT: {
                         List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(employee);
-                        initiatorsList.addAll(departmentEmployees);
+                        if (!departmentEmployees.isEmpty()) {
+                            initiatorsList = departmentEmployees;
+                        }
                         break;
                     }
                     case MEMBER: {
@@ -235,6 +238,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
                         break;
                     }
                     default: {
+                        initiatorsList = new ArrayList<>();
                         initiatorsList.add(orgstructureService.getCurrentEmployee());
                         break;
                     }
@@ -242,24 +246,28 @@ public class ContractsWebScriptBean extends BaseWebScript {
 
                 String employeesQuery = "";
                 // фильтр по сотрудниками-создателям
-                if (!initiatorsList.isEmpty()) {
-                    Map<QName, List<NodeRef>> initList = new HashMap<QName, List<NodeRef>>();
-                    initList.put(ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT, initiatorsList);
-                    initList.put(ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, initiatorsList);
+                if (initiatorsList != null) {
+                    if (!initiatorsList.isEmpty()) {
+                        Map<QName, List<NodeRef>> initList = new HashMap<QName, List<NodeRef>>();
+                        initList.put(ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT, initiatorsList);
+                        initList.put(ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, initiatorsList);
 
-                    boolean addOR = false;
-                    for (QName type : types) {
-                        String authorProperty = documentService.getAuthorProperty(type);
-                        authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-                        for (NodeRef employeeRef : initList.get(type)) {
-                            employeesQuery += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
-                            addOR = true;
+                        boolean addOR = false;
+                        for (QName type : types) {
+                            String authorProperty = documentService.getAuthorProperty(type);
+                            authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+                            for (NodeRef employeeRef : initList.get(type)) {
+                                employeesQuery += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                                addOR = true;
+                            }
+                        }
+
+                        if (employeesQuery.length() > 0) {
+                            filterQuery += (filterQuery.length() > 0 ? " AND (" : "") + employeesQuery + (filterQuery.length() > 0 ? ")" : "");
                         }
                     }
-
-                    if (employeesQuery.length() > 0) {
-                        filterQuery += (filterQuery.length() > 0 ? " AND (" : "") + employeesQuery + (filterQuery.length() > 0 ? ")" : "");
-                    }
+                } else {
+                    return new NodeRef[0];
                 }
             }
         }
