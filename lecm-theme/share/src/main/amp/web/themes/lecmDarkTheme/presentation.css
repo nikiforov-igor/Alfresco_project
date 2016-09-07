@@ -2655,3 +2655,20 @@ div#lightbox {
     background-color: transparent !important;
 }
 /* Form buttons : end */
+
+.yui-skin-lecmDarkTheme .yui-u .dashlet .dashlet-title {
+    background-color: #C4C4C4;
+    border-bottom: 1px solid #636363;
+}
+
+.yui-skin-lecmDarkTheme .yui-u .dashlet .dashlet-title.title span {
+    color: #333;
+}
+
+.yui-skin-lecmDarkTheme .yui-u .dashlet .dashlet-title {
+    background-color: #C4C4C4;
+    border-bottom: 1px solid #636363;
+}
+.yui-skin-lecmDarkTheme .yui-u .dashlet .dashlet-title.title span {
+    color: #333;
+}
