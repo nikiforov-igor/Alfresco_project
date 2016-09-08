@@ -271,6 +271,7 @@
 	            var hidden = Dom.get(inputId + '-hidden');
 	            var onOptionClick = function (p_sType, p_aArgs, p_oItem) {
 	                selectButton.set("label", p_oItem.cfg.getProperty("text"));
+	                selectButton.set("title", p_oItem.cfg.getProperty("text"));
 	                hidden.value = p_oItem.value;
 		            loadBusinessJournalRecords(true);
 	            };
