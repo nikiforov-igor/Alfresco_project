@@ -6,6 +6,7 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -382,7 +383,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
      * Изменение атрибутивного состава cm:person. Необходимо обновить атрибуты
      * соответствующего сотрудника.
      */
-    public void onUpdatePersonProperties(NodeRef person, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+    public void onUpdatePersonProperties(final NodeRef person, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 
         // проверка на тот случай, что полиси вызвана во время старта системы, когда происходит обнуление системной проперти
         if (PolicyUtils.safeEquals(before.get(ContentModel.PROP_SIZE_CURRENT), after.get(ContentModel.PROP_SIZE_CURRENT))) {
@@ -419,11 +420,29 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
             } else if (!before.isEmpty() && synchronizablePropertiesChanged(before, after)) {
                 // если что-то из этого было изменено, то синхронизируем атрибуты cm:person и lecm-orgstr:employee
                 // для начала пролучаем сотрудника, привязанного к измененному пользователю
-                NodeRef employee = orgstructureService.getEmployeeByPerson(person, false);
+                final NodeRef employee = orgstructureService.getEmployeeByPerson(person, false);
                 // если таковой присутствует...
                 if (employee != null) {
                     // ...то запускаем синхронизацию
-                    synchronizePersonAndEmployee(person, employee);
+                    final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+                    AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
+                    try{
+                        AuthenticationUtil.setFullyAuthenticatedUser(AuthenticationUtil.getAdminUserName());
+                        AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
+                            @Override
+                            public Void doWork() throws Exception {
+                                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>(){
+                                    @Override
+                                    public Void execute() throws Throwable {
+                                        synchronizePersonAndEmployee(person, employee);
+                                        return null;
+                                    }
+                                }, false, true);
+                            }
+                        }, AuthenticationUtil.getAdminUserName());
+                    } finally{
+                        AuthenticationUtil.setFullyAuthenticatedUser(user);
+                    }
                 }
             }
         }
