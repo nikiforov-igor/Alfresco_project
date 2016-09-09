@@ -63,6 +63,11 @@ function createReviewTSItem(reviewTable, reviewTsItems) {
 					}
 				}
 			}
+		} else if ('lecm-orgstr:organization-unit' == item.typeShort) {
+			assocEmployees = orgstructure.getEmployeesInUnit(item);
+			for (k in assocEmployees) {
+				pushEmployeeIfNotExist(employees, assocEmployees[k]);
+			}
 		}
 	}
 	for (i in employees) {
