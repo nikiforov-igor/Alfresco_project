@@ -276,6 +276,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(errandsIssuedByMe);
     }
 
+    /**
+     * Получить поручения на контроле
+     * @param document
+     * @param filter
+     * @return
+     */
     public Scriptable getDocumentErrandsControlledMe(ScriptNode document, String filter) {
         List<NodeRef> errandsControlledMe = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter,
                 Arrays.asList(ErrandsService.ASSOC_ERRANDS_CONTROLLER));
@@ -293,6 +299,12 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(errandsAll);
     }
 
+    /**
+     * Получение всех поручений по документу
+     * @param document
+     * @param filter
+     * @return
+     */
     public Scriptable getDocumentErrandsAll(ScriptNode document, String filter) {
         List<NodeRef> errandsAll = errandsService.getFilterDocumentErrands(document.getNodeRef(), filter, null);
         return createScriptable(errandsAll);
