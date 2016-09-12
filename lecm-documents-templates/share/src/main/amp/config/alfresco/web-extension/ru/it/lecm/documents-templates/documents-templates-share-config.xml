@@ -5,15 +5,32 @@
 				<field-visibility>
 					<show id="lecm-template:actions"/>
 					<show id="cm:title"/>
+					<show id="lecm-template:organizationAssoc"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
 				</field-visibility>
 				<appearance>
 						<set id="top" template="/org/alfresco/components/form/2-column-set.ftl"/>
+						<set id="top2"/>
 						<set id="bottom"/>
 
-						<field id="cm:title" set="top" mandatory="true">
+						<field id="cm:title" set="top2" mandatory="true">
 							<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						</field>
+						<field id="lecm-template:organizationAssoc" set="top2" mandatory="true">
+							<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+								<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+								<control-param name="additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+								<control-param name="plane">true</control-param>
+								<control-param name="showCreateNewLink">false</control-param>
+								<control-param name="showAutocomplete">true</control-param>
+								<control-param name="showSearch">true</control-param>
+								<control-param name="nameSubstituteString">{lecm-contractor:shortname}</control-param>
+								<control-param name="changeItemsFireAction">templateOrganizationSelect</control-param>
+								<control-param name="sortProp">lecm-contractor:shortname</control-param>
+								<control-param name="childrenDataSource">/lecm/orgstructure/getOrganizations/picker</control-param>
+								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
+							</control>
 						</field>
 						<field id="lecm-template:actions" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>
@@ -34,15 +51,32 @@
 				<field-visibility>
 					<show id="lecm-template:actions"/>
 					<show id="cm:title"/>
+					<show id="lecm-template:organizationAssoc"/>
 					<show id="lecm-template:doc-type"/>
 					<show id="lecm-template:attributes"/>
 				</field-visibility>
 				<appearance>
 						<set id="top" template="/org/alfresco/components/form/2-column-set.ftl"/>
+						<set id="top2"/>
 						<set id="bottom"/>
 
-						<field id="cm:title" set="top" mandatory="true">
+						<field id="cm:title" set="top2" mandatory="true">
 							<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+						</field>
+						<field id="lecm-template:organizationAssoc" set="top2" mandatory="true">
+							<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
+								<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
+								<control-param name="additionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+								<control-param name="plane">true</control-param>
+								<control-param name="showCreateNewLink">false</control-param>
+								<control-param name="showAutocomplete">true</control-param>
+								<control-param name="showSearch">true</control-param>
+								<control-param name="nameSubstituteString">{lecm-contractor:shortname}</control-param>
+								<control-param name="changeItemsFireAction">templateOrganizationSelect</control-param>
+								<control-param name="sortProp">lecm-contractor:shortname</control-param>
+								<control-param name="childrenDataSource">/lecm/orgstructure/getOrganizations/picker</control-param>
+								<control-param name="defaultValueDataSource">/lecm/documents-templates/defaultOrganization</control-param>
+							</control>
 						</field>
 						<field id="lecm-template:actions" set="top">
 							<control template="/ru/it/lecm/documents-templates/components/controls/actions.ftl"/>

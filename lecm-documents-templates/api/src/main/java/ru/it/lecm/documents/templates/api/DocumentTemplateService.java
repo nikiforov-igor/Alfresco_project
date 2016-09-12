@@ -9,6 +9,8 @@ import org.alfresco.service.namespace.QName;
  * @author vmalygin
  */
 public interface DocumentTemplateService {
+	String ROUTES_URL = "http://www.it.ru/lecm/document/template/1.0";
+	QName ASSOC_ORGANIZATION = QName.createQName(ROUTES_URL, "organizationAssoc");
 
 	NodeRef getDocumentTemplateFolder();
 
