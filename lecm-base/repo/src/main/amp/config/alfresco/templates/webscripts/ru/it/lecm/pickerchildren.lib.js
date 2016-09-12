@@ -287,7 +287,14 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				resultObj.path = path;
 				resultObj.simplePath = simplePath;
 			}
-
+			if (argsUseObjectDescription && sortProp == "cm:name") {
+				containerResults.sort(function (a, b) {
+					return a.visibleName > b.visibleName;
+				});
+				contentResults.sort(function (a, b) {
+					return a.visibleName > b.visibleName;
+				});
+			}
 			results = containerResults.concat(contentResults);
 		}
 		else if (url.templateArgs.type == "category")
