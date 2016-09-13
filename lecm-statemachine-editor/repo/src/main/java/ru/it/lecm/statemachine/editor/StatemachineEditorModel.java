@@ -21,12 +21,20 @@ public class StatemachineEditorModel {
 	public final static QName TYPE_ACTIONS = QName.createQName(STATEMACHINE_EDITOR_URI, "actions");
 	public final static QName TYPE_END_EVENT = QName.createQName(STATEMACHINE_EDITOR_URI, "endEvent");
 	public final static QName TYPE_WORKFLOW_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionWorkflow");
+	public final static QName TYPE_USER_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI,"userTransition");
+	public final static QName TYPE_FORM_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI,"transitionForm");
+	public final static QName TYPE_FORMTRANS_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI,"transitionFormTrans");
+	public final static QName TYPE_USER_WORKFLOW_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI,"UserWorkflowEntity");
+	public final static QName TYPE_START_WORKFLOW_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI,"StartWorkflowEntity");
+	public final static QName TYPE_SCRIPT_ACTION_TRANSITION = QName.createQName(STATEMACHINE_EDITOR_URI,"ScriptActionEntity");
 	public final static QName TYPE_OUTPUT_VARIABLE = QName.createQName(STATEMACHINE_EDITOR_URI, "outputVariable");
 	public final static QName TYPE_INPUT_VARIABLE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputVariable");
 	public final static QName TYPE_INPUT_FORM_VARIABLE = QName.createQName(STATEMACHINE_EDITOR_URI, "inputFormVariable");
 	public final static QName TYPE_DYNAMIC_ROLE = QName.createQName(STATEMACHINE_EDITOR_URI, "dynamic-role");
 	public final static QName TYPE_CONDITION_ACCESS = QName.createQName(STATEMACHINE_EDITOR_URI, "conditionAccess");
 	public final static QName TYPE_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "versionContainer");
+
+
 
 	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_EDITOR_URI, "actionId");
 	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_EDITOR_URI, "actionExecution");
