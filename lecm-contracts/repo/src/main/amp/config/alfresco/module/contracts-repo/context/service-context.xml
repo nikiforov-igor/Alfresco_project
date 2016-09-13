@@ -570,7 +570,7 @@
           class="ru.it.lecm.contracts.schedule.ContractStageEndDateNotificationSchedule">
         <property name="transactionMode" value="ISOLATED_TRANSACTIONS"/>
         <property name="compensatingActionMode" value="IGNORE"/>
-        <property name="cronExpression" value="0 0 0 * * ?"/>
+        <property name="cronExpression" value="0 45 3 * * ?"/>
         <property name="jobName" value="lecm-contracts-stage-end-notifications-job"/>
         <property name="jobGroup" value="lecm-contracts-stage-end-notifications"/>
         <property name="triggerName" value="lecm-contracts-stage-end-notifications-trigger"/>
