@@ -24,6 +24,8 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		showFolders = args['showFolders'],
 		docType = args['docType'],
         useOnlyInSameOrg = ("true" == args['onlyInSameOrg']),
+		doNotCheck = (doNotCheckAccess == null || ("" + doNotCheckAccess) == "false") ?
+			("true" == args['doNotCheckAccess']) : doNotCheckAccess,
 		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
 		additionalProperties = args['additionalProperties'],
 		argsPathRoot = args['pathRoot'],
@@ -146,7 +148,6 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                     ignoreTypes = argsFilterType;
                 }
 
-                var doNotCheck = doNotCheckAccess != null && (("" + doNotCheckAccess) == "true");
                 var childType = null;
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
                     childType = argsSelectableType;
@@ -180,7 +181,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					query = addAdditionalFilter(query, filter);
 				}
 
-                if (doNotCheckAccess == null || ("" + doNotCheckAccess == "false")) {
+				if (!doNotCheck) {
 					query = addAdditionalFilter(query, "{{IN_SAME_ORGANIZATION({strict:" + useOnlyInSameOrg + "})}}");
 				}
 

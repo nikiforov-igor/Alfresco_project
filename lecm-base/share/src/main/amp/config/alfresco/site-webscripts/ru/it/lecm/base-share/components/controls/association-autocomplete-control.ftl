@@ -176,6 +176,9 @@
     <#if field.control.params.useStrictFilterByOrg??>
         useStrictFilterByOrg: "${field.control.params.useStrictFilterByOrg?string}",
     </#if>
+    <#if field.control.params.doNotCheckAccess??>
+        doNotCheckAccess: ${field.control.params.doNotCheckAccess?string},
+    </#if>
     <#if defaultValue?has_content>
 	    defaultValue: "${defaultValue?string}",
     </#if>
@@ -240,6 +243,9 @@
     </#if>
     <#if field.control.params.useStrictFilterByOrg??>
         useStrictFilterByOrg: "${field.control.params.useStrictFilterByOrg?string}",
+    </#if>
+    <#if field.control.params.doNotCheckAccess??>
+        doNotCheckAccess: ${field.control.params.doNotCheckAccess?string},
     </#if>
 	<#if field.control.params.createNewMessage??>
 		createNewMessage: "${field.control.params.createNewMessage}",

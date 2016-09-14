@@ -176,6 +176,9 @@
                 <#if field.control.params.useStrictFilterByOrg??>
                     useStrictFilterByOrg: "${field.control.params.useStrictFilterByOrg?string}",
                 </#if>
+				<#if field.control.params.doNotCheckAccess??>
+					doNotCheckAccess: ${field.control.params.doNotCheckAccess?string},
+				</#if>
 				fieldId: "${field.configName}",
 				formId: "${args.htmlid}",
 				showSelectedItems: ${showSelectedItems?string},

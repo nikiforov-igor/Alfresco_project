@@ -117,6 +117,7 @@ LogicECM.module = LogicECM.module || {};
 				additionalFilter: "",
 
                 useStrictFilterByOrg: false,
+				doNotCheckAccess: false,
 
 				ignoreNodes: null,
 
@@ -698,7 +699,8 @@ LogicECM.module = LogicECM.module || {};
                     "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 					"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 					"&additionalFilter=" + encodeURIComponent(additionalFilter) +
-                    "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
+                    "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
+                    "&doNotCheckAccess=" + encodeURIComponent("" + this.options.doNotCheckAccess);
 
 				if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/") {
 					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);

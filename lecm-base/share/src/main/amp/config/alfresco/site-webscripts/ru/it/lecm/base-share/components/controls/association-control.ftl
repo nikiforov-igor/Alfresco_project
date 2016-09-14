@@ -251,6 +251,9 @@
 			<#if params.useStrictFilterByOrg??>
 				useStrictFilterByOrg: "${params.useStrictFilterByOrg?string}",
 			</#if>
+			<#if params.doNotCheckAccess??>
+                doNotCheckAccess: ${params.doNotCheckAccess?string},
+			</#if>
 			<#if params.childrenDataSource??>
 				childrenDataSource: "${params.childrenDataSource}",
 			</#if>

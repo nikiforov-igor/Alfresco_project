@@ -160,6 +160,8 @@ LogicECM.module = LogicECM.module || {};
 
             useStrictFilterByOrg: false,
 
+            doNotCheckAccess: false,
+
             defaultValue: null,
 
 	        defaultValueDataSource: null,
@@ -1616,6 +1618,7 @@ LogicECM.module = LogicECM.module || {};
 	            "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 				"&additionalFilter=" + encodeURIComponent(additionalFilter) +
+                "&doNotCheckAccess=" + encodeURIComponent("" + this.options.doNotCheckAccess) +
                 "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
                 "&pathRoot=" + encodeURIComponent(this.options.rootLocation) +
                 "&pathNameSubstituteString=" + encodeURIComponent(this.options.pathNameSubstituteString);
