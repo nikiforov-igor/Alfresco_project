@@ -429,4 +429,9 @@
 			</map>
 		</property>
 	</bean>
+	<bean id="eventsAssociationPolicy"
+		  class="ru.it.lecm.events.policy.EventsAssociationHandlerPolicy"
+		  init-method="init"
+		  parent="logicEcmAssociationPolicy"
+		  depends-on="events.dictionaries.LogicEcmModelsBootstrap"/>
 </beans>

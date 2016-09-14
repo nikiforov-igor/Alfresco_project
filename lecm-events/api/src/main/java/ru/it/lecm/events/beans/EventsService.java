@@ -87,6 +87,8 @@ public interface EventsService {
 	public static final QName TYPE_EVENTS_USER_SETTINGS = QName.createQName(EVENTS_SETTINGS_NAMESPACE_URI, "user-settings");
 	public static final QName USER_SETTINGS_PROP_SHOW_DECLINED = QName.createQName(EVENTS_SETTINGS_NAMESPACE_URI, "show-declined");
 
+	public static final QName TYPE_EVENT_RESOURCE = QName.createQName(EVENTS_DIC_NAMESPACE_URI, "resources");
+
 	public static final String EVENT_LINK_URL = "/share/page/event";
 
 	public static final String EVENTS_ENGINEER_ROLE = "EVENTS_ENGINEER";
