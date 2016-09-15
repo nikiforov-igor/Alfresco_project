@@ -300,7 +300,7 @@
 	<bean id="events.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
-          dataSourcePolicy,reportDescriptorPolicy">
+          dataSourcePolicy,reportDescriptorPolicy,reporting.LogicEcmDictionariesBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
 		<property name="dictionaries">
 			<list>

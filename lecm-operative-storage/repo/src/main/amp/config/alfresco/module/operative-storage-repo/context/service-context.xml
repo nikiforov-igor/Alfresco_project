@@ -123,7 +123,7 @@
 	<bean id="operative.storage.reports.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
           reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
-          dataSourcePolicy,reportDescriptorPolicy"
+          dataSourcePolicy,reportDescriptorPolicy,reporting.LogicEcmDictionariesBootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"
 		  p:dictionaries-ref="operative.storage.reports"
           p:xmlImportListener-ref="operative.storage.reports.deployer"/>
