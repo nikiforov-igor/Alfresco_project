@@ -730,15 +730,15 @@
 					</field>
 
 					<field id="lecm-events:location-assoc">
-						<control template="/ru/it/lecm/events/controls/events-location-control.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Места_x0020_проведения_x0020_мероприятий</control-param>
-							<control-param name="plane">true</control-param>
-							<control-param name="childrenDataSource">lecm/events/locations/picker</control-param>
+						<control>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="org_field">lecm-events-dic:locations-organization-assoc-ref</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:temp-resources-assoc">
 						<control>
-							<control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
+							<control-param name="org_field">lecm-events-dic:resources-organization-assoc-ref</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:initiator-assoc">
