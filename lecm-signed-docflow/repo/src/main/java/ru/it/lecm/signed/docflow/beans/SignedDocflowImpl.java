@@ -64,8 +64,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private BehaviourFilter behaviourFilter;
 	private LockService lockService;
 	private String cspdllpath;
-    private CSPSigner signer;
     private String enforcedurl;
+    private String catalinahome;
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
@@ -93,7 +93,10 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 	public void setCspdllpath(String cspdllpath) {
         this.cspdllpath = cspdllpath;
-        signer = new CSPSigner(cspdllpath);
+    }
+
+    public void setCatalinahome(String catalinahome) {
+        this.catalinahome = catalinahome;
     }
 
     public void setEnforcedurl(String enforcedurl) {
@@ -544,7 +547,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 		ContentReader sourceReader = contentService.getReader(refToSignList, ContentModel.PROP_CONTENT);
 		try {
 			byte[] sourceContentBytes = IOUtils.toByteArray(sourceReader.getContentInputStream());
-            byte[] targetContentBytes = signer.getProcessor().hashGostr3411(sourceContentBytes);
+            byte[] targetContentBytes = CSPSigner.getProcessor(cspdllpath, catalinahome).hashGostr3411(sourceContentBytes);
 			return Hex.encodeHexString(targetContentBytes).toUpperCase();
 		} catch (IOException | CryptoException ex) {
 			logger.error("", ex);

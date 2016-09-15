@@ -83,19 +83,23 @@
         <constructor-arg value="${cspdll.path}"/>
     </bean>
 
+    <bean id="catalinahomestr" class="java.lang.String">
+        <constructor-arg value="${catalina.home}"/>
+    </bean>
+
     <bean id="enforcedurlstr" class="java.lang.String">
         <constructor-arg value="${enforced.url}"/>
     </bean>
 
 	<util:constant id="signedDocflowFolder" static-field="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl.SIGNED_DOCFLOW_FOLDER"/>
-	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean" 
+	<bean id="signedDocflowService" class="ru.it.lecm.signed.docflow.beans.SignedDocflowImpl" parent="baseBean"
 		  depends-on="lecm.signed-docflow.model-bootstrap">
 		<property name="folders">
 			<map>
 				<entry key="#{signedDocflowFolder}" value="Сервис ЮЗД"/>
 			</map>
 		</property>
-		
+
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
@@ -104,6 +108,7 @@
 		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 		<property name="lockService" ref="lockService"/>
 		<property name="cspdllpath" ref="cspdllpathstr"/>
+        <property name="catalinahome" ref="catalinahomestr"/>
         <property name="enforcedurl" ref="enforcedurlstr"/>
 	</bean>
 
@@ -122,7 +127,7 @@
 		<property name="defaultFromEmail" value="${mail.from.default}"/>
 	</bean>
 
-	<bean id="zipSignedContentService" class="ru.it.lecm.signed.docflow.ZipSignedContentService" 
+	<bean id="zipSignedContentService" class="ru.it.lecm.signed.docflow.ZipSignedContentService"
 		  parent="baseBean" init-method="init">
 		<property name="fileFolderService" ref="fileFolderService"/>
 		<property name="signedDocflowService" ref="signedDocflowService"/>
@@ -130,7 +135,7 @@
 		<property name="dictionaryService" ref="dictionaryService"/>
 	</bean>
 
-	<bean id="receiveContentByEmailService" class="ru.it.lecm.signed.docflow.ReceiveContentByEmailService" 
+	<bean id="receiveContentByEmailService" class="ru.it.lecm.signed.docflow.ReceiveContentByEmailService"
 		  parent="baseBean" init-method="init">
 		<property name="zipSignedContentService" ref="zipSignedContentService"/>
 		<property name="mailHost" value="imap.googlemail.com"/>

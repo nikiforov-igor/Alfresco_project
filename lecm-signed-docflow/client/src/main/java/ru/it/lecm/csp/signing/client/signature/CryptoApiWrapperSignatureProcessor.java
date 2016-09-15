@@ -16,6 +16,7 @@ import com.sun.jna.platform.win32.WinDef.BOOLByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.security.cert.CertificateEncodingException;
@@ -82,8 +83,7 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
                 _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary(libPath,
                         JavaCryptoApiWrapper.class, options);
             } else if (Platform.isLinux()) {
-//                String libPath = Utils.getLoadLib("libCryptoApiWrapper.so", "/home/pechenko");
-                _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary("libCryptoApiWrapper.so",
+                _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary(Paths.get(wrapperfolder, "libCryptoApiWrapper.so").toString()/*"libCryptoApiWrapper.so"*/,
                         JavaCryptoApiWrapper.class);
             } else {
                 _cryptoApiWrapper = new JavaCryptoApiWrapperMockImpl();
@@ -94,7 +94,11 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
         }
     }
 
-    public CryptoApiWrapperSignatureProcessor getInstanse(String wrapperfolder) {
+    public CryptoApiWrapperSignatureProcessor getInstanse(String wrapperfolder, String catalinahome) {
+        File localFile = Paths.get(catalinahome, "webapps/alfresco/WEB-INF/classes/alfresco/module/signed-docflow-repo/libs/CryptoApiWrapper_x64.dll").toFile();
+        if (wrapperfolder.isEmpty() && localFile != null && localFile.exists()) {
+            wrapperfolder = localFile.getParent();
+        }
         if (_cryptoApiWrapper == null || _cryptoApiWrapper instanceof JavaCryptoApiWrapperMockImpl) {
             initWrapper(wrapperfolder);
         }
