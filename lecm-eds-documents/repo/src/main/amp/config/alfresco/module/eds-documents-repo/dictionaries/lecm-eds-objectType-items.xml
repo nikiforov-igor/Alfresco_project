@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Потенциальная роль" type="lecm-busjournal:objectType">
+                <property name="cm:name">Потенциальная роль</property>
+                <property name="lecm-busjournal:objectType-code">LECM_POTENTIAL_ROLE</property>
+                <property name="lecm-busjournal:objectType-class">lecm-eds-globset:potential-role</property>
+                <property name="lecm-busjournal:objectType-template">Роль: {lecm-eds-globset:potential-role-business-role-assoc-text-content} {lecm-eds-globset:potential-role-employee-assoc-text-content} {lecm-eds-globset:potential-role-organization-element-assoc-text-content}</property>
+            </item>
+        </items>
+    </item>
+</items>

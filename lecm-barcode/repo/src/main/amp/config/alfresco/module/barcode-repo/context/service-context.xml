@@ -15,6 +15,7 @@
 		<value>alfresco/module/barcode-repo/dictionaries/lecm-print-commands-dic.xml</value>
 		<value>alfresco/module/barcode-repo/dictionaries/lecm-print-commands-dic-items.xml</value>
 		<value>alfresco/module/barcode-repo/dictionaries/lecm-employee-to-printer-dic.xml</value>
+		<value>alfresco/module/barcode-repo/dictionaries/lecm-printer-objectType-items.xml</value>
 	</util:list>
 
 	<bean id="lecm.barcode.models.bootstrap" parent="dictionaryModelBootstrap"
@@ -24,7 +25,10 @@
 	/>
 
 	<bean id="lecm.barcode.dictionaries.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="lecm.barcode.models.bootstrap"
+		  depends-on="lecm.barcode.models.bootstrap,
+		  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+		  businessJournalLogEventsPolicy,
+		  ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap"
 		  p:dictionaries-ref="lecm.barcode.dictionaries"
 	/>
 
