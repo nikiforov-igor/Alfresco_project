@@ -129,6 +129,7 @@
 		<module>lecm-meetings</module>
         <module>lecm-search-editor</module>
         <module>lecm-documents-templates</module>
+        <module>lecm-reporting</module>
         <!--<module>lecm-mobile</module>-->
     </modules>
     <scm>
@@ -771,12 +772,6 @@
                 <module>lecm-experts</module>
                 <module>lecm-scaner</module>
                 <module>lecm-diagnostic-utility</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>lecmReporting</id>
-            <modules>
-                <module>lecm-reporting</module>
             </modules>
         </profile>
     </profiles>
