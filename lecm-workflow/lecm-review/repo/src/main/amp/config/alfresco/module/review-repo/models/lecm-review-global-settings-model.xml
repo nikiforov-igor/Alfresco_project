@@ -63,7 +63,7 @@
 				<!-- Режим выбора ознакамливающихся "по организации - все сотрудники организации" -->
 				<property name="lecmReviewGlobalSettings:selectBy">
 					<type>d:text</type>
-					<default>ORGANIZATION</default>
+					<default>ORGANISATION</default>
 					<constraints>
 						<constraint ref="lecmReviewGlobalSettings:select-by-list"/>
 					</constraints>

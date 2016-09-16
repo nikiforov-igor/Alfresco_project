@@ -28,7 +28,8 @@
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
 					  ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
-					  businessJournalLogEventsPolicy"
+					  businessJournalLogEventsPolicy,
+					  regNumbers.regNumbersBootstrap"
 		  p:dictionaries-ref="outgoing.dictionaries"/>
 
 	<util:list id="outgoing.groupOperations.dictionaries">
