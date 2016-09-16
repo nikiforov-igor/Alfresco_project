@@ -48,7 +48,7 @@
     <bean id="${groupId}.${artifactId}.internalDictionaryBootstrap"
           parent="lecmDictionaryBootstrap"
           depends-on="ru.it.lecm.notifications.notifications-repo.notificationsTemplatesBootstrap,
-                    internal.LogicEcmInternalBootstrap">
+                    internal.LogicEcmInternalBootstrap, regNumbers.regNumbersBootstrap">
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic.xml</value>
