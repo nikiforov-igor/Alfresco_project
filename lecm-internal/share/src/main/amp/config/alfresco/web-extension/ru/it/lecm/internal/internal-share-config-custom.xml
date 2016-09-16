@@ -109,7 +109,7 @@
 	                        <control-param name="firstUseStrictFilterByOrg">true</control-param>
 
                             <control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="secondXPathLocation">..</control-param>
+                            <control-param name="secondXPathLocation">{currentLocation}</control-param>
 							<control-param name="secondXPathLocationRoot">{lecmMyOrganization}</control-param>
                             <control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>

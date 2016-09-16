@@ -156,6 +156,12 @@
                 <property name="lecm-busjournal:objectType-template">Отсутствие</property>
                 <property name="lecm-busjournal:objectType-list-template">Отсутствие</property>
             </item>
+            <item name="cm:Шаблон сообщения" type="lecm-busjournal:objectType">
+                <property name="cm:name">Шаблон сообщения</property>
+                <property name="lecm-busjournal:objectType-code">MESSAGE_TEMPLATE</property>
+                <property name="lecm-busjournal:objectType-class">lecm-busjournal:messageTemplate</property>
+                <property name="lecm-busjournal:objectType-template">Шаблон: {lecm-busjournal:messageTemplate-code}</property>
+            </item>
         </items>
     </item>
 </items>

@@ -341,8 +341,16 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 	@Override
 	public boolean isReviewersByOrganization() {
+		boolean result = true;
+
 		NodeRef settings = getSettings();
-		return settings == null || !nodeService.getProperty(settings, PROP_REVIEW_GLOBAL_SETTINGS_SELECT_BY).equals(CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_UNIT);
+		if (settings != null) {
+			Object selectByValue = nodeService.getProperty(settings, PROP_REVIEW_GLOBAL_SETTINGS_SELECT_BY);
+			if (selectByValue != null) {
+				result = !selectByValue.equals(CONSTRAINT_REVIEW_GLOBAL_SETTINGS_SELECT_BY_UNIT);
+			}
+		}
+		return result;
 	}
 
 	@Override

@@ -16,6 +16,18 @@
                 <property name="lecm-busjournal:objectType-template">Участник</property>
                 <property name="lecm-busjournal:objectType-list-template">Участник</property>
             </item>
+            <item name="cm:Уровень привилегий для выбора мест проведения" type="lecm-busjournal:objectType">
+                <property name="cm:name">Уровень привилегий для выбора мест проведения</property>
+                <property name="lecm-busjournal:objectType-code">EVENT_LOCATIONS_PL</property>
+                <property name="lecm-busjournal:objectType-class">lecm-events-dic:locations-pl</property>
+                <property name="lecm-busjournal:objectType-template">Уровень {lecm-events-dic:locations-pl-level}</property>
+            </item>
+            <item name="cm:Уровень привилегий для выбора ресурсов" type="lecm-busjournal:objectType">
+                <property name="cm:name">Уровень привилегий для выбора ресурсов</property>
+                <property name="lecm-busjournal:objectType-code">EVENT_RESOURCES_PL</property>
+                <property name="lecm-busjournal:objectType-class">lecm-events-dic:resources-pl</property>
+                <property name="lecm-busjournal:objectType-template">Уровень {lecm-events-dic:resources-pl-level}</property>
+            </item>
         </items>
     </item>
 </items>

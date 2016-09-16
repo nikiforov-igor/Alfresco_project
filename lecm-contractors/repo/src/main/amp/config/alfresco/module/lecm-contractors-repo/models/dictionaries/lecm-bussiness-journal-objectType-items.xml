@@ -9,6 +9,13 @@
                 <property name="lecm-busjournal:objectType-class"><![CDATA[lecm-representative:representative-type]]></property>
                 <property name="lecm-busjournal:objectType-list-template"><![CDATA[{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:middlename}]]></property>
             </item>
+            <item name="cm:Физическое лицо" type="lecm-busjournal:objectType">
+                <property name="cm:name"><![CDATA[Физическое лицо]]></property>
+                <property name="lecm-busjournal:objectType-code"><![CDATA[PHYSICAL_PERSON]]></property>
+                <property name="lecm-busjournal:objectType-template"><![CDATA[{lecm-contractor:shortname}]]></property>
+                <property name="lecm-busjournal:objectType-class"><![CDATA[lecm-contractor:physical-person-type]]></property>
+                <property name="lecm-busjournal:objectType-list-template"><![CDATA[{lecm-contractor:shortname}]]></property>
+            </item>
         </items>
     </item>
 </items>
