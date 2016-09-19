@@ -502,7 +502,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     return true;
                 };
                 Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
-                Bubbling.addDefaultAction("show-more", fnActionHandler, me.options.forceSubscribing);
+				Bubbling.addDefaultAction("show-more"  + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
             }
 
             if (!this.options.overrideSortingWith && me.options.otherActions != null && me.options.otherActions.length > 0){
