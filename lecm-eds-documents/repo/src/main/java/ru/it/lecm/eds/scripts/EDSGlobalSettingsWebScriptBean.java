@@ -115,8 +115,19 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 //			};
 //			settings = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
 //		}
-
-		return new ScriptNode(edsGlobalSettingsService.getSettingsNode(), serviceRegistry, getScope());
+		
+		NodeRef settings = edsGlobalSettingsService.getSettingsNode();
+		if(settings == null) {
+			try{
+				settings = edsGlobalSettingsService.createSettingsNode();
+			}catch(Exception e) {
+				
+			}
+		}
+		if (settings != null) {
+			return new ScriptNode(settings, serviceRegistry, getScope());
+		}
+		return null;
 	}
 
 	public Boolean isRegistrationCenralized() {

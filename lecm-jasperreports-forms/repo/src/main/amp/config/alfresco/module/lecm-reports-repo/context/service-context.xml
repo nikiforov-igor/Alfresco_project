@@ -142,12 +142,12 @@
           class="ru.it.lecm.reports.dao.RepositoryReportContentDAOBean"
           parent="baseBean">
         <!-- Автоматическое создание каталогов. -->
-        <property name="folders">
+        <!--<property name="folders">
             <map>
                 <entry key="#{RSF_ROOT_ID}" value="#{RSF_ROOT_NAME}"/>
                 <entry key="#{RSF_ROOT_CONFIG_ID}" value="#{RSF_ROOT_NAME}/#{RSF_ROOT_CONFIG_NAME}"/>
             </map>
-        </property>
+        </property>-->
     </bean>
 
 
@@ -291,7 +291,7 @@
         <property name="reportEditorDAO" ref="reportEditorDAOBean"/>
 
         <!-- файлы создаваемых шаблонов отчётов как "cm:content" в репозитории -->
-        <property name="contentRepositoryDAO" ref="repositoryReportContentBean"/>
+        <!--<property name="contentRepositoryDAO" ref="repositoryReportContentBean"/>-->
         <property name="subreportFileDAO" ref="fileSubreportContentBean"/>
 
         <!-- файлы готовых отчётов (поставка) в файловой системе -->

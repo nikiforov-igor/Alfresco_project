@@ -45,6 +45,7 @@ public class DocumentDeletePolicy implements BeforeDeleteNodePolicy {
 
     @Override
     public void beforeDeleteNode(NodeRef nodeRef) {
+    	logger.debug("ДОКУМЕНТ. beforeDeleteNode");
         if (stateMachineService.hasActiveStatemachine(nodeRef) && !stateMachineService.isDraft(nodeRef)) {
             //throw new AlfrescoRuntimeException("Cannot delete document " + nodeRef + ". Is not draft.");
         }

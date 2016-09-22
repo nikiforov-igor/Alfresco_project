@@ -73,18 +73,18 @@ public class LecmTransactionHelperImpl implements LecmTransactionHelper {
      */
     @Override
     public <R> R doInTransaction(RetryingTransactionHelper.RetryingTransactionCallback<R> cb, boolean readOnly) {
-        try {
-            checkTransaction(readOnly);
-        } catch (WriteTransactionNeededException ex) {
-            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
-        } catch (TransactionNeededException ex1) {
-            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, readOnly, true);
-        }
-        try {
-            return cb.execute();
-        } catch (Throwable ex) {
-            throw new RuntimeException(ex);
-        }
+//        try {
+//            checkTransaction(readOnly);
+//        } catch (WriteTransactionNeededException ex) {
+//            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
+//        } catch (TransactionNeededException ex1) {
+            return transactionService.getRetryingTransactionHelper().doInTransaction(cb, readOnly);
+//        }
+//        try {
+//            return cb.execute();
+//        } catch (Throwable ex) {
+//            throw new RuntimeException(ex);
+//        }
     }
 
     @Override

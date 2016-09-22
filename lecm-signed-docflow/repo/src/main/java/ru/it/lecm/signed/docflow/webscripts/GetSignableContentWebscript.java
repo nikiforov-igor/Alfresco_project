@@ -1,5 +1,6 @@
 package ru.it.lecm.signed.docflow.webscripts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
 
@@ -52,7 +54,12 @@ public class GetSignableContentWebscript extends DeclarativeWebScript {
 			throw new WebScriptException(errorMsg);
 		}
 
-		List<NodeRef> categories = documentAttachmentsService.getCategories(docNodeRef);
+		List<NodeRef> categories = new ArrayList<NodeRef>();
+		try {
+			categories = documentAttachmentsService.getCategories(docNodeRef);
+		}catch(WriteTransactionNeededException e){
+			logger.error("error: ",e);
+		}
 		for (NodeRef nodeRef : categories) {
 			Map<String, Object> resultObject = new HashMap<String, Object>();
 			JSONArray contentArray = new JSONArray();

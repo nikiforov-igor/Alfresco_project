@@ -161,12 +161,11 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
      */
     @SuppressWarnings("unused")
     public ScriptNode getDirectory() {
-        try {
-            NodeRef ref = service.getBusinessJournalDirectory();
-            return new ScriptNode(ref, serviceRegistry, getScope());
-        } catch (Exception e) {
-            throw new ScriptException("Не удалось получить директорию с бизнес-журналом", e);
-        }
+    	NodeRef ref = service.getBusinessJournalDirectory();
+    	if(ref != null) {
+    		return new ScriptNode(ref, serviceRegistry, getScope());
+    	}
+        return null;
     }
 
     private Map<BusinessJournalRecord.Field, String> getFilter(Scriptable filter) {

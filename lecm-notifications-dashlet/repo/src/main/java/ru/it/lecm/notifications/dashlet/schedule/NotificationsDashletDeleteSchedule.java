@@ -1,6 +1,7 @@
 package ru.it.lecm.notifications.dashlet.schedule;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
@@ -26,6 +27,7 @@ import ru.it.lecm.notifications.dashlet.beans.NotificationsDashletChannel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.transaction.UserTransaction;
 
 /**
  * User: AIvkin
@@ -186,19 +188,42 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 				logger.error("Error rescheduleJob" + ex);
 			}
 		}
-
+		
 		Set<NodeRef> nodes = new HashSet<>();
-		nodes.addAll(getOldNotifications());
+		
+		UserTransaction userTransaction = getTransactionService().getUserTransaction();
+        try
+        {
+            userTransaction.begin();
+            nodes.addAll(getOldNotifications());
 
-		Set<QName> typeSet = new HashSet<>();
-		typeSet.add(ContentModel.TYPE_FOLDER);
-		List<ChildAssociationRef> employeeFolders = nodeService.getChildAssocs(notificationsDashletChannel.getRootRef(), typeSet);
-		if (employeeFolders != null) {
-			for (ChildAssociationRef folderAssocRef: employeeFolders) {
-				NodeRef folderRef = folderAssocRef.getChildRef();
-				nodes.addAll(getGreaterMaxNotifications(folderRef));
-			}
-		}
+    		Set<QName> typeSet = new HashSet<>();
+    		typeSet.add(ContentModel.TYPE_FOLDER);
+    		List<ChildAssociationRef> employeeFolders = nodeService.getChildAssocs(notificationsDashletChannel.getRootRef(), typeSet);
+    		if (employeeFolders != null) {
+    			for (ChildAssociationRef folderAssocRef: employeeFolders) {
+    				NodeRef folderRef = folderAssocRef.getChildRef();
+    				nodes.addAll(getGreaterMaxNotifications(folderRef));
+    			}
+    		}
+			userTransaction.commit();
+        }
+        catch(Throwable e)
+        {
+            // rollback the transaction
+            try
+            { 
+                if (userTransaction != null) 
+                {
+                    userTransaction.rollback();
+                }
+            }
+            catch (Exception ex)
+            {
+                // NOOP 
+            }
+            throw new AlfrescoRuntimeException("Service folders [notifications-dashlet] bootstrap failed", e);
+        }
 
 		return new ArrayList<>(nodes);
 	}

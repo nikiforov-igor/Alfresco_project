@@ -82,24 +82,24 @@ public class ModelToRepositoryLoader implements DictionaryListener {
         if (repositoryModelsLocation == null) {
             return;
         }
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-            @Override
-            public Object doWork() throws Exception {
-                                //Вызывается только в init-методе
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>(){
-
-					@Override
-					public Object execute() throws Throwable {
+//        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+//            @Override
+//            public Object doWork() throws Exception {
+//                                //Вызывается только в init-методе
+//				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>(){
+//
+//					@Override
+//					public Object execute() throws Throwable {
 						// регистрируем модели
 						for (final String bootstrapModel : models) {
 							lecmModelsService.loadModelFromLocation(bootstrapModel, firstRun && useDefaultModels);
 						}
-						return null;
-					}
-
-				}, false, true);
-            }
-        });
+//						return null;
+//					}
+//
+//				}, false);
+//            }
+//        });
         //firstRun = false;
     }
 

@@ -19,6 +19,7 @@ import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 
 /**
  *
@@ -59,6 +60,11 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
+	}
+	
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		super.onBootstrap(event);
 	}
 
 	private List<Locale> toLocales(String localesString) {
@@ -112,19 +118,19 @@ public class LecmMessageServiceImpl extends BaseBean implements LecmMessageServi
 	}
 
 	public void init() {
-		StoreRef storeRef = repoMessagesLocation.getStoreRef();
-		NodeRef rootNode = nodeService.getRootNode(storeRef);
-		String path = repoMessagesLocation.getPath();
-		List<NodeRef> nodeRefs = searchService.selectNodes(rootNode, path + CRITERIA_ALL + "[" + defaultSubtypeOfContent + "]", null, namespaceService, false);
-		Set<String> resourceBundleBaseNames = new HashSet<>();
-		for (NodeRef nodeRef : nodeRefs) {
-			String resourceName = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
-			String bundleBaseName = messageService.getBaseBundleName(resourceName);
-
-			if(resourceBundleBaseNames.add(bundleBaseName)) {
-				String repoBundlePath =storeRef.toString() + path + "/cm:" + bundleBaseName;
-				messageService.registerResourceBundle(repoBundlePath);
-			}
-		}
+//		StoreRef storeRef = repoMessagesLocation.getStoreRef();
+//		NodeRef rootNode = nodeService.getRootNode(storeRef);
+//		String path = repoMessagesLocation.getPath();
+//		List<NodeRef> nodeRefs = searchService.selectNodes(rootNode, path + CRITERIA_ALL + "[" + defaultSubtypeOfContent + "]", null, namespaceService, false);
+//		Set<String> resourceBundleBaseNames = new HashSet<>();
+//		for (NodeRef nodeRef : nodeRefs) {
+//			String resourceName = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+//			String bundleBaseName = messageService.getBaseBundleName(resourceName);
+//
+//			if(resourceBundleBaseNames.add(bundleBaseName)) {
+//				String repoBundlePath =storeRef.toString() + path + "/cm:" + bundleBaseName;
+//				messageService.registerResourceBundle(repoBundlePath);
+//			}
+//		}
 	}
 }

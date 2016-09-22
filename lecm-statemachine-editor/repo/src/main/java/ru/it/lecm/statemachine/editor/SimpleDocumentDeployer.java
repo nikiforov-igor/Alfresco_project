@@ -48,30 +48,30 @@ public class SimpleDocumentDeployer {
     }
 
     public void init() {
-        NodeRef home = repositoryStructureHelper.getHomeRef();
-        if (home != null) {
-            NodeRef statemachinesRef = nodeService.getChildByName(home, ContentModel.ASSOC_CONTAINS, "statemachines");
-            if (statemachinesRef != null) {
-                Set<QName> childTypes = new HashSet<>();
-                childTypes.add(StatemachineEditorModel.TYPE_STATEMACHINE);
-                List<ChildAssociationRef> statemachines = nodeService.getChildAssocs(statemachinesRef, childTypes);
-                for (ChildAssociationRef statemachine : statemachines) {
-                    Boolean isSimpleDocument = false;
-                    Object isSimpleDocumentObj = nodeService.getProperty(statemachine.getChildRef(), StatemachineEditorModel.PROP_SIMPLE_DOCUMENT);
-                    if (isSimpleDocumentObj != null) {
-                        isSimpleDocument = (Boolean) isSimpleDocumentObj;
-                    }
-                    if (isSimpleDocument) {
-                        try {
-                            appendType(statemachine.getChildRef());
-                        } catch (LecmBaseException e) {
-                            String name = nodeService.getProperty(statemachine.getChildRef(), ContentModel.PROP_NAME).toString();
-                            logger.error("Error while bootstrap statemachine for simple document " + name, e);
-                        }
-                    }
-                }
-            }
-        }
+//        NodeRef home = repositoryStructureHelper.getHomeRef();
+//        if (home != null) {
+//            NodeRef statemachinesRef = nodeService.getChildByName(home, ContentModel.ASSOC_CONTAINS, "statemachines");
+//            if (statemachinesRef != null) {
+//                Set<QName> childTypes = new HashSet<>();
+//                childTypes.add(StatemachineEditorModel.TYPE_STATEMACHINE);
+//                List<ChildAssociationRef> statemachines = nodeService.getChildAssocs(statemachinesRef, childTypes);
+//                for (ChildAssociationRef statemachine : statemachines) {
+//                    Boolean isSimpleDocument = false;
+//                    Object isSimpleDocumentObj = nodeService.getProperty(statemachine.getChildRef(), StatemachineEditorModel.PROP_SIMPLE_DOCUMENT);
+//                    if (isSimpleDocumentObj != null) {
+//                        isSimpleDocument = (Boolean) isSimpleDocumentObj;
+//                    }
+//                    if (isSimpleDocument) {
+//                        try {
+//                            appendType(statemachine.getChildRef());
+//                        } catch (LecmBaseException e) {
+//                            String name = nodeService.getProperty(statemachine.getChildRef(), ContentModel.PROP_NAME).toString();
+//                            logger.error("Error while bootstrap statemachine for simple document " + name, e);
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     public void appendType(NodeRef statemachine) throws LecmBaseException {

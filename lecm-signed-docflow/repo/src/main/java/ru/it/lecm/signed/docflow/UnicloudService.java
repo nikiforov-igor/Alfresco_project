@@ -87,38 +87,38 @@ public class UnicloudService {
 	}
 
 	public void init() {
-		if (logger.isTraceEnabled()) {
-			try {
-				Holder<GateResponse> gateResponse = new Holder<GateResponse>();
-				Holder<String> version = new Holder<String>();
-				gateWcfService.getServiceVersion(gateResponse, version);
-				if (version.value != null) {
-					logger.trace(version.value);
-				} else {
-					Utils.logGateResponse(gateResponse, logger);
-				}
-
-				gateResponse = new Holder<GateResponse>();
-				Holder<ArrayOfOperatorInfo> operatorsHolder = new Holder<ArrayOfOperatorInfo>();
-				gateWcfService.getOperators(gateResponse, operatorsHolder);
-				if (operatorsHolder.value != null) {
-				List<OperatorInfo> operators = operatorsHolder.value.getOperatorInfos();
-					for (OperatorInfo operator : operators) {
-						logger.trace("AuthenticationType = {}", operator.getAuthenticationType());
-						logger.trace("CertificateIssuerName = {}", operator.getCertificateIssuerName());
-						logger.trace("Code = {}", operator.getCode());
-						logger.trace("Extension = {}", operator.getExtension());
-						logger.trace("Inn = {}", operator.getInn());
-						logger.trace("IsRemoteSignEnabled = {}", operator.isIsRemoteSignEnabled());
-						logger.trace("Name = {}", operator.getName());
-					}
-				} else {
-					Utils.logGateResponse(gateResponse, logger);
-				}
-			} catch (Exception ex) {
-				logger.error(ex.getMessage());
-			}
-		}
+//		if (logger.isTraceEnabled()) {
+//			try {
+//				Holder<GateResponse> gateResponse = new Holder<GateResponse>();
+//				Holder<String> version = new Holder<String>();
+//				gateWcfService.getServiceVersion(gateResponse, version);
+//				if (version.value != null) {
+//					logger.trace(version.value);
+//				} else {
+//					Utils.logGateResponse(gateResponse, logger);
+//				}
+//
+//				gateResponse = new Holder<GateResponse>();
+//				Holder<ArrayOfOperatorInfo> operatorsHolder = new Holder<ArrayOfOperatorInfo>();
+//				gateWcfService.getOperators(gateResponse, operatorsHolder);
+//				if (operatorsHolder.value != null) {
+//				List<OperatorInfo> operators = operatorsHolder.value.getOperatorInfos();
+//					for (OperatorInfo operator : operators) {
+//						logger.trace("AuthenticationType = {}", operator.getAuthenticationType());
+//						logger.trace("CertificateIssuerName = {}", operator.getCertificateIssuerName());
+//						logger.trace("Code = {}", operator.getCode());
+//						logger.trace("Extension = {}", operator.getExtension());
+//						logger.trace("Inn = {}", operator.getInn());
+//						logger.trace("IsRemoteSignEnabled = {}", operator.isIsRemoteSignEnabled());
+//						logger.trace("Name = {}", operator.getName());
+//					}
+//				} else {
+//					Utils.logGateResponse(gateResponse, logger);
+//				}
+//			} catch (Exception ex) {
+//				logger.error(ex.getMessage());
+//			}
+//		}
 	}
 
 	/**

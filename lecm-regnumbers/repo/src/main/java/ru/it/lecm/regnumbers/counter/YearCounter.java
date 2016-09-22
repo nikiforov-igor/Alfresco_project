@@ -17,7 +17,7 @@ public class YearCounter extends AbstractCounter implements RetryingTransactionC
 	}
 
 	@Override
-	public Long execute() throws Throwable {
+	public Long execute() {
 		long value;
 
 		int curYear = getCurYear();
@@ -36,8 +36,8 @@ public class YearCounter extends AbstractCounter implements RetryingTransactionC
 
 	@Override
 	public long getValue() {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-
-		return transactionHelper.doInTransaction(this, false, true);
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		return execute();
+//		return transactionHelper.doInTransaction(this, false);
 	}
 }

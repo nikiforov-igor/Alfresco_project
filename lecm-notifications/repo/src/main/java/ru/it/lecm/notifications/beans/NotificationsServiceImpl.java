@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
@@ -118,20 +119,37 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
      * Метод инициализвции сервиса
     */
     public void init() {
-        //Проверить наличие и создать ноду с глобальными настройками.
-        //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-        lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-            @Override
-            public Void execute() throws Throwable {
-                if (null == getGlobalSettingsNode()) {
-                    createGlobalSettingsNode();
-                }
-                return null;
-            }
-        });
+//        //Проверить наличие и создать ноду с глобальными настройками.
+//        //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
+//        lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//
+//            @Override
+//            public Void execute() throws Throwable {
+//                if (null == getGlobalSettingsNode()) {
+//                    createGlobalSettingsNode();
+//                }
+//                return null;
+//            }
+//        });
         transactionListener = new NotificationTransactionListener();
     }
+    
+    protected void onBootstrap(ApplicationEvent event)
+	{
+      //Проверить наличие и создать ноду с глобальными настройками.
+      //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
+      lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+
+          @Override
+          public Void execute() throws Throwable {
+              if (null == getGlobalSettingsNode()) {
+                  createGlobalSettingsNode();
+              }
+              return null;
+          }
+      });
+      //transactionListener = new NotificationTransactionListener();
+	}
 
     @Override
     public boolean isNotificationType(NodeRef ref) {
@@ -562,8 +580,12 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
     }
 
-    private NodeRef createGlobalSettingsNode() throws WriteTransactionNeededException {
-        return createNode(this.getServiceRootFolder(), TYPE_NOTIFICATIONS_GLOBAL_SETTINGS, NOTIFICATIONS_SETTINGS_NODE_NAME, null);
+    public NodeRef createGlobalSettingsNode() {
+    	try{
+    		return createNode(this.getServiceRootFolder(), TYPE_NOTIFICATIONS_GLOBAL_SETTINGS, NOTIFICATIONS_SETTINGS_NODE_NAME, null);
+    	} catch(WriteTransactionNeededException e){
+    		return null;
+    	}
     }
 
     @Override
@@ -744,7 +766,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
                         @Override
                         public Void doWork() throws Exception {
-                            lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                        	serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
 
                                 @Override
                                 public Void execute() throws Throwable {
@@ -758,13 +780,13 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                                     }
                                     return null;
                                 }
-                            });
+                            }, false, true);
                             return null;
                         }
                     });
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
+//                    Runnable runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
                             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
                                 @Override
                                 public Void doWork() throws Exception {
@@ -804,9 +826,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                                     }, false, true);
                                 }
                             });
-                        }
-                    };
-                    threadPoolExecutor.execute(runnable);
+//                        }
+//                    };
+//                    threadPoolExecutor.execute(runnable);
                 }
             }
         }

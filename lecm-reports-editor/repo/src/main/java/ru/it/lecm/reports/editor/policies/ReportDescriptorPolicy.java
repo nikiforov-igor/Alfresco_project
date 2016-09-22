@@ -153,7 +153,7 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
                 desc = reportsManager.getReportEditorDAO().getReportDescriptor(report);
             }
             //удалим задеплоенный отчет и файлы шаблон(-а)-ов (из Директории Сервси построения отчетов)
-            reportsManager.unregisterReportDescriptor(desc);
+//            reportsManager.unregisterReportDescriptor(desc);
         }
 
         //для подотчетов - удалим из набора данных родителя, ссылку на него

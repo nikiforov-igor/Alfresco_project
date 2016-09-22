@@ -9,6 +9,8 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.MLText;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -18,6 +20,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy implements NodeServicePolicies.BeforeDeleteAssociationPolicy {
+	
+	final static protected Logger logger = LoggerFactory.getLogger(DocumentsOnCreateAssocsPolicy.class);
+	
     private SubstitudeBean substitute;
 
     @Override
@@ -38,6 +43,7 @@ public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy imp
      */
     @Override
     public void onCreateAssociation(AssociationRef nodeAssocRef) {
+    	logger.debug("ДОКУМЕНТ. onCreateAssociation");
         NodeRef record = nodeAssocRef.getSourceRef();
         String assocQName = nodeAssocRef.getTypeQName().toPrefixString(namespaceService);
 
@@ -118,6 +124,7 @@ public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy imp
      */
     @Override
     public void beforeDeleteAssociation(AssociationRef nodeAssocRef) {
+    	logger.debug("ДОКУМЕНТ. beforeDeleteAssociation");
         NodeRef record = nodeAssocRef.getSourceRef();
         updateTextContent(record, nodeAssocRef.getTypeQName());
     }

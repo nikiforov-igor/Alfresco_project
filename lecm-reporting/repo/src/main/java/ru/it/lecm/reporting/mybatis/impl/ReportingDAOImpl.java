@@ -19,12 +19,12 @@ public class ReportingDAOImpl implements ReportingDAO {
     private SqlSession template = null;
 
     public void init() {
-        try {
-            LogFactory.useLog4JLogging();
-            this.template.getConnection().setAutoCommit(true);
-        } catch (SQLException var2) {
-            throw new AlfrescoRuntimeException(var2.getMessage());
-        }
+//        try {
+//            LogFactory.useLog4JLogging();
+//            this.template.getConnection().setAutoCommit(true);
+//        } catch (SQLException var2) {
+//            throw new AlfrescoRuntimeException(var2.getMessage());
+//        }
     }
 
     public void openConnection() throws SQLException {

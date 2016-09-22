@@ -84,7 +84,7 @@ public class ConfigToRepositoryLoader {
      * Размещение конфигов в репозиторий
      */
     public void init() {
-        loadConfigs();
+        //loadConfigs();
     }
 
     private void loadConfigs() {
@@ -104,7 +104,7 @@ public class ConfigToRepositoryLoader {
                         return null;
                     }
 
-                }, false, true);
+                }, false);
             }
         });
     }

@@ -4,6 +4,8 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.LifecycleStateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
@@ -27,9 +29,11 @@ public class EndWorkflowEvent implements ExecutionListener {
 
     private static DocumentService documentService;
     private LifecycleStateMachineHelper stateMachineHelper;
+    final static Logger logger = LoggerFactory.getLogger(EndWorkflowEvent.class);
 
     @Override
     public void notify(final DelegateExecution delegateExecution) throws Exception {
+    	logger.info("!!!!!!!! notify");
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
             @Override
             public Void doWork() throws Exception {
@@ -45,7 +49,7 @@ public class EndWorkflowEvent implements ExecutionListener {
 
                 DocumentWorkflowUtil utils = new DocumentWorkflowUtil();
                 WorkflowDescriptor descriptor = utils.getWorkflowDescriptor(document, executionId);
-
+                logger.info("!!!!!!!! descriptor: "+descriptor);
                 if (descriptor != null) {
                     stateMachineHelper.logEndWorkflowEvent(document, executionId);
 
@@ -86,21 +90,25 @@ public class EndWorkflowEvent implements ExecutionListener {
                             }
                         }
                     }
-
+                    logger.info("!!!!!!!! variables: "+variables);
                     if (variables != null) {
                         stateMachineHelper.getOutputVariables(statemachineId, delegateExecution.getVariables(), variables);
                     }
 
                     String taskId = stateMachineHelper.getCurrentTaskId(statemachineId);
+                    logger.info("!!!!!!!! taskId: "+taskId);
                     //TODO Сразу передавать нужные параметры
                     List<StateMachineAction> transitionActions = stateMachineHelper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(TransitionAction.class));
                     boolean isTrasitionValid = false;
                     boolean stopSubWorkflows = false;
                     String messageName = "";
+                    logger.info("!!!!!!!! transitionActions: "+transitionActions);
                     for (StateMachineAction action : transitionActions) {
                         TransitionAction transitionAction = (TransitionAction) action;
                         for(TransitionAction.TransitionActionEntity transition: transitionAction.getTransitions()) {
+                        	logger.info("!!!!!!!! transition: "+transition);
 	                        boolean currentTransitionValid = documentService.execExpression(document, transition.getExpression());
+	                        logger.info("!!!!!!!! currentTransitionValid: "+currentTransitionValid);
 //	                        HashMap<String, Object> parameters = new HashMap<String, Object>();
 //	                        parameters.put(transition.getVariableName(), currentTransitionValid);
 //	                        stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
@@ -108,6 +116,7 @@ public class EndWorkflowEvent implements ExecutionListener {
 	                        if (currentTransitionValid) {
 	                            stopSubWorkflows = stopSubWorkflows || transition.isStopSubWorkflows();
 	                            messageName = transition.getVariableName()+"_msg";
+	                            logger.info("!!!!!!!! messageName: "+messageName);
 	                        }
 	                        isTrasitionValid = isTrasitionValid || currentTransitionValid;
                     	}
@@ -118,7 +127,7 @@ public class EndWorkflowEvent implements ExecutionListener {
                         	//TODO DONE первый параметр теперь нодреф документа а не id машины состояний
                             stateMachineHelper.stopDocumentSubWorkflows(document, executionId);
                         }
-
+                        logger.info("!!!!!!!! sendMessage");
                         //stateMachineHelper.nextTransition(taskId);
                         stateMachineHelper.sendMessage(messageName, statemachineId.replace(LifecycleStateMachineHelper.ACTIVITI_PREFIX,""));
                     }

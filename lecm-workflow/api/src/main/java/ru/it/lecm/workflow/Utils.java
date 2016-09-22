@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -175,7 +176,12 @@ public class Utils implements ApplicationContextAware {
 	 */
 	private static String getContractDocumentVersion(final NodeRef contractDocumentRef, final String documentAttachmentCategoryName) {
 		NodeRef contractCategory = null;
-		List<NodeRef> contractCategories = documentAttachmentsService.getCategories(contractDocumentRef);
+		List<NodeRef> contractCategories = new ArrayList<NodeRef>();
+		try{
+			contractCategories = documentAttachmentsService.getCategories(contractDocumentRef);
+		}catch(WriteTransactionNeededException e){
+			logger.error("error: ",e);
+		}
 		for (NodeRef categoryRef : contractCategories) {
 			String categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
 			if (documentAttachmentCategoryName.equals(categoryName)) {

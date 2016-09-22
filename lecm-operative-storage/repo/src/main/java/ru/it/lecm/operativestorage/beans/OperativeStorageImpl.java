@@ -21,6 +21,7 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -96,26 +97,49 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 	}
 
 	public void init() {
-		if (getSettings() == null) {
-			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-			transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-
-				@Override
-				public Object execute() throws Throwable {
-					AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-
-						@Override
-						public Object doWork() throws Exception {
+//		if (getSettings() == null) {
+//			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//			transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+//
+//				@Override
+//				public Object execute() throws Throwable {
+//					AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+//
+//						@Override
+//						public Object doWork() throws Exception {
+//							PropertyMap props = new PropertyMap();
+//							props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
+//							createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
+//							return null;
+//						}
+//					});
+//					return null;
+//				}
+//			}, false, true);
+//		}
+	}
+	
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+			@Override
+			public Object execute() throws Throwable {
+				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+					@Override
+					public Object doWork() throws Exception {
+						if (getSettings() == null) {
 							PropertyMap props = new PropertyMap();
 							props.put(PROP_OPERATIVE_STORAGE_CENRALIZED, true);
 							createNode(getOperativeStorageFolder(), TYPE_OPERATIVE_STORAGE_SETTING, OPERATIVE_STORAGE_GLOBAL_SETTING_NAME, props);
 							return null;
 						}
-					});
-					return null;
-				}
-			}, false, true);
-		}
+						return null;
+					}
+				});
+				return null;
+			}
+		}, false, true);
 	}
 
 	@Override

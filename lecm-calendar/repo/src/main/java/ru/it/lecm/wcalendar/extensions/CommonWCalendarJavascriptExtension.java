@@ -39,6 +39,11 @@ public class CommonWCalendarJavascriptExtension extends BaseScopableProcessorExt
 		NodeRef container = commonWCalendarService.getWCalendarDescriptor().getWCalendarContainer();
 		if (container != null) {
 			return new ScriptNode(container, serviceRegistry, getScope());
+		} else {
+			container = commonWCalendarService.getWCalendarDescriptor().createWCalendarContainer();
+			if(container != null) {
+				return new ScriptNode(container, serviceRegistry, getScope());
+			}
 		}
 		return null;
 	}

@@ -12,8 +12,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import javax.transaction.UserTransaction;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -22,6 +25,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.GUID;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.deputy.DeputyService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -61,23 +65,68 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 
 	@Override
 	public void init() {
-		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-
-			@Override
-			public Void doWork() throws Exception {
-				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-					@Override
-					public Void execute() throws Throwable {
-						if (getDeputySettingsNode() == null) {
-							createDeputySettingsNode();
-						}
-						return null;
-					}
-				});
-
-			}
-		});
+//		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+//
+//			@Override
+//			public Void doWork() throws Exception {
+//				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//
+//					@Override
+//					public Void execute() throws Throwable {
+//						if (getDeputySettingsNode() == null) {
+//							createDeputySettingsNode();
+//						}
+//						return null;
+//					}
+//				});
+//
+//			}
+//		});
+	}
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+        transactionHelper.setForceWritable(true);
+        transactionHelper.doInTransaction(
+			new RetryingTransactionHelper.RetryingTransactionCallback<Object>(){
+				@Override
+				public Object execute() throws Throwable {
+					return AuthenticationUtil.runAs(new RunAsWork<Object>()
+			        {
+			            public Object doWork()
+			            {
+							UserTransaction userTransaction = transactionService.getUserTransaction();
+					        try
+					        {
+					            userTransaction.begin();
+								if (getDeputySettingsNode() == null) {
+									createDeputySettingsNode();
+								}
+								userTransaction.commit();
+					        }
+					        catch(Throwable e)
+					        {
+					            // rollback the transaction
+					            try
+					            { 
+					                if (userTransaction != null) 
+					                {
+					                    userTransaction.rollback();
+					                }
+					            }
+					            catch (Exception ex)
+					            {
+					                // NOOP 
+					            }
+					            throw new AlfrescoRuntimeException("Service folders [deputy-settings-node] bootstrap failed", e);
+					        }
+							return null;
+			            }
+			        }, AuthenticationUtil.getSystemUserName());
+				}
+			},false,true);
 	}
 
 	@Override
@@ -88,7 +137,9 @@ public class DeputyServiceImpl extends BaseBean implements DeputyService {
 	@Override
 	public NodeRef getDeputySettingsNode() {
 		NodeRef settingsFolder = getDeputySettingsFolder();
-		List<ChildAssociationRef> settingsNodeAssocs = nodeService.getChildAssocs(settingsFolder);
+		List<ChildAssociationRef> settingsNodeAssocs = null;
+		if(settingsFolder!=null)
+			settingsNodeAssocs = nodeService.getChildAssocs(settingsFolder);
 
 		if (settingsNodeAssocs != null && !settingsNodeAssocs.isEmpty()) {
 			return settingsNodeAssocs.get(0).getChildRef();

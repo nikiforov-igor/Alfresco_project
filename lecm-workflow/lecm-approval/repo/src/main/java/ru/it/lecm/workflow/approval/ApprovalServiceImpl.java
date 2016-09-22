@@ -18,6 +18,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -62,24 +63,32 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
     }
 
     public void init() {
-		if (null == getSettings()) {
-			AuthenticationUtil.runAsSystem(this);
-		}
+//		if (null == getSettings()) {
+//			AuthenticationUtil.runAsSystem(this);
+//		}
+	}
+    
+    protected void onBootstrap(ApplicationEvent event)
+	{
+    	RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		transactionHelper.doInTransaction(this, false, true);
 	}
 
 	@Override
 	public NodeRef doWork() throws Exception {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-		return transactionHelper.doInTransaction(this, false, true);
+		if (null == getSettings()) {
+			PropertyMap props = new PropertyMap();
+			if (defaultApprovalTerm != null) {
+				props.put(ApprovalGlobalSettingsModel.PROP_DEFAULT_APPROVAL_TERM, defaultApprovalTerm);
+			}
+			return createNode(getApprovalFolder(), ApprovalGlobalSettingsModel.TYPE_SETTINGS, APPROVAL_GLOBAL_SETTINGS_NAME, props);
+		}
+		return null;
 	}
 
 	@Override
 	public NodeRef execute() throws Throwable {
-		PropertyMap props = new PropertyMap();
-		if (defaultApprovalTerm != null) {
-			props.put(ApprovalGlobalSettingsModel.PROP_DEFAULT_APPROVAL_TERM, defaultApprovalTerm);
-		}
-		return createNode(getApprovalFolder(), ApprovalGlobalSettingsModel.TYPE_SETTINGS, APPROVAL_GLOBAL_SETTINGS_NAME, props);
+		return AuthenticationUtil.runAsSystem(this);
 	}
 
 	@Override

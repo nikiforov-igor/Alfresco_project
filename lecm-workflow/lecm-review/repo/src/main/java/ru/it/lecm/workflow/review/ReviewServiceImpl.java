@@ -12,6 +12,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -71,14 +72,37 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	}
 
 	public void init() {
-		if (null == getSettings()) {
-			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-				@Override
-				public NodeRef doWork() throws Exception {
-					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
+//		if (null == getSettings()) {
+//			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+//				@Override
+//				public NodeRef doWork() throws Exception {
+//					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//						@Override
+//						public NodeRef execute() throws Throwable {
+//							PropertyMap props = new PropertyMap();
+//							if (defaultReviewTerm != null) {
+//								props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
+//								props.put(PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE, defaultTermToNotify);
+//							}
+//							return createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
+//						}
+//					}, false, true);
+//				}
+//			});
+//		}
+	}
+	
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+			@Override
+			public NodeRef execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+					@Override
+					public NodeRef doWork() throws Exception {
+						if (null == getSettings()) {
 							PropertyMap props = new PropertyMap();
 							if (defaultReviewTerm != null) {
 								props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
@@ -86,10 +110,11 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 							}
 							return createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
 						}
-					}, false, true);
-				}
-			});
-		}
+						return null;
+					}
+				});
+			}
+		}, false, true);
 	}
 
 	@Override

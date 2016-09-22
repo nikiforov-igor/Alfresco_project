@@ -94,7 +94,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	}
 
 	@Override
-	public List<NodeRef> getCategories(final NodeRef documentRef) {
+	public List<NodeRef> getCategories(final NodeRef documentRef) throws WriteTransactionNeededException {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 		final QName type = nodeService.getType(documentRef);
 		List<String> categories = getCategories(type);
@@ -119,18 +119,18 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			}
 		}
 		//Создаём всё, чего не хватает
-                lecmTransactionHelper.doInRWTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
+//                lecmTransactionHelper.doInRWTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//			@Override
+//			public Void execute() throws Throwable {
 				NodeRef rootRef = (null == attachmentRootRef ? createRootFolder(documentRef) : attachmentRootRef);
 				for (String folder : toCreate) {
 					result.add(createCategoryFolder(folder, rootRef, type));
 				}
-				return null;
-			}
-		}
-
-		);
+//				return null;
+//			}
+//		}
+//
+//		);
 		return result;
 	}
 

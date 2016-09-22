@@ -9,6 +9,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.policies.PolicyUtils;
 import ru.it.lecm.security.Types;
@@ -37,16 +38,20 @@ public class OrgstructureSGNotifierBeanImpl
 		PropertyCheck.mandatory(this, "sgNotifier", this.sgNotifier);
 		PropertyCheck.mandatory(this, "orgstructureService", this.orgstructureService);
 
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-		transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
-			@Override
-			public Void execute () throws Throwable {
-				autoTieAllEmployeers();
-				return null;
-			}
-		});
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+//		transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+//			@Override
+//			public Void execute () throws Throwable {
+////				autoTieAllEmployeers();
+//				return null;
+//			}
+//		});
 
 		logger.info("initialized");
+	}
+	
+	protected void onBootstrap(ApplicationEvent event)
+	{
 	}
 
 

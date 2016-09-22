@@ -54,7 +54,7 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 
 	@Override
 	public Void doWork() throws Exception {
-		return transactionService.getRetryingTransactionHelper().doInTransaction(this, transactionService.isReadOnly(), false);
+		return transactionService.getRetryingTransactionHelper().doInTransaction(this, transactionService.isReadOnly());
 	}
 
 	@Override
@@ -67,15 +67,15 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 
 
 	public void init() {
-		try {
-			Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.messages.editor.enabled");
-			boolean enabled = (editorEnabled == null) ? true : Boolean.valueOf((String) editorEnabled);
-			if (enabled) {
-				AuthenticationUtil.runAsSystem(this);
-			}
-		} catch (LecmBaseException ex) {
-			throw new IllegalStateException("Cannot read document messages properties");
-		}
+//		try {
+//			Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.messages.editor.enabled");
+//			boolean enabled = (editorEnabled == null) ? true : Boolean.valueOf((String) editorEnabled);
+//			if (enabled) {
+//				AuthenticationUtil.runAsSystem(this);
+//			}
+//		} catch (LecmBaseException ex) {
+//			throw new IllegalStateException("Cannot read document messages properties");
+//		}
 	}
 
 	private void loadMessagesFromLocation(String messageLocation, boolean useDefault) {

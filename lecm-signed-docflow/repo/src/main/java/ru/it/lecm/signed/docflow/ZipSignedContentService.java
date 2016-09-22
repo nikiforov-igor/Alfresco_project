@@ -26,6 +26,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.signed.docflow.api.SignedDocflow;
@@ -221,7 +222,12 @@ public class ZipSignedContentService extends BaseBean {
 
 	private List<NodeRef> getAttachments(NodeRef docNodeRef) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
-		List<NodeRef> categories = documentAttachmentsService.getCategories(docNodeRef);
+		List<NodeRef> categories = new ArrayList<NodeRef>();
+		try{
+			categories = documentAttachmentsService.getCategories(docNodeRef);
+		}catch(WriteTransactionNeededException e){
+			logger.error("error: ",e);
+		}
 		for (NodeRef nodeRef : categories) {
 			String categoryName = documentAttachmentsService.getCategoryName(nodeRef);
 			result.addAll(documentAttachmentsService.getAttachmentsByCategory(docNodeRef, categoryName));

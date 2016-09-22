@@ -63,10 +63,10 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
             @Override
             public Void doWork() throws Exception {
-                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-                    @Override
-                    public Void execute() throws Throwable {
+//                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//
+//                    @Override
+//                    public Void execute() throws Throwable {
                         NodeRef typeRoot = getFolder(repositoryHelper.getCompanyHome(), path);
                         if (typeRoot == null) {
                             List<String> paths = new ArrayList<>();
@@ -94,9 +94,9 @@ public class SimpleDocumentRegistryImpl extends BaseBean implements SimpleDocume
                             lecmPermissionService.rebuildStaticACL(typeRoot, permissionGroups);
                         }
                         item.setTypeRoot(typeRoot);
-                        return null;
-                    }
-                });
+//                        return null;
+//                    }
+//                });
                 return null;
             }
         });

@@ -16,8 +16,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -37,11 +36,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 /**
  *
  * @author vlevin
  */
-public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService, ApplicationContextAware {
+public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService {
 
 	private final static Logger logger = LoggerFactory.getLogger(RegNumbersServiceImpl.class);
 	private final static String SEARCH_QUERY_TEMPLATE_WITH_REGDATE = "TYPE:\"%s\" AND =regnumberTemplate:\"%s\" AND @lecm\\-document\\-aspects:reg\\-data\\-date:[\"%d-01-01T00:00:00\" TO \"%d-12-31T23:59:59\"]";
@@ -52,7 +52,6 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	private final static String REGNUMBER_SEARCH_TEMPLATE = "%lecm\\-document:regnum";
 	private NodeRef templateDictionaryNode;
 
-	private ApplicationContext applicationContext;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private DictionaryBean dictionaryService;
@@ -71,17 +70,26 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "documentConnectionService", documentConnectionService);
 		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
-
+		logger.info("!!!!!!!!!!!!!!!!!! init");
+//		templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
+	}
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+event);
 		templateDictionaryNode = dictionaryService.getDictionaryByName(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME);
+		logger.info("!!!!!!!!!!!!!!!!!! onBootstrap: "+templateDictionaryNode);
+	}
+	
+	@Override
+	protected void onShutdown(ApplicationEvent event)
+	{
+		logger.info("!!!!!!!!!!!!!!!!!! onShutdown :"+event);
 	}
 
 	public void setNamespaceService(final NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
 	}
 
 	public void setSearchService(SearchService searchService) {
@@ -110,7 +118,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
     @Override
 	public String getNumber(NodeRef documentNode, String templateStr) throws TemplateParseException, TemplateRunException {
-		Parser parser = new ParserImpl(applicationContext);
+		Parser parser = new ParserImpl(getApplicationContext());
 		return parser.runTemplate(templateStr, documentNode);
 	}
 
@@ -176,7 +184,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	@Override
 	public String validateTemplate(String templateStr, boolean verbose) {
 		String result = "";
-		Parser parser = new ParserImpl(applicationContext);
+		Parser parser = new ParserImpl(getApplicationContext());
 		try {
 			parser.parseTemplate(templateStr);
 		} catch (TemplateParseException ex) {

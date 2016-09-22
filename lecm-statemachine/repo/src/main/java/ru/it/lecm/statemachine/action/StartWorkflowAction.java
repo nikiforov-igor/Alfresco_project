@@ -190,6 +190,7 @@ public class StartWorkflowAction extends StateMachineAction implements Postponed
 	                      //!!!!!!getStateMachineHelper().setInputVariables(stateMachineExecutionId, executionId, localVariables.getInput());
 	                      //Обозначить запуск процесса в документе
 	              		WorkflowDescriptor descriptor = new WorkflowDescriptor(executionId, stateMachineExecutionId, workflowId, currentTaskId, actionName, id, "");
+	              		logger.info("!!!!!!!!!!! StartWorkflowAction: "+descriptor);
 	              		new DocumentWorkflowUtil().addWorkflow(document, executionId, descriptor);
 	
 	              		getStateMachineHelper().sendSignal(executionId);

@@ -46,6 +46,8 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
     private final DateFormat FolderNameFormatMonth = new SimpleDateFormat("MM");
     private final DateFormat FolderNameFormatDay = new SimpleDateFormat("dd");
 
+    private static NodeRef rootref = null;
+    
     private Repository repository;
     private NodeService nodeService;
     private PermissionService permissionService;
@@ -110,39 +112,43 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
         //repository.init ();
         //Init-метод. Так что транзакции точно нет, и точно нужна RW.
         //Создаём общесистемные папки. 
-        AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-
-            @Override
-            public Void doWork() throws Exception {
-                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-                    @Override
-                    public Void execute() throws Throwable {
-                        NodeRef rootRef = getRootRef();
-                        if (null == rootRef) {
-                            rootRef = createRootFolder();
-                        }
-                        logger.debug("Root directory is {}. It's noderef is {}", root, rootRef);
-                        
-                        NodeRef homeRef = getHomeRef();
-                        if (null == homeRef) {
-                            homeRef = createHomeRef();
-                        }
-                        logger.debug("Home directory is {}. It's noderef is {}", home, homeRef);
-                        
-                        NodeRef documentsRef = getDocumentsRef();
-                        if (null == documentsRef) {
-                            documentsRef = createFolder(getRootRef(), documents);
-                        }
-                        logger.debug("Documents directory is {}. It's noderef is {}", documents, documentsRef);
-                        return null;
-                    }
-
-                });
-                return null;
-            }
-
-        });
+//////////////////////////////////////
+//        AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
+//
+//            @Override
+//            public Void doWork() throws Exception {
+//                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//
+//                    @Override
+//                    public Void execute() throws Throwable {
+//////////////////////////////////////
+//                        NodeRef rootRef = getRootRef();
+//                        if (null == rootRef) {
+//                            rootRef = createRootFolder();
+//                        }
+//                        logger.debug("Root directory is {}. It's noderef is {}", root, rootRef);
+//                        
+//                        NodeRef homeRef = getHomeRef();
+//                        if (null == homeRef) {
+//                            homeRef = createHomeRef();
+//                        }
+//                        logger.debug("Home directory is {}. It's noderef is {}", home, homeRef);
+//                        
+//                        NodeRef documentsRef = getDocumentsRef();
+//                        if (null == documentsRef) {
+//                            documentsRef = createFolder(getRootRef(), documents);
+//                        }
+//                        logger.debug("Documents directory is {}. It's noderef is {}", documents, documentsRef);
+//////////////////////////////////////
+//                        return null;
+//                    }
+//
+//                });
+//                return null;
+//            }
+//
+//        });
+//////////////////////////////////////
         
     }
 
@@ -176,17 +182,17 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
      * @return NodeRef свежесозданной папки
      */
     @Override
-    public NodeRef createFolder(final NodeRef parentRef, final String folder) throws WriteTransactionNeededException {
+    public NodeRef createFolder(final NodeRef parentRef, final String folder) {//throws WriteTransactionNeededException {
         ParameterCheck.mandatory("parentRef", parentRef);
         ParameterCheck.mandatory("folder", folder);
         ParameterCheck.mandatory("transactionService", transactionService);
         ParameterCheck.mandatory("nodeService", nodeService);
 
-        try {
-            lecmTransactionHelper.checkTransaction(false);
-        } catch (TransactionNeededException ex) {
-            throw new WriteTransactionNeededException("Can't create \"" + folder + "\" in " + parentRef.toString());
-        }
+//        try {
+//            lecmTransactionHelper.checkTransaction(false);
+//        } catch (TransactionNeededException ex) {
+//            throw new WriteTransactionNeededException("Can't create \"" + folder + "\" in " + parentRef.toString());
+//        }
         QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, folder);
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
         properties.put(ContentModel.PROP_NAME, folder);
@@ -254,7 +260,7 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
      *
      * @return
      */
-    private NodeRef createRootFolder() throws WriteTransactionNeededException {
+    private NodeRef createRootFolder() {//throws WriteTransactionNeededException {
         logger.trace("Try to create root folder...");
         //Создаём папку
         NodeRef folderRef = createFolder(repository.getCompanyHome(), root);
@@ -266,7 +272,10 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
 
     //TODO DONE Refactoring in progress....
     private NodeRef getRootRef() {
-        return getFolder(repository.getCompanyHome(), root);
+    	if (rootref==null) {
+    		rootref = getFolder(repository.getCompanyHome(), root);
+    	}
+        return rootref;
     }
 
     /**
@@ -285,7 +294,7 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
      *
      * @return
      */
-    private NodeRef createHomeRef() throws WriteTransactionNeededException {
+    private NodeRef createHomeRef() {// throws WriteTransactionNeededException {
         NodeRef folderRef = createFolder(getRootRef(), home);
         permissionService.setPermission(folderRef, PermissionService.ALL_AUTHORITIES, CONSUMER, true);
         permissionService.setInheritParentPermissions(folderRef, false);
@@ -314,7 +323,8 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
 
     @Override
     public NodeRef getDocumentsRef() {
-        return getFolder(getRootRef(), documents);
+    	return createPath(NamespaceService.CONTENT_MODEL_1_0_URI, getRootRef(), Arrays.asList(new String[]{documents}));
+        //return getFolder(getRootRef(), documents);
     }
 
     /**
@@ -346,16 +356,16 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
 //                В некоторых случаях без транзакции, поэтому пока оберну прямо здесь.
 //                TODO: Найти место, где бы гарантированно создавать папку черновиков для пользователя и создавать там.
 //                может быть при создании пользователя?
-                RetryingTransactionCallback<NodeRef> cb = new RetryingTransactionCallback<NodeRef>() {
-
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        return createFolder(personHome, drafts);
-                    }
-
-                };
+//                RetryingTransactionCallback<NodeRef> cb = new RetryingTransactionCallback<NodeRef>() {
+//
+//                    @Override
+//                    public NodeRef execute() throws Throwable {
+            	draftsRef = createFolder(personHome, drafts);
+//                    }
+//
+//                };
 //              draftsRef = createFolder(personHome, drafts);
-                draftsRef = lecmTransactionHelper.doInTransaction(cb, false);
+//                draftsRef = lecmTransactionHelper.doInTransaction(cb, false);
             }
             logger.trace("Person drafts directory is {}. It's noderef is {}", drafts, draftsRef);
         } else {
@@ -374,26 +384,27 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
 
     private NodeRef createServiceRef(ServiceFolder serviceFolder) {
             String relativePath = serviceFolder.getRelativePath();
+            relativePath = root+FOLDER_SEPARATOR+home+FOLDER_SEPARATOR+relativePath;
             final String[] folders = StringUtils.split(relativePath, FOLDER_SEPARATOR);
-            final NodeRef parentRef = getHomeRef();
+            final NodeRef parentRef = repository.getCompanyHome();//getHomeRef();
             NodeRef result = null;
             if (folders.length > 0) {
-                result = AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
-                    @Override
-                    public NodeRef doWork() throws Exception {
-                        return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionCallback<NodeRef>() {
-                            @Override
-                            public NodeRef execute() throws Throwable {
+//                result = AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
+//                    @Override
+//                    public NodeRef doWork() throws Exception {
+//                        return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionCallback<NodeRef>() {
+//                            @Override
+//                            public NodeRef execute() throws Throwable {
                                 return createPath(NamespaceService.CONTENT_MODEL_1_0_URI, parentRef, Arrays.asList(folders));
-                            }
-                        });
-                    }
-                });
+//                            }
+//                        });
+//                    }
+//                });
 
             }
-            if (null == result) {
-                logger.error("Can't create service folder \"" + serviceFolder.getRelativePath() + "\"");
-            }
+//            if (null == result) {
+//                logger.error("Can't create service folder \"" + serviceFolder.getRelativePath() + "\"");
+//            }
             return result;
     }
 
@@ -411,12 +422,12 @@ class RepositoryStructureHelperImpl implements ServiceFolderStructureHelper {
     //TODO DONE refactoring in progress...
     //Все методы, непосредственно выполняющие действия, вынесены в ru.it.lecm.base.beans.RepositoryStructureHelperImpl
     @Override
-    public NodeRef createPath(String nameSpace, NodeRef root, List<String> directoryPaths) throws WriteTransactionNeededException {
-        try {
-            lecmTransactionHelper.checkTransaction(false);
-        } catch (TransactionNeededException ex) {
-            throw new WriteTransactionNeededException("Can't create path \"" + StringUtils.join(directoryPaths.toArray(), "/") + "\" in " + root.toString());
-        }
+    public NodeRef createPath(String nameSpace, NodeRef root, List<String> directoryPaths) {//throws WriteTransactionNeededException {
+//        try {
+//            lecmTransactionHelper.checkTransaction(false);
+//        } catch (TransactionNeededException ex) {
+//            throw new WriteTransactionNeededException("Can't create path \"" + StringUtils.join(directoryPaths.toArray(), "/") + "\" in " + root.toString());
+//        }
         NodeRef directoryRef = root;
         for (String pathString : directoryPaths) {
             NodeRef pathDir = getFolder(directoryRef, pathString);

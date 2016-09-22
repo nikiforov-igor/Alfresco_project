@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -130,29 +131,54 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
 		PropertyCheck.mandatory(this, "lecmPermissionService", lecmPermissionService);
 		PropertyCheck.mandatory(this, "secretarySecurityService", secretarySecurityService);
 
-		//создание контейнера для хранения параметров делегирования
-		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-
-			@Override
-			public Void doWork() throws Exception {
-				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionCallback<Void>() {
-
-					@Override
-					public Void execute() throws Throwable {
-						if (null == getDelegationOptsContainer()) {
-							createDelegationOptsContainer();
-						}
-						if (null == getGlobalSettingsNode()) {
-							createGlobalSettingsNode();
-						}
-						return null;
-					}
-				});
-
-			}
-		});
+//		//создание контейнера для хранения параметров делегирования
+//		AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
+//
+//			@Override
+//			public Void doWork() throws Exception {
+//				return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionCallback<Void>() {
+//
+//					@Override
+//					public Void execute() throws Throwable {
+//						if (null == getDelegationOptsContainer()) {
+//							createDelegationOptsContainer();
+//						}
+//						if (null == getGlobalSettingsNode()) {
+//							createGlobalSettingsNode();
+//						}
+//						return null;
+//					}
+//				});
+//
+//			}
+//		});
 
 		//возможно здесь еще будет штука для создания параметров делегирования для уже существующих пользователей
+	}
+	
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		//создание контейнера для хранения параметров делегирования
+				AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
+
+					@Override
+					public Void doWork() throws Exception {
+						return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionCallback<Void>() {
+
+							@Override
+							public Void execute() throws Throwable {
+								if (null == getDelegationOptsContainer()) {
+									createDelegationOptsContainer();
+								}
+								if (null == getGlobalSettingsNode()) {
+									createGlobalSettingsNode();
+								}
+								return null;
+							}
+						});
+
+					}
+				});
 	}
 
 	private NodeRef createDelegationOptsContainer() {

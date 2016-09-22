@@ -1,6 +1,7 @@
 package ru.it.lecm.signed.docflow.webscripts;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.alfresco.model.ContentModel;
@@ -15,6 +16,7 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.signed.docflow.api.Signature;
@@ -49,7 +51,12 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 
 	private JSONArray getDocumentSignsInfo(final NodeRef documentRef) {
 		JSONArray result = new JSONArray();
-		List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
+		List<NodeRef> categories =new ArrayList<NodeRef>();
+		try {
+			categories = documentAttachmentsService.getCategories(documentRef);
+		} catch(WriteTransactionNeededException e){
+			logger.error("error: ",e);
+		}
 		for (NodeRef categoryRef : categories) {
 			JSONArray contentArray = new JSONArray();
 			String categoryName = (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);

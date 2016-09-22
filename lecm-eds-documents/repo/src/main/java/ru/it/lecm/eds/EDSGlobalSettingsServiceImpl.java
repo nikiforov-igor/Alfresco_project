@@ -9,6 +9,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -49,27 +50,32 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	}
 
 	public void init() {
-		if (null == getSettingsNode()) {
-			//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-			lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-				@Override
-				public NodeRef execute() throws Throwable {
-					return createSettingsNode();
-				}
-			});
-
-		}
-		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
-
-		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
-		List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
-		for (NodeRef potentialRoleRef : potentialRolesRefs) {
-			Serializable businessRole = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF);
-			Serializable organizationElement = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF);
-			if (businessRole != null && organizationElement != null) {
-				updatePotentialRolesMap(businessRole.toString(), organizationElement.toString(), potentialRoleRef);
-			}
-		}
+//		if (null == getSettingsNode()) {
+//			//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
+//			lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//				@Override
+//				public NodeRef execute() throws Throwable {
+//					return createSettingsNode();
+//				}
+//			});
+//
+//		}
+//		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
+//
+//		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
+//		List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
+//		for (NodeRef potentialRoleRef : potentialRolesRefs) {
+//			Serializable businessRole = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF);
+//			Serializable organizationElement = nodeService.getProperty(potentialRoleRef, PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF);
+//			if (businessRole != null && organizationElement != null) {
+//				updatePotentialRolesMap(businessRole.toString(), organizationElement.toString(), potentialRoleRef);
+//			}
+//		}
+	}
+	
+	protected void onBootstrap(ApplicationEvent event)
+	{
+		super.onBootstrap(event);
 	}
 
 	private void updatePotentialRolesMap(String businessRoleId, String organizationElementStrRef, NodeRef potentialRoleRef) {
@@ -207,7 +213,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         /**
          * создание ноды с настройками. создаётся при инициализации бина
          */
-        private NodeRef createSettingsNode() throws WriteTransactionNeededException {
+        public NodeRef createSettingsNode() throws WriteTransactionNeededException {
     //		Проверим, открыта ли транзакция
             //проверяется в createNode
 //            try {

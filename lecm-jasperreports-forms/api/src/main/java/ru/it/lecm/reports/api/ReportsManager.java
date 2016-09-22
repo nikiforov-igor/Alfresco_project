@@ -173,12 +173,12 @@ public class ReportsManager{
     }
 
     public void init() {
-        scanResources();
-        // добавим обработку подотчетов из репозитория!
-        // нам нужно скопировать их в файловую систему, если их там нет
-        for (String reportCode : getDescriptors().getKeys()) {
-            copySubreportsTemplatesInternal(getDescriptors().get(reportCode));
-        }
+//        scanResources();
+//        // добавим обработку подотчетов из репозитория!
+//        // нам нужно скопировать их в файловую систему, если их там нет
+//        for (String reportCode : getDescriptors().getKeys()) {
+//            copySubreportsTemplatesInternal(getDescriptors().get(reportCode));
+//        }
     }
 
     private void copySubreportsTemplatesInternal(ReportDescriptor availableDescriptor) {
@@ -360,7 +360,7 @@ public class ReportsManager{
             return true;
         }
         for (String reportRole : reportRoles) {
-            if (auth.contains("GROUP__LECM$BR%" + reportRole)) {
+            if (auth.contains("GROUP__LECM$BR!" + reportRole)) {
                 return true;
             }
         }

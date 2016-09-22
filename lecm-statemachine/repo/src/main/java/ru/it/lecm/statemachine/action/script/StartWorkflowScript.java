@@ -1,9 +1,13 @@
 package ru.it.lecm.statemachine.action.script;
 
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
@@ -27,10 +31,12 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
  * Time: 16:18
  */
 public class StartWorkflowScript extends DeclarativeWebScript {
+	private final static Logger logger = LoggerFactory.getLogger(StartWorkflowScript.class);
 
 	private static ServiceRegistry serviceRegistry;
     private static DocumentFrequencyAnalysisService frequencyAnalysisService;
     private static OrgstructureBean orgstructureService;
+    private TransactionService transactionService;
     private LifecycleStateMachineHelper stateMachineHelper;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
@@ -48,20 +54,36 @@ public class StartWorkflowScript extends DeclarativeWebScript {
     public void setStateMachineHelper(LifecycleStateMachineHelper stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
     }
+    
+    public void setTransactionService(TransactionService transactionService) {
+    	this.transactionService = transactionService;
+    }
 
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         Map<String, Object> result = new HashMap<String, Object>();
-		String taskId = req.getParameter("taskId");
+		final String taskId = req.getParameter("taskId");
 		String persistedResponse = req.getParameter("formResponse");
 		String actionId = req.getParameter("actionId");
 		String actionType = req.getParameter("actionType");
 
 		//Если есть actionId обрабатываем transitionAction
 		if ("trans".equals(actionType)) {
-            String executionId = stateMachineHelper.getCurrentExecutionId(taskId);
-            NodeRef document = stateMachineHelper.getStatemachineDocument(executionId);
+			logger.debug("!!!!!!!!!! executeImpl 1");
+//			RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//			NodeRef document = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//                @Override
+//                public NodeRef execute() throws Throwable {
+                	logger.debug("!!!!!!!!!! executeImpl 2");
+		            String executionId = stateMachineHelper.getCurrentExecutionId(taskId);
+		            logger.debug("!!!!!!!!!! executeImpl 3");
+		            NodeRef document = stateMachineHelper.getStatemachineDocument(executionId);
+		            logger.debug("!!!!!!!!!! executeImpl 4");
+//		            return document;
+//                }
+//            }, false, true);
             TransitionResponse transitionResponse = stateMachineHelper.executeUserAction(document, taskId, actionId, FinishStateWithTransitionAction.class, persistedResponse);
+            logger.debug("!!!!!!!!!! executeImpl 5");
             //если небыло ошибок, то действие логируем
             if (transitionResponse.getErrors().size() == 0) {
 //				updateActionCount в своих недрах дёргает updateFrequencyCount,
@@ -70,27 +92,28 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 //				Метод frequencyAnalysisService.getFrequencyUnit использует метод
 //				getWorkDirectory, который ранее был getOrCreate, поэтому выполним
 //				проверку и создадим папку при необходимости
-				NodeService nodeService = serviceRegistry.getNodeService();
-				QName type = nodeService.getType(document);
-				String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
-				NodeRef employee = orgstructureService.getCurrentEmployee();
-
-				if(frequencyAnalysisService.getWorkDirectory(employee) == null){
-					try {
-						frequencyAnalysisService.createWorkDirectory(employee, shortTypeName);
-					} catch (WriteTransactionNeededException ex) {
-						throw new RuntimeException("Can't create work directory", ex);
-					}
-				}
-
-				if(frequencyAnalysisService.getFrequencyUnit(employee, shortTypeName, actionId) == null) {
-					try {
-						frequencyAnalysisService.createFrequencyUnit(employee, shortTypeName, actionId);
-					} catch (WriteTransactionNeededException ex) {
-						throw new RuntimeException("Can't create FrequencyUnit");
-					}
-				}
-                updateActionCount(document, actionId);
+            	
+//				NodeService nodeService = serviceRegistry.getNodeService();
+//				QName type = nodeService.getType(document);
+//				String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
+//				NodeRef employee = orgstructureService.getCurrentEmployee();
+//
+//				if(frequencyAnalysisService.getWorkDirectory(employee) == null){
+//					try {
+//						frequencyAnalysisService.createWorkDirectory(employee, shortTypeName);
+//					} catch (WriteTransactionNeededException ex) {
+//						throw new RuntimeException("Can't create work directory", ex);
+//					}
+//				}
+//
+//				if(frequencyAnalysisService.getFrequencyUnit(employee, shortTypeName, actionId) == null) {
+//					try {
+//						frequencyAnalysisService.createFrequencyUnit(employee, shortTypeName, actionId);
+//					} catch (WriteTransactionNeededException ex) {
+//						throw new RuntimeException("Can't create FrequencyUnit");
+//					}
+//				}
+//                updateActionCount(document, actionId);
                 String newWorkflowId = parseExecutionId(persistedResponse);
                 if (newWorkflowId != null) {
                     stateMachineHelper.logStartWorkflowEvent(document, newWorkflowId);
@@ -98,8 +121,10 @@ public class StartWorkflowScript extends DeclarativeWebScript {
                 if (transitionResponse.getRedirect() != null) {
                     result.put("redirect", transitionResponse.getRedirect());
                 }
+                logger.debug("!!!!!!!!!! executeImpl 6");
             }
 		} else if ("user".equals(actionType)){
+			logger.debug("!!!!!!!!!! executeImpl 7");
             String executionId = parseExecutionId(persistedResponse);
 
             NodeRef document = stateMachineHelper.getStatemachineDocument(executionId);
@@ -114,6 +139,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
                 }
             }
         } else if ("signal".equals(actionType)) {
+        	logger.debug("!!!!!!!!!! executeImpl 8");
             String executionId = parseExecutionId(persistedResponse);
             stateMachineHelper.sendSignal(executionId);
         }

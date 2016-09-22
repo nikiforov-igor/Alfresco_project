@@ -16,6 +16,7 @@ import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.TransactionNeededException;
@@ -94,27 +95,32 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     public void init() {
         //Думаю, самое подходящее место для проверки существования и создания глобальных настроек, это при инициализации бина
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-
-            @Override
-            public Void doWork() throws Exception {
-                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-
-                    @Override
-                    public Void execute() throws Throwable {
-                        if (null == getSettingsNode()) {
-                            createSettingsNode();
-                        }
-                        if (null == getDashletSettingsNode()) {
-                            createDashletSettingsNode();
-                        }
-                        return null;
-                    }
-                });
-                return null;
-            }
-        });
+//        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+//
+//            @Override
+//            public Void doWork() throws Exception {
+//                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//
+//                    @Override
+//                    public Void execute() throws Throwable {
+//                        if (null == getSettingsNode()) {
+//                            createSettingsNode();
+//                        }
+//                        if (null == getDashletSettingsNode()) {
+//                            createDashletSettingsNode();
+//                        }
+//                        return null;
+//                    }
+//                });
+//                return null;
+//            }
+//        });
     }
+    
+    protected void onBootstrap(ApplicationEvent event)
+	{
+    	super.onBootstrap(event);
+	}
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -141,12 +147,12 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
-    public NodeRef createSettingsNode() throws WriteTransactionNeededException {
-        try {
-            lecmTransactionHelper.checkTransaction();
-        } catch (TransactionNeededException ex) {
-            throw new WriteTransactionNeededException("Can't create settings node");
-        }
+    public NodeRef createSettingsNode() {
+//        try {
+//            lecmTransactionHelper.checkTransaction();
+//        } catch (TransactionNeededException ex) {
+//            throw new WriteTransactionNeededException("Can't create settings node");
+//        }
 
         final NodeRef rootFolder = this.getServiceRootFolder();
         NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
@@ -163,12 +169,13 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return settingsRef;
     }
 
-    public NodeRef createDashletSettingsNode() throws WriteTransactionNeededException {
-        try {
-            lecmTransactionHelper.checkTransaction();
-        } catch (TransactionNeededException ex) {
-            throw new WriteTransactionNeededException("Can't create settings node");
-        }
+    @Override
+    public NodeRef createDashletSettingsNode() {
+//        try {
+//            lecmTransactionHelper.checkTransaction();
+//        } catch (TransactionNeededException ex) {
+//            throw new WriteTransactionNeededException("Can't create settings node");
+//        }
 
         final NodeRef rootFolder = this.getServiceRootFolder();
         NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);

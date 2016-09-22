@@ -8,6 +8,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 
 import java.util.Collection;
@@ -94,7 +95,7 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 	 * @param documentNodeRef nodeRef документа
 	 * @return массив категорий вложений
 	 */
-    public Scriptable getCategories(String documentNodeRef) {
+    public Scriptable getCategories(String documentNodeRef) throws WriteTransactionNeededException {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
         NodeRef documentRef = new NodeRef(documentNodeRef);

@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.transaction.UserTransaction;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
@@ -65,9 +67,36 @@ public class AbsenceProlongationSchedule extends AbstractScheduledAction {
 
 	@Override
 	public List<NodeRef> getNodes() {
+		
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
 		Date now = new Date();
-		NodeRef parentContainer = absenceService.getContainer();
+		NodeRef parentContainer = null;
+		
+		UserTransaction userTransaction = getTransactionService().getUserTransaction();
+        try
+        {
+            userTransaction.begin();
+            
+            parentContainer = absenceService.getContainer();
+            
+			userTransaction.commit();
+        }
+        catch(Throwable e)
+        {
+            // rollback the transaction
+            try
+            { 
+                if (userTransaction != null) 
+                {
+                    userTransaction.rollback();
+                }
+            }
+            catch (Exception ex)
+            {
+                // NOOP 
+            }
+            throw new AlfrescoRuntimeException("Service folders [notifications-dashlet] bootstrap failed", e);
+        }
 
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);

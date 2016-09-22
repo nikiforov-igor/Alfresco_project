@@ -26,6 +26,7 @@ import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -97,23 +98,27 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 	}
 
 	public void init() {
-		PropertyCheck.mandatory(this, "nodeService", nodeService);
-		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
-		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
-		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
-		PropertyCheck.mandatory(this, "transactionService", transactionService);
-		PropertyCheck.mandatory(this, "personService", personService);
-		PropertyCheck.mandatory(this, "authService", authService);
-		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
-		PropertyCheck.mandatory(this, "searchService", searchService);
-		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
-
-		authenticationService = (MutableAuthenticationService) authService;
-
-		positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
-		businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
-
-		helper = new ExportImportHelper(nodeService, namespaceService, searchService, orgstructureService);
+//		PropertyCheck.mandatory(this, "nodeService", nodeService);
+//		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+//		PropertyCheck.mandatory(this, "businessJournalService", businessJournalService);
+//		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
+//		PropertyCheck.mandatory(this, "transactionService", transactionService);
+//		PropertyCheck.mandatory(this, "personService", personService);
+//		PropertyCheck.mandatory(this, "authService", authService);
+//		PropertyCheck.mandatory(this, "behaviourFilter", behaviourFilter);
+//		PropertyCheck.mandatory(this, "searchService", searchService);
+//		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
+//
+//		authenticationService = (MutableAuthenticationService) authService;
+//
+//		positionsRoot = dictionaryService.getDictionaryByName(POSITIONS_DICTIONARY_NAME);
+//		businessRolesRoot = dictionaryService.getDictionaryByName(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME);
+//
+//		helper = new ExportImportHelper(nodeService, namespaceService, searchService, orgstructureService);
+	}
+	
+	protected void onBootstrap(ApplicationEvent event)
+	{
 	}
 
 	@Override
@@ -213,7 +218,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 						return true;
 					}
 
-				}, false, true);
+				}, false);
 			} catch (RuntimeException ex) {
 				logger.error("Невозможно выполнить импорт должности {}; причина: {}", position, ex.getMessage());
 				if (logger.isDebugEnabled()) {

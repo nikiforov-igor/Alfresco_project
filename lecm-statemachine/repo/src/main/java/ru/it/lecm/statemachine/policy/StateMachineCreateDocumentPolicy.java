@@ -106,6 +106,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
 	@Override
 	public void onCreateNode(final ChildAssociationRef childAssocRef) {
+		logger.debug("!!!!!!!! onCreateNode");
         final NodeRef docRef = childAssocRef.getChildRef();
         final NodeService nodeService = serviceRegistry.getNodeService();
         final QName type = nodeService.getType(docRef);
@@ -184,17 +185,18 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         final HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
         props.put(ContentModel.PROP_NAME, name);
         try {
-            ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
-                @Override
-                public ChildAssociationRef execute() throws Throwable {
-                    return nodeService.createNode(
+//            ChildAssociationRef childAssocRef = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
+//                @Override
+//                public ChildAssociationRef execute() throws Throwable {
+//                    return 
+        	ChildAssociationRef childAssocRef = nodeService.createNode(
                             parent,
                             ContentModel.ASSOC_CONTAINS,
                             QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
                             ContentModel.TYPE_FOLDER,
                             props);
-                }
-            }, false, true);
+//                }
+//            }, false, true);
             return childAssocRef.getChildRef();
         } catch(DuplicateChildNodeNameException e) {
             return nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, name);
@@ -212,21 +214,22 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
         @Override
         public void flush() {
-
+        	logger.debug("!!!!!!!! flush");
         }
 
         @Override
         public void beforeCommit(boolean readOnly) {
-
+        	logger.debug("!!!!!!!! beforeCommit");
         }
 
         @Override
         public void beforeCompletion() {
-
+        	logger.debug("!!!!!!!! beforeCompletion");
         }
 
         @Override
         public void afterCommit() {
+        	logger.debug("!!!!!!!! afterCommit");
             final NodeService nodeService = serviceRegistry.getNodeService();
             final String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
             List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(STM_POST_TRANSACTION_PENDING_DOCS);
@@ -239,20 +242,21 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                         final String stateMashineId = prefixes.get(0) + "_" + type.getLocalName();
                         Runnable runnable = new Runnable() {
                             public void run() {
-                                AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
-                                    @Override
-                                    public Void doWork() throws Exception {
-										//TODO transaction in loop!!!
-                                        return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                            	//TODO transaction in loop!!!
+                            	serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                            		@Override
+                            		public Void execute() throws Throwable {
+                            			return AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
                                             @Override
-                                            public Void execute() throws Throwable {
+                                            public Void doWork() throws Exception {
+                                            	logger.debug("!!!!!!!! afterCommit execute");
                                                 PersonService personService = serviceRegistry.getPersonService();
                                                 NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
                                                 Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
 
                                                 final WorkflowService workflowService = serviceRegistry.getWorkflowService();
-
+                                                logger.debug("!!!!!!!! afterCommit createPackage");
                                                 NodeRef stateProcessPackage = workflowService.createPackage(null);
                                                 nodeService.addChild(stateProcessPackage, docRef, WorkflowModel.ASSOC_PACKAGE_CONTAINS, type);
 
@@ -276,12 +280,14 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 //AuthenticationUtil.setFullyAuthenticatedUser("workflow");
                                                 WorkflowPath path = null;
                                                 try {
+                                                	logger.debug("!!!!!!!! afterCommit startWorkflow");
                                                     path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
                                                 } catch (Exception e) {
                                                     logger.error("Error while start statemachine", e);
                                                 } finally {
                                                     AuthenticationUtil.setFullyAuthenticatedUser(currentUser);
                                                 }
+                                                logger.debug("!!!!!!!! afterCommit addAspect");
                                                 HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
                                                 aspectProps.put(StatemachineModel.PROP_STATEMACHINE_ID, path.getInstance().getId());
                                                 nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATEMACHINE, aspectProps);
@@ -296,6 +302,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                     public Void doWork() throws Exception {
 		                                                List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(pathId);
 		                                                for (WorkflowTask task : tasks) {
+		                                                	logger.debug("!!!!!!!! afterCommit endTask");
 		                                                    workflowService.endTask(task.getId(), null);
 		                                                }
 		                                                return null;
@@ -311,9 +318,9 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 businessJournalService.log(docRef, EventCategory.ADD, "#initiator создал(а) новый документ \"#mainobject\" в статусе \"#object1\"", objects);
                                                 return null;
                                             }
-                                        }, false, true);
-                                    }
-                                }, currentUser);
+                                        }, currentUser);
+                            		}
+                            	}, false, true);
                             }
                         };
 
@@ -321,6 +328,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                     }
                 }
             }
+            logger.debug("!!!!!!!! afterCommit end");
         }
 
         @Override
