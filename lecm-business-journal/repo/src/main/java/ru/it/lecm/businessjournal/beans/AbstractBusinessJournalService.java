@@ -509,7 +509,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     public NodeRef getBusinessJournalDirectory() {
-	return getFolder(bjRootID);
+    	return getFolder(bjRootID);
     }
 
     public NodeRef getBusinessJournalArchiveDirectory() {

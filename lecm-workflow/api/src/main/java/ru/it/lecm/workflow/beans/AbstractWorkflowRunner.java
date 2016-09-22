@@ -148,6 +148,7 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 		String stateMachineExecutionId = ACTIVITI_PREFIX + stateMachineService.getStatemachineId(documentRef);
 		String currentTaskId = stateMachineService.getCurrentTaskId(stateMachineExecutionId);
 		WorkflowDescriptor descriptor = new WorkflowDescriptor(instance.getId(), stateMachineExecutionId, instance.getDefinition().getName(), currentTaskId, "", "", "");
+		logger.info("!!!!!!!!!!! connectToStatemachine: "+descriptor);
 		new DocumentWorkflowUtil().addWorkflow(documentRef, instance.getId(), descriptor);
 	}
 

@@ -232,7 +232,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 	public NodeRef getDictionaryByDictionaryValue(NodeRef nodeRef) {
 		if (isDictionaryValue(nodeRef)) {
 			ChildAssociationRef parent = nodeService.getPrimaryParent(nodeRef);
-			while (parent != null && !isDictionary(parent.getParentRef())) {
+			while (parent != null && parent.getParentRef() !=null && !isDictionary(parent.getParentRef())) {
 				parent = nodeService.getPrimaryParent(parent.getParentRef());
 			}
 			if (parent != null) {

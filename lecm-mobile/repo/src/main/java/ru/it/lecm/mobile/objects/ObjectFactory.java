@@ -20,7 +20,7 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.secretary.SecretaryService;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.statemachine.bean.ActionsScriptBean;
+import ru.it.lecm.statemachine.bean.UserActionsService;
 
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -58,7 +58,7 @@ public class ObjectFactory {
     private NamespaceService namespaceService;
     private ContentService contentService;
     private TransactionService transactionService;
-    private ActionsScriptBean actionsService;
+    private UserActionsService actionsService;
     private SysAdminParams sysAdminParams;
     private DictionaryService dictionaryService;
     private SecretaryService secretaryService;
@@ -775,7 +775,7 @@ public class ObjectFactory {
         this.transactionService = transactionService;
     }
 
-    public void setActionsService(ActionsScriptBean actionsService) {
+    public void setActionsService(UserActionsService actionsService) {
         this.actionsService = actionsService;
     }
 

@@ -181,17 +181,17 @@ var adminWidgets = [
 	}
 ];
 
-if (!conditionEditionTeam) {
-	adminWidgets.push({
-		id: "ADMIN_REPLIACATION_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuItem",
-		config: {
-			id: "ADMIN_REPLIACATION_MENU_ITEM",
-			label: msg.get("label.replication"),
-			targetUrl: "console/admin-console/replication-jobs"
-		}
-	});
-}
+//if (!conditionEditionTeam) {
+//	adminWidgets.push({
+//		id: "ADMIN_REPLIACATION_MENU_ITEM",
+//		name: "alfresco/menus/AlfMenuItem",
+//		config: {
+//			id: "ADMIN_REPLIACATION_MENU_ITEM",
+//			label: msg.get("label.replication"),
+//			targetUrl: "console/admin-console/replication-jobs"
+//		}
+//	});
+//}
 
 
 var moreMenu = {

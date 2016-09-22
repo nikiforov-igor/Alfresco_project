@@ -13,6 +13,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.util.List;
+import java.util.Collection;
 
 /**
  * User: dbashmakov
@@ -149,5 +150,9 @@ public class LecmPermissionWebScript extends BaseWebScript {
 	public Scriptable getEmployeesByDynamicRole(ScriptNode document, String roleCode) {
 		List<NodeRef> results = lecmPermissionService.getEmployeesByDynamicRole(document.getNodeRef(), roleCode);
 		return createScriptable(results);
+	}
+	
+	public Collection<LecmPermissionService.LecmPermissionGroup> getPermGroups() {
+		return lecmPermissionService.getPermGroups();
 	}
 }

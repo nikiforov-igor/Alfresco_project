@@ -6,7 +6,9 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptPagingNodes;
 import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -353,5 +355,24 @@ public class BaseWebScriptBean extends BaseWebScript {
 			isQNameAspectCache.putIfAbsent(prefixedType, result);
 		}
 		return result;
+	}
+	public PropertyDefinition getProperty(QName name) {
+		return dictionaryService.getProperty(name);
+	}
+	
+	public AssociationDefinition getAssociation(QName name) {
+		return dictionaryService.getAssociation(name);
+	}
+	
+	public String toPrefixString(PropertyDefinition prop){
+		return prop.getDataType().getName().toPrefixString(namespaceService);
+	}
+	
+	public String toPrefixString(AssociationDefinition assoc){
+		return assoc.getTargetClass().getName().toPrefixString(namespaceService);
+	}
+	
+	public QName createQName(String qname) {
+		return QName.createQName(qname, namespaceService);
 	}
 }

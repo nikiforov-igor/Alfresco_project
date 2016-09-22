@@ -87,7 +87,7 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
             }
         });
         for (String accessRole : accessRoles) {
-            if (auth.contains("GROUP__LECM$BR%" + accessRole)) {
+            if (auth.contains("GROUP__LECM$BR!" + accessRole)) {
                 return true;
             }
         }

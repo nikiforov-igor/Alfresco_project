@@ -6,6 +6,19 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<bean id="reportsEditor.LogicEcmDictionariesBootstrap1" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditor.modelBootstrap, reportsEditorService, businessJournalLogEventsPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Справочники"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/reports-editor-repo/models/lecm-reports-columns-types.xml</value>
+                <value>alfresco/module/reports-editor-repo/models/lecm-reports-parameters-types.xml</value>
+                <value>alfresco/module/reports-editor-repo/models/lecm-reports-providers.xml</value>
+                <value>alfresco/module/reports-editor-repo/models/lecm-reports-types.xml</value>
+            </list>
+        </property>
+    </bean>
+    
 	<util:list id="approve3.reports.bootstrap.dictionaries">
 		<value>alfresco/module/${artifactId}/reports/approval-list.xml</value>
 		<value>alfresco/module/${artifactId}/reports/approval-history.xml</value>

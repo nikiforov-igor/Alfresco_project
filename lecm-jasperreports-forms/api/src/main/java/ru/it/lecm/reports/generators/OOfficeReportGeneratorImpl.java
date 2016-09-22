@@ -109,7 +109,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 
     private String toUrl(File file, OpenOfficeConnection connection) throws ConnectException {
         final Object fcProvider = connection.getFileContentProvider();
-        XFileIdentifierConverter fic = UnoRuntime.queryInterface(XFileIdentifierConverter.class, fcProvider);
+        XFileIdentifierConverter fic = (XFileIdentifierConverter)UnoRuntime.queryInterface(XFileIdentifierConverter.class, fcProvider);
         return fic.getFileURLFromSystemPath("", file.getAbsolutePath());
     }
 

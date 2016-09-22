@@ -47,4 +47,9 @@ public class WorkflowDescriptor {
 	public String getEventName() {
 		return eventName;
 	}
+	
+	@Override
+    public String toString() {
+		return "{executionId: "+executionId+", statemachineExecutionId: "+statemachineExecutionId+", workflowId: "+workflowId+", startTaskId: "+startTaskId+", actionName: "+actionName+", actionId: "+actionId+", eventName: "+eventName+"}";
+	}
 }

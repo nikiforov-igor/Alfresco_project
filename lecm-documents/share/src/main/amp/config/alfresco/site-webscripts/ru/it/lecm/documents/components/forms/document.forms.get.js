@@ -24,7 +24,7 @@ function main() {
         if (metadata && (metadata.type)) {
             model.documentType = metadata.type;
 
-            model.reportsDescriptors = getReports(metadata.type);
+            //model.reportsDescriptors = getReports(metadata.type);
         }
     }
 }

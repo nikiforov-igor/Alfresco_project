@@ -243,6 +243,10 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 		return stateMachineHelper.isStarter(type);
 	}
 
+	public ru.it.lecm.statemachine.StateFields getStateFields(ScriptNode node) {
+		return stateMachineHelper.getStateFields(node.getNodeRef());
+	}
+	
 	/**
 	 * Проверка документа на черновой статус
 	 *

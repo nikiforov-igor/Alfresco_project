@@ -40,7 +40,7 @@ public final class Types {
 	------------------------------------------------------------------------------------------------
 	 */
 
-	final static public String SFX_DELIM = "%"; // разделить внутри суффиксов - должен отличаится от разделителя внутри guid (минуса)
+	final static public String SFX_DELIM = "!"; // разделить внутри суффиксов - должен отличаится от разделителя внутри guid (минуса)
 	final static public String PFX_LECM = "_LECM";
 	final static public String SFX_OU  = "$OU"+ SFX_DELIM;   // by id
 	final static public String SFX_PRIVATE_OU  = "$OU_PRIVATE" + SFX_DELIM;   // by id

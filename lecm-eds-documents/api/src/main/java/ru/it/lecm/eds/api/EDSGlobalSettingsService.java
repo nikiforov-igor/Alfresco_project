@@ -37,6 +37,7 @@ public interface EDSGlobalSettingsService {
 	QName ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc");
 
 	NodeRef getSettingsNode();
+	NodeRef createSettingsNode() throws WriteTransactionNeededException;
 
 	Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef);
 	Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef);
