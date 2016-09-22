@@ -45,9 +45,10 @@
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
-							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>
-							<control-param name="messageHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation.message</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" event="propertychange" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation" message-id="lecm.calendar.same.date"/>
+						</constraint-handlers>
 					</field>
 				</appearance>
 			</form>
@@ -81,9 +82,10 @@
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
-							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>
-							<control-param name="messageHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation.message</control-param>
 						</control>
+						<constraint-handlers>
+							<constraint type="MANDATORY" event="propertychange" validation-handler="LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation" message-id="lecm.calendar.same.date"/>
+						</constraint-handlers>
 					</field>
 				</appearance>
 			</form>
