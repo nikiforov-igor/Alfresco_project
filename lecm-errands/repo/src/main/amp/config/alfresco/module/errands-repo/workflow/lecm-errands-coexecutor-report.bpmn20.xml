@@ -64,7 +64,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script></script>
+            <script>var test=1;</script>
         </scriptTask>
         <receiveTask id="errandCoexecutorReport" name="Receive Task"></receiveTask>
         <sequenceFlow id="flow1" name="" sourceRef="startCoexecutorReport" targetRef="coexecutorReport"></sequenceFlow>

@@ -18,7 +18,7 @@
                     </activiti:field>
                 </activiti:executionListener>
             </extensionElements>
-            <script/>
+            <script>>var test=1;</script>
         </scriptTask>
         <receiveTask id="ReceiveTask" name="Receive Task"/>
         <sequenceFlow id="flow1" name="" sourceRef="startdocumentStamp" targetRef="documentStampTask"/>
