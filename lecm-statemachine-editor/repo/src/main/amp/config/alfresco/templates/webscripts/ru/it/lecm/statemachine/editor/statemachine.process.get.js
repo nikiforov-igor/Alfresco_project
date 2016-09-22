@@ -72,13 +72,14 @@ if (statemachineId != null && statemachineId != '') {
     var isSimple = machine.properties["lecm-stmeditor:simple-document"];
 	model.isSimple = isSimple != null && isSimple;
 
-    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-    var dictionaryService = ctx.getBean("dictionaryService");
-    var namespaceService = ctx.getBean("namespaceService");
-    var modelQName = Packages.org.alfresco.service.namespace.QName.createQName(statemachineId.replace("_", ":"), namespaceService);
-    var aspectQName = Packages.org.alfresco.service.namespace.QName.createQName("lecm-document-aspects:finalize-to-unit", namespaceService);
-    var aspects = dictionaryService.getType(modelQName).getDefaultAspectNames();
-    model.isFinalizeToUnit = aspects.contains(aspectQName);
+	//Переписать на сервис
+    //var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+    //var dictionaryService = ctx.getBean("dictionaryService");
+    //var namespaceService = ctx.getBean("namespaceService");
+    //var modelQName = Packages.org.alfresco.service.namespace.QName.createQName(statemachineId.replace("_", ":"), namespaceService);
+    //var aspectQName = Packages.org.alfresco.service.namespace.QName.createQName("lecm-document-aspects:finalize-to-unit", namespaceService);
+    //var aspects = dictionaryService.getType(modelQName).getDefaultAspectNames();
+    model.isFinalizeToUnit = false;//aspects.contains(aspectQName);
 
 
 	var machineStatuses = statuses.childAssocs["contains"];

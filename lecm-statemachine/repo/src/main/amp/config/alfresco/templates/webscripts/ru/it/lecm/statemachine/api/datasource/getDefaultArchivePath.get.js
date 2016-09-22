@@ -17,8 +17,7 @@ if (statemachineNode) {
     if (!simple) {
         model.value = DEFAULT_PATH;
     } else {
-        var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-        var modelName = ctx.getBean("documentService").getDocumentTypeLabel(statemachineNode.name.replace("_",":"));
+        var modelName = documentScript.getDocumentTypeLabel(statemachineNode.name.replace("_",":"));
         model.value = "/" + modelName + DEFAULT_SIMPLE_PATH;
     }
 } else {

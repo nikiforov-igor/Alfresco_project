@@ -1,7 +1,4 @@
-var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-var privilegesService = ctx.getBean("lecmPermissionServiceBean");
-
-var privileges = privilegesService.getPermGroups().toArray();
+var privileges = lecmPermission.getPermGroups().toArray();
 
 var result = [];
 

@@ -1,13 +1,13 @@
 var nodeRef = args["documentNodeRef"];
 var node = search.findNode(nodeRef);
 
-var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
-var helper = ctx.getBean("stateMachineHelper");
+//var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+var helper = statemachine;//ctx.getBean("stateMachineHelper");
 
-var stateFields = helper.getStateFields(node.nodeRef);
+var stateFields = helper.getStateFields(node);
 var items = [];
 var fields = stateFields.getFields().toArray();
-var isDraft = helper.isDraft(node.nodeRef);
+var isDraft = helper.isDraft(node);
 var writeAllFieldsPermission = lecmPermission.hasPermission(node, "_lecmPerm_WriteAllFields");
 
 for each (var field in fields) {
