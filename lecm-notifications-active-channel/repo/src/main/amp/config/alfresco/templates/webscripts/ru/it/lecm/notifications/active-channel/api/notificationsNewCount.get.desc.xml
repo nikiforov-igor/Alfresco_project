@@ -3,6 +3,6 @@
 	<description>Notifications Active Channel Count</description>
 	<url>/lecm/notifications/active-channel/api/new-count</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

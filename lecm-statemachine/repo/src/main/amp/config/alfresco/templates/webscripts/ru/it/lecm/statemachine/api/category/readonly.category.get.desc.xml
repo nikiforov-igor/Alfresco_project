@@ -3,6 +3,6 @@
 	<description>Check read only attachment category</description>
 	<url>/lecm/statemachine/api/category/readonly</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

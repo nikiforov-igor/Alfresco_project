@@ -8,5 +8,5 @@
     <url>/lecm/meeting/holdingTechnicalMembers/picker/{type}/{store_type}/{store_id}/{id}/doclib</url>
     <format default="json"/>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

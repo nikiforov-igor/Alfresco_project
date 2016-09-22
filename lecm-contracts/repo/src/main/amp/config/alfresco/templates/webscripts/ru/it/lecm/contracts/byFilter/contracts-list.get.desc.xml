@@ -5,5 +5,5 @@
     <format default="json">extension</format>
     <lifecycle>internal</lifecycle>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

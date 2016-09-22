@@ -4,5 +4,5 @@
     <url>/lecm/subscriptions/event-category</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

@@ -3,6 +3,6 @@
 	<description>Get Documents Tasks</description>
 	<url>/lecm/statemachine/api/documentsTasks</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

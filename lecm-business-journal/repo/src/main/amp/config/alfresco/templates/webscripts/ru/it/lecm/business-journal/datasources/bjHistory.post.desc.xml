@@ -4,5 +4,5 @@
    <url>/lecm/business-journal/ds/history</url>
    <format default="json">argument</format>
    <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

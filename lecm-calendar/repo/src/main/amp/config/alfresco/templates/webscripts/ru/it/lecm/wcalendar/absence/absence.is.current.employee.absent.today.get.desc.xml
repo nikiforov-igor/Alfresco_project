@@ -4,6 +4,6 @@
 	<description>Check if current employee has planned abscense for today</description>
 	<url>/lecm/wcalendar/absence/get/isCurrentEmployeeAbsentToday</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

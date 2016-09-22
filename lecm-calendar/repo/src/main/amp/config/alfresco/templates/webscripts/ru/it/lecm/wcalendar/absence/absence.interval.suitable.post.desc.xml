@@ -4,6 +4,6 @@
 	<description>Check if we can add abcence in given interval for given employee</description>
 	<url>/lecm/wcalendar/absence/get/isIntervalSuitableForAbsence</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

@@ -4,5 +4,5 @@
 	<url>/lecm/errands/api/documentErrandsFilteredList</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

@@ -3,6 +3,6 @@
     <description>Адрес создания документа</description>
     <url>/lecm/document/api/url/view?nodeRef={nodeRef}</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json"/>
 </webscript>

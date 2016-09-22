@@ -3,5 +3,5 @@
   <description>Скрипт для отображения контрола с заданными параметрами</description>
   <url>/lecm/components/control</url>
   <authentication>user</authentication>
-  <transaction>none</transaction>
+  <transaction allow="readonly">required</transaction>
 </webscript>

@@ -8,6 +8,6 @@
               но, наверное стоит разнести получение и создание/актуализацию procuracies  
    -->
    <transaction>required</transaction>
-   <!--<transaction>none</transaction>-->
+   <transaction allow="readonly">required</transaction>
    <format default="json"/>
 </webscript>

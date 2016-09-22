@@ -5,5 +5,5 @@
 	<url>/lecm/review/global-settings/settings</url>
 	<format default="json">extension</format>
 	<authentication>user</authentication>
-	<transaction>none</transaction>
+	<transaction>required</transaction>
 </webscript>

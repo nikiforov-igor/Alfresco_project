@@ -4,5 +4,5 @@
     <url>/lecm/statemachine/getStatuses?docType={docType}&amp;active={active}&amp;final={final}</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

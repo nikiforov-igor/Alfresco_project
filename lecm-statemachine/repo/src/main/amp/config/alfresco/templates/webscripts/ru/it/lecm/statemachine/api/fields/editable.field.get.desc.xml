@@ -3,6 +3,6 @@
 	<description>Check editable field</description>
 	<url>/lecm/statemachine/api/field/editable</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

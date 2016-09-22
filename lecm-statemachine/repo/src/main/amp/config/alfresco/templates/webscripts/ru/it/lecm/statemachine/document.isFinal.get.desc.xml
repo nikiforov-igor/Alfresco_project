@@ -3,5 +3,6 @@
 	<description>Document is final</description>
 	<url>/lecm/statemachine/isFinal</url>
 	<format default="json">extension</format>
-	<authentication runas="admin">none</authentication>
+	<authentication runas="admin">user</authentication>
+	<transaction allow="readonly">required</transaction>
 </webscript>

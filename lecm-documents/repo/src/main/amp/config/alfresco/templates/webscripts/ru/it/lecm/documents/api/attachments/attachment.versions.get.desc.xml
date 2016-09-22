@@ -3,6 +3,6 @@
 	<description>Attachment versions</description>
 	<url>/lecm/document/attachments/api/versions?nodeRef={nodeRef}</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

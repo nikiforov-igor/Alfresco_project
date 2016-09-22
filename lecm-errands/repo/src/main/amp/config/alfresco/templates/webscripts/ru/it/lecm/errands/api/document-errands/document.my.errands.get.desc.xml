@@ -3,6 +3,6 @@
 	<description>Get Document Errands for right board</description>
 	<url>/lecm/errands/api/documentErrandsRightBoard</url>
 	<authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 	<format default="json"/>
 </webscript>

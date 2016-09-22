@@ -3,6 +3,6 @@
     <description>Notifications search</description>
     <url>/lecm/notifications/search</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
     <format default="json">extension</format>
 </webscript>

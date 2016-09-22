@@ -3,5 +3,5 @@
     <description>Search Queries Main Content</description>
     <url>/lecm/search-queries/main</url>
     <authentication>user</authentication>
-    <transaction>none</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>

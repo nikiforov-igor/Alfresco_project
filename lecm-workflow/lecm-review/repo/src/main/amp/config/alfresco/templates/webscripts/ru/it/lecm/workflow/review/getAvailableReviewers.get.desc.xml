@@ -5,5 +5,5 @@
 	<url>/lecm/workflow/review/getAvailableReviewers?reviewListRef={reviewListRef}</url>
 	<authentication>user</authentication>
 	<format default="json"/>
-	<transaction>none</transaction>
+	<transaction allow="readonly">required</transaction>
 </webscript>
