@@ -341,7 +341,7 @@
 
     <bean id="orgstructure.arm.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionary/arm-orgstructure.xml</value>
@@ -351,7 +351,7 @@
 
     <bean id="orgstructure.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/orgstructure-settings-arm.xml</value>

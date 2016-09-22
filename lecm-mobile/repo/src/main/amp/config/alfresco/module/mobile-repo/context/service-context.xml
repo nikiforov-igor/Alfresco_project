@@ -130,7 +130,7 @@
 
     <bean id="mobile.arm.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/default-mobile-sed.xml</value>

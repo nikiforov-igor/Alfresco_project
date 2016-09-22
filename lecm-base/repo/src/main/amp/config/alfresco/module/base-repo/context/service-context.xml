@@ -52,6 +52,7 @@
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 		<property name="permissionService" ref="permissionService"/>
 		<property name="authorityService" ref="authorityService"/>
+		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
 	<bean id="substitudeService" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" parent="baseBean"
@@ -482,7 +483,7 @@
 
 	<bean id="base.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="userProfile.arm.LogicEcmBootstrap">
-		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Мое делегирование"/>
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>

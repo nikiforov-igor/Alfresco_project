@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="CreateOrUpdate">
     <item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
         <property name="cm:name">Бизнес роли</property>
         <property name="lecm-dic:description">Справочник всех бизнес ролей</property>

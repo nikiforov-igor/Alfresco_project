@@ -188,7 +188,7 @@
 
     <bean id="subscriptions.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
           depends-on="arm.settings.LogicEcmBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование"/>
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
         <property name="dictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/arm/subscriptions-settings-arm.xml</value>

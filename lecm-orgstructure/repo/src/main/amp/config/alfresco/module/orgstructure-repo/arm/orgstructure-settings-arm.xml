@@ -1,58 +1,74 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="cm:Оргструктура" type="lecm-arm:accordion">
-		<property name="cm:name"><![CDATA[Оргструктура]]></property>
-		<property name="lecm-arm:order"><![CDATA[20]]></property>
-		<property name="lecm-arm:search-type"><![CDATA[]]></property>
-		<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
-		<property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
-		<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-		<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
-		<property name="lecm-arm:search-query"><![CDATA[]]></property>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+		<property name="cm:name">Настройки АРМ</property>
+		<property name="lecm-dic:attributeForShow">cm:name</property>
+		<property name="lecm-dic:type">lecm-arm:arm</property>
+		<property name="lecm-dic:active">true</property>
+		<property name="lecm-dic:plane">false</property>
+		<property name="lecm-dic:description">Настройки АРМ</property>
 		<items>
-			<item name="cm:Организации" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Организации]]></property>
-				<property name="lecm-arm:order"><![CDATA[5]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/organizations]]></property>
-			</item>
-			<item name="cm:Сотрудники" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Сотрудники]]></property>
-				<property name="lecm-arm:order"><![CDATA[10]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/org-employees]]></property>
-			</item>
-			<item name="cm:Штатное расписание" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Штатное расписание]]></property>
-				<property name="lecm-arm:order"><![CDATA[20]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/org-staff-list]]></property>
-			</item>
-			<item name="cm:Подразделения" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Подразделения]]></property>
-				<property name="lecm-arm:order"><![CDATA[30]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/org-structure]]></property>
-			</item>
-			<item name="cm:Рабочие группы" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Рабочие группы]]></property>
-				<property name="lecm-arm:order"><![CDATA[40]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/org-work-groups]]></property>
-			</item>
-			<item name="cm:Должности" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Должности]]></property>
-				<property name="lecm-arm:order"><![CDATA[50]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/org-positions]]></property>
-			</item>
-			<item name="cm:Роли для рабочих групп" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Роли для рабочих групп]]></property>
-				<property name="lecm-arm:order"><![CDATA[60]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/org-roles]]></property>
-			</item>
-			<item name="cm:Бизнес роли" type="lecm-arm:html-node">
-				<property name="cm:name"><![CDATA[Бизнес роли]]></property>
-				<property name="lecm-arm:order"><![CDATA[80]]></property>
-				<property name="lecm-arm:html-url"><![CDATA[page/org-business-roles]]></property>
+		    <item name="cm:Администрирование" type="lecm-arm:arm">
+		        <property name="cm:name"><![CDATA[Администрирование]]></property>
+		        <property name="lecm-arm:code"><![CDATA[ADMIN]]></property>
+		        <items>
+					<item name="cm:Оргструктура" type="lecm-arm:accordion">
+						<property name="cm:name"><![CDATA[Оргструктура]]></property>
+						<property name="lecm-arm:order"><![CDATA[20]]></property>
+						<property name="lecm-arm:search-type"><![CDATA[]]></property>
+						<property name="lecm-arm:is-aggregation-node"><![CDATA[false]]></property>
+						<property name="lecm-arm:types"><![CDATA[lecm-eds-document:base]]></property>
+						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+						<property name="lecm-arm:is-for-secretaries"><![CDATA[false]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<items>
+							<item name="cm:Организации" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Организации]]></property>
+								<property name="lecm-arm:order"><![CDATA[5]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/organizations]]></property>
+							</item>
+							<item name="cm:Сотрудники" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Сотрудники]]></property>
+								<property name="lecm-arm:order"><![CDATA[10]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/org-employees]]></property>
+							</item>
+							<item name="cm:Штатное расписание" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Штатное расписание]]></property>
+								<property name="lecm-arm:order"><![CDATA[20]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/org-staff-list]]></property>
+							</item>
+							<item name="cm:Подразделения" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Подразделения]]></property>
+								<property name="lecm-arm:order"><![CDATA[30]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/org-structure]]></property>
+							</item>
+							<item name="cm:Рабочие группы" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Рабочие группы]]></property>
+								<property name="lecm-arm:order"><![CDATA[40]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/org-work-groups]]></property>
+							</item>
+							<item name="cm:Должности" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Должности]]></property>
+								<property name="lecm-arm:order"><![CDATA[50]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/org-positions]]></property>
+							</item>
+							<item name="cm:Роли для рабочих групп" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Роли для рабочих групп]]></property>
+								<property name="lecm-arm:order"><![CDATA[60]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/org-roles]]></property>
+							</item>
+							<item name="cm:Бизнес роли" type="lecm-arm:html-node">
+								<property name="cm:name"><![CDATA[Бизнес роли]]></property>
+								<property name="lecm-arm:order"><![CDATA[80]]></property>
+								<property name="lecm-arm:html-url"><![CDATA[page/org-business-roles]]></property>
+							</item>
+						</items>
+						<assocs>
+							<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог Оргструктуры"/>
+						</assocs>
+					</item>
+				</items>
 			</item>
 		</items>
-		<assocs>
-			<assoc type="lecm-arm:business-roles-assoc" path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Технолог Оргструктуры"/>
-		</assocs>
 	</item>
 </items>
