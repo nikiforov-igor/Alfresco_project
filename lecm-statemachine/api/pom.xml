@@ -19,15 +19,15 @@
 		and include them in the AMP, they are provided by Alfresco
 	  -->
 	<dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-core</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-repository</artifactId>
         </dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
@@ -37,8 +37,8 @@
 		</dependency>
         <dependency>
             <groupId>org.springframework.extensions.surf</groupId>
-            <artifactId>spring-surf</artifactId>
-        </dependency>
+            <artifactId>spring-surf-core</artifactId>
+        </dependency>-->
         <dependency>
             <groupId>ru.it.lecm.business-journal</groupId>
             <artifactId>business-journal-repo-api</artifactId>

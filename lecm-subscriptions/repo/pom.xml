@@ -18,19 +18,19 @@
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 		</dependency>
@@ -40,22 +40,22 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-surf</artifactId>
+			<artifactId>spring-surf-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.business-journal</groupId>
 			<artifactId>business-journal-repo-api</artifactId>
@@ -73,34 +73,29 @@
 			<artifactId>subscriptions-repo-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-all</artifactId>
-		</dependency>
-
-<!--		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-client</artifactId>
-			<version>5.9.0</version>
-		</dependency>
-
+		</dependency> -->
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-spring</artifactId>
-			<version>5.9.0</version>
-		</dependency>-->
-
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
@@ -126,30 +121,33 @@
 					<groupId>org.springframework</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-
+		</dependency> -->
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.4.2</version>
-		</dependency>
+			<version>2.3.2</version>
+			<exclusions>
+			<exclusion>
+					<artifactId>jackson-core</artifactId>
+					<groupId>com.fasterxml.jackson.core</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jackson-annotations</artifactId>
+					<groupId>com.fasterxml.jackson.core</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
 	</dependencies>
 	<!--
 		The scm is required for the buildnumber-maven-plugin which is required
 		for AMP version numbering
 	-->
-	<scm>
-		<connection>scm:svn:http://domain.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
-		<url>http://domain.com/svn/trunk/</url>
-	</scm>
 
 	<build>
 		<plugins>
 			<!-- Needed for cross OS compatibility in acp/zip encoding -->
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
@@ -163,11 +161,10 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-				<version>1.1.1</version>
 				<extensions>true</extensions>
 			</plugin>
 		</plugins>
@@ -175,7 +172,7 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/amp</directory>
-				<targetPath>../${project.build.finalName}</targetPath>
+				<targetPath>${app.amp.output.folder}</targetPath>
 				<excludes>
 					<exclude>**README-*</exclude>
 				</excludes>

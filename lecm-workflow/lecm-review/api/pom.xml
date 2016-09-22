@@ -13,10 +13,10 @@
 	<name>Logic ECM Review Repo API</name>
 
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
@@ -33,9 +33,9 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 </project>

@@ -56,13 +56,13 @@
                       All provided libs (as contained in the war dependency) but useful for
                       development (e.g. IDE configuration)
                   -->
-            <dependency>
+            <!--<dependency>
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-web-client</artifactId>
                 <version>${alfresco.version}</version>
-                <scope>provided</scope>
+                <scope>provided</scope>-->
                 <!--<classifier>${alfresco.edition}</classifier>-->
-            </dependency>
+            <!--</dependency>
             <dependency>
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-web-framework-commons</artifactId>
@@ -73,23 +73,23 @@
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-core</artifactId>
                 <version>${alfresco.version}</version>
-                <scope>provided</scope>
+                <scope>provided</scope>-->
                 <!--<classifier>${alfresco.edition}</classifier>-->
-            </dependency>
+            <!--</dependency>
             <dependency>
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-repository</artifactId>
                 <version>${alfresco.version}</version>
-                <scope>provided</scope>
+                <scope>provided</scope>-->
                 <!--<classifier>${alfresco.edition}</classifier>-->
-            </dependency>
+            <!--</dependency>
             <dependency>
                 <groupId>org.alfresco</groupId>
                 <artifactId>alfresco-remote-api</artifactId>
                 <version>${alfresco.version}</version>
-                <scope>provided</scope>
+                <scope>provided</scope>-->
                 <!--<classifier>${alfresco.edition}</classifier>-->
-            </dependency>
+            <!--</dependency>-->
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
@@ -130,6 +130,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.alfresco.maven.plugin</groupId>
+                <artifactId>alfresco-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

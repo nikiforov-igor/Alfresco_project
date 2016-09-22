@@ -20,21 +20,21 @@
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-core</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-surf</artifactId>
+			<artifactId>spring-surf-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
@@ -67,7 +67,7 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>ru.it.lecm.dictionary</groupId>
 			<artifactId>dictionary-repo-api</artifactId>
 			<version>${project.version}</version>
@@ -76,25 +76,19 @@
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-		</dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.base</groupId>
-                    <artifactId>base-repo-api</artifactId>
-                    <version>${project.version}</version>
-                    <scope>provided</scope>
-                </dependency>
+		</dependency>-->
+        <dependency>
+        	<groupId>ru.it.lecm.base</groupId>
+        	<artifactId>base-repo-api</artifactId>
+        	<version>${project.version}</version>
+        	<scope>provided</scope>
+        </dependency>
 	</dependencies>
-
-	<scm>
-		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk</connection>
-		<developerConnection>scm:svn:https://vlevin@datateh.ru/alfrescoecm/Business Platform/trunk/</developerConnection>
-		<url>https://svn.datateh.ru/alfrescoecm/Business Platform/trunk</url>
-	</scm>
 
 	<build>
 		<plugins>
 			<!-- Needed for cross OS compatibility in acp/zip encoding -->
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 			</plugin>
@@ -108,18 +102,18 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
-                <version>1.1.1</version>
                 <extensions>true</extensions>
 			</plugin>
 		</plugins>
-		<resources><resource>
+		<resources>
+			<resource>
                 <filtering>true</filtering>
                 <directory>src/main/amp</directory>
-                <targetPath>../${project.build.finalName}</targetPath>
+                <targetPath>${app.amp.output.folder}</targetPath>
                 <excludes>
                     <exclude>**README-*</exclude>
                 </excludes>

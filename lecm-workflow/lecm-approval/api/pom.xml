@@ -17,7 +17,7 @@
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 		</dependency>
@@ -35,7 +35,7 @@
 			<artifactId>workflow-repo-api</artifactId>
 			<version>${platform.version}</version>
 			<type>jar</type>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>ru.it.lecm.base</groupId>
 			<artifactId>base-repo-api</artifactId>
