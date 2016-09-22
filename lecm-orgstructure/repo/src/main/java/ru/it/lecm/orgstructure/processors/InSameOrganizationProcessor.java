@@ -16,6 +16,7 @@ import java.util.Set;
  */
 public class InSameOrganizationProcessor extends SearchQueryProcessor {
     public static final String USERNAME_PARAM = "username";
+    public static final String ORGANIZATION_PARAM = "organization";
     public static final String ORGANIZATION_FIELD_PARAM = "org_field";
     public static final String DEFAULT_ORGANIZATION_FIELD = "lecm-orgstr-aspects:linked-organization-assoc-ref";
 
@@ -41,27 +42,30 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
             orgFieldShort = DEFAULT_ORGANIZATION_FIELD;
         }
 
+        String organizationParam = params != null && params.get(ORGANIZATION_PARAM) != null ? params.get(ORGANIZATION_PARAM).toString() : null;
+
         Boolean useStrictAccess = params != null && params.get("strict") != null ? Boolean.valueOf(params.get("strict").toString()) : false;
         NodeRef organization;
         Set<String> auth = authorityService.getAuthoritiesForUser(userName);
 
-        final String organizationProperty = orgFieldShort.toString().replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-        sbQuery.append("@").append(organizationProperty).append(":");
-
-//        if (!orgstructureBean.isEmployeeHasBusinessRole(employee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
-        if ( !AuthenticationUtil.isRunAsUserTheSystemUser() && !auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
-            organization = orgstructureBean.getUserOrganization(userName);
+        if (!AuthenticationUtil.isRunAsUserTheSystemUser() && !auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
+        	final String organizationProperty = orgFieldShort.toString();
+            sbQuery.append("@").append(organizationProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-")).append(":");
+            
+        	organization = organizationParam != null && NodeRef.isNodeRef(organizationParam) ? new NodeRef(organizationParam) : orgstructureBean.getUserOrganization(userName);
             if (organization != null) {
-            	sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
+                sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
             } else {
                 sbQuery.append("\"NOT_REF\"");
             }
         } else {
-            sbQuery.append("\"*\"");
+        	//sbQuery.append("\"").append(organizationParam != null && NodeRef.isNodeRef(organizationParam) ? organizationParam.replace(":", "\\:") : "?*").append("\"");
+        	sbQuery.append("ISNODE:T");
         }
-        if (!useStrictAccess) {
-            sbQuery.append(" OR ISNULL:").append("\"").append(organizationProperty).append("\"");
-        }
+        //if (!useStrictAccess) {
+        //    sbQuery.append(" OR (ISNULL:").append("\"").append(organizationProperty).append("\"");
+        //    sbQuery.append(" OR NOT EXISTS:").append("\"").append(organizationProperty).append("\")");
+        //}
 
         return sbQuery.toString();
     }

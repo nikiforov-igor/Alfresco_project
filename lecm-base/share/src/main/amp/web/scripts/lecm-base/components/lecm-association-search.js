@@ -117,6 +117,7 @@ LogicECM.module = LogicECM.module || {};
 				additionalFilter: "",
 
                 useStrictFilterByOrg: false,
+				doNotCheckAccess: false,
 
 				ignoreNodes: null,
 
@@ -681,7 +682,7 @@ LogicECM.module = LogicECM.module || {};
 				}
 
 				if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
-					var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";
+					var ignoreNodesFilter = "(ISNOTNULL:\"cm:name\" AND  @cm\\:name:?*)";
 					for (var i = 0; i < this.options.ignoreNodes.length; i++) {
 						ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
 					}
@@ -698,7 +699,8 @@ LogicECM.module = LogicECM.module || {};
                     "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 					"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 					"&additionalFilter=" + encodeURIComponent(additionalFilter) +
-                    "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
+                    "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg) +
+                    "&doNotCheckAccess=" + encodeURIComponent("" + this.options.doNotCheckAccess);
 
 				if (this.options.rootLocation && this.options.rootLocation.charAt(0) == "/") {
 					params += "&xpath=" + encodeURIComponent(this.options.rootLocation);

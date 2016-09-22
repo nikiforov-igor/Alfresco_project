@@ -85,7 +85,8 @@
 					<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 					<control-param name="employeeAbsenceMarker">true</control-param>
 					<control-param name="useStrictFilterByOrg">true</control-param>
-					<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+					<control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* )AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+					<control-param name="showSearch">true</control-param>
 				</type>
 				<type name="association:lecm-orgstr:workRole" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 					<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>

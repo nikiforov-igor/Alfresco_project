@@ -24,6 +24,8 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		showFolders = args['showFolders'],
 		docType = args['docType'],
         useOnlyInSameOrg = ("true" == args['onlyInSameOrg']),
+		doNotCheck = (doNotCheckAccess == null || ("" + doNotCheckAccess) == "false") ?
+			("true" == args['doNotCheckAccess']) : doNotCheckAccess,
 		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
 		additionalProperties = args['additionalProperties'],
 		argsPathRoot = args['pathRoot'],
@@ -146,7 +148,6 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                     ignoreTypes = argsFilterType;
                 }
 
-                var doNotCheck = doNotCheckAccess != null && (("" + doNotCheckAccess) == "true");
                 var childType = null;
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
                     childType = argsSelectableType;
@@ -180,7 +181,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					query = addAdditionalFilter(query, filter);
 				}
 
-                if (doNotCheckAccess == null || ("" + doNotCheckAccess == "false")) {
+				if (!doNotCheck) {
 					query = addAdditionalFilter(query, "{{IN_SAME_ORGANIZATION({strict:" + useOnlyInSameOrg + "})}}");
 				}
 
@@ -287,7 +288,14 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				resultObj.path = path;
 				resultObj.simplePath = simplePath;
 			}
-
+			if (argsUseObjectDescription && sortProp == "cm:name") {
+				containerResults.sort(function (a, b) {
+					return a.visibleName > b.visibleName;
+				});
+				contentResults.sort(function (a, b) {
+					return a.visibleName > b.visibleName;
+				});
+			}
 			results = containerResults.concat(contentResults);
 		}
 		else if (url.templateArgs.type == "category")
@@ -685,7 +693,7 @@ function getFilterParams(filterData, parentXPath)
 function addAdditionalFilter(query, additionalPerameters) {
 	if (additionalPerameters
 		&& 'ISNOTNULL:"sys:node-dbid"' != additionalPerameters
-		&& 'ISNOTNULL:"cm:name"' != additionalPerameters) {
+		&& '(ISNOTNULL:"cm:name" AND  @cm\:name:?*)' != additionalPerameters) {
 
 		var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
 		var singleNotQuery = additionalPerameters.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalPerameters);

@@ -22,7 +22,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
@@ -41,7 +41,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">(ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND @lecm-orgstr\\:employee-person-login:?* ) AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
 							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
