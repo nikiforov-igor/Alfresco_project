@@ -15,9 +15,7 @@ LogicECM.module.Contracts.currencyValidation =
 			if (isNaN(totalAmountFloat)) {
 				return false;
 			} else {
-				if (totalAmountFloat != 0) {
-					return currency.value.length > 0;
-				}
+				return currency.value.length > 0;
 			}
 		}
 		return true;
