@@ -23,6 +23,7 @@ import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
+import java.text.Collator;
 import java.util.*;
 
 /**
@@ -427,9 +428,12 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
             public int compare(DisciplineGroupInfo o1, DisciplineGroupInfo o2) {
                 final String s1 = ds.getItemName(o1);
                 final String s2 = ds.getItemName(o2);
+                Collator сollator = Collator.getInstance(Locale.getDefault());
+                сollator.setStrength(Collator.PRIMARY);
+
                 return (s1 == null)
                         ? (s2 == null ? 0 : 1)
-                        : (s2 == null ? -1 : s1.compareToIgnoreCase(s2));
+                        : (s2 == null ? -1 : сollator.compare(s1.toLowerCase(), s2.toLowerCase()));
             }
         }
     }
