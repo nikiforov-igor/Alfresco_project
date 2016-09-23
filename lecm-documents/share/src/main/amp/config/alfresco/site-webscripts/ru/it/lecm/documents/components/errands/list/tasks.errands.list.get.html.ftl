@@ -79,7 +79,8 @@
         YAHOO.Bubbling.fire("graphContainerReady", {
             isErrandCard: true,
             onlyDirect: true,
-            onlySystem: true
+            onlySystem: true,
+            connectionTypes: "onBasis"
         });
     });
 })();
