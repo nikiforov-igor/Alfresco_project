@@ -30,7 +30,7 @@
         <preferedType>lecm-errands:document</preferedType>
         <isMultiRow>true</isMultiRow>
         <isCustom>false</isCustom>
-        <isRunAsSystem>true</isRunAsSystem>
+        <isRunAsSystem>false</isRunAsSystem>
         <isIncludeAllOrgs>false</isIncludeAllOrgs>
     </query.descriptor>
 
