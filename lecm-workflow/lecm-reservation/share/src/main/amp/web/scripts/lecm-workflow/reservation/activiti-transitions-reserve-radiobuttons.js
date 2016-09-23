@@ -47,17 +47,9 @@ LogicECM.module = LogicECM.module || {};
 
 		checkComment: function checkComment(arg) {
 			var transitionDecision = '';
-			var setDivElements = arg.parentNode.parentNode.parentNode.parentNode.children;
-			for (var i=0; i<setDivElements.length; ++i) {
-				if (setDivElements[i].innerText.indexOf('Одобрить запрос') != -1) {
-					var decisionElementsBlock = setDivElements[i];
-					var decisionElements = decisionElementsBlock.children[0].children;
-					for (var j=0; j<decisionElements.length; ++j) {
-						if (decisionElements[j].name == 'prop_lecmRegnumRes_decision') {
-							transitionDecision = decisionElements[j].value;
-						}
-					}
-				}
+			var decisionElement = Dom.get(arg.id.replace('prop_bpm_comment', 'prop_lecmRegnumRes_decision'));
+			if (decisionElement != null) {
+				transitionDecision = decisionElement.value
 			}
 			if ((transitionDecision == 'RESERVED') || (arg && arg.value != '')) {
 				return true;
