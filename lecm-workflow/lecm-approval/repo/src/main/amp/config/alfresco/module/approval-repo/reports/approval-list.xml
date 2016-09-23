@@ -5,14 +5,7 @@
 		<property name="cm:name"><![CDATA[Лист согласования]]></property>
 		<property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
 		<property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
-		<property name="lecm-rpeditor:reportQuery"><![CDATA[TYPE:"lecm-additional-document:additionalDocument" OR
-TYPE:"lecm-contract:document" OR
-TYPE:"lecm-internal:document" OR
-TYPE:"lecm-nd:document" OR
-TYPE:"lecm-ord:document" OR
-TYPE:"lecm-outgoing:document" OR
-TYPE:"lecm-protocol:document" OR
-TYPE:"lecm-meetings:document"]]></property>
+		<property name="lecm-rpeditor:reportQuery"><![CDATA[]]></property>
 		<property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
 		<property name="lecm-rpeditor:reportCode"><![CDATA[lecm-approval-list]]></property>
 		<property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
