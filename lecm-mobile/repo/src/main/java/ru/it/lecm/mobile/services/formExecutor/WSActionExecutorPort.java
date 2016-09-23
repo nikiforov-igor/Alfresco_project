@@ -25,7 +25,7 @@ import ru.it.lecm.mobile.objects.*;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.statemachine.bean.ActionsScriptBean;
+import ru.it.lecm.statemachine.bean.UserActionsService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ import java.util.Map;
 public class WSActionExecutorPort implements WSActionExecutor {
     private ObjectFactory objectFactory;
     private WorkflowService workflowService;
-    private ActionsScriptBean actionsService;
+    private UserActionsService actionsService;
     private NamespaceService namespaceService;
     private NodeService nodeService;
     private OrgstructureBean orgstructureBean;
@@ -61,7 +61,7 @@ public class WSActionExecutorPort implements WSActionExecutor {
         this.workflowService = workflowService;
     }
 
-    public void setActionsService(ActionsScriptBean actionsService) {
+    public void setActionsService(UserActionsService actionsService) {
         this.actionsService = actionsService;
     }
 
