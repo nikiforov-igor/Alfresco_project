@@ -286,13 +286,13 @@
                         if (me.widgets.calendar) {
                             var dialogEl = me.widgets.calendar.oDomContainer;
 
-                            if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != inputEl && el != iconEl) {
+                            if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != iconEl) {
                                 me._hidePicker();
                             }
                         }
                     });
 
-                    Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
+                    //Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
 
                     var iconEl = Dom.get(me.id + "-icon");
                     if (iconEl) {
