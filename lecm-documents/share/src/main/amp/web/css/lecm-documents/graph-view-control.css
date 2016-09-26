@@ -14,9 +14,9 @@
         padding: 4px;
         background-color: #FFF;
 }
-.yui-dt-first {
+/*.yui-dt-first {
 	background-color: #FFF;
-}
+} */
 div.connections-list div#expandable_table table thead {
 	display: none;
 }
