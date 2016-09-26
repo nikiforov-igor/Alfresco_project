@@ -212,7 +212,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getUserNearestEvents(int maxItems) {
-        return createScriptable(eventService.getNearestEvents(formatDate(new Date(), false), maxItems, eventService.getAdditionalFilterForCalendarShow()));
+        return createScriptable(eventService.getNearestEvents(formatDate(new Date(), true), maxItems, eventService.getAdditionalFilterForCalendarShow()));
     }
 
     private String formatDate(Date date, Boolean isAllDay) {
