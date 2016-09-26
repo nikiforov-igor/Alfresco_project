@@ -351,9 +351,9 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                                     parentNode = prevNode;
                                     prevNode = node.getNodeRef();
                                     if (node.getNodeRef() == null) {
-                                        nodePath += "." + node.getArmNodeRef().getId() + "-" + node.getTitle();
+                                        nodePath += "." + (node.getArmNodeRef().getId() + "-" + node.getTitle() + '-' + node.getArmNodeRef().getId());
                                     } else {
-                                        nodePath += "." + node.getNodeRef().getId();
+                                        nodePath += "." + (node.getNodeRef().getId() + '-' + node.getArmNodeRef().getId());
                                     }
                                     break;
                                 }
