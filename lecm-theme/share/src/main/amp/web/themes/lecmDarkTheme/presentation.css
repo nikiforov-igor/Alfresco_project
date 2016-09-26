@@ -1447,7 +1447,7 @@ body.alfresco-guest
     height: 72px;
     width: 428px;
     background: transparent url(images/logo.png) no-repeat;
-    position: fixed;
+    position: absolute;
     margin-left: 280px;
     margin-top: 40px;
 }
