@@ -213,7 +213,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
                     }
 
                     hasNodes = rs.length() > 0;
-                    skipCountOffset = rs.length();
+                    skipCountOffset = skipCountOffset + rs.length();
                 }
             }
             rs = new NodeRefsResultSet(getServices().getServiceRegistry().getNodeService(), nodes);
