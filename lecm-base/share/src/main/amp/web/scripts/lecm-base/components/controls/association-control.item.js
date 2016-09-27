@@ -56,7 +56,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			temporarySelected: {}, //выбранные в пикере (до нажатия ОК)
 			nodeData: null,
 			skipItemsCount: null,
-			searchTerm: null
+			searchTerm: null,
+			loadingInProcess: false	
 		},
 
 		options: {
@@ -387,11 +388,13 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					this.widgets.datatable.onDataReturnAppendRows(sRequest, oResponse, oPayload);
 				}
 				this.stateParams.alreadyShowCreateNewLink = true;
+				this.currentState.loadingInProcess = false;
 			}
 
 			function onFailure(sRequest, oResponse) {
 				var response;
 
+				this.currentState.loadingInProcess = false;
 				if (401 === oResponse.status) {
 					window.location.reload();
 				} else {
@@ -509,10 +512,12 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		onDatatableScroll: function (oArgs) {
 			/* обработка подгрузки новой порции данных */
-			if (oArgs.target.scrollTop + oArgs.target.clientHeight === oArgs.target.scrollHeight) {
+			if (oArgs.target.scrollTop + oArgs.target.clientHeight === oArgs.target.scrollHeight && !this.currentState.loadingInProcess) {
 				//подумать над тем, что если у нас вернулось 0 данных, то больше ничего не грузить
+				this.currentState.loadingInProcess = true;
 				this.loadTableData(false, this.currentState.searchTerm);
 			}
+			
 		},
 
 		onAdd: function (event) {
