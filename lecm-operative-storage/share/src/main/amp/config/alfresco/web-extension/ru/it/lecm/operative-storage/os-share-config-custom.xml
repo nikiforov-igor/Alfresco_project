@@ -1,4 +1,11 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-os/os-validators.js" />
+            </dependencies>
+        </forms>
+    </config>
 	<config>
 		<forms>
 			<default-controls>
@@ -224,14 +231,24 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-os:nomenclature-year-section-year">
-						<control template="/ru/it/lecm/os/controls/os-year-control.ftl">
-							<control-param name="orgFieldId">assoc:os-aspects:nomenclature-organization-assoc</control-param>
-						</control>
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.OS.isCorrectYear" event="keyup" message-id="os.is.correct.year"/>
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                            <control-param name="validationType">keyup</control-param>
+                            <control-param name="validationMessageId">os.year.unique</control-param>
+                            <control-param name="checkInArchive">false</control-param>
+                            <control-param name="validationFn">LogicECM.module.OS.uniqueYear</control-param>
+                        </control>
                     </field>
                     <field id="lecm-os:nomenclature-year-section-comment">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
                     <field id="os-aspects:nomenclature-organization-assoc">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.OS.isOrganizationCentralized" event="keyup" message-id="os.organization.selected"/>
+                        </constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 							<control-param name="plane">true</control-param>
                             <control-param name="changeItemsFireAction">organizationChanged</control-param>
@@ -267,12 +284,22 @@
 					<show id="os-aspects:nomenclature-organization-assoc" />
                 </field-visibility>
                 <appearance>
-					<field id="lecm-os:nomenclature-year-section-year">
-						<control template="/ru/it/lecm/os/controls/os-year-control.ftl">
-							<control-param name="orgFieldId">assoc:os-aspects:nomenclature-organization-assoc</control-param>
-						</control>
+                    <field id="lecm-os:nomenclature-year-section-year">
+                        <constraint-handlers>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.OS.isCorrectYear" event="keyup" message-id="os.is.correct.year"/>
+                        </constraint-handlers>
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="isUniqueValue">true</control-param>
+                            <control-param name="validationType">keyup</control-param>
+                            <control-param name="validationMessageId">os.year.unique</control-param>
+                            <control-param name="checkInArchive">false</control-param>
+                            <control-param name="validationFn">LogicECM.module.OS.uniqueYear</control-param>
+                        </control>
                     </field>
 					<field id="os-aspects:nomenclature-organization-assoc">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.module.OS.isOrganizationCentralized" event="keyup" message-id="os.organization.selected"/>
+                        </constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-os:nomenclature-year-section-comment">

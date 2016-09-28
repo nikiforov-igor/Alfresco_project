@@ -1,1 +1,1 @@
-model.result = operativeStorage.isYearUniq(args["year"], args["orgNodeRef"]);
+model.result = operativeStorage.isYearUniq(args["year"], args["orgNodeRef"], args["nodeRef"]);

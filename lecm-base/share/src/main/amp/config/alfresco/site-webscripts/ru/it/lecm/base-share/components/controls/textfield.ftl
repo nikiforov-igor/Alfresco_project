@@ -113,6 +113,9 @@
             isUniqueValue: ${field.control.params.isUniqueValue!false?string},
             checkInArchive: ${field.control.params.checkInArchive!false?string},
             validationMessageId: "${field.control.params.validationMessageId!'LogicECM.constraints.isUnique.message'}",
+            <#if field.control.params.validationFn??>
+                validationFn: ${field.control.params.validationFn},
+            </#if>
             validationType: "${field.control.params.validationType!'keyup'}"
         }).setMessages(${messages});
     }
