@@ -991,6 +991,7 @@
             <workflow name="activiti$eventsMemberDecline"/>
             <workflow name="activiti$eventsRequestNewTime"/>
             <workflow name="activiti$removeRepeatable"/>
+            <workflow name="activiti$lecm-events_document"/>
         </hidden-workflows>
     </config>
 </alfresco-config>
