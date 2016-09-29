@@ -95,14 +95,16 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 											}
 
 											if (item.attachments != null && item.attachments.length > 0) {
+												Dom.removeClass(this.id + "-attachment-select-container", "hidden1");
 												for (var j = 0; j < item.attachments.length; j++) {
 													var attachment = item.attachments[j];
 
 													if (attachment.nodeRef != null) {
 														var option = document.createElement("option");
 														option.value = attachment.nodeRef;
-                                                                                                                if(attachment.nodeRef == this.options.selectedAttachmentNodeRef)
-                                                                                                                    option.selected = true;
+                                                        if(attachment.nodeRef == this.options.selectedAttachmentNodeRef) {
+	                                                        option.selected = true;
+                                                        }
 														if (attachment.name != null) {
 															option.innerHTML = attachment.name;
 														}
@@ -110,6 +112,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 														optionGroup.appendChild(option);
 													}
 												}
+											} else {
+												Dom.removeClass(this.id + "-attachment-select-empty-container", "hidden1");
 											}
 
 											this.attachmentsSelect.appendChild(optionGroup);
