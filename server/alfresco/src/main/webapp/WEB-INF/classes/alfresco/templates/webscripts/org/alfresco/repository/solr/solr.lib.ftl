@@ -1,5 +1,5 @@
 <#macro json_string string>${string?js_string?replace("\\'", "\'")?replace("\\>", ">")}</#macro>
-
+<!--TEST-->
 <#macro aclChangeSetJSON aclChangeSet>
 {
 "id": ${aclChangeSet.id?c},
