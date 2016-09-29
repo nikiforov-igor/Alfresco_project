@@ -1059,17 +1059,18 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
         onAddRow: function(me, asset, owner, actionsConfig, confirmFunction) {
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
-            var orgMetadata = this.modules.dataGrid.datagridMeta;
+			var dataGrid = this.modules.dataGrid;
+            var orgMetadata = dataGrid.datagridMeta;
             if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
                 var itemType = orgMetadata.itemType;
 
                 // Intercept before dialog show
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-                    var addMsg = orgMetadata.addMessage;
+                    var createFormTitleMsg = dataGrid.options.createFormTitleMsg;
                     var contId = p_dialog.id + "-form-container";
                     Alfresco.util.populateHTML(
-                        [contId + "_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
+                        [contId + "_h", createFormTitleMsg ? this.msg(createFormTitleMsg) : this.msg("label.create-row.title") ]
                     );
                     if (itemType && itemType != "") {
                         Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
