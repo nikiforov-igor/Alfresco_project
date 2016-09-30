@@ -7,7 +7,7 @@
 <script type="text/javascript">//<![CDATA[
 (function(){
 	function createDatagrid(rootNode) {
-	    new LogicECM.module.Dictionary.DataGrid('${id}', rootNode.attributeForShow).setOptions(
+	    new LogicECM.module.Dictionary.DataGrid('${id}', rootNode).setOptions(
 	            {
 	                bubblingLabel: "${bubblingLabel}",
 	                usePagination: true,
@@ -20,6 +20,15 @@
 	                        permission: "edit",
 	                        label: "${msg("actions.edit")}"
 	                    },
+                        {
+                            type: "datagrid-action-link-${bubblingLabel}",
+                            id: "onActionMove",
+                            permission: "edit",
+                            label: "${msg("actions.move")}",
+                            evaluator: function () {
+                                return rootNode.plane == "false";
+                            }
+                        },
 	                    {
 	                        type: "datagrid-action-link-${bubblingLabel}",
 	                        id: "onActionVersion",
