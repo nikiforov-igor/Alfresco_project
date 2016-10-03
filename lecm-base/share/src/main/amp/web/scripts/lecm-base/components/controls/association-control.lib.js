@@ -22,7 +22,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (options.allowedNodes) {
 				allowedNodesFilter = options.allowedNodes.reduce(function (prev, curr) {
 					return prev + (prev.length ? ' OR ' : '') + 'ID:"' + curr + '"';
-				}, options.allowedNodes.length ? '' : 'ISNULL:"sys:node-dbid"');
+				}, options.allowedNodes.length ? '' : '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")');
 
 				if (additionalFilter) {
 					additionalFilter = '(' + additionalFilter + ') AND (' + allowedNodesFilter + ')';
@@ -34,7 +34,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (options.ignoreNodes && options.ignoreNodes.length) {
 				ignoreNodesFilter = options.ignoreNodes.reduce(function (prev, curr) {
 					return prev + ' AND NOT ID:"' + curr + '"';
-				}, 'ISNOTNULL:"cm:name"');
+				}, '(ISNOTNULL:\"cm:name\" AND  @cm\\:name:\"?*\")');
 
 				if (additionalFilter) {
 					additionalFilter = '(' + additionalFilter + ') AND (' + ignoreNodesFilter + ')';

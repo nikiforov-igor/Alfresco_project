@@ -51,6 +51,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         expandedChildren: [],
 
+        notSingleQueryPattern: /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i,
+
         onReady: function () {
             var date = new Date;
             date.setDate(date.getDate() + 30);
@@ -382,11 +384,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                 if (buffer) {
                     buffer = buffer.reverse();
-                    var useInject = true;
                     for (var i = 0; i < buffer.length; i++) {
                         var q = buffer[i];
-                        useInject = q.indexOf("NOT") == 0;
-                        resultedQuery += "(" + (useInject && q.length > 1 ? "ISNOTNULL:\"cm:name\" AND " : "") + q + ")"+ " AND "
+                        var isSingleNotQuery = q.indexOf("NOT") == 0 && !this.notSingleQueryPattern.test(q.trim());
+                        resultedQuery += ((!isSingleNotQuery && q.length > 0 ? "(" : "") + q + (!isSingleNotQuery && q.length > 0 ? ")" : "" ) + " AND ");
                     }
                 }
 

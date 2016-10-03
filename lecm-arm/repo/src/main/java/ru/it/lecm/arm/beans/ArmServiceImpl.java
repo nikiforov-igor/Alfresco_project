@@ -27,6 +27,7 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * User: AIvkin
@@ -633,11 +634,16 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 							if (query.length() > 0) {
 								query.append(" OR ");
 							}
-							query.append("(");
-							if (searchQuery.startsWith("NOT")) {
-								query.append("ISNOTNULL:\"cm:name\" AND ");
-							}
-							query.append(searchQuery).append(")");
+                            boolean useBrackets = true;
+                            if (searchQuery.startsWith("NOT")) {
+                                Matcher m = MULTIPLE_NOT_QUERY.matcher(searchQuery.toUpperCase());
+                                if (!m.find()) { //
+                                    useBrackets = false;
+                                }
+                            }
+                            query.append(useBrackets ? "(" : "");
+                            query.append(searchQuery);
+                            query.append(useBrackets ? ")" : "");
 						}
 					}
 					String oldQuery = (String) getCachedProperties(nodeRef).get(ArmService.PROP_SEARCH_QUERY);

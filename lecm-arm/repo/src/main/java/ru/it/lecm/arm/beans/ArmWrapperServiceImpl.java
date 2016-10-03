@@ -15,6 +15,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * User: dbashmakov
@@ -261,11 +262,19 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             if (searchQuery != null) {
                 String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
                 if (!parentQuery.isEmpty()) {
-                    sb.append(sb.length() > 0 ? " AND (" : "(");
+                    sb.append(sb.length() > 0 ? " AND " : "");
+                    boolean useBrackets = true;
+
                     if (parentQuery.startsWith("NOT")) {
-                        sb.append("ISNOTNULL:\"cm:name\" AND ");
+                        Matcher m = ArmService.MULTIPLE_NOT_QUERY.matcher(parentQuery.toUpperCase());
+                        if (!m.find()) {
+                            useBrackets = false;
+                        }
                     }
-                    sb.append(parentQuery).append(")");
+
+                    sb.append(useBrackets ? "(" : "");
+                    sb.append(parentQuery);
+                    sb.append(useBrackets ? ")" : "");
                 }
             }
         }
@@ -310,11 +319,19 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             if (searchQuery != null) {
                 String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
                 if (!parentQuery.isEmpty()) {
-                    sb.append(sb.length() > 0 ? " AND (" : "(");
+                    sb.append(sb.length() > 0 ? " AND " : "");
+                    boolean useBrackets = true;
+
                     if (parentQuery.startsWith("NOT")) {
-                        sb.append("ISNOTNULL:\"cm:name\" AND ");
+                        Matcher m = ArmService.MULTIPLE_NOT_QUERY.matcher(parentQuery.toUpperCase());
+                        if (!m.find()) {
+                            useBrackets = false;
+                        }
                     }
-                    sb.append(parentQuery).append(")");
+
+                    sb.append(useBrackets ? "(" : "");
+                    sb.append(parentQuery);
+                    sb.append(useBrackets ? ")" : "");
                 }
             }
         }

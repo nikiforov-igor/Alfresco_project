@@ -1043,7 +1043,7 @@
                             <![CDATA[lecm-ord:document,lecm-errands:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-protocol:document]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:search-query">
-                            <![CDATA[ISNOTNULL:"cm:name" AND NOT (@lecm\-statemachine\:status:'Удален')]]></property>
+                            <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:Входящие" type="lecm-arm:node">
@@ -2473,7 +2473,7 @@
                                         <property name="lecm-arm:types"><![CDATA[]]></property>
                                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                                         <property name="lecm-arm:search-query">
-                                            <![CDATA[ISNOTNULL:"cm:name" AND NOT (@lecm\-statemachine\-aspects\:is\-final:true)]]></property>
+                                            <![CDATA[NOT (@lecm\-statemachine\-aspects\:is\-final:true)]]></property>
                                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                                     </item>
                                     <item name="cm:Архив" type="lecm-arm:node">
@@ -2717,7 +2717,7 @@
                             <![CDATA[lecm-ord:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-protocol:document]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:search-query">
-                            <![CDATA[ISNOTNULL:"cm:name" AND NOT (@lecm\-statemachine\:status:'Удален')]]></property>
+                            <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:Новые" type="lecm-arm:node">
@@ -3642,7 +3642,7 @@
                             <![CDATA[lecm-ord:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-protocol:document]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:search-query">
-                            <![CDATA[ISNOTNULL:"cm:name" AND NOT (@lecm\-statemachine\:status:'Удален')]]></property>
+                            <![CDATA[NOT (@lecm\-statemachine\:status:'Удален')]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:cf58f4c7-9ad9-4014-a01c-e5d85f61dbff" type="lecm-arm:field">
@@ -6005,7 +6005,7 @@
                         <property name="lecm-arm:types"><![CDATA[lecm-meetings:document]]></property>
                         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
                         <property name="lecm-arm:search-query">
-                            <![CDATA[ISNOTNULL:"cm:name" AND NOT (@lecm\-statemachine\:status:'Удалено')]]></property>
+                            <![CDATA[NOT (@lecm\-statemachine\:status:'Удалено')]]></property>
                         <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
                         <items>
                             <item name="cm:Новое" type="lecm-arm:node">

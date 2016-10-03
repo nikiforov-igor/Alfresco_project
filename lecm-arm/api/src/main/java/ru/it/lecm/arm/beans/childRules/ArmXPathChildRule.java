@@ -76,7 +76,7 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 			sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-			String query = "PATH:\"" + rootXPath + "\" AND (ISNULL:\"lecm\\-dic:active\" OR lecm\\-dic:active:true)";
+			String query = "PATH:\"" + rootXPath + "\" AND NOT @lecm\\-dic\\:active:false";
 			if (types != null && types.size() > 0) {
 				query += " AND (";
 				for (int i = 0; i < types.size(); i++) {
@@ -130,7 +130,7 @@ public class ArmXPathChildRule extends ArmBaseChildRule {
 			sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 			sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-			String query = "PARENT:\"" + node.toString() + "\" AND (ISNULL:\"lecm\\-dic:active\" OR lecm\\-dic:active:true)";
+			String query = "PARENT:\"" + node.toString() + "\" AND NOT @lecm\\-dic:active:false";
 			if (types != null && types.size() > 0) {
 				query += " AND (";
 				for (int i = 0; i < types.size(); i++) {

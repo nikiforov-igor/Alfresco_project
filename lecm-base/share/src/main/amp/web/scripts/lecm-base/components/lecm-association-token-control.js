@@ -1831,7 +1831,7 @@ LogicECM.module = LogicECM.module || {};
 							allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
 						}
 					} else {
-						allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
+						allowedNodesFilter = '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")';
 					}
 
 					if (additionalFilter != null && additionalFilter.length > 0) {

@@ -324,7 +324,7 @@
 					<field id="lecm-protocol:signers-assoc">
 						<control>
 							<control-param name="useStrictFilterByOrg">true</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_APPROVERS</control-param>
 						</control>
 					</field>
@@ -341,19 +341,19 @@
 					<field id="lecm-protocol:meeting-chairman-assoc">
 						<control>
 							<control-param name="useStrictFilterByOrg">true</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 						</control>
 					</field>
 					<field id="lecm-protocol:attended-assoc">
 						<control>
 							<control-param name="useStrictFilterByOrg">true</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 						</control>
 					</field>
 					<field id="lecm-protocol:secretary-assoc">
 						<control>
 							<control-param name="useStrictFilterByOrg">true</control-param>
-							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 						</control>
 					</field>
 				</appearance>

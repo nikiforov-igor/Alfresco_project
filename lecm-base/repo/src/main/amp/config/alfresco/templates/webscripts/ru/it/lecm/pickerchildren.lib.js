@@ -200,11 +200,11 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 							ascending: false
 						});
 					}
-
+                                        
 					childNodes = search.query(
 						{
 							query: searchQueryProcessor.processQuery(query),
-							language: "lucene",
+							language: "fts-alfresco",
 							page:
 							{
 								skipCount: skipCount,
@@ -682,7 +682,7 @@ function getFilterParams(filterData, parentXPath)
 			}
 		}
 
-		params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '(' + filter + ')' + or;
+		params += ampersand + escapeQuery(namespace[0]) + "\\:" + escapeQuery(namespace[1]) + ":"+ '(' + filter + ')' + or;
 	}
 	if (params !== "") {
 		query += " AND " + "(" + params + " )";
@@ -690,16 +690,16 @@ function getFilterParams(filterData, parentXPath)
 	return query;
 }
 
-function addAdditionalFilter(query, additionalPerameters) {
-	if (additionalPerameters
-		&& 'ISNOTNULL:"sys:node-dbid"' != additionalPerameters
-		&& 'ISNOTNULL:"cm:name"' != additionalPerameters) {
+function addAdditionalFilter(query, additionalParameters) {
+	if (additionalParameters
+		&& 'ISNOTNULL:"sys:node-dbid"' != additionalParameters
+		&& 'ISNOTNULL:"cm:name"' != additionalParameters) {
 
 		var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
-		var singleNotQuery = additionalPerameters.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalPerameters);
+		var singleNotQuery = additionalParameters.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalParameters);
 
 		query += " AND " + (!singleNotQuery ? "(" : "")
-			+ additionalPerameters + (!singleNotQuery ? ")" : "");
+			+ escapeQuery(additionalParameters) + (!singleNotQuery ? ")" : "");
 	}
 	return query;
 }
@@ -791,4 +791,20 @@ function getFilterForAvailableElement(availableElements) {
 		}
 	}
 	return filter;
+}
+
+function escapeQuery(value) {
+	var result = "";
+
+	for (var i = 0, c, prev_c; i < value.length; i++) {
+		c = value.charAt(i);
+		prev_c = i > 0 ? value.charAt(i-1) : null;
+
+		if (c == '-' && '\\' != prev_c && ' ' != prev_c) {
+			result += '\\';
+		}
+
+		result += c;
+	}
+	return result;
 }

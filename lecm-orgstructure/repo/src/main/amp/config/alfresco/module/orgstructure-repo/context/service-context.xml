@@ -334,6 +334,10 @@
         <property name="authorityService" ref="authorityService"/>
     </bean>
 
+    <bean id="employeeHasLoginProcessor" class="ru.it.lecm.orgstructure.processors.EmployeeHasLoginProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="EMPLOYEE_HAS_LOGIN"/>
+    </bean>
+
     <bean id="orgstructureOnCreateAssocsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureOnCreateAssocPolicy"
           parent="logicEcmAssociationPolicy" init-method="init">
         <property name="substitute" ref="substitudeService"/>

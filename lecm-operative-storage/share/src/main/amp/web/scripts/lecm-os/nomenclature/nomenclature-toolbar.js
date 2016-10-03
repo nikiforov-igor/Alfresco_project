@@ -77,7 +77,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			var templateUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/picker/node/" + nodeRef.uri + "/children";
 			var templateRequestParams = {
 				selectableType: "lecm-os:nomenclature-case",
-				additionalFilter: "@lecm-os\\:nomenclature-case-status:\"MARK_TO_DESTROY\" OR @lecm-os\\:nomenclature-case-status:\"CLOSED\"",
+				additionalFilter: "@lecm\\-os\\:nomenclature\\-case\\-status:\"MARK_TO_DESTROY\" OR @lecm\\-os\\:nomenclature\\-case\\-status:\"CLOSED\"",
 				searchTerm: "",
 				nameSubstituteString: "{lecm-os:nomenclature-case-index} - {cm:title}"
 			};

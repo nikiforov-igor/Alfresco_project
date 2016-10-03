@@ -20,7 +20,7 @@
 							}
 							
 							var ignore = oResults.ignoredString.split(",");
-							var filter = '@lecm-orgstr-aspects\\:linked-organization-assoc-ref:\"' + oResults.organization + '\"';
+							var filter = '@lecm\\-orgstr\\-aspects\\:linked\\-organization\\-assoc\\-ref:\"' + oResults.organization + '\"';
 
 							ignore.forEach(function(el) {
 								filter += ' AND NOT ID:\"' + el + '\"'

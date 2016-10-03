@@ -303,7 +303,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                         recreate: true,
 		                         nodeRef: node.data.nodeRef,
 								 searchConfig: ('lecm-contractor:contractor-type' == node.data.childType) ? {
-	 								filter: '-ASPECT:"lecm-orgstr-aspects:is-organization-aspect" and ISNOTNULL:"sys:node-dbid"'
+	 								filter: 'NOT ASPECT:"lecm-orgstr-aspects:is-organization-aspect"'
 	 							} : null
                              },
                              scrollTo: true

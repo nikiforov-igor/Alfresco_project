@@ -1579,38 +1579,46 @@ LogicECM.module = LogicECM.module || {};
         {
 	        var additionalFilter = this.options.additionalFilter;
 			var allowedNodesFilter = "";
+            var notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i;
+            var singleNotQuery;
 
-			if (this.options.allowedNodes) {
-				if (this.options.allowedNodes.length) {
-					for (var i in this.options.allowedNodes) {
-						if (allowedNodesFilter.length > 0) {
-							allowedNodesFilter += " OR ";
-						}
-						allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
-					}
-				} else {
-					allowedNodesFilter = 'ISNULL:"sys:node-dbid"';
-				}
+            if (this.options.allowedNodes) {
+                if (this.options.allowedNodes.length) {
+                    for (var i in this.options.allowedNodes) {
+                        if (allowedNodesFilter.length > 0) {
+                            allowedNodesFilter += " OR ";
+                        }
+                        allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
+                    }
+                } else {
+                    allowedNodesFilter = '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")';
+                }
 
-				if (additionalFilter) {
-					additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
-				} else {
-					additionalFilter = allowedNodesFilter;
-				}
-			}
+                if (additionalFilter != null && additionalFilter.length > 0) {
+                    singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+                    additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
+                } else {
+                    additionalFilter = allowedNodesFilter;
+                }
+            }
 
-	        if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
-		        var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";
-		        for (var i = 0; i < this.options.ignoreNodes.length; i++) {
-			        ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
-		        }
+            if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
+                var ignoreNodesFilter = "";
+                for (var i = 0; i < this.options.ignoreNodes.length; i++) {
+                    if (ignoreNodesFilter !== "") {
+                        ignoreNodesFilter += " AND ";
+                    }
+                    ignoreNodesFilter += "NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
+                }
 
-		        if (additionalFilter != null && additionalFilter.length > 0) {
-			        additionalFilter = "(" + additionalFilter + ") AND (" + ignoreNodesFilter + ")";
-		        } else {
-			        additionalFilter = ignoreNodesFilter;
-		        }
-	        }
+                var addBrackets = this.options.ignoreNodes.length > 1;
+                if (additionalFilter != null && additionalFilter.length > 0) {
+                    singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+                    additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND " + (addBrackets ? "(" : "") + ignoreNodesFilter + (addBrackets ? ")" : "");
+                } else {
+                    additionalFilter = ignoreNodesFilter;
+                }
+            }
 
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                 "&skipCount=" + this.skipItemsCount + "&size=" + this.getMaxSearchResult() +

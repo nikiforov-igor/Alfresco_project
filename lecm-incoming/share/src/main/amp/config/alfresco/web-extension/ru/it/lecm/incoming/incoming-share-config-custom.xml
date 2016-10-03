@@ -733,7 +733,7 @@
 							<control-param name="employee_showSearch">true</control-param>
 							<control-param name="employee_useStrictFilterByOrg">true</control-param>
 							<control-param name="employee_showAssocViewForm">true</control-param>
-                            <control-param name="employee_additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+                            <control-param name="employee_additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="employee_sortProp">lecm-orgstr:lecm-orgstr:employee-short-name</control-param>>
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
