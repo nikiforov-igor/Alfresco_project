@@ -174,7 +174,7 @@
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="organization_endpointMany">false</control-param>
-							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
@@ -282,7 +282,7 @@
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="organization_endpointMany">false</control-param>
-							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
@@ -584,7 +584,7 @@
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="organization_endpointMany">false</control-param>
-							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
@@ -738,7 +738,7 @@
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="organization_endpointMany">false</control-param>
-							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
@@ -915,7 +915,7 @@
 							<control-param name="organization_label">Организация</control-param>
 							<control-param name="organization_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="organization_endpointMany">false</control-param>
-							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="organization_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
 							<control-param name="organization_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="organization_treeNodeTitleSubstituteString">{cm:name}</control-param>
@@ -1142,7 +1142,7 @@
                             <control-param name="firstChangeItemsFireAction">targetChanged</control-param>
 
                             <control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
-                            <control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
                             <control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
