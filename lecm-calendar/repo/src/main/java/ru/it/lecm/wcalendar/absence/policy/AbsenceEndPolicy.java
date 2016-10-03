@@ -31,7 +31,7 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 
 	private IAbsence absenceService;
 	private PolicyComponent policyComponent;
-	private final static Logger logger = LoggerFactory.getLogger(AbsenceStartPolicy.class);
+	private final static Logger logger = LoggerFactory.getLogger(AbsenceEndPolicy.class);
 
 	public final void init() {
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
@@ -81,12 +81,12 @@ public class AbsenceEndPolicy implements NodeServicePolicies.OnUpdatePropertiesP
 			так как сработает проверка resetTime(today).equals(resetTime(curEnd)), где today это 01:00 какого-то дня, curEnd это 23:59 этого же дня
 			бессрочные отсутствия отключаются только вручную
 		*/
-//		else if (prevEnd != null && !prevEnd.equals(curEnd) && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
+		else if (prevEnd != null && !prevEnd.equals(curEnd) && today.after(prevStart) && today.before(prevEnd) && resetTime(today).equals(resetTime(curEnd))) {
 			// если: бывшее время окончания присутствует И окончание отстутствия изменилось И сегодняшняя дата позже бывшего начала отсутствия
 			// И раньше его бывшего конца И нынешний конец отсутствия - сегодня
-//			absenceService.endAbsence(nodeRef);
-//			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
-//		}
+			absenceService.endAbsence(nodeRef);
+			logger.debug(String.format("Policy AbsenceEndPolicy invoked on %s for employee %s", nodeRef.toString(), employee.toString()));
+		}
 //		dumpNodeContent(nodeRef, "onUpdateProperties");
 
 	}
