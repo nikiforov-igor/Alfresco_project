@@ -40,7 +40,7 @@
 	</bean>
 
 	<bean id="regNumbersService" class="ru.it.lecm.regnumbers.bean.RegNumbersServiceImpl" init-method="init" parent="baseBean"
-		  depends-on="regNumbers.regNumbersBootstrap, regNumbersCounterFactory, documentMembersService, serviceOrgstructure">
+		  depends-on="regNumbers.regNumbersBootstrap, regNumbersCounterFactory, regNumbers.regNumbersTemplatesDicBootstrap, documentMembersService, serviceOrgstructure">
 		<property name="searchService" ref="searchService"/>
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
