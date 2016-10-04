@@ -20,6 +20,8 @@
     height: 476px !important;
 }
 
-.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .thumbnailView {
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .thumbnailView,
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .outlineView
+{
      padding: 0 !important;
- }
+}
