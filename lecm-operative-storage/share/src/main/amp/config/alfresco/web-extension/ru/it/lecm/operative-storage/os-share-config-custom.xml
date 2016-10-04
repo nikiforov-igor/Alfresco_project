@@ -336,7 +336,7 @@
                     </field>
                     <field id="lecm-os:nomenclature-unit-section-unit-assoc">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
@@ -389,7 +389,7 @@
 
                     <field id="lecm-os:nomenclature-unit-section-unit-assoc" set="set1">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
@@ -420,7 +420,7 @@
                     </field>
                     <field id="lecm-os:nomenclature-unit-section-unit-assoc">
                         <control template="/ru/it/lecm/os/controls/nomenclature-orgunit-validation.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                             <control-param name="sortProp">lecm-orgstr:element-short-name</control-param>
