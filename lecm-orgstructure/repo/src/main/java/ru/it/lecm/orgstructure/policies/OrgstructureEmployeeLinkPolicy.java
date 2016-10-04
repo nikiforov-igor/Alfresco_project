@@ -162,10 +162,6 @@ public class OrgstructureEmployeeLinkPolicy
 				objects.add(unit != null ? unit.toString() : "");
 
 				businessJournalService.log(employee, EventCategory.RELEASE_JOB_POSITION, defaultDescription, objects);
-                objects.add(employee != null ? employee.toString() : "");
-
-				businessJournalService.log(employeeLink, EventCategory.REMOVE_FROM_REPORTING, "#initiator внес(ла) сведения о снятии Сотрудника #object3 с должности " +
-                        "#object1 в подразделении #object2", objects);
 
 				if ((Boolean) nodeService.getProperty(parent, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS)) {
 					// Назначение на должность

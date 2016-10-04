@@ -685,13 +685,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, docNodeRef, EventCategory.DELETE, DOCUMENT_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, docNodeRef, EventCategory.REMOVE_FROM_REPORTING, DOCUMENT_TEMPLATE);
 
 		cruellyDeleteNode(docNodeRef);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
-
 	}
 
 	@Override
@@ -704,12 +701,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, yearSection, EventCategory.DELETE, OS_YEAR_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, yearSection, EventCategory.REMOVE_FROM_REPORTING, OS_YEAR_TEMPLATE);
 
 		cruellyDeleteNode(yearSection);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
@@ -729,12 +724,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, unitSection, EventCategory.DELETE, OS_UNIT_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, unitSection, EventCategory.REMOVE_FROM_REPORTING, OS_UNIT_TEMPLATE);
 
 		cruellyDeleteNode(unitSection);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
@@ -753,12 +746,10 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 
 		BusinessJournalRecord deleteRecord = businessJournalService.createBusinessJournalRecord(user, caseRef, EventCategory.DELETE, CASE_TEMPLATE);
-		BusinessJournalRecord reportingRecord = businessJournalService.createBusinessJournalRecord(user, caseRef, EventCategory.REMOVE_FROM_REPORTING, CASE_TEMPLATE);
 
 		cruellyDeleteNode(caseRef);
 
 		businessJournalService.sendRecord(deleteRecord);
-		businessJournalService.sendRecord(reportingRecord);
 	}
 
 	@Override
