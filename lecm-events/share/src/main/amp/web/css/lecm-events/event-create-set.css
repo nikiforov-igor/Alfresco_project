@@ -7,9 +7,6 @@
     text-align: center;
 }
 
-.create-event-set {
-    width: auto;
-}
 .create-event-set .event-create-right {
     width: 300px;
     position: absolute;
@@ -104,9 +101,7 @@
     padding-right: 320px;
     box-sizing: border-box;
 }
-.create-event-set .event-create-center .control .label-div {
-    width: auto;
-}
+
 .create-event-set .event-create-center .control.checkbox-control .label-div {
     display: none;
 }
