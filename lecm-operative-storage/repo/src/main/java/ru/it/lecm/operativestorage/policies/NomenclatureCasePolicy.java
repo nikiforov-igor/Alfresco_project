@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies.OnAddAspectPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateChildAssociationPolicy;
@@ -69,7 +70,10 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 
 		policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
 				new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		
+
+		policyComponent.bindClassBehaviour(OnUpdatePropertiesPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_YEAR_SECTION,
+				new JavaBehaviour(this, "onUpdateYearNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
 		policyComponent.bindClassBehaviour(OnUpdatePropertiesPolicy.QNAME, OperativeStorageService.TYPE_NOMENCLATURE_CASE,
 				new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
@@ -117,7 +121,19 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 		});
 
 	}
+	public void onUpdateYearNode(final NodeRef yearSection, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+			@Override
+			public Object doWork() throws Exception {
+				int nomenclatureYearSectionYear = (int) nodeService.getProperty(yearSection, OperativeStorageService.PROP_NOMENCLATURE_YEAR_SECTION_YEAR);
+				if (nomenclatureYearSectionYear != -1) {
+					nodeService.setProperty(yearSection, ContentModel.PROP_TITLE, String.valueOf(nomenclatureYearSectionYear));
+				}
+				return null;
+			}
+		});
 
+	}
 	private NodeRef getDefaultOrgUnit(NodeRef caseNodeRef) {
 		NodeRef sectionRef = nodeService.getPrimaryParent(caseNodeRef).getParentRef();
 		List<AssociationRef> unitList = nodeService.getTargetAssocs(sectionRef, OperativeStorageService.ASSOC_NOMENCLATURE_UNIT_TO_ORGUNIT);
@@ -144,7 +160,7 @@ public class NomenclatureCasePolicy implements OnCreateNodePolicy,
 			nodeService.setProperty(nodeRef, OperativeStorageService.PROP_NOMENCLATURE_CASE_CLOSE_DATE, theLastDayOfTheYearDate);
 		}
 	};
-			
+
 	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		NodeRef caseNodeRef = nodeAssocRef.getSourceRef();
