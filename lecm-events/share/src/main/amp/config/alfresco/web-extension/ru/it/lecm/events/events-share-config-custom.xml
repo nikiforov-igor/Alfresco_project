@@ -60,6 +60,9 @@
                         </control>
                     </field>
                     <field id="lecm-events:all-day">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
@@ -276,6 +279,9 @@
                         </control>
                     </field>
                     <field id="lecm-events:all-day" set="createEventSet">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
@@ -425,6 +431,9 @@
                         </control>
                     </field>
                     <field id="lecm-events:all-day">
+                        <control>
+                            <control-param name="fireMandatoryByChange">true</control-param>
+                        </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
                         </constraint-handlers>
