@@ -14,6 +14,10 @@
 <#if params.useDeferedReinit?? && params.useDeferedReinit == "true">
     <#assign useDeferedReinit = true>
 </#if>
+<#assign fieldName = field.name>
+<#if params.fieldName??>
+    <#assign fieldName = params.fieldName>
+</#if>
 
 <div id="${controlId}-edt" class="control association-tree-control editmode">
 	<div class="label-div">
@@ -25,9 +29,9 @@
 		</label>
 	</div>
 	<div id="${controlId}" class="container">
-        <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-        <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
-        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+        <input type="hidden" id="${controlId}-added" name="${fieldName}_added"/>
+        <input type="hidden" id="${controlId}-removed" name="${fieldName}_removed"/>
+        <input type="hidden" id="${fieldHtmlId}" name="${fieldName}" value="${field.value?html}" />
 
 		<div class="value-div">
             <div id="${pickerId}-treeSelector" class="yui-u panel-left tree object-finder">
@@ -84,6 +88,9 @@
                     ignoreNodes: "${args.ignoreNodes}".split(","),
                 </#if>
 				currentValue: "${field.value!''}",
+                <#if params.rootNodeScript??>
+                    rootNodeScript: "${params.rootNodeScript}",
+                </#if>
                 <#if params.treeBranchesDatasource??>
                     treeBranchesDatasource: "${params.treeBranchesDatasource}",
                 </#if>

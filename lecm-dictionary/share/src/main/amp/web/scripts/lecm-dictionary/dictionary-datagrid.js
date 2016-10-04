@@ -200,6 +200,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                     submitType: "json",
                     showCancelButton: true,
                     itemNodeRef: item.nodeRef,
+                    ignoreNodes: item.nodeRef,
                     args: JSON.stringify(args)
                 },
                 actionUrl: null,
@@ -217,8 +218,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 },
                 onSuccess: {
                     fn: function (response) {
-                        //this.widgets.pagingDataTable.reloadDataTable();
-                        alert("ok");
+                        YAHOO.Bubbling.fire("selectedCurrentNode");
                     },
                     scope: this
                 }

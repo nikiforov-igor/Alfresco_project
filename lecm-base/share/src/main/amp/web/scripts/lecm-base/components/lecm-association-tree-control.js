@@ -52,6 +52,7 @@ LogicECM.module = LogicECM.module || {};
                 // скрывать ли игнорируемые ноды в дереве
                 ignoreNodesInTreeView: true,
                 ignoreNodes: null,
+                rootNodeScript: "lecm/forms/node/search",
                 treeBranchesDatasource: "lecm/components/association-tree",
                 useDeferedReinit: false,
                 fieldId: null,
@@ -104,9 +105,10 @@ LogicECM.module = LogicECM.module || {};
                 this.tree.setDynamicLoad(this._loadNode.bind(this));
 
                 this.tree.subscribe('clickEvent', function (event) {
-                    event.node.focus();
-                    this.treeViewClicked(event.node);
-                    this.tree.onEventToggleHighlight(event);
+                    if (event.node.data.isSelectable) {
+                        this.treeViewClicked(event.node);
+                        this.tree.onEventToggleHighlight(event);
+                    }
                     return false;
                 }.bind(this));
 
@@ -138,9 +140,13 @@ LogicECM.module = LogicECM.module || {};
                                             displayPath: oResults.displayPath,
                                             path: oResults.path,
                                             simplePath: oResults.simplePath,
+                                            isSelectable: oResults.selectable != null ? oResults.selectable : true,
                                             renderHidden: true
                                         };
                                         me.rootNode = new YAHOO.widget.TextNode(newNode, me.tree.getRoot());
+                                        if (!newNode.isSelectable) {
+                                            me.rootNode.contentStyle = "not-selectable";
+                                        }
                                     } else {
                                         me.rootNode = me.tree.getRoot();
                                         var augmented = Alfresco.util.deepCopy(me.tree.getRoot());
@@ -152,9 +158,6 @@ LogicECM.module = LogicECM.module || {};
                                     me.options.rootNodeRef = oResults.nodeRef;
 
                                     me.tree.draw();
-
-                                    me.treeViewClicked(me.rootNode);
-                                    me.tree.onEventToggleHighlight(me.rootNode);
                                 }
                             },
                             scope: this
@@ -171,12 +174,18 @@ LogicECM.module = LogicECM.module || {};
             },
 
             _generateRootUrlPath: function (nodeRef) {
-                return $combine(Alfresco.constants.PROXY_URI, "/lecm/forms/node/search", nodeRef.replace("://", "/"));
+                return $combine(Alfresco.constants.PROXY_URI, this.options.rootNodeScript, nodeRef.replace("://", "/"));
             },
 
             _generateRootUrlParams: function () {
-                return "?titleProperty=" + encodeURIComponent(this.options.treeRoteNodeTitleProperty) +
+                var params = "?titleProperty=" + encodeURIComponent(this.options.treeRoteNodeTitleProperty) +
                     "&xpath=" + encodeURIComponent(this.options.rootLocation);
+
+                if (this.options.ignoreNodesInTreeView && this.options.ignoreNodes != null) {
+                    params += "&ignoreNodes=" + encodeURIComponent(this.options.ignoreNodes);
+                }
+
+                return params;
             },
 
             _loadNode: function (node, fnLoadComplete) {
@@ -209,10 +218,14 @@ LogicECM.module = LogicECM.module || {};
                                         isLeaf: oResults[nodeIndex].isLeaf,
                                         type: oResults[nodeIndex].type,
                                         isContainer: oResults[nodeIndex].isContainer,
+                                        isSelectable: oResults[nodeIndex].selectable != null ? oResults[nodeIndex].selectable : true,
                                         renderHidden: true
                                     };
 
-                                    new YAHOO.widget.TextNode(newNode, node);
+                                    var textNode = new YAHOO.widget.TextNode(newNode, node);
+                                    if (!newNode.isSelectable) {
+                                        textNode.contentStyle = "not-selectable";
+                                    }
                                 }
                             }
                         }
@@ -248,6 +261,10 @@ LogicECM.module = LogicECM.module || {};
                 var params = "?nodeSubstituteString=" + encodeURIComponent(this.options.treeNodeSubstituteString) +
                     "&nodeTitleSubstituteString=" + encodeURIComponent(this.options.treeNodeTitleSubstituteString) +
                     "&selectableType=" + encodeURIComponent(this.options.itemType);
+
+                if (this.options.ignoreNodesInTreeView && this.options.ignoreNodes != null) {
+                    params += "&ignoreNodes=" + encodeURIComponent(this.options.ignoreNodes);
+                }
 
                 if (this.options.sortProp != null) {
                     params += "&sortProp=" + encodeURIComponent(this.options.sortProp);
