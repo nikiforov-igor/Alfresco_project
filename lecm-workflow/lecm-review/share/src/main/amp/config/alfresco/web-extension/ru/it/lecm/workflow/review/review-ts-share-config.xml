@@ -25,7 +25,7 @@
 					<control-param name="orgUnit_label">Подразделение</control-param>
 					<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
 					<control-param name="orgUnit_endpointMany">true</control-param>
-					<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+					<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 					<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 					<control-param name="orgUnit_plane">false</control-param>
 					<control-param name="orgUnit_showSearch">true</control-param>
@@ -140,7 +140,7 @@
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="orgUnit_endpointMany">true</control-param>
-							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
@@ -248,7 +248,7 @@
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="orgUnit_endpointMany">true</control-param>
-							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
@@ -307,7 +307,7 @@
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="orgUnit_endpointMany">true</control-param>
-							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
@@ -355,7 +355,7 @@
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="orgUnit_endpointMany">true</control-param>
-							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
@@ -422,7 +422,7 @@
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="orgUnit_endpointMany">true</control-param>
-							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
@@ -491,7 +491,7 @@
 							<control-param name="orgUnit_label">Подразделение</control-param>
 							<control-param name="orgUnit_endpointType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="orgUnit_endpointMany">true</control-param>
-							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура/cm:Холдинг</control-param>
+							<control-param name="orgUnit_rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="orgUnit_nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="orgUnit_plane">false</control-param>
 							<control-param name="orgUnit_showSearch">true</control-param>
