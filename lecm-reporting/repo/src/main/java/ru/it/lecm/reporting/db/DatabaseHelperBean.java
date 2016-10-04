@@ -71,6 +71,7 @@ public class DatabaseHelperBean {
             if (tablename != null &&
                     !"associations".equalsIgnoreCase(tablename) &&
                     !"lastsuccessfulrun".equalsIgnoreCase(tablename) &&
+                    !"deleted".equalsIgnoreCase(tablename) &&
                     !"type_tables".equalsIgnoreCase(tablename)) {
                 tablename = tablename.trim();
                 String status = this.reportingDAO.reportingSelectStatusFromLastsuccessfulrun(tablename);
