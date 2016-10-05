@@ -275,8 +275,8 @@
                         me.widgets.calendar.render();
                     }
 
-                    Event.addListener(me.id + "-date", "keyup", me._handleFieldChange, me, true);
-                    Event.addListener(me.id + "-time", "keyup", me._handleFieldChange, me, true);
+                    Event.addListener(me.id + "-date", "keyup", me._inputKeyup, me, true);
+                    Event.addListener(me.id + "-time", "keyup", me._inputKeyup, me, true);
 
                     // Hide Calendar if we click anywhere in the document other than the calendar
                     Event.on(document, "click", function(e) {
@@ -286,13 +286,13 @@
                         if (me.widgets.calendar) {
                             var dialogEl = me.widgets.calendar.oDomContainer;
 
-                            if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != iconEl) {
+                            if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != inputEl && el != iconEl) {
                                 me._hidePicker();
                             }
                         }
                     });
 
-                    //Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
+                    Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
 
                     var iconEl = Dom.get(me.id + "-icon");
                     if (iconEl) {
@@ -459,6 +459,12 @@
 
                     me._hidePicker();
                 },
+
+                _inputKeyup: function (event) {
+                    this._hidePicker();
+                    this._handleFieldChange(event);
+                },
+
                 /**
                  * Handles the date or time being changed in either input field.
                  *
