@@ -340,9 +340,11 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		NodeRef item = nodeAssocRef.getSourceRef();
 		NodeRef attachment = nodeAssocRef.getTargetRef();
 		NodeRef document = documentTableService.getDocumentByTableDataRow(item);
-		if (null != document && null != attachment && documentAttachmentsService.isDocumentAttachment(attachment)) {
+		if (attachment != null) {
 			documentAttachmentsService.deleteAttachment(attachment);
-			refreshFiles(document);
+            if (document != null) {
+                refreshFiles(document);
+            }
 		}
 	}
 
