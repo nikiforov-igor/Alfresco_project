@@ -444,35 +444,15 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 				method: 'GET',
 				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes',
 				dataObj: {
-					items: p_oItem.items
+					items: p_oItem.items,
+					checkVolumes: false
 				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
 						if(response.json.notEmpty) {
-							Alfresco.util.PopupManager.displayPrompt({
-								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
-								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),
-								buttons:[
-									{
-										text:Alfresco.util.message('lecm.os.btn.ok'),
-										handler: {
-											obj: {
-												context: this,
-												p_sType: p_sType,
-												p_aArgs: p_aArgs,
-												p_oItem: p_oItem
-											},
-											fn: destroyND
-										}
-									},
-									{
-										text:Alfresco.util.message('lecm.os.btn.cancel'),
-										handler:function DataGridActions__onActionDelete_cancel() {
-											this.destroy();
-										}
-									}
-								]
+							Alfresco.util.PopupManager.displayMessage({
+								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs')
 							});
 						} else {
 							this.onGroupActionsClick(p_sType, p_aArgs, p_oItem);
