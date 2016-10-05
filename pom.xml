@@ -547,6 +547,8 @@
                             <nonFilteredFileExtension>svg</nonFilteredFileExtension>
                             <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
                             <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>dll</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>so</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>
