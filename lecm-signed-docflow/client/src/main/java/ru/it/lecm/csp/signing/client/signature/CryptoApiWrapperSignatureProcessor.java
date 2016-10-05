@@ -72,8 +72,9 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
     */
     private void initWrapper(String wrapperfolder) {
         try {
+            String libName;
             if (Platform.isWindows()) {
-                String libName = "CryptoApiWrapper.dll";
+                libName = "CryptoApiWrapper_x86.dll";
                 if (Platform.is64Bit()) {
                     libName = "CryptoApiWrapper_x64.dll";
                 }
@@ -83,7 +84,11 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
                 _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary(libPath,
                         JavaCryptoApiWrapper.class, options);
             } else if (Platform.isLinux()) {
-                _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary(Paths.get(wrapperfolder, "libCryptoApiWrapper.so").toString()/*"libCryptoApiWrapper.so"*/,
+                libName = "libCryptoApiWrapper_x86.so";
+                if (Platform.is64Bit()) {
+                    libName = "libCryptoApiWrapper_x64.so";
+                }
+                _cryptoApiWrapper = (JavaCryptoApiWrapper) Native.loadLibrary(Paths.get(wrapperfolder, libName).toString()/*"libCryptoApiWrapper.so"*/,
                         JavaCryptoApiWrapper.class);
             } else {
                 _cryptoApiWrapper = new JavaCryptoApiWrapperMockImpl();
@@ -95,9 +100,9 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
     }
 
     public CryptoApiWrapperSignatureProcessor getInstanse(String wrapperfolder, String catalinahome) {
-        File localFile = Paths.get(catalinahome, "webapps/alfresco/WEB-INF/classes/alfresco/module/signed-docflow-repo/libs/CryptoApiWrapper_x64.dll").toFile();
-        if (wrapperfolder.isEmpty() && localFile != null && localFile.exists()) {
-            wrapperfolder = localFile.getParent();
+        File localFolder = Paths.get(catalinahome, "webapps/alfresco/WEB-INF/classes/alfresco/module/signed-docflow-repo/libs/").toFile();
+        if (wrapperfolder.isEmpty() && localFolder != null && localFolder.isDirectory() && localFolder.exists()) {
+            wrapperfolder = localFolder.getPath();
         }
         if (_cryptoApiWrapper == null || _cryptoApiWrapper instanceof JavaCryptoApiWrapperMockImpl) {
             initWrapper(wrapperfolder);
