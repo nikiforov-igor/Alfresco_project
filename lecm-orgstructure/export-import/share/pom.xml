@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.orgstructure.export-import</groupId>
 		<artifactId>orgstructure-export-import</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<artifactId>orgstructure-export-import-share</artifactId>
