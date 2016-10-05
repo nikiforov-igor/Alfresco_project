@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.notifications.dashlet</groupId>
         <artifactId>notifications-dashlet</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.5</version>
     </parent>
 
     <artifactId>notifications-dashlet-repo</artifactId>

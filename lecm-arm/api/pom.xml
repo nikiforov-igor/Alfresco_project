@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.arm</groupId>
 		<artifactId>arm</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<artifactId>arm-repo-api</artifactId>

@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.ord</groupId>
         <artifactId>ord</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.5</version>
     </parent>
 
     <artifactId>ord-repo</artifactId>
