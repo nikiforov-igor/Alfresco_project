@@ -52,6 +52,7 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
+nb-configuration.xml
 ### Eclipse template
 
 .metadata
