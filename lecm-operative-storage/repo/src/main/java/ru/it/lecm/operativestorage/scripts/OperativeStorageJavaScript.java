@@ -234,7 +234,7 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 	}
 
 	public boolean isYearUniq(String year, String orgNodeRef, String currentNodeRef) {
-		if (orgNodeRef == null || orgNodeRef.length() == 0) {
+		if (orgNodeRef == null || orgNodeRef.length() == 0 || !NodeRef.isNodeRef(orgNodeRef)) {
 			return true;
 		}
 
