@@ -9,6 +9,12 @@
 	<util:list id="orgstructure.export-import.models">
 		<value>alfresco/module/${artifactId}/models/orgstructure-export-import-model.xml</value>
 	</util:list>
+
+	<util:constant id="contractorsDictionaryName" static-field="ru.it.lecm.orgstructure.exportimport.beans.OrgstructureImportServiceImpl.CONTRACTORS_DICTIONARY"/>
+	<util:map id="orgstructure.dictionaryNames">
+		<entry key="#{contractorsDictionaryName}" value="Контрагенты"/>
+	</util:map>
+
 	<bean id="orgstructure.export-import.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap"
 		  p:models-ref="orgstructure.export-import.models" />
@@ -24,6 +30,7 @@
 		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:searchService-ref="searchService"
 		  p:namespaceService-ref="namespaceService"
+		  p:dictionaries-ref="orgstructure.dictionaryNames"
 	/>
 
 	<bean id="orgstructure.export-import.export.service" parent="baseBean"

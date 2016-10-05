@@ -64,6 +64,13 @@
 	  <version>${platform.version}</version>
 	  <type>jar</type>
 	 </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.contractors</groupId>
+			<artifactId>lecm-contractors-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 	<!--
 		The scm is required for the buildnumber-maven-plugin which is required
