@@ -542,18 +542,18 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 										},
 										fn: closeAllCases
 									}
+								//}, {
+								//	text: 'Перенести переходящие дела',
+								//	handler: {
+								//		obj: {
+								//			context: this,
+								//			fn: execFunction,
+								//			items: items
+								//		},
+								//		fn: moveOpenTransientCases
+								//	}
 								}, {
-									text: 'Перенести переходящие дела',
-									handler: {
-										obj: {
-											context: this,
-											fn: execFunction,
-											items: items
-										},
-										fn: moveOpenTransientCases
-									}
-								}, {
-									text: 'Отмена',
+									text: Alfresco.util.message('lecm.os.msg.notClose'),
 									handler: {
 										fn: cancel
 									}
@@ -588,18 +588,18 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 										},
 										fn: closeAllCases
 									}
+								//}, {
+								//	text: Alfresco.util.message('lecm.os.msg.move.passing.docs'),
+								//	handler: {
+								//		obj: {
+								//			context: this,
+								//			fn: execFunction,
+								//			items: items
+								//		},
+								//		fn: moveOpenTransientCases
+								//	}
 								}, {
-									text: Alfresco.util.message('lecm.os.msg.move.passing.docs'),
-									handler: {
-										obj: {
-											context: this,
-											fn: execFunction,
-											items: items
-										},
-										fn: moveOpenTransientCases
-									}
-								}, {
-									text: Alfresco.util.message('lecm.os.btn.cancel'),
+									text: Alfresco.util.message('lecm.os.msg.notClose'),
 									handler: {
 										fn: cancel
 									}
