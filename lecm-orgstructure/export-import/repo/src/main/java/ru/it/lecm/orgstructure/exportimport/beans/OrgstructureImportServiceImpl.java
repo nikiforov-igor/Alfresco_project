@@ -69,14 +69,14 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 	private ExportImportHelper helper;
 
 	private final static String DEFAULT_PASSWORD = "12345";
-	private String contratorsDictionaryName;
+	private String contractorsDictionaryName;
 
-	public void setContratorsDictionaryName(String contratorsDictionaryName) {
-		this.contratorsDictionaryName = contratorsDictionaryName;
+	public void setContractorsDictionaryName(String contractorsDictionaryName) {
+		this.contractorsDictionaryName = contractorsDictionaryName;
 	}
 
-	public String getContratorsDictionaryName() {
-		return contratorsDictionaryName;
+	public String getContractorsDictionaryName() {
+		return contractorsDictionaryName;
 	}
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
@@ -552,7 +552,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 		props.put(Contractors.PROP_CONTRACTOR_SHORTNAME, StringUtils.trim(department.getNameShort()));
 		props.put(Contractors.PROP_CONTRACTOR_CODE, StringUtils.trim(department.getCode()));
 
-		NodeRef contractorsDic = dictionaryService.getDictionaryByName(contratorsDictionaryName);
+		NodeRef contractorsDic = dictionaryService.getDictionaryByName(contractorsDictionaryName);
 		NodeRef contractorNode = nodeService.createNode(contractorsDic, ContentModel.ASSOC_CONTAINS,
 				generateRandomQName(),Contractors.TYPE_CONTRACTOR, props).getChildRef();
 		nodeService.addAspect(contractorNode, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION, null);
