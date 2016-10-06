@@ -71,7 +71,7 @@ public class XMLImporter {
         this.permissionService = permissionService;
 
         try {
-            checkStateMachineExistence(stateMachineId);
+            stateMachineNodeRef = checkStateMachineExistence(stateMachineId);
         }  catch (WriteTransactionNeededException e) {
             logger.error(e.getMessage());
         }
@@ -85,7 +85,7 @@ public class XMLImporter {
      * TODO рефакторинг - разбить на составляющие и запихнуть в какой-нибудь сервисный бин
      * + задействовать его же в statemachine.process.get вебскрипте
      */
-    private void checkStateMachineExistence(String stateMachineId) throws WriteTransactionNeededException{
+    private NodeRef checkStateMachineExistence(String stateMachineId) throws WriteTransactionNeededException{
 
         final NodeRef companyHome = repositoryHelper.getHomeRef();
         NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
@@ -96,7 +96,7 @@ public class XMLImporter {
                 }
         }
         //проверяем ноду мс
-        stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
+        NodeRef stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
         if (stateMachineNodeRef == null) {
             Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
             properties.put(ContentModel.PROP_NAME, stateMachineId);
@@ -104,6 +104,7 @@ public class XMLImporter {
                     QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, stateMachineId), StatemachineEditorModel.TYPE_STATEMACHINE, properties);
             stateMachineNodeRef = stateMachineChildAssocRef.getChildRef();
         }
+        return stateMachineNodeRef;
     }
 
     public void importStateMachine() throws XMLStreamException {
