@@ -8,7 +8,6 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -71,7 +70,7 @@ public class XMLImporter {
         this.permissionService = permissionService;
 
         try {
-            stateMachineNodeRef = checkStateMachineExistence(stateMachineId);
+            stateMachineNodeRef = getStateMachineFolder(stateMachineId);
         }  catch (WriteTransactionNeededException e) {
             logger.error(e.getMessage());
         }
@@ -85,7 +84,7 @@ public class XMLImporter {
      * TODO рефакторинг - разбить на составляющие и запихнуть в какой-нибудь сервисный бин
      * + задействовать его же в statemachine.process.get вебскрипте
      */
-    private NodeRef checkStateMachineExistence(String stateMachineId) throws WriteTransactionNeededException{
+    private NodeRef getStateMachineFolder(String stateMachineId) throws WriteTransactionNeededException{
 
         final NodeRef companyHome = repositoryHelper.getHomeRef();
         NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
