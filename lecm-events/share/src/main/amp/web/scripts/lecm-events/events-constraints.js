@@ -28,7 +28,59 @@ LogicECM.module.Events.toDateValue = null;
 LogicECM.module.Events.currentFromDateValue = null;
 LogicECM.module.Events.currentToDateValue = null;
 
+LogicECM.module.Events.currentEmployeeBeginTime = null;
+LogicECM.module.Events.currentEmployeeEndTime = null;
+
 LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromDateFieldId, toDateFieldId) {
+    if (LogicECM.module.Events.currentEmployeeBeginTime && LogicECM.module.Events.currentEmployeeEndTime) {
+        LogicECM.module.Events.doBaseChangeAllDayValidation(field, form, fromDateFieldId, toDateFieldId);
+    } else {
+        LogicECM.module.Events.loadCurrentEmployeeSchedule(field, form, fromDateFieldId, toDateFieldId);
+    }
+    return true;
+};
+
+LogicECM.module.Events.loadCurrentEmployeeSchedule = function (field, form, fromDateFieldId, toDateFieldId) {
+    Alfresco.util.Ajax.jsonGet({
+        url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+        successCallback: {
+            fn: function (response) {
+                var employee = response.json;
+
+                if (employee && employee.nodeRef) {
+                    Alfresco.util.Ajax.jsonPost({
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/wcalendar/schedule/get/employeeScheduleStdTime",
+                        dataObj: {
+                            nodeRef: employee.nodeRef
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                var result = response.json;
+                                if (result) {
+                                    if (result.begin) {
+                                        LogicECM.module.Events.currentEmployeeBeginTime = result.begin;
+                                    } else {
+                                        LogicECM.module.Events.currentEmployeeBeginTime = "00:01";
+                                    }
+                                    if (result.end) {
+                                        LogicECM.module.Events.currentEmployeeEndTime = result.end;
+                                    } else {
+                                        LogicECM.module.Events.currentEmployeeEndTime = "23:59";
+                                    }
+                                    LogicECM.module.Events.doBaseChangeAllDayValidation(field, form, fromDateFieldId, toDateFieldId);
+                                }
+                            },
+                            scope: this
+                        }
+                    });
+                }
+            },
+            scope: this
+        }
+    });
+};
+
+LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fromDateFieldId, toDateFieldId) {
 	if (field.form != null) {
 		var fromDate = field.form["prop_" + fromDateFieldId.replace(":", "_")];
 		var toDate = field.form["prop_" + toDateFieldId.replace(":", "_")];
@@ -44,13 +96,13 @@ LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromD
 		var times = [
 			{
 				field: fromTime,
-				allDayValue: "00:01",
+				allDayValue: LogicECM.module.Events.currentEmployeeBeginTime,
 				savedValue: LogicECM.module.Events.fromDateValue,
 				fieldId: fromDateFieldId
 			},
 			{
 				field: toTime,
-				allDayValue: "23:59",
+				allDayValue: LogicECM.module.Events.currentEmployeeEndTime,
 				savedValue: LogicECM.module.Events.toDateValue,
 				fieldId: toDateFieldId
 			}
