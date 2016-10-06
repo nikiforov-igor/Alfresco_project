@@ -34,8 +34,6 @@ public class StatemachineEditorModel {
 	public final static QName TYPE_CONDITION_ACCESS = QName.createQName(STATEMACHINE_EDITOR_URI, "conditionAccess");
 	public final static QName TYPE_VERSION = QName.createQName(STATEMACHINE_EDITOR_URI, "versionContainer");
 
-
-
 	public final static QName PROP_ACTION_ID = QName.createQName(STATEMACHINE_EDITOR_URI, "actionId");
 	public final static QName PROP_ACTION_EXECUTION = QName.createQName(STATEMACHINE_EDITOR_URI, "actionExecution");
 	public final static QName PROP_STATUS_UUID = QName.createQName(STATEMACHINE_EDITOR_URI, "statusUUID");

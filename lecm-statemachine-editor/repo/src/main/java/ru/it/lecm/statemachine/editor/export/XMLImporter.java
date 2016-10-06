@@ -55,21 +55,11 @@ public class XMLImporter {
     private NodeRef alternativesNodeRef;
     RepositoryStructureHelper repositoryHelper;
 
-
     private Map<String, NodeRef> businessRoles = new HashMap<String, NodeRef>();
 
     //TODO Refactoring in progress
     public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService, DictionaryBean serviceDictionary, String stateMachineId) throws XMLStreamException {
-
-            this.nodeService = nodeService;
-            this.serviceDictionary = serviceDictionary;
-            this.repositoryHelper = repositoryHelper;
-            try {
-                checkStateMachineExistence(stateMachineId);
-            }  catch (WriteTransactionNeededException e) {
-                logger.error(e.getMessage());
-             }
-            this.xmlr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
+        this(inputStream,repositoryHelper,nodeService,serviceDictionary,null,stateMachineId);
     }
 
     public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService,
@@ -95,7 +85,7 @@ public class XMLImporter {
      * TODO рефакторинг - разбить на составляющие и запихнуть в какой-нибудь сервисный бин
      * + задействовать его же в statemachine.process.get вебскрипте
      */
-    void checkStateMachineExistence(String stateMachineId) throws WriteTransactionNeededException{
+    private void checkStateMachineExistence(String stateMachineId) throws WriteTransactionNeededException{
 
         final NodeRef companyHome = repositoryHelper.getHomeRef();
         NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
@@ -104,7 +94,6 @@ public class XMLImporter {
                 if(permissionService!=null) {
                     permissionService.setInheritParentPermissions(stateMachinesRoot, false);
                 }
-
         }
         //проверяем ноду мс
         stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
@@ -115,10 +104,6 @@ public class XMLImporter {
                     QName.createQName(StatemachineEditorModel.STATEMACHINE_EDITOR_URI, stateMachineId), StatemachineEditorModel.TYPE_STATEMACHINE, properties);
             stateMachineNodeRef = stateMachineChildAssocRef.getChildRef();
         }
-
-
-
-
     }
 
     public void importStateMachine() throws XMLStreamException {
