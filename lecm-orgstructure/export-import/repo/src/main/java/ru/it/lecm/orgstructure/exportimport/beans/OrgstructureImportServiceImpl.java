@@ -505,7 +505,7 @@ public class OrgstructureImportServiceImpl extends BaseBean implements Orgstruct
 							departNode = nodeService.getChildByName(parentNode, ContentModel.ASSOC_CONTAINS, nameShort);
 							if (departNode == null) {
 								departNode = createDepartment(id, parentNode, depart);
-								if(parentID.equals("0")){
+								if("0".equals(parentID)){
 									NodeRef contractorNode = createOrgContractor(depart);
 									nodeService.addAspect(departNode,OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION,null);
 									nodeService.createAssociation(departNode,contractorNode,OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
