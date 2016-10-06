@@ -47,7 +47,7 @@ LogicECM.module.Events.loadCurrentEmployeeSchedule = function (field, form, from
             fn: function (response) {
                 var employee = response.json;
 
-                if (employee != null && employee.nodeRef != null) {
+                if (employee && employee.nodeRef) {
                     Alfresco.util.Ajax.jsonPost({
                         url: Alfresco.constants.PROXY_URI_RELATIVE + "/lecm/wcalendar/schedule/get/employeeScheduleStdTime",
                         dataObj: {
