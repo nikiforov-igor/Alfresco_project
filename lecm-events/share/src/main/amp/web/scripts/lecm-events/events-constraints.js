@@ -32,7 +32,7 @@ LogicECM.module.Events.currentEmployeeBeginTime = null;
 LogicECM.module.Events.currentEmployeeEndTime = null;
 
 LogicECM.module.Events.baseChangeAllDayValidation = function (field, form, fromDateFieldId, toDateFieldId) {
-    if (LogicECM.module.Events.currentEmployeeBeginTime != null && LogicECM.module.Events.currentEmployeeEndTime != null) {
+    if (LogicECM.module.Events.currentEmployeeBeginTime && LogicECM.module.Events.currentEmployeeEndTime) {
         LogicECM.module.Events.doBaseChangeAllDayValidation(field, form, fromDateFieldId, toDateFieldId);
     } else {
         LogicECM.module.Events.loadCurrentEmployeeSchedule(field, form, fromDateFieldId, toDateFieldId);
