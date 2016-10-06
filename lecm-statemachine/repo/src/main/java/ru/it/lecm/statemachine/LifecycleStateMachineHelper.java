@@ -5,10 +5,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
-import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.history.*;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
 import org.activiti.engine.impl.calendar.CycleBusinessCalendar;
@@ -36,10 +33,11 @@ import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.ResultSetRow;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -602,45 +600,62 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
     }
 
     @Override
-    public List<NodeRef> getDocumentsWithFinishedTasks(String authority, Set<String> workflowIds) {
-        Set<NodeRef> documents = new HashSet<>();
+    public List<NodeRef> getDocumentsWithFinishedTasks(List<NodeRef> documents, String authority, Set<String> taskNames) {
+        List<NodeRef> resultedDocs = new ArrayList<>();
 
-        Set<String> excluded = new HashSet<>();
-        for (String key : getStateMachines().getKeys()) {
-            StateMachene machine = getStateMachines().get(key);
-            excluded.add(ACTIVITI_PREFIX + machine.getName());
-        }
+        final WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
-        WorkflowInstanceQuery query = new WorkflowInstanceQuery();
-        query.setActive(true);
-        query.setExcludedDefinitions(new ArrayList<>(excluded));
+        for (NodeRef document : documents) {
+            boolean isSuitableDoc = false;
 
-        List<WorkflowInstance> workflows = serviceRegistry.getWorkflowService().getWorkflows(query);
-        for (WorkflowInstance workflow : workflows) {
-            String processId = workflow.getId().replace(ACTIVITI_PREFIX, "");
+            //ACTIVE
+            final String executionId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
 
-            HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
-            HistoricTaskInstanceQuery taskQuery = historyService.createHistoricTaskInstanceQuery()
-                    .taskAssignee(authority)
-                    .processInstanceId(processId)
-                    .finished();
-
-            List<HistoricTaskInstance> historicTasks = taskQuery.list();
-
-            for (HistoricTaskInstance historicTask : historicTasks) {
-                if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(historicTask.getFormKey())) {
-                    NodeRef doc = getStatemachineDocument(workflow.getId());
-
-                    if (doc != null) {
-                        documents.add(doc);
+            List<WorkflowInstance> activeWorkflows = workflowService.getWorkflowsForContent(document, true);
+            for (WorkflowInstance workflow : activeWorkflows) {
+                if(!workflow.getId().equals(executionId)) {
+                    boolean hasTask = isWorkflowHasHistoricTasksForUser(workflow, taskNames, authority);
+                    if (hasTask) {
+                        resultedDocs.add(document);
+                        isSuitableDoc = true;
                         break;
                     }
                 }
+            }
 
+            //FINISHED
+            if (!isSuitableDoc) {
+                List<WorkflowInstance> completedWorkflows = workflowService.getWorkflowsForContent(document, false);
+                for (WorkflowInstance workflow : completedWorkflows) {
+                    boolean hasTask = isWorkflowHasHistoricTasksForUser(workflow, taskNames, authority);
+                    if (hasTask) {
+                        resultedDocs.add(document);
+                        break;
+                    }
+                }
             }
         }
-        return new ArrayList<>(documents);
+        return new ArrayList<>(resultedDocs);
     }
+
+    private boolean isWorkflowHasHistoricTasksForUser(WorkflowInstance workflow, Set<String> taskNames, String authority) {
+        final HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
+
+        String processId = workflow.getId().replace(ACTIVITI_PREFIX, "");
+
+        HistoricTaskInstanceQuery taskQuery = historyService.createHistoricTaskInstanceQuery()
+                .taskAssignee(authority)
+                .processInstanceId(processId)
+                .finished();
+
+        for (HistoricTaskInstance historicTask : taskQuery.list()) {
+            if (taskNames == null || taskNames.isEmpty() || taskNames.contains(historicTask.getFormKey())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /*
      * Используется в
      * 		- DocumentsRemovalServiceImpl -> purge
