@@ -56,13 +56,13 @@ LogicECM.module.Events.loadCurrentEmployeeSchedule = function (field, form, from
                         successCallback: {
                             fn: function (response) {
                                 var result = response.json;
-                                if (result != null) {
-                                    if (result.begin != null) {
+                                if (result) {
+                                    if (result.begin) {
                                         LogicECM.module.Events.currentEmployeeBeginTime = result.begin;
                                     } else {
                                         LogicECM.module.Events.currentEmployeeBeginTime = "00:01";
                                     }
-                                    if (result.end != null) {
+                                    if (result.end) {
                                         LogicECM.module.Events.currentEmployeeEndTime = result.end;
                                     } else {
                                         LogicECM.module.Events.currentEmployeeEndTime = "23:59";
