@@ -66,6 +66,7 @@
 		<property name="activitiProcessEngine" ref="activitiProcessEngine"/>
 		<property name="statemachineService" ref="stateMachineHelper"/>
 		<property name="simpleDocumentDeployer" ref="simpleDocumentDeployer"/>
+		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
 	</bean>
 
     <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.export.get"
@@ -84,6 +85,7 @@
         <property name="contentService" ref="contentService"/>
         <property name="serviceDictionary" ref="serviceDictionary"/>
         <property name="propertiesService" ref="propertiesService"/>
+		<property name="permissionService" ref="permissionService"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.import.get"
@@ -95,6 +97,7 @@
         <property name="contentService" ref="contentService"/>
         <property name="serviceDictionary" ref="serviceDictionary"/>
         <property name="propertiesService" ref="propertiesService"/>
+		<property name="permissionService" ref="permissionService"/>
     </bean>
 
     <bean id="statemachineEditor.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
