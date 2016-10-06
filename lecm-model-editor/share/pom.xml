@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.it.lecm.model-editor</groupId>
         <artifactId>model-editor</artifactId>
-        <version>1.8.0</version>
+        <version>1.8.5</version>
     </parent>
 
     <artifactId>model-editor-share</artifactId>

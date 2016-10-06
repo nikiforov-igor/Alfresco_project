@@ -234,7 +234,7 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 	}
 
 	public boolean isYearUniq(String year, String orgNodeRef, String currentNodeRef) {
-		if (orgNodeRef == null || orgNodeRef.length() == 0) {
+		if (orgNodeRef == null || orgNodeRef.length() == 0 || !NodeRef.isNodeRef(orgNodeRef)) {
 			return true;
 		}
 
@@ -322,6 +322,10 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 
 	public boolean caseHasDocsOrVolumes(String caseNodeRefString) {
 		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString));
+	}
+
+	public boolean caseHasDocsOrVolumes(String caseNodeRefString, boolean checkVolumes) {
+		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString), checkVolumes);
 	}
 
 	public boolean canCopyUnits(String unitsString, String destNodeRef) {

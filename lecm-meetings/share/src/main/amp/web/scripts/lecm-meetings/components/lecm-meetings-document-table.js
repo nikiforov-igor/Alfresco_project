@@ -236,7 +236,8 @@ LogicECM.module = LogicECM.module || {};
 							createFormId: "",
 							nodeRef: this.tableData.nodeRef,
 							actionsConfig: {
-								fullDelete: true
+								fullDelete: true,
+                                trash: false
 					        },
 							sort: this.options.sort ? this.options.sort : "lecm-document:indexTableRow",
 							useChildQuery: true
