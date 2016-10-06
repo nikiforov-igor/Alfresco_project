@@ -638,38 +638,17 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'GET',
-				dataObj: {
-					selectableType: 'lecm-document:base,lecm-os:nomenclature-case-volume'
-				},
 				url: Alfresco.constants.PROXY_URI + 'lecm/os/nomenclature/caseHasDocsVolumes',
 				dataObj: {
-					items: item.nodeRef
+					items: item.nodeRef,
+					checkVolumes: false
 				},
 				successCallback: {
 					scope: this,
 					fn: function(response) {
 						if(response.json.notEmpty) {
-							Alfresco.util.PopupManager.displayPrompt({
-								title:Alfresco.util.message('lecm.os.lbl.nomen.doc.remove'),
-								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs'),
-								buttons:[
-									{
-										text:Alfresco.util.message('lecm.os.btn.ok'),
-										handler: {
-											obj: {
-												context: this,
-												deleteFn: destroyND
-											},
-											fn: areYouReallyShurePrompt
-										}
-									},
-									{
-										text:Alfresco.util.message('lecm.os.btn.cancel'),
-										handler:function DataGridActions__onActionDelete_cancel() {
-											this.destroy();
-										}
-									}
-								]
+							Alfresco.util.PopupManager.displayMessage({
+								text: Alfresco.util.message('lecm.os.msg.doc.contains.docs')
 							});
 						} else {
 							execFunction.call(this);

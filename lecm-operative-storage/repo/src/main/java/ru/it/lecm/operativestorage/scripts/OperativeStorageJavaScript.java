@@ -324,6 +324,10 @@ public class OperativeStorageJavaScript extends BaseWebScript{
 		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString));
 	}
 
+	public boolean caseHasDocsOrVolumes(String caseNodeRefString, boolean checkVolumes) {
+		return operativeStorageService.caseHasDocumentsVolumes(new NodeRef(caseNodeRefString), checkVolumes);
+	}
+
 	public boolean canCopyUnits(String unitsString, String destNodeRef) {
 		List<String> nodesStr = Arrays.asList(unitsString.split(","));
 		List<NodeRef> units = new ArrayList<>();

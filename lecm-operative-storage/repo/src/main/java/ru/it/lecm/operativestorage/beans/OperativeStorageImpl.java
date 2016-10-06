@@ -542,13 +542,20 @@ public class OperativeStorageImpl extends BaseBean implements OperativeStorageSe
 
 	@Override
 	public boolean caseHasDocumentsVolumes(NodeRef caseRef) {
+		return caseHasDocumentsVolumes(caseRef, true);
+	}
+
+	@Override
+	public boolean caseHasDocumentsVolumes(NodeRef caseRef, boolean checkVolumes) {
 		NodeRef docFolder = getDocuemntsFolder(caseRef);
+
 		List<ChildAssociationRef> docs = nodeService.getChildAssocs(docFolder);
+		List<ChildAssociationRef> volumes = null;
+		if (checkVolumes) {
+			volumes = nodeService.getChildAssocs(caseRef, new HashSet<>(Arrays.asList(TYPE_NOMENCLATURE_VOLUME)));
+		}
 
-		List<ChildAssociationRef> volumes = nodeService.getChildAssocs(caseRef, new HashSet<>(Arrays.asList(TYPE_NOMENCLATURE_VOLUME)));
-
-		return (docs != null && docs.size() > 0) || (volumes != null && volumes.size() > 0);
-
+		return (docs != null && docs.size() > 0) || (checkVolumes && (volumes != null && volumes.size() > 0));
 	}
 
 	private List<NodeRef> getAllOrgUnitsAssocs(NodeRef sectionNodeRef) {
