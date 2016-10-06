@@ -574,12 +574,12 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
      * 		- ArmServiceImpl -> getActiveWorkflowsQuery
      */
     @Override
-    public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> workflowIds, Integer remainingDays) {
+    public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> tasksNames, Integer remainingDays) {
         Set<NodeRef> documents = new HashSet<NodeRef>();
 
         List<WorkflowTask> tasks = getAssignedAndPooledTasks(employeeLogin);
         for (WorkflowTask task : tasks) {
-            if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(task.getDefinition().getId())) {
+            if (tasksNames == null || tasksNames.isEmpty() || tasksNames.contains(task.getDefinition().getId())) {
 	            NodeRef doc = getTaskDocument(task, null);
                 if (doc != null) {
 	                if (remainingDays == null) {
