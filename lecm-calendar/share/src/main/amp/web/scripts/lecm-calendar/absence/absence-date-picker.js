@@ -63,7 +63,6 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				}
 			}
 
-
 			// construct the picker
 			this.widgets.calendar = new YAHOO.widget.Calendar(this.id, this.id, {
 				title:this._msg("form.control.date-picker.choose"),
