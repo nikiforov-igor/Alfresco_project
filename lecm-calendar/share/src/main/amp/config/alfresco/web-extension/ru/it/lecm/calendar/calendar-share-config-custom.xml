@@ -43,7 +43,9 @@
 				<appearance>
 					<field id="lecm-cal:day"  mandatory="true">
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
-							<control-param name="argCurrentValue">initialDate</control-param>
+							<control-param name="currentValueArg">initialDate</control-param>
+							<control-param name="maxLimitArg">maxLimitDate</control-param>
+							<control-param name="minLimitArg">minLimitDate</control-param>
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>
@@ -80,7 +82,9 @@
 				<appearance>
 					<field id="lecm-cal:day"  mandatory="true">
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
-							<control-param name="argCurrentValue">initialDate</control-param>
+							<control-param name="currentValueArg">initialDate</control-param>
+							<control-param name="maxLimitArg">maxLimitDate</control-param>
+							<control-param name="minLimitArg">minLimitDate</control-param>
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
 							<control-param name="validateHandler">LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation</control-param>

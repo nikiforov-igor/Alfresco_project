@@ -62,8 +62,8 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 						"&mode={mode}" +
 						"&submitType={submitType}" +
 						"&showCancelButton=true"+
-						"&maxLimitArg={maxDate}"+
-						"&minLimitArg={minDate}"+
+						"&maxLimitDate={maxDate}"+
+						"&minLimitDate={minDate}"+
 						"&initialDate={pickerDate}";
 				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
