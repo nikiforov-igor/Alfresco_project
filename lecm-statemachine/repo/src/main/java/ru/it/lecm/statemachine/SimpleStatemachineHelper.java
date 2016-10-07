@@ -239,7 +239,7 @@ public class SimpleStatemachineHelper implements StateMachineServiceBean {
     }
 
     @Override
-    public List<NodeRef> getDocumentsWithFinishedTasks(String employeeLogin, Set<String> workflowIds) {
+    public List<NodeRef> getDocumentsWithFinishedTasks(List<NodeRef> documents, String employeeLogin, Set<String> taskNames) {
         throw createNotImplementedException();
     }
 
