@@ -33,6 +33,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 	LogicECM.module.WCalendar.Absence.DatePicker.prototype.draw = function () {
 			var theDate = null;
+			var me =this;
 
 			if (this.options.currentValue == null || this.options.currentValue === "")
 			{
@@ -103,6 +104,20 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				Event.addListener(this.id + "-icon", "click", this._showPicker, this, true);
 			}
 
+
+			// Hide Calendar if we click anywhere in the document other than the calendar
+			Event.on(document, "click", function(e) {
+				var inputEl = Dom.get(me.id + "-date");
+				var iconEl = Dom.get(me.id + "-icon");
+				var el = Event.getTarget(e);
+				if (me.widgets.calendar) {
+					var dialogEl = me.widgets.calendar.oDomContainer;
+
+					if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != iconEl) {
+						me._hidePicker();
+					}
+				}
+			});
 
 			// register a validation handler for the date entry field so that the submit
 			// button disables when an invalid date is entered
