@@ -53,25 +53,17 @@
 <#assign currentValue = "" />
 <#assign minLimit = "" />
 <#assign maxLimit = "" />
-<#if field.control.params.currentValue?? >
-	<#assign currentValue = form.arguments[field.control.params.currentValue] />
-<#elseif field.control.params.currentValueArg?? && args[field.control.params.currentValueArg]??>
+<#if field.control.params.currentValueArg?? && args[field.control.params.currentValueArg]??>
 	<#assign currentValue = args[field.control.params.currentValueArg] />
 </#if>
 
-<#if field.control.params.maxLimit?? >
-	<#assign maxLimit = form.arguments[field.control.params.maxLimitArg] />
-<#elseif field.control.params.maxLimitArg?? && args[field.control.params.maxLimitArg]??>
+<#if field.control.params.maxLimitArg?? && args[field.control.params.maxLimitArg]??>
 	<#assign maxLimit = args[field.control.params.maxLimitArg] />
 </#if>
 
-<#if field.control.params.minLimit?? >
-	<#assign minLimit = form.arguments[field.control.params.minLimitArg] />
-<#elseif field.control.params.minLimitArg?? && args[field.control.params.minLimitArg]??>
+<#if field.control.params.minLimitArg?? && args[field.control.params.minLimitArg]??>
 	<#assign minLimit = args[field.control.params.minLimitArg] />
 </#if>
-
-
 
 <#if form.capabilities?? && form.capabilities.javascript?? && form.capabilities.javascript == false><#assign jsDisabled=true><#else><#assign jsDisabled=false></#if>
 
