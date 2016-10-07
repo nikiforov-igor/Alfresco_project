@@ -59,7 +59,6 @@
         /* Load YUI Components */
         Alfresco.util.YUILoaderHelper.require(["button", "calendar"], me.onComponentsLoaded, me);
 
-
         // Initialise prototype properties
         me.widgets = {};
 
@@ -69,8 +68,6 @@
         Bubbling.on("showControl", me.onShowControl, this);
 	    Bubbling.on("handleFieldChange", me.onHandleFieldChange, this);
 	    Bubbling.on("showDatePicker", me.hidePickerWhenAnotherIsOpening, this);
-
-
 
         return me;
     };
@@ -265,9 +262,6 @@
                         // setup events
                         me.widgets.calendar.selectEvent.subscribe(me._handlePickerChange, me, true);
 
-
-
-
                         // если в body уже есть календарь(и) с таким id, нужно удалить
                         var samePickers = Selector.query("body > #" + me.id);
                         if (samePickers && !samePickers.isEmpty) {
@@ -299,7 +293,6 @@
                     });
 
                     //Event.addListener(me.id + "-date", "click", me._showPicker, me, true);
-
 
                     var iconEl = Dom.get(me.id + "-icon");
                     if (iconEl) {
@@ -390,7 +383,6 @@
                         }
                         Dom.get(me.id + "-date").focus();
                         Event.addListener(me.id+"-date", "focusout", me.onFocusOut, me,true);
-
                     }
                 },
                 /**
@@ -602,22 +594,20 @@
 		            }
 	            },
                 //закрываем пикер, если переключились на другие компоненты
-                onFocusOut: function(layer,args){
+                onFocusOut: function (layer, args) {
                     console.log("FOCUS OUT EVENT1");
                     var referal = layer.relatedTarget;
-                    var isPicker =false;
-                    while(referal){
-                        if(referal.classList.contains("datepicker")){
-                            isPicker=true;
+                    var isPicker = false;
+                    while (referal) {
+                        if (referal.classList.contains("datepicker")) {
+                            isPicker = true;
                             break;
                         }
-                        referal=referal.offsetParent;
+                        referal = referal.offsetParent;
                     }
-                    if(!isPicker) {
-                        Event.removeListener(this.id+"-date", "focusout", this.onFocusOut);
+                    if (!isPicker) {
                         this._hidePicker();
                     }
-
                 }
             };
 })();
