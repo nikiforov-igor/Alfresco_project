@@ -34,19 +34,15 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 	LogicECM.module.WCalendar.Absence.DatePicker.prototype.draw = function () {
 			var theDate = null;
 
-			if (this.options.currentValue == null || this.options.currentValue === "")
-			{
+			if (!this.options.currentValue) {
 				// MNT-2214 fix, check for prevously entered value
 				this.options.currentValue = Dom.get(this.currentValueHtmlId).value;
 			}
-
 			// calculate current date
-			if (this.options.currentValue !== null && this.options.currentValue !== "")
-			{
-				theDate = Alfresco.util.fromISO8601(this.options.currentValue);
+			if (this.options.currentValue) {
+				theDate = Date.parse(this.options.currentValue);
 			}
-			else
-			{
+			else {
 				theDate = new Date();
 			}
 
@@ -56,7 +52,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			var timeEntry = theDate.toString(this._msg("form.control.date-picker.entry.time.format"));
 
 			// populate the input fields
-			if (this.options.currentValue !== "")
+			if (this.options.currentValue)
 			{
 				// show the formatted date
 				Dom.get(this.id + "-date").value = dateEntry;
@@ -83,6 +79,15 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			});
 			this.widgets.calendar.cfg.setProperty("pagedate", page);
 			this.widgets.calendar.cfg.setProperty("selected", selected);
+
+			if (this.options.minLimit) {
+				this.widgets.calendar.cfg.setProperty("mindate", this.options.minLimit);
+
+			}
+			if (this.options.maxLimit) {
+				this.widgets.calendar.cfg.setProperty("maxdate", this.options.maxLimit);
+			}
+
 			Alfresco.util.calI18nParams(this.widgets.calendar);
 
 			// setup events
@@ -119,7 +124,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			this.widgets.calendar.render();
 
 			// If value was set in visible fields, make sure they are validated and put in the hidden field as well
-			if (this.options.currentValue !== "")
+			if (this.options.currentValue)
 			{
 			this._handleFieldChange(null);
 			}
