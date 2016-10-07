@@ -55,8 +55,8 @@
 <#assign maxLimit = "" />
 <#if field.control.params.currentValue?? >
 	<#assign currentValue = form.arguments[field.control.params.currentValue] />
-<#elseif args["currentValue"]??>
-	<#assign currentValue = args["currentValue"] />
+<#elseif field.control.params.argCurrentValue?? && args[field.control.params.argCurrentValue]??>
+	<#assign currentValue = args[field.control.params.argCurrentValue] />
 </#if>
 
 <#if field.control.params.maxLimitArg?? >

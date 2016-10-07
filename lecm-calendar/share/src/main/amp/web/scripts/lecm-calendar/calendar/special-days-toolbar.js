@@ -32,13 +32,13 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 				var headerLabel;
 				var selectedYear = dataGrid.options.currentYear;
 				var pickerDateString;
-				var maxDateString =  "12/31/"+selectedYear;
-				var minDateString =  "01/01/"+selectedYear;
-
+				var maxDateString = "12/31/" + selectedYear;
+				var minDateString = "01/01/" + selectedYear;
 				var date = new Date();
-				if(date.getFullYear()!=selectedYear){
+
+				if (date.getFullYear() != selectedYear) {
 					pickerDateString = minDateString;
-				}else{
+				} else {
 					pickerDateString = Alfresco.util.formatDate(date, "mm/dd/yyyy");
 				}
 
@@ -64,7 +64,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays = LogicECM.module.WCalendar.Calen
 						"&showCancelButton=true"+
 						"&maxLimitArg={maxDate}"+
 						"&minLimitArg={minDate}"+
-						"&currentValue={pickerDate}";
+						"&initialDate={pickerDate}";
 				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
 					itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
 					itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
