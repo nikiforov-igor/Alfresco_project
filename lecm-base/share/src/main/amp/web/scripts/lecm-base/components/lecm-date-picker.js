@@ -517,6 +517,7 @@
                             }
                             else {
                                 Dom.addClass(me.id + "-date", "invalid");
+                                Dom.get(me.currentValueHtmlId).value = "";
                                 if (YAHOO.env.ua.ie) {
                                     Bubbling.fire("mandatoryControlValueUpdated", me);
                                 }
