@@ -2,7 +2,6 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
-import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
@@ -21,12 +20,14 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.GUID;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.surf.util.I18NUtil;
+import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
@@ -34,7 +35,6 @@ import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
-import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.constraints.DocumentUrlConstraint;
 import ru.it.lecm.documents.expression.Expression;
@@ -43,6 +43,8 @@ import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -602,6 +604,78 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
             }
         }
         return null;
+    }
+
+    @Override
+    public String getDocumentCopyURL(NodeRef document) {
+        final QName docType = nodeService.getType(document);
+        final String prefixedType = docType.toPrefixString(namespaceService);
+
+        DocumentCopySettings settings = DocumentCopySettingsBean.getSettingsForDocType(prefixedType);
+        boolean isHasSettings = settings != null && (settings.getPropsToCopy() != null || settings.getAssocsToCopy() != null);
+
+        StringBuilder urlBuilder = new StringBuilder();
+
+        if (isHasSettings) {
+            urlBuilder.append(settings.getBaseURL()).append("?documentType=").append(prefixedType);
+
+            StringBuilder paramsBuilder = new StringBuilder();
+            paramsBuilder.append("documentType=").append(prefixedType);
+
+            // копируем свойства
+            final List<String> propertiesToCopy = settings.getPropsToCopy();
+            if (null != propertiesToCopy) {
+                Map<QName, Serializable> originalProperties = nodeService.getProperties(document);
+                for (String propName : propertiesToCopy) {
+                    try {
+                        QName propQName = QName.createQName(propName, namespaceService);
+                        if (null != propQName) {
+                            Object propValue = originalProperties.get(propQName);
+                            if (null != propValue) {
+                                if (propValue instanceof Date) {
+                                    propValue = BaseBean.DateFormatISO8601.format(propValue);
+                                }
+                                paramsBuilder.append("&prop_")
+                                        .append(propQName.toPrefixString(namespaceService).replace(":", "_"))
+                                        .append("=")
+                                        .append(propValue.toString());
+                            }
+                        }
+                    } catch (InvalidQNameException invalid) {
+                        logger.warn("Invalid QName for document property:" + propName);
+                    }
+                }
+            }
+
+            final List<String> assocsToCopy = settings.getAssocsToCopy();
+            if (null != assocsToCopy) {
+                for (String assocName : assocsToCopy) {
+                    try {
+                        QName assocQName = QName.createQName(assocName, namespaceService);
+                        if (null != assocQName) {
+                            List<NodeRef> targets = findNodesByAssociationRef(document, assocQName, null, ASSOCIATION_TYPE.TARGET);
+                            if (null != targets) {
+                                paramsBuilder.append("&assoc_")
+                                        .append(assocQName.toPrefixString(namespaceService).replace(":", "_"))
+                                        .append("=")
+                                        .append(StringUtils.collectionToDelimitedString(targets, ","));
+                            }
+                        }
+                    } catch (InvalidQNameException invalid) {
+                        logger.warn("Invalid QName for document assoc:" + assocName);
+                    }
+                }
+            }
+            String encodedParams = Base64.encodeBase64String(paramsBuilder.toString().getBytes());
+            int encodedParamsHash = paramsBuilder.toString().hashCode();
+
+            String encodedURIParams = URLEncoder.encodeUriComponent(encodedParams);
+
+            urlBuilder.append("&p1=").append(encodedURIParams);
+            urlBuilder.append("&p2=").append(encodedParamsHash);
+        }
+
+        return urlBuilder.length() > 0 ? urlBuilder.toString() : null;
     }
 
     private String getDraftRootLabel(String docType) {

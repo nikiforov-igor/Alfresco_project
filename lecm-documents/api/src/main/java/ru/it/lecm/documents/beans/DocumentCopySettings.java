@@ -13,6 +13,7 @@ public class DocumentCopySettings {
     private List<String> assocsToCopy;
     private List<String> categoriesToCopy;
     private List<String> tableDataToCopy;
+    private String baseURL = DocumentService.DEFAULT_CREATE_URL;
 
     public List<String> getTableDataToCopy() {
         return tableDataToCopy;
@@ -44,5 +45,13 @@ public class DocumentCopySettings {
 
     public void setCategoriesToCopy(List<String> categoriesToCopy) {
         this.categoriesToCopy = categoriesToCopy;
+    }
+
+    public String getBaseURL() {
+        return baseURL;
+    }
+
+    public void setBaseURL(String baseURL) {
+        this.baseURL = baseURL;
     }
 }
