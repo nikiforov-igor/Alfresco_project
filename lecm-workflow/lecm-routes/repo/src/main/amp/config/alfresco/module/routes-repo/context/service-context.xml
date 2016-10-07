@@ -55,4 +55,6 @@
 	  p:searchService-ref="searchService"
 	/>
 
+	<bean id="routesOnCreateAssocPolicy" class="ru.it.lecm.workflow.routes.policy.RoutesOnCreateAssocPolicy"
+		  init-method="init" parent="logicEcmAssociationPolicy"/>
 </beans>

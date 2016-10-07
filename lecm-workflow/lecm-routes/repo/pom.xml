@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>ru.it.lecm.workflow.routes</groupId>
 		<artifactId>routes</artifactId>
-		<version>1.8.0</version>
+		<version>1.8.5</version>
 	</parent>
 
 	<artifactId>routes-repo</artifactId>
@@ -79,6 +79,11 @@
 			<artifactId>documents-repo-api</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.routes</groupId>
+			<artifactId>routes-repo-api</artifactId>
+			<version>${platform.version}</version>
 		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>

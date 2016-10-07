@@ -13,7 +13,7 @@
 			</default-controls>
 			<dependencies>
 				<js src="/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js"/>
-				<js src="/scripts/lecm-events/events-constraints.js"/>
+				<!--<js src="/scripts/lecm-events/events-constraints.js"/>-->
 				<js src="/scripts/lecm-meetings/meetings-constraints.js"/>
 				<!--js src="/scripts/lecm-contracts/get-stage-delete-message.js"/-->
 			</dependencies>
@@ -86,6 +86,9 @@
 				<appearance>
 					<field id="lecm-events:title"/>
 					<field id="lecm-events:all-day">
+						<control>
+							<control-param name="fireMandatoryByChange">true</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
 						</constraint-handlers>
@@ -443,6 +446,9 @@
 
 					<field id="lecm-events:title" set="createEventSet"/>
 					<field id="lecm-events:all-day" set="createEventSet">
+						<control>
+							<control-param name="fireMandatoryByChange">true</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
 						</constraint-handlers>
@@ -640,6 +646,9 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-events:all-day">
+						<control>
+							<control-param name="fireMandatoryByChange">true</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="INVALID" validation-handler="LogicECM.module.Events.changeAllDayValidation" event="change"/>
 						</constraint-handlers>
