@@ -137,31 +137,29 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
 
 			if (el != null) {
-				var selectedItems = this.selectedItems;
+				var me = this;
+				var items = this.getSelectedItems(!!this.options.sortSelected);
 
 				if (clearCurrentDisplayValue) {
 					el.innerHTML = '';
 				}
-				if(this.options.sortingSelected){
-					selectedItems = this.getSortedSelectedItems();
-				}
-				for (var i in selectedItems) {
-					var displayName = selectedItems[i].selectedName;
+				items.forEach(function(item, index, array){
+					var displayName = me.selectedItems[item].selectedName;
 
-					if(this.options.disabled) {
+					if(me.options.disabled) {
 						//if (this.options.itemType == "lecm-orgstr:employee") {
-						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
+						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.this.selectedItems[item].nodeRef, displayName));
 						//} else {
-							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, selectedItems[i]), this.getMandatoryCheckboxHTML(selectedItems[i], true) + this.getMemberStatusHTML(selectedItems[i]));
+							el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[i], true) + me.getMemberStatusHTML(me.selectedItems[item]));
 						//}
 					} else {
-						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, selectedItems[i]), this.getMandatoryCheckboxHTML(selectedItems[i], false) + this.getMemberStatusHTML(selectedItems[i]) + this.getRemoveButtonHTML(selectedItems[i], "_c"));
+						el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[item], false) + me.getMemberStatusHTML(me.selectedItems[item]) + me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
 
-						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: selectedItems[i], dopId: "_c", updateForms: true}, this);
-						YAHOO.util.Event.onAvailable(this.getMandatoryCheckboxId(selectedItems[i]), this.attachMandatoryCheckboxClickListener, selectedItems[i], this);
+						YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef, me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "_c", updateForms: true}, me);
+						YAHOO.util.Event.onAvailable(me.getMandatoryCheckboxId(me.selectedItems[item]), me.attachMandatoryCheckboxClickListener, me.selectedItems[item], me);
 					}
 					el.innerHTML += '<div class="clear"></div>';
-				}
+				});
 			}
 
 			if(!this.options.disabled)

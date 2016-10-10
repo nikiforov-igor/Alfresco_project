@@ -156,7 +156,7 @@ LogicECM.module = LogicECM.module || {};
 
 				sortProp: "cm:name",
 
-				sortingSelected: false,
+				sortSelected: false,
 
 				selectedItemsNameSubstituteString: null,
 				// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
@@ -1891,7 +1891,7 @@ LogicECM.module = LogicECM.module || {};
 				if (item) {
 					this.selectedItems[item.nodeRef] = item;
 					this.singleSelectedItem = item;
-					if(this.options.sortingSelected){
+					if(this.options.sortSelected){
 						this.updateSelectedItems();
 					}else {
 						this.updateAddedSelectedItem(item);
@@ -1919,28 +1919,27 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			updateSelectedItems: function () {
-				var items = this.selectedItems;
+				var me = this;
 				var fieldId = this.options.pickerId + "-selected-elements";
 				Dom.get(fieldId).innerHTML = '';
 				Dom.get(fieldId).className = 'currentValueDisplay';
 
-				if(this.options.sortingSelected){
-					items = this.getSortedSelectedItems();
-				}
-				for (var i in items) {
-						var displayName = items[i].selectedName;
+				var items = this.getSelectedItems(!!this.options.sortSelected);
 
-						if (this.options.itemType == "lecm-orgstr:employee") {
-							var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
-							Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
+				items.forEach(function(item, index, array){
+						var displayName = me.selectedItems[item].selectedName;
+
+						if (me.options.itemType == "lecm-orgstr:employee") {
+							var elementName = me.getEmployeeAbsenceMarkeredHTML(me.selectedItems[item].nodeRef, displayName, true);
+							Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, me.getRemoveButtonHTML(me.selectedItems[item]));
 						} else {
-							Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
+							Dom.get(fieldId).innerHTML += Util.getCroppedItem(me.getDefaultView(displayName, me.selectedItems[item]), me.getRemoveButtonHTML(me.selectedItems[item]));
 						}
 
 						Dom.get(fieldId).innerHTML += '<div class="clear"></div>';
 
-						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
-				}
+						YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef, me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "", updateForms: false}, me);
+				});
 			},
 
 			updateAddedSelectedItem: function(item) {
@@ -2029,36 +2028,34 @@ LogicECM.module = LogicECM.module || {};
 				Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
 
 				if (el != null) {
-					var selectedItems = this.selectedItems;
+					var me = this;
+					var items = this.getSelectedItems(!!this.options.sortSelected);
 
 					if (clearCurrentDisplayValue) {
 						el.innerHTML = '';
 					}
-					if(this.options.sortingSelected){
-						selectedItems = this.getSortedSelectedItems();
-					}
-					for (var i in selectedItems) {
-						var displayName = selectedItems[i].selectedName;
+					items.forEach(function(item, index, array){
+						var displayName = me.selectedItems[item].selectedName;
 
-						if(this.options.disabled) {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(selectedItems[i].nodeRef, displayName));
+						if(me.options.disabled) {
+							if (me.options.itemType == "lecm-orgstr:employee") {
+								el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(me.selectedItems[item].nodeRef, displayName));
 							} else {
-								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, selectedItems[i]));
+								el.innerHTML += Util.getCroppedItem(me.getDefaultView(displayName, me.selectedItems[item]));
 							}
 						} else {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								var elementName = this.getEmployeeAbsenceMarkeredHTML(selectedItems[i].nodeRef, displayName, null);
-								el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(selectedItems[i], "_c"));
+							if (me.options.itemType == "lecm-orgstr:employee") {
+								var elementName = me.getEmployeeAbsenceMarkeredHTML(me.selectedItems[item].nodeRef, displayName, null);
+								el.innerHTML += Util.getCroppedItem(elementName, me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
 							} else {
-								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, selectedItems[i]), this.getRemoveButtonHTML(selectedItems[i], "_c"));
+								el.innerHTML += Util.getCroppedItem(me.getDefaultView(displayName, me.selectedItems[item]), me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
 							}
 
-							YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: selectedItems[i], dopId: "_c", updateForms: true}, this);
+							YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef + "_c", me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "_c", updateForms: true}, me);
 						}
 
 						el.innerHTML += '<div class="clear"></div>';
-					}
+					});
 				}
 
 				if(!this.options.disabled)
@@ -2181,25 +2178,22 @@ LogicECM.module = LogicECM.module || {};
 				return removedItems;
 			},
 
-			getSelectedItems:function () {
-				var selectedItems = [];
+			getSelectedItems:function (sort) {
+				var selectedItems = [], me = this;
 
 				for (var item in this.selectedItems) {
 					if (this.selectedItems.hasOwnProperty(item)) {
 						selectedItems.push(item);
 					}
 				}
+				if(sort){
+					selectedItems = selectedItems.sort(function (a, b) {
+						return me.selectedItems[a].name.localeCompare(me.selectedItems[b].name);
+					});
+				}
 				return selectedItems;
 			},
 
-			getSortedSelectedItems:function(){
-				var items = this.selectedItems;
-				items = Object.keys(items).map(function (key) { if (items.hasOwnProperty(key)) { return items[key]; }});
-				var sortedItems = items.sort(function (a, b) {
-						return a.name.localeCompare(b.name);
-					});
-				return sortedItems;
-			},
 			getSelectedItemsNameSubstituteString:function () {
 				var result = this.options.nameSubstituteString;
 				if (this.options.selectedItemsNameSubstituteString != null) {

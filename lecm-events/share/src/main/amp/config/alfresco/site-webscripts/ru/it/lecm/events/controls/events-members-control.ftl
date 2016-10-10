@@ -53,9 +53,9 @@
 <#if field.control.params.endpointMany??>
     <#assign endpointMany = (field.control.params.endpointMany == "true")>
 </#if>
-<#assign sortingSelected = false>
-<#if params.sortingSelected?? && params.sortingSelected == "true">
-    <#assign  sortingSelected = true>
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+    <#assign  sortSelected = true>
 </#if>
 
 
@@ -207,7 +207,7 @@
 				showPath: ${showPath?string},
 				showAutocomplete: ${showAutocomplete?string},
 				currentValue: "${field.value!''}",
-                sortingSelected: ${sortingSelected?string},
+                sortSelected: ${sortSelected?string},
             <#if params.defaultValueDataSource??>
 				defaultValueDataSource: "${params.defaultValueDataSource}",
             </#if>
