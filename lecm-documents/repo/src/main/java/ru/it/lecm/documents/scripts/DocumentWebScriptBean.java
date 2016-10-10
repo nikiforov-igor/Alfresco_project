@@ -501,13 +501,8 @@ public class DocumentWebScriptBean extends BaseWebScript {
     public String getDocumentCopyURL(String nodeRef) {
         ParameterCheck.mandatory("nodeRef", nodeRef);
         NodeRef ref = NodeRef.isNodeRef(nodeRef) ? new NodeRef(nodeRef): null;
-        if (ref != null && nodeService.exists(ref)) {
-            String copyURL = documentService.getDocumentCopyURL(ref);
-            if (copyURL != null) {
-                return copyURL;
-            }
-        }
-        return "";
+
+        return documentService.getDocumentCopyURL(ref);
     }
 
     /**

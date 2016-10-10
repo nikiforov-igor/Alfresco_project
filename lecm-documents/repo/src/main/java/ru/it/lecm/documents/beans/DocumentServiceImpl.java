@@ -608,23 +608,23 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     @Override
     public String getDocumentCopyURL(NodeRef document) {
-        final QName docType = nodeService.getType(document);
-        final String prefixedType = docType.toPrefixString(namespaceService);
-
-        DocumentCopySettings settings = DocumentCopySettingsBean.getSettingsForDocType(prefixedType);
-        boolean isHasSettings = settings != null && (settings.getPropsToCopy() != null || settings.getAssocsToCopy() != null);
-
         StringBuilder urlBuilder = new StringBuilder();
 
-        if (isHasSettings) {
-            urlBuilder.append(settings.getBaseURL()).append("?documentType=").append(prefixedType);
+        if (document != null && nodeService.exists(document)) {
+            final QName docType = nodeService.getType(document);
+            final String prefixedType = docType.toPrefixString(namespaceService);
 
-            StringBuilder paramsBuilder = new StringBuilder();
-            paramsBuilder.append("documentType=").append(prefixedType);
+            DocumentCopySettings settings = DocumentCopySettingsBean.getSettingsForDocType(prefixedType);
+            boolean isHasSettings = settings != null && !settings.isEmpty();
 
-            // копируем свойства
-            final List<String> propertiesToCopy = settings.getPropsToCopy();
-            if (null != propertiesToCopy) {
+            if (isHasSettings) {
+                urlBuilder.append(settings.getBaseURL()).append("?documentType=").append(prefixedType);
+
+                StringBuilder paramsBuilder = new StringBuilder();
+                paramsBuilder.append("documentType=").append(prefixedType);
+
+                // копируем свойства
+                final List<String> propertiesToCopy = settings.getPropsToCopy();
                 Map<QName, Serializable> originalProperties = nodeService.getProperties(document);
                 for (String propName : propertiesToCopy) {
                     try {
@@ -645,10 +645,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                         logger.warn("Invalid QName for document property:" + propName);
                     }
                 }
-            }
 
-            final List<String> assocsToCopy = settings.getAssocsToCopy();
-            if (null != assocsToCopy) {
+                final List<String> assocsToCopy = settings.getAssocsToCopy();
                 for (String assocName : assocsToCopy) {
                     try {
                         QName assocQName = QName.createQName(assocName, namespaceService);
@@ -665,17 +663,18 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                         logger.warn("Invalid QName for document assoc:" + assocName);
                     }
                 }
+
+                String encodedParams = Base64.encodeBase64String(paramsBuilder.toString().getBytes());
+                int encodedParamsHash = paramsBuilder.toString().hashCode();
+
+                String encodedURIParams = URLEncoder.encodeUriComponent(encodedParams);
+
+                urlBuilder.append("&p1=").append(encodedURIParams);
+                urlBuilder.append("&p2=").append(encodedParamsHash);
             }
-            String encodedParams = Base64.encodeBase64String(paramsBuilder.toString().getBytes());
-            int encodedParamsHash = paramsBuilder.toString().hashCode();
-
-            String encodedURIParams = URLEncoder.encodeUriComponent(encodedParams);
-
-            urlBuilder.append("&p1=").append(encodedURIParams);
-            urlBuilder.append("&p2=").append(encodedParamsHash);
         }
 
-        return urlBuilder.length() > 0 ? urlBuilder.toString() : null;
+        return urlBuilder.toString();
     }
 
     private String getDraftRootLabel(String docType) {
