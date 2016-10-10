@@ -10,3 +10,7 @@
      display: table;
      float: none;
  }
+
+.control.association-token-control .value-div .control-selected-values {
+    max-height: none;
+}
