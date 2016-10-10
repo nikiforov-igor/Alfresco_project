@@ -238,7 +238,7 @@
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
 					<field id="lecmSignAspects:signerEmployeeAssoc" set="contract-info">
-						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+						<control>
 							<control-param name="allowedNodesScript">lecm/orgstructure/employees/allowed?businessRoleId=LECM_SIGNERS</control-param>
 						</control>
 					</field>
