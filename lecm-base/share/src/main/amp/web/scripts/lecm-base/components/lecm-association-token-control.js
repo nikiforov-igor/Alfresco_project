@@ -156,6 +156,8 @@ LogicECM.module = LogicECM.module || {};
 
 				sortProp: "cm:name",
 
+				sortingSelected: false,
+
 				selectedItemsNameSubstituteString: null,
 				// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
 				employeeAbsenceMarker: false,
@@ -1889,8 +1891,11 @@ LogicECM.module = LogicECM.module || {};
 				if (item) {
 					this.selectedItems[item.nodeRef] = item;
 					this.singleSelectedItem = item;
-
-					this.updateAddedSelectedItem(item);
+					if(this.options.sortingSelected){
+						this.updateSelectedItems();
+					}else {
+						this.updateAddedSelectedItem(item);
+					}
 					if (!this.options.multipleSelectMode) {
 						this.updateAddButtons();
 					} else if (this.addItemButtons.hasOwnProperty(item.nodeRef)) {
@@ -1919,8 +1924,10 @@ LogicECM.module = LogicECM.module || {};
 				Dom.get(fieldId).innerHTML = '';
 				Dom.get(fieldId).className = 'currentValueDisplay';
 
+				if(this.options.sortingSelected){
+					items = this.getSortedSelectedItems();
+				}
 				for (var i in items) {
-					if (typeof(items[i]) != "function") {
 						var displayName = items[i].selectedName;
 
 						if (this.options.itemType == "lecm-orgstr:employee") {
@@ -1933,7 +1940,6 @@ LogicECM.module = LogicECM.module || {};
 						Dom.get(fieldId).innerHTML += '<div class="clear"></div>';
 
 						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
-					}
 				}
 			},
 
@@ -2023,27 +2029,32 @@ LogicECM.module = LogicECM.module || {};
 				Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
 
 				if (el != null) {
+					var selectedItems = this.selectedItems;
+
 					if (clearCurrentDisplayValue) {
 						el.innerHTML = '';
 					}
-					for (var i in this.selectedItems) {
-						var displayName = this.selectedItems[i].selectedName;
+					if(this.options.sortingSelected){
+						selectedItems = this.getSortedSelectedItems();
+					}
+					for (var i in selectedItems) {
+						var displayName = selectedItems[i].selectedName;
 
 						if(this.options.disabled) {
 							if (this.options.itemType == "lecm-orgstr:employee") {
-								el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
+								el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(selectedItems[i].nodeRef, displayName));
 							} else {
-								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]));
+								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, selectedItems[i]));
 							}
 						} else {
 							if (this.options.itemType == "lecm-orgstr:employee") {
-								var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
-								el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+								var elementName = this.getEmployeeAbsenceMarkeredHTML(selectedItems[i].nodeRef, displayName, null);
+								el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(selectedItems[i], "_c"));
 							} else {
-								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+								el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, selectedItems[i]), this.getRemoveButtonHTML(selectedItems[i], "_c"));
 							}
 
-							YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
+							YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: selectedItems[i], dopId: "_c", updateForms: true}, this);
 						}
 
 						el.innerHTML += '<div class="clear"></div>';
@@ -2181,6 +2192,14 @@ LogicECM.module = LogicECM.module || {};
 				return selectedItems;
 			},
 
+			getSortedSelectedItems:function(){
+				var items = this.selectedItems;
+				items = Object.keys(items).map(function (key) { if (items.hasOwnProperty(key)) { return items[key]; }});
+				var sortedItems = items.sort(function (a, b) {
+						return a.name.localeCompare(b.name);
+					});
+				return sortedItems;
+			},
 			getSelectedItemsNameSubstituteString:function () {
 				var result = this.options.nameSubstituteString;
 				if (this.options.selectedItemsNameSubstituteString != null) {

@@ -53,6 +53,11 @@
 <#if field.control.params.endpointMany??>
     <#assign endpointMany = (field.control.params.endpointMany == "true")>
 </#if>
+<#assign sortingSelected = false>
+<#if params.sortingSelected?? && params.sortingSelected == "true">
+    <#assign  sortingSelected = true>
+</#if>
+
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
@@ -202,6 +207,7 @@
 				showPath: ${showPath?string},
 				showAutocomplete: ${showAutocomplete?string},
 				currentValue: "${field.value!''}",
+                sortingSelected: ${sortingSelected?string},
             <#if params.defaultValueDataSource??>
 				defaultValueDataSource: "${params.defaultValueDataSource}",
             </#if>

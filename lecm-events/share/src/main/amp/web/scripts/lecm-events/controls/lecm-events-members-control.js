@@ -137,23 +137,28 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
 
 			if (el != null) {
+				var selectedItems = this.selectedItems;
+
 				if (clearCurrentDisplayValue) {
 					el.innerHTML = '';
 				}
-				for (var i in this.selectedItems) {
-					var displayName = this.selectedItems[i].selectedName;
+				if(this.options.sortingSelected){
+					selectedItems = this.getSortedSelectedItems();
+				}
+				for (var i in selectedItems) {
+					var displayName = selectedItems[i].selectedName;
 
 					if(this.options.disabled) {
 						//if (this.options.itemType == "lecm-orgstr:employee") {
 						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName));
 						//} else {
-							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], true) + this.getMemberStatusHTML(this.selectedItems[i]));
+							el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, selectedItems[i]), this.getMandatoryCheckboxHTML(selectedItems[i], true) + this.getMemberStatusHTML(selectedItems[i]));
 						//}
 					} else {
-						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], false) + this.getMemberStatusHTML(this.selectedItems[i]) + this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, selectedItems[i]), this.getMandatoryCheckboxHTML(selectedItems[i], false) + this.getMemberStatusHTML(selectedItems[i]) + this.getRemoveButtonHTML(selectedItems[i], "_c"));
 
-						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
-						YAHOO.util.Event.onAvailable(this.getMandatoryCheckboxId(this.selectedItems[i]), this.attachMandatoryCheckboxClickListener, this.selectedItems[i], this);
+						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: selectedItems[i], dopId: "_c", updateForms: true}, this);
+						YAHOO.util.Event.onAvailable(this.getMandatoryCheckboxId(selectedItems[i]), this.attachMandatoryCheckboxClickListener, selectedItems[i], this);
 					}
 					el.innerHTML += '<div class="clear"></div>';
 				}
