@@ -21,6 +21,9 @@
 <#assign propComment = "prop_lecm-contract-table-structure_stage-comment">
 <#assign assocAttachments = "assoc_lecm-contract-table-structure_attachments-temp-assoc">
 <#assign propStatus = "prop_lecm-contract-table-structure_stage-status">
+
+<#assign startId = htmlId + "_" + propStartDate?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
+<#assign endId = htmlId + "_" + propEndDate?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
 <#-- /Fields -->
 
 <#assign inEditMode = form.mode == "edit">
@@ -38,11 +41,13 @@
             <tr>
                 <td colspan="3"><@formLib.renderField field = form.fields[propStatus] /></td>
                 <input id="${htmlId}_${propStatus}" name="${propStatus}" value="${form.fields[propStatus].value}" type="hidden"/>
-                <td></td>
             </tr>
 			</#if>
+        <tr>
+			<td colspan="3" <#if inViewMode>id="propIndexTableRow"</#if>><@formLib.renderField field = form.fields[propIndexTableRow] /></td>
+		</tr>
         <tr <#if inViewMode>class="tableRowData"</#if>>
-            <td <#if inViewMode>id="propIndexTableRow"</#if>><@formLib.renderField field = form.fields[propIndexTableRow] /></td>
+			<td></td>
             <td <#if inViewMode>id="propStartDate"</#if>><@formLib.renderField field = form.fields[propStartDate] /></td>
             <td <#if inViewMode>id="propEndDate"</#if>><@formLib.renderField field = form.fields[propEndDate] /></td>
         </tr>
@@ -179,7 +184,9 @@
 				endDateHtmlId: "${htmlId}_${propEndDateReal}"
 			}).setMessages(${messages});
 		}
-		YAHOO.util.Event.onDOMReady(initJs);
+            YAHOO.util.Event.onAvailable('${startId}', function() {
+                YAHOO.util.Event.onAvailable('${endId}', initJs);
+            });
 		</#if>
 	})();
 </script>
