@@ -395,6 +395,7 @@
 		</property>
 	</bean>
 	<bean id="eventCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+		<property name="baseURL" value="event-create"/>
 		<property name="propsToCopy">
 			<list>
 				<value>lecm-events:title</value>
