@@ -22,8 +22,8 @@
 <#assign assocAttachments = "assoc_lecm-contract-table-structure_attachments-temp-assoc">
 <#assign propStatus = "prop_lecm-contract-table-structure_stage-status">
 
-<#assign startReadyId = htmlId + "_" + propStartDate?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
-<#assign endReadyId = htmlId + "_" + propEndDate?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
+<#assign startId = htmlId + "_" + propStartDate?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
+<#assign endId = htmlId + "_" + propEndDate?replace("prop_", "")?replace("_", ":") + "_" + "componentReady"/>
 <#-- /Fields -->
 
 <#assign inEditMode = form.mode == "edit">
@@ -184,8 +184,8 @@
 				endDateHtmlId: "${htmlId}_${propEndDateReal}"
 			}).setMessages(${messages});
 		}
-            YAHOO.util.Event.onAvailable('${startReadyId}', function() {
-                YAHOO.util.Event.onAvailable('${endReadyId}', initJs);
+            YAHOO.util.Event.onAvailable('${startId}', function() {
+                YAHOO.util.Event.onAvailable('${endId}', initJs);
             });
 		</#if>
 	})();
