@@ -5,18 +5,19 @@
  */
 package ru.it.lecm.csp.signing.client.signature;
 
-import com.sun.jna.Function;
-import com.sun.jna.Library;
-import com.sun.jna.Memory;
-import com.sun.jna.Native;
-import com.sun.jna.Platform;
-import com.sun.jna.Pointer;
-import com.sun.jna.WString;
+import com.sun.jna.*;
 import com.sun.jna.platform.win32.WinDef.BOOLByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.csp.signing.client.cryptoapiwrapper.CRYPT_DATA_BLOB;
+import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapper;
+import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapperMockImpl;
+import ru.it.lecm.csp.signing.client.exception.CryptoException;
+
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.security.cert.CertificateEncodingException;
@@ -27,13 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.it.lecm.csp.signing.client.cryptoapiwrapper.CRYPT_DATA_BLOB;
-import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapperMockImpl;
-import ru.it.lecm.csp.signing.client.exception.CryptoException;
-import ru.it.lecm.csp.signing.client.cryptoapiwrapper.JavaCryptoApiWrapper;
 
 /**
  *
@@ -99,11 +93,7 @@ public class CryptoApiWrapperSignatureProcessor implements SignatureProcessor {
         }
     }
 
-    public CryptoApiWrapperSignatureProcessor getInstanse(String wrapperfolder, String catalinahome) {
-        File localFolder = Paths.get(catalinahome, "webapps/alfresco/WEB-INF/classes/alfresco/module/signed-docflow-repo/libs/").toFile();
-        if (wrapperfolder.isEmpty() && localFolder != null && localFolder.isDirectory() && localFolder.exists()) {
-            wrapperfolder = localFolder.getPath();
-        }
+    public CryptoApiWrapperSignatureProcessor getInstanse(String wrapperfolder) {
         if (_cryptoApiWrapper == null || _cryptoApiWrapper instanceof JavaCryptoApiWrapperMockImpl) {
             initWrapper(wrapperfolder);
         }
