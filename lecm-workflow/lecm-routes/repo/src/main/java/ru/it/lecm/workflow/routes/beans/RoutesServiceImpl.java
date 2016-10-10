@@ -42,7 +42,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	private final static Logger logger = LoggerFactory.getLogger(RoutesServiceImpl.class);
 	public final static String ROUTES_FOLDER_ID = "ROUTES_FOLDER";
-	private final String SEARCH_ROUTES_QUERY_FORMAT = "(+TYPE:\"%s\") AND (-ASPECT:\"sys:temporary\" AND -ASPECT:\"lecm-workflow:temp\") AND (+PARENT:\"%s\") AND (+ISNOTNULL:\"sys:node-dbid\" AND @sys:node-dbid:?*)";
+	private final String SEARCH_ROUTES_QUERY_FORMAT = "(+TYPE:\"%s\") AND (-ASPECT:\"sys:temporary\" AND -ASPECT:\"lecm-workflow:temp\") AND (+PARENT:\"%s\") AND +ISNOTNULL:\"sys:node-dbid\"";
 	private final static String CUSTOM_ITERATION_TITLE = "Индивидуальный маршрут";
 
 	QName TYPE_CONTRACTOR = QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-type");
