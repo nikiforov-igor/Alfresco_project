@@ -1930,8 +1930,6 @@ LogicECM.module = LogicECM.module || {};
 							Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
 						}
 
-						Dom.get(fieldId).innerHTML += '<div class="clear"></div>';
-
 						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
 					}
 				}
@@ -1947,8 +1945,6 @@ LogicECM.module = LogicECM.module || {};
 				} else {
 					Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, item), this.getRemoveButtonHTML(item));
 				}
-
-				Dom.get(fieldId).innerHTML += '<div class="clear"></div>';
 
 				var items = this.selectedItems;
 				for (var i in items) {
@@ -2045,8 +2041,6 @@ LogicECM.module = LogicECM.module || {};
 
 							YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 						}
-
-						el.innerHTML += '<div class="clear"></div>';
 					}
 				}
 

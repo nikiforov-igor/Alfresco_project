@@ -155,7 +155,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 						YAHOO.util.Event.onAvailable(this.getMandatoryCheckboxId(this.selectedItems[i]), this.attachMandatoryCheckboxClickListener, this.selectedItems[i], this);
 					}
-					el.innerHTML += '<div class="clear"></div>';
 				}
 			}
 
