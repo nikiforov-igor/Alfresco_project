@@ -493,6 +493,19 @@ public class DocumentWebScriptBean extends BaseWebScript {
     }
 
     /**
+     * Получить URL для копирования документа
+     *
+     * @param nodeRef документ
+     */
+    @SuppressWarnings("unused")
+    public String getDocumentCopyURL(String nodeRef) {
+        ParameterCheck.mandatory("nodeRef", nodeRef);
+        NodeRef ref = NodeRef.isNodeRef(nodeRef) ? new NodeRef(nodeRef): null;
+
+        return documentService.getDocumentCopyURL(ref);
+    }
+
+    /**
      * Получить ссылку на АРМ документа
      *
      * @param nodeRef документ

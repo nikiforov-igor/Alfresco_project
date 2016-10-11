@@ -158,8 +158,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef, me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "_c", updateForms: true}, me);
 						YAHOO.util.Event.onAvailable(me.getMandatoryCheckboxId(me.selectedItems[item]), me.attachMandatoryCheckboxClickListener, me.selectedItems[item], me);
 					}
-					el.innerHTML += '<div class="clear"></div>';
-				});
+				}
 			}
 
 			if(!this.options.disabled)

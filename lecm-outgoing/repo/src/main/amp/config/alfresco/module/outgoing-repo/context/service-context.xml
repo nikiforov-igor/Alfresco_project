@@ -62,7 +62,6 @@
 	<util:list id="outgoing.copySettings.assocsToCopy">
 		<value>lecm-outgoing:contractor-assoc</value>
 		<value>lecm-outgoing:recipient-assoc</value>
-		<value>lecm-outgoing:registrar-assoc</value>
 		<value>lecm-outgoing:delivery-method-assoc</value>
 		<value>lecm-eds-document:document-type-assoc</value>
 		<value>lecm-eds-document:file-register-assoc</value>
