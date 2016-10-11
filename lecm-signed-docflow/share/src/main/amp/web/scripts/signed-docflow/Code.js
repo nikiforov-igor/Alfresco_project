@@ -1300,7 +1300,7 @@ function SignHash_NPAPI(thumbprint, hash, hashNodeRef, sTSAAddress) {
             var oHashedData = cadesplugin.CreateObject("CAdESCOM.HashedData");
             oHashedData.Algorithm = hashAlg;
             oHashedData.SetHashValue(sHashValue);
-            var CADES = sTSAAddress ? (sTSAAddress !== "${enforced.url}" ? 0x5D : 1) : 1;
+            var CADES = sTSAAddress ? (sTSAAddress !== "${dsign.tsp.url}" ? 0x5D : 1) : 1;
 
             if (sHashValue) {
                 // Данные на подпись ввели
