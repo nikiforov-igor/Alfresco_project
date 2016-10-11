@@ -1936,9 +1936,8 @@ LogicECM.module = LogicECM.module || {};
 							Dom.get(fieldId).innerHTML += Util.getCroppedItem(me.getDefaultView(displayName, me.selectedItems[item]), me.getRemoveButtonHTML(me.selectedItems[item]));
 						}
 
-						YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + items[i].nodeRef, me.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, me);
-					}
-				}
+						YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef, me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "", updateForms: false}, me);
+				});
 			},
 
 			updateAddedSelectedItem: function(item) {
@@ -2050,7 +2049,7 @@ LogicECM.module = LogicECM.module || {};
 
 							YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef + "_c", me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "_c", updateForms: true}, me);
 						}
-					}
+					});
 				}
 
 				if(!this.options.disabled)
