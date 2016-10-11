@@ -502,7 +502,7 @@ i.icon-building {
 }
 .control .control-selected-values > div:nth-child(even),
 .currentValueDisplay > div:nth-child(even) {
-    background: #f8f8f8;
+    background: #edf5ff;
 }
 .control .control-selected-values > div:last-child,
 .currentValueDisplay > div:last-child {
