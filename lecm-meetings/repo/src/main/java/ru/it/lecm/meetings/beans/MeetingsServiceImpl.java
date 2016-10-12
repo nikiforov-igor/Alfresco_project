@@ -353,7 +353,7 @@ public class MeetingsServiceImpl extends BaseBean implements MeetingsService {
 					List<NodeRef> rows = documentTableService.getTableDataRows(table);
 					if (null != rows) {
 						result.put("size", rows.size());
-						Boolean isDeleted = (Boolean) nodeService.getProperty(meeting, EventsService.PROP_EVENT_REMOVED);
+						Boolean isDeleted = Boolean.TRUE.equals(nodeService.getProperty(meeting, EventsService.PROP_EVENT_REMOVED));
 						if (!isDeleted) {
 							Boolean approveAgenda = (Boolean)nodeService.getProperty(meeting, PROP_MEETINGS_APPROVE_AGENDA);
 							if (approveAgenda) {
