@@ -48,7 +48,7 @@
                                         var oResult = eval("(" + oResponse.responseText + ")");
                                         if (oResult) {
 
-                                            var hasNoActiveAbsences = LogicECM.module.Base.DataGrid.prototype.checkEmployeeHasNoActiveAbsences(oResult.employee, "${msg('message.employee.position.delete.failure.absence')} \n")
+                                            var hasNoActiveAbsences = me.checkEmployeeHasNoActiveAbsences(oResult.employee, "${msg('message.employee.position.delete.failure.absence')} \n")
 
                                             if (hasNoActiveAbsences && !hasNoActiveAbsences.hasNoActiveAbsences){
                                                 return;
@@ -192,7 +192,7 @@
                      */
                     LogicECM.module.Base.DataGrid.prototype.checkEmployeeHasNoActiveAbsences = function _сheckEmployeeHasNoActiveAbsences (employeeNodeRef, comment){
 
-                        var result = LogicECM.module.Base.DataGrid.prototype.makeJquerySyncRequestForAbsence(
+                        var result = this.makeJquerySyncRequestForAbsence(
                                                                                                             "lecm/orgstructure/api/employeeHasNoAbsences",
                                                                                                             { nodeRef : employeeNodeRef },
                                                                                                             true,
@@ -202,7 +202,7 @@
 
                     LogicECM.module.Base.DataGrid.prototype.checkMakeBossHasNoActiveAbsences = function _сheckMakeBossHasNoActiveAbsences (staffNodeRef, comment){
 
-                        var result = LogicECM.module.Base.DataGrid.prototype.makeJquerySyncRequestForAbsence(
+                        var result = this.makeJquerySyncRequestForAbsence(
                                                                                                             "lecm/orgstructure/api/makeBossHasNoAbsences",
                                                                                                             { nodeRef : staffNodeRef },
                                                                                                             true,
@@ -233,7 +233,7 @@
 														handler:function DataGridActions__onActionMakeBoss_make() {
 															this.destroy();
 
-                                                            var hasNoActiveAbsences = LogicECM.module.Base.DataGrid.prototype.checkMakeBossHasNoActiveAbsences(
+                                                            var hasNoActiveAbsences = me.checkMakeBossHasNoActiveAbsences(
                                                                     staffRow.nodeRef /*oResult.employee*/,
                                                                     "${msg('message.employee.position.primary.add.failure.absence')} \n");
 
