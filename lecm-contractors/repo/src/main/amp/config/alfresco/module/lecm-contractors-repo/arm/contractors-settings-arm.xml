@@ -22,7 +22,7 @@
 				<items>
 					<item name="cm:f10842ac-8800-44db-a13a-16946bd689e7" type="lecm-arm:query-child-rule">
 						<property name="cm:name"><![CDATA[f10842ac-8800-44db-a13a-16946bd689e7]]></property>
-						<property name="lecm-arm:list-query-child-rule"><![CDATA[TYPE: "lecm-dic:dictionary" AND PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*" AND @lecm\-dic\:type:("lecm-contractor:contractor-type" "lecm-legalform:legalform-type" "lecm-specialization:specialization-type" "lecm-representative:representative-type" "lecm-contractor:physical-person-type")]]></property>
+						<property name="lecm-arm:list-query-child-rule"><![CDATA[TYPE: "lecm-dic:dictionary" AND PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*" AND (=@lecm\-dic\:type:"lecm-contractor:contractor-type" OR =@lecm\-dic\:type:"lecm-legalform:legalform-type" OR =@lecm\-dic\:type:"lecm-specialization:specialization-type" OR =@lecm\-dic\:type:"lecm-representative:representative-type" OR =@lecm\-dic\:type:"lecm-contractor:physical-person-type")]]></property>
 					</item>
 				</items>
 				<assocs>
