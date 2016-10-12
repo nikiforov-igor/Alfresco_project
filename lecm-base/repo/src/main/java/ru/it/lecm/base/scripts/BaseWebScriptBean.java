@@ -374,5 +374,18 @@ public class BaseWebScriptBean extends BaseWebScript {
 	
 	public QName createQName(String qname) {
 		return QName.createQName(qname, namespaceService);
+	}	
+	
+	public Set<QName> getSubTypes(QName type, boolean bln) {
+		return (Set<QName>) dictionaryService.getSubTypes(type, bln);
+	}
+	
+	public Set<QName> getSubTypes(String type, boolean bln) {
+		QName qNameType = QName.createQName(type, namespaceService);
+		return (Set<QName>) dictionaryService.getSubTypes(qNameType, bln);
+	}
+	
+	public TypeDefinition getType(QName type) {
+		return dictionaryService.getType(type);
 	}
 }
