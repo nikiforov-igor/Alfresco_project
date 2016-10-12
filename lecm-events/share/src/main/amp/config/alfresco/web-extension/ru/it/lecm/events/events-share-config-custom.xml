@@ -41,6 +41,8 @@
                     <show id="lecm-events:temp-members-assoc-json"/>
                     <!-- Приглашённые -->
                     <show id="lecm-events:invited-members-assoc"/>
+                    <!--Не рассылать приглашения-->
+                    <show id="lecm-events:not-send-invitation"/>
                     <!-- Место проведения -->
                     <show id="lecm-events:location-assoc"/>
                     <!-- Ресурсы -->
@@ -169,6 +171,8 @@
                     <show id="lecm-events-ts:members-assoc"/>
                     <!-- Приглашённые -->
                     <show id="lecm-events:invited-members-assoc"/>
+                    <!--Не рассылать приглашения-->
+                    <show id="lecm-events:not-send-invitation"/>
                     <!-- Описание -->
                     <show id="lecm-events:description"/>
                 </field-visibility>
@@ -243,6 +247,8 @@
                     <show id="lecm-events:temp-members-assoc-json"/>
                     <!-- Приглашённые -->
                     <show id="lecm-events:invited-members-assoc"/>
+                    <!--Не рассылать приглашения-->
+                    <show id="lecm-events:not-send-invitation"/>
                     <!-- Место проведения -->
                     <show id="lecm-events:location-assoc"/>
                     <!-- Ресурсы -->
@@ -350,6 +356,7 @@
                             <control-param name="itemType">lecm-representative:representative-type</control-param>
                         </control>
                     </field>
+                    <field id="lecm-events:not-send-invitation" set="createEventSet"/>
                     <field id="lecm-events:location-assoc" set="createEventSet">
                         <control template="/ru/it/lecm/events/controls/events-location-control.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Места_x0020_проведения_x0020_мероприятий</control-param>
