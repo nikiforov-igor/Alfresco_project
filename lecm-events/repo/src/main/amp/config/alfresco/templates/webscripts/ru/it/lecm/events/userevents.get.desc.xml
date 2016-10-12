@@ -7,7 +7,7 @@
   <url>/lecm/events/user?from={from}&amp;to={to?}&amp;repeating={repeating?}&amp;timeZoneOffset={timeZoneOffset?}</url>
   <format default="json">argument</format>
   <authentication>user</authentication>
-  <transaction allow="readonly">required</transaction>
+  <transaction>required</transaction>
   <lifecycle>internal</lifecycle>
   <args>
     <arg>
