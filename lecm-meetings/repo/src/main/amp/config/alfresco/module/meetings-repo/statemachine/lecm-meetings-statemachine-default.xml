@@ -131,7 +131,7 @@
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionExpression</name>
@@ -1415,7 +1415,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionExpression</name>
@@ -3365,6 +3365,44 @@ if (document !== null) {
                                                             <association>
                                                                 <type>transitionStatus</type>
                                                                 <reference>workspace://SpacesStore/02548952-2acb-4d41-b3c7-9f2fa88a7125</reference>
+                                                            </association>
+                                                        </associations>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                    <node>
+                                                        <type>transition</type>
+                                                        <name>00064de4-5551-4656-81e9-1b0975336ee9</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/e6155087-5b5c-4472-8f61-1285c81dd1eb
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>stopSubWorkflows</name>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionExpression</name>
+                                                                <value><![CDATA[doc.attr("lecm-events:removed")]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionDocumentChangeScript</name>
+                                                                <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>do-not-ask-for-confirmation</name>
+                                                                <value><![CDATA[false]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects>
+                                                            <transitionStatusAspect/>
+                                                        </aspects>
+                                                        <associations>
+                                                            <association>
+                                                                <type>transitionStatus</type>
+                                                                <reference>
+                                                                    workspace://SpacesStore/63730519-8427-4002-b782-64613af5446c
+                                                                </reference>
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
