@@ -127,8 +127,9 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                                         reportersFilterEnabled: false
                                     })
                                 }
-                                datagrid.draw();
                             }
+
+                            datagrid.draw();
                         }
                     },
                     failureCallback: {
