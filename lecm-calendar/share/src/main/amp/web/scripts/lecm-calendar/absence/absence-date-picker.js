@@ -98,8 +98,8 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				// Focus icon after calendar is closed
 				Dom.get(this.id + "-icon").focus();
 			}, this, true);
-			Event.addListener(this.id + "-date", "keyup", this._handleFieldChange, this, true);
-			Event.addListener(this.id + "-time", "keyup", this._handleFieldChange, this, true);
+			Event.addListener(this.id + "-date", "keyup", this._handleFieldChangeWithYearValidation, this, true);
+			Event.addListener(this.id + "-time", "keyup", this._handleFieldChangeWithYearValidation, this, true);
 
 			var iconEl = Dom.get(this.id + "-icon");
 			if (iconEl)
@@ -141,7 +141,17 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			// If value was set in visible fields, make sure they are validated and put in the hidden field as well
 			if (this.options.currentValue)
 			{
-			this._handleFieldChange(null);
+			this._handleFieldChangeWithYearValidation(null);
 			}
     };
+	LogicECM.module.WCalendar.Absence.DatePicker.prototype._handleFieldChangeWithYearValidation = function DatePicker__handleFieldChange(event) {
+		//Если введен другой год - сообщаем , что он будет проигнорирован.
+		if (this.options.currentValue) {
+			if (Date.parse(Dom.get(this.id + "-date").value) &&
+				Date.parse(this.options.currentValue).getFullYear() != Date.parse(Dom.get(this.id + "-date").value).getFullYear()) {
+				Alfresco.util.PopupManager.displayMessage({text: Alfresco.util.message("lecm.calendar.msg.wrong.year")});
+			}
+		}
+		this._handleFieldChange(event);
+	}
 })();
