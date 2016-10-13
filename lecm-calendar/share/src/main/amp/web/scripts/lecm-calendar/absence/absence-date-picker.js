@@ -145,12 +145,12 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			}
     };
 	LogicECM.module.WCalendar.Absence.DatePicker.prototype._handleFieldChangeWithYearValidation = function DatePicker__handleFieldChange(event) {
-		var theDate = Date.parse(this.options.currentValue);
+		var currentDate = Date.parse(this.options.currentValue);
 		var dateField = Dom.get(this.id + "-date");
 		var changedDate = Date.parse(dateField.value);
 
 		//Если введен другой год - сообщаем , что он будет проигнорирован.
-		if (theDate && changedDate && changedDate.getFullYear() != theDate.getFullYear()) {
+		if (currentDate && changedDate && changedDate.getFullYear() != currentDate.getFullYear()) {
 			Alfresco.util.PopupManager.displayMessage({
 				text: Alfresco.util.message("lecm.calendar.msg.wrong.year")
 			});
