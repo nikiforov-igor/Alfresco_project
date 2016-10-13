@@ -1,5 +1,5 @@
 ;(function () {
-    
+
     var pluginObject;
     var plugin_resolved = 0;
     var plugin_reject;
@@ -15,7 +15,7 @@
             plugin_resolve = resolve;
             plugin_reject = reject;
         });
-    } else 
+    } else
     {
         cadesplugin = {};
     }
@@ -56,7 +56,7 @@
 
     function isChromiumBased()
     {
-        var retVal = (navigator.userAgent.match(/chrome/i) || 
+        var retVal = (navigator.userAgent.match(/chrome/i) ||
                       navigator.userAgent.match(/opera/i));
         return retVal;
     }
@@ -96,14 +96,14 @@
     var ru_cryptopro_npcades_10_native_bridge = {
       callbacksCount : 1,
       callbacks : {},
-      
+
       // Automatically called by native layer when a result is available
       resultForCallback : function resultForCallback(callbackId, resultArray) {
             var callback = ru_cryptopro_npcades_10_native_bridge.callbacks[callbackId];
             if (!callback) return;
             callback.apply(null,resultArray);
       },
-      
+
       // Use this in javascript to request native objective-c code
       // functionName : string (I think the name is explicit :p)
       // args : array of arguments
@@ -111,10 +111,10 @@
       call : function call(functionName, args, callback) {
         var hasCallback = callback && typeof callback == "function";
         var callbackId = hasCallback ? ru_cryptopro_npcades_10_native_bridge.callbacksCount++ : 0;
-        
+
         if (hasCallback)
           ru_cryptopro_npcades_10_native_bridge.callbacks[callbackId] = callback;
-        
+
         var iframe = document.createElement("IFRAME");
             var arrObjs = new Array("_CPNP_handle");
             try{
@@ -160,7 +160,7 @@
         var elem = document.createElement('object');
         elem.setAttribute("id", "cadesplugin_object");
         elem.setAttribute("type", "application/x-cades");
-        elem.setAttribute("style", "visibility=hidden");
+        elem.setAttribute("style", "display: none;");
         document.getElementsByTagName("body")[0].appendChild(elem);
         pluginObject = document.getElementById("cadesplugin_object");
         if(isIE())
@@ -168,13 +168,13 @@
             var elem1 = document.createElement('object');
             elem1.setAttribute("id", "certEnrollClassFactory");
             elem1.setAttribute("classid", "clsid:884e2049-217d-11da-b2a4-000e7bbb2b09");
-            elem1.setAttribute("style", "visibility=hidden");
+            elem1.setAttribute("style", "display: none;");
             document.getElementsByTagName("body")[0].appendChild(elem1);
-   
+
         }
     }
 
-    //Отправляем событие что все ок. 
+    //Отправляем событие что все ок.
     function plugin_loaded()
     {
         plugin_resolved = 1;
@@ -186,7 +186,7 @@
         }
     }
 
-    //Отправляем событие что сломались. 
+    //Отправляем событие что сломались.
     function plugin_loaded_error(msg)
     {
         plugin_resolved = 1;
@@ -212,7 +212,7 @@
         }
 
     }
-    
+
     //Вспомогательная функция для NPAPI
     function createPromise(arg)
     {
@@ -225,7 +225,7 @@
                     plugin_loaded();
                 }
                 catch (err) {
-                    // Объект создать не удалось, проверим, установлен ли 
+                    // Объект создать не удалось, проверим, установлен ли
                     // вообще плагин. Такая возможность есть не во всех браузерах
                     var mimetype = navigator.mimeTypes["application/x-cades"];
                     if (mimetype) {
@@ -264,7 +264,7 @@
                     check_npapi_plugin();
                     },
                 false);
-        }else 
+        }else
         {
             window.addEventListener("load", function (event) {
                 load_npapi_plugin();
@@ -278,7 +278,7 @@
         pluginObject = obj;
     }
 
-    //Export 
+    //Export
     cadesplugin.JSModuleVersion = "2.0"
     cadesplugin.async_spawn = async_spawn;
     cadesplugin.set = set_pluginObject;
