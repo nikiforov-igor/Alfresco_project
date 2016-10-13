@@ -1,4 +1,6 @@
 (function () {
+	/*
+	 * TODO: убедиться, что оно заведётся без этой функции
 	function getDecisionDisplayValue(decision) {
 		var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
 		var dictionaryService = ctx.getBean('dictionaryService');
@@ -9,6 +11,7 @@
 
 		return constraint.getDisplayLabel(decision, dictionaryService);
 	}
+	*/
 
 	function getSourceRouteForIteration(currentIteration) {
 		var sourceRoute = routesService.getSourceRouteForIteration(currentIteration);
@@ -45,7 +48,10 @@
 			currentIterationNode.properties[approvalDecisionQName] : '';
 
 		if (approvalResult) {
-			approvalResultTitle = getDecisionDisplayValue(approvalResult);
+//			approvalResultTitle = getDecisionDisplayValue(approvalResult);
+			var qName = base.createQName('lecmApproveAspects:approvalDecision');
+			var propDefinition = base.getProperty(qName);
+			approvalResultTitle = Evaluator.translateField(propDefinition, approvalResult);
 		}
 
 		sourceRouteNode = getSourceRouteForIteration(currentIterationNode);

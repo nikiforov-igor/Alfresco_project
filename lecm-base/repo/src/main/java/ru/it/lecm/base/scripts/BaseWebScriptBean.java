@@ -388,4 +388,9 @@ public class BaseWebScriptBean extends BaseWebScript {
 	public TypeDefinition getType(QName type) {
 		return dictionaryService.getType(type);
 	}
+	
+	public TypeDefinition getType(String type) {
+		QName qName = QName.createQName(type, namespaceService);
+		return dictionaryService.getType(qName);
+	}
 }

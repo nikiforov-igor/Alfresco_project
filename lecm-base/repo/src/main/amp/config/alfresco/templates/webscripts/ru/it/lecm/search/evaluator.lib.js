@@ -163,24 +163,27 @@ var Evaluator = {
      * @param value {String} default value
      * @return {String}
      */
-	translateField: function Evaluator_translateField(propertyDef, value) {
-		//if (propertyDef == null || propertyDef == "") {
-		//	return null;
-		//}
-		//if (propertyDef.getConstraints() != null) {
-		//	for (var i = 0, len = propertyDef.getConstraints().size(); i < len; ++i) {
-        //        var constraint = propertyDef.getConstraints().get(i).getConstraint();
-		//		if ("LIST" == constraint.getType()) {
-		//			var allowedV = constraint.getAllowedValues();
-		//			for (var j = 0; j < allowedV.size(); ++j) {
-		//				var allowedVasString = "" + allowedV.get(j);
-        //                if (value == allowedVasString) {
-        //                    return constraint.getDisplayLabel(allowedVasString, dictionaryService);
-        //                }
-		//			}
-		//		}
-		//	}
-		//}
+	
+//	TODO: Проверить
+	translateField: function Evaluator_translateField(objDef, value) {
+		if (objDef == null || objDef == "") {
+			return null;
+		}
+
+		if (objDef.constraints != null) {
+			for ( var i=0, len= objDef.constraints.size(); i<len; ++i ) {
+				if ("LIST" == objDef.constraints.get(i).type) {
+					var allowedV = objDef.constraints.get(i).parameters.allowedValues;
+					for (var j=0; j<allowedV.size(); ++j ) {
+						var allowedVasString = "" + allowedV.get(j);
+						var allValSplit = allowedVasString.split("|");
+						if (value == allValSplit[0]) {
+							return allValSplit[1];
+						}
+					}
+				}
+			}
+		}
 		return value;
 	},
 
