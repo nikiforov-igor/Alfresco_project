@@ -58,56 +58,132 @@
 
 <#if disabled>
 <div id="${controlId}" class="control association-token-control viewmode">
-	<div class="label-div">
+    <div class="label-div">
         <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
-		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
+        <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
         </#if>
-		<label>${field.label?html}:</label>
-	</div>
-	<div class="container">
-		<div class="value-div">
-			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
-			<span id="${controlId}-currentValueDisplay" class="mandatory-highlightable"></span>
-		</div>
-	</div>
+        <label>${field.label?html}:</label>
+    </div>
+    <div class="container">
+        <div class="value-div">
+            <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+            <span id="${controlId}-currentValueDisplay" class="mandatory-highlightable"></span>
+        </div>
+    </div>
 </div>
 <#else>
 <div class="control association-token-control editmode">
-	<div class="label-div">
-		<label for="${controlId}">
+    <div class="label-div">
+        <label for="${controlId}">
         ${field.label?html}:
             <#if field.endpointMandatory!false || field.mandatory!false>
-				<span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+                <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
             </#if>
-		</label>
-	</div>
-	<div id="${controlId}" class="container">
+        </label>
+    </div>
+    <div id="${controlId}" class="container">
         <#if field.disabled == false>
-			<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-			<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
-			<input type="hidden" id="${controlId}-selectedItems"/>
+            <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+            <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+            <input type="hidden" id="${controlId}-selectedItems"/>
 
-			<div id="${controlId}-itemGroupActions" class="buttons-div">
-				<input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
+            <div id="${controlId}-itemGroupActions" class="buttons-div">
+                <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
                 <#if showCreateNewButton>
-					<span class="create-new-button">
+                    <span class="create-new-button">
                         <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
                     </span>
                 </#if>
-			</div>
+            </div>
 
             <@renderTreePickerDialogHTML controlId plane showSearch/>
         </#if>
 
-		<div class="value-div">
-			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+        <div class="value-div">
+            <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
             <#if showAutocomplete>
-				<input id="${controlId}-autocomplete-input" type="text" class="mandatory-highlightable"/>
+                <input id="${controlId}-autocomplete-input" type="text" class="mandatory-highlightable"/>
             </#if>
-			<div id="${controlId}-currentValueDisplay" class="control-selected-values <#if showAutocomplete>hidden1<#else>mandatory-highlightable</#if>"></div>
-		</div>
-	</div>
-	<div id="${controlId}-autocomplete-container"></div>
+            <#if disabled>
+                <div id="${controlId}-currentValueDisplay" class="control-selected-values <#if showAutocomplete>hidden1<#else>mandatory-highlightable</#if>"></div>
+            <#else>
+                <div id="${controlId}-diagram" class="member-control-diagram">
+                    <div id="${controlId}-diagram-header">
+                        <#assign calControlId = fieldHtmlId + "-date-cntrl">
+                        <#assign calFieldHtmlId = fieldHtmlId + "-calendar">
+                        <#assign currentValue = defaultValue?js_string>
+                        <#if  !currentValue?has_content && !disabled >
+                            <#assign currentValue = field.control.params.defaultValue!""?js_string>
+                            <#if currentValue == "now">
+                                <#if field.control.params.defaultTime?? >
+                                    <#assign currentValue = .now?string("yyyy-MM-dd'T'" + field.control.params.defaultTime + ":00.000")>
+                                <#else>
+                                    <#assign currentValue = .now?string("yyyy-MM-dd")>
+                                </#if>
+                            </#if>
+                        </#if>
+                        <script type="text/javascript">//<![CDATA[
+                        (function () {
+                            function init() {
+                                var resources = [
+                                    'scripts/lecm-base/components/lecm-date-picker.js'
+                                ]
+                                if ($.timepicker === undefined) {
+                                    resources.push('scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js');
+                                    resources.push('scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js');
+                                    resources.push('scripts/lecm-base/third-party/jquery-ui-sliderAccess.js');
+                                }
+                                LogicECM.module.Base.Util.loadResources(resources, [
+                                    'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
+                                    'css/lecm-calendar/jquery-ui-timepicker-addon.css'
+                                ], createDatePicker, ["button", "calendar"]);
+                            }
+
+                            function createDatePicker() {
+                                var picker = new LogicECM.DatePicker("${calControlId}", "${calFieldHtmlId}").setOptions(
+                                        {
+                                                <#if form.mode == "view" || disabled>disabled: true,</#if>
+                                            currentValue: "${currentValue}",
+                                            <#if field.control.params.defaultScriptURL?has_content>
+                                                defaultScript: '${field.control.params.defaultScriptURL?js_string}',
+                                                destination: "${form.destination!""}",
+                                                itemKind: "${form.arguments.itemKind!""}",
+                                            </#if>
+                                            <#if field.control.params.changeFireAction??>
+                                                changeFireAction: "${field.control.params.changeFireAction}",
+                                            </#if>
+                                            showTime: false,
+                                            mandatory: ${field.mandatory?string},
+                                            minLimit: "${minLimit?string}",
+                                            maxLimit: "${maxLimit?string}",
+                                            fieldId: "${field.configName}",
+                                            formId: "${args.htmlid}"
+                                        }).setMessages(
+                                ${messages}
+                                );
+                                picker.draw();
+                            }
+
+                            YAHOO.util.Event.onAvailable('${calFieldHtmlId}', init, this, true);
+                        })();
+                        //]]></script>
+
+                        <div id="${calControlId}-parent" class="member-control-diagram-header-first-cell">
+                            <div id="${calControlId}" class="datepicker"></div>
+                            <input id="${calFieldHtmlId}" type="hidden" name="${field.name}-calendar" value="${defaultValue?html}"/>
+                            <div class="date-entry-container only-date">
+                                <input id="${calControlId}-date" name="-" type="text" class="member-control-diagram-header-calendar date-entry mandatory-highlightable"
+                                       <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
+                                       <#else>tabindex="0"</#if> />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="${controlId}-diagram-content"></div>
+                </div>
+            </#if>
+        </div>
+    </div>
+    <div id="${controlId}-autocomplete-container"></div>
 </div>
 </#if>
 <div class="clear"></div>
@@ -134,116 +210,117 @@
         </#if>
     </#if>
 
-	(function() {
-		function init() {
-			LogicECM.module.Base.Util.loadResources([
-				'scripts/lecm-base/components/lecm-association-token-control.js',
-				'scripts/lecm-events/controls/lecm-events-members-control.js',
-				'modules/simple-dialog.js'
-			], [
-				'css/lecm-base/components/lecm-association-token-control.css',
-				'css/lecm-base/components/lecm-events-members-control.css'
-			], createControl);
-		}
-		function createControl(){
-			new LogicECM.module.Calendar.MembersControl("${fieldHtmlId}").setOptions({
+    (function() {
+        function init() {
+            LogicECM.module.Base.Util.loadResources([
+                'scripts/lecm-base/components/lecm-association-token-control.js',
+                'scripts/lecm-events/controls/lecm-events-members-control.js',
+                'modules/simple-dialog.js'
+            ], [
+                'css/lecm-base/components/lecm-association-token-control.css',
+                'css/lecm-base/components/lecm-events-members-control.css',
+                'css/lecm-events/event-members-control.css'
+            ], createControl);
+        }
+        function createControl(){
+            new LogicECM.module.Calendar.MembersControl("${fieldHtmlId}").setOptions({
             <#if disabled>
-				disabled: true,
+                disabled: true,
             </#if>
             <#if params.rootLocation??>
-				rootLocation: "${params.rootLocation}",
+                rootLocation: "${params.rootLocation}",
             </#if>
             <#if field.mandatory??>
-				mandatory: ${field.mandatory?string},
+                mandatory: ${field.mandatory?string},
             <#elseif field.endpointMandatory??>
-				mandatory: ${field.endpointMandatory?string},
+                mandatory: ${field.endpointMandatory?string},
             </#if>
-				multipleSelectMode: ${endpointMany?string},
+                multipleSelectMode: ${endpointMany?string},
 
             <#if params.nameSubstituteString??>
-				nameSubstituteString: "${params.nameSubstituteString}",
+                nameSubstituteString: "${params.nameSubstituteString}",
             </#if>
             <#if params.sortProp??>
-				sortProp: "${params.sortProp}",
+                sortProp: "${params.sortProp}",
             </#if>
             <#if params.selectedItemsNameSubstituteString??>
-				selectedItemsNameSubstituteString: "${params.selectedItemsNameSubstituteString}",
+                selectedItemsNameSubstituteString: "${params.selectedItemsNameSubstituteString}",
             </#if>
             <#if params.treeNodeSubstituteString??>
-				treeNodeSubstituteString: "${params.treeNodeSubstituteString}",
+                treeNodeSubstituteString: "${params.treeNodeSubstituteString}",
             </#if>
             <#if params.treeNodeTitleSubstituteString??>
-				treeNodeTitleSubstituteString: "${params.treeNodeTitleSubstituteString}",
+                treeNodeTitleSubstituteString: "${params.treeNodeTitleSubstituteString}",
             </#if>
             <#if params.treeItemType??>
-				treeItemType: "${params.treeItemType}",
+                treeItemType: "${params.treeItemType}",
             </#if>
             <#if params.changeItemsFireAction??>
-				changeItemsFireAction: "${params.changeItemsFireAction}",
+                changeItemsFireAction: "${params.changeItemsFireAction}",
             </#if>
             <#if args.ignoreNodes??>
-				ignoreNodes: "${args.ignoreNodes}".split(","),
+                ignoreNodes: "${args.ignoreNodes}".split(","),
             </#if>
             <#if params.treeIgnoreNodesScript??>
-				treeIgnoreNodesScript: "${params.treeIgnoreNodesScript}",
+                treeIgnoreNodesScript: "${params.treeIgnoreNodesScript}",
             </#if>
-				showCreateNewLink: ${showCreateNewLink?string},
-				showCreateNewButton: ${showCreateNewButton?string},
+                showCreateNewLink: ${showCreateNewLink?string},
+                showCreateNewButton: ${showCreateNewButton?string},
             <#if params.createNewMessage??>
-				createNewMessage: "${params.createNewMessage}",
+                createNewMessage: "${params.createNewMessage}",
             <#elseif params.createNewMessageId??>
-				createNewMessage: "${msg(params.createNewMessageId)}",
+                createNewMessage: "${msg(params.createNewMessageId)}",
             </#if>
             <#if params.createDialogClass??>
-				createDialogClass: "${params.createDialogClass}",
+                createDialogClass: "${params.createDialogClass}",
             </#if>
-				showSearch: ${showSearch?string},
-				plane: ${plane?string},
-				showPath: ${showPath?string},
-				showAutocomplete: ${showAutocomplete?string},
-				currentValue: "${field.value!''}",
+                showSearch: ${showSearch?string},
+                plane: ${plane?string},
+                showPath: ${showPath?string},
+                showAutocomplete: ${showAutocomplete?string},
+                currentValue: "${field.value!''}",
             <#if params.defaultValueDataSource??>
-				defaultValueDataSource: "${params.defaultValueDataSource}",
+                defaultValueDataSource: "${params.defaultValueDataSource}",
             </#if>
             <#if params.useStrictFilterByOrg??>
-				useStrictFilterByOrg: "${params.useStrictFilterByOrg?string}",
+                useStrictFilterByOrg: "${params.useStrictFilterByOrg?string}",
             </#if>
             <#if params.doNotCheckAccess??>
                 doNotCheckAccess: ${params.doNotCheckAccess?string},
             </#if>
             <#if params.childrenDataSource??>
-				childrenDataSource: "${params.childrenDataSource}",
+                childrenDataSource: "${params.childrenDataSource}",
             </#if>
             <#if params.pickerItemsScript??>
-	            pickerItemsScript: "${params.pickerItemsScript}",
+                pickerItemsScript: "${params.pickerItemsScript}",
             </#if>
             <#if defaultValue?has_content>
-				defaultValue: "${defaultValue?string}",
+                defaultValue: "${defaultValue?string}",
             </#if>
-            eventNodeRef: "${form.arguments.itemId}",
+                eventNodeRef: "${form.arguments.itemId}",
             <#if params.fireAction?? && params.fireAction != "">
-				fireAction: {
+                fireAction: {
                     <#list params.fireAction?split(optionSeparator) as typeValue>
                         <#if typeValue?index_of(labelSeparator) != -1>
                             <#assign type=typeValue?split(labelSeparator)>
                             <#if type[0] == "addItem">
-								addItem: "${type[1]}",
+                                addItem: "${type[1]}",
                             </#if>
                             <#if type[0] == "cancel">
-								cancel: "${type[1]}",
+                                cancel: "${type[1]}",
                             </#if>
                         </#if>
                     </#list>
-				},
+                },
             </#if>
-				itemType: "${params.endpointType ! field.endpointType}",
-				additionalFilter: "${params.additionalFilter!''}",
-				showAssocViewForm: ${showAssocViewForm?string},
-				checkType: ${checkType?string},
-				fieldId: "${field.configName}",
-				formId: "${args.htmlid}"
-			}).setMessages( ${messages} );
-		}
-		YAHOO.util.Event.onDOMReady(init);
-	})();
+                itemType: "${params.endpointType ! field.endpointType}",
+                additionalFilter: "${params.additionalFilter!''}",
+                showAssocViewForm: ${showAssocViewForm?string},
+                checkType: ${checkType?string},
+                fieldId: "${field.configName}",
+                formId: "${args.htmlid}"
+            }).setMessages( ${messages} );
+        }
+        YAHOO.util.Event.onDOMReady(init);
+    })();
 </script>

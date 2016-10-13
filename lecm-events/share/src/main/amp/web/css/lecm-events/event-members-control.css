@@ -1,0 +1,69 @@
+.member-control-diagram {
+    width: 100%;
+    position: relative;
+}
+
+.member-control-diagram-header-first-cell {
+    border: 1px solid #666;
+    background-color: #bbb;
+    height: 24px;
+    display: inline-block;
+    color: black;
+    text-align: center;
+    float: left;
+    width: 100px;
+}
+
+.member-control-diagram-header-calendar {
+    width: 94px !important;
+}
+.member-control-diagram-empty-cell {
+    height: 24px;
+    position: absolute;
+    top: 0px;
+}
+
+.member-control-diagram-header-cell {
+    border-top: 1px solid #666;
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #666;
+    background-color: #bbb;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+}
+
+.member-control-diagram-header-text-cell {
+    height: 24px;
+    line-height: 26px;
+    color: black;
+    text-align: center;
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.member-control-diagram-cell {
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #666;
+    height: 24px;
+    color: black;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+}
+
+.member-control-diagram-first-cell {
+    border-left: 1px solid #666;
+    border-bottom: 1px solid #666;
+    border-right: 1px solid #666;
+    height: 24px;
+    display: inline-block;
+}
+
+.member-control-diagram-selector {
+    position: absolute;
+    top: 0;
+    z-index: 999999;
+}
