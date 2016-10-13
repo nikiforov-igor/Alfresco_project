@@ -6,7 +6,7 @@
     margin: 0 0 -4px 5px;
 }
 
-.control.association-token-control .value-div div.cropped-item {
+.control.association-token-control.vertical .value-div div.cropped-item {
      display: table;
      float: none;
  }

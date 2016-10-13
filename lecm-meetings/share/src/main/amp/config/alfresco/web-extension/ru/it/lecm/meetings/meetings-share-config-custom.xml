@@ -152,6 +152,7 @@
 							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
 							<control-param name="sortSelected">true</control-param>
+                            <control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:temp-members-assoc-json">
@@ -164,6 +165,7 @@
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
 							<control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
+                            <control-param name="verticalList">true</control-param>
 							<control-param name="sortSelected">true</control-param>
 						</control>
 					</field>
@@ -180,6 +182,7 @@
 						<control>
 							<control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
 							<control-param name="sortSelected">true</control-param>
+                            <control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<!-- Инициатор -->
@@ -536,6 +539,7 @@
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
+                            <control-param name="verticalList">true</control-param>
 							<control-param name="sortSelected">true</control-param>
 						</control>
 					</field>
@@ -550,6 +554,7 @@
 							<control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 							<control-param name="sortSelected">true</control-param>
+                            <control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 
@@ -564,6 +569,7 @@
 						<control>
 							<control-param name="childrenDataSource">lecm/events/resources/picker</control-param>
 							<control-param name="sortSelected">true</control-param>
+                            <control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:initiator-assoc" set="createEventSet">
