@@ -23,18 +23,15 @@
             }
         }
 
-        // GetES6CertsJson(this);
-
         if (!CryptoApplet.useNPAPI) {
             GetES6CertsJson(this);
-        }
-        else {
-            window.addEventListener("message", function (event) {
-                if (event.data === "cadesplugin_loaded") {
-                    CryptoApplet.useNPAPI = true;
-                }
-            },
-            false);
+        } else {
+            window.addEventListener("message", function(event) {
+                    if (event.data === "cadesplugin_loaded") {
+                        CryptoApplet.useNPAPI = true;
+                    }
+                },
+                false);
             window.postMessage("cadesplugin_echo_request", "*");
             FillCertList_NPAPIJson(this);
         }
