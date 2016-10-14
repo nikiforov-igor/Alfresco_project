@@ -292,6 +292,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                 destroyOnHide: true,
                 doBeforeDialogShow: {
                     fn: function (p_form, simpleDialog) {
+                        LogicECM.module.Base.Util.reInitializeControl(simpleDialog.id, "lecmWorkflowRoutes:stageItemEmployeeAssoc", {
+                            allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + destination + (this.routeOrganization ? "&organization=" + this.routeOrganization : "")
+                        });
                         simpleDialog.dialog.setHeader(dialogHeader);
                         simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
                             LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
