@@ -4,3 +4,6 @@
     width: 238px;
     text-align: right;
 }
+.sidebar .thumbnailView, .sidebar .outlineView {
+    padding:0 !important;
+}
