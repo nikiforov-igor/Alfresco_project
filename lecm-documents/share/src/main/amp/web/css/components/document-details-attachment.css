@@ -4,6 +4,6 @@
     width: 238px;
     text-align: right;
 }
-.sidebar .thumbnailView, .sidebar .outlineView {
-    padding:0 !important;
+.sidebar .yui-navset.yui-navset-top .thumbnailView.documentView {
+    padding: 0;
 }
