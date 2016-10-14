@@ -2008,13 +2008,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 var elActions = Dom.get(this.id + "-actions-" + (oArgs.el.id));
 
-                // Don't hide unless the More Actions drop-down is showing, or a dialog mask is present
-                if (!this.showingMoreActions || Dom.hasClass(document.body, "masked"))
-                {
-                    // Just hide the action links, rather than removing them from the DOM
-                    Dom.addClass(elActions, "hidden");
-                    this.deferredActionsMenu = null;
-                }
+                // Just hide the action links, rather than removing them from the DOM
+                Dom.addClass(elActions, "hidden");
+                this.deferredActionsMenu = null;
+
             },
 
             /**
