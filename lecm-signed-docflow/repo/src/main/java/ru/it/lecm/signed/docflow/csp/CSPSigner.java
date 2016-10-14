@@ -20,13 +20,13 @@ public class CSPSigner {
 
     private static SignatureProcessor signatureProcessor;
 
-    public static SignatureProcessor getProcessor(final String dllpath, final String catalinahome) {
+    public static SignatureProcessor getProcessor(final String dllpath) {
         SignatureProcessor localInstance = signatureProcessor;
 		if (localInstance == null || (signatureProcessor instanceof JavaCryptoApiWrapperMockImpl)) {
 			synchronized (CSPSigner.class) {
 				localInstance = signatureProcessor;
 				if (localInstance == null) {
-					signatureProcessor = localInstance = new CryptoApiWrapperSignatureProcessor().getInstanse(dllpath, catalinahome);
+					signatureProcessor = localInstance = new CryptoApiWrapperSignatureProcessor().getInstanse(dllpath);
 				}
 			}
 		}
