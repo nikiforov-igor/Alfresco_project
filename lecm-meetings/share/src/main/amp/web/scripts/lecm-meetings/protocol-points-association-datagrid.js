@@ -75,7 +75,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 doBeforeDialogShow: {
                     fn: function (p_form, p_dialog) {
                         var contId = p_dialog.id + "-form-container";
-                        if (item.type && item.type != "") {
+                        if (item.type) {
                             Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
                         }
                         p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));

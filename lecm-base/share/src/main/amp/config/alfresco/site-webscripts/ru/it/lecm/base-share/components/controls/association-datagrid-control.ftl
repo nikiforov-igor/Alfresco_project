@@ -286,18 +286,18 @@
             'scripts/lecm-base/components/lecm-toolbar.js',
             'modules/simple-dialog.js',
             'scripts/lecm-base/components/lecm-datagrid.js',
-            'scripts/lecm-base/components/lecm-association-datagrid-control.js',
+            'scripts/lecm-base/components/lecm-association-datagrid-control.js'
             <#if field.control.params.jsDependencies??>
                 <#list field.control.params.jsDependencies?split(",") as js>
-                    '${js}',
+                    ,'${js}'
                 </#list>
             </#if>
         ],
         [
-            'css/lecm-base/components/association-datagrid-control.css',
+            'css/lecm-base/components/association-datagrid-control.css'
             <#if field.control.params.cssDependencies??>
                 <#list field.control.params.cssDependencies?split(",") as css>
-                    '${css}',
+                    ,'${css}'
                 </#list>
             </#if>
         ],loadRootNode);
