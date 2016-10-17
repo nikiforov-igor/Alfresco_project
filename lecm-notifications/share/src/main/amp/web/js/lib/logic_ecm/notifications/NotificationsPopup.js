@@ -92,9 +92,6 @@ define(['dojo/_base/declare',
 					console.warn('Status: %s. Message: %s.', status, msg);
 					if (500 === status) {
 						console.warn('Server exception: %s', exception);
-						Alfresco.util.PopupManager.displayMessage({
-							text: this.message('message.new.notifications.count.load.failure')
-						});
 					}
 				}));
 			},
