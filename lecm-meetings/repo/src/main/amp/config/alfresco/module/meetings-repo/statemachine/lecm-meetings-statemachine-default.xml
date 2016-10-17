@@ -523,7 +523,7 @@
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -683,7 +683,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1182,6 +1182,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <type>documentField</type>
                                         <name>lecm-events_temp-resources-assoc</name>
                                         <nodeRef>workspace://SpacesStore/7eb595c5-5f0c-4527-8670-a52c46dd997c</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/232ac2b9-ce61-4380-a0f9-7c4ccc02eac9</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -2094,6 +2109,21 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/f1372fac-86cf-4033-b4d7-b949298af023</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -2675,6 +2705,21 @@ if (document !== null) {
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/9e88a2bf-aada-4ba4-b59c-f57e39d64699</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -3094,6 +3139,21 @@ if (document !== null) {
                                         <type>documentField</type>
                                         <name>lecm-events_temp-resources-assoc</name>
                                         <nodeRef>workspace://SpacesStore/8954d55f-e5ac-48ac-9bdc-131fc86e621e</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/cbcc6044-f21c-42c9-b519-8b615a9453dc</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>editableField</name>
@@ -3952,6 +4012,21 @@ if (document !== null) {
                                             <property>
                                                 <name>editableField</name>
                                                 <value><![CDATA[true]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects/>
+                                        <associations/>
+                                        <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>documentField</type>
+                                        <name>lecm-events_not-send-invitation</name>
+                                        <nodeRef>workspace://SpacesStore/7d705685-db05-4b63-b0fc-e3805393a52c</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>editableField</name>
+                                                <value><![CDATA[false]]></value>
                                             </property>
                                         </properties>
                                         <aspects/>
