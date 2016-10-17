@@ -287,7 +287,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                     mode: 'create',
                     submitType: 'json',
                     showCancelButton: true,
-                    routeOrganization: this.routeOrganization ? this.routeOrganization : null
+                    routeOrganization: this.routeOrganization ? this.routeOrganization : null,
+                    allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + destination + (this.routeOrganization ? "&organization=" + this.routeOrganization : "")
                 },
                 destroyOnHide: true,
                 doBeforeDialogShow: {

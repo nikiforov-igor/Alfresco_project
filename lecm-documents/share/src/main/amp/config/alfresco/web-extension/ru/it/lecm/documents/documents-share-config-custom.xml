@@ -185,7 +185,7 @@
             <action id="document-copy-to" type="javascript" label="actions.document.copy-to">
                 <param name="function">onActionCopyTo</param>
                 <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-                <evaluator>evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatus</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
             </action>
 
             <!-- Move to -->
@@ -195,7 +195,7 @@
                     <permission allow="true">Delete</permission>
                 </permissions>
                 <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
-	            <evaluator>evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatusAndAdmin</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
             </action>
 
             <!-- Delete -->
@@ -213,13 +213,6 @@
                 <param name="function">onActionAssignWorkflow</param>
                 <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
             </action>
-
-	        <!-- Assign workflow -->
-	        <action id="lecm-document-assign-workflow" type="javascript" label="actions.document.assign-workflow">
-		        <param name="function">onActionAssignWorkflow</param>
-		        <evaluator>evaluator.ru.it.lecm.documents.isBase</evaluator>
-		        <evaluator>evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus</evaluator>
-	        </action>
 
             <!-- Manage permissions (site roles) -->
             <action id="document-manage-site-permissions" type="javascript" icon="document-manage-permissions" label="actions.document.manage-permissions">
