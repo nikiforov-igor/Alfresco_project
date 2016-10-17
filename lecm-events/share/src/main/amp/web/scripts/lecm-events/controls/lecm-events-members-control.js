@@ -11,17 +11,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 	 * Alfresco Slingshot aliases
 	 */
 	var Dom = YAHOO.util.Dom,
-		Util = LogicECM.module.Base.Util;
+		Bubbling = YAHOO.Bubbling;
+	Util = LogicECM.module.Base.Util;
 
 	LogicECM.module.Calendar.MembersControl = function (htmlId)
 	{
 		this.id = htmlId;
 		var module = LogicECM.module.Calendar.MembersControl.superclass.constructor.call(this, htmlId);
-		window.addEventListener("resize", function() {
-			module.drawDiagramHeader();
-			module.drawDiagram();
-		})
-
+		window.addEventListener("resize", module.redraw.bind(module));
+		Bubbling.on("mandatoryControlValueUpdated", module.dateFieldUpdated, module);
+		Bubbling.on("setMemberCalendarDate", module.setMemberCalendarDate, module);
 		return this;
 	};
 
@@ -33,16 +32,18 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		endHour: 22,
 		timeStep: 15,
 		firstColumnWidth: 100,
-		hasDrawHeader: false,
 		selector: null,
-		startDate: new Date(),
-		endDate: new Date(),
+		startDate: null,
+		endDate: null,
 		selectorBorderWidth: 4,
 		prevStartIndex: null,
 		prevEndIndex: null,
 		dragEnabled: false,
 		dragDelta: 0,
 		maxIndex: 1,
+		headerIsReady: false,
+		startDateField: null,
+		endDateField: null,
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
 			var arrItems = "";
@@ -170,10 +171,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			//Рисуем диаграмму, если это не форма просмотра, а редактирования
 			el = Dom.get(this.options.controlId + "-diagram");
 			if (el && !this.options.disabled) {
-				if (!this.hasDrawHeader) {
-					this.drawDiagramHeader();
-					this.hasDrawHeader = true;
-				}
+				this.draw();
 				this.requestMembersTime();
 			}
 
@@ -350,12 +348,76 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		draw: function draw_function() {
+			if (this.startDate && this.endDate && this.startDate <= this.endDate) {
+				this.drawDiagramHeader();
+				this.drawDiagram();
+				this.drawSelector();
+			}
+		},
+
+		redraw: function redraw_function() {
+			var header = Dom.get(this.options.controlId + "-diagram-header");
+			var len = header.children.length;
+			for (var i = 1; i < len; i++) {
+				header.removeChild(header.children[1]);
+			}
+			this.headerIsReady = false;
+			this.drawDiagramHeader();
+			this.drawDiagram();
+			this.drawSelector();
+		},
+
+		/**
+		 * Обработчик изменения полей назначения времени
+		 */
+		dateFieldUpdated: function dateFieldUpdated_function(layer, args) {
+			if (this.options.disabled) return;
+			var control = args[1];
+			if (control && control.options.fieldId) {
+				var fieldId = control.options.fieldId;
+				if (fieldId == "lecm-events:from-date") {
+					var valueField = Dom.get(control.currentValueHtmlId);
+					this.startDate = Alfresco.util.fromISO8601(valueField.value);
+					this.startDateField = {
+						id: control.id,
+						formId: control.options.formId,
+						configName: control.options.fieldId
+					};
+					Dom.get(this.id + "-date-cntrl-date").value = Dom.get(control.id + "-date").value;
+					Bubbling.fire("handleFieldChange", {
+						fieldId: this.options.fieldId,
+						formId: this.options.formId
+					});
+					this.draw();
+				} else if (fieldId == "lecm-events:to-date") {
+					var valueField = Dom.get(control.currentValueHtmlId);
+					this.endDate = Alfresco.util.fromISO8601(valueField.value);
+					this.endDateField = {
+						id: control.id,
+						formId: control.options.formId,
+						configName: control.options.fieldId
+					};
+					this.draw();
+				}
+
+			}
+		},
+
+		setMemberCalendarDate: function setMemberCalendarDate(layer, args) {
+			var date = Alfresco.util.fromISO8601(args[1].date);
+			Dom.get(this.startDateField.id + "-date").value = this.formatDate(date);
+			Bubbling.fire("handleFieldChange", {
+				fieldId: this.startDateField.configName,
+				formId: this.startDateField.formId
+			});
+		},
+
 		/**
 		 * Запрос занятости участников
 		 */
 		requestMembersTime: function requestMembersTime_function() {
-			this.drawDiagram();
-			this.drawSelector(this.startDate, this.endDate);
+			this.draw();
 		},
 
 		/**
@@ -377,8 +439,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var firstColumn = document.createElement("div");
 				firstColumn.className = "member-control-diagram-first-cell";
 				firstColumn.style.width = this.firstColumnWidth + "px";
-				firstColumn.innerHTML = item.selectedName;
 				content.appendChild(firstColumn);
+				var textCell = document.createElement("div");
+				textCell.innerHTML = item.selectedName;
+				firstColumn.appendChild(textCell);
 				this._drawHourCells(content, itemNum, false);
 				itemNum++;
 			}
@@ -388,14 +452,18 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * Рисуем заголовок диаграммы
 		 */
 		drawDiagramHeader: function drawDiagramHeader_function() {
+			if (this.headerIsReady) return;
 			var header = Dom.get(this.options.controlId + "-diagram-header");
 			this._drawHourCells(header, 0, true);
+			this.headerIsReady = true;
 		},
 
 		/**
 		 * Создаем рамку выбора времени
 		 */
-		drawSelector: function drawSelector(startTime, endTime) {
+		drawSelector: function drawSelector() {
+			var startTime = this.startDate;
+			var endTime = this.endDate;
 			var control = Dom.get(this.options.controlId + "-diagram");
 			var region = Dom.getRegion(control);
 			if (!this.selector) {
@@ -404,22 +472,19 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				control.appendChild(this.selector);
 
 				var selectorHead = document.createElement("div");
-				selectorHead.style.height = "24px"
-				selectorHead.innerHTML = "&nbsp;"
-				selectorHead.style.cursor = "-webkit-grab";
+				selectorHead.style.height = "24px";
+				selectorHead.innerHTML = "&nbsp;";
+				Dom.addClass(selectorHead, "member-control-diagram-selector-grab");
 				selectorHead.addEventListener("mousedown", this.dragStart.bind(this));
 				document.body.addEventListener("mouseup", this.dragEnd.bind(this));
-				document.body.addEventListener("mousemove", this.moveSelector.bind(this))
-				document.body.addEventListener("selectstart", this.selectStart.bind(this))
+				document.body.addEventListener("mousemove", this.moveSelector.bind(this));
+				document.body.addEventListener("selectstart", this.selectStart.bind(this));
 				this.selector.appendChild(selectorHead);
 
+			} else {
+				this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex, true);
 			}
 			this.selector.style.height = region.height + "px";
-			//Тестовые данные
-			startTime.setHours(15);
-			startTime.setMinutes(45);
-			endTime.setHours(17);
-			endTime.setMinutes(30);
 
 			//Расчет индексов старта и конца
 			var startHour = startTime.getHours();
@@ -445,15 +510,44 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		dragStart: function(ev) {
 			var head = this.selector.firstChild;
-			head.style.cursor = "-webkit-grabbing";
+			Dom.removeClass(head, "member-control-diagram-selector-grab");
+			Dom.addClass(head, "member-control-diagram-selector-grabbing");
 			this.dragEnabled = true;
 			this.dragDelta = ev.offsetX;
 
 		},
 
 		dragEnd: function(ev) {
+			if (this.dragEnabled) {
+				//Передаем данные в контролы
+				var startMinutes = (this.prevStartIndex - 1) * this.timeStep;
+				var endMinutes = this.prevEndIndex * this.timeStep;
+				var startHour = Math.floor(startMinutes / 60);
+				var endHour = Math.floor(endMinutes / 60);
+				startMinutes = startMinutes - startHour * 60;
+				endMinutes = endMinutes - endHour * 60;
+				startHour = startHour + this.startHour;
+				endHour = endHour + this.startHour;
+
+				//Начало
+				Dom.get(this.startDateField.id + "-date").value = this.formatDate(this.startDate);
+				Dom.get(this.startDateField.id + "-time").value = ('0' + startHour).slice(-2) + ":" + ('0' + startMinutes).slice(-2);
+				Bubbling.fire("handleFieldChange", {
+					fieldId: this.startDateField.configName,
+					formId: this.startDateField.formId
+				});
+
+				//Окончание
+				Dom.get(this.endDateField.id + "-date").value = this.formatDate(this.startDate);
+				Dom.get(this.endDateField.id + "-time").value = ('0' + endHour).slice(-2) + ":" + ('0' + endMinutes).slice(-2);
+				Bubbling.fire("handleFieldChange", {
+					fieldId: this.endDateField.configName,
+					formId: this.endDateField.formId
+				});
+			}
 			var head = this.selector.firstChild;
-			head.style.cursor = "-webkit-grab";
+			Dom.removeClass(head, "member-control-diagram-selector-grabbing");
+			Dom.addClass(head, "member-control-diagram-selector-grab");
 			this.dragEnabled = false;
 		},
 
@@ -485,27 +579,35 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
-		_clearSelectorBorder: function(startIndex, endIndex) {
+		formatDate: function formatDate_function(date) {
+			var mm = ("0" + (date.getMonth()+1)).slice(-2);
+			var dd = ("0" + date.getDate()).slice(-2);
+			return dd + "." + mm + "." + date.getFullYear();
+		},
+
+		_clearSelectorBorder: function(startIndex, endIndex, onlyHeader) {
 			for (var i = startIndex; i <= endIndex; i++) {
 				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
 				cell.style.backgroundColor = "transparent";
 			}
 
-			var keysLen = Object.keys(this.selectedItems).length;
-			for (var i = 1; i <= keysLen; i++) {
-				var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
-				leftCell.style.borderLeft = "none";
-				leftCell.style.width = (parseInt(leftCell.style.width) + this.selectorBorderWidth) + "px";
-				var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
-				rightCell.style.borderRight = "none";
-				rightCell.style.width = (parseInt(rightCell.style.width) + this.selectorBorderWidth) + "px";
-				if (i == keysLen) {
-					for (var j = startIndex; j <= endIndex; j++) {
-						var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
-						cell.style.borderBottom = "none";
-						cell.style.height = (Dom.getRegion(cell).height + this.selectorBorderWidth) + "px";
-					}
+			if (!onlyHeader) {
+				var keysLen = Object.keys(this.selectedItems).length;
+				for (var i = 1; i <= keysLen; i++) {
+					var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
+					leftCell.style.borderLeft = "none";
+					leftCell.style.width = (parseInt(leftCell.style.width) + this.selectorBorderWidth) + "px";
+					var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
+					rightCell.style.borderRight = "none";
+					rightCell.style.width = (parseInt(rightCell.style.width) + this.selectorBorderWidth) + "px";
+					if (i == keysLen) {
+						for (var j = startIndex; j <= endIndex; j++) {
+							var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
+							cell.style.borderBottom = "none";
+							cell.style.height = (Dom.getRegion(cell).height + this.selectorBorderWidth) + "px";
+						}
 
+					}
 				}
 			}
 		},

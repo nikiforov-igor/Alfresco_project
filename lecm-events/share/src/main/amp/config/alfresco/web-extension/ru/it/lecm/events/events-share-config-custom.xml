@@ -290,6 +290,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">12:00</control-param>
+                            <control-param name="changeFireAction">changeEventFromDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
@@ -299,6 +300,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">13:00</control-param>
+                            <control-param name="changeFireAction">changeEventToDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
@@ -442,6 +444,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">12:00</control-param>
+                            <control-param name="changeFireAction">changeEventFromDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>
@@ -451,6 +454,7 @@
                         <control>
                             <control-param name="defaultValue">now</control-param>
                             <control-param name="defaultTime">13:00</control-param>
+                            <control-param name="changeFireAction">changeEventToDate</control-param>
                         </control>
                         <constraint-handlers>
                             <constraint type="INVALID" validation-handler="LogicECM.module.Events.updateLocationDSValidation" event="change"/>

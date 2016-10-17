@@ -142,20 +142,8 @@
                             function createDatePicker() {
                                 var picker = new LogicECM.DatePicker("${calControlId}", "${calFieldHtmlId}").setOptions(
                                         {
-                                                <#if form.mode == "view" || disabled>disabled: true,</#if>
-                                            currentValue: "${currentValue}",
-                                            <#if field.control.params.defaultScriptURL?has_content>
-                                                defaultScript: '${field.control.params.defaultScriptURL?js_string}',
-                                                destination: "${form.destination!""}",
-                                                itemKind: "${form.arguments.itemKind!""}",
-                                            </#if>
-                                            <#if field.control.params.changeFireAction??>
-                                                changeFireAction: "${field.control.params.changeFireAction}",
-                                            </#if>
+                                            changeFireAction: "setMemberCalendarDate",
                                             showTime: false,
-                                            mandatory: ${field.mandatory?string},
-                                            minLimit: "${minLimit?string}",
-                                            maxLimit: "${maxLimit?string}",
                                             fieldId: "${field.configName}",
                                             formId: "${args.htmlid}"
                                         }).setMessages(

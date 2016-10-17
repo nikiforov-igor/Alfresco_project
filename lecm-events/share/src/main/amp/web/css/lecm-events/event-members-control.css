@@ -67,3 +67,11 @@
     top: 0;
     z-index: 999999;
 }
+
+.member-control-diagram-selector-grab {
+    cursor: -webkit-grab;
+}
+
+.member-control-diagram-selector-grabbing {
+    cursor: -webkit-grabbing;
+}
