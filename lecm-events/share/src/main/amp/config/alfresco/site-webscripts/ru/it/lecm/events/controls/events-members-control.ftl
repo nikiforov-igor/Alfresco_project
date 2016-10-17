@@ -57,16 +57,15 @@
 <#if params.sortSelected?? && params.sortSelected == "true">
     <#assign  sortSelected = true>
 </#if>
-
+<#assign  verticalListClass = "">
+<#if params.verticalList?? && params.verticalList == "true">
+<#assign  verticalListClass = "vertical">
+</#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
-    <#if params.verticalList?? && params.verticalList == "true">
-    <div id="${controlId}" class="control association-token-control vertical viewmode">
-    <#else>
-    <div id="${controlId}" class="control association-token-control viewmode">
-    </#if>
+    <div id="${controlId}" class="control association-token-control ${verticalListClass} viewmode">
         <div class="label-div">
             <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
             <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}"/><span>
@@ -81,11 +80,7 @@
         </div>
     </div>
 <#else>
-    <#if params.verticalList?? && params.verticalList == "true">
-    <div id="${controlId}" class="control association-token-control vertical editmode">
-    <#else>
-    <div id="${controlId}" class="control association-token-control editmode">
-    </#if>
+    <div id="${controlId}" class="control association-token-control ${verticalListClass} editmode">
         <div class="label-div">
             <label for="${controlId}">
             ${field.label?html}:
