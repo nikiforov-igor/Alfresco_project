@@ -8,6 +8,23 @@
 
 	var Dom = YAHOO.util.Dom;
 
+    LogicECM.module.Meetings.finishDatesValidation = function (field, args, event, form, silent, message) {
+        if (field.form != null) {
+            var fromInput = field.form["prop_lecm-meetings_actual-from-date"];
+            var toInput = field.form["prop_lecm-meetings_actual-to-date"];
+
+            if (fromInput != null && fromInput.value && toInput != null && toInput.value) {
+                var fromDate = Alfresco.util.fromISO8601(fromInput.value);
+                var toDate = Alfresco.util.fromISO8601(toInput.value);
+                if (fromDate > toDate) {
+                    return false;
+                }
+            }
+
+        }
+        return true;
+    };
+
 	LogicECM.module.Meetings.agendaItemConnectedWorkplaceValidation =
 		function (field, args,  event, form, silent, message) {
 			if (field.form != null) {
