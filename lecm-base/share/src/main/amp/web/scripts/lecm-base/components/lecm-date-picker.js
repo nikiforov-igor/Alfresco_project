@@ -517,6 +517,7 @@
                             }
                             else {
                                 Dom.addClass(me.id + "-date", "invalid");
+                                Dom.get(me.currentValueHtmlId).value = "";
                             }
                         }
                     }

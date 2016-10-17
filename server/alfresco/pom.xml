@@ -624,6 +624,10 @@
 							<groupId>org.alfresco</groupId>
 							<artifactId>alfresco</artifactId>
 							<type>war</type>
+							<excludes>
+								<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
+								<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
+							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
 						<overlay>
@@ -1032,6 +1036,10 @@
                                     <groupId>org.alfresco</groupId>
                                     <artifactId>alfresco</artifactId>
                                     <type>war</type>
+									<excludes>
+										<exclude>WEB-INF/lib/poi-*-beta2-20130720.jar</exclude>
+										<exclude>WEB-INF/lib/xmlbeans-2.3.0.jar</exclude>
+									</excludes>
                                 </overlay>
                                 <!-- Add / order your AMPs here -->
                                 <overlay>

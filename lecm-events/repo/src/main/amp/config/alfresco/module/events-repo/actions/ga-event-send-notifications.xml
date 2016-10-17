@@ -6,7 +6,7 @@
         <property name="lecm-group-actions:type"><![CDATA[[lecm-events:document]]]></property>
         <property name="lecm-group-actions:order"><![CDATA[0]]></property>
         <property name="lecm-group-actions:expression">
-            <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")) AND doc.attr("lecm-events:removed") == false]]></property>
+            <![CDATA[(user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "BR_INITIATOR") OR user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "EVENTS_INITIATOR_DYN")) AND doc.attr("lecm-events:removed") == false AND doc.attr("lecm-events:not-send-invitation") != true]]></property>
         <property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
         <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
         <property name="cm:title"><![CDATA[Направить уведомления]]></property>

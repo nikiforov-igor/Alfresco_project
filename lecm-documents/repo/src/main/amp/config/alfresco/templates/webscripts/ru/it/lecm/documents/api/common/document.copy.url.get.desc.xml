@@ -1,0 +1,8 @@
+<webscript>
+  <shortname>Document copy URL</shortname>
+  <description>Get URL to copy document</description>
+  <url>/lecm/document/api/copy/url?nodeRef={nodeRef}</url>
+  <format default="json">argument</format>
+  <authentication>user</authentication>
+  <transaction readonly="true">required</transaction>
+</webscript>

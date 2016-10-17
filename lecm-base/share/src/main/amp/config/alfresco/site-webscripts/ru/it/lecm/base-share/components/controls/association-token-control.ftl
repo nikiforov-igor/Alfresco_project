@@ -61,6 +61,11 @@
     <#assign fieldValue=form.fields[fieldKey].value?replace(";", ",")>
 </#if>
 
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+    <#assign  sortSelected = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
 <#if disabled>
@@ -207,6 +212,7 @@
 				showPath: ${showPath?string},
 				showAutocomplete: ${showAutocomplete?string},
 				currentValue: "${fieldValue!''}",
+                sortSelected: ${sortSelected?string},
             <#if params.defaultValueDataSource??>
 				defaultValueDataSource: "${params.defaultValueDataSource}",
             </#if>

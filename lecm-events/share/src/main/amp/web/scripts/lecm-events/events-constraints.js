@@ -205,20 +205,24 @@ LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fro
 };
 
 LogicECM.module.Events.repeateDateValidationFunction = function (field, form, fromDateFieldId, toDateFieldId) {
-	if (field.form != null) {
+	if (field.form) {
 		var fromDate = field.form["prop_" + fromDateFieldId.replace(":", "_")];
 		var toDate = field.form["prop_" + toDateFieldId.replace(":", "_")];
 
-		Dom.removeClass(fromDate.id+ "-cntrl-date", "invalid");
-		Dom.removeClass(toDate.id + "-cntrl-date", "invalid");
+        var fromDateInput = Dom.get(fromDate.id + "-cntrl-date");
+        var toDateInput = Dom.get(toDate.id + "-cntrl-date");
 
-
-		var fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
-		var toDateTime = Alfresco.util.fromISO8601(toDate.value);
-		if (toDateTime < fromDateTime) {
-			Dom.addClass(fromDate.id+ "-cntrl-date", "invalid");
-			Dom.addClass(toDate.id + "-cntrl-date", "invalid");
-		}
+        if (fromDate.value.length > 0 && toDate.value.length > 0) {
+            var fromDateTime = Alfresco.util.fromISO8601(fromDate.value);
+            var toDateTime = Alfresco.util.fromISO8601(toDate.value);
+            if (toDateTime < fromDateTime) {
+                Dom.addClass(fromDateInput, "invalid");
+                Dom.addClass(toDateInput, "invalid");
+            } else {
+                Dom.removeClass(fromDateInput, "invalid");
+                Dom.removeClass(toDateInput, "invalid");
+            }
+        }
 	}
 	return true;
 };
@@ -249,7 +253,7 @@ LogicECM.module.Events.repeatableValidation =
 	function (field, args,  event, form, silent, message) {
 		if (field.form != null) {
 			var repeatable = field.form["prop_lecm-events_repeatable"];
-			return repeatable.value == "false" || field.value.length > 0
+			return repeatable.value == "false" || field.value.length > 0;
 		}
 		return false;
 	};

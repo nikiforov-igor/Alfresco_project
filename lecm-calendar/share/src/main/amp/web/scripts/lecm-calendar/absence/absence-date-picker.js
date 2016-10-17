@@ -33,20 +33,17 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 	LogicECM.module.WCalendar.Absence.DatePicker.prototype.draw = function () {
 			var theDate = null;
+			var me =this;
 
-			if (this.options.currentValue == null || this.options.currentValue === "")
-			{
+			if (!this.options.currentValue) {
 				// MNT-2214 fix, check for prevously entered value
 				this.options.currentValue = Dom.get(this.currentValueHtmlId).value;
 			}
-
 			// calculate current date
-			if (this.options.currentValue !== null && this.options.currentValue !== "")
-			{
-				theDate = Alfresco.util.fromISO8601(this.options.currentValue);
+			if (this.options.currentValue) {
+				theDate = Date.parse(this.options.currentValue);
 			}
-			else
-			{
+			else {
 				theDate = new Date();
 			}
 
@@ -56,7 +53,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			var timeEntry = theDate.toString(this._msg("form.control.date-picker.entry.time.format"));
 
 			// populate the input fields
-			if (this.options.currentValue !== "")
+			if (this.options.currentValue)
 			{
 				// show the formatted date
 				Dom.get(this.id + "-date").value = dateEntry;
@@ -83,6 +80,15 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			});
 			this.widgets.calendar.cfg.setProperty("pagedate", page);
 			this.widgets.calendar.cfg.setProperty("selected", selected);
+
+			if (this.options.minLimit) {
+				this.widgets.calendar.cfg.setProperty("mindate", this.options.minLimit);
+
+			}
+			if (this.options.maxLimit) {
+				this.widgets.calendar.cfg.setProperty("maxdate", this.options.maxLimit);
+			}
+
 			Alfresco.util.calI18nParams(this.widgets.calendar);
 
 			// setup events
@@ -92,8 +98,8 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				// Focus icon after calendar is closed
 				Dom.get(this.id + "-icon").focus();
 			}, this, true);
-			Event.addListener(this.id + "-date", "keyup", this._handleFieldChange, this, true);
-			Event.addListener(this.id + "-time", "keyup", this._handleFieldChange, this, true);
+			Event.addListener(this.id + "-date", "keyup", this._handleFieldChangeWithYearValidation, this, true);
+			Event.addListener(this.id + "-time", "keyup", this._handleFieldChangeWithYearValidation, this, true);
 
 			var iconEl = Dom.get(this.id + "-icon");
 			if (iconEl)
@@ -103,6 +109,20 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 				Event.addListener(this.id + "-icon", "click", this._showPicker, this, true);
 			}
 
+
+			// Hide Calendar if we click anywhere in the document other than the calendar
+			Event.on(document, "click", function(e) {
+				var inputEl = Dom.get(me.id + "-date");
+				var iconEl = Dom.get(me.id + "-icon");
+				var el = Event.getTarget(e);
+				if (me.widgets.calendar) {
+					var dialogEl = me.widgets.calendar.oDomContainer;
+
+					if (el && el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != iconEl) {
+						me._hidePicker();
+					}
+				}
+			});
 
 			// register a validation handler for the date entry field so that the submit
 			// button disables when an invalid date is entered
@@ -119,9 +139,22 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			this.widgets.calendar.render();
 
 			// If value was set in visible fields, make sure they are validated and put in the hidden field as well
-			if (this.options.currentValue !== "")
+			if (this.options.currentValue)
 			{
-			this._handleFieldChange(null);
+			this._handleFieldChangeWithYearValidation(null);
 			}
     };
+	LogicECM.module.WCalendar.Absence.DatePicker.prototype._handleFieldChangeWithYearValidation = function DatePicker__handleFieldChange(event) {
+		var currentDate = Date.parse(this.options.currentValue);
+		var dateField = Dom.get(this.id + "-date");
+		var changedDate = Date.parse(dateField.value);
+
+		//Если введен другой год - сообщаем , что он будет проигнорирован.
+		if (currentDate && changedDate && changedDate.getFullYear() != currentDate.getFullYear()) {
+			Alfresco.util.PopupManager.displayMessage({
+				text: Alfresco.util.message("lecm.calendar.msg.wrong.year")
+			});
+		}
+		this._handleFieldChange(event);
+	}
 })();

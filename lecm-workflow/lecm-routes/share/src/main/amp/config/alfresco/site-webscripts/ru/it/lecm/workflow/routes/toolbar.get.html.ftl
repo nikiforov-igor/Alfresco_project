@@ -14,16 +14,18 @@
             routesToolbar.setOptions ({
                 pageId: "${pageId}",
                 inEngineer: LogicECM.module.Routes.isEngineer,
-                datagridBubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
+                bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL
             });
         }
 
         function init() {
             LogicECM.module.Base.Util.loadResources([
+                'scripts/lecm-base/components/lecm-toolbar.js',
                 'scripts/lecm-workflow/routes/routes-toolbar.js',
                 'components/form/form.js',
                 'modules/simple-dialog.js'
             ], [
+                'components/data-lists/toolbar.css',
                 'css/lecm-base/components/base-menu/base-menu.css',
                 'css/lecm-workflow/routes.css'
             ], createPage);
@@ -34,7 +36,7 @@
 
 </script>
 
-<@comp.baseToolbar toolbarId true false false>
+<@comp.baseToolbar toolbarId true true true>
 	<#if isEngineer>
 		<div id="${toolbarId}-btnCreateNewRoute"></div>
 	</#if>

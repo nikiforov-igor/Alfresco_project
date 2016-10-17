@@ -211,3 +211,9 @@
 .datagrid .action-set .onActionUploadNewVersion a {
 	background-image: url(/share/res/components/documentlibrary/actions/document-upload-new-version-16.png);
 }
+.dashlet-body .datagrid .grid .yui-dt-col-prop_cm_name .yui-dt-liner{
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

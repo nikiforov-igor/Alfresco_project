@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.beans;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class DocumentCopySettings {
     private List<String> assocsToCopy;
     private List<String> categoriesToCopy;
     private List<String> tableDataToCopy;
+    private String baseURL = DocumentService.DEFAULT_CREATE_URL;
 
     public List<String> getTableDataToCopy() {
         return tableDataToCopy;
@@ -23,7 +25,7 @@ public class DocumentCopySettings {
     }
     
     public List<String> getPropsToCopy() {
-        return propsToCopy;
+        return propsToCopy != null ? propsToCopy : Collections.<String>emptyList();
     }
 
     public void setPropsToCopy(List<String> propsToCopy) {
@@ -31,7 +33,7 @@ public class DocumentCopySettings {
     }
 
     public List<String> getAssocsToCopy() {
-        return assocsToCopy;
+        return assocsToCopy != null ? assocsToCopy : Collections.<String>emptyList();
     }
 
     public void setAssocsToCopy(List<String> assocsToCopy) {
@@ -39,10 +41,22 @@ public class DocumentCopySettings {
     }
 
     public List<String> getCategoriesToCopy() {
-        return categoriesToCopy;
+        return categoriesToCopy != null ? categoriesToCopy : Collections.<String>emptyList();
     }
 
     public void setCategoriesToCopy(List<String> categoriesToCopy) {
         this.categoriesToCopy = categoriesToCopy;
+    }
+
+    public String getBaseURL() {
+        return baseURL;
+    }
+
+    public void setBaseURL(String baseURL) {
+        this.baseURL = baseURL;
+    }
+
+    public boolean isEmpty() {
+        return getPropsToCopy().isEmpty() && getAssocsToCopy().isEmpty();
     }
 }

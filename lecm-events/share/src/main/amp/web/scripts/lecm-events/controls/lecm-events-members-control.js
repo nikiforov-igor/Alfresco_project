@@ -156,16 +156,28 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Dom.setStyle(el, "display", this.canCurrentValuesShow() ? "block" : "none");
 
 			if (el != null) {
+				var me = this;
+				var items = this.getSelectedItems(!!this.options.sortSelected);
+
 				if (clearCurrentDisplayValue) {
 					el.innerHTML = '';
 				}
-				if(this.options.disabled) {
-					for (var i in this.selectedItems) {
-						var displayName = this.selectedItems[i].selectedName;
-						el.innerHTML += Util.getCroppedItem(this.getMemberView(displayName, this.selectedItems[i]), this.getMandatoryCheckboxHTML(this.selectedItems[i], true) + this.getMemberStatusHTML(this.selectedItems[i]));
-						el.innerHTML += '<div class="clear"></div>';
+				items.forEach(function(item, index, array){
+					var displayName = me.selectedItems[item].selectedName;
+
+					if(me.options.disabled) {
+						//if (this.options.itemType == "lecm-orgstr:employee") {
+						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.this.selectedItems[item].nodeRef, displayName));
+						//} else {
+							el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[i], true) + me.getMemberStatusHTML(me.selectedItems[item]));
+						//}
+					} else {
+						el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[item], false) + me.getMemberStatusHTML(me.selectedItems[item]) + me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
+
+						YAHOO.util.Event.onAvailable("t-" + me.options.prefixPickerId + me.selectedItems[item].nodeRef, me.attachRemoveClickListener, {node: me.selectedItems[item], dopId: "_c", updateForms: true}, me);
+						YAHOO.util.Event.onAvailable(me.getMandatoryCheckboxId(me.selectedItems[item]), me.attachMandatoryCheckboxClickListener, me.selectedItems[item], me);
 					}
-				}
+				});
 			}
 
 			//Рисуем диаграмму, если это не форма просмотра, а редактирования

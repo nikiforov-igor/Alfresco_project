@@ -254,6 +254,7 @@
 	</util:list>
 
 	<bean id="meetings.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
+		  p:baseURL="event-create"
 		  p:propsToCopy-ref="meetings.copySettings.propsToCopy"
 		  p:assocsToCopy-ref="meetings.copySettings.assocsToCopy" />
 

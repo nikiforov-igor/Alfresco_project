@@ -53,6 +53,10 @@
 <#if field.control.params.endpointMany??>
     <#assign endpointMany = (field.control.params.endpointMany == "true")>
 </#if>
+<#assign sortSelected = false>
+<#if params.sortSelected?? && params.sortSelected == "true">
+    <#assign  sortSelected = true>
+</#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>
 
@@ -262,11 +266,12 @@
             <#if params.createDialogClass??>
                 createDialogClass: "${params.createDialogClass}",
             </#if>
-                showSearch: ${showSearch?string},
-                plane: ${plane?string},
-                showPath: ${showPath?string},
-                showAutocomplete: ${showAutocomplete?string},
-                currentValue: "${field.value!''}",
+				showSearch: ${showSearch?string},
+				plane: ${plane?string},
+				showPath: ${showPath?string},
+				showAutocomplete: ${showAutocomplete?string},
+				currentValue: "${field.value!''}",
+                sortSelected: ${sortSelected?string},
             <#if params.defaultValueDataSource??>
                 defaultValueDataSource: "${params.defaultValueDataSource}",
             </#if>
