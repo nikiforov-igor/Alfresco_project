@@ -204,7 +204,7 @@
                     </target>
                 </association>
                 <!-- Представитель корреспондента -->
-                <association name="lecm-incoming:afddressee-assoc">
+                <association name="lecm-incoming:addressee-assoc">
                     <title>Представитель корреспондента</title>
                     <source>
                         <mandatory>false</mandatory>
