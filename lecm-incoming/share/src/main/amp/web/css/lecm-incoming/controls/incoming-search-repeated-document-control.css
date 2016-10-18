@@ -5,6 +5,9 @@
 .form-container .bd .form-fields .control.incoming-search-repeated .search-similar-label {
     margin-top: 15px;
 }
+.form-container .bd .form-fields .control.incoming-search-repeated .container input[type="checkbox"] {
+    margin-left: 2px;
+}
 .form-container .bd .form-fields .control.incoming-search-repeated .object-finder .bd {
     padding: 0;
 }
