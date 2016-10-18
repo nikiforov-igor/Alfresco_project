@@ -29,7 +29,7 @@
 <script type="text/javascript">
     (function () {
         LogicECM.module.Base.Util.loadCSS([
-            'css/multiple-sign-form.css'
+            'css/signed-docflow/multiple-sign-form.css'
         ])
     })();
 </script>
