@@ -180,11 +180,13 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined, String lastCreated) {
 		List<NodeRef> results = new ArrayList<>();
+		Date from = ISO8601DateFormat.parse(fromDate);
+		Date to = ISO8601DateFormat.parse(toDate);
 
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + toDate + "\"> AND @lecm\\-events\\:to\\-date:<\"" + fromDate + "\" TO MAX] AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter;
+		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + BaseBean.DateFormatISO8601_SZ.format(to) + "\"> AND @lecm\\-events\\:to\\-date:<\"" + BaseBean.DateFormatISO8601_SZ.format(from) + "\" TO MAX] AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter;
 		query += " AND (" + organizationQueryProcessor.getQuery(null) + ")";
 		sp.setQuery(query);
 
@@ -198,8 +200,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			}
 		}
 		if (lastCreated != null) {
-			Date from = ISO8601DateFormat.parse(fromDate);
-			Date to = ISO8601DateFormat.parse(toDate);
 			String[] lastCreatedItems = lastCreated.split(",");
 			for (String lastCreatedItem : lastCreatedItems) {
 				if (NodeRef.isNodeRef(lastCreatedItem)) {
