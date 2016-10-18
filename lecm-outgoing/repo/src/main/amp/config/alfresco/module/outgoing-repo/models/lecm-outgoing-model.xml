@@ -106,7 +106,7 @@
 					</target>
 				</association>
 				<association name="lecm-outgoing:recipient-assoc">
-					<title>Адресант корреспондента</title>
+					<title>Адресат корреспондента</title>
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
