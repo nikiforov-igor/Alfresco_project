@@ -15,7 +15,6 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
-import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -163,30 +162,27 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	@Override
-	public List<NodeRef> getEvents(String fromDate, String toDate) {
+	public List<NodeRef> getEvents(Date fromDate, Date toDate) {
 		return getEvents(fromDate, toDate, "");
 	}
 
 	@Override
-	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter) {
+	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter) {
 		return getEvents(fromDate, toDate, additionalFilter, false, null);
 	}
 
 	@Override
-	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined) {
+	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined) {
 		return getEvents(fromDate, toDate, additionalFilter, false, null);
 	}
 
 	@Override
-	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined, String lastCreated) {
+	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined, String lastCreated) {
 		List<NodeRef> results = new ArrayList<>();
-		Date from = ISO8601DateFormat.parse(fromDate);
-		Date to = ISO8601DateFormat.parse(toDate);
-
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + BaseBean.DateFormatISO8601_SZ.format(to) + "\"> AND @lecm\\-events\\:to\\-date:<\"" + BaseBean.DateFormatISO8601_SZ.format(from) + "\" TO MAX] AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter;
+		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + BaseBean.DateFormatISO8601_SZ.format(toDate) + "\"> AND @lecm\\-events\\:to\\-date:<\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO MAX] AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter;
 		query += " AND (" + organizationQueryProcessor.getQuery(null) + ")";
 		sp.setQuery(query);
 
@@ -210,7 +206,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 						Date propToDate = (Date) properties.get(PROP_EVENT_TO_DATE);
 						Boolean removed = (Boolean) properties.get(PROP_EVENT_REMOVED);
 						Boolean showInCalendar = (Boolean) properties.get(PROP_EVENT_SHOW_IN_CALENDAR);
-						if (propFromDate != null && propFromDate.before(to) && propToDate != null && propToDate.after(from)
+						if (propFromDate != null && propFromDate.before(toDate) && propToDate != null && propToDate.after(fromDate)
 								&& !removed && showInCalendar) {
 							results.add(ref);
 						}
@@ -225,7 +221,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	@Override
-	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, String lastCreated) {
+	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, String lastCreated) {
 		return getEvents(fromDate, toDate, additionalFilter, false, lastCreated);
 	}
 
@@ -256,7 +252,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	@Override
-	public List<NodeRef> getNearestEvents(String fromDate, int maxCount, String additionalFilter) {
+	public List<NodeRef> getNearestEvents(Date fromDate, int maxCount, String additionalFilter) {
 		List<NodeRef> results = new ArrayList<>();
 
 		SearchParameters sp = new SearchParameters();
@@ -266,13 +262,13 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		String query;
 		if (maxCount > 0) {
 			sp.setMaxItems(maxCount);
-			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO MAX> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
+			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO MAX> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
 		} else {
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(Calendar.HOUR_OF_DAY, 23);
 			calendar.set(Calendar.MINUTE, 59);
 			calendar.set(Calendar.SECOND, 59);
-			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + fromDate + "\" TO \"" + DateFormatISO8601.format(calendar.getTime()) + "\"> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
+			query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO \"" + DateFormatISO8601_SZ.format(calendar.getTime()) + "\"> AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + (additionalFilter == null ? "" : additionalFilter);
 		}
 		sp.setQuery(query + " AND (" + organizationQueryProcessor.getQuery(null) + ")");
 
@@ -305,7 +301,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	}
 
 	@Override
-	public List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode) {
+	public List<NodeRef> getAvailableUserLocations(final Date fromDate, final Date toDate, NodeRef ignoreNode) {
 		List<NodeRef> results = new ArrayList<>();
 		NodeRef locationsDic = dictionaryBean.getDictionaryByName("Места проведения мероприятий");
 		if (locationsDic != null) {
@@ -325,8 +321,6 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 		}
 
 		if (fromDate != null && toDate != null) {
-			final String fromDateFinal = fromDate;
-			final String toDateFinal = toDate;
 			final NodeRef ignoreNodeFinal = ignoreNode;
 
 			Set<NodeRef> unavailableLocations = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Set<NodeRef>>() {
@@ -338,7 +332,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 					if (ignoreNodeFinal != null) {
 						additionalFilter += " AND NOT ID:\"" + ignoreNodeFinal.toString() + "\"";
 					}
-					List<NodeRef> existEvents = getEvents(fromDateFinal, toDateFinal, additionalFilter);
+					List<NodeRef> existEvents = getEvents(fromDate, toDate, additionalFilter);
 					if (existEvents != null) {
 						for (NodeRef event : existEvents) {
 							NodeRef location = getEventLocation(event);
@@ -437,7 +431,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 			additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
 		}
 
-		List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
+		List<NodeRef> events = getEvents(fromDate, toDate, additionalFilter);
 
 		return events == null || events.isEmpty();
 	}
@@ -479,7 +473,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 				additionalFilter += " AND NOT ID:\"" + ignoreNode.toString() + "\"";
 			}
 
-			List<NodeRef> events = getEvents(DateFormatISO8601.format(fromDate), DateFormatISO8601.format(toDate), additionalFilter);
+			List<NodeRef> events = getEvents(fromDate, toDate, additionalFilter);
 
 			return events == null || events.isEmpty();
 		}
