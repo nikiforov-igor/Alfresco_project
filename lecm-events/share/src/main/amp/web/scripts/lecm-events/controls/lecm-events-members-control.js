@@ -44,6 +44,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		headerIsReady: false,
 		startDateField: null,
 		endDateField: null,
+		keyIndex: [],
+		busytime: {},
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
 			var arrItems = "";
@@ -169,7 +171,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						//if (this.options.itemType == "lecm-orgstr:employee") {
 						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.this.selectedItems[item].nodeRef, displayName));
 						//} else {
-							el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[i], true) + me.getMemberStatusHTML(me.selectedItems[item]));
+						el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[i], true) + me.getMemberStatusHTML(me.selectedItems[item]));
 						//}
 					} else {
 						el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[item], false) + me.getMemberStatusHTML(me.selectedItems[item]) + me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
@@ -364,6 +366,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (this.startDate && this.endDate && this.startDate <= this.endDate) {
 				this.drawDiagramHeader();
 				this.drawDiagram();
+				this.fillBusyTime();
 				this.drawSelector();
 			}
 		},
@@ -390,6 +393,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var fieldId = control.options.fieldId;
 				if (fieldId == "lecm-events:from-date") {
 					var valueField = Dom.get(control.currentValueHtmlId);
+					var prevDate = this.startDate ? this.formatDate(this.startDate) : null;
 					this.startDate = Alfresco.util.fromISO8601(valueField.value);
 					this.startDateField = {
 						id: control.id,
@@ -402,8 +406,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						formId: this.options.formId
 					});
 					this.draw();
+					if (this.formatDate(this.startDate) != prevDate) {
+						this.requestMembersTime();
+					}
 				} else if (fieldId == "lecm-events:to-date") {
 					var valueField = Dom.get(control.currentValueHtmlId);
+					var prevDate = this.endDate ? this.formatDate(this.endDate) : null;
 					this.endDate = Alfresco.util.fromISO8601(valueField.value);
 					this.endDateField = {
 						id: control.id,
@@ -411,8 +419,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						configName: control.options.fieldId
 					};
 					this.draw();
+					if (this.formatDate(this.endDate) != prevDate) {
+						this.requestMembersTime();
+					}
 				}
-
 			}
 		},
 
@@ -429,7 +439,30 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * Запрос занятости участников
 		 */
 		requestMembersTime: function requestMembersTime_function() {
-			this.draw();
+			var items = Object.keys(this.selectedItems).join(",");
+			if (items == "" || this.startDate == null) return;
+
+			Alfresco.util.Ajax.jsonRequest(
+				{
+					url: Alfresco.constants.PROXY_URI + "lecm/events/members/busytime",
+					method: "GET",
+					dataObj: {
+						items: items,
+						date: Alfresco.util.formatDate(this.startDate, "yyyy-mm-dd"),
+						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : ""
+					},
+					successCallback:
+					{
+						fn: function(response) {
+							if (response.json) {
+								this.busytime = response.json;
+								this.fillBusyTime(response.json);
+							}
+						},
+
+						scope: this
+					}
+				});
 		},
 
 		/**
@@ -446,6 +479,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var cellByHour = Math.round(60 / this.timeStep);
 			var cellWidth = Math.floor(width / cellByHour);
 			var itemNum = 1;
+			this.keyIndex = [];
 			for (var key in this.selectedItems) {
 				var item = this.selectedItems[key];
 				var firstColumn = document.createElement("div");
@@ -456,6 +490,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				textCell.innerHTML = item.selectedName;
 				firstColumn.appendChild(textCell);
 				this._drawHourCells(content, itemNum, false);
+				this.keyIndex[key] = itemNum;
 				itemNum++;
 			}
 		},
@@ -597,6 +632,51 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			return dd + "." + mm + "." + date.getFullYear();
 		},
 
+		fillBusyTime: function fillBusyTime_function() {
+			var startDayDate = new Date(this.startDate.getTime());
+			startDayDate.setHours(startHour);
+			startDayDate.setMinutes(0);
+			startDayDate.setSeconds(0);
+
+			var endDayDate = new Date(this.startDate.getTime());;
+			endDayDate.setHours(endHour);
+			endDayDate.setMinutes(0);
+			endDayDate.setSeconds(0);
+
+			var cellSettings = this._calculateCell();
+			for (var i in this.busytime) {
+				var times = this.busytime[i].busytime;
+				for (var key in times) {
+					var time = times[key];
+					var start = Alfresco.util.fromISO8601(time.start);
+					var end = Alfresco.util.fromISO8601(time.end);
+					var employee = this.busytime[i].employee;
+					var startIndex, endIndex;
+					if (start <= startDayDate) {
+						startIndex = 0;
+					} else {
+						var startHour = start.getHours();
+						var startMinutes = start.getMinutes();
+						startIndex = (startHour - this.startHour) * cellSettings.cellByHour + Math.round(startMinutes / this.timeStep) + 1;
+					}
+
+					if (endDayDate >= end) {
+						endIndex = this.maxIndex;
+					} else {
+						var endHour = end.getHours();
+						var endMinutes = end.getMinutes();
+						endIndex = (endHour - this.startHour) * cellSettings.cellByHour + Math.round(endMinutes / this.timeStep);
+					}
+					var rowIndex = this.keyIndex[employee];
+					for (var j = startIndex; j <= endIndex; j++) {
+						var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + j);
+						cell.style.backgroundColor = "red";
+						cell.title = time.title;
+					}
+				}
+			}
+		},
+
 		_clearSelectorBorder: function(startIndex, endIndex, onlyHeader) {
 			for (var i = startIndex; i <= endIndex; i++) {
 				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
@@ -698,6 +778,17 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				cellByHour: cellByHour,
 				cellWidth: cellWidth
 			};
+		},
+
+		isNodeRef: function (value) {
+			var regexNodeRef = new RegExp(/^[^\:^ ]+\:\/\/[^\:^ ]+\/[^ ]+$/);
+			var result = false;
+			try {
+				result = regexNodeRef.test(String(value));
+			}
+			catch (e) {
+			}
+			return result;
 		}
 	}, true);
 })();

@@ -87,6 +87,12 @@ public class EventsWebScriptBean extends BaseWebScript {
         return getUserEvents(fromDate, toDate, false, null);
     }
 
+    public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, String additionalFilter) {
+        List<NodeRef> events = eventService.getEvents(fromDate, toDate, additionalFilter, null);
+        return processEvents(events, false, true, null, TimeZone.getDefault().getRawOffset());
+    }
+
+
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode) {
         return getUserEvents(fromDate, toDate, loadActions, mode, TimeZone.getDefault().getRawOffset());
     }
