@@ -1,0 +1,13 @@
+.form-container .bd .form-fields .control.incoming-search-repeated .object-finder {
+    margin-bottom: 5px;
+    margin-top:5px
+}
+.form-container .bd .form-fields .control.incoming-search-repeated .search-similar-label {
+    margin-top: 15px;
+}
+.form-container .bd .form-fields .control.incoming-search-repeated .object-finder .bd {
+    padding: 0;
+}
+.form-container .bd .form-fields .control.incoming-search-repeated .object-finder .bd .picker-items {
+    margin: 2px;
+}

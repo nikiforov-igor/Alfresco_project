@@ -54,7 +54,7 @@
 	</div>
 <#else>
 	<div class="control incoming-search-repeated editmode">
-		<div class="label-div">
+		<div class="label-div search-similar-label">
 			<label for="${controlId}">
 			${field.label?html}:
 				<#if field.endpointMandatory!false || field.mandatory!false>
@@ -100,6 +100,9 @@
 	        'scripts/lecm-base/components/lecm-association-search.js',
             'scripts/lecm-incoming/incoming-search-repeated-documents.js'
 	    ], process);
+        LogicECM.module.Base.Util.loadCSS([
+            'css/lecm-incoming/controls/incoming-search-repeated-document-control.css'
+        ]);
 	}
 
 	function process() {
