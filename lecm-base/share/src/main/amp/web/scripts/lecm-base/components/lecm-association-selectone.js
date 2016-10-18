@@ -350,8 +350,9 @@ LogicECM.module = LogicECM.module || {};
             },
 
             fillContent: function AssociationSelectOne_populateSelect() {
-                var successHandler = function (sRequest, oResponse, oPayload)
-                {
+                var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
+
+                function successHandler(sRequest, oResponse, oPayload) {
                     this.clearChildren(this.selectItem);
 
                     if (this.options.notSelectedOptionShow) {
@@ -379,10 +380,9 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     this.onSelectChange();
-                }.bind(this);
+                }
 
-                var failureHandler = function (sRequest, oResponse)
-                {
+                function failureHandler (sRequest, oResponse) {
                     if (oResponse.status == 401)
                     {
                         // Our session has likely timed-out, so refresh to offer the login page
@@ -392,9 +392,7 @@ LogicECM.module = LogicECM.module || {};
                     {
                         //todo show failure message
                     }
-                }.bind(this);
-
-                var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
+                }
 
                 this.dataSource.sendRequest(url,
                     {
