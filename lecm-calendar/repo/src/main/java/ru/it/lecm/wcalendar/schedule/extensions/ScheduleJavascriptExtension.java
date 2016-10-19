@@ -132,17 +132,33 @@ public class ScheduleJavascriptExtension extends CommonWCalendarJavascriptExtens
 	/**
 	 * Получить расписание, привзянное к сотруднику или орг. единице.
 	 *
-	 * @param node JSON вида {"nodeRef": SubjRef}, где SubjRef - NodeRef на
-	 * сотрудника или орг. единицу.
-	 * @return NodeRef расписания, привязанного к node. Если таковое
-	 * отсутствует, то null.
+	 * @param node JSON вида {"nodeRef": SubjRef, "fromParent": value1, "exclDefault" : value2},
+	 *                где SubjRef - NodeRef на сотрудника или орг. единицу,
+	 *                fromParent - флаг, искать ли расписание у родительского эжлемента
+	 *             	  exclDefault - флаг, исключать ли дефолтное расписание, если расписание у элемента не найдено
+	 * @return NodeRef расписания, привязанного к node. Если таковое отсутствует, то null.
 	 */
 	public ScriptNode getScheduleByOrgSubject(final JSONObject node) {
+		NodeRef schedule;
 		try {
-			return getScheduleByOrgSubject(node.getString("nodeRef"));
+			NodeRef nodeRef = new NodeRef(node.getString("nodeRef"));
+			boolean fromParent = node.has("fromParent") && node.getBoolean("fromParent"); // default - false
+			boolean exclDefault = node.has("exclDefault") && node.getBoolean("exclDefault"); // default - false
+
+			schedule = scheduleService.getScheduleByOrgSubject(nodeRef, exclDefault || fromParent);
+			if (schedule == null && fromParent) {
+				schedule = scheduleService.getParentSchedule(nodeRef);
+				if (schedule == null && !exclDefault) {
+					schedule = scheduleService.getDefaultSystemSchedule();
+				}
+			}
 		} catch (JSONException ex) {
 			throw new WebScriptException(ex.getMessage(), ex);
 		}
+		if (schedule != null) {
+			return new ScriptNode(schedule, serviceRegistry);
+		}
+		return null;
 	}
 
 	/**
