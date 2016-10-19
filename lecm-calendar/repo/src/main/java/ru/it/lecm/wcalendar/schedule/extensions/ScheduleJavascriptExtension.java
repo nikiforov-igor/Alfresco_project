@@ -1,7 +1,5 @@
 package ru.it.lecm.wcalendar.schedule.extensions;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
@@ -13,6 +11,9 @@ import ru.it.lecm.wcalendar.extensions.CommonWCalendarJavascriptExtension;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
 import ru.it.lecm.wcalendar.schedule.ISpecialScheduleRaw;
 import ru.it.lecm.wcalendar.schedule.beans.SpecialScheduleRawBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JavaScript root-object под названием "schedule". Предоставляет доступ к
@@ -139,26 +140,15 @@ public class ScheduleJavascriptExtension extends CommonWCalendarJavascriptExtens
 	 * @return NodeRef расписания, привязанного к node. Если таковое отсутствует, то null.
 	 */
 	public ScriptNode getScheduleByOrgSubject(final JSONObject node) {
-		NodeRef schedule;
 		try {
 			NodeRef nodeRef = new NodeRef(node.getString("nodeRef"));
 			boolean fromParent = node.has("fromParent") && node.getBoolean("fromParent"); // default - false
 			boolean exclDefault = node.has("exclDefault") && node.getBoolean("exclDefault"); // default - false
 
-			schedule = scheduleService.getScheduleByOrgSubject(nodeRef, exclDefault || fromParent);
-			if (schedule == null && fromParent) {
-				schedule = scheduleService.getParentSchedule(nodeRef);
-				if (schedule == null && !exclDefault) {
-					schedule = scheduleService.getDefaultSystemSchedule();
-				}
-			}
+			return getScheduleByOrgSubject(nodeRef, fromParent, exclDefault);
 		} catch (JSONException ex) {
 			throw new WebScriptException(ex.getMessage(), ex);
 		}
-		if (schedule != null) {
-			return new ScriptNode(schedule, serviceRegistry);
-		}
-		return null;
 	}
 
 	/**
@@ -169,7 +159,7 @@ public class ScheduleJavascriptExtension extends CommonWCalendarJavascriptExtens
 	 * отсутствует, то null.
 	 */
 	public ScriptNode getScheduleByOrgSubject(final String nodeRefStr) {
-		return getScheduleByOrgSubject(new NodeRef(nodeRefStr));
+		return getScheduleByOrgSubject(new NodeRef(nodeRefStr), false, false);
 	}
 
 	/**
@@ -180,17 +170,22 @@ public class ScheduleJavascriptExtension extends CommonWCalendarJavascriptExtens
 	 * отсутствует, то null.
 	 */
 	public ScriptNode getScheduleByOrgSubject(final ScriptNode nodeRef) {
-		return getScheduleByOrgSubject(nodeRef.getNodeRef());
+		return getScheduleByOrgSubject(nodeRef.getNodeRef(), false, false);
 	}
 
-	private ScriptNode getScheduleByOrgSubject(NodeRef node) {
-		NodeRef nodeRef = scheduleService.getScheduleByOrgSubject(node);
-		if (nodeRef != null) {
-			return new ScriptNode(nodeRef, serviceRegistry);
+	private ScriptNode getScheduleByOrgSubject(NodeRef node, boolean fromParent, boolean exclDefault) {
+		NodeRef schedule = scheduleService.getScheduleByOrgSubject(node, exclDefault || fromParent);
+		if (schedule == null && fromParent) {
+			schedule = scheduleService.getParentSchedule(node);
+			if (schedule == null && !exclDefault) {
+				schedule = scheduleService.getDefaultSystemSchedule();
+			}
+		}
+		if (schedule != null) {
+			return new ScriptNode(schedule, serviceRegistry);
 		}
 		return null;
 	}
-
 	/**
 	 * Проверяет, привязано ли какое-нибудь расписание к node.
 	 *
