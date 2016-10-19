@@ -1,15 +1,12 @@
 package ru.it.lecm.documents.expression;
 
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.QName;
-import org.springframework.extensions.surf.util.I18NUtil;
-import org.springframework.util.StringUtils;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -159,6 +156,12 @@ public class ExpressionDocument {
 	public boolean hasCategoryAttachment(String attachmentCategory) {
         return !documentAttachmentsService.getAttachmentsByCategory(nodeRef, attachmentCategory).isEmpty();
 	}
+
+    //Наличие вложения с определенным типом
+    public boolean isReadOnlyCategory(String categoryName) {
+        NodeRef category = documentAttachmentsService.getCategory(categoryName, nodeRef);
+        return category == null || documentAttachmentsService.isReadonlyCategory(category);
+    }
 
 	//Проверка условий на корректность хотя бы у одного из вложений
 	public boolean anyAttachmentAttribute(String attributeName, String condition, String value) {
