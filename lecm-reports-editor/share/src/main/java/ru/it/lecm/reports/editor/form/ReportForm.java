@@ -288,15 +288,16 @@ public class ReportForm extends LecmFormGet {
                 }
 
                 if (alfrescoType.toUpperCase().equals(CustomTypes.STATUS.name())) {
-                    String resultedValue = "";
+                    StringBuilder resultedValueBuilder = new StringBuilder();
+                    String strResultedValue = "";
                     if (desc.getFlags().getSupportedNodeTypes() != null) {
                         for (String type : desc.getFlags().getSupportedNodeTypes()) {
-                            resultedValue += (type + ",");
+                            resultedValueBuilder.append(type).append(",");
                         }
-                        resultedValue = resultedValue.substring(0, resultedValue.length() - 1);
+                        strResultedValue = resultedValueBuilder.substring(0, resultedValueBuilder.length() - 1);
                     }
 
-                    control.getParams().put("docType", resultedValue);
+                    control.getParams().put("docType", strResultedValue);
                     control.getParams().put("multiply", String.valueOf(column.getParameterValue().getType().equals(ParameterType.Type.LIST)));
                 }
 

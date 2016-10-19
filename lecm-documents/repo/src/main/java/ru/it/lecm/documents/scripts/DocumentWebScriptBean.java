@@ -673,9 +673,9 @@ public class DocumentWebScriptBean extends BaseWebScript {
         Collection<QName> typesList = new ArrayList<>();
         if (types != null) {
             typesList.addAll(types);
-            String indent = "";
+            StringBuilder indent = new StringBuilder();
             for (int i = 0; i < level; i++) {
-                indent += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                indent.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
             }
             level++;
             Collections.sort((List<QName>) typesList, new Comparator<QName>() {
@@ -695,7 +695,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
             for (QName type : typesList) {
                 TypeDefinition typeDef = dictionaryService.getType(type);
-                results.put(type.toPrefixString(namespaceService), indent + "&nbsp;" + typeDef.getTitle(dictionaryService));
+                results.put(type.toPrefixString(namespaceService), indent.toString() + "&nbsp;" + typeDef.getTitle(dictionaryService));
                 results.putAll(getSubtypesInternal(type, level));
             }
         }

@@ -284,10 +284,9 @@ public class FileFinder {
     public String matchPathLists(List<String> r, List<String> f) {
         int i;
         int j;
-        String s;
+        StringBuilder sb = new StringBuilder();
         // start at the beginning of the lists
         // iterate while both lists are equal
-        s = "";
         i = r.size() - 1;
         j = f.size() - 1;
 
@@ -299,16 +298,16 @@ public class FileFinder {
 
         // for each remaining level in the home path, add a ..
         for (; i >= 0; i--) {
-            s += "src/main" + File.separator;
+            sb.append("src/main").append(File.separator);
         }
 
         // for each level in the file path, add the path
         for (; j >= 1; j--) {
-            s += f.get(j) + File.separator;
+            sb.append(f.get(j)).append(File.separator);
         }
 
         // file name
-        s += f.get(j);
-        return s;
+        sb.append(f.get(j));
+        return sb.toString();
     }
 }

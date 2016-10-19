@@ -11,9 +11,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.LecmMessageService;
 import ru.it.lecm.dictionary.ExportSettings;
 import ru.it.lecm.dictionary.export.ExportNamespace;
-import ru.it.lecm.base.beans.LecmMessageService;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -287,12 +287,12 @@ public class XMLExportBeanImpl implements XMLExportBean {
         private void writeMLPropertyExample(String fieldName) throws XMLStreamException {
         	List<Locale> localeList = lecmMessageService.getMlLocales();
         	if (localeList.size() > 0) {
-            	String example = "<property name=\"" + fieldName + "\">";
+            	StringBuilder example = new StringBuilder("<property name=\"" + fieldName + "\">");
             	for (Locale locale : localeList) {
-            		example += "<value lang=\"" + locale.toString() + "\"><![CDATA[" + locale.toString() + " value" + "]]></value>";
+            		example.append("<value lang=\"").append(locale.toString()).append("\"><![CDATA[").append(locale.toString()).append(" value").append("]]></value>");
             	}
-            	example += "</property>";
-            	xmlw.writeComment(example);
+            	example.append("</property>");
+            	xmlw.writeComment(example.toString());
         	}
         }
 

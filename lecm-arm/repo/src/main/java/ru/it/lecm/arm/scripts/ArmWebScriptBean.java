@@ -339,7 +339,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                     }
                     if (accordion != null) {
                         result.put("accordion", accordion.getId());
-                        String nodePath = accordion.getId();
+                        StringBuilder nodePath = new StringBuilder(accordion.getId());
                         NodeRef prevNode = accordion;
                         NodeRef parentNode = armRef;
                         for (int i = 1; i < splitPath.length; i++) {
@@ -351,9 +351,9 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                                     parentNode = prevNode;
                                     prevNode = node.getNodeRef();
                                     if (node.getNodeRef() == null) {
-                                        nodePath += "." + (node.getArmNodeRef().getId() + "-" + node.getTitle() + '-' + node.getArmNodeRef().getId());
+                                        nodePath.append(".").append(node.getArmNodeRef().getId()).append("-").append(node.getTitle()).append('-').append(node.getArmNodeRef().getId());
                                     } else {
-                                        nodePath += "." + (node.getNodeRef().getId() + '-' + node.getArmNodeRef().getId());
+                                        nodePath.append(".").append(node.getNodeRef().getId()).append('-').append(node.getArmNodeRef().getId());
                                     }
                                     break;
                                 }
@@ -362,7 +362,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                                 break;
                             }
                         }
-                        result.put("selected", nodePath);
+                        result.put("selected", nodePath.toString());
                         result.put("pageNum", 1);
                     }
                 }
