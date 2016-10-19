@@ -11,6 +11,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
         LogicECM.module.Routes.StagesControlDatagrid.superclass.constructor.call(this, containerId);
 
         YAHOO.Bubbling.on("routeOrganizationSelected", this.onRouteOrganizationSelected, this);
+        YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         return this;
     };
 
@@ -27,7 +28,42 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
         onActionDelete: function (p_items, owner, actionsConfig, fnDeleteComplete) {
             this.onDelete(p_items, owner, actionsConfig, this._fireStageControlUpdated, null);
         },
+        /**
+         * Data Items deleted event handler
+         *
+         * @method onDataItemsDeleted
+         * @param layer {object} Event fired
+         * @param args {array} Event parameters (depends on event type)
+         */
+        onDataItemsDeleted: function DataGrid_onDataItemsDeleted(layer, args)
+        {
+            var obj = args[1];
+            if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.items !== null))
+            {
+                var recordFound, el,
+                    fnCallback = function(record)
+                    {
+                        return function DataGrid_onDataItemsDeleted_anim()
+                        {
+                            this.widgets.dataTable.deleteRow(record);
+                        };
+                    };
 
+                for (var i = 0, ii = obj.items.length; i < ii; i++)
+                {
+                    recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
+                    if (recordFound !== null)
+                    {
+                        el = this.widgets.dataTable.getTrEl(recordFound);
+                        Alfresco.util.Anim.fadeOut(el,
+                            {
+                                callback: fnCallback(recordFound),
+                                scope: this
+                            });
+                    }
+                }
+            }
+        },
         onActionCreate: function (event, obj, isApprovalListContextProp) {
             function onCreateStageSuccess(r) {
                 var formId = this.options.createStageFormId;

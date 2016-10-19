@@ -2452,9 +2452,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     var nodeRefs = [];
                     for (var i = 0, ii = items.length; i < ii; i++) {
                         nodeRefs.push(items[i].nodeRef);
-                    }
-                    this.collapseAll();
 
+                        var record = this._findRecordByParameter(items[i].nodeRef, "nodeRef");
+                        if (record != null) {
+                            var row = this.widgets.dataTable.getRow(record);
+                            if (Dom.hasClass(row, "expanded")) {
+                                Dom.get("expand-" + record.getId()).innerHTML = "+";
+                                Dom.removeClass(row, "expanded");
+                                this.onCollapse(record);
+                            }
+                        }
+                    }
                     var query = "";
                     if (actionsConfig) {
                         var fullDelete = actionsConfig.fullDelete;
