@@ -81,6 +81,8 @@ LogicECM.module = LogicECM.module || {};
 
 		alreadyShowCreateNewLink: false,
 
+        timeout:null,
+
 		options:
 		{
 			// скрывать ли игнорируемые ноды в дереве
@@ -670,8 +672,6 @@ LogicECM.module = LogicECM.module || {};
                     }
 	            }
 		        this.searchData = searchData;
-
-				if (this.option)
 	            this.isSearch = true;
 	            this._updateItems(nodeRef, searchData);
 			} else if (searchTerm === "") {
@@ -1493,12 +1493,16 @@ LogicECM.module = LogicECM.module || {};
         },
 
 		onPickerItemsContainerScroll: function(event) {
+            var me = this;
 			var container = event.currentTarget;
-			if (container.scrollTop + container.clientHeight == container.scrollHeight) {
-				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
 
-				this._loadItems(this.currentNode.data.nodeRef, this.searchData, false);
-			}
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(function(){
+                if (container.scrollTop + container.clientHeight == container.scrollHeight && !me.isSearch) {
+                    Dom.setStyle(me.options.pickerId + "-picker-items-loading", "visibility", "visible");
+                    me._loadItems(me.currentNode.data.nodeRef, me.searchData, false);
+                }
+            },50);
 		},
 
 		_loadItems: function(nodeRef, searchTerm, clearList) {
@@ -1526,6 +1530,7 @@ LogicECM.module = LogicECM.module || {};
 				}
 
 				this.alreadyShowCreateNewLink = true;
+                this.isSearch = false;
 			};
 
 			var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse)
