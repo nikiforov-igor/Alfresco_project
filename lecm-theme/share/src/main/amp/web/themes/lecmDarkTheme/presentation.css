@@ -2593,11 +2593,11 @@ div#lightbox {
 }
 
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite .yui-button .first-child {
-    background: url(images/LECM_C-style-icons-6-16.png) no-repeat center center;
+    background: url('images/LECM_C-style-icons-6-16.png') no-repeat center center;
 }
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite.enabled .yui-button .first-child {
-    background: url(images/LECM_C-style-icons-6-16.png) no-repeat center,
-    url(/share/res/components/images/star-selected_16x16.png) no-repeat center;
+    background: url('images/LECM_C-style-icons-6-16.png') no-repeat center,
+    url('/share/res/components/images/star-selected_16x16.png') no-repeat center;
 }
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite.disabled .first-child,
 .yui-skin-lecmDarkTheme .document-header .document-action .favorite .yui-button-disabled .first-child {
