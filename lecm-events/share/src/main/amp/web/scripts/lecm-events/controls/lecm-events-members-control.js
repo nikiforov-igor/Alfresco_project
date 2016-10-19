@@ -46,6 +46,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		endDateField: null,
 		keyIndex: [],
 		busytime: {},
+		busyInterval: [],
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
 			var arrItems = "";
@@ -362,6 +363,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		/**
+		 * Создаем диаграмму занятости
+		 */
 		draw: function draw_function() {
 			if (this.startDate && this.endDate && this.startDate <= this.endDate) {
 				this.drawDiagramHeader();
@@ -371,6 +375,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		/**
+		 * Перерисовываем диаграмму занятости при изменении окна браузера
+		 */
 		redraw: function redraw_function() {
 			var header = Dom.get(this.options.controlId + "-diagram-header");
 			var len = header.children.length;
@@ -391,6 +398,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var control = args[1];
 			if (control && control.options.fieldId) {
 				var fieldId = control.options.fieldId;
+				//Данные из поля "Начало"
 				if (fieldId == "lecm-events:from-date") {
 					var valueField = Dom.get(control.currentValueHtmlId);
 					var prevDate = this.startDate ? this.formatDate(this.startDate) : null;
@@ -409,6 +417,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					if (this.formatDate(this.startDate) != prevDate) {
 						this.requestMembersTime();
 					}
+					//Данные из поля завершение
 				} else if (fieldId == "lecm-events:to-date") {
 					var valueField = Dom.get(control.currentValueHtmlId);
 					var prevDate = this.endDate ? this.formatDate(this.endDate) : null;
@@ -426,6 +435,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		/**
+		 *  Смена даты из диаграммы
+		 */
 		setMemberCalendarDate: function setMemberCalendarDate(layer, args) {
 			var date = Alfresco.util.fromISO8601(args[1].date);
 			Dom.get(this.startDateField.id + "-date").value = this.formatDate(date);
@@ -470,14 +482,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		drawDiagram: function drawDiagram_function() {
 			Dom.removeClass(this.options.controlId + "-diagram", "hidden1");
-			var region = Dom.getRegion(this.options.controlId + "-diagram");
 			var content = Dom.get(this.options.controlId + "-diagram-content");
 			content.innerHTML = "";
-			var width = region.width - this.firstColumnWidth;
-			var bordersWidth = this.endHour - this.startHour + 1;
-			width = Math.floor((width - bordersWidth) / (this.endHour - this.startHour + 1));
-			var cellByHour = Math.round(60 / this.timeStep);
-			var cellWidth = Math.floor(width / cellByHour);
 			var itemNum = 1;
 			this.keyIndex = [];
 			for (var key in this.selectedItems) {
@@ -540,12 +546,15 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var endMinutes = endTime.getMinutes();
 			var cellBounds = this._calculateCell();
 			var startIndex = (startHour - this.startHour) * cellBounds.cellByHour + Math.round(startMinutes / this.timeStep) + 1;
-			var endIndex = (endHour - this.startHour) * cellBounds.cellByHour + Math.round(endMinutes / this.timeStep);
+
 			this.maxIndex = (this.endHour - this.startHour + 1) * cellBounds.cellByHour;
+			var days = this.dateDiffInDays(endTime, startTime);
+			var endIndex = days * this.maxIndex + (endHour - this.startHour) * cellBounds.cellByHour + Math.round(endMinutes / this.timeStep);
 
 			//Устанавливаем размер и положение рамки
 			var left = Dom.getRegion(this.options.controlId + "-diagram_0_"+ startIndex).left;
-			var right = Dom.getRegion(this.options.controlId + "-diagram_0_"+ endIndex).right;
+			var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
+			var right = Dom.getRegion(this.options.controlId + "-diagram_0_"+ fillIndex).right;
 			this.selector.style.left = (left - region.left - 1) + "px";
 			this.selector.style.width = (right - left) + "px";
 
@@ -555,6 +564,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.prevEndIndex = endIndex;
 		},
 
+		/**
+		 * Обработка начала перемещения рамки
+		 * @param ev
+		 */
 		dragStart: function(ev) {
 			var head = this.selector.firstChild;
 			Dom.removeClass(head, "member-control-diagram-selector-grab");
@@ -564,20 +577,33 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		},
 
+		/**
+		 * Обработка окончания перемещения рамки
+		 * @param ev
+		 */
 		dragEnd: function(ev) {
 			if (this.dragEnabled) {
 				//Передаем данные в контролы
 				var startMinutes = (this.prevStartIndex - 1) * this.timeStep;
-				var endMinutes = this.prevEndIndex * this.timeStep;
+				var days = Math.floor(this.prevEndIndex / this.maxIndex);
+				var endIndex = this.prevEndIndex - days * this.maxIndex;
+				if (endIndex == 0) {
+					endIndex = this.maxIndex;
+					days--;
+				}
+				var endMinutes = endIndex * this.timeStep;
 				var startHour = Math.floor(startMinutes / 60);
 				var endHour = Math.floor(endMinutes / 60);
 				startMinutes = startMinutes - startHour * 60;
 				endMinutes = endMinutes - endHour * 60;
 				startHour = startHour + this.startHour;
 				endHour = endHour + this.startHour;
+				var start = new Date(this.startDate.getTime());
+				this.startDate = null;
+				this.endDate = null;
 
 				//Начало
-				Dom.get(this.startDateField.id + "-date").value = this.formatDate(this.startDate);
+				Dom.get(this.startDateField.id + "-date").value = this.formatDate(start);
 				Dom.get(this.startDateField.id + "-time").value = ('0' + startHour).slice(-2) + ":" + ('0' + startMinutes).slice(-2);
 				Bubbling.fire("handleFieldChange", {
 					fieldId: this.startDateField.configName,
@@ -585,7 +611,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				});
 
 				//Окончание
-				Dom.get(this.endDateField.id + "-date").value = this.formatDate(this.startDate);
+				start.setHours(this.startHour)
+				start.setMinutes(0);
+				start.setSeconds(0);
+				var endDate = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
+				Dom.get(this.endDateField.id + "-date").value = this.formatDate(endDate);
 				Dom.get(this.endDateField.id + "-time").value = ('0' + endHour).slice(-2) + ":" + ('0' + endMinutes).slice(-2);
 				Bubbling.fire("handleFieldChange", {
 					fieldId: this.endDateField.configName,
@@ -598,22 +628,29 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.dragEnabled = false;
 		},
 
+		/**
+		 * Метод для отмены выделения текста при перетаскивания рамки в диаграмме (не работает)
+		 * @param ev
+		 * @returns {boolean}
+		 */
 		selectStart: function(ev) {
 			return !this.dragEnabled;
 		},
 
+		/**
+		 * Действия при перемещении рамки
+		 * @param ev
+		 */
 		moveSelector: function moveSelector_function(ev) {
 			if (this.dragEnabled) {
 				var cellBounds = this._calculateCell();
 				var diagramBounds = Dom.getRegion(this.options.controlId + "-diagram");
-				var selectorBounds = Dom.getRegion(this.selector);
-				var offset = ev.offsetX;
 				var x = ev.clientX;
 				var newX = x - this.dragDelta - this.firstColumnWidth - diagramBounds.x;
 				var startIndex = Math.floor((newX + Math.floor(newX / cellBounds.width)) / cellBounds.cellWidth);
 				if (startIndex != this.prevStartIndex) {
 					var endIndex = startIndex + (this.prevEndIndex - this.prevStartIndex);
-					if (startIndex > 0 && endIndex <= this.maxIndex) {
+					if (startIndex > 0 && startIndex <= this.maxIndex) {
 						this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
 						this._drawSelectorBorder(startIndex, endIndex);
 						var left = Dom.getRegion(this.options.controlId + "-diagram_0_"+ startIndex).left;
@@ -626,13 +663,22 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		/**
+		 * Приведение даты к формату mm.dd.yyyy
+		 * @param date
+		 * @returns {string}
+		 */
 		formatDate: function formatDate_function(date) {
 			var mm = ("0" + (date.getMonth()+1)).slice(-2);
 			var dd = ("0" + date.getDate()).slice(-2);
 			return dd + "." + mm + "." + date.getFullYear();
 		},
 
+		/**
+		 * Заполнение занятости сотрудника
+		 */
 		fillBusyTime: function fillBusyTime_function() {
+			this.busyInterval = [];
 			var startDayDate = new Date(this.startDate.getTime());
 			startDayDate.setHours(startHour);
 			startDayDate.setMinutes(0);
@@ -665,20 +711,35 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					} else {
 						var endHour = end.getHours();
 						var endMinutes = end.getMinutes();
-						endIndex = (endHour - this.startHour) * cellSettings.cellByHour + Math.round(endMinutes / this.timeStep);
+						var days = this.dateDiffInDays(end, start);
+						endIndex = days * this.maxIndex + (endHour - this.startHour) * cellSettings.cellByHour + Math.round(endMinutes / this.timeStep);
 					}
+
 					var rowIndex = this.keyIndex[employee];
-					for (var j = startIndex; j <= endIndex; j++) {
+					var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
+					for (var j = startIndex; j <= fillIndex; j++) {
 						var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + j);
 						cell.style.backgroundColor = "red";
 						cell.title = time.title;
 					}
+					this.busyInterval.push({
+						start: startIndex,
+						end: endIndex
+					});
 				}
 			}
 		},
 
+		/**
+		 * Удаление рамки предыдущего выделенного периода
+		 * @param startIndex
+		 * @param endIndex
+		 * @param onlyHeader
+		 * @private
+		 */
 		_clearSelectorBorder: function(startIndex, endIndex, onlyHeader) {
-			for (var i = startIndex; i <= endIndex; i++) {
+			var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
+			for (var i = startIndex; i <= fillIndex; i++) {
 				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
 				cell.style.backgroundColor = "transparent";
 			}
@@ -689,11 +750,17 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
 					leftCell.style.borderLeft = "none";
 					leftCell.style.width = (parseInt(leftCell.style.width) + this.selectorBorderWidth) + "px";
-					var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
-					rightCell.style.borderRight = "none";
-					rightCell.style.width = (parseInt(rightCell.style.width) + this.selectorBorderWidth) + "px";
+					if (endIndex <= this.maxIndex) {
+						var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
+						rightCell.style.borderRight = "none";
+						rightCell.style.width = (parseInt(rightCell.style.width) + this.selectorBorderWidth) + "px";
+					}
+
 					if (i == keysLen) {
 						for (var j = startIndex; j <= endIndex; j++) {
+							if (j > this.maxIndex) {
+								break;
+							}
 							var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
 							cell.style.borderBottom = "none";
 							cell.style.height = (Dom.getRegion(cell).height + this.selectorBorderWidth) + "px";
@@ -704,37 +771,66 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		/**
+		 * Отрисовка текущего выделенного периода
+		 * @param startIndex
+		 * @param endIndex
+		 * @private
+		 */
 		_drawSelectorBorder: function(startIndex, endIndex) {
-			for (var i = startIndex; i <= endIndex; i++) {
+			var isBusy = false;
+			for (var key in this.busyInterval) {
+				var interval = this.busyInterval[key];
+				if ((startIndex >= interval.start && startIndex <= interval.end) ||
+					(endIndex >= interval.start && endIndex <= interval.end) ||
+					(startIndex <= interval.start && endIndex >= interval.end)) {
+					isBusy = true;
+					break;
+				}
+			}
+
+			var color = isBusy ? "orange" : "forestgreen";
+			var headerIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
+			for (var i = startIndex; i <= headerIndex; i++) {
 				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
-				cell.style.backgroundColor = "forestgreen";
+				cell.style.backgroundColor = color;
 			}
 
 			var keysLen = Object.keys(this.selectedItems).length;
 			for (var i = 1; i <= keysLen; i++) {
 				var leftCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + startIndex);
-				leftCell.style.borderLeft = this.selectorBorderWidth + "px solid forestgreen";
+				leftCell.style.borderLeft = this.selectorBorderWidth + "px solid " + color;
 				leftCell.style.width = (parseInt(leftCell.style.width) - this.selectorBorderWidth) + "px";
-				var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
-				rightCell.style.borderRight = this.selectorBorderWidth + "px solid forestgreen";
-				rightCell.style.width = (parseInt(rightCell.style.width) - this.selectorBorderWidth) + "px";
+				if (endIndex <= this.maxIndex) {
+					var rightCell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + endIndex);
+					rightCell.style.borderRight = this.selectorBorderWidth + "px solid " + color;
+					rightCell.style.width = (parseInt(rightCell.style.width) - this.selectorBorderWidth) + "px";
+				}
 				if (i == keysLen) {
 					for (var j = startIndex; j <= endIndex; j++) {
+						if (j > this.maxIndex) {
+							break;
+						}
 						var cell = Dom.get(this.options.controlId + "-diagram_" + i + "_" + j);
 						cell.style.height = (Dom.getRegion(cell).height - this.selectorBorderWidth) + "px";
-						cell.style.borderBottom = this.selectorBorderWidth + "px solid forestgreen";
+						cell.style.borderBottom = this.selectorBorderWidth + "px solid " + color;
 					}
 
 				}
 			}
 		},
 
+		/**
+		 * Отрисовка ячеек равных промежутку timeStep
+		 * @param container
+		 * @param lineNum
+		 * @param isHeader
+		 */
 		_drawHourCells: function drawHourCells_function(container, lineNum, isHeader) {
 			var cellBounds = this._calculateCell();
 			var cellByHour = cellBounds.cellByHour;
 			var cellWidth = cellBounds.cellWidth;
 			for (var hour = this.startHour; hour <= this.endHour; hour++) {
-				var firstColumn = document.createElement("div");
 				var column = document.createElement("div");
 				column.style.width = (cellWidth * cellByHour) + "px";
 				if (isHeader) {
@@ -766,6 +862,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		/**
+		 * Расчет параметров ячеке для отрисовки
+		 * @returns {{width: number, cellByHour: number, cellWidth: number}}
+		 */
 		_calculateCell: function calculateCell_function() {
 			var region = Dom.getRegion(this.options.controlId + "-diagram");
 			var width = region.width - this.firstColumnWidth;
@@ -780,6 +880,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			};
 		},
 
+		/**
+		 * Проверяем является ли строка nodeRef
+		 * @param value
+		 * @returns {boolean}
+		 */
 		isNodeRef: function (value) {
 			var regexNodeRef = new RegExp(/^[^\:^ ]+\:\/\/[^\:^ ]+\/[^ ]+$/);
 			var result = false;
@@ -789,6 +894,24 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			catch (e) {
 			}
 			return result;
+		},
+
+		/**
+		 * Расчет разницы между двумя датами в днях
+		 * @param bigDate
+		 * @param smallDate
+		 * @returns {number}
+		 */
+		dateDiffInDays: function (bigDate, smallDate) {
+			var first = new Date(smallDate.getTime());
+			first.setHours(0);
+			first.setMinutes(0);
+			first.setSeconds(0);
+			var second = new Date(bigDate.getTime());
+			second.setHours(0);
+			second.setMinutes(0);
+			second.setSeconds(0);
+			return Math.round((second-first)/(1000*60*60*24));
 		}
 	}, true);
 })();
