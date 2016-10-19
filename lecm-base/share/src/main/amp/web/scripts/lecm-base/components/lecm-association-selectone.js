@@ -353,31 +353,22 @@ LogicECM.module = LogicECM.module || {};
                 var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
 
                 function successHandler(sRequest, oResponse, oPayload) {
-                    this.clearChildren(this.selectItem);
+					var results = oResponse.results,
+						opts = [].slice.call(this.selectItem.children);
 
-                    if (this.options.notSelectedOptionShow) {
-                        var emptyOption = this.selectItem.options[0];
-                        var emptOpt = document.createElement('option');
-                        var emptyOptHtml = emptyOption.innerHTML.trim();
-                        emptyOptHtml = (emptyOptHtml == "") ? "&nbsp;" : emptyOptHtml;
-                        emptOpt.innerHTML = emptyOptHtml;
-                        emptOpt.value = emptyOption.value;
+					opts.forEach(function(elem, idx) {
+						if (!this.options.notSelectedOptionShow || idx > 0) {
+							this.selectItem.removeChild(elem);
+						}
+					}, this);
 
-                        this.selectItem.innerHTML = "";
-                        this.selectItem.appendChild(emptOpt);
-                    }
-
-                    var results = oResponse.results;
-                    for (var i = 0; i < results.length; i++) {
-                        var node = results[i];
+					results.forEach(function(node) {
                         var opt = document.createElement('option');
                         opt.innerHTML = node.name;
                         opt.value = node.nodeRef;
-                        if (node.nodeRef == this.options.selectedValueNodeRef || node.nodeRef == this.defaultValue) {
-                            opt.selected = true;
-                        }
+						opt.selected = (node.nodeRef == this.options.selectedValueNodeRef || node.nodeRef == this.defaultValue);
                         this.selectItem.appendChild(opt);
-                    }
+					}, this);
 
                     this.onSelectChange();
                 }
@@ -400,12 +391,6 @@ LogicECM.module = LogicECM.module || {};
                         failure: failureHandler,
                         scope: this
                     });
-            },
-
-            clearChildren: function AssociationSelectOne_clearChildren(node) {
-                while (node.firstChild) {
-                    node.removeChild(node.firstChild);
-                }
             },
 
             populateSelect: function AssociationSelectOne_populateSelect() {
