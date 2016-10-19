@@ -166,20 +166,20 @@ var Evaluator = {
 	
 //	TODO: Проверить
 	translateField: function Evaluator_translateField(objDef, value) {
-		if (objDef == null || objDef == "") {
+		if (!objDef) {
 			return null;
 		}
 
-		if (objDef.constraints != null) {
-			for ( var i=0, len= objDef.constraints.size(); i<len; ++i ) {
-				if ("LIST" == objDef.constraints.get(i).type) {
-					var allowedV = objDef.constraints.get(i).parameters.allowedValues;
-					for (var j=0; j<allowedV.size(); ++j ) {
-						var allowedVasString = "" + allowedV.get(j);
-						var allValSplit = allowedVasString.split("|");
-						if (value == allValSplit[0]) {
-							return allValSplit[1];
-						}
+		if (objDef.constraints) {
+			for (var i = 0, len = objDef.constraints.size(); i < len; ++i) {
+                var constraint = objDef.constraints.get(i).constraint;
+				if ("LIST" == constraint.type) {
+					var allowedV = constraint.allowedValues;
+					for (var j = 0; j < allowedV.size(); ++j) {
+						var allowedValue = "" + allowedV.get(j);
+                        if (value == allowedValue) {
+                            return base.getListConstraintDisplayValue(constraint, allowedValue);
+                        }
 					}
 				}
 			}

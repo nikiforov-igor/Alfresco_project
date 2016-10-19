@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/search/evaluator.lib.js">
+
 (function () {
 	/*
 	 * TODO: убедиться, что оно заведётся без этой функции

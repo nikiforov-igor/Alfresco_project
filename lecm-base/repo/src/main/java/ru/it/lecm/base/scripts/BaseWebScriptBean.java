@@ -30,6 +30,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 
 /**
  * @author dbashmakov
@@ -392,5 +393,9 @@ public class BaseWebScriptBean extends BaseWebScript {
 	public TypeDefinition getType(String type) {
 		QName qName = QName.createQName(type, namespaceService);
 		return dictionaryService.getType(qName);
+	}
+	
+	public String getListConstraintDisplayValue(ListOfValuesConstraint constraint, String value) {
+		return constraint.getDisplayLabel(value, dictionaryService);
 	}
 }
