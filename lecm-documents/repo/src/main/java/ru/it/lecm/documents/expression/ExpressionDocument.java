@@ -157,7 +157,11 @@ public class ExpressionDocument {
         return !documentAttachmentsService.getAttachmentsByCategory(nodeRef, attachmentCategory).isEmpty();
 	}
 
-    //Наличие вложения с определенным типом
+    /**
+     * Проверяет категорию на возможность записи в неё
+     * @param categoryName - имя категории
+     * @return true - если категория read-only или не существует
+     */
     public boolean isReadOnlyCategory(String categoryName) {
         NodeRef category = documentAttachmentsService.getCategory(categoryName, nodeRef);
         return category == null || documentAttachmentsService.isReadonlyCategory(category);
