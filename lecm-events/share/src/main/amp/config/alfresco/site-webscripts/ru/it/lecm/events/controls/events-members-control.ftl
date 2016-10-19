@@ -112,65 +112,67 @@
                 <div id="${controlId}-currentValueDisplay" class="control-selected-values <#if showAutocomplete>hidden1<#else>mandatory-highlightable</#if>"></div>
             <#else>
                 <div id="${controlId}-diagram" class="member-control-diagram">
-                    <div id="${controlId}-diagram-header">
-                        <#assign calControlId = fieldHtmlId + "-date-cntrl">
-                        <#assign calFieldHtmlId = fieldHtmlId + "-calendar">
-                        <#assign currentValue = defaultValue?js_string>
-                        <#if  !currentValue?has_content && !disabled >
-                            <#assign currentValue = field.control.params.defaultValue!""?js_string>
-                            <#if currentValue == "now">
-                                <#if field.control.params.defaultTime?? >
-                                    <#assign currentValue = .now?string("yyyy-MM-dd'T'" + field.control.params.defaultTime + ":00.000")>
-                                <#else>
-                                    <#assign currentValue = .now?string("yyyy-MM-dd")>
+                    <div id="${controlId}-diagram-container" class="member-control-diagram-container">
+                        <div id="${controlId}-diagram-header">
+                            <#assign calControlId = fieldHtmlId + "-date-cntrl">
+                            <#assign calFieldHtmlId = fieldHtmlId + "-calendar">
+                            <#assign currentValue = defaultValue?js_string>
+                            <#if  !currentValue?has_content && !disabled >
+                                <#assign currentValue = field.control.params.defaultValue!""?js_string>
+                                <#if currentValue == "now">
+                                    <#if field.control.params.defaultTime?? >
+                                        <#assign currentValue = .now?string("yyyy-MM-dd'T'" + field.control.params.defaultTime + ":00.000")>
+                                    <#else>
+                                        <#assign currentValue = .now?string("yyyy-MM-dd")>
+                                    </#if>
                                 </#if>
                             </#if>
-                        </#if>
-                        <script type="text/javascript">//<![CDATA[
-                        (function () {
-                            function init() {
-                                var resources = [
-                                    'scripts/lecm-base/components/lecm-date-picker.js'
-                                ]
-                                if ($.timepicker === undefined) {
-                                    resources.push('scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js');
-                                    resources.push('scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js');
-                                    resources.push('scripts/lecm-base/third-party/jquery-ui-sliderAccess.js');
+                            <script type="text/javascript">//<![CDATA[
+                            (function () {
+                                function init() {
+                                    var resources = [
+                                        'scripts/lecm-base/components/lecm-date-picker.js'
+                                    ]
+                                    if ($.timepicker === undefined) {
+                                        resources.push('scripts/lecm-base/third-party/jquery-ui-1.10.3.custom.js');
+                                        resources.push('scripts/lecm-base/third-party/jquery-ui-timepicker-addon.js');
+                                        resources.push('scripts/lecm-base/third-party/jquery-ui-sliderAccess.js');
+                                    }
+                                    LogicECM.module.Base.Util.loadResources(resources, [
+                                        'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
+                                        'css/lecm-calendar/jquery-ui-timepicker-addon.css'
+                                    ], createDatePicker, ["button", "calendar"]);
                                 }
-                                LogicECM.module.Base.Util.loadResources(resources, [
-                                    'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
-                                    'css/lecm-calendar/jquery-ui-timepicker-addon.css'
-                                ], createDatePicker, ["button", "calendar"]);
-                            }
 
-                            function createDatePicker() {
-                                var picker = new LogicECM.DatePicker("${calControlId}", "${calFieldHtmlId}").setOptions(
-                                        {
-                                            changeFireAction: "setMemberCalendarDate",
-                                            showTime: false,
-                                            fieldId: "${field.configName}",
-                                            formId: "${args.htmlid}"
-                                        }).setMessages(
-                                ${messages}
-                                );
-                                picker.draw();
-                            }
+                                function createDatePicker() {
+                                    var picker = new LogicECM.DatePicker("${calControlId}", "${calFieldHtmlId}").setOptions(
+                                            {
+                                                changeFireAction: "setMemberCalendarDate",
+                                                showTime: false,
+                                                fieldId: "${field.configName}",
+                                                formId: "${args.htmlid}"
+                                            }).setMessages(
+                                    ${messages}
+                                    );
+                                    picker.draw();
+                                }
 
-                            YAHOO.util.Event.onAvailable('${calFieldHtmlId}', init, this, true);
-                        })();
-                        //]]></script>
+                                YAHOO.util.Event.onAvailable('${calFieldHtmlId}', init, this, true);
+                            })();
+                            //]]></script>
 
-                        <div id="${calControlId}-parent" class="member-control-diagram-header-first-cell">
-                            <div id="${calControlId}" class="datepicker"></div>
-                            <input id="${calFieldHtmlId}" type="hidden" name="${field.name}-calendar" value="${defaultValue?html}"/>
-                            <div class="date-entry-container only-date">
-                                <input id="${calControlId}-date" name="-" type="text" class="member-control-diagram-header-calendar date-entry mandatory-highlightable"
-                                       <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
-                                       <#else>tabindex="0"</#if> />
+                            <div id="${calControlId}-parent" class="member-control-diagram-header-first-cell">
+                                <div id="${calControlId}" class="datepicker"></div>
+                                <input id="${calFieldHtmlId}" type="hidden" name="${field.name}-calendar" value="${defaultValue?html}"/>
+                                <div class="date-entry-container only-date">
+                                    <input id="${calControlId}-date" name="-" type="text" class="member-control-diagram-header-calendar date-entry mandatory-highlightable"
+                                           <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
+                                           <#else>tabindex="0"</#if> />
+                                </div>
                             </div>
                         </div>
+                        <div id="${controlId}-diagram-content"></div>
                     </div>
-                    <div id="${controlId}-diagram-content"></div>
                 </div>
             </#if>
         </div>

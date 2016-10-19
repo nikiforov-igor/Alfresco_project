@@ -31,7 +31,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		startHour: 6,
 		endHour: 22,
 		timeStep: 15,
-		firstColumnWidth: 100,
+		firstColumnWidth: 140,
 		selector: null,
 		startDate: null,
 		endDate: null,
@@ -493,8 +493,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				firstColumn.style.width = this.firstColumnWidth + "px";
 				content.appendChild(firstColumn);
 				var textCell = document.createElement("div");
+				textCell.className = "member-control-diagram-first-cell-text";
 				textCell.innerHTML = item.selectedName;
+				textCell.title = item.selectedName;
 				firstColumn.appendChild(textCell);
+				var removeButton = document.createElement("div");
+				removeButton.className = "member-control-diagram-first-cell-remove"
+				firstColumn.appendChild(removeButton);
+
 				this._drawHourCells(content, itemNum, false);
 				this.keyIndex[key] = itemNum;
 				itemNum++;
@@ -509,6 +515,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var header = Dom.get(this.options.controlId + "-diagram-header");
 			this._drawHourCells(header, 0, true);
 			this.headerIsReady = true;
+			//Устанавливаем размер контейнера
+			var cellBounds = this._calculateCell();
+			var hours = this.endHour - this.startHour + 1;
+			var width = this.firstColumnWidth + hours * cellBounds.width + hours;
+			Dom.get(this.options.controlId + "-diagram-container").style.width = width + "px";
 		},
 
 		/**
@@ -789,7 +800,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 			}
 
-			var color = isBusy ? "orange" : "forestgreen";
+			var color = isBusy ? "#FFC90E" : "#22B14C";
 			var headerIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
 			for (var i = startIndex; i <= headerIndex; i++) {
 				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
@@ -911,7 +922,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			second.setHours(0);
 			second.setMinutes(0);
 			second.setSeconds(0);
-			return Math.round((second-first)/(1000*60*60*24));
+			return Math.round((second-first) / (1000 * 60 * 60 * 24));
 		}
 	}, true);
 })();
