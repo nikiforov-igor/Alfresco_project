@@ -11,6 +11,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation = function
 	var valid = true;
 	var dataGrids = [];
 	var exactFiels = document.getElementsByName('prop_lecm-cal_day')[0];
+	if(!exactFiels.value) return valid;
 	var dayDate = Alfresco.util.fromISO8601(exactFiels.value);
 	var dayStr = pad((dayDate.getMonth() + 1), 2) + pad(dayDate.getDate(), 2);
 
