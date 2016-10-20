@@ -81,8 +81,6 @@ LogicECM.module = LogicECM.module || {};
 
 		alreadyShowCreateNewLink: false,
 
-        timeout:null,
-
 		options:
 		{
 			// скрывать ли игнорируемые ноды в дереве
@@ -286,7 +284,8 @@ LogicECM.module = LogicECM.module || {};
                     this.createPickerDialog();
                 }
 
-	            Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll.bind(this));
+                Event.removeListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll);
+                Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll, this, true);
 
                 if (!this.options.lazyLoading) {
                     this._loadSearchProperties();
@@ -672,6 +671,8 @@ LogicECM.module = LogicECM.module || {};
                     }
 	            }
 		        this.searchData = searchData;
+
+				if (this.option)
 	            this.isSearch = true;
 	            this._updateItems(nodeRef, searchData);
 			} else if (searchTerm === "") {
@@ -1493,16 +1494,12 @@ LogicECM.module = LogicECM.module || {};
         },
 
 		onPickerItemsContainerScroll: function(event) {
-            var me = this;
 			var container = event.currentTarget;
+			if (container.scrollTop + container.clientHeight == container.scrollHeight) {
+				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
 
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(function(){
-                if (container.scrollTop + container.clientHeight == container.scrollHeight && !me.isSearch) {
-                    Dom.setStyle(me.options.pickerId + "-picker-items-loading", "visibility", "visible");
-                    me._loadItems(me.currentNode.data.nodeRef, me.searchData, false);
-                }
-            },50);
+				this._loadItems(this.currentNode.data.nodeRef, this.searchData, false);
+			}
 		},
 
 		_loadItems: function(nodeRef, searchTerm, clearList) {
@@ -1530,7 +1527,6 @@ LogicECM.module = LogicECM.module || {};
 				}
 
 				this.alreadyShowCreateNewLink = true;
-                this.isSearch = false;
 			};
 
 			var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse)
