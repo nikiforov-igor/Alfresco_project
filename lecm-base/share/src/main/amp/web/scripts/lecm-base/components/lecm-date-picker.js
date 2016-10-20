@@ -279,7 +279,7 @@
                     Event.addListener(me.id + "-time", "keyup", me._inputKeyup, me, true);
 
                     // Hide Calendar if we click anywhere in the document other than the calendar
-                    Event.on(document, "click", function(e) {
+                    Event.on(document, "mousedown", function(e) {
                         var inputEl = Dom.get(me.id + "-date");
                         var iconEl = Dom.get(me.id + "-icon");
                         var el = Event.getTarget(e);
