@@ -34,10 +34,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		firstColumnWidth: 140,
 		selector: null,
 		startDate: null,
+		initialStartDate: null,
 		endDate: null,
+		initialEndDate: null,
 		selectorBorderWidth: 4,
 		prevStartIndex: null,
 		prevEndIndex: null,
+		prevSelectionStartIndex: null,
+		prevESelectionEndIndex: null,
 		dragEnabled: false,
 		dragDelta: 0,
 		maxIndex: 1,
@@ -45,8 +49,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		startDateField: null,
 		endDateField: null,
 		keyIndex: [],
-		busytime: {},
+		busytime: [],
 		busyInterval: [],
+		busyColor: null,
+		notBusyColor: null,
+		needDraw: true,
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
 			var arrItems = "";
@@ -172,7 +179,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						//if (this.options.itemType == "lecm-orgstr:employee") {
 						//	el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(this.this.selectedItems[item].nodeRef, displayName));
 						//} else {
-							el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[item], true) + me.getMemberStatusHTML(me.selectedItems[item]));
+						el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[item], true) + me.getMemberStatusHTML(me.selectedItems[item]));
 						//}
 					} else {
 						el.innerHTML += Util.getCroppedItem(me.getMemberView(displayName, me.selectedItems[item]), me.getMandatoryCheckboxHTML(me.selectedItems[item], false) + me.getMemberStatusHTML(me.selectedItems[item]) + me.getRemoveButtonHTML(me.selectedItems[item], "_c"));
@@ -305,11 +312,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var title = "";
 			if (node.memberStatus == "EMPTY") {
 				img = "alf_waiting_grey_16.png";
-                title = this.msg("label.events.participation.not_confirmed_yet");
-            } else if (node.memberStatus == "CONFIRMED") {
+				title = this.msg("label.events.participation.not_confirmed_yet");
+			} else if (node.memberStatus == "CONFIRMED") {
 				img = "alf_thumbUp_green_16.png";
-                title = this.msg("label.events.participation.confirmed");
-            } else if (node.memberStatus == "DECLINED") {
+				title = this.msg("label.events.participation.confirmed");
+			} else if (node.memberStatus == "DECLINED") {
 				img = "alf_thumbDown_red_16.png";
 				title = this.msg("label.events.participation.rejected") + ": " + node.memberDeclineReason;
 			} else if (node.memberStatus == "REQUEST_NEW_TIME") {
@@ -370,6 +377,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (this.startDate && this.endDate && this.startDate <= this.endDate) {
 				this.drawDiagramHeader();
 				this.drawDiagram();
+				this.drawCurrentState();
 				this.fillBusyTime();
 				this.drawSelector();
 			}
@@ -402,7 +410,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				if (fieldId == "lecm-events:from-date") {
 					var valueField = Dom.get(control.currentValueHtmlId);
 					var prevDate = this.startDate ? this.formatDate(this.startDate) : null;
-					this.startDate = Alfresco.util.fromISO8601(valueField.value);
+					var date = Alfresco.util.fromISO8601(valueField.value);
+					if (!this.initialStartDate) {
+						this.initialStartDate = new Date(date.getTime());
+					}
+					this.startDate = date;
 					this.startDateField = {
 						id: control.id,
 						formId: control.options.formId,
@@ -413,23 +425,32 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						fieldId: this.options.fieldId,
 						formId: this.options.formId
 					});
-					this.draw();
-					if (this.formatDate(this.startDate) != prevDate) {
-						this.requestMembersTime();
+					if (this.needDraw) {
+						this.draw();
+						if (this.formatDate(this.startDate) != prevDate) {
+							this.requestMembersTime();
+						}
 					}
 					//Данные из поля завершение
 				} else if (fieldId == "lecm-events:to-date") {
 					var valueField = Dom.get(control.currentValueHtmlId);
 					var prevDate = this.endDate ? this.formatDate(this.endDate) : null;
-					this.endDate = Alfresco.util.fromISO8601(valueField.value);
+
+					var date = Alfresco.util.fromISO8601(valueField.value);
+					if (!this.initialEndDate) {
+						this.initialEndDate = new Date(date.getTime());
+					}
+					this.endDate = date;
 					this.endDateField = {
 						id: control.id,
 						formId: control.options.formId,
 						configName: control.options.fieldId
 					};
-					this.draw();
-					if (this.formatDate(this.endDate) != prevDate) {
-						this.requestMembersTime();
+					if (this.needDraw) {
+						this.draw();
+						if (this.formatDate(this.endDate) != prevDate) {
+							this.requestMembersTime();
+						}
 					}
 				}
 			}
@@ -470,6 +491,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 								this.busytime = response.json;
 								this.fillBusyTime(response.json);
 							}
+							this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+							this._drawSelectorBorder(this.prevStartIndex, this.prevEndIndex);
 						},
 
 						scope: this
@@ -500,11 +523,25 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var removeButton = document.createElement("div");
 				removeButton.className = "member-control-diagram-first-cell-remove"
 				firstColumn.appendChild(removeButton);
+				YAHOO.util.Event.on(removeButton, 'click', this.removeDiagramItem, {
+					node: item,
+					updateForms: true
+				}, this);
 
 				this._drawHourCells(content, itemNum, false);
 				this.keyIndex[key] = itemNum;
 				itemNum++;
 			}
+		},
+
+		/**
+		 * Удаление записи из диаграммы времени
+		 * @param ev
+		 * @param params
+		 */
+		removeDiagramItem: function removeDiagramItem_function(ev, params) {
+			this.busytime = [];
+			this.removeNode(ev, params);
 		},
 
 		/**
@@ -530,26 +567,29 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var endTime = this.endDate;
 			var control = Dom.get(this.options.controlId + "-diagram");
 			var region = Dom.getRegion(control);
-			if (!this.selector) {
-				this.selector = document.createElement("div");
-				this.selector.className = "member-control-diagram-selector";
-				control.appendChild(this.selector);
+			/*
+			 if (!this.selector) {
+			 this.selector = document.createElement("div");
+			 this.selector.className = "member-control-diagram-selector";
+			 control.appendChild(this.selector);
 
-				var selectorHead = document.createElement("div");
-				selectorHead.style.height = "24px";
-				selectorHead.innerHTML = "&nbsp;";
-				Dom.addClass(selectorHead, "member-control-diagram-selector-grab");
-				selectorHead.addEventListener("mousedown", this.dragStart.bind(this));
-				document.body.addEventListener("mouseup", this.dragEnd.bind(this));
-				document.body.addEventListener("mousemove", this.moveSelector.bind(this));
-				document.body.addEventListener("selectstart", this.selectStart.bind(this));
-				this.selector.appendChild(selectorHead);
-
-			} else {
+			 var selectorHead = document.createElement("div");
+			 selectorHead.style.height = "24px";
+			 selectorHead.innerHTML = "&nbsp;";
+			 Dom.addClass(selectorHead, "member-control-diagram-selector-grab");
+			 //selectorHead.addEventListener("mousedown", this.dragStart.bind(this));
+			 //document.body.addEventListener("mouseup", this.dragEnd.bind(this));
+			 //document.body.addEventListener("mousemove", this.moveSelector.bind(this));
+			 //document.body.addEventListener("selectstart", this.selectStart.bind(this));
+			 this.selector.appendChild(selectorHead);
+			 } else {
+			 this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex, true);
+			 }
+			 this.selector.style.height = region.height + "px";
+			 */
+			if (this.prevStartIndex && this.prevEndIndex) {
 				this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex, true);
 			}
-			this.selector.style.height = region.height + "px";
-
 			//Расчет индексов старта и конца
 			var startHour = startTime.getHours();
 			var startMinutes = startTime.getMinutes();
@@ -562,12 +602,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var days = this.dateDiffInDays(endTime, startTime);
 			var endIndex = days * this.maxIndex + (endHour - this.startHour) * cellBounds.cellByHour + Math.round(endMinutes / this.timeStep);
 
-			//Устанавливаем размер и положение рамки
-			var left = Dom.getRegion(this.options.controlId + "-diagram_0_"+ startIndex).left;
-			var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
-			var right = Dom.getRegion(this.options.controlId + "-diagram_0_"+ fillIndex).right;
-			this.selector.style.left = (left - region.left - 1) + "px";
-			this.selector.style.width = (right - left) + "px";
+			/*
+			 //Устанавливаем размер и положение рамки
+			 var left = Dom.getRegion(this.options.controlId + "-diagram_0_"+ startIndex).left;
+			 var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
+			 var right = Dom.getRegion(this.options.controlId + "-diagram_0_"+ fillIndex).right;
+			 this.selector.style.left = (left - region.left - 1) + "px";
+			 this.selector.style.width = (right - left) + "px";
+			 */
 
 			//расскрашиваем рамку
 			this._drawSelectorBorder(startIndex, endIndex);
@@ -691,12 +733,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		fillBusyTime: function fillBusyTime_function() {
 			this.busyInterval = [];
 			var startDayDate = new Date(this.startDate.getTime());
-			startDayDate.setHours(startHour);
+			startDayDate.setHours(this.startHour);
 			startDayDate.setMinutes(0);
 			startDayDate.setSeconds(0);
 
 			var endDayDate = new Date(this.startDate.getTime());;
-			endDayDate.setHours(endHour);
+			endDayDate.setHours(this.endHour);
 			endDayDate.setMinutes(0);
 			endDayDate.setSeconds(0);
 
@@ -717,7 +759,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						startIndex = (startHour - this.startHour) * cellSettings.cellByHour + Math.round(startMinutes / this.timeStep) + 1;
 					}
 
-					if (endDayDate >= end) {
+					if (endDayDate <= end) {
 						endIndex = this.maxIndex;
 					} else {
 						var endHour = end.getHours();
@@ -730,7 +772,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
 					for (var j = startIndex; j <= fillIndex; j++) {
 						var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + j);
-						cell.style.backgroundColor = "red";
+						Dom.removeClass(cell, "member-control-diagram-current");
+						Dom.addClass(cell, "member-control-diagram-busy-cell");
 						cell.title = time.title;
 					}
 					this.busyInterval.push({
@@ -739,6 +782,160 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					});
 				}
 			}
+		},
+
+		/**
+		 * Отображаем текущее состояние состояние выбранного времени
+		 */
+		drawCurrentState: function drawCurrentState_function() {
+			//Не отображаем если это не дата начала
+			if (this.startDate.getYear() != this.initialStartDate.getYear() ||
+				this.startDate.getMonth() != this.initialStartDate.getMonth() ||
+				this.startDate.getDay() != this.initialStartDate.getDay() ||
+				!this.isNodeRef(this.options.currentValue)) {
+				return;
+			}
+			var startDayDate = new Date(this.initialStartDate.getTime());
+			startDayDate.setHours(this.startHour);
+			startDayDate.setMinutes(0);
+			startDayDate.setSeconds(0);
+
+			var endDayDate = new Date(this.initialEndDate.getTime());;
+			endDayDate.setHours(this.endHour);
+			endDayDate.setMinutes(0);
+			endDayDate.setSeconds(0);
+
+			var cellSettings = this._calculateCell();
+			var startIndex, endIndex;
+			if (this.initialStartDate <= startDayDate) {
+				startIndex = 0;
+			} else {
+				var startHour = this.initialStartDate.getHours();
+				var startMinutes = this.initialStartDate.getMinutes();
+				startIndex = (startHour - this.startHour) * cellSettings.cellByHour + Math.round(startMinutes / this.timeStep) + 1;
+			}
+
+			if (endDayDate <= this.initialEndDate) {
+				endIndex = this.maxIndex;
+			} else {
+				var endHour = this.initialEndDate.getHours();
+				var endMinutes = this.initialEndDate.getMinutes();
+				var days = this.dateDiffInDays(this.initialEndDate, this.initialStartDate);
+				endIndex = days * this.maxIndex + (endHour - this.startHour) * cellSettings.cellByHour + Math.round(endMinutes / this.timeStep);
+			}
+
+			var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
+			var diagram = Dom.get(this.options.controlId + "-diagram");
+			var diagramBounds = Dom.getRegion(diagram);
+			for (var key in this.selectedItems) {
+				var item = this.selectedItems[key];
+				var rowIndex = this.keyIndex[item.nodeRef];
+				for (var i = startIndex; i <= fillIndex; i++) {
+					var cell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + i);
+					Dom.addClass(cell, "member-control-diagram-current");
+				}
+				//Добавляем иконку
+				var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+				var prevIcon = Dom.get(id);
+				if (prevIcon) {
+					diagram.removeChild(prevIcon)
+				}
+				var item = this.getMemberStatusHTML(item);
+				var icon = document.createElement("div");
+				icon.id = id;
+				icon.innerHTML = item;
+				icon.className = "member-control-diagram-member-status";
+
+				var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
+				var firstCellRegion = Dom.getRegion(firstCell);
+				var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
+				var lastCellRegion = Dom.getRegion(lastCell);
+				var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+
+				icon.style.left = (left - diagramBounds.left) + "px";
+				icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
+				diagram.appendChild(icon);
+			}
+		},
+
+
+		clearSelectionHeader: function clearSelectionHeader_function(ev) {
+			var el = ev.target;
+			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
+			if (this.prevSelectionStartIndex && this.prevSelectionEndIndex) {
+				for (var i = this.prevSelectionStartIndex; i <= this.prevSelectionEndIndex; i++) {
+					Dom.removeClass(this.options.controlId + "-diagram-select-layer_0_" + i, "member-control-diagram-selection");
+				}
+			}
+		},
+
+		drawSelectionHeader: function drawSelectionHeader_function(ev) {
+			var el = ev.target;
+			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
+
+			var cellIndex = el.cellIndex;
+			var delta = this.prevEndIndex - this.prevStartIndex;
+			var lastCellIndex = cellIndex + delta;
+			lastCellIndex = lastCellIndex > this.maxIndex ? this.maxIndex : lastCellIndex;
+			for (var i = cellIndex; i <= lastCellIndex; i++) {
+				Dom.addClass(this.options.controlId + "-diagram-select-layer_0_" + i, "member-control-diagram-selection");
+			}
+			this.prevSelectionStartIndex = cellIndex;
+			this.prevSelectionEndIndex = lastCellIndex;
+		},
+
+		selectTime: function selectTime_function(ev) {
+			var el = ev.target;
+			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
+
+			var cellIndex = el.cellIndex;
+			var delta = this.prevEndIndex - this.prevStartIndex;
+			var lastCellIndex = cellIndex + delta;
+			this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+			this._drawSelectorBorder(cellIndex, lastCellIndex);
+			this.prevStartIndex = cellIndex;
+			this.prevEndIndex = lastCellIndex;
+
+			//Передаем данные в контролы
+			this.needDraw = false;
+			var startMinutes = (this.prevStartIndex - 1) * this.timeStep;
+			var days = Math.floor(this.prevEndIndex / this.maxIndex);
+			var endIndex = this.prevEndIndex - days * this.maxIndex;
+			if (endIndex == 0) {
+				endIndex = this.maxIndex;
+				days--;
+			}
+			var endMinutes = endIndex * this.timeStep;
+			var startHour = Math.floor(startMinutes / 60);
+			var endHour = Math.floor(endMinutes / 60);
+			startMinutes = startMinutes - startHour * 60;
+			endMinutes = endMinutes - endHour * 60;
+			startHour = startHour + this.startHour;
+			endHour = endHour + this.startHour;
+			var start = new Date(this.startDate.getTime());
+			this.startDate = null;
+			this.endDate = null;
+
+			//Начало
+			Dom.get(this.startDateField.id + "-date").value = this.formatDate(start);
+			Dom.get(this.startDateField.id + "-time").value = ('0' + startHour).slice(-2) + ":" + ('0' + startMinutes).slice(-2);
+			Bubbling.fire("handleFieldChange", {
+				fieldId: this.startDateField.configName,
+				formId: this.startDateField.formId
+			});
+
+			//Окончание
+			start.setHours(this.startHour)
+			start.setMinutes(0);
+			start.setSeconds(0);
+			var endDate = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
+			Dom.get(this.endDateField.id + "-date").value = this.formatDate(endDate);
+			Dom.get(this.endDateField.id + "-time").value = ('0' + endHour).slice(-2) + ":" + ('0' + endMinutes).slice(-2);
+			Bubbling.fire("handleFieldChange", {
+				fieldId: this.endDateField.configName,
+				formId: this.endDateField.formId
+			});
+			this.needDraw = true;
 		},
 
 		/**
@@ -800,7 +997,15 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				}
 			}
 
-			var color = isBusy ? "#FFC90E" : "#22B14C";
+			if (!this.busyColor) {
+				var style = this._getStyle(".member-control-diagram-selector-busy");
+				this.busyColor = style.style.color;
+			}
+			if (!this.notBusyColor) {
+				var style = this._getStyle(".member-control-diagram-selector-not-busy");
+				this.notBusyColor = style.style.color;
+			}
+			var color = isBusy ? this.busyColor : this.notBusyColor;
 			var headerIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
 			for (var i = startIndex; i <= headerIndex; i++) {
 				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
@@ -856,11 +1061,20 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var cell = document.createElement("div");
 					cell.style.width = cellWidth + "px";
 					cell.style.left = left + "px";
-					left += cellWidth;
 					cell.className = "member-control-diagram-empty-cell";
 					cell.innerHTML = "&nbsp";
 					cell.id = this.options.controlId + "-diagram_" + lineNum + "_" + ((hour - this.startHour) * cellByHour + i);
 					column.appendChild(cell);
+					if (isHeader) {
+						cell = document.createElement("div");
+						cell.style.width = cellWidth + "px";
+						cell.style.left = left + "px";
+						cell.className = "member-control-diagram-empty-cell";
+						cell.innerHTML = "&nbsp";
+						cell.id = this.options.controlId + "-diagram-select-layer_" + lineNum + "_" + ((hour - this.startHour) * cellByHour + i);
+						column.appendChild(cell);
+					}
+					left += cellWidth;
 				}
 
 				if (isHeader) {
@@ -869,6 +1083,21 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					textColumn.className = "member-control-diagram-header-text-cell";
 					textColumn.innerHTML = ('0' + hour).slice(-2) + ":00";
 					column.appendChild(textColumn);
+					var left = 0;
+					for (var i = 1; i <= cellByHour; i++) {
+						var cell = document.createElement("div");
+						cell.style.width = cellWidth + "px";
+						cell.style.left = left + "px";
+						left += cellWidth;
+						cell.className = "member-control-diagram-empty-cell";
+						cell.style.cursor = "pointer";
+						cell.innerHTML = "&nbsp";
+						cell.cellIndex = (hour - this.startHour) * cellByHour + i;
+						column.appendChild(cell);
+						cell.addEventListener("mouseover", this.drawSelectionHeader.bind(this));
+						cell.addEventListener("mouseout", this.clearSelectionHeader.bind(this));
+						cell.addEventListener("click", this.selectTime.bind(this));
+					}
 				}
 			}
 		},
@@ -923,6 +1152,22 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			second.setMinutes(0);
 			second.setSeconds(0);
 			return Math.round((second-first) / (1000 * 60 * 60 * 24));
+		},
+
+		_getStyle: function getStyle_function(className_) {
+			var styleSheets = window.document.styleSheets;
+			var styleSheetsLength = styleSheets.length;
+			for (var i = 0; i < styleSheetsLength; i++) {
+				var classes = styleSheets[i].rules || styleSheets[i].cssRules;
+				if (!classes)
+					continue;
+				var classesLength = classes.length;
+				for (var x = 0; x < classesLength; x++) {
+					if (classes[x].selectorText == className_) {
+						return classes[x];
+					}
+				}
+			}
 		}
 	}, true);
 })();
