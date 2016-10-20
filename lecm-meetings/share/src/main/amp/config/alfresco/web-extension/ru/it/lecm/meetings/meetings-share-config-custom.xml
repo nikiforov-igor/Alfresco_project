@@ -373,6 +373,7 @@
 							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="changeItemsFireAction">meetingHoldingChangeTechnicalMembers</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<!--Приглашенные-->
@@ -384,6 +385,7 @@
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 							<control-param name="changeItemsFireAction">meetingHoldingChangeTechnicalMembers</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-meetings:finished">
@@ -744,6 +746,7 @@
 							<control-param name="additionalFilter">{{EMPLOYEE_HAS_LOGIN}}</control-param>
 							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<!--Приглашенные-->
@@ -754,6 +757,7 @@
 							<control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname} {lecm-representative:propMiddlename}</control-param>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 
@@ -768,6 +772,7 @@
 							<control-param name="useStrictFilterByOrg">true</control-param>
 							<control-param name="org_field">lecm-events-dic:resources-organization-assoc-ref</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:initiator-assoc">
@@ -905,12 +910,14 @@
 							<control-param name="plane">true</control-param>
 							<control-param name="pickerItemsScript">/lecm/events/members/picker/items</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-events:invited-members-assoc">
 						<control>
 							<control-param name="itemType">lecm-representative:representative-type</control-param>
 							<control-param name="sortSelected">true</control-param>
+							<control-param name="verticalList">true</control-param>
 						</control>
 					</field>
 				</appearance>
