@@ -11,6 +11,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
         LogicECM.module.Routes.StagesControlDatagrid.superclass.constructor.call(this, containerId);
 
         YAHOO.Bubbling.on("routeOrganizationSelected", this.onRouteOrganizationSelected, this);
+        YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         return this;
     };
 
@@ -27,7 +28,31 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
         onActionDelete: function (p_items, owner, actionsConfig, fnDeleteComplete) {
             this.onDelete(p_items, owner, actionsConfig, this._fireStageControlUpdated, null);
         },
+        /**
+         * Data Items deleted event handler
+         *
+         * @method onDataItemsDeleted
+         * @param layer {object} Event fired
+         * @param args {array} Event parameters (depends on event type)
+         */
+        onDataItemsDeleted: function DataGrid_onDataItemsDeleted(layer, args) {
+            var obj = args[1], recordFound, el;
 
+            if (obj && this._hasEventInterest(obj.bubblingLabel) && obj.items) {
+                for (var i = 0, ii = obj.items.length; i < ii; i++) {
+                    recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
+                    if (recordFound) {
+                        el = this.widgets.dataTable.getTrEl(recordFound);
+                        Alfresco.util.Anim.fadeOut(el, {
+                            callback: function () {
+                                this.widgets.dataTable.deleteRow(recordFound);
+                            },
+                            scope: this
+                        });
+                    }
+                }
+            }
+        },
         onActionCreate: function (event, obj, isApprovalListContextProp) {
             function onCreateStageSuccess(r) {
                 var formId = this.options.createStageFormId;
@@ -287,7 +312,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                     mode: 'create',
                     submitType: 'json',
                     showCancelButton: true,
-                    routeOrganization: this.routeOrganization ? this.routeOrganization : null
+                    routeOrganization: this.routeOrganization ? this.routeOrganization : null,
+                    allowedNodesScript: "lecm/workflow/routes/getEmployeesForStage?stage=" + destination + (this.routeOrganization ? "&organization=" + this.routeOrganization : "")
                 },
                 destroyOnHide: true,
                 doBeforeDialogShow: {

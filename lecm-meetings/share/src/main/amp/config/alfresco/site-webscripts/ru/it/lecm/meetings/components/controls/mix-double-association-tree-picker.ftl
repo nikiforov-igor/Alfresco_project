@@ -124,6 +124,8 @@
 
 	    var fistControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}");
 	    fistControl.setOptions({
+            fieldId: "${field.configName}",
+            formId: "${args.htmlid}",
 	        <#if disabled>
 	            disabled: true,
 	        </#if>
@@ -203,12 +205,14 @@
 			<#if params.itemTypeSubstituteStrings??>
 				itemTypeSubstituteStrings: "${params.itemTypeSubstituteStrings}",
 			</#if>
-		    clearFormsOnStart: true,
+		    clearFormsOnStart: true
 	    });
 	    fistControl.setMessages(${messages});
 
 	    var secondControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}");
 	    secondControl.setOptions({
+            fieldId: "${field.configName}-second",
+            formId: "${args.htmlid}",
 		    prefixPickerId: "${secondControlId}",
 		    <#if disabled>
 			    disabled: true,

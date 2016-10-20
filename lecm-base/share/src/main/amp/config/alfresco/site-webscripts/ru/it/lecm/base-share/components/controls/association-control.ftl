@@ -86,6 +86,8 @@
             </#if>
         </#list>
     </#if>
+<#elseif args["allowedNodesScript"]??>
+	<#assign allowedScript = args["allowedNodesScript"] />
 </#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(params.forceEditable?? && params.forceEditable == "true"))>

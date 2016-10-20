@@ -405,6 +405,8 @@
                                     </item>
                                 </items>
                                 <assocs>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Поручения/ca6c82f2-8796-4bc2-b203-0fa8343b288f"/>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -930,6 +932,8 @@
                             </item>
                         </items>
                         <assocs>
+                            <assoc type="lecm-arm:filters-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/7e6e1fe7-2cae-40f2-a138-256afb8dcaa6"/>
                             <assoc type="lecm-arm:fields-assoc"
@@ -6410,6 +6414,8 @@
                                     </item>
                                 </items>
                                 <assocs>
+                                    <assoc type="lecm-arm:filters-assoc"
+                                           path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                                     <assoc type="lecm-arm:fields-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Срочная работа/Поручения/530b7543-3ba5-461d-b43d-aaad9382cff3"/>
                                     <assoc type="lecm-arm:fields-assoc"
@@ -6933,6 +6939,8 @@
                             </item>
                         </items>
                         <assocs>
+                            <assoc type="lecm-arm:filters-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По срокам"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа руководителя/Поручения в работе/f6753c37-8ab1-4145-b989-ba5018ca7e58"/>
                             <assoc type="lecm-arm:fields-assoc"

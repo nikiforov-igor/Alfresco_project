@@ -2,14 +2,29 @@
     vertical-align: middle;
     margin-left: 5px;
 }
-.control.association-token-control .value-div div.cropped-item .ci-buttons-div img.members-status {
-    margin: 0 0 -4px 5px;
+
+.control.association-token-control .container.collapse-width,
+.control.association-token-control .container.collapse-width .value-div {
+    float: none;
 }
 
+.control.association-token-control .value-div div.cropped-item {
+    display: block;
+    float: none;
+}
 .control.association-token-control.vertical .value-div div.cropped-item {
      display: table;
      float: none;
  }
+
+.control.association-token-control .value-div div.cropped-item .ci-value-div {
+    max-width: 100%;
+    float: none;
+}
+
+.control.association-token-control .value-div div.cropped-item .ci-buttons-div img.members-status {
+    margin: 0 0 -4px 5px;
+}
 
 .control.association-token-control .value-div .control-selected-values {
     max-height: none;
