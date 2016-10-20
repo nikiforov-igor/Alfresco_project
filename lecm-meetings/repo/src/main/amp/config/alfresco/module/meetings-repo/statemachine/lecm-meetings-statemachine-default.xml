@@ -523,7 +523,7 @@
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -683,7 +683,7 @@ var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSON
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>

@@ -102,7 +102,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public List<Map<String, Object>> getUserEvents(String fromDate, String toDate, boolean loadActions, String mode, Integer timeZoneOffset, String lastCreated) {
-        List<NodeRef> events = eventService.getEvents(fromDate, toDate, eventService.getAdditionalFilterForCalendarShow(), lastCreated);
+        List<NodeRef> events = eventService.getEvents(ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), eventService.getAdditionalFilterForCalendarShow(), lastCreated);
         return processEvents(events, loadActions, true, mode, timeZoneOffset);
     }
 
@@ -218,7 +218,7 @@ public class EventsWebScriptBean extends BaseWebScript {
     }
 
     public Scriptable getUserNearestEvents(int maxItems) {
-        return createScriptable(eventService.getNearestEvents(formatDate(new Date(), true), maxItems, eventService.getAdditionalFilterForCalendarShow()));
+        return createScriptable(eventService.getNearestEvents(ISO8601DateFormat.parse(formatDate(new Date(), true)), maxItems, eventService.getAdditionalFilterForCalendarShow()));
     }
 
     private String formatDate(Date date, Boolean isAllDay) {
@@ -243,7 +243,7 @@ public class EventsWebScriptBean extends BaseWebScript {
             ignoreNodeRef = new NodeRef(ignoreNode);
         }
 
-        List<NodeRef> results = eventService.getAvailableUserLocations(fromDate, toDate, ignoreNodeRef);
+        List<NodeRef> results = eventService.getAvailableUserLocations(ISO8601DateFormat.parse(fromDate), ISO8601DateFormat.parse(toDate), ignoreNodeRef);
         if (results != null) {
             return createScriptable(results);
         }

@@ -93,15 +93,15 @@ public interface EventsService {
 
 	public static final String EVENTS_ENGINEER_ROLE = "EVENTS_ENGINEER";
 
-	List<NodeRef> getEvents(String fromDate, String toDate);
+	List<NodeRef> getEvents(Date fromDate, Date toDate);
 
-	public List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter);
+	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter);
 
-	List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined);
-	List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, boolean excludeDeclined, String lastCreated);
-	List<NodeRef> getEvents(String fromDate, String toDate, String additionalFilter, String lastCreated);
+	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined);
+	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined, String lastCreated);
+	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, String lastCreated);
 
-	public List<NodeRef> searchEvents(String filter);
+	List<NodeRef> searchEvents(String filter);
 
 	NodeRef getEventLocation(NodeRef event);
 
@@ -111,9 +111,9 @@ public interface EventsService {
 
 	List<NodeRef> getEventResources(NodeRef event);
 
-	List<NodeRef> getNearestEvents(String fromDate, int maxCount, String additionalFilter);
+	List<NodeRef> getNearestEvents(Date fromDate, int maxCount, String additionalFilter);
 
-	List<NodeRef> getAvailableUserLocations(String fromDate, String toDate, NodeRef ignoreNode);
+	List<NodeRef> getAvailableUserLocations(Date fromDate, Date toDate, NodeRef ignoreNode);
 
 	List<NodeRef> getAvailableUserResources();
 

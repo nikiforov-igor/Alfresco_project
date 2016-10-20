@@ -1,9 +1,8 @@
 /**
-/**
-* LogicECM root namespace.
-    *
-* @namespace LogicECM
-*/
+ * LogicECM root namespace.
+ *
+ * @namespace LogicECM
+ */
 // Ensure LogicECM root object exists
 if (typeof LogicECM == "undefined" || !LogicECM) {
     LogicECM = {};
@@ -50,11 +49,11 @@ LogicECM.module = LogicECM.module || {};
 
                 itemFamily: "node",
 
-	            mandatory: false,
+                mandatory: false,
 
                 selectedValueNodeRef: "",
 
-	            oldValue: "",
+                oldValue: "",
 
                 maxSearchResults: 1000,
 
@@ -70,7 +69,7 @@ LogicECM.module = LogicECM.module || {};
 
                 fieldId: null,
 
-	            notSelectedOptionShow: false,
+                notSelectedOptionShow: false,
 
                 notSelectedText: "",
 
@@ -78,11 +77,11 @@ LogicECM.module = LogicECM.module || {};
 
                 multipleSelect: false,
 
-	            disabled: false,
+                disabled: false,
 
                 defaultValue: null,
 
-	            defaultValueDataSource: null,
+                defaultValueDataSource: null,
 
                 changeItemsFireAction: null,
 
@@ -97,9 +96,9 @@ LogicECM.module = LogicECM.module || {};
 
             selectItemId: null,
 
-	        removedItemId: null,
+            removedItemId: null,
 
-	        addedItemId: null,
+            addedItemId: null,
 
             currentDisplayValueId: null,
 
@@ -109,17 +108,17 @@ LogicECM.module = LogicECM.module || {};
 
             dataSource: null,
 
-	        defaultValue: null,
+            defaultValue: null,
 
             doubleClickLock: false,
 
             setOptions: function AssociationSelectOne_setOptions(obj)
             {
                 LogicECM.module.AssociationSelectOne.superclass.setOptions.call(this, obj);
-				YAHOO.Bubbling.fire("afterOptionsSet",
-					{
-						eventGroup: this
-					});
+                YAHOO.Bubbling.fire("afterOptionsSet",
+                    {
+                        eventGroup: this
+                    });
                 return this;
             },
 
@@ -127,13 +126,13 @@ LogicECM.module = LogicECM.module || {};
             {
                 this._loadParentNode();
 
-	            if (!this.options.disabled) {
-	                this.selectItem = Dom.get(this.selectItemId);
-	                if (this.selectItem) {
-	                    this.populateSelect();
-	                }
-		            YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
-	            }
+                if (!this.options.disabled) {
+                    this.selectItem = Dom.get(this.selectItemId);
+                    if (this.selectItem) {
+                        this.populateSelect();
+                    }
+                    YAHOO.util.Event.on(this.selectItemId, "change", this.onSelectChange, this, true);
+                }
 
                 this.currentDisplayValueElement = Dom.get(this.currentDisplayValueId);
                 if (this.currentDisplayValueElement) {
@@ -143,8 +142,8 @@ LogicECM.module = LogicECM.module || {};
                     this.createNewButton =  new YAHOO.widget.Button(
                         this.controlId + "-selectone-create-new-button",
                         {
-	                        onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this },
-	                        disabled: true
+                            onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this },
+                            disabled: true
                         }
                     );
                 }
@@ -152,7 +151,7 @@ LogicECM.module = LogicECM.module || {};
                 LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
 
-	        onSelectChange: function AssociationTreeViewer_onSelectChange() {
+            onSelectChange: function AssociationTreeViewer_onSelectChange() {
                 var selectValue = null;
 
                 if (!this.options.multipleSelect) {
@@ -169,30 +168,30 @@ LogicECM.module = LogicECM.module || {};
                         selectValue = values.join(",");
                     }
                 }
-		        var addedItem = "";
-		        var removedItem = "";
+                var addedItem = "";
+                var removedItem = "";
 
-		        if (selectValue != this.options.oldValue) {
-			        removedItem = this.options.oldValue;
-			        addedItem = selectValue;
-		        }
-		        Dom.get(this.removedItemId).value = removedItem;
-		        Dom.get(this.addedItemId).value = addedItem;
+                if (selectValue != this.options.oldValue) {
+                    removedItem = this.options.oldValue;
+                    addedItem = selectValue;
+                }
+                Dom.get(this.removedItemId).value = removedItem;
+                Dom.get(this.addedItemId).value = addedItem;
 
-		        if (this.options.mandatory) {
-			        YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-		        }
+                if (this.options.mandatory) {
+                    YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+                }
 
-		        YAHOO.Bubbling.fire("formValueChanged",
-			        {
-				        eventGroup:this,
-				        addedItems:addedItem,
-				        removedItems:removedItem,
-				        selectedItems:selectValue,
-				        selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
-			        });
+                YAHOO.Bubbling.fire("formValueChanged",
+                    {
+                        eventGroup:this,
+                        addedItems:addedItem,
+                        removedItems:removedItem,
+                        selectedItems:selectValue,
+                        selectedItemsMetaData:Alfresco.util.deepCopy(this.selectItem.value)
+                    });
                 if (this.options.primaryCascading) {
-                        YAHOO.Bubbling.fire("changeDropDown",{bubblingLabel: this.options.fieldId});
+                    YAHOO.Bubbling.fire("changeDropDown",{bubblingLabel: this.options.fieldId});
                 }
 
                 if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
@@ -202,31 +201,31 @@ LogicECM.module = LogicECM.module || {};
                         formId: this.options.formId
                     });
                 }
-	        },
+            },
 
             showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
                 if (this.doubleClickLock) return;
                 this.doubleClickLock = true;
                 var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-	            var templateRequestParams = {
-		            itemKind: "type",
-		            itemId: this.options.itemType,
-		            destination: this.options.parentNodeRef,
-		            mode: "create",
-		            submitType: "json",
-		            formId: "association-create-new-node-form",
-		            showCancelButton: true
-	            };
+                var templateRequestParams = {
+                    itemKind: "type",
+                    itemId: this.options.itemType,
+                    destination: this.options.parentNodeRef,
+                    mode: "create",
+                    submitType: "json",
+                    formId: "association-create-new-node-form",
+                    showCancelButton: true
+                };
 
                 new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
                     width:"40em",
                     templateUrl:templateUrl,
-	                templateRequestParams: templateRequestParams,
+                    templateRequestParams: templateRequestParams,
                     actionUrl:null,
                     destroyOnHide:true,
                     doBeforeDialogShow:{
                         fn: this.setCreateNewFormDialogTitle,
-	                    scope: this
+                        scope: this
                     },
                     onSuccess:{
                         fn:function (response) {
@@ -245,15 +244,15 @@ LogicECM.module = LogicECM.module || {};
             },
 
             setCreateNewFormDialogTitle: function (p_form, p_dialog) {
-				var message;
-				if ( this.options.createNewMessage ) {
-					message = this.options.createNewMessage;
-				} else {
-					message = this.msg("dialog.createNew.title");
-				}
-				p_dialog.dialog.setHeader(message);
-	            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-	            this.doubleClickLock = false;
+                var message;
+                if ( this.options.createNewMessage ) {
+                    message = this.options.createNewMessage;
+                } else {
+                    message = this.msg("dialog.createNew.title");
+                }
+                p_dialog.dialog.setHeader(message);
+                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                this.doubleClickLock = false;
             },
 
             _loadParentNode: function AssociationTreeViewer__loadRootNode() {
@@ -268,18 +267,18 @@ LogicECM.module = LogicECM.module || {};
                                 var oResults = response.json;
                                 if (oResults != null) {
                                     this.rootNode = {
-                                            label:oResults.title,
-                                            nodeRef:oResults.nodeRef,
-                                            type:oResults.type,
-                                            isContainer: oResults.isContainer,
-                                            displayPath: oResults.displayPath
+                                        label:oResults.title,
+                                        nodeRef:oResults.nodeRef,
+                                        type:oResults.type,
+                                        isContainer: oResults.isContainer,
+                                        displayPath: oResults.displayPath
                                     };
                                     if (this.options.parentNodeRef === "") {
                                         this.options.parentNodeRef = oResults.nodeRef;
                                     }
-	                                if (this.options.showCreateNewButton && this.createNewButton != null) {
-		                                this.createNewButton.set("disabled", !oResults.hasPermAddChildren);
-	                                }
+                                    if (this.options.showCreateNewButton && this.createNewButton != null) {
+                                        this.createNewButton.set("disabled", !oResults.hasPermAddChildren);
+                                    }
                                 }
                             },
                             scope: this
@@ -323,85 +322,76 @@ LogicECM.module = LogicECM.module || {};
                 LogicECM.module.AssociationSelectOne.superclass.destroy.call(this);
             },
 
-	        loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
-		        if (this.options.defaultValue != null) {
-                     this.defaultValue = this.options.defaultValue;
-                     this.fillContent();
-                } else 
+            loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
+                if (this.options.defaultValue != null) {
+                    this.defaultValue = this.options.defaultValue;
+                    this.fillContent();
+                } else
                 if (this.options.defaultValueDataSource != null) {
-			        var me = this;
+                    var me = this;
 
-			        Alfresco.util.Ajax.request(
-				        {
-					        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
-					        successCallback: {
-						        fn: function (response) {
-							        var oResults = eval("(" + response.serverResponse.responseText + ")");
-							        if (oResults != null && oResults.nodeRef != null ) {
-								        me.defaultValue = oResults.nodeRef;
-							        }
-							        me.fillContent();
-						        }
-					        },
-					        failureMessage: "message.failure"
-				        });
-		        } else {
-			        this.fillContent();
-		        }
-	        },
+                    Alfresco.util.Ajax.request(
+                        {
+                            url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+                            successCallback: {
+                                fn: function (response) {
+                                    var oResults = eval("(" + response.serverResponse.responseText + ")");
+                                    if (oResults != null && oResults.nodeRef != null ) {
+                                        me.defaultValue = oResults.nodeRef;
+                                    }
+                                    me.fillContent();
+                                }
+                            },
+                            failureMessage: "message.failure"
+                        });
+                } else {
+                    this.fillContent();
+                }
+            },
 
-	        fillContent: function AssociationSelectOne_populateSelect() {
-		        var successHandler = function (sRequest, oResponse, oPayload)
-		        {
-			        if (this.options.notSelectedOptionShow) {
-				        var emptyOption = this.selectItem.options[0];
-				        var emptOpt = document.createElement('option');
-				        var emptyOptHtml = emptyOption.innerHTML.trim();
-                        emptyOptHtml = (emptyOptHtml == "") ? "&nbsp;" : emptyOptHtml;
-				        emptOpt.innerHTML = emptyOptHtml;
-				        emptOpt.value = emptyOption.value;
+            fillContent: function AssociationSelectOne_populateSelect() {
+                var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
 
-				        this.selectItem.innerHTML = "";
-				        this.selectItem.appendChild(emptOpt);
-			        }
+                function successHandler(sRequest, oResponse, oPayload) {
+					var results = oResponse.results,
+						opts = [].slice.call(this.selectItem.children);
 
-			        var results = oResponse.results;
-			        for (var i = 0; i < results.length; i++) {
-				        var node = results[i];
-				        var opt = document.createElement('option');
-				        opt.innerHTML = node.name;
-				        opt.value = node.nodeRef;
-				        if (node.nodeRef == this.options.selectedValueNodeRef || node.nodeRef == this.defaultValue) {
-					        opt.selected = true;
-				        }
-				        this.selectItem.appendChild(opt);
-			        }
+					opts.forEach(function(elem, idx) {
+						if (!this.options.notSelectedOptionShow || idx > 0) {
+							this.selectItem.removeChild(elem);
+						}
+					}, this);
 
-			        this.onSelectChange();
-		        }.bind(this);
+					results.forEach(function(node) {
+                        var opt = document.createElement('option');
+                        opt.innerHTML = node.name;
+                        opt.value = node.nodeRef;
+						opt.selected = (node.nodeRef == this.options.selectedValueNodeRef || node.nodeRef == this.defaultValue);
+                        this.selectItem.appendChild(opt);
+					}, this);
 
-		        var failureHandler = function (sRequest, oResponse)
-		        {
-			        if (oResponse.status == 401)
-			        {
-				        // Our session has likely timed-out, so refresh to offer the login page
-				        window.location.reload();
-			        }
-			        else
-			        {
-				        //todo show failure message
-			        }
-		        }.bind(this);
+                    this.onSelectChange();
+                }
 
-		        var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
+                function failureHandler (sRequest, oResponse) {
+                    if (oResponse.status == 401)
+                    {
+                        // Our session has likely timed-out, so refresh to offer the login page
+                        window.location.reload();
+                    }
+                    else
+                    {
+                        //todo show failure message
+                    }
+                }
 
-		        this.dataSource.sendRequest(url,
-			        {
-				        success: successHandler,
-				        failure: failureHandler,
-				        scope: this
-			        });
-	        },
+                this.dataSource.sendRequest(url,
+                    {
+                        success: successHandler,
+                        failure: failureHandler,
+                        scope: this
+                    });
+            },
 
             populateSelect: function AssociationSelectOne_populateSelect() {
                 this._createDataSource();
@@ -413,39 +403,39 @@ LogicECM.module = LogicECM.module || {};
             },
 
             populateCurrentValue: function AssociationSelectOne_populateCurrentValue() {
-	            if (this.options.selectedValueNodeRef != null && this.options.selectedValueNodeRef.length > 0) {
-	                Alfresco.util.Ajax.jsonGet(
-	                    {
-	                        url: Alfresco.constants.PROXY_URI + "lecm/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
-	                        successCallback:
-	                        {
-	                            fn: function (response) {
-	                                var properties = response.json.item.node.properties;
-	                                var name = this.options.nameSubstituteString;
+                if (this.options.selectedValueNodeRef != null && this.options.selectedValueNodeRef.length > 0) {
+                    Alfresco.util.Ajax.jsonGet(
+                        {
+                            url: Alfresco.constants.PROXY_URI + "lecm/node/" + this.options.selectedValueNodeRef.replace("://", "/"),
+                            successCallback:
+                            {
+                                fn: function (response) {
+                                    var properties = response.json.item.node.properties;
+                                    var name = this.options.nameSubstituteString;
                                     for (var prop in properties) {
                                         var propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
                                         if (name.indexOf(propSubstName) != -1) {
                                             name = name.replace(propSubstName, properties[prop]);
                                         }
                                     }
-	                                this.currentDisplayValueElement.innerHTML = name;
-	                            },
-	                            scope: this
-	                        },
-	                        failureCallback:
-	                        {
-	                            fn: function (response) {
-	                                //todo show error message
-	                            },
-	                            scope: this
-	                        }
-	                    });
-	            } else if (this.options.notSelectedOptionShow){
-		            if (this.options.notSelectedText.length > 0) {
+                                    this.currentDisplayValueElement.innerHTML = name;
+                                },
+                                scope: this
+                            },
+                            failureCallback:
+                            {
+                                fn: function (response) {
+                                    //todo show error message
+                                },
+                                scope: this
+                            }
+                        });
+                } else if (this.options.notSelectedOptionShow){
+                    if (this.options.notSelectedText.length > 0) {
                         this.currentDisplayValueElement.innerHTML = this.options.notSelectedText;
-		            } else {
-			            this.currentDisplayValueElement.innerHTML = "&nbsp;";
-		            }
+                    } else {
+                        this.currentDisplayValueElement.innerHTML = "&nbsp;";
+                    }
                 }
             },
 
@@ -561,5 +551,5 @@ LogicECM.module = LogicECM.module || {};
                 }
                 return params;
             }
-         });
+        });
 })();
