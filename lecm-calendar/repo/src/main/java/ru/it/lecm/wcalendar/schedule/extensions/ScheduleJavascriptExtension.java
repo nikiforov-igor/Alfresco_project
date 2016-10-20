@@ -87,7 +87,7 @@ public class ScheduleJavascriptExtension extends CommonWCalendarJavascriptExtens
 		if (schedule == null) {
 			return null;
 		}
-		return new ScriptNode(schedule, serviceRegistry);
+		return new ScriptNode(schedule, serviceRegistry, getScope());
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class ScheduleJavascriptExtension extends CommonWCalendarJavascriptExtens
 			}
 		}
 		if (schedule != null) {
-			return new ScriptNode(schedule, serviceRegistry);
+			return new ScriptNode(schedule, serviceRegistry, getScope());
 		}
 		return null;
 	}
@@ -310,7 +310,7 @@ public class ScheduleJavascriptExtension extends CommonWCalendarJavascriptExtens
 		if (createdNode == null) {
 			throw new WebScriptException("Something has gone wrong: response is empty!");
 		} else {
-			return new ScriptNode(createdNode, serviceRegistry);
+			return new ScriptNode(createdNode, serviceRegistry, getScope());
 		}
 	}
 }
