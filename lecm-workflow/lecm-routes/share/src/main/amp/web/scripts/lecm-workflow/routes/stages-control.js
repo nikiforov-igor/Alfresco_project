@@ -37,22 +37,18 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
          */
         onDataItemsDeleted: function DataGrid_onDataItemsDeleted(layer, args)
         {
-            var obj = args[1];
-            if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.items)) {
-                var recordFound, el,
-                    fnCallback = function (record) {
-                        return function DataGrid_onDataItemsDeleted_anim() {
-                            this.widgets.dataTable.deleteRow(record);
-                        };
-                    };
+            var obj = args[1], recordFound, el;
 
+            if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.items)) {
                 for (var i = 0, ii = obj.items.length; i < ii; i++) {
                     recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
                     if (recordFound) {
                         el = this.widgets.dataTable.getTrEl(recordFound);
                         Alfresco.util.Anim.fadeOut(el,
                             {
-                                callback: fnCallback(recordFound),
+                                callback: function () {
+                                    this.widgets.dataTable.deleteRow(recordFound);
+                                },
                                 scope: this
                             });
                     }
