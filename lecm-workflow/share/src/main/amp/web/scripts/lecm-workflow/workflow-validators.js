@@ -177,3 +177,31 @@ LogicECM.module.Workflow.routeHasEmployeesValidator =
 
 		return valid;
 	};
+
+LogicECM.module.Workflow.routeIsEmptyValidator =
+	function (field) {
+		var valid = false;
+		var docNodeRef = YAHOO.util.History.getQueryStringParameter('nodeRef');
+		if (field.value && field.value.length > 0) {
+			jQuery.ajax({
+				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/routes/isRouteEmpty?routeRef=" + field.value + "&documentRef=" + docNodeRef,
+				type: "GET",
+				timeout: 30000,
+				async: false,
+				dataType: "json",
+				contentType: "application/json",
+				processData: false,
+				success: function (result) {
+					valid = result && !result.isRouteEmpty;
+				},
+				error: function() {
+					Alfresco.util.PopupManager.displayMessage({
+						text: "ERROR: can not perform field validation"
+					});
+					valid = false;
+				}
+			});
+		}
+
+		return valid;
+	};

@@ -111,14 +111,20 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 		return documentNode != null ? new ScriptNode(documentNode, serviceRegistry, getScope()) : null;
 	}
 
-	public boolean hasEmployeesInRoute(final ScriptNode document) {
-		return routesService.hasEmployeesInRoute(document.getNodeRef());
+	public boolean hasEmployeesInRoute(final ScriptNode node) {
+		return routesService.hasEmployeesInRoute(node.getNodeRef());
 	}
-	public boolean hasEmployeesInDocRoute(final ScriptNode route) {
-		return routesService.hasEmployeesInDocRoute(route.getNodeRef());
+
+	public boolean hasEmployeesInRoute(final ScriptNode route, final ScriptNode document) {
+		return routesService.hasEmployeesInRoute(route.getNodeRef(), document != null ? document.getNodeRef() : null);
 	}
-	public boolean hasPotentialEmployeesInRoute(final ScriptNode route, final ScriptNode document) {
-		return routesService.hasPotentialEmployeesInRoute(route.getNodeRef(), document.getNodeRef());
+
+	public boolean isRouteEmpty(ScriptNode node) {
+		return routesService.isRouteEmpty(node.getNodeRef());
+	}
+
+	public boolean isRouteEmpty(ScriptNode route, ScriptNode document) {
+		return routesService.isRouteEmpty(route.getNodeRef(), document.getNodeRef());
 	}
 
 	public String getApprovalState(final ScriptNode document) {
