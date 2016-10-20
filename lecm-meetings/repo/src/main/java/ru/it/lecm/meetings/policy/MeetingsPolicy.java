@@ -1,9 +1,5 @@
 package ru.it.lecm.meetings.policy;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -20,14 +16,18 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
-import ru.it.lecm.contractors.api.Contractors;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.events.beans.EventsService;
 import ru.it.lecm.meetings.beans.MeetingsService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -47,6 +47,7 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 	private BehaviourFilter behaviourFilter;
 	private LecmPermissionService lecmPermissionService;
 	private MeetingsService meetingsService;
+	private StateMachineServiceBean stateMachineService;
 
 	public MeetingsService getMeetingsService() {
 		return meetingsService;
@@ -102,6 +103,14 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 
 	public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
+	}
+
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
+
+	public StateMachineServiceBean getStateMachineService() {
+		return stateMachineService;
 	}
 
 	@Override
@@ -184,7 +193,9 @@ public class MeetingsPolicy extends BaseBean implements NodeServicePolicies.OnUp
 		NodeRef event = nodeAssocRef.getSourceRef();
 		NodeRef secretary = nodeAssocRef.getTargetRef();
 		documentMembersService.addMemberWithoutCheckPermission(event, secretary, LecmPermissionService.LecmPermissionGroup.PGROLE_Reader, true);
-		lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
+		if (!stateMachineService.isFinal(event)) {
+			lecmPermissionService.grantDynamicRole("EVENTS_INITIATOR_DYN", event, secretary.getId(), lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Owner"));
+		}
 	}
 
 	public void onSecretaryRemoved(AssociationRef nodeAssocRef) {
