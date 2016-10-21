@@ -1037,7 +1037,14 @@ function RetrieveCertificate_NPAPI()
     xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var response;
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
+
+		function isIE() {
+			var retVal = (("Microsoft Internet Explorer" == navigator.appName) || // IE < 11
+				navigator.userAgent.match(/Trident\/./i)); // IE 11
+			return retVal;
+		}
+
+		if (xmlhttp.readyState == 4) {
             if(xmlhttp.status == 200) {
                 response = xmlhttp.responseText;
                 var cert_data = "";
@@ -1213,12 +1220,6 @@ function Decrypt_NPAPI(certListBoxId) {
     {
         alert("Ошибка при шифровании данных:" + err);
     }
-}
-
-function isIE() {
-    var retVal = (("Microsoft Internet Explorer" == navigator.appName) || // IE < 11
-        navigator.userAgent.match(/Trident\/./i)); // IE 11
-    return retVal;
 }
 
 function SignHashes_NPAPI(thumbprint, docs, sTSAAddress, signCallBack, context) {
