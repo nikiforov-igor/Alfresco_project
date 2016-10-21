@@ -284,7 +284,8 @@ LogicECM.module = LogicECM.module || {};
                     this.createPickerDialog();
                 }
 
-	            Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll.bind(this));
+                Event.removeListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll);
+                Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll, this, true);
 
                 if (!this.options.lazyLoading) {
                     this._loadSearchProperties();
