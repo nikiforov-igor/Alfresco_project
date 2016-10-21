@@ -71,9 +71,38 @@ public class ExpressionDocument {
      * @return значение атрибута
      */
 	public Object attr(String attributeName) {
-		QName attribute = QName.createQName(attributeName,serviceRegistry.getNamespaceService());
+		QName attribute = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
 		return serviceRegistry.getNodeService().getProperty(nodeRef, attribute);
 	}
+
+    /**
+     * Получить значение ассоцации
+     * @param assocName имя TARGET ассоциации (в виде prefix:localName)
+     * @return значение ассоациации
+     */
+    public NodeRef assoc(String assocName) {
+        List<NodeRef> assocs = assocList(assocName);
+        return !assocs.isEmpty() ? assocs.get(0) : null;
+    }
+
+    /**
+     * Получить значение ассоциации
+     * @param  assocName TARGET ассоциация (в виде prefix:localName)
+     * @return значение ассоациации
+     */
+    public List<NodeRef> assocList(String assocName) {
+        QName assocTypeName = QName.createQName(assocName, serviceRegistry.getNamespaceService());
+        List<NodeRef> assocs = new ArrayList<>();
+
+        List<AssociationRef> associationRefs = serviceRegistry.getNodeService().getTargetAssocs(nodeRef, assocTypeName);
+        for (AssociationRef associationRef : associationRefs) {
+            NodeRef assocNodeRef = associationRef.getTargetRef();
+            if (assocNodeRef != null) {
+                assocs.add(assocNodeRef);
+            }
+        }
+        return assocs;
+    }
 
     /**
      * Получить значение атрибута ассоциации
