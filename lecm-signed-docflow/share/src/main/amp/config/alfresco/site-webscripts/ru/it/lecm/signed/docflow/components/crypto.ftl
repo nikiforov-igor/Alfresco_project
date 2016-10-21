@@ -3,8 +3,14 @@
 -->
 <#macro initApplet>
 <script type="text/javascript">
-	CryptoApplet = new LogicECM.CryptoApplet('crypto-applet-module');
-	CryptoApplet.onReady();
+	(function() {
+		 LogicECM.module.Base.Util.loadScripts([
+			'scripts/lecm-base/third-party/cadesplugin_api.js'
+		 ], function() {
+			CryptoApplet = new LogicECM.CryptoApplet('crypto-applet-module');
+			CryptoApplet.onReady();
+		});
+	})();
 </script>
 
 </#macro>
