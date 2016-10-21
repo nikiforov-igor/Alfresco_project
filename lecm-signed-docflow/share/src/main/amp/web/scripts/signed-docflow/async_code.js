@@ -851,7 +851,14 @@ function RetrieveCertificate_Async()
         xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var response;
         xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4) {
+
+			function isIE() {
+				var retVal = (("Microsoft Internet Explorer" == navigator.appName) || // IE < 11
+					navigator.userAgent.match(/Trident\/./i)); // IE 11
+				return retVal;
+			}
+
+			if (xmlhttp.readyState == 4) {
                 if(xmlhttp.status == 200) {
                     cadesplugin.async_spawn (function*(arg) {
                         var response = arg[0];
@@ -1134,12 +1141,6 @@ function verifyCert_Async() {
             removeWaitMessage();
         }
     );
-}
-
-function isIE() {
-    var retVal = (("Microsoft Internet Explorer" == navigator.appName) || // IE < 11
-        navigator.userAgent.match(/Trident\/./i)); // IE 11
-    return retVal;
 }
 
 function GetES6Certs(lstId, context) {

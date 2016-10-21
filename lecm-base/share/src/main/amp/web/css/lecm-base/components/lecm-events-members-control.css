@@ -12,6 +12,10 @@
     display: block;
     float: none;
 }
+.control.association-token-control.vertical .value-div div.cropped-item {
+     display: table;
+     float: none;
+ }
 
 .control.association-token-control .value-div div.cropped-item .ci-value-div {
     max-width: 100%;
