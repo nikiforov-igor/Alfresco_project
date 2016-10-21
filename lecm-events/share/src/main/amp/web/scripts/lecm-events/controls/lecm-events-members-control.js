@@ -31,20 +31,19 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		startHour: 6,
 		endHour: 22,
 		timeStep: 15,
-		firstColumnWidth: 140,
-		selector: null,
+		firstColumnWidth: 154,
 		startDate: null,
 		initialStartDate: null,
 		endDate: null,
+		selectedDate: null,
 		initialEndDate: null,
 		selectorBorderWidth: 4,
 		prevStartIndex: null,
 		prevEndIndex: null,
 		prevSelectionStartIndex: null,
-		prevESelectionEndIndex: null,
-		dragEnabled: false,
-		dragDelta: 0,
+		prevSelectionEndIndex: null,
 		maxIndex: 1,
+		period: 0,
 		headerIsReady: false,
 		startDateField: null,
 		endDateField: null,
@@ -54,6 +53,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		busyColor: null,
 		notBusyColor: null,
 		needDraw: true,
+
+		onReady: function ConsoleGroups_onReady() {
+			LogicECM.module.AssociationTokenControl.prototype.onReady.call(this);
+			var prevDate = Dom.get(this.id + "-date-cntrl-prevDate");
+			prevDate.addEventListener("click", this.prevDay.bind(this));
+			var nextDate = Dom.get(this.id + "-date-cntrl-nextDate");
+			nextDate.addEventListener("click", this.nextDay.bind(this));
+			var pointDate = Dom.get(this.id + "-date-cntrl-pointDate");
+			pointDate.addEventListener("click", this.resetDate.bind(this));
+		},
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
 			var arrItems = "";
@@ -414,6 +423,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					if (!this.initialStartDate) {
 						this.initialStartDate = new Date(date.getTime());
 					}
+					this.selectedDate = new Date(date.getTime());
 					this.startDate = date;
 					this.startDateField = {
 						id: control.id,
@@ -460,13 +470,59 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 *  Смена даты из диаграммы
 		 */
 		setMemberCalendarDate: function setMemberCalendarDate(layer, args) {
-			var date = Alfresco.util.fromISO8601(args[1].date);
-			Dom.get(this.startDateField.id + "-date").value = this.formatDate(date);
+			this.selectDate(Alfresco.util.fromISO8601(args[1].date));
+		},
+
+		/**
+		 * Смена состояния диаграммы при изменнии текущей отображаемой даты
+		 * @param date
+		 */
+		selectDate: function selectDate_function(date) {
+			this.selectedDate = date;
+			this.busytime = [];
+			this.draw();
+			this.requestMembersTime();
+		},
+
+		/**
+		 * Смена выбранной даты на следующий день
+		 */
+		nextDay: function nextDay_function() {
+			var date = new Date(this.selectedDate.getTime() + 24 * 60 * 60 * 1000);
+			Dom.get(this.id + "-date-cntrl-date").value = this.formatDate(date);
+			this.selectDate(date);
+		},
+
+		/**
+		 * Смена выбранной даты на предыдущий день
+		 */
+		prevDay: function prevDay_function() {
+			var date = new Date(this.selectedDate.getTime() - 24 * 60 * 60 * 1000);
+			Dom.get(this.id + "-date-cntrl-date").value = this.formatDate(date);
+			this.selectDate(date);
+		},
+
+		/**
+		 * Сброс даты на начальную
+		 */
+		resetDate: function resetDate_function() {
+			//Начало
+			Dom.get(this.startDateField.id + "-date").value = this.formatDate(this.initialStartDate);
+			Dom.get(this.startDateField.id + "-time").value = ('0' + this.initialStartDate.getHours()).slice(-2) + ":" + ('0' + this.initialStartDate.getMinutes()).slice(-2);
 			Bubbling.fire("handleFieldChange", {
 				fieldId: this.startDateField.configName,
 				formId: this.startDateField.formId
 			});
+
+			//Окончание
+			Dom.get(this.endDateField.id + "-date").value = this.formatDate(this.initialEndDate);
+			Dom.get(this.endDateField.id + "-time").value = ('0' + this.initialEndDate.getHours()).slice(-2) + ":" + ('0' + this.initialEndDate.getMinutes()).slice(-2);
+			Bubbling.fire("handleFieldChange", {
+				fieldId: this.endDateField.configName,
+				formId: this.endDateField.formId
+			});
 		},
+
 
 		/**
 		 * Запрос занятости участников
@@ -481,7 +537,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					method: "GET",
 					dataObj: {
 						items: items,
-						date: Alfresco.util.formatDate(this.startDate, "yyyy-mm-dd"),
+						date: Alfresco.util.formatDate(this.selectedDate, "yyyy-mm-dd"),
 						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : ""
 					},
 					successCallback:
@@ -491,8 +547,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 								this.busytime = response.json;
 								this.fillBusyTime(response.json);
 							}
-							this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
-							this._drawSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+							if (this.prevStartIndex && this.prevEndIndex) {
+								this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+								this._drawSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+							}
 						},
 
 						scope: this
@@ -555,7 +613,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			//Устанавливаем размер контейнера
 			var cellBounds = this._calculateCell();
 			var hours = this.endHour - this.startHour + 1;
-			var width = this.firstColumnWidth + hours * cellBounds.width + hours;
+			var width = this.firstColumnWidth + 2 + hours * cellBounds.width + hours;
 			Dom.get(this.options.controlId + "-diagram-container").style.width = width + "px";
 		},
 
@@ -566,27 +624,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var startTime = this.startDate;
 			var endTime = this.endDate;
 			var control = Dom.get(this.options.controlId + "-diagram");
-			var region = Dom.getRegion(control);
-			/*
-			 if (!this.selector) {
-			 this.selector = document.createElement("div");
-			 this.selector.className = "member-control-diagram-selector";
-			 control.appendChild(this.selector);
-
-			 var selectorHead = document.createElement("div");
-			 selectorHead.style.height = "24px";
-			 selectorHead.innerHTML = "&nbsp;";
-			 Dom.addClass(selectorHead, "member-control-diagram-selector-grab");
-			 //selectorHead.addEventListener("mousedown", this.dragStart.bind(this));
-			 //document.body.addEventListener("mouseup", this.dragEnd.bind(this));
-			 //document.body.addEventListener("mousemove", this.moveSelector.bind(this));
-			 //document.body.addEventListener("selectstart", this.selectStart.bind(this));
-			 this.selector.appendChild(selectorHead);
-			 } else {
-			 this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex, true);
-			 }
-			 this.selector.style.height = region.height + "px";
-			 */
 			if (this.prevStartIndex && this.prevEndIndex) {
 				this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex, true);
 			}
@@ -602,117 +639,15 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var days = this.dateDiffInDays(endTime, startTime);
 			var endIndex = days * this.maxIndex + (endHour - this.startHour) * cellBounds.cellByHour + Math.round(endMinutes / this.timeStep);
 
-			/*
-			 //Устанавливаем размер и положение рамки
-			 var left = Dom.getRegion(this.options.controlId + "-diagram_0_"+ startIndex).left;
-			 var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
-			 var right = Dom.getRegion(this.options.controlId + "-diagram_0_"+ fillIndex).right;
-			 this.selector.style.left = (left - region.left - 1) + "px";
-			 this.selector.style.width = (right - left) + "px";
-			 */
-
 			//расскрашиваем рамку
-			this._drawSelectorBorder(startIndex, endIndex);
-			this.prevStartIndex = startIndex;
-			this.prevEndIndex = endIndex;
-		},
-
-		/**
-		 * Обработка начала перемещения рамки
-		 * @param ev
-		 */
-		dragStart: function(ev) {
-			var head = this.selector.firstChild;
-			Dom.removeClass(head, "member-control-diagram-selector-grab");
-			Dom.addClass(head, "member-control-diagram-selector-grabbing");
-			this.dragEnabled = true;
-			this.dragDelta = ev.offsetX;
-
-		},
-
-		/**
-		 * Обработка окончания перемещения рамки
-		 * @param ev
-		 */
-		dragEnd: function(ev) {
-			if (this.dragEnabled) {
-				//Передаем данные в контролы
-				var startMinutes = (this.prevStartIndex - 1) * this.timeStep;
-				var days = Math.floor(this.prevEndIndex / this.maxIndex);
-				var endIndex = this.prevEndIndex - days * this.maxIndex;
-				if (endIndex == 0) {
-					endIndex = this.maxIndex;
-					days--;
-				}
-				var endMinutes = endIndex * this.timeStep;
-				var startHour = Math.floor(startMinutes / 60);
-				var endHour = Math.floor(endMinutes / 60);
-				startMinutes = startMinutes - startHour * 60;
-				endMinutes = endMinutes - endHour * 60;
-				startHour = startHour + this.startHour;
-				endHour = endHour + this.startHour;
-				var start = new Date(this.startDate.getTime());
-				this.startDate = null;
-				this.endDate = null;
-
-				//Начало
-				Dom.get(this.startDateField.id + "-date").value = this.formatDate(start);
-				Dom.get(this.startDateField.id + "-time").value = ('0' + startHour).slice(-2) + ":" + ('0' + startMinutes).slice(-2);
-				Bubbling.fire("handleFieldChange", {
-					fieldId: this.startDateField.configName,
-					formId: this.startDateField.formId
-				});
-
-				//Окончание
-				start.setHours(this.startHour)
-				start.setMinutes(0);
-				start.setSeconds(0);
-				var endDate = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
-				Dom.get(this.endDateField.id + "-date").value = this.formatDate(endDate);
-				Dom.get(this.endDateField.id + "-time").value = ('0' + endHour).slice(-2) + ":" + ('0' + endMinutes).slice(-2);
-				Bubbling.fire("handleFieldChange", {
-					fieldId: this.endDateField.configName,
-					formId: this.endDateField.formId
-				});
-			}
-			var head = this.selector.firstChild;
-			Dom.removeClass(head, "member-control-diagram-selector-grabbing");
-			Dom.addClass(head, "member-control-diagram-selector-grab");
-			this.dragEnabled = false;
-		},
-
-		/**
-		 * Метод для отмены выделения текста при перетаскивания рамки в диаграмме (не работает)
-		 * @param ev
-		 * @returns {boolean}
-		 */
-		selectStart: function(ev) {
-			return !this.dragEnabled;
-		},
-
-		/**
-		 * Действия при перемещении рамки
-		 * @param ev
-		 */
-		moveSelector: function moveSelector_function(ev) {
-			if (this.dragEnabled) {
-				var cellBounds = this._calculateCell();
-				var diagramBounds = Dom.getRegion(this.options.controlId + "-diagram");
-				var x = ev.clientX;
-				var newX = x - this.dragDelta - this.firstColumnWidth - diagramBounds.x;
-				var startIndex = Math.floor((newX + Math.floor(newX / cellBounds.width)) / cellBounds.cellWidth);
-				if (startIndex != this.prevStartIndex) {
-					var endIndex = startIndex + (this.prevEndIndex - this.prevStartIndex);
-					if (startIndex > 0 && startIndex <= this.maxIndex) {
-						this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
-						this._drawSelectorBorder(startIndex, endIndex);
-						var left = Dom.getRegion(this.options.controlId + "-diagram_0_"+ startIndex).left;
-						this.selector.style.left = (left - diagramBounds.left - 1) + "px";
-
-						this.prevStartIndex = startIndex;
-						this.prevEndIndex = endIndex;
-					}
-				}
+			if (this.dateDiffInDays(this.selectedDate, this.startDate) == 0) {
+				this._drawSelectorBorder(startIndex, endIndex);
+				this.prevStartIndex = startIndex;
+				this.prevEndIndex = endIndex;
+				this.period = endIndex - startIndex;
+			} else {
+				this.prevStartIndex = null;
+				this.prevEndIndex = null;
 			}
 		},
 
@@ -732,12 +667,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		fillBusyTime: function fillBusyTime_function() {
 			this.busyInterval = [];
-			var startDayDate = new Date(this.startDate.getTime());
+			var startDayDate = new Date(this.selectedDate.getTime());
 			startDayDate.setHours(this.startHour);
 			startDayDate.setMinutes(0);
 			startDayDate.setSeconds(0);
 
-			var endDayDate = new Date(this.startDate.getTime());;
+			var endDayDate = new Date(this.selectedDate.getTime());;
 			endDayDate.setHours(this.endHour);
 			endDayDate.setMinutes(0);
 			endDayDate.setSeconds(0);
@@ -789,10 +724,21 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		drawCurrentState: function drawCurrentState_function() {
 			//Не отображаем если это не дата начала
-			if (this.startDate.getYear() != this.initialStartDate.getYear() ||
-				this.startDate.getMonth() != this.initialStartDate.getMonth() ||
-				this.startDate.getDay() != this.initialStartDate.getDay() ||
+			if (this.selectedDate.getYear() != this.initialStartDate.getYear() ||
+				this.selectedDate.getMonth() != this.initialStartDate.getMonth() ||
+				this.selectedDate.getDay() != this.initialStartDate.getDay() ||
 				!this.isNodeRef(this.options.currentValue)) {
+
+				var diagram = Dom.get(this.options.controlId + "-diagram");
+				for (var key in this.selectedItems) {
+					var item = this.selectedItems[key];
+					var rowIndex = this.keyIndex[item.nodeRef];
+					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
+					var prevIcon = Dom.get(id);
+					if (prevIcon) {
+						diagram.removeChild(prevIcon)
+					}
+				}
 				return;
 			}
 			var startDayDate = new Date(this.initialStartDate.getTime());
@@ -824,6 +770,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				endIndex = days * this.maxIndex + (endHour - this.startHour) * cellSettings.cellByHour + Math.round(endMinutes / this.timeStep);
 			}
 
+			startIndex = startIndex > 0 ? startIndex : 1;
 			var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
 			var diagram = Dom.get(this.options.controlId + "-diagram");
 			var diagramBounds = Dom.getRegion(diagram);
@@ -840,21 +787,32 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				if (prevIcon) {
 					diagram.removeChild(prevIcon)
 				}
-				var item = this.getMemberStatusHTML(item);
-				var icon = document.createElement("div");
-				icon.id = id;
-				icon.innerHTML = item;
-				icon.className = "member-control-diagram-member-status";
+				if (startIndex < fillIndex) {
+					var iconItem = this.getMemberStatusHTML(item);
+					var icon = document.createElement("div");
+					icon.id = id;
+					icon.innerHTML = iconItem;
+					icon.className = "member-control-diagram-member-status";
 
-				var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
-				var firstCellRegion = Dom.getRegion(firstCell);
-				var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
-				var lastCellRegion = Dom.getRegion(lastCell);
-				var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+					if (item.memberStatus == "REQUEST_NEW_TIME") {
+						icon.style.cursor = "pointer";
+						var me = this;
+						var requestDate = new Date(item.memberFromDate);
+						icon.addEventListener("click", function() {
+							me.selectByDate(requestDate);
+						});
+					}
 
-				icon.style.left = (left - diagramBounds.left) + "px";
-				icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
-				diagram.appendChild(icon);
+					var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
+					var firstCellRegion = Dom.getRegion(firstCell);
+					var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
+					var lastCellRegion = Dom.getRegion(lastCell);
+					var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+
+					icon.style.left = (left - diagramBounds.left) + "px";
+					icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
+					diagram.appendChild(icon);
+				}
 			}
 		},
 
@@ -874,8 +832,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
 
 			var cellIndex = el.cellIndex;
-			var delta = this.prevEndIndex - this.prevStartIndex;
-			var lastCellIndex = cellIndex + delta;
+			var lastCellIndex = cellIndex + this.period;
 			lastCellIndex = lastCellIndex > this.maxIndex ? this.maxIndex : lastCellIndex;
 			for (var i = cellIndex; i <= lastCellIndex; i++) {
 				Dom.addClass(this.options.controlId + "-diagram-select-layer_0_" + i, "member-control-diagram-selection");
@@ -884,14 +841,32 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.prevSelectionEndIndex = lastCellIndex;
 		},
 
-		selectTime: function selectTime_function(ev) {
+		selectHeaderTime: function selectHeaderTime_function(ev) {
 			var el = ev.target;
 			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
 
 			var cellIndex = el.cellIndex;
-			var delta = this.prevEndIndex - this.prevStartIndex;
-			var lastCellIndex = cellIndex + delta;
-			this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+			this.selectTime(cellIndex);
+		},
+
+		selectByDate: function selectRequestTime_function(requestDate) {
+			this.selectedDate = requestDate;
+
+			var startHour = this.selectedDate.getHours();
+			var startMinutes = this.selectedDate.getMinutes();
+			var cellBounds = this._calculateCell();
+			var startIndex = (startHour - this.startHour) * cellBounds.cellByHour + Math.round(startMinutes / this.timeStep) + 1;
+			this.selectTime(startIndex);
+			this.busytime = [];
+			this.draw();
+			this.requestMembersTime();
+		},
+
+		selectTime: function selectTime_function (cellIndex) {
+			var lastCellIndex = cellIndex + this.period;
+			if (this.prevStartIndex && this.prevEndIndex) {
+				this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+			}
 			this._drawSelectorBorder(cellIndex, lastCellIndex);
 			this.prevStartIndex = cellIndex;
 			this.prevEndIndex = lastCellIndex;
@@ -912,7 +887,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			endMinutes = endMinutes - endHour * 60;
 			startHour = startHour + this.startHour;
 			endHour = endHour + this.startHour;
-			var start = new Date(this.startDate.getTime());
+			var start = new Date(this.selectedDate.getTime());
 			this.startDate = null;
 			this.endDate = null;
 
@@ -1096,7 +1071,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						column.appendChild(cell);
 						cell.addEventListener("mouseover", this.drawSelectionHeader.bind(this));
 						cell.addEventListener("mouseout", this.clearSelectionHeader.bind(this));
-						cell.addEventListener("click", this.selectTime.bind(this));
+						cell.addEventListener("click", this.selectHeaderTime.bind(this));
 					}
 				}
 			}
@@ -1113,6 +1088,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			width = Math.floor((width - bordersWidth) / (this.endHour - this.startHour + 1));
 			var cellByHour = Math.round(60 / this.timeStep);
 			var cellWidth = Math.floor(width / cellByHour);
+			width = cellWidth * cellByHour;
 			return {
 				width: width,
 				cellByHour: cellByHour,
