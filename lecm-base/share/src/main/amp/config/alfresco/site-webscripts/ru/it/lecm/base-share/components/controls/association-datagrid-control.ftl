@@ -97,16 +97,21 @@
     </#if>
 </#if>
 
+<#assign jsObjectName = "LogicECM.module.Base.AssociationDataGrid"/>
+<#if field.control.params.jsObjectName??>
+    <#assign jsObjectName = field.control.params.jsObjectName/>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function () {
     var Dom = YAHOO.util.Dom;
 
-    function createToolabar(nodeRef) {
+    function createToolbar(nodeRef) {
         new LogicECM.module.Base.Toolbar(null, "${fieldHtmlId}").setMessages(${messages}).setOptions({
             bubblingLabel: "${bubblingId}",
             itemType: "${field.control.params.itemType!""}",
             destination: nodeRef,
-        newRowButtonType:<#if field.disabled == true>"inActive"<#else>"defaultActive"</#if>
+            newRowButtonType:<#if field.disabled == true>"inActive"<#else>"defaultActive"</#if>
         });
     }
 
@@ -116,8 +121,8 @@
             return this;
         };
 
-        YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.AssociationDataGrid, {
-        ${field.control.params.actionsHandler!""}
+        YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, ${jsObjectName}, {
+            ${field.control.params.actionsHandler!""}
         });
 
         var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
@@ -243,9 +248,9 @@
     function loadRootNode() {
         var sUrl = "";
     <#if field.control.params.startLocation?? || field.control.params.rootNode??>
-                sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") +
-                    <#if field.control.params.startLocation??>"&xpath=" + encodeURIComponent("${field.control.params.startLocation}")<#else>""</#if> +
-            <#if field.control.params.rootNode??>"&rootNode=" + encodeURIComponent(getRootUrlParams("${field.control.params.rootNode}"))<#else>""</#if>;
+        sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") +
+        <#if field.control.params.startLocation??>"&xpath=" + encodeURIComponent("${field.control.params.startLocation}")<#else>""</#if> +
+        <#if field.control.params.rootNode??>"&rootNode=" + encodeURIComponent(getRootUrlParams("${field.control.params.rootNode}"))<#else>""</#if>;
     <#elseif (field.control.params.startLocationScriptUrl?? && (form.mode != "create"))>
         var nodeRef = "${form.arguments.itemId}";
         sUrl = Alfresco.constants.PROXY_URI + "${field.control.params.startLocationScriptUrl}?nodeRef=" + nodeRef;
@@ -258,7 +263,7 @@
                             fn: function (response) {
                                 var oResults = response.json;
                                 if (oResults != null) {
-                                    createToolabar(response.json.nodeRef);
+                                    createToolbar(response.json.nodeRef);
                                     createDataGrid(response.json.nodeRef);
                                 }
                             },
@@ -282,9 +287,19 @@
             'modules/simple-dialog.js',
             'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-association-datagrid-control.js'
+            <#if field.control.params.jsDependencies??>
+                <#list field.control.params.jsDependencies?split(",") as js>
+                    ,'${js}'
+                </#list>
+            </#if>
         ],
         [
             'css/lecm-base/components/association-datagrid-control.css'
+            <#if field.control.params.cssDependencies??>
+                <#list field.control.params.cssDependencies?split(",") as css>
+                    ,'${css}'
+                </#list>
+            </#if>
         ],loadRootNode);
     }
 

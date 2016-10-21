@@ -176,7 +176,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                     }
                 }
 
-				query = addAdditionalFilter(query, argsAdditionalFilter);
+				query = addAdditionalFilter(query, "" + searchQueryProcessor.processQuery(argsAdditionalFilter));
 				if (filter != null) {
 					query = addAdditionalFilter(query, filter);
 				}
