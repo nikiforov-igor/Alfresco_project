@@ -814,21 +814,21 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 	@Override
 	public String getAdditionalFilterForCalendarShow() {
 		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		if (currentEmployee != null && !orgstructureBean.isEmployeeHasBusinessRole(currentEmployee, EVENTS_ENGINEER_ROLE)
 				&& this.propsForFilterShowIncalendar != null && this.propsForFilterShowIncalendar.size() > 0) {
-			result += " AND (";
+			result.append(" AND (");
 			int i = 0;
 			for (String prop : this.propsForFilterShowIncalendar) {
 				if (i > 0) {
-					result += " OR ";
+					result.append(" OR ");
 				}
-				result += "@" + prop.replaceAll("-", "\\\\-").replaceAll(":", "\\\\:") + ": \"*" + currentEmployee + "*\"";
+				result.append("@").append(prop.replaceAll("-", "\\\\-").replaceAll(":", "\\\\:")).append(": \"*").append(currentEmployee).append("*\"");
 				i++;
 			}
-			result += ")";
+			result.append(")");
 		}
-		return result;
+		return result.toString();
 
 	}
 

@@ -666,6 +666,7 @@
 
     <bean id="employeeExpression" class="ru.it.lecm.documents.expression.ExpressionEmployee">
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="delegationService" ref="delegationService"/>
     </bean>
 
 	<bean id="documentsOnCreateAssocsPolicy" class="ru.it.lecm.documents.policy.DocumentsOnCreateAssocsPolicy"

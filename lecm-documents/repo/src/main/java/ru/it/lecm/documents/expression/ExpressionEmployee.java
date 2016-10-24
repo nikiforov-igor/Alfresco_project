@@ -1,9 +1,13 @@
 package ru.it.lecm.documents.expression;
 
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+
+import java.util.List;
 
 /**
  * User: pmelnikov
@@ -16,6 +20,7 @@ public class ExpressionEmployee {
     private OrgstructureBean orgstructureBean;
     private static LecmPermissionService lecmPermissionService;
     private NodeRef employee;
+    private static IDelegation delegationService;
 
 	public ExpressionEmployee() {
 	}
@@ -30,6 +35,9 @@ public class ExpressionEmployee {
 		ExpressionEmployee.lecmPermissionService = lecmPermissionService;
 	}
 
+    public void setDelegationService(IDelegation delegationService) {
+        ExpressionEmployee.delegationService = delegationService;
+    }
 	/**
      * Проверяет наличие руководящей позиции у сотрудника
      * @return
@@ -69,4 +77,24 @@ public class ExpressionEmployee {
 	public boolean hasDynamicBusinessRole(NodeRef document, String roleName) {
 		return lecmPermissionService.hasEmployeeDynamicRole(document, orgstructureBean.getEmployeeLogin(employee), roleName);
 	}
+
+    /**
+     * Проверяет является ли текущий сотрудник полным делегатом у заданного сотрудника
+     * @param delegationOwner сотрудник, который мог делегировать полномочия
+     * @return true - если есть активное делегирование, где текущий сотрудник является полным делегатом
+     */
+    public boolean hasActiveDelegation(NodeRef delegationOwner) {
+        if (delegationOwner != null) {
+            NodeRef delegationOpts = delegationService.getDelegationOpts(delegationOwner);
+            boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
+            if (isDelegationActive) {
+                List<AssociationRef> trusteeAssoc = serviceRegistry.getNodeService().getTargetAssocs(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE);
+                if (!trusteeAssoc.isEmpty()) {
+                    NodeRef effectiveEmployee = trusteeAssoc.get(0).getTargetRef();
+                    return effectiveEmployee.equals(this.employee);
+                }
+            }
+        }
+        return false;
+    }
 }
