@@ -34,10 +34,11 @@ public class BaseQueryArmFilter implements ArmDocumentsFilter {
             if (args.size() == 1) {
                 resultedQuery = baseQuery.replaceAll(VALUE, args.get(0));
             } else {
+                StringBuilder stringBuilder = new StringBuilder(resultedQuery);
                 for (String filterValue : args) {
-                    resultedQuery += baseQuery.replaceAll(VALUE, filterValue) + " OR ";
+                    stringBuilder.append(baseQuery.replaceAll(VALUE, filterValue)).append(" OR ");
                 }
-                resultedQuery = resultedQuery.substring(0, resultedQuery.length() - 4);
+                resultedQuery = stringBuilder.substring(0, stringBuilder.length() - 4);
             }
         }
         return resultedQuery;

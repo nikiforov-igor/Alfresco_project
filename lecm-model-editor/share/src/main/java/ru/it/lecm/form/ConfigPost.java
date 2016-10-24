@@ -1,22 +1,17 @@
 package ru.it.lecm.form;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.springframework.extensions.config.ConfigService;
-import org.springframework.extensions.surf.util.Content;
-import org.springframework.extensions.webscripts.DeclarativeWebScript;
-import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.WebScriptException;
-import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.extensions.config.ConfigService;
+import org.springframework.extensions.surf.util.Content;
+import org.springframework.extensions.webscripts.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConfigPost extends DeclarativeWebScript {
 	
@@ -46,77 +41,58 @@ public class ConfigPost extends DeclarativeWebScript {
             String name = json.getJSONObject("model").getJSONObject("types").getJSONObject("type").getString("_name");
             JSONArray prop = json.getJSONObject("model").getJSONObject("types").getJSONObject("type").getJSONObject("properties").getJSONArray("property");
             JSONArray assoc = json.getJSONObject("model").getJSONObject("types").getJSONObject("type").getJSONObject("associations").getJSONArray("association");
-            String s = "" +
+            StringBuilder s = new StringBuilder("" +
     				"<alfresco-config>" +
     				"	<config evaluator=\"node-type\" condition=\""+name+"\" replace=\"true\">" +
     				"		<forms>" +
     				"			<form>" +
-    				"				<field-visibility>";
+    				"				<field-visibility>");
             	for(int i=0 ; i<prop.length(); i++){
-    				s+="					<show id=\""+prop.getJSONObject(i).getString("_name")+"\"/>";
+    				s.append("					<show id=\"").append(prop.getJSONObject(i).getString("_name")).append("\"/>");
             	}
             	for(int i=0 ; i<assoc.length(); i++){
-    				s+="					<show id=\""+assoc.getJSONObject(i).getString("_name")+"\"/>";
+    				s.append("					<show id=\"").append(assoc.getJSONObject(i).getString("_name")).append("\"/>");
             	}
-    			s+= "				</field-visibility>" +
-    				"				<appearance>" +
-    				"					<set id=\"contract-info\" appearance=\"\"/>";
+    			s.append("				</field-visibility>" + "				<appearance>" + "					<set id=\"contract-info\" appearance=\"\"/>");
                 for(int i=0 ; i<prop.length(); i++){
-    				s+="					<field id=\""+prop.getJSONObject(i).getString("_name")+"\" set=\"contract-info\"/>";
+    				s.append("					<field id=\"").append(prop.getJSONObject(i).getString("_name")).append("\" set=\"contract-info\"/>");
                 }
                 for(int i=0 ; i<assoc.length(); i++){
-    				s+="					<field id=\""+assoc.getJSONObject(i).getString("_name")+"\" set=\"contract-info\"/>";
+    				s.append("					<field id=\"").append(assoc.getJSONObject(i).getString("_name")).append("\" set=\"contract-info\"/>");
                 }
-    			s+= "				</appearance>" +
-    				"			</form>" +
-    				"		</forms>" +
-    				"	</config>" +
-    				"	<config evaluator=\"model-type\" condition=\""+name+"\" replace=\"true\">" +
-    				"		<forms>" +
-    				"			<form>" +
-    				"				<field-visibility>";
+    			s.append("				</appearance>" + "			</form>" + "		</forms>" + "	</config>" + "	<config evaluator=\"model-type\" condition=\"").append(name).append("\" replace=\"true\">").append("		<forms>").append("			<form>").append("				<field-visibility>");
             	for(int i=0 ; i<prop.length(); i++){
-    				s+="					<show id=\""+prop.getJSONObject(i).getString("_name")+"\"/>";
+    				s.append("					<show id=\"").append(prop.getJSONObject(i).getString("_name")).append("\"/>");
             	}
             	for(int i=0 ; i<assoc.length(); i++){
-    				s+="					<show id=\""+assoc.getJSONObject(i).getString("_name")+"\"/>";
+    				s.append("					<show id=\"").append(assoc.getJSONObject(i).getString("_name")).append("\"/>");
             	}
-    			s+= "				</field-visibility>" +
-    				"				<appearance>" +
-    				"					<set id=\"contract-info\" appearance=\"\"/>";
+    			s.append("				</field-visibility>" + "				<appearance>" + "					<set id=\"contract-info\" appearance=\"\"/>");
                 for(int i=0 ; i<prop.length(); i++){
-                    	s+="					<field id=\""+prop.getJSONObject(i).getString("_name")+"\" set=\"contract-info\"/>";
+                    	s.append("					<field id=\"").append(prop.getJSONObject(i).getString("_name")).append("\" set=\"contract-info\"/>");
                 }
                 for(int i=0 ; i<assoc.length(); i++){
-    				s+="					<field id=\""+assoc.getJSONObject(i).getString("_name")+"\" set=\"contract-info\"/>";
+    				s.append("					<field id=\"").append(assoc.getJSONObject(i).getString("_name")).append("\" set=\"contract-info\"/>");
                 }
-    			s+= "				</appearance>" +
-    				"			</form>" +
-    				"			<form id=\"datagrid\">" +
-    				"				<field-visibility>";
+    			s.append("				</appearance>" + "			</form>" + "			<form id=\"datagrid\">" + "				<field-visibility>");
             	for(int i=0 ; i<prop.length(); i++){
-    				s+="					<show id=\""+prop.getJSONObject(i).getString("_name")+"\"/>";
+    				s.append("					<show id=\"").append(prop.getJSONObject(i).getString("_name")).append("\"/>");
             	}
             	for(int i=0 ; i<assoc.length(); i++){
-    				s+="					<show id=\""+assoc.getJSONObject(i).getString("_name")+"\"/>";
+    				s.append("					<show id=\"").append(assoc.getJSONObject(i).getString("_name")).append("\"/>");
             	}
-    			s+= "				</field-visibility>" +
-    				"				<appearance>";
+    			s.append("				</field-visibility>" + "				<appearance>");
                 for(int i=0 ; i<prop.length(); i++){
-                    	s+="					<field id=\""+prop.getJSONObject(i).getString("_name")+"\" set=\"contract-info\"/>";
+                    	s.append("					<field id=\"").append(prop.getJSONObject(i).getString("_name")).append("\" set=\"contract-info\"/>");
                 }
                 for(int i=0 ; i<assoc.length(); i++){
-    				s+="					<field id=\""+assoc.getJSONObject(i).getString("_name")+"\" set=\"contract-info\"/>";
+    				s.append("					<field id=\"").append(assoc.getJSONObject(i).getString("_name")).append("\" set=\"contract-info\"/>");
                 }
-    			s+=	"				</appearance>" +
-    				"			</form>" +
-    				"		</forms>" +
-    				"	</config>" +
-    				"</alfresco-config>";
+    			s.append("				</appearance>" + "			</form>" + "		</forms>" + "	</config>" + "</alfresco-config>");
     		
     		
     		
-    		StringConfigSource cs = new StringConfigSource(s);
+    		StringConfigSource cs = new StringConfigSource(s.toString());
     		
     		this.configService.appendConfig(cs);
     		

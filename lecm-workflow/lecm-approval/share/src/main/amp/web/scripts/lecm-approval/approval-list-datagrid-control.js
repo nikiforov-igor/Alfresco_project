@@ -169,6 +169,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 		this.name = 'LogicECM.module.Approval.ApprovalListDataGridControl';
 
+		YAHOO.Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
+
 		return this;
 	};
 
@@ -830,6 +832,24 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.onDelete(p_items, owner, actionsConfig, function () {
 				this.getApprovalData(this.fillCurrentApprovalState);
 			}, null);
+		},
+		onDataItemsDeleted: function DataGrid_onDataItemsDeleted(layer, args) {
+			var obj = args[1], recordFound, el;
+
+			if (obj && this._hasEventInterest(obj.bubblingLabel) && obj.items) {
+				for (var i = 0, ii = obj.items.length; i < ii; i++) {
+					recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
+					if (recordFound) {
+						el = this.widgets.dataTable.getTrEl(recordFound);
+						Alfresco.util.Anim.fadeOut(el, {
+							callback: function () {
+								this.widgets.dataTable.deleteRow(recordFound);
+							},
+							scope: this
+						});
+					}
+				}
+			}
 		},
 
 		refreshSourceRoute: function () {

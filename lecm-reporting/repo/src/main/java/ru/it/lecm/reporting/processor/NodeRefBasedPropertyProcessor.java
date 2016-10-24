@@ -119,27 +119,27 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                 PreparedStatement stmt = null;
                 java.sql.Connection conn = null;
                 try {
-                    String typesQuery = "SELECT " +
+                    StringBuilder typesQuery = new StringBuilder("SELECT " +
                             "  alf_qname.id " +
                             "FROM " +
                             "  alf_qname, " +
                             "  alf_namespace " +
                             "WHERE " +
-                            "  alf_qname.ns_id = alf_namespace.id AND (";
+                            "  alf_qname.ns_id = alf_namespace.id AND (");
 
                     boolean first = true;
                     for (QName t : types) {
                         if (!first) {
-                            typesQuery += " OR ";
+                            typesQuery.append(" OR ");
                         }
-                        typesQuery += "(alf_namespace.uri = '" + t.getNamespaceURI() + "' AND alf_qname.local_name = '" + t.getLocalName() + "')";
+                        typesQuery.append("(alf_namespace.uri = '").append(t.getNamespaceURI()).append("' AND alf_qname.local_name = '").append(t.getLocalName()).append("')");
                         first = false;
                     }
 
-                    typesQuery += ");";
+                    typesQuery.append(");");
 
                     conn = getReportingHelper().getAlfrescoDataSource().getConnection();
-                    stmt = conn.prepareStatement(typesQuery);
+                    stmt = conn.prepareStatement(typesQuery.toString());
                     res = stmt.executeQuery();
                     List<Long> lTypes = new ArrayList<>();
                     while (res.next()) {
@@ -1205,17 +1205,17 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                     Integer.parseInt(this.getGlobalProperties().getProperty("reporting.harvest.treshold.child.assocs", "20")));
             long shortName = childAssocs.size();
             if (shortName > 0L && shortName <= min) {
-                String maxChildCount = "";
+                StringBuilder maxChildCount = new StringBuilder();
 
                 ChildAssociationRef numberOfChildCars;
-                for (Iterator iterator = childAssocs.iterator(); iterator.hasNext(); maxChildCount = maxChildCount + numberOfChildCars.getChildRef()) {
+                for (Iterator iterator = childAssocs.iterator(); iterator.hasNext(); maxChildCount.append(numberOfChildCars.getChildRef())) {
                     numberOfChildCars = (ChildAssociationRef) iterator.next();
                     if (maxChildCount.length() > 0) {
-                        maxChildCount = maxChildCount + ",";
+                        maxChildCount.append(",");
                     }
                 }
 
-                rl.setLine(Constants.COLUMN_CHILD_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), maxChildCount, this.getReplacementDataType());
+                rl.setLine(Constants.COLUMN_CHILD_NODEREF, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), maxChildCount.toString(), this.getReplacementDataType());
             } else if (shortName > 0L) { // достигли лимита - сообщение
                 logger.warn("Max limit reached for node:" + nodeRef + " ," +
                         "reporting.harvest.treshold.child.assocs = " + min + ", number assocs=" + shortName);
@@ -1247,7 +1247,7 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
 
         for (QName type : targetsByQName.keySet()) {
             String key;
-            String value;
+            StringBuilder value;
             long maxChildCount1;
             long numberOfChildCars1;
             try {
@@ -1260,14 +1260,14 @@ public class NodeRefBasedPropertyProcessor extends PropertyProcessor {
                         key = key.substring(0, 60);
                     }
                     if (!this.getBlacklist().toLowerCase().contains("," + key.toLowerCase() + ",") && !key.equals("-") && e.size() > 0) {
-                        value = "";
+                        value = new StringBuilder();
                         for (NodeRef node : e) {
-                            value += node.toString() + ",";
+                            value.append(node.toString()).append(",");
                             AssocDefinition definition = new AssocDefinition(nodeRef.toString(), node.toString(), key);
                             this.getAssocs().add(definition);
                         }
-                        value = value.substring(0, value.length() - 1);
-                        rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), value, this.getReplacementDataType());
+                        String strValue = value.substring(0, value.length() - 1);
+                        rl.setLine(key, this.getClassToColumnType().getProperty(Constants.COLUMN_NODEREFS, "-"), strValue, this.getReplacementDataType());
                     }
                 } else if (numberOfChildCars1 > 0L) { //достигли лимита - сообщение
                     logger.warn("Max limit reached for node:" + nodeRef + " ,reporting.harvest.treshold.sourcetarget.assocs=" + maxChildCount1 + ", number assocs=" + numberOfChildCars1);

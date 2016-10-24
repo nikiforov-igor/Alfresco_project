@@ -784,10 +784,10 @@ function checkDocType(item, docType) {
 }
 
 function getFilterForAvailableElement(availableElements) {
-	var filter = "@sys\\:node\\-uuid:\"NOT_REF\"";
+	var filter = "=@sys\\:node-uuid:\"00000000\-0000\-0000\-0000\-000000000000\"";
 	if (availableElements != null && availableElements.length > 0) {
 		for (var i = 0; i < availableElements.length; i++) {
-			filter += " OR @sys\\:node\\-uuid:\"" + availableElements[i].nodeRef.getId() + "\"";
+			filter += " OR =@sys\\:node-uuid:\"" + availableElements[i].nodeRef.getId() + "\"";
 		}
 	}
 	return filter;

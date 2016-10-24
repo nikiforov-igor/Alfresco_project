@@ -21,11 +21,12 @@ public class ReportingStatus extends AbstractWebScript {
 
 
    private String postFix(String base, int size, String filler) {
-      while(base.length() < size) {
-         base = base + filler;
+       StringBuilder stringBuilder = new StringBuilder(base);
+      while(stringBuilder.length() < size) {
+          stringBuilder.append(filler);
       }
 
-      return base;
+      return stringBuilder.toString();
    }
 
    public void execute(WebScriptRequest arg0, WebScriptResponse pResponse) throws IOException {
