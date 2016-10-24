@@ -182,7 +182,7 @@ function checkForApplet() {
                 */
 				return false;
 			},
-			signAction: function (nodeRefList, options) {
+			signAction: function (nodeRefList, options, parentDialog) {
 
 				if (!YAHOO.lang.isArray(nodeRefList)) {
 					nodeRefList = [nodeRefList];
@@ -191,6 +191,7 @@ function checkForApplet() {
                 var signform = {};
 
 				this.loadCertsForm({
+					parentDialog: parentDialog,
 					title: Alfresco.util.message('lecm.signdoc.msg.signing'),
 					actionURL: ""/*Alfresco.constants.PROXY_URI + 'lecm/signed-docflow/signContent'*/,
 					doBeforeAjaxCallback: {
@@ -832,11 +833,20 @@ function checkForApplet() {
 
 				form = new Alfresco.module.SimpleDialog(params.htmlId);
 				form.setOptions({
+					parentDialog: params.parentDialog,
 					width: '20em',
 					templateUrl: url,
 					templateRequestParams: templateRequestParams,
 					actionUrl: params.actionURL,
 					destroyOnHide: true,
+					doAfterDialogHide: {
+						scope: this,
+						fn: function (p_form, p_dialog) {
+							if (p_dialog.options.parentDialog) {
+								p_dialog.options.parentDialog.hide();
+							}
+						}
+					},
 					doBeforeDialogShow: {
 						scope: this,
 						fn: function (p_form, p_dialog) {
@@ -897,8 +907,8 @@ function checkForApplet() {
 						obj: JSON.stringify(response.json)
 					};
 					var url = Alfresco.constants.URL_SERVICECONTEXT + 'components/form';
-					var form = new Alfresco.module.SimpleDialog(params.htmlId);
-					form.setOptions({
+					var dialog = new Alfresco.module.SimpleDialog(params.htmlId);
+					dialog.setOptions({
 						width: '30em',
 						templateUrl: url,
 						templateRequestParams: templateRequestParams,
@@ -908,6 +918,7 @@ function checkForApplet() {
 							scope: this,
 							fn: function (p_form, p_dialog) {
 								p_dialog.dialog.setHeader(params.title);
+								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 							}},
 						doBeforeAjaxRequest: {
 							scope: this,
@@ -928,7 +939,7 @@ function checkForApplet() {
 								}
 
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
-									cb.fn.apply(cb.scope, [nodeRefList, cb.obj]);
+									cb.fn.apply(cb.scope, [nodeRefList, cb.obj, dialog]);
 								}
 
 								if (!params.actionURL) {
