@@ -43,8 +43,6 @@ import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -425,38 +423,38 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         String query = "";
         if (docTypes != null && !docTypes.isEmpty()) {
             boolean addOR = false;
-            String typesFilter = "";
+            StringBuilder typesFilter = new StringBuilder();
             for (QName type : docTypes) {
-                typesFilter += (addOR ? " OR " : "") + " TYPE:\"" + type + "\"";
+                typesFilter.append(addOR ? " OR " : "").append(" TYPE:\"").append(type).append("\"");
                 addOR = true;
             }
-            query += "(" + typesFilter + ")";
+            query += "(" + typesFilter.toString() + ")";
         }
 
         // пути
         if (paths != null && !paths.isEmpty()) {
             boolean addOR = false;
-            String pathsFilter = "";
+            StringBuilder pathsFilter = new StringBuilder();
             for (String path : paths) {
-                pathsFilter += (addOR ? " OR " : "") + "PATH:\"" + path + "//*\"";
+                pathsFilter.append(addOR ? " OR " : "").append("PATH:\"").append(path).append("//*\"");
                 addOR = true;
             }
-            query += (query.length() > 0 ? " AND (" : "(") + pathsFilter + ")";
+            query += (query.length() > 0 ? " AND (" : "(") + pathsFilter.toString() + ")";
         }
 
         // фильтр по статусам
         if (statuses != null && !statuses.isEmpty()) {
-            String statusesFilter = "";
-            String statusesNotFilter = "";
+            StringBuilder statusesFilter = new StringBuilder();
+            StringBuilder statusesNotFilter = new StringBuilder();
             for (String status : statuses) {
                 if (!status.trim().startsWith("!")) {
-                    statusesFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
+                    statusesFilter.append(" @lecm\\-statemachine\\:status:\"").append(status.replace("!", "").trim()).append("\"");
                 } else {
-                    statusesNotFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
+                    statusesNotFilter.append(" @lecm\\-statemachine\\:status:\"").append(status.replace("!", "").trim()).append("\"");
                 }
             }
-            query += (!statusesFilter.isEmpty() ? (query.length() > 0 ? " AND (" : "(") + ("" + statusesFilter + ")") : "")
-                    + (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter + ")") : "");
+            query += (statusesFilter.length() > 0 ? (query.length() > 0 ? " AND (" : "(") + ("" + statusesFilter.toString() + ")") : "")
+                    + (statusesNotFilter.length() > 0 ? (" AND NOT (" + statusesNotFilter.toString() + ")") : "");
         }
 
         query += (query.length() > 0 ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}");

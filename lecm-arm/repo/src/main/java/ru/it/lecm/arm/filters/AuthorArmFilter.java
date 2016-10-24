@@ -10,7 +10,9 @@ import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -45,7 +47,7 @@ public class AuthorArmFilter implements ArmDocumentsFilter {
 
     @Override
     public String getQuery(String authorProperties, List<String> args) {
-        String resultedQuery = "";
+        StringBuilder resultedQuery = new StringBuilder();
         if (args != null && !args.isEmpty()) {
             logger.debug("Filter args: " + StringUtils.collectionToCommaDelimitedString(args));
 	        logger.debug("Filter params: " + authorProperties);
@@ -53,7 +55,7 @@ public class AuthorArmFilter implements ArmDocumentsFilter {
             String filterValue = args.get(0);
 
             if (filterValue == null) {
-                return resultedQuery;
+                return resultedQuery.toString();
             }
 
             List<NodeRef> employees = new ArrayList<NodeRef>();
@@ -71,7 +73,7 @@ public class AuthorArmFilter implements ArmDocumentsFilter {
                             List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
                             employees.addAll(departmentEmployees);
                             if (employees.isEmpty()) {
-                                resultedQuery += "ID:\"NOT_ID\"";
+                                resultedQuery.append("ID:\"NOT_ID\"");
                             }
                             break;
                         }
@@ -83,7 +85,7 @@ public class AuthorArmFilter implements ArmDocumentsFilter {
                                 String[] docsRefs = favouriteDocs.split(",");
                                 boolean addOR = false;
                                 for (String docsRef : docsRefs) {
-                                    resultedQuery += (addOR ? " OR " : "") + "ID:" + docsRef.replace(":", "\\:");
+                                    resultedQuery.append(addOR ? " OR " : "").append("ID:").append(docsRef.replace(":", "\\:"));
                                     addOR = true;
                                 }
                             }
@@ -101,7 +103,7 @@ public class AuthorArmFilter implements ArmDocumentsFilter {
 	                    for (String field : authorProperties.split(",")) {
 		                    String authorProp = field.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
 	                        for (NodeRef employeeRef : employees) {
-	                            resultedQuery += (addOR ? " OR " : "") + "@" + authorProp + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+	                            resultedQuery.append(addOR ? " OR " : "").append("@").append(authorProp).append(":\"").append(employeeRef.toString().replace(":", "\\:")).append("\"");
 	                            addOR = true;
 	                        }
 	                    }
@@ -111,6 +113,6 @@ public class AuthorArmFilter implements ArmDocumentsFilter {
                 logger.warn("Incorrect filter! Filter args:" + StringUtils.collectionToCommaDelimitedString(args));
             }
         }
-        return resultedQuery;
+        return resultedQuery.toString();
     }
 }
