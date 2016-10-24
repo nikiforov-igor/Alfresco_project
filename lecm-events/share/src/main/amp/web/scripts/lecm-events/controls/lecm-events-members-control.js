@@ -804,7 +804,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					}
 
 					var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
-					var firstCellRegion = Dom.getRegion(firstCell);
+					var firstCellRegion = Dom.getRegion
+					(firstCell);
 					var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
 					var lastCellRegion = Dom.getRegion(lastCell);
 					var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
@@ -817,6 +818,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 
+		/**
+		 * Очистка маркера выбора заголовка таблицы
+		 * @param ev
+		 */
 		clearSelectionHeader: function clearSelectionHeader_function(ev) {
 			var el = ev.target;
 			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
@@ -827,6 +832,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			}
 		},
 
+		/**
+		 * Отрисовка маркера выбора в заголовке таблицы
+		 * @param ev
+		 */
 		drawSelectionHeader: function drawSelectionHeader_function(ev) {
 			var el = ev.target;
 			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
@@ -841,6 +850,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.prevSelectionEndIndex = lastCellIndex;
 		},
 
+		/**
+		 * Выбор времени из заголовка таблицы
+		 * @param ev
+		 */
 		selectHeaderTime: function selectHeaderTime_function(ev) {
 			var el = ev.target;
 			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
@@ -849,6 +862,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.selectTime(cellIndex);
 		},
 
+		/**
+		 * Выбор времени в таблице по дате
+		 * @param requestDate
+		 */
 		selectByDate: function selectRequestTime_function(requestDate) {
 			this.selectedDate = requestDate;
 
@@ -862,6 +879,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.requestMembersTime();
 		},
 
+		/**
+		 * Выбор времени в таблице по индексу
+		 * @param cellIndex
+		 */
 		selectTime: function selectTime_function (cellIndex) {
 			var lastCellIndex = cellIndex + this.period;
 			if (this.prevStartIndex && this.prevEndIndex) {
@@ -1056,7 +1077,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var textColumn = document.createElement("div");
 					textColumn.style.width = (cellWidth * cellByHour) + "px";
 					textColumn.className = "member-control-diagram-header-text-cell";
-					textColumn.innerHTML = ('0' + hour).slice(-2) + ":00";
+					textColumn.innerHTML = hour;
 					column.appendChild(textColumn);
 					var left = 0;
 					for (var i = 1; i <= cellByHour; i++) {
@@ -1130,6 +1151,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			return Math.round((second-first) / (1000 * 60 * 60 * 24));
 		},
 
+		/**
+		 * Выборка правила из таблицы стилей
+		 * @param className_
+		 * @returns {CssRule}
+		 */
 		_getStyle: function getStyle_function(className_) {
 			var styleSheets = window.document.styleSheets;
 			var styleSheetsLength = styleSheets.length;
