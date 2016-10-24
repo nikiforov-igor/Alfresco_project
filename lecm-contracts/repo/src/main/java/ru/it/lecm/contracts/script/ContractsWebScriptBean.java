@@ -244,7 +244,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
                     }
                 }
 
-                String employeesQuery = "";
+                StringBuilder employeesQuery = new StringBuilder();
                 // фильтр по сотрудниками-создателям
                 if (initiatorsList != null) {
                     if (!initiatorsList.isEmpty()) {
@@ -257,13 +257,13 @@ public class ContractsWebScriptBean extends BaseWebScript {
                             String authorProperty = documentService.getAuthorProperty(type);
                             authorProperty = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
                             for (NodeRef employeeRef : initList.get(type)) {
-                                employeesQuery += (addOR ? " OR " : "") + "@" + authorProperty + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+                                employeesQuery.append(addOR ? " OR " : "").append("@").append(authorProperty).append(":\"").append(employeeRef.toString().replace(":", "\\:")).append("\"");
                                 addOR = true;
                             }
                         }
 
                         if (employeesQuery.length() > 0) {
-                            filterQuery += (filterQuery.length() > 0 ? " AND (" : "") + employeesQuery + (filterQuery.length() > 0 ? ")" : "");
+                            filterQuery += (filterQuery.length() > 0 ? " AND (" : "") + employeesQuery.toString() + (filterQuery.length() > 0 ? ")" : "");
                         }
                     }
                 } else {
@@ -306,16 +306,16 @@ public class ContractsWebScriptBean extends BaseWebScript {
     @SuppressWarnings("unused")
     public Scriptable getAdditionalDocsByType(Scriptable paths, String typeFilter, String queryFilterId, boolean activeDocs) {
         String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s") : new String[0];
-        String filter = "";
+        StringBuilder filter = new StringBuilder();
         for (String type : types) {
             if (filter.length() > 0) {
-                filter += " OR ";
+                filter.append(" OR ");
             }
-            filter += "@lecm\\-additional\\-document\\:additionalDocumentType\\-text\\-content:\"" + type + "\"";
+            filter.append("@lecm\\-additional\\-document\\:additionalDocumentType\\-text\\-content:\"").append(type).append("\"");
         }
 
         if (filter.length() > 0) {
-            filter = " (" + filter + ") ";
+            filter.insert(0, " (").append(") ");
         }
 
         if (queryFilterId != null && !queryFilterId.isEmpty()) {
@@ -334,7 +334,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
                 employeesFilter = docFilter.getQuery((Object[]) filterData.split("/"));
             }
             if (employeesFilter.length() > 0) {
-                filter += " AND (" + employeesFilter + ")";
+                filter.append(" AND (").append(employeesFilter).append(")");
             }
         }
         List<QName> docType = new ArrayList<QName>();
@@ -344,7 +344,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
         for (String finalStatus : contractsDocsFinalStatuses) {
             statuses.add((activeDocs ? "!" : "") + finalStatus);
         }
-        List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, getElements(Context.getCurrentContext().getElements(paths)), statuses, filter, null);
+        List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, getElements(Context.getCurrentContext().getElements(paths)), statuses, filter.toString(), null);
         return createScriptable(additionalDocuments);
     }
 

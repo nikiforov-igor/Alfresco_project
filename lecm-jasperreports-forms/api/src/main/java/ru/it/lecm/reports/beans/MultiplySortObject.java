@@ -79,13 +79,13 @@ public class MultiplySortObject implements Comparable {
 
     @Override
     public String toString() {
-        String result = super.toString() + ", Values: {";
+        StringBuilder result = new StringBuilder(super.toString() + ", Values: {");
         for (int i = 0; i < this.columnValues.size(); i++) {
             Comparable value1 = this.columnValues.get(i);
             boolean sortDir1 = this.sortDirs.get(i);
-            result += "{" + value1 + "," + sortDir1 + "}";
+            result.append("{").append(value1).append(",").append(sortDir1).append("}");
         }
-        result += "}";
-        return result;
+        result.append("}");
+        return result.toString();
     }
 }

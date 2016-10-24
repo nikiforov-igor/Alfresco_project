@@ -798,11 +798,11 @@ public class DiagnosticUtility {
     }
 
     private static String buildFilePath(String root, String[] parts) {
-        String resultPath = root;
+        StringBuilder resultPath = new StringBuilder(root);
         for (String part : parts) {
-            resultPath += File.separator + part;
+            resultPath.append(File.separator).append(part);
         }
-        return resultPath;
+        return resultPath.toString();
     }
 
     private static int sendRequestToURL(HttpClient client, String[] requestURL) {
