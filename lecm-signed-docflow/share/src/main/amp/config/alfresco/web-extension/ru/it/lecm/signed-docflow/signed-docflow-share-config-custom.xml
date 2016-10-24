@@ -110,7 +110,6 @@
 	<config>
 		<forms>
 			<dependencies>
-				<js src="/scripts/signed-docflow/CryptoAppletModule.js" />
 				<!-- JS для регистрации action'а "Разблокировать документ,
 				добавлен сюда, ибо иначе на странице вложения не цепляется-->
 				<js src="/scripts/signed-docflow/document-unlock.js" />
