@@ -37,7 +37,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 			if (!this.options.currentValue) {
 				// MNT-2214 fix, check for prevously entered value
-				this.options.currentValue = Dom.get(this.currentValueHtmlId).value;
+				this.options.currentValue = Alfresco.util.formatDate(Dom.get(this.currentValueHtmlId).value,"mm/dd/yyyy hh:mm:ss");
 			}
 			// calculate current date
 			if (this.options.currentValue) {
