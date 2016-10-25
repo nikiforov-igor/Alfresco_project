@@ -347,7 +347,7 @@
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
 		                var clicked = Event.getTarget(event) || Dom.get(me.id + "-date");
-		                var d = 10;                                                         // величина отступа
+		                var d = 5;                                                         // величина отступа
 
 		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
                             var body = Selector.query('body')[0];
@@ -512,6 +512,11 @@
                                         // NOTE: we don't need to check the time value in here as the _handlePickerChange
                                         //       function gets called as well as a result of rendering the picker above,
                                         //       that's also why we don't update the hidden field in here either.
+                                    }
+                                    if (me.options.changeFireAction != null) {
+                                        Bubbling.fire(me.options.changeFireAction, {
+                                            date: isoValue
+                                        });
                                     }
                                 }
                             }
