@@ -168,7 +168,7 @@ LogicECM.module.Workflow.routeHasEmployeesValidator =
 				},
 				error: function() {
 					Alfresco.util.PopupManager.displayMessage({
-						text: "ERROR: can not perform field validation"
+						text: this.msg('message.field.validation.failed')
 					});
 					valid = false;
 				}
@@ -196,7 +196,7 @@ LogicECM.module.Workflow.routeIsEmptyValidator =
 				},
 				error: function() {
 					Alfresco.util.PopupManager.displayMessage({
-						text: "ERROR: can not perform field validation"
+						text: this.msg('message.field.validation.failed')
 					});
 					valid = false;
 				}
