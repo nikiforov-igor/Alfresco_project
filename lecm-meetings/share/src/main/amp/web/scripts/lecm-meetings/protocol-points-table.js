@@ -367,8 +367,8 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                     },
                     scope: createDetails
                 }
-                    }).show();
-            }
+            }).show();
+        }
     }, true);
 
 })();
