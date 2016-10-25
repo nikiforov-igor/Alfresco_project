@@ -89,6 +89,8 @@ public interface RoutesService {
 	 */
 	boolean isRouteEmpty(final NodeRef route, final NodeRef docForExpression);
 
+	boolean hasPotentialEmployeesInRoute(final NodeRef routeRef, final NodeRef documentRef);
+
 	String getApprovalState(NodeRef documentNode);
 
 	List<NodeRef> getEmployeesByRoute(NodeRef route);
