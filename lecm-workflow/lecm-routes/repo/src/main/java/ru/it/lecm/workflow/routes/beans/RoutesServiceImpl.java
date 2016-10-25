@@ -634,103 +634,94 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	@Override
 	public boolean hasEmployeesInRoute(final NodeRef nodeRef) {
-		NodeRef currentIterationRef = null;
-		NodeRef documentForExpression = null;
-		if (nodeRef != null) {
-			QName type = nodeService.getType(nodeRef);
-			if (!RoutesModel.TYPE_ROUTE.equals(type)) { // document
-				currentIterationRef = getDocumentCurrentIteration(nodeRef);
-				documentForExpression = nodeRef;
-			} else { // route
-				currentIterationRef = nodeRef;
-				documentForExpression = getDocumentByIteration(currentIterationRef);
-			}
-		}
-		return hasEmployeesInRoute(currentIterationRef, documentForExpression);
+		return !isRouteEmpty(nodeRef, null, false, true);
 	}
 
 	@Override
 	public boolean hasEmployeesInRoute(NodeRef route, NodeRef docForExpression) {
-		boolean hasEmployeesInIteration = false;
-		if (route != null) {
-			List<NodeRef> stages = getAllStagesOfRoute(route);
+		return !isRouteEmpty(route, docForExpression, false, true);
+	}
+
+	@Override
+	public boolean isRouteEmpty(final NodeRef nodeRef) {
+		return isRouteEmpty(nodeRef, null, true, false);
+	}
+
+	@Override
+	public boolean isRouteEmpty(NodeRef route, NodeRef docForExpression) {
+		return isRouteEmpty(route, docForExpression, true, false);
+	}
+
+	private boolean isRouteEmpty(NodeRef nodeRef, NodeRef document, boolean checkExpressions, boolean checkEmployees) {
+		boolean isEmptyByEmployees = true;
+		boolean isEmptyByExpressions = false;/* По постановке - не пусто, если этапов нет*/
+
+		NodeRef currentIterationRef = null;
+		NodeRef documentForExpression = document;
+
+		// Получаем маршрут + документ
+		if (nodeRef != null) {
+			QName type = nodeService.getType(nodeRef);
+			if (!RoutesModel.TYPE_ROUTE.equals(type)) { // document
+				currentIterationRef = getDocumentCurrentIteration(nodeRef);
+				if (documentForExpression == null) {
+					documentForExpression = nodeRef;
+				}
+			} else { // route
+				currentIterationRef = nodeRef;
+				if (documentForExpression == null) {
+					documentForExpression = getDocumentByIteration(currentIterationRef);
+				}
+			}
+		}
+
+		if (currentIterationRef != null) {
+			final List<NodeRef> stages = getAllStagesOfRoute(currentIterationRef);
+
+			final int stagesCount = stages.size();
+			int skippedCount = 0;
 
 			for (NodeRef stage : stages) {
-				//TODO оставлю правильное решение - объединение проверок на условие этапа и наличие согласующих.
-				// Если расскоментировать - то вся логика сведется к проверке наличия согласующих, которым улетит документ
-				// лишними окажутся условиями в МС + дублирующий валидатор на форме выбора маршрута
-
-					/*Object stageExpression = nodeService.getProperty(stage, RoutesModel.PROP_STAGE_EXPRESSION);
-					if (stageExpression != null && !documentService.execExpression(docForExpression, stageExpression.toString())) {
+				if (checkExpressions && documentForExpression != null) {
+					Object stageExpression = nodeService.getProperty(stage, RoutesModel.PROP_STAGE_EXPRESSION);
+					if (stageExpression != null && !documentService.execExpression(documentForExpression, stageExpression.toString())) {
+						skippedCount++;
 						continue; //пропускаем те, что будут пропущены
-					}*/
-
-				List<NodeRef> stageItems = getAllStageItemsOfStage(stage);
-				for (NodeRef stageItem : stageItems) {
-					List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
-					hasEmployeesInIteration = assocs.size() > 0;
-					if (hasEmployeesInIteration) {
-						break;
 					}
+				}
 
-					if (docForExpression != null) {
-						NodeRef employee = null;
-						NodeRef macrosNode = findNodeByAssociationRef(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS, RoutesMacrosModel.TYPE_MACROS, ASSOCIATION_TYPE.TARGET);
-						if (macrosNode != null && nodeService.exists(macrosNode)) {
-							String macrosString = (String) nodeService.getProperty(macrosNode, RoutesMacrosModel.PROP_MACROS_STRING);
-							try {
-								employee = evaluateMacrosString(macrosString, docForExpression, orgstructureService.getCurrentEmployee());
-							} catch (ScriptException ex) {
-								logger.warn("Error executing script {}. Macros node: {}", macrosString, macrosNode);
-							}
-							hasEmployeesInIteration = employee != null;
-							if (hasEmployeesInIteration) {
-								break;
+				if (checkEmployees) {
+					List<NodeRef> stageItems = getAllStageItemsOfStage(stage);
+					for (NodeRef stageItem : stageItems) {
+						List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+						if (assocs.size() > 0) {
+							isEmptyByEmployees = false;
+							break;
+						}
+
+						if (documentForExpression != null) {
+							NodeRef employee = null;
+							NodeRef macrosNode = findNodeByAssociationRef(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS, RoutesMacrosModel.TYPE_MACROS, ASSOCIATION_TYPE.TARGET);
+							if (macrosNode != null && nodeService.exists(macrosNode)) {
+								String macrosString = (String) nodeService.getProperty(macrosNode, RoutesMacrosModel.PROP_MACROS_STRING);
+								try {
+									employee = evaluateMacrosString(macrosString, documentForExpression, orgstructureService.getCurrentEmployee());
+								} catch (ScriptException ex) {
+									logger.warn("Error executing script {}. Macros node: {}", macrosString, macrosNode);
+								}
+								if (employee != null) {
+									isEmptyByEmployees = false;
+									break;
+								}
 							}
 						}
 					}
 				}
 
 			}
+			isEmptyByExpressions = stagesCount > 0 && (skippedCount == stagesCount);
 		}
-		return hasEmployeesInIteration;
-	}
-
-	@Override
-	public boolean isRouteEmpty(final NodeRef nodeRef) {
-		NodeRef currentIterationRef = null;
-		NodeRef documentForExpression = null;
-		if (nodeRef != null) {
-			QName type = nodeService.getType(nodeRef);
-			if (!RoutesModel.TYPE_ROUTE.equals(type)) { // document
-				currentIterationRef = getDocumentCurrentIteration(nodeRef);
-				documentForExpression = nodeRef;
-			} else { // route
-				currentIterationRef = nodeRef;
-				documentForExpression = getDocumentByIteration(currentIterationRef);
-			}
-		}
-		return isRouteEmpty(currentIterationRef, documentForExpression);
-	}
-
-	@Override
-	public boolean isRouteEmpty(NodeRef route, NodeRef docForExpression) {
-		boolean isEmptyRoute = false;
-		if (route != null && docForExpression != null) {
-			List<NodeRef> stages = getAllStagesOfRoute(route);
-			final int stagesCount = stages.size();
-			int skippedCount = 0;
-
-			for (NodeRef stageRef : stages) {
-				/*Этап будет пропущен если не отработает условие по этапу*/
-				Object stageExpression = nodeService.getProperty(stageRef, RoutesModel.PROP_STAGE_EXPRESSION);
-				if (stageExpression != null && !documentService.execExpression(docForExpression, stageExpression.toString())) {
-					skippedCount++;
-				}
-			}
-			isEmptyRoute = stagesCount > 0 && (skippedCount == stagesCount);
-		}
-		return isEmptyRoute;
+		return (checkExpressions && isEmptyByExpressions) || (checkEmployees && isEmptyByEmployees);
 	}
 
 	@Override
