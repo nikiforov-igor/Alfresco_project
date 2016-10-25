@@ -27,23 +27,58 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
         filteredFields: ['lecm-protocol-ts:reporter-assoc', 'lecm-protocol-ts:coreporter-assoc'],
 
         applyReportersFilter: function (formId) {
-            var reportersFilter = [];
+            var reportersFilter = [],
+                notExistsInFilter = function (item) {
+                    return reportersFilter.indexOf(item) == -1 && item.length > 0;
+                };
+
 
             this.fieldsForFilter.forEach(function (fieldId) {
                 var controls = Alfresco.util.ComponentManager.find({id: this.options.formId + fieldId});
 
                 if (controls && controls.length) {
-                    reportersFilter = reportersFilter.concat(Object.keys(controls[0].selectedItems).filter(function (item) {
-                        return reportersFilter.indexOf(item) == -1;
-                    }));
+                    reportersFilter = reportersFilter.concat(Object.keys(controls[0].selectedItems).filter(notExistsInFilter));
+                } else {
+                    var control = YAHOO.util.Dom.get(this.options.formId + fieldId);
+                    if (control) {
+                        reportersFilter = reportersFilter.concat((control.value.split(",")).filter(notExistsInFilter));
+                    }
                 }
             }, this);
 
-            this.filteredFields.forEach(function (fieldId) {
-                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                    allowedNodes: reportersFilter
-                });
-            }, this);
+            /* + забытый инициатор*/
+            Alfresco.util.Ajax.jsonGet({
+                url: Alfresco.constants.PROXY_URI + 'lecm/orgstructure/api/getCurrentEmployee',
+                successCallback: {
+                    scope: this,
+                    fn: function (response) {
+                        var oResults = JSON.parse(response.serverResponse.responseText);
+
+                        if (oResults && oResults.nodeRef) {
+                            var initiator = [];
+                            initiator.push(oResults.nodeRef);
+
+                            reportersFilter = reportersFilter.concat(initiator.filter(notExistsInFilter));
+
+                            this.filteredFields.forEach(function (fieldId) {
+                                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
+                                    allowedNodes: reportersFilter
+                                });
+                            }, this);
+                        }
+                    }
+                },
+                failureCallback: {
+                    scope: this,
+                    fn: function () {
+                        this.filteredFields.forEach(function (fieldId) {
+                            LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
+                                allowedNodes: reportersFilter
+                            });
+                        }, this);
+                    }
+                }
+            });
         },
 
         onActionEdit: function DataGrid_onActionEdit(item) {

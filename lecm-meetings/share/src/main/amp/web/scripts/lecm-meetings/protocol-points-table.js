@@ -160,7 +160,8 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
         fieldsForFilter: [
             '_assoc_lecm-protocol_meeting-chairman-assoc',
             '_assoc_lecm-protocol_secretary-assoc',
-            '_assoc_lecm-protocol_attended-assoc'
+            '_assoc_lecm-protocol_attended-assoc',
+            '_assoc_lecm-document_author-assoc'
         ],
 
         filteredFields: ['lecm-protocol-ts:reporter-assoc', 'lecm-protocol-ts:coreporter-assoc'],
@@ -169,7 +170,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
 
             var reportersFilter = [],
                 notExistsInFilter = function (item) {
-                    return reportersFilter.indexOf(item) == -1;
+                    return reportersFilter.indexOf(item) == -1 && item.length > 0;
                 };
 
 
@@ -178,6 +179,11 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
 
                 if (controls && controls.length) {
                     reportersFilter = reportersFilter.concat(Object.keys(controls[0].selectedItems).filter(notExistsInFilter));
+                } else {
+                    var control = YAHOO.util.Dom.get(this.options.formId + fieldId);
+                    if (control) {
+                        reportersFilter = reportersFilter.concat((control.value.split(",")).filter(notExistsInFilter));
+                    }
                 }
             }, this);
 
@@ -361,8 +367,8 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                     },
                     scope: createDetails
                 }
-            }).show();
-        }
+                    }).show();
+            }
     }, true);
 
 })();
