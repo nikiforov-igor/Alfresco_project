@@ -376,7 +376,7 @@
 		                var height = picker.offsetHeight;
 
 		                if (y + height > Dom.getViewportHeight()) {                        // если календарь не помещается до низа окна
-			                y -= height;                                                   // откроем его вверх
+                            y -= height + d * 3;                                           // откроем его вверх
 		                }
                         if (Dom.getY(picker) != y) {
                             Dom.setY(picker, y);

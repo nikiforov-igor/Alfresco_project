@@ -165,7 +165,7 @@
                             })();
                             //]]></script>
 
-                            <div id="${calControlId}-parent" class="member-control-diagram-header-first-cell">
+                            <div id="${calControlId}-cal-cell" class="member-control-diagram-header-first-cell">
                                 <div id="${calControlId}-prevDate" class="member-control-diagram-header-prevdate"></div>
                                 <div id="${calControlId}" class="datepicker"></div>
                                 <input id="${calFieldHtmlId}" type="hidden" name="${field.name}-calendar" value="${defaultValue?html}"/>

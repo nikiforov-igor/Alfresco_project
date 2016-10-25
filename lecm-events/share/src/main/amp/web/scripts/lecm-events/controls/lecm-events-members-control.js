@@ -402,9 +402,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				header.removeChild(header.children[1]);
 			}
 			this.headerIsReady = false;
-			this.drawDiagramHeader();
-			this.drawDiagram();
-			this.drawSelector();
+			this.draw();
 		},
 
 		/**
@@ -617,6 +615,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		drawDiagramHeader: function drawDiagramHeader_function() {
 			if (this.headerIsReady) return;
+			var calendarCellBounds = Dom.getRegion(this.id + "-date-cntrl-cal-cell");
+			this.firstColumnWidth = calendarCellBounds.width - 2;
 			var header = Dom.get(this.options.controlId + "-diagram-header");
 			this._drawHourCells(header, 0, true);
 			this.headerIsReady = true;
