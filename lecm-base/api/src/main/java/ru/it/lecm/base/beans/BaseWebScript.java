@@ -111,7 +111,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
     }
 
 	public String wrapperAttribute(NodeRef nodeRef, String description, String formId) {
-		return "<a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + nodeRef.toString() + "', null, null" + (formId != null ? (",'" +  formId + "'") : "") + ")\">" + description + "</a>";
+		return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes('" + nodeRef.toString() + "', null, null" + (formId != null ? (",'" +  formId + "'") : "") + ")\">" + description + "</a>";
 	}
 
 

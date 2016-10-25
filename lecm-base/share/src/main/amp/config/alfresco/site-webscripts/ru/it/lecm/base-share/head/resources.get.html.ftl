@@ -9,10 +9,26 @@
 		<@script type="text/javascript" src="${url.context}/res/yui/history/history.js" group="lecm-head-resources"/>
 	</#if>
 </@>
-
+<@markup id = "html">
+<#assign viewNodeFormId = "view-node-form">
+<div id="${viewNodeFormId}" class="yui-panel hidden1"><#--отрисовываем форму скрытой всегда - при показе ей явным образом выставляется display:block-->
+    <div id="${viewNodeFormId}-head" class="hd">${msg("logicecm.view")}</div>
+    <div id="${viewNodeFormId}-body" class="bd">
+        <div id="${viewNodeFormId}-content"></div>
+        <div class="bdft">
+	            <span id="${viewNodeFormId}-cancel" class="yui-button yui-push-button">
+	                <span class="first-child">
+	                    <button type="button" tabindex="0" onclick="LogicECM.module.Base.Util.hideViewDialog(null,null,'${viewNodeFormId}');">${msg("button.close")}</button>
+	                </span>
+	            </span>
+        </div>
+    </div>
+</div>
+</@>
 <@markup id="resources">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/font-awesome.css" group="lecm-head-resources"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/base-styles.css" group="lecm-head-resources"/>
+
 
 	<#--
 	 сделаем метод Bubbling.unsubscribe более безопасным

@@ -113,7 +113,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 									html += YAHOO.lang.substitute(clickHandledStringTemplate, {
 										nodeRef: oRecord.getData("nodeRef"),
 										content: columnContent,
-										clickHandler: "viewAttributes"
+										clickHandler: "LogicECM.module.Base.Util.viewAttributes"
 									});
 								} else {
 									html += columnContent;
@@ -234,7 +234,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 									html += YAHOO.lang.substitute(clickHandledStringTemplate, {
 										nodeRef: oRecord.getData("nodeRef"),
 										content: columnContent,
-										clickHandler: "viewAttributes"
+										clickHandler: "LogicECM.module.Base.Util.viewAttributes"
 									});
 								} else {
 									html += columnContent;

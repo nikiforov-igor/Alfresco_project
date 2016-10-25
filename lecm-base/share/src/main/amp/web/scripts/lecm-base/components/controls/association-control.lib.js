@@ -146,7 +146,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			var title = (options.showAssocViewForm && item.nodeRef != null) ? Alfresco.util.message('title.click.for.extend.info') : titleName;
 			var result = '<span class="not-person" title="' + title + '">';
 			if (options.showAssocViewForm && item.nodeRef != null) {
-				result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+				result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
 			} else {
 				result += displayValue;
 			}

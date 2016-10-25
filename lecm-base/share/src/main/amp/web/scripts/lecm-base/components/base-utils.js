@@ -456,7 +456,7 @@ LogicECM.module.Base.Util = {
         if (showTitle == null || showTitle) {
             title = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
         }
-        return "<span><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a></span>";
+        return "<span><a href='javascript:void(0);' " + title + " onclick=\"LogicECM.module.Base.Util.viewAttributes(\'" + nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a></span>";
     },
 
     getControlEmployeeView: function(employeeNodeRef, displayValue, showTitle) {
@@ -475,7 +475,7 @@ LogicECM.module.Base.Util = {
         } else {
             personSpanTag = "<span class='person'" + personTitle + ">";
         }
-        return personSpanTag + "<a href='javascript:void(0);' " + linkTitle + " onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+        return personSpanTag + "<a href='javascript:void(0);' " + linkTitle + " onclick=\"LogicECM.module.Base.Util.viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
     },
 
     getControlDefaultView: function (displayValue) {
@@ -837,6 +837,98 @@ LogicECM.module.Base.Util = {
 			var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
 			return v.toString(16);
 		});
+	},
+
+	viewDialog: null,
+
+
+	viewAttributes: function (nodeRef, setId, title, viewFormId) {
+		viewFormId = viewFormId ? viewFormId : "view-node-form";
+		if(!this.viewDialog) this.createDialog(viewFormId);
+
+		var obj = {
+			htmlid:nodeRef.replace("workspace://SpacesStore/","").replace("-",""),
+			itemKind:"node",
+			itemId:nodeRef,
+			formId: viewFormId,
+			mode:"view"
+		};
+		if (setId != null) {
+			obj.setId = setId;
+		}
+
+		Alfresco.util.Ajax.request(
+			{
+				scope:this,
+				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+				dataObj: obj,
+				successCallback: {
+					scope:this,
+					fn: function (response) {
+						var formEl = Dom.get(viewFormId+"-content");
+						formEl.innerHTML = response.serverResponse.responseText;
+						if (this.viewDialog != null) {
+							Dom.setStyle(viewFormId, "display", "block");
+							var message = title ? Alfresco.messages.global[title] : Alfresco.util.message("logicecm.view");
+							var titleElement = Dom.get(viewFormId + "-head");
+							if (titleElement) {
+								titleElement.innerHTML = message;
+							}
+							this.viewDialog.show();
+						}
+					}
+				},
+				failureMessage:  Alfresco.util.message("message.failure"),
+				execScripts: true
+			});
+	},
+
+	hideViewDialog: function (layer, args, formId) {
+		var mayHide = false;
+		if (this.viewDialog) {
+			if (!args) {
+				mayHide = true;
+			} else if (args[1] && args[1].panel && args[1].panel.id == this.viewDialog.id) {
+				mayHide = true
+			}
+			if (mayHide) {
+				this.viewDialog.hide();
+				Dom.setStyle(formId ? formId : "view-node-form", "display", "none");
+			}
+		}
+	},
+
+	createDialog: function (formId) {
+		this.viewDialog = Alfresco.util.createYUIPanel(formId,
+			{
+				width: "60em"
+			});
+		YAHOO.Bubbling.on("hidePanel", this.hideViewDialog);
+	},
+
+	showEmployeeViewByLink: function (employeeLinkNodeRef, title) {
+		var sUrl = Alfresco.constants.PROXY_URI + "/lecm/orgstructure/api/getEmployeeByLink?nodeRef=" + employeeLinkNodeRef;
+		var callback = {
+			scope:this,
+			success: function (oResponse) {
+				var oResults = eval("(" + oResponse.responseText + ")");
+				if (oResults && oResults.nodeRef) {
+					this.viewAttributes(oResults.nodeRef, null, title);
+				} else {
+					Alfresco.util.PopupManager.displayMessage(
+						{
+							text: this.msg("message.details.failure")
+						});
+				}
+			},
+			failure: function (oResponse) {
+				Alfresco.util.PopupManager.displayMessage(
+					{
+						text: this.msg("message.details.failure")
+					});
+			}
+		};
+		YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 	}
 };
 

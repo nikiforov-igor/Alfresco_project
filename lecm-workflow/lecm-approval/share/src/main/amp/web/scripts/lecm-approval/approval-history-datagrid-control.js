@@ -36,7 +36,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				return null;
 			}
 			var result,
-				messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewStageResult\')">{value}</a>';
+				messageTemplate = '<a href="javascript:void(0)" onclick="LogicECM.module.Base.Util.viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewStageResult\')">{value}</a>';
 
 			result = YAHOO.lang.substitute(messageTemplate, {
 				nodeRef: nodeRef,

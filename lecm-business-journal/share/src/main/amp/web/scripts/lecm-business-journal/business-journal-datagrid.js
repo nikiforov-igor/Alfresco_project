@@ -176,7 +176,7 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
 	        if (displayValue.length > 0) {
 		        result = "<span>";
 	            if (nodeRef != null && nodeRef.length > 0) {
-		            result += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + nodeRef + "\')\">" + displayValue + "</a>";
+		            result += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes(\'" + nodeRef + "\')\">" + displayValue + "</a>";
 		        } else {
 		            result += displayValue;
 	            }
@@ -188,7 +188,7 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
             if (displayValue.length == 0 || employeeNodeRef == null || employeeNodeRef.indexOf("://") < 0) {
                 return "Система";
             }
-            return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\',null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+            return "<span class='person'><a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes(\'" + employeeNodeRef + "\',null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
         },
 
         onExportCsv: function DataGrid__onExportCsv(fileName)

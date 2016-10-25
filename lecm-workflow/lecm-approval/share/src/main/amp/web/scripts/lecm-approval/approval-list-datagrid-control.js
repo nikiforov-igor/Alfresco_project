@@ -879,7 +879,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					return null;
 				}
 				var result,
-					messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.stage.details\', \'viewStageResult\')">{value}</a>';
+					messageTemplate = '<a href="javascript:void(0)" onclick="LogicECM.module.Base.Util.viewAttributes(\'{nodeRef}\', null, \'label.view.stage.details\', \'viewStageResult\')">{value}</a>';
 
 				result = YAHOO.lang.substitute(messageTemplate, {
 					nodeRef: nodeRef,
@@ -936,7 +936,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		function formatState(nodeRef, decisionData, hasComment) {
 			var result,
 					commentIcon = '<img alt="' + Alfresco.util.message('label.comment') + '" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
-					messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewApprovalResult\')">{value} {icon}</a>';
+					messageTemplate = '<a href="javascript:void(0)" onclick="LogicECM.module.Base.Util.viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewApprovalResult\')">{value} {icon}</a>';
 
 			if (decisionData.value === 'NO_DECISION') {
 				return null;

@@ -53,7 +53,7 @@ LogicECM.module.Signing = LogicECM.module.Signing || {};
 									html += YAHOO.lang.substitute(clickHandledStringTemplate, {
 										nodeRef: oRecord.getData("nodeRef"),
 										content: columnContent,
-										clickHandler: "viewAttributes"
+										clickHandler: "LogicECM.module.Base.Util.viewAttributes"
 									});
 								} else {
 									html += columnContent;
