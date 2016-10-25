@@ -506,7 +506,15 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * Сброс даты на начальную
 		 */
 		resetDate: function resetDate_function() {
+			if (this.prevStartIndex && this.prevEndIndex) {
+				this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+			}
+			this.prevStartIndex = null;
+			this.prevEndIndex = null;
+			this.busytime = [];
+
 			//Начало
+			this.needDraw = false;
 			Dom.get(this.startDateField.id + "-date").value = this.formatDate(this.initialStartDate);
 			Dom.get(this.startDateField.id + "-time").value = ('0' + this.initialStartDate.getHours()).slice(-2) + ":" + ('0' + this.initialStartDate.getMinutes()).slice(-2);
 			Bubbling.fire("handleFieldChange", {
@@ -515,12 +523,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			});
 
 			//Окончание
+			this.needDraw = true;
 			Dom.get(this.endDateField.id + "-date").value = this.formatDate(this.initialEndDate);
 			Dom.get(this.endDateField.id + "-time").value = ('0' + this.initialEndDate.getHours()).slice(-2) + ":" + ('0' + this.initialEndDate.getMinutes()).slice(-2);
 			Bubbling.fire("handleFieldChange", {
 				fieldId: this.endDateField.configName,
 				formId: this.endDateField.formId
 			});
+			this.requestMembersTime();
 		},
 
 
