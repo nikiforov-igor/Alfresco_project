@@ -364,89 +364,9 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
             }).show();
         },
 
-        onAddRow: function(me, asset, owner, actionsConfig, confirmFunction) {
-            if (this.doubleClickLock) return;
-            this.doubleClickLock = true;
-            var orgMetadata = this.modules.dataGrid.datagridMeta;
-            if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
-                var destination = orgMetadata.nodeRef;
-                var itemType = orgMetadata.itemType;
-
-                // Intercept before dialog show
-                var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-                    var addMsg = orgMetadata.addMessage;
-                    var contId = p_dialog.id + "-form-container";
-                    Alfresco.util.populateHTML(
-                        [contId + "_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
-                    );
-                    if (itemType && itemType != "") {
-                        Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
-                    }
-                    var rowId = p_dialog.options.onSuccess.rowId;
-                    var oDataRow = this.widgets.dataTable.getRecord(rowId);
-                    if (oDataRow) {
-                        var tempIndexTag = Dom.get(this.id + "-createDetails_prop_lecm-document_indexTableRow");
-                        if (tempIndexTag) {
-                            var index = eval(oDataRow.getData().itemData["prop_lecm-document_indexTableRow"].value);
-                            tempIndexTag.value = index+1;
-                        }
-                    }
-                    this.doubleClickLock = false;
-                    p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-
-                    if (this.options.reportersFilterEnabled) {
-                        this.applyReportersFilter(p_dialog.id);
-                    }
-                };
-
-                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-                var templateRequestParams = {
-                    itemKind:"type",
-                    itemId:itemType,
-                    destination:destination,
-                    mode:"create",
-                    formId: "addTableRow",
-                    submitType:"json",
-                    showCancelButton: true
-                };
-
-                // Using Forms Service, so always create new instance
-                var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
-                createDetails.setOptions(
-                    {
-                        width:"50em",
-                        templateUrl:templateUrl,
-                        templateRequestParams: templateRequestParams,
-                        actionUrl:null,
-                        destroyOnHide:true,
-                        doBeforeDialogShow:{
-                            fn:doBeforeDialogShow,
-                            scope:this
-                        },
-                        onSuccess:{
-                            fn:function DataGrid_onActionCreate_success(response) {
-                                var me = response.config.successCallback.obj.scope.options.onSuccess.scope;
-                                Bubbling.fire("datagridRefresh",
-                                    {
-                                        bubblingLabel:me.options.bubblingLabel
-                                    });
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: this.msg("message.save.success")
-                                    });
-                                this.doubleClickLock = false;
-                            },
-                            scope:this,
-                            rowId: asset.id
-                        },
-                        onFailure:{
-                            fn:function DataGrid_onActionCreate_failure(response) {
-                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
-                                this.doubleClickLock = true;
-                            },
-                            scope:this
-                        }
-                    }).show();
+        beforeShowCheck: function (p_form, p_dialog) {
+            if (this.options.reportersFilterEnabled) {
+                this.applyReportersFilter(p_dialog.id);
             }
         }
     }, true);
