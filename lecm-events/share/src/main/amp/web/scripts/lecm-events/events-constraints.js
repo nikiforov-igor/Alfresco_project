@@ -94,7 +94,11 @@ LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fro
 		var toTime = Dom.get(toDate.id + "-cntrl-time");
 
 		var allDay = field.value == "true";
-
+		if (allDay) {
+			toDateField.readOnly = false;
+		} else {
+			toDateField.readOnly = true;
+		}
 		var times = [
 			{
 				field: fromTime,

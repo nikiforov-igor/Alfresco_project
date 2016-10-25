@@ -436,7 +436,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					if (this.needDraw) {
 						this.draw();
 						if (this.formatDate(this.startDate) != prevDate) {
+							this.busytime = [];
+							this.draw();
 							this.requestMembersTime();
+						} else {
+							this.draw();
 						}
 					}
 					//Данные из поля завершение
@@ -455,9 +459,12 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						configName: control.options.fieldId
 					};
 					if (this.needDraw) {
-						this.draw();
 						if (this.formatDate(this.endDate) != prevDate) {
+							this.busytime = [];
+							this.draw();
 							this.requestMembersTime();
+						} else {
+							this.draw();
 						}
 					}
 				}
@@ -476,10 +483,15 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * @param date
 		 */
 		selectDate: function selectDate_function(date) {
+			var requestMemberTime = this.formatDate(date) != this.formatDate(this.selectedDate);
 			this.selectedDate = date;
-			this.busytime = [];
-			this.draw();
-			this.requestMembersTime();
+			if (requestMemberTime) {
+				this.busytime = [];
+				this.draw();
+				this.requestMembersTime();
+			} else {
+				this.draw();
+			}
 		},
 
 		/**
@@ -577,10 +589,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.keyIndex = [];
 			for (var key in this.selectedItems) {
 				var item = this.selectedItems[key];
+				var row = document.createElement("div");
+				row.className = "member-control-diagram-row";
+				content.appendChild(row);
 				var firstColumn = document.createElement("div");
 				firstColumn.className = "member-control-diagram-first-cell";
 				firstColumn.style.width = this.firstColumnWidth + "px";
-				content.appendChild(firstColumn);
+				row.appendChild(firstColumn);
 				var textCell = document.createElement("div");
 				textCell.className = "member-control-diagram-first-cell-text";
 				textCell.innerHTML = item.selectedName;
@@ -594,7 +609,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					updateForms: true
 				}, this);
 
-				this._drawHourCells(content, itemNum, false);
+				this._drawHourCells(row, itemNum, false);
 				this.keyIndex[key] = itemNum;
 				itemNum++;
 			}
@@ -616,7 +631,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		drawDiagramHeader: function drawDiagramHeader_function() {
 			if (this.headerIsReady) return;
 			var calendarCellBounds = Dom.getRegion(this.id + "-date-cntrl-cal-cell");
-			this.firstColumnWidth = calendarCellBounds.width - 2;
+			this.firstColumnWidth = calendarCellBounds.width;
 			var header = Dom.get(this.options.controlId + "-diagram-header");
 			this._drawHourCells(header, 0, true);
 			this.headerIsReady = true;
@@ -880,6 +895,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				cellIndex = lastCellIndex - this.period;
 			}
 			this.selectTime(cellIndex);
+			this.draw();
 		},
 
 		/**
@@ -929,8 +945,24 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			startHour = startHour + this.startHour;
 			endHour = endHour + this.startHour;
 			var start = new Date(this.selectedDate.getTime());
+
+			//Обновляем состояние диаграммы и полей времени
 			this.startDate = null;
 			this.endDate = null;
+
+			//Сбрасываем значения контролов
+			Dom.get(this.startDateField.id + "-date").value = "";
+			Dom.get(this.startDateField.id + "-time").value = "";
+			Dom.get(this.endDateField.id + "-date").value = "";
+			Dom.get(this.endDateField.id + "-time").value = "";
+			Bubbling.fire("handleFieldChange", {
+				fieldId: this.startDateField.configName,
+				formId: this.startDateField.formId
+			});
+			Bubbling.fire("handleFieldChange", {
+				fieldId: this.endDateField.configName,
+				formId: this.endDateField.formId
+			});
 
 			//Начало
 			Dom.get(this.startDateField.id + "-date").value = this.formatDate(start);

@@ -117,7 +117,7 @@
             <#else>
                 <div id="${controlId}-diagram" class="member-control-diagram">
                     <div id="${controlId}-diagram-container" class="member-control-diagram-container">
-                        <div id="${controlId}-diagram-header">
+                        <div id="${controlId}-diagram-header" class="member-control-diagram-header">
                             <#assign calControlId = fieldHtmlId + "-date-cntrl">
                             <#assign calFieldHtmlId = fieldHtmlId + "-calendar">
                             <#assign currentValue = defaultValue?js_string>
