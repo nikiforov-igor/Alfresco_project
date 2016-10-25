@@ -27,11 +27,11 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
         filteredFields: ['lecm-protocol-ts:reporter-assoc', 'lecm-protocol-ts:coreporter-assoc'],
 
         applyReportersFilter: function (formId) {
-            var reportersFilter = [],
-                notExistsInFilter = function (item) {
-                    return reportersFilter.indexOf(item) == -1 && item.length > 0;
-                };
+            var reportersFilter = [];
 
+            var notExistsInFilter = function (item) {
+                return reportersFilter.indexOf(item) == -1 && item.length > 0;
+            };
 
             this.fieldsForFilter.forEach(function (fieldId) {
                 var controls = Alfresco.util.ComponentManager.find({id: this.options.formId + fieldId});
