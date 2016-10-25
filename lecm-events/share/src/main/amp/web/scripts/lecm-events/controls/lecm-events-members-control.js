@@ -850,9 +850,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var el = ev.target;
 			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
 
-			var cellIndex = el.cellIndex;
+			var cellIndex = el.cellIndex - Math.floor(this.period / 2);
+			cellIndex = cellIndex <= 0 ? 1 : cellIndex;
 			var lastCellIndex = cellIndex + this.period;
-			lastCellIndex = lastCellIndex > this.maxIndex ? this.maxIndex : lastCellIndex;
+			if (lastCellIndex > this.maxIndex) {
+				lastCellIndex = this.maxIndex;
+				cellIndex = lastCellIndex - this.period;
+			}
 			for (var i = cellIndex; i <= lastCellIndex; i++) {
 				Dom.addClass(this.options.controlId + "-diagram-select-layer_0_" + i, "member-control-diagram-selection");
 			}
@@ -868,7 +872,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var el = ev.target;
 			if (!Dom.hasClass(el, "member-control-diagram-empty-cell")) return;
 
-			var cellIndex = el.cellIndex;
+			var cellIndex = el.cellIndex - Math.floor(this.period / 2);
+			cellIndex = cellIndex <= 0 ? 1 : cellIndex;
+			var lastCellIndex = cellIndex + this.period;
+			if (lastCellIndex > this.maxIndex) {
+				lastCellIndex = this.maxIndex;
+				cellIndex = lastCellIndex - this.period;
+			}
 			this.selectTime(cellIndex);
 		},
 
