@@ -10,7 +10,7 @@
 
 .control.association-token-control .value-div div.cropped-item {
     display: block;
-    float: none;
+    float: left;
 }
 .control.association-token-control.vertical .value-div div.cropped-item {
      display: table;
