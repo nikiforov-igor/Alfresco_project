@@ -242,7 +242,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		getMemberView: function (displayValue, item) {
 			var result = "<span class='not-person'>";
-			result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a>";
+			result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'" + item.nodeRef + "\',title: \'logicecm.employee.view\' })\">" + displayValue + "</a>";
 			result += "</span>";
 
 			return result;

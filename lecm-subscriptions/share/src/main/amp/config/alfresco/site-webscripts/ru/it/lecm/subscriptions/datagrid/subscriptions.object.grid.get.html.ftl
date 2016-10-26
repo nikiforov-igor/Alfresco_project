@@ -53,7 +53,7 @@
                                                                 var columnContent = "";
                                                                 switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
                                                                     case "lecm-subscr:subscription-object-assoc":
-                                                                        columnContent += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes(\'" + data.value + "\')\">" + data.displayValue + "</a>";
+                                                                        columnContent += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'" + data.value + "\'})\">" + data.displayValue + "</a>";
                                                                         break;
                                                                     default:
                                                                         break;
