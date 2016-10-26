@@ -26,22 +26,24 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
 
         filteredFields: ['lecm-protocol-ts:reporter-assoc', 'lecm-protocol-ts:coreporter-assoc'],
 
-        applyReportersFilter: function (formId) {
-            var reportersFilter = [];
+        reportersFilter: [],
 
-            var notExistsInFilter = function (item) {
-                return reportersFilter.indexOf(item) == -1 && item.length > 0;
-            };
+        notExistsInFilter: function (item) {
+            return this.reportersFilter.indexOf(item) == -1 && item.length > 0;
+        },
+
+        applyReportersFilter: function (formId) {
+            this.reportersFilter = [];
 
             this.fieldsForFilter.forEach(function (fieldId) {
                 var controls = Alfresco.util.ComponentManager.find({id: this.options.formId + fieldId});
 
                 if (controls && controls.length) {
-                    reportersFilter = reportersFilter.concat(Object.keys(controls[0].selectedItems).filter(notExistsInFilter));
+                    this.reportersFilter = this.reportersFilter.concat(Object.keys(controls[0].selectedItems).filter(this.notExistsInFilter, this));
                 } else {
                     var control = YAHOO.util.Dom.get(this.options.formId + fieldId);
                     if (control) {
-                        reportersFilter = reportersFilter.concat((control.value.split(",")).filter(notExistsInFilter));
+                        this.reportersFilter = this.reportersFilter.concat((control.value.split(",")).filter(this.notExistsInFilter, this));
                     }
                 }
             }, this);
@@ -58,11 +60,11 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                             var initiator = [];
                             initiator.push(oResults.nodeRef);
 
-                            reportersFilter = reportersFilter.concat(initiator.filter(notExistsInFilter));
+                            this.reportersFilter = this.reportersFilter.concat(initiator.filter(this.notExistsInFilter, this));
 
                             this.filteredFields.forEach(function (fieldId) {
                                 LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                    allowedNodes: reportersFilter
+                                    allowedNodes: this.reportersFilter
                                 });
                             }, this);
                         }
@@ -73,7 +75,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                     fn: function () {
                         this.filteredFields.forEach(function (fieldId) {
                             LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                allowedNodes: reportersFilter
+                                allowedNodes: this.reportersFilter
                             });
                         }, this);
                     }
