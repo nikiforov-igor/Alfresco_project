@@ -1936,8 +1936,8 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover
 {
-  background-color:#C9EBF6;
-  color:black;
+  background-color: rgba(255, 255, 255, 0);
+  color: black;
 }
 
 /*datagrid control*/
