@@ -1257,7 +1257,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		},
 
 		_updateAllDay: function _updateAllDay(control) {
-			this.allDay = control.checkbox.checked;
+			if (control.checkbox) {
+				this.allDay = control.checkbox.checked;
+			}
 		}
 		///////////////////////////////////////
 	}, true);
