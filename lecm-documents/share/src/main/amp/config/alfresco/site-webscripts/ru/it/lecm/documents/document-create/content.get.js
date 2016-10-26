@@ -28,34 +28,36 @@ function main() {
 			var name = param.split("=")[0];
 			var value = param.split("=")[1];
 			if (name && value) {
+				var decodedValue;
+				try {
+					decodedValue = decodeURIComponent(value);
+				} catch (e) {
+					decodedValue = value;
+				}
 				if (name == "documentType") {
-					docType = value;
+					docType = decodedValue;
 				} else if (name == "formId") {
-					formId = value;
+					formId = decodedValue;
 				} else if (name == "connectionType") {
-					connectionType = value;
+					connectionType = decodedValue;
 				} else if (name == "connectionIsSystem") {
-					connectionIsSystem = value;
+					connectionIsSystem = decodedValue;
 				} else if (name == "connectionIsReverse") {
-					connectionIsReverse = value;
+					connectionIsReverse = decodedValue;
 				} else if (name == "parentDocumentNodeRef") {
-					parentDocumentNodeRef = value;
+					parentDocumentNodeRef = decodedValue;
 				} else if (name == "workflowTask") {
-					workflowTask = value;
+					workflowTask = decodedValue;
 				} else if (name == "actionType") {
-					actionType = value;
+					actionType = decodedValue;
 				} else if (name == "taskId") {
-					taskId = value;
+					taskId = decodedValue;
 				} else if (name == "actionId") {
-					actionId = value;
+					actionId = decodedValue;
 				} else if (name == "backUrl") {
-					backUrl = value;
+					backUrl = decodedValue;
 				} else {
-					try {
-						urlArgs[name] = decodeURIComponent(value);
-					} catch (e) {
-						urlArgs[name] = value;
-					}
+					urlArgs[name] = decodedValue;
 				}
 			}
 		}

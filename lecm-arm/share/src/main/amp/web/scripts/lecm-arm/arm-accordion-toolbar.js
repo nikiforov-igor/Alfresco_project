@@ -45,8 +45,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
 			var attributes = p_oItem.attributes ? p_oItem.attributes : [];
 			var params = attributes.reduce(function(prev, curr) {
-				return prev + '&' + curr.initial.formsName + '=' + curr.initial.value;
-			}, 'documentType=' + p_oItem.type);
+				return prev + '&' + curr.initial.formsName + '=' + encodeURIComponent(curr.initial.value);
+			}, 'documentType=' + encodeURIComponent(p_oItem.type));
 			window.location.href = Alfresco.constants.URL_PAGECONTEXT + p_oItem.page + "?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
 		},
 		onUpdateArmToolbar: function(layer, args) {
@@ -96,7 +96,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 										}
 									});
 								}
-								
+
 								return {
 									text: template.name,
 									value: type.type,
