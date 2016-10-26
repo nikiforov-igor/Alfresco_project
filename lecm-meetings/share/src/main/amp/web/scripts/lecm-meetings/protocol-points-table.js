@@ -368,6 +368,12 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                     scope: createDetails
                 }
             }).show();
+        },
+
+        beforeShowCheck: function (p_form, p_dialog) {
+            if (this.options.reportersFilterEnabled) {
+                this.applyReportersFilter(p_dialog.id);
+            }
         }
     }, true);
 
