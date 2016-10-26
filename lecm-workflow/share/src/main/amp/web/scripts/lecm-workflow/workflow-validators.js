@@ -153,7 +153,7 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 LogicECM.module.Workflow.routeHasEmployeesValidator =
 	function (field) {
 		var valid = false;
-		var docNodeRef = YAHOO.util.History.getQueryStringParameter('nodeRef');
+		var docNodeRef = Alfresco.util.getQueryStringParameter('nodeRef');
 		if (field.value) {
 			jQuery.ajax({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/routes/isHasEmployees?routeRef=" + field.value + "&documentRef=" + docNodeRef,
@@ -181,7 +181,7 @@ LogicECM.module.Workflow.routeHasEmployeesValidator =
 LogicECM.module.Workflow.routeIsEmptyValidator =
 	function (field) {
 		var valid = false;
-		var docNodeRef = YAHOO.util.History.getQueryStringParameter('nodeRef');
+		var docNodeRef = Alfresco.util.getQueryStringParameter('nodeRef');
 		if (field.value) {
 			jQuery.ajax({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/routes/isRouteEmpty?routeRef=" + field.value + "&documentRef=" + docNodeRef,
