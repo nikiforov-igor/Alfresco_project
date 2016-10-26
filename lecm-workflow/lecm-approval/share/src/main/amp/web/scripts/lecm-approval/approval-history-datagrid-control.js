@@ -37,9 +37,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 
 			return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
-							"{nodeRef:\'" + nodeRef + "\'," +
-							"title: \'label.view.approval.details\', " +
-							"formId: \'viewApprovalResult\' })>" + decisionData.displayValue + "</a>";
+				"{nodeRef:\'" + nodeRef + "\'," +
+				"title: \'label.view.approval.details\', " +
+				"formId: \'viewApprovalResult\' })>" + decisionData.displayValue + "</a>";
 		}
 		var html = null;
 

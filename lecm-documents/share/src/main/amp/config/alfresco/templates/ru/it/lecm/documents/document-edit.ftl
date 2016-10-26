@@ -10,7 +10,6 @@
 </@>
 
 
-
 <div id="no_menu_page" class="sticky-wrapper">
 	<@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
 		<#if hasPermission>

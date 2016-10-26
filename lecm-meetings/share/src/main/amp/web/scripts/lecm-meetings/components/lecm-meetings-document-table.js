@@ -1131,7 +1131,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+								LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
                                 this.doubleClickLock = true;
                             },
                             scope:this

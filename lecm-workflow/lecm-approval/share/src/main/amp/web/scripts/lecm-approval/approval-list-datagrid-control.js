@@ -431,7 +431,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							macrosName = messageSplittedArr.splice(0, 2)[1];
 							macrosScript = messageSplittedArr.join(' | ');
 							message = Alfresco.util.message('message.error.running.macros') + ' ' + macrosName;
-							this.displayErrorMessageWithDetails(Alfresco.util.message('title.error.running.macros'), message, macrosScript);
+							LogicECM.module.Base.Util.displayErrorMessageWithDetails(Alfresco.util.message('title.error.running.macros'), message, macrosScript);
 						}
 						this.getApprovalData(function () {
 							this.fillCurrentApprovalState();
@@ -447,7 +447,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				},
 				onFailure: {
 					fn: function (response) {
-						this.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
+						LogicECM.module.Base.Util.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
 					},
 					scope: this
 				}
@@ -819,7 +819,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				},
 				onFailure: {
 					fn: function (response) {
-						this.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
+						LogicECM.module.Base.Util.displayErrorMessageWithDetails(Alfresco.util.message('logicecm.base.error'), Alfresco.util.message('message.save.failure'), response.json.message);
 					},
 					scope: this
 				}

@@ -20,8 +20,6 @@ LogicECM.module = LogicECM.module || {};
  */
 LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 
-
-
 (function () {
 
     LogicECM.module.BusinessJournal.DataGrid = function (containerId) {
@@ -145,7 +143,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 	        if (displayValue.length > 0) {
 		        result = "<span>";
 	            if (nodeRef != null && nodeRef.length > 0) {
-		            result += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'"+nodeRef+"\'})\">" + displayValue + "</a>";
+                    result += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'" + nodeRef + "\'})\">" + displayValue + "</a>";
 		        } else {
 		            result += displayValue;
 	            }
@@ -157,8 +155,7 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
             if (displayValue.length == 0 || employeeNodeRef == null || employeeNodeRef.indexOf("://") < 0) {
                 return "Система";
             }
-
-            return "<span class='person'><a href='javascript:void(0);'" + "onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'"+employeeNodeRef+"\',title:\'logicecm.employee.view\'})\">" + displayValue + "</a></span>";
+            return "<span class='person'><a href='javascript:void(0);'" + "onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'" + employeeNodeRef + "\',title:\'logicecm.employee.view\'})\">" + displayValue + "</a></span>";
         },
 
         onExportCsv: function DataGrid__onExportCsv(fileName)

@@ -12,7 +12,6 @@
 </@>
 
 
-
 <div id="no_menu_page" class="sticky-wrapper">
 	<@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
 		<@region id="content" scope="template"/>

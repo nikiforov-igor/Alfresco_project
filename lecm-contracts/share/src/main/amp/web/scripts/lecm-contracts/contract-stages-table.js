@@ -154,7 +154,7 @@ LogicECM.module.Contracts = LogicECM.module.Contracts || {};
                                     columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"document-attachment?nodeRef="+ data.value +"' title='" + data.displayValue + "'>" + fileIconHtml + "</a>";
                                     break;
                                 case "cm:cmobject":
-                                    columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'"+ data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
+                                    columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({nodeRef:\'" + data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
                                     break;
                                 default:
                                     break;

@@ -2821,7 +2821,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                me.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
+                                LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
 	                            me.editDialogOpening = false;
 	                            this.widgets.cancelButton.set("disabled", false);
                             },
@@ -2830,36 +2830,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }).show();
             },
 
-            displayErrorMessageWithDetails: function(msgHeader, msgTitle, msgDetails) {
-                if (this.errorMessageDialog == null) {
-                    this.errorMessageDialog = new YAHOO.widget.SimpleDialog("errorMessageWithDetailsDialog", {
-                        width: "60em",
-                        fixedcenter: true,
-                        destroyOnHide: true,
-                        modal: true
-                    });
-                }
 
-                this.errorMessageDialog.setHeader(msgHeader);
-
-                var customMsg = msgDetails.match("\\[\\[.+\\]\\]");
-                if (customMsg != null) {
-                    msgDetails = customMsg[0].replace("[[", "").replace("]]", "");
-                }
-                var errorDialogBody = '<div class="grid-create-error-dialog"><h3>' + msgTitle + '</h3>';
-                errorDialogBody += '<a href="javascript:void(0);" id="' + this.id + '-error-message-show-details-link">' + this.msg("logicecm.base.error.show.details") + '</a></div>';
-                errorDialogBody += '<div id="' + this.id + '-error-message-show-details" class="error-dialog-details">' + msgDetails + '</div>';
-
-                this.errorMessageDialog.setBody(errorDialogBody);
-                this.errorMessageDialog.render(document.body);
-                this.errorMessageDialog.show();
-
-                Event.on(this.id + "-error-message-show-details-link", "click", this.errorMessageShowDetails, null, this);
-            },
-
-            errorMessageShowDetails: function() {
-                Dom.setStyle(this.id + "-error-message-show-details", "display", "block");
-            },
 
             /**
              * Create Data Item pop-up

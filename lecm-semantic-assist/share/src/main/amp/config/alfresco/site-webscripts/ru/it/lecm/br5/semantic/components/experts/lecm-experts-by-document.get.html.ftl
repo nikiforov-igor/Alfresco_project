@@ -15,7 +15,6 @@
 						</div>
 						<#assign fio = mapAttrs["lastName"] +" "+ mapAttrs["firstName"] +" "+ mapAttrs["middleName"]>
 						<div class="person">
-
 							<h3><a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({nodeRef:'${mapAttrs["expertRef"]}', title: 'logicecm.employee.view'})">${fio}</a></h3>
 							<#if mapAttrs["staf"] != "">
 								<div>${mapAttrs["staf"]}</div>
