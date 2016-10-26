@@ -71,6 +71,19 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				this.options.mode = 'edit';
 			}
 
+			function doBeforeAjaxRequest(form) {
+				for (var property in form.dataObj) {
+					if (form.dataObj.hasOwnProperty(property) &&
+						property.indexOf("prop_lecm-template") != 0 &&
+						property.indexOf("assoc_lecm-template") != 0 &&
+						property.indexOf("alf_destination") != 0 &&
+						property.indexOf("prop_cm") != 0) {
+						delete form.dataObj[property];
+					}
+				}
+				return true;
+			}
+
 			var obj = args[1],
 				form = Dom.get(obj.component.id),
 				fieldId = Selector.query('input[name="prop_lecm-template_attributes"]', form, true).id,
@@ -81,6 +94,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 						// doBeforeFOrmSubmit; doBeforeAjaxRequest;
 						this.widgets.formsRuntime = obj.component.formsRuntime;
 						this.widgets.formsRuntime.ajaxSubmitHandlers.successCallback.fn = onSuccessFormSubmit;
+						this.widgets.formsRuntime.doBeforeAjaxRequest.fn = doBeforeAjaxRequest;
 						this.widgets.formsRuntime.applyTabFix();
 					} else {
 						console.warn('formsRuntime already exists for LogicECM.module.DocumentsTemplates.DetailsView[' + this.id + '] mode ' + obj.component.options.mode);
