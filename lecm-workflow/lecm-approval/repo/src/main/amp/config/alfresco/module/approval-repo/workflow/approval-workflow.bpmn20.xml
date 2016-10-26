@@ -131,7 +131,7 @@
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
-  var stage, i, size, approvalState, items, isTemp;
+  var stage, i, j, size, length, approvalState, items, isTemp, expression;
   for (i = 0, size = stages.length; i < size; ++i) {
     stage = stages[i];
     isTemp = stage.hasAspect('sys:temporary') || stage.hasAspect('lecm-workflow:temp');
@@ -139,13 +139,14 @@
     approvalState = (approvalState != null) ? '' + approvalState : null;
     items = stage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
     /* выбор первого неактивного этапа */
-    var expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
+    expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
     if (expression && !approval.checkExpression(bpm_package.children[0].nodeRef, expression)) {
-      stage.properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+      approvalState = 'SKIPPED';
+      stage.properties['lecmApproveAspects:approvalState'] = approvalState;
       stage.save();
       if (items && items.length) {
         for (j = 0, length = items.length; j < length; ++j) {
-          items[j].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+          items[j].properties['lecmApproveAspects:approvalState'] = approvalState;
           items[j].save();
         }
       }
@@ -323,7 +324,7 @@
   var initiator;
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
-				  
+
 	var filename = attachment.properties["cm:name"];
 	var existingFile = currentStageItem.childByNamePath(filename);
 	var parent = attachment.getParent();
@@ -360,9 +361,9 @@
 		attachment.properties["cm:name"]=filename;
 		attachment.save();
 	}
-				  
+
     attachment.move(stageItem);
-				  
+
 	var filename;
 	if (decision == 'APPROVED') {
 		filename = 'Согласовано';
@@ -593,7 +594,7 @@
 		}
 
 		filename += ' - ' + employee.properties["lecm-orgstr:employee-short-name"];
-				  
+
 		approval.copyToDocumentAttachmentCategory(attachment, document, filename);
 	}
 	currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = base.getValueConverter().convertValueForJava(new Date());
@@ -769,20 +770,21 @@
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
-  var i, size, approvalState, hasNextStage, items, isTemp;
+  var i, j, size, length, approvalState, hasNextStage, items, isTemp, expression;
   for (i = 0, size = stages.length; i < size; ++i) {
     isTemp = stages[i].hasAspect('sys:temporary') || stage.hasAspect('lecm-workflow:temp');
     approvalState = stages[i].properties['lecmApproveAspects:approvalState'];
     approvalState = (approvalState != null) ? '' + approvalState : null;
     items = stages[i].getChildAssocsByType('lecmWorkflowRoutes:stageItem');
 
-    var expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
+    expression = stages[i].properties['lecmWorkflowRoutes:stageExpression'];
     if (expression && !approval.checkExpression(bpm_package.children[0].nodeRef, expression)) {
-      stages[i].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+      approvalState = 'SKIPPED';
+      stages[i].properties['lecmApproveAspects:approvalState'] = approvalState;
       stages[i].save();
       if (items && items.length) {
         for (j = 0, length = items.length; j < length; ++j) {
-          items[j].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+          items[j].properties['lecmApproveAspects:approvalState'] = approvalState;
           items[j].save();
         }
       }
