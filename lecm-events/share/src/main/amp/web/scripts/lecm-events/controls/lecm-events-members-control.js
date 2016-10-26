@@ -53,15 +53,26 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		busyColor: null,
 		notBusyColor: null,
 		needDraw: true,
+		allDay: false,
 
 		onReady: function ConsoleGroups_onReady() {
 			LogicECM.module.AssociationTokenControl.prototype.onReady.call(this);
 			var prevDate = Dom.get(this.id + "-date-cntrl-prevDate");
-			prevDate.addEventListener("click", this.prevDay.bind(this));
+			if (prevDate) {
+				prevDate.addEventListener("click", this.prevDay.bind(this));
+			}
 			var nextDate = Dom.get(this.id + "-date-cntrl-nextDate");
-			nextDate.addEventListener("click", this.nextDay.bind(this));
+			if (nextDate) {
+				nextDate.addEventListener("click", this.nextDay.bind(this));
+			}
 			var pointDate = Dom.get(this.id + "-date-cntrl-pointDate");
-			pointDate.addEventListener("click", this.resetDate.bind(this));
+			if (pointDate) {
+				pointDate.addEventListener("click", this.resetDate.bind(this));
+			}
+			var components = Alfresco.util.ComponentManager.list();
+			components.forEach(function(component) {
+				this._formControlUpdated(component);
+			}, this);
 		},
 
 		_loadSelectedItems: function (clearCurrentDisplayValue, updateForms) {
@@ -411,64 +422,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		dateFieldUpdated: function dateFieldUpdated_function(layer, args) {
 			if (this.options.disabled) return;
 			var control = args[1];
-			if (control && control.options.fieldId) {
-				var fieldId = control.options.fieldId;
-				//Данные из поля "Начало"
-				if (fieldId == "lecm-events:from-date") {
-					var valueField = Dom.get(control.currentValueHtmlId);
-					var prevDate = this.startDate ? this.formatDate(this.startDate) : null;
-					var date = Alfresco.util.fromISO8601(valueField.value);
-					if (!this.initialStartDate) {
-						this.initialStartDate = new Date(date.getTime());
-					}
-					this.selectedDate = new Date(date.getTime());
-					this.startDate = date;
-					this.startDateField = {
-						id: control.id,
-						formId: control.options.formId,
-						configName: control.options.fieldId
-					};
-					Dom.get(this.id + "-date-cntrl-date").value = Dom.get(control.id + "-date").value;
-					Bubbling.fire("handleFieldChange", {
-						fieldId: this.options.fieldId,
-						formId: this.options.formId
-					});
-					if (this.needDraw) {
-						this.draw();
-						if (this.formatDate(this.startDate) != prevDate) {
-							this.busytime = [];
-							this.draw();
-							this.requestMembersTime();
-						} else {
-							this.draw();
-						}
-					}
-					//Данные из поля завершение
-				} else if (fieldId == "lecm-events:to-date") {
-					var valueField = Dom.get(control.currentValueHtmlId);
-					var prevDate = this.endDate ? this.formatDate(this.endDate) : null;
-
-					var date = Alfresco.util.fromISO8601(valueField.value);
-					if (!this.initialEndDate) {
-						this.initialEndDate = new Date(date.getTime());
-					}
-					this.endDate = date;
-					this.endDateField = {
-						id: control.id,
-						formId: control.options.formId,
-						configName: control.options.fieldId
-					};
-					if (this.needDraw) {
-						if (this.formatDate(this.endDate) != prevDate) {
-							this.busytime = [];
-							this.draw();
-							this.requestMembersTime();
-						} else {
-							this.draw();
-						}
-					}
-				}
-			}
+			this._formControlUpdated(control);
 		},
 
 		/**
@@ -563,7 +517,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					successCallback:
 					{
 						fn: function(response) {
-							if (response.json) {
+							if (response.json && response.config.dataObj.date == Alfresco.util.formatDate(this.selectedDate, "yyyy-mm-dd")) {
 								this.busytime = response.json;
 								this.fillBusyTime(response.json);
 							}
@@ -1222,6 +1176,89 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					}
 				}
 			}
+		},
+
+		_formControlUpdated: function _formControlUpdated(control) {
+			if (control && control.options.fieldId && control.options.formId == this.options.formId) {
+				var fieldId = control.options.fieldId;
+				//Данные из поля "Начало"
+				if (fieldId == this.options.fromDateConfigName) {
+					this._updateStartDate(control);
+				//Данные из поля завершение
+				} else if (fieldId == this.options.toDateConfigName) {
+					this._updateEndDate(control);
+				} else if (fieldId == this.options.allDayConfigName) {
+					this._updateAllDay(control);
+				}
+			}
+		},
+
+		_updateStartDate: function _updateStartDate_function(control) {
+			var valueField = Dom.get(control.currentValueHtmlId);
+			var prevDate = this.startDate ? this.formatDate(this.startDate) : null;
+			var date = Alfresco.util.fromISO8601(valueField.value);
+			if (!this.initialStartDate) {
+				this.initialStartDate = new Date(date.getTime());
+			}
+			this.selectedDate = new Date(date.getTime());
+			this.startDate = date;
+			this.startDateField = {
+				id: control.id,
+				formId: control.options.formId,
+				configName: control.options.fieldId
+			};
+			Dom.get(this.id + "-date-cntrl-date").value = Dom.get(control.id + "-date").value;
+			Bubbling.fire("handleFieldChange", {
+				fieldId: this.options.fieldId,
+				formId: this.options.formId
+			});
+			if (this.needDraw) {
+				this.draw();
+				if (this.formatDate(this.startDate) != prevDate) {
+					this.busytime = [];
+					this.draw();
+					this.requestMembersTime();
+				} else {
+					this.draw();
+				}
+			}
+			if (!this.allDay && this.endDateField ) {
+				Dom.get(this.endDateField.id + "-date").value = this.formatDate(this.startDate);
+				Bubbling.fire("handleFieldChange", {
+					fieldId: this.endDateField.configName,
+					formId: this.endDateField.formId
+				});
+			}
+		},
+
+		_updateEndDate: function _updateEndDate_function(control) {
+			var valueField = Dom.get(control.currentValueHtmlId);
+			var prevDate = this.endDate ? this.formatDate(this.endDate) : null;
+
+			var date = Alfresco.util.fromISO8601(valueField.value);
+			if (!this.initialEndDate) {
+				this.initialEndDate = new Date(date.getTime());
+			}
+			this.endDate = date;
+			this.endDateField = {
+				id: control.id,
+				formId: control.options.formId,
+				configName: control.options.fieldId
+			};
+			if (this.needDraw) {
+				if (this.formatDate(this.endDate) != prevDate) {
+					this.busytime = [];
+					this.draw();
+					this.requestMembersTime();
+				} else {
+					this.draw();
+				}
+			}
+		},
+
+		_updateAllDay: function _updateAllDay(control) {
+			this.allDay = control.checkbox.checked;
 		}
+		///////////////////////////////////////
 	}, true);
 })();

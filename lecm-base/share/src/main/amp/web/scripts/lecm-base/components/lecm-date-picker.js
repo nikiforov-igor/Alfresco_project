@@ -339,6 +339,11 @@
                  * мы выносим его в body и позиционируем по кнопке его вызова
                  */
                 _showPicker: function DatePicker__showPicker(event) {
+                    //проверяем на возможность редактирования, если редактировать нельзя - ничего не показываем
+                    var dateEl = Dom.get(this.id + "-date");
+                    if (dateEl && dateEl.readOnly) {
+                        return;
+                    }
                     // При открытии календаря посылаем событие, чтобы закрыть все другие открытые календари
                     Bubbling.fire("showDatePicker", {datepicker : this});
 
@@ -346,7 +351,7 @@
 		                var me = this;
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
-		                var clicked = Event.getTarget(event) || Dom.get(me.id + "-date");
+		                var clicked = Event.getTarget(event) || dateEl;
 		                var d = 5;                                                         // величина отступа
 
 		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
@@ -381,7 +386,7 @@
                         if (Dom.getY(picker) != y) {
                             Dom.setY(picker, y);
                         }
-                        Dom.get(me.id + "-date").focus();
+                        dateEl.focus();
                     }
                 },
                 /**
