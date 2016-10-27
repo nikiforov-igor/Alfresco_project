@@ -283,8 +283,6 @@
 				allDayConfigName: "${params.allDayConfigName!'lecm-events:all-day'}",
 				fromDateConfigName: "${params.fromDateConfigName!'lecm-events:from-date'}",
 				toDateConfigName: "${params.toDateConfigName!'lecm-events:to-date'}",
-				currentValue: "${field.value!''}",
-				currentValue: "${field.value!''}",
                 sortSelected: ${sortSelected?string},
             <#if params.defaultValueDataSource??>
                 defaultValueDataSource: "${params.defaultValueDataSource}",
