@@ -24,7 +24,7 @@
     <#assign usePagination = field.control.params.usePagination/>
 </#if>
 
-<div class="form-field with-grid" id="${controlId}">
+<div class="form-field lecm-checkboxtable with-grid" id="${controlId}">
     <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
         <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 <@grid.datagrid containerId false>
@@ -71,6 +71,9 @@
 			    },
 			    dataSource:"${field.control.params.ds!"lecm/search"}",
 			    bubblingLabel: "${containerId}",
+				<#if field.control.params.fixedHeader??>
+                    fixedHeader: ${field.control.params.fixedHeader},
+				</#if>
 			    <#if field.control.params.height??>
 				    height: ${field.control.params.height},
 			    </#if>
