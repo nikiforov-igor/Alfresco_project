@@ -203,6 +203,7 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/base-repo/models/lecm-base-aspects-model.xml</value>
+				<value>alfresco/module/base-repo/models/lecm-base-dummy-script-aspects-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
