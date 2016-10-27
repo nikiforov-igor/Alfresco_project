@@ -966,7 +966,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
             var orgMetadata = this.modules.dataGrid.datagridMeta;
-            if (orgMetadata != null && orgMetadata.nodeRef.indexOf(":") > 0) {
+            if (orgMetadata && orgMetadata.nodeRef.indexOf(":") > 0) {
                 var destination = orgMetadata.nodeRef;
                 var itemType = orgMetadata.itemType;
 
@@ -977,7 +977,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     Alfresco.util.populateHTML(
                         [contId + "_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
                     );
-                    if (itemType && itemType != "") {
+                    if (itemType) {
                         Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
                     }
                     var rowId = p_dialog.options.onSuccess.rowId;
@@ -991,6 +991,8 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     }
                     this.doubleClickLock = false;
 	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+
+					this.beforeShowCheck(p_form, p_dialog);
                 };
 
                 var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
@@ -1043,6 +1045,10 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     }).show();
             }
         },
+
+		beforeShowCheck: function (p_form, p_dialog) {
+		},
+
         _itemUpdate:function DataGrid_onDataItemCreated(nodeRef) {
             if (this._hasEventInterest(this.bubblingLabel) && (this.nodeRef !== null)) {
                 var nodeRef = new Alfresco.util.NodeRef(nodeRef);
