@@ -837,7 +837,6 @@ LogicECM.module.Base.Util = {
 			var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
 			return v.toString(16);
 		});
-		this.viewDialog
 	},
 
 	viewDialog: null,
@@ -973,7 +972,7 @@ LogicECM.module.Base.Util = {
 	errorMessageShowDetails: function () {
 		Dom.setStyle(this.id + "-error-message-show-details", "display", "block");
 	}
-	
+
 };
 
 LogicECM.module.Base.SimplePromise = function () {
