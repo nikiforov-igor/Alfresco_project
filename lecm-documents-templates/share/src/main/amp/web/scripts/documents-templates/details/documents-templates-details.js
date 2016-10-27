@@ -72,14 +72,18 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 			}
 
 			function doBeforeAjaxRequest(form) {
+				var propsForRemove = [];
 				for (var property in form.dataObj) {
 					if (form.dataObj.hasOwnProperty(property) &&
 						property.indexOf("prop_lecm-template") != 0 &&
 						property.indexOf("assoc_lecm-template") != 0 &&
 						property.indexOf("alf_destination") != 0 &&
 						property.indexOf("prop_cm") != 0) {
-						delete form.dataObj[property];
+						propsForRemove.push(property);
 					}
+				}
+				for (var i in propsForRemove) {
+					delete form.dataObj[propsForRemove[i]];
 				}
 				return true;
 			}
