@@ -2,6 +2,7 @@ package ru.it.lecm.workflow.approval.api;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -9,6 +10,11 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
  * @author vmalygin
  */
 public interface ApprovalService {
+	public static final String APPROVAL_ASPECTS_NAMESPACE = "http://www.it.ru/logicECM/model/approval/aspects/1.0";
+	
+	public static final QName ASPECT_APPROVAL_DATA = QName.createQName(APPROVAL_ASPECTS_NAMESPACE, "approvalDataAspect");
+	public static final QName ASSOC_APPROVAL_FOLDER = QName.createQName(APPROVAL_ASPECTS_NAMESPACE, "approvalFolderRef");
+	
 	/**
 	 * получение NodeRef-ы на корневую папку "Сервис Согласование"
 	 * @return NodeRef на корневую папку или null, если такой нет
