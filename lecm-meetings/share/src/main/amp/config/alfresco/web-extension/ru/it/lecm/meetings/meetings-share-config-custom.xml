@@ -93,6 +93,8 @@
 					<!-- Тематика -->
 					<show id="lecm-events:subject-assoc"/>
 					<show id="lecm-events:subject-assoc-ref"/>
+					<show id="lecm-meetings:actual-from-date" for-mode="view"/>
+					<show id="lecm-meetings:actual-to-date" for-mode="view"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-events:title"/>
@@ -352,6 +354,8 @@
 					<show id="lecm-meetings:holding-invited-members-assoc"/>
 					<!-- Завершено -->
 					<show id="lecm-meetings:finished"/>
+					<show id="lecm-events:from-date"/>
+					<show id="lecm-events:to-date"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-events:title" read-only="true"/>
@@ -403,6 +407,46 @@
 					</field>
 					<field id="lecm-meetings:finished">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="lecm-events:from-date">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+					<field id="lecm-events:to-date">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+					</field>
+				</appearance>
+			</form>
+			<form id="holding-accept">
+				<field-visibility>
+					<show id="lecm-meetings:actual-from-date"/>
+					<show id="lecm-meetings:actual-to-date"/>
+					<show id="lecm-meetings:finished"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-meetings:finished">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+							<control-param name="fieldValue">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-meetings:actual-from-date">
+						<control>
+							<control-param name="maxLimitCurrentDate">true</control-param>
+							<control-param name="selectedItemsFormArgs">from_date</control-param>
+							<control-param name="forceEditable">true</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Meetings.finishDatesValidation" message-id="message.validation.finishDatesValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-meetings:actual-to-date">
+						<control>
+							<control-param name="maxLimitCurrentDate">true</control-param>
+							<control-param name="selectedItemsFormArgs">to_date</control-param>
+							<control-param name="forceEditable">true</control-param>
+						</control>
+						<constraint-handlers>
+							<constraint type="INVALID" validation-handler="LogicECM.module.Meetings.finishDatesValidation" message-id="message.validation.finishDatesValidation" event="change"/>
+						</constraint-handlers>
 					</field>
 				</appearance>
 			</form>
