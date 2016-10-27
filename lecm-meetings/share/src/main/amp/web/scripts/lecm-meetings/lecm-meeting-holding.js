@@ -222,8 +222,8 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 			var arguments = {};
 			for (var i = 0; i < this.submitElements.length; i++) {
-				if (this.submitElements[i].getForm() != null
-					&& Dom.get(this.submitElements[i].getForm().id) != null
+				if (this.submitElements[i].getForm()
+					&& Dom.get(this.submitElements[i].getForm().id)
 					&& this.submitElements[i].getForm().id != (this.HOLDING_MEETING + "-form")) {
 					var form = this.submitElements[i].getForm();
 
