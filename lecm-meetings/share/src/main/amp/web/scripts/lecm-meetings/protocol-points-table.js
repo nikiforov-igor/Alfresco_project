@@ -194,28 +194,27 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                         if (oResults && oResults.employees && oResults.employees.length) {
 
                             reportersFilter = reportersFilter.concat(oResults.employees.filter(notExistsInFilter));
-
-                            this.filteredFields.forEach(function (fieldId) {
-                                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                    allowedNodes: reportersFilter
-                                });
-                            }, this);
                         }
+                        this._applyFilter(formId, reportersFilter);
                     }
                 },
                 failureCallback: {
                     scope: this,
                     fn: function () {
-                        this.filteredFields.forEach(function (fieldId) {
-                            LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                allowedNodes: reportersFilter
-                            });
-                        }, this);
+                        this._applyFilter(formId, reportersFilter);
                     }
                 }
             });
 
 
+        },
+
+        _applyFilter: function (formId, reportersFilter) {
+            this.filteredFields.forEach(function (fieldId) {
+                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
+                    allowedNodes: reportersFilter
+                });
+            }, this);
         },
 
         onActionEdit: function DataGrid_onActionEdit(item) {
