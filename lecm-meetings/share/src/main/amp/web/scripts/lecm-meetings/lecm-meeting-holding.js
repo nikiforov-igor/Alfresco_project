@@ -80,36 +80,14 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 
 		onBeforeFormRuntimeInit: function(layer, args) {
 			var submitElement = args[1].runtime.submitElements[0];
-
 			this.submitElements.push(submitElement);
 
-			var isMainForm = false;
-			var form = submitElement.getForm();
-			if (form != null) {
-				var propFinished = form["prop_lecm-meetings_finished"];
-				if (propFinished != null) {
-					isMainForm = true;
-				}
-			}
-
-			args[1].runtime.setAJAXSubmit(true,
-				{
-					successCallback:
-					{
-						fn:  null,
-						scope: this
-					},
-					failureCallback:
-					{
-						fn: this.onFormSubmitFailure,
-						scope: this
-					}
-				});
+			args[1].runtime.setAJAXSubmit(true);
 		},
 
 		saveForm: function() {
 			for (var i = 0; i < this.submitElements.length; i++) {
-				if (this.submitElements[i].getForm() && Dom.get(this.submitElements[i].getForm().id) && this.submitElements[i].getForm().id != (this.HOLDING_MEETING + "-form")) {
+				if (this.submitElements[i].getForm() && this.submitElements[i].getForm().id != (this.HOLDING_MEETING + "-form")) {
 					this.submitElements[i].submitForm();
 				}
 			}
@@ -223,7 +201,6 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 			var arguments = {};
 			for (var i = 0; i < this.submitElements.length; i++) {
 				if (this.submitElements[i].getForm()
-					&& Dom.get(this.submitElements[i].getForm().id)
 					&& this.submitElements[i].getForm().id != (this.HOLDING_MEETING + "-form")) {
 					var form = this.submitElements[i].getForm();
 
