@@ -841,7 +841,7 @@ LogicECM.module.Base.Util = {
 
 	viewAttributes: function (obj) {
 
-		var viewDialog = this.createDialog("view-node-panel_"+Alfresco.util.generateDomId());
+		var viewDialog = this.createDialog("view-node-panel_" + Alfresco.util.generateDomId());
 		var requestObj = {
 			itemKind: obj.itemKind ? obj.itemKind : "node",
 			itemId: obj.itemId ? obj.itemId : obj.nodeRef,
@@ -880,11 +880,9 @@ LogicECM.module.Base.Util = {
 	},
 
 	destroyViewDialog: function (event, args, params) {
-
 		LogicECM.module.Base.Util.destroyForm(params.dialog.id);
 		LogicECM.module.Base.Util.formDestructor(event, args, params);
 		params.dialog.destroy();
-
 	},
 
 	createDialog: function (formid) {
@@ -896,7 +894,7 @@ LogicECM.module.Base.Util = {
 					{
 						text  : Alfresco.util.message("button.close"),
 						handler : function (e) {
-							viewDialog.hideEvent.fire();
+							viewDialog.hide();
 						}
 					}
 
@@ -934,16 +932,13 @@ LogicECM.module.Base.Util = {
 		YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 	},
 
-
 	displayErrorMessageWithDetails: function (msgHeader, msgTitle, msgDetails) {
-
 		var errorMessageDialog = new YAHOO.widget.SimpleDialog("errorMessageWithDetailsDialog", {
 			width: "60em",
 			fixedcenter: true,
 			destroyOnHide: true,
 			modal: true
 		});
-
 
 		errorMessageDialog.setHeader(msgHeader);
 
@@ -961,8 +956,6 @@ LogicECM.module.Base.Util = {
 
 		YAHOO.util.Event.on(this.id + "-error-message-show-details-link", "click", this.errorMessageShowDetails, null, this);
 		errorMessageDialog.hideEvent.subscribe(this.destroyViewDialog, {dialog: errorMessageDialog}, this);
-
-
 	},
 
 	errorMessageShowDetails: function () {
