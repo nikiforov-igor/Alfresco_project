@@ -197,32 +197,29 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                     scope: this,
                     fn: function (response) {
                         var oResults = JSON.parse(response.serverResponse.responseText);
-
                         if (oResults && oResults.employees && oResults.employees.length) {
-
                             this.reportersFilter = this.reportersFilter.concat(oResults.employees.filter(this.notExistsInFilter, this));
-
-                            this.filteredFields.forEach(function (fieldId) {
-                                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                    allowedNodes: this.reportersFilter
-                                });
-                            }, this);
                         }
+                        this._applyFilter(formId);
                     }
                 },
                 failureCallback: {
                     scope: this,
                     fn: function () {
-                        this.filteredFields.forEach(function (fieldId) {
-                            LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                allowedNodes: this.reportersFilter
-                            });
-                        }, this);
+                        this._applyFilter(formId);
                     }
                 }
             });
 
 
+        },
+
+        _applyFilter: function (formId) {
+            this.filteredFields.forEach(function (fieldId) {
+                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
+                    allowedNodes: this.reportersFilter
+                });
+            }, this);
         },
 
         onActionEdit: function DataGrid_onActionEdit(item) {
