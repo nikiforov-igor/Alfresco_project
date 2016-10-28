@@ -839,22 +839,18 @@ LogicECM.module.Base.Util = {
 		});
 	},
 
-	viewDialog: null,
-	viewFormId: "view-node-form",
-
 	viewAttributes: function (obj) {
-		var viewFormId = obj.formId ? obj.formId : "view-node-form";
-		if (!this.viewDialog || this.viewFormId != viewFormId) {
-			this.viewFormId = viewFormId;
-			this.createDialog();
-		}
+
+		var viewDialog = this.createDialog("view-node-panel_"+Alfresco.util.generateDomId());
 		var requestObj = {
 			itemKind: obj.itemKind ? obj.itemKind : "node",
 			itemId: obj.itemId ? obj.itemId : obj.nodeRef,
 			mode: "view",
 			htmlid: obj.htmlid ? obj.htmlid : obj.nodeRef.replace("workspace://SpacesStore/", "").replace("-", ""),
-			formId: viewFormId
 		};
+		if(obj.formId){
+			requestObj.formId = obj.formId;
+		}
 		if (obj.nodeId) {
 			requestObj.nodeId = obj.nodeId;
 		}
@@ -865,51 +861,49 @@ LogicECM.module.Base.Util = {
 		Alfresco.util.Ajax.request(
 			{
 				scope: this,
-				url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 				dataObj: requestObj,
 				successCallback: {
 					scope: this,
 					fn: function (response) {
-						var formEl = Dom.get(viewFormId + "-content");
-						formEl.innerHTML = response.serverResponse.responseText;
-						if (this.viewDialog != null) {
-							Dom.setStyle(viewFormId, "display", "block");
+						if (viewDialog != null) {
 							var message = obj.title ? Alfresco.messages.global[obj.title] : Alfresco.util.message("logicecm.view");
-							var titleElement = Dom.get(viewFormId + "-head");
-							if (titleElement) {
-								titleElement.innerHTML = message;
-							}
-							this.viewDialog.show();
+							viewDialog.setHeader(message);
+							viewDialog.setBody(response.serverResponse.responseText);
+							viewDialog.show();
 						}
 					}
 				},
-				failureMessage: Alfresco.util.message("message.failure"),
+				failureMessage: obj.failureMessage ? Alfresco.messages.global[obj.failureMessage] : Alfresco.util.message("message.failure"),
 				execScripts: true
 			});
 	},
 
-	hideViewDialog: function (layer, args) {
-		var mayHide = false;
-		if (this.viewDialog) {
-			if (!args) {
-				mayHide = true;
-			} else if (args[1] && args[1].panel && args[1].panel.id == this.viewDialog.id) {
-				mayHide = true
-			}
-			if (mayHide) {
-				this.viewDialog.hide();
-				Dom.setStyle(this.viewFormId, "display", "none");
-			}
-		}
+	destroyViewDialog: function (event, args, params) {
+
+		LogicECM.module.Base.Util.destroyForm(params.dialog.id);
+		LogicECM.module.Base.Util.formDestructor(event, args, params);
+		params.dialog.destroy();
+
 	},
 
-	createDialog: function () {
-		//if(this.viewDialog) this.viewDialog.destroy();
-		this.viewDialog = Alfresco.util.createYUIPanel(this.viewFormId,
+	createDialog: function (formid) {
+		var viewDialog = Alfresco.util.createYUIPanel(formid,
 			{
-				width: "60em"
+				width: "60em",
+				destroyOnHide: true,
+				buttons: [
+					{
+						text  : Alfresco.util.message("button.close"),
+						handler : function (e) {
+							viewDialog.hideEvent.fire();
+						}
+					}
+
+				]
 			});
-		YAHOO.Bubbling.on("hidePanel", this.hideViewDialog);
+		viewDialog.hideEvent.subscribe(this.destroyViewDialog, {dialog: viewDialog}, this);
+		return viewDialog;
 	},
 
 	showEmployeeViewByLink: function (employeeLinkNodeRef, title) {
@@ -940,19 +934,18 @@ LogicECM.module.Base.Util = {
 		YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 	},
 
-	errorMessageDialog: null,
 
 	displayErrorMessageWithDetails: function (msgHeader, msgTitle, msgDetails) {
-		if (this.errorMessageDialog == null) {
-			this.errorMessageDialog = new YAHOO.widget.SimpleDialog("errorMessageWithDetailsDialog", {
-				width: "60em",
-				fixedcenter: true,
-				destroyOnHide: true,
-				modal: true
-			});
-		}
 
-		this.errorMessageDialog.setHeader(msgHeader);
+		var errorMessageDialog = new YAHOO.widget.SimpleDialog("errorMessageWithDetailsDialog", {
+			width: "60em",
+			fixedcenter: true,
+			destroyOnHide: true,
+			modal: true
+		});
+
+
+		errorMessageDialog.setHeader(msgHeader);
 
 		var customMsg = msgDetails.match("\\[\\[.+\\]\\]");
 		if (customMsg != null) {
@@ -962,11 +955,14 @@ LogicECM.module.Base.Util = {
 		errorDialogBody += '<a href="javascript:void(0);" id="' + this.id + '-error-message-show-details-link">' + Alfresco.util.message("logicecm.base.error.show.details") + '</a></div>';
 		errorDialogBody += '<div id="' + this.id + '-error-message-show-details" class="error-dialog-details">' + msgDetails + '</div>';
 
-		this.errorMessageDialog.setBody(errorDialogBody);
-		this.errorMessageDialog.render(document.body);
-		this.errorMessageDialog.show();
+		errorMessageDialog.setBody(errorDialogBody);
+		errorMessageDialog.render(document.body);
+		errorMessageDialog.show();
 
 		YAHOO.util.Event.on(this.id + "-error-message-show-details-link", "click", this.errorMessageShowDetails, null, this);
+		errorMessageDialog.hideEvent.subscribe(this.destroyViewDialog, {dialog: errorMessageDialog}, this);
+
+
 	},
 
 	errorMessageShowDetails: function () {

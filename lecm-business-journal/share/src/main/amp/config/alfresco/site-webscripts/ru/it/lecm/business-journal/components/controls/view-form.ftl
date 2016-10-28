@@ -225,21 +225,39 @@
                     }
                     if (response.type) {
                         if (response.typeRef) {
-                            document.getElementById("${formId}-type").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.typeRef + "')\">" + response.type + "</a>";
+                            document.getElementById("${formId}-type").innerHTML = "<a href='javascript:void(0);' onclick=" +
+                                    "\"LogicECM.module.Base.Util.viewAttributes({" +
+                                    "formId: \'${panelId}\'," +
+                                    "nodeRef:\'" + response.typeRef + "\'," +
+                                    "htmlId: \'LinkMetadata-" + response.typeRef.replace(/\//g, "_")+ "\'," +
+                                    "setId:\'common\'," +
+                                    "failureMessage: \'message.object-not-found\'})\">" + response.type + "</a>";
                         } else {
                             document.getElementById("${formId}-type").innerHTML = response.type;
                         }
                     }
                     if (response.initiator) {
                         if (response.initiatorRef) {
-                            document.getElementById("${formId}-initiator").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.initiatorRef + "')\">" + response.initiator + "</a>";
+                            document.getElementById("${formId}-initiator").innerHTML = "<a href='javascript:void(0);' onclick=" +
+                                    "\"LogicECM.module.Base.Util.viewAttributes({" +
+                                    "formId: \'${panelId}\'," +
+                                    "nodeRef:\'" + response.initiatorRef + "\'," +
+                                    "htmlId: \'LinkMetadata-" + response.initiatorRef.replace(/\//g, "_")+ "\'," +
+                                    "setId:\'common\'," +
+                                    "failureMessage: \'message.object-not-found\'})\">" + response.initiator + "</a>";
                         } else {
                             document.getElementById("${formId}-initiator").innerHTML = response.initiator;
                         }
                     }
                     if (response.mainObject) {
                         if (response.mainObjectRef) {
-                            document.getElementById("${formId}-mainObject").innerHTML = "<a href='javascript:void(0);' onclick=\"_viewLinkAttributes('${panelId}','" + response.mainObjectRef + "')\">" + response.mainObject + "</a>";
+                            document.getElementById("${formId}-mainObject").innerHTML = "<a href='javascript:void(0);' onclick=" +
+                                    "\"LogicECM.module.Base.Util.viewAttributes({" +
+                                    "formId: \'${panelId}\'," +
+                                    "nodeRef:\'" + response.mainObjectRef + "\'," +
+                                    "htmlId: \'LinkMetadata-" + response.mainObjectRef.replace(/\//g, "_")+ "\'," +
+                                    "setId:\'common\'," +
+                                    "failureMessage: \'message.object-not-found\'})\">" + response.mainObject + "</a>";
                         } else {
                             document.getElementById("${formId}-mainObject").innerHTML = response.mainObject;
                         }
