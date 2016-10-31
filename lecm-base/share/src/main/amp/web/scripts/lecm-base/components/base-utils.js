@@ -866,7 +866,9 @@ LogicECM.module.Base.Util = {
 					scope: this,
 					fn: function (response) {
 						if (viewDialog) {
-							var message = obj.title ? Alfresco.messages.global[obj.title] : Alfresco.util.message("logicecm.view");
+							var message = obj.title ?
+								(Alfresco.messages.global[obj.title] ? Alfresco.messages.global[obj.title] : obj.title) :
+								Alfresco.util.message("logicecm.view");
 							viewDialog.setHeader(message);
 							viewDialog.setBody(response.serverResponse.responseText);
 							viewDialog.show();

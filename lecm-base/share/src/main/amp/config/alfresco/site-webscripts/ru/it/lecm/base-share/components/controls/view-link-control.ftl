@@ -1,5 +1,3 @@
-<#import "/ru/it/lecm/base-share/components/view2.lib.ftl" as view />
-
 <#assign formId = args.htmlid + "-form" />
 
 <#-- Будет уникальным на основе 'args.itemId' -->
@@ -15,8 +13,6 @@
 <#else>
     <#assign setId = "common" />
 </#if>
-
-<@view.viewForm formId = viewLinkFormId useDefaultForms = true />
 
 <div class="control view-link viewmode">
 	<div class="label-div">
@@ -57,10 +53,15 @@
                         if (response.json.parentName != null) {
 	                        blockElem = YAHOO.util.Dom.get( "${formId}-view-link-block" );
 	                        blockElem.innerHTML = '<a id="${formId}-view-link-ref" href="javascript:void(0);"/>' + response.json.parentName + '</a>';
-
-	                        YAHOO.util.Event.addListener("${formId}-view-link-ref", "click", function() {
-		                        LogicECM.CurrentModules.ViewFormModule[ "${viewLinkFormId}" ].view( response.json.parentRef, "${setId}", "${formTitle} " + response.json.childName );
-	                        });
+                            YAHOO.util.Event.addListener("${formId}-view-link-ref", "click", function () {
+                                LogicECM.module.Base.Util.viewAttributes({
+                                    formId: '${viewLinkFormId}',
+                                    itemId: response.json.parentRef,
+                                    setId: '${setId}',
+                                    failureMessage: 'message.object-not-found',
+                                    title: '${formTitle} ' + response.json.childName
+                                });
+                            });
                         } else if (response.json.parents != null) {
 	                        blockElem = YAHOO.util.Dom.get( "${formId}-view-link-block" );
 
@@ -68,8 +69,14 @@
 	                            blockElem.innerHTML += '<a id="${formId}-view-link-ref-' + i + '" href="javascript:void(0);"/>' + response.json.parents[i].name + '</a></br>';
 
 	                            YAHOO.util.Event.onAvailable("${formId}-view-link-ref-" + i, function (j) {
-                                    YAHOO.util.Event.addListener("${formId}-view-link-ref-" + j, "click", function(e, k) {
-                                        LogicECM.CurrentModules.ViewFormModule[ "${viewLinkFormId}" ].view( response.json.parents[k].nodeRef, "${setId}", "${formTitle} " + response.json.childName );
+                                    YAHOO.util.Event.addListener("${formId}-view-link-ref-" + j, "click", function (e, k) {
+                                        LogicECM.module.Base.Util.viewAttributes({
+                                            formId: '${viewLinkFormId}',
+                                            itemId: response.json.parents[k].nodeRef,
+                                            setId: '${setId}',
+                                            failureMessage: 'message.object-not-found',
+                                            title: '${formTitle} ' + response.json.childName
+                                        });
                                     }, j);
 	                            }, i);
                             }
