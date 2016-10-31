@@ -242,7 +242,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
             }
 
             // Using Forms Service, so always create new instance
-            var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
+            var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails" + Alfresco.util.generateDomId());
             editDetails.setOptions({
                 width: this.options.editFormWidth,
                 templateUrl: templateUrl,
@@ -325,7 +325,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 showCancelButton: true
             };
 
-            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails" + Alfresco.util.generateDomId());
             createDetails.setOptions({
                 width: "50em",
                 templateUrl: templateUrl,

@@ -983,7 +983,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     var rowId = p_dialog.options.onSuccess.rowId;
                     var oDataRow = this.widgets.dataTable.getRecord(rowId);
                     if (oDataRow) {
-                        var tempIndexTag = Dom.get(this.id + "-createDetails_prop_lecm-document_indexTableRow");
+                        var tempIndexTag = Dom.get(p_dialog.id + "_prop_lecm-document_indexTableRow");
                         if (tempIndexTag) {
                             var index = eval(oDataRow.getData().itemData["prop_lecm-document_indexTableRow"].value);
                             tempIndexTag.value = index+1;
@@ -1007,7 +1007,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 	            };
 
                 // Using Forms Service, so always create new instance
-                var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+                var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails-" + Alfresco.util.generateDomId());
                 createDetails.setOptions(
                     {
                         width:"50em",
