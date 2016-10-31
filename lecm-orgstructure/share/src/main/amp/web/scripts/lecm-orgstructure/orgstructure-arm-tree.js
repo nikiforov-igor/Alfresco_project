@@ -254,7 +254,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
 
-            LogicECM.module.Base.Util.viewAttributes({nodeRef:this.selectedNode.data.nodeRef.toString()});
+            LogicECM.module.Base.Util.viewAttributes({itemId:this.selectedNode.data.nodeRef.toString()});
             this.doubleClickLock = false;
         }
     });

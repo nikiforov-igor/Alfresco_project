@@ -23,7 +23,7 @@ LogicECM.module.Signing = LogicECM.module.Signing || {};
 		signingListRef: null,
 		getCustomCellFormatter: function(grid, elCell, oRecord, oColumn, oData) {
 			var html = "", i, ii, columnContent, datalistColumn, data,
-				clickHandledStringTemplate = '<a href="javascript:void(0);" onclick="{clickHandler}(\'{nodeRef}\')">{content}</a>';
+				clickHandledStringTemplate = '<a href="javascript:void(0);" onclick="{clickHandler}({itemId:\'{nodeRef}\'})">{content}</a>';
 
 			if (!oRecord) {
 				oRecord = this.getRecord(elCell);

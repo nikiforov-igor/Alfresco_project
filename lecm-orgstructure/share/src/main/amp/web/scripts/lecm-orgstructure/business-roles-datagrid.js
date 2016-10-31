@@ -64,7 +64,7 @@ LogicECM.module.OrgStructure.BusinessRoles = LogicECM.module.OrgStructure.Busine
 										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("lecm.date-format.defaultDateOnly"));
 										if (datalistColumn.name == attributeForShow) {
 											content = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes("
-												+ "{nodeRef:\'"
+												+ "{itemId:\'"
 												+ oRecord.getData("nodeRef")
 												+ "\'})\">"
 												+ content
@@ -77,7 +77,7 @@ LogicECM.module.OrgStructure.BusinessRoles = LogicECM.module.OrgStructure.Busine
 										content = Alfresco.util.formatDate (Alfresco.util.fromISO8601 (data.value), scope.msg ("lecm.date-format.defaultDateOnly"));
 										if (datalistColumn.name == attributeForShow) {
 											content = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes("
-												+ "{nodeRef:\'"
+												+ "{itemId:\'"
 												+ oRecord.getData("nodeRef")
 												+ "\'})\">"
 												+ content
@@ -90,7 +90,7 @@ LogicECM.module.OrgStructure.BusinessRoles = LogicECM.module.OrgStructure.Busine
 										content = Alfresco.util.encodeHTML (data.displayValue);
 										if (datalistColumn.name == attributeForShow) {
 											html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes("
-												+ "{nodeRef:\'"
+												+ "{itemId:\'"
 												+ oRecord.getData("nodeRef")
 												+ "\'})\">"
 												+ content

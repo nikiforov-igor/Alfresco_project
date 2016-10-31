@@ -54,7 +54,7 @@
 								</td>
 								<td style="vertical-align: top; padding: 0 0 0 10px">
 									<#assign fio = mapAttrs["lastName"] +" "+ mapAttrs["firstName"] +" "+ mapAttrs["middleName"]>
-									<p><a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({nodeRef:'${mapAttrs["expertRef"]}', title: 'logicecm.employee.view'})">${fio}</a></p>
+									<p><a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${mapAttrs["expertRef"]}', title: 'logicecm.employee.view'})">${fio}</a></p>
 									<#if mapAttrs["staf"] != "">
 										<p>Должность: ${mapAttrs["staf"]}</p>
 									</#if>

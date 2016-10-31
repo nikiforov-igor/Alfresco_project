@@ -879,7 +879,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					return null;
 				}
 				return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
-					"{nodeRef:\'" + nodeRef + "\'," +
+					"{itemId:\'" + nodeRef + "\'," +
 					"title: \'label.view.stage.details\', " +
 					"formId: \'viewStageResult\' })>" + decisionData.displayValue + "</a>";
 			}
@@ -934,7 +934,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				return null;
 			}
 			return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
-				"{nodeRef:\'" + nodeRef + "\'," +
+				"{itemId:\'" + nodeRef + "\'," +
 				"title: \'label.view.approval.details\', " +
 				"formId: \'viewApprovalResult\' })>"
 				+ decisionData.displayValue + (hasComment ? commentIcon : '')+ "</a>";

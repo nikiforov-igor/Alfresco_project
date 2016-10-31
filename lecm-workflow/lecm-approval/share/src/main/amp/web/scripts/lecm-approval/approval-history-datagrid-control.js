@@ -37,7 +37,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 
 			return "<a href=\"javascript:void(0);\" onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
-				"{nodeRef:\'" + nodeRef + "\'," +
+				"{itemId:\'" + nodeRef + "\'," +
 				"title: \'label.view.approval.details\', " +
 				"formId: \'viewApprovalResult\' })>" + decisionData.displayValue + "</a>";
 		}

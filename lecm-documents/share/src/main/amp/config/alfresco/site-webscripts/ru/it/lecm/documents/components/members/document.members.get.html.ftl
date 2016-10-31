@@ -34,7 +34,7 @@
                         <#list members.items as item>
                             <#if i < skipCount>
                                 <li class="text-broken">
-                                    <a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({nodeRef:'${item.employeeRef}', title: 'logicecm.employee.view'})">${item.employeeName}</a><br/>
+                                    <a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${item.employeeRef}', title: 'logicecm.employee.view'})">${item.employeeName}</a><br/>
                                 ${item.employeePosition}<br/>
                                     <#assign i = i+1/>
                                 </li>

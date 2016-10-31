@@ -379,7 +379,7 @@ LogicECM.module = LogicECM.module || {};
                                             displayValue += this.options.objectRenderer.renderItem(item, 16,
                                                 "<div>{icon} <a href='javascript:void(0)'; onclick=\"LogicECM.module.Base.Util.viewAttributes({" +
                                                 "formId:\'" + this.id + "-link\'," +
-                                                "nodeRef:\'" + item.nodeRef + "\'," +
+                                                "itemId:\'" + item.nodeRef + "\'," +
                                                 "htmlId: \'LinkMetadata-" + item.nodeRef.replace(/\//g, "_") + "\'," +
                                                 "setId:\'common\'," +
                                                 "failureMessage: \'message.object-not-found\'})\">" + "{name}</a></div>");

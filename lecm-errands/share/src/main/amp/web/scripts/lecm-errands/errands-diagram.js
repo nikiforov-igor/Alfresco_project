@@ -215,7 +215,7 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                 }
                 if (oColumn.key =="executor") {
                     desc = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes(" +
-                        "{nodeRef:\'" + data.executorRef + "\', title: \'logicecm.employee.view\' })\">" + data.executor_name + "</a> ";
+                        "{itemId:\'" + data.executorRef + "\', title: \'logicecm.employee.view\' })\">" + data.executor_name + "</a> ";
                 }
                 if (oColumn.key =="startDate") {
                     if (data.startDate != undefined) {
