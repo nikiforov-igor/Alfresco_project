@@ -48,7 +48,7 @@
 					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
 					<show id="lecmWorkflowRoutes:routeEditable"/>
-					<show id="lecmWorkflowRoutes:stagesControlFake" force="true" />
+					<show id="lecm-base-dummy-aspects:script" force="true" />
 				</field-visibility>
 				<appearance>
 					<set id="availability" appearance="bordered-panel" label-id="lecm.routers.available.selection"/>
@@ -98,7 +98,7 @@
 					<field id="lecmWorkflowRoutes:routeEditable" set="params">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
-					<field id="lecmWorkflowRoutes:stagesControlFake" set="stages">
+					<field id="lecm-base-dummy-aspects:script" set="stages">
 						<control template="/ru/it/lecm/workflow/routes/controls/stages-control.ftl">
 							<control-param name="contextProperty">createStageFormId</control-param>
 							<control-param name="disableIfOrganizationEmpty">true</control-param>
@@ -131,7 +131,7 @@
 					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
 					<show id="lecmWorkflowRoutes:routeEditable"/>
-					<show id="lecmWorkflowRoutes:stagesControlFake" force="true"/>
+					<show id="lecm-base-dummy-aspects:script" force="true"/>
 				</field-visibility>
 				<appearance>
 					<set id="availability" appearance="bordered-panel" label-id="lecm.routers.available.selection"/>
@@ -181,7 +181,7 @@
 					<field id="lecmWorkflowRoutes:routeEditable" set="params">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
-					<field id="lecmWorkflowRoutes:stagesControlFake" set="stages">
+					<field id="lecm-base-dummy-aspects:script" set="stages">
 						<control template="/ru/it/lecm/workflow/routes/controls/stages-control.ftl">
 							<control-param name="contextProperty">createStageFormId</control-param>
 							<control-param name="disableIfOrganizationEmpty">true</control-param>

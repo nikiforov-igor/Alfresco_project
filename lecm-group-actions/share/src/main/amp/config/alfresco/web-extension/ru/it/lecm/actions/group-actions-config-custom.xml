@@ -290,7 +290,8 @@
         </forms>
     </config>
 
-    <config evaluator="model-type" condition="lecm-group-actions:form-data">
+<!--TODO: Судя по всему неактуально, отсмотреть внимательнее --> 
+<!--    <config evaluator="model-type" condition="lecm-group-actions:form-data">
         <forms>
             <form>
                 <field-visibility>
@@ -326,7 +327,7 @@
                 </appearance>
             </form>
         </forms>
-    </config>
+    </config>-->
 
 
 </alfresco-config>

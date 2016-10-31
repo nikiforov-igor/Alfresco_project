@@ -16,9 +16,10 @@
     <config evaluator="node-type" condition="lecm-internal:document">
         <forms>
             <!-- Форма для модального представления -->
-            <form id="internal-modal">
+            <!-- TODO: Похоже, нигде не используется -->
+            <!-- <form id="internal-modal">
                 <field-visibility>
-                    <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
+                    <show id="lecm-document:regnum"/>																	
                     <show id="lecm-document-aspects:reg-data-date" force="true"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -52,7 +53,7 @@
                     </field>
 
                 </appearance>
-            </form>
+            </form> -->
             <!-- Форма редатирования-->
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
