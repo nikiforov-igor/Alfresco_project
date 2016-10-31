@@ -254,7 +254,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
 
-            viewAttributes(this.selectedNode.data.nodeRef, null, "", null); // метод из view.lib.ftl
+            LogicECM.module.Base.Util.viewAttributes({itemId:this.selectedNode.data.nodeRef.toString()});
             this.doubleClickLock = false;
         }
     });

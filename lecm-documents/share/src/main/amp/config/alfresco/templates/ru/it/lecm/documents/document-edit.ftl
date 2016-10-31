@@ -1,6 +1,4 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-<#include "/ru/it/lecm/base-share/components/view.lib.ftl"/>
-
 <@bpage.templateHeader>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/base-menu/base-menu.css"/>
@@ -11,7 +9,6 @@
 	<#include "/org/alfresco/components/form/form.dependencies.inc">
 </@>
 
-<@viewForm />
 
 <div id="no_menu_page" class="sticky-wrapper">
 	<@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>

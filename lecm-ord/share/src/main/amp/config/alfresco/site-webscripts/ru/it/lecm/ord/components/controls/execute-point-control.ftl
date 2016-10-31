@@ -66,7 +66,7 @@
 								 type: "button",
 								 label: "${msg('ord.item.execute.button')}",
 								 onclick: {
-								  fn: function(){executePoint(); hideViewDialog(); },
+								  fn: function(){executePoint(); LogicECM.module.Base.Util.hideViewDialog(); },
 								  scope: this
 								 }
 								});

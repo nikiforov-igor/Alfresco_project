@@ -137,7 +137,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                     },
                     onFailure: {
                         fn: function (response) {
-                            this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
+                            LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
                             this.createDialogOpening = false;
                             this.widgets.cancelButton.set('disabled', false);
                         },
@@ -372,7 +372,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
                             macrosName = messageSplittedArr.splice(0, 2)[1];
                             macrosScript = messageSplittedArr.join(' | ');
                             message = this.msg('message.error.running.macros') + ' ' + macrosName;
-                            this.displayErrorMessageWithDetails(this.msg('title.error.running.macros'), message, macrosScript);
+                            LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg('title.error.running.macros'), message, macrosScript);
                         } else {
                             Alfresco.util.PopupManager.displayMessage({
                                 text: this.msg('message.new-row.failure')

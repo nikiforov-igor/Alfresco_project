@@ -482,7 +482,7 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                     columnContent = "<a href=\'" + Alfresco.constants.URL_PAGECONTEXT+'document-attachment?nodeRef='+ data.value +"\'\">" + fileIconHtml + data.displayValue + "</a>";
                                     break;
 								case "cm:cmobject":
-									columnContent = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + data.value + "\', null, \'" + "logicecm.view" + "\')\">" + data.displayValue + "</a>";
+									columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'"+ data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
 									break;
                                 default:
                                     break;

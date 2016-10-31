@@ -63,7 +63,7 @@
 								 type: "button",
 								 label: "${msg('protocol.point.execute.button')}",
 								 onclick: {
-								  fn: function(){executePoint(); hideViewDialog(); },
+								  fn: function(){executePoint(); LogicECM.module.Base.Util.hideViewDialog(); },
 								  scope: this
 								 }
 								});

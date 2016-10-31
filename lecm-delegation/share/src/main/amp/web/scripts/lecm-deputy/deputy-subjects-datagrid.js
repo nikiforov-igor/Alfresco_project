@@ -87,7 +87,7 @@ LogicECM.module.Deputy.Const = LogicECM.module.Deputy.Const || {};
 						},
 						onFailure: {
 							fn: function DataGrid_onActionCreate_failure(response) {
-								me.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
+								LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
 								me.editDialogOpening = false;
 								this.widgets.cancelButton.set("disabled", false);
 							},
