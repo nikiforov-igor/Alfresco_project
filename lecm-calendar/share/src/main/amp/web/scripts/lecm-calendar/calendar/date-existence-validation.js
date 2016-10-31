@@ -19,7 +19,7 @@ LogicECM.module.WCalendar.Calendar.SpecialDays.dayExistenceValidation = function
 	dataGrids.push(LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", LogicECM.module.WCalendar.Calendar.WORKING_DAYS_LABEL));
 	dataGrids.push(LogicECM.module.Base.Util.findComponentByBubblingLabel("LogicECM.module.Base.DataGrid", LogicECM.module.WCalendar.Calendar.NON_WORKING_DAYS_LABEL));
 
-	var pickerYear = pad(dayDate.getFullYear(), 4);
+	var pickerYear = dayDate.getFullYear();
 	var datagridYear = dataGrids[0].options.currentYear;
 	//Если введен другой год - сообщаем , что он будет проигнорирован.
 	if (datagridYear != pickerYear) {
