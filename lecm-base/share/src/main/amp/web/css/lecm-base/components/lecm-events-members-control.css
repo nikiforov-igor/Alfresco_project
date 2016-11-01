@@ -28,3 +28,6 @@
 .control.association-token-control .value-div .control-selected-values {
     max-height: none;
 }
+.control .container .value-div .control-selected-values {
+    overflow: hidden;
+}
