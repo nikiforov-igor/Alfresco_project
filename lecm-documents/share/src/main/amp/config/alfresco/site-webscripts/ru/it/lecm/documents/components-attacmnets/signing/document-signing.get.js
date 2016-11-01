@@ -20,6 +20,8 @@ function main() {
 	model.isSignable = isSignable;
 	model.isSigned = isSigned;
 	model.nodeRef = nodeRef;
+
+	model.isExchangeEnabled = checkExchangeEnabled();
 }
 
 function getDocument(nodeRef) {
@@ -68,6 +70,18 @@ function checkDocflowable(nodeRef) {
 	if (response.status == 200) {
 		responseNative = eval('(' + response + ')');
 		result = responseNative.enabled;
+	}
+	return result;
+}
+
+function checkExchangeEnabled() {
+	var response,
+		result = false,
+		url = "/lecm/signed-docflow/exchangeEnabled";
+
+	response = remote.connect("alfresco").get(url);
+	if (response.status == 200) {
+		result = eval('(' + response + ')');
 	}
 	return result;
 }
