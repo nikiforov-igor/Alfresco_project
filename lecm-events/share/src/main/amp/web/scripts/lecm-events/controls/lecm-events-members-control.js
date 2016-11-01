@@ -543,6 +543,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			content.innerHTML = "";
 			var itemNum = 1;
 			this.keyIndex = [];
+			var cellBounds = this._calculateCell();
+			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth;
 			for (var key in this.selectedItems) {
 				var item = this.selectedItems[key];
 				var row = document.createElement("div");
@@ -550,13 +552,16 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				content.appendChild(row);
 				var firstColumn = document.createElement("div");
 				firstColumn.className = "member-control-diagram-first-cell";
-				firstColumn.style.width = this.firstColumnWidth + "px";
+				firstColumn.style.width = cellBounds.firstColumnWidth + "px";
 				row.appendChild(firstColumn);
 				var textCell = document.createElement("div");
 				textCell.className = "member-control-diagram-first-cell-text";
 				textCell.innerHTML = item.selectedName;
 				textCell.title = item.selectedName;
 				firstColumn.appendChild(textCell);
+				var textBounds = Dom.getRegion(textCell);
+				textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");;
+
 				var removeButton = document.createElement("div");
 				removeButton.className = "member-control-diagram-first-cell-remove"
 				firstColumn.appendChild(removeButton);
@@ -588,13 +593,17 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			if (this.headerIsReady) return;
 			var calendarCellBounds = Dom.getRegion(this.id + "-date-cntrl-cal-cell");
 			this.firstColumnWidth = calendarCellBounds.width;
-			var header = Dom.get(this.options.controlId + "-diagram-header");
-			this._drawHourCells(header, 0, true);
-			this.headerIsReady = true;
 			//Устанавливаем размер контейнера
 			var cellBounds = this._calculateCell();
 			var hours = this.endHour - this.startHour + 1;
-			var width = this.firstColumnWidth + 2 + hours * cellBounds.width + hours;
+			var width = cellBounds.firstColumnWidth + 2 + hours * cellBounds.width + hours;
+			var header = Dom.get(this.options.controlId + "-diagram-header");
+			this._drawHourCells(header, 0, true);
+			Dom.get(this.id + "-date-cntrl-cal-cell").style.width = cellBounds.firstColumnWidth + "px";
+			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth - 6;
+			var calendarBounds = Dom.getRegion(this.id + "-date-cntrl-date");
+			Dom.get(this.id + "-date-cntrl-date").setAttribute("style", "width: " + (delta + calendarBounds.width) + "px !important;");;
+			this.headerIsReady = true;
 			Dom.get(this.options.controlId + "-diagram-container").style.width = width + "px";
 		},
 
@@ -1139,7 +1148,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				this.cellBounds = {
 					width: width,
 					cellByHour: cellByHour,
-					cellWidth: cellWidth
+					cellWidth: cellWidth,
+					firstColumnWidth: region.width - width * (this.endHour - this.startHour + 1) - bordersWidth
 				};
 			}
 			return this.cellBounds;
