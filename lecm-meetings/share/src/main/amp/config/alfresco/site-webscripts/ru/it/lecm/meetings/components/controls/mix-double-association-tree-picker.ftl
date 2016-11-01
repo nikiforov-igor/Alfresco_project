@@ -122,7 +122,7 @@
 
     function createDoublePicker() {
 
-	    var fistControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}");
+	    var fistControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}", "-first");
 	    fistControl.setOptions({
             fieldId: "${field.configName}",
             formId: "${args.htmlid}",
@@ -209,7 +209,7 @@
 	    });
 	    fistControl.setMessages(${messages});
 
-	    var secondControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}");
+	    var secondControl = new LogicECM.module.MixAssociationTreeViewer("${fieldHtmlId}", "-second");
 	    secondControl.setOptions({
             fieldId: "${field.configName}-second",
             formId: "${args.htmlid}",

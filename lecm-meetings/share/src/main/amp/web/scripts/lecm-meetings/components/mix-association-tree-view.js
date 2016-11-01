@@ -30,9 +30,9 @@ LogicECM.module = LogicECM.module || {};
 
     var IDENT_CREATE_NEW = "~CREATE~NEW~";
 
-    LogicECM.module.MixAssociationTreeViewer = function(htmlId)
+    LogicECM.module.MixAssociationTreeViewer = function(htmlId, subName)
 	{
-        LogicECM.module.MixAssociationTreeViewer.superclass.constructor.call(this, "MixAssociationTreeViewer", htmlId);
+        LogicECM.module.MixAssociationTreeViewer.superclass.constructor.call(this, "MixAssociationTreeViewer" + (subName ? subName : ""), htmlId);
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
