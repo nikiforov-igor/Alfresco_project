@@ -234,7 +234,7 @@
                                     htmlId: 'LinkMetadata-' + response.typeRef.replace(/\//g, "_"),
                                     setId: 'common',
                                     failureMessage: 'message.object-not-found'
-                                }
+                                })
                             });
                         } else {
                             document.getElementById("${formId}-type").innerHTML = response.type;
@@ -251,7 +251,7 @@
                                     htmlId: 'LinkMetadata-' + response.initiatorRef.replace(/\//g, "_"),
                                     setId: 'common',
                                     failureMessage: 'message.object-not-found'
-                                }
+                                })
                             });
                         } else {
                             document.getElementById("${formId}-initiator").innerHTML = response.initiator;
@@ -268,7 +268,7 @@
                                     htmlId: 'LinkMetadata-' + response.mainObjectRef.replace(/\//g, "_"),
                                     setId: 'common',
                                     failureMessage: 'message.object-not-found'
-                                }
+                                })
                             });
                         } else {
                             document.getElementById("${formId}-mainObject").innerHTML = response.mainObject;
