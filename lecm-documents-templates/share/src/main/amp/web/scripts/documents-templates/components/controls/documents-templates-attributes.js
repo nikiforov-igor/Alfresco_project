@@ -446,7 +446,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 				}
 			}
 
-			if (organization && this.templateOrganization && organization.nodeRef != this.templateOrganization) {
+			if (this.templateOrganization && (!organization || organization.nodeRef != this.templateOrganization)) {
 				this.onClearTemplateAttributes();
 			}
 
