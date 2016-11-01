@@ -30,9 +30,9 @@ LogicECM.module = LogicECM.module || {};
 
     var IDENT_CREATE_NEW = "~CREATE~NEW~";
 
-    LogicECM.module.MixAssociationTreeViewer = function(htmlId)
+    LogicECM.module.MixAssociationTreeViewer = function(htmlId, subName)
 	{
-        LogicECM.module.MixAssociationTreeViewer.superclass.constructor.call(this, "MixAssociationTreeViewer", htmlId);
+        LogicECM.module.MixAssociationTreeViewer.superclass.constructor.call(this, "MixAssociationTreeViewer" + (subName ? subName : ""), htmlId);
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
@@ -1728,7 +1728,7 @@ LogicECM.module = LogicECM.module || {};
             var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : displayValue;
 	        var result = "<span class='not-person' title='" + title + "'>";
 	        if (this.options.showAssocViewForm && item.nodeRef != null) {
-		        result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+		        result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\' })\">" + displayValue + "</a>";
 	        } else {
 		        result += displayValue;
 	        }

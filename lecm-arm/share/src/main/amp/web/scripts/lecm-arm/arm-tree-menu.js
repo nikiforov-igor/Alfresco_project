@@ -25,6 +25,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         YAHOO.Bubbling.on("armRefreshParentSelectedTreeNode", this.onRefreshParentSelectedTreeNode, this);
         YAHOO.Bubbling.on("beforeDateChanged", this.onCalSelect, this);
         YAHOO.Bubbling.on("selectedParentCurrentNode", this.onSelectedParentCurrentNode, this);
+        YAHOO.Bubbling.on("selectedCurrentNode", this.onSelectedCurrentNode, this);
 
         return this;
     };
@@ -650,6 +651,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         onSelectedParentCurrentNode: function() {
             this._treeNodeSelected(this.selectedNode.parent);
+        },
+
+        onSelectedCurrentNode: function() {
+            this._treeNodeSelected(this.selectedNode);
         }
     });
 })();

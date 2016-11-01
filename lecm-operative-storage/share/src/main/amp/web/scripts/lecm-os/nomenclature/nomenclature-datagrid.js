@@ -80,7 +80,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 
 							switch (datalistColumn.name.toLowerCase()) { //  меняем отрисовку для конкретных колонок
 								case "cm:title":
-									columnContent += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\', null, null, '')\">" + data.displayValue + "</a>";
+									columnContent += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + oRecord.getData("nodeRef")+"\'})\">" + data.displayValue + "</a>";
 									columnContent += '<br />';
 									break;
 								default:
@@ -88,7 +88,7 @@ LogicECM.module.Nomenclature.Datagrid = LogicECM.module.Nomenclature.Datagrid ||
 							}
 
 							if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
-								html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\', null, \'" + scope.options.viewFormTitleMsg + "\', '')\">" + columnContent + "</a>";
+								html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + oRecord.getData("nodeRef") + "\', title: \'scope.options.viewFormTitleMsg\' })\">" + columnContent + "</a>";
 							} else if (scope.options.attributeForOpen != null && datalistColumn.name == scope.options.attributeForOpen) {
 								html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
 							} else {

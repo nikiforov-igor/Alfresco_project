@@ -330,7 +330,7 @@ LogicECM.module.GroupActions = LogicECM.module.GroupActions || {};
                                 },
                                 onFailure: {
                                     fn: function DataGrid_onActionCreate_failure(response) {
-                                        this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+                                        LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
                                         this.editDialogOpening = false;
                                     },
                                     scope: this

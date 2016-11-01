@@ -53,7 +53,6 @@
     YAHOO.util.Event.onDOMReady(createObjects);
 })();
 //]]></script>
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 <div class="dashlet orgstructure-dictionary">
     <div class="title">${msg("header")}</div>
     <div class="body scrollableList" id="${id}-paginator" <#if args.height??>style="height: ${args.height}px;"</#if>>
@@ -66,7 +65,6 @@
             <div class="empty"><span>${msg("dashlet.empty.text")}</span></div>
         </div>
         <div id="${id}-orgstructure-tree" class="orgstructure-tree"></div>
-        <@view.viewForm formId="${id}-org-dashlet-view-form"/>
     </div>
 </div>
 

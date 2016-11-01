@@ -20,44 +20,6 @@ LogicECM.module = LogicECM.module || {};
  */
 LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 
-LogicECM.module.BusinessJournal.view = function(nodeId) {
-    var obj = {
-        itemKind:"type",
-        itemId: "lecm-busjournal:bjRecord",
-        destination: null,
-        mode:"view",
-        submitType:"json",
-        formId: "bj-view-node-form",
-        nodeId: nodeId,
-        htmlid: "bj-view-node-form-htmlid",
-        showSubmitButton: false
-    };
-
-    Alfresco.util.Ajax.request(
-        {
-            url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
-            dataObj: obj,
-            successCallback:{
-                fn:function(response) {
-                    var formEl = Dom.get("bj-view-node-form-content");
-                    formEl.innerHTML = response.serverResponse.responseText;
-                    if (viewDialog != null) {
-                        Dom.setStyle("bj-view-node-form", "display", "block");
-                        var message = "Просмотр";
-                        var titleElement = Dom.get("bj-view-node-form-form-head");
-                        if (titleElement) {
-                            titleElement.innerHTML = message;
-                        }
-                        viewDialog.show();
-                    }
-                }
-            },
-            failureMessage:"message.failure",
-            execScripts:true
-        });
-    return false;
-};
-
 (function () {
 
     LogicECM.module.BusinessJournal.DataGrid = function (containerId) {
@@ -156,7 +118,12 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
                             }
                             if (columnContent != "") {
                                 if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
-                                    html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.BusinessJournal.view(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
+                                    html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({" +
+                                        "itemKind: \'type\'," +
+                                        "itemId: \'lecm-busjournal:bjRecord\'," +
+                                        "htmlid: \'bj-view-node-form-htmlid\'," +
+                                        "nodeId:\'" + oRecord.getData("nodeRef") +
+                                        "\'})\">" + columnContent + "</a>";
                                 } else {
                                     html += columnContent;
                                 }
@@ -176,7 +143,7 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
 	        if (displayValue.length > 0) {
 		        result = "<span>";
 	            if (nodeRef != null && nodeRef.length > 0) {
-		            result += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + nodeRef + "\')\">" + displayValue + "</a>";
+                    result += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + nodeRef + "\'})\">" + displayValue + "</a>";
 		        } else {
 		            result += displayValue;
 	            }
@@ -188,7 +155,7 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
             if (displayValue.length == 0 || employeeNodeRef == null || employeeNodeRef.indexOf("://") < 0) {
                 return "Система";
             }
-            return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\',null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+            return "<span class='person'><a href='javascript:void(0);'" + "onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + employeeNodeRef + "\',title:\'logicecm.employee.view\'})\">" + displayValue + "</a></span>";
         },
 
         onExportCsv: function DataGrid__onExportCsv(fileName)

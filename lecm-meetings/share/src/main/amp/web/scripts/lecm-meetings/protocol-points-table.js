@@ -197,32 +197,29 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                     scope: this,
                     fn: function (response) {
                         var oResults = JSON.parse(response.serverResponse.responseText);
-
                         if (oResults && oResults.employees && oResults.employees.length) {
-
                             this.reportersFilter = this.reportersFilter.concat(oResults.employees.filter(this.notExistsInFilter, this));
-
-                            this.filteredFields.forEach(function (fieldId) {
-                                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                    allowedNodes: this.reportersFilter
-                                });
-                            }, this);
                         }
+                        this._applyFilter(formId);
                     }
                 },
                 failureCallback: {
                     scope: this,
                     fn: function () {
-                        this.filteredFields.forEach(function (fieldId) {
-                            LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                allowedNodes: this.reportersFilter
-                            });
-                        }, this);
+                        this._applyFilter(formId);
                     }
                 }
             });
 
 
+        },
+
+        _applyFilter: function (formId) {
+            this.filteredFields.forEach(function (fieldId) {
+                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
+                    allowedNodes: this.reportersFilter
+                });
+            }, this);
         },
 
         onActionEdit: function DataGrid_onActionEdit(item) {
@@ -245,7 +242,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
             }
 
             // Using Forms Service, so always create new instance
-            var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
+            var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails" + Alfresco.util.generateDomId());
             editDetails.setOptions({
                 width: this.options.editFormWidth,
                 templateUrl: templateUrl,
@@ -261,7 +258,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                         p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
                         this.editDialogOpening = false;
 
-                        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 
                         if (this.options.reportersFilterEnabled) {
                             this.applyReportersFilter(p_dialog.id);
@@ -309,7 +306,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 }
                 me.editDialogOpening = false;
 
-                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 
                 if (this.options.reportersFilterEnabled) {
                     this.applyReportersFilter(p_dialog.id);
@@ -328,7 +325,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 showCancelButton: true
             };
 
-            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails" + Alfresco.util.generateDomId());
             createDetails.setOptions({
                 width: "50em",
                 templateUrl: templateUrl,
@@ -362,7 +359,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 },
                 onFailure: {
                     fn: function (response) {
-                        me.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
+                        LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
                         me.editDialogOpening = false;
                         this.widgets.cancelButton.set("disabled", false);
                     },

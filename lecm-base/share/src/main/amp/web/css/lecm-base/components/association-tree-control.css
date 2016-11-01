@@ -1,0 +1,8 @@
+.control.association-tree-control .container .value-div > div.object-finder {
+    width: 100%;
+}
+
+.control.association-tree-control .ygtvcell.not-selectable {
+    font-style: italic;
+    color: grey;
+}

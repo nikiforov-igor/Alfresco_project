@@ -1,6 +1,5 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 
 <@templateHeader>
 	<#include "/org/alfresco/components/form/form.get.head.ftl"/>
@@ -35,7 +34,6 @@
 
 <@bpage.basePage showToolbar=false>
 	<div style="float:left; width: 1000px; padding:10px;">
-	<@view.viewForm formId="${el}-view-node-form"/>
 	<#if  dataExperts??>
 		<#assign keys = dataExperts?keys>
 		<#list keys?sort?reverse as key>
@@ -56,7 +54,7 @@
 								</td>
 								<td style="vertical-align: top; padding: 0 0 0 10px">
 									<#assign fio = mapAttrs["lastName"] +" "+ mapAttrs["firstName"] +" "+ mapAttrs["middleName"]>
-									<p>${view.showViewLink(fio, mapAttrs["expertRef"], 'logicecm.employee.view')} </p>
+									<p><a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:'${mapAttrs["expertRef"]}', title: 'logicecm.employee.view'})">${fio}</a></p>
 									<#if mapAttrs["staf"] != "">
 										<p>Должность: ${mapAttrs["staf"]}</p>
 									</#if>

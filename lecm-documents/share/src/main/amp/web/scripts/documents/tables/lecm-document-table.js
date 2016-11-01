@@ -440,7 +440,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"document-attachment?nodeRef="+ data.value +"' title='" + data.displayValue + "'>" + fileIconHtml + data.displayValue + "</a>";
 									break;
 								case "cm:cmobject":
-									columnContent = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + data.value + "\', null, \'" + "logicecm.view" + "\')\">" + data.displayValue + "</a>";
+									columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + data.value + "\', title: \'logicecm.view\' })\">" + data.displayValue + "</a>";
 									break;
 								default:
 									break;
@@ -983,14 +983,14 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     var rowId = p_dialog.options.onSuccess.rowId;
                     var oDataRow = this.widgets.dataTable.getRecord(rowId);
                     if (oDataRow) {
-                        var tempIndexTag = Dom.get(this.id + "-createDetails_prop_lecm-document_indexTableRow");
+                        var tempIndexTag = Dom.get(p_dialog.id + "_prop_lecm-document_indexTableRow");
                         if (tempIndexTag) {
                             var index = eval(oDataRow.getData().itemData["prop_lecm-document_indexTableRow"].value);
                             tempIndexTag.value = index+1;
                         }
                     }
                     this.doubleClickLock = false;
-	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id, force: true}, this);
 
 					this.beforeShowCheck(p_form, p_dialog);
                 };
@@ -1007,7 +1007,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 	            };
 
                 // Using Forms Service, so always create new instance
-                var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
+                var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails-" + Alfresco.util.generateDomId());
                 createDetails.setOptions(
                     {
                         width:"50em",
@@ -1037,7 +1037,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+								LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
                                 this.doubleClickLock = true;
                             },
                             scope:this

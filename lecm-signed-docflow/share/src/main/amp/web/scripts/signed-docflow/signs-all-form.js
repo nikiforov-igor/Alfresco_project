@@ -111,7 +111,7 @@
 
 				signInfo = ko.mapping.toJS(signInfo);
 
-				return substitute("viewAttributes(\"{nodeRef}\");", signInfo);
+				return substitute("LogicECM.module.Base.Util.viewAttributes({itemId: \"{nodeRef}\" });", signInfo);
 			},
 			categoryIsNotEmpty: function($context) {
 				var i0 = $context.$index();

@@ -1,4 +1,3 @@
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 <#assign id = args.htmlid>
 
 <div class="dashlet document bordered approval">
