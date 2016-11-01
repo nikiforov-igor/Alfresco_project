@@ -416,7 +416,7 @@
         var elem = document.createElement('object');
         elem.setAttribute("id", "cadesplugin_object");
         elem.setAttribute("type", "application/x-cades");
-        elem.setAttribute("style", "visibility=hidden");
+        elem.setAttribute("style", "visibility: hidden");
         document.getElementsByTagName("body")[0].appendChild(elem);
         pluginObject = document.getElementById("cadesplugin_object");
         if(isIE())
@@ -424,12 +424,12 @@
             var elem1 = document.createElement('object');
             elem1.setAttribute("id", "certEnrollClassFactory");
             elem1.setAttribute("classid", "clsid:884e2049-217d-11da-b2a4-000e7bbb2b09");
-            elem1.setAttribute("style", "visibility=hidden");
+            elem1.setAttribute("style", "visibility: hidden");
             document.getElementsByTagName("body")[0].appendChild(elem1);
             var elem2 = document.createElement('object');
             elem2.setAttribute("id", "webClassFactory");
             elem2.setAttribute("classid", "clsid:B04C8637-10BD-484E-B0DA-B8A039F60024");
-            elem2.setAttribute("style", "visibility=hidden");
+            elem2.setAttribute("style", "visibility: hidden");
             document.getElementsByTagName("body")[0].appendChild(elem2);
         }
     }
