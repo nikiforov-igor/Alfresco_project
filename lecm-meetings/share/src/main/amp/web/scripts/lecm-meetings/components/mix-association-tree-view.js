@@ -1728,7 +1728,7 @@ LogicECM.module = LogicECM.module || {};
             var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : displayValue;
 	        var result = "<span class='not-person' title='" + title + "'>";
 	        if (this.options.showAssocViewForm && item.nodeRef != null) {
-		        result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+		        result += "<a href='javascript:void(0);' " + " onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + item.nodeRef + "\', title: \'logicecm.view\' })\">" + displayValue + "</a>";
 	        } else {
 		        result += displayValue;
 	        }

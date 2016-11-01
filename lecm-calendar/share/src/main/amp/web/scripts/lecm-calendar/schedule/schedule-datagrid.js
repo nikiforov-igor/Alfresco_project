@@ -54,9 +54,10 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 									case "datetime":
 										content = Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.shortTime24FTL"));
 										if (datalistColumn.name == attributeForShow) {
-											content = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'"
+											content = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes("
+													+"{itemId:\'"
 													+ oRecord.getData("nodeRef")
-													+ "\')\">"
+													+ "\'})\">"
 													+ content
 													+ "</a>";
 										}
@@ -66,9 +67,10 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 									default:
 										content = Alfresco.util.encodeHTML(data.displayValue);
 										if (datalistColumn.name == attributeForShow) {
-											html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'"
+											html += "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes("
+													+"{itemId:\'"
 													+ oRecord.getData("nodeRef")
-													+ "\')\">"
+													+ "\'})\">"
 													+ content
 													+ "</a>";
 										} else {

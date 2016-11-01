@@ -29,12 +29,12 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                 bubblingLabel: null,
                 editPath: null,
                 deletePath:null,
-                expired: 60
+                expired: 60,
+                panelId: null
             },
 
             queryConfig: null,
-            
-            preferencesDialog: null,
+
             
             PREFERENCE_KEY: "ru.it.lecm.search-editor.state.",
 
@@ -131,18 +131,30 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
             },
 
             showDialog: function () {
+                var me = this;
                 if (this.preferencesDialog == null) {
                     // создаем диалог
-                    this.preferencesDialog = Alfresco.util.createYUIPanel("preferencesBlock",
+                    this.preferencesDialog = Alfresco.util.createYUIPanel(this.options.panelId + "-preferencesBlock",
                         {
-                            width: "400px"
-                        });
+                            width: "400px",
+                            buttons: [
+                                {
+                                    text: Alfresco.util.message('label.button.save'),
+                                    handler: function(e){
+                                        me.onSaveClick();
+                                    }
 
-                    // создаем кнопки
-                    this.widgets.saveButton =
-                        Alfresco.util.createYUIButton(this, "preferencesBlock-save-button", this.onSaveClick, {}, Dom.get("preferencesBlock-save-button"));
-                    this.widgets.rollbackButton =
-                        Alfresco.util.createYUIButton(this, "preferencesBlock-rollback-button", this.onRollbackClick, {}, Dom.get("preferencesBlock-rollback-button"));
+                                },
+                                {
+                                    text: Alfresco.util.message('label.button.reset'),
+                                    handler: function(e){
+                                        me.onRollbackClick();
+                                    }
+
+                                }
+                            ]
+
+                        });
                 }
 
                 Alfresco.util.Ajax.jsonGet(
@@ -173,7 +185,7 @@ LogicECM.module.SearchQueries = LogicECM.module.SearchQueries || {};
                                     div.className = "column-pref-div";
 
                                     button = document.createElement('input');
-                                    button.setAttribute('id', this.id + '-' + columns[i].formsName);
+                                    button.setAttribute('id', this.options.panelId + '-' + columns[i].formsName);
                                     button.setAttribute('type', 'checkbox');
                                     button.setAttribute('name', columns[i].formsName);
                                     button.value = columns[i].name;

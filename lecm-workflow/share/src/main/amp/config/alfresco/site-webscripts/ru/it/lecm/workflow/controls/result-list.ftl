@@ -25,7 +25,7 @@
                 var html = "", i, ii, columnContent, datalistColumn, data,
                         resultItemCommentTemplate = '<a href="{proto}//{host}{pageContext}document-attachment?nodeRef={nodeRef}">' +
                                 '<img src="{resContext}/components/images/generic-file-16.png" width="16"  alt="{displayValue}" title="{displayValue}"/></a>',
-                        attributeForShowTemplate = '<a href="javascript:void(0);" onclick="viewAttributes(\'{nodeRef}\')">{content}</a>';
+                        attributeForShowTemplate = '<a href="javascript:void(0);" onclick="LogicECM.module.Base.Util.viewAttributes({itemId:\'{nodeRef}\'})">{content}</a>';
 
                 if (!oRecord) {
                     oRecord = this.getRecord(elCell);

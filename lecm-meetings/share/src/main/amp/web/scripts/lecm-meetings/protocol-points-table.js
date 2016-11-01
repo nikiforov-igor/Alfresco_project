@@ -359,7 +359,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 },
                 onFailure: {
                     fn: function (response) {
-                        me.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
+                        LogicECM.module.Base.Util.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
                         me.editDialogOpening = false;
                         this.widgets.cancelButton.set("disabled", false);
                     },

@@ -501,7 +501,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
 									columnContent = "<a href='" + Alfresco.constants.URL_PAGECONTEXT+"document-attachment?nodeRef="+ data.value +"' title='" + data.displayValue + "'>" + fileIconHtml + data.displayValue + "</a>";
 									break;
 								case "cm:cmobject":
-									columnContent = "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + data.value + "\', null, \'" + "logicecm.view" + "\')\">" + data.displayValue + "</a>";
+									columnContent = "<a href='javascript:void(0);' onclick=\"LogicECM.module.Base.Util.viewAttributes({itemId:\'" + data.value + "\', title: \'logicecm.view\'})\">" + data.displayValue + "</a>";
 									break;
 								case "st:site":
 									var fileIcon = Alfresco.util.getFileIcon(data.displayValue, "st:sites", 16);
@@ -1131,7 +1131,7 @@ LogicECM.module.MeetingsDocumentTableDataGrid= LogicECM.module.MeetingsDocumentT
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+								LogicECM.module.Base.Util.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
                                 this.doubleClickLock = true;
                             },
                             scope:this

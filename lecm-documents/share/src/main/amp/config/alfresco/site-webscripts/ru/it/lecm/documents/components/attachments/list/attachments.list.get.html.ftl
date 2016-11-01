@@ -2,7 +2,6 @@
 	<!-- Parameters and libs -->
 	<#assign aDateTime = .now>
 	<#assign el=args.htmlid + aDateTime?iso_utc/>
-	<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 	<script type="text/javascript">
 		function hideButton() {
             if(location.hash != "#expanded") {
@@ -18,7 +17,6 @@
     </div>
 	<div id="${el}">
 	    <#if categories??>
-	        <@view.viewForm formId="${el}-view-modifier-form"/>
 	        <#list categories as category>
 	            <#assign categoryId = el + "-" + category.nodeRef?replace("/", "")?replace(":", "")/>
 	            <div id="${categoryId}"  class="attachment-list no-check-bg">
