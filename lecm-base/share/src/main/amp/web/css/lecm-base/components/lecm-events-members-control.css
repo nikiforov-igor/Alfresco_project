@@ -33,7 +33,7 @@
 
 @supports (-moz-appearance:meterbar){
     .control.association-token-control.editmode .value-div div.cropped-item .ci-value-div {
-        max-width: 92%;
+        max-width: 90%;
         float:left;
     }
 }
