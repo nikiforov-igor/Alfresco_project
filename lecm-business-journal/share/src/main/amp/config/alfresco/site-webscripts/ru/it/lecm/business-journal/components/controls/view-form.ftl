@@ -213,7 +213,18 @@
             var sUrl = Alfresco.constants.PROXY_URI + "/lecm/business-journal/component/record?recordId=${args.nodeId}";
             var callback = {
                 success: function (oResponse) {
-                    var reqObj = null;
+
+                    function addOnClickListener(el,ref){
+                        var reqObj = {
+                            formId: '${panelId}',
+                            itemId: ref,
+                            htmlId: 'LinkMetadata-' + ref.replace(/\//g, "_"),
+                            setId: 'common',
+                            failureMessage: 'message.object-not-found'
+                        };
+                        YAHOO.util.Event.addListener(el, "click",LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util,reqObj));
+                    }
+
                     var response = eval("(" + oResponse.responseText + ")");
                     if (response.date) {
                         document.getElementById("${formId}-date").innerHTML =  Alfresco.util.formatDate(Alfresco.util.fromISO8601(response.date), "dd mmm yyyy HH:MM:ss");
@@ -226,48 +237,27 @@
                     }
                     if (response.type) {
                         if (response.typeRef) {
-                            reqObj = {
-                                formId: '${panelId}',
-                                itemId: response.typeRef,
-                                htmlId: 'LinkMetadata-' + response.typeRef.replace(/\//g, "_"),
-                                setId: 'common',
-                                failureMessage: 'message.object-not-found'
-                            };
                             var el = document.getElementById("${formId}-type");
                             el.innerHTML = "<a href='javascript:void(0);'>" + response.type + "</a>";
-                            YAHOO.util.Event.addListener(el, "click",LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util,reqObj));
+                            addOnClickListener(el,response.typeRef);
                         } else {
                             document.getElementById("${formId}-type").innerHTML = response.type;
                         }
                     }
                     if (response.initiator) {
                         if (response.initiatorRef) {
-                            reqObj = {
-                                formId: '${panelId}',
-                                itemId: response.initiatorRef,
-                                htmlId: 'LinkMetadata-' + response.initiatorRef.replace(/\//g, "_"),
-                                setId: 'common',
-                                failureMessage: 'message.object-not-found'
-                            };
                             var el = document.getElementById("${formId}-initiator");
                             el.innerHTML = "<a href='javascript:void(0);'>" + response.initiator + "</a>";
-                            YAHOO.util.Event.addListener(el, "click",LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util,reqObj));
+                            addOnClickListener(el,response.initiatorRef);
                         } else {
                             document.getElementById("${formId}-initiator").innerHTML = response.initiator;
                         }
                     }
                     if (response.mainObject) {
                         if (response.mainObjectRef) {
-                            reqObj = {
-                                formId: '${panelId}',
-                                itemId: response.mainObjectRef,
-                                htmlId: 'LinkMetadata-' + response.mainObjectRef.replace(/\//g, "_"),
-                                setId: 'common',
-                                failureMessage: 'message.object-not-found'
-                            };
                             var el = document.getElementById("${formId}-mainObject");
                             el.innerHTML = "<a href='javascript:void(0);'>" + response.mainObject + "</a>";
-                            YAHOO.util.Event.addListener(el, "click",LogicECM.module.Base.Util.viewAttributes.bind(LogicECM.module.Base.Util,reqObj));
+                            addOnClickListener(el,response.mainObjectRef);
                         } else {
                             document.getElementById("${formId}-mainObject").innerHTML = response.mainObject;
                         }
