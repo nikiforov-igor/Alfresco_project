@@ -32,7 +32,7 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
             return this.reportersFilter.indexOf(item) == -1 && item.length > 0;
         },
 
-        applyReportersFilter: function (formId) {
+        getAllowedEmployees: function () {
             this.reportersFilter = [];
 
             this.fieldsForFilter.forEach(function (fieldId) {
@@ -49,38 +49,30 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
             }, this);
 
             /* + забытый инициатор*/
-            Alfresco.util.Ajax.jsonGet({
-                url: Alfresco.constants.PROXY_URI + 'lecm/orgstructure/api/getCurrentEmployee',
-                successCallback: {
-                    scope: this,
-                    fn: function (response) {
-                        var oResults = JSON.parse(response.serverResponse.responseText);
+            jQuery.ajax({
+                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/api/getCurrentEmployee",
+                type: "GET",
+                timeout: 30000,
+                async: false,
+                dataType: "json",
+                contentType: "application/json",
+                context:this,
+                success: function (response) {
+                    if (response && response.nodeRef) {
+                        var initiator = [];
+                        initiator.push(response.nodeRef);
 
-                        if (oResults && oResults.nodeRef) {
-                            var initiator = [];
-                            initiator.push(oResults.nodeRef);
-
-                            this.reportersFilter = this.reportersFilter.concat(initiator.filter(this.notExistsInFilter, this));
-
-                            this.filteredFields.forEach(function (fieldId) {
-                                LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                    allowedNodes: this.reportersFilter
-                                });
-                            }, this);
-                        }
+                        this.reportersFilter = this.reportersFilter.concat(initiator.filter(this.notExistsInFilter, this));
                     }
                 },
-                failureCallback: {
-                    scope: this,
-                    fn: function () {
-                        this.filteredFields.forEach(function (fieldId) {
-                            LogicECM.module.Base.Util.reInitializeControl(formId, fieldId, {
-                                allowedNodes: this.reportersFilter
-                            });
-                        }, this);
-                    }
+                error: function(jqXHR, textStatus, errorThrown) {
+                    Alfresco.util.PopupManager.displayMessage({
+                        text: errorThrown
+                    });
                 }
             });
+
+            return this.reportersFilter.join(",");
         },
 
         onActionEdit: function DataGrid_onActionEdit(item) {
@@ -101,7 +93,9 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
             if (this.options.editForm) {
                 templateRequestParams.formId = this.options.editForm;
             }
-
+            templateRequestParams.args = JSON.stringify({
+                allowedForPoint: this.getAllowedEmployees()
+            });
             var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
             editDetails.setOptions({
                 width: this.options.editFormWidth,
@@ -119,8 +113,6 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                         this.editDialogOpening = false;
 
                         p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-
-                        this.applyReportersFilter(p_dialog.id);
                     },
                     scope: this
                 },
@@ -175,8 +167,6 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 me.editDialogOpening = false;
 
                 p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-
-                this.applyReportersFilter(p_dialog.id);
             };
 
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
@@ -189,6 +179,10 @@ LogicECM.module.Meetings = LogicECM.module.Meetings || {};
                 submitType: "json",
                 showCancelButton: true
             };
+
+            templateRequestParams.args = JSON.stringify({
+                allowedForPoint: this.getAllowedEmployees()
+            });
 
             var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
             createDetails.setOptions({
