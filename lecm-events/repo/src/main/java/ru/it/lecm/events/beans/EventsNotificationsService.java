@@ -604,21 +604,19 @@ public class EventsNotificationsService extends BaseBean {
 		vEventProperties.add(new Uid(mailTemplateModel.get("uid").toString()));
 
 		if ((Boolean) mailTemplateModel.get("allDay")) {
-			net.fortuna.ical4j.model.Date dtStart = new net.fortuna.ical4j.model.Date(((Date) mailTemplateModel.get("fromDate")));
-			vEventProperties.add(new DtStart(dtStart));
-			net.fortuna.ical4j.model.Date dtEnd = new net.fortuna.ical4j.model.Date(((Date) mailTemplateModel.get("toDate")));
-			vEventProperties.add(new DtEnd(dtEnd));
-		} else {
-			DateTime dtStart = new DateTime();
-			dtStart.setUtc(true);
-			dtStart.setTime(((Date) mailTemplateModel.get("fromDate")).getTime());
-			vEventProperties.add(new DtStart(dtStart));
-
-			DateTime dtEnd = new DateTime();
-			dtEnd.setUtc(true);
-			dtEnd.setTime(((Date) mailTemplateModel.get("toDate")).getTime());
-			vEventProperties.add(new DtEnd(dtEnd));
+			vEventProperties.add(new XProperty("X-MICROSOFT-CDO-ALLDAYEVENT", "true"));
+			vEventProperties.add(new XProperty("X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT", "true"));
 		}
+		DateTime dtStart = new DateTime();
+		dtStart.setUtc(true);
+		dtStart.setTime(((Date) mailTemplateModel.get("fromDate")).getTime());
+		vEventProperties.add(new DtStart(dtStart));
+
+		DateTime dtEnd = new DateTime();
+		dtEnd.setUtc(true);
+		dtEnd.setTime(((Date) mailTemplateModel.get("toDate")).getTime());
+		vEventProperties.add(new DtEnd(dtEnd));
+
 
 		vEventProperties.add(new Summary(mailTemplateModel.get("title").toString()));
 		vEventProperties.add(new Location(mailTemplateModel.get("location").toString()));
