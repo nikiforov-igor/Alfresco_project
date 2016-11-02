@@ -802,14 +802,14 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						icon.style.cursor = "pointer";
 						var me = this;
 						var requestDate = new Date(item.memberFromDate);
+						var requestIndex = this.keyIndex[item.nodeRef];
 						icon.addEventListener("click", function() {
-							me.selectByDate(requestDate);
+							me.selectByDate(requestDate, requestIndex);
 						});
 					}
 
 					var firstCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + startIndex);
-					var firstCellRegion = Dom.getRegion
-					(firstCell);
+					var firstCellRegion = Dom.getRegion(firstCell);
 					var lastCell = Dom.get(this.options.controlId + "-diagram_" + rowIndex + "_" + fillIndex);
 					var lastCellRegion = Dom.getRegion(lastCell);
 					var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
@@ -884,7 +884,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * Выбор времени в таблице по дате
 		 * @param requestDate
 		 */
-		selectByDate: function selectRequestTime_function(requestDate) {
+		selectByDate: function selectRequestTime_function(requestDate, requestIndex) {
 			this.selectedDate = requestDate;
 
 			var startHour = this.selectedDate.getHours();
@@ -895,6 +895,43 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			this.busytime = [];
 			this.draw();
 			this.requestMembersTime();
+			if (requestIndex) {
+				var diagram = Dom.get(this.options.controlId + "-diagram");
+				var diagramBounds = Dom.getRegion(diagram);
+				var cellSettings = this._calculateCell();
+				var item;
+				for (var key in this.selectedItems) {
+					var item = this.selectedItems[key];
+					if (requestIndex == this.keyIndex[item.nodeRef]) {
+						break;
+					}
+				}
+				//Добавляем иконку
+				var id = this.options.controlId + "-diagram-member-status-" + requestIndex;
+				var prevIcon = Dom.get(id);
+				if (prevIcon) {
+					diagram.removeChild(prevIcon)
+				}
+
+				var img = "alf_clock_green_16.jpg";
+				var title = this.msg("label.events.participation.another_time") + ": " + Alfresco.util.formatDate(new Date(item.memberFromDate), this.msg("lecm.date-format.datetime"));
+				var iconItem = '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'images/lecm-events/' + img + '" class="members-status" title="' + title + '"/>';
+
+				var icon = document.createElement("div");
+				icon.id = id;
+				icon.innerHTML = iconItem;
+				icon.className = "member-control-diagram-member-status";
+
+				var firstCell = Dom.get(this.options.controlId + "-diagram_" + requestIndex + "_" + startIndex);
+				var firstCellRegion = Dom.getRegion(firstCell);
+				var lastCell = Dom.get(this.options.controlId + "-diagram_" + requestIndex + "_" + (startIndex + this.period));
+				var lastCellRegion = Dom.getRegion(lastCell);
+				var left = firstCellRegion.left + (Math.round((lastCellRegion.left + cellSettings.cellWidth - firstCellRegion.left) / 2) - 10);
+
+				icon.style.left = (left - diagramBounds.left) + "px";
+				icon.style.top = (firstCellRegion.top - diagramBounds.top + 2) + "px";
+				diagram.appendChild(icon);
+			}
 		},
 
 		/**
