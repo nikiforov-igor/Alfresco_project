@@ -169,7 +169,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					fn: function(response) {
 						if (checkbox.checked) {
 							this.signingContainer.style.display = "block";
-							this.exchangeContainer.style.display = "block";
+							if (this.options.isExchangeEnabled) {
+								this.exchangeContainer.style.display = "block";
+							}
 						} else {
 							this.signingContainer.style.display = "none";
 							this.exchangeContainer.style.display = "none";

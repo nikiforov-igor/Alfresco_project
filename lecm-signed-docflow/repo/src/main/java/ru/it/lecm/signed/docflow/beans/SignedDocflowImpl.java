@@ -61,6 +61,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	private String dsignWrapperPath;
     private String dsignTspUrl;
     private boolean dsignEnabled;
+    private boolean dsignExchangeEnabled;
 
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
@@ -97,6 +98,14 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
     public void setDsignEnabled(boolean dsignEnabled) {
         this.dsignEnabled = dsignEnabled;
     }
+
+	public void setDsignExchangeEnabled(boolean dsignExchangeEnabled) {
+		this.dsignExchangeEnabled = dsignExchangeEnabled;
+	}
+
+	public boolean isDsignExchangeEnabled() {
+		return dsignExchangeEnabled;
+	}
 
     @Override
 	public List<Signature> getSignatures(NodeRef signedContentRef) {

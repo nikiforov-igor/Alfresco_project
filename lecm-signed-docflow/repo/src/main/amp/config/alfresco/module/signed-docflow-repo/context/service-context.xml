@@ -98,6 +98,7 @@
 		<property name="dsignWrapperPath" value="${dsign.wrapper.path}"/>
         <property name="dsignTspUrl" value="${dsign.tsp.url}"/>
         <property name="dsignEnabled" value="${dsign.enabled}"/>
+        <property name="dsignExchangeEnabled" value="${dsign.exchange.enabled}"/>
 	</bean>
 
 	<bean id="sendContentToPartnerService" class="ru.it.lecm.signed.docflow.SendContentToPartnerService" init-method="init"
