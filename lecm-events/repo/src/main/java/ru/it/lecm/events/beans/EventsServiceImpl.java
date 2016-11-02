@@ -168,21 +168,22 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter) {
-		return getEvents(fromDate, toDate, additionalFilter, false, null);
+		return getEvents(fromDate, toDate, additionalFilter, false, null, true);
 	}
 
 	@Override
 	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined) {
-		return getEvents(fromDate, toDate, additionalFilter, false, null);
+		return getEvents(fromDate, toDate, additionalFilter, false, null, true);
 	}
 
 	@Override
-	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined, String lastCreated) {
+	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined, String lastCreated, boolean onlyForCalendar) {
 		List<NodeRef> results = new ArrayList<>();
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + BaseBean.DateFormatISO8601_SZ.format(toDate) + "\"> AND @lecm\\-events\\:to\\-date:<\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO MAX] AND @lecm\\-events\\:removed: false AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter;
+		String query = "TYPE:\"lecm-events:document\" AND @lecm\\-events\\:from\\-date:[MIN TO \"" + BaseBean.DateFormatISO8601_SZ.format(toDate) + "\"> AND @lecm\\-events\\:to\\-date:<\"" + BaseBean.DateFormatISO8601_SZ.format(fromDate) + "\" TO MAX] AND @lecm\\-events\\:removed: false";
+		query += onlyForCalendar ? " AND @lecm\\-events\\:show\\-in\\-calendar: true " + additionalFilter : " " + additionalFilter;
 		query += " AND (" + organizationQueryProcessor.getQuery(null) + ")";
 		sp.setQuery(query);
 
@@ -222,7 +223,7 @@ public class EventsServiceImpl extends BaseBean implements EventsService {
 
 	@Override
 	public List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, String lastCreated) {
-		return getEvents(fromDate, toDate, additionalFilter, false, lastCreated);
+		return getEvents(fromDate, toDate, additionalFilter, false, lastCreated, true);
 	}
 
 	@Override

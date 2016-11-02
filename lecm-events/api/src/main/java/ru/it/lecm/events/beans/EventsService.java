@@ -98,7 +98,7 @@ public interface EventsService {
 	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter);
 
 	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined);
-	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined, String lastCreated);
+	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, boolean excludeDeclined, String lastCreated, boolean onlyForCalendar);
 	List<NodeRef> getEvents(Date fromDate, Date toDate, String additionalFilter, String lastCreated);
 
 	List<NodeRef> searchEvents(String filter);

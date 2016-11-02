@@ -7,7 +7,7 @@ if (args["items"] && args["date"]) {
             additionalFilter += "@lecm\\-events\\:temp\\-members\\-assoc\\-ref: \"*" + employee + "*\" OR ";
             additionalFilter += "@lecm\\-meetings\\:chairman\\-assoc\\-ref: \"*" + employee + "*\" OR ";
             additionalFilter += "@lecm\\-meetings\\:secretary\\-assoc\\-ref: \"*" + employee + "*\")";
-            var eventsCollection = events.getUserEvents(args["date"] + "T00:00:00Z", args["date"] + "T23:59:59Z", additionalFilter);
+            var eventsCollection = events.getUserEvents(args["date"] + "T00:00:00Z", args["date"] + "T23:59:59Z", additionalFilter, false);
             var busytime = [];
             for (var i = 0; i < eventsCollection.size(); i++) {
                 var event = eventsCollection.get(i);
