@@ -1450,7 +1450,7 @@ LogicECM.module = LogicECM.module || {};
                 return $html(p_value);
             };
 
-            return YAHOO.lang.substitute(template, item, renderHelper);
+            return YAHOO.lang.substitute(template, item);
         },
 
         canItemBeSelected: function AssociationTreeViewer_canItemBeSelected(id)
