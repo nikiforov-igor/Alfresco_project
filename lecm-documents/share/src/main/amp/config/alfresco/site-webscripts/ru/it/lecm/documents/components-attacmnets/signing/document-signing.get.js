@@ -81,7 +81,8 @@ function checkExchangeEnabled() {
 
 	response = remote.connect("alfresco").get(url);
 	if (response.status == 200) {
-		result = eval('(' + response + ')');
+		var responseNative = eval('(' + response + ')');
+		result = responseNative.enabled;
 	}
 	return result;
 }
