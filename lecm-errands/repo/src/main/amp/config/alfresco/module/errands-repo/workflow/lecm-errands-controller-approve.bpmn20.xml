@@ -35,6 +35,7 @@
 								});
 
 		                        if (document.properties["lecm-errands:without-initiator-approval"]) {
+                                    execution.setVariable("controllerApproveResult", "executed");
 	                                document.properties["lecm-errands:controller-approve-result"] = "executed";
 		                        } else {
 			                        var initiator = null;
@@ -52,6 +53,7 @@
 										}
 									});
 
+                                    execution.setVariable("controllerApproveResult", "approveInitiator");
 	                                document.properties["lecm-errands:controller-approve-result"] = "approveInitiator";
 		                        }
 	                            document.save();
