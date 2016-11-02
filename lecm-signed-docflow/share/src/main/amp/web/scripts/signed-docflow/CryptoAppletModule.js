@@ -895,7 +895,12 @@ function checkForApplet() {
 				}).show();
 			},
 			loadMultipleForm: function (params) {
-
+				
+				function recoverButtonsState(dialog) {
+					dialog.widgets.cancelButton.set("disabled", false);
+					dialog.widgets.okButton.set("disabled", false);
+				}
+				
 				function renderForm(response) {
 					var templateRequestParams = {
 						itemKind: 'type',
@@ -935,6 +940,7 @@ function checkForApplet() {
 									Alfresco.util.PopupManager.displayMessage({
 										text: Alfresco.util.message('lecm.signdoc.msg.must.select.one.or.more.docs')
 									});
+									recoverButtonsState(dialog);
 									return false;
 								}
 
