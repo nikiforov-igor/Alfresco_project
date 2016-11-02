@@ -67,10 +67,12 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 					formData: successResponse.config.dataObj
 				});
 
+				var orgInputValue = form["assoc_lecm-template_organizationAssoc"] ? form["assoc_lecm-template_organizationAssoc"].value : null;
 				LogicECM.module.Base.Util.reInitializeControl(this.formsRuntime.formId.replace("-form", ""), "lecm-template:organizationAssoc", {
-					currentValue: form["assoc_lecm-template_organizationAssoc"] ? form["assoc_lecm-template_organizationAssoc"].value : null,
-					defaultValue: form["assoc_lecm-template_organizationAssoc"] ? form["assoc_lecm-template_organizationAssoc"].value : null
+					currentValue: orgInputValue,
+					defaultValue: orgInputValue
 				});
+
 				// хак для замены формы создания на форму редактирования без обновления страницы
 				form.attributes.action.nodeValue = Alfresco.constants.PROXY_URI_RELATIVE + 'api/node/' + templateNode.uri + '/formprocessor';
 				this.options.mode = 'edit';
