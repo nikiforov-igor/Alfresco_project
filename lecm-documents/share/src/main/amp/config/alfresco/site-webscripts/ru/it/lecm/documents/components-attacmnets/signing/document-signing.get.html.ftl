@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="widget-bordered-panel <#if !isSignable>hidden1</#if>" id="${el}-exchange-container">
+<div class="widget-bordered-panel <#if !isSignable || !isExchangeEnabled>hidden1</#if>" id="${el}-exchange-container">
     <div class="document-metadata-header document-components-panel">
         <h2 id="${el}-exchange-heading" class="dark">
             ${msg("label.exchange")}
@@ -67,9 +67,10 @@
 		var isFunction = YAHOO.lang.isFunction;
 		if (isFunction(LogicECM.DocumentAttachmentSigning)) {
 			var signingComponent = new LogicECM.DocumentAttachmentSigning("${el}").setOptions({
-				nodeRef: "${nodeRef}",
-				title: "${msg('heading')}",
-				signable: ${isSignable?string}
+                nodeRef: "${nodeRef}",
+                title: "${msg('heading')}",
+                signable: ${isSignable?string},
+                isExchangeEnabled: ${isExchangeEnabled?string}
 			}).setMessages(${messages});
 		}
 		YAHOO.util.Event.on("${el}-signableSwitch", "click", signingComponent.onSignableSwitch, signingComponent, true);
