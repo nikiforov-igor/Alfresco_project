@@ -69,13 +69,7 @@ LogicECM.module.DocumentsTemplates = LogicECM.module.DocumentsTemplates || {};
 
 				LogicECM.module.Base.Util.reInitializeControl(this.formsRuntime.formId.replace("-form", ""), "lecm-template:organizationAssoc", {
 					currentValue: form["assoc_lecm-template_organizationAssoc"] ? form["assoc_lecm-template_organizationAssoc"].value : null,
-					defaultValue: form["assoc_lecm-template_organizationAssoc"] ? form["assoc_lecm-template_organizationAssoc"].value : null,
-					rootLocation: "/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты",
-					additionalFilter: "ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"",
-					changeItemsFireAction: "templateOrganizationSelect",
-					sortProp: "lecm-contractor:shortname",
-					childrenDataSource: "lecm/orgstructure/getOrganizations/picker",
-					defaultValueDataSource: "/lecm/documents-templates/defaultOrganization"
+					defaultValue: form["assoc_lecm-template_organizationAssoc"] ? form["assoc_lecm-template_organizationAssoc"].value : null
 				});
 				// хак для замены формы создания на форму редактирования без обновления страницы
 				form.attributes.action.nodeValue = Alfresco.constants.PROXY_URI_RELATIVE + 'api/node/' + templateNode.uri + '/formprocessor';
