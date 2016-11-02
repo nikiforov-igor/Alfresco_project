@@ -841,7 +841,7 @@ LogicECM.module.Base.Util = {
 
 	viewAttributes: function (obj) {
 
-		var viewDialog = this.createDialog("view-node-panel_" + Alfresco.util.generateDomId());
+		var viewDialog = LogicECM.module.Base.Util.createDialog("view-node-panel_" + Alfresco.util.generateDomId());
 		var requestObj = {
 			itemKind: obj.itemKind ? obj.itemKind : "node",
 			itemId: obj.itemId,
@@ -907,7 +907,7 @@ LogicECM.module.Base.Util = {
 				{
 					fn: function (oResponse) {
 						if (oResponse.json.nodeRef) {
-							this.viewAttributes({
+							LogicECM.module.Base.Util.viewAttributes({
 								itemId: oResponse.json.nodeRef,
 								title: title
 							});
