@@ -159,13 +159,6 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 						YAHOO.util.Event.onAvailable(me.getMandatoryCheckboxId(me.selectedItems[item]), me.attachMandatoryCheckboxClickListener, me.selectedItems[item], me);
 					}
 				});
-				var valueDivs = Selector.query(".cropped-item .ci-value-div", el, false);
-				var buttonsDiv = Selector.query(".cropped-item .ci-buttons-div", el, true);
-				var buttonsDivWith = buttonsDiv ? buttonsDiv.offsetWidth : 0;
-				valueDivs.forEach(function (item, index, array) {
-					Dom.setStyle(item, "max-width", (el.offsetWidth - buttonsDivWith - 30) + "px");
-				});
-
 			}
 
 			if(!this.options.disabled)

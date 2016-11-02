@@ -11,16 +11,18 @@
 .control.association-token-control .value-div div.cropped-item {
     display: block;
     float: left;
+    max-width: 96.5%
 }
-.control.association-token-control.vertical .value-div div.cropped-item {
-     display: table;
-     float: none;
- }
 
 .control.association-token-control .value-div div.cropped-item .ci-value-div {
+    float: none;
     max-width: 100%;
 }
 
+.control.association-token-control.vertical .value-div div.cropped-item {
+    float: none;
+    max-width: 96.5%;
+}
 .control.association-token-control .value-div div.cropped-item .ci-buttons-div img.members-status {
     margin: 0 0 -4px 5px;
 }
@@ -28,6 +30,11 @@
 .control.association-token-control .value-div .control-selected-values {
     max-height: none;
 }
-.control .container .value-div .control-selected-values {
-    overflow: hidden;
+
+@supports (-moz-appearance:meterbar){
+    .control.association-token-control.editmode .value-div div.cropped-item .ci-value-div {
+        max-width: 92%;
+        float:left;
+    }
 }
+
