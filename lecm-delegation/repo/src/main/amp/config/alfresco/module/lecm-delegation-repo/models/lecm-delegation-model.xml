@@ -156,6 +156,15 @@
 						<tokenised>false</tokenised>
 					</index>
 				</property>
+				<!-- активно ли делегирующее лицо  -->
+				<property name="lecm-d8n:is-owner-employee-exists">
+					<type>d:boolean</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<!-- делегирующее лицо. Тот человек, чьи бизнес роли и права будут переданы -->

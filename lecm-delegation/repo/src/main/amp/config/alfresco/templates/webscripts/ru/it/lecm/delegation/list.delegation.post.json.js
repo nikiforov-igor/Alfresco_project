@@ -57,6 +57,7 @@
         var tmpParams = {};
         tmpParams.fields = 'lecm-orgstr_employee-last-name,lecm-orgstr_employee-first-name,lecm-orgstr_employee-middle-name';
         tmpParams.itemType = 'lecm-orgstr:employee';
+
         tmpParams.maxResults = params.maxResults;
         tmpParams.nameSubstituteStrings = ',,,{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name},{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}';
         tmpParams.parent = orgstructure.getEmployeesDirectory().nodeRef.toString();

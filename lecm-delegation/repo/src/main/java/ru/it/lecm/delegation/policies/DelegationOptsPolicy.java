@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.delegation.beans.DelegationBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -59,9 +60,13 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
         Serializable employeeName = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
         Serializable employeeFirstName = nodeService.getProperty(nodeRef, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
 
+        NodeRef delegationOpts;
+
         if (Boolean.FALSE.equals(nodeService.getProperty(nodeRef, BaseBean.IS_ACTIVE))) {
             if (null != delegationService.getDelegationOpts(nodeRef)) {
                 delegationService.stopDelegation(nodeRef);
+                delegationOpts = delegationService.getDelegationOpts(nodeRef);
+                nodeService.setProperty(delegationOpts, DelegationBean.PROP_IS_OWNER_EMPLOYEE_EXISTS, false);
             }
         }
 
@@ -70,12 +75,19 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
         }
 
         if (employeeName.toString().contains(employeeFirstName.toString())) {
-            if (null==delegationService.getDelegationOpts(nodeRef)) {
+            if (null == delegationService.getDelegationOpts(nodeRef)) {
                 delegationService.createDelegationOpts(nodeRef);
             }
-            logger.debug("employee with nodeRef '{}' sucessfully updated", nodeRef);
+            logger.debug("employee with nodeRef '{}' successfully updated", nodeRef);
         } else {
-            logger.warn("employee with name '{}'  and fisrt name '{}' not updated", employeeName.toString(), employeeFirstName.toString());
+            logger.warn("employee with name '{}'  and first name '{}' not updated", employeeName.toString(), employeeFirstName.toString());
+        }
+
+        if (Boolean.TRUE.equals(nodeService.getProperty(nodeRef, BaseBean.IS_ACTIVE))) {
+            delegationOpts = delegationService.getDelegationOpts(nodeRef);
+            if (null != delegationOpts) {
+                nodeService.setProperty(delegationOpts, DelegationBean.PROP_IS_OWNER_EMPLOYEE_EXISTS, true);
+            }
         }
     }
 }
