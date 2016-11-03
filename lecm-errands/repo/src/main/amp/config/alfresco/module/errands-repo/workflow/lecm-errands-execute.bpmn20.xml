@@ -38,6 +38,8 @@
 										}
 									});
 
+									/* HOTFIX: совместимость для предыдущих версий МС поручений, которая опиралась на переменные процесса */
+                                    execution.setVariable("executeResult", "approveController");
 									document.properties["lecm-errands:execute-result"] = "approveController";
 								} else {
 									var initiator = null;
@@ -56,8 +58,12 @@
 									});
 
 									if (document.properties["lecm-errands:without-initiator-approval"]) {
+										/* HOTFIX: совместимость для предыдущих версий МС поручений, которая опиралась на переменные процесса */
+                                        execution.setVariable("executeResult", "executed");
 										document.properties["lecm-errands:execute-result"] = "executed";
 									} else {
+										/* HOTFIX: совместимость для предыдущих версий МС поручений, которая опиралась на переменные процесса */
+                                        execution.setVariable("executeResult", "approveInitiator");
 										document.properties["lecm-errands:execute-result"] = "approveInitiator";
 									}
 								}
