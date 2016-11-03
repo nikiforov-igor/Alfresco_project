@@ -168,11 +168,20 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var nodeData, count;
+			var nodeData, count, addedValues;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].added,
 				count = this._renderSelectedItems([nodeData]);
-				//посылаем событие, передаем selectedItems либо из однго элемента либо пустой
+				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+					added: nodeData
+				});
+				if (this.widgets.added) {
+					addedValues = this.widgets.added.value ? this.widgets.added.value.split(',') : [];
+					if (addedValues.indexOf(nodeData.nodeRef) == -1) {
+						addedValues.push(nodeData.nodeRef);
+						this.widgets.added.value = Alfresco.util.encodeHTML(addedValues.join(','));
+					}
+				}
 			}
 		},
 
@@ -234,7 +243,7 @@ LogicECM.module = LogicECM.module || {};
                     addedKeys = Object.keys(args[1].added);
 
                 selectedKeys.forEach(function (key) {
-                    selectedArray.push(args[1].selected[key])
+                    selectedArray.push(args[1].selected[key]);
                 }, this);
 
                 selectedArray.sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
@@ -309,12 +318,13 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		formatResult: function (oResultData, sQuery, sResultMatch) {
+			var name = oResultData[1].name,
+				path;
 			if (!this.options.plane) {
-				var name = sResultMatch;
-				var path = oResultData[3] + sResultMatch;
+				path = oResultData[1].path + name;
 				return '<div title="' + path + '">' + name + '</div>';
 			} else {
-				return sResultMatch;
+				return name;
 			}
 		},
 
@@ -326,14 +336,8 @@ LogicECM.module = LogicECM.module || {};
 			// Если после нажатия enter возращается только один результат, то он сразу подставляется в поле
 			if (this.enterPressed && results && results.length == 1) {
 				this.enterPressed = false;
-				node = {
-					name: results[0].name,
-					selectedName: results[0].selectedName,
-					nodeRef: results[0].nodeRef,
-					path: results[0].path,
-					simplePath: results[0].simplePath
-				};
-				this.fire('addSelectedItem', {
+				node = results[0];
+				this.fire('addSelectedItem', { /* Bubbling.fire */
 					added: node
 				});
 				this.widgets.autocomplete.getInputEl().value = '';
@@ -349,13 +353,7 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onItemSelect: function (sEvent, aArgs) {
-			var node = {
-				name: aArgs[2][0],
-				selectedName: aArgs[2][1],
-				nodeRef: aArgs[2][2],
-				path: aArgs[2][3],
-				simplePath: aArgs[2][4]
-			};
+			var node = aArgs[2][1];
 			this.fire('addSelectedItem', { /* Bubbling.fire */
 				added: node
 			});
@@ -413,8 +411,7 @@ LogicECM.module = LogicECM.module || {};
 					responseType: YAHOO.util.DataSource.TYPE_JSON,
 					connXhrMode: 'cancelStaleRequests',
 					responseSchema: {
-						resultsList: 'items',
-						fields: ['name', 'selectedName', 'nodeRef', 'path', 'simplePath']
+						resultsList: 'items'
 					}
 				});
 				this.widgets.datasource.doBeforeParseData = this.bind(this.doBeforeParseData);
