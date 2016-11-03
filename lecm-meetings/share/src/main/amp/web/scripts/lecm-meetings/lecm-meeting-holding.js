@@ -21,6 +21,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 		submitElements: [],
 
 		HOLDING_MEETING: "holdingMeeting",
+		ITEM_FORM_PREFIX: "mhi-",
 
 		onReady: function () {
 			var actionSave = Dom.get(this.id + "-event-action-save");
@@ -125,7 +126,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				{
 					url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 					dataObj: {
-						htmlid: "mhi-" + nodeRef.replace('workspace://SpacesStore/', '_'),
+						htmlid: this.ITEM_FORM_PREFIX + nodeRef.replace('workspace://SpacesStore/', '_'),
 						itemKind: "node",
 						itemId: nodeRef,
 						mode: "edit",
@@ -173,7 +174,7 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/meeting/removeItem?nodeRef=" + nodeRef,
 					successCallback: {
 						fn: function (response) {
-							var itemBlock = Dom.get("mhi-" + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
+							var itemBlock = Dom.get(this.ITEM_FORM_PREFIX + nodeRef.replace('workspace://SpacesStore/', '_') + "-form-container");
 							if (itemBlock != null) {
 								itemBlock.parentNode.removeChild(itemBlock);
 							}
@@ -203,18 +204,19 @@ LogicECM.module.Meetengs = LogicECM.module.Meetengs || {};
 				if (this.submitElements[i].getForm()
 					&& this.submitElements[i].getForm().id != (this.HOLDING_MEETING + "-form")) {
 					var form = this.submitElements[i].getForm();
-
-					var propFromDate = form["prop_lecm-events_from-date"];
-					if (propFromDate) {
-						arguments.from_date = propFromDate.value;
-					} else {
-						arguments.from_date = Alfresco.util.toISO8601(new Date(), {"milliseconds": false});
-					}
-					var propToDate = form["prop_lecm-events_to-date"];
-					if (propToDate) {
-						arguments.to_date = propToDate.value;
-					} else {
-						arguments.to_date = Alfresco.util.toISO8601(new Date(), {"milliseconds": false});
+					if (form.id.indexOf(this.ITEM_FORM_PREFIX) < 0) {
+						var propFromDate = form["prop_lecm-events_from-date"];
+						if (propFromDate) {
+							arguments.from_date = propFromDate.value;
+						} else {
+							arguments.from_date = Alfresco.util.toISO8601(new Date(), {"milliseconds": false});
+						}
+						var propToDate = form["prop_lecm-events_to-date"];
+						if (propToDate) {
+							arguments.to_date = propToDate.value;
+						} else {
+							arguments.to_date = Alfresco.util.toISO8601(new Date(), {"milliseconds": false});
+						}
 					}
 				}
 			}
