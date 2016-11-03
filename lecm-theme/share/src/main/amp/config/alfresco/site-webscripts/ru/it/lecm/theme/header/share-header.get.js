@@ -2,40 +2,60 @@
 <import resource="classpath:/alfresco/site-webscripts/org/alfresco/callutils.js">
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 
-var imagesRoot = "/share/components/images/header/"
+var imagesRoot = "/share/components/images/header/";
 
-var logicECMWidgets = [
-    {
-        id: "SED_MENU_ITEM_ADDITIONAL",
-        name: "alfresco/header/AlfMenuItem",
-        config: {
-            id: "SED_MENU_ITEM_ADDITIONAL",
-            label: msg.get("label.sed_title"),
-            targetUrl: "arm?code=SED",
-            iconImage: imagesRoot + "docs_16_light.png"
-        }
-    },
-    {
-        id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
-        name: "alfresco/header/AlfMenuItem",
-        config: {
-        id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
-        label: msg.get("label.orgstructure-dictionary"),
-        targetUrl: "orgstructure-dictionary",
-        iconImage: imagesRoot + "orgstructure_light.png"
-        }
-    },
-	{
-	    id: "ADMINISTRATION_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "ADMINISTRATION_MENU_ITEM",
-	        label: msg.get("label.admin.page"),
-	        targetUrl: "admin",
-            iconImage: imagesRoot + "settings_16_light.png"
-        }
+function getArmsForMenu() {
+	var result = [],
+		url = "/lecm/menu/arms/get",
+		response = remote.connect("alfresco").get(url);
+
+	if (response.status == 200) {
+		result = eval('(' + response + ')');
 	}
-];
+	return result;
+}
+
+var logicECMWidgets = [];
+var arms = getArmsForMenu();
+
+for (var i = 0; i < arms.length; i++) {
+	var title = msg.get("label." + arms[i].code + ".menu.item");
+	if (title == "label." + arms[i].code + ".menu.item") {
+		title = arms[i].title;
+	}
+	logicECMWidgets.push({
+		id: arms[i].code + "_MENU_ITEM_ADDITIONAL",
+		name: "alfresco/header/AlfMenuItem",
+		config: {
+			id: arms[i].code + "_MENU_ITEM_ADDITIONAL",
+			label: title,
+			targetUrl: "arm?code=" + arms[i].code,
+			iconImage: imagesRoot + "docs_16_light.png"
+		}
+	});
+}
+
+logicECMWidgets.push({
+	id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
+	name: "alfresco/header/AlfMenuItem",
+	config: {
+		id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
+		label: msg.get("label.orgstructure-dictionary"),
+		targetUrl: "orgstructure-dictionary",
+		iconImage: imagesRoot + "orgstructure_light.png"
+	}
+});
+
+logicECMWidgets.push({
+	id: "ADMINISTRATION_MENU_ITEM",
+	name: "alfresco/header/AlfMenuItem",
+	config: {
+		id: "ADMINISTRATION_MENU_ITEM",
+		label: msg.get("label.admin.page"),
+		targetUrl: "admin",
+		iconImage: imagesRoot + "settings_16_light.png"
+	}
+});
 
 var standartWidgets = [
 	{
@@ -243,7 +263,7 @@ var appItems = [
 		name: "alfresco/menus/AlfMenuBarItem",
 		config: {
 			id: "SED_MENU_ITEM",
-			label: msg.get("label.sed.menu.item"),
+			label: msg.get("label.SED.menu.item"),
 			targetUrl: "arm?code=SED"
 		}
 	},
