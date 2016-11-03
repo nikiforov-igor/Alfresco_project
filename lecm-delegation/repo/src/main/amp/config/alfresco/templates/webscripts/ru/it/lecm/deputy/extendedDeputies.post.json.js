@@ -45,7 +45,7 @@
 
 	for each(var deputy in allDeputies) {
 		var employeeAssocs = deputy.assocs['lecm-deputy:employee-assoc'];
-		if(employeeAssocs && employeeAssocs.length > 0) {
+		if(employeeAssocs && employeeAssocs.length) {
 			var employee = employeeAssocs[0];
 			var employeeNodeRef = employee.nodeRef.toString();
 
