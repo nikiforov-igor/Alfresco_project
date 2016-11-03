@@ -224,7 +224,7 @@
                     <show id="save-event-script" force="true"/>
                     <!-- Заголовок -->
                     <show id="lecm-events:title"/>
-                    <!-- Весмь день -->
+                    <!-- Весь день -->
                     <show id="lecm-events:all-day"/>
                     <!-- Дата начала мероприятия -->
                     <show id="lecm-events:from-date"/>
