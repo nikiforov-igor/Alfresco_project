@@ -432,7 +432,11 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 *  Смена даты из диаграммы
 		 */
 		setMemberCalendarDate: function setMemberCalendarDate(layer, args) {
-			this.selectDate(Alfresco.util.fromISO8601(args[1].date));
+			var date = Alfresco.util.fromISO8601(args[1].date);
+			date.setHours(0);
+			date.setMinutes(0);
+			date.setSeconds(0);
+			this.selectDate(date);
 		},
 
 		/**
@@ -592,10 +596,10 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				textCell.title = item.selectedName;
 				firstColumn.appendChild(textCell);
 				var textBounds = Dom.getRegion(textCell);
-				textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");;
+				textCell.setAttribute("style", "width: " + (delta + textBounds.width) + "px !important;");
 
 				var removeButton = document.createElement("div");
-				removeButton.className = "member-control-diagram-first-cell-remove"
+				removeButton.className = "member-control-diagram-first-cell-remove";
 				firstColumn.appendChild(removeButton);
 				YAHOO.util.Event.on(removeButton, 'click', this.removeDiagramItem, {
 					node: item,
@@ -634,7 +638,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			Dom.get(this.id + "-date-cntrl-cal-cell").style.width = cellBounds.firstColumnWidth + "px";
 			var delta = cellBounds.firstColumnWidth - this.firstColumnWidth - 6;
 			var calendarBounds = Dom.getRegion(this.id + "-date-cntrl-date");
-			Dom.get(this.id + "-date-cntrl-date").setAttribute("style", "width: " + (delta + calendarBounds.width) + "px !important;");;
+			Dom.get(this.id + "-date-cntrl-date").setAttribute("style", "width: " + (delta + calendarBounds.width) + "px !important;");
 			this.headerIsReady = true;
 			Dom.get(this.options.controlId + "-diagram-container").style.width = width + "px";
 		},
@@ -669,7 +673,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var startIndex = (startHour - this.startHour) * cellBounds.cellByHour + Math.round(startMinutes / this.timeStep) + 1;
 
 			this.maxIndex = (this.endHour - this.startHour + 1) * cellBounds.cellByHour;
-			var days = 0
+			var days = 0;
 			if (!forAllDayPeriod) {
 				days = this.dateDiffInDays(endTime, startTime);
 			}
@@ -708,7 +712,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			startDayDate.setMinutes(0);
 			startDayDate.setSeconds(0);
 
-			var endDayDate = new Date(this.selectedDate.getTime());;
+			var endDayDate = new Date(this.selectedDate.getTime());
 			endDayDate.setHours(this.endHour);
 			endDayDate.setMinutes(0);
 			endDayDate.setSeconds(0);
@@ -772,7 +776,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
 					var prevIcon = Dom.get(id);
 					if (prevIcon) {
-						diagram.removeChild(prevIcon)
+						diagram.removeChild(prevIcon);
 					}
 				}
 				return;
@@ -782,7 +786,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			startDayDate.setMinutes(0);
 			startDayDate.setSeconds(0);
 
-			var endDayDate = new Date(this.initialEndDate.getTime());;
+			var endDayDate = new Date(this.initialEndDate.getTime());
 			endDayDate.setHours(this.endHour);
 			endDayDate.setMinutes(0);
 			endDayDate.setSeconds(0);
@@ -821,7 +825,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var id = this.options.controlId + "-diagram-member-status-" + rowIndex;
 				var prevIcon = Dom.get(id);
 				if (prevIcon) {
-					diagram.removeChild(prevIcon)
+					diagram.removeChild(prevIcon);
 				}
 				if (startIndex < fillIndex) {
 					var iconItem = this.getMemberStatusHTML(item);
@@ -942,7 +946,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				var id = this.options.controlId + "-diagram-member-status-" + requestIndex;
 				var prevIcon = Dom.get(id);
 				if (prevIcon) {
-					diagram.removeChild(prevIcon)
+					diagram.removeChild(prevIcon);
 				}
 
 				var img = "alf_clock_green_16.jpg";
@@ -1024,7 +1028,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			});
 
 			//Окончание
-			start.setHours(this.startHour)
+			start.setHours(this.startHour);
 			start.setMinutes(0);
 			start.setSeconds(0);
 			var endDate = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
@@ -1047,7 +1051,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		_clearSelectorBorder: function(startIndex, endIndex, onlyHeader) {
 			var fillIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
 			for (var i = startIndex; i <= fillIndex; i++) {
-				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
+				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i);
 				cell.style.backgroundColor = "transparent";
 			}
 
@@ -1111,7 +1115,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			var color = isBusy ? this.busyColor : this.notBusyColor;
 			var headerIndex = endIndex > this.maxIndex ? this.maxIndex : endIndex;
 			for (var i = startIndex; i <= headerIndex; i++) {
-				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i)
+				var cell = Dom.get(this.options.controlId + "-diagram_0_" + i);
 				cell.style.backgroundColor = color;
 			}
 
@@ -1297,6 +1301,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				//Данные из поля завершение
 				} else if (fieldId == this.options.toDateConfigName) {
 					this._updateEndDate(control);
+				//Флаг "Весь день"
 				} else if (fieldId == this.options.allDayConfigName) {
 					this._updateAllDay(control);
 				}
