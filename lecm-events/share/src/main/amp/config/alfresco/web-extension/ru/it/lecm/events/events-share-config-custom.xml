@@ -761,6 +761,18 @@
                     </field>
                 </appearance>
             </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-events-dic:resources-note"/>
+                    <show id="lecm-events-dic:resources-organization-assoc"/>
+                    <show id="lecm-events-dic:resources-responsible-assoc"/>
+                    <show id="lecm-events-dic:resources-require-approval"/>
+                    <show id="lecm-events-dic:resources-available"/>
+                    <show id="lecm-events-dic:resources-privilege-level"/>
+                    <show id="lecm-events-dic:resources-code"/>
+                </field-visibility>
+            </form>
         </forms>
     </config>
 
