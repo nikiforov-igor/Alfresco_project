@@ -1,29 +1,33 @@
-if (args["items"] && args["date"]) {
+if (args["items"]) {
     var employees = args["items"].split(",");
-    var result = [];
+    var timeZoneOffset = null;
+    if (args['timeZoneOffset']) {
+        timeZoneOffset = parseInt(args['timeZoneOffset']);
+    }
+    var isBusy = false;
     for each(var employee in employees) {
         if (employee) {
             var additionalFilter = "AND (@lecm\\-events\\:initiator\\-assoc\\-ref: \"*" + employee + "*\" OR ";
             additionalFilter += "@lecm\\-events\\:temp\\-members\\-assoc\\-ref: \"*" + employee + "*\" OR ";
             additionalFilter += "@lecm\\-meetings\\:chairman\\-assoc\\-ref: \"*" + employee + "*\" OR ";
             additionalFilter += "@lecm\\-meetings\\:secretary\\-assoc\\-ref: \"*" + employee + "*\")";
-            var eventsCollection = events.getUserEvents(args["date"] + "T00:00:00Z", args["date"] + "T23:59:59Z", additionalFilter, true);
-            var busytime = [];
+            var eventsCollection = events.getUserEvents(args["startDate"], args["endDate"], additionalFilter, true);
+
             for (var i = 0; i < eventsCollection.size(); i++) {
                 var event = eventsCollection.get(i);
                 if (event["nodeRef"] != args["exclude"]) {
-                    busytime.push({
-                        title: event["title"],
-                        start: event["start"],
-                        end: event["end"]
-                    })
+                    isBusy = true;
+                    break;
                 }
             }
-            result.push({
-                employee: employee,
-                busytime: busytime
-            })
+        }
+        if (isBusy) {
+            break;
         }
     }
+    var result = {
+        isBusy: isBusy
+    };
+
     model.result = jsonUtils.toJSONString(result);
 }

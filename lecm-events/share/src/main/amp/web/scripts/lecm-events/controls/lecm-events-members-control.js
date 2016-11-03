@@ -54,6 +54,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		notBusyColor: null,
 		needDraw: true,
 		allDay: false,
+		allDayBusy: false,
 		cellBounds: null,
 
 		onReady: function ConsoleGroups_onReady() {
@@ -522,6 +523,37 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 							if (response.json && response.config.dataObj.date == Alfresco.util.formatDate(this.selectedDate, "yyyy-mm-dd")) {
 								this.busytime = response.json;
 								this.fillBusyTime(response.json);
+							}
+							if (this.prevStartIndex && this.prevEndIndex) {
+								this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+								this._drawSelectorBorder(this.prevStartIndex, this.prevEndIndex);
+							}
+						},
+
+						scope: this
+					}
+				});
+		},
+
+		requestAllDayMembersTime: function requestMembersTime_function() {
+			var items = Object.keys(this.selectedItems).join(",");
+			if (items == "" || this.startDate == null) return;
+
+			Alfresco.util.Ajax.jsonRequest(
+				{
+					url: Alfresco.constants.PROXY_URI + "lecm/events/members/alldaybusytime",
+					method: "GET",
+					dataObj: {
+						items: items,
+						startDate: Alfresco.util.toISO8601(this.startDate),
+						endDate: Alfresco.util.toISO8601(this.endDate),
+						exclude: this.isNodeRef(this.options.eventNodeRef) ? this.options.eventNodeRef : ""
+					},
+					successCallback:
+					{
+						fn: function(response) {
+							if (response.json && response.config.dataObj.startDate == Alfresco.util.toISO8601(this.startDate)) {
+								this.allDayBusy = response.json.isBusy;
 							}
 							if (this.prevStartIndex && this.prevEndIndex) {
 								this._clearSelectorBorder(this.prevStartIndex, this.prevEndIndex);
@@ -1054,13 +1086,17 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		_drawSelectorBorder: function(startIndex, endIndex) {
 			var isBusy = false;
-			for (var key in this.busyInterval) {
-				var interval = this.busyInterval[key];
-				if ((startIndex >= interval.start && startIndex <= interval.end) ||
-					(endIndex >= interval.start && endIndex <= interval.end) ||
-					(startIndex <= interval.start && endIndex >= interval.end)) {
-					isBusy = true;
-					break;
+			if (this.allDay) {
+				isBusy = this.allDayBusy;
+			} else {
+				for (var key in this.busyInterval) {
+					var interval = this.busyInterval[key];
+					if ((startIndex >= interval.start && startIndex <= interval.end) ||
+						(endIndex >= interval.start && endIndex <= interval.end) ||
+						(startIndex <= interval.start && endIndex >= interval.end)) {
+						isBusy = true;
+						break;
+					}
 				}
 			}
 
@@ -1258,7 +1294,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				//Данные из поля "Начало"
 				if (fieldId == this.options.fromDateConfigName) {
 					this._updateStartDate(control);
-					//Данные из поля завершение
+				//Данные из поля завершение
 				} else if (fieldId == this.options.toDateConfigName) {
 					this._updateEndDate(control);
 				} else if (fieldId == this.options.allDayConfigName) {
@@ -1292,11 +1328,13 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 				formId: this.options.formId
 			});
 			if (this.needDraw) {
-				this.draw();
 				if (this.formatDate(this.startDate) != prevDate) {
 					this.busytime = [];
 					this.draw();
 					this.requestMembersTime();
+					if (this.allDay) {
+						this.requestAllDayMembersTime();
+					}
 				} else {
 					this.draw();
 				}
@@ -1334,6 +1372,9 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					this.busytime = [];
 					this.draw();
 					this.requestMembersTime();
+					if (this.allDay) {
+						this.requestAllDayMembersTime();
+					}
 				} else {
 					this.draw();
 				}
@@ -1355,6 +1396,8 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					fieldId: this.endDateField.configName,
 					formId: this.endDateField.formId
 				});
+			} else if (this.allDay) {
+				this.requestAllDayMembersTime();
 			}
 		}
 		///////////////////////////////////////
