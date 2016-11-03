@@ -333,12 +333,22 @@ LogicECM.module = LogicECM.module || {};
 					path: results[0].path,
 					simplePath: results[0].simplePath
 				};
-				this.fire('addSelectedItem', {
+				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+					added: node
+				});
+				this.fire('addSelectedItem', { /* Bubbling.fire */
 					added: node
 				});
 				this.widgets.autocomplete.getInputEl().value = '';
 				if (!this.options.endpointMany) {
 					Dom.addClass(this.widgets.autocomplete.getInputEl(), 'hidden');
+				}
+				if (this.widgets.added) {
+					addedValues = (this.widgets.added.value || '').split(',');
+					if (addedValues.indexOf(node.nodeRef) == -1) {
+						addedValues.push(node.nodeRef);
+						this.widgets.added.value = Alfresco.util.encodeHTML(addedValues.join(','));
+					}
 				}
 				res = false;
 			} else {
@@ -350,12 +360,16 @@ LogicECM.module = LogicECM.module || {};
 
 		onItemSelect: function (sEvent, aArgs) {
 			var node = {
-				name: aArgs[2][0],
-				selectedName: aArgs[2][1],
-				nodeRef: aArgs[2][2],
-				path: aArgs[2][3],
-				simplePath: aArgs[2][4]
-			};
+					name: aArgs[2][0],
+					selectedName: aArgs[2][1],
+					nodeRef: aArgs[2][2],
+					path: aArgs[2][3],
+					simplePath: aArgs[2][4]
+				},
+				addedValues;
+			this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
+				added: node
+			});
 			this.fire('addSelectedItem', { /* Bubbling.fire */
 				added: node
 			});
@@ -368,6 +382,13 @@ LogicECM.module = LogicECM.module || {};
 			}
 			if (this.widgets.autocomplete._nDelayID != -1) {
 				clearTimeout(this.widgets.autocomplete._nDelayID);
+			}
+			if (this.widgets.added) {
+				addedValues = (this.widgets.added.value || '').split(',');
+				if (addedValues.indexOf(node.nodeRef) == -1) {
+					addedValues.push(node.nodeRef);
+					this.widgets.added.value = Alfresco.util.encodeHTML(addedValues.join(','));
+				}
 			}
 		},
 
