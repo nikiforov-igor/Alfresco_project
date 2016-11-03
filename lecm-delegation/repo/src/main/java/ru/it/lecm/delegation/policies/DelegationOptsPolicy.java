@@ -60,12 +60,10 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
         Serializable employeeName = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
         Serializable employeeFirstName = nodeService.getProperty(nodeRef, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
 
-        NodeRef delegationOpts;
-
         if (Boolean.FALSE.equals(nodeService.getProperty(nodeRef, BaseBean.IS_ACTIVE))) {
-            if (null != delegationService.getDelegationOpts(nodeRef)) {
+            NodeRef delegationOpts = delegationService.getDelegationOpts(nodeRef);
+            if (null != delegationOpts) {
                 delegationService.stopDelegation(nodeRef);
-                delegationOpts = delegationService.getDelegationOpts(nodeRef);
                 nodeService.setProperty(delegationOpts, DelegationBean.PROP_IS_OWNER_EMPLOYEE_EXISTS, false);
             }
         }
@@ -84,7 +82,7 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
         }
 
         if (Boolean.TRUE.equals(nodeService.getProperty(nodeRef, BaseBean.IS_ACTIVE))) {
-            delegationOpts = delegationService.getDelegationOpts(nodeRef);
+            NodeRef delegationOpts = delegationService.getDelegationOpts(nodeRef);
             if (null != delegationOpts) {
                 nodeService.setProperty(delegationOpts, DelegationBean.PROP_IS_OWNER_EMPLOYEE_EXISTS, true);
             }
