@@ -15,7 +15,7 @@ if (args["items"]) {
 
             for (var i = 0; i < eventsCollection.size(); i++) {
                 var event = eventsCollection.get(i);
-                if (event["nodeRef"] != args["exclude"]) {
+                if (("" + event["nodeRef"]) != ("" + args["exclude"])) {
                     isBusy = true;
                     break;
                 }

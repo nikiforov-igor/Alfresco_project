@@ -11,7 +11,7 @@ if (args["items"] && args["date"]) {
             var busytime = [];
             for (var i = 0; i < eventsCollection.size(); i++) {
                 var event = eventsCollection.get(i);
-                if (event["nodeRef"] != args["exclude"]) {
+                if (("" + event["nodeRef"]) != ("" + args["exclude"])) {
                     busytime.push({
                         title: event["title"],
                         start: event["start"],
