@@ -448,7 +448,7 @@
                         // always inform the forms runtime that the control value has been updated
                         Bubbling.fire("mandatoryControlValueUpdated", me);
 
-                        if (me.options.changeFireAction != null) {
+                        if (me.options.changeFireAction) {
                             Bubbling.fire(me.options.changeFireAction, {
                                 date: isoValue
                             });
@@ -518,7 +518,7 @@
                                         //       function gets called as well as a result of rendering the picker above,
                                         //       that's also why we don't update the hidden field in here either.
                                     }
-                                    if (me.options.changeFireAction != null) {
+                                    if (me.options.changeFireAction) {
                                         Bubbling.fire(me.options.changeFireAction, {
                                             date: isoValue
                                         });
