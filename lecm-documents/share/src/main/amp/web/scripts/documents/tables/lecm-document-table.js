@@ -1006,6 +1006,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 		            showCancelButton: true
 	            };
 
+				this.updateTemplateParams(templateRequestParams);
                 // Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails-" + Alfresco.util.generateDomId());
                 createDetails.setOptions(
@@ -1047,6 +1048,9 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
         },
 
 		beforeShowCheck: function (p_form, p_dialog) {
+		},
+
+		updateTemplateParams: function (params) {
 		},
 
         _itemUpdate:function DataGrid_onDataItemCreated(nodeRef) {
