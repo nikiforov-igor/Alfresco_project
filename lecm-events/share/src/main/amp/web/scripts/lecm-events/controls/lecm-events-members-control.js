@@ -510,7 +510,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 */
 		requestMembersTime: function requestMembersTime_function() {
 			var items = Object.keys(this.selectedItems).join(",");
-			if (items == "" || this.startDate == null) return;
+			if (!items || !this.startDate) return;
 
 			Alfresco.util.Ajax.jsonRequest(
 				{
@@ -541,7 +541,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 
 		requestAllDayMembersTime: function requestMembersTime_function() {
 			var items = Object.keys(this.selectedItems).join(",");
-			if (items == "" || this.startDate == null) return;
+			if (!items || !this.startDate) return;
 
 			Alfresco.util.Ajax.jsonRequest(
 				{

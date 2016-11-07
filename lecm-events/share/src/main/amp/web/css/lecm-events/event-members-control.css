@@ -21,13 +21,13 @@
     -webkit-box-sizing: border-box;
 }
 
-.member-control-diagram-header-calendar {
-    border-top: none !important;
-    border-bottom: none !important;
-    margin: 0 !important;
-    height: 20px !important;
-    text-align: center !important;
-    width: 95px !important;
+.form-container input.date-entry.member-control-diagram-header-calendar {
+    border-top: none;
+    border-bottom: none;
+    margin: 0;
+    height: 20px;
+    text-align: center;
+    width: 95px;
 }
 
 .member-control-diagram-header-calendar-container {
