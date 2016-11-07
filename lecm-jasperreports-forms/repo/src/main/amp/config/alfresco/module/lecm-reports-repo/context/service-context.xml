@@ -142,12 +142,12 @@
           class="ru.it.lecm.reports.dao.RepositoryReportContentDAOBean"
           parent="baseBean">
         <!-- Автоматическое создание каталогов. -->
-        <!--<property name="folders">
+        <property name="folders">
             <map>
                 <entry key="#{RSF_ROOT_ID}" value="#{RSF_ROOT_NAME}"/>
                 <entry key="#{RSF_ROOT_CONFIG_ID}" value="#{RSF_ROOT_NAME}/#{RSF_ROOT_CONFIG_NAME}"/>
             </map>
-        </property>-->
+        </property>
     </bean>
 
 

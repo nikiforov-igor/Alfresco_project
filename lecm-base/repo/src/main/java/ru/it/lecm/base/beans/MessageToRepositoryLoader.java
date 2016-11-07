@@ -4,17 +4,17 @@ import java.util.List;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
-import org.alfresco.repo.solr.SolrActiveEvent;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.admin.RepoAdminService;
 import org.alfresco.service.transaction.TransactionService;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.extensions.surf.util.AbstractLifecycleBean;
 
 /**
  *
  * @author vmalygin
  */
-public class MessageToRepositoryLoader implements ApplicationListener<SolrActiveEvent>, RunAsWork<Void>, RetryingTransactionCallback<Void> {
+public class MessageToRepositoryLoader extends AbstractLifecycleBean implements RunAsWork<Void>, RetryingTransactionCallback<Void> {
 
 	private RepoAdminService repoAdminService;
 	private TransactionService transactionService;
@@ -48,11 +48,6 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 	}
 
 	@Override
-	public void onApplicationEvent(SolrActiveEvent event) {
-		init();
-	}
-
-	@Override
 	public Void doWork() throws Exception {
 		return transactionService.getRetryingTransactionHelper().doInTransaction(this, transactionService.isReadOnly());
 	}
@@ -63,19 +58,6 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 			loadMessagesFromLocation(messageLocation, useDefaultMessages);
 		}
 		return null;
-	}
-
-
-	public void init() {
-//		try {
-//			Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.messages.editor.enabled");
-//			boolean enabled = (editorEnabled == null) ? true : Boolean.valueOf((String) editorEnabled);
-//			if (enabled) {
-//				AuthenticationUtil.runAsSystem(this);
-//			}
-//		} catch (LecmBaseException ex) {
-//			throw new IllegalStateException("Cannot read document messages properties");
-//		}
 	}
 
 	private void loadMessagesFromLocation(String messageLocation, boolean useDefault) {
@@ -104,5 +86,22 @@ public class MessageToRepositoryLoader implements ApplicationListener<SolrActive
 			}
 			repoAdminService.deployMessageBundle(messageLocation);
 		}
+	}
+
+	@Override
+	protected void onBootstrap(ApplicationEvent ae) {
+		try {
+			Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.messages.editor.enabled");
+			boolean enabled = (editorEnabled == null) ? true : Boolean.valueOf((String) editorEnabled);
+			if (enabled) {
+				AuthenticationUtil.runAsSystem(this);
+			}
+		} catch (LecmBaseException ex) {
+			throw new IllegalStateException("Cannot read document messages properties");
+		}
+	}
+
+	@Override
+	protected void onShutdown(ApplicationEvent ae) {		
 	}
 }
