@@ -766,7 +766,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 			//Не отображаем если это не дата начала
 			if (this.selectedDate.getYear() != this.initialStartDate.getYear() ||
 				this.selectedDate.getMonth() != this.initialStartDate.getMonth() ||
-				this.selectedDate.getDay() != this.initialStartDate.getDay() ||
+				this.selectedDate.getDate() != this.initialStartDate.getDate() ||
 				!this.isNodeRef(this.options.currentValue)) {
 
 				var diagram = Dom.get(this.options.controlId + "-diagram");
