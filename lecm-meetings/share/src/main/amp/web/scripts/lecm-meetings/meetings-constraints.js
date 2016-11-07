@@ -16,7 +16,8 @@
             if (fromInput && fromInput.value && toInput && toInput.value) {
                 var fromDate = Alfresco.util.fromISO8601(fromInput.value);
                 var toDate = Alfresco.util.fromISO8601(toInput.value);
-                if (fromDate > toDate) {
+				var curDate = new Date();
+                if (fromDate > curDate || toDate > curDate || fromDate > toDate) {
                     return false;
                 }
             }
