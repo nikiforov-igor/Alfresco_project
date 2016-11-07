@@ -125,7 +125,12 @@
                     changeFireAction: null
                 },
 
-	            tempDisabled: false,
+                /**
+                 * Vertical indent for picker from text of date
+                 */
+                datePickerVerticalIndent: 5,
+
+                tempDisabled: false,
 
                 /**
                  * Object container for storing YUI widget instances.
@@ -352,7 +357,6 @@
 		                var picker = Dom.get(me.id);
 		                var parent = picker.parentNode;
 		                var clicked = Event.getTarget(event) || dateEl;
-		                var d = 5;                                                         // величина отступа
 
 		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
                             var body = Selector.query('body')[0];
@@ -372,16 +376,16 @@
 		                }
                         me.widgets.calendar.show();                                         // сначала сделать видимым, потом позиционировать, иначе позиционирование не отрабатывает
 
-                        var x = (Dom.getX(clicked) + clicked.offsetWidth) - picker.offsetWidth - d;
+                        var x = (Dom.getX(clicked) + clicked.offsetWidth) - picker.offsetWidth - this.datePickerVerticalIndent;
                         if (Dom.getX(picker) != x) {
                             Dom.setX(picker, x);
                         }
 
-                        var y = Dom.getY(clicked) + clicked.offsetHeight - d;
+                        var y = Dom.getY(clicked) + clicked.offsetHeight - this.datePickerVerticalIndent;
 		                var height = picker.offsetHeight;
 
 		                if (y + height > Dom.getViewportHeight()) {                        // если календарь не помещается до низа окна
-                            y -= height + d * 3;                                           // откроем его вверх
+                            y -= height + this.datePickerVerticalIndent * 3;                                           // откроем его вверх
 		                }
                         if (Dom.getY(picker) != y) {
                             Dom.setY(picker, y);
