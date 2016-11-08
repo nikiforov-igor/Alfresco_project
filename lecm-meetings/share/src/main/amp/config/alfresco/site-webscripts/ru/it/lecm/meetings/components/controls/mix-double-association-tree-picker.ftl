@@ -110,7 +110,31 @@
     <#elseif form.arguments[field.name]?has_content>
         <#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
     </#if>
+	<#assign allowedNodesFirst = "">
+	<#assign allowedNodesSecond = "">
 
+	<#if params.firstAllowedNodesFormArgs??>
+		<#assign firstAllowedNodesFormArgs = params.firstAllowedNodesFormArgs?split(",")>
+		<#list firstAllowedNodesFormArgs as firstAllowedNodesFormArg>
+			<#if form.arguments[firstAllowedNodesFormArg]??>
+				<#if (allowedNodesFirst?length > 0)>
+					<#assign allowedNodesFirst = allowedNodesFirst + ","/>
+				</#if>
+				<#assign allowedNodesFirst = allowedNodesFirst + form.arguments[firstAllowedNodesFormArg]/>
+			</#if>
+		</#list>
+	</#if>
+	<#if params.secondAllowedNodesFormArgs??>
+		<#assign secondAllowedNodesFormArgs = params.secondAllowedNodesFormArgs?split(",")>
+		<#list secondAllowedNodesFormArgs as secondAllowedNodesFormArg>
+			<#if form.arguments[secondAllowedNodesFormArg]??>
+				<#if (allowedNodesSecond?length > 0)>
+					<#assign allowedNodesSecond = allowedNodesSecond + ","/>
+				</#if>
+				<#assign allowedNodesSecond = allowedNodesSecond + form.arguments[secondAllowedNodesFormArg]/>
+			</#if>
+		</#list>
+	</#if>
 (function() {
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
@@ -205,6 +229,9 @@
 			<#if params.itemTypeSubstituteStrings??>
 				itemTypeSubstituteStrings: "${params.itemTypeSubstituteStrings}",
 			</#if>
+			<#if (allowedNodesFirst?length > 0)>
+				allowedNodes: "${allowedNodesFirst}".split(","),
+			</#if>
 		    clearFormsOnStart: true
 	    });
 	    fistControl.setMessages(${messages});
@@ -292,6 +319,9 @@
 		    currentValue: "${field.value!''}",
 			<#if params.itemTypeSubstituteStrings??>
 				itemTypeSubstituteStrings: "${params.itemTypeSubstituteStrings}",
+			</#if>
+			<#if (allowedNodesSecond?length > 0)>
+				allowedNodes: "${allowedNodesSecond}".split(","),
 			</#if>
 		    clearFormsOnStart: true
 	    });

@@ -1936,7 +1936,8 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover
 {
-  background-color: rgba(255, 255, 255, 0);
+  background-color:#C9EBF6;
+  color:black;
 }
 
 /*datagrid control*/
@@ -2482,6 +2483,12 @@ div#lightbox {
     color: #6ca5ce;
 }
 /* lecm-arm-documents : end */
+
+/* arm menu : start */
+.yui-skin-lecmTheme .arm-menu-item {
+    background-image: url("/share/components/images/header/docs_16_light.png");
+}
+/* arm menu : end */
 
 /* Controls colors : start */
 .yui-skin-lecmTheme .control .container .value-div > input[type=text],

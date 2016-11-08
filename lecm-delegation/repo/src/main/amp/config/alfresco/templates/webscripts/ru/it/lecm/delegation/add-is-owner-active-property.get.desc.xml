@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+    <shortname>Add property "lecm-d8n:is-owner-employee-exists" to delegation-opts</shortname>
+    <description>Add property "lecm-d8n:is-owner-employee-exists" to delegation-opts. True if owner employee id active.</description>
+    <url>/lecm/delegation/addEmployeeExistsProperty</url>
+    <authentication>user</authentication>
+    <format default="json"/>
+</webscript>

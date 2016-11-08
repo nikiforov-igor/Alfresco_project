@@ -76,6 +76,11 @@ public interface IDelegation {
 	QName ASSOC_DELEGATION_OPTS_TRUSTEE = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-trustee-assoc");
 
 	/**
+	 * &lt;property name="lecm-d8n:is-owner-employee-exists"&gt;
+	 */
+	QName PROP_IS_OWNER_EMPLOYEE_EXISTS = QName.createQName(DELEGATION_NAMESPACE, "is-owner-employee-exists");
+
+	/**
 	 * &lt;child-association name="lecm-d8n:delegation-opts-procuracy-assoc"&gt;
 	 */
 	QName ASSOC_DELEGATION_OPTS_PROCURACY = QName.createQName (DELEGATION_NAMESPACE, "delegation-opts-procuracy-assoc");

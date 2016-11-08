@@ -21,6 +21,9 @@
 				overrideSortingWith: false,
 				expandDataSource: 'lecm/delegation/procuraciesDatagrid',
 				datagridMeta:{
+					searchConfig: {
+						filter: '@lecm\\-d8n\\:is\\-owner\\-employee\\-exists:true',
+					},
 					useFilterByOrg: false,
 					itemType: LogicECM.module.Delegation.Const.itemType,
 					nodeRef: LogicECM.module.Delegation.Const.nodeRef
