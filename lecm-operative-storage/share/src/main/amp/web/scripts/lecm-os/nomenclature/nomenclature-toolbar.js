@@ -401,7 +401,7 @@ LogicECM.module.Nomenclature = LogicECM.module.Nomenclature || {};
 			}
 
 			itemsData.forEach(function(el) {
-				var msg = el.itemData['prop_os-aspects_sort-value'].displayValue+ ' - ' + el.itemData['prop_cm_title'].displayValue + '<br>';
+				var msg = el.itemData['prop_os-aspects_common-index'].displayValue+ ' - ' + el.itemData['prop_cm_title'].displayValue + '<br>';
 				html += "<div class=\"noerror-item\">" + msg + "</div>";
 			});
 
