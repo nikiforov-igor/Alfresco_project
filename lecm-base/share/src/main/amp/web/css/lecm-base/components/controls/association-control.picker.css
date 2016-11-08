@@ -10,9 +10,16 @@
 	margin: 0 0 10px 0;
 }
 
+.association-picker .with-ex-search .button-select {
+	width: 100%
+}
+
 .association-picker .button-select button {
 	text-align: left;
 	width: 250px;
+}
+.association-picker .with-ex-search .button-select button {
+	width: 100%;
 }
 
 .association-picker .bd .form-fields .control .container .buttons-div {
@@ -83,4 +90,31 @@
 
 .association-picker .currentValueDisplay {
 	margin-top: 3px;
+}
+
+.association-picker .bd .control-ex-search div.form-buttons {
+	display: none;
+}
+
+.association-picker .bd .control-ex-search div.form-fields {
+	padding: 5px 0 0;
+}
+
+.association-picker .bd .control-ex-search .buttons-div {
+	float: right;
+}
+
+.association-picker .bd .control-ex-search .control .label-div {
+	width: 100px;
+	text-align: right;
+}
+
+.association-picker .control .label-div {
+	display: none;
+}
+
+.association-picker .with-ex-search .control .label-div {
+	display: block;
+	width: 100px;
+	text-align: right;
 }

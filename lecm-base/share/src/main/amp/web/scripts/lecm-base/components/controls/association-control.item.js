@@ -57,6 +57,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			nodeData: null,
 			skipItemsCount: null,
 			searchTerm: null,
+			exSearchFilter: null,
+			exSearchFormId: null,
 			loadingInProcess: false	
 		},
 
@@ -83,13 +85,18 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			pickerItemsScript: 'lecm/forms/picker/items',
 			showCreateNewLink: false,
 			hasAspects: null,
-			hasNoAspects: null
+			hasNoAspects: null,
+			showExSearch: false
 		},
 
 		widgets: {
 			search: null,
+			exSearch: null,
 			searchButton: null,
+			exSearchButton: null,
+			exSearchClearButton: null,
 			searchListener: null,
+			exSearchListener: null,
 			treeView: null,
 			datatable: null,
 			datasource: null
@@ -361,6 +368,9 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (this.options.showSearch) {
 				this.widgets.searchListener.enable();
 			}
+			if (this.options.showExSearch) {
+				this.widgets.exSearchListener.enable();
+			}
 			if (!this.options.plane) {
 				this.widgets.treeRoot.data = this.rootNodeData;
 				if (this.options.showParentNodeInTreeView) {
@@ -375,7 +385,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 		},
 
-		loadTableData: function (initializeTable, searchTerm) {
+		loadTableData: function (initializeTable, searchTerm, exSearchFilter) {
 			/* заполнение датагрида данными */
 			function onSuccess(sRequest, oResponse, oArgument) {
 				var initializeTable = oArgument.initializeTable,
@@ -414,7 +424,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			}
 			this.currentState.skipItemsCount = initializeTable ? 0 : this.currentState.skipItemsCount;
 			this.currentState.searchTerm = searchTerm;
-			params = ACUtils.generateChildrenUrlParams(this.options, this.currentState.searchTerm, this.currentState.skipItemsCount);
+			this.currentState.exSearchFilter = exSearchFilter;
+			params = ACUtils.generateChildrenUrlParams(this.options, this.currentState.searchTerm, this.currentState.skipItemsCount, false, this.currentState.exSearchFilter);
 			this.widgets.datatable.load({
 				request: this.currentState.nodeData.nodeRef.replace('://', '/') + '/children' + params,
 				callback: {
@@ -427,6 +438,156 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					failure: onFailure
 				}
 			});
+		},
+
+		onExSearch: function () {
+			var obj, strname, event;
+
+			if (arguments.length > 1) {
+				obj = arguments[1];
+				strname = Object.prototype.toString.call(obj);
+				if (strname.indexOf('Event') >= 0) {
+					event = obj;
+				}
+				if (strname.indexOf('Array') >= 0 && obj.length === 2) {
+					event = obj[1];
+				}
+			}
+
+			var exSearchFilter = '';
+			if (YAHOO.lang.isFunction(LogicECM.module.AssociationComplexControl.getExSearchQuery)) {
+				exSearchFilter = LogicECM.module.AssociationComplexControl.getExSearchQuery(this);
+			} else {
+				exSearchFilter = this._getExSearchQuery();
+			}
+
+			if (exSearchFilter) {
+				this.stateParams.isSearch = true;
+				this.loadTableData(true, '', exSearchFilter);
+			} else if ('' === exSearchFilter) {
+				this.stateParams.isSearch = false;
+				this.loadTableData(true, '', '');
+			}
+
+			if (event) {
+				Event.stopEvent(event);
+			}
+		},
+
+		_getExSearchQuery: function () {
+			var exSearchFilter = '',
+				propNamePrefix = '@',
+				first = true;
+
+			if (this.widgets.exSearch && this.currentState.exSearchFormId) {
+				var currentForm = Dom.get(this.currentState.exSearchFormId);
+				if (currentForm) {
+					for (var i = 0; i < currentForm.elements.length; i++) {
+						var element = currentForm.elements[i],
+							propName = element.name,
+							propValue = YAHOO.lang.trim(element.value);
+
+						if (propName && propValue && propValue.length) {
+							if (propName.indexOf("prop_") === 0) {
+								propName = propName.substr(5);
+								if (propName.indexOf("_") !== -1) {
+									propName = propName.replace("_", ":");
+									if (propName.match("-range$") == "-range") {
+										var from, to, sepindex = propValue.indexOf("|");
+										if (propName.match("-date-range$") == "-date-range") {
+											propName = propName.substr(0, propName.length - "-date-range".length);
+											from = (sepindex === 0 ? "MIN" : propValue.substr(0, 10));
+											to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1, 10));
+										} else {
+											propName = propName.substr(0, propName.length - "-number-range".length);
+											from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));
+											to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1));
+										}
+										exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this._escape(propName) + ':"' + from + '".."' + to + '"';
+										first = false;
+									} else {
+										exSearchFilter += (first ? '' : ' AND ') + propNamePrefix + this._escape(propName) + ':' + this._applySearchSettingsToTerm(propValue, 'MATCHES');
+										first = false;
+									}
+								}
+							} else if (propName.indexOf("assoc_") == 0) {
+								var assocName = propName.substring(6);
+								if (assocName.indexOf("_") !== -1) {
+									assocName = assocName.replace("_", ":") + "-ref";
+									exSearchFilter += (first ? '(' : ' AND (');
+									var assocValues = propValue.split(",");
+									var firstAssoc = true;
+									for (var k = 0; k < assocValues.length; k++) {
+										var assocValue = assocValues[k];
+										if (!firstAssoc) {
+											exSearchFilter += " OR ";
+										}
+										exSearchFilter += this._escape(assocName) + ':"' + this._applySearchSettingsToTerm(assocValue, 'CONTAINS') + '"';
+										firstAssoc = false;
+									}
+									exSearchFilter += ") ";
+									first = false;
+								}
+							}
+						}
+					}
+				}
+			}
+			return exSearchFilter;
+		},
+
+		_escape: function (value) {
+			var result = "";
+
+			for (var i = 0, c; i < value.length; i++) {
+				c = value.charAt(i);
+				if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= 'а' && c <= 'я') || (c >= 'А' && c <= 'Я') || (c >= '0' && c <= '9') || c == '_')) {
+					result += '\\';
+				}
+
+				result += c;
+			}
+			return result;
+		},
+
+		_applySearchSettingsToTerm: function (searchTerm, searchSettings) {
+			var decoratedTerm;
+
+			searchTerm = this._escape(searchTerm);
+
+			switch (searchSettings) {
+				case 'BEGINS':
+					decoratedTerm = searchTerm + '*';
+					break;
+				case 'ENDS':
+					decoratedTerm = '*' + searchTerm;
+					break;
+				case 'CONTAINS':
+					decoratedTerm = '*' + searchTerm + '*';
+					break;
+				case 'MATCHES':
+					decoratedTerm = searchTerm;
+					break;
+				default:
+					decoratedTerm = '*' + searchTerm + '*';
+					break;
+			}
+
+			return decoratedTerm;
+		},
+		_getInputValue: function (form, propName) {
+			var value = null;
+			var inputName = form[propName];
+			if (inputName != null) {
+				value = inputName.value;
+				value = YAHOO.lang.trim(value);
+			}
+			return value;
+		},
+
+		onExSearchClear: function() {
+			this._loadSearchForm();
+			this.loadTableData(true, '', '');
 		},
 
 		onSearch: function () {
@@ -515,7 +676,7 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			if (oArgs.target.scrollTop + oArgs.target.clientHeight === oArgs.target.scrollHeight && !this.currentState.loadingInProcess) {
 				//подумать над тем, что если у нас вернулось 0 данных, то больше ничего не грузить
 				this.currentState.loadingInProcess = true;
-				this.loadTableData(false, this.currentState.searchTerm);
+				this.loadTableData(false, this.currentState.searchTerm, this.currentState.exSearchFilter);
 			}
 			
 		},
@@ -679,6 +840,24 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 					fn: this.onSearch
 				}, 'keydown');
 			}
+			if (this.options.showExSearch) {
+				this.widgets.exSearch = Dom.get(this.id + '-search-form');
+				this.widgets.exSearchButton = Alfresco.util.createYUIButton(this, 'ex-search', this.onExSearch, {
+					type: 'push'
+				});
+				this.widgets.exSearchClearButton = Alfresco.util.createYUIButton(this, 'ex-search-clear', this.onExSearchClear, {
+					type: 'push'
+				});
+				this.widgets.exSearchListener = new YAHOO.util.KeyListener(this.widgets.exSearch, {
+					keys: [ YAHOO.util.KeyListener.KEY.ENTER ]
+				}, {
+					scope: this,
+					correctScope:true,
+					fn: this.onExSearch
+				}, 'keydown');
+
+				this._loadSearchForm();
+			}
 			if (!this.options.plane) {
 				this.widgets.treeView = new YAHOO.widget.TreeView(this.id + '-tree');
 				this.widgets.treeView.singleNodeHighlight = true;
@@ -718,6 +897,39 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 			this.widgets.datatable.on('tableScrollEvent', this.onDatatableScroll, null, this);
 
 			this.loadHelper.fulfil('ready');
+		},
+
+		_loadSearchForm: function () {
+			if (this.options.showExSearch && this.widgets.exSearch) {
+				// load the form component for the appropriate type
+				var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
+					{
+						itemId: this.options.itemType,
+						formId: "ex-control-search"
+					});
+
+				//var timeStamp = new Date().getTime();
+				//this.options.currentFormClearTimeStep = timeStamp;
+
+				var formData = {
+					htmlid: this.widgets.exSearch.id + "-" + Alfresco.util.generateDomId()
+				};
+				this.currentState.exSearchFormId = formData.htmlid + "-form";
+
+				Alfresco.util.Ajax.request(
+					{
+						url: formUrl,
+						dataObj: formData,
+						successCallback: {
+							fn: function (response) {
+								this.widgets.exSearch.innerHTML = response.serverResponse.responseText;
+							},
+							scope: this
+						},
+						scope: this,
+						execScripts: true
+					});
+			}
 		},
 
 		_generateCreateNewParams: function (nodeRef, itemType) {

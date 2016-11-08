@@ -13,11 +13,13 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 
 	LogicECM.module.AssociationComplexControl.Utils = {
 
-		generateChildrenUrlParams: function (options, searchTerm, skipItemsCount, forAutocomplete) {
+		generateChildrenUrlParams: function (options, searchTerm, skipItemsCount, forAutocomplete, exSearchFilter) {
 			/* построение параметров для запроса данных датагрида */
 			var additionalFilter = options.additionalFilter,
 				allowedNodesFilter,
-				ignoreNodesFilter;
+				ignoreNodesFilter,
+				notSingleQueryPattern = /^NOT[\s]+.*(?=\sOR\s|\sAND\s|\s\+|\s\-)/i,
+				singleNotQuery;
 
 			if (options.allowedNodes) {
 				allowedNodesFilter = options.allowedNodes.reduce(function (prev, curr) {
@@ -25,7 +27,8 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}, options.allowedNodes.length ? '' : '(ISNULL:"sys:node-dbid" OR NOT EXISTS:"sys:node-dbid")');
 
 				if (additionalFilter) {
-					additionalFilter = '(' + additionalFilter + ') AND (' + allowedNodesFilter + ')';
+					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+					additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + allowedNodesFilter + ")";
 				} else {
 					additionalFilter = allowedNodesFilter;
 				}
@@ -37,12 +40,20 @@ LogicECM.module.AssociationComplexControl = LogicECM.module.AssociationComplexCo
 				}, '(ISNOTNULL:\"cm:name\" AND  @cm\\:name:\"?*\")');
 
 				if (additionalFilter) {
-					additionalFilter = '(' + additionalFilter + ') AND (' + ignoreNodesFilter + ')';
+					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+					additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + ignoreNodesFilter + ")";
 				} else {
 					additionalFilter = ignoreNodesFilter;
 				}
 			}
-
+			if (exSearchFilter && exSearchFilter.length) {
+				if (additionalFilter) {
+					singleNotQuery = additionalFilter.indexOf("NOT") == 0 && !notSingleQueryPattern.test(additionalFilter);
+					additionalFilter = (!singleNotQuery ? "(" : "") + additionalFilter + (!singleNotQuery ? ")" : "") + " AND (" + exSearchFilter + ")";
+				} else {
+					additionalFilter = exSearchFilter;
+				}
+			}
 			return Alfresco.util.toQueryString({
 				selectableType: options.itemType,
 				searchTerm: searchTerm ? searchTerm : '',
