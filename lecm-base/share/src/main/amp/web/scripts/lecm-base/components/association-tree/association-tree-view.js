@@ -1495,8 +1495,7 @@ LogicECM.module = LogicECM.module || {};
 		onPickerItemsContainerScroll: function(event) {
 			var container = event.currentTarget;
 			if (container.scrollTop + container.clientHeight == container.scrollHeight && !this.isSearch) {
-				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
-
+                Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
 				this._loadItems(this.currentNode.data.nodeRef, this.searchData, false);
 			}
 		},
@@ -1540,6 +1539,7 @@ LogicECM.module = LogicECM.module || {};
 				{
 					try
 					{
+                        this.isSearch = false;
 						var response = YAHOO.lang.JSON.parse(oResponse.responseText);
 						this.widgets.dataTable.set("MSG_ERROR", response.message);
 						this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
@@ -1561,6 +1561,7 @@ LogicECM.module = LogicECM.module || {};
 			// call the pickerchildren data webscript
             //if widget is active and not destroyed!!!
             if (this.widgets.dataSource) {
+                this.isSearch = true;
                 this.widgets.dataSource.sendRequest(url,
                     {
                         success: successHandler,
@@ -2147,7 +2148,7 @@ LogicECM.module = LogicECM.module || {};
 				this.allowedNodes = null;
 				this.allowedNodesScript = null;
 
-				this.init();
+				this.onReady();
 			}
 		}
 	});
