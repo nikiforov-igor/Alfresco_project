@@ -1846,7 +1846,12 @@ public class LifecycleStateMachineHelper implements StateMachineServiceBean, Ini
             Execution execution = runtimeService.createExecutionQuery().executionId(stateMachineExecutionId.replace(ACTIVITI_PREFIX, "")).singleResult();
             if (execution != null) {
                 if (variable.getFromType() == WorkflowVariables.Type.VARIABLE) {
-                    value = (String)runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue());
+                    Object varObject = runtimeService.getVariable(stateMachineExecutionId.replace(ACTIVITI_PREFIX, ""), variable.getFromValue());
+                    if (varObject instanceof ActivitiScriptNode) {
+                        value = ((ActivitiScriptNode) varObject).getNodeRef().toString();
+                    } else {
+                        value = varObject.toString();
+                    }
                 } else if (variable.getFromType() == WorkflowVariables.Type.FIELD) {
                     NodeService nodeService = serviceRegistry.getNodeService();
 
