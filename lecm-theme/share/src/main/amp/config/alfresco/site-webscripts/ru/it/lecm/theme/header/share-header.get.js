@@ -19,8 +19,9 @@ var logicECMWidgets = [];
 var arms = getArmsForMenu();
 
 for (var i = 0; i < arms.length; i++) {
-	var title = msg.get("label." + arms[i].code + ".menu.item");
-	if (title == "label." + arms[i].code + ".menu.item") {
+	var msgId = "label." + arms[i].code + ".menu.item";
+    var title = msg.get(msgId);
+	if (title == msgId) {
 		title = arms[i].title;
 	}
 	logicECMWidgets.push({
