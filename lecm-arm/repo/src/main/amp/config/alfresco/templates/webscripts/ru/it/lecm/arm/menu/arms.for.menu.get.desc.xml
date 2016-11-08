@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Получение списка АРМов для меню для текущего пользователя</shortname>
+	<description>Получение отсортированного списка АРМов для меню для текущего пользователя</description>
+	<url>/lecm/menu/arms/get</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+	<transaction allow="readonly">required</transaction>
+</webscript>

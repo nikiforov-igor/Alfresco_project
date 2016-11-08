@@ -259,6 +259,45 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         return result;
     }
 
+    @Override
+    public List<NodeRef> getArmsForMenu() {
+        Set<QName> armTypeSet = new HashSet<>(1);
+        armTypeSet.add(TYPE_ARM);
+
+        List<NodeRef> filteredArms = new ArrayList<>();
+        List<ChildAssociationRef> arms = nodeService.getChildAssocs(getDictionaryArmSettings(), armTypeSet);
+        if (arms != null) {
+            Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
+
+            for (ChildAssociationRef armAssoc : arms) {
+                NodeRef arm = armAssoc.getChildRef();
+                Boolean showInMenu = Boolean.TRUE.equals(nodeService.getProperty(arm, PROP_ARM_SHOW_IN_MENU));
+                if (showInMenu) {
+                    Set<String> roles = new HashSet<>();
+                    List<AssociationRef> associationRefs = nodeService.getTargetAssocs(arm, ASSOC_ARM_MENU_BUSINESS_ROLES);
+                    for (AssociationRef associationRef : associationRefs) {
+                        NodeRef role = associationRef.getTargetRef();
+                        String roleCode = getAutorityByBusinessRole(role);
+                        roles.add(roleCode);
+                    }
+                    if (!roles.isEmpty()) {
+                        for (String role : roles) {
+                            if (auth.contains(role)) {
+                                filteredArms.add(arm);
+                                break;
+                            }
+                        }
+                    } else {
+                        filteredArms.add(arm);
+                    }
+                }
+            }
+        }
+
+        Collections.sort(filteredArms, comparator);
+        return filteredArms;
+    }
+
     public List<NodeRef> getArmRunAsBossAccordions(NodeRef accordion) {
         List<NodeRef> result = new ArrayList<>();
 
