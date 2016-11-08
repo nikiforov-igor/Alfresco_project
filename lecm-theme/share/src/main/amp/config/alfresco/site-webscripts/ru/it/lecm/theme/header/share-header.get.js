@@ -31,7 +31,7 @@ for (var i = 0; i < arms.length; i++) {
 			id: arms[i].code + "_MENU_ITEM_ADDITIONAL",
 			label: title,
 			targetUrl: "arm?code=" + arms[i].code,
-			iconImage: imagesRoot + "docs_16_light.png"
+			iconClass: "arm-menu-item " + arms[i].code
 		}
 	});
 }
