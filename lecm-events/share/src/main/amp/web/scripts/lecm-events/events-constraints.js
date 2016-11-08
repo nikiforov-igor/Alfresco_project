@@ -94,7 +94,7 @@ LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fro
 		var toTime = Dom.get(toDate.id + "-cntrl-time");
 
 		var allDay = field.value == "true";
-
+		toDateField.readOnly = !allDay;
 		var times = [
 			{
 				field: fromTime,
@@ -135,8 +135,17 @@ LogicECM.module.Events.doBaseChangeAllDayValidation = function (field, form, fro
 			}
 		});
 
-		LogicECM.module.Events.fromDateValue = times[0].savedValue;
-		LogicECM.module.Events.toDateValue = times[1].savedValue;
+		if (allDay && times[0].savedValue) {
+			LogicECM.module.Events.fromDateValue = times[0].savedValue;
+		} else if (!allDay) {
+			LogicECM.module.Events.fromDateValue = times[0].savedValue;
+		}
+
+		if (allDay && times[1].savedValue) {
+			LogicECM.module.Events.toDateValue = times[1].savedValue;
+		} else if (!allDay) {
+			LogicECM.module.Events.toDateValue = times[1].savedValue;
+		}
 
 		var dates = [
 			{
