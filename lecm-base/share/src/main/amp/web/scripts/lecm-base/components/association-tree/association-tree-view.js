@@ -30,9 +30,9 @@ LogicECM.module = LogicECM.module || {};
 
     var IDENT_CREATE_NEW = "~CREATE~NEW~";
 
-    LogicECM.module.AssociationTreeViewer = function(htmlId)
+    LogicECM.module.AssociationTreeViewer = function(htmlId, subName)
 	{
-        LogicECM.module.AssociationTreeViewer.superclass.constructor.call(this, "AssociationTreeViewer", htmlId);
+        LogicECM.module.AssociationTreeViewer.superclass.constructor.call(this, "AssociationTreeViewer" + (subName ? subName : ""), htmlId);
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
@@ -1042,7 +1042,7 @@ LogicECM.module = LogicECM.module || {};
                                             }
                                         });
                                 }
-                                
+
                                 this._loadSelectedItems(this.options.clearFormsOnStart, true);
 
                                 if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
@@ -1671,7 +1671,7 @@ LogicECM.module = LogicECM.module || {};
             var fieldId = this.options.pickerId + "-selected-elements";
             Dom.get(fieldId).innerHTML = '';
             Dom.get(fieldId).className = 'currentValueDisplay';
-            
+
 
             var num = 0;
             for (i in items) {
@@ -1785,12 +1785,12 @@ LogicECM.module = LogicECM.module || {};
 	        }
 
             var el = Dom.get(this.options.controlId + "-currentValueDisplay");
-            
+
 	        if (el != null) {
 		        if (clearCurrentDisplayValue) {
 	                el.innerHTML = '';
 		        }
-                
+
 	            for (var i in this.selectedItems) {
 	                if (this.options.plane || !this.options.showSelectedItemsPath) {
 	                    var displayName = this.selectedItems[i].selectedName;
@@ -1828,7 +1828,7 @@ LogicECM.module = LogicECM.module || {};
 	        }
 
             if (!this.options.disabled) {
-                
+
                 var addItems = this.getAddedItems();
 
                 // Update added fields in main form to be submitted
@@ -1892,14 +1892,14 @@ LogicECM.module = LogicECM.module || {};
 			            selectedItems:selectedItems,
 			            selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
 		            });
-                
+
                 if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
                     var params = {
                         selectedItems: this.selectedItems,
                         formId: this.options.formId,
                         fieldId: this.options.fieldId
                     };
-                    
+
                     YAHOO.Bubbling.fire(this.options.changeItemsFireAction, params);
                 }
             }
