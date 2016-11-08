@@ -142,6 +142,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		onUploadSignature: function(event) {
 			CryptoApplet.loadSignAction(this.options.nodeRef, {successCallback: {fn: this.checkSigned, scope: this}});
 		},
+        
+        onExportSignature: function(event) {
+			CryptoApplet.exportSignAction(this.options.nodeRef);
+		},
 
 		onSignableSwitch: function(event) {
 			var checkbox = event.currentTarget;
