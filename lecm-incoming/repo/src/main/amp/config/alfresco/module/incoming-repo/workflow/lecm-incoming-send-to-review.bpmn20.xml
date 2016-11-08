@@ -17,18 +17,11 @@
 							comment = (comment && comment != "null") ? comment : "Комментариев нет";
 							if (document != null) {
 								var existReviewersAssocs = document.assocs["lecm-eds-document:reviewers-assoc"];
-								if (existReviewersAssocs != null) {
-									for (var i = 0; i < existReviewersAssocs.length; i++) {
-								        lecmPermission.revokeDynamicRole(document, existReviewersAssocs[i], "INCOMING_REVIEWER_DYN");
-								        document.removeAssociation(existReviewersAssocs[i], "lecm-eds-document:reviewers-assoc");
-									}
-								}
-
 								var recipient = execution.getVariable("lecmIncomingWf_sendToReviewRecipient");
 								if (recipient != null) {
 								 	if (recipient.typeShort == "lecm-orgstr:employee") {
-								 		lecmPermission.grantDynamicRole(document, recipient, "INCOMING_REVIEWER_DYN","LECM_BASIC_PG_Employee");
-										lecmPermission.grantDynamicRole(document, recipient, "INCOMING_ALREADY_REVIEWED_DYN","LECM_BASIC_PG_Employee");
+								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYN");
+								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_ALREADY_REVIEWED_DYN");
 								    	document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
 
 								    	notifications.sendNotificationFromCurrentUser({
@@ -74,7 +67,7 @@
 
 								    	if (recipients.length > 0) {
 								    	    for (var i = 0; i < employees.length; i++) {
-								    	    	lecmPermission.grantDynamicRole(document, employees[i], "INCOMING_REVIEWER_DYN","LECM_BASIC_PG_Employee");
+								    	        statemachine.grandDynamicRoleForEmployee(document, employees[i], "INCOMING_REVIEWER_DYN");
 								    	        document.createAssociation(employees[i], "lecm-eds-document:reviewers-assoc");
 								    	    }
 
@@ -103,7 +96,7 @@
 
 									if (recipients.length > 0) {
 							            for (var i = 0; i < recipients.length; i++) {
-											lecmPermission.grantDynamicRole(document, recipients[i], "INCOMING_REVIEWER_DYN","LECM_BASIC_PG_Employee");
+							                statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYN");
 							                document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
 							            }
 
@@ -125,6 +118,12 @@
 									logText += " " + base.wrapperTitle("Комментарий", "#object1") + ".";
 									logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
 				                    businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
+								}
+								if (existReviewersAssocs != null) {
+									for (var i = 0; i < existReviewersAssocs.length; i++) {
+								        lecmPermission.revokeDynamicRole(document, existReviewersAssocs[i], "INCOMING_REVIEWER_DYN");
+								        document.removeAssociation(existReviewersAssocs[i], "lecm-eds-document:reviewers-assoc");
+									}
 								}
 							}
 						]]></activiti:string>
