@@ -116,12 +116,6 @@
 
                 // Make sure we persist the dom content from the editor in to the hidden textarea when appropriate
                 this.editor.subscribe("onChange", this._handleContentChange, this, true);
-                // Add validation to the editor
-                var keyUpIdentifier = (Alfresco.constants.HTML_EDITOR === 'YAHOO.widget.SimpleEditor') ? 'editorKeyUp' : 'onKeyUp';
-                this.editor.subscribe(keyUpIdentifier, function (e)
-                {
-                    this.editor.save();
-                }, this, true);
             },
 
             /**
