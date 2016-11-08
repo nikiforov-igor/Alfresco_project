@@ -259,9 +259,8 @@
                 ${msg("message.eddand.onBasis")} <a href="${siteURL("document?nodeRef=" + additionalDoc.nodeRef)}">${additionalDoc.name}</a>
             </#if>
         </div>
-        <#assign content = props["lecm-errands:content"]/>
-        <#if content?? && content != "">
-            <div class="errand-content">${content}</div>
+        <#if props["lecm-errands:content"]?? && props["lecm-errands:content"] != "">
+            <div class="errand-content">${props["lecm-errands:content"]}</div>
         </#if>
         <div class="times">
             <#assign viewFormat>${msg("form.control.date-picker.view.date.format")}</#assign>
