@@ -365,7 +365,7 @@ function checkForApplet() {
 
 								cb = (options) ? options.successCallback : null;
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
-									cb.fn.apply(cb.scope, [signs]);
+									cb.fn.call(cb.scope, signs);
 								}
 							});
 						}

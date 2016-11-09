@@ -1463,10 +1463,13 @@ function SignES6Hashes(thumbprint, docs, sTSAAddress, signCallBack, context) {
 }
 
 function verifySignature (hash, sSignedMessage){
-    return cadesplugin.async_spawn(function*(arg) {
+    return cadesplugin.async_spawn(verifyGenerator);
+    
+    function* verifyGenerator(){
         yield cadesplugin;
+        var CADESCOM_HASH_ALGORITHM_CP_GOST_3411 = 100;
         var oHashedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.HashedData");
-        oHashedData.Algorithm = 100; 
+        oHashedData.Algorithm = CADESCOM_HASH_ALGORITHM_CP_GOST_3411; 
         oHashedData.SetHashValue(hash);
 
         var oSignedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.CadesSignedData");
@@ -1474,13 +1477,11 @@ function verifySignature (hash, sSignedMessage){
         try {
             yield oSignedData.VerifyHash(oHashedData, sSignedMessage);
         } catch (err) {
-            alert("Failed to verify signature");
             return false;
         }
 
         return true;
-
-        });
+    }
 }
 
 function verifySignaturesSync (signs, callback) {

@@ -1333,12 +1333,12 @@ function verifySignaturesSync (signs, callback) {
     });
 
     callback(results);
-
 }
 
 function verifySignature (hash, sSignedMessage){
+    var CADESCOM_HASH_ALGORITHM_CP_GOST_3411 = 100;
     var oHashedData = cadesplugin.CreateObject("CAdESCOM.HashedData");
-    oHashedData.Algorithm = 100; 
+    oHashedData.Algorithm = CADESCOM_HASH_ALGORITHM_CP_GOST_3411; 
     oHashedData.SetHashValue(hash);
     
     var oSignedData = cadesplugin.CreateObject("CAdESCOM.CadesSignedData");
