@@ -17,31 +17,46 @@
 							comment = (comment && comment != "null") ? comment : "Комментариев нет";
 							if (document != null) {
 								var existReviewersAssocs = document.assocs["lecm-eds-document:reviewers-assoc"];
+								function checkReviewerExist(recipientRef){
+									var exist = false;
+									if (existReviewersAssocs != null){
+										existReviewersAssocs.slice(0).forEach(function(element, index, array){
+											if(element.nodeRef.toString().localeCompare(recipientRef.toString()) == 0){
+												existReviewersAssocs.splice(index,1);
+												exist = true;
+											}
+										});
+									}
+									return exist;
+								}
 								var recipient = execution.getVariable("lecmIncomingWf_sendToReviewRecipient");
 								if (recipient != null) {
 								 	if (recipient.typeShort == "lecm-orgstr:employee") {
-								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYN");
-								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_ALREADY_REVIEWED_DYN");
-								    	document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
+								 		if (!checkReviewerExist(recipient.nodeRef)){
+											statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYN");
+											statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_ALREADY_REVIEWED_DYN");
+											document.createAssociation(recipient, "lecm-eds-document:reviewers-assoc");
 
-								    	notifications.sendNotificationFromCurrentUser({
-											recipients: [recipient],
-											templateCode: 'INCOMING_REVIEW',
-											templateConfig: {
-												mainObject: document,
-												sender: currentEmployee,
-												comment: comment
-											},
-											dontCheckAccessToObject: true
-										});
 
-	                                    var logObjects = [];
-				                        logObjects.push("" + recipient.nodeRef);
-				                        logObjects.push(comment);
-				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1.";
-							            logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
-                                        logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
-				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
+											notifications.sendNotificationFromCurrentUser({
+												recipients: [recipient],
+												templateCode: 'INCOMING_REVIEW',
+												templateConfig: {
+													mainObject: document,
+													sender: currentEmployee,
+													comment: comment
+												},
+												dontCheckAccessToObject: true
+											});
+
+											var logObjects = [];
+											logObjects.push("" + recipient.nodeRef);
+											logObjects.push(comment);
+											var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1.";
+											logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
+											logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+											businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
+										}
 								    } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
 								    	var recipients = [];
                                         var employees = [];
@@ -66,9 +81,16 @@
                                         }
 
 								    	if (recipients.length > 0) {
+
+											for (var i = 0; i < employees.length; i++) {
+												if(checkReviewerExist(employees[i].nodeRef)){
+													employees.splice(i,1);
+													recipients.splice(i,1);
+												}
+											}
 								    	    for (var i = 0; i < employees.length; i++) {
-								    	        statemachine.grandDynamicRoleForEmployee(document, employees[i], "INCOMING_REVIEWER_DYN");
-								    	        document.createAssociation(employees[i], "lecm-eds-document:reviewers-assoc");
+												statemachine.grandDynamicRoleForEmployee(document, employees[i], "INCOMING_REVIEWER_DYN");
+												document.createAssociation(employees[i], "lecm-eds-document:reviewers-assoc");
 								    	    }
 
 											notifications.sendNotificationFromCurrentUser({
@@ -95,9 +117,14 @@
 									var recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
 
 									if (recipients.length > 0) {
+										for (var i = 0; i < recipients.length; i++) {
+											if(checkReviewerExist(recipients[i].nodeRef)){
+												recipients.splice(i,1);
+											}
+										}
 							            for (var i = 0; i < recipients.length; i++) {
-							                statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYN");
-							                document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
+											statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYN");
+											document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
 							            }
 
 								    	notifications.sendNotificationFromCurrentUser({
