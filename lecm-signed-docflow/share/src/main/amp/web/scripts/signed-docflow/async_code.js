@@ -1462,6 +1462,37 @@ function SignES6Hashes(thumbprint, docs, sTSAAddress, signCallBack, context) {
 	);
 }
 
+function verifySignature (hash, sSignedMessage){
+    return cadesplugin.async_spawn(verifyGenerator);
+    
+    function* verifyGenerator(){
+        yield cadesplugin;
+        var CADESCOM_HASH_ALGORITHM_CP_GOST_3411 = 100;
+        var oHashedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.HashedData");
+        oHashedData.Algorithm = CADESCOM_HASH_ALGORITHM_CP_GOST_3411; 
+        oHashedData.SetHashValue(hash);
+
+        var oSignedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.CadesSignedData");
+
+        try {
+            yield oSignedData.VerifyHash(oHashedData, sSignedMessage);
+        } catch (err) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+function verifySignaturesSync (signs, callback) {
+    var promises = signs.map(function (sign) {
+        return verifySignature(sign.hash, sign.signedMessage);
+    });
+
+    Promise.all(promises).then(function(results) {
+        callback(results);
+    });
+}
 
 function GetCertificateES6(thumbprint) {
     return cadesplugin.async_spawn(function*(arg) {
