@@ -39,6 +39,8 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private DictionaryBean dictionaryBean;
+	
+	private NodeRef settingsNode;
 
 	private Integer defaultReviewTerm;
 	private Integer defaultTermToNotify;
@@ -70,29 +72,8 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 	public void setDefaultTermToNotify(Integer defaultTermToNotify) {
 		this.defaultTermToNotify = (defaultTermToNotify != null) ? defaultTermToNotify : DEFAULT_REVIEW_TERM;
 	}
-
-	public void init() {
-//		if (null == getSettings()) {
-//			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-//				@Override
-//				public NodeRef doWork() throws Exception {
-//					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-//					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-//						@Override
-//						public NodeRef execute() throws Throwable {
-//							PropertyMap props = new PropertyMap();
-//							if (defaultReviewTerm != null) {
-//								props.put(PROP_REVIEW_GLOBAL_SETTINGS_DEFAULT_REVIEW_TERM, defaultReviewTerm);
-//								props.put(PROP_REVIEW_GLOBAL_SETTINGS_TERM_TO_NOTIFY_BEFORE_DEADLINE, defaultTermToNotify);
-//							}
-//							return createNode(getServiceRootFolder(), TYPE_REVIEW_GLOBAL_SETTINGS, REVIEW_GLOBAL_SETTINGS_NAME, props);
-//						}
-//					}, false, true);
-//				}
-//			});
-//		}
-	}
 	
+	@Override
 	protected void onBootstrap(ApplicationEvent event)
 	{
 		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
@@ -315,7 +296,11 @@ public class ReviewServiceImpl extends BaseBean implements ReviewService {
 
 	@Override
 	public NodeRef getSettings() {
-		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, REVIEW_GLOBAL_SETTINGS_NAME);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, REVIEW_GLOBAL_SETTINGS_NAME);
+		}
+		
+		return settingsNode;
 	}
 
 	@Override

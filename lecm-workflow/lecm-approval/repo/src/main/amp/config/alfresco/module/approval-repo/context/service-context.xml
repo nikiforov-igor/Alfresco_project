@@ -89,7 +89,7 @@
 	<util:map id="approval.folders">
 		<entry key="#{approvalFolder}" value="Сервис Согласование документов"/>
 	</util:map>
-	<bean id="approvalWorkflowService" parent="baseBean" init-method="init"
+	<bean id="approvalWorkflowService" parent="baseBean"
 		  class="ru.it.lecm.workflow.approval.ApprovalServiceImpl"
 		  depends-on="lecm.approve3.model.bootstrap"
 		  p:defaultApprovalTerm="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${lecm.approval.defaultTerm}') ? T(java.lang.Integer).parseInt('${lecm.approval.defaultTerm}') : null}"

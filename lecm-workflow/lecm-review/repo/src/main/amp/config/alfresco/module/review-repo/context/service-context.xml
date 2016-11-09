@@ -76,7 +76,7 @@
 		<entry key="#{reviewFolder}" value="Сервис Ознакомление документов"/>
 	</util:map>
 	<bean id="reviewService" class="ru.it.lecm.workflow.review.ReviewServiceImpl"
-		  parent="baseBean" depends-on="review.model.bootstrap" init-method="init"
+		  parent="baseBean" depends-on="review.model.bootstrap"
 		  p:documentTableService-ref="documentTableService"
 		  p:orgstructureBean-ref="serviceOrgstructure"
 		  p:searchService-ref="searchService"

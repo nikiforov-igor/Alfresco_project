@@ -152,7 +152,7 @@
 		  p:rootPath="/Business platform/LECM/Сервис Оперативное хранение"
 		  p:dictionaries-ref="operative.storage.customDictionaries" />
 
-	<bean id="lecmOperativeStorageService" parent="baseBean" class="ru.it.lecm.operativestorage.beans.OperativeStorageImpl" init-method="init"
+	<bean id="lecmOperativeStorageService" parent="baseBean" class="ru.it.lecm.operativestorage.beans.OperativeStorageImpl"
 		  depends-on="lecmPermissionServiceBean"
 		  p:folders-ref="lecmOperativeStorageFolders"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"

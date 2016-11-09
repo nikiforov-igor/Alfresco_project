@@ -63,6 +63,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private ThreadPoolExecutor threadPoolExecutor;
     private TransactionListener transactionListener;
 	private ApplicationContext applicationContext;
+	private NodeRef settingsNode;
 
 	public ApplicationContext getApplicationContext() {
 		return applicationContext;
@@ -119,18 +120,6 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
      * Метод инициализвции сервиса
     */
     public void init() {
-//        //Проверить наличие и создать ноду с глобальными настройками.
-//        //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-//        lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-//
-//            @Override
-//            public Void execute() throws Throwable {
-//                if (null == getGlobalSettingsNode()) {
-//                    createGlobalSettingsNode();
-//                }
-//                return null;
-//            }
-//        });
         transactionListener = new NotificationTransactionListener();
     }
     
@@ -138,16 +127,16 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	{
       //Проверить наличие и создать ноду с глобальными настройками.
       //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-      lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
 
-          @Override
-          public Void execute() throws Throwable {
-              if (null == getGlobalSettingsNode()) {
-                  createGlobalSettingsNode();
-              }
-              return null;
-          }
-      });
+			@Override
+			public Void execute() throws Throwable {
+				if (null == getGlobalSettingsNode()) {
+					settingsNode = createGlobalSettingsNode();
+				}
+				return null;
+			}
+		});
       //transactionListener = new NotificationTransactionListener();
 	}
 
@@ -575,9 +564,11 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
     @Override
     public NodeRef getGlobalSettingsNode() {
-        final NodeRef rootFolder = this.getServiceRootFolder();
-        final String settingsObjectName = NOTIFICATIONS_SETTINGS_NODE_NAME;
-        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+		if (settingsNode == null) {
+			settingsNode = nodeService.getChildByName(this.getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, NOTIFICATIONS_SETTINGS_NODE_NAME);
+		}
+		
+		return settingsNode;
     }
 
     public NodeRef createGlobalSettingsNode() {

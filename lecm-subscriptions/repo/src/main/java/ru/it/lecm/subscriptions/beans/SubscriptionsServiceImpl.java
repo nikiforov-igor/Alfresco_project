@@ -16,8 +16,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * User: mShafeev
@@ -260,5 +261,21 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getSubscriptionRootRef();
+	}
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						getServiceRootFolder();
+						return null;
+					}
+				});
+			}
+		});
 	}
 }

@@ -73,9 +73,19 @@ public class CounterFactoryImpl extends BaseBean implements CounterFactory {
 	}
 	
 	@Override
-	protected void onBootstrap(ApplicationEvent event)
-	{
-		super.onBootstrap(event);
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						getServiceRootFolder();
+						return null;
+					}
+				});
+			}
+		});
 	}
 
 	public void setNamespaceService(final NamespaceService namespaceService) {

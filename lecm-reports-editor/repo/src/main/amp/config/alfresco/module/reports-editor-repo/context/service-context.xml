@@ -54,7 +54,7 @@
     <util:constant id="RE_REPORTS_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_REPORTS_ROOT_ID"/>
     <util:constant id="RE_REPORTS_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_REPORTS_ROOT_NAME"/>
 
-    <bean id="reportsEditorService" init-method="init" class="ru.it.lecm.reports.editor.ReportsEditorService" parent="baseBean"
+    <bean id="reportsEditorService" class="ru.it.lecm.reports.editor.ReportsEditorService" parent="baseBean"
           depends-on="reportsEditor.modelBootstrap, reportsManager">
         <property name="reportsManager" ref="reportsManager"/>
         <!-- Автоматическое создание каталогов. -->

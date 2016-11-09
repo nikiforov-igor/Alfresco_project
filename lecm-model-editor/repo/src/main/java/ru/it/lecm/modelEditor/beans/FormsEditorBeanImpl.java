@@ -29,11 +29,13 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.ChildAssociationDefinition;
 import org.alfresco.service.cmr.dictionary.ClassAttributeDefinition;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.util.PropertyMap;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.ApplicationEvent;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
@@ -680,5 +682,21 @@ public class FormsEditorBeanImpl extends BaseBean {
 				createAttribute(formRef, childAssocDef, order++);
 			}
 		}
+	}
+	
+	@Override
+	protected void onBootstrap(ApplicationEvent event) {
+		lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+			@Override
+			public Void execute() throws Throwable {
+				return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+					@Override
+					public Void doWork() throws Exception {
+						getServiceRootFolder();
+						return null;
+					}
+				});
+			}
+		});
 	}
 }
