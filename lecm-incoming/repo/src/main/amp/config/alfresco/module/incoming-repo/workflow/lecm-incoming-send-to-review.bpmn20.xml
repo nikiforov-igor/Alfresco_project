@@ -55,7 +55,7 @@
 									logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение рассматривающим.";
 									logText += " " + base.wrapperTitle("Комментарий", "#object1") + ".";
 								}
-								if (recipients.length > 0) {
+								if (recipients.length) {
 
 									if (existReviewersAssocs && existReviewersAssocs.length){
 										existReviewersAssocs = existReviewersAssocs.filter(function(element){
