@@ -49,7 +49,7 @@
 									logObjects.push(comment);
 									logText += " " + base.wrapperTitle("Комментарий", "#object2") + ".";
 								}else {
-									var recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
+									recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
 
 									logObjects.push(comment);
 									logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение рассматривающим.";
