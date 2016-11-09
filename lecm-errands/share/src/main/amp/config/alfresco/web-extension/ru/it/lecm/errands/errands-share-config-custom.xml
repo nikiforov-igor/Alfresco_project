@@ -18,6 +18,13 @@
                     <control-param name="showCreateNewLink">false</control-param>
                     <control-param name="showCreateNewButton">false</control-param>
                 </type>
+               <type name="association:lecm-errands-dic:errand-type"  template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                   <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_поручений</control-param>
+                   <control-param name="nameSubstituteString">{cm:name}</control-param>
+                   <control-param name="notSelectedOptionShow">true</control-param>
+                   <control-param name="notSelectedOptionLabel"> </control-param>
+                   <control-param name="showCreateNewButton">false</control-param>
+                </type>
             </default-controls>
         </forms>
     </config>
@@ -688,6 +695,8 @@
             </form>
             <form id="primary-routing">
                 <field-visibility>
+                    <!--  Типы поручений -->
+                    <show id="lecm-errands:type-assoc"/>
                     <!--  Заголовок поручения -->
                     <show id="lecm-errands:title"/>
                     <!-- Исполнитель -->
@@ -700,6 +709,11 @@
                     <show id="lecm-errands:additional-document-assoc"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-errands:type-assoc">
+                        <control>
+                            <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-errands:title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
@@ -932,6 +946,87 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="node-type" condition="lecm-errands-dic:errand-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-type-default-type"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-errands-dic:errand-type-default-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-errands-dic:errand-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-type-default-type"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-errands-dic:errand-type-default-type">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="search">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-type-default-type"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" mandatory="false">
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                    <field id="lecm-errands-dic:errand-type-default-type" mandatory="false">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
+                            <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                        <constraint-handlers>
+                            <constraint type="MANDATORY" validation-handler="LogicECM.constraints.notMandatory" event="keyup" />
+                        </constraint-handlers>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-errands-dic:errand-type-default-type"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
 	<config evaluator="node-type" condition="lecm-errands:settings">
 		<forms>
@@ -1506,6 +1601,7 @@
                 <field-visibility>
                     <show id="packageItems"/>
                     <show id="lecmErrandWf:primaryRoutingErrandsList"/>
+                    <show id="change-errand-type-script" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="packageItems">
@@ -1515,6 +1611,11 @@
                         <control template="/ru/it/lecm/eds/controls/multi-form-control.ftl">
                             <control-param name="documentType">lecm-errands:document</control-param>
                             <control-param name="documentFromId">primary-routing</control-param>
+                        </control>
+                    </field>
+                    <field id="change-errand-type-script">
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-reinit-title-by-type.js</control-param>
                         </control>
                     </field>
                 </appearance>

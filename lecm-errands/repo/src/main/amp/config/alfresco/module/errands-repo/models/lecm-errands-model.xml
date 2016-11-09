@@ -12,6 +12,7 @@
         <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 		<import uri="http://www.it.ru/logicECM/errands/table-structure/1.0" prefix="lecm-errands-ts"/>
+		<import uri="http://www.it.ru/logicECM/errands/dictionaries/1.0" prefix="lecm-errands-dic"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/errands/1.0" prefix="lecm-errands"/>
@@ -239,6 +240,22 @@
 						<tokenised>false</tokenised>
 					</index>
 				</property>
+                <property name="lecm-errands:type-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-errands:type-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
                 <!-- Номер документа основания - поле для атрибутивного поиска-->
                 <property name="lecm-errands:base-doc-number">
                     <type>d:text</type>
@@ -330,6 +347,18 @@
                     </source>
                     <target>
                         <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Тип поручения -->
+                <association name="lecm-errands:type-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-errands-dic:errand-type</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>

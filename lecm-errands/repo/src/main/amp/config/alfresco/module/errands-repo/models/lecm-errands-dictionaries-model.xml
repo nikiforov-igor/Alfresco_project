@@ -27,5 +27,21 @@
 				</property>
 			</properties>
 		</type>
+
+        <type name="lecm-errands-dic:errand-type">
+            <title>Logic Ecm Dictionary Errands Types</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+            <properties>
+                <property name="lecm-errands-dic:errand-type-default-type">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+        </type>
 	</types>
 </model>

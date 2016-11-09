@@ -25,7 +25,8 @@
 		  documents.LogicEcmModelsConnectionsBootstrap,
 		  links.LogicEcmContractsBootstrap,
 		  documents.dictionaries.LogicEcmModelsBootstrap,
-		  errands.tableStructure.LogicEcmModelsBootstrap">
+		  errands.tableStructure.LogicEcmModelsBootstrap,
+          errands.dictionaries.LogicEcmModelsBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-model.xml</value>
@@ -67,6 +68,8 @@
 				<value>alfresco/module/${artifactId}/models/lecm-errands-roles-items.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-regnumbers.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/errands-nt-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-errands-types-items.xml</value>
 			</list>
 		</property>
 	</bean>
