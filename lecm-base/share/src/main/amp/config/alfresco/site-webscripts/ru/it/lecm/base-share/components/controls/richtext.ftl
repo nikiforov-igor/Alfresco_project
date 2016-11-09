@@ -13,6 +13,16 @@
 </#if>
 
 <#if form.mode == "view" || field.disabled>
+    <script type="text/javascript">
+        (function() {
+            function init() {
+                LogicECM.module.Base.Util.loadCSS([
+                    'css/lecm-base/components/lecm-rich-text.css'
+                ]);
+            }
+            YAHOO.util.Event.onDOMReady(init);
+        })();
+    </script>
     <div class="control richtext viewmode">
         <div class="label-div">
             <#if field.mandatory && value == "">
