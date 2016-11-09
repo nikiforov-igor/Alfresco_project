@@ -2489,6 +2489,12 @@ div#lightbox {
 }
 /* lecm-arm-documents : end */
 
+/* arm menu : start */
+.yui-skin-lecmDarkTheme .arm-menu-item {
+    background-image: url("/share/components/images/header/docs_16_light.png");
+}
+/* arm menu : end */
+
 .yui-skin-lecmDarkTheme .ygtv-highlight .ygtv-highlight1,
 .yui-skin-lecmDarkTheme .ygtv-highlight .ygtv-highlight1 .ygtvlabel {
     background-color: #43A7CB;

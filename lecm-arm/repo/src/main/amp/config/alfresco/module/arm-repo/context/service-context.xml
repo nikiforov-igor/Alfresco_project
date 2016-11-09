@@ -161,6 +161,9 @@
                         <value>cm:name</value>
                         <value>lecm-arm:code</value>
                         <value>lecm-arm:show-calendar</value>
+                        <value>lecm-arm:show-in-menu</value>
+                        <value>lecm-arm:menu-business-roles-assoc</value>
+                        <value>lecm-arm:order</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:accordion">

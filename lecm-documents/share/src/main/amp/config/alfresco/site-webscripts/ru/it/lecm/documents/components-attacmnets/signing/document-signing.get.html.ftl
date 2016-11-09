@@ -33,6 +33,7 @@
 			<div id="${el}-signDocument" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.sign")}</div>
 			<div id="${el}-refreshSignatures" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.refresh.signature")}</div>
 			<div id="${el}-uploadSignature" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.upload.signature")}</div>
+            <div id="${el}-exportSignature" class="widget-button-grey text-cropped" href="javascript:void(0);">${msg("label.export.signature")}</div>
 		</div>
     </div>
 </div>
@@ -81,6 +82,7 @@
 		YAHOO.util.Event.on("${el}-refreshSentDocuments", "click", signingComponent.onRefreshSentDocuments, signingComponent, true);
 		YAHOO.util.Event.on("${el}-sendDocument", "click", signingComponent.onSendDocument, signingComponent, true);
 		YAHOO.util.Event.on("${el}-signaturesReceived", "click", signingComponent.onSignaturesReceived, signingComponent, true);
+        YAHOO.util.Event.on("${el}-exportSignature", "click", signingComponent.onExportSignature, signingComponent, true);
 	}
 	YAHOO.util.Event.onDOMReady(init);
 })();
