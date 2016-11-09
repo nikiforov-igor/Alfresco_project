@@ -168,19 +168,17 @@ LogicECM.module = LogicECM.module || {};
 		},
 
 		onAddSelectedItem: function (layer, args) {
-			var nodeData, count, addedValues;
+			var nodeData, count;
 			if (Alfresco.util.hasEventInterest(this, args)) {
 				nodeData = args[1].added,
 				count = this._renderSelectedItems([nodeData]);
 				this.fire('addSelectedItemToPicker', { /* Bubbling.fire */
 					added: nodeData
 				});
+
+				Dom.get(this.id).value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.selected).join(','));
 				if (this.widgets.added) {
-					addedValues = this.widgets.added.value ? this.widgets.added.value.split(',') : [];
-					if (addedValues.indexOf(nodeData.nodeRef) == -1) {
-						addedValues.push(nodeData.nodeRef);
-						this.widgets.added.value = Alfresco.util.encodeHTML(addedValues.join(','));
-					}
+					this.widgets.added.value = Alfresco.util.encodeHTML(Object.keys(this.widgets.picker.added).join(','));
 				}
 			}
 		},
@@ -237,18 +235,17 @@ LogicECM.module = LogicECM.module || {};
 
 		onPickerClosed: function (layer, args) {
 			if (Alfresco.util.hasEventInterest(this, args)) {
-                var selectedArray = [],
+                var selectedValues = [],
                     selectedKeys = Object.keys(args[1].selected),
                     removedKeys = Object.keys(args[1].removed),
                     addedKeys = Object.keys(args[1].added);
 
-                selectedKeys.forEach(function (key) {
-                    selectedArray.push(args[1].selected[key]);
-                }, this);
+                selectedValues = selectedKeys.map(function(key) {
+					return this[key];
+				}, args[1].selected).sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
 
-                selectedArray.sort(LogicECM.module.AssociationComplexControl.Utils.sortByIndex);
 				this.widgets.selected.innerHTML = '';
-				this._renderSelectedItems(selectedArray);
+				this._renderSelectedItems(selectedValues);
 
                 addedKeys.sort(function (a, b) {
                     return args[1].added[a].index - args[1].added[b].index;
