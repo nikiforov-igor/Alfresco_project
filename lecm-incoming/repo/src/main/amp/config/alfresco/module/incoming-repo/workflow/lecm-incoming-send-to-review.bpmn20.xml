@@ -14,11 +14,12 @@
 							function checkReviewerExist(recipientRef){
 									var exist = false;
 									if (existReviewersAssocs && existReviewersAssocs.length){
-										existReviewersAssocs.slice(0).forEach(function(element, index, array){
-											if(element.nodeRef.toString().localeCompare(recipientRef.toString()) == 0){
-												existReviewersAssocs.splice(index,1);
+										existReviewersAssocs = existReviewersAssocs.filter(function(element, index, array){
+											if(element.nodeRef.equals(recipientRef)){
 												exist = true;
+												return false;
 											}
+											return true;
 										});
 									}
 									return exist;
