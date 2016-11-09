@@ -345,16 +345,29 @@ function checkForApplet() {
 							for (i = 0; i < response.json.length; i++) {
 								for (j = 0; j < response.json[i].signedContent.length; j++) {
 									for (k = 0; k < response.json[i].signedContent[j].signsInfo.length; k++) {
-										sign = new SignatureFromContent(response.json[i].signedContent[j].nodeRef, response.json[i].signedContent[j].signsInfo[k].signature, response.json[i].signedContent[j].signsInfo[k].nodeRef);
+										sign = new SignatureFromContent(response.json[i].signedContent[j].nodeRef, response.json[i].signedContent[j].signsInfo[k].signature, response.json[i].signedContent[j].signsInfo[k].nodeRef, response.json[i].signedContent[j].contentHash);
 										signs.push(sign);
 									}
 								}
 							}
+							
+							var partialContentSignature = signs.map(function (sign) {
+								return {
+									hash: sign.contentHash,
+									signedMessage: sign.signature
+								}
+							});
 
-							cb = (options) ? options.successCallback : null;
-							if (cb && YAHOO.lang.isFunction(cb.fn)) {
-								cb.fn.apply(cb.scope, [signs]);
-							}
+							verifySignaturesSync(partialContentSignature, function (results) {
+								signs.forEach(function (sign, index) {
+									sign.valid = results[index];
+								});
+
+								cb = (options) ? options.successCallback : null;
+								if (cb && YAHOO.lang.isFunction(cb.fn)) {
+									cb.fn.apply(cb.scope, [signs]);
+								}
+							});
 						}
 					},
 					failureCallback: {
@@ -1331,13 +1344,15 @@ function prepareBase64(base64Content) {
  ==========================================================
  */
 
-function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef) {
+function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef, contentHash) {
 
 	var contentURI, result, now;
 
 	this.signatureNodeRef = signatureNodeRef;
 	this.signatureContent = prepareBase64(signatureContent);
 	this.contentAssociation = nodeRef;
+	this.contentHash = contentHash;
+    this.signature = null;
 	this.signDate = null;
 	this.valid = false;
 	this.validateDate = null;
@@ -1346,9 +1361,8 @@ function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef) {
 	if (nodeRef && signatureContent) {
 		try {
 			contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
-			result = signApplet.check(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL', this.signatureContent);
-			this.valid = result.getResult();
-			this.certificate = new CertificateFromBase64(result.getCert());
+			var signData = JSON.parse(this.signatureContent);
+			this.signature = signData.signature;
 			now = Alfresco.util.toISO8601(new Date());
 			this.validateDate = now;
 			this.signDate = now;
