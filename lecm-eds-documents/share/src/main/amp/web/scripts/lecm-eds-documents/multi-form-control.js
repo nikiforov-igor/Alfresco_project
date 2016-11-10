@@ -32,7 +32,10 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 disabled: false,
                 rootForm: null,
                 documentFromId: null,
+                defaultValueFromId: null,
                 documentType: null,
+                defaultValueDataSource: null,
+                availableRemoveDefault: true,
                 args: null
             },
             rootFolder: null,
@@ -44,6 +47,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
 
             onReady: function () {
                 if (this.options.documentType && !this.options.disabled) {
+                    this.loadDefaultValue();
                     this.loadDraftRoot();
 
                     Alfresco.util.createYUIButton(this, "addButton", this.onAdd);
@@ -70,6 +74,28 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 if (simpleDialogComponents && simpleDialogComponents.length) {
                     var simpleDialog = simpleDialogComponents[0];
                     YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", simpleDialog.onBeforeFormRuntimeInit)
+                }
+            },
+
+            loadDefaultValue: function() {
+                if (this.options.defaultValueDataSource) {
+                    Alfresco.util.Ajax.jsonGet({
+                        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+                        dataObj: this.options.args,
+                        successCallback: {
+                            fn: function (response) {
+                                var oResults = response.json;
+                                if (oResults && oResults.length) {
+                                    var i;
+                                    for (i = 0; i < oResults.length; i++) {
+                                        this.onAdd(null, null, oResults[i]);
+                                    }
+                                }
+                            },
+                            scope: this
+                        },
+                        failureMessage: "message.failure"
+                    });
                 }
             },
 
@@ -157,7 +183,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
-            onAdd: function () {
+            onAdd: function (e, target, args) {
                 this.currentLine++;
                 var num = this.currentLine;
                 var formId = this.id + "-line-" + this.currentLine;
@@ -170,11 +196,13 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     mode: "create",
                     submitType: "json",
                     formUI: true,
-                    args: JSON.stringify(this.options.args),
+                    args: args ? JSON.stringify(YAHOO.lang.merge(this.options.args, args)) : this.options.args,
                     showCancelButton: false,
                     showSubmitButton: false
                 };
-                if (this.options.documentFromId) {
+                if (args && this.options.defaultValueFromId) {
+                    dataObj.formId = this.options.defaultValueFromId;
+                } else if (this.options.documentFromId) {
                     dataObj.formId = this.options.documentFromId;
                 }
 
@@ -192,7 +220,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                             Dom.addClass(li, "primary-routing-documents-item");
 
                             var itemsHtml = "";
-                            if (!this.options.disabled) {
+                            if (!this.options.disabled && (!args || this.options.availableRemoveDefault)) {
                                 itemsHtml += this.getActionsDivHTML(num);
                             }
                             itemsHtml += "<div id='" + formId + "_container' class='primary-routing-documents-item-container'>";
