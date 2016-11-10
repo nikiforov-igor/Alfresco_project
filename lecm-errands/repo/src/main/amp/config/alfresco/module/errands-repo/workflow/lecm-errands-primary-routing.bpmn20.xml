@@ -13,6 +13,16 @@
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
        		                var document = bpm_package.children[0];
+       		                if (document != null) {
+       		                    var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
+	                            var errandsList = eval('(' + lecmErrandWf_primaryRoutingErrandsList + ')');
+	                            if (errandsList) {
+	                                var i;
+	                                for (i = 0; i < errandsList.length; i++) {
+	                                    errands.createErrands(jsonUtils.toJSONObject(errandsList[i]));
+	                                }
+	                            }
+                            }
                    		]]></activiti:string>
                     </activiti:field>
                 </activiti:executionListener>

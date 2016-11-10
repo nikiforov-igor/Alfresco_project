@@ -1,4 +1,5 @@
 <script type="text/javascript">//<![CDATA[
+var hiddenValue = new YAHOO.util.Element("${fieldHtmlId}");
 var hiddenAdded = new YAHOO.util.Element("${fieldHtmlId}-added");
 hiddenAdded.on('contentReady', Absence_DrawNodeRefInHidden, this);
 
@@ -13,6 +14,7 @@ function Absence_DrawNodeRefInHidden() {
 				var result = response.json;
 				if (result != null) {
 					hiddenAdded.set('value', result.nodeRef);
+                    hiddenValue.set('value', result.nodeRef);
 				}
 			},
 			scope: this
@@ -22,6 +24,7 @@ function Absence_DrawNodeRefInHidden() {
 //]]></script>
 
 <#if form.mode == "edit" || form.mode == "create">
+	<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value=""/>
 	<input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed" value=""/>
 	<input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added" value=""/>
 </#if>

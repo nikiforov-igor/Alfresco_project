@@ -38,17 +38,14 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 availableRemoveDefault: true,
                 args: null
             },
-            rootFolder: null,
             currentLine: 0,
             rootSubmitElement: null,
             rootFormSubmitFunction: null,
             forms: [],
-            createdDocuments: [],
 
             onReady: function () {
                 if (this.options.documentType && !this.options.disabled) {
                     this.loadDefaultValue();
-                    this.loadDraftRoot();
 
                     Alfresco.util.createYUIButton(this, "addButton", this.onAdd);
                     Alfresco.util.createYUIButton(this, "removeAllButton", this.onRemoveAll);
@@ -77,7 +74,7 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
-            loadDefaultValue: function() {
+            loadDefaultValue: function () {
                 if (this.options.defaultValueDataSource) {
                     Alfresco.util.Ajax.jsonGet({
                         url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
@@ -99,34 +96,8 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
             },
 
-            loadDraftRoot: function () {
-                var url;
-                var template = '{proxyUri}lecm/document-type/settings?docType={docType}';
-                var successCallback;
-                if (this.options.documentType) {
-                    url = YAHOO.lang.substitute(template, {
-                        proxyUri: Alfresco.constants.PROXY_URI,
-                        docType: encodeURIComponent(this.options.documentType)
-                    });
-
-                    successCallback = {
-                        scope: this,
-                        fn: function (serverResponse) {
-                            this.rootFolder = serverResponse.json.nodeRef;
-                        }
-                    };
-
-                    Alfresco.util.Ajax.jsonGet({
-                        url: url,
-                        successCallback: successCallback,
-                        failureMessage: this.msg('message.failure')
-                    });
-                }
-            },
-
             onBeforeFormRuntimeInit: function (layer, args) {
                 if (args[1] && args[1].runtime && args[1].runtime.formId.indexOf(this.id + "-line-") == 0) {
-                    args[1].runtime.ajaxSubmitHandlers.successCallback.fn = this.onSuccessDocumentSubmit.bind(this);
                     this.forms[args[1].runtime.formId] = args[1].runtime;
                 }
             },
@@ -144,40 +115,41 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 }
 
                 if (documentsFormsValid) {
-                    if (this.createdDocuments.length == Object.keys(this.forms).length) {
-                        this.submitRootForm();
-                    } else {
-                        this.options.rootForm._toggleSubmitElements(false);
-
-                        var submitEvent = document.createEvent('Event');
-                        submitEvent.initEvent('submit', true, false);
-                        for (i in this.forms) {
-                            if (this.forms.hasOwnProperty(i)) {
-                                this.forms[i]._submitInvoked(submitEvent);
-                            }
-                        }
-                    }
-                }
-            },
-
-            onSuccessDocumentSubmit: function (successResponse) {
-                var createdDocumentRef = new Alfresco.util.NodeRef(successResponse.json.persistedObject);
-                this.createdDocuments.push(createdDocumentRef);
-
-                var rootCurrentValue = Dom.get(this.id);
-                if (rootCurrentValue) {
-                    if (rootCurrentValue.value.length) {
-                        rootCurrentValue.value += ",";
-                    }
-                    rootCurrentValue.value += createdDocumentRef;
-                }
-
-                if (this.createdDocuments.length == Object.keys(this.forms).length) {
+                    this.buildFormsData();
                     this.submitRootForm();
                 }
             },
 
-            submitRootForm: function() {
+            buildFormsData: function () {
+                var valueElement = Dom.get(this.id), i;
+
+                if (valueElement != null) {
+                    var resultJson = [];
+                    for (i in this.forms) {
+                        if (this.forms.hasOwnProperty(i)) {
+                            var formData = this.forms[i].getFormData();
+                            if (formData) {
+                                var key;
+                                var data = {};
+                                for (key in formData) {
+                                    if (formData.hasOwnProperty(key)) {
+                                        if (key.indexOf('prop_') == 0 ||
+                                            (key.indexOf('assoc_') == 0 &&
+                                            (key.lastIndexOf('_added') != key.length - '_added'.length) &&
+                                            (key.lastIndexOf('_removed') != key.length - '_removed'.length))) {
+                                            data[key] = formData[key];
+                                        }
+                                    }
+                                }
+                                resultJson.push(data);
+                            }
+                        }
+                    }
+                    valueElement.value = JSON.stringify(resultJson);
+                }
+            },
+
+            submitRootForm: function () {
                 if (YAHOO.lang.isFunction(this.rootFormSubmitFunction) && this.rootSubmitElement) {
                     this.rootFormSubmitFunction.call(this.rootSubmitElement);
                 }
@@ -191,7 +163,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 var dataObj = {
                     htmlid: formId,
                     itemKind: "type",
-                    destination: this.rootFolder,
                     itemId: this.options.documentType,
                     mode: "create",
                     submitType: "json",
