@@ -16,11 +16,20 @@
     function createControl() {
         new LogicECM.module.eds.MultiFormControl("${fieldHtmlId}").setOptions({
             disabled: ${disabled?string},
+        <#if params.availableRemoveDefault??>
+            availableRemoveDefault: ${params.availableRemoveDefault},
+        </#if>
         <#if params.documentFromId??>
             documentFromId: "${params.documentFromId}",
         </#if>
+        <#if params.defaultValueFromId??>
+            defaultValueFromId: "${params.defaultValueFromId}",
+        </#if>
         <#if params.documentType??>
             documentType: "${params.documentType}",
+        </#if>
+        <#if params.defaultValueDataSource??>
+            defaultValueDataSource: "${params.defaultValueDataSource}",
         </#if>
 
             args: {

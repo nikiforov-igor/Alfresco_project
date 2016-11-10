@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Incoming datasource for create default errands</shortname>
+    <description>Incoming datasource for create default errands</description>
+    <url>/lecm/incoming/primaryRouting/defaultErrands/datasource</url>
+    <format default="json"/>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

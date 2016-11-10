@@ -14,6 +14,7 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.alfresco.util.ParameterCheck;
+import org.json.simple.JSONObject;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.NativeJavaObject;
@@ -34,6 +35,8 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
+
+import static com.sun.corba.se.spi.activation.IIOP_CLEAR_TEXT.value;
 
 /**
  * User: AIvkin
@@ -754,6 +757,48 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     }
 
                                     nodeService.createAssociation(errand, parentErrand, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+                                    return null;
+                                }
+                            }, false, true);
+                        }
+                    }, user);
+                } catch (Exception e) {
+                    logger.error("Error while create errand", e);
+                }
+            }
+        };
+        threadPoolExecutor.execute(runnable);
+    }
+
+    public void createErrands(final JSONObject json) {
+        final String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        Runnable runnable = new Runnable() {
+            public void run() {
+                try {
+                    AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
+                        @Override
+                        public Void doWork() throws Exception {
+                            return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                @Override
+                                public Void execute() throws Throwable {
+                                    Map<String, String> properties = new HashMap<>();
+                                    Map<String, String> associations = new HashMap<>();
+
+                                    for (Object keyObj: json.keySet()) {
+                                        String key = (String) keyObj;
+                                        String field = key.replaceAll("prop_", "").replaceAll("assoc_", "").replaceAll("_", ":");
+                                        String value = (String) json.get(key);
+
+                                        if (!value.isEmpty()) {
+                                            if (key.startsWith("prop_")) {
+                                                properties.put(field, value);
+                                            } else if (key.startsWith("assoc_")) {
+                                                associations.put(field, value);
+                                            }
+                                        }
+                                    }
+
+                                    documentService.createDocument(ErrandsService.TYPE_ERRANDS.toPrefixString(namespaceService), properties, associations);
                                     return null;
                                 }
                             }, false, true);
