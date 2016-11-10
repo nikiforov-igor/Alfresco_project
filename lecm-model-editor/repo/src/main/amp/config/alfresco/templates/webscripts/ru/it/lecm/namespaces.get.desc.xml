@@ -3,4 +3,5 @@
   <description>Возвращает массив нэймспэйсов</description>
   <url>/namespaces</url>
   <format default="json">argument</format>
+  <transaction allow="readonly">required</transaction>
 </webscript>

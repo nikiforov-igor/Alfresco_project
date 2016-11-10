@@ -4,6 +4,6 @@
 	<description>Generate registration number for document instance using given template</description>
 	<url>/lecm/regNumbers/getNumber</url>
 	<authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
+    <transaction>required</transaction>
 	<format default="json"/>
 </webscript>

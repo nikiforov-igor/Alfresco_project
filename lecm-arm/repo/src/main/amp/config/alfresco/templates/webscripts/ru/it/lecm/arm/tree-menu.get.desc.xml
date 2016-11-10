@@ -4,5 +4,5 @@
     <url>/lecm/arm/tree-menu</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
-    <transaction readonly="true">required</transaction>
+    <transaction allow="readonly">required</transaction>
 </webscript>
