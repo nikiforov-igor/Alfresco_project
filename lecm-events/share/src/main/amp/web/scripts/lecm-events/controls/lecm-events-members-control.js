@@ -734,7 +734,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 					var employee = this.busytime[i].employee;
 					var startIndex, endIndex;
 					if (start <= startDayDate) {
-						startIndex = 0;
+						startIndex = 1;
 					} else {
 						var startHour = start.getHours();
 						var startMinutes = start.getMinutes();
@@ -1310,7 +1310,7 @@ LogicECM.module.Calendar = LogicECM.module.Calendar || {};
 		 * @private
 		 */
 		_formControlUpdated: function _formControlUpdated(control) {
-			if (control && control.options.fieldId && control.options.formId == this.options.formId) {
+			if (control && control.options && control.options.fieldId && control.options.formId == this.options.formId) {
 				var fieldId = control.options.fieldId;
 				//Данные из поля "Начало"
 				if (fieldId == this.options.fromDateConfigName) {
