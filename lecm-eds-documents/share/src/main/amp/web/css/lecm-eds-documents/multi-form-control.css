@@ -79,3 +79,31 @@
     margin-top: 44px;
     margin-right: 10px;
 }
+
+.control.primary-routing .primary-routing-documents-item-container fieldset {
+    border: none;
+    padding: 0;
+}
+.control.primary-routing .primary-routing-documents-item-container .label-div {
+    width: 120px;
+}
+.control.primary-routing .primary-routing-documents-item-container .yui-u.first .label-div {
+    width: 100px;
+}
+.control.primary-routing .primary-routing-documents-item-container legend {
+    width: 120px;
+    float: left;
+    line-height: 28px;
+    padding: 2px 10px 2px 0;
+    font-size: 100%;
+    text-align: right;
+}
+.control.primary-routing .primary-routing-documents-item-container .form-container {
+    width: 100%;
+}
+.control.primary-routing .primary-routing-documents-item-container .yui-u.first {
+    width: 45%;
+}
+.control.primary-routing .primary-routing-documents-item-container .yui-u {
+    width: 55%;
+}

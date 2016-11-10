@@ -695,6 +695,9 @@
                 </appearance>
             </form>
             <form id="primary-routing">
+                <create-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
+                <edit-form template="/ru/it/lecm/errands/components/primary-routing-form-template.ftl" />
+
                 <field-visibility>
                     <!--  Типы поручений -->
                     <show id="lecm-errands:type-assoc"/>
@@ -715,15 +718,16 @@
                     <show id="lecm-errands:additional-document-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="top"/>
-                    <set id="limitation-date" appearance="fieldset" label="Срок исполнения" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
-
-                    <field id="lecm-errands:type-assoc" set="top">
+                    <set id="left"/>
+                    <set id="right"/>
+                    <set id="r1" parent="right"/>
+                    <set id="limitation-date" parent="right" appearance="fieldset" label-id="label.limitation-date" template="/ru/it/lecm/errands/controls/errands-limitation-date-set.ftl"/>
+                    <field id="lecm-errands:type-assoc" set="left"  mandatory="true">
                         <control>
                             <control-param name="changeItemsFireAction">errandTypeChanged</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:title" set="top">
+                    <field id="lecm-errands:title" set="r1">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
@@ -734,13 +738,8 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:executor-assoc" set="top"/>
+                    <field id="lecm-errands:executor-assoc" set="left"/>
 
-                    <field id="limitation-date-script" set="top">
-                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
-                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
-                        </control>
-                    </field>
                     <field id="lecm-errands:limitation-date-radio" set="limitation-date" mandatory="true">
                         <control template="/ru/it/lecm/eds/controls/selectone-radiobuttons.ftl">
                             <control-param name="defaultValue">DAYS</control-param>
@@ -771,16 +770,20 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
-
-                    <field id="lecm-errands:initiator-assoc" set="top">
+                    <field id="lecm-errands:initiator-assoc" set="left">
                         <control template="/ru/it/lecm/wcalendar/controls/hidden-current-employee.ftl"/>
                         <!--<control>-->
                         <!--<control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>-->
                         <!--</control>-->
                     </field>
-                    <field id="lecm-errands:additional-document-assoc" set="top">
+                    <field id="lecm-errands:additional-document-assoc" set="left" >
                         <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl">
                             <control-param name="parentDocArg">parentDoc</control-param>
+                        </control>
+                    </field>
+                    <field id="limitation-date-script" set="left" >
+                        <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
+                            <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
                         </control>
                     </field>
                 </appearance>

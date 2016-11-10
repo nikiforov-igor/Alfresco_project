@@ -21,10 +21,10 @@
 .errands-limitation-date-set .errands-limitation-date-set-days {
     float: left;
     overflow: hidden;
-    width: 70px;
+    width: 50px;
 }
 .errands-limitation-date-set .errands-limitation-date-set-days .control .value-div input {
-    width: 60px;
+    width: 40px;
 }
 .errands-limitation-date-set .errands-limitation-date-set-days .control.editmode .container .value-div input[type=text] {
     margin-bottom: 0;
@@ -40,6 +40,7 @@
 
 .errands-limitation-date-set .errands-limitation-date-set-date {
 	float: left;
+    width: calc(100% - 150px);
 }
 
 /*.errands-limitation-date-set-date .control.date .container {*/
