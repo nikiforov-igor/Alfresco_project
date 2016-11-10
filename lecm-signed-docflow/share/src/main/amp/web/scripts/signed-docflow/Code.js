@@ -1327,6 +1327,31 @@ function SignHash_NPAPI(thumbprint, hash, hashNodeRef, sTSAAddress) {
 	return { signature: result, errorString: "" };
 }
 
+function verifySignaturesSync (signs, callback) {
+    var results = signs.map(function (sign) {
+        return verifySignature(sign.hash, sign.signedMessage);
+    });
+
+    callback(results);
+}
+
+function verifySignature (hash, sSignedMessage){
+    var CADESCOM_HASH_ALGORITHM_CP_GOST_3411 = 100;
+    var oHashedData = cadesplugin.CreateObject("CAdESCOM.HashedData");
+    oHashedData.Algorithm = CADESCOM_HASH_ALGORITHM_CP_GOST_3411; 
+    oHashedData.SetHashValue(hash);
+    
+    var oSignedData = cadesplugin.CreateObject("CAdESCOM.CadesSignedData");
+    
+    try {
+        oSignedData.VerifyHash(oHashedData, sSignedMessage);
+    } catch (err) {
+        alert("Failed to verify signature");
+        return false;
+    }
+    return true;
+}
+
 //-----------------------------------
 var Base64 = {
 

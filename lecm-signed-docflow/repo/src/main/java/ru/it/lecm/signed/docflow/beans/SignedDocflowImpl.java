@@ -550,7 +550,8 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	 * @param refToSignList
 	 * @return hashRef
 	 */
-	private String generateHash(NodeRef refToSignList) {
+    @Override
+	public String generateHash(NodeRef refToSignList) {
 		ContentReader sourceReader = contentService.getReader(refToSignList, ContentModel.PROP_CONTENT);
 		try {
 			byte[] sourceContentBytes = IOUtils.toByteArray(sourceReader.getContentInputStream());

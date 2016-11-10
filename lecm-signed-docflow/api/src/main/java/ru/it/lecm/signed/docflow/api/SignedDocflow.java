@@ -151,4 +151,12 @@ public interface SignedDocflow {
 	 * @return адрес сервиса штампов
 	 */
     String getSTSAAddress();
+		    
+    /**
+	 * вычислить хэш файла по нодрефе
+	 *
+	 * @param refToSignList
+	 * @return hashRef
+	 */
+    String generateHash(NodeRef refToSignList);
 }

@@ -77,6 +77,7 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 					attachmentObject.put("fileName", (String) nodeService.getProperty(attachRef, ContentModel.PROP_NAME));
 					attachmentObject.put("nodeRef", attachRef.toString());
 					attachmentObject.put("signsInfo", signsInfoJSON);
+                    attachmentObject.put("contentHash", signedDocflowService.generateHash(attachRef));
 					contentArray.put(attachmentObject);
 				}
 			}
@@ -111,6 +112,7 @@ public class GetDocumentSignsInfoWebscript extends DeclarativeWebScript{
 		contentObject.put("fileName", (String) nodeService.getProperty(contentRef, ContentModel.PROP_NAME));
 		contentObject.put("nodeRef", contentRef.toString());
 		contentObject.put("signsInfo", signsInfoJSON);
+        contentObject.put("contentHash", signedDocflowService.generateHash(contentRef));
 
 		JSONArray contentArray = new JSONArray();
 		contentArray.put(contentObject);
