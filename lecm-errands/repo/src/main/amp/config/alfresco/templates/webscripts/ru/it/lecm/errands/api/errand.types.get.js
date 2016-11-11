@@ -1,7 +1,7 @@
 var types = [];
 
 var dictinaryErrandsTypes = dictionary.getDictionaryByName("Типы поручений");
-if (dictinaryErrandsTypes != null) {
+if (dictinaryErrandsTypes) {
     types = dictionary.getChildren(dictinaryErrandsTypes.nodeRef);
 }
 
