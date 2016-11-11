@@ -3656,36 +3656,6 @@
                                                                 <nodes>
                                                                     <node>
                                                                         <type>inputVariable</type>
-                                                                        <name>152e2ffd-b3cd-4bd1-b59b-f74dc343a4ff
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/86d63cf7-3df9-443e-86d6-a9ff1d851cfe
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[stm_document]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[parentDoc]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
                                                                         <name>52f60317-26fc-4b7b-90ac-34c722216d89
                                                                         </name>
                                                                         <nodeRef>

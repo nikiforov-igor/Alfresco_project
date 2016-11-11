@@ -1,5 +1,5 @@
 var results = [];
-var incoming =  search.findNode(args["parentDoc"]);
+var incoming =  search.findNode(args["documentNodeRef"]);
 if (incoming) {
     var recipients = incoming.associations["lecm-incoming:recipient-assoc"];
     if (recipients) {
