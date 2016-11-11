@@ -782,10 +782,13 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                                     Map<String, String> properties = new HashMap<>();
                                     Map<String, String> associations = new HashMap<>();
 
-                                    for (Object keyObj: json.keySet()) {
-                                        String key = (String) keyObj;
+                                    for (Object entryObj: json.entrySet()) {
+                                        //Не знаю почему, но если для json.entrySet() сразу указать Map.Entry, то компилятор ругается
+                                        Map.Entry entry = (Map.Entry) entryObj;
+
+                                        String key = (String) entry.getKey();
                                         String field = key.replaceAll("prop_", "").replaceAll("assoc_", "").replaceAll("_", ":");
-                                        String value = (String) json.get(key);
+                                        String value = (String) entry.getValue();
 
                                         if (value != null && !value.isEmpty()) {
                                             if (key.startsWith("prop_")) {
