@@ -8,7 +8,7 @@
         var value = args[1].value;
         var formId = args[1].formId;
 
-        if (formId != null) {
+        if (formId) {
             if ("DAYS" == value) {
                 LogicECM.module.Base.Util.enableControl(formId, "lecm-errands:limitation-date-days");
                 LogicECM.module.Base.Util.enableControl(formId, "lecm-errands:limitation-date-type");

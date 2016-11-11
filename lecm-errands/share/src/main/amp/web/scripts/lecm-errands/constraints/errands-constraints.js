@@ -7,13 +7,13 @@ LogicECM.module.Errands = LogicECM.module.Errands || {};
 
 LogicECM.module.Errands.limitationDateValidation =
     function (field, args, event, form, silent, message) {
-        if (field.form != null) {
+        if (field.form) {
             var radio = field.form["prop_lecm-errands_limitation-date-radio"];
             var days = field.form["prop_lecm-errands_limitation-date-days"];
             var limitationDate = field.form["prop_lecm-errands_limitation-date"];
 
             var radioValue = null;
-            if (radio != null) {
+            if (radio) {
                 for (var i = 0; i < radio.length; i++) {
                     if (radio[i].checked == true) {
                         radioValue = radio[i].value;
@@ -26,7 +26,7 @@ LogicECM.module.Errands.limitationDateValidation =
             } else if (radioValue == "DAYS") {
                 return days.value.length > 0;
             } else {
-                return limitationDate != null && limitationDate.value.length > 0
+                return limitationDate && limitationDate.value.length;
             }
         }
         return true;
