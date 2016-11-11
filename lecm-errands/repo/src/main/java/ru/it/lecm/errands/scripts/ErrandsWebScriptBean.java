@@ -36,8 +36,6 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import static com.sun.corba.se.spi.activation.IIOP_CLEAR_TEXT.value;
-
 /**
  * User: AIvkin
  * Date: 10.07.13
