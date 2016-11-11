@@ -25,13 +25,7 @@
 
 <#if form.mode == "view">
 	<div class="control selectone-radiobuttons viewmode">
-		<div class="label-div">
-			<#if field.mandatory && !(field.value?is_number) && field.value == "">
-			<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png"
-			                                      title="${msg("form.field.incomplete")}"/><span>
-			</#if>
-			<label>${field.label?html}:</label>
-		</div>
+		<div class="label-div">&nbsp;</div>
 		<#if fieldValue?string == "">
 			<#assign valueToShow=msg("form.control.novalue")>
 		<#else>
