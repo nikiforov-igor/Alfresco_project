@@ -13,7 +13,7 @@
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
        		                var document = bpm_package.children[0];
-       		                if (document != null) {
+       		                if (document) {
        		                    var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils();
 	                            var errandsList = eval('(' + lecmErrandWf_primaryRoutingErrandsList + ')');
 	                            if (errandsList) {
