@@ -65,10 +65,5 @@
             <button type="button" title="${msg("actions.add")}">${msg("actions.add")}</button>
         </span>
     </span>
-    <span id="${fieldHtmlId}-removeAllButton" class="yui-button yui-push-button">
-        <span class="first-child">
-            <button type="button" title="${msg("button.removeAll")}">${msg("button.removeAll")}</button>
-        </span>
-    </span>
 </#if>
 </div>

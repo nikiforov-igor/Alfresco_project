@@ -48,7 +48,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                     this.loadDefaultValue();
 
                     Alfresco.util.createYUIButton(this, "addButton", this.onAdd);
-                    Alfresco.util.createYUIButton(this, "removeAllButton", this.onRemoveAll);
 
                     this.fixSimpleDialog();
 
@@ -219,12 +218,6 @@ LogicECM.module.eds = LogicECM.module.eds || {};
                 var element = document.getElementById(this.id + "_" + args.num + "_item");
                 element.parentNode.removeChild(element);
                 delete this.forms[this.id + "-line-" + args.num + "-form"];
-            },
-
-            onRemoveAll: function remove_function() {
-                var element = document.getElementById(this.id + "-primary-routing-documents-list");
-                element.innerHTML = "";
-                this.forms = {};
             },
 
             getActionsDivHTML: function (num) {
