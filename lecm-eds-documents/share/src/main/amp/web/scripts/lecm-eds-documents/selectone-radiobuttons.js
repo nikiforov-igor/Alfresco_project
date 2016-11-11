@@ -25,7 +25,7 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onValueChanged: function (layer) {
-            if (layer.target != null && layer.target.value != null) {
+            if (layer.target && layer.target.value) {
                 var value = layer.target.value;
 
                 YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
@@ -42,7 +42,7 @@ LogicECM.module = LogicECM.module || {};
         onDisableControl: function (layer, args) {
             if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
                 var input = Dom.get(this.id);
-                if (input !== null) {
+                if (input) {
                     input.setAttribute("disabled", "true");
                     input.value = "";
                 }
@@ -59,7 +59,7 @@ LogicECM.module = LogicECM.module || {};
             if (this.options.formId === args[1].formId && this.options.fieldId === args[1].fieldId) {
                 if (!this.options.disabled) {
                     var input = Dom.get(this.id);
-                    if (input !== null) {
+                    if (input) {
                         input.removeAttribute("disabled");
                     }
 					var radios = YAHOO.util.Selector.query('input[name="' + this.options.fieldName + '"]');
@@ -74,7 +74,7 @@ LogicECM.module = LogicECM.module || {};
 
         onReady: function () {
             LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
-            if (this.options.fieldName != null) {
+            if (this.options.fieldName) {
                 var radioButtons = document.getElementsByName(this.options.fieldName);
                 for (var i = 0; i < radioButtons.length; i++) {
                     YAHOO.util.Event.addListener(radioButtons[i], "click", this.onValueChanged, null, this);
