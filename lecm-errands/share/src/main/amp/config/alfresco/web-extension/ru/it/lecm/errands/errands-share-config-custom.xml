@@ -712,10 +712,6 @@
                     <show id="lecm-errands:limitation-date-days"/>
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date"/>
-                    <!-- Инициатор -->
-                    <show id="lecm-errands:initiator-assoc"/>
-                    <!-- Ссылка на документ основание  -->
-                    <show id="lecm-errands:additional-document-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="left"/>
@@ -770,17 +766,6 @@
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:initiator-assoc" set="left">
-                        <control template="/ru/it/lecm/wcalendar/controls/hidden-current-employee.ftl"/>
-                        <!--<control>-->
-                        <!--<control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>-->
-                        <!--</control>-->
-                    </field>
-                    <field id="lecm-errands:additional-document-assoc" set="left" >
-                        <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl">
-                            <control-param name="parentDocArg">parentDoc</control-param>
-                        </control>
-                    </field>
                     <field id="limitation-date-script" set="left" >
                         <control template="/ru/it/lecm/base-share/components/controls/load-script-control.ftl">
                             <control-param name="scripts">scripts/lecm-errands/errands-change-limitation-date.js</control-param>
@@ -803,10 +788,6 @@
                     <show id="lecm-errands:limitation-date-days"/>
                     <show id="lecm-errands:limitation-date-type"/>
                     <show id="lecm-errands:limitation-date"/>
-                    <!-- Инициатор -->
-                    <show id="lecm-errands:initiator-assoc"/>
-                    <!-- Ссылка на документ основание  -->
-                    <show id="lecm-errands:additional-document-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="top"/>
@@ -864,15 +845,6 @@
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change" />
                         </constraint-handlers>
-                    </field>
-
-                    <field id="lecm-errands:initiator-assoc" set="top">
-                        <control template="/ru/it/lecm/wcalendar/controls/hidden-current-employee.ftl"/>
-                    </field>
-                    <field id="lecm-errands:additional-document-assoc" set="top">
-                        <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl">
-                            <control-param name="parentDocArg">parentDoc</control-param>
-                        </control>
                     </field>
                 </appearance>
             </form>
